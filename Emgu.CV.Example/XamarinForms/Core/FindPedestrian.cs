@@ -22,9 +22,9 @@ namespace PedestrianDetection
       /// <param name="image">The image</param>
       /// <param name="processingTime">The processing time in milliseconds</param>
       /// <returns>The region where pedestrians are detected</returns>
-      public static Rectangle[] Find(IInputArray image, out long processingTime)
+      public static Rectangle[] Find(IInputArray image)
       {
-         Stopwatch watch;
+         //Stopwatch watch;
          Rectangle[] regions;
 
          using (InputArray iaImage = image.GetInputArray())
@@ -39,7 +39,7 @@ namespace PedestrianDetection
                {
                   des.SetSVMDetector(des.GetDefaultPeopleDetector());
 
-                  watch = Stopwatch.StartNew();
+                  //watch = Stopwatch.StartNew();
                   using (GpuMat cudaBgra = new GpuMat())
                   using (VectorOfRect vr = new VectorOfRect())
                   {
@@ -55,17 +55,17 @@ namespace PedestrianDetection
                using (HOGDescriptor des = new HOGDescriptor())
                {
                   des.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
-                  watch = Stopwatch.StartNew();
+                  //watch = Stopwatch.StartNew();
 
                   MCvObjectDetection[] results = des.DetectMultiScale(image);
                   regions = new Rectangle[results.Length];
                   for (int i = 0; i < results.Length; i++)
                      regions[i] = results[i].Rect;
-                  watch.Stop();
+                  //watch.Stop();
                }
             }
 
-            processingTime = watch.ElapsedMilliseconds;
+            //processingTime = watch.ElapsedMilliseconds;
 
             return regions;
          }

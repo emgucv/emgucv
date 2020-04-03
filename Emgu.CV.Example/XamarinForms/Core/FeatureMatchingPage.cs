@@ -28,43 +28,40 @@ using FeatureMatchingExample;
 
 namespace Emgu.CV.XamarinForms
 {
-   public class FeatureMatchingPage : ButtonTextImagePage
-   {
-      public FeatureMatchingPage()
-         : base()
-      {
-         var button = this.GetButton();
-         button.Text = "Perform Feature Matching";
-         button.Clicked += OnButtonClicked;
+    public class FeatureMatchingPage : ButtonTextImagePage
+    {
+        public FeatureMatchingPage()
+           : base()
+        {
+            var button = this.GetButton();
+            button.Text = "Perform Feature Matching";
+            button.Clicked += OnButtonClicked;
 
-         OnImagesLoaded += async (sender, images) =>
-         {
-            if (images == null || images [0] == null || images [1] == null)
-               return;
-            SetMessage( "Please wait..." );
+        }
+
+        private async void OnButtonClicked(Object sender, EventArgs args)
+        {
+            Mat[] images = await LoadImages(new String[] { "box.png", "box_in_scene.png" }, new string[] { "Pick a model image from", "Pick a observed image from" });
+            if (images == null || images[0] == null || images[1] == null)
+                return;
+            SetMessage("Please wait...");
             SetImage(null);
             Task<Tuple<Mat, long>> t = new Task<Tuple<Mat, long>>(
-               () =>
-               {
-                  long time;
-                  Mat matchResult = DrawMatches.Draw(images[0], images[1], out time);
-                  return new Tuple<Mat,long>(matchResult, time);
-               });
+                () =>
+                {
+                    long time;
+                    Mat matchResult = DrawMatches.Draw(images[0], images[1], out time);
+                    return new Tuple<Mat, long>(matchResult, time);
+                });
             t.Start();
 
             var result = await t;
             foreach (var img in images)
-               img.Dispose();
-            
+                img.Dispose();
+
             SetImage(t.Result.Item1);
             String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
-            SetMessage( String.Format("Detected with {1} in {0} milliseconds.", t.Result.Item2, computeDevice) );
-         };
-      }
-
-      private void OnButtonClicked(Object sender, EventArgs args)
-      {
-         LoadImages(new String[] {"box.png", "box_in_scene.png"}, new string[] {"Pick a model image from", "Pick a observed image from"});
-      }
-   }
+            SetMessage(String.Format("Detected with {1} in {0} milliseconds.", t.Result.Item2, computeDevice));
+        }
+    }
 }

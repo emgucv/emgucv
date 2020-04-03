@@ -66,39 +66,36 @@ namespace Emgu.CV.XamarinForms
             button.Text = "Perform Text Detection";
             button.Clicked += OnButtonClicked;
 
-            OnImagesLoaded += async (sender, image) =>
-            {
-                if (image == null || image[0] == null)
-                    return;
-                SetMessage("Please wait...");
-                SetImage(null);
-                String lang = "eng";
-                OcrEngineMode mode = OcrEngineMode.TesseractOnly;
-                await InitTesseract(lang, OcrEngineMode.TesseractOnly);
-                _ocr.SetImage(image[0]);
-                if (_ocr.Recognize() != 0)
-                    throw new Exception("Failed to recognize image");
-                String ocrResult = _ocr.GetUTF8Text();
-
-                SetImage(image[0]);
-                
-                if (Device.RuntimePlatform.Equals("WPF"))
-                {
-                    ocrResult = ocrResult.Replace(System.Environment.NewLine, " ");
-                }
-                ocrResult = String.Format(
-                    "tesseract version {2}; lang: {0}; mode: {1}{3}Text Detected:{3}{4}", 
-                    lang, 
-                    mode.ToString(), 
-                    Emgu.CV.OCR.Tesseract.VersionString, 
-                    System.Environment.NewLine, ocrResult);
-                SetMessage(ocrResult);
-            };
         }
 
-        private void OnButtonClicked(Object sender, EventArgs args)
+        private async void OnButtonClicked(Object sender, EventArgs args)
         {
-            LoadImages(new string[] { "test_image.png" });
+            Mat[] images = await LoadImages(new string[] { "test_image.png" });
+            if (images == null || images[0] == null)
+                return;
+            SetMessage("Please wait...");
+            SetImage(null);
+            String lang = "eng";
+            OcrEngineMode mode = OcrEngineMode.TesseractOnly;
+            await InitTesseract(lang, OcrEngineMode.TesseractOnly);
+            _ocr.SetImage(images[0]);
+            if (_ocr.Recognize() != 0)
+                throw new Exception("Failed to recognize image");
+            String ocrResult = _ocr.GetUTF8Text();
+
+            SetImage(images[0]);
+
+            if (Device.RuntimePlatform.Equals("WPF"))
+            {
+                ocrResult = ocrResult.Replace(System.Environment.NewLine, " ");
+            }
+            ocrResult = String.Format(
+                "tesseract version {2}; lang: {0}; mode: {1}{3}Text Detected:{3}{4}",
+                lang,
+                mode.ToString(),
+                Emgu.CV.OCR.Tesseract.VersionString,
+                System.Environment.NewLine, ocrResult);
+            SetMessage(ocrResult);
         }
 
         private void DownloadManager_OnDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)

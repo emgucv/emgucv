@@ -75,20 +75,21 @@ namespace Emgu.CV.XamarinForms
 
         public bool HasCameraOption { get; set; }
 
-        public virtual async void LoadImages(String[] imageNames, String[] labels = null)
+        public virtual async Task<Mat[]> LoadImages(String[] imageNames, String[] labels = null)
         {
-#if __MACOS__
             Mat[] mats = new Mat[imageNames.Length];
-            for (int i = 0; i < mats.Length; i++)
-                mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.Color);
-            InvokeOnImagesLoaded(mats);
-#else
+
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX))
+            {
+                for (int i = 0; i < mats.Length; i++)
+                    mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.Color);
+                return mats;
+            }
 
 #if __ANDROID__ || __IOS__
             await CrossMedia.Current.Initialize();
 #endif
 
-            Mat[] mats = new Mat[imageNames.Length];
             for (int i = 0; i < mats.Length; i++)
             {
                 String pickImgString = "Use Image from";
@@ -136,27 +137,9 @@ namespace Emgu.CV.XamarinForms
                 {
                     action = await DisplayActionSheet(pickImgString, "Cancel", null, options.ToArray());
                     if (action == null) //user clicked outside of action sheet
-                        return;
+                        return null;
                 }
-                /*
-                if (haveCameraOption & havePickImgOption)
-                {
-                    action = await DisplayActionSheet(pickImgString, "Cancel", null, "Default", "Photo Library",
-                        "Photo from Camera");
-                    if (action == null) //user clicked outside of action sheet
-                        return;
-                }
-                else if (havePickImgOption)
-                {
-                    action = await DisplayActionSheet(pickImgString, "Cancel", null, "Default", "Photo Library");
-                    if (action == null) //user clicked outside of action sheet
-                        return;
-                }
-                else
-                {
-                    action = "Default";
-                }*/
-
+                
                 if (action.Equals("Default"))
                 {
 #if __ANDROID__
@@ -172,7 +155,7 @@ namespace Emgu.CV.XamarinForms
 #if __ANDROID__ || __IOS__ || NETFX_CORE
                     var photoResult = await CrossMedia.Current.PickPhotoAsync();
                     if (photoResult == null) //canceled
-                        return;
+                        return null;
                     mats[i] = CvInvoke.Imread(photoResult.Path);
 
 #else
@@ -190,7 +173,7 @@ namespace Emgu.CV.XamarinForms
                             }
                             else
                             {
-                                return;
+                                return null;
                             }
                         }
                     }
@@ -218,8 +201,8 @@ namespace Emgu.CV.XamarinForms
                         Name = $"{DateTime.UtcNow}.jpg"
                     };
                     var takePhotoResult = await CrossMedia.Current.TakePhotoAsync(mediaOptions);
-                    if (takePhotoResult == null) //cancelled
-                        return;
+                    if (takePhotoResult == null) //canceled
+                        return null;
 
                     mats[i] = CvInvoke.Imread(takePhotoResult.Path);
 #else
@@ -246,8 +229,9 @@ namespace Emgu.CV.XamarinForms
                     mats = new Mat[0];
                 }
             }
-            InvokeOnImagesLoaded(mats);
-#endif
+
+            return mats;
+            //InvokeOnImagesLoaded(mats);
         }
 
 #if __ANDROID__
@@ -259,6 +243,7 @@ namespace Emgu.CV.XamarinForms
         public Mat MatHandle;
 #endif
 
+        /*
         public void InvokeOnImagesLoaded(Mat[] images)
         {
             if (OnImagesLoaded != null)
@@ -266,6 +251,7 @@ namespace Emgu.CV.XamarinForms
         }
 
         public event EventHandler<Mat[]> OnImagesLoaded;
+        */
 
         //private byte[] _imageData;
         //private MemoryStream _imageStream;

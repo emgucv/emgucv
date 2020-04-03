@@ -177,67 +177,6 @@ namespace Emgu.CV.XamarinForms
             button.Text = _defaultButtonText;
             button.Clicked += OnButtonClicked;
             
-            OnImagesLoaded += async (sender, image) =>
-            {
-                if (image == null || (image.Length > 0 && image[0] == null))
-                    return;
-
-                if (image.Length == 0)
-                {
-                    await InitFaceDetector();
-                    await InitFacemark();
-
-#if __ANDROID__
-                    button.Text = _StopCameraButtonText;
-                    StartCapture(async delegate(Object sender, Mat m)
-                    {
-                        //Skip the frame if busy, 
-                        //Otherwise too many frames arriving and will eventually saturated the memory.
-                        if (!_isBusy)
-                        {
-                            _isBusy = true;
-                            try
-                            {
-                                Stopwatch watch = Stopwatch.StartNew();
-                                await Task.Run(() => { DetectAndRender(m); });
-                                watch.Stop();
-                                SetImage(m);
-                                SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
-                            }
-                            finally
-                            {
-                                _isBusy = false;
-                            }
-                        }
-                    });
-#else
-                    //Handle video
-                    if (_capture == null)
-                    {
-                        _capture = new VideoCapture();
-                        _capture.ImageGrabbed += _capture_ImageGrabbed;
-                    }
-                    _capture.Start();
-#endif
-                }
-                else
-                {
-                    SetMessage("Please wait...");
-                    SetImage(null);
-                    
-                    await InitFaceDetector();
-                    await InitFacemark();
-                    Stopwatch watch = Stopwatch.StartNew();
-
-                    DetectAndRender(image[0]);
-                    watch.Stop();
-                            
-                    SetImage(image[0]);
-                    String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
-
-                    SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
-                }
-            };
         }
 
         private void _capture_ImageGrabbed(object sender, EventArgs e)
@@ -254,7 +193,7 @@ namespace Emgu.CV.XamarinForms
             SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
         }
 
-        private void OnButtonClicked(Object sender, EventArgs args)
+        private async void OnButtonClicked(Object sender, EventArgs args)
         {
 #if __ANDROID__
             var button = GetButton();
@@ -266,7 +205,66 @@ namespace Emgu.CV.XamarinForms
                 return;
             }
 #endif
-            LoadImages(new string[] { "lena.jpg" });
+            Mat[] images = await LoadImages(new string[] { "lena.jpg" });
+
+            if (images == null || (images.Length > 0 && images[0] == null))
+                return;
+
+            if (images.Length == 0)
+            {
+                await InitFaceDetector();
+                await InitFacemark();
+
+#if __ANDROID__
+                button.Text = _StopCameraButtonText;
+                StartCapture(async delegate (Object sender, Mat m)
+                {
+                    //Skip the frame if busy, 
+                    //Otherwise too many frames arriving and will eventually saturated the memory.
+                    if (!_isBusy)
+                    {
+                        _isBusy = true;
+                        try
+                        {
+                            Stopwatch watch = Stopwatch.StartNew();
+                            await Task.Run(() => { DetectAndRender(m); });
+                            watch.Stop();
+                            SetImage(m);
+                            SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
+                        }
+                        finally
+                        {
+                            _isBusy = false;
+                        }
+                    }
+                });
+#else
+                    //Handle video
+                    if (_capture == null)
+                    {
+                        _capture = new VideoCapture();
+                        _capture.ImageGrabbed += _capture_ImageGrabbed;
+                    }
+                    _capture.Start();
+#endif
+            }
+            else
+            {
+                SetMessage("Please wait...");
+                SetImage(null);
+
+                await InitFaceDetector();
+                await InitFacemark();
+                Stopwatch watch = Stopwatch.StartNew();
+
+                DetectAndRender(images[0]);
+                watch.Stop();
+
+                SetImage(images[0]);
+                String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
+
+                SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
+            }
         }
 
         private void DownloadManager_OnDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)

@@ -68,7 +68,8 @@ namespace Emgu.CV.XamarinForms
                     manager.AddFile(
                         "https://github.com/pjreddie/darknet/raw/master/cfg/yolov3-spp.cfg",
                         _modelFolderName);
-                } else if (version == YoloVersion.YoloV3)
+                }
+                else if (version == YoloVersion.YoloV3)
                 {
                     manager.AddFile(
                         "https://pjreddie.com/media/files/yolov3.weights",
@@ -76,7 +77,8 @@ namespace Emgu.CV.XamarinForms
                     manager.AddFile(
                         "https://github.com/pjreddie/darknet/raw/master/cfg/yolov3.cfg",
                         _modelFolderName);
-                } else if (version == YoloVersion.YoloV3Tiny)
+                }
+                else if (version == YoloVersion.YoloV3Tiny)
                 {
                     manager.AddFile(
                         "https://pjreddie.com/media/files/yolov3-tiny.weights",
@@ -88,7 +90,7 @@ namespace Emgu.CV.XamarinForms
 
                 manager.AddFile("https://github.com/pjreddie/darknet/raw/master/data/coco.names",
                     _modelFolderName);
-            
+
                 manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
                 await manager.Download();
                 _yoloDetector = DnnInvoke.ReadNetFromDarknet(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
@@ -100,95 +102,93 @@ namespace Emgu.CV.XamarinForms
 
         private void DetectAndRender(Mat image, double confThreshold = 0.5)
         {
-            //int imgDim = 300;
             MCvScalar meanVal = new MCvScalar();
 
             Size imageSize = image.Size;
-            //using (Mat inputBlob = new Mat())
-            //{
-                DnnInvoke.BlobFromImage(
-                    image,
-                    _inputBlob,
-                    1.0,
-                    new Size(416, 416),
-                    meanVal,
-                    true,
-                    false,
-                    DepthType.Cv8U);
-                _yoloDetector.SetInput(_inputBlob, "", 0.00392);
-                int[] outLayers = _yoloDetector.UnconnectedOutLayers;
-                String outLayerType = _yoloDetector.GetLayer(outLayers[0]).Type;
-                String[] outLayerNames = _yoloDetector.UnconnectedOutLayersNames;
-                using (VectorOfMat outs = new VectorOfMat())
-                {
-                    _yoloDetector.Forward(outs, outLayerNames);
-                    List<Rectangle> boxes = new List<Rectangle>();
-                    List<double> confidents = new List<double>();
-                    List<int> classIds = new List<int>();
-                    if (outLayerType.Equals("Region"))
-                    {
-                        int size = outs.Size;
-                        
-                        for (int i = 0; i < size; i++)
-                        {
-                            // Network produces output blob with a shape NxC where N is a number of
-                            // detected objects and C is a number of classes + 4 where the first 4
-                            // numbers are [center_x, center_y, width, height]
-                            using (Mat m = outs[i])
-                            {
-                                int rows = m.Rows;
-                                int cols = m.Cols;
-                                float[,] data = m.GetData(true) as float[,];
-                                for (int j = 0; j < rows; j++)
-                                {
-                                    using (Mat subM = new Mat(m, new Emgu.CV.Structure.Range(j, j + 1), new Emgu.CV.Structure.Range(5, cols)))
-                                    {
-                                        double minVal = 0, maxVal = 0;
-                                        Point minLoc = new Point();
-                                        Point maxLoc = new Point();
-                                        CvInvoke.MinMaxLoc(subM, ref minVal, ref maxVal, ref minLoc, ref maxLoc );
-                                        if (maxVal > confThreshold)
-                                        {
-                                            
-                                            int centerX = (int) (data[j,0] * imageSize.Width);
-                                            int centerY = (int) (data[j,1] * imageSize.Height);
-                                            int width = (int) (data[j,2] * imageSize.Width);
-                                            int height = (int) (data[j,3] * imageSize.Height);
-                                            int left = centerX - width / 2;
-                                            int top = centerY - height / 2;
-                                            Rectangle rect = new Rectangle(left, top, width, height);
 
-                                            classIds.Add(maxLoc.X);
-                                            confidents.Add(maxVal);
-                                            boxes.Add(rect);
-                                        }
+            DnnInvoke.BlobFromImage(
+                image,
+                _inputBlob,
+                1.0,
+                new Size(416, 416),
+                meanVal,
+                true,
+                false,
+                DepthType.Cv8U);
+            _yoloDetector.SetInput(_inputBlob, "", 0.00392);
+            int[] outLayers = _yoloDetector.UnconnectedOutLayers;
+            String outLayerType = _yoloDetector.GetLayer(outLayers[0]).Type;
+            String[] outLayerNames = _yoloDetector.UnconnectedOutLayersNames;
+            using (VectorOfMat outs = new VectorOfMat())
+            {
+                _yoloDetector.Forward(outs, outLayerNames);
+                List<Rectangle> boxes = new List<Rectangle>();
+                List<double> confidents = new List<double>();
+                List<int> classIds = new List<int>();
+                if (outLayerType.Equals("Region"))
+                {
+                    int size = outs.Size;
+
+                    for (int i = 0; i < size; i++)
+                    {
+                        // Network produces output blob with a shape NxC where N is a number of
+                        // detected objects and C is a number of classes + 4 where the first 4
+                        // numbers are [center_x, center_y, width, height]
+                        using (Mat m = outs[i])
+                        {
+                            int rows = m.Rows;
+                            int cols = m.Cols;
+                            float[,] data = m.GetData(true) as float[,];
+                            for (int j = 0; j < rows; j++)
+                            {
+                                using (Mat subM = new Mat(m, new Emgu.CV.Structure.Range(j, j + 1), new Emgu.CV.Structure.Range(5, cols)))
+                                {
+                                    double minVal = 0, maxVal = 0;
+                                    Point minLoc = new Point();
+                                    Point maxLoc = new Point();
+                                    CvInvoke.MinMaxLoc(subM, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
+                                    if (maxVal > confThreshold)
+                                    {
+
+                                        int centerX = (int)(data[j, 0] * imageSize.Width);
+                                        int centerY = (int)(data[j, 1] * imageSize.Height);
+                                        int width = (int)(data[j, 2] * imageSize.Width);
+                                        int height = (int)(data[j, 3] * imageSize.Height);
+                                        int left = centerX - width / 2;
+                                        int top = centerY - height / 2;
+                                        Rectangle rect = new Rectangle(left, top, width, height);
+
+                                        classIds.Add(maxLoc.X);
+                                        confidents.Add(maxVal);
+                                        boxes.Add(rect);
                                     }
                                 }
-
                             }
-                        }
 
-                        for  ( int i = 0; i < boxes.Count; i++)
-                        {
-                            String c = _labels[classIds[i]];
-                            
-                            CvInvoke.Rectangle(image, boxes[i], new MCvScalar(0, 0, 255), 2);
-                            CvInvoke.PutText(
-                                image, 
-                                String.Format("{0}: {1}",c, confidents[i]),
-                                boxes[i].Location,
-                                FontFace.HersheyDuplex,
-                                1.0, 
-                                new MCvScalar(0, 0, 255),
-                                1);
                         }
-                        
                     }
-                    else
+
+                    for (int i = 0; i < boxes.Count; i++)
                     {
-                        throw new Exception(String.Format("Unknown output layer type: {0}", outLayerType ));
+                        String c = _labels[classIds[i]];
+
+                        CvInvoke.Rectangle(image, boxes[i], new MCvScalar(0, 0, 255), 2);
+                        CvInvoke.PutText(
+                            image,
+                            String.Format("{0}: {1}", c, confidents[i]),
+                            boxes[i].Location,
+                            FontFace.HersheyDuplex,
+                            1.0,
+                            new MCvScalar(0, 0, 255),
+                            1);
                     }
-                //}
+
+                }
+                else
+                {
+                    throw new Exception(String.Format("Unknown output layer type: {0}", outLayerType));
+                }
+
             }
         }
 
@@ -211,66 +211,6 @@ namespace Emgu.CV.XamarinForms
             button.Text = _defaultButtonText;
             button.Clicked += OnButtonClicked;
 
-            OnImagesLoaded += async (sender, image) =>
-            {
-                if (image == null || (image.Length > 0 && image[0] == null))
-                    return;
-
-                if (image.Length == 0)
-                {
-                    await InitYoloDetector(YoloVersion.YoloV3Tiny);
-
-#if __ANDROID__
-                    button.Text = _StopCameraButtonText;
-                    StartCapture(async delegate(Object sender, Mat m)
-                    {
-                        //Skip the frame if busy, 
-                        //Otherwise too many frames arriving and will eventually saturated the memory.
-                        if (!_isBusy)
-                        {
-                            _isBusy = true;
-                            try
-                            {
-                                Stopwatch watch = Stopwatch.StartNew();
-                                await Task.Run(() => { DetectAndRender(m); });
-                                watch.Stop();
-                                SetImage(m);
-                                SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
-                            }
-                            finally
-                            {
-                                _isBusy = false;
-                            }
-                        }
-                    });
-#else
-                    //Handle video
-                    if (_capture == null)
-                    {
-                        _capture = new VideoCapture();
-                        _capture.ImageGrabbed += _capture_ImageGrabbed;
-                    }
-                    _capture.Start();
-#endif
-                }
-                else
-                {
-                    SetMessage("Please wait...");
-                    SetImage(null);
-
-                    await InitYoloDetector();
-
-                    Stopwatch watch = Stopwatch.StartNew();
-
-                    DetectAndRender(image[0]);
-                    watch.Stop();
-
-                    SetImage(image[0]);
-                    String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
-
-                    SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
-                }
-            };
         }
 
         private void _capture_ImageGrabbed(object sender, EventArgs e)
@@ -287,7 +227,7 @@ namespace Emgu.CV.XamarinForms
             SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
         }
 
-        private void OnButtonClicked(Object sender, EventArgs args)
+        private async void OnButtonClicked(Object sender, EventArgs args)
         {
 #if __ANDROID__
             var button = GetButton();
@@ -299,7 +239,65 @@ namespace Emgu.CV.XamarinForms
                 return;
             }
 #endif
-            LoadImages(new string[] { "dog416.png" });
+            Mat[] images = await LoadImages(new string[] { "dog416.png" });
+
+            if (images == null || (images.Length > 0 && images[0] == null))
+                return;
+
+            if (images.Length == 0)
+            {
+                await InitYoloDetector(YoloVersion.YoloV3Tiny);
+
+#if __ANDROID__
+                button.Text = _StopCameraButtonText;
+                StartCapture(async delegate (Object sender, Mat m)
+                {
+                    //Skip the frame if busy, 
+                    //Otherwise too many frames arriving and will eventually saturated the memory.
+                    if (!_isBusy)
+                    {
+                        _isBusy = true;
+                        try
+                        {
+                            Stopwatch watch = Stopwatch.StartNew();
+                            await Task.Run(() => { DetectAndRender(m); });
+                            watch.Stop();
+                            SetImage(m);
+                            SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
+                        }
+                        finally
+                        {
+                            _isBusy = false;
+                        }
+                    }
+                });
+#else
+                    //Handle video
+                    if (_capture == null)
+                    {
+                        _capture = new VideoCapture();
+                        _capture.ImageGrabbed += _capture_ImageGrabbed;
+                    }
+                    _capture.Start();
+#endif
+            }
+            else
+            {
+                SetMessage("Please wait...");
+                SetImage(null);
+
+                await InitYoloDetector();
+
+                Stopwatch watch = Stopwatch.StartNew();
+
+                DetectAndRender(images[0]);
+                watch.Stop();
+
+                SetImage(images[0]);
+                String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
+
+                SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
+            }
         }
 
         private void DownloadManager_OnDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
