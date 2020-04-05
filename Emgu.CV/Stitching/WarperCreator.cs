@@ -13,6 +13,9 @@ using Emgu.Util;
 
 namespace Emgu.CV.Stitching
 {
+    /// <summary>
+    /// Image warper factories base class.
+    /// </summary>
     public abstract class WarperCreator : UnmanagedObject
     {
         /// <summary>

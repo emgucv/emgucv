@@ -15,6 +15,9 @@ using UIKit;
 
 namespace Emgu.CV
 {
+    /// <summary>
+    /// Provide extension method to convert IInputArray to and from UIImage
+    /// </summary>
     public static class UIImageExtension
     {
         /// <summary>
@@ -110,8 +113,18 @@ namespace Emgu.CV
         }
     }
 
+    /// <summary>
+    /// Class that can be used to read a file to Mat using UIImage
+    /// </summary>
     public class UIImageFileReaderMat : Emgu.CV.IFileReaderMat
     {
+        /// <summary>
+        /// Read the file into Mat using UIImage
+        /// </summary>
+        /// <param name="fileName">The image file to be read</param>
+        /// <param name="mat">The Mat to read the file into</param>
+        /// <param name="loadType">Image load type</param>
+        /// <returns>True if successfully read the file into the Mat</returns>
         public bool ReadFile(String fileName, Mat mat, CvEnum.ImreadModes loadType)
         {
             try

@@ -13,6 +13,9 @@ using Emgu.CV.CvEnum;
 
 namespace Emgu.CV
 {
+    /// <summary>
+    /// Provide extension method to convert IInputArray to and from CGImage
+    /// </summary>
     public static class CGImageExtension
     {
         /// <summary>
