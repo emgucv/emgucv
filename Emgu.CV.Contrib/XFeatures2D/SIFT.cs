@@ -2,8 +2,6 @@
 //  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if NONFREE
-
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -62,4 +60,3 @@ namespace Emgu.CV.XFeatures2D
     }
 }
 
-#endif
