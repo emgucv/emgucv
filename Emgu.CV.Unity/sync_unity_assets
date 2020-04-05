@@ -35,6 +35,7 @@ cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Videostab/*.cs ../Emgu.CV/Videostab
 #cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Viz/*.cs ../Emgu.CV/Viz 
 
 
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Alphamat/*.cs ../Emgu.CV.Contrib/Alphamat 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Aruco/*.cs ../Emgu.CV.Contrib/Aruco  
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/BgSegm/*.cs ../Emgu.CV.Contrib/BgSegm  
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Bioinspired/*.cs ../Emgu.CV.Contrib/Bioinspired

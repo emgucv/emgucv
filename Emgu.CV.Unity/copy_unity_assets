@@ -62,7 +62,8 @@ cp -r ../Emgu.CV/Video Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Videoio Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Videostab Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 
-
+mkdir Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Alphamat
+cp -r ../Emgu.CV.Contrib/Alphamat/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Alphamat
 mkdir Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Aruco
 cp -r ../Emgu.CV.Contrib/Aruco/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Aruco
 mkdir Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/BgSegm
