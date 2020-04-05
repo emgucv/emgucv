@@ -886,7 +886,7 @@ namespace Emgu.CV
             return this.ForEachDuplicateChannel(
                delegate (IInputArray img, int channel)
                {
-                   return CvInvoke.HoughCircles(img, CvEnum.HoughType.Gradient, dp, minDist, cannyThresh[channel], accumulatorThresh[channel], minRadius, maxRadius);
+                   return CvInvoke.HoughCircles(img, CvEnum.HoughModes.Gradient, dp, minDist, cannyThresh[channel], accumulatorThresh[channel], minRadius, maxRadius);
                });
         }
 #endregion
