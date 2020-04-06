@@ -52,7 +52,7 @@ namespace ShapeDetection
             Stopwatch watch = Stopwatch.StartNew();
             double cannyThreshold = 180.0;
             double circleAccumulatorThreshold = 120;
-            CircleF[] circles = CvInvoke.HoughCircles(uimage, HoughType.Gradient, 2.0, 20.0, cannyThreshold, circleAccumulatorThreshold, 5);
+            CircleF[] circles = CvInvoke.HoughCircles(uimage, HoughModes.Gradient, 2.0, 20.0, cannyThreshold, circleAccumulatorThreshold, 5);
 
             watch.Stop();
             msgBuilder.Append(String.Format("Hough circles - {0} ms; ", watch.ElapsedMilliseconds));

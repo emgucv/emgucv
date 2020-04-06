@@ -1599,7 +1599,7 @@ namespace Emgu.CV
         public static void HoughCircles(
            IInputArray image,
            IOutputArray circles,
-           CvEnum.HoughType method,
+           CvEnum.HoughModes method,
            double dp,
            double minDist,
            double param1 = 100,
@@ -1626,7 +1626,7 @@ namespace Emgu.CV
         /// <returns>The circles detected</returns>
         public static CircleF[] HoughCircles(
            IInputArray image,
-           CvEnum.HoughType method,
+           CvEnum.HoughModes method,
            double dp,
            double minDist,
            double param1 = 100,
@@ -1651,7 +1651,7 @@ namespace Emgu.CV
         private static extern void cveHoughCircles(
            IntPtr image,
            IntPtr circles,
-           CvEnum.HoughType method,
+           CvEnum.HoughModes method,
            double dp,
            double minDist,
            double param1,
