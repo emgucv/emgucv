@@ -286,7 +286,7 @@ void cudaGemm(cv::_InputArray* src1, cv::_InputArray* src2, double alpha,
 void cudaLShift(cv::_InputArray* a, CvScalar* scale, cv::_OutputArray* c, cv::cuda::Stream* stream)
 {
 #ifdef HAVE_OPENCV_CUDAARITHM
-	cv::cuda::lshift(*a, *scale, *c, stream ? *stream : cv::cuda::Stream::Null());
+	cv::cuda::lshift(*a, static_cast<cv::Scalar>(*scale), *c, stream ? *stream : cv::cuda::Stream::Null());
 #else
 	throw_no_cudaarithm();
 #endif
@@ -295,7 +295,7 @@ void cudaLShift(cv::_InputArray* a, CvScalar* scale, cv::_OutputArray* c, cv::cu
 void cudaRShift(cv::_InputArray* a, CvScalar* scale, cv::_OutputArray* c, cv::cuda::Stream* stream)
 {
 #ifdef HAVE_OPENCV_CUDAARITHM
-	cv::cuda::rshift(*a, *scale, *c, stream ? *stream : cv::cuda::Stream::Null());
+	cv::cuda::rshift(*a, static_cast<cv::Scalar>(*scale), *c, stream ? *stream : cv::cuda::Stream::Null());
 #else
 	throw_no_cudaarithm();
 #endif

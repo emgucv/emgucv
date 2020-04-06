@@ -1188,8 +1188,8 @@ void cvePlaneWarperGpuRelease(cv::PlaneWarperGpu** warperCreator)
 {
 #ifdef HAVE_OPENCV_STITCHING
 #ifdef HAVE_OPENCV_CUDAWARPING
-	delete* warper;
-	*warper = 0;
+	delete* warperCreator;
+	*warperCreator = 0;
 #else
 	throw_no_cudawarping();
 #endif
@@ -1243,8 +1243,8 @@ void cveCylindricalWarperGpuRelease(cv::CylindricalWarperGpu** warperCreator)
 {
 #ifdef HAVE_OPENCV_STITCHING
 #ifdef HAVE_OPENCV_CUDAWARPING
-	delete* warper;
-	*warper = 0;
+	delete* warperCreator;
+	*warperCreator = 0;
 #else
 	throw_no_cudawarping();
 #endif

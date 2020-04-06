@@ -33,11 +33,13 @@ IF EXIST "%ANDROID_NDK%" SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows-x86_64\bin\
 
 IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r17c" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r17c
 
-REM IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r18b" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r18b
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r18b" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r18b
 
-REM IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r19c" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r19c
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r19c" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r19c
 
-REM IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r20" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r20
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r20" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r20
+
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r21" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r21
 
 IF EXIST "%programfiles(x86)%\CMake 2.8\bin\cmake.exe" SET CMAKE_EXE=%programfiles(x86)%\CMake 2.8\bin\cmake.exe
 IF EXIST "%programfiles(x86)%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programfiles(x86)%\CMake\bin\cmake.exe
