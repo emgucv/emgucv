@@ -44,6 +44,15 @@ CVAPI(void) cveCorrectMatches(cv::_InputArray* f, cv::_InputArray* points1, cv::
 
 CVAPI(bool) cveFindChessboardCornersSB(cv::_InputArray* image, CvSize* patternSize, cv::_OutputArray* corners, int flags);
 
+CVAPI(void) cveEstimateChessboardSharpness(
+	cv::_InputArray* image, 
+	CvSize* patternSize, 
+	cv::_InputArray* corners,
+	float riseDistance, 
+	bool vertical,
+	cv::_OutputArray* sharpness, 
+	CvScalar* result);
+
 CVAPI(void) cveDrawChessboardCorners(cv::_InputOutputArray* image, CvSize* patternSize, cv::_InputArray* corners, bool patternWasFound);
 
 CVAPI(void) cveFilterSpeckles(cv::_InputOutputArray* img, double newVal, int maxSpeckleSize, double maxDiff, cv::_InputOutputArray* buf);

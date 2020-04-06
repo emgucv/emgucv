@@ -111,6 +111,22 @@ bool cveFindChessboardCornersSB(cv::_InputArray* image, CvSize* patternSize, cv:
 	return cv::findChessboardCornersSB(*image, *patternSize, *corners, flags);
 }
 
+void cveEstimateChessboardSharpness(
+	cv::_InputArray* image,
+	CvSize* patternSize,
+	cv::_InputArray* corners,
+	float riseDistance,
+	bool vertical,
+	cv::_OutputArray* sharpness,
+	CvScalar* result)
+{
+	cv::Scalar r = cv::estimateChessboardSharpness(*image, *patternSize, *corners, riseDistance, vertical, sharpness ? *sharpness : (cv::OutputArray) cv::noArray()) ;
+	result->val[0] = r.val[0];
+	result->val[1] = r.val[1];
+	result->val[2] = r.val[2];
+	result->val[3] = r.val[3];
+}
+
 void cveDrawChessboardCorners(cv::_InputOutputArray* image, CvSize* patternSize, cv::_InputArray* corners, bool patternWasFound)
 {
 	cv::drawChessboardCorners(*image, *patternSize, *corners, patternWasFound);

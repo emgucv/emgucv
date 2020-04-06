@@ -138,7 +138,7 @@ namespace Emgu.CV
         /// <param name="param2">Parameter used for the RANSAC or LMedS methods only. It specifies a desirable level of confidence (probability) that the estimated matrix is correct.</param>
         /// <param name="mask">The optional pointer to output array of N elements, every element of which is set to 0 for outliers and to 1 for the "inliers", i.e. points that comply well with the estimated epipolar geometry. The array is computed only in RANSAC and LMedS methods. For other methods it is set to all 1.</param>
         /// <returns>The calculated fundamental matrix </returns>
-        public static Mat FindFundamentalMat(IInputArray points1, IInputArray points2, 
+        public static Mat FindFundamentalMat(IInputArray points1, IInputArray points2,
            CvEnum.FmType method = CvEnum.FmType.Ransac, double param1 = 3, double param2 = 0.99, IOutputArray mask = null)
         {
             Mat f = new Mat();
@@ -318,7 +318,7 @@ namespace Emgu.CV
             Mat m = new Mat();
             using (InputArray iaObjectPoints = objectPoints.GetInputArray())
             using (InputArray iaImagePoints = imagePoints.GetInputArray())
-                cveInitCameraMatrix2D(iaObjectPoints, iaImagePoints, ref imageSize, aspectRatio, m );
+                cveInitCameraMatrix2D(iaObjectPoints, iaImagePoints, ref imageSize, aspectRatio, m);
             return m;
         }
 
@@ -646,17 +646,17 @@ namespace Emgu.CV
         /// <param name="flags">Method for solving a PnP problem </param>
         /// <returns>True if successful</returns>
         public static bool SolvePnPRansac(
-           IInputArray objectPoints, 
-           IInputArray imagePoints, 
-           IInputArray cameraMatrix, 
+           IInputArray objectPoints,
+           IInputArray imagePoints,
+           IInputArray cameraMatrix,
            IInputArray distCoeffs,
-           IOutputArray rvec, 
+           IOutputArray rvec,
            IOutputArray tvec,
-           bool useExtrinsicGuess = false, 
-           int iterationsCount = 100, 
-           float reprojectionError = 8.0f, 
+           bool useExtrinsicGuess = false,
+           int iterationsCount = 100,
+           float reprojectionError = 8.0f,
            double confident = 0.99,
-           IOutputArray inliers = null, 
+           IOutputArray inliers = null,
            CvEnum.SolvePnpMethod flags = SolvePnpMethod.Iterative)
         {
             using (InputArray iaObjectPoints = objectPoints.GetInputArray())
@@ -676,18 +676,18 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         private static extern bool cveSolvePnPRansac(
-           IntPtr objectPoints, 
-           IntPtr imagePoints, 
-           IntPtr cameraMatrix, 
+           IntPtr objectPoints,
+           IntPtr imagePoints,
+           IntPtr cameraMatrix,
            IntPtr distCoeffs,
-           IntPtr rvec, 
+           IntPtr rvec,
            IntPtr tvec,
            [MarshalAs(CvInvoke.BoolMarshalType)]
            bool useExtrinsicGuess,
-           int iterationsCount, 
-           float reprojectionError, 
+           int iterationsCount,
+           float reprojectionError,
            double confident,
-           IntPtr inliers, 
+           IntPtr inliers,
            CvEnum.SolvePnpMethod flags);
 
         /// <summary>
@@ -757,7 +757,7 @@ namespace Emgu.CV
             using (InputArray iaDistortionCoeffs = distCoeffs == null ? InputArray.GetEmpty() : distCoeffs.GetInputArray())
             using (InputOutputArray ioaRotationVector = rvec.GetInputOutputArray())
             using (InputOutputArray ioaTranslationVector = tvec.GetInputOutputArray())
-                cveSolvePnPRefineLM(iaObjectPoints, iaImagePoints, iaCameraMatrix, iaDistortionCoeffs, ioaRotationVector, ioaTranslationVector, ref criteria );
+                cveSolvePnPRefineLM(iaObjectPoints, iaImagePoints, iaCameraMatrix, iaDistortionCoeffs, ioaRotationVector, ioaTranslationVector, ref criteria);
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -838,7 +838,7 @@ namespace Emgu.CV
             IOutputArrayOfArrays tvecs,
             bool useExtrinsicGuess = false,
             CvEnum.SolvePnpMethod flags = SolvePnpMethod.Iterative,
-            IInputArray rvec = null, 
+            IInputArray rvec = null,
             IInputArray tvec = null,
             IOutputArray reprojectionError = null)
         {
@@ -855,13 +855,13 @@ namespace Emgu.CV
             {
                 return cveSolvePnPGeneric(
                     iaObjectPoints,
-                    iaImagePoints, 
-                    iaCameraMatrix, 
+                    iaImagePoints,
+                    iaCameraMatrix,
                     iaDistCoeffs,
                     oaRotationVector,
-                    oaTranslationVector, 
-                    useExtrinsicGuess, 
-                    flags, 
+                    oaTranslationVector,
+                    useExtrinsicGuess,
+                    flags,
                     iaRvec,
                     iaTvec,
                     oaReporjectionError);
@@ -882,7 +882,7 @@ namespace Emgu.CV
             IntPtr rvec,
             IntPtr tvec,
             IntPtr reprojectionError);
-            
+
 
         /// <summary>
         /// Estimates transformation between the 2 cameras making a stereo pair. If we have a stereo camera, where the relative position and orientatation of the 2 cameras is fixed, and if we computed poses of an object relative to the first camera and to the second camera, (R1, T1) and (R2, T2), respectively (that can be done with cvFindExtrinsicCameraParams2), obviously, those poses will relate to each other, i.e. given (R1, T1) it should be possible to compute (R2, T2) - we only need to know the position and orientation of the 2nd camera relative to the 1st camera. That's what the described function does. It computes (R, T) such that:
@@ -1034,12 +1034,12 @@ namespace Emgu.CV
         /// <param name="threshold">If the parameter is greater than zero, then all the point pairs that do not comply the epipolar geometry well enough (that is, the points for which fabs(points2[i]T*F*points1[i])&gt;threshold) are rejected prior to computing the homographies</param>
         /// <returns>True if successful</returns>
         public static bool StereoRectifyUncalibrated(
-            IInputArray points1, 
-            IInputArray points2, 
-            IInputArray f, 
+            IInputArray points1,
+            IInputArray points2,
+            IInputArray f,
             Size imgSize,
-            IOutputArray h1, 
-            IOutputArray h2, 
+            IOutputArray h1,
+            IOutputArray h2,
             double threshold = 5)
         {
             using (InputArray iaPoints1 = points1.GetInputArray())
@@ -1199,7 +1199,11 @@ namespace Emgu.CV
         /// <param name="corners">Output array of detected corners.</param>
         /// <param name="flags">Various operation flags</param>
         /// <returns>True if chessboard corners found</returns>
-        public static bool FindChessboardCornersSB(IInputArray image, Size patternSize, IOutputArray corners, CvEnum.CalibCbType flags = CalibCbType.Default)
+        public static bool FindChessboardCornersSB(
+            IInputArray image, 
+            Size patternSize, 
+            IOutputArray corners, 
+            CvEnum.CalibCbType flags = CalibCbType.Default)
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaCorners = corners.GetOutputArray())
@@ -1353,11 +1357,62 @@ namespace Emgu.CV
         private static extern void cveCorrectMatches(IntPtr f, IntPtr points1, IntPtr points2, IntPtr newPoints1,
            IntPtr newPoints2);
 
+        /// <summary>
+        /// Estimates the sharpness of a detected chessboard.
+        /// Image sharpness, as well as brightness, are a critical parameter for accuracte camera calibration. For accessing these parameters for filtering out problematic calibraiton images, this method calculates edge profiles by traveling from black to white chessboard cell centers. Based on this, the number of pixels is calculated required to transit from black to white. This width of the transition area is a good indication of how sharp the chessboard is imaged and should be below ~3.0 pixels.
+        /// </summary>
+        /// <param name="image">Gray image used to find chessboard corners</param>
+        /// <param name="patternSize">Size of a found chessboard pattern</param>
+        /// <param name="corners">Corners found by findChessboardCorners(SB)</param>
+        /// <param name="riseDistance">Rise distance 0.8 means 10% ... 90% of the final signal strength</param>
+        /// <param name="vertical">By default edge responses for horizontal lines are calculated</param>
+        /// <param name="sharpness">Optional output array with a sharpness value for calculated edge responses</param>
+        /// <returns>Scalar(average sharpness, average min brightness, average max brightness,0)</returns>
+        public static MCvScalar EstimateChessboardSharpness(
+            IInputArray image,
+            Size patternSize,
+            IInputArray corners,
+            float riseDistance = 0.8f,
+            bool vertical = false,
+            IOutputArray sharpness = null)
+        {
+            MCvScalar result = new MCvScalar();
+            using (InputArray iaImage = image.GetInputArray())
+            using (InputArray iaCorners = corners.GetInputArray())
+            using (OutputArray oaSharpness = (sharpness == null? OutputArray.GetEmpty() : sharpness.GetOutputArray()))
+                cveEstimateChessboardSharpness(
+                    iaImage,
+                    ref patternSize,
+                    iaCorners,
+                    riseDistance,
+                    vertical,
+                    oaSharpness,
+                    ref result
+                    );
+            return result;
+        }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveFisheyeProjectPoints(IntPtr objectPoints, IntPtr imagePoints, IntPtr rvec,
-           IntPtr tvec,
-           IntPtr K, IntPtr D, double alpha, IntPtr jacobian);
+        private static extern void cveEstimateChessboardSharpness(
+            IntPtr image,
+            ref Size patternSize,
+            IntPtr corners,
+            float riseDistance,
+            [MarshalAs(BoolMarshalType)]
+            bool vertical,
+            IntPtr sharpness,
+            ref MCvScalar result);
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveFisheyeProjectPoints(
+            IntPtr objectPoints,
+            IntPtr imagePoints,
+            IntPtr rvec,
+            IntPtr tvec,
+            IntPtr K,
+            IntPtr D,
+            double alpha,
+            IntPtr jacobian);
 
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1469,13 +1524,13 @@ namespace Emgu.CV
         /// <param name="alpha">The skew coefficient.</param>
         /// <param name="jacobian">Optional output 2Nx15 jacobian matrix of derivatives of image points with respect to components of the focal lengths, coordinates of the principal point, distortion coefficients, rotation vector, translation vector, and the skew. In the old interface different components of the jacobian are returned via different output parameters.</param>
         public static void ProjectPoints(
-            IInputArray objectPoints, 
-            IOutputArray imagePoints, 
+            IInputArray objectPoints,
+            IOutputArray imagePoints,
             IInputArray rvec,
             IInputArray tvec,
-            IInputArray K, 
-            IInputArray D, 
-            double alpha = 0, 
+            IInputArray K,
+            IInputArray D,
+            double alpha = 0,
             IOutputArray jacobian = null)
         {
             using (InputArray iaObjectPoints = objectPoints.GetInputArray())
