@@ -29,7 +29,7 @@ namespace Emgu.CV.Alphamat
         /// <param name="image">The input image</param>
         /// <param name="tmap">The trimap</param>
         /// <param name="result">The output mask</param>
-        public void AlphamatInfoFlow(IInputArray image, IInputArray tmap, IOutputArray result)
+        public static void InfoFlow(IInputArray image, IInputArray tmap, IOutputArray result)
         {
             using (InputArray iaImage = image.GetInputArray())
             using (InputArray iaTmap = tmap.GetInputArray())
