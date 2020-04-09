@@ -831,41 +831,44 @@ namespace Emgu.CV.Test
         [Test]
         public void TestGrayscaleBitmapConstructor()
         {
-            Image<Bgra, Byte> img = new Image<Bgra, byte>(320, 240);
-            img.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255, 255));
-            img.Save("tmp.png");
-
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            Image<Bgra, Byte> img2 = new Image<Bgra, byte>("tmp.png");
-            stopwatch.Stop();
-            Trace.WriteLine(string.Format("Time: {0} milliseconds", stopwatch.ElapsedMilliseconds));
-            Image<Bgra, Byte> absDiff = new Image<Bgra, Byte>(320, 240);
-            CvInvoke.AbsDiff(img, img2, absDiff);
-            double[] min, max;
-            Point[] minLoc, maxLoc;
-            double eps = 1;
-            absDiff.MinMax(out min, out max, out minLoc, out maxLoc); //ImageViewer.Show(absDiff);
-            EmguAssert.IsTrue(max[0] < eps);
-            EmguAssert.IsTrue(max[1] < eps);
-            EmguAssert.IsTrue(max[2] < eps);
-
-            stopwatch.Reset();
-            stopwatch.Start();
-            using (Bitmap bmp = new Bitmap("tmp.png"))
-            using (Image bmpImage = Bitmap.FromFile("tmp.png"))
+            if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
             {
-                EmguAssert.AreEqual(System.Drawing.Imaging.PixelFormat.Format32bppArgb, bmpImage.PixelFormat);
+                Image<Bgra, Byte> img = new Image<Bgra, byte>(320, 240);
+                img.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255, 255));
+                img.Save("tmp.png");
 
-                Image<Gray, Byte> img3 = bmp.ToImage<Gray, byte>();
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                Image<Bgra, Byte> img2 = new Image<Bgra, byte>("tmp.png");
                 stopwatch.Stop();
                 Trace.WriteLine(string.Format("Time: {0} milliseconds", stopwatch.ElapsedMilliseconds));
-                Image<Gray, Byte> diff = img.Convert<Gray, Byte>().AbsDiff(img3);
+                Image<Bgra, Byte> absDiff = new Image<Bgra, Byte>(320, 240);
+                CvInvoke.AbsDiff(img, img2, absDiff);
+                double[] min, max;
+                Point[] minLoc, maxLoc;
+                double eps = 1;
+                absDiff.MinMax(out min, out max, out minLoc, out maxLoc); //ImageViewer.Show(absDiff);
+                EmguAssert.IsTrue(max[0] < eps);
+                EmguAssert.IsTrue(max[1] < eps);
+                EmguAssert.IsTrue(max[2] < eps);
 
-                //Test seems to failed on Linux system. Skipping test on Linux for now.
-                if (!System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-                    EmguAssert.AreEqual(0, CvInvoke.CountNonZero(diff));
+                stopwatch.Reset();
+                stopwatch.Start();
+                using (Bitmap bmp = new Bitmap("tmp.png"))
+                using (Image bmpImage = Bitmap.FromFile("tmp.png"))
+                {
+                    EmguAssert.AreEqual(System.Drawing.Imaging.PixelFormat.Format32bppArgb, bmpImage.PixelFormat);
 
-                EmguAssert.IsTrue(img.Convert<Gray, Byte>().Equals(img3));
+                    Image<Gray, Byte> img3 = bmp.ToImage<Gray, byte>();
+                    stopwatch.Stop();
+                    Trace.WriteLine(string.Format("Time: {0} milliseconds", stopwatch.ElapsedMilliseconds));
+                    Image<Gray, Byte> diff = img.Convert<Gray, Byte>().AbsDiff(img3);
+
+                    //Test seems to failed on Linux system. Skipping test on Linux for now.
+                    if (!System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                        EmguAssert.AreEqual(0, CvInvoke.CountNonZero(diff));
+
+                    EmguAssert.IsTrue(img.Convert<Gray, Byte>().Equals(img3));
+                }
             }
         }
 #endif
@@ -1030,7 +1033,7 @@ namespace Emgu.CV.Test
             VoronoiFacet[] facets = subdiv.GetVoronoiFacets();
         }
 
-#region Test code from Bug 36, thanks to Bart
+        #region Test code from Bug 36, thanks to Bart
 
         [Test]
         public void TestPlanarSubdivision3()
@@ -1099,7 +1102,7 @@ namespace Emgu.CV.Test
 
             return points;
         }
-#endregion
+        #endregion
 
         /*
         [Test]
@@ -1123,7 +1126,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestMatchTemplate()
         {
-#region prepare synthetic image for testing
+            #region prepare synthetic image for testing
             int templWidth = 50;
             int templHeight = 50;
             Point templCenter = new Point(120, 100);
@@ -1138,7 +1141,7 @@ namespace Emgu.CV.Test
             img.ROI = objectLocation;
             randomObj.Copy(img, null);
             img.ROI = Rectangle.Empty;
-#endregion
+            #endregion
 
             Image<Gray, Single> match = img.MatchTemplate(randomObj, Emgu.CV.CvEnum.TemplateMatchingType.Sqdiff);
             double[] minVal, maxVal;
@@ -1432,7 +1435,7 @@ namespace Emgu.CV.Test
             {
                 images[i] = new Mat(new Size(200, 200), DepthType.Cv8U, 1);
                 CvInvoke.Randu(images[i], new MCvScalar(0), new MCvScalar(255));
-                
+
                 labels[i] = i;
             }
 
@@ -1448,7 +1451,7 @@ namespace Emgu.CV.Test
 
             Mat sample = new Mat(new Size(200, 200), DepthType.Cv8U, 1);
             CvInvoke.Randu(sample, new MCvScalar(0), new MCvScalar(255));
-            
+
             EigenFaceRecognizer eigen = new EigenFaceRecognizer(0, double.MaxValue);
 
             eigen.Train(images, labels);
@@ -1561,14 +1564,14 @@ namespace Emgu.CV.Test
         [Test]
         public void TestConvexHull()
         {
-#region Create some random points
+            #region Create some random points
             Random r = new Random();
             PointF[] pts = new PointF[200];
             for (int i = 0; i < pts.Length; i++)
             {
                 pts[i] = new PointF((float)(100 + r.NextDouble() * 400), (float)(100 + r.NextDouble() * 400));
             }
-#endregion
+            #endregion
 
             Mat img = new Mat(600, 600, DepthType.Cv8U, 3);
             img.SetTo(new MCvScalar(255.0, 255.0, 255.0));
@@ -1745,18 +1748,18 @@ namespace Emgu.CV.Test
         [Test]
         public void TestEllipseFitting()
         {
-#region generate random points
+            #region generate random points
             System.Random r = new Random();
             int sampleCount = 100;
             Ellipse modelEllipse = new Ellipse(new PointF(200, 200), new SizeF(150, 60), 90);
             PointF[] pts = PointCollection.GeneratePointCloud(modelEllipse, sampleCount);
-#endregion
+            #endregion
 
             Stopwatch watch = Stopwatch.StartNew();
             Ellipse fittedEllipse = PointCollection.EllipseLeastSquareFitting(pts);
             watch.Stop();
 
-#region draw the points and the fitted ellips
+            #region draw the points and the fitted ellips
             Mat img = new Mat(400, 400, DepthType.Cv8U, 3);
             img.SetTo(new MCvScalar(255, 255, 255));
             foreach (PointF p in pts)
@@ -1764,7 +1767,7 @@ namespace Emgu.CV.Test
             RotatedRect rect = fittedEllipse.RotatedRect;
             rect.Angle += 90; //the detected ellipse was off by 90 degree
             CvInvoke.Ellipse(img, rect, new MCvScalar(0, 0, 255), 2);
-#endregion
+            #endregion
 
             //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
         }
@@ -1772,18 +1775,18 @@ namespace Emgu.CV.Test
         [Test]
         public void TestMinAreaRect()
         {
-#region generate random points
+            #region generate random points
             System.Random r = new Random();
             int sampleCount = 100;
             Ellipse modelEllipse = new Ellipse(new PointF(200, 200), new SizeF(90, 60), -60);
             PointF[] pts = PointCollection.GeneratePointCloud(modelEllipse, sampleCount);
-#endregion
+            #endregion
 
             Stopwatch watch = Stopwatch.StartNew();
             RotatedRect box = CvInvoke.MinAreaRect(pts);
             watch.Stop();
 
-#region draw the points and the box
+            #region draw the points and the box
             Mat img = new Mat(400, 400, DepthType.Cv8U, 3);
             img.SetTo(new MCvScalar(255, 255, 255));
 
@@ -1792,7 +1795,7 @@ namespace Emgu.CV.Test
             CvInvoke.Polylines(img, vertices, true, new MCvScalar(0, 0, 255), 1);
             foreach (PointF p in pts)
                 CvInvoke.Circle(img, Point.Round(p), 2, new MCvScalar(0, 255, 0), 1);
-#endregion
+            #endregion
 
             //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
         }
@@ -1800,23 +1803,23 @@ namespace Emgu.CV.Test
         [Test]
         public void TestMinEnclosingCircle()
         {
-#region generate random points
+            #region generate random points
             System.Random r = new Random();
             int sampleCount = 100;
             Ellipse modelEllipse = new Ellipse(new PointF(200, 200), new SizeF(90, 60), -60);
             PointF[] pts = PointCollection.GeneratePointCloud(modelEllipse, sampleCount);
-#endregion
+            #endregion
 
             Stopwatch watch = Stopwatch.StartNew();
             CircleF circle = CvInvoke.MinEnclosingCircle(pts);
             watch.Stop();
 
-#region draw the points and the circle
+            #region draw the points and the circle
             Mat img = new Mat(400, 400, DepthType.Cv8U, 3);
             img.SetTo(new MCvScalar(255, 255, 255));
             foreach (PointF p in pts)
                 CvInvoke.Circle(img, Point.Round(p), 2, new MCvScalar(0, 255, 0), 1);
-#endregion
+            #endregion
 
             //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
         }
@@ -2216,7 +2219,7 @@ namespace Emgu.CV.Test
                 //invert the pixel
                 for (int j = 0; j < data.Length; j++)
                 {
-                    data[j] = (byte) (255 - data[j]);
+                    data[j] = (byte)(255 - data[j]);
                 }
 
                 li.Data = data;
@@ -2391,11 +2394,11 @@ namespace Emgu.CV.Test
                 }
 
                 using (VideoWriter writer = new VideoWriter(
-                        fileName, 
+                        fileName,
                         backend_idx,
-                        VideoWriter.Fourcc('H', '2', '6', '4'), 
-                        5, 
-                        new Size(width, height), 
+                        VideoWriter.Fourcc('H', '2', '6', '4'),
+                        5,
+                        new Size(width, height),
                         true))
                 {
                     double quality = writer.Get(VideoWriter.WriterProperty.Quality);
@@ -2597,7 +2600,7 @@ namespace Emgu.CV.Test
         public void TestDrawMarker()
         {
             Mat m = new Mat(new Size(640, 480), DepthType.Cv8U, 3);
-            m.SetTo(new MCvScalar(0,0,0));
+            m.SetTo(new MCvScalar(0, 0, 0));
             CvInvoke.DrawMarker(m, new Point(200, 200), new MCvScalar(255.0, 255.0, 0), MarkerTypes.Diamond);
             //Emgu.CV.UI.ImageViewer.Show(m);
         }
@@ -2889,20 +2892,20 @@ namespace Emgu.CV.Test
             using (SeamFinder finder = new GraphCutSeamFinder())
             using (BlocksChannelsCompensator compensator = new BlocksChannelsCompensator())
             using (FeatherBlender blender = new FeatherBlender())
-            { 
+            {
                 stitcher.SetFeaturesFinder(detector);
                 stitcher.SetWarper(warper);
                 stitcher.SetSeamFinder(finder);
                 stitcher.SetExposureCompensator(compensator);
                 stitcher.SetBlender(blender);
-                
+
                 Mat result = new Mat();
                 using (VectorOfMat vm = new VectorOfMat())
                 {
                     vm.Push(images);
                     stitcher.Stitch(vm, result);
                 }
-                
+
                 //Emgu.CV.UI.ImageViewer.Show(result);
             }
         }
@@ -4075,7 +4078,7 @@ namespace Emgu.CV.Test
             Mat m = EmguAssert.LoadMat("pedestrian.png");
             Mat result = new Mat();
             using (Bioinspired.RetinaFastToneMapping tm = new Bioinspired.RetinaFastToneMapping(m.Size))
-            using(Mat gray = new Mat())
+            using (Mat gray = new Mat())
             {
                 CvInvoke.CvtColor(m, gray, ColorConversion.Bgr2Gray);
                 tm.Setup(3.0f, 1.0f, 1.0f);
