@@ -564,30 +564,7 @@ namespace Emgu.CV.Test
             viewer.ShowDialog();
         }
 
-        /*
-        public static void TestOnePassVideoStabilizerCamera()
-        {
-           ImageViewer viewer = new ImageViewer();
-           using (Capture capture = new Capture())
-           using (GaussianMotionFilter motionFilter = new GaussianMotionFilter())
-           //using (Features2D.FastDetector detector = new Features2D.FastDetector(10, true))
-           using (Features2D.SURF detector = new Features2D.SURF(500, false))
-           //using (Features2D.ORBDetector detector = new Features2D.ORBDetector(500))
-           using (OnePassStabilizer stabilizer = new OnePassStabilizer(capture))
-           {
-              stabilizer.SetMotionFilter(motionFilter);
-              //motionEstimator.SetDetector(detector);
 
-              //stabilizer.SetMotionEstimator(motionEstimator);
-              Application.Idle += delegate(object sender, EventArgs e)
-              {
-                 Image<Bgr, byte> frame = stabilizer.NextFrame();
-                 if (frame != null)
-                    viewer.Image = frame;
-              };
-              viewer.ShowDialog();
-           }
-        }*/
 
         public static void TestOnePassVideoStabilizer()
         {

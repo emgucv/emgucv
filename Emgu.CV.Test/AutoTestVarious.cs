@@ -33,6 +33,7 @@ using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
 using Emgu.CV.Tiff;
 using Emgu.CV.Util;
+using Emgu.CV.VideoStab;
 using Emgu.CV.XFeatures2D;
 using Emgu.CV.XImgproc;
 //using Emgu.CV.Softcascade;
@@ -4160,6 +4161,29 @@ namespace Emgu.CV.Test
             using (VectorOfERStat v = new VectorOfERStat())
             {
 
+            }
+        }
+
+        [Test]
+        public static void TestOnePassVideoStabilizer()
+        {
+            //ImageViewer viewer = new ImageViewer();
+            using (VideoCapture capture = new VideoCapture("tree.avi"))
+            using (Emgu.CV.VideoStab.CaptureFrameSource framesource = new CaptureFrameSource(capture))
+            using (Emgu.CV.VideoStab.GaussianMotionFilter motionFilter = new Emgu.CV.VideoStab.GaussianMotionFilter())
+            //using (Features2D.FastDetector detector = new Features2D.FastDetector(10, true))
+            //using (Features2D.SURF detector = new Features2D.SURF(500, false))
+            //using (Features2D.ORBDetector detector = new Features2D.ORBDetector(500))
+            using (Emgu.CV.VideoStab.OnePassStabilizer stabilizer = new Emgu.CV.VideoStab.OnePassStabilizer(framesource))
+            using (Mat frame = new Mat())
+            {
+                stabilizer.SetMotionFilter(motionFilter);
+                int frameCount = 0;
+                while (stabilizer.NextFrame(frame))
+                {
+                    frameCount++;
+                }
+                EmguAssert.IsTrue(frameCount > 0, "VideoStabilizer did not return any frames");
             }
         }
 

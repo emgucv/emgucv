@@ -12,50 +12,67 @@ using Emgu.Util;
 
 namespace Emgu.CV.VideoStab
 {
-   /// <summary>
-   /// A FrameSource that can be used by the Video Stabilizer
-   /// </summary>
-   public abstract class FrameSource : UnmanagedObject
-   {
-      private VideoCapture.CaptureModuleType _captureSource;
+    /// <summary>
+    /// A FrameSource that can be used by the Video Stabilizer
+    /// </summary>
+    public abstract class FrameSource : UnmanagedObject
+    {
+        private VideoCapture.CaptureModuleType _captureSource;
 
-      /// <summary>
-      /// Get or Set the capture type
-      /// </summary>
-      public VideoCapture.CaptureModuleType CaptureSource
-      {
-         get
-         {
-            return _captureSource;
-         }
-         set
-         {
-            _captureSource = value;
-         }
-      }
+        /// <summary>
+        /// Get or Set the capture type
+        /// </summary>
+        public VideoCapture.CaptureModuleType CaptureSource
+        {
+            get
+            {
+                return _captureSource;
+            }
+            set
+            {
+                _captureSource = value;
+            }
+        }
 
-      /// <summary>
-      /// The unmanaged pointer the the frameSource
-      /// </summary>
-      public IntPtr FrameSourcePtr;
+        /// <summary>
+        /// The unmanaged pointer the frameSource
+        /// </summary>
+        public IntPtr FrameSourcePtr;
 
-      /// <summary>
-      /// Retrieve the next frame from the FrameSoure
-      /// </summary>
-      /// <returns>The next frame</returns>
-      public Mat NextFrame()
-      {
-         Mat frame = new Mat();
-         VideoStabInvoke.VideostabFrameSourceGetNextFrame(FrameSourcePtr, frame);
-         return frame;
-      }
+        /// <summary>
+        /// Retrieve the next frame from the FrameSource
+        /// </summary>
+        /// <returns>The next frame. If no more frames, null will be returned.</returns>
+        public Mat NextFrame()
+        {
+            Mat frame = new Mat();
+            if (VideoStabInvoke.cveVideostabFrameSourceGetNextFrame(FrameSourcePtr, frame))
+            {
+                return frame;
+            }
+            else
+            {
+                frame.Dispose();
+                return null;
+            }
+        }
 
-      /// <summary>
-      /// Release the unmanaged memory associated with this FrameSource
-      /// </summary>
-      protected override void DisposeObject()
-      {
-         FrameSourcePtr = IntPtr.Zero;
-      }
-   }
+        /// <summary>
+        /// Retrieve the next frame from the FrameSource
+        /// </summary>
+        /// <param name="frame">The next frame</param>
+        /// <returns>True if there are more frames</returns>
+        public bool NextFrame(Mat frame)
+        {
+            return VideoStabInvoke.cveVideostabFrameSourceGetNextFrame(FrameSourcePtr, frame);
+        }
+
+        /// <summary>
+        /// Release the unmanaged memory associated with this FrameSource
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            FrameSourcePtr = IntPtr.Zero;
+        }
+    }
 }

@@ -17,11 +17,11 @@ namespace Emgu.CV.VideoStab
       /// <summary>
       /// Create a Gaussian motion filter
       /// </summary>
-      /// <param name="radius">The radius, use 15 for default.</param>
-      /// <param name="stdev">The standard deviation, use -1.0f for default</param>
-      public GaussianMotionFilter(int radius, float stdev)
+      /// <param name="radius">The radius</param>
+      /// <param name="stdev">The standard deviation</param>
+      public GaussianMotionFilter(int radius=15, float stdev=-1.0f)
       {
-         _ptr = VideoStabInvoke.GaussianMotionFilterCreate(radius, stdev);
+         _ptr = VideoStabInvoke.cveGaussianMotionFilterCreate(radius, stdev);
       }
 
       /// <summary>
@@ -29,7 +29,7 @@ namespace Emgu.CV.VideoStab
       /// </summary>
       protected override void DisposeObject()
       {
-         VideoStabInvoke.GaussianMotionFilterRelease(ref _ptr);
+         VideoStabInvoke.cveGaussianMotionFilterRelease(ref _ptr);
       }
    }
 }

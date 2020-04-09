@@ -11,40 +11,44 @@ using Emgu.Util;
 
 namespace Emgu.CV.VideoStab
 {
-   /// <summary>
-   /// A two pass video stabilizer
-   /// </summary>
-   public class TwoPassStabilizer : FrameSource
-   {
-      private IntPtr _stabilizerBase;
+    /// <summary>
+    /// A two pass video stabilizer
+    /// </summary>
+    public class TwoPassStabilizer : FrameSource
+    {
+        private IntPtr _stabilizerBase;
 
-      private FrameSource _baseFrameSource;
+        private FrameSource _baseFrameSource;
 
-      /// <summary>
-      /// Create a two pass video stabilizer.
-      /// </summary>
-      /// <param name="baseFrameSource">The capture object to be stabilized. Should not be a camera stream.</param>
-      public TwoPassStabilizer(FrameSource baseFrameSource)
-      {
-         if (baseFrameSource.CaptureSource == VideoCapture.CaptureModuleType.Camera)
-         {
-            throw new ArgumentException("Two pass stabilizer cannot process camera stream");
-         }
+        /// <summary>
+        /// Create a two pass video stabilizer.
+        /// </summary>
+        /// <param name="baseFrameSource">The capture object to be stabilized. Should not be a camera stream.</param>
+        public TwoPassStabilizer(FrameSource baseFrameSource)
+        {
+            if (baseFrameSource.CaptureSource == VideoCapture.CaptureModuleType.Camera)
+            {
+                throw new ArgumentException("Two pass stabilizer cannot process camera stream");
+            }
 
-         _baseFrameSource = baseFrameSource;
+            _baseFrameSource = baseFrameSource;
 
-         _ptr = VideoStabInvoke.TwoPassStabilizerCreate(_baseFrameSource, ref _stabilizerBase, ref FrameSourcePtr);
-      }
+            _ptr = VideoStabInvoke.cveTwoPassStabilizerCreate(_baseFrameSource, ref _stabilizerBase, ref FrameSourcePtr);
+        }
 
-      /// <summary>
-      /// Release the unmanaged memory
-      /// </summary>
-      protected override void DisposeObject()
-      {
-         VideoStabInvoke.TwoPassStabilizerRelease(ref _ptr);
-         _stabilizerBase = IntPtr.Zero;
-         //_captureFrameSource.Dispose();
-         base.Dispose();
-      }
-   }
+        /// <summary>
+        /// Release the unmanaged memory
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            if (_ptr != IntPtr.Zero)
+            {
+                VideoStabInvoke.cveTwoPassStabilizerRelease(ref _ptr);
+            }
+
+            _stabilizerBase = IntPtr.Zero;
+            //_captureFrameSource.Dispose();
+            base.Dispose();
+        }
+    }
 }

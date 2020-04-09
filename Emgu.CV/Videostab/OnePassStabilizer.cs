@@ -12,48 +12,52 @@ using Emgu.Util;
 namespace Emgu.CV.VideoStab
 {
 
-   /// <summary>
-   /// A one pass video stabilizer
-   /// </summary>
-   public class OnePassStabilizer : FrameSource
-   {
-      private IntPtr _stabilizerBase;
+    /// <summary>
+    /// A one pass video stabilizer
+    /// </summary>
+    public class OnePassStabilizer : FrameSource
+    {
+        private IntPtr _stabilizerBase;
 
-      private FrameSource _baseFrameSource;
+        private FrameSource _baseFrameSource;
 
-      /// <summary>
-      /// Create a one pass stabilizer
-      /// </summary>
-      /// <param name="baseFrameSource">The capture object to be stabalized</param>
-      public OnePassStabilizer(FrameSource baseFrameSource)
-      {
-         _baseFrameSource = baseFrameSource;
-         _ptr = VideoStabInvoke.OnePassStabilizerCreate(baseFrameSource.FrameSourcePtr, ref _stabilizerBase, ref FrameSourcePtr);
-      }
+        /// <summary>
+        /// Create a one pass stabilizer
+        /// </summary>
+        /// <param name="baseFrameSource">The capture object to be stabalized</param>
+        public OnePassStabilizer(FrameSource baseFrameSource)
+        {
+            _baseFrameSource = baseFrameSource;
+            _ptr = VideoStabInvoke.cveOnePassStabilizerCreate(baseFrameSource.FrameSourcePtr, ref _stabilizerBase, ref FrameSourcePtr);
+        }
 
-      /// <summary>
-      /// Set the Motion Filter
-      /// </summary>
-      /// <param name="motionFilter">The motion filter</param>
-      public void SetMotionFilter(GaussianMotionFilter motionFilter)
-      {
-         VideoStabInvoke.OnePassStabilizerSetMotionFilter(_ptr, motionFilter);
-      }
+        /// <summary>
+        /// Set the Motion Filter
+        /// </summary>
+        /// <param name="motionFilter">The motion filter</param>
+        public void SetMotionFilter(GaussianMotionFilter motionFilter)
+        {
+            VideoStabInvoke.cveOnePassStabilizerSetMotionFilter(_ptr, motionFilter);
+        }
 
-      /*
-      public void SetMotionEstimator(PyrLkRobustMotionEstimator estimator)
-      {
-         VideoStabInvoke.StabilizerBaseSetMotionEstimator(_stabilizerBase, estimator);
-      }*/
+        /*
+        public void SetMotionEstimator(PyrLkRobustMotionEstimator estimator)
+        {
+           VideoStabInvoke.StabilizerBaseSetMotionEstimator(_stabilizerBase, estimator);
+        }*/
 
-      /// <summary>
-      /// Release the unmanaged memory associated with the stabilizer
-      /// </summary>
-      protected override void DisposeObject()
-      {
-         VideoStabInvoke.OnePassStabilizerRelease(ref _ptr);
-         _stabilizerBase = IntPtr.Zero;
-         base.Dispose();
-      }
-   }
+        /// <summary>
+        /// Release the unmanaged memory associated with the stabilizer
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            if (_ptr != IntPtr.Zero)
+            {
+                VideoStabInvoke.cveOnePassStabilizerRelease(ref _ptr);
+            }
+
+            _stabilizerBase = IntPtr.Zero;
+            base.Dispose();
+        }
+    }
 }
