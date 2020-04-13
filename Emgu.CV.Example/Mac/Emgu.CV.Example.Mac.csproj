@@ -176,7 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
-      <Project>{849EE864-97D2-46C2-B67E-FE7829D1D6D8}</Project>
+      <Project>{AFA9D3CF-62EB-47A8-BC3D-BC9006D495F9}</Project>
       <Name>Emgu.CV.Platform.NetStandard</Name>
     </ProjectReference>
   </ItemGroup>

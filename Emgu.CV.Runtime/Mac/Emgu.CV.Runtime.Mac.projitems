@@ -9,16 +9,16 @@
     <Import_RootNamespace>Emgu.CV</Import_RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
-    <EmguCVMacBinaryDir>$(MSBuildThisFileDirectory)..\..\libs\osx</EmguCVMacBinaryDir>
+    <EmguCVMacBinaryDir>..\..\libs\osx</EmguCVMacBinaryDir>
   </PropertyGroup>
   <PropertyGroup>
     <EmguCVMacLinkTarget>Xamarin.Mac</EmguCVMacLinkTarget>
     <EmguCVMacNativeFile>$(EmguCVMacBinaryDir)\libcvextern.dylib</EmguCVMacNativeFile>
-    <EmguCVMacErrorMessage Condition="!Exists('$(EmguCVMacNativeFile)')">This package do not contain necessary binary for $(EmguCVMacLinkTarget). Missing $(EmguCVMacNativeFile). PInvoke may fail on Mac OS.</EmguCVMacErrorMessage>
-    <EmguCVMacDeployMessage Condition="Exists('$(EmguCVMacNativeFile)')">$(EmguCVMacDeployMessage)MacOS x64 </EmguCVMacDeployMessage>
+    <EmguCVMacErrorMessage Condition="!Exists('$(MSBuildThisFileDirectory)$(EmguCVMacNativeFile)')">This package do not contain necessary binary for $(EmguCVMacLinkTarget). Missing $(MSBuildThisFileDirectory)$(EmguCVMacNativeFile). PInvoke may fail on Mac OS.</EmguCVMacErrorMessage>
+    <EmguCVMacDeployMessage Condition="Exists('$(MSBuildThisFileDirectory)$(EmguCVMacNativeFile)')">$(EmguCVMacDeployMessage)MacOS x64 </EmguCVMacDeployMessage>
   </PropertyGroup>
-  <ItemGroup Condition="Exists('$(EmguCVMacNativeFile)')">
-    <Content Include="$(EmguCVMacNativeFile)">
+  <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)$(EmguCVMacNativeFile)')">
+    <Content Include="$(MSBuildThisFileDirectory)$(EmguCVMacNativeFile)">
       <Link>libcvextern.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

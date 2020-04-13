@@ -106,10 +106,15 @@ namespace Emgu.CV.XamarinForms
                 }
                 else
                 {
+#if __ANDROID__ || __IOS__ || NETFX_CORE
                     haveCameraOption =
                         (CrossMedia.Current.IsCameraAvailable && CrossMedia.Current.IsTakePhotoSupported);
                     havePickImgOption =
                         CrossMedia.Current.IsPickVideoSupported;
+#else
+                    haveCameraOption = false;
+                    havePickImgOption = false;
+#endif
                 }
 
                 String action;
@@ -120,7 +125,7 @@ namespace Emgu.CV.XamarinForms
                 if (haveCameraOption)
                     options.Add("Photo from Camera");
 
-#if __IOS__ || __ANDROID__
+#if __ANDROID__ || __IOS__ || NETFX_CORE
                 if (this.HasCameraOption && haveCameraOption)
                     options.Add("Camera");
 #endif
@@ -158,6 +163,8 @@ namespace Emgu.CV.XamarinForms
                         return null;
                     mats[i] = CvInvoke.Imread(photoResult.Path);
 
+#elif __MACOS__
+                    throw new NotImplementedException(String.Format("Action '{0}' is not implemented", action));
 #else
                     if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
                     {
@@ -179,6 +186,7 @@ namespace Emgu.CV.XamarinForms
                     }
                     else
                     {
+#if __ANDROID__ || __IOS__ || NETFX_CORE
                         var file = await CrossMedia.Current.PickPhotoAsync();
                         using (Stream s = file.GetStream())
                         using (MemoryStream ms = new MemoryStream())
@@ -189,23 +197,14 @@ namespace Emgu.CV.XamarinForms
                             CvInvoke.Imdecode(data, ImreadModes.Color, m);
                             mats[i] = m;
                         }
+#endif
+                        throw new NotImplementedException(String.Format("Action '{0}' is not implemented", action));
                     }
 #endif
                 }
                 else if (action.Equals("Photo from Camera"))
                 {
 #if __ANDROID__ || __IOS__ || NETFX_CORE
-                    var mediaOptions = new Plugin.Media.Abstractions.StoreCameraMediaOptions
-                    {
-                        Directory = "Emgu",
-                        Name = $"{DateTime.UtcNow}.jpg"
-                    };
-                    var takePhotoResult = await CrossMedia.Current.TakePhotoAsync(mediaOptions);
-                    if (takePhotoResult == null) //canceled
-                        return null;
-
-                    mats[i] = CvInvoke.Imread(takePhotoResult.Path);
-#else
                     var mediaOptions = new Plugin.Media.Abstractions.StoreCameraMediaOptions
                     {
                         Directory = "Emgu",
@@ -220,8 +219,9 @@ namespace Emgu.CV.XamarinForms
                         Mat m = new Mat();
                         CvInvoke.Imdecode(data, ImreadModes.Color, m);
                         mats[i] = m;
-
                     }
+#else
+                    throw new NotImplementedException(String.Format("Action '{0}' is not implemented", action));
 #endif
                 }
                 else if (action.Equals("Camera"))
