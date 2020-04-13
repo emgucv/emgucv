@@ -61,22 +61,21 @@ namespace Emgu.CV.Example.Mac
             {
                 //Read the files as an 8-bit Bgr image  
                 NSImage nsImage = NSImage.ImageNamed("lena.jpg");
-                UMat image = nsImage.ToUMat(); //UMat version
-                                                //image = new Mat("lena.jpg", ImreadModes.Color); //CPU version
-
+                UMat image = nsImage.ToUMat(); //UMat version                                                
                 long detectionTime;
                 List<Rectangle> faces = new List<Rectangle>();
                 List<Rectangle> eyes = new List<Rectangle>();
-
-                FaceDetection.DetectFace.Detect(
-                  image, "haarcascade_frontalface_default.xml", "haarcascade_eye.xml",
-                  faces, eyes,
-                  out detectionTime);
+                using (CascadeClassifier faceCascadeClassifier = new CascadeClassifier("haarcascade_frontalface_default.xml"))
+				using (CascadeClassifier eyeCascadeClassifier = new CascadeClassifier("haarcascade_eye.xml"))
+					FaceDetection.DetectFace.Detect(
+                        image, faceCascadeClassifier, eyeCascadeClassifier,
+                        faces, eyes,
+                        out detectionTime);
 
                 foreach (Rectangle face in faces)
-                    CvInvoke.Rectangle(image, face, new Bgr(Color.Red).MCvScalar, 2);
+                    CvInvoke.Rectangle(image, face, new MCvScalar(0, 0, 255), 2);
                 foreach (Rectangle eye in eyes)
-                    CvInvoke.Rectangle(image, eye, new Bgr(Color.Blue).MCvScalar, 2);
+                    CvInvoke.Rectangle(image, eye, new MCvScalar(255, 0, 0), 2);
 
                 mainImageView.Image = image.ToNSImage();
             } catch (Exception e)
@@ -106,14 +105,12 @@ namespace Emgu.CV.Example.Mac
 		{
 			using (Mat image = new Mat("pedestrian.png"))
 			{
-
-				long processingTime;
 				Rectangle[] results;
 
-
+				var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 				using (UMat uImage = image.GetUMat(AccessType.ReadWrite))
-					results = PedestrianDetection.FindPedestrian.Find(uImage, out processingTime);
-
+					results = PedestrianDetection.FindPedestrian.Find(uImage);
+				stopwatch.Stop();
 
 				foreach (Rectangle rect in results)
 				{
