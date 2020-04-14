@@ -12,18 +12,15 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
 using System.Diagnostics;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.Shape
 {
     /// <summary>
     /// Abstract base class for histogram cost algorithms.
     /// </summary>
-    public abstract class HistogramCostExtractor : UnmanagedObject
+    public abstract class HistogramCostExtractor : SharedPtrObject
     {
-        /// <summary>
-        /// Pointer native cv::Ptr object.
-        /// </summary>
-        protected IntPtr _sharedPtr;
 
         /// <summary>
         /// Release the histogram cost extractor
@@ -32,7 +29,7 @@ namespace Emgu.CV.Shape
         {
             if (_ptr != IntPtr.Zero)
             {
-                ShapeInvoke.cvHistogramCostExtractorRelease(ref _ptr, ref _sharedPtr);
+                ShapeInvoke.cveHistogramCostExtractorRelease(ref _sharedPtr);
             }
         }
     }
@@ -51,7 +48,7 @@ namespace Emgu.CV.Shape
         /// <param name="defaultCost">Default cost</param>
         public NormHistogramCostExtractor(CvEnum.DistType flag = CvEnum.DistType.L2, int nDummies = 25, float defaultCost = 0.2f)
         {
-            _ptr = ShapeInvoke.cvNormHistogramCostExtractorCreate(flag, nDummies, defaultCost, ref _sharedPtr);
+            _ptr = ShapeInvoke.cveNormHistogramCostExtractorCreate(flag, nDummies, defaultCost, ref _sharedPtr);
         }
     }
 
@@ -68,7 +65,7 @@ namespace Emgu.CV.Shape
         /// <param name="defaultCost">Default cost</param>
         public EMDHistogramCostExtractor(CvEnum.DistType flag = CvEnum.DistType.L2, int nDummies = 25, float defaultCost = 0.2f)
         {
-            _ptr = ShapeInvoke.cvEMDHistogramCostExtractorCreate(flag, nDummies, defaultCost, ref _sharedPtr);
+            _ptr = ShapeInvoke.cveEMDHistogramCostExtractorCreate(flag, nDummies, defaultCost, ref _sharedPtr);
         }
     }
 
@@ -84,7 +81,7 @@ namespace Emgu.CV.Shape
         /// <param name="defaultCost">Default cost</param>
         public ChiHistogramCostExtractor(int nDummies = 25, float defaultCost = 0.2f)
         {
-            _ptr = ShapeInvoke.cvChiHistogramCostExtractorCreate(nDummies, defaultCost, ref _sharedPtr);
+            _ptr = ShapeInvoke.cveChiHistogramCostExtractorCreate(nDummies, defaultCost, ref _sharedPtr);
         }
     }
 
@@ -100,7 +97,7 @@ namespace Emgu.CV.Shape
         /// <param name="defaultCost">Default cost</param>
         public EMDL1HistogramCostExtractor(int nDummies = 25, float defaultCost = 0.2f)
         {
-            _ptr = ShapeInvoke.cvEMDL1HistogramCostExtractorCreate(nDummies, defaultCost, ref _sharedPtr);
+            _ptr = ShapeInvoke.cveEMDL1HistogramCostExtractorCreate(nDummies, defaultCost, ref _sharedPtr);
         }
     }
 
@@ -115,18 +112,18 @@ namespace Emgu.CV.Shape
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cvNormHistogramCostExtractorCreate(CvEnum.DistType flag, int nDummies, float defaultCost, ref IntPtr sharedPtr);
+        internal extern static IntPtr cveNormHistogramCostExtractorCreate(CvEnum.DistType flag, int nDummies, float defaultCost, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cvEMDHistogramCostExtractorCreate(CvEnum.DistType flag, int nDummies, float defaultCost, ref IntPtr sharedPtr);
+        internal extern static IntPtr cveEMDHistogramCostExtractorCreate(CvEnum.DistType flag, int nDummies, float defaultCost, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cvChiHistogramCostExtractorCreate(int nDummies, float defaultCost, ref IntPtr sharedPtr);
+        internal extern static IntPtr cveChiHistogramCostExtractorCreate(int nDummies, float defaultCost, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cvEMDL1HistogramCostExtractorCreate(int nDummies, float defaultCost, ref IntPtr sharedPtr);
+        internal extern static IntPtr cveEMDL1HistogramCostExtractorCreate(int nDummies, float defaultCost, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cvHistogramCostExtractorRelease(ref IntPtr extractor, ref IntPtr sharedPtr);
+        internal extern static void cveHistogramCostExtractorRelease(ref IntPtr sharedPtr);
     }
 }

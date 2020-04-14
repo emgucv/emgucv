@@ -6,69 +6,65 @@
 
 #include "shape_c.h"
 
-cv::HistogramCostExtractor* cvNormHistogramCostExtractorCreate(int flag, int nDummies, float defaultCost, cv::Ptr<cv::HistogramCostExtractor>** sharedPtr)
+cv::HistogramCostExtractor* cveNormHistogramCostExtractorCreate(int flag, int nDummies, float defaultCost, cv::Ptr<cv::HistogramCostExtractor>** sharedPtr)
 {
 	cv::Ptr<cv::HistogramCostExtractor> ptr = cv::createNormHistogramCostExtractor(flag, nDummies, defaultCost);
 	*sharedPtr = new cv::Ptr<cv::HistogramCostExtractor>(ptr);
 	return ptr.get();
 }
 
-cv::HistogramCostExtractor* cvEMDHistogramCostExtractorCreate(int flag, int nDummies, float defaultCost, cv::Ptr<cv::HistogramCostExtractor>** sharedPtr)
+cv::HistogramCostExtractor* cveEMDHistogramCostExtractorCreate(int flag, int nDummies, float defaultCost, cv::Ptr<cv::HistogramCostExtractor>** sharedPtr)
 {
 	cv::Ptr<cv::HistogramCostExtractor> ptr = cv::createEMDHistogramCostExtractor(flag, nDummies, defaultCost);
 	*sharedPtr = new cv::Ptr<cv::HistogramCostExtractor>(ptr);
 	return ptr.get();
 }
 
-cv::HistogramCostExtractor* cvChiHistogramCostExtractorCreate(int nDummies, float defaultCost, cv::Ptr<cv::HistogramCostExtractor>** sharedPtr)
+cv::HistogramCostExtractor* cveChiHistogramCostExtractorCreate(int nDummies, float defaultCost, cv::Ptr<cv::HistogramCostExtractor>** sharedPtr)
 {
 	cv::Ptr<cv::HistogramCostExtractor> ptr = cv::createChiHistogramCostExtractor(nDummies, defaultCost);
 	*sharedPtr = new cv::Ptr<cv::HistogramCostExtractor>(ptr);
 	return ptr.get();
 }
 
-cv::HistogramCostExtractor* cvEMDL1HistogramCostExtractorCreate(int nDummies, float defaultCost, cv::Ptr<cv::HistogramCostExtractor>** sharedPtr)
+cv::HistogramCostExtractor* cveEMDL1HistogramCostExtractorCreate(int nDummies, float defaultCost, cv::Ptr<cv::HistogramCostExtractor>** sharedPtr)
 {
 	cv::Ptr<cv::HistogramCostExtractor> ptr = cv::createEMDL1HistogramCostExtractor(nDummies, defaultCost);
 	*sharedPtr = new cv::Ptr<cv::HistogramCostExtractor>(ptr);
 	return ptr.get();
 }
 
-void cvHistogramCostExtractorRelease(cv::HistogramCostExtractor** extractor, cv::Ptr<cv::HistogramCostExtractor>** sharedPtr)
+void cveHistogramCostExtractorRelease(cv::Ptr<cv::HistogramCostExtractor>** sharedPtr)
 {
 	delete *sharedPtr;
-	*extractor = 0;
 	*sharedPtr = 0;
 }
 
-
-cv::ThinPlateSplineShapeTransformer* cvThinPlateSplineShapeTransformerCreate(double regularizationParameter, cv::ShapeTransformer** transformer, cv::Ptr<cv::ThinPlateSplineShapeTransformer>** sharedPtr)
+cv::ThinPlateSplineShapeTransformer* cveThinPlateSplineShapeTransformerCreate(double regularizationParameter, cv::ShapeTransformer** transformer, cv::Ptr<cv::ThinPlateSplineShapeTransformer>** sharedPtr)
 {
 	cv::Ptr<cv::ThinPlateSplineShapeTransformer> ptr = cv::createThinPlateSplineShapeTransformer(regularizationParameter);
 	*sharedPtr = new cv::Ptr<cv::ThinPlateSplineShapeTransformer>(ptr);
 	*transformer = dynamic_cast<cv::ShapeTransformer*>(ptr.get());
-	return ptr.get();
+	return (*sharedPtr)->get();
 }
 
-void cvThinPlateSplineShapeTransformerRelease(cv::ThinPlateSplineShapeTransformer** transformer, cv::Ptr<cv::ThinPlateSplineShapeTransformer>** sharedPtr)
+void cveThinPlateSplineShapeTransformerRelease(cv::Ptr<cv::ThinPlateSplineShapeTransformer>** sharedPtr)
 {
 	delete *sharedPtr;
-	*transformer = 0;
 	*sharedPtr = 0;
 }
 
-cv::AffineTransformer* cvAffineTransformerCreate(bool fullAffine, cv::ShapeTransformer** transformer, cv::Ptr<cv::AffineTransformer>** sharedPtr)
+cv::AffineTransformer* cveAffineTransformerCreate(bool fullAffine, cv::ShapeTransformer** transformer, cv::Ptr<cv::AffineTransformer>** sharedPtr)
 {
 	cv::Ptr<cv::AffineTransformer> ptr = cv::createAffineTransformer(fullAffine);
 	*sharedPtr = new cv::Ptr<cv::AffineTransformer>(ptr);
 	*transformer = dynamic_cast<cv::ShapeTransformer*>(ptr.get());
-	return ptr.get();
+	return (*sharedPtr)->get();
 }
 
-void cvAffineTransformerRelease(cv::AffineTransformer** transformer, cv::Ptr<cv::AffineTransformer>** sharedPtr)
+void cveAffineTransformerRelease(cv::Ptr<cv::AffineTransformer>** sharedPtr)
 {
 	delete *sharedPtr;
-	*transformer = 0;
 	*sharedPtr = 0;
 }
 
@@ -77,7 +73,7 @@ float cvShapeDistanceExtractorComputeDistance(cv::ShapeDistanceExtractor* extrac
 	return extractor->computeDistance(*contour1, *contour2);
 }
 
-cv::ShapeContextDistanceExtractor* cvShapeContextDistanceExtractorCreate(
+cv::ShapeContextDistanceExtractor* cveShapeContextDistanceExtractorCreate(
 	int nAngularBins, int nRadialBins, float innerRadius, float outerRadius, int iterations,
 	cv::HistogramCostExtractor* comparer, cv::ShapeTransformer* transformer, cv::ShapeDistanceExtractor** e,
 	cv::Ptr<cv::ShapeContextDistanceExtractor>** sharedPtr)
@@ -91,23 +87,21 @@ cv::ShapeContextDistanceExtractor* cvShapeContextDistanceExtractorCreate(
 	return ptr.get();
 }
 
-void cvShapeContextDistanceExtractorRelease(cv::ShapeContextDistanceExtractor** extractor, cv::Ptr<cv::ShapeContextDistanceExtractor>** sharedPtr)
+void cveShapeContextDistanceExtractorRelease(cv::Ptr<cv::ShapeContextDistanceExtractor>** sharedPtr)
 {
 	delete *sharedPtr;
-	*extractor = 0;
 	*sharedPtr = 0;
 }
 
-cv::HausdorffDistanceExtractor* cvHausdorffDistanceExtractorCreate(int distanceFlag, float rankProp, cv::ShapeDistanceExtractor** e, cv::Ptr<cv::HausdorffDistanceExtractor>** sharedPtr)
+cv::HausdorffDistanceExtractor* cveHausdorffDistanceExtractorCreate(int distanceFlag, float rankProp, cv::ShapeDistanceExtractor** e, cv::Ptr<cv::HausdorffDistanceExtractor>** sharedPtr)
 {
 	cv::Ptr<cv::HausdorffDistanceExtractor> ptr = cv::createHausdorffDistanceExtractor(distanceFlag, rankProp);
 	*sharedPtr = new cv::Ptr<cv::HausdorffDistanceExtractor>(ptr);
 	*e = dynamic_cast<cv::ShapeDistanceExtractor*>(ptr.get());
 	return ptr.get();
 }
-void cvHausdorffDistanceExtractorRelease(cv::HausdorffDistanceExtractor** extractor, cv::Ptr<cv::HausdorffDistanceExtractor>** sharedPtr)
+void cveHausdorffDistanceExtractorRelease(cv::Ptr<cv::HausdorffDistanceExtractor>** sharedPtr)
 {
 	delete *sharedPtr;
-	*extractor = 0;
 	*sharedPtr = 0;
 }

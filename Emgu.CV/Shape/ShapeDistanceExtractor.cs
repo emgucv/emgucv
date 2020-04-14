@@ -12,13 +12,14 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
 using System.Diagnostics;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.Shape
 {
     /// <summary>
     /// Abstract base class for shape distance algorithms.
     /// </summary>
-    public abstract class ShapeDistanceExtractor : UnmanagedObject
+    public abstract class ShapeDistanceExtractor : SharedPtrObject
     {
         /// <summary>
         /// Pointer to the unmanaged ShapeDistanceExtractor
@@ -50,7 +51,7 @@ namespace Emgu.CV.Shape
         {
             using (InputArray iaContour1 = contour1.GetInputArray())
             using (InputArray iaContour2 = contour2.GetInputArray())
-                return ShapeInvoke.cvShapeDistanceExtractorComputeDistance(_shapeDistanceExtractorPtr, iaContour1, iaContour2);
+                return ShapeInvoke.cveShapeDistanceExtractorComputeDistance(_shapeDistanceExtractorPtr, iaContour1, iaContour2);
         }
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace Emgu.CV.Shape
     /// </summary>
     public partial class ShapeContextDistanceExtractor : ShapeDistanceExtractor
     {
-        private IntPtr _sharedPtr;
+        //private IntPtr _sharedPtr;
 
         /// <summary>
         /// Create a shape context distance extractor
@@ -87,7 +88,7 @@ namespace Emgu.CV.Shape
            float outerRadius = 3,
            int iterations = 3)
         {
-            _ptr = ShapeInvoke.cvShapeContextDistanceExtractorCreate(nAngularBins, nRadialBins, innerRadius, outerRadius, iterations, comparer, transformer.ShapeTransformerPtr, ref _shapeDistanceExtractorPtr, ref _sharedPtr);
+            _ptr = ShapeInvoke.cveShapeContextDistanceExtractorCreate(nAngularBins, nRadialBins, innerRadius, outerRadius, iterations, comparer, transformer.ShapeTransformerPtr, ref _shapeDistanceExtractorPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -96,7 +97,7 @@ namespace Emgu.CV.Shape
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ShapeInvoke.cvShapeContextDistanceExtractorRelease(ref _ptr, ref _sharedPtr);
+                ShapeInvoke.cveShapeContextDistanceExtractorRelease(ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -106,7 +107,7 @@ namespace Emgu.CV.Shape
     /// </summary>
     public class HausdorffDistanceExtractor : ShapeDistanceExtractor
     {
-        private IntPtr _sharedPtr;
+        //private IntPtr _sharedPtr;
 
         /// <summary>
         /// Create Hausdorff distance extractor
@@ -115,7 +116,7 @@ namespace Emgu.CV.Shape
         /// <param name="rankProp">The rank proportion (or fractional value) that establish the Kth ranked value of the partial Hausdorff distance. Experimentally had been shown that 0.6 is a good value to compare shapes.</param>
         public HausdorffDistanceExtractor(CvEnum.DistType distanceFlag = CvEnum.DistType.L2, float rankProp = 0.6f)
         {
-            _ptr = ShapeInvoke.cvHausdorffDistanceExtractorCreate(distanceFlag, rankProp, ref _shapeDistanceExtractorPtr, ref _sharedPtr);
+            _ptr = ShapeInvoke.cveHausdorffDistanceExtractorCreate(distanceFlag, rankProp, ref _shapeDistanceExtractorPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -123,7 +124,12 @@ namespace Emgu.CV.Shape
         /// </summary>
         protected override void DisposeObject()
         {
-            ShapeInvoke.cvHausdorffDistanceExtractorRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+            {
+                ShapeInvoke.cveHausdorffDistanceExtractorRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
+
             base.DisposeObject();
         }
     }
@@ -131,20 +137,20 @@ namespace Emgu.CV.Shape
     public static partial class ShapeInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cvShapeContextDistanceExtractorCreate(
+        internal extern static IntPtr cveShapeContextDistanceExtractorCreate(
            int nAngularBins, int nRadialBins, float innerRadius, float outerRadius, int iterations,
            IntPtr comparer, IntPtr transformer, ref IntPtr shapeDistanceExtractor, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cvShapeContextDistanceExtractorRelease(ref IntPtr extractor, ref IntPtr sharedPtr);
+        internal extern static void cveShapeContextDistanceExtractorRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cvHausdorffDistanceExtractorCreate(CvEnum.DistType distanceFlag, float rankProp, ref IntPtr shapeDistanceExtractor, ref IntPtr sharedPtr);
+        internal extern static IntPtr cveHausdorffDistanceExtractorCreate(CvEnum.DistType distanceFlag, float rankProp, ref IntPtr shapeDistanceExtractor, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cvHausdorffDistanceExtractorRelease(ref IntPtr extractor, ref IntPtr sharedPtr);
+        internal extern static void cveHausdorffDistanceExtractorRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static float cvShapeDistanceExtractorComputeDistance(IntPtr extractor, IntPtr contour1, IntPtr contour2);
+        internal extern static float cveShapeDistanceExtractorComputeDistance(IntPtr extractor, IntPtr contour1, IntPtr contour2);
     }
 }
