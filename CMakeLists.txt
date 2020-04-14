@@ -975,7 +975,7 @@ SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY}
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
       </group>
-	  <group targetFramework="Xamarin.iOS1.0" />")
+	  <group targetFramework=\"Xamarin.iOS1.0\" />")
 IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
 	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\net461\" />
