@@ -965,6 +965,8 @@ SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
 SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\netstandard2.0\" />
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\netstandard2.0\" />
+	<file src=\"..\\_._\" target=\"lib\\xamarinios10\" />
+	<file src=\"..\\_._\" target=\"lib\\xamarinios10\" />
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
@@ -972,7 +974,8 @@ SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY}
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-      </group>")
+      </group>
+	  <group targetFramework="Xamarin.iOS1.0" />")
 IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
 	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\net461\" />
