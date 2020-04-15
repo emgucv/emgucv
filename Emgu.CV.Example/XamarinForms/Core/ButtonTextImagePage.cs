@@ -164,12 +164,11 @@ namespace Emgu.CV.XamarinForms
 #else
                     if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS)
                     {
-                        FileData fileData = await CrossFilePicker.Current.PickFile(new string[] { new string[] { "jpg", "jpeg", "png", "bmp" } });
+                        FileData fileData = await CrossFilePicker.Current.PickFile(new string[] { "jpg", "jpeg", "png", "bmp" });
                         if (fileData == null)
                             return null;
                         mats[i] = CvInvoke.Imread(fileData.FilePath, ImreadModes.AnyColor);
-                    }
-                    if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
+                    } else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
                     {
                         FileData fileData = await CrossFilePicker.Current.PickFile(new string[] { "Image | *.jpg;*.jpeg;*.png;*.bmp;*.gif | All Files | *" });
                         if (fileData == null)
