@@ -59,12 +59,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TfInterop.NetCore", "..\..\
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Ubuntu", "..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.shproj", "{86A21342-2DA9-4841-B1BD-B323AC5B81FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicImage.Asp.NetCore", "..\..\Emgu.CV.Example\DynamicImage.Asp.NetCore\DynamicImage.Asp.NetCore.csproj", "{97C98FCA-5F0D-4771-8063-881C620946AF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicImage.Asp.NetCore", "..\..\Emgu.CV.Example\DynamicImage.Asp.NetCore\DynamicImage.Asp.NetCore.csproj", "{97C98FCA-5F0D-4771-8063-881C620946AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildInfo.NetCore.Console", "..\..\Emgu.CV.Example\BuildInfo.NetCore.Console\BuildInfo.NetCore.Console.csproj", "{1CF0C8B2-0FDE-4E28-9C7C-EBE0F303F601}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
+		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{1cf0c8b2-0fde-4e28-9c7c-ebe0f303f601}*SharedItemsImports = 5
+		..\..\Emgu.CV.Runtime\Raspbian\Emgu.CV.Runtime.Raspbian.projitems*{1cf0c8b2-0fde-4e28-9c7c-ebe0f303f601}*SharedItemsImports = 5
+		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{1cf0c8b2-0fde-4e28-9c7c-ebe0f303f601}*SharedItemsImports = 5
+		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{1cf0c8b2-0fde-4e28-9c7c-ebe0f303f601}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{288b46af-cd8e-4503-bbef-7d295a5d9e13}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{32bfc19b-ae74-413f-90fc-345cbce13b69}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{331f904e-e7e8-42e0-8c82-22539c35e8f3}*SharedItemsImports = 4
@@ -324,6 +330,18 @@ Global
 		{97C98FCA-5F0D-4771-8063-881C620946AF}.Release|x64.Build.0 = Release|Any CPU
 		{97C98FCA-5F0D-4771-8063-881C620946AF}.Release|x86.ActiveCfg = Release|Any CPU
 		{97C98FCA-5F0D-4771-8063-881C620946AF}.Release|x86.Build.0 = Release|Any CPU
+		{1CF0C8B2-0FDE-4E28-9C7C-EBE0F303F601}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CF0C8B2-0FDE-4E28-9C7C-EBE0F303F601}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CF0C8B2-0FDE-4E28-9C7C-EBE0F303F601}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1CF0C8B2-0FDE-4E28-9C7C-EBE0F303F601}.Debug|x64.Build.0 = Debug|Any CPU
+		{1CF0C8B2-0FDE-4E28-9C7C-EBE0F303F601}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1CF0C8B2-0FDE-4E28-9C7C-EBE0F303F601}.Debug|x86.Build.0 = Debug|Any CPU
+		{1CF0C8B2-0FDE-4E28-9C7C-EBE0F303F601}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CF0C8B2-0FDE-4E28-9C7C-EBE0F303F601}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CF0C8B2-0FDE-4E28-9C7C-EBE0F303F601}.Release|x64.ActiveCfg = Release|Any CPU
+		{1CF0C8B2-0FDE-4E28-9C7C-EBE0F303F601}.Release|x64.Build.0 = Release|Any CPU
+		{1CF0C8B2-0FDE-4E28-9C7C-EBE0F303F601}.Release|x86.ActiveCfg = Release|Any CPU
+		{1CF0C8B2-0FDE-4E28-9C7C-EBE0F303F601}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

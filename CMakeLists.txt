@@ -987,6 +987,12 @@ IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
 	</group>")
 ENDIF()
 
+IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86 OR APPLE)
+	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
+	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\netcoreapp3.1\" />
+	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\netcoreapp3.1\" />")
+ENDIF()
+
 IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
 	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
 	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetCore.dll\" target=\"lib\\netcoreapp3.1\" />
@@ -1004,11 +1010,6 @@ IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
       </group>")
 ENDIF()
 
-IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86 OR APPLE)
-	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
-	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\netcoreapp3.1\" />
-	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\netcoreapp3.1\" />")
-ENDIF()
 
 SET(EMGUCV_NUGET_DEPENDENCY "
 	<dependencies>

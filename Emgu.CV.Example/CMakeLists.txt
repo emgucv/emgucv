@@ -348,7 +348,6 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.World.dll" 
       -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll")
     
-    add_subdirectory(HelloWorld)
     add_subdirectory(CameraCapture)
     #add_subdirectory(PlanarSubdivision)
     add_subdirectory(ShapeDetection)
@@ -369,6 +368,12 @@ IF(EMGU_CV_EXAMPLE_BUILD)
     #  add_subdirectory(WebDynamicImage)
     #ENDIF()
   ENDIF()
+  
+  IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_OSX OR HAVE_LINUX_ARM OR HAVE_LINUX_X64 OR HAVE_LINUX_X86)
+    add_subdirectory(HelloWorld)
+	add_subdirectory(BuildInfo.NetCore.Console)
+  ENDIF()
+  
   INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/DynamicImage.Asp.NetCore/"
