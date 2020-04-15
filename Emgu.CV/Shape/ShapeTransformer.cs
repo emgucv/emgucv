@@ -11,6 +11,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
 using System.Diagnostics;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Util;
 
 namespace Emgu.CV.Shape
@@ -117,5 +118,103 @@ namespace Emgu.CV.Shape
         internal extern static IntPtr cveThinPlateSplineShapeTransformerCreate(double regularizationParameter, ref IntPtr transformer, ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveThinPlateSplineShapeTransformerRelease(ref IntPtr sharedPtr);
+
+        /// <summary>
+        /// Estimate the transformation parameters of the current transformer algorithm, based on point matches.
+        /// </summary>
+        /// <param name="transformer">The shape transformer</param>
+        /// <param name="transformingShape">Contour defining first shape.</param>
+        /// <param name="targetShape">Contour defining second shape (Target).</param>
+        /// <param name="matches">Standard vector of Matches between points.</param>
+        public static void EstimateTransformation(
+            this IShapeTransformer transformer, 
+            IInputArray transformingShape,
+            IInputArray targetShape, 
+            VectorOfDMatch matches)
+        {
+            using(InputArray iaTransformingShape = transformingShape.GetInputArray())
+            using (InputArray iaTargetShape = targetShape.GetInputArray())
+            {
+                cveShapeTransformerEstimateTransformation(
+                    transformer.ShapeTransformerPtr,
+                    iaTransformingShape,
+                    iaTargetShape,
+                    matches);
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveShapeTransformerEstimateTransformation(
+            IntPtr transformer,
+            IntPtr transformingShape,
+            IntPtr targetShape,
+            IntPtr matches);
+
+        /// <summary>
+        /// Apply a transformation, given a pre-estimated transformation parameters.
+        /// </summary>
+        /// <param name="transformer">The shape transformer</param>
+        /// <param name="input">Contour (set of points) to apply the transformation.</param>
+        /// <param name="output">Output contour.</param>
+        /// <returns></returns>
+        public static float ApplyTransformation(
+            this IShapeTransformer transformer,
+            IInputArray input,
+            IOutputArray output = null)
+        {
+            using (InputArray iaInput = input.GetInputArray())
+            using (OutputArray oaOutput = output == null ? OutputArray.GetEmpty() : output.GetOutputArray())
+            {
+                return cveShapeTransformerApplyTransformation(
+                    transformer.ShapeTransformerPtr,
+                    iaInput,
+                    oaOutput);
+            }
+        }
+            
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static float cveShapeTransformerApplyTransformation(
+            IntPtr transformer,
+            IntPtr input,
+            IntPtr output);
+
+        /// <summary>
+        /// Apply a transformation, given a pre-estimated transformation parameters, to an Image.
+        /// </summary>
+        /// <param name="transformer">The shape transformer</param>
+        /// <param name="transformingImage">Input image.</param>
+        /// <param name="output">Output image.</param>
+        /// <param name="flags">Image interpolation method.</param>
+        /// <param name="boarderMode">border style.</param>
+        /// <param name="borderValue">border value.</param>
+        public static void WarpImage(
+            this IShapeTransformer transformer,
+            IInputArray transformingImage,
+            IOutputArray output,
+            CvEnum.Inter flags = Inter.Linear,
+            CvEnum.BorderType boarderMode = BorderType.Constant,
+            MCvScalar borderValue = new MCvScalar())
+        {
+            using (InputArray iaTransformingImage = transformingImage.GetInputArray())
+            using (OutputArray oaOutput = output.GetOutputArray())
+            {
+                cveShapeTransformerWarpImage(
+                    transformer.ShapeTransformerPtr,
+                    iaTransformingImage, 
+                    oaOutput,
+                    flags,
+                    boarderMode, 
+                    ref borderValue);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveShapeTransformerWarpImage(
+            IntPtr transformer,
+            IntPtr transformingImage,
+            IntPtr output,
+            CvEnum.Inter flags,
+            CvEnum.BorderType borderMode,
+            ref MCvScalar borderValue);
+
     }
 }

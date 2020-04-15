@@ -27,6 +27,24 @@ CVAPI(void) cveThinPlateSplineShapeTransformerRelease(cv::Ptr<cv::ThinPlateSplin
 CVAPI(cv::AffineTransformer*) cveAffineTransformerCreate(bool fullAffine, cv::ShapeTransformer** transformer, cv::Ptr<cv::AffineTransformer>** sharedPtr);
 CVAPI(void) cveAffineTransformerRelease(cv::Ptr<cv::AffineTransformer>** sharedPtr);
 
+CVAPI(void) cveShapeTransformerEstimateTransformation(
+    cv::ShapeTransformer* transformer,
+    cv::_InputArray* transformingShape, 
+    cv::_InputArray* targetShape,
+    std::vector<cv::DMatch>* matches);
+ 
+CVAPI(float) cveShapeTransformerApplyTransformation(
+    cv::ShapeTransformer* transformer, 
+    cv::_InputArray* input, 
+    cv::_OutputArray* output);
+
+CVAPI(void) cveShapeTransformerWarpImage(
+    cv::ShapeTransformer* transformer,
+    cv::_InputArray* transformingImage, 
+    cv::_OutputArray* output,
+    int flags, 
+    int borderMode,
+    CvScalar* borderValue);
 
 CVAPI(float) cveShapeDistanceExtractorComputeDistance(cv::ShapeDistanceExtractor* extractor, cv::_InputArray* contour1, cv::_InputArray* contour2);
 

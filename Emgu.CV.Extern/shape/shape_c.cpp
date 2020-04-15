@@ -68,7 +68,35 @@ void cveAffineTransformerRelease(cv::Ptr<cv::AffineTransformer>** sharedPtr)
 	*sharedPtr = 0;
 }
 
-float cvShapeDistanceExtractorComputeDistance(cv::ShapeDistanceExtractor* extractor, cv::_InputArray* contour1, cv::_InputArray* contour2)
+void cveShapeTransformerEstimateTransformation(
+	cv::ShapeTransformer* transformer,
+	cv::_InputArray* transformingShape,
+	cv::_InputArray* targetShape,
+	std::vector<cv::DMatch>* matches)
+{
+	transformer->estimateTransformation(*transformingShape, *targetShape, *matches);
+}
+
+float cveShapeTransformerApplyTransformation(
+	cv::ShapeTransformer* transformer,
+	cv::_InputArray* input,
+	cv::_OutputArray* output)
+{
+	return transformer->applyTransformation(*input, output ? *output : static_cast<cv::OutputArray>(cv::noArray()));
+}
+
+void cveShapeTransformerWarpImage(
+	cv::ShapeTransformer* transformer,
+	cv::_InputArray* transformingImage,
+	cv::_OutputArray* output,
+	int flags,
+	int borderMode,
+	CvScalar* borderValue)
+{
+	transformer->warpImage(*transformingImage, *output, flags, borderMode, *borderValue);
+}
+
+float cveShapeDistanceExtractorComputeDistance(cv::ShapeDistanceExtractor* extractor, cv::_InputArray* contour1, cv::_InputArray* contour2)
 {
 	return extractor->computeDistance(*contour1, *contour2);
 }
