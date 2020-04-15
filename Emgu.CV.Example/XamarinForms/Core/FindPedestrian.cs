@@ -20,7 +20,6 @@ namespace PedestrianDetection
       /// Find the pedestrian in the image
       /// </summary>
       /// <param name="image">The image</param>
-      /// <param name="processingTime">The processing time in milliseconds</param>
       /// <returns>The region where pedestrians are detected</returns>
       public static Rectangle[] Find(IInputArray image)
       {
