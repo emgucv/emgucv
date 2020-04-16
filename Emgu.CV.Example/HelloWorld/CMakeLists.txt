@@ -7,7 +7,7 @@ IF (DOTNET_FOUND)
 PROJECT(Example.HelloWorld)
 
 #BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/Windows.Desktop/Emgu.CV.Example.sln" "HelloWorld" "" ALL)
-BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.csproj"  "" ALL)
+BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.NetCore.csproj"  "" ALL)
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Emgu.CV.Examples")
 ADD_DEPENDENCIES(${PROJECT_NAME} cvextern)
 
