@@ -147,6 +147,9 @@ CVAPI(double) cveKmeans(cv::_InputArray* data, int k, cv::_InputOutputArray* bes
 
 CVAPI(void) cveHConcat(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst);
 CVAPI(void) cveVConcat(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst);
+CVAPI(void) cveHConcat2(cv::_InputArray* src, cv::_OutputArray* dst);
+CVAPI(void) cveVConcat2(cv::_InputArray* src, cv::_OutputArray* dst);
+
 
 CVAPI(double) cvePSNR(cv::_InputArray* src1, cv::_InputArray* src2);
 

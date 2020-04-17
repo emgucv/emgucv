@@ -516,6 +516,15 @@ void cveVConcat(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* 
 	cv::vconcat(*src1, *src2, *dst);
 }
 
+void cveHConcat2(cv::_InputArray* src, cv::_OutputArray* dst)
+{
+	cv::hconcat(*src, *dst);
+}
+void cveVConcat2(cv::_InputArray* src, cv::_OutputArray* dst)
+{
+	cv::vconcat(*src, *dst);
+}
+
 
 double cvePSNR(cv::_InputArray* src1, cv::_InputArray* src2)
 {
