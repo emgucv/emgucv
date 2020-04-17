@@ -4,10 +4,7 @@
 
 IF(WIN32)
   PROJECT(Example.Aruco)
-
   BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/Windows.Desktop/Emgu.CV.Example.sln" "Aruco" "" ALL)
-
   set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Emgu.CV.Examples")
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetFramework)
-
 ENDIF()

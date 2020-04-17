@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraCapture", "..\..\Emgu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MotionDetection", "..\..\Emgu.CV.Example\MotionDetection\MotionDetection.csproj", "{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShapeDetection", "..\..\Emgu.CV.Example\ShapeDetection\ShapeDetection.csproj", "{F42D1B92-5722-41F4-B8F1-98185CD09D87}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LicensePlateRecognition", "..\..\Emgu.CV.Example\LicensePlateRecognition\LicensePlateRecognition.csproj", "{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoSurveillance", "..\..\Emgu.CV.Example\VideoSurveillance\VideoSurveillance.csproj", "{E8A4DE5C-BE26-445F-BEBD-8C99C80857E1}"
@@ -61,7 +59,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Ubuntu", ".
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicImage.Asp.NetCore", "..\..\Emgu.CV.Example\DynamicImage.Asp.NetCore\DynamicImage.Asp.NetCore.csproj", "{97C98FCA-5F0D-4771-8063-881C620946AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildInfo.NetCore.Console", "..\..\Emgu.CV.Example\BuildInfo.NetCore.Console\BuildInfo.NetCore.Console.csproj", "{1CF0C8B2-0FDE-4E28-9C7C-EBE0F303F601}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildInfo.NetCore.Console", "..\..\Emgu.CV.Example\BuildInfo.NetCore.Console\BuildInfo.NetCore.Console.csproj", "{1CF0C8B2-0FDE-4E28-9C7C-EBE0F303F601}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -96,7 +94,6 @@ Global
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{bdcc078c-8d14-47dc-850d-9d5731503aec}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{e8a4de5c-be26-445f-bebd-8c99c80857e1}*SharedItemsImports = 4
 		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
-		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{f42d1b92-5722-41f4-b8f1-98185cd09d87}*SharedItemsImports = 4
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{f8ccdef7-e79a-4fd5-8c0e-9290059c7dd6}*SharedItemsImports = 5
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{f8ccdef7-e79a-4fd5-8c0e-9290059c7dd6}*SharedItemsImports = 5
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{f8ccdef7-e79a-4fd5-8c0e-9290059c7dd6}*SharedItemsImports = 5
@@ -157,17 +154,6 @@ Global
 		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release|x64.ActiveCfg = Release|x64
 		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release|x64.Build.0 = Release|x64
 		{3EC66D5C-1B05-4B4F-BB13-82BD76C992EE}.Release|x86.ActiveCfg = Release|Any CPU
-		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Debug|x64.ActiveCfg = Debug|x64
-		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Debug|x64.Build.0 = Debug|x64
-		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Debug|x86.ActiveCfg = Debug|x86
-		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Debug|x86.Build.0 = Debug|x86
-		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Release|x64.ActiveCfg = Release|x64
-		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Release|x64.Build.0 = Release|x64
-		{F42D1B92-5722-41F4-B8F1-98185CD09D87}.Release|x86.ActiveCfg = Release|Any CPU
 		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{288B46AF-CD8E-4503-BBEF-7D295A5D9E13}.Debug|x64.ActiveCfg = Debug|x64
