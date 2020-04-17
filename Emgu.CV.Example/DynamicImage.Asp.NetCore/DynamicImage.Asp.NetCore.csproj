@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Emgu.CV.runtime.windows" Version="4.2.0.3662" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
   </ItemGroup>
 
 
