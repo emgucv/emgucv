@@ -70,8 +70,11 @@ namespace Emgu.CV.XamarinForms
             //MessageLabel.BackgroundColor = Color.AliceBlue;
             //DisplayImage.BackgroundColor = Color.Aqua;
             //_mainLayout.BackgroundColor = Color.Blue;
-            
-            Content = _mainLayout;
+
+            Content = new ScrollView()
+            {
+                Content = _mainLayout
+            };
         }
 
         public bool HasCameraOption { get; set; }

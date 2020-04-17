@@ -34,6 +34,9 @@ namespace Emgu.CV.XamarinForms
             Button featureDetectionButton = new Button();
             featureDetectionButton.Text = "Feature Matching";
 
+            Button shapeDetectionButton = new Button();
+            shapeDetectionButton.Text = "Shape Detection";
+
             Button pedestrianDetectionButton = new Button();
             pedestrianDetectionButton.Text = "Pedestrian Detection";
 
@@ -56,6 +59,7 @@ namespace Emgu.CV.XamarinForms
                 faceDetectionButton,
                 faceLandmarkDetectionButton,
                 featureDetectionButton,
+                shapeDetectionButton,
                 pedestrianDetectionButton,
                 ocrButton,
                 maskRcnnButton,
@@ -94,7 +98,6 @@ namespace Emgu.CV.XamarinForms
                   Content = new ScrollView()
                   {
                       Content = buttonsLayout,
-
                   }
               };
 
@@ -139,6 +142,11 @@ namespace Emgu.CV.XamarinForms
                 MainPage.Navigation.PushAsync(new FaceDetectionPage());
             };
             
+            shapeDetectionButton.Clicked += (sender, args) =>
+            {
+                MainPage.Navigation.PushAsync(new ShapeDetectionPage());
+            };
+
             pedestrianDetectionButton.Clicked += (sender, args) =>
             {
                 MainPage.Navigation.PushAsync(new PedestrianDetectionPage());

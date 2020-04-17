@@ -171,6 +171,10 @@
       <Link>dog416.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\Core\pic3.png">
+      <Link>pic3.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\Core\stop-sign.jpg">
       <Link>stop-sign.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

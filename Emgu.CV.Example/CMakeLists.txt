@@ -350,7 +350,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
     
     add_subdirectory(CameraCapture)
     #add_subdirectory(PlanarSubdivision)
-    add_subdirectory(ShapeDetection)
+    #add_subdirectory(ShapeDetection)
     #add_subdirectory(FeatureMatching)
     #add_subdirectory(TrafficSignRecognition)
     add_subdirectory(MotionDetection)
