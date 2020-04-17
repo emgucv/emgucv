@@ -325,9 +325,6 @@ SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 
 :END_OF_GPU
 
-SET BUILD_PROJECT=
-IF "%6%"=="package" SET BUILD_PROJECT= /project PACKAGE 
-
 IF "%3%"=="intel" GOTO INTEL_COMPILER
 IF "%3%"=="intel_inf" GOTO INTEL_COMPILER
 :NOT_INTEL_COMPILER
@@ -445,17 +442,21 @@ SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 
 :BUILD
 IF NOT "%7%"=="build" GOTO END
-%CMAKE% --build . --config Release
-REM call %DEVENV% %BUILD_TYPE% emgucv.sln %BUILD_PROJECT% 
+
+SET BUILD_TARGET=
+IF "%6%"=="package" SET BUILD_TARGET= --target PACKAGE 
+
+%CMAKE% --build . --config Release %BUILD_TARGET%
 
 IF "%5%"=="htmldoc" ^
-call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.Document 
+%CMAKE% --build . --config Release --target Emgu.CV.Document
+
 IF "%5%"=="doc" ^
-call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.Document 
+%CMAKE% --build . --config Release --target Emgu.CV.Document
 
 IF NOT "%8%"=="nuget" GOTO END
+%CMAKE% --build . --config Release --target Emgu.CV.nuget
 
-call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.nuget 
 REM IF "%2%"=="gpu" ^
 REM call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.CUDA.nuget 
 
