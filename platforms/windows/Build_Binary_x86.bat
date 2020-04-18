@@ -442,18 +442,15 @@ SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 
 :BUILD
 IF NOT "%7%"=="build" GOTO END
-
 SET BUILD_TARGET=
 IF "%6%"=="package" SET BUILD_TARGET= --target PACKAGE 
-
 %CMAKE% --build . --config Release %BUILD_TARGET%
 
-IF "%5%"=="htmldoc" ^
+:BUILD_DOC
+IF NOT ("%5%"=="htmldoc" OR "%5%"=="doc") GOTO BUILD_NUGET
 %CMAKE% --build . --config Release --target Emgu.CV.Document
 
-IF "%5%"=="doc" ^
-%CMAKE% --build . --config Release --target Emgu.CV.Document
-
+:BUILD_NUGET
 IF NOT "%8%"=="nuget" GOTO END
 %CMAKE% --build . --config Release --target Emgu.CV.nuget
 
