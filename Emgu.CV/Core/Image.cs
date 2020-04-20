@@ -2088,11 +2088,21 @@ namespace Emgu.CV
                 }
                 else
                 {   //different depth
-                    using (Image<TSrcColor, TDepth> tmp = srcImage.Convert<TSrcColor, TDepth>()) //convert depth
-                                                                                                 //using (Mat tmp = new CV.Mat())
-                    {
-                        //srcImage.Mat.ConvertTo(tmp, CvInvoke.GetDepthType(typeof(TDepth), 
-                        CvInvoke.CvtColor(tmp, this, typeof(TSrcColor), typeof(TColor));
+                    if (typeof(TSrcDepth) == typeof(Byte))
+                    {   //Do color conversion first, then depth conversion
+                        using (Image< TColor, TSrcDepth > tmp = srcImage.Convert<TColor, TSrcDepth>())
+                        {
+                            this.ConvertFrom(tmp);
+                        }
+                    }
+                    else
+                    {   //Do depth conversion first, then color conversion
+                        using (Image<TSrcColor, TDepth> tmp = srcImage.Convert<TSrcColor, TDepth>()) //convert depth
+                            //using (Mat tmp = new CV.Mat())
+                        {
+                            //srcImage.Mat.ConvertTo(tmp, CvInvoke.GetDepthType(typeof(TDepth), 
+                            CvInvoke.CvtColor(tmp, this, typeof(TSrcColor), typeof(TColor));
+                        }
                     }
                 }
 #endregion
