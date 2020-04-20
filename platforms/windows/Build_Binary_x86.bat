@@ -5,7 +5,7 @@ REM %1%: "64", "32", "ARM"
 REM %2%: "gpu", if omitted, it will not use CUDA
 REM %3%: "intel_inf" "intel", "WindowsPhone81", "WindowsStore81", "WindowsStore10", "vs2015"
 REM %4%: "nonfree", "openni"
-REM %5%: "doc", "htmldoc", this indicates if we should build the documentation
+REM %5%: "doc" this indicates if we should build the documentation
 REM %6%: "package", this indicates if we should build the ".zip" and ".exe" package
 REM %7%: "build", if set to "build", the script will also build the target
 REM %8%: "nuget", this indicates if we should build the nuget package
@@ -15,6 +15,7 @@ pushd %~p0
 cd ..\..
 mkdir b
 cd b
+
 REM cd ..\..
 IF "%1%"=="64" ECHO "BUILDING 64bit solution" 
 IF "%1%"=="32" ECHO "BUILDING 32bit solution"
@@ -442,17 +443,20 @@ SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 
 :BUILD
 IF NOT "%7%"=="build" GOTO END
-SET BUILD_TARGET=
-IF "%6%"=="package" SET BUILD_TARGET= --target PACKAGE 
-%CMAKE% --build . --config Release %BUILD_TARGET%
 
-:BUILD_DOC
-IF NOT ("%5%"=="htmldoc" OR "%5%"=="doc") GOTO BUILD_NUGET
-%CMAKE% --build . --config Release --target Emgu.CV.Document
+SET CMAKE_BUILD_TARGET=cvextern
+IF NOT "%6%"=="package" GOTO CHECK_DOC_BUILD
+SET CMAKE_BUILD_TARGET=%CMAKE_BUILD_TARGET% PACKAGE
+:CHECK_DOC_BUILD
+IF NOT "%5%"=="doc" GOTO CHECK_NUGET_BUILD
+SET CMAKE_BUILD_TARGET=%CMAKE_BUILD_TARGET% Emgu.CV.Document
+:CHECK_NUGET_BUILD
+IF NOT "%8%"=="nuget" GOTO END_SET_BUILD_TARGET
+SET CMAKE_BUILD_TARGET=%CMAKE_BUILD_TARGET% Emgu.CV.Document
+:END_SET_BUILD_TARGET
+REM echo CMAKE_BUILD_TARGET=%CMAKE_BUILD_TARGET% Emgu.CV.nuget
 
-:BUILD_NUGET
-IF NOT "%8%"=="nuget" GOTO END
-%CMAKE% --build . --config Release --target Emgu.CV.nuget
+%CMAKE% --build . --config Release --target %CMAKE_BUILD_TARGET%
 
 REM IF "%2%"=="gpu" ^
 REM call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.CUDA.nuget 
