@@ -13,7 +13,7 @@ REM %9%: This field if for the CUDA_ARCH_BIN_OPTION, if you want to specify manu
 
 pushd %~p0
 cd ..\..
-mkdir b
+IF NOT EXIST b mkdir b
 cd b
 
 REM cd ..\..
@@ -452,10 +452,11 @@ IF NOT "%5%"=="doc" GOTO CHECK_NUGET_BUILD
 SET CMAKE_BUILD_TARGET=%CMAKE_BUILD_TARGET% Emgu.CV.Document
 :CHECK_NUGET_BUILD
 IF NOT "%8%"=="nuget" GOTO END_SET_BUILD_TARGET
-SET CMAKE_BUILD_TARGET=%CMAKE_BUILD_TARGET% Emgu.CV.Document
+SET CMAKE_BUILD_TARGET=%CMAKE_BUILD_TARGET% Emgu.CV.runtime.windows.nuget
 :END_SET_BUILD_TARGET
 REM echo CMAKE_BUILD_TARGET=%CMAKE_BUILD_TARGET% Emgu.CV.nuget
 
+REM %CMAKE% --build . --config Release --parallel --target %CMAKE_BUILD_TARGET%
 %CMAKE% --build . --config Release --target %CMAKE_BUILD_TARGET%
 
 REM IF "%2%"=="gpu" ^
