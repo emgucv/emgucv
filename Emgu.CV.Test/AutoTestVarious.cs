@@ -1430,8 +1430,10 @@ namespace Emgu.CV.Test
         [Test]
         public void TestFaceRecognizer()
         {
-            Mat[] images = new Mat[20];
-            int[] labels = new int[20];
+            int trainingImgCount = 20;
+            int numComponents = trainingImgCount / 5;
+            Mat[] images = new Mat[trainingImgCount];
+            int[] labels = new int[trainingImgCount];
             for (int i = 0; i < images.Length; i++)
             {
                 images[i] = new Mat(new Size(200, 200), DepthType.Cv8U, 1);
@@ -1440,8 +1442,8 @@ namespace Emgu.CV.Test
                 labels[i] = i;
             }
 
-            Mat[] images2 = new Mat[20];
-            int[] labels2 = new int[20];
+            Mat[] images2 = new Mat[trainingImgCount];
+            int[] labels2 = new int[trainingImgCount];
             for (int i = 0; i < images2.Length; i++)
             {
                 images2[i] = new Mat(new Size(200, 200), DepthType.Cv8U, 1);
@@ -1453,7 +1455,7 @@ namespace Emgu.CV.Test
             Mat sample = new Mat(new Size(200, 200), DepthType.Cv8U, 1);
             CvInvoke.Randu(sample, new MCvScalar(0), new MCvScalar(255));
 
-            EigenFaceRecognizer eigen = new EigenFaceRecognizer(0, double.MaxValue);
+            EigenFaceRecognizer eigen = new EigenFaceRecognizer(numComponents, double.MaxValue);
 
             eigen.Train(images, labels);
             FaceRecognizer.PredictionResult result;
@@ -1466,9 +1468,17 @@ namespace Emgu.CV.Test
             result = eigen.Predict(sample);
             Trace.WriteLine(String.Format("Eigen distance: {0}", result.Distance));
             String filePath = Path.Combine(Path.GetTempPath(), "abc.xml");
-            
-            //eigen.Save(filePath);
-            //eigen.Load(filePath);
+
+            eigen.Write(filePath);
+            using (EigenFaceRecognizer eigen2 = new EigenFaceRecognizer(numComponents, double.MaxValue))
+            {
+                eigen2.Read(filePath);
+                for (int i = 0; i < images.Length; i++)
+                {
+                    result = eigen2.Predict(images[i]);
+                    EmguAssert.IsTrue(result.Label == i);
+                }
+            }
 
             FisherFaceRecognizer fisher = new FisherFaceRecognizer(0, double.MaxValue);
             fisher.Train(images, labels);
@@ -1483,9 +1493,10 @@ namespace Emgu.CV.Test
             LBPHFaceRecognizer lbph = new LBPHFaceRecognizer(1, 8, 8, 8, double.MaxValue);
             lbph.Train(images, labels);
             lbph.Update(images2, labels2);
+            
             using (VectorOfMat vm = lbph.Histograms)
             {
-                EmguAssert.IsTrue(vm.Size == 2);
+                EmguAssert.IsTrue(vm.Size == images.Length + images2.Length);
             }
             for (int i = 0; i < images.Length; i++)
             {

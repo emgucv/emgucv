@@ -223,6 +223,19 @@ namespace ${NAMESPACE_CS}
          {
             get { return _v.ToArrayOfArray(); }
          }
+#else
+		 public ${VECTOR_ELEMENT_CS}[] Values
+         {
+			get
+			{
+			   ${VECTOR_ELEMENT_CS}[] result = new ${VECTOR_ELEMENT_CS}[_v.Size];
+			   for (int i = 0; i < result.Length; i++)
+			   {
+				  result[i] = _v[i];
+			   }
+			   return result;
+			}
+         }
 #endif
       }
 
