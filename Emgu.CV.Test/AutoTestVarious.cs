@@ -1466,6 +1466,7 @@ namespace Emgu.CV.Test
             result = eigen.Predict(sample);
             Trace.WriteLine(String.Format("Eigen distance: {0}", result.Distance));
             String filePath = Path.Combine(Path.GetTempPath(), "abc.xml");
+            
             //eigen.Save(filePath);
             //eigen.Load(filePath);
 
@@ -1482,6 +1483,10 @@ namespace Emgu.CV.Test
             LBPHFaceRecognizer lbph = new LBPHFaceRecognizer(1, 8, 8, 8, double.MaxValue);
             lbph.Train(images, labels);
             lbph.Update(images2, labels2);
+            using (VectorOfMat vm = lbph.Histograms)
+            {
+                EmguAssert.IsTrue(vm.Size == 2);
+            }
             for (int i = 0; i < images.Length; i++)
             {
                 EmguAssert.IsTrue(lbph.Predict(images[i]).Label == i);

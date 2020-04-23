@@ -18,7 +18,7 @@ CVAPI(cv::face::EigenFaceRecognizer*) cveEigenFaceRecognizerCreate(
 	int numComponents,
 	double threshold,
 	cv::face::FaceRecognizer** faceRecognizerPtr,
-	cv::face::FaceRecognizer** basicFaceRecognizerPtr,
+	cv::face::BasicFaceRecognizer** basicFaceRecognizerPtr,
 	cv::Ptr<cv::face::EigenFaceRecognizer>** sharedPtr);
 CVAPI(void) cveEigenFaceRecognizerRelease(cv::Ptr<cv::face::EigenFaceRecognizer>** sharedPtr);
 
@@ -39,6 +39,7 @@ CVAPI(cv::face::LBPHFaceRecognizer*) cveLBPHFaceRecognizerCreate(
 	cv::face::FaceRecognizer** faceRecognizerPtr,
 	cv::Ptr<cv::face::LBPHFaceRecognizer>** sharedPtr);
 CVAPI(void) cveLBPHFaceRecognizerRelease(cv::Ptr<cv::face::LBPHFaceRecognizer>** sharedPtr);
+CVAPI(void) cveLBPHFaceRecognizerGetHistograms(cv::face::LBPHFaceRecognizer* recognizer, std::vector<cv::Mat>* histograms);
 
 CVAPI(void) cveFaceRecognizerTrain(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);
 CVAPI(void) cveFaceRecognizerUpdate(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels);

@@ -53,7 +53,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="algorithm">The algorithm.</param>
         /// <param name="storage">The storage.</param>
-        /// <param name="name">Simplified API for language bindings</param>
+        /// <param name="name">The name of the node</param>
         public static void Write(this IAlgorithm algorithm, FileStorage storage, String name)
         {
             using (CvString csName = new CvString(name))
@@ -81,7 +81,6 @@ namespace Emgu.CV
         {
             using (FileStorage fs = new FileStorage(format, FileStorage.Mode.Write | FileStorage.Mode.Memory))
             {
-                
                 fs.Insert(algorithm.GetDefaultName());
                 fs.Insert("{");
                 algorithm.Write(fs);

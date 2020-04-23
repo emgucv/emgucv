@@ -22,5 +22,14 @@ namespace Emgu.CV.Face
         /// The native pointer to the BasicFaceRecognizer object 
         /// </summary>
         protected IntPtr _basicFaceRecognizerPtr;
+
+        /// <summary>
+        /// Release the unmanaged memory associated with this BasicFaceRecognizer
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            _basicFaceRecognizerPtr = IntPtr.Zero;
+            base.DisposeObject();
+        }
     }
 }

@@ -11,7 +11,7 @@ cv::face::EigenFaceRecognizer* cveEigenFaceRecognizerCreate(
 	int numComponents, 
 	double threshold, 
 	cv::face::FaceRecognizer** faceRecognizerPtr,
-	cv::face::FaceRecognizer** basicFaceRecognizerPtr,
+	cv::face::BasicFaceRecognizer** basicFaceRecognizerPtr,
 	cv::Ptr<cv::face::EigenFaceRecognizer>** sharedPtr)
 {
    cv::Ptr<cv::face::EigenFaceRecognizer> ptr = cv::face::EigenFaceRecognizer::create(numComponents, threshold);
@@ -64,6 +64,12 @@ void cveLBPHFaceRecognizerRelease(cv::Ptr<cv::face::LBPHFaceRecognizer>** shared
 {
 	delete *sharedPtr;
 	*sharedPtr = 0;
+}
+void cveLBPHFaceRecognizerGetHistograms(cv::face::LBPHFaceRecognizer* recognizer, std::vector<cv::Mat>* histograms)
+{
+	std::vector<cv::Mat> h = recognizer->getHistograms();
+	histograms->clear();
+	std::copy(h.begin(), h.end(), std::back_inserter(*histograms));
 }
 
 void cveFaceRecognizerTrain(cv::face::FaceRecognizer* recognizer, cv::_InputArray* images, cv::_InputArray* labels)

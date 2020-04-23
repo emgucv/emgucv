@@ -74,8 +74,25 @@ namespace Emgu.CV.Face
         protected override void DisposeObject()
         {
             if (_sharedPtr == IntPtr.Zero)
+            {
                 FaceInvoke.cveLBPHFaceRecognizerRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
+
             base.DisposeObject();
+        }
+
+        /// <summary>
+        /// Get the histograms
+        /// </summary>
+        public VectorOfMat Histograms
+        {
+            get
+            {
+                VectorOfMat histograms = new VectorOfMat();
+                FaceInvoke.cveLBPHFaceRecognizerGetHistograms(_ptr, histograms);
+                return histograms;
+            }
         }
     }
 
@@ -95,6 +112,9 @@ namespace Emgu.CV.Face
             ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveLBPHFaceRecognizerRelease(ref IntPtr sharedPtr);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveLBPHFaceRecognizerGetHistograms(IntPtr recognizer, IntPtr histograms);
     }
 
 
