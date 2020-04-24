@@ -143,7 +143,7 @@ namespace ${NAMESPACE_CS}
       /// <returns>The input array</returns>
       public InputArray GetInputArray()
       {
-        return new InputArray( cvInputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
+        return new InputArray( cveInputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
       }
 	  
       /// <summary>
@@ -152,7 +152,7 @@ namespace ${NAMESPACE_CS}
       /// <returns>The output array</returns>
       public OutputArray GetOutputArray()
       {
-         return new OutputArray( cvOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
+         return new OutputArray( cveOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
       }
 
       /// <summary>
@@ -161,7 +161,7 @@ namespace ${NAMESPACE_CS}
       /// <returns>The input output array</returns>
       public InputOutputArray GetInputOutputArray()
       {
-         return new InputOutputArray( cvInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
+         return new InputOutputArray( cveInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
       }     
       
       /// <summary>
@@ -268,13 +268,13 @@ namespace ${NAMESPACE_CS}
       internal static extern int VectorOf${VECTOR_NAME}SizeOfItemInBytes();
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cvInputArrayFromVectorOf${VECTOR_NAME}(IntPtr vec);
+      internal static extern IntPtr cveInputArrayFromVectorOf${VECTOR_NAME}(IntPtr vec);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cvOutputArrayFromVectorOf${VECTOR_NAME}(IntPtr vec);
+      internal static extern IntPtr cveOutputArrayFromVectorOf${VECTOR_NAME}(IntPtr vec);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr cvInputOutputArrayFromVectorOf${VECTOR_NAME}(IntPtr vec);
+      internal static extern IntPtr cveInputOutputArrayFromVectorOf${VECTOR_NAME}(IntPtr vec);
    }
 }
 
