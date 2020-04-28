@@ -577,7 +577,17 @@ ELSEIF(NOT ("${ANDROID_LABEL}" STREQUAL ""))
   SET(ANDROID_LABEL "-android${ANDROID_LABEL}")
 ENDIF()
 
-CHECK_BINARY_EXIST("libs" "Emgu.CV.World*" HAVE_PREBUILD_EMGU_CV_WORLD OFF)
+#CHECK_BINARY_EXIST("libs" "Emgu.CV.World*" HAVE_PREBUILD_EMGU_CV_WORLD OFF)
+CHECK_BINARY_EXIST("libs" "Emgu.CV.Platform.IOS.*" HAVE_PREBUILD_EMGU_CV_IOS OFF)
+#IF(HAVE_PREBUILD_EMGU_CV_IOS)
+#  INSTALL(
+#	FILES
+#	"${CMAKE_SOURCE_DIR}/libs/Emgu.CV.Platform.IOS.dll"
+#	"${CMAKE_SOURCE_DIR}/libs/Emgu.CV.Platform.IOS.xml"
+#	DESTINATION "libs/"
+#	COMPONENT emgucv_binary
+#	)
+#ENDIF()
 
 # ----------------------------------------------------------------------------
 #  Setup Package information
@@ -1445,13 +1455,12 @@ ELSEIF (WIN32)
   IF(NOT NETFX_CORE)
     
     if(WITH_FFMPEG)
-      
       INSTALL(
-	FILES
-	"${UNMANAGED_LIBRARY_OUTPUT_PATH}/${OPENCV_FFMPEG_OUTPUT_NAME}.dll"
-	DESTINATION "libs/${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/"
-	COMPONENT libs
-	)
+		FILES
+		"${UNMANAGED_LIBRARY_OUTPUT_PATH}/${OPENCV_FFMPEG_OUTPUT_NAME}.dll"
+		DESTINATION "libs/${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/"
+		COMPONENT libs
+		)
     endif()
     
     # ----------------------------------------------------------------------------
@@ -1934,12 +1943,12 @@ ELSEIF (WIN32)
   SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\Emgu CV License.lnk\\\"  \\\"$INSTDIR\\\\${LICENSE_FILE_NAME}\\\" ")	
   SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\Open CV License.lnk\\\"  \\\"$INSTDIR\\\\lib\\\\opencv.license.txt\\\" ")
   SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\Tesseract OCR License.lnk\\\"  \\\"$INSTDIR\\\\lib\\\\3rdParty\\\\tesseract-ocr.license.txt\\\" ")	
-  SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\CvBlob License.lnk\\\"  \\\"$INSTDIR\\\\lib\\\\3rdParty\\\\cvblob.license.txt\\\" ")	
+  #SET(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}\nCreateShortCut \\\"$SMPROGRAMS\\\\$STARTMENU_FOLDER\\\\License\\\\CvBlob License.lnk\\\"  \\\"$INSTDIR\\\\lib\\\\3rdParty\\\\cvblob.license.txt\\\" ")	
   
   SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\License\\\\Emgu CV License.lnk\\\" ")
   SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\License\\\\Open CV License.lnk\\\" ")
   SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\License\\\\Tesseract OCR License.lnk\\\" ")
-  SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\License\\\\CvBlob License.lnk\\\" ")
+  #SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\n Delete \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\License\\\\CvBlob License.lnk\\\" ")
   SET(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "${CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS}\nRMDir  \\\"$SMPROGRAMS\\\\$MUI_TEMP\\\\License\\\" ")
   
   #IF(EMGU_CV_EXAMPLE_BUILD AND NOT NETFX_CORE)
