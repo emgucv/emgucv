@@ -3,6 +3,7 @@
 # --------------------------------------------------------
 
 ADD_SUBDIRECTORY(NetStandard)
+ADD_SUBDIRECTORY(NetStandard_iOS)
 ADD_SUBDIRECTORY(DotNet)
 ADD_SUBDIRECTORY(iOS)
 ADD_SUBDIRECTORY(Android)

@@ -399,9 +399,10 @@ namespace Emgu.CV
 #else
             if (Emgu.Util.Platform.OperationSystem == Platform.OS.IOS)
                 return libraryLoaded;
-            else if (Emgu.Util.Platform.OperationSystem == Platform.OS.IOS)
+            else if (Emgu.Util.Platform.OperationSystem == Platform.OS.Android)
             {
                 System.Reflection.Assembly monoAndroidAssembly = Emgu.Util.Toolbox.FindAssembly("Mono.Android.dll");
+
                 //Running on Xamarin Android
                 Type javaSystemType = monoAndroidAssembly.GetType("Java.Lang.JavaSystem");
                 if (javaSystemType != null)
@@ -464,6 +465,7 @@ namespace Emgu.CV
                         return System.Runtime.InteropServices.NativeLibrary.Load("ResolveLib", asm, null);
                     };
                     */
+                return;
             }
 
             List<String> modules = CvInvoke.OpenCVModuleList;

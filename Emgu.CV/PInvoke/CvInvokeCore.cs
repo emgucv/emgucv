@@ -36,7 +36,7 @@ namespace Emgu.CV
         /// <param name="userData">Arbitrary pointer that is transparently passed to the error handler.</param>
         /// <returns>if 0, signal the process to continue</returns>
 #if __IOS__
-        [ObjCRuntime.MonoPInvokeCallback(typeof(CvErrorCallback))]
+        //[ObjCRuntime.MonoPInvokeCallback(typeof(CvErrorCallback))]
 #elif (UNITY_WSA || UNITY_ANDROID) && (!UNITY_EDITOR)
         [AOT.MonoPInvokeCallback(typeof(CvErrorCallback))]
 #endif
@@ -63,7 +63,7 @@ namespace Emgu.CV
         /// <param name="userData">Arbitrary pointer that is transparently passed to the error handler.</param>
         /// <returns>If 0, signal the process to continue</returns>
 #if __IOS__
-        [ObjCRuntime.MonoPInvokeCallback(typeof(CvErrorCallback))]
+        //[ObjCRuntime.MonoPInvokeCallback(typeof(CvErrorCallback))]
 #elif (UNITY_WSA || UNITY_ANDROID) && (!UNITY_EDITOR)
         [AOT.MonoPInvokeCallback(typeof(CvErrorCallback))]
 #endif

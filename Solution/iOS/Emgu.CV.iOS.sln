@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.Util", "..\..\Emgu.Util\Emgu.Util.shproj", "{98561642-5EC3-4244-BAF9-6876D9BA5527}"
 EndProject
@@ -11,18 +11,19 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.OCR", "..\..\Emgu.C
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Contrib", "..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.shproj", "{11E54A7E-778D-466C-A176-71E150976AC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.World.IOS", "..\..\Emgu.CV.World\iOS\Emgu.CV.World.IOS.csproj", "{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.NetStandard.IOS", "..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj", "{B5A48CE0-D4E6-4112-B782-F4A948BA2974}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
-		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
+		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
-		..\..\Emgu.CV\Emgu.CV.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
-		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
-		..\..\Emgu.Util\Emgu.Util.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
-		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{0ee2b36c-f7cd-49fa-a270-d7d988cff6e5}*SharedItemsImports = 4
+		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{b5a48ce0-d4e6-4112-b782-f4a948ba2974}*SharedItemsImports = 5
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{b5a48ce0-d4e6-4112-b782-f4a948ba2974}*SharedItemsImports = 5
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{b5a48ce0-d4e6-4112-b782-f4a948ba2974}*SharedItemsImports = 5
+		..\..\Emgu.CV\Emgu.CV.projitems*{b5a48ce0-d4e6-4112-b782-f4a948ba2974}*SharedItemsImports = 5
+		..\..\Emgu.Util\Emgu.Util.projitems*{b5a48ce0-d4e6-4112-b782-f4a948ba2974}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|iPhone = Ad-Hoc|iPhone
@@ -35,25 +36,28 @@ Global
 		Release|iPhoneSimulator = Release|iPhoneSimulator
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.Ad-Hoc|iPhoneSimulator.Build.0 = Release|Any CPU
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.AppStore|iPhone.ActiveCfg = Release|Any CPU
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.AppStore|iPhone.Build.0 = Release|Any CPU
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.AppStore|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.AppStore|iPhoneSimulator.Build.0 = Release|Any CPU
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.Debug|iPhone.ActiveCfg = Debug|Any CPU
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.Debug|iPhone.Build.0 = Debug|Any CPU
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.Release|iPhone.ActiveCfg = Release|Any CPU
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.Release|iPhone.Build.0 = Release|Any CPU
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.Ad-Hoc|iPhone.Build.0 = Debug|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.Ad-Hoc|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.AppStore|iPhone.Build.0 = Debug|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.AppStore|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.AppStore|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.Debug|iPhone.ActiveCfg = Release|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.Debug|iPhone.Build.0 = Release|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.Release|iPhone.Build.0 = Release|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{B5A48CE0-D4E6-4112-B782-F4A948BA2974}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C6EE5770-F75F-4CB2-A9FF-E1BDCBD52E18}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
