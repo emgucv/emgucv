@@ -11,6 +11,7 @@
     <AssemblyName>EmguCVXamarinFormsiOS</AssemblyName>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <ProvisioningType>manual</ProvisioningType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -154,7 +155,7 @@
       <Version>5.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.5.0.617</Version>
+      <Version>4.6.0.726</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Plugin.FilePicker">
       <Version>2.1.34</Version>
@@ -164,6 +165,10 @@
     <ProjectReference Include="..\..\..\Emgu.CV.Platform\iOS\Emgu.CV.Platform.IOS.csproj">
       <Project>{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}</Project>
       <Name>Emgu.CV.Platform.IOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj">
+      <Project>{79214dcd-3f36-4c50-97f4-11af21f60711}</Project>
+      <Name>Emgu.CV.Platform.NetStandard.IOS</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\Core\Emgu.CV.XamarinForms.projitems" Label="Shared" />

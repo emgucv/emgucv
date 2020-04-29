@@ -32,9 +32,12 @@ namespace Example.iOS
             {
                 long processingTime;
                 using (Mat image = CvInvoke.Imread("pedestrian.png", ImreadModes.Color))
+                    using (HOGDescriptor hog = new HOGDescriptor())
                 {
+                    
+                    hog.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
                     Stopwatch watch = Stopwatch.StartNew();
-                    Rectangle[] pedestrians = FindPedestrian.Find(image);
+                    Rectangle[] pedestrians = FindPedestrian.Find(image, hog);
                     watch.Stop();
 
 

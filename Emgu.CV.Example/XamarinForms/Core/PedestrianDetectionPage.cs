@@ -61,6 +61,19 @@ namespace Emgu.CV.XamarinForms
             }
         }
 
+        private void _capture_ImageGrabbed(object sender, EventArgs e)
+        {
+            if (_mat == null)
+                _mat = new Mat();
+            _capture.Retrieve(_mat);
+            Stopwatch watch = Stopwatch.StartNew();
+            ProcessImage(_mat);
+            watch.Stop();
+            SetImage(_mat);
+            this.DisplayImage.BackgroundColor = Color.Black;
+            this.DisplayImage.IsEnabled = true;
+            SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
+        }
 
         public void ProcessImage(Mat m)
         {

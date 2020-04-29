@@ -172,6 +172,10 @@
       <Project>{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}</Project>
       <Name>Emgu.CV.Platform.IOS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj">
+      <Project>{79214dcd-3f36-4c50-97f4-11af21f60711}</Project>
+      <Name>Emgu.CV.Platform.NetStandard.IOS</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
