@@ -5,7 +5,7 @@ using ObjCRuntime;
 using Foundation;
 //using UIKit;
 
-namespace Emgu.CV.World
+namespace Emgu.CV
 {
    // The first step to creating a binding is to add your native library ("libNativeLibrary.a")
    // to the project by right-clicking (or Control-clicking) the folder containing this source

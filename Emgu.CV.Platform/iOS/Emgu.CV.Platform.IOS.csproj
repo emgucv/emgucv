@@ -56,7 +56,6 @@
       <!-- HintPath for Windows -->
       <HintPath Condition="Exists('$(TargetFrameworkRootPath)\Xamarin.iOS\v1.0\Facades\System.Drawing.Common.dll')">$(TargetFrameworkRootPath)\Xamarin.iOS\v1.0\Facades\netstandard.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK-1.0" />
     <Reference Include="System" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
@@ -92,7 +91,7 @@
   <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
-	</Compile>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\Emgu.CV.NativeImage\CGImageExtension.cs">
       <Link>CGImageExtension.cs</Link>
