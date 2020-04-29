@@ -22,8 +22,13 @@ namespace Emgu.CV.XamarinForms.iOS
 		//
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
+
 			global::Xamarin.Forms.Forms.Init ();
-			LoadApplication (new Emgu.CV.XamarinForms.App ());
+            
+			if (!Emgu.CV.CvInvokeIOS.IsLoaded)
+				throw new Exception("Failed to load Emgu.CV.Platform.IOS.dll");
+
+            LoadApplication (new Emgu.CV.XamarinForms.App ());
 
 			return base.FinishedLaunching (app, options);
 		}

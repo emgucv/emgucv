@@ -15,6 +15,14 @@ using UIKit;
 
 namespace Emgu.CV
 {
+    public static class CvInvokeIOS
+    {
+        public static bool IsLoaded
+        {
+            get { return true; }
+        }
+    }
+
     /// <summary>
     /// Provide extension method to convert IInputArray to and from UIImage
     /// </summary>

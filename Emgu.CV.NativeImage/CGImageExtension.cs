@@ -109,6 +109,10 @@ namespace Emgu.CV
                  cspace,
                  CGImageAlphaInfo.PremultipliedLast))
                     context.DrawImage(rect, cgImage);
+                if (modes == ImreadModes.Unchanged)
+                {
+                    m.CopyTo(mat);
+                }
                 if (modes == ImreadModes.Grayscale)
                 {
                     CvInvoke.CvtColor(m, mat, ColorConversion.Rgba2Gray);
@@ -116,6 +120,10 @@ namespace Emgu.CV
                 else if (modes == ImreadModes.AnyColor)
                 {
                     CvInvoke.CvtColor(m, mat, ColorConversion.Rgba2Bgra);
+                }
+                else if (modes == ImreadModes.Color)
+                {
+                    CvInvoke.CvtColor(m, mat, ColorConversion.Rgba2Bgr);
                 }
                 else if (modes == ImreadModes.ReducedColor2)
                 {
@@ -133,13 +141,18 @@ namespace Emgu.CV
                         CvInvoke.CvtColor(tmp, mat, ColorConversion.Rgba2Gray);
                     }
                 }
-                else if (modes == ImreadModes.ReducedColor4 || modes == ImreadModes.ReducedColor8 || modes == ImreadModes.ReducedGrayscale4 || modes == ImreadModes.ReducedGrayscale8 || modes == ImreadModes.LoadGdal)
+                else if (modes == ImreadModes.ReducedColor4 
+                         || modes == ImreadModes.ReducedColor8 
+                         || modes == ImreadModes.ReducedGrayscale4 
+                         || modes == ImreadModes.ReducedGrayscale8 
+                         || modes == ImreadModes.LoadGdal)
                 {
                     throw new NotImplementedException(String.Format("Conversion from PNG using mode {0} is not supported", modes));
                 }
                 else
                 {
-                    CvInvoke.CvtColor(m, mat, ColorConversion.Rgba2Bgr);
+                    throw new Exception(String.Format("ImreadModes of {0} is not implemented.", modes.ToString()));
+                    //CvInvoke.CvtColor(m, mat, ColorConversion.Rgba2Bgr);
                 }
             }
         }

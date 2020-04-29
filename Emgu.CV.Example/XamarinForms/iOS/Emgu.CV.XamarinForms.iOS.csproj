@@ -117,7 +117,12 @@
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="OpenTK-1.0" />
+    <Reference Include="netstandard">
+      <!-- HintPath for macOS -->
+      <HintPath Condition="Exists('/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS/Facades/System.Drawing.Common.dll')">/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono/Xamarin.iOS/Facades/netstandard.dll</HintPath>
+      <!-- HintPath for Windows -->
+      <HintPath Condition="Exists('$(TargetFrameworkRootPath)\Xamarin.iOS\v1.0\Facades\System.Drawing.Common.dll')">$(TargetFrameworkRootPath)\Xamarin.iOS\v1.0\Facades\netstandard.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -139,6 +144,9 @@
     </Content>
     <Content Include="..\Core\pedestrian.png">
       <Link>pedestrian.png</Link>
+    </Content>
+    <Content Include="..\Core\pic3.png">
+      <Link>pic3.png</Link>
     </Content>
     <Content Include="..\Core\stop-sign.jpg">
       <Link>stop-sign.jpg</Link>

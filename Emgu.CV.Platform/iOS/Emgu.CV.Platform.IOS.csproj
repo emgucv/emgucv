@@ -75,16 +75,24 @@
     <EmguCVNativeFile>$(OpenCVBinaryDir)\iOS\libcvextern.a</EmguCVNativeFile>
     <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
     <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)ios </EmguCVDeployMessage>
+    <EmguCVLinkWithFile>$(MSBuildThisFileDirectory)\libcvextern.linkwith.cs</EmguCVLinkWithFile>
     <EmguCVErrorMessage Condition="!Exists('$(EmguCVLinkWithFile)')"> This package do not contain necessary file for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVLinkWithFile) </EmguCVErrorMessage>
   </PropertyGroup>
+  <ItemGroup>
+    <ObjcBindingNativeLibrary Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(EmguCVLinkWithFile)" Condition="Exists('$(EmguCVLinkWithFile)')">
+      <DependentUpon>libcvextern.a</DependentUpon>
+    </Compile>
+  </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="libcvextern.linkwith.cs" />
+	</Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\Emgu.CV.NativeImage\CGImageExtension.cs">
       <Link>CGImageExtension.cs</Link>
@@ -95,11 +103,6 @@
   </ItemGroup>
   <ItemGroup>
     <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <NativeReference Include="Native References/libcvextern.a">
-      <Kind>Static</Kind>
-    </NativeReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj">

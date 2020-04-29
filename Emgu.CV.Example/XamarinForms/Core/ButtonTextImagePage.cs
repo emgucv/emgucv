@@ -154,7 +154,7 @@ namespace Emgu.CV.XamarinForms
 #else
                     if (!File.Exists(imageNames[i]))
                         throw new FileNotFoundException(String.Format("File {0} do not exist.", imageNames[i]));
-                    mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.AnyColor);
+                    mats[i] = CvInvoke.Imread(imageNames[i], ImreadModes.Color);
 #endif
                 }
                 else if (action.Equals("Photo Library"))
