@@ -27,7 +27,7 @@ IF(HAVE_IOS)
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
       COMPONENT emgucv_binary)	  
 
-    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.Platform.NetStandard)  
+    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.Platform.NetStandard.IOS)  
     if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
     endif() 
