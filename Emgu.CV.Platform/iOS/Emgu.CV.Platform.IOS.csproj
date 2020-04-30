@@ -105,7 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj">
-      <Project>{79214dcd-3f36-4c50-97f4-11af21f60711}</Project>
+      <Project>{B5A48CE0-D4E6-4112-B782-F4A948BA2974}</Project>
       <Name>Emgu.CV.Platform.NetStandard.IOS</Name>
     </ProjectReference>
   </ItemGroup>

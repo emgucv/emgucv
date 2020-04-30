@@ -38,8 +38,8 @@
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
   	<!-- The following two copy commands are used to get around a "dotnet build" bug where the resulting assembly use the project name instead of AssemblyName -->
 	<!-- should be removed once it is fixed in the "dotnet build" command -->
-	<Copy SourceFiles="$(OutputPath)$(AssemblyName).IOS.dll" DestinationFiles="$(OutputPath)$(AssemblyName).dll" ContinueOnError="true" Condition="Exists('$(OutputPath)$(AssemblyName).IOS.dll')"/>
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).IOS.xml" DestinationFiles="$(OutputPath)$(AssemblyName).xml" ContinueOnError="true" Condition="Exists('$(OutputPath)$(AssemblyName).IOS.xml')"/>
+	<Copy SourceFiles="$(OutputPath)$(AssemblyName).IOS.dll" DestinationFiles="$(OutputPath)$(AssemblyName).dll" ContinueOnError="true" Condition="Exists('$(OutputPath)$(AssemblyName).IOS.dll')" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).IOS.xml" DestinationFiles="$(OutputPath)$(AssemblyName).xml" ContinueOnError="true" Condition="Exists('$(OutputPath)$(AssemblyName).IOS.xml')" />
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\..\libs\iOS" Importance="high" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\..\libs\iOS" ContinueOnError="true" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="..\..\libs\iOS" ContinueOnError="true" />
