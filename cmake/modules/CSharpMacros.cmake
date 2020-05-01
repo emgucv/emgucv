@@ -203,7 +203,8 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
 	#MESSAGE(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> msbuild_target_name: ${msbuild_target_name}")
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
-      COMMAND  ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /target:${msbuild_target_name}
+	  COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
+      COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /target:${msbuild_target_name}
       COMMENT "Building ${target}")
     ENDIF()
   ELSE()
