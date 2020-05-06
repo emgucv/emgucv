@@ -60,6 +60,29 @@ CVAPI(void*) oclDeviceGetPtr(cv::ocl::Device* device);
 
 //----------------------------------------------------------------------------
 //
+//  OclContext
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::ocl::Context*) oclContextCreate();
+CVAPI(const cv::ocl::Context*) oclContextGetDefault(bool initialize);
+CVAPI(void) oclContextRelease(cv::ocl::Context** context);
+CVAPI(const cv::ocl::Program*) oclContextGetProg(
+    cv::ocl::Context* context,
+    cv::ocl::ProgramSource* prog,
+    cv::String* buildopt, 
+    cv::String* errmsg);
+
+//----------------------------------------------------------------------------
+//
+//  OclProgram
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::ocl::Program*) oclProgramCreate();
+CVAPI(void) oclProgramRelease(cv::ocl::Program** program);
+CVAPI(void) oclProgramGetBinary(cv::ocl::Program* program, std::vector<char>* binary);
+
+//----------------------------------------------------------------------------
+//
 //  OclProgramSource
 //
 //----------------------------------------------------------------------------
