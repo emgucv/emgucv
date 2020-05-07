@@ -908,6 +908,7 @@ ENDIF()
 SET(EMGUCV_MACOS_NUGET_FILE_LIST "")
 IF(HAVE_OSX)
 	SET(EMGUCV_MACOS_NUGET_FILE_LIST "${EMGUCV_MACOS_NUGET_FILE_LIST} 
+	<file src=\"..\\..\\..\\libs\\osx\\*.dylib\" target=\"build\" />
 	<file src=\"Emgu.CV.runtime.macos.targets\" target=\"build\\${EMGUCV_MACOS_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
