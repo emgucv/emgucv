@@ -1171,6 +1171,12 @@ IF(HAVE_IOS AND WIN32)
 	<file src=\"Emgu.CV.runtime.ios.targets\" target=\"build\\${EMGUCV_IOS_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 	<file src=\"..\\..\\..\\${LICENSE_FILE_NAME}\" target=\"\" />")
+	SET(EMGUCV_IOS_NUGET_DEPENDENCY "
+	<dependencies>
+		<group targetFramework=\"Xamarin.iOS10\">
+		    <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"[${CPACK_PACKAGE_VERSION}]\" />
+		</group>
+	</dependencies>")
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ios.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ios/Package.nuspec)
 ENDIF()
 
