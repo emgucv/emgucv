@@ -182,7 +182,7 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Buffer size
         /// </summary>
-        Buffersuze = 38,
+        Buffersize = 38,
         /// <summary>
         /// Auto focus
         /// </summary>
