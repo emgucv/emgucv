@@ -1585,7 +1585,7 @@ ELSEIF (WIN32)
 	FOREACH (file ${DEBUGER_VISUALIZER_FILES})
 	  SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
 	    "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
-	CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\${file}.dll' '$${vs_version}_INSTALL_FOLDER'")
+	CopyFiles /SILENT '\\\$INSTDIR\\\\libs\\\\${file}.dll' '$${vs_version}_INSTALL_FOLDER'")
 	ENDFOREACH()
 	
 	#INSTALL native DLLs
@@ -1615,7 +1615,7 @@ ELSEIF (WIN32)
 	#Install the Debugger Visualizer itself
 	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
 	  "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
-	CopyFiles /SILENT '\\\$INSTDIR\\\\bin\\\\Emgu.CV.DebuggerVisualizers.dll' '$${vs_version}_INSTALL_FOLDER'
+	CopyFiles /SILENT '\\\$INSTDIR\\\\libs\\\\Emgu.CV.DebuggerVisualizers.dll' '$${vs_version}_INSTALL_FOLDER'
 	installDebuggerVisualizer4${vs_version}Done:")
 	
       ENDMACRO()
