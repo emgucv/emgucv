@@ -146,12 +146,11 @@ namespace Emgu.CV
                         //we may be running in a debugger visualizer under a unit test in this case
                         String visualStudioDir = AppDomain.CurrentDomain.BaseDirectory;
                         DirectoryInfo visualStudioDirInfo = new DirectoryInfo(visualStudioDir);
-                        String debuggerVisualzerPath =
-                            Path.Combine(Path.Combine(Path.Combine(
-                                visualStudioDirInfo.Parent.FullName, "Packages"), "Debugger"), "Visualizers");
+                        String debuggerVisualizerPath =
+                            Path.Combine(visualStudioDirInfo.Parent.FullName, "Packages", "Debugger", "Visualizers");
 
-                        if (Directory.Exists(debuggerVisualzerPath))
-                            loadDirectory = debuggerVisualzerPath;
+                        if (Directory.Exists(debuggerVisualizerPath))
+                            loadDirectory = debuggerVisualizerPath;
                         else
                             loadDirectory = String.Empty;
                         /*
