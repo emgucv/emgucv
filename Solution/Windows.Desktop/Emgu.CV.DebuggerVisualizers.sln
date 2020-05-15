@@ -20,10 +20,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.NetStandar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Platform.NetFramework", "..\..\Emgu.CV.Platform\DotNet\Framework\Emgu.CV.Platform.NetFramework.csproj", "{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.DebuggerVisualizers.Console.Test", "..\..\Emgu.CV.DebuggerVisualizers\Emgu.CV.DebuggerVisualizers.Console.Test\Emgu.CV.DebuggerVisualizers.Console.Test.csproj", "{37099E39-A3FC-4CB9-8365-6F5264C4337F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
+		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{37099e39-a3fc-4cb9-8365-6f5264c4337f}*SharedItemsImports = 4
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{5db57d3a-1db6-4930-ae6a-e1587140b0c6}*SharedItemsImports = 5
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{5db57d3a-1db6-4930-ae6a-e1587140b0c6}*SharedItemsImports = 5
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{5db57d3a-1db6-4930-ae6a-e1587140b0c6}*SharedItemsImports = 5
@@ -79,6 +82,18 @@ Global
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|x64.Build.0 = Release|x64
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|x86.ActiveCfg = Release|x86
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|x86.Build.0 = Release|x86
+		{37099E39-A3FC-4CB9-8365-6F5264C4337F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37099E39-A3FC-4CB9-8365-6F5264C4337F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37099E39-A3FC-4CB9-8365-6F5264C4337F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{37099E39-A3FC-4CB9-8365-6F5264C4337F}.Debug|x64.Build.0 = Debug|Any CPU
+		{37099E39-A3FC-4CB9-8365-6F5264C4337F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{37099E39-A3FC-4CB9-8365-6F5264C4337F}.Debug|x86.Build.0 = Debug|Any CPU
+		{37099E39-A3FC-4CB9-8365-6F5264C4337F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37099E39-A3FC-4CB9-8365-6F5264C4337F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37099E39-A3FC-4CB9-8365-6F5264C4337F}.Release|x64.ActiveCfg = Release|Any CPU
+		{37099E39-A3FC-4CB9-8365-6F5264C4337F}.Release|x64.Build.0 = Release|Any CPU
+		{37099E39-A3FC-4CB9-8365-6F5264C4337F}.Release|x86.ActiveCfg = Release|Any CPU
+		{37099E39-A3FC-4CB9-8365-6F5264C4337F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

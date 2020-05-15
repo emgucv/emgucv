@@ -40,5 +40,11 @@ namespace Emgu.CV.DebuggerVisualizers
                 }
             }
         }
+
+        public static void TestShowVisualizer(object objectToVisualize)
+        {
+            VisualizerDevelopmentHost myHost = new VisualizerDevelopmentHost(objectToVisualize, typeof(BaseImageVisualizer));
+            myHost.ShowVisualizer();
+        }
     }
 }
