@@ -611,9 +611,18 @@ namespace Emgu.CV
         }
     }
 
+    /// <summary>
+    /// Class that can be used to read file into Mat
+    /// </summary>
     public class BitmapFileReaderMat : Emgu.CV.IFileReaderMat
     {
-
+        /// <summary>
+        /// Read the file into a Mat
+        /// </summary>
+        /// <param name="fileName">The name of the image file</param>
+        /// <param name="mat">The Mat to read into</param>
+        /// <param name="loadType">Image load type.</param>
+        /// <returns>True if the file can be read into the Mat</returns>
         public bool ReadFile(String fileName, Mat mat, CvEnum.ImreadModes loadType)
         {
             try
@@ -633,8 +642,17 @@ namespace Emgu.CV
         }
     }
 
+    /// <summary>
+    /// Class that can be used to write the Mat to a file
+    /// </summary>
     public class BitmapFileWriterMat : Emgu.CV.IFileWriterMat
     {
+        /// <summary>
+        /// Write the Mat into the file
+        /// </summary>
+        /// <param name="mat">The Mat to write</param>
+        /// <param name="fileName">The name of the file to be written into</param>
+        /// <returns>True if the file has been written into Mat</returns>
         public bool WriteFile(Mat mat, String fileName)
         {
             try
@@ -675,7 +693,6 @@ namespace Emgu.CV
                 //throw;
                 return false;
             }
-
         }
     }
 }
