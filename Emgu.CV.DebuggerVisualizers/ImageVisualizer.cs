@@ -3,14 +3,32 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.CodeDom;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Emgu.CV;
 using Emgu.CV.UI;
 using System.Diagnostics;
+using System.Security.Cryptography;
+using Emgu.CV.DebuggerVisualizers;
 
-[assembly: DebuggerVisualizer(typeof(Emgu.CV.DebuggerVisualizers.ImageVisualizer), Target = typeof(Image<,>))]
-[assembly: DebuggerVisualizer(typeof(Emgu.CV.DebuggerVisualizers.MatVisualizer), Target = typeof(Mat))]
-[assembly: DebuggerVisualizer(typeof(Emgu.CV.DebuggerVisualizers.UMatVisualizer), Target = typeof(UMat))]
+[assembly: DebuggerVisualizer(
+    typeof(Emgu.CV.DebuggerVisualizers.ImageVisualizer),
+    typeof(VisualizerObjectSource),
+    //Target = typeof(Image<,>), 
+    TargetTypeName = "Emgu.CV.Image<,>, Emgu.CV.Platform.NetStandard",
+    Description = "Image<,> debugger visualizer")]
+[assembly: DebuggerVisualizer(
+    typeof(Emgu.CV.DebuggerVisualizers.MatVisualizer),
+    typeof(VisualizerObjectSource),
+    //Target = typeof(Mat),
+    TargetTypeName = "Emgu.CV.Mat, Emgu.CV.Platform.NetStandard",
+    Description = "Mat debugger visualizer")]
+[assembly: DebuggerVisualizer(
+    typeof(Emgu.CV.DebuggerVisualizers.UMatVisualizer),
+    typeof(VisualizerObjectSource),
+    //Target = typeof(UMat),
+    TargetTypeName = "Emgu.CV.UMat, Emgu.CV.Platform.NetStandard",
+    Description = "UMat debugger visualizer")]
 
 namespace Emgu.CV.DebuggerVisualizers
 {

@@ -9,11 +9,13 @@ using Emgu.CV;
 using Emgu.CV.UI;
 using Emgu.CV.Structure;
 using System.Diagnostics;
+using System.Security.Cryptography;
 
 [assembly: DebuggerVisualizer(
-typeof(Emgu.CV.DebuggerVisualizers.BitmapVisualizer),
-Target = typeof(Bitmap))]
-
+    typeof(Emgu.CV.DebuggerVisualizers.BitmapVisualizer),
+    typeof(VisualizerObjectSource),
+    Target = typeof(Bitmap),
+    Description = "Bitmap Debugger Visualizer")]
 
 namespace Emgu.CV.DebuggerVisualizers
 {

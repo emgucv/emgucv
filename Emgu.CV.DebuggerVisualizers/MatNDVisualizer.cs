@@ -13,8 +13,11 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 [assembly: DebuggerVisualizer(
-typeof(Emgu.CV.DebuggerVisualizers.MatNDVisualizer),
-Target = typeof(MatND<>))]
+    typeof(Emgu.CV.DebuggerVisualizers.MatNDVisualizer),
+    typeof(VisualizerObjectSource),
+    //Target = typeof(MatND<>), 
+    TargetTypeName = "Emgu.CV.MatND<,>, Emgu.CV.Platform.NetStandard",
+    Description = "MatND debugger visualizer")]
 namespace Emgu.CV.DebuggerVisualizers
 {
    public sealed class MatNDVisualizer : DialogDebuggerVisualizer
