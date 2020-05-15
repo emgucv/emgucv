@@ -9,8 +9,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Emgu.CV.UI")]
-[assembly: AssemblyDescription("A Collection of User Interfaces for Emgu CV")]
+[assembly: AssemblyTitle("Emgu.CV.Platform.NetFramework")]
+[assembly: AssemblyDescription("A Collection of User Interfaces for Emgu CV targeting .Net framework")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
