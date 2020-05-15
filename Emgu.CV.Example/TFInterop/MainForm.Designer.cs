@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.pictureBox = new Emgu.CV.UI.ImageBox();
             this.messageLabel = new System.Windows.Forms.Label();
             this.fileNameTextBox = new System.Windows.Forms.TextBox();
             this.openFileButton = new System.Windows.Forms.Button();
@@ -123,7 +123,7 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox;
+        private Emgu.CV.UI.ImageBox pictureBox;
         private System.Windows.Forms.Label messageLabel;
         private System.Windows.Forms.TextBox fileNameTextBox;
         private System.Windows.Forms.Button openFileButton;

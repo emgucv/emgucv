@@ -113,122 +113,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\Emgu.CV.NativeImage\BitmapExtension.cs" />
-    <Compile Include="..\HistogramBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="..\HistogramViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="..\HistogramViewer.designer.cs">
-      <DependentUpon>HistogramViewer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="..\ImageBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="..\ImageBox.designer.cs">
-      <DependentUpon>ImageBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="..\ImageProperty.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="..\ImageProperty.designer.cs">
-      <DependentUpon>ImageProperty.cs</DependentUpon>
-    </Compile>
-    <Compile Include="..\ImageViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="..\ImageViewer.designer.cs">
-      <DependentUpon>ImageViewer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="..\MatrixBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="..\MatrixBox.Designer.cs">
-      <DependentUpon>MatrixBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="..\MatrixViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="..\MatrixViewer.Designer.cs">
-      <DependentUpon>MatrixViewer.cs</DependentUpon>
-    </Compile>
-    <Compile Include="..\Operation.cs" />
-    <Compile Include="..\OperationsView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="..\OperationsView.designer.cs">
-      <DependentUpon>OperationsView.cs</DependentUpon>
-    </Compile>
-    <Compile Include="..\PanAndZoomPictureBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="..\ParameterInputDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="..\ParameterInputDialog.designer.cs">
-      <DependentUpon>ParameterInputDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\..\CommonAssemblyInfo.cs" />
-    <Compile Include="Properties\StringTable.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StringTable.resx</DependentUpon>
-    </Compile>
-    <Compile Include="..\ImagePropertyDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="..\ImagePropertyDialog.designer.cs">
-      <DependentUpon>ImagePropertyDialog.cs</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="..\HistogramViewer.resx">
-      <DependentUpon>HistogramViewer.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\ImageBox.resx">
-      <DependentUpon>ImageBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\ImageProperty.resx">
-      <DependentUpon>ImageProperty.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\ImageViewer.resx">
-      <DependentUpon>ImageViewer.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\MatrixBox.resx">
-      <DependentUpon>MatrixBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\MatrixViewer.resx">
-      <DependentUpon>MatrixViewer.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\OperationsView.resx">
-      <DependentUpon>OperationsView.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\PanAndZoomPictureBox.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>PanAndZoomPictureBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\ParameterInputDialog.resx">
-      <DependentUpon>ParameterInputDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\StringTable.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>StringTable.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\ImagePropertyDialog.resx">
-      <DependentUpon>ImagePropertyDialog.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Emgu.CV.snk" />
@@ -242,6 +128,7 @@
       <Name>Emgu.CV.Platform.NetStandard</Name>
     </ProjectReference>
   </ItemGroup>
+  <Import Project="..\Emgu.CV.Platform.Net.projitems" Label="Shared" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

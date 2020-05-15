@@ -184,20 +184,20 @@ namespace TFInterop
                 _renderMat = new Mat();
             m.CopyTo(_renderMat);
 
-            Bitmap bmp = _renderMat.ToBitmap();
+            //Bitmap bmp = _renderMat.ToBitmap();
 
             if (InvokeRequired)
             {
                 this.Invoke((MethodInvoker)(() =>
                 {
                     messageLabel.Text = resStr;
-                    pictureBox.Image = bmp;
+                    pictureBox.Image = _renderMat;
                 }));
             }
             else
             {
                 messageLabel.Text = resStr;
-                pictureBox.Image = bmp;
+                pictureBox.Image = _renderMat;
             }
         }
 
