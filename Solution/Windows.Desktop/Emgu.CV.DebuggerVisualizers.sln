@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Platform.NetFramewo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.DebuggerVisualizers.Console.Test", "..\..\Emgu.CV.DebuggerVisualizers\Emgu.CV.DebuggerVisualizers.Console.Test\Emgu.CV.DebuggerVisualizers.Console.Test.csproj", "{37099E39-A3FC-4CB9-8365-6F5264C4337F}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Platform.Net", "..\..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.shproj", "{AC06F404-0A97-4142-A021-572D686E231F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13

@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>ac06f404-0a97-4142-a021-572d686e231f</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Emgu.CV.Platform.Net</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)HistogramBox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HistogramViewer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)HistogramViewer.Designer.cs">
+      <DependentUpon>HistogramViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ImageBox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImageBox.Designer.cs">
+      <DependentUpon>ImageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ImageProperty.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImageProperty.Designer.cs">
+      <DependentUpon>ImageProperty.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ImagePropertyDialog.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImagePropertyDialog.designer.cs">
+      <DependentUpon>ImagePropertyDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)ImageViewer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ImageViewer.Designer.cs">
+      <DependentUpon>ImageViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)MatrixBox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MatrixBox.Designer.cs">
+      <DependentUpon>MatrixBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)MatrixViewer.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MatrixViewer.Designer.cs">
+      <DependentUpon>MatrixViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Operation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OperationsView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)OperationsView.designer.cs">
+      <DependentUpon>OperationsView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)PanAndZoomPictureBox.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ParameterInputDialog.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ParameterInputDialog.designer.cs">
+      <DependentUpon>ParameterInputDialog.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)HistogramViewer.resx">
+      <DependentUpon>HistogramViewer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ImageBox.resx">
+      <DependentUpon>ImageBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ImageProperty.resx">
+      <DependentUpon>ImageProperty.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ImageViewer.resx">
+      <DependentUpon>ImageViewer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MatrixBox.resx">
+      <DependentUpon>MatrixBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MatrixViewer.resx">
+      <DependentUpon>MatrixViewer.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)OperationsView.resx">
+      <DependentUpon>OperationsView.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)PanAndZoomPictureBox.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>PanAndZoomPictureBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ParameterInputDialog.resx">
+      <DependentUpon>ParameterInputDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ImagePropertyDialog.resx">
+      <DependentUpon>ImagePropertyDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+	  </ItemGroup>
+</Project>

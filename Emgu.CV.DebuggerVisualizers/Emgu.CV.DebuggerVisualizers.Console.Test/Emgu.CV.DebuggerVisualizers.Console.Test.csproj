@@ -54,18 +54,15 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.Platform\DotNet\Framework\Emgu.CV.Platform.NetFramework.csproj">
-      <Project>{90e78bbf-c7fe-4d8e-ade1-75448e866fdb}</Project>
-      <Name>Emgu.CV.Platform.NetFramework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
-      <Project>{5db57d3a-1db6-4930-ae6a-e1587140b0c6}</Project>
-      <Name>Emgu.CV.Platform.NetStandard</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.DebuggerVisualizers.csproj">
       <Project>{e8f09998-297b-485c-b234-e5ace5f55772}</Project>
       <Name>Emgu.CV.DebuggerVisualizers</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation">
+      <Version>4.3.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
