@@ -87,9 +87,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Emgu.CV.NativeImage\BitmapExtension.cs">
-      <Link>BitmapExtension.cs</Link>
-    </Compile>
     <Compile Include="BitmapVisualizer.cs" />
     <Compile Include="DenseHistogramVisualizer.cs" />
     <Compile Include="ImageVisualizer.cs" />
