@@ -13,7 +13,7 @@
 	<summary>This package provides the native CUDA FFT dependencies for EMGU software libraries</summary>
     <description>This package provides the native CUDA FFT dependencies for EMGU software libraries</description>
     <releaseNotes>This is the CUFFT component of CUDA ${EMGU_CUFFT_VERSION}. </releaseNotes>
-    <copyright>${NUGET_PACKAGE_VENDOR}, All Rights Reserved.</copyright>
+    <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>emgu cufft</tags>
   </metadata>
   <files>

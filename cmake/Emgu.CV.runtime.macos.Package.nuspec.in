@@ -17,7 +17,7 @@
 http://www.emgu.com/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html    	        
     </releaseNotes>
 	${EMGUCV_MACOS_NUGET_DEPENDENCY}
-    <copyright>${CURRENT_YEAR} ${CPACK_PACKAGE_VENDOR}, all rights reserved</copyright>
+    <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>opencv emgu emgucv ai image macos</tags>
   </metadata>
   <files>

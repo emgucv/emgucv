@@ -16,7 +16,7 @@
 	<dependencies>
 		${EMGU_CUDA_NPP_NUGET_DEPENDENCY}
     </dependencies>
-    <copyright>${CURRENT_YEAR} ${CPACK_PACKAGE_VENDOR}, All Rights Reserved.</copyright>
+    <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>emgu cuda</tags>
   </metadata>
   <files>
