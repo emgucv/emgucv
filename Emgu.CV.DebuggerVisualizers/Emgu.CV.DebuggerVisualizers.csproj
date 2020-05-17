@@ -116,5 +116,7 @@
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll to ..\libs" Importance="high" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\libs" ContinueOnError="true" />
+	<Message Text="Copying $(OutputPath)System.Runtime.InteropServices.RuntimeInformation.dll to ..\libs" Importance="high" />
+    <Copy SourceFiles="$(OutputPath)System.Runtime.InteropServices.RuntimeInformation.dll" DestinationFolder="..\libs" ContinueOnError="true" />
   </Target>
 </Project>

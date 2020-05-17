@@ -1611,6 +1611,7 @@ ELSEIF (WIN32)
 	SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
 	  "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
 	CopyFiles /SILENT '\\\$INSTDIR\\\\libs\\\\Emgu.CV.DebuggerVisualizers.dll' '$${vs_version}_INSTALL_FOLDER'
+	CopyFiles /SILENT '\\\$INSTDIR\\\\libs\\\\System.Runtime.InteropServices.RuntimeInformation.dll' '$${vs_version}_INSTALL_FOLDER'
 	installDebuggerVisualizer4${vs_version}Done:")
 	
       ENDMACRO()
