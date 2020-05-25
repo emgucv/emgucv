@@ -60,6 +60,12 @@ IF(WIN32 AND WITH_CUDA)
 ENDIF()
 ############################### GPU END ################################
 
+IF(WITH_INF_ENGINE)
+	#SET(INF_ENGINE_LIB_DIRS )
+	#link_directories("${INF_ENGINE_LIB_DIRS}/Release")
+	link_directories("${IE_INCLUDE_DIR}/../lib/intel64/")
+ENDIF()
+
 ############################### OPENMP START ##############################
 IF(WITH_OPENMP)
   FIND_PACKAGE( OpenMP REQUIRED)

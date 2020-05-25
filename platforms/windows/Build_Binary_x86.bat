@@ -3,7 +3,7 @@ REM @echo off
 REM POSSIBLE OPTIONS: 
 REM %1%: "64", "32", "ARM"
 REM %2%: "gpu", if omitted, it will not use CUDA
-REM %3%: "intel_inf" "intel", "WindowsPhone81", "WindowsStore81", "WindowsStore10", "vs2015"
+REM %3%: "intel_inf" "intel", "inf", "WindowsPhone81", "WindowsStore81", "WindowsStore10", "vs2015"
 REM %4%: "nonfree", "openni"
 REM %5%: "doc" this indicates if we should build the documentation
 REM %6%: "package", this indicates if we should build the ".zip" and ".exe" package
@@ -326,6 +326,42 @@ SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 
 :END_OF_GPU
 
+IF "%3%"=="inf" GOTO WITH_OPENVINO
+IF "%3%"=="intel_inf" GOTO WITH_OPENVINO
+
+GOTO WITHOUT_OPENVINO
+
+:WITH_OPENVINO
+REM use OpenVINO if possible
+SET OPENVINO_DIR=
+REM IF EXIST "C:\Intel\computer_vision_sdk_2018.3.343" SET OPENVINO_DIR=C:\Intel\computer_vision_sdk_2018.3.343
+REM IF EXIST "C:\Intel\computer_vision_sdk_2018.5.445" SET OPENVINO_DIR=C:\Intel\computer_vision_sdk_2018.5.445
+IF EXIST "%PROGRAMFILES_DIR_X86%\IntelSWTools\openvino" SET OPENVINO_DIR=%PROGRAMFILES_DIR_X86%\IntelSWTools\openvino
+IF NOT EXIST "%OPENVINO_DIR%" GOTO WITHOUT_OPENVINO
+
+REM GOTO WITHOUT_OPENVINO
+
+REM SET INTEL_CVSDK_DIR=%OPENVINO_DIR%\deployment_tools\inference_engine
+REM -DINF_ENGINE_RELEASE="2018030343" ^
+call "%OPENVINO_DIR%\bin\setupvars.bat"
+
+SET CMAKE_CONF_FLAGS=^
+-DWITH_INF_ENGINE:BOOL=TRUE ^
+-DENABLE_CXX11=ON ^
+%CMAKE_CONF_FLAGS%
+
+REM -DINF_ENGINE_INCLUDE_DIRS="%OPENVINO_DIR:\=/%/deployment_tools/inference_engine/include" ^
+REM -DINF_ENGINE_LIB_DIRS="%OPENVINO_DIR:\=/%/deployment_tools/inference_engine/lib/intel64" ^
+
+GOTO END_OF_OPENVINO
+
+:WITHOUT_OPENVINO
+SET CMAKE_CONF_FLAGS=^
+-DWITH_INF_ENGINE:BOOL=FALSE ^
+%CMAKE_CONF_FLAGS%
+:END_OF_OPENVINO
+
+
 IF "%3%"=="intel" GOTO INTEL_COMPILER
 IF "%3%"=="intel_inf" GOTO INTEL_COMPILER
 :NOT_INTEL_COMPILER
@@ -340,6 +376,8 @@ SET INTEL_ENV=%INTEL_DIR%\iclvars.bat
 SET INTEL_ICL=%INTEL_DIR%\ia32\icl.exe
 IF "%OS_MODE%"==" Win64" SET INTEL_ICL=%INTEL_DIR%\intel64\icl.exe
 SET INTEL_TBB=%INTEL_COMPILER_DIR%tbb\include
+
+REM SET INTEL_MKL_ROOT=%INTEL_COMPILER_DIR%mkl
 
 SET INTEL_ARCH=ia32
 IF "%OS_MODE%"==" Win64" SET INTEL_ARCH=intel64
@@ -363,30 +401,7 @@ IF EXIST "%INTEL_DIR%" SET CMAKE_CONF_FLAGS=^
 -DCV_ICC:BOOL=TRUE ^
 %CMAKE_CONF_FLAGS%
 
-REM use OpenVINO if possible
-SET OPENVINO_DIR=
-IF EXIST "C:\Intel\computer_vision_sdk_2018.3.343" SET OPENVINO_DIR=C:\Intel\computer_vision_sdk_2018.3.343
-IF EXIST "C:\Intel\computer_vision_sdk_2018.5.445" SET OPENVINO_DIR=C:\Intel\computer_vision_sdk_2018.5.445
-IF EXIST "%OPENVINO_DIR%" IF "%OS_MODE%"==" Win64" IF "%3%"=="intel_inf" GOTO WITH_OPENVINO
-
-GOTO WITHOUT_OPENVINO
-
-:WITH_OPENVINO
-REM SET INTEL_CVSDK_DIR=%OPENVINO_DIR%\deployment_tools\inference_engine
-REM -DINF_ENGINE_RELEASE="2018030343" ^
-SET CMAKE_CONF_FLAGS=^
--DWITH_INF_ENGINE:BOOL=TRUE ^
--DINF_ENGINE_INCLUDE_DIRS="%OPENVINO_DIR:\=/%/deployment_tools/inference_engine/include" ^
--DINF_ENGINE_LIB_DIRS="%OPENVINO_DIR:\=/%/deployment_tools/inference_engine/lib/intel64" ^
--DENABLE_CXX11=ON ^
-%CMAKE_CONF_FLAGS%
-GOTO END_OF_OPENVINO
-:WITHOUT_OPENVINO
-SET CMAKE_CONF_FLAGS=^
--DWITH_INF_ENGINE:BOOL=FALSE ^
-%CMAKE_CONF_FLAGS%
-:END_OF_OPENVINO
-
+REM -DMKL_ROOT_DIR:String="%INTEL_MKL_ROOT:\=/%" 
 REM IF NOT "%2%"=="gpu" GOTO END_OF_INTEL_GPU
 REM SET CUDA_HOST_COMPILER=%VS110COMNTOOLS%..\..\VC\bin
 REM IF "%OS_MODE%"==" Win64" SET CUDA_HOST_COMPILER=%CUDA_HOST_COMPILER%\amd64
