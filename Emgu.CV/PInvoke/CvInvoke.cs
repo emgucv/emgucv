@@ -305,8 +305,14 @@ namespace Emgu.CV
 
             String oldDir = Environment.CurrentDirectory;
             if (!String.IsNullOrEmpty(loadDirectory) && Directory.Exists(loadDirectory))
+            {
                 Environment.CurrentDirectory = loadDirectory;
-
+                if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
+                {
+                    bool setDllDirectorySuccess = Emgu.Util.Toolbox.SetDllDirectory(loadDirectory);
+                }
+            }
+            
 #endif
 
             System.Diagnostics.Debug.WriteLine(String.Format("Loading open cv binary from {0}", loadDirectory));

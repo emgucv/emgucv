@@ -548,8 +548,9 @@ namespace Emgu.Util
                 {
                     const int loadLibrarySearchDllLoadDir = 0x00000100;
                     const int loadLibrarySearchDefaultDirs = 0x00001000;
+                    const int loadLibrarySearchApplicationDir = 0x00000200;
                     //const int loadLibrarySearchUserDirs = 0x00000400;
-                    IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
+                    IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs | loadLibrarySearchApplicationDir );
                     //IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchUserDirs);
                     if (handler == IntPtr.Zero)
                     {
