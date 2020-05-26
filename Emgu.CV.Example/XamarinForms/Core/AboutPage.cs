@@ -6,38 +6,50 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using Emgu.CV.Dnn;
 using Emgu.CV.ML;
 using Xamarin.Forms;
 
 namespace Emgu.CV.XamarinForms
 {
-	public class AboutPage : ContentPage
-	{
-		public AboutPage ()
-		{
+    public class AboutPage : ContentPage
+    {
+        public AboutPage()
+        {
 
-         String openclTxt = String.Format("Has OpenCL: {0}", CvInvoke.HaveOpenCL);
+            String openclTxt = String.Format("Has OpenCL: {0}", CvInvoke.HaveOpenCL);
 
-		   String lineBreak = "<br/>";
-         if (CvInvoke.HaveOpenCL)
-         {
-            openclTxt = String.Format("{0}{1}Use OpenCL: {2}{1}<textarea rows=\"5\">{3}</textarea>{1}",
-               openclTxt, lineBreak,
-               CvInvoke.UseOpenCL, 
-               CvInvoke.OclGetPlatformsSummary());
-         }
+            String lineBreak = "<br/>";
+            if (CvInvoke.HaveOpenCL)
+            {
+                openclTxt = String.Format("{0}{1}Use OpenCL: {2}{1}<textarea rows=\"5\">{3}</textarea>{1}",
+                   openclTxt, lineBreak,
+                   CvInvoke.UseOpenCL,
+                   CvInvoke.OclGetPlatformsSummary());
+            }
 
-         String osDescription = Emgu.Util.Platform.OperationSystem.ToString();
+            
+            var dnnBackends = DnnInvoke.GetAvailableBackends();
+            List<String> dnnBackendsText = new List<string>();
+            foreach (var dnnBackend in dnnBackends)
+            {
+                dnnBackendsText.Add(String.Format("{0} - {1}", dnnBackend.Backend, dnnBackend.Target));
+            }
 
-         Content = 
-               new WebView()
-               {
-                  WidthRequest =  1000,
-                  HeightRequest = 1000,
-                  Source =  new HtmlWebViewSource()
+            String dnnText = String.Join(";", dnnBackendsText.ToArray());
+            
+
+            String osDescription = Emgu.Util.Platform.OperationSystem.ToString();
+
+            Content =
+                  new WebView()
                   {
-                     Html =
-                     @"<html>
+                      WidthRequest = 1000,
+                      HeightRequest = 1000,
+                      Source = new HtmlWebViewSource()
+                      {
+                          Html =
+                        @"<html>
 <head>
 <style>body { background-color: #EEEEEE; }</style>
 <style type=""text/css"">
@@ -58,16 +70,18 @@ textarea { width: 100%; margin: 0; padding: 0; border - width: 0; }
 " + RuntimeInformation.FrameworkDescription + @"
 <H4> Process Architecture: </H4>
 " + RuntimeInformation.ProcessArchitecture + @"
+<H4> Dnn Backends: </H4>
+" + dnnText + @"
 <H4> Build Info </H4>
 <textarea rows=""30"">"
-                     + CvInvoke.BuildInformation + @"
+                        + CvInvoke.BuildInformation + @"
 </textarea>
 </body>
 </html>"
-                  }
-               
-				
-			};
-		}
-	}
+                      }
+
+
+                  };
+        }
+    }
 }
