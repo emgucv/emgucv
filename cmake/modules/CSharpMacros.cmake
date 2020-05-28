@@ -150,18 +150,18 @@ MACRO(BUILD_CSPROJ target csproj_file extra_flags)
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
       COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build ${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}
-      COMMENT "Building ${target}")
+      COMMENT "Building ${target} with ${CMAKE_VS_DEVENV_COMMAND}")
   ELSEIF(MSBUILD_EXECUTABLE)
     #MESSAGE(STATUS "Adding custom command: ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}")
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
       COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}
-      COMMENT "Building ${target}")
+      COMMENT "Building ${target} with ${MSBUILD_EXECUTABLE}")
   ELSEIF (DOTNET_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
       COMMAND ${MAC_FRESH_SHELL_PREFIX} "${DOTNET_EXECUTABLE}" build -c ${DEFAULT_CS_CONFIG} "${csproj_file}"
-      COMMENT "Building ${target}")
+      COMMENT "Building ${target} with ${DOTNET_EXECUTABLE}")
   ELSE()
     MESSAGE(FATAL_ERROR "Neither Visual Studio, msbuild nor dotnot is found!")
   ENDIF()
@@ -176,7 +176,7 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
       COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build ${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /project ${project_name}
-      COMMENT "Building ${target}")
+      COMMENT "Building ${target} with ${CMAKE_VS_DEVENV_COMMAND}")
 #  ELSEIF(VSTOOL_EXECUTABLE)      
 #    IF ("${project_name}" STREQUAL "")
 #    ADD_CUSTOM_COMMAND (
@@ -197,7 +197,7 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
       TARGET ${target}
 	  COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
       COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
-      COMMENT "Building ${target}")
+      COMMENT "Building ${target} with ${MSBUILD_EXECUTABLE}")
     ELSE()
 	STRING(REGEX REPLACE "\\." "_" msbuild_target_name ${project_name})
 	#MESSAGE(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> msbuild_target_name: ${msbuild_target_name}")
@@ -205,7 +205,7 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
       TARGET ${target}
 	  COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
       COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /target:${msbuild_target_name}
-      COMMENT "Building ${target}")
+      COMMENT "Building ${target} with ${MSBUILD_EXECUTABLE}")
     ENDIF()
   ELSE()
     MESSAGE(FATAL_ERROR "Neither Visual Studio, msbuild nor dotnot is found!")
@@ -223,7 +223,7 @@ MACRO(BUILD_DOTNET_PROJ target csproj_file extra_flags)
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
       COMMAND  ${MAC_FRESH_SHELL_PREFIX} "${DOTNET_EXECUTABLE}" build -c ${DEFAULT_CS_CONFIG} ${extra_flags} "${csproj_file}"
-      COMMENT "Building ${target}")
+      COMMENT "Building ${target} with ${DOTNET_EXECUTABLE}")
   ELSE()
     MESSAGE(FATAL_ERROR "DOTNET_EXECUTABLE not found!")
   ENDIF()
