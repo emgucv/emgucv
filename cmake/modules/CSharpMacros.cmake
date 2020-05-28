@@ -146,12 +146,12 @@ MACRO(BUILD_CSPROJ target csproj_file extra_flags)
 
   ADD_CUSTOM_TARGET (${target} ${ARGV3} SOURCES ${csproj_file} )
   
-  IF (WIN32 AND MSVC AND NOT ("${CMAKE_VS_DEVENV_COMMAND}" STREQUAL ""))
-    ADD_CUSTOM_COMMAND (
-      TARGET ${target}
-      COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build ${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}
-      COMMENT "Building ${target} with ${CMAKE_VS_DEVENV_COMMAND}")
-  ELSEIF(MSBUILD_EXECUTABLE)
+#  IF (WIN32 AND MSVC AND NOT ("${CMAKE_VS_DEVENV_COMMAND}" STREQUAL ""))
+#    ADD_CUSTOM_COMMAND (
+#      TARGET ${target}
+#      COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build ${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}
+#      COMMENT "Building ${target} with ${CMAKE_VS_DEVENV_COMMAND}")
+  IF(MSBUILD_EXECUTABLE)
     #MESSAGE(STATUS "Adding custom command: ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}")
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
@@ -172,11 +172,11 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
     SET(MAC_FRESH_SHELL_PREFIX env -i zsh)
   ENDIF()
   ADD_CUSTOM_TARGET (${target} ${ARGV4})
-  IF (WIN32 AND MSVC AND NOT ("${CMAKE_VS_DEVENV_COMMAND}" STREQUAL ""))
-    ADD_CUSTOM_COMMAND (
-      TARGET ${target}
-      COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build ${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /project ${project_name}
-      COMMENT "Building ${target} with ${CMAKE_VS_DEVENV_COMMAND}")
+#  IF (WIN32 AND MSVC AND NOT ("${CMAKE_VS_DEVENV_COMMAND}" STREQUAL ""))
+#    ADD_CUSTOM_COMMAND (
+#      TARGET ${target}
+#      COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build ${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /project ${project_name}
+#      COMMENT "Building ${target} with ${CMAKE_VS_DEVENV_COMMAND}")
 #  ELSEIF(VSTOOL_EXECUTABLE)      
 #    IF ("${project_name}" STREQUAL "")
 #    ADD_CUSTOM_COMMAND (
@@ -191,7 +191,7 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
 #      COMMAND "${VSTOOL_EXECUTABLE}" build -t:Build -c:"${DEFAULT_CS_CONFIG}" ${extra_flags}${solution_file} -p:${project_name}
 #      COMMENT "Building ${target}")
 #    ENDIF()
-  ELSEIF(MSBUILD_EXECUTABLE)
+  IF(MSBUILD_EXECUTABLE)
     IF ("${project_name}" STREQUAL "")
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
