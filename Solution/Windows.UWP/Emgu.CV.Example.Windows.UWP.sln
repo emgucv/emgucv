@@ -19,6 +19,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.UWP", "..\.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.Netstandard", "..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.Netstandard.csproj", "{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Cuda", "..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.shproj", "{7B22BB32-C867-45A7-AC53-5BDA820DB91C}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
@@ -30,6 +32,7 @@ Global
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{5e912dcc-e7ac-491f-8293-c985e3ab5ca7}*SharedItemsImports = 5
 		..\..\Emgu.CV\Emgu.CV.projitems*{5e912dcc-e7ac-491f-8293-c985e3ab5ca7}*SharedItemsImports = 5
 		..\..\Emgu.Util\Emgu.Util.projitems*{5e912dcc-e7ac-491f-8293-c985e3ab5ca7}*SharedItemsImports = 5
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
 		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
@@ -37,12 +40,14 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
+		Debug|ARM64 = Debug|ARM64
 		Debug|iPhone = Debug|iPhone
 		Debug|iPhoneSimulator = Debug|iPhoneSimulator
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
 		Release|ARM = Release|ARM
+		Release|ARM64 = Release|ARM64
 		Release|iPhone = Release|iPhone
 		Release|iPhoneSimulator = Release|iPhoneSimulator
 		Release|x64 = Release|x64
@@ -53,6 +58,7 @@ Global
 		{2A63A8EE-515F-4280-A178-FB58633CEDA1}.Debug|ARM.ActiveCfg = Debug|ARM
 		{2A63A8EE-515F-4280-A178-FB58633CEDA1}.Debug|ARM.Build.0 = Debug|ARM
 		{2A63A8EE-515F-4280-A178-FB58633CEDA1}.Debug|ARM.Deploy.0 = Debug|ARM
+		{2A63A8EE-515F-4280-A178-FB58633CEDA1}.Debug|ARM64.ActiveCfg = Debug|x86
 		{2A63A8EE-515F-4280-A178-FB58633CEDA1}.Debug|iPhone.ActiveCfg = Debug|x86
 		{2A63A8EE-515F-4280-A178-FB58633CEDA1}.Debug|iPhoneSimulator.ActiveCfg = Debug|x86
 		{2A63A8EE-515F-4280-A178-FB58633CEDA1}.Debug|x64.ActiveCfg = Debug|x64
@@ -65,6 +71,7 @@ Global
 		{2A63A8EE-515F-4280-A178-FB58633CEDA1}.Release|ARM.ActiveCfg = Release|ARM
 		{2A63A8EE-515F-4280-A178-FB58633CEDA1}.Release|ARM.Build.0 = Release|ARM
 		{2A63A8EE-515F-4280-A178-FB58633CEDA1}.Release|ARM.Deploy.0 = Release|ARM
+		{2A63A8EE-515F-4280-A178-FB58633CEDA1}.Release|ARM64.ActiveCfg = Release|x86
 		{2A63A8EE-515F-4280-A178-FB58633CEDA1}.Release|iPhone.ActiveCfg = Release|x86
 		{2A63A8EE-515F-4280-A178-FB58633CEDA1}.Release|iPhoneSimulator.ActiveCfg = Release|x86
 		{2A63A8EE-515F-4280-A178-FB58633CEDA1}.Release|x64.ActiveCfg = Release|x64
@@ -77,6 +84,8 @@ Global
 		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Debug|ARM.Build.0 = Debug|Any CPU
+		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Debug|ARM64.Build.0 = Debug|Any CPU
 		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Debug|iPhone.Build.0 = Debug|Any CPU
 		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
@@ -89,6 +98,8 @@ Global
 		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Release|ARM.ActiveCfg = Release|Any CPU
 		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Release|ARM.Build.0 = Release|Any CPU
+		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Release|ARM64.Build.0 = Release|Any CPU
 		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Release|iPhone.ActiveCfg = Release|Any CPU
 		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Release|iPhone.Build.0 = Release|Any CPU
 		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU

@@ -9,8 +9,12 @@ using System.Threading.Tasks;
 
 namespace Emgu.CV
 {
-    public class WinrtInvoke
+    public static class WinrtInvoke
     {
+        static WinrtInvoke()
+        {
+            CvInvoke.CheckLibraryLoaded();
+        }
         [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
         public delegate void WinrtMessageLoopCallback();
 

@@ -173,10 +173,10 @@
       <Version>5.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.6.0.726</Version>
+      <Version>4.6.0.800</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Plugin.FilePicker">
-      <Version>2.1.34</Version>
+      <Version>2.1.41</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
