@@ -3489,6 +3489,61 @@ namespace Emgu.CV.Test
 
         }
 
+        /*
+        [Test]
+        public void TestDnnPersonDetection()
+        {
+            string modelXmlFile = "person-detection-retail-0013.xml";
+            String modelFile = "person-detection-retail-0013.bin";
+            if (!File.Exists(modelFile))
+            {
+                //Download the model file
+                String modelUrl = "https://download.01.org/opencv/2020/openvinotoolkit/2020.3/open_model_zoo/models_bin/1/person-detection-retail-0013/FP16/person-detection-retail-0013.bin";
+                Trace.WriteLine("downloading file from:" + modelUrl + " to: " + modelFile);
+                System.Net.WebClient downloadClient = new System.Net.WebClient();
+                try
+                {
+                    downloadClient.DownloadFile(modelUrl, modelFile);
+                }
+                catch
+                {
+                    //Delete the file in case of failed download.
+                    File.Delete(modelFile);
+                    throw;
+                }
+            }
+            if (!File.Exists(modelXmlFile))
+            {
+                //Download the model xml file
+                String modelXmlUrl = "https://download.01.org/opencv/2020/openvinotoolkit/2020.3/open_model_zoo/models_bin/1/person-detection-retail-0013/FP16/person-detection-retail-0013.xml";
+                Trace.WriteLine("downloading file from:" + modelXmlUrl + " to: " + modelXmlFile);
+                System.Net.WebClient downloadClient = new System.Net.WebClient();
+                try
+                {
+                    downloadClient.DownloadFile(modelXmlUrl, modelXmlFile);
+                }
+                catch
+                {
+                    //Delete the file in case of failed download.
+                    File.Delete(modelXmlFile);
+                    throw;
+                }
+            }
+
+            Dnn.Net net = DnnInvoke.ReadNetFromModelOptimizer(modelXmlFile, modelFile);
+
+            Mat img = EmguAssert.LoadMat("space_shuttle.jpg");
+
+            
+            //CvInvoke.Resize(img, img, new Size(224, 224));
+
+            //Mat inputBlob = DnnInvoke.BlobFromImage(img);
+            //net.SetInput(inputBlob, "data");
+            //Mat probBlob = net.Forward("prob");
+        
+        }
+        */
+
         [Test]
         public void TestDnnBvlcGoogleNet()
         {
