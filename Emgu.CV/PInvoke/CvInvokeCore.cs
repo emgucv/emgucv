@@ -1044,6 +1044,25 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveAbsDiff(IntPtr src1, IntPtr src2, IntPtr dst);
 
+
+        /// <summary>
+        /// Calculates the sum of a scaled array and another array.
+        /// </summary>
+        /// <param name="src1">First input array</param>
+        /// <param name="alpha">Scale factor for the first array</param>
+        /// <param name="src2">Second input array of the same size and type as src1</param>
+        /// <param name="dst">Output array of the same size and type as src1</param>
+        public static void ScaleAdd(IInputArray src1, double alpha, IInputArray src2, IOutputArray dst)
+        {
+            using (InputArray iaSrc1 = src1.GetInputArray())
+            using (InputArray iaSrc2 = src2.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveScaleAdd(iaSrc1, alpha, iaSrc2, oaDst);
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveScaleAdd(IntPtr src1, double alpha, IntPtr src2, IntPtr dst);
+
         /// <summary>
         /// Calculated weighted sum of two arrays as following:
         /// dst(I)=src1(I)*alpha+src2(I)*beta+gamma

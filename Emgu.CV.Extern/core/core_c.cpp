@@ -358,6 +358,11 @@ void cveGemm(cv::_InputArray* src1, cv::_InputArray* src2, double alpha, cv::_In
 	cv::gemm(*src1, *src2, alpha, src3 ? *src3 : (cv::InputArray) cv::noArray(), beta, *dst, flags);
 }
 
+void cveScaleAdd(cv::_InputArray* src1, double alpha, cv::_InputArray* src2, cv::_OutputArray* dst)
+{
+	cv::scaleAdd(*src1, alpha, *src2, *dst);
+}
+
 void cveAddWeighted(cv::_InputArray* src1, double alpha, cv::_InputArray* src2, double beta, double gamma, cv::_OutputArray* dst, int dtype)
 {
 	cv::addWeighted(*src1, alpha, *src2, beta, gamma, *dst, dtype);
