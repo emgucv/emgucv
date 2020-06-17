@@ -471,8 +471,8 @@ SET CMAKE_BUILD_TARGET=%CMAKE_BUILD_TARGET% Emgu.CV.runtime.windows.nuget
 :END_SET_BUILD_TARGET
 REM echo CMAKE_BUILD_TARGET=%CMAKE_BUILD_TARGET% Emgu.CV.nuget
 
-REM %CMAKE% --build . --config Release --parallel --target %CMAKE_BUILD_TARGET%
-%CMAKE% --build . --config Release --target %CMAKE_BUILD_TARGET%
+%CMAKE% --build . --config Release --parallel --target %CMAKE_BUILD_TARGET%
+REM %CMAKE% --build . --config Release --target %CMAKE_BUILD_TARGET%
 
 REM IF "%2%"=="gpu" ^
 REM call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.CUDA.nuget 
