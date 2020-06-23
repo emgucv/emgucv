@@ -1163,7 +1163,7 @@ IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 	SET(EMGUCV_ANDROID_NUGET_FILE_LIST "${EMGUCV_ANDROID_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.runtime.android.targets\" target=\"build\\${EMGUCV_ANDROID_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-	<file src=\"..\\..\\..\\${LICENSE_FILE_NAME}\" target=\"\" />")
+	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"${EMGUCV_LICENSE_FILE}\" />")
 	SET(EMGUCV_ANDROID_NUGET_DEPENDENCY "
 	<dependencies>
 	  <group targetFramework=\"MonoAndroid5.0\">
@@ -1181,7 +1181,7 @@ IF(HAVE_IOS AND WIN32)
 	SET(EMGUCV_IOS_NUGET_FILE_LIST "${EMGUCV_IOS_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.runtime.ios.targets\" target=\"build\\${EMGUCV_IOS_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-	<file src=\"..\\..\\..\\${LICENSE_FILE_NAME}\" target=\"\" />")
+	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"${EMGUCV_LICENSE_FILE}\" />")
 	SET(EMGUCV_IOS_NUGET_DEPENDENCY "
 	<dependencies>
 		<group targetFramework=\"Xamarin.iOS10\">
