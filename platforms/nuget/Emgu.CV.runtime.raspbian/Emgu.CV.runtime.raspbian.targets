@@ -5,7 +5,7 @@
       <EmguCVRaspbianBuildArm Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='arm'">True</EmguCVRaspbianBuildArm>
       <EmguCVRaspbianNativeFileArm>$(MSBuildThisFileDirectory)\arm\libcvextern.so</EmguCVRaspbianNativeFileArm>
       <EmguCVRaspbianDeployMessage Condition="'$(EmguCVRaspbianBuildArm)'=='True' AND Exists('$(EmguCVRaspbianNativeFileArm)')">$(EmguCVRaspbianDeployMessage)arm </EmguCVRaspbianDeployMessage>
-      <EmguCVRaspbianErrorMessage Condition="'$(EmguCVRaspbianBuildArm)'=='True' AND !Exists('$(EmguCVRaspbianNativeFileArm)')">This package do not contain necessary binary for $(EmguCVRaspbianLinkTarget). Arm is targeted, but file $(EmguCVRaspbianNativeFileArm) is missing.</EmguCVRaspbianErrorMessage>
+      <EmguCVRaspbianErrorMessage Condition="'$(EmguCVRaspbianBuildArm)'=='True' AND !Exists('$(EmguCVRaspbianNativeFileArm)')">This package do not contain necessary binary for $(EmguCVRaspbianLinkTarget). Arm is targeted, but file $(EmguCVRaspbianNativeFileArm) is missing. Pinvoke may fail on Raspbian ARM platform.</EmguCVRaspbianErrorMessage>
     </PropertyGroup>
     <ItemGroup Condition="'$(EmguCVRaspbianBuildArm)'=='True' AND Exists('$(EmguCVRaspbianNativeFileArm)')">
       <None Include="$(MSBuildThisFileDirectory)\*.so">
@@ -15,7 +15,7 @@
     </ItemGroup>
     <Target Name="EmguCVRaspbianPackageBuildImports" BeforeTargets="PrepareForBuild">
       <Message Condition="'$(EmguCVRaspbianLinkTarget)'!=''" Text="Emgu CV nuget package compiling against $(EmguCVRaspbianLinkTarget)" Importance="High" />
-      <Error Text="'$(EmguCVRaspbianErrorMessage)'" Condition="'$(EmguCVRaspbianErrorMessage)'!=''" />
+      <Warning Text="'$(EmguCVRaspbianErrorMessage)'" Condition="'$(EmguCVRaspbianErrorMessage)'!=''" />
       <Message Text="Emgu CV compiling with $(EmguCVRaspbianDeployMessage)binary" Condition="'$(EmguCVRaspbianDeployMessage)'!=''" Importance="High" />
       <Message Text="No native binary is deployed by the Emgu CV project." Condition="'$(EmguCVRaspbianDeployMessage)'==''" Importance="High" />
     </Target>

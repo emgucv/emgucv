@@ -807,11 +807,11 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Directory.Build.props.in ${CMAK
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.rc.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Extern/version.rc)
 
 MACRO(CHECK_LICENSE_TYPE)
-	MESSAGE(STATUS "LICENSE FILE: ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.License.txt")
+	MESSAGE(STATUS "LICENSE FILE: ${CMAKE_CURRENT_SOURCE_DIR}/${LICENSE_FILE_NAME}")
     IF (WIN32)
-        EXECUTE_PROCESS(COMMAND "findstr" "gpl" "Emgu.CV.License.txt" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} OUTPUT_VARIABLE TMP)
+        EXECUTE_PROCESS(COMMAND "findstr" "gpl" "${LICENSE_FILE_NAME}" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} OUTPUT_VARIABLE TMP)
 	ELSE()	
-	    EXECUTE_PROCESS(COMMAND "grep" "gpl" "Emgu.CV.License.txt" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} OUTPUT_VARIABLE TMP)
+	    EXECUTE_PROCESS(COMMAND "grep" "gpl" "${LICENSE_FILE_NAME}" WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} OUTPUT_VARIABLE TMP)
 	ENDIF()
 	
 	STRING(STRIP "${TMP}" TMP)
@@ -912,7 +912,7 @@ IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.runtime.windows.targets\" target=\"build\\${EMGUCV_WINDOWS_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"${EMGUCV_LICENSE_FILE}\" />")
 ENDIF()
 
 SET(EMGUCV_MACOS_NUGET_FILE_LIST "")
@@ -992,7 +992,7 @@ SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST}
 	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\xamarinios10\" />
 	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\xamarinios10\" />
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"${EMGUCV_LICENSE_FILE}\" />")
 SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
       <group targetFramework=\".NETStandard2.0\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />

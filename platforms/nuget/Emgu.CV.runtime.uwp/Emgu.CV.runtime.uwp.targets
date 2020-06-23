@@ -11,13 +11,13 @@
 	  <EmguCVNativeFileUwpArm>$(MSBuildThisFileDirectory)\UWP\arm\cvextern.dll</EmguCVNativeFileUwpArm>
 	  <EmguCVNativeFileUwpArm64>$(MSBuildThisFileDirectory)\UWP\arm64\cvextern.dll</EmguCVNativeFileUwpArm64>	  
       <EmguCvDeployMessage Condition="'$(EmguCvBuildUwpX86)'=='True' AND Exists('$(EmguCvNativeFileUwpX86)')">$(EmguCVDeployMessage)UWP_x86 </EmguCvDeployMessage>
-      <EmguCvErrorMessage Condition="'$(EmguCvBuildUwpX86)'=='True' AND !Exists('$(EmguCvNativeFileUwpX86)')">This package do not contain necessary binary for $(EmguCvLinkTarget). UWP X86 is targeted, but file $(EmguCvNativeFileUwpX86) is missing.</EmguCvErrorMessage>
+      <EmguCvErrorMessage Condition="'$(EmguCvBuildUwpX86)'=='True' AND !Exists('$(EmguCvNativeFileUwpX86)')">This package do not contain necessary binary for $(EmguCvLinkTarget). UWP X86 is targeted, but file $(EmguCvNativeFileUwpX86) is missing. PInvoke may fail on UWP X86 platform.</EmguCvErrorMessage>
       <EmguCvDeployMessage Condition="'$(EmguCvBuildUwpX64)'=='True' AND Exists('$(EmguCvNativeFileUwpX64)')">$(EmguCVDeployMessage)UWP_x64 </EmguCvDeployMessage>
-      <EmguCvErrorMessage Condition="'$(EmguCvBuildUwpX64)'=='True' AND !Exists('$(EmguCvNativeFileUwpX64)')">This package do not contain necessary binary for $(EmguCvLinkTarget). UWP X64 is targeted, but file $(EmguCvNativeFileUwpX64) is missing.</EmguCvErrorMessage>
+      <EmguCvErrorMessage Condition="'$(EmguCvBuildUwpX64)'=='True' AND !Exists('$(EmguCvNativeFileUwpX64)')">This package do not contain necessary binary for $(EmguCvLinkTarget). UWP X64 is targeted, but file $(EmguCvNativeFileUwpX64) is missing. PInvoke may fail on UWP X64 platform.</EmguCvErrorMessage>
 	  <EmguCvDeployMessage Condition="'$(EmguCvBuildUwpArm)'=='True' AND Exists('$(EmguCvNativeFileUwpArm)')">$(EmguCVDeployMessage)UWP_arm </EmguCvDeployMessage>
-      <EmguCvErrorMessage Condition="'$(EmguCvBuildUwpArm)'=='True' AND !Exists('$(EmguCvNativeFileUwpArm)')">This package do not contain necessary binary for $(EmguCvLinkTarget). UWP Arm is targeted, but file $(EmguCvNativeFileUwpArm) is missing.</EmguCvErrorMessage>
+      <EmguCvErrorMessage Condition="'$(EmguCvBuildUwpArm)'=='True' AND !Exists('$(EmguCvNativeFileUwpArm)')">This package do not contain necessary binary for $(EmguCvLinkTarget). UWP Arm is targeted, but file $(EmguCvNativeFileUwpArm) is missing. PInvoke may fail on UWP ARM platform.</EmguCvErrorMessage>
 	  <EmguCvDeployMessage Condition="'$(EmguCvBuildUwpArm64)'=='True' AND Exists('$(EmguCvNativeFileUwpArm64)')">$(EmguCVDeployMessage)UWP_arm64 </EmguCvDeployMessage>
-      <EmguCvErrorMessage Condition="'$(EmguCvBuildUwpArm64)'=='True' AND !Exists('$(EmguCvNativeFileUwpArm64)')">This package do not contain necessary binary for $(EmguCvLinkTarget). UWP Arm64 is targeted, but file $(EmguCvNativeFileUwpArm64) is missing.</EmguCvErrorMessage>
+      <EmguCvErrorMessage Condition="'$(EmguCvBuildUwpArm64)'=='True' AND !Exists('$(EmguCvNativeFileUwpArm64)')">This package do not contain necessary binary for $(EmguCvLinkTarget). UWP Arm64 is targeted, but file $(EmguCvNativeFileUwpArm64) is missing. PInvoke may fail on UWP X64 platform.</EmguCvErrorMessage>
     </PropertyGroup>
 	<!-- Windows 10 UWP (x86) -->
     <ItemGroup Condition="'$(EmguCvBuildUwpX86)'=='True' AND Exists('$(EmguCVNativeFileUwpX86)')">
@@ -49,7 +49,7 @@
     </ItemGroup>
     <Target Name="EmguCVPackageBuildImports" BeforeTargets="PrepareForBuild">
       <Message Condition="'$(EmguCvLinkTarget)'!=''" Text="Emgu CV nuget package compiling against $(EmguCvLinkTarget)" Importance="High" />
-      <Error Text="'$(EmguCvErrorMessage)'" Condition="'$(EmguCvErrorMessage)'!=''" />
+      <Warning Text="'$(EmguCvErrorMessage)'" Condition="'$(EmguCvErrorMessage)'!=''" />
       <Message Text="Emgu CV compiling with $(EmguCvDeployMessage)binary" Condition="'$(EmguCvDeployMessage)'!=''" Importance="High" />
     </Target>
 </Project>
