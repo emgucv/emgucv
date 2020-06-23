@@ -806,6 +806,9 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Directory.Build.props.in ${CMAK
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.rc.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Extern/version.rc)
 
+SET (EMGUCV_LICENSE_FILE "${LICENSE_FILE_NAME}.txt")
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/${LICENSE_FILE_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/${EMGUCV_LICENSE_FILE} COPYONLY)
+
 MACRO(CHECK_LICENSE_TYPE)
 	MESSAGE(STATUS "LICENSE FILE: ${CMAKE_CURRENT_SOURCE_DIR}/${LICENSE_FILE_NAME}")
     IF (WIN32)
@@ -816,8 +819,8 @@ MACRO(CHECK_LICENSE_TYPE)
 	
 	STRING(STRIP "${TMP}" TMP)
 	STRING(LENGTH "${TMP}" GPL_LICENSE_LENGTH)
-	SET (LICENSE_TYPE "OpenSource")
-	SET (EMGUCV_LICENSE_FILE "${LICENSE_FILE_NAME}")
+	SET (LICENSE_TYPE "Dual License")
+	
 	IF(${GPL_LICENSE_LENGTH} EQUAL 0)
 		SET(LICENSE_TYPE "Commercial")		
 	ENDIF()
@@ -912,7 +915,7 @@ IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.runtime.windows.targets\" target=\"build\\${EMGUCV_WINDOWS_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"${EMGUCV_LICENSE_FILE}\" />")
+	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 
 SET(EMGUCV_MACOS_NUGET_FILE_LIST "")
@@ -992,7 +995,7 @@ SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST}
 	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\xamarinios10\" />
 	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\xamarinios10\" />
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"${EMGUCV_LICENSE_FILE}\" />")
+	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
       <group targetFramework=\".NETStandard2.0\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
@@ -1163,7 +1166,7 @@ IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 	SET(EMGUCV_ANDROID_NUGET_FILE_LIST "${EMGUCV_ANDROID_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.runtime.android.targets\" target=\"build\\${EMGUCV_ANDROID_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"${EMGUCV_LICENSE_FILE}\" />")
+	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 	SET(EMGUCV_ANDROID_NUGET_DEPENDENCY "
 	<dependencies>
 	  <group targetFramework=\"MonoAndroid5.0\">
@@ -1181,7 +1184,7 @@ IF(HAVE_IOS AND WIN32)
 	SET(EMGUCV_IOS_NUGET_FILE_LIST "${EMGUCV_IOS_NUGET_FILE_LIST} 
 	<file src=\"Emgu.CV.runtime.ios.targets\" target=\"build\\${EMGUCV_IOS_NUGET_ID}.targets\" />
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"${EMGUCV_LICENSE_FILE}\" />")
+	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 	SET(EMGUCV_IOS_NUGET_DEPENDENCY "
 	<dependencies>
 		<group targetFramework=\"Xamarin.iOS10\">
