@@ -32,7 +32,7 @@ namespace HelloWorld
 
             CvInvoke.Imshow(win1, img); //Show the image
             CvInvoke.WaitKey(0);  //Wait for the key pressing event
-            CvInvoke.DestroyWindow(win1); //Destroy the window if key is pressed
+            CvInvoke.DestroyAllWindows(); //Destroy all windows if key is pressed
         }
     }
 }
