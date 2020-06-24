@@ -5,9 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Emgu.CV.runtime.windows" Version="4.3.0.3890" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems" Label="Shared" />
+
+  <Import Project="..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems" Label="Shared" />
 
 
 </Project>

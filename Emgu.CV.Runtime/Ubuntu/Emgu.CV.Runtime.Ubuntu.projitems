@@ -24,10 +24,12 @@
       <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+	<!--
 	<Content Include="$(EmguCVUbuntuBinaryDir)\x64\*.so.*">
       <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+	-->
   </ItemGroup>
   <Target Name="EmguCVUbuntuPackageBuildImports" BeforeTargets="PrepareForBuild">
     <Warning Text="'$(EmguCVUbuntuErrorMessage)'" Condition="'$(EmguCVUbuntuErrorMessage)'!=''" />
