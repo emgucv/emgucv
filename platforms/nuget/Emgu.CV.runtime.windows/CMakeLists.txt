@@ -19,4 +19,13 @@ IF ((TARGET Emgu.CV.Platform.NetStandard) AND (HAVE_WINDESKTOP_X86 OR HAVE_WINDE
   IF (WIN32 AND HAVE_WINDESKTOP_X64 AND WITH_CUDA)
   	ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.windows.cuda.cufft.nuget Emgu.CV.runtime.windows.cuda.dnn.nuget Emgu.CV.runtime.windows.cuda.npp.nuget)
   ENDIF()
+
+  IF (TARGET Emgu.CV.Platform.NetFramework)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetFramework)
+  ENDIF()
+
+  IF (TARGET Emgu.CV.Platform.NetCore)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetCore)
+  ENDIF()
+
 ENDIF()
