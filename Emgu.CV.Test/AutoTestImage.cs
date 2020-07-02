@@ -660,26 +660,38 @@ namespace Emgu.CV.Test
         [TestAttribute]
         public void TestConvolutionAndLaplace()
         {
-            Mat image = new Mat(new Size(300, 400), DepthType.Cv8U, 1);
-            CvInvoke.Randu(image, new MCvScalar(0.0), new MCvScalar(255.0));
-            Mat laplacian = new Mat();
-            CvInvoke.Laplacian(image, laplacian, DepthType.Cv8U);
-            
+            Image<Gray, Byte> image = new Image<Gray, byte>(300, 400);
+            image.SetRandUniform(new MCvScalar(0.0), new MCvScalar(255.0));
+
+            Image<Gray, float> laplace = image.Laplace(1);
+
             float[,] k = { {0, 1, 0},
                         {1, -4, 1},
                         {0, 1, 0}};
             ConvolutionKernelF kernel = new ConvolutionKernelF(k);
-            Mat convoluted = new Mat(image.Size, DepthType.Cv8U, 1);
-            CvInvoke.Filter2D(image, convoluted, kernel, kernel.Center);
-            
-            Mat absDiff = new Mat();
-            
-            CvInvoke.AbsDiff(laplacian, convoluted, absDiff);
-            int nonZeroPixelCount = CvInvoke.CountNonZero(absDiff);
-            
-            EmguAssert.IsTrue(nonZeroPixelCount == 0);
 
-            //Emgu.CV.UI.ImageViewer.Show(absDiff);
+            Image<Gray, float> convoluted = image * kernel;
+
+            Image<Gray, float> absDiff = new Image<Gray, float>(convoluted.Size);
+            CvInvoke.AbsDiff(laplace, convoluted, absDiff);
+            //Emgu.CV.UI.ImageViewer.Show(absDiff.Convert<Gray, byte>());
+            EmguAssert.IsTrue(laplace.Equals(convoluted));
+
+
+            Image<Bgr, Byte> imageBgr = new Image<Bgr, Byte>(300, 400);
+            imageBgr.SetRandNormal(new MCvScalar(0,0,0), new MCvScalar(255, 255, 255) );
+            Image<Bgr, float> imageBgrConv =  imageBgr.Convolution(kernel);
+            /*
+            try
+            {
+               Matrix<float> kernel1D = new Matrix<float>(new float[] { 1.0f, -2.0f, 1.0f });
+               Image<Gray, float> result = new Image<Gray, float>(image.Width, image.Height);
+               CvInvoke.Filter2D(image, result, kernel1D, new MCvPoint(0, 1));
+            }
+            catch (Exception e)
+            {
+               throw e;
+            }*/
         }
 
 #if !NETFX_CORE
