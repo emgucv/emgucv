@@ -22,7 +22,7 @@ jobs:
     - name: Install dependencies
       run: ./platforms/ubuntu/18.04/apt_install_dependency.sh
     - name: Build Emgu CV native binary
-      run: ./platforms/ubuntu/18.04/cmake_configure
+      run: ./platforms/ubuntu/18.04/cmake_configure.sh
     - name: Build Emgu CV package binary
       run: make package
       working-directory: ./platforms/ubuntu/18.04/build/
