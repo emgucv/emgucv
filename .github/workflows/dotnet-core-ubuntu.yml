@@ -20,7 +20,7 @@ jobs:
     - name: Check out submodules
       run: git submodule update --init --recursive
     - name: Install dependencies
-      run: ./platforms/ubuntu/18.04/apt_install_dependency
+      run: ./platforms/ubuntu/18.04/apt_install_dependency.sh
     - name: Build Emgu CV native binary
       run: ./platforms/ubuntu/18.04/cmake_configure
     - name: Build Emgu CV package binary
