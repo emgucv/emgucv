@@ -1,0 +1,36 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Check out submodules
+      run: git submodule update --init --recursive
+    - name: Install dependencies
+      run: ./platforms/ubuntu/18.04/apt_install_dependency
+    - name: Build Emgu CV native binary
+      run: ./platforms/ubuntu/18.04/cmake_configure
+    - name: Build Emgu CV package binary
+      run: make package
+      working-directory: ./platforms/ubuntu/18.04/build/
+    - uses: actions/upload-artifact@v2
+      with:
+        name: emgutcv-ubuntu-zip-package
+        path: ${{ github.workspace }}/platforms/ubuntu/18.04/build/*.zip
+    - uses: actions/upload-artifact@v2
+      with:
+        name: emgucv-ubuntu-nuget-package
+        path: ${{ github.workspace }}/platforms/nuget/*.nupkg 
