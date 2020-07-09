@@ -15,7 +15,10 @@ jobs:
     - uses: actions/checkout@v2
     - name: Check out submodules
       run: git submodule update --init --recursive
-    - name: Build Emgu CV 32bit native binary
-      run: .\Build_Binary_x86.bat 32 nogpu vc no-openni
+    - name: Build Emgu CV 32-bit native binary
+      run: .\Build_Binary_x86.bat 32 nogpu vc no-openni no-doc no-package build
       working-directory: ${{ github.workspace }}\platforms\windows\
+    - name: Clean up the 32-bit build
+      run: .\git-clean.bat
+      working-directory: ${{ github.workspace }}\miscellaneous\
 
