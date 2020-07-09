@@ -30,12 +30,6 @@ cd ..
 
 cd Emgu.CV.Extern
 
-cd cvblob
-cd libcvblob
-git clean -d -f -x "." 
-cd ..
-cd ..
-
 cd tesseract
 cd libtesseract
 
