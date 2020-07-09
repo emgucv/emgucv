@@ -28,7 +28,7 @@ jobs:
       working-directory: ./platforms/ubuntu/18.04/build/
     - uses: actions/upload-artifact@v2
       with:
-        name: emgutcv-ubuntu-zip-package
+        name: emgucv-ubuntu-zip-package
         path: ${{ github.workspace }}/platforms/ubuntu/18.04/build/*.zip
     - uses: actions/upload-artifact@v2
       with:

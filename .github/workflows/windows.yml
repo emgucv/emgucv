@@ -1,0 +1,21 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check out submodules
+      run: git submodule update --init --recursive
+    - name: Build Emgu CV 32bit native binary
+      run: Build_Binary_x86.bat 32 nogpu vc no-openni
+      working-directory: ./platforms/windows/
+
