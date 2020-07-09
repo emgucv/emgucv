@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2
@@ -20,16 +20,16 @@ jobs:
     - name: Check out submodules
       run: git submodule update --init --recursive
     - name: Install dependencies
-      run: ./platforms/ubuntu/18.04/apt_install_dependency.sh
+      run: ./platforms/ubuntu/20.04/apt_install_dependency.sh
     - name: Build Emgu CV native binary
-      run: ./platforms/ubuntu/18.04/cmake_configure.sh
+      run: ./platforms/ubuntu/20.04/cmake_configure.sh
     - name: Build Emgu CV package binary
       run: make package
-      working-directory: ./platforms/ubuntu/18.04/build/
+      working-directory: ./platforms/ubuntu/20.04/build/
     - uses: actions/upload-artifact@v2
       with:
         name: emgucv-ubuntu-zip-package
-        path: ${{ github.workspace }}/platforms/ubuntu/18.04/build/*.zip
+        path: ${{ github.workspace }}/platforms/ubuntu/20.04/build/*.zip
     - uses: actions/upload-artifact@v2
       with:
         name: emgucv-ubuntu-nuget-package

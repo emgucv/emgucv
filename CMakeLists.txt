@@ -624,9 +624,9 @@ IF(CV_ICC)
   SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-icc")
 ENDIF()
 
-IF(WITH_TBB)
-  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-tbb")
-ENDIF()
+#IF(WITH_TBB)
+#  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-tbb")
+#ENDIF()
 
 IF(WITH_IPP)
   SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-ipp")
@@ -1678,7 +1678,7 @@ ELSEIF (WIN32)
 	ENDIF()
 	
 	SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
-	"${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
+	"${UNINSTALL_DEBGER_VISUALIZER_COMMAND}
 	IfErrors uninstallDebuggerVisualizer4${vs_version}Done")
 	FOREACH (file ${DEBUGER_VISUALIZER_FILES})
 	  SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
@@ -2134,105 +2134,114 @@ ELSEIF (APPLE)
   
 ELSE() #LINUX
   SET(MONO_GACUTIL_EXEC "gacutil")
-  SET(LINUX_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/linux")
+  #SET(LINUX_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/linux")
   SET(EMGUCV_MANAGED_DLLS "Emgu.CV.Platform.NetStandard" "Emgu.CV.Platform.NetCore")
   
-  SET(CLIFILELIST_CONTENT "")
-  FOREACH(MANAGED_DLL ${EMGUCV_MANAGED_DLLS})
-    SET(CLIFILELIST_CONTENT "${CLIFILELIST_CONTENT}/usr/${CPACK_PACKAGE_CLI_FOLDER}/${MANAGED_DLL}.dll\n")
-  ENDFOREACH()
-  FILE(WRITE ${LINUX_CONTROL_FILE_FOLDER}/clifilelist.txt ${CLIFILELIST_CONTENT})
-  INSTALL(
-    FILES
-    ${LINUX_CONTROL_FILE_FOLDER}/clifilelist.txt
-    DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
-    COMPONENT emgucv_binary)
+  #SET(CLIFILELIST_CONTENT "")
+  #FOREACH(MANAGED_DLL ${EMGUCV_MANAGED_DLLS})
+  #  SET(CLIFILELIST_CONTENT "${CLIFILELIST_CONTENT}/usr/${CPACK_PACKAGE_CLI_FOLDER}/${MANAGED_DLL}.dll\n")
+  #ENDFOREACH()
+  #FILE(WRITE ${LINUX_CONTROL_FILE_FOLDER}/clifilelist.txt ${CLIFILELIST_CONTENT})
+  #INSTALL(
+  #  FILES
+  #  ${LINUX_CONTROL_FILE_FOLDER}/clifilelist.txt
+  #  DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
+  #  COMPONENT emgucv_binary)
   
   #creating the pkg-config file
-  SET(PACKAGE_CFG_REF_CONTENT "")
-  FOREACH(MANAGED_DLL ${EMGUCV_MANAGED_DLLS})
-    SET(PACKAGE_CFG_REF_CONTENT "${PACKAGE_CFG_REF_CONTENT} -r:\${libdir}/${MANAGED_DLL}.dll")
-  ENDFOREACH()
+  #SET(PACKAGE_CFG_REF_CONTENT "")
+  #FOREACH(MANAGED_DLL ${EMGUCV_MANAGED_DLLS})
+  #  SET(PACKAGE_CFG_REF_CONTENT "${PACKAGE_CFG_REF_CONTENT} -r:\${libdir}/${MANAGED_DLL}.dll")
+  #ENDFOREACH()
   
-  FILE(WRITE ${LINUX_CONTROL_FILE_FOLDER}/${CPACK_PACKAGE_NAME}.pc
-    "prefix=/usr\nexec_prefix=\${prefix}\nlibdir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\napidir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\n\nName: ${CPACK_PACKAGE_NAME}\nDescription: ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}\nVersion: ${CPACK_PACKAGE_VERSION}\nLibs: ${PACKAGE_CFG_REF_CONTENT}\n")
-  INSTALL(
-    FILES
-    ${LINUX_CONTROL_FILE_FOLDER}/${CPACK_PACKAGE_NAME}.pc
-    DESTINATION /usr/lib/pkgconfig
-    COMPONENT emgucv_binary)
+  #FILE(WRITE ${LINUX_CONTROL_FILE_FOLDER}/${CPACK_PACKAGE_NAME}.pc
+  #  "prefix=/usr\nexec_prefix=\${prefix}\nlibdir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\napidir=\${exec_prefix}/${CPACK_PACKAGE_CLI_FOLDER}\n\nName: ${CPACK_PACKAGE_NAME}\nDescription: ${CPACK_PACKAGE_DESCRIPTION_SUMMARY}\nVersion: ${CPACK_PACKAGE_VERSION}\nLibs: ${PACKAGE_CFG_REF_CONTENT}\n")
+  #INSTALL(
+  #  FILES
+  #  ${LINUX_CONTROL_FILE_FOLDER}/${CPACK_PACKAGE_NAME}.pc
+  #  DESTINATION /usr/lib/pkgconfig
+  #  COMPONENT emgucv_binary)
   
-  SET(REMOVE_EMGU_FROM_GAC_SCRIPT "")
-  FOREACH(MANAGED_DLL ${EMGUCV_MANAGED_DLLS})
-    SET(REMOVE_EMGU_FROM_GAC_SCRIPT "${REMOVE_EMGU_FROM_GAC_SCRIPT} ${MANAGED_DLL}")
-  ENDFOREACH()
-  SET(REMOVE_EMGU_FROM_GAC_SCRIPT "for dll in${REMOVE_EMGU_FROM_GAC_SCRIPT}; do ${MONO_GACUTIL_EXEC} -u $dll; done")
+  #SET(REMOVE_EMGU_FROM_GAC_SCRIPT "")
+  #FOREACH(MANAGED_DLL ${EMGUCV_MANAGED_DLLS})
+  #  SET(REMOVE_EMGU_FROM_GAC_SCRIPT "${REMOVE_EMGU_FROM_GAC_SCRIPT} ${MANAGED_DLL}")
+  #ENDFOREACH()
+  #SET(REMOVE_EMGU_FROM_GAC_SCRIPT "for dll in${REMOVE_EMGU_FROM_GAC_SCRIPT}; do ${MONO_GACUTIL_EXEC} -u $dll; done")
   
-  SET(CPACK_STRIP_FILES "")
+  #SET(CPACK_STRIP_FILES "")
   
   IF(NOT CPACK_GENERATOR)
     MESSAGE(STATUS "Checking for CPACK build type...")
-    FIND_PROGRAM(DPKG_CMD dpkg)
-    IF (DPKG_CMD)
+    FIND_PROGRAM(ZIP_CMD zip)
+    IF (ZIP_CMD)
       # ----------------------------------------------------------------------------
       #  Building .deb package for Debian 
       # ----------------------------------------------------------------------------
-      MESSAGE(STATUS "FOUND dpkg: ${DPKG_CMD}")
-      LIST(APPEND CPACK_GENERATOR DEB)
+      MESSAGE(STATUS "FOUND zip: ${ZIP_CMD}")
+      LIST(APPEND CPACK_GENERATOR ZIP)
     ENDIF()
+
+    #FIND_PROGRAM(DPKG_CMD dpkg)
+    #IF (DPKG_CMD)
+      # ----------------------------------------------------------------------------
+      #  Building .deb package for Debian 
+      # ----------------------------------------------------------------------------
+    #  MESSAGE(STATUS "FOUND dpkg: ${DPKG_CMD}")
+    #  LIST(APPEND CPACK_GENERATOR DEB)
+    #ENDIF()
     
-    FIND_PROGRAM(RPMBUILD_CMD rpmbuild)
-    IF(RPMBUILD_CMD)
+    #FIND_PROGRAM(RPMBUILD_CMD rpmbuild)
+    #IF(RPMBUILD_CMD)
       # ----------------------------------------------------------------------------
       #  Building .rpm package  
       # ----------------------------------------------------------------------------
-      MESSAGE(STATUS "FOUND rpmbuild: ${RPMBUILD_CMD}")
-      LIST(APPEND CPACK_GENERATOR RPM)
-    ENDIF()
+    #  MESSAGE(STATUS "FOUND rpmbuild: ${RPMBUILD_CMD}")
+    #  LIST(APPEND CPACK_GENERATOR RPM)
+    #ENDIF()
   ENDIF()
   
-  SET(PREINST_SCRIPT "#!/bin/sh\nmkdir -p /usr/lib/pkgconfig /usr/${CPACK_PACKAGE_CLI_FOLDER} /usr/share/opencv/haarcascades /usr/share/opencv/lbpcascades /usr/share/opencv/doc \n")
-  LIST(FIND CPACK_GENERATOR "DEB" TEMP)
-  IF(NOT (${TEMP} EQUAL -1))
-    SET(DEBIAN_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/debian")
-    FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/preinst ${PREINST_SCRIPT}) 
-    FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/postinst
-      "#!/bin/sh\nset -e\nif [ \"$1\" = \"configure\" ]; then\n  ldconfig\n  ${MONO_GACUTIL_EXEC} -il /usr/${CPACK_PACKAGE_CLI_FOLDER}/clifilelist.txt -package ${CPACK_PACKAGE_NAME}\nfi\n")
-    FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/prerm
-      "#!/bin/sh\nset -e\nif [ \"$1\" = \"remove\" ] || [ \"$1\" = \"upgrade\" ] && [ -x /usr/share/cli-common/gac-package-remove ]; then\n${REMOVE_EMGU_FROM_GAC_SCRIPT}\nfi\n")
+  #SET(PREINST_SCRIPT "#!/bin/sh\nmkdir -p /usr/lib/pkgconfig /usr/${CPACK_PACKAGE_CLI_FOLDER} /usr/share/opencv/haarcascades /usr/share/opencv/lbpcascades /usr/share/opencv/doc \n")
+  #LIST(FIND CPACK_GENERATOR "DEB" TEMP)
+  #IF(NOT (${TEMP} EQUAL -1))
+  #  SET(DEBIAN_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/debian")
+  #  FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/preinst ${PREINST_SCRIPT}) 
+  #  FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/postinst
+  #    "#!/bin/sh\nset -e\nif [ \"$1\" = \"configure\" ]; then\n  ldconfig\n  ${MONO_GACUTIL_EXEC} -il /usr/${CPACK_PACKAGE_CLI_FOLDER}/clifilelist.txt -package ${CPACK_PACKAGE_NAME}\nfi\n")
+  #  FILE(WRITE ${DEBIAN_CONTROL_FILE_FOLDER}/prerm
+  #    "#!/bin/sh\nset -e\nif [ \"$1\" = \"remove\" ] || [ \"$1\" = \"upgrade\" ] && [ -x /usr/share/cli-common/gac-package-remove ]; then\n${REMOVE_EMGU_FROM_GAC_SCRIPT}\nfi\n")
     
-    SET(DEBIAN_PACKAGE_PRIORITY "optional")
-    SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${DEBIAN_CONTROL_FILE_FOLDER}/preinst;${DEBIAN_CONTROL_FILE_FOLDER}/postinst;${DEBIAN_CONTROL_FILE_FOLDER}/prerm;${DEBIAN_CONTROL_FILE_FOLDER}/postrm")
-    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), mono-2.0-gac, libtiff5, libgeotiff2, libgtk-3-0, libgstreamer1.0-0, libavcodec54, libswscale2, libavformat54, libopenexr6, libjasper1, libdc1394-22, libv4l-0, libqt4-opengl")
-    IF(EMGU_CV_WITH_TESSERACT)
-      SET(CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}, libtesseract3")
-    ENDIF()
-    IF(WITH_TBB)
-      SET(CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}, libtbb2")
-    ENDIF()
-  ENDIF()
+  #  SET(DEBIAN_PACKAGE_PRIORITY "optional")
+  #  SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${DEBIAN_CONTROL_FILE_FOLDER}/preinst;${DEBIAN_CONTROL_FILE_FOLDER}/postinst;${DEBIAN_CONTROL_FILE_FOLDER}/prerm;${DEBIAN_CONTROL_FILE_FOLDER}/postrm")
+  #  SET(CPACK_DEBIAN_PACKAGE_DEPENDS "mono-runtime (>> 2.4.2), mono-2.0-gac, libtiff5, libgeotiff2, libgtk-3-0, libgstreamer1.0-0, libavcodec54, libswscale2, libavformat54, libopenexr6, libjasper1, libdc1394-22, libv4l-0, libqt4-opengl")
+  #  IF(EMGU_CV_WITH_TESSERACT)
+  #    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}, libtesseract3")
+  #  ENDIF()
+  #  IF(WITH_TBB)
+  #    SET(CPACK_DEBIAN_PACKAGE_DEPENDS "${CPACK_DEBIAN_PACKAGE_DEPENDS}, libtbb2")
+  #  ENDIF()
+  #ENDIF()
   
-  LIST(FIND CPACK_GENERATOR "RPM" TEMP)
-  IF(NOT (${TEMP} EQUAL -1))  
-    SET(CPACK_RPM_PACKAGE_LICENSE "GPL v3")
-    SET(CPACK_RPM_PACKAGE_REQUIRES "mono-core >= 2.6, mono-wcf, jasper, libgeotiff, gtk2, OpenEXR, libv4l, libdc1394, qt")
-    IF (WITH_TBB)
-      SET(CPACK_RPM_PACKAGE_REQUIRES ", tbb")
-    ENDIF()
-    IF(EMGUCV_WITH_TESSERACT AND TESSERACT_FOUND)
-      SET(CPACK_RPM_PACKAGE_REQUIRES ", tesseract")
-    ENDIF()    
-    SET(RPM_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/rpm")
-    FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/preinst ${PREINST_SCRIPT})
-    FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/postinst
-      "ldconfig\n${MONO_GACUTIL_EXEC} -il /usr/${CPACK_PACKAGE_CLI_FOLDER}/clifilelist.txt -package ${CPACK_PACKAGE_NAME}\n")
-    FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/prerm
-      "${REMOVE_EMGU_FROM_GAC_SCRIPT}\n")
-    SET(CPACK_RPM_PRE_INSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/preinst")
-    SET(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/postinst")
-    SET(CPACK_RPM_PRE_UNINSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/prerm")
-    SET(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/postrm")
-  ENDIF()	
+  #LIST(FIND CPACK_GENERATOR "RPM" TEMP)
+  #IF(NOT (${TEMP} EQUAL -1))  
+  #  SET(CPACK_RPM_PACKAGE_LICENSE "GPL v3")
+  #  SET(CPACK_RPM_PACKAGE_REQUIRES "mono-core >= 2.6, mono-wcf, jasper, libgeotiff, gtk2, OpenEXR, libv4l, libdc1394, qt")
+  #  IF (WITH_TBB)
+  #    SET(CPACK_RPM_PACKAGE_REQUIRES ", tbb")
+  #  ENDIF()
+  #  IF(EMGUCV_WITH_TESSERACT AND TESSERACT_FOUND)
+  #    SET(CPACK_RPM_PACKAGE_REQUIRES ", tesseract")
+  #  ENDIF()    
+  #  SET(RPM_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/rpm")
+  #  FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/preinst ${PREINST_SCRIPT})
+  #  FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/postinst
+  #    "ldconfig\n${MONO_GACUTIL_EXEC} -il /usr/${CPACK_PACKAGE_CLI_FOLDER}/clifilelist.txt -package ${CPACK_PACKAGE_NAME}\n")
+  #  FILE(WRITE ${RPM_CONTROL_FILE_FOLDER}/prerm
+  #    "${REMOVE_EMGU_FROM_GAC_SCRIPT}\n")
+  #  SET(CPACK_RPM_PRE_INSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/preinst")
+  #  SET(CPACK_RPM_POST_INSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/postinst")
+  #  SET(CPACK_RPM_PRE_UNINSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/prerm")
+  #  SET(CPACK_RPM_POST_UNINSTALL_SCRIPT_FILE "${RPM_CONTROL_FILE_FOLDER}/postrm")
+  #ENDIF()	
 ENDIF()  
 
 MESSAGE(STATUS "CPACK_GENERATOR: ${CPACK_GENERATOR}")
