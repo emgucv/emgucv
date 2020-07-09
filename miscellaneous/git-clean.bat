@@ -51,7 +51,9 @@ cd ..
 IF NOT "%1%"=="--keep_binary" GOTO CLEAN_ALL
 
 :KEEP_BINARY
-git clean -d -f -x -n -e \!libs "." 
+move libs opencv\
+git clean -d -f -x "." 
+move opencv\libs .\
 GOTO END_OF_CLEAN
 
 :CLEAN_ALL
