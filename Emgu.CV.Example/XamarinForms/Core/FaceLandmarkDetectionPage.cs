@@ -46,16 +46,42 @@ namespace Emgu.CV.XamarinForms
         private Net _faceDetector = null;
         private FacemarkLBF _facemark = null;
 
-        private async Task InitFaceDetector()
+        /// <summary>
+        /// The face detector type
+        /// </summary>
+        public enum FaceDetectorType
+        {
+            /// <summary>
+            /// 32-bit floating point model
+            /// </summary>
+            FP32,
+            /// <summary>
+            /// 16-bit floating point model
+            /// </summary>
+            Fp16
+        }
+
+        private async Task InitFaceDetector(FaceDetectorType type = FaceDetectorType.Fp16)
         {
             if (_faceDetector == null)
             {
                 FileDownloadManager manager = new FileDownloadManager();
+
+                if (type == FaceDetectorType.FP32)
+                {
+                    manager.AddFile(
+                        "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel",
+                        _modelFolderName);
+                } else if (type == FaceDetectorType.Fp16)
+                {
+                    manager.AddFile(
+                        "https://raw.githubusercontent.com/opencv/opencv_3rdparty/dnn_samples_face_detector_20180205_fp16/res10_300x300_ssd_iter_140000_fp16.caffemodel",
+                        _modelFolderName);
+                }
                 manager.AddFile(
-                    "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel",
+                    "https://raw.githubusercontent.com/opencv/opencv/4.0.1/samples/dnn/face_detector/deploy.prototxt",
                     _modelFolderName);
-                manager.AddFile("https://raw.githubusercontent.com/opencv/opencv/4.0.1/samples/dnn/face_detector/deploy.prototxt",
-                    _modelFolderName);
+
                 manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
                 await manager.Download();
                 _faceDetector = DnnInvoke.ReadNetFromCaffe(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
@@ -63,7 +89,10 @@ namespace Emgu.CV.XamarinForms
                 if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
                 {
                     _faceDetector.SetPreferableBackend(Emgu.CV.Dnn.Backend.Cuda);
-                    _faceDetector.SetPreferableTarget(Emgu.CV.Dnn.Target.Cuda);
+                    if (type == FaceDetectorType.FP32)
+                        _faceDetector.SetPreferableTarget(Emgu.CV.Dnn.Target.Cuda);
+                    else if (type == FaceDetectorType.Fp16)
+                        _faceDetector.SetPreferableTarget(Emgu.CV.Dnn.Target.CudaFp16);
                 }
             }
         }
