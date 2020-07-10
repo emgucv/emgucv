@@ -1,0 +1,27 @@
+name: Mac OS Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check out submodules
+      run: git submodule update --init --recursive
+    - name: Build Emgu CV native binary
+      run: ./configure_x86_64
+      working-directory: ./platforms/osx/
+    - name: Build Emgu CV package (unsigned)
+      run: make package
+      working-directory: ./platforms/osx/build/
+    - uses: actions/upload-artifact@v2
+      with:
+        name: emgucv-macos-zip-package
+        path: ${{ github.workspace }}/platforms/osx/build/*.zip
