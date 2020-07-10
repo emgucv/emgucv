@@ -59,6 +59,12 @@ namespace Emgu.CV.XamarinForms
                 manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
                 await manager.Download();
                 _faceDetector = DnnInvoke.ReadNetFromCaffe(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
+
+                if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
+                {
+                    _faceDetector.SetPreferableBackend(Emgu.CV.Dnn.Backend.Cuda);
+                    _faceDetector.SetPreferableTarget(Emgu.CV.Dnn.Target.Cuda);
+                }
             }
         }
 
