@@ -7,6 +7,8 @@ ADD_SUBDIRECTORY("Emgu.CV.runtime.windows.cuda.dnn")
 ADD_SUBDIRECTORY("Emgu.CV.runtime.windows.cuda.npp")
 
 ADD_SUBDIRECTORY("Emgu.CV")
+ADD_SUBDIRECTORY("Emgu.CV.Bitmap")
+ADD_SUBDIRECTORY("Emgu.CV.UI")
 
 ADD_SUBDIRECTORY("Emgu.CV.runtime.android")
 ADD_SUBDIRECTORY("Emgu.CV.runtime.windows")

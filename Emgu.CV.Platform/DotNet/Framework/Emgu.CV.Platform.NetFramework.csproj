@@ -123,10 +123,19 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Emgu.CV.NativeImage\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj">
+      <Project>{586b61d2-f1fe-499e-884c-470054e00c35}</Project>
+      <Name>Emgu.CV.Bitmap</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
       <Project>{9D2543B4-7B83-42BB-9E5B-755A30EA8241}</Project>
       <Name>Emgu.CV.Platform.NetStandard</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Drawing.Common">
+      <Version>4.7.0</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="..\Emgu.CV.Platform.Net.projitems" Label="Shared" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

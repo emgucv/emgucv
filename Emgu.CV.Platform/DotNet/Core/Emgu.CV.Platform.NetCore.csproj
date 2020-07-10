@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Emgu.CV.NativeImage\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj" />
     <ProjectReference Include="..\..\Netstandard\Emgu.CV.Platform.Netstandard.csproj" />
   </ItemGroup>
   <Target Name="DeployBinary" AfterTargets="AfterBuild">

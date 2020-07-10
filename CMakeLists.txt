@@ -833,6 +833,8 @@ CHECK_LICENSE_TYPE()
 #  Generate neget packaging file for Emgu CV project
 # ----------------------------------------------------------------------------
 SET(EMGUCV_NUGET_ID "Emgu.CV")
+SET(EMGUCV_BITMAP_NUGET_ID "Emgu.CV.Bitmap")
+SET(EMGUCV_UI_NUGET_ID "Emgu.CV.UI")
 SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.windows")
 #SET(
 IF(WITH_CUDA)
@@ -1007,38 +1009,56 @@ SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY}
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
       </group>")
-#IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
-#	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
-#	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\net461\" />
-#	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\net461\" />")
-#	SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
-#	<group targetFramework=\"net461\">
-#	</group>")
-#ENDIF()
 
-#IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86 OR APPLE)
-#	SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
-#	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\netcoreapp3.1\" />
-#	<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\netcoreapp3.1\" />")
-#ENDIF()
+
+SET(EMGUCV_BITMAP_NUGET_TITLE "Bitmap extension for Emgu CV")
+SET(EMGUCV_BITMAP_NUGET_SUMMARY "This package add extension method to convert Bitmap to and from Emgu objects (e.g. Mat, UMat, GpuMat)")
+SET(EMGUCV_BITMAP_NUGET_FILE_LIST "")
+SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "")
+SET(EMGUCV_BITMAP_NUGET_FILE_LIST "${EMGUCV_BITMAP_NUGET_FILE_LIST} 
+    <file src=\"..\\..\\..\\libs\\Emgu.CV.Bitmap.dll\" target=\"lib\\netstandard2.0\" />
+    <file src=\"..\\..\\..\\libs\\Emgu.CV.Bitmap.xml\" target=\"lib\\netstandard2.0\" />
+    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
+      <group targetFramework=\".NETStandard2.0\">
+        <dependency id=\"System.Drawing.Common\" version=\"4.7.0\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+      </group>")
+SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "
+	<dependencies>
+${EMGUCV_BITMAP_NUGET_DEPENDENCY}
+    </dependencies>")
 
 
 IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
-  SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} 
-    <file src=\"..\\_._\" target=\"lib\\netstandard2.0\" />
+  SET(EMGUCV_UI_NUGET_TITLE "Windows UI components for Emgu CV")
+  SET(EMGUCV_UI_NUGET_FILE_LIST "${EMGUCV_UI_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetFramework.dll\" target=\"lib\\net461\" />
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetFramework.xml\" target=\"lib\\net461\" />
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetCore.dll\" target=\"lib\\netcoreapp3.1\" />
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetCore.xml\" target=\"lib\\netcoreapp3.1\" />")
-
-    SET(EMGUCV_WINDOWS_NUGET_FRAMEWORK_REFERENCES "${EMGUCV_WINDOWS_NUGET_FRAMEWORK_REFERENCES}
-")
-	SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
+    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetCore.xml\" target=\"lib\\netcoreapp3.1\" />
+    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+	")
+  SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
+      <group targetFramework=\"net461\">
+        <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+      </group>")
+  SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
+      <group targetFramework=\".NETCoreApp3.1\">
+        <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+      </group>")
+  SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
     <frameworkReferences>
       <group targetFramework=\".NETCoreApp3.1\">
         <frameworkReference name=\"Microsoft.WindowsDesktop.App.WindowsForms\" />
       </group>
     </frameworkReferences>")
+  SET(EMGUCV_UI_NUGET_DEPENDENCY "
+	<dependencies>
+${EMGUCV_UI_NUGET_DEPENDENCY}
+    </dependencies>")
 ENDIF()
 
 SET(EMGUCV_NUGET_DEPENDENCY "
@@ -1060,18 +1080,16 @@ IF(HAVE_WINDESKTOP_X64)
 ENDIF()
 STRING(STRIP "${EMGUCV_NUGET_TITLE_ARCH}" EMGUCV_NUGET_TITLE_ARCH)
 STRING(REPLACE "x86 x64" "" EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH}")
+
+SET(EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY "<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />")
+SET(EMGUCV_WINDOWS_NETCORE_NUGET_DEPENDENCY "<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />")
+SET(EMGUCV_WINDOWS_NETFRAMEWORK_NUGET_DEPENDENCY "<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />")
  
 SET(EMGUCV_WINDOWS_NUGET_TITLE "EMGU CV ${EMGUCV_NUGET_TITLE_ARCH}")
 #SET(EMGUCV_WINDOWS_NUGET_TITLE "EMGU CV ${EMGUCV_NUGET_TITLE_ARCH}")
 STRING(STRIP "${EMGUCV_WINDOWS_NUGET_TITLE}" EMGUCV_WINDOWS_NUGET_TITLE)
 
 
-
-#SET(EMGUCV_WINDOWS_NET461_NUGET_DEPENDENCY "")
-SET(EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY "<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />")
-SET(EMGUCV_WINDOWS_NETCORE_NUGET_DEPENDENCY "<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />")
-SET(EMGUCV_WINDOWS_NETFRAMEWORK_NUGET_DEPENDENCY "<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />")
-#SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "")
 
 
 IF(WITH_CUDA)
@@ -1226,6 +1244,7 @@ ENDIF()
 
 IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/Package.nuspec)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.UI/Package.nuspec)
 ENDIF()
 
 if(HAVE_LINUX_ARM)
@@ -1254,6 +1273,9 @@ ENDIF()
 
 #generate nuget config file for Emgu.CV 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV/Package.nuspec)
+
+#generate nuget config file for Emgu.CV.Bitmap
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Bitmap.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.Bitmap/Package.nuspec)
 
 #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/component.yaml.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/xamarin/emgucv_v3/component/component.yaml)
 

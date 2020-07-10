@@ -9,7 +9,6 @@
     <Import_RootNamespace>Emgu.CV.Platform.Net</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)..\..\Emgu.CV.NativeImage\BitmapExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HistogramBox.cs">
       <SubType>Component</SubType>
     </Compile>

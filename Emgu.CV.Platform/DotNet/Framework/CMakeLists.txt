@@ -24,14 +24,7 @@ IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND NOT ANDROID AND NOT NETFX_CORE A
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
     endif()
     
-    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.Platform.NetStandard)
-    INSTALL(
-      FILES 
-      ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll 
-      ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.xml
-      DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
-      COMPONENT emgucv_binary)
-
+    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.Bitmap)
 
   ENDIF()
   

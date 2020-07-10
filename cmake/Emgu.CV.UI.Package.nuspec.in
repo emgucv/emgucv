@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>${EMGUCV_UI_NUGET_ID}</id>
+	<title>${EMGUCV_UI_NUGET_TITLE}</title>
+    <version>${CPACK_PACKAGE_VERSION}</version>
+    <authors>${CPACK_PACKAGE_VENDOR}</authors>
+    <owners>${CPACK_PACKAGE_VENDOR}</owners>
+    <license type="file">${EMGUCV_LICENSE_FILE}</license>
+    <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
+	<repository type="git" url="https://github.com/emgucv/emgucv" />
+	<icon>icon.png</icon>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+	<summary>${EMGUCV_UI_NUGET_SUMMARY}</summary>
+    <description>Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library. Allowing OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython etc. </description>
+    <releaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. For online documentation please visit
+http://www.emgu.com/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html    	        
+    </releaseNotes>
+	${EMGUCV_UI_NUGET_DEPENDENCY}
+    <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
+    <tags>opencv emgu emgucv ai image</tags>
+  </metadata>
+  <files>
+    ${EMGUCV_UI_NUGET_FILE_LIST}
+  </files>
+</package>
