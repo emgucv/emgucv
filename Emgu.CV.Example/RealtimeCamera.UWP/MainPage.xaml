@@ -9,8 +9,8 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Button x:Name="captureButton" Content="Capture" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Click="captureButton_Click"/>
-        <Image x:Name="image1" HorizontalAlignment="Left" Height="200" Margin="10,80,0,0" VerticalAlignment="Top" Width="300"/>
-        <Image x:Name="image2" HorizontalAlignment="Left" Margin="10,300,0,0" VerticalAlignment="Top" Height="200" Width="300"/>
+        <Image x:Name="imageCamera" HorizontalAlignment="Left" Height="200" Margin="10,80,0,0" VerticalAlignment="Top" Width="300"/>
+        <Image x:Name="imageProcessed" HorizontalAlignment="Left" Margin="10,300,0,0" VerticalAlignment="Top" Height="200" Width="300"/>
         <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="88,10,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="32" Width="222"/>
 
     </Grid>
