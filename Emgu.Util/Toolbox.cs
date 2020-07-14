@@ -153,13 +153,6 @@ namespace Emgu.Util
         }
 
 
-        [DllImport("Kernel32.dll", SetLastError = true)]
-        private static extern IntPtr LoadPackagedLibrary(
-           [MarshalAs(UnmanagedType.LPStr)]
-         String fileName,
-           int dwFlags);
-
-
         /// <summary>
         /// Call a command from command line
         /// </summary>
@@ -530,22 +523,10 @@ namespace Emgu.Util
           const int loadLibrarySearchDllLoadDir = 0x00000100;
           const int loadLibrarySearchDefaultDirs = 0x00001000;
           return LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
-#elif NETFX_CORE
-         IntPtr handler = LoadPackagedLibrary(dllname, 0);
-
-         if (handler == IntPtr.Zero)
-         {
-            int error = Marshal.GetLastWin32Error();
-
-            System.Diagnostics.Debug.WriteLine(String.Format("Error loading {0}: error code {1}", dllname, (uint)error));
-         }
-
-         return handler;
 #else
             if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
             {
-                //if (Platform.ClrType == TypeEnum.ClrType.NetFxCore)
-                {
+
                     const int loadLibrarySearchDllLoadDir = 0x00000100;
                     const int loadLibrarySearchDefaultDirs = 0x00001000;
                     const int loadLibrarySearchApplicationDir = 0x00000200;
@@ -562,10 +543,22 @@ namespace Emgu.Util
                         {
                             System.Diagnostics.Trace.WriteLine(String.Format("Please check if the current user has execute permission for file: {0} ", dllname));
                         }
-                    }
+
+                        //Also try loadPackagedLibrary
+                        IntPtr packagedLibraryHandler = LoadPackagedLibrary(dllname, 0);
+                        if (packagedLibraryHandler == IntPtr.Zero)
+                        {
+                            error = Marshal.GetLastWin32Error();
+                            ex = new System.ComponentModel.Win32Exception(error);
+                            System.Diagnostics.Debug.WriteLine(String.Format("LoadPackagedLibrary {0} failed with error code {1}: {2}", dllname, (uint)error, ex.Message));
+                        }
+                        else
+                        {
+                            System.Diagnostics.Trace.WriteLine(String.Format("LoadPackagedLibrary loaded: {0}", dllname));
+                            return packagedLibraryHandler;
+                        }
+                    } 
                     return handler;
-                } //else
-                  //return WinAPILoadLibrary(dllname);
             }
             else
             {
@@ -574,6 +567,24 @@ namespace Emgu.Util
 #endif
         }
 
+        /*
+        [DllImport("kernel32", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
+        static extern UIntPtr GetProcAddress(IntPtr hModule, string procName);
+
+        private static bool? _kernel32HasLoadPackagedLibrary = null;
+        private static IntPtr LoadPackagedLibrarySafe(String fileName, int dwFlags)
+        {
+            if (_kernel32HasLoadPackagedLibrary == null)
+            {
+                UIntPtr = GetProcAddress("")
+            }
+        }*/
+
+        [DllImport("Kernel32.dll", SetLastError = true)]
+        private static extern IntPtr LoadPackagedLibrary(
+            [MarshalAs(UnmanagedType.LPStr)]
+            String fileName,
+            int dwFlags);
 
         [DllImport("Kernel32.dll", SetLastError = true)]
         private static extern IntPtr LoadLibraryEx(
