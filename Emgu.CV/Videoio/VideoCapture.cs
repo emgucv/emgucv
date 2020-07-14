@@ -537,12 +537,13 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Similar to the C++ implementation of cv::Capture &gt;&gt; Mat. It first call Grab() function follows by Retrieve()
+        /// First call Grab() function follows by Retrieve()
         /// </summary>
-        /// <param name="m">The matrix the image will be read into.</param>
-        public void Read(Mat m)
+        /// <param name="m">The output array where the image will be read into.</param>
+        public bool Read(IOutputArray m)
         {
-            CvInvoke.cveVideoCaptureReadToMat(Ptr, m);
+            using (OutputArray oaM = m.GetOutputArray())
+                return CvInvoke.cveVideoCaptureRead(Ptr, oaM);
         }
 
         /// <summary>
@@ -706,8 +707,8 @@ namespace Emgu.CV
 
     partial class CvInvoke
     {
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveVideoCaptureReadToMat(IntPtr capture, IntPtr mat);
+        //[DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        //internal static extern void cveVideoCaptureReadToMat(IntPtr capture, IntPtr mat);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveVideoCaptureCreateFromDevice(int index, VideoCapture.API apiPreference);

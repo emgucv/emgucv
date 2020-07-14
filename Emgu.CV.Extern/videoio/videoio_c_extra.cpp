@@ -120,6 +120,7 @@ bool cveVideoCaptureRead(cv::VideoCapture* capture, cv::_OutputArray* image)
 #endif
 }
 
+/*
 void cveVideoCaptureReadToMat(cv::VideoCapture* capture, cv::Mat* mat)
 {
 #ifdef HAVE_OPENCV_VIDEOIO
@@ -129,7 +130,7 @@ void cveVideoCaptureReadToMat(cv::VideoCapture* capture, cv::Mat* mat)
 #else
 	throw_no_videoio();
 #endif
-}
+}*/
 
 void cveVideoCaptureGetBackendName(cv::VideoCapture* capture, cv::String* name)
 {
