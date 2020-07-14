@@ -4305,6 +4305,13 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestLoadLibrary()
+        {
+            bool loaded = (IntPtr.Zero != Emgu.Util.Toolbox.LoadLibrary("not_exist"));
+            EmguAssert.IsFalse(loaded);
+        }
+
+        [Test]
         public void TestERFilter()
         {
             CvInvoke.SanityCheck();

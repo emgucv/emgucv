@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Emgu.CV.NativeImage\BitmapExtension.cs" Link="BitmapExtension.cs" />
     <Compile Include="..\AutoTestCalibration.cs" Link="AutoTestCalibration.cs" />
     <Compile Include="..\AutoTestCuda.cs" Link="AutoTestCuda.cs" />
     <Compile Include="..\AutoTestFeatures2d.cs" Link="AutoTestFeatures2d.cs" />
@@ -255,6 +254,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV.NativeImage\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj" />
     <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
   </ItemGroup>
   <Import Project="..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems" Label="Shared" />
