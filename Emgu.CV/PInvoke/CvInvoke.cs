@@ -310,6 +310,10 @@ namespace Emgu.CV
                 if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
                 {
                     bool setDllDirectorySuccess = Emgu.Util.Toolbox.SetDllDirectory(loadDirectory);
+                    if (!setDllDirectorySuccess)
+                    {
+                        System.Diagnostics.Debug.WriteLine(String.Format("Failed to set dll directory: {0}", loadDirectory));
+                    }
                 }
             }
             
