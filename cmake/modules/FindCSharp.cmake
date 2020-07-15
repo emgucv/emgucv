@@ -28,7 +28,7 @@ $ENV{windir}/Microsoft.NET/Framework/v2.0.50727/
 )
 
 FIND_PROGRAM (MSBUILD_EXECUTABLE_20 
-NAMES msbuild xbuild
+NAMES msbuild 
 PATHS
 $ENV{windir}/Microsoft.NET/Framework/v2.0.50727/
 "C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727"

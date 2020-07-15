@@ -139,18 +139,19 @@ MACRO(SET_CS_TARGET_FRAMEWORK)
 ENDMACRO(SET_CS_TARGET_FRAMEWORK)
 
 SET(DEFAULT_CS_CONFIG "Release" CACHE STRING "Default C# build configuration")
+
 MACRO(BUILD_CSPROJ target csproj_file extra_flags)
   IF(APPLE)
     SET(MAC_FRESH_SHELL_PREFIX env -i zsh)
   ENDIF()
-
+  
   ADD_CUSTOM_TARGET (${target} ${ARGV3} SOURCES ${csproj_file} )
   
-#  IF (WIN32 AND MSVC AND NOT ("${CMAKE_VS_DEVENV_COMMAND}" STREQUAL ""))
-#    ADD_CUSTOM_COMMAND (
-#      TARGET ${target}
-#      COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build ${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}
-#      COMMENT "Building ${target} with ${CMAKE_VS_DEVENV_COMMAND}")
+  #  IF (WIN32 AND MSVC AND NOT ("${CMAKE_VS_DEVENV_COMMAND}" STREQUAL ""))
+  #    ADD_CUSTOM_COMMAND (
+  #      TARGET ${target}
+  #      COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build ${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}
+  #      COMMENT "Building ${target} with ${CMAKE_VS_DEVENV_COMMAND}")
   IF(MSBUILD_EXECUTABLE)
     #MESSAGE(STATUS "Adding custom command: ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}")
     ADD_CUSTOM_COMMAND (
@@ -172,40 +173,56 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
     SET(MAC_FRESH_SHELL_PREFIX env -i zsh)
   ENDIF()
   ADD_CUSTOM_TARGET (${target} ${ARGV4})
-#  IF (WIN32 AND MSVC AND NOT ("${CMAKE_VS_DEVENV_COMMAND}" STREQUAL ""))
-#    ADD_CUSTOM_COMMAND (
-#      TARGET ${target}
-#      COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build ${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /project ${project_name}
-#      COMMENT "Building ${target} with ${CMAKE_VS_DEVENV_COMMAND}")
-#  ELSEIF(VSTOOL_EXECUTABLE)      
-#    IF ("${project_name}" STREQUAL "")
-#    ADD_CUSTOM_COMMAND (
-#      TARGET ${target}
-#      COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
-#      COMMAND "${VSTOOL_EXECUTABLE}" build -t:Build -c:"${DEFAULT_CS_CONFIG}" ${extra_flags}${solution_file}
-#      COMMENT "Building ${target}")
-#    ELSE()
-#    ADD_CUSTOM_COMMAND (
-#      TARGET ${target}
-#      COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
-#      COMMAND "${VSTOOL_EXECUTABLE}" build -t:Build -c:"${DEFAULT_CS_CONFIG}" ${extra_flags}${solution_file} -p:${project_name}
-#      COMMENT "Building ${target}")
-#    ENDIF()
+  #  IF (WIN32 AND MSVC AND NOT ("${CMAKE_VS_DEVENV_COMMAND}" STREQUAL ""))
+  #    ADD_CUSTOM_COMMAND (
+  #      TARGET ${target}
+  #      COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build ${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /project ${project_name}
+  #      COMMENT "Building ${target} with ${CMAKE_VS_DEVENV_COMMAND}")
+  #  ELSEIF(VSTOOL_EXECUTABLE)      
+  #    IF ("${project_name}" STREQUAL "")
+  #    ADD_CUSTOM_COMMAND (
+  #      TARGET ${target}
+  #      COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
+  #      COMMAND "${VSTOOL_EXECUTABLE}" build -t:Build -c:"${DEFAULT_CS_CONFIG}" ${extra_flags}${solution_file}
+  #      COMMENT "Building ${target}")
+  #    ELSE()
+  #    ADD_CUSTOM_COMMAND (
+  #      TARGET ${target}
+  #      COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
+  #      COMMAND "${VSTOOL_EXECUTABLE}" build -t:Build -c:"${DEFAULT_CS_CONFIG}" ${extra_flags}${solution_file} -p:${project_name}
+  #      COMMENT "Building ${target}")
+  #    ENDIF()
   IF(MSBUILD_EXECUTABLE)
     IF ("${project_name}" STREQUAL "")
-    ADD_CUSTOM_COMMAND (
-      TARGET ${target}
-	  COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
-      COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
-      COMMENT "Building ${target} with ${MSBUILD_EXECUTABLE}")
+      ADD_CUSTOM_COMMAND (
+	TARGET ${target}
+	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
+	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
+	COMMENT "Building ${target} with ${MSBUILD_EXECUTABLE}")
     ELSE()
-	STRING(REGEX REPLACE "\\." "_" msbuild_target_name ${project_name})
-	#MESSAGE(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> msbuild_target_name: ${msbuild_target_name}")
-    ADD_CUSTOM_COMMAND (
-      TARGET ${target}
-	  COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
-      COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /target:${msbuild_target_name}
-      COMMENT "Building ${target} with ${MSBUILD_EXECUTABLE}")
+      STRING(REGEX REPLACE "\\." "_" msbuild_target_name ${project_name})
+      #MESSAGE(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> msbuild_target_name: ${msbuild_target_name}")
+      ADD_CUSTOM_COMMAND (
+	TARGET ${target}
+	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
+	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /target:${msbuild_target_name}
+	COMMENT "Building ${target} with ${MSBUILD_EXECUTABLE}")
+    ENDIF()
+  ELSEIF (DOTNET_EXECUTABLE)
+    IF ("${project_name}" STREQUAL "")
+      ADD_CUSTOM_COMMAND (
+	TARGET ${target}
+	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild -t:restore ${solution_file}
+	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
+	COMMENT "Building ${target} with ${DOTNET_EXECUTABLE}")
+    ELSE()
+      STRING(REGEX REPLACE "\\." "_" msbuild_target_name ${project_name})
+      #MESSAGE(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> msbuild_target_name: ${msbuild_target_name}")
+      ADD_CUSTOM_COMMAND (
+	TARGET ${target}
+	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild -t:restore ${solution_file}
+	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} /target:${msbuild_target_name}
+	COMMENT "Building ${target} with ${DOTNET_EXECUTABLE}")
     ENDIF()
   ELSE()
     MESSAGE(FATAL_ERROR "Neither Visual Studio, msbuild nor dotnot is found!")
