@@ -32,6 +32,12 @@ IF "%1%"=="64" SET OS_MODE= Win64
 IF "%1%"=="ARM" SET OS_MODE= ARM
 IF "%1%"=="ARM64" SET OS_MODE= ARM64
 
+SET BUILD_ARCH=
+IF "%1%"=="64" SET BUILD_ARCH=-A x64
+IF "%1%"=="32" SET BUILD_ARCH=-A Win32
+IF "%1%"=="ARM" SET BUILD_ARCH=-A ARM
+IF "%1%"=="ARM64" SET BUILD_ARCH=-A ARM64
+
 SET PROGRAMFILES_DIR_X86=%programfiles(x86)%
 if NOT EXIST "%PROGRAMFILES_DIR_X86%" SET PROGRAMFILES_DIR_X86=%programfiles%
 SET PROGRAMFILES_DIR=%programfiles%
@@ -59,6 +65,7 @@ SET VS2017="%VS2017_DIR%\Common7\IDE\devenv.com"
 FOR /F "tokens=* USEBACKQ" %%F IN (`..\miscellaneous\vswhere.exe -version [16.0^,17.0^) -property installationPath`) DO SET VS2019_DIR=%%F
 SET VS2019="%VS2019_DIR%\Common7\IDE\devenv.com"
 
+FOR /F "tokens=* USEBACKQ" %%F IN (`..\miscellaneous\vswhere.exe -products * -property installationPath`) DO SET VS_BUILDTOOLS=%%F
 
 IF EXIST "%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe" SET MSBUILD35=%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe
 IF EXIST "%windir%\Microsoft.NET\Framework64\v3.5\MSBuild.exe" SET MSBUILD35=%windir%\Microsoft.NET\Framework64\v3.5\MSBuild.exe
@@ -109,7 +116,7 @@ IF %DEVENV%==%VS2017% SET BUILD_TYPE=/Build Release
 IF %DEVENV%==%VS2019% SET BUILD_TYPE=/Build Release
 
 IF %DEVENV%=="%MSBUILD35%" SET CMAKE_CONF="Visual Studio 12 2005%OS_MODE%"
-IF %DEVENV%=="%MSBUILD40%" SET CMAKE_CONF="Visual Studio 12 2005%OS_MODE%"
+IF %DEVENV%=="%MSBUILD40%" SET CMAKE_CONF="Visual Studio 16" %BUILD_ARCH%
 IF %DEVENV%==%VS2005% SET CMAKE_CONF="Visual Studio 8 2005%OS_MODE%"
 IF %DEVENV%==%VS2008% SET CMAKE_CONF="Visual Studio 9 2008%OS_MODE%"
 IF %DEVENV%==%VS2010% SET CMAKE_CONF="Visual Studio 10%OS_MODE%"
@@ -117,10 +124,7 @@ IF %DEVENV%==%VS2012% SET CMAKE_CONF="Visual Studio 11%OS_MODE%"
 IF %DEVENV%==%VS2013% SET CMAKE_CONF="Visual Studio 12%OS_MODE%"
 IF %DEVENV%==%VS2015% SET CMAKE_CONF="Visual Studio 14%OS_MODE%"
 IF %DEVENV%==%VS2017% SET CMAKE_CONF="Visual Studio 15%OS_MODE%"
-IF %DEVENV%==%VS2019% IF "%1%"=="64" SET CMAKE_CONF="Visual Studio 16" -A x64
-IF %DEVENV%==%VS2019% IF "%1%"=="32" SET CMAKE_CONF="Visual Studio 16" -A Win32
-IF %DEVENV%==%VS2019% IF "%1%"=="ARM" SET CMAKE_CONF="Visual Studio 16" -A ARM
-IF %DEVENV%==%VS2019% IF "%1%"=="ARM64" SET CMAKE_CONF="Visual Studio 16" -A ARM64
+IF %DEVENV%==%VS2019% SET CMAKE_CONF="Visual Studio 16" %BUILD_ARCH%
 
 SET IPP_BUILD_FLAGS=-DWITH_IPP:BOOL=FALSE 
 
