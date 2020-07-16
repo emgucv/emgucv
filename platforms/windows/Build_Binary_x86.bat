@@ -12,10 +12,32 @@ REM %8%: "nuget", this indicates if we should build the nuget package
 REM %9%: This field if for the CUDA_ARCH_BIN_OPTION, if you want to specify manually. e.g. "6.1"
 
 :DOCKER_START
-IF "%1%"=="64" IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvars64.bat" "c:\BuildTools\vc\Auxiliary\Build\vcvars64.bat"
-IF "%1%"=="32" IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvars32.bat" "c:\BuildTools\vc\Auxiliary\Build\vcvars32.bat"
-IF "%1%"=="ARM" IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm.bat" "c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm.bat"
-IF "%1%"=="ARM64" IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm64.bat" "c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm64.bat"
+IF "%1%"=="32" GOTO ENV_x86
+IF "%1%"=="64" GOTO ENV_x64
+IF "%1%"=="ARM" GOTO ENV_ARM
+IF "%1%"=="ARM64" GOTO ENV_ARM64
+GOTO ENV_END
+
+:ENV_x86
+IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvars32.bat" SET ENV_SETUP_SCRIPT=c:\BuildTools\vc\Auxiliary\Build\vcvars32.bat
+GOTO ENV_END
+
+:ENV_x64
+IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvars64.bat" SET ENV_SETUP_SCRIPT=c:\BuildTools\vc\Auxiliary\Build\vcvars64.bat
+GOTO ENV_END
+
+:ENV_ARM
+IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm.bat" SET ENV_SETUP_SCRIPT=c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm.bat
+GOTO ENV_END
+
+:ENV_ARM64
+IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm64.bat" SET ENV_SETUP_SCRIPT=c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm64.bat
+
+:ENV_END
+IF "%ENV_SETUP_SCRIPT%"=="" GOTO DOCKER_END
+
+call %ENV_SETUP_SCRIPT%
+
 :DOCKER_END
 
 pushd %~p0
