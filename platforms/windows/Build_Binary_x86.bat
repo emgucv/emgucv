@@ -11,6 +11,13 @@ REM %7%: "build", if set to "build", the script will also build the target
 REM %8%: "nuget", this indicates if we should build the nuget package
 REM %9%: This field if for the CUDA_ARCH_BIN_OPTION, if you want to specify manually. e.g. "6.1"
 
+:DOCKER_START
+IF "%1%"=="64" IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvars64.bat" "c:\BuildTools\vc\Auxiliary\Build\vcvars64.bat"
+IF "%1%"=="32" IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvars32.bat" "c:\BuildTools\vc\Auxiliary\Build\vcvars32.bat"
+IF "%1%"=="ARM" IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm.bat" "c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm.bat"
+IF "%1%"=="ARM64" IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm64.bat" "c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm64.bat"
+:DOCKER_END
+
 pushd %~p0
 cd ..\..
 IF NOT EXIST b mkdir b
