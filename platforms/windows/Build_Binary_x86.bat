@@ -11,45 +11,49 @@ REM %7%: "build", if set to "build", the script will also build the target
 REM %8%: "nuget", this indicates if we should build the nuget package
 REM %9%: This field if for the CUDA_ARCH_BIN_OPTION, if you want to specify manually. e.g. "6.1"
 
-:DOCKER_START
+SET BUILD_FOLDER=build
+
 IF "%1%"=="32" GOTO ENV_x86
 IF "%1%"=="64" GOTO ENV_x64
 IF "%1%"=="ARM" GOTO ENV_ARM
 IF "%1%"=="ARM64" GOTO ENV_ARM64
+
 GOTO ENV_END
 
 :ENV_x86
+SET BUILD_FOLDER=%BUILD_FOLDER%_x86
+ECHO "BUILDING 32bit solution in %BUILD_FOLDER%"
 IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvars32.bat" SET ENV_SETUP_SCRIPT=c:\BuildTools\vc\Auxiliary\Build\vcvars32.bat
 GOTO ENV_END
 
 :ENV_x64
+SET BUILD_FOLDER=%BUILD_FOLDER%_x64
+ECHO "BUILDING 64bit solution in %BUILD_FOLDER%" 
 IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvars64.bat" SET ENV_SETUP_SCRIPT=c:\BuildTools\vc\Auxiliary\Build\vcvars64.bat
 GOTO ENV_END
 
 :ENV_ARM
+SET BUILD_FOLDER=%BUILD_FOLDER%_ARM
+ECHO "BUILDING ARM solution in %BUILD_FOLDER%"
 IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm.bat" SET ENV_SETUP_SCRIPT=c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm.bat
 GOTO ENV_END
 
 :ENV_ARM64
+SET BUILD_FOLDER=%BUILD_FOLDER%_ARM64
+ECHO "BUILDING ARM64 solution in %BUILD_FOLDER%"
 IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm64.bat" SET ENV_SETUP_SCRIPT=c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm64.bat
 
 :ENV_END
-IF "%ENV_SETUP_SCRIPT%"=="" GOTO DOCKER_END
+IF "%ENV_SETUP_SCRIPT%"=="" GOTO ENV_SETUP_END
 
 call %ENV_SETUP_SCRIPT%
 
-:DOCKER_END
+:ENV_SETUP_END
 
 pushd %~p0
 cd ..\..
-IF NOT EXIST b mkdir b
-cd b
-
-REM cd ..\..
-IF "%1%"=="64" ECHO "BUILDING 64bit solution" 
-IF "%1%"=="32" ECHO "BUILDING 32bit solution"
-IF "%1%"=="ARM" ECHO "BUILDING ARM solution"
-IF "%1%"=="ARM64" ECHO "BUILDING ARM64 solution"
+IF NOT EXIST %BUILD_FOLDER% mkdir %BUILD_FOLDER%
+cd %BUILD_FOLDER%
 
 SET NETFX_CORE=""
 IF "%3%"=="WindowsPhone81" SET NETFX_CORE="TRUE" 
@@ -250,16 +254,16 @@ IF %NETFX_CORE%=="TRUE" GOTO NETFX_CORE
 :NONE_NETFX_CORE
 cd ..
 cd vtk
-mkdir -p build
-cd build
+IF NOT EXIST %BUILD_FOLDER% mkdir %BUILD_FOLDER%
+cd %BUILD_FOLDER%
 %CMAKE% -G %CMAKE_CONF% -DVTK_DATA_EXCLUDE_FROM_ALL:BOOL=TRUE -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DCMAKE_BUILD_TYPE:STRING="Release" ..
 %CMAKE% --build . --config Release --parallel
 cd ..
 cd ..
-cd b
+cd %BUILD_FOLDER%
 
 SET CMAKE_CONF_FLAGS=^
--DVTK_DIR:String="%cd%\..\vtk\build" ^
+-DVTK_DIR:String="%cd%\..\vtk\%BUILD_FOLDER%" ^
 -DVTK_RENDERING_BACKEND:String="OpenGL2" ^
 -DBUILD_TESTING:BOOL=FALSE ^
 %CMAKE_CONF_FLAGS%
