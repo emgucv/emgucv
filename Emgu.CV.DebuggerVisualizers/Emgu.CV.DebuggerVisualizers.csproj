@@ -87,6 +87,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Emgu.CV.NativeImage\Emgu.CV.Bitmap\BitmapExtension.cs">
+      <Link>BitmapExtension.cs</Link>
+    </Compile>
     <Compile Include="BitmapVisualizer.cs" />
     <Compile Include="DenseHistogramVisualizer.cs" />
     <Compile Include="ImageVisualizer.cs" />
@@ -113,7 +116,7 @@
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll to ..\libs" Importance="high" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\libs" ContinueOnError="true" />
-	<Message Text="Copying $(OutputPath)System.Runtime.InteropServices.RuntimeInformation.dll to ..\libs" Importance="high" />
+    <Message Text="Copying $(OutputPath)System.Runtime.InteropServices.RuntimeInformation.dll to ..\libs" Importance="high" />
     <Copy SourceFiles="$(OutputPath)System.Runtime.InteropServices.RuntimeInformation.dll" DestinationFolder="..\libs" ContinueOnError="true" />
   </Target>
 </Project>
