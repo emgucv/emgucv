@@ -12,7 +12,7 @@ using Emgu.CV;
 using Emgu.Util;
 using Emgu.CV.Features2D;
 
-namespace Emgu.CV.XFeatures2D
+namespace Emgu.CV
 {
     /// <summary>
     /// Wrapped SIFT detector
@@ -32,7 +32,7 @@ namespace Emgu.CV.XFeatures2D
            double contrastThreshold = 0.04, double edgeThreshold = 10.0,
            double sigma = 1.6)
         {
-            _ptr = XFeatures2DInvoke.cveSIFTCreate(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma,
+            _ptr = Features2DInvoke.cveSIFTCreate(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma,
                ref _feature2D, ref _sharedPtr);
         }
 
@@ -42,12 +42,12 @@ namespace Emgu.CV.XFeatures2D
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                XFeatures2DInvoke.cveSIFTRelease(ref _sharedPtr);
+                Features2DInvoke.cveSIFTRelease(ref _sharedPtr);
             base.DisposeObject();
         }
     }
 
-    public static partial class XFeatures2DInvoke
+    public static partial class Features2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveSIFTCreate(

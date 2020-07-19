@@ -12,12 +12,7 @@
 #include "opencv2/xfeatures2d.hpp"
 #include "vectors_c.h"
 
-//SIFTDetector
-CVAPI(cv::xfeatures2d::SIFT*) cveSIFTCreate(
-	int nFeatures, int nOctaveLayers,
-	double contrastThreshold, double edgeThreshold,
-	double sigma, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::SIFT>** sharedPtr);
-CVAPI(void) cveSIFTRelease(cv::Ptr<cv::xfeatures2d::SIFT>** sharedPtr);
+
 
 //StarDetector
 CVAPI(cv::xfeatures2d::StarDetector*) cveStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::StarDetector>** sharedPtr);

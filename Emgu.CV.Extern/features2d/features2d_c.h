@@ -203,4 +203,11 @@ CVAPI(void) cveAKAZEDetectorRelease(cv::Ptr<cv::AKAZE>** sharedPtr);
 CVAPI(cv::AgastFeatureDetector*) cveAgastFeatureDetectorCreate(int threshold, bool nonmaxSuppression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::AgastFeatureDetector>** sharedPtr);
 CVAPI(void) cveAgastFeatureDetectorRelease(cv::Ptr<cv::AgastFeatureDetector>** sharedPtr);
 
+
+//SIFTDetector
+CVAPI(cv::SIFT*) cveSIFTCreate(
+	int nFeatures, int nOctaveLayers,
+	double contrastThreshold, double edgeThreshold,
+	double sigma, cv::Feature2D** feature2D, cv::Ptr<cv::SIFT>** sharedPtr);
+CVAPI(void) cveSIFTRelease(cv::Ptr<cv::SIFT>** sharedPtr);
 #endif

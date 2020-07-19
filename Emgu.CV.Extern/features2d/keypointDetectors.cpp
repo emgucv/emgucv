@@ -584,3 +584,23 @@ void cveAgastFeatureDetectorRelease(cv::Ptr<cv::AgastFeatureDetector>** sharedPt
 	delete *sharedPtr;
 	*sharedPtr = 0;
 }
+
+//SIFTDetector
+cv::SIFT* cveSIFTCreate(
+	int nFeatures, int nOctaveLayers,
+	double contrastThreshold, double edgeThreshold,
+	double sigma, cv::Feature2D** feature2D,
+	cv::Ptr<cv::SIFT>** sharedPtr)
+{
+	cv::Ptr<cv::SIFT> siftPtr = cv::SIFT::create(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma);
+	*sharedPtr = new cv::Ptr<cv::SIFT>(siftPtr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(siftPtr.get());
+
+	return siftPtr.get();
+}
+
+void cveSIFTRelease(cv::Ptr<cv::SIFT>** sharedPtr)
+{
+	delete* sharedPtr;
+	*sharedPtr = 0;
+}

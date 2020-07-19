@@ -6,25 +6,7 @@
 
 #include "xfeatures2d_c.h"
 
-//SIFTDetector
-cv::xfeatures2d::SIFT* cveSIFTCreate(
-	int nFeatures, int nOctaveLayers,
-	double contrastThreshold, double edgeThreshold,
-	double sigma, cv::Feature2D** feature2D,
-	cv::Ptr<cv::xfeatures2d::SIFT>** sharedPtr)
-{
-	cv::Ptr<cv::xfeatures2d::SIFT> siftPtr = cv::xfeatures2d::SIFT::create(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma);
-	*sharedPtr = new cv::Ptr<cv::xfeatures2d::SIFT>(siftPtr);
-	*feature2D = dynamic_cast<cv::Feature2D*>(siftPtr.get());
 
-	return siftPtr.get();
-}
-
-void cveSIFTRelease(cv::Ptr<cv::xfeatures2d::SIFT>** sharedPtr)
-{
-	delete* sharedPtr;
-	*sharedPtr = 0;
-}
 
 
 //StarDetector
