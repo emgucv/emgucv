@@ -3234,23 +3234,30 @@ ENDIF()
 
 #add_subdirectory(gpu)
 IF (IOS)
-SET(IOS_RELEASE_FOLDER "")
-IF (("${IOS_ARCH}" STREQUAL "i386") OR ("${IOS_ARCH}" STREQUAL "x86_64"))
-  SET(IOS_RELEASE_FOLDER "Release-iphonesimulator")
-ELSE()
-  SET(IOS_RELEASE_FOLDER "Release-iphoneos")
+  SET(IOS_RELEASE_FOLDER "")
+  IF (("${IOS_ARCH}" STREQUAL "i386") OR ("${IOS_ARCH}" STREQUAL "x86_64"))
+    SET(IOS_RELEASE_FOLDER "Release-iphonesimulator")
+  ELSE()
+    SET(IOS_RELEASE_FOLDER "Release-iphoneos")
+  ENDIF()
+  
+  add_custom_command(TARGET ${the_target}
+    POST_BUILD
+    #COMMAND libtool -static -o ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_${IOS_ARCH}.a bin/**/*.a libs/Release/*.a opencv/3rdparty/lib/Release/*.a opencv/lib/Release/*.a freetype2/${IOS_RELEASE_FOLDER}/*.a harfbuzz/${IOS_RELEASE_FOLDER}/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/*.a
+    COMMAND libtool -static -o ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_${IOS_ARCH}.a bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/Release/*.a libs/Release/*.a opencv/3rdparty/lib/Release/*.a opencv/lib/Release/*.a freetype2/${IOS_RELEASE_FOLDER}/*.a harfbuzz/${IOS_RELEASE_FOLDER}/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/*.a
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+    COMMENT "linking target")
+  add_custom_command(TARGET ${the_target}
+    POST_BUILD
+    COMMAND lipo -create -output ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern.a ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_*.a
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    COMMENT "linking target")  
 ENDIF()
 
-add_custom_command(TARGET ${the_target}
-                   POST_BUILD
-                   #COMMAND libtool -static -o ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_${IOS_ARCH}.a bin/**/*.a libs/Release/*.a opencv/3rdparty/lib/Release/*.a opencv/lib/Release/*.a freetype2/${IOS_RELEASE_FOLDER}/*.a harfbuzz/${IOS_RELEASE_FOLDER}/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/*.a
-				   COMMAND libtool -static -o ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_${IOS_ARCH}.a bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/Release/*.a libs/Release/*.a opencv/3rdparty/lib/Release/*.a opencv/lib/Release/*.a freetype2/${IOS_RELEASE_FOLDER}/*.a harfbuzz/${IOS_RELEASE_FOLDER}/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/*.a
-                   WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-                   COMMENT "linking target")
-add_custom_command(TARGET ${the_target}
-                   POST_BUILD
-                   COMMAND lipo -create -output ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern.a ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_*.a
-                   WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-                   COMMENT "linking target")				   
-			   
+IF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
+  add_custom_command(TARGET ${the_target}
+    POST_BUILD
+    COMMAND emcc -o ${CMAKE_SOURCE_DIR}/libs/libcvextern.bc bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/*.a opencv/3rdparty/lib/*.a opencv/lib/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/*.a
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+    COMMENT "Merging libcvextern.bc")
 ENDIF()
