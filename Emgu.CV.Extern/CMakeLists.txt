@@ -2936,11 +2936,15 @@ ENDIF()
 #ENDIF()
 
 
+
 IF(IOS)
   add_library(${the_target} STATIC ${extern_srcs} ${extern_hdrs} )
 ELSEIF(WIN32)
   #add the version information for windows binary
   add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs} ${PROJECT_SOURCE_DIR}/version.rc )
+ELSEIF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
+  add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs} )
+  set_target_properties(${the_target} PROPERTIES SUFFIX ".bc")    
 ELSE()
   add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs} )
   IF (APPLE)

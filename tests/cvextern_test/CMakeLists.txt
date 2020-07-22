@@ -120,7 +120,7 @@ IF(EMGU_ENABLE_SSE)
   IF(MSVC AND EMGUCV_ARCH MATCHES "win32" AND (NOT CV_ICC)) 
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")        ## Optimization
   ENDIF()
-  IF (NOT WIN32)
+  IF ((NOT WIN32) AND NOT ("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten"))
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -latomic")
   ENDIF()
 ENDIF()
@@ -132,6 +132,10 @@ target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS}
 #  ${TIFF_LIBRARY} 
 #  ${GEOTIFF_LIBRARY}
 )
+
+IF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
+  set_target_properties(${the_target} PROPERTIES SUFFIX ".html")
+ENDIF()
 
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${the_target} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
