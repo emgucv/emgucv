@@ -29,7 +29,7 @@ namespace Emgu.CV.XamarinForms
             }
 
             
-            var dnnBackends = DnnInvoke.GetAvailableBackends();
+            var dnnBackends = DnnInvoke.AvailableBackends;
             List<String> dnnBackendsText = new List<string>();
             foreach (var dnnBackend in dnnBackends)
             {

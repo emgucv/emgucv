@@ -73,7 +73,8 @@ namespace Emgu.CV.XamarinForms
                 _maskRcnnDetector = Emgu.CV.Dnn.DnnInvoke.ReadNetFromTensorflow(manager.Files[0].LocalFile, manager.Files[2].LocalFile);
 
                 //prefer cuda backend if available
-                foreach (BackendTargetPair p in DnnInvoke.GetAvailableBackends())
+                
+                foreach (BackendTargetPair p in DnnInvoke.AvailableBackends)
                 {
                     if (p.Backend == Dnn.Backend.Cuda && p.Target == Target.Cuda)
                     {
@@ -230,7 +231,7 @@ namespace Emgu.CV.XamarinForms
 
             button.Clicked += OnButtonClicked;
 
-            BackendTargetPair[] availableBackends = Emgu.CV.Dnn.DnnInvoke.GetAvailableBackends();
+            BackendTargetPair[] availableBackends = Emgu.CV.Dnn.DnnInvoke.AvailableBackends;
 
             StringBuilder availableBackendsStr = new StringBuilder("Available backends: " + System.Environment.NewLine);
             foreach (BackendTargetPair p in availableBackends)

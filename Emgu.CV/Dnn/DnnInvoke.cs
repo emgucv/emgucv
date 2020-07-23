@@ -476,23 +476,25 @@ namespace Emgu.CV.Dnn
         /// <summary>
         /// Get the list of available DNN Backends
         /// </summary>
-        /// <returns>The available backend and target pair</returns>
-        public static BackendTargetPair[] GetAvailableBackends()
+        public static BackendTargetPair[] AvailableBackends
         {
-            using (VectorOfInt viBackends = new VectorOfInt())
-            using (VectorOfInt viTargets = new VectorOfInt())
+            get
             {
-                cveDNNGetAvailableBackends(viBackends, viTargets);
-                int[] backendArr = viBackends.ToArray();
-                int[] targetArr = viTargets.ToArray();
-
-                BackendTargetPair[] availableBackends = new BackendTargetPair[backendArr.Length];
-                for (int i = 0; i < backendArr.Length; i++)
+                using (VectorOfInt viBackends = new VectorOfInt())
+                using (VectorOfInt viTargets = new VectorOfInt())
                 {
-                    availableBackends[i] = new BackendTargetPair((Backend) backendArr[i], (Target) targetArr[i]);
-                }
+                    cveDNNGetAvailableBackends(viBackends, viTargets);
+                    int[] backendArr = viBackends.ToArray();
+                    int[] targetArr = viTargets.ToArray();
 
-                return availableBackends;
+                    BackendTargetPair[] availableBackends = new BackendTargetPair[backendArr.Length];
+                    for (int i = 0; i < backendArr.Length; i++)
+                    {
+                        availableBackends[i] = new BackendTargetPair((Backend) backendArr[i], (Target) targetArr[i]);
+                    }
+
+                    return availableBackends;
+                }
             }
         }
 
