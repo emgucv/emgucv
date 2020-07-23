@@ -3254,10 +3254,10 @@ IF (IOS)
     COMMENT "linking target")  
 ENDIF()
 
-IF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
-  add_custom_command(TARGET ${the_target}
-    POST_BUILD
-    COMMAND emcc -o ${CMAKE_SOURCE_DIR}/libs/libcvextern.bc bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/*.a opencv/3rdparty/lib/*.a opencv/lib/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/*.a
-    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-    COMMENT "Merging libcvextern.bc")
-ENDIF()
+#IF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
+#  add_custom_command(TARGET ${the_target}
+#    POST_BUILD
+#    COMMAND emcc -o ${CMAKE_SOURCE_DIR}/libs/libcvextern.bc bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/*.a opencv/3rdparty/lib/*.a opencv/lib/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/*.a
+#    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+#    COMMENT "Merging libcvextern.bc")
+#ENDIF()
