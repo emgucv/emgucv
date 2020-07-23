@@ -61,7 +61,7 @@ namespace Emgu.CV.XamarinForms
             Fp16
         }
 
-        private async Task InitFaceDetector(FaceDetectorType type = FaceDetectorType.Fp16)
+        private async Task InitFaceDetector(FaceDetectorType type = FaceDetectorType.FP32)
         {
             if (_faceDetector == null)
             {
@@ -86,6 +86,7 @@ namespace Emgu.CV.XamarinForms
                 await manager.Download();
                 _faceDetector = DnnInvoke.ReadNetFromCaffe(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
 
+                
                 if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
                 {
                     _faceDetector.SetPreferableBackend(Emgu.CV.Dnn.Backend.Cuda);
