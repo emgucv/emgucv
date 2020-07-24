@@ -4,7 +4,7 @@
 
 using System;
 
-#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#if UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
 using Color = UnityEngine.Color;
 #else
 using Color = System.Drawing.Color;
@@ -23,7 +23,7 @@ namespace Emgu.CV
         /// <param name="red">red</param>
         public DisplayColorAttribute(int blue, int green, int red)
         {
-#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#if UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
             _displayColor = new Color(red/255.0f, green/255.0f, blue/255.0f, 1.0f);
 #else
             _displayColor = Color.FromArgb(red, green, blue);

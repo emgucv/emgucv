@@ -10,7 +10,7 @@ using Emgu.CV.CvEnum;
 
 #if __UNIFIED__
 using CoreGraphics;
-#elif NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#elif NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_WEBGL || UNITY_EDITOR 
 #else
 using System.Drawing.Imaging;
 #endif

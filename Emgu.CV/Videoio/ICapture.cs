@@ -1,10 +1,9 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
-#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_WSA || NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE)
+#if !(__ANDROID__ || __UNIFIED__ || NETFX_CORE || UNITY_WSA || NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_WEBGL || UNITY_STANDALONE)
 #define HAVE_SERVICE_MODEL
 #endif
-
 
 using System;
 #if HAVE_SERVICE_MODEL
