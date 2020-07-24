@@ -8,7 +8,7 @@
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>Emgu.Util</Import_RootNamespace>
   </PropertyGroup>
-    <ItemGroup>
+  <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)*.cs" />
   </ItemGroup>
 </Project>

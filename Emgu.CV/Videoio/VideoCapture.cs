@@ -15,6 +15,7 @@ using System.ServiceModel;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Threading;
+using System.Threading.Tasks;
 //using System.Threading.Tasks;
 using Emgu.Util;
 using Emgu.CV.Structure;
@@ -22,6 +23,7 @@ using Emgu.CV.Util;
 
 namespace Emgu.CV
 {
+
     /// <summary> 
     /// Capture images from either camera or video file. 
     /// </summary>
@@ -409,10 +411,8 @@ namespace Emgu.CV
         private volatile GrabState _grabState = GrabState.Stopped;
 
         private void Run(
-#if WITH_SERVICE_MODEL
-                System.ServiceModel.Dispatcher.ExceptionHandler eh = null
-#endif
-            )
+            Emgu.Util.ExceptionHandler eh = null
+        )
         {
             try
             {
@@ -433,10 +433,8 @@ namespace Emgu.CV
             }
             catch (Exception e)
             {
-#if WITH_SERVICE_MODEL
                 if (eh != null && eh.HandleException(e))
                         return;
-#endif
                 throw new Exception("Capture error", e);
             }
             finally
@@ -447,24 +445,14 @@ namespace Emgu.CV
 
         private static void Wait(int millisecond)
         {
-            //Task t = Task.Delay(millisecond);
-            //t.Wait();
             Thread.Sleep(millisecond);
         }
 
-
-#if WITH_SERVICE_MODEL
         /// <summary>
         /// Start the grab process in a separate thread. Once started, use the ImageGrabbed event handler and RetrieveGrayFrame/RetrieveBgrFrame to obtain the images.
         /// </summary>
         /// <param name="eh">An exception handler. If provided, it will be used to handle exception in the capture thread.</param>
-        public void Start(System.ServiceModel.Dispatcher.ExceptionHandler eh = null)
-#else
-        /// <summary>
-        /// Start the grab process in a separate thread. Once started, use the ImageGrabbed event handler and RetrieveGrayFrame/RetrieveBgrFrame to obtain the images.
-        /// </summary>
-        public void Start()
-#endif
+        public void Start(Emgu.Util.ExceptionHandler eh = null)
         {
             if (_grabState == GrabState.Pause)
             {
@@ -476,14 +464,8 @@ namespace Emgu.CV
             {
                 _grabState = GrabState.Running;
 
-//              Task t = new Task(Run);
-//              t.Start();
-
-#if WITH_SERVICE_MODEL
-                ThreadPool.QueueUserWorkItem(delegate { Run(eh); });
-#else
-                ThreadPool.QueueUserWorkItem(delegate { Run(); });
-#endif
+              Task t = new Task(delegate { Run(eh); });
+              t.Start();
             }
         }
 
