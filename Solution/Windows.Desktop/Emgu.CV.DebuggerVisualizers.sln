@@ -20,22 +20,24 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Platform.Net", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.DebuggerVisualizers.Console.Test", "..\..\Emgu.CV.DebuggerVisualizers\Emgu.CV.DebuggerVisualizers.Console.Test\Emgu.CV.DebuggerVisualizers.Console.Test.csproj", "{37099E39-A3FC-4CB9-8365-6F5264C4337F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.NetStandard", "..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj", "{43D397BF-04C8-47E2-BAB1-EA73CC2B6D30}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{37099e39-a3fc-4cb9-8365-6f5264c4337f}*SharedItemsImports = 4
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{43d397bf-04c8-47e2-bab1-ea73cc2b6d30}*SharedItemsImports = 5
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{43d397bf-04c8-47e2-bab1-ea73cc2b6d30}*SharedItemsImports = 5
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{43d397bf-04c8-47e2-bab1-ea73cc2b6d30}*SharedItemsImports = 5
+		..\..\Emgu.CV\Emgu.CV.projitems*{43d397bf-04c8-47e2-bab1-ea73cc2b6d30}*SharedItemsImports = 5
+		..\..\Emgu.Util\Emgu.Util.projitems*{43d397bf-04c8-47e2-bab1-ea73cc2b6d30}*SharedItemsImports = 5
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
 		..\..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.projitems*{ac06f404-0a97-4142-a021-572d686e231f}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{adc3c8e5-ebcd-4d3c-b3a4-20cfe0e42fc1}*SharedItemsImports = 13
-		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{e8f09998-297b-485c-b234-e5ace5f55772}*SharedItemsImports = 4
-		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{e8f09998-297b-485c-b234-e5ace5f55772}*SharedItemsImports = 4
-		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{e8f09998-297b-485c-b234-e5ace5f55772}*SharedItemsImports = 4
 		..\..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.projitems*{e8f09998-297b-485c-b234-e5ace5f55772}*SharedItemsImports = 4
-		..\..\Emgu.CV\Emgu.CV.projitems*{e8f09998-297b-485c-b234-e5ace5f55772}*SharedItemsImports = 4
-		..\..\Emgu.Util\Emgu.Util.projitems*{e8f09998-297b-485c-b234-e5ace5f55772}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +72,18 @@ Global
 		{37099E39-A3FC-4CB9-8365-6F5264C4337F}.Release|x64.Build.0 = Release|Any CPU
 		{37099E39-A3FC-4CB9-8365-6F5264C4337F}.Release|x86.ActiveCfg = Release|Any CPU
 		{37099E39-A3FC-4CB9-8365-6F5264C4337F}.Release|x86.Build.0 = Release|Any CPU
+		{43D397BF-04C8-47E2-BAB1-EA73CC2B6D30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43D397BF-04C8-47E2-BAB1-EA73CC2B6D30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43D397BF-04C8-47E2-BAB1-EA73CC2B6D30}.Debug|x64.ActiveCfg = Debug|x64
+		{43D397BF-04C8-47E2-BAB1-EA73CC2B6D30}.Debug|x64.Build.0 = Debug|x64
+		{43D397BF-04C8-47E2-BAB1-EA73CC2B6D30}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{43D397BF-04C8-47E2-BAB1-EA73CC2B6D30}.Debug|x86.Build.0 = Debug|Any CPU
+		{43D397BF-04C8-47E2-BAB1-EA73CC2B6D30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43D397BF-04C8-47E2-BAB1-EA73CC2B6D30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43D397BF-04C8-47E2-BAB1-EA73CC2B6D30}.Release|x64.ActiveCfg = Release|x64
+		{43D397BF-04C8-47E2-BAB1-EA73CC2B6D30}.Release|x64.Build.0 = Release|x64
+		{43D397BF-04C8-47E2-BAB1-EA73CC2B6D30}.Release|x86.ActiveCfg = Release|Any CPU
+		{43D397BF-04C8-47E2-BAB1-EA73CC2B6D30}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

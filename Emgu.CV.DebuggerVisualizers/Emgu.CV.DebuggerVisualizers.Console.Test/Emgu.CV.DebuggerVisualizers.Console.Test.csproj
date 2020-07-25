@@ -52,6 +52,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
+      <Project>{43d397bf-04c8-47e2-bab1-ea73cc2b6d30}</Project>
+      <Name>Emgu.CV.Platform.NetStandard</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.DebuggerVisualizers.csproj">
       <Project>{e8f09998-297b-485c-b234-e5ace5f55772}</Project>
       <Name>Emgu.CV.DebuggerVisualizers</Name>
