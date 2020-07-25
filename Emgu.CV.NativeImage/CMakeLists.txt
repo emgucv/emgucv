@@ -11,6 +11,7 @@ INSTALL(
   PATTERN "*.cs"
   PATTERN "*.shproj"
   PATTERN "*.projitems"
+  PATTERN "*.csproj"
   PATTERN "*.resx"
   PATTERN ".svn" EXCLUDE
   PATTERN "obj" EXCLUDE
