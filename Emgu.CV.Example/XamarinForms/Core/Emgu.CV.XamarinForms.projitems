@@ -20,6 +20,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DownloadableFile.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DrawSubdivision.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DetectFace.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LicensePlateRecognitionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FileDownloadManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FindPedestrian.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DrawMatches.cs" />

@@ -52,6 +52,9 @@ namespace Emgu.CV.XamarinForms
             Button stopSignDetectionButton = new Button();
             stopSignDetectionButton.Text = "Stop Sign Detection (DNN module)";
 
+            Button licensePlateRecognitionButton = new Button();
+            licensePlateRecognitionButton.Text = "License Plate Recognition";
+
             List<View> buttonList = new List<View>()
             {
                 helloWorldButton,
@@ -65,6 +68,7 @@ namespace Emgu.CV.XamarinForms
                 maskRcnnButton,
                 stopSignDetectionButton,
                 yoloButton,
+                licensePlateRecognitionButton
             };
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Emgu.Util.Platform.ClrType != Emgu.Util.Platform.Clr.NetFxCore)
@@ -155,6 +159,11 @@ namespace Emgu.CV.XamarinForms
             featureDetectionButton.Clicked += (sender, args) =>
             {
                 MainPage.Navigation.PushAsync(new FeatureMatchingPage());
+            };
+
+            licensePlateRecognitionButton.Clicked += (sender, args) =>
+            {
+                MainPage.Navigation.PushAsync(new LicensePlateRecognitionPage());
             };
 
             if (Emgu.Util.Platform.ClrType == Emgu.Util.Platform.Clr.NetFxCore)
