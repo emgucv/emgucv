@@ -72,8 +72,20 @@ namespace Emgu.CV.XamarinForms
                 licensePlateRecognitionButton
             };
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) &&
-                Emgu.Util.Platform.ClrType != Emgu.Util.Platform.Clr.NetFxCore)
+            var openCVConfigDict = CvInvoke.ConfigDict;
+            bool haveViz = (openCVConfigDict["HAVE_OPENCV_VIZ"] != 0);
+            bool haveDNN = (openCVConfigDict["HAVE_OPENCV_DNN"] != 0);
+            bool hasInferenceEngine = false;
+            if (haveDNN)
+            {
+                var dnnBackends = DnnInvoke.AvailableBackends;
+                hasInferenceEngine = Array.Exists(dnnBackends, dnnBackend =>
+                    (dnnBackend.Backend == Dnn.Backend.InferenceEngine
+                     || dnnBackend.Backend == Dnn.Backend.InferenceEngineNgraph
+                     || dnnBackend.Backend == Dnn.Backend.InferenceEngineNnBuilder2019));
+            }
+
+            if (haveViz)
             {
                 Button viz3dButton = new Button();
                 viz3dButton.Text = "Simple 3D reconstruction";
@@ -165,40 +177,28 @@ namespace Emgu.CV.XamarinForms
                 MainPage.Navigation.PushAsync(new LicensePlateRecognitionPage());
             };
 
-            var dnnBackends = DnnInvoke.AvailableBackends;
-            bool hasInferenceEngine = Array.Exists(dnnBackends, dnnBackend =>
-                (dnnBackend.Backend == Dnn.Backend.InferenceEngine
-                 || dnnBackend.Backend == Dnn.Backend.InferenceEngineNgraph
-                 || dnnBackend.Backend == Dnn.Backend.InferenceEngineNnBuilder2019));
-            licensePlateRecognitionButton.IsVisible = hasInferenceEngine;
-            
-
-            if (Emgu.Util.Platform.ClrType == Emgu.Util.Platform.Clr.NetFxCore)
+            maskRcnnButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new MaskRcnnPage()); };
+            faceLandmarkDetectionButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new FaceLandmarkDetectionPage()); };
+            stopSignDetectionButton.Clicked += (sender, args) =>
             {
-                //No DNN module for UWP apps
-                maskRcnnButton.IsVisible = false;
-                faceLandmarkDetectionButton.IsVisible = false;
-                stopSignDetectionButton.IsVisible = false;
-                yoloButton.IsVisible = false;
-            }
-            else
-            {
-                maskRcnnButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new MaskRcnnPage()); };
-                faceLandmarkDetectionButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new FaceLandmarkDetectionPage()); };
-                stopSignDetectionButton.Clicked  += (sender, args) =>
-                {
-                    MaskRcnnPage stopSignDetectionPage = new MaskRcnnPage();
-                    stopSignDetectionPage.DefaultImage = "stop-sign.jpg";
-                    stopSignDetectionPage.ObjectsOfInterest = new string[] {"stop sign"};
-                    MainPage.Navigation.PushAsync(stopSignDetectionPage);
-                };
-                yoloButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new YoloPage()); };
-            }
+                MaskRcnnPage stopSignDetectionPage = new MaskRcnnPage();
+                stopSignDetectionPage.DefaultImage = "stop-sign.jpg";
+                stopSignDetectionPage.ObjectsOfInterest = new string[] { "stop sign" };
+                MainPage.Navigation.PushAsync(stopSignDetectionPage);
+            };
+            yoloButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new YoloPage()); };
 
             ocrButton.Clicked += (sender, args) =>
             {
                 MainPage.Navigation.PushAsync(new OcrPage());
             };
+
+            maskRcnnButton.IsVisible = haveDNN;
+            faceLandmarkDetectionButton.IsVisible = haveDNN;
+            stopSignDetectionButton.IsVisible = haveDNN;
+            yoloButton.IsVisible = haveDNN;
+            licensePlateRecognitionButton.IsVisible = hasInferenceEngine;
+
         }
 
         public Page CurrentPage
