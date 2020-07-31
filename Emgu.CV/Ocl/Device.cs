@@ -70,7 +70,7 @@ namespace Emgu.CV.Ocl
         /// <summary>
         /// Set the native device pointer
         /// </summary>
-        /// <param name="nativeDevicePointer"></param>
+        /// <param name="nativeDevicePointer">The native device pointer</param>
         public void Set(IntPtr nativeDevicePointer)
         {
             OclInvoke.oclDeviceSet(_ptr, nativeDevicePointer);

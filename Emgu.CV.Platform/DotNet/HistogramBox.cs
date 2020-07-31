@@ -23,34 +23,27 @@ namespace Emgu.CV.UI
     /// </summary>
     public partial class HistogramBox : ImageBox
     {
-        //private Graphics _graphic;
-
         /// <summary>
         /// Construct a histogram control
         /// </summary>
         public HistogramBox()
         : base()
         {
-            
+
         }
 
         /// <summary>
-        /// Add a plot of the 1D histogram. You should call the Refresh() function to update the control after all modification is complete.
+        /// Add a plot of the 1D histogram. 
         /// </summary>
         /// <param name="name">The name of the histogram</param>
         /// <param name="color">The drawing color</param>
         /// <param name="histogram">The 1D histogram to be drawn</param>
         /// <param name="binSize">The size of the bin</param>
         /// <param name="ranges">The ranges</param>
+        /// <returns>The image of the histogram</returns>
         public Mat GenerateHistogram(String name, Color color, Mat histogram, int binSize, float[] ranges)
         {
             //Debug.Assert(histogram.Dimension == 1, Properties.StringTable.Only1DHistogramSupported);
-            
-            //GraphPane pane = new GraphPane();
-            // Set the Title
-            //pane.Title.Text = name;
-            //pane.XAxis.Title.Text = "Value";
-            //pane.YAxis.Title.Text = "Count";
 
             #region draw the histogram
             RangeF range = new RangeF(ranges[0], ranges[1]);
@@ -97,25 +90,18 @@ namespace Emgu.CV.UI
                         new MCvScalar(0, 0, 255));
                     return render;
                 }
-                //PointPairList pointList = new PointPairList(
-                //   bin,
-                //   binVal);
-
-                //pane.AddCurve(name, pointList, color);
             }
-        
-        #endregion
+            #endregion
 
-        //zedGraphControl1.MasterPane.Add(pane);
-    }
+        }
 
-    /// <summary>
-    /// Generate histograms for the image. One histogram is generated for each color channel.
-    /// You will need to call the Refresh function to do the painting afterward.
-    /// </summary>
-    /// <param name="image">The image to generate histogram from</param>
-    /// <param name="numberOfBins">The number of bins for each histogram</param>
-    public void GenerateHistograms(IInputArray image, int numberOfBins)
+        /// <summary>
+        /// Generate histograms for the image. One histogram is generated for each color channel.
+        /// You will need to call the Refresh function to do the painting afterward.
+        /// </summary>
+        /// <param name="image">The image to generate histogram from</param>
+        /// <param name="numberOfBins">The number of bins for each histogram</param>
+        public void GenerateHistograms(IInputArray image, int numberOfBins)
         {
             using (InputArray iaImage = image.GetInputArray())
             {
@@ -234,7 +220,7 @@ namespace Emgu.CV.UI
                         float[] ranges = new float[] { minVal, maxVal };
                         CvInvoke.CalcHist(vm, new int[] { 0 }, null, hist, new int[] { numberOfBins }, ranges, false);
                         //hist.Calculate(new IImage[1] { channels[i] }, true, null);
-                        histograms[i]  = GenerateHistogram(channelNames[i], colors[i], hist, numberOfBins, ranges);
+                        histograms[i] = GenerateHistogram(channelNames[i], colors[i], hist, numberOfBins, ranges);
                     }
                 }
 
@@ -277,7 +263,6 @@ namespace Emgu.CV.UI
         {
             this.Image = null;
         }
-
 
     }
 }
