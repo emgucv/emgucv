@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV.CvEnum;
+using Emgu.CV.Dnn;
 using Xamarin.Forms;
 using Emgu.CV.Structure;
 using Emgu.Util.TypeEnum;
@@ -71,7 +72,8 @@ namespace Emgu.CV.XamarinForms
                 licensePlateRecognitionButton
             };
 
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && Emgu.Util.Platform.ClrType != Emgu.Util.Platform.Clr.NetFxCore)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) &&
+                Emgu.Util.Platform.ClrType != Emgu.Util.Platform.Clr.NetFxCore)
             {
                 Button viz3dButton = new Button();
                 viz3dButton.Text = "Simple 3D reconstruction";
@@ -97,13 +99,13 @@ namespace Emgu.CV.XamarinForms
 
             // The root page of your application
             ContentPage page =
-              new ContentPage()
-              {
-                  Content = new ScrollView()
-                  {
-                      Content = buttonsLayout,
-                  }
-              };
+                new ContentPage()
+                {
+                    Content = new ScrollView()
+                    {
+                        Content = buttonsLayout,
+                    }
+                };
 
             String aboutIcon = null;
             /*
@@ -118,23 +120,20 @@ namespace Emgu.CV.XamarinForms
                 aboutIcon = "questionmark.png";*/
 
             MainPage =
-             new NavigationPage(
-                page
-             );
+                new NavigationPage(
+                    page
+                );
 
             ToolbarItem aboutItem = new ToolbarItem("About", aboutIcon,
-               () =>
-               {
-                   MainPage.Navigation.PushAsync(new AboutPage());
-                   //page.DisplayAlert("Emgu CV Examples", "App version: ...", "Ok");
-               }
+                () =>
+                {
+                    MainPage.Navigation.PushAsync(new AboutPage());
+                    //page.DisplayAlert("Emgu CV Examples", "App version: ...", "Ok");
+                }
             );
             page.ToolbarItems.Add(aboutItem);
 
-            helloWorldButton.Clicked += (sender, args) =>
-            {
-                MainPage.Navigation.PushAsync(new HelloWorldPage());
-            };
+            helloWorldButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new HelloWorldPage()); };
 
             planarSubdivisionButton.Clicked += (sender, args) =>
             {
@@ -145,7 +144,7 @@ namespace Emgu.CV.XamarinForms
             {
                 MainPage.Navigation.PushAsync(new FaceDetectionPage());
             };
-            
+
             shapeDetectionButton.Clicked += (sender, args) =>
             {
                 MainPage.Navigation.PushAsync(new ShapeDetectionPage());
@@ -165,6 +164,14 @@ namespace Emgu.CV.XamarinForms
             {
                 MainPage.Navigation.PushAsync(new LicensePlateRecognitionPage());
             };
+
+            var dnnBackends = DnnInvoke.AvailableBackends;
+            bool hasInferenceEngine = Array.Exists(dnnBackends, dnnBackend =>
+                (dnnBackend.Backend == Dnn.Backend.InferenceEngine
+                 || dnnBackend.Backend == Dnn.Backend.InferenceEngineNgraph
+                 || dnnBackend.Backend == Dnn.Backend.InferenceEngineNnBuilder2019));
+            licensePlateRecognitionButton.IsVisible = hasInferenceEngine;
+            
 
             if (Emgu.Util.Platform.ClrType == Emgu.Util.Platform.Clr.NetFxCore)
             {
