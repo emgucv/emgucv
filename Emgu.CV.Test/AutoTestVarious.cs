@@ -2854,7 +2854,7 @@ namespace Emgu.CV.Test
 
             images[0] = EmguAssert.LoadMat("stitch1.jpg");
             images[1] = EmguAssert.LoadMat("lena.jpg");
-            images[2] = EmguAssert.LoadMat("license-plate.jpg");
+            images[2] = EmguAssert.LoadMat("dog416.png");
             images[3] = EmguAssert.LoadMat("pedestrian.png");
 
             using (Stitcher stitcher = new Stitcher())
