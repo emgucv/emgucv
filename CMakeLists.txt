@@ -754,6 +754,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   stereo
   surface_matching
   alphamat
+  intensity_transform
   )
 
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})

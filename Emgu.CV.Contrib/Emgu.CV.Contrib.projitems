@@ -34,5 +34,6 @@
 	<Compile Include="$(MSBuildThisFileDirectory)Stereo\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)SurfaceMatching\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)DnnSuperres\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)IntensityTransform\*.cs" />
   </ItemGroup>
 </Project>
