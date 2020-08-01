@@ -26,5 +26,9 @@ jobs:
       working-directory: ${{ github.workspace }}\platforms\windows\
     - uses: actions/upload-artifact@v2
       with:
+        name: emgucv-windows-nsis-build-log
+        path: ${{ github.workspace }}\build_x64\_CPack_Packages\win64\NSIS\*.log
+    - uses: actions/upload-artifact@v2
+      with:
         name: emgucv-windows-zip-package
         path: ${{ github.workspace }}\build_x64\*.zip
