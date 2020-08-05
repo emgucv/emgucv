@@ -2,6 +2,7 @@
 #  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
+IF (TARGET Emgu.CV.Platform.NetStandard)
 IF (DOTNET_FOUND)
   PROJECT(Emgu.CV.Bitmap)
   BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.csproj" "" ALL)  
@@ -18,4 +19,4 @@ IF (DOTNET_FOUND)
   endif()
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard)
 ENDIF()
-
+ENDIF()
