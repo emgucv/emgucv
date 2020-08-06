@@ -114,6 +114,8 @@ mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DnnSuperres
 cp -r ../Emgu.CV.Contrib/DnnSuperres/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DnnSuperres
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/IntensityTransform
 cp -r ../Emgu.CV.Contrib/IntensityTransform/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/IntensityTransform
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rapid
+cp -r ../Emgu.CV.Contrib/Rapid/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rapid
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.OCR/
 

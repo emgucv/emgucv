@@ -35,5 +35,6 @@
 	<Compile Include="$(MSBuildThisFileDirectory)SurfaceMatching\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)DnnSuperres\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)IntensityTransform\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Rapid\*.cs" />
   </ItemGroup>
 </Project>
