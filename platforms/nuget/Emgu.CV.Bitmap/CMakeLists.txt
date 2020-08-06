@@ -13,7 +13,7 @@ IF (TARGET Emgu.CV.Bitmap)
   ELSE()
   ADD_CUSTOM_TARGET(
     ${PROJECT_NAME} ALL
-    COMMAND ${DOTNET_EXECUTABLE} pack -c ${DEFAULT_CS_CONFIG} "${CMAKE_CURRENT_SOURCE_DIR}/../../../Emgu.CV.NativeImage/Emgu.CV.Bitmap/Emgu.CV.Bitmap.csproj" -p:NuspecFile="${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" -o "${CMAKE_CURRENT_SOURCE_DIR}/../"
+    COMMAND ${DOTNET_EXECUTABLE} pack -c ${DEFAULT_CS_CONFIG} "${CMAKE_CURRENT_SOURCE_DIR}/../../../Emgu.CV.Platform/Emgu.CV.Bitmap/Emgu.CV.Bitmap.csproj" -p:NuspecFile="${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" -o "${CMAKE_CURRENT_SOURCE_DIR}/../"
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     )
   ENDIF()

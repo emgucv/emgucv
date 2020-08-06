@@ -20,7 +20,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Platform.Net", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Platform.NetFramework", "..\..\Emgu.CV.Platform\DotNet\Framework\Emgu.CV.Platform.NetFramework.csproj", "{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emgu.CV.NativeImage\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj", "{0D749AFA-740A-42C5-9B29-C3FAC279082D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj", "{0D749AFA-740A-42C5-9B29-C3FAC279082D}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

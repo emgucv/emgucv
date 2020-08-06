@@ -24,7 +24,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Raspbian", 
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Ubuntu", "..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.shproj", "{86A21342-2DA9-4841-B1BD-B323AC5B81FD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emgu.CV.NativeImage\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj", "{5ED72F11-F0CE-4847-92F8-5C798628A4CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj", "{5ED72F11-F0CE-4847-92F8-5C798628A4CB}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

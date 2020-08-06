@@ -253,7 +253,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.NativeImage\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj" />
+    <ProjectReference Include="..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj" />
     <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
   </ItemGroup>
   <Import Project="..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems" Label="Shared" />

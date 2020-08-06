@@ -61,7 +61,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildInfo.NetCore.Console",
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Platform.Net", "..\..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.shproj", "{AC06F404-0A97-4142-A021-572D686E231F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emgu.CV.NativeImage\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj", "{586B61D2-F1FE-499E-884C-470054E00C35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj", "{586B61D2-F1FE-499E-884C-470054E00C35}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

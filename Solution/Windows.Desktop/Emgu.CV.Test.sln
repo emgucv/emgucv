@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Platform.NetFramewo
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Platform.Net", "..\..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.shproj", "{AC06F404-0A97-4142-A021-572D686E231F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj", "{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
@@ -112,6 +114,18 @@ Global
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|x64.Build.0 = Release|x64
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|x86.ActiveCfg = Release|x86
 		{90E78BBF-C7FE-4D8E-ADE1-75448E866FDB}.Release|x86.Build.0 = Release|x86
+		{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}.Debug|x64.Build.0 = Debug|Any CPU
+		{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}.Debug|x86.Build.0 = Debug|Any CPU
+		{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}.Release|x64.ActiveCfg = Release|Any CPU
+		{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}.Release|x64.Build.0 = Release|Any CPU
+		{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}.Release|x86.ActiveCfg = Release|Any CPU
+		{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
