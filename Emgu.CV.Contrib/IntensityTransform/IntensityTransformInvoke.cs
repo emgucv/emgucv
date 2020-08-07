@@ -13,14 +13,21 @@ using System.Diagnostics;
 
 namespace Emgu.CV.IntensityTransform
 {
-    internal static partial class IntensityTransformInvoke
+    /// <summary>
+    /// Implementations of intensity transformation algorithms to adjust image contrast.
+    /// </summary>
+    public static partial class IntensityTransformInvoke
     {
         static IntensityTransformInvoke()
         {
             CvInvoke.CheckLibraryLoaded();
         }
 
-        
+        /// <summary>
+        /// Given an input bgr or grayscale image and constant c, apply log transformation to the image on domain [0, 255] and return the resulting image.
+        /// </summary>
+        /// <param name="input">Input bgr or grayscale image.</param>
+        /// <param name="output">resulting image of log transformations.</param>
         public static void LogTransform(Mat input, Mat output)
         {
             cveLogTransform(input, output);
@@ -29,11 +36,11 @@ namespace Emgu.CV.IntensityTransform
         internal static extern void cveLogTransform(IntPtr input, IntPtr output);
 
         /// <summary>
-        /// 
+        /// Given an input bgr or grayscale image and constant gamma, apply power-law transformation, a.k.a. gamma correction to the image on domain [0, 255] and return the resulting image.
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="output"></param>
-        /// <param name="gamma"></param>
+        /// <param name="input">Input bgr or grayscale image.</param>
+        /// <param name="output">resulting image of gamma corrections.</param>
+        /// <param name="gamma">constant in c*r^gamma where r is pixel value.</param>
         public static void GammaCorrection(Mat input, Mat output, float gamma)
         {
             cveGammaCorrection(input, output, gamma);
