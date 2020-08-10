@@ -1014,20 +1014,26 @@ ENDIF()
 SET(EMGUCV_NUGET_FILE_LIST "")
 SET(EMGUCV_NUGET_DEPENDENCY "")
 SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
+
+IF (HAVE_IOS)
+  SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\xamarinios10\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\xamarinios10\" />")
+  SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
+      <group targetFramework=\"Xamarin.iOS1.0\">
+        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
+      </group>")
+ENDIF()
+
 SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\netstandard2.0\" />
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\netstandard2.0\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\xamarinios10\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\xamarinios10\" />
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
       <group targetFramework=\".NETStandard2.0\">
-        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-      </group>
-      <group targetFramework=\"Xamarin.iOS1.0\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
