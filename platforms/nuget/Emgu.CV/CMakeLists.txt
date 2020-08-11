@@ -18,10 +18,11 @@ IF (TARGET Emgu.CV.Platform.NetStandard)
     )
   ENDIF()
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard)
-  ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard.IOS)
-
-
   
+  IF (TARGET Emgu.CV.Platform.NetStandard.IOS)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard.IOS)
+  ENDIF()
+
   if(ENABLE_SOLUTION_FOLDERS)
     set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "nuget")
   endif() 
