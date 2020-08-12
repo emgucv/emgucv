@@ -1049,7 +1049,7 @@ SET(EMGUCV_BITMAP_NUGET_FILE_LIST "${EMGUCV_BITMAP_NUGET_FILE_LIST}
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Bitmap.xml\" target=\"lib\\netstandard2.0\" />
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
-SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
+SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "${EMGUCV_BITMAP_NUGET_DEPENDENCY} 
       <group targetFramework=\".NETStandard2.0\">
         <dependency id=\"System.Drawing.Common\" version=\"4.7.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
@@ -1071,7 +1071,7 @@ IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
 	")
   SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
-      <group targetFramework=\"net461\">
+      <group targetFramework=\".NETFramework4.6.1\">
         <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </group>")
   SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
@@ -1087,7 +1087,10 @@ IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
   SET(EMGUCV_UI_NUGET_DEPENDENCY "
 	<dependencies>
 ${EMGUCV_UI_NUGET_DEPENDENCY}
-    </dependencies>")
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName=\"System.Windows.Forms\" targetFramework=\".NETFramework4.6.1\" />
+    </frameworkAssemblies>")
 ENDIF()
 
 SET(EMGUCV_NUGET_DEPENDENCY "
@@ -1231,20 +1234,11 @@ ENDIF()
 SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "	<dependencies>
       <group targetFramework=\"net461\">${EMGUCV_WINDOWS_NETFRAMEWORK_NUGET_DEPENDENCY}</group>
       <group targetFramework=\".NETStandard2.0\">${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}</group>
-      <group targetFramework=\".NETCoreApp3.1\">
-        ${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}
-        <dependency id=\"System.Drawing.Common\" version=\"4.7.0\" exclude=\"Build,Analyzers\" />
-      </group>
-      <frameworkReferences>
-        <group targetFramework=\".NETCoreApp3.1\">
-          <frameworkReference name=\"Microsoft.WindowsDesktop.App.WindowsForms\" />
-        </group>
-      </frameworkReferences>
+      <group targetFramework=\".NETCoreApp3.1\">${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}</group>
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName=\"mscorlib\" targetFramework=\".NETFramework4.6.1\" />
       <frameworkAssembly assemblyName=\"System.Drawing\" targetFramework=\".NETFramework4.6.1\" />
-      <frameworkAssembly assemblyName=\"System.Windows.Forms\" targetFramework=\".NETFramework4.6.1\" />
     </frameworkAssemblies>")
 
 IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
