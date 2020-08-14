@@ -1125,7 +1125,7 @@ STRING(STRIP "${EMGUCV_WINDOWS_NUGET_TITLE}" EMGUCV_WINDOWS_NUGET_TITLE)
 
 
 IF(WITH_CUDA)
-    SET(CUDA_EULA_URL https://docs.nvidia.com/pdf/EULA.pdf)
+    
 	SET(EMGUCV_WINDOWS_NUGET_TITLE "${EMGUCV_WINDOWS_NUGET_TITLE} with CUDA support")
 	SET(EMGU_CUDA_NUGET_TITLE "Native x64 CUDA dependency for EMGU CV")
 	SET(EMGU_CUDA_NPP_NUGET_FILE_LIST "<file src=\"${EMGU_NPP_NUGET_ID}.targets\" target=\"build\\${EMGU_NPP_NUGET_ID}.targets\" />")
@@ -1161,18 +1161,19 @@ IF(WITH_CUDA)
 	SET(EMGUCV_WINDOWS_NETFRAMEWORK_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NETFRAMEWORK_NUGET_DEPENDENCY}<dependency id=\"${EMGU_NPP_NUGET_ID}\" version=\"[${EMGU_NPP_VERSION}]\" />")
 
 	IF(HAVE_WINDESKTOP_X64)
-		file(DOWNLOAD ${CUDA_EULA_URL} "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows.cuda.npp/EULA.pdf")
-		file(DOWNLOAD ${CUDA_EULA_URL} "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows.cuda.cufft/EULA.pdf")
+	    #SET(CUDA_EULA_URL https://docs.nvidia.com/pdf/EULA.pdf)
+		#file(DOWNLOAD ${CUDA_EULA_URL} "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows.cuda.npp/EULA.pdf")
+		#file(DOWNLOAD ${CUDA_EULA_URL} "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows.cuda.cufft/EULA.pdf")
 		#file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cudnn")
 		SET(EMGU_CUDA_NPP_NUGET_FILE_LIST "${EMGU_CUDA_NPP_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cu*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cufft*.dll;..\\..\\..\\libs\\x64\\cudnn*.dll\" target=\"build\\x64\" /> 
 		<file src=\"..\\..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
-		<file src=\"EULA.pdf\" target=\"CUDA_EULA.pdf\" />")
+		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
 		SET(EMGU_CUFFT_NUGET_FILE_LIST "${EMGU_CUFFT_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cufft*.dll\" target=\"build\\x64\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-		<file src=\"EULA.pdf\" target=\"CUDA_EULA.pdf\" />")
+		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
 		SET(EMGU_CUDNN_NUGET_FILE_LIST "${EMGU_CUDNN_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cudnn*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cudnn_ops_*.dll;..\\..\\..\\libs\\x64\\cudnn_cnn_*.dll\" target=\"build\\x64\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
