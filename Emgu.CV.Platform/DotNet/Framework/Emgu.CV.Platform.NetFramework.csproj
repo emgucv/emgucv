@@ -123,7 +123,7 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Emgu.CV.NativeImage\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj">
+    <ProjectReference Include="..\..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj">
       <Project>{586b61d2-f1fe-499e-884c-470054e00c35}</Project>
       <Name>Emgu.CV.Bitmap</Name>
     </ProjectReference>

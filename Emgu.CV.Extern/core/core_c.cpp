@@ -1023,6 +1023,34 @@ void cveMomentsRelease(cv::Moments** moments)
 	*moments = 0;
 }
 
+void cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value)
+{
+	key->clear();
+	value->clear();
+	
+	key->push_back("HAVE_OPENCV_VIZ");
+#ifdef HAVE_OPENCV_VIZ
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+	
+	key->push_back("HAVE_OPENCV_VIDEOIO");
+#ifdef HAVE_OPENCV_VIDEOIO
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_DNN");
+#ifdef HAVE_OPENCV_DNN
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+	
+}
+
 #if defined(CV_ICC) && defined(_M_IX86)
 //Fix for intel compiler: Intel compiler has not implemented __iso_volatile_load64 for x86 architecture.
 __int64 __iso_volatile_load64(const volatile __int64* _mem)

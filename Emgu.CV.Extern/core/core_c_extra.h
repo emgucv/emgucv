@@ -284,4 +284,6 @@ CVAPI(void) cveRngRelease(cv::RNG** rng);
 
 CVAPI(cv::Moments*) cveMomentsCreate();
 CVAPI(void) cveMomentsRelease(cv::Moments** moments);
+
+CVAPI(void) cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value);
 #endif

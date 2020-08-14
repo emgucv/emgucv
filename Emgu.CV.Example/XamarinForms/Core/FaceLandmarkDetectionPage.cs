@@ -46,38 +46,17 @@ namespace Emgu.CV.XamarinForms
         private Net _faceDetector = null;
         private FacemarkLBF _facemark = null;
 
-        /// <summary>
-        /// The face detector type
-        /// </summary>
-        public enum FaceDetectorType
-        {
-            /// <summary>
-            /// 32-bit floating point model
-            /// </summary>
-            FP32,
-            /// <summary>
-            /// 16-bit floating point model
-            /// </summary>
-            Fp16
-        }
-
-        private async Task InitFaceDetector(FaceDetectorType type = FaceDetectorType.FP32)
+        private async Task InitFaceDetector()
         {
             if (_faceDetector == null)
             {
                 FileDownloadManager manager = new FileDownloadManager();
 
-                if (type == FaceDetectorType.FP32)
-                {
-                    manager.AddFile(
-                        "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel",
-                        _modelFolderName);
-                } else if (type == FaceDetectorType.Fp16)
-                {
-                    manager.AddFile(
-                        "https://raw.githubusercontent.com/opencv/opencv_3rdparty/dnn_samples_face_detector_20180205_fp16/res10_300x300_ssd_iter_140000_fp16.caffemodel",
-                        _modelFolderName);
-                }
+
+                manager.AddFile(
+                    "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel",
+                    _modelFolderName);
+
                 manager.AddFile(
                     "https://raw.githubusercontent.com/opencv/opencv/4.0.1/samples/dnn/face_detector/deploy.prototxt",
                     _modelFolderName);
@@ -86,14 +65,11 @@ namespace Emgu.CV.XamarinForms
                 await manager.Download();
                 _faceDetector = DnnInvoke.ReadNetFromCaffe(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
 
-                
+
                 if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
                 {
                     _faceDetector.SetPreferableBackend(Emgu.CV.Dnn.Backend.Cuda);
-                    if (type == FaceDetectorType.FP32)
-                        _faceDetector.SetPreferableTarget(Emgu.CV.Dnn.Target.Cuda);
-                    else if (type == FaceDetectorType.Fp16)
-                        _faceDetector.SetPreferableTarget(Emgu.CV.Dnn.Target.CudaFp16);
+                    _faceDetector.SetPreferableTarget(Emgu.CV.Dnn.Target.Cuda);
                 }
             }
         }
@@ -132,7 +108,7 @@ namespace Emgu.CV.XamarinForms
             {
                 float confidenceThreshold = 0.5f;
 
-                List<Rectangle> fullFaceRegions = new List<Rectangle>(); 
+                List<Rectangle> fullFaceRegions = new List<Rectangle>();
                 List<Rectangle> partialFaceRegions = new List<Rectangle>();
                 Rectangle imageRegion = new Rectangle(Point.Empty, image.Size);
 
@@ -153,7 +129,7 @@ namespace Emgu.CV.XamarinForms
                             xRightTop - xLeftBottom,
                             yRightTop - yLeftBottom);
                         Rectangle faceRegion = Rectangle.Round(objectRegion);
-                        
+
                         if (imageRegion.Contains(faceRegion))
                             fullFaceRegions.Add(faceRegion);
                         else
@@ -212,7 +188,6 @@ namespace Emgu.CV.XamarinForms
             var button = this.GetButton();
             button.Text = _defaultButtonText;
             button.Clicked += OnButtonClicked;
-            
         }
 
         private void _capture_ImageGrabbed(object sender, EventArgs e)
@@ -275,13 +250,13 @@ namespace Emgu.CV.XamarinForms
                     }
                 });
 #else
-                    //Handle video
-                    if (_capture == null)
-                    {
-                        _capture = new VideoCapture();
-                        _capture.ImageGrabbed += _capture_ImageGrabbed;
-                    }
-                    _capture.Start();
+                //Handle video
+                if (_capture == null)
+                {
+                    _capture = new VideoCapture();
+                    _capture.ImageGrabbed += _capture_ImageGrabbed;
+                }
+                _capture.Start();
 #endif
             }
             else

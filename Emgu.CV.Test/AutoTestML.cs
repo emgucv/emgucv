@@ -929,7 +929,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestKMeans2()
         {
-            int clustersCount = 2;
+            //int clustersCount = 2;
             int sampleCount = 300;
             int maxVal = 500;
 

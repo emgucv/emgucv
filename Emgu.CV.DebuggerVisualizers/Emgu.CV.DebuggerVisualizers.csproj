@@ -87,7 +87,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Emgu.CV.NativeImage\Emgu.CV.Bitmap\BitmapExtension.cs">
+    <Compile Include="..\Emgu.CV.Platform\Emgu.CV.Bitmap\BitmapExtension.cs">
       <Link>BitmapExtension.cs</Link>
     </Compile>
     <Compile Include="BitmapVisualizer.cs" />
@@ -106,12 +106,13 @@
       <Version>4.3.0</Version>
     </PackageReference>
   </ItemGroup>
-  <Import Project="..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
+  <ItemGroup>
+    <ProjectReference Include="..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
+      <Project>{43d397bf-04c8-47e2-bab1-ea73cc2b6d30}</Project>
+      <Name>Emgu.CV.Platform.NetStandard</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.projitems" Label="Shared" />
-  <Import Project="..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" />
-  <Import Project="..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" />
-  <Import Project="..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
-  <Import Project="..\Emgu.CV\Emgu.CV.projitems" Label="Shared" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll to ..\libs" Importance="high" />

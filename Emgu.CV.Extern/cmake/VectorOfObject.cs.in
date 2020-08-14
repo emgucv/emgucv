@@ -176,6 +176,7 @@ namespace ${NAMESPACE_CS}
       /// <summary>
       /// Create the standard vector of ${VECTOR_NAME} 
       /// </summary>
+	  /// <param name="values">The values to be pushed to the vector</param>
       public VectorOf${VECTOR_NAME}(${ELEMENT_OF_ELEMENT}[][] values)
          : this()
       {

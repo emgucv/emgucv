@@ -203,9 +203,6 @@ namespace Emgu.CV.XamarinForms
                                     subRegion);
                         }
                     }
-
-
-
                 }
             }
         }

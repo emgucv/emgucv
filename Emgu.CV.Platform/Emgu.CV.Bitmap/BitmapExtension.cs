@@ -278,6 +278,8 @@ namespace Emgu.CV
         /// <summary>
         /// Create an Image &lt; TColor, TDepth &gt; from Bitmap
         /// </summary>
+        /// <typeparam name="TColor">The color type of the Image</typeparam>
+        /// <typeparam name="TDepth">The depth type of the Image</typeparam>
         public static Image<TColor, TDepth> ToImage<TColor, TDepth>(this Bitmap bitmap) where
             TColor : struct, IColor
             where TDepth : new()
@@ -298,7 +300,7 @@ namespace Emgu.CV
                         using (Image<Bgra, Byte> mat =
                             new Image<Bgra, Byte>(size.Width, size.Height, data.Stride, data.Scan0))
                         {
-                            CvInvoke.MixChannels(mat, image, new[] {0, 0, 1, 1, 2, 2});
+                            CvInvoke.MixChannels(mat, image, new[] { 0, 0, 1, 1, 2, 2 });
                         }
 
                         bitmap.UnlockBits(data);
@@ -347,7 +349,7 @@ namespace Emgu.CV
                                 CvInvoke.LUT(indexValue, gTable, g);
                                 CvInvoke.LUT(indexValue, rTable, r);
                                 CvInvoke.LUT(indexValue, aTable, a);
-                                using (VectorOfMat mv = new VectorOfMat(new Mat[] {b, g, r, a}))
+                                using (VectorOfMat mv = new VectorOfMat(new Mat[] { b, g, r, a }))
                                 {
                                     CvInvoke.Merge(mv, image);
                                 }
@@ -406,7 +408,7 @@ namespace Emgu.CV
                         int v = 0;
                         for (int i = 0; i < rows; i++, srcAddress += data.Stride)
                         {
-                            Marshal.Copy((IntPtr) srcAddress, row, 0, row.Length);
+                            Marshal.Copy((IntPtr)srcAddress, row, 0, row.Length);
 
                             for (int j = 0; j < cols; j++, v <<= 1)
                             {
@@ -416,7 +418,7 @@ namespace Emgu.CV
                                     v = row[j >> 3];
                                 }
 
-                                imagedata[i, j, 0] = (v & mask) == 0 ? (Byte) 0 : (Byte) 255;
+                                imagedata[i, j, 0] = (v & mask) == 0 ? (Byte)0 : (Byte)255;
                             }
                         }
                     }
@@ -441,14 +443,14 @@ namespace Emgu.CV
                     {
                         Byte[,,] data = tmp1.Data;
                         for (int i = 0; i < size.Width; i++)
-                        for (int j = 0; j < size.Height; j++)
-                        {
-                            Color color = bitmap.GetPixel(i, j);
-                            data[j, i, 0] = color.B;
-                            data[j, i, 1] = color.G;
-                            data[j, i, 2] = color.R;
-                            data[j, i, 3] = color.A;
-                        }
+                            for (int j = 0; j < size.Height; j++)
+                            {
+                                Color color = bitmap.GetPixel(i, j);
+                                data[j, i, 0] = color.B;
+                                data[j, i, 1] = color.G;
+                                data[j, i, 2] = color.R;
+                                data[j, i, 3] = color.A;
+                            }
 
                         image.ConvertFrom<Bgra, Byte>(tmp1);
                     }
@@ -467,6 +469,8 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="bmp">the bitmap to copy data from</param>
         /// <param name="image">The image to copy data to</param>
+        /// <typeparam name="TColor">The color type of the Image</typeparam>
+        /// <typeparam name="TDepth">The depth type of the Image</typeparam>
         private static void CopyFromBitmap<TColor, TDepth>(this Image<TColor, TDepth> image, Bitmap bmp) where
             TColor : struct, IColor
             where TDepth : new()
@@ -509,6 +513,8 @@ namespace Emgu.CV
         /// <summary> 
         /// Convert this image into Bitmap, the pixel values are copied over to the Bitmap
         /// </summary>
+        /// <typeparam name="TColor">The color type of the Image</typeparam>
+        /// <typeparam name="TDepth">The depth type of the Image</typeparam>
         /// <remarks> For better performance on Image&lt;Gray, Byte&gt; and Image&lt;Bgr, Byte&gt;, consider using the Bitmap property </remarks>
         /// <returns> This image in Bitmap format, the pixel data are copied over to the Bitmap</returns>
         public static Bitmap ToBitmap<TColor, TDepth>(this Image<TColor, TDepth> image) where
@@ -570,6 +576,8 @@ namespace Emgu.CV
         /// <param name="image">The image to be converted to Bitmap</param>
         /// <param name="width">The width of the bitmap</param>
         /// <param name="height"> The height of the bitmap</param>
+        /// <typeparam name="TColor">The color type of the Image</typeparam>
+        /// <typeparam name="TDepth">The depth type of the Image</typeparam>
         /// <returns> This image in Bitmap format of the specific size</returns>
         public static Bitmap ToBitmap<TColor, TDepth>(this Image<TColor, TDepth> image, int width, int height) where
             TColor : struct, IColor
@@ -584,6 +592,8 @@ namespace Emgu.CV
         /// <summary>
         /// Convert the CudaImage to its equivalent Bitmap representation
         /// </summary>
+        /// <typeparam name="TColor">The color type of the CudaImage</typeparam>
+        /// <typeparam name="TDepth">The depth type of the CudaImage</typeparam>
         public static Bitmap ToBitmap<TColor, TDepth>(this CudaImage<TColor, TDepth> cudaImage) where
             TColor : struct, IColor
             where TDepth : new()

@@ -6,7 +6,7 @@
 
 #include "phase_unwrapping_c.h"
 
-CVAPI(cv::phase_unwrapping::HistogramPhaseUnwrapping*) cveHistogramPhaseUnwrappingCreate(
+cv::phase_unwrapping::HistogramPhaseUnwrapping* cveHistogramPhaseUnwrappingCreate(
 	int width,
 	int height,
 	float histThresh,

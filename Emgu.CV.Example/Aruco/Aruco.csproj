@@ -121,7 +121,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.NativeImage\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj">
       <Project>{586b61d2-f1fe-499e-884c-470054e00c35}</Project>
       <Name>Emgu.CV.Bitmap</Name>
     </ProjectReference>

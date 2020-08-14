@@ -108,8 +108,12 @@ namespace Emgu.CV.Example.Mac
 				Rectangle[] results;
 
 				var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+				using (HOGDescriptor hog = new HOGDescriptor())
 				using (UMat uImage = image.GetUMat(AccessType.ReadWrite))
-					results = PedestrianDetection.FindPedestrian.Find(uImage);
+				{
+					hog.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
+					results = PedestrianDetection.FindPedestrian.Find(uImage, hog);
+				}
 				stopwatch.Stop();
 
 				foreach (Rectangle rect in results)

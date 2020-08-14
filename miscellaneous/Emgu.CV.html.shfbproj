@@ -94,6 +94,9 @@ Base functions (L1) can be found in CvInvoke class</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.PhaseUnwrapping" isDocumented="True">Phase Unwrapping API</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Saliency" isDocumented="True">Saliency API</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.XObjdetect" isDocumented="True">Extended object detection</NamespaceSummaryItem>
+	  <NamespaceSummaryItem name="Emgu.CV.PpfMatch3d" isDocumented="True">Surface Matching module</NamespaceSummaryItem>
+	  <NamespaceSummaryItem name="Emgu.CV.Rapid" isDocumented="True">Silhouette based 3D object tracking</NamespaceSummaryItem>
+	  <NamespaceSummaryItem name="Emgu.CV.IntensityTransform" isDocumented="True">The module brings implementations of intensity transformation algorithms to adjust image contrast.</NamespaceSummaryItem>
     </NamespaceSummaries>
     <PlugInConfigurations>
     </PlugInConfigurations>

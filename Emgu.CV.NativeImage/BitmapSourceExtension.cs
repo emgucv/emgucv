@@ -66,7 +66,7 @@ namespace Emgu.CV
             }
             else
             {
-                throw new Exception(String.Format("Convertion from BitmapSource of format {0} is not supported.", source.Format));
+                throw new Exception(String.Format("Conversion from BitmapSource of format {0} is not supported.", source.Format));
             }
         }
     }

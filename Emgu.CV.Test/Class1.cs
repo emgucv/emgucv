@@ -18,7 +18,7 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using Emgu.CV;
-using Emgu.CV.Cvb;
+//using Emgu.CV.Cvb;
 using Emgu.CV.Cuda;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
@@ -1012,6 +1012,7 @@ namespace Emgu.CV.Test
            }
         }*/
 
+        /*
         public void TestCvBlob()
         {
             //MCvFont font = new MCvFont(Emgu.CV.CvEnum.FontFace.HersheySimplex, 0.5, 0.5);
@@ -1065,7 +1066,7 @@ namespace Emgu.CV.Test
                 capture.Start();
                 viewer.ShowDialog();
             }
-        }
+        }*/
 
         /*
         public void TestPyrLK()

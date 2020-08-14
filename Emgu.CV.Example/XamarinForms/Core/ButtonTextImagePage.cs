@@ -173,7 +173,7 @@ namespace Emgu.CV.XamarinForms
                         mats[i] = CvInvoke.Imread(fileData.FilePath, ImreadModes.AnyColor);
                     } else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
                     {
-                        FileData fileData = await CrossFilePicker.Current.PickFile(new string[] { "Image | *.jpg;*.jpeg;*.png;*.bmp;*.gif | All Files | *" });
+                        FileData fileData = await CrossFilePicker.Current.PickFile(new string[] { "Image | *.jpg;*.jpeg;*.png;*.bmp;*.gif;*.webp | All Files | *" });
                         if (fileData == null)
                             return null;
                         mats[i] = CvInvoke.Imread(fileData.FilePath, ImreadModes.AnyColor);

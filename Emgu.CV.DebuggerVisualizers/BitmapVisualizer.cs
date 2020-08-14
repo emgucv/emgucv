@@ -14,9 +14,9 @@ using System.Security.Cryptography;
 [assembly: DebuggerVisualizer(
     typeof(Emgu.CV.DebuggerVisualizers.BitmapVisualizer),
     typeof(VisualizerObjectSource),
-    //Target = typeof(Bitmap),
+    Target = typeof(Bitmap),
     //TargetTypeName = "System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0",
-    TargetTypeName = "System.Drawing.Bitmap, System.Drawing",
+    //TargetTypeName = "System.Drawing.Bitmap, System.Drawing",
     Description = "Bitmap Debugger Visualizer")]
 
 namespace Emgu.CV.DebuggerVisualizers

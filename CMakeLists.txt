@@ -560,6 +560,11 @@ CHECK_BINARY_EXIST("libs/x64" "*.so" HAVE_LINUX_X64 ${IS_UBUNTU_X64_BUILD})
     SET(OSX_LABEL "-osx")
   ENDIF()	
 
+IF (IS_RASPBIAN_BUILD OR IS_UBUNTU_X64_BUILD OR IS_UBUNTU_X86_BUILD OR HAVE_LINUX_ARM OR HAVE_LINUX_X64 OR HAVE_LINUX_X86)
+  SET(HAVE_LINUX ON)
+ELSE()
+  SET(HAVE_LINUX OFF)
+ENDIF()
 
 SET(ANDROID_LABEL "")
 IF(HAVE_ANDROID_ARM64_V8A)
@@ -596,6 +601,12 @@ CHECK_BINARY_EXIST("libs" "Emgu.CV.Platform.IOS.*" HAVE_PREBUILD_EMGU_CV_IOS OFF
 #	COMPONENT emgucv_binary
 #	)
 #ENDIF()
+
+IF (HAVE_IOS AND (NOT HAVE_OSX) AND (NOT HAVE_ANDROID) AND (NOT HAVE_WINSTORE_10) AND (NOT (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)) AND (NOT HAVE_LINUX))
+  SET(HAVE_IOS_ONLY ON)
+ELSE()
+  SET(HAVE_IOS_ONLY OFF)
+ENDIF()
 
 # ----------------------------------------------------------------------------
 #  Setup Package information
@@ -754,6 +765,8 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   stereo
   surface_matching
   alphamat
+  intensity_transform
+  rapid
   )
 
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})
@@ -1001,20 +1014,26 @@ ENDIF()
 SET(EMGUCV_NUGET_FILE_LIST "")
 SET(EMGUCV_NUGET_DEPENDENCY "")
 SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
+
+IF (HAVE_IOS)
+  SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\xamarinios10\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\xamarinios10\" />")
+  SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
+      <group targetFramework=\"Xamarin.iOS1.0\">
+        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
+      </group>")
+ENDIF()
+
 SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\netstandard2.0\" />
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\netstandard2.0\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\xamarinios10\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\xamarinios10\" />
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
       <group targetFramework=\".NETStandard2.0\">
-        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-      </group>
-      <group targetFramework=\"Xamarin.iOS1.0\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
@@ -1030,7 +1049,7 @@ SET(EMGUCV_BITMAP_NUGET_FILE_LIST "${EMGUCV_BITMAP_NUGET_FILE_LIST}
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Bitmap.xml\" target=\"lib\\netstandard2.0\" />
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
-SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
+SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "${EMGUCV_BITMAP_NUGET_DEPENDENCY} 
       <group targetFramework=\".NETStandard2.0\">
         <dependency id=\"System.Drawing.Common\" version=\"4.7.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
@@ -1052,7 +1071,7 @@ IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
 	")
   SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
-      <group targetFramework=\"net461\">
+      <group targetFramework=\".NETFramework4.6.1\">
         <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </group>")
   SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
@@ -1068,7 +1087,10 @@ IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
   SET(EMGUCV_UI_NUGET_DEPENDENCY "
 	<dependencies>
 ${EMGUCV_UI_NUGET_DEPENDENCY}
-    </dependencies>")
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName=\"System.Windows.Forms\" targetFramework=\".NETFramework4.6.1\" />
+    </frameworkAssemblies>")
 ENDIF()
 
 SET(EMGUCV_NUGET_DEPENDENCY "
@@ -1103,6 +1125,7 @@ STRING(STRIP "${EMGUCV_WINDOWS_NUGET_TITLE}" EMGUCV_WINDOWS_NUGET_TITLE)
 
 
 IF(WITH_CUDA)
+    SET(CUDA_EULA_URL https://docs.nvidia.com/pdf/EULA.pdf)
 	SET(EMGUCV_WINDOWS_NUGET_TITLE "${EMGUCV_WINDOWS_NUGET_TITLE} with CUDA support")
 	SET(EMGU_CUDA_NUGET_TITLE "Native x64 CUDA dependency for EMGU CV")
 	SET(EMGU_CUDA_NPP_NUGET_FILE_LIST "<file src=\"${EMGU_NPP_NUGET_ID}.targets\" target=\"build\\${EMGU_NPP_NUGET_ID}.targets\" />")
@@ -1138,18 +1161,18 @@ IF(WITH_CUDA)
 	SET(EMGUCV_WINDOWS_NETFRAMEWORK_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NETFRAMEWORK_NUGET_DEPENDENCY}<dependency id=\"${EMGU_NPP_NUGET_ID}\" version=\"[${EMGU_NPP_VERSION}]\" />")
 
 	IF(HAVE_WINDESKTOP_X64)
-		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows.cuda.npp")
-		file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows.cuda.cufft")
+		file(DOWNLOAD ${CUDA_EULA_URL} "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows.cuda.npp/EULA.pdf")
+		file(DOWNLOAD ${CUDA_EULA_URL} "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows.cuda.cufft/EULA.pdf")
 		#file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cudnn")
 		SET(EMGU_CUDA_NPP_NUGET_FILE_LIST "${EMGU_CUDA_NPP_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cu*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cufft*.dll;..\\..\\..\\libs\\x64\\cudnn*.dll\" target=\"build\\x64\" /> 
 		<file src=\"..\\..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
-		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
+		<file src=\"EULA.pdf\" target=\"CUDA_EULA.pdf\" />")
 		SET(EMGU_CUFFT_NUGET_FILE_LIST "${EMGU_CUFFT_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cufft*.dll\" target=\"build\\x64\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
+		<file src=\"EULA.pdf\" target=\"CUDA_EULA.pdf\" />")
 		SET(EMGU_CUDNN_NUGET_FILE_LIST "${EMGU_CUDNN_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cudnn*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cudnn_ops_*.dll;..\\..\\..\\libs\\x64\\cudnn_cnn_*.dll\" target=\"build\\x64\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
@@ -1211,20 +1234,11 @@ ENDIF()
 SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "	<dependencies>
       <group targetFramework=\"net461\">${EMGUCV_WINDOWS_NETFRAMEWORK_NUGET_DEPENDENCY}</group>
       <group targetFramework=\".NETStandard2.0\">${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}</group>
-      <group targetFramework=\".NETCoreApp3.1\">
-        ${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}
-        <dependency id=\"System.Drawing.Common\" version=\"4.7.0\" exclude=\"Build,Analyzers\" />
-      </group>
-      <frameworkReferences>
-        <group targetFramework=\".NETCoreApp3.1\">
-          <frameworkReference name=\"Microsoft.WindowsDesktop.App.WindowsForms\" />
-        </group>
-      </frameworkReferences>
+      <group targetFramework=\".NETCoreApp3.1\">${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}</group>
     </dependencies>
     <frameworkAssemblies>
       <frameworkAssembly assemblyName=\"mscorlib\" targetFramework=\".NETFramework4.6.1\" />
       <frameworkAssembly assemblyName=\"System.Drawing\" targetFramework=\".NETFramework4.6.1\" />
-      <frameworkAssembly assemblyName=\"System.Windows.Forms\" targetFramework=\".NETFramework4.6.1\" />
     </frameworkAssemblies>")
 
 IF(HAVE_ANDROID_ALL_ARCH AND WIN32)

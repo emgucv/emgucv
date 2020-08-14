@@ -11,11 +11,10 @@ INSTALL(
   PATTERN "*.cs"
   PATTERN "*.shproj"
   PATTERN "*.projitems"
+  PATTERN "*.csproj"
   PATTERN "*.resx"
   PATTERN ".svn" EXCLUDE
   PATTERN "obj" EXCLUDE
   PATTERN "CMakeFiles" EXCLUDE
   PATTERN "${PROJECT_NAME}.dir" EXCLUDE
 )
-
-ADD_SUBDIRECTORY(Emgu.CV.Bitmap)

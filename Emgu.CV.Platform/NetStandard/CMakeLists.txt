@@ -3,7 +3,7 @@
 # --------------------------------------------------------
 
 IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
-  IF (DOTNET_FOUND)
+  IF (DOTNET_FOUND AND NOT (HAVE_IOS_ONLY))
     #IF(WIN32 AND (MSVC_VERSION GREATER 1900)) #need MSVC to be at least 2017
     PROJECT(Emgu.CV.Platform.NetStandard)
     #IF (APPLE)
