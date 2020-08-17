@@ -51,7 +51,7 @@ namespace Emgu.CV.UI
       /// Call the specific method with the specific parameters on the provided <paramref name="instance"/>
       /// </summary>
       /// <param name="instance">The instance to call the method</param>
-      /// <returns></returns>
+      /// <returns>The result from invoking the specific method.</returns>
       public Object InvokeMethod(Object instance)
       {
          if (!_mi.ContainsGenericParameters)
@@ -76,7 +76,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Represent this operation as a string
       /// </summary>
-      /// <returns></returns>
+      /// <returns>The String representation of the operation</returns>
       public override string ToString()
       {
          return String.Format(
@@ -89,6 +89,7 @@ namespace Emgu.CV.UI
       /// <summary>
       /// Represent this operation as code
       /// </summary>
+      /// <param name="language">The programming language</param>
       /// <returns>The source code</returns>
       public String ToCode(ProgrammingLanguage language)
       {

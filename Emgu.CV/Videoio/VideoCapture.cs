@@ -522,6 +522,7 @@ namespace Emgu.CV
         /// First call Grab() function follows by Retrieve()
         /// </summary>
         /// <param name="m">The output array where the image will be read into.</param>
+        /// <returns>False if no frames has been grabbed</returns>
         public bool Read(IOutputArray m)
         {
             using (OutputArray oaM = m.GetOutputArray())

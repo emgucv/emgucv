@@ -75,7 +75,7 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Create a new gain compensator
         /// </summary>
-        /// <param name="nrFeeds"></param>
+        /// <param name="nrFeeds">nr feeds</param>
         public GainCompensator(int nrFeeds)
         {
             _ptr = StitchingInvoke.cveGainCompensatorCreate(nrFeeds, ref _exposureCompensatorPtr);
@@ -102,7 +102,7 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// Create a new exposure compensator
         /// </summary>
-        /// <param name="nrFeeds"></param>
+        /// <param name="nrFeeds">nr feeds</param>
         public ChannelsCompensator(int nrFeeds)
         {
             _ptr = StitchingInvoke.cveChannelsCompensatorCreate(nrFeeds, ref _exposureCompensatorPtr);
@@ -152,7 +152,7 @@ namespace Emgu.CV.Stitching
         /// </summary>
         /// <param name="blWidth">block width</param>
         /// <param name="blHeight">block height</param>
-        /// <param name="nrFeeds"></param>
+        /// <param name="nrFeeds">nr feeds</param>
         public BlocksGainCompensator(int blWidth = 32, int blHeight = 32, int nrFeeds = 1)
         {
             _ptr = StitchingInvoke.cveBlocksGainCompensatorCreate(blWidth, blHeight, nrFeeds,
@@ -183,7 +183,7 @@ namespace Emgu.CV.Stitching
         /// </summary>
         /// <param name="blWidth">Block width</param>
         /// <param name="blHeight">Block height</param>
-        /// <param name="nrFeeds"></param>
+        /// <param name="nrFeeds">nr feeds</param>
         public BlocksChannelsCompensator(int blWidth = 32, int blHeight = 32, int nrFeeds = 1)
         {
             _ptr = StitchingInvoke.cveBlocksChannelsCompensatorCreate(blWidth, blHeight, nrFeeds,

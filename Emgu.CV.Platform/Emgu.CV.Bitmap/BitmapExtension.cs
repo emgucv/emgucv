@@ -83,7 +83,7 @@ namespace Emgu.CV
         /// <param name="numberOfChannels">The number of channels</param>
         /// <param name="srcDepthType">The source image depth type</param>
         /// <param name="tryDataSharing">Try to create Bitmap that shares the data with the image</param>
-        /// <returns>The Bitmap</returns>
+        /// <returns>A bitmap representation of the image.</returns>
         public static Bitmap RawDataToBitmap(IntPtr scan0, int step, Size size, Type srcColorType, int numberOfChannels,
             Type srcDepthType, bool tryDataSharing = false)
         {
@@ -206,6 +206,7 @@ namespace Emgu.CV
         /// <summary>
         /// Convert the mat into Bitmap, the pixel values are copied over to the Bitmap
         /// </summary>
+        /// <returns>A bitmap representation of the image.</returns>
         public static Bitmap ToBitmap(this Mat mat)
         {
             if (mat.Dims > 3)
@@ -266,6 +267,7 @@ namespace Emgu.CV
         /// <summary>
         /// Convert the gpuMat into Bitmap, the pixel values are copied over to the Bitmap
         /// </summary>
+        /// <returns>A bitmap representation of the image.</returns>
         public static Bitmap ToBitmap(this GpuMat gpuMat)
         {
             using (Mat tmp = new Mat())
@@ -280,6 +282,7 @@ namespace Emgu.CV
         /// </summary>
         /// <typeparam name="TColor">The color type of the Image</typeparam>
         /// <typeparam name="TDepth">The depth type of the Image</typeparam>
+        /// <returns>The Image &lt; TColor, TDepth &gt; converted from Bitmap</returns>
         public static Image<TColor, TDepth> ToImage<TColor, TDepth>(this Bitmap bitmap) where
             TColor : struct, IColor
             where TDepth : new()
@@ -594,6 +597,7 @@ namespace Emgu.CV
         /// </summary>
         /// <typeparam name="TColor">The color type of the CudaImage</typeparam>
         /// <typeparam name="TDepth">The depth type of the CudaImage</typeparam>
+        /// <returns> This image in Bitmap format, the pixel data are copied over to the Bitmap</returns>
         public static Bitmap ToBitmap<TColor, TDepth>(this CudaImage<TColor, TDepth> cudaImage) where
             TColor : struct, IColor
             where TDepth : new()

@@ -26,11 +26,17 @@ namespace Emgu.CV.Cuda
       /// </summary>
       /// <param name="srcDepth">The depth of the source image</param>
       /// <param name="srcChannels">The number of channels in the source image</param>
-      /// <param name="blockSize">Neighborhood size </param>
-      /// <param name="kSize"></param>
+      /// <param name="blockSize">Neighborhood size.</param>
+      /// <param name="kSize">Kernel size</param>
       /// <param name="k">Harris detector free parameter.</param>
-      /// <param name="borderType">Boreder type, use REFLECT101 for default</param>
-      public CudaHarrisCorner(DepthType srcDepth, int srcChannels, int blockSize, int kSize, double k, CvEnum.BorderType borderType = BorderType.Default)
+      /// <param name="borderType">Border type.</param>
+      public CudaHarrisCorner(
+          DepthType srcDepth, 
+          int srcChannels, 
+          int blockSize, 
+          int kSize, 
+          double k, 
+          CvEnum.BorderType borderType = BorderType.Default)
       {
          _ptr = CudaInvoke.cudaCreateHarrisCorner(CvInvoke.MakeType(srcDepth, srcChannels), blockSize, kSize, k, borderType, ref _sharedPtr);
       }

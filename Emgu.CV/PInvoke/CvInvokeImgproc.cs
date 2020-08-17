@@ -1344,6 +1344,7 @@ namespace Emgu.CV
         /// <param name="threshold">Threshold value</param>
         /// <param name="maxValue">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
         /// <param name="thresholdType">Thresholding type </param>
+        /// <returns>The computed threshold value if Otsu's or Triangle methods used.</returns>
         public static double Threshold(
            IInputArray src,
            IOutputArray dst,

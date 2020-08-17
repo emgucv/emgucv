@@ -62,6 +62,7 @@ namespace Emgu.CV.Superres
         /// <summary>
         /// Get the next frame
         /// </summary>
+        /// <param name="frame">The output array to put the frame to</param>
         public void NextFrame(IOutputArray frame)
         {
             using (OutputArray oaFrame = frame.GetOutputArray())

@@ -1029,6 +1029,7 @@ namespace Emgu.CV.Cuda
         /// <param name="maxValue">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
         /// <param name="thresholdType">Thresholding type</param>
         /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+        /// <returns>The computed threshold value if Otsu's or Triangle methods used.</returns>
         public static double Threshold(IInputArray src, IOutputArray dst, double threshold, double maxValue, CvEnum.ThresholdType thresholdType, Stream stream = null)
         {
             using (InputArray iaSrc = src.GetInputArray())

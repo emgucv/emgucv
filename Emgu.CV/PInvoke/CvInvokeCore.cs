@@ -848,6 +848,7 @@ namespace Emgu.CV
         /// <param name="coeffs">The (degree + 1)-length array of equation coefficients (CV_32FC1 or CV_64FC1)</param>
         /// <param name="roots">The degree-length output array of real or complex roots (CV_32FC2 or CV_64FC2)</param>
         /// <param name="maxiter">The maximum number of iterations</param>
+        /// <returns>The max difference.</returns>
         public static double SolvePoly(IInputArray coeffs, IOutputArray roots, int maxiter = 300)
         {
             using (InputArray iaCoeffs = coeffs.GetInputArray())
