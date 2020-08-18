@@ -206,6 +206,7 @@ namespace Emgu.CV
         /// <summary>
         /// Convert the mat into Bitmap, the pixel values are copied over to the Bitmap
         /// </summary>
+        /// <param name="mat">The Mat to be converted to Bitmap</param>
         /// <returns>A bitmap representation of the image.</returns>
         public static Bitmap ToBitmap(this Mat mat)
         {
@@ -256,6 +257,7 @@ namespace Emgu.CV
         /// <summary>
         /// Convert the umat into Bitmap, the pixel values are copied over to the Bitmap
         /// </summary>
+        /// <param name="umat">The UMat to be converted to Bitmap</param>
         public static Bitmap ToBitmap(this UMat umat)
         {
             using (Mat tmp = umat.GetMat(CvEnum.AccessType.Read))
@@ -267,6 +269,7 @@ namespace Emgu.CV
         /// <summary>
         /// Convert the gpuMat into Bitmap, the pixel values are copied over to the Bitmap
         /// </summary>
+        /// <param name="gpuMat">The gpu mat to be converted to Bitmap</param>
         /// <returns>A bitmap representation of the image.</returns>
         public static Bitmap ToBitmap(this GpuMat gpuMat)
         {
@@ -280,6 +283,7 @@ namespace Emgu.CV
         /// <summary>
         /// Create an Image &lt; TColor, TDepth &gt; from Bitmap
         /// </summary>
+        /// <param name="bitmap">The Bitmap to be converted to Image &lt; TColor, TDepth &gt;</param>
         /// <typeparam name="TColor">The color type of the Image</typeparam>
         /// <typeparam name="TDepth">The depth type of the Image</typeparam>
         /// <returns>The Image &lt; TColor, TDepth &gt; converted from Bitmap</returns>
@@ -518,6 +522,7 @@ namespace Emgu.CV
         /// </summary>
         /// <typeparam name="TColor">The color type of the Image</typeparam>
         /// <typeparam name="TDepth">The depth type of the Image</typeparam>
+        /// <param name="image">The image to be converted to Bitmap</param>
         /// <remarks> For better performance on Image&lt;Gray, Byte&gt; and Image&lt;Bgr, Byte&gt;, consider using the Bitmap property </remarks>
         /// <returns> This image in Bitmap format, the pixel data are copied over to the Bitmap</returns>
         public static Bitmap ToBitmap<TColor, TDepth>(this Image<TColor, TDepth> image) where
@@ -591,10 +596,10 @@ namespace Emgu.CV
         }
 
 
-
         /// <summary>
         /// Convert the CudaImage to its equivalent Bitmap representation
         /// </summary>
+        /// <param name="cudaImage">The cuda image to be converted to Bitmap</param>
         /// <typeparam name="TColor">The color type of the CudaImage</typeparam>
         /// <typeparam name="TDepth">The depth type of the CudaImage</typeparam>
         /// <returns> This image in Bitmap format, the pixel data are copied over to the Bitmap</returns>
