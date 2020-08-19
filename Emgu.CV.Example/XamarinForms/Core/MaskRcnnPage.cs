@@ -282,7 +282,7 @@ namespace Emgu.CV.XamarinForms
 #if __ANDROID__
                 button.Text = _StopCameraButtonText;
                 //AndroidImageView.Visibility = ViewStates.Visible;
-                StartCapture(async delegate (Object sender, Mat m)
+                StartCapture(async delegate (Object captureSender, Mat m)
                 {
                     //Skip the frame if busy, 
                     //Otherwise too many frames arriving and will eventually saturated the memory.
