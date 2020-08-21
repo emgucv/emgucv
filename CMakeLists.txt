@@ -1236,14 +1236,18 @@ IF(WITH_CUDA)
 ENDIF()
 
 SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "	<dependencies>
-      <group targetFramework=\"net461\">${EMGUCV_WINDOWS_NETFRAMEWORK_NUGET_DEPENDENCY}</group>
       <group targetFramework=\".NETStandard2.0\">${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}</group>
-      <group targetFramework=\".NETCoreApp3.1\">${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}</group>
-    </dependencies>
-    <frameworkAssemblies>
-      <frameworkAssembly assemblyName=\"mscorlib\" targetFramework=\".NETFramework4.6.1\" />
-      <frameworkAssembly assemblyName=\"System.Drawing\" targetFramework=\".NETFramework4.6.1\" />
-    </frameworkAssemblies>")
+    </dependencies>")
+
+#SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "	<dependencies>
+#      <group targetFramework=\"net461\">${EMGUCV_WINDOWS_NETFRAMEWORK_NUGET_DEPENDENCY}</group>
+#      <group targetFramework=\".NETStandard2.0\">${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}</group>
+#      <group targetFramework=\".NETCoreApp3.1\">${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}</group>
+#    </dependencies>
+#    <frameworkAssemblies>
+#      <frameworkAssembly assemblyName=\"mscorlib\" targetFramework=\".NETFramework4.6.1\" />
+#      <frameworkAssembly assemblyName=\"System.Drawing\" targetFramework=\".NETFramework4.6.1\" />
+#    </frameworkAssemblies>")
 
 IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
   SET(EMGUCV_ANDROID_NUGET_TITLE "Emgu CV for Android Native Runtime")	
