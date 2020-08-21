@@ -132,6 +132,9 @@
       <Link>stop-sign.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\Core\pic3.png">
+      <Link>pic3.png</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -167,7 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.7.0.1239</Version>
+      <Version>4.8.0.1269</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Plugin.FilePicker">
       <Version>2.1.41</Version>
