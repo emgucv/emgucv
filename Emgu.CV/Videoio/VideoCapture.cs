@@ -410,9 +410,7 @@ namespace Emgu.CV
 
         private volatile GrabState _grabState = GrabState.Stopped;
 
-        private void Run(
-            Emgu.Util.ExceptionHandler eh = null
-        )
+        private void Run(Emgu.Util.ExceptionHandler eh = null)
         {
             try
             {
@@ -443,10 +441,7 @@ namespace Emgu.CV
             }
         }
 
-        private static void Wait(int millisecond)
-        {
-            Thread.Sleep(millisecond);
-        }
+        private Task _captureTask = null; 
 
         /// <summary>
         /// Start the grab process in a separate thread. Once started, use the ImageGrabbed event handler and RetrieveGrayFrame/RetrieveBgrFrame to obtain the images.
@@ -464,8 +459,8 @@ namespace Emgu.CV
             {
                 _grabState = GrabState.Running;
 
-              Task t = new Task(delegate { Run(eh); });
-              t.Start();
+                _captureTask = new Task(delegate { Run(eh); });
+                _captureTask.Start();
             }
         }
 
@@ -491,6 +486,12 @@ namespace Emgu.CV
             else
                if (_grabState == GrabState.Running)
                 _grabState = GrabState.Stopping;
+
+            if (_captureTask != null)
+            {
+                _captureTask.Wait(100);
+                _captureTask = null;
+            }
         }
         #endregion
 
