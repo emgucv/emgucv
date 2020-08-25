@@ -1,8 +1,14 @@
 :: variables required for OpenCV build ::
 :: Note: all pathes should be specified without tailing slashes!
+@echo on
 
 SET MAKE_EXE=
 SET ANDROID_NDK_PARENT_DIR=C:\android
+
+:: variables required for android-opencv build ::
+IF EXIST "C:\Program Files (x86)\Android\android-sdk" SET ANDROID_SDK=C:\Program Files (x86)\Android\android-sdk
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-sdk" SET ANDROID_SDK=%ANDROID_NDK_PARENT_DIR%\android-sdk
+
 IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r10e" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r10e
 IF EXIST "%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r10e" SET ANDROID_NDK=%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r10e
 
@@ -39,8 +45,11 @@ IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r19c" SET ANDROID_NDK=%ANDROID_ND
 
 IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r20" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r20
 
-IF EXIST "C:\Program Files (x86)\Android\android-sdk\ndk-bundle" SET ANDROID_NDK=C:\Program Files (x86)\Android\android-sdk\ndk-bundle
 IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r21" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r21
+
+IF EXIST "%programfiles(x86)%\Android\android-sdk\ndk-bundle" SET ANDROID_NDK=%programfiles(x86)%\Android\android-sdk\ndk-bundle
+IF EXIST "%ANDROID_SDK%\ndk-bundle" SET ANDROID_NDK=%ANDROID_SDK%\ndk-bundle
+
 
 REM SET MAKE_EXE
 IF EXIST "%ANDROID_NDK%" SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows-x86_64\bin\make.exe
@@ -50,9 +59,7 @@ IF EXIST "%programfiles(x86)%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programfiles(x
 IF EXIST "%programfiles%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programfiles%\CMake\bin\cmake.exe
 IF EXIST "%programw6432%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programw6432%\CMake\bin\cmake.exe
 
-:: variables required for android-opencv build ::
-IF EXIST "C:\Program Files (x86)\Android\android-sdk" SET ANDROID_SDK=C:\Program Files (x86)\Android\android-sdk
-IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-sdk" SET ANDROID_SDK=%ANDROID_NDK_PARENT_DIR%\android-sdk
+
 
 SET ANT_DIR="%VS140COMNTOOLS%..\..\Apps\apache-ant-1.9.3"
 
