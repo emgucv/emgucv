@@ -108,8 +108,7 @@ echo on
 -DWITH_OPENCL:BOOL=ON ^
 -DWITH_CUDA:BOOL=OFF ^
 -DBUILD_ANDROID_PROJECTS=OFF ^
--DCMAKE_C_FLAGS:STRING="-std=c11 -fvisibility=hidden -fvisibility-inlines-hidden -flto" ^
--DCMAKE_CXX_FLAGS:STRING="-fvisibility=hidden -fvisibility-inlines-hidden -flto" ^
+-DCMAKE_C_FLAGS:STRING=-std=c11 ^ 
 -DCMAKE_BUILD_TYPE:STRING=RELEASE) ^
 && GOTO cmakefin
 REM -DCMAKE_BUILD_TYPE:STRING=MINSIZEREL) ^
