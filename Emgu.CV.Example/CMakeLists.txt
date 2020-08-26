@@ -204,6 +204,30 @@ IF(EMGU_CV_EXAMPLE_BUILD)
   IF(HAVE_WINSTORE_10)
     INSTALL(
       DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.UWP/"
+      DESTINATION Emgu.CV.Example/HelloWorld.UWP/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "Properties/*"
+      PATTERN "*.csproj"
+      PATTERN "*.appxmanifest"
+      PATTERN "*.xaml"
+	  PATTERN "*.xml"
+      PATTERN "*.json"
+      PATTERN "*.pfx"
+      PATTERN "Assets/*.png"  
+      PATTERN ".git" EXCLUDE
+      PATTERN "obj" EXCLUDE
+      PATTERN "CMake*" EXCLUDE
+      PATTERN "Release" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "RelWithDebInfo" EXCLUDE
+      PATTERN "*.dir" EXCLUDE
+      PATTERN "bin" EXCLUDE
+      )
+    INSTALL(
+      DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/RealtimeCamera.UWP/"
       DESTINATION Emgu.CV.Example/RealtimeCamera.UWP/
       COMPONENT emgucv_example_source
@@ -213,6 +237,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.csproj"
       PATTERN "*.appxmanifest"
       PATTERN "*.xaml"
+	  PATTERN "*.xml"
       PATTERN "*.json"
       PATTERN "*.pfx"
       PATTERN "Assets/*.png"  

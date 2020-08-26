@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.Netstandar
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Cuda", "..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.shproj", "{7B22BB32-C867-45A7-AC53-5BDA820DB91C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld.UWP", "..\..\Emgu.CV.Example\HelloWorld.UWP\HelloWorld.UWP.csproj", "{98476854-23F3-4116-8711-7AE17190A90F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
@@ -34,7 +36,9 @@ Global
 		..\..\Emgu.Util\Emgu.Util.projitems*{5e912dcc-e7ac-491f-8293-c985e3ab5ca7}*SharedItemsImports = 5
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
+		..\..\Emgu.CV.Runtime\UWP\Emgu.CV.Runtime.UWP.projitems*{98476854-23f3-4116-8711-7ae17190a90f}*SharedItemsImports = 4
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+		..\..\Emgu.CV.Runtime\UWP\Emgu.CV.Runtime.UWP.projitems*{cc44bc03-c015-42b5-9465-45a7f9375981}*SharedItemsImports = 13
 		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -108,6 +112,36 @@ Global
 		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Release|x64.Build.0 = Release|x64
 		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Release|x86.ActiveCfg = Release|Any CPU
 		{5E912DCC-E7AC-491F-8293-C985E3AB5CA7}.Release|x86.Build.0 = Release|Any CPU
+		{98476854-23F3-4116-8711-7AE17190A90F}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{98476854-23F3-4116-8711-7AE17190A90F}.Debug|ARM.ActiveCfg = Debug|ARM
+		{98476854-23F3-4116-8711-7AE17190A90F}.Debug|ARM.Build.0 = Debug|ARM
+		{98476854-23F3-4116-8711-7AE17190A90F}.Debug|ARM.Deploy.0 = Debug|ARM
+		{98476854-23F3-4116-8711-7AE17190A90F}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{98476854-23F3-4116-8711-7AE17190A90F}.Debug|ARM64.Build.0 = Debug|ARM64
+		{98476854-23F3-4116-8711-7AE17190A90F}.Debug|ARM64.Deploy.0 = Debug|ARM64
+		{98476854-23F3-4116-8711-7AE17190A90F}.Debug|iPhone.ActiveCfg = Debug|x86
+		{98476854-23F3-4116-8711-7AE17190A90F}.Debug|iPhoneSimulator.ActiveCfg = Debug|x86
+		{98476854-23F3-4116-8711-7AE17190A90F}.Debug|x64.ActiveCfg = Debug|x64
+		{98476854-23F3-4116-8711-7AE17190A90F}.Debug|x64.Build.0 = Debug|x64
+		{98476854-23F3-4116-8711-7AE17190A90F}.Debug|x64.Deploy.0 = Debug|x64
+		{98476854-23F3-4116-8711-7AE17190A90F}.Debug|x86.ActiveCfg = Debug|x86
+		{98476854-23F3-4116-8711-7AE17190A90F}.Debug|x86.Build.0 = Debug|x86
+		{98476854-23F3-4116-8711-7AE17190A90F}.Debug|x86.Deploy.0 = Debug|x86
+		{98476854-23F3-4116-8711-7AE17190A90F}.Release|Any CPU.ActiveCfg = Release|x86
+		{98476854-23F3-4116-8711-7AE17190A90F}.Release|ARM.ActiveCfg = Release|ARM
+		{98476854-23F3-4116-8711-7AE17190A90F}.Release|ARM.Build.0 = Release|ARM
+		{98476854-23F3-4116-8711-7AE17190A90F}.Release|ARM.Deploy.0 = Release|ARM
+		{98476854-23F3-4116-8711-7AE17190A90F}.Release|ARM64.ActiveCfg = Release|ARM64
+		{98476854-23F3-4116-8711-7AE17190A90F}.Release|ARM64.Build.0 = Release|ARM64
+		{98476854-23F3-4116-8711-7AE17190A90F}.Release|ARM64.Deploy.0 = Release|ARM64
+		{98476854-23F3-4116-8711-7AE17190A90F}.Release|iPhone.ActiveCfg = Release|x86
+		{98476854-23F3-4116-8711-7AE17190A90F}.Release|iPhoneSimulator.ActiveCfg = Release|x86
+		{98476854-23F3-4116-8711-7AE17190A90F}.Release|x64.ActiveCfg = Release|x64
+		{98476854-23F3-4116-8711-7AE17190A90F}.Release|x64.Build.0 = Release|x64
+		{98476854-23F3-4116-8711-7AE17190A90F}.Release|x64.Deploy.0 = Release|x64
+		{98476854-23F3-4116-8711-7AE17190A90F}.Release|x86.ActiveCfg = Release|x86
+		{98476854-23F3-4116-8711-7AE17190A90F}.Release|x86.Build.0 = Release|x86
+		{98476854-23F3-4116-8711-7AE17190A90F}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
