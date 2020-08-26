@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-/*
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,9 +30,7 @@ namespace Emgu.CV.Cuda
         /// <param name="fileName">The file to create the classifier from</param>
         public CudaCascadeClassifier(String fileName)
         {
-#if !NETFX_CORE
             Debug.Assert(File.Exists(fileName), String.Format("The Cascade file {0} does not exist.", fileName));
-#endif
             using (CvString s = new CvString(fileName))
                 _ptr = CudaInvoke.cudaCascadeClassifierCreate(s, ref _sharedPtr);
         }
@@ -108,4 +106,3 @@ namespace Emgu.CV.Cuda
 
     }
 }
-*/
