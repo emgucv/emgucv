@@ -121,7 +121,6 @@ echo on
 -DBUILD_opencv_androidcamera:BOOL=OFF ^
 -DBUILD_opencv_adas:BOOL=OFF ^
 -DBUILD_opencv_hdf:BOOL=OFF ^
--DBUILD_opencv_saliency:BOOL=OFF ^
 -DBUILD_TBB:BOOL=OFF ^
 -DWITH_OPENCL:BOOL=ON ^
 -DWITH_CUDA:BOOL=OFF ^
