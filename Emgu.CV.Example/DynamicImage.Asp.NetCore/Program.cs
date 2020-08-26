@@ -13,6 +13,7 @@ namespace DynamicImage.Asp.NetCore
     {
         public static void Main(string[] args)
         {
+            Console.WriteLine("Image containing the current time can be viewed from http://localhost:5000/api/file");
             CreateHostBuilder(args).Build().Run();
         }
 
