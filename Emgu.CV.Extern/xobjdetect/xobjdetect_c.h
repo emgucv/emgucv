@@ -9,8 +9,17 @@
 #define EMGU_XOBJDETECT_C_H
 
 #include "opencv2/core/core_c.h"
-#include "opencv2/xobjdetect.hpp"
 
+#ifdef HAVE_OPENCV_XOBJDETECT
+#include "opencv2/xobjdetect.hpp"
+#else
+static inline CV_NORETURN void throw_no_xobjdetect() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xobjdetect support"); }
+namespace cv {
+	namespace xobjdetect {
+		class WBDetector {};
+	}
+}
+#endif
 CVAPI(cv::xobjdetect::WBDetector*) cveWBDetectorCreate(cv::Ptr<cv::xobjdetect::WBDetector>** sharedPtr);
 CVAPI(void) cveWBDetectorRead(cv::xobjdetect::WBDetector* detector, cv::FileNode* node);
 CVAPI(void) cveWBDetectorWrite(cv::xobjdetect::WBDetector* detector, cv::FileStorage* fs);

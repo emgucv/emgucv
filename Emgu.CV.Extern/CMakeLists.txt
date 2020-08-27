@@ -191,11 +191,11 @@ MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mty
 	SET(C_COMPILATION_CONDITION_OPEN "#if ${c_compilation_condition}")
 	SET(C_COMPILATION_CONDITION_CLOSE "#endif")
   ENDIF()
-  IF(IS_DUMMY)
-	SET(C_HEADER_SOURCE "#include \"opencv2/core/core_c.h\"")
-  ELSE()
+#  IF(IS_DUMMY)
+#	SET(C_HEADER_SOURCE "#include \"opencv2/core/core_c.h\"")
+#  ELSE()
 	SET(C_HEADER_SOURCE "${header_additional_include}")
-  ENDIF()
+#  ENDIF()
 
   SET(C_SOURCE "${source_additional_code} #include \"${fname}.h\"")
   
@@ -1762,8 +1762,7 @@ ENDIF()
     "CvInvoke"
     "Tonemap"
 	""
-    "#include \"opencv2/photo.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"photo_c.h\""
 	""
 	""
 	${HAVE_opencv_photo})
@@ -1785,8 +1784,7 @@ ENDIF()
     "CvInvoke"
     "TonemapReinhard"
 	""
-    "#include \"opencv2/photo.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"photo_c.h\""
 	""
 	""
 	${HAVE_opencv_photo})	
@@ -1807,8 +1805,7 @@ ENDIF()
     "CvInvoke"
     "TonemapDrago"
 	""
-    "#include \"opencv2/photo.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"photo_c.h\""
 	""
 	""
 	${HAVE_opencv_photo})		
@@ -1829,8 +1826,7 @@ ENDIF()
     "CvInvoke"
     "TonemapMantiuk"
 	""
-    "#include \"opencv2/photo.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"photo_c.h\""
 	""
 	""
 	${HAVE_opencv_photo})	
@@ -2056,8 +2052,7 @@ ENDIF()
     "CudaInvoke"
     "CudaHoughLinesDetector"
 	""
-    "#include \"opencv2/cudaimgproc.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"cudaimgproc_c.h\""
 	""
 	""
 	${HAVE_opencv_cudaimgproc})
@@ -2093,8 +2088,7 @@ ENDIF()
     "CudaInvoke"
     "CudaHOG"
 	""
-    "#include \"opencv2/cudaobjdetect.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"cudaobjdetect_c.h\""
 	""
 	""
 	${HAVE_opencv_cudaobjdetect})
@@ -2157,8 +2151,7 @@ ENDIF()
     "PlotInvoke"
     "Plot2d"
 	""
-    "#include \"opencv2/plot.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"plot_c.h\""
 	""
 	""
 	${HAVE_opencv_plot})
@@ -2187,8 +2180,7 @@ ENDIF()
     "SaliencyInvoke"
     "MotionSaliencyBinWangApr2014"
 	""
-    "#include \"opencv2/saliency.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"saliency_c.h\""
 	""
 	""
 	${HAVE_opencv_saliency})
@@ -2208,8 +2200,7 @@ ENDIF()
     "SaliencyInvoke"
     "ObjectnessBING"
 	""
-    "#include \"opencv2/saliency.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"saliency_c.h\""
 	""
 	""
 	${HAVE_opencv_saliency})
@@ -2239,8 +2230,7 @@ ENDIF()
     "XPhotoInvoke"
     "SimpleWB"
 	""
-    "#include \"opencv2/xphoto.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"xphoto_c.h\""
 	""
 	""
 	${HAVE_opencv_xphoto})
@@ -2260,8 +2250,7 @@ ENDIF()
     "XPhotoInvoke"
     "GrayworldWB"
 	""
-    "#include \"opencv2/xphoto.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"xphoto_c.h\""
 	""
 	""
 	${HAVE_opencv_xphoto})
@@ -2284,8 +2273,7 @@ ENDIF()
     "XPhotoInvoke"
     "LearningBasedWB"
 	""
-    "#include \"opencv2/xphoto.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"xphoto_c.h\""
 	""
 	""
 	${HAVE_opencv_xphoto})
@@ -2308,8 +2296,7 @@ ENDIF()
     "XPhotoInvoke"
     "TonemapDurand"
 	""
-    "#include \"opencv2/xphoto.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"xphoto_c.h\""
 	""
 	""
 	${HAVE_opencv_xphoto})
@@ -2345,8 +2332,7 @@ ENDIF()
     "FaceInvoke"
     "FacemarkLBFParams"
 	""
-    "#include \"opencv2/face.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"face_c.h\""
 	""
 	""
 	${HAVE_opencv_face})
@@ -2373,8 +2359,7 @@ ENDIF()
     "FaceInvoke"
     "FacemarkAAMParams"
 	""
-    "#include \"opencv2/face.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"face_c.h\""
 	""
 	""
 	${HAVE_opencv_face})
@@ -2404,8 +2389,7 @@ ENDIF()
     "DnnInvoke"
     "Net"
 	""
-	"#include \"opencv2/dnn.hpp\"
-#include \"opencv2/core/types_c.h\""
+	"#include \"dnn_c.h\""
 	""
 	""
 	${HAVE_opencv_dnn})
@@ -2426,8 +2410,7 @@ ENDIF()
     "DnnInvoke"
     "Layer"
 	""
-	"#include \"opencv2/dnn.hpp\"
-#include \"opencv2/core/types_c.h\""
+	"#include \"dnn_c.h\""
 	""
 	""
 	${HAVE_opencv_dnn})
@@ -2453,8 +2436,7 @@ ENDIF()
     "StereoInvoke"
     "QuasiDenseStereo"
 	""
-	"#include \"opencv2/stereo.hpp\"
-#include \"opencv2/core/types_c.h\""
+	"#include \"stereo_c.h\""
 	""
 	""
 	${HAVE_opencv_stereo})

@@ -10,28 +10,23 @@
 
 
 #include "opencv2/opencv_modules.hpp"
+
 #include "opencv2/core/core_c.h"
 
 #ifdef HAVE_OPENCV_VIDEOSTAB
-
 #include "opencv2/videostab/stabilizer.hpp"
-#ifdef HAVE_OPENCV_HIGHGUI
-#include "opencv2/highgui/highgui_c.h"
-#include "opencv2/highgui/highgui.hpp"
-#else
-namespace cv
-{
-	class VideoCapture {};
-}
-static inline CV_NORETURN void throw_no_highgui() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without highgui support"); }
-#endif
-
 #else
 static inline CV_NORETURN void throw_no_videostab() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Videoio support"); }
-
+namespace cv {
+	namespace videostab {
+		class IFrameSource {};
+	}
+}
 #endif
 
 #ifdef HAVE_OPENCV_VIDEOIO
+#include "opencv2/videoio.hpp"
+
 class CaptureFrameSource : public cv::videostab::IFrameSource
 {
 public:
@@ -67,6 +62,8 @@ protected:
 };
 
 #else
+
+
 static inline CV_NORETURN void throw_no_videoio() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Videoio support"); }
 
 namespace cv
@@ -100,6 +97,20 @@ protected:
 #endif
 
 
+#ifdef HAVE_OPENCV_VIDEOSTAB
+#else
+namespace cv {
+	namespace videostab {
+		class StabilizerBase {};
+		class ImageMotionEstimatorBase {};
+		class OnePassStabilizer {};
+		class TwoPassStabilizer {};
+		class MotionFilterBase {};
+		class GaussianMotionFilter {};
+	}
+}
+
+#endif
 
 CVAPI(CaptureFrameSource*) cveVideostabCaptureFrameSourceCreate(cv::VideoCapture* capture, cv::videostab::IFrameSource** frameSource);
 CVAPI(void) cveVideostabCaptureFrameSourceRelease(CaptureFrameSource** captureFrameSource);

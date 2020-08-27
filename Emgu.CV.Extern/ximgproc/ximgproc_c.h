@@ -9,7 +9,32 @@
 #define EMGU_XIMGPROC_C_H
 
 #include "opencv2/core/core_c.h"
+#ifdef HAVE_OPENCV_XIMGPROC
 #include "opencv2/ximgproc.hpp"
+#else
+static inline CV_NORETURN void throw_no_ximgproc() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without ximgproc support"); }
+namespace cv {
+	namespace ximgproc {
+		class DTFilter {};
+		class RFFeatureGetter {};
+		class StructuredEdgeDetection {};
+		class SuperpixelSEEDS {};
+		class SuperpixelLSC {};
+		class SuperpixelSLIC {};
+		class FastLineDetector {};
+		enum WMFWeightType {};
+		class DisparityFilter {};
+		class DisparityWLSFilter {};
+		class RidgeDetectionFilter {};
+		class EdgeBoxes {};
+		namespace  segmentation {
+			class GraphSegmentation {};
+				class SelectiveSearchSegmentation {};
+		}
+	}
+class StereoMatcher {};
+}
+#endif
 
 CVAPI(void) cveDtFilter(cv::_InputArray* guide, cv::_InputArray* src, cv::_OutputArray* dst, double sigmaSpatial, double sigmaColor, int mode, int numIters);
 
@@ -46,10 +71,10 @@ CVAPI(void) cveStructuredEdgeDetectionEdgesNms(cv::ximgproc::StructuredEdgeDetec
 CVAPI(void) cveStructuredEdgeDetectionRelease(cv::ximgproc::StructuredEdgeDetection** detection, cv::Ptr<cv::ximgproc::StructuredEdgeDetection>** sharedPtr);
 
 CVAPI(cv::ximgproc::SuperpixelSEEDS*) cveSuperpixelSEEDSCreate(
-   int imageWidth, int imageHeight, int imageChannels,
-   int numSuperpixels, int numLevels, int prior,
-   int histogramBins, bool doubleStep,
-   cv::Ptr<cv::ximgproc::SuperpixelSEEDS>** sharedPtr);
+	int imageWidth, int imageHeight, int imageChannels,
+	int numSuperpixels, int numLevels, int prior,
+	int histogramBins, bool doubleStep,
+	cv::Ptr<cv::ximgproc::SuperpixelSEEDS>** sharedPtr);
 CVAPI(int) cveSuperpixelSEEDSGetNumberOfSuperpixels(cv::ximgproc::SuperpixelSEEDS* seeds);
 CVAPI(void) cveSuperpixelSEEDSGetLabels(cv::ximgproc::SuperpixelSEEDS* seeds, cv::_OutputArray* labelsOut);
 CVAPI(void) cveSuperpixelSEEDSGetLabelContourMask(cv::ximgproc::SuperpixelSEEDS* seeds, cv::_OutputArray* image, bool thickLine);
@@ -71,7 +96,7 @@ CVAPI(void) cveSuperpixelSLICGetLabels(cv::ximgproc::SuperpixelSLIC* slic, cv::_
 CVAPI(void) cveSuperpixelSLICGetLabelContourMask(cv::ximgproc::SuperpixelSLIC* slic, cv::_OutputArray* image, bool thickLine);
 CVAPI(void) cveSuperpixelSLICEnforceLabelConnectivity(cv::ximgproc::SuperpixelSLIC* slic, int minElementSize);
 CVAPI(void) cveSuperpixelSLICRelease(cv::ximgproc::SuperpixelSLIC** slic, cv::Ptr<cv::ximgproc::SuperpixelSLIC>** sharedPtr);
- 
+
 CVAPI(cv::ximgproc::segmentation::GraphSegmentation*) cveGraphSegmentationCreate(double sigma, float k, int minSize, cv::Ptr<cv::ximgproc::segmentation::GraphSegmentation>** sharedPtr);
 CVAPI(void) cveGraphSegmentationProcessImage(cv::ximgproc::segmentation::GraphSegmentation* segmentation, cv::_InputArray* src, cv::_OutputArray* dst);
 CVAPI(void) cveGraphSegmentationRelease(cv::ximgproc::segmentation::GraphSegmentation** segmentation, cv::Ptr<cv::ximgproc::segmentation::GraphSegmentation>** sharedPtr);

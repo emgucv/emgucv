@@ -9,7 +9,17 @@
 #define EMGU_PHASE_UNWRAPPING_C_H
 
 #include "opencv2/core/core_c.h"
+#ifdef HAVE_OPENCV_PHASE_UNWRAPPING
 #include "opencv2/phase_unwrapping.hpp"
+#else
+static inline CV_NORETURN void throw_no_phase_unwrapping() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without phase unwrapping support"); }
+namespace cv {
+namespace phase_unwrapping {
+class HistogramPhaseUnwrapping {};
+}
+}
+
+#endif
 
 CVAPI(cv::phase_unwrapping::HistogramPhaseUnwrapping*) cveHistogramPhaseUnwrappingCreate(
 	int width,

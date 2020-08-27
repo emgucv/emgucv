@@ -9,7 +9,21 @@
 #define EMGU_QUALITY_C_H
 
 #include "opencv2/core/core_c.h"
+#ifdef HAVE_OPENCV_QUALITY
 #include "opencv2/quality.hpp"
+#else
+static inline CV_NORETURN void throw_no_quality() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without quality module support"); }
+namespace cv {
+namespace quality {
+class QualityBase {};
+class QualityMSE {};
+class QualityBRISQUE {};
+class QualityPSNR {};
+class QualitySSIM {};
+class QualityGMSD {};
+}
+}
+#endif
 
 CVAPI(void) cveQualityBaseCompute(cv::quality::QualityBase* qualityBase, cv::_InputArray* cmpImgs, CvScalar* score);
 CVAPI(void) cveQualityBaseGetQualityMap(cv::quality::QualityBase* qualityBase, cv::_OutputArray* dst);

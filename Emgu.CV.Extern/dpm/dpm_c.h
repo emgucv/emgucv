@@ -9,7 +9,18 @@
 #define EMGU_DPM_C_H
 
 #include "opencv2/core/core_c.h"
+
+#ifdef HAVE_OPENCV_DPM
 #include "opencv2/dpm.hpp"
+#else
+static inline CV_NORETURN void throw_no_dpm() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without dpm support"); }
+
+namespace  cv {
+	namespace dpm {
+		class DPMDetector {};
+	}
+}
+#endif
 
 using cv::dpm::DPMDetector;
 
