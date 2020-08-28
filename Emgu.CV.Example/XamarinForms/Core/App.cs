@@ -131,10 +131,13 @@ namespace Emgu.CV.XamarinForms
             else
                 aboutIcon = "questionmark.png";*/
 
-            MainPage =
-                new NavigationPage(
-                    page
-                );
+            NavigationPage navigationPage = new NavigationPage(page);
+            MainPage = navigationPage;
+
+            //Fix for UWP navigation text
+            if (Device.RuntimePlatform == Device.WPF)
+                navigationPage.BarTextColor = Color.Green;
+            
 
             ToolbarItem aboutItem = new ToolbarItem("About", aboutIcon,
                 () =>

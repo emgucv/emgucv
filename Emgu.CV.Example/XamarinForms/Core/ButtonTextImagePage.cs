@@ -13,9 +13,9 @@ using Emgu.CV.Structure;
 using Emgu.Util.TypeEnum;
 using Plugin.FilePicker;
 using Plugin.FilePicker.Abstractions;
-#if !__MACOS__
-using Plugin.Media;
-#endif
+//#if !__MACOS__
+//using Plugin.Media;
+//#endif
 
 namespace Emgu.CV.XamarinForms
 {
