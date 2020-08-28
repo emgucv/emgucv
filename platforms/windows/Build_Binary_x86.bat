@@ -311,7 +311,7 @@ for /d %%i in ( "%VS2019_DIR%\VC\Tools\MSVC\*" ) do SET VS2019_CUDA_HOST_COMPILE
 IF %DEVENV%==%VS2019% SET CUDA_HOST_COMPILER=%VS2019_CUDA_HOST_COMPILER%
 
 for /d %%i in ( "%BUILDTOOLS%\VC\Tools\MSVC\*" ) do SET BUILDTOOLS_CUDA_HOST_COMPILER=%%i\bin\Hostx64\x64\cl.exe
-IF %DEVENV%=="%BUILDTOOLS%" SET CUDA_HOST_COMPILER=%BUILDTOOLS_CUDA_HOST_COMPILER%
+IF %DEVENV%=="%MSBUILD_BUILDTOOLS%" SET CUDA_HOST_COMPILER=%BUILDTOOLS_CUDA_HOST_COMPILER%
 
 REM Find cuda. Use latest Cuda release for 64 bit and Cuda 6.5 for 32bit
 REM We cannot use latest Cuda release for 32 bit because the 32bit version of npp has been depreciated from Cuda 7
@@ -356,7 +356,8 @@ REM pushd "%VS2017_DIR%\VC\Auxiliary\Build\"
 REM call vcvars64.bat -vcvars_ver=14.11  
 REM popd
 SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
--DCUDA_HOST_COMPILER:String="%CUDA_HOST_COMPILER:\=/%" 
+-DCUDA_HOST_COMPILER:String="%CUDA_HOST_COMPILER%" 
+REM -DCUDA_HOST_COMPILER:String="%CUDA_HOST_COMPILER:\=/%" 
 
 REM :END_FIND_CL
 
