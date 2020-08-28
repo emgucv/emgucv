@@ -39,8 +39,8 @@ IF(EMGU_CV_EXAMPLE_BUILD)
   IF (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
     INSTALL(
       DIRECTORY
-      "${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/WPF/"
-      DESTINATION Emgu.CV.Example/XamarinForms/WPF/
+      "${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/WPF.NetCore/"
+      DESTINATION Emgu.CV.Example/XamarinForms/WPF.NetCore/
       COMPONENT emgucv_example_source
       FILES_MATCHING 
       PATTERN "*.cs"
