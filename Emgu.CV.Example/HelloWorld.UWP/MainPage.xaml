@@ -1,0 +1,16 @@
+﻿<Page
+    x:Class="HelloWorld.UWP.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HelloWorld.UWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid >
+        
+        <Image x:Name="imageControl" HorizontalAlignment="Left" Height="480" Margin="10,80,0,0" VerticalAlignment="Top" Width="640"/>
+        
+    </Grid>
+</Page>

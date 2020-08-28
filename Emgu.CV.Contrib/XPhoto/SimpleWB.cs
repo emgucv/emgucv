@@ -33,9 +33,18 @@ namespace Emgu.CV.XPhoto
         {
             if (_ptr != IntPtr.Zero)
             {
-                XPhotoInvoke.cveSimpleWBRelease(ref _ptr, ref _sharedPtr);
+                XPhotoInvoke.cveSimpleWBRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
             }
             base.DisposeObject();
         }
+    }
+
+    public static partial class XPhotoInvoke
+    {
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveSimpleWBCreate(ref IntPtr whiteBalancer, ref IntPtr sharedPtr);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveSimpleWBRelease(ref IntPtr sharedPtr);
     }
 }

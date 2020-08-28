@@ -9,10 +9,31 @@
 #define EMGU_XFEATURES2D_C_H
 
 #include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/xfeatures2d.hpp"
 #include "vectors_c.h"
 
+#ifdef HAVE_OPENCV_XFEATURES2D
+#include "opencv2/xfeatures2d.hpp"
+#else
+static inline CV_NORETURN void throw_no_xfeatures2d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xfeatures2d support"); }
+namespace cv {
 
+	namespace xfeatures2d {
+		class StarDetector {};
+		class FREAK {};
+		class BriefDescriptorExtractor {};
+		class LUCID {};
+		class LATCH {};
+		class DAISY {};
+		class BoostDesc {};
+		class MSDDetector {};
+		class VGG {};
+		class PCTSignatures {};
+		class PCTSignaturesSQFD {};
+		class HarrisLaplaceFeatureDetector {};
+
+	}
+}
+#endif
 
 //StarDetector
 CVAPI(cv::xfeatures2d::StarDetector*) cveStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::StarDetector>** sharedPtr);
@@ -20,7 +41,7 @@ CVAPI(void) cveStarDetectorRelease(cv::Ptr<cv::xfeatures2d::StarDetector>** shar
 
 /*
 //GridAdaptedFeatureDetector
-CVAPI(cv::xfeatures2d ::GridAdaptedFeatureDetector*) GridAdaptedFeatureDetectorCreate(   
+CVAPI(cv::xfeatures2d ::GridAdaptedFeatureDetector*) GridAdaptedFeatureDetectorCreate(
    cv::FeatureDetector* detector,
    int maxTotalKeypoints,
    int gridRows, int gridCols);
@@ -54,12 +75,12 @@ CVAPI(void) cveLATCHRelease(cv::Ptr<cv::xfeatures2d::LATCH>** sharedPtr);
 CVAPI(cv::xfeatures2d::DAISY*) cveDAISYCreate(
 	float radius, int qRadius, int qTheta,
 	int qHist, int norm, cv::_InputArray* H,
-	bool interpolation, bool useOrientation, 
+	bool interpolation, bool useOrientation,
 	cv::Feature2D** extractor, cv::Ptr<cv::xfeatures2d::DAISY>** sharedPtr);
 CVAPI(void) cveDAISYRelease(cv::Ptr<cv::xfeatures2d::DAISY>** sharedPtr);
 
 //BoostDesc
-CVAPI(cv::xfeatures2d::BoostDesc*) cveBoostDescCreate(int desc,	bool useScaleOrientation, float scalefactor, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::BoostDesc>** sharedPtr);
+CVAPI(cv::xfeatures2d::BoostDesc*) cveBoostDescCreate(int desc, bool useScaleOrientation, float scalefactor, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::BoostDesc>** sharedPtr);
 CVAPI(void) cveBoostDescRelease(cv::Ptr<cv::xfeatures2d::BoostDesc>** sharedPtr);
 
 //MSD
@@ -74,11 +95,11 @@ CVAPI(cv::xfeatures2d::VGG*) cveVGGCreate(
 	float scaleFactor, bool dscNormalize, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::VGG>** sharedPtr);
 CVAPI(void) cveVGGRelease(cv::Ptr<cv::xfeatures2d::VGG>** sharedPtr);
 
-CVAPI(cv::xfeatures2d::PCTSignatures*) cvePCTSignaturesCreate(int initSampleCount,	int initSeedCount,	int pointDistribution, cv::Ptr<cv::xfeatures2d::PCTSignatures>** sharedPtr);
+CVAPI(cv::xfeatures2d::PCTSignatures*) cvePCTSignaturesCreate(int initSampleCount, int initSeedCount, int pointDistribution, cv::Ptr<cv::xfeatures2d::PCTSignatures>** sharedPtr);
 CVAPI(cv::xfeatures2d::PCTSignatures*) cvePCTSignaturesCreate2(std::vector<cv::Point2f>* initSamplingPoints, int initSeedCount, cv::Ptr<cv::xfeatures2d::PCTSignatures>** sharedPtr);
 CVAPI(cv::xfeatures2d::PCTSignatures*) cvePCTSignaturesCreate3(std::vector<cv::Point2f>* initSamplingPoints, std::vector<int>* initClusterSeedIndexes, cv::Ptr<cv::xfeatures2d::PCTSignatures>** sharedPtr);
 CVAPI(void) cvePCTSignaturesRelease(cv::Ptr<cv::xfeatures2d::PCTSignatures>** sharedPtr);
-CVAPI(void) cvePCTSignaturesComputeSignature(cv::xfeatures2d::PCTSignatures* pct, cv::_InputArray* image,cv::_OutputArray* signature);
+CVAPI(void) cvePCTSignaturesComputeSignature(cv::xfeatures2d::PCTSignatures* pct, cv::_InputArray* image, cv::_OutputArray* signature);
 CVAPI(void) cvePCTSignaturesDrawSignature(cv::_InputArray* source, cv::_InputArray* signature, cv::_OutputArray* result, float radiusToShorterSideRatio, int borderThickness);
 
 CVAPI(cv::xfeatures2d::PCTSignaturesSQFD*) cvePCTSignaturesSQFDCreate(
@@ -108,8 +129,8 @@ CVAPI(cv::xfeatures2d::HarrisLaplaceFeatureDetector*) cveHarrisLaplaceFeatureDet
 CVAPI(void) cveHarrisLaplaceFeatureDetectorRelease(cv::Ptr<cv::xfeatures2d::HarrisLaplaceFeatureDetector>** sharedPtr);
 
 CVAPI(void) cveMatchGMS(
-	CvSize* size1, CvSize* size2, 
+	CvSize* size1, CvSize* size2,
 	std::vector< cv::KeyPoint >* keypoints1, std::vector< cv::KeyPoint >* keypoints2,
-	std::vector< cv::DMatch >* matches1to2, std::vector< cv::DMatch >* matchesGMS, 
+	std::vector< cv::DMatch >* matches1to2, std::vector< cv::DMatch >* matchesGMS,
 	bool withRotation, bool withScale, double thresholdFactor);
 #endif

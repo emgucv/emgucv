@@ -9,8 +9,18 @@
 #define EMGU_NONFREE_C_H
 
 #include "opencv2/core/core_c.h"
-//#include "opencv2/nonfree/nonfree.hpp"
+
+#ifdef HAVE_OPENCV_XFEATURES2D
 #include "opencv2/xfeatures2d.hpp"
+#else
+static inline CV_NORETURN void throw_no_xfeatures2d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xfeatures2d support"); }
+namespace cv {
+	class Feature2D {};
+	namespace xfeatures2d {
+		class SURF {};
+	}
+}
+#endif
 
 //SURFDetector
 CVAPI(cv::xfeatures2d::SURF*) cveSURFCreate(double hessianThresh, int nOctaves, int nOctaveLayers, bool extended, bool upright, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::SURF>** sharedPtr);

@@ -191,11 +191,11 @@ MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mty
 	SET(C_COMPILATION_CONDITION_OPEN "#if ${c_compilation_condition}")
 	SET(C_COMPILATION_CONDITION_CLOSE "#endif")
   ENDIF()
-  IF(IS_DUMMY)
-	SET(C_HEADER_SOURCE "#include \"opencv2/core/core_c.h\"")
-  ELSE()
+#  IF(IS_DUMMY)
+#	SET(C_HEADER_SOURCE "#include \"opencv2/core/core_c.h\"")
+#  ELSE()
 	SET(C_HEADER_SOURCE "${header_additional_include}")
-  ENDIF()
+#  ENDIF()
 
   SET(C_SOURCE "${source_additional_code} #include \"${fname}.h\"")
   
@@ -1247,7 +1247,9 @@ ENDMACRO()
 ############################### core code gen END ################################
 
 ############################### objdetect code gen START ##############################
-
+IF (NOT HAVE_opencv_objdetect)
+  SET(HAVE_opencv_objdetect FALSE)
+ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
     "objdetect/QRCodeDetector_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Objdetect/QRCodeDetector.g.cs"
@@ -1272,7 +1274,9 @@ ENDMACRO()
 ############################### objdetect code gen END ################################
 
 ############################### imgproc code gen START ##############################
-
+IF (NOT HAVE_opencv_imgproc)
+  SET(HAVE_opencv_imgproc FALSE)
+ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
     "imgproc/LineIterator_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Imgproc/LineIterator.g.cs"
@@ -1296,7 +1300,9 @@ ENDMACRO()
 ############################### imgproc code gen END ################################
 
 ############################### features2d code gen START ##############################
-
+IF (NOT HAVE_opencv_features2d)
+  SET(HAVE_opencv_features2d FALSE)
+ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
     "features2d/SimpleBlobDetector_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Features2D/SimpleBlobDetectorParams.g.cs"
@@ -1338,7 +1344,9 @@ ENDMACRO()
 ############################### features2d code gen END ################################
 
 ############################### ml code gen START ##############################
-
+IF (NOT HAVE_opencv_ml)
+  SET(HAVE_opencv_ml FALSE)
+ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/em_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/EM.g.cs"
@@ -1581,7 +1589,9 @@ ENDMACRO()
 ############################### ml code gen END ################################
 
 ############################### video code gen START ##############################
-
+IF (NOT HAVE_opencv_video)
+  SET(HAVE_opencv_video FALSE)
+ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
     "video/kalmanfilter_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Video/KalmanFilter.g.cs"
@@ -1662,6 +1672,9 @@ ENDMACRO()
 ############################### videoio code gen END ################################
 
 ############################### optflow code gen START ##############################
+IF (NOT HAVE_opencv_optflow)
+  SET(HAVE_opencv_optflow FALSE)
+ENDIF()
 
  CREATE_OCV_CLASS_PROPERTY( 
     "optflow/dual_tvl1_opticalflow_property" 
@@ -1730,6 +1743,9 @@ CREATE_OCV_CLASS_PROPERTY(
 ############################### optflow code gen END ################################
 
 ############################### photo code gen START ##############################
+IF (NOT HAVE_opencv_photo)
+  SET(HAVE_opencv_photo FALSE)
+ENDIF()
 
   CREATE_OCV_CLASS_PROPERTY( 
     "photo/Tonemap_property" 
@@ -1746,8 +1762,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "CvInvoke"
     "Tonemap"
 	""
-    "#include \"opencv2/photo.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"photo_c.h\""
 	""
 	""
 	${HAVE_opencv_photo})
@@ -1769,8 +1784,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "CvInvoke"
     "TonemapReinhard"
 	""
-    "#include \"opencv2/photo.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"photo_c.h\""
 	""
 	""
 	${HAVE_opencv_photo})	
@@ -1791,8 +1805,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "CvInvoke"
     "TonemapDrago"
 	""
-    "#include \"opencv2/photo.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"photo_c.h\""
 	""
 	""
 	${HAVE_opencv_photo})		
@@ -1813,8 +1826,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "CvInvoke"
     "TonemapMantiuk"
 	""
-    "#include \"opencv2/photo.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"photo_c.h\""
 	""
 	""
 	${HAVE_opencv_photo})	
@@ -1823,6 +1835,9 @@ CREATE_OCV_CLASS_PROPERTY(
 
 
 ############################### xfeatures2d code gen START ##############################
+IF (NOT HAVE_opencv_xfeatures2d)
+  SET(HAVE_opencv_xfeatures2d FALSE)
+ENDIF()
 
    CREATE_OCV_CLASS_PROPERTY( 
     "xfeatures2d/pct_compute_signature_property" 
@@ -1860,6 +1875,9 @@ CREATE_OCV_CLASS_PROPERTY(
 ############################### xfeatures2d code gen END ################################
 
 ############################### stitching code gen START ##############################
+IF (NOT HAVE_opencv_stitching)
+  SET(HAVE_opencv_stitching FALSE)
+ENDIF()
 
    CREATE_OCV_CLASS_PROPERTY( 
     "stitching/stitching_property" 
@@ -1884,6 +1902,9 @@ CREATE_OCV_CLASS_PROPERTY(
 ############################### stitching code gen END ################################
 
 ############################### video code gen START ##############################
+IF (NOT HAVE_opencv_video)
+  SET(HAVE_opencv_video FALSE)
+ENDIF()
 
   CREATE_OCV_CLASS_PROPERTY( 
     "video/disopticalflow_property" 
@@ -1974,7 +1995,9 @@ CREATE_OCV_CLASS_PROPERTY(
 ############################### video code gen END ################################
 
 ############################### shape code gen START ##############################
-
+IF (NOT HAVE_opencv_shape)
+  SET(HAVE_opencv_shape FALSE)
+ENDIF()
    CREATE_OCV_CLASS_PROPERTY( 
     "shape/ShapeContextDistanceExtractor_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Shape/ShapeContextDistanceExtractor.g.cs"
@@ -2007,7 +2030,9 @@ CREATE_OCV_CLASS_PROPERTY(
 ############################### shape code gen END ################################
 
 ############################### cudaimgproc code gen START ##############################
-
+IF (NOT HAVE_opencv_cudaimgproc)
+  SET(HAVE_opencv_cudaimgproc FALSE)
+ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
     "cudaimgproc/cuda_hough_lines_detector_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Imgproc/CudaHoughLinesDetector.g.cs"
@@ -2027,8 +2052,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "CudaInvoke"
     "CudaHoughLinesDetector"
 	""
-    "#include \"opencv2/cudaimgproc.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"cudaimgproc_c.h\""
 	""
 	""
 	${HAVE_opencv_cudaimgproc})
@@ -2036,7 +2060,9 @@ CREATE_OCV_CLASS_PROPERTY(
 ############################### cudaimgproc code gen END ##############################
 
 ############################### cudaobjdetect code gen START ##############################
-
+IF (NOT HAVE_opencv_cudaobjdetect)
+  SET(HAVE_opencv_cudaobjdetect FALSE)
+ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
     "cudaobjdetect/cuda_hog_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Objdetect/CudaHOG.g.cs"
@@ -2062,8 +2088,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "CudaInvoke"
     "CudaHOG"
 	""
-    "#include \"opencv2/cudaobjdetect.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"cudaobjdetect_c.h\""
 	""
 	""
 	${HAVE_opencv_cudaobjdetect})
@@ -2098,7 +2123,9 @@ CREATE_OCV_CLASS_PROPERTY(
 ############################### cudaobjdetect code gen END ##############################
 
 ############################### plot code gen START ##############################
-
+IF (NOT HAVE_opencv_plot)
+  SET(HAVE_opencv_plot FALSE)
+ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
     "plot/plot2d_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Plot/Plot2d.g.cs"
@@ -2124,8 +2151,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "PlotInvoke"
     "Plot2d"
 	""
-    "#include \"opencv2/plot.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"plot_c.h\""
 	""
 	""
 	${HAVE_opencv_plot})
@@ -2133,7 +2159,9 @@ CREATE_OCV_CLASS_PROPERTY(
 ############################### plot code gen END ##############################
 
 ############################### saliency code gen START ##############################
-
+IF (NOT HAVE_opencv_saliency)
+  SET(HAVE_opencv_saliency FALSE)
+ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
     "saliency/MotionSaliencyBinWangApr2014_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Saliency/MotionSaliencyBinWangApr2014.g.cs"
@@ -2152,8 +2180,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "SaliencyInvoke"
     "MotionSaliencyBinWangApr2014"
 	""
-    "#include \"opencv2/saliency.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"saliency_c.h\""
 	""
 	""
 	${HAVE_opencv_saliency})
@@ -2173,8 +2200,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "SaliencyInvoke"
     "ObjectnessBING"
 	""
-    "#include \"opencv2/saliency.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"saliency_c.h\""
 	""
 	""
 	${HAVE_opencv_saliency})
@@ -2182,7 +2208,9 @@ CREATE_OCV_CLASS_PROPERTY(
 ############################### plot code gen END ##############################
 
 ############################### xphoto code gen START ##############################
-
+IF (NOT HAVE_opencv_xphoto)
+  SET(HAVE_opencv_xphoto FALSE)
+ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
     "xphoto/simplewb_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XPhoto/SimpleWB.g.cs"
@@ -2202,8 +2230,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "XPhotoInvoke"
     "SimpleWB"
 	""
-    "#include \"opencv2/xphoto.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"xphoto_c.h\""
 	""
 	""
 	${HAVE_opencv_xphoto})
@@ -2223,8 +2250,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "XPhotoInvoke"
     "GrayworldWB"
 	""
-    "#include \"opencv2/xphoto.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"xphoto_c.h\""
 	""
 	""
 	${HAVE_opencv_xphoto})
@@ -2247,8 +2273,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "XPhotoInvoke"
     "LearningBasedWB"
 	""
-    "#include \"opencv2/xphoto.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"xphoto_c.h\""
 	""
 	""
 	${HAVE_opencv_xphoto})
@@ -2271,8 +2296,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "XPhotoInvoke"
     "TonemapDurand"
 	""
-    "#include \"opencv2/xphoto.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"xphoto_c.h\""
 	""
 	""
 	${HAVE_opencv_xphoto})
@@ -2280,7 +2304,9 @@ CREATE_OCV_CLASS_PROPERTY(
 ############################### xphoto code gen END ##############################
 
 ############################### face code gen START ##############################
-
+IF (NOT HAVE_opencv_face)
+  SET(HAVE_opencv_face FALSE)
+ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
     "face/facemarklbf_params_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Face/FacemarkLBFParams.g.cs"
@@ -2306,8 +2332,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "FaceInvoke"
     "FacemarkLBFParams"
 	""
-    "#include \"opencv2/face.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"face_c.h\""
 	""
 	""
 	${HAVE_opencv_face})
@@ -2334,8 +2359,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "FaceInvoke"
     "FacemarkAAMParams"
 	""
-    "#include \"opencv2/face.hpp\"
-#include \"opencv2/core/types_c.h\""
+    "#include \"face_c.h\""
 	""
 	""
 	${HAVE_opencv_face})
@@ -2343,7 +2367,9 @@ CREATE_OCV_CLASS_PROPERTY(
 ############################### face code gen END ##############################
 
 ############################### dnn code gen START ##############################
-
+IF (NOT HAVE_opencv_dnn)
+  SET(HAVE_opencv_dnn FALSE)
+ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
     "dnn/net_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/Net.g.cs"
@@ -2363,8 +2389,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "DnnInvoke"
     "Net"
 	""
-	"#include \"opencv2/dnn.hpp\"
-#include \"opencv2/core/types_c.h\""
+	"#include \"dnn_c.h\""
 	""
 	""
 	${HAVE_opencv_dnn})
@@ -2385,8 +2410,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "DnnInvoke"
     "Layer"
 	""
-	"#include \"opencv2/dnn.hpp\"
-#include \"opencv2/core/types_c.h\""
+	"#include \"dnn_c.h\""
 	""
 	""
 	${HAVE_opencv_dnn})
@@ -2394,7 +2418,9 @@ CREATE_OCV_CLASS_PROPERTY(
 ############################### dnn code gen END ##############################
 
 ############################### stereo code gen START ##############################
-
+IF (NOT HAVE_opencv_stereo)
+  SET(HAVE_opencv_stereo FALSE)
+ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
     "stereo/quasi_dense_stereo_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Stereo/QuasiDenseStereo.g.cs"
@@ -2410,8 +2436,7 @@ CREATE_OCV_CLASS_PROPERTY(
     "StereoInvoke"
     "QuasiDenseStereo"
 	""
-	"#include \"opencv2/stereo.hpp\"
-#include \"opencv2/core/types_c.h\""
+	"#include \"stereo_c.h\""
 	""
 	""
 	${HAVE_opencv_stereo})

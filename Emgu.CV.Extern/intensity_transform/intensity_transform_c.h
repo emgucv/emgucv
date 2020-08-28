@@ -9,7 +9,12 @@
 #define EMGU_INTENSITY_TRANSFORM_C_H
 
 #include "opencv2/core/core_c.h"
+
+#ifdef HAVE_OPENCV_INTENSITY_TRANSFORM
 #include "opencv2/intensity_transform.hpp"
+#else
+static inline CV_NORETURN void throw_no_intensity_transform() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without intensity transform."); }
+#endif
 
 CVAPI(void) cveLogTransform(cv::Mat* input, cv::Mat* output);
 

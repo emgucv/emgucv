@@ -9,8 +9,23 @@
 #define EMGU_TRACKING_C_H
 
 #include "opencv2/core/core_c.h"
+#ifdef HAVE_OPENCV_TRACKING
 #include "opencv2/tracking/tracking.hpp"
-
+#else
+static inline CV_NORETURN void throw_no_tracking() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without tracking support"); }
+namespace cv {
+class Tracker {};
+class TrackerBoosting {};
+class TrackerMedianFlow {};
+class TrackerMIL {};
+class TrackerTLD {};
+class TrackerKCF {};
+class TrackerGOTURN {};
+class TrackerMOSSE {};
+class MultiTracker {};
+class TrackerCSRT {};
+}
+#endif
 //CVAPI(cv::Tracker*) cveTrackerCreate(cv::String* trackerType);
 CVAPI(bool) cveTrackerInit(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox);
 CVAPI(bool) cveTrackerUpdate(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox);

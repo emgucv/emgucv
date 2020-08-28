@@ -9,9 +9,33 @@
 #define EMGU_FACE_C_H
 
 #include "opencv2/core/core_c.h"
-//#include "opencv2/face/facerec.hpp"
+
+#ifdef HAVE_OPENCV_FACE
 #include "opencv2/face/bif.hpp"
 #include "opencv2/face.hpp"
+#else
+static inline CV_NORETURN void throw_no_face() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without face support"); }
+namespace cv {
+	namespace face {
+		class FaceRecognizer {};
+		class BasicFaceRecognizer {};
+		class EigenFaceRecognizer {};
+		class FisherFaceRecognizer {};
+		class LBPHFaceRecognizer {};
+		class BIF {};
+		class Facemark {};
+		class FacemarkAAM {
+		public:
+			struct  Params {};
+		};
+		class FacemarkLBF {
+		public:
+			struct  Params {};
+		};
+		class MACE {};
+	}
+}
+#endif
 
 //EigenFaceRecognizer
 CVAPI(cv::face::EigenFaceRecognizer*) cveEigenFaceRecognizerCreate(
@@ -23,7 +47,7 @@ CVAPI(cv::face::EigenFaceRecognizer*) cveEigenFaceRecognizerCreate(
 CVAPI(void) cveEigenFaceRecognizerRelease(cv::Ptr<cv::face::EigenFaceRecognizer>** sharedPtr);
 
 CVAPI(cv::face::FisherFaceRecognizer*) cveFisherFaceRecognizerCreate(
-	int numComponents, 
+	int numComponents,
 	double threshold,
 	cv::face::FaceRecognizer** faceRecognizerPtr,
 	cv::face::FaceRecognizer** basicFaceRecognizerPtr,
@@ -31,10 +55,10 @@ CVAPI(cv::face::FisherFaceRecognizer*) cveFisherFaceRecognizerCreate(
 CVAPI(void) cveFisherFaceRecognizerRelease(cv::Ptr<cv::face::FisherFaceRecognizer>** sharedPtr);
 
 CVAPI(cv::face::LBPHFaceRecognizer*) cveLBPHFaceRecognizerCreate(
-	int radius, 
-	int neighbors, 
-	int gridX, 
-	int gridY, 
+	int radius,
+	int neighbors,
+	int gridX,
+	int gridY,
 	double threshold,
 	cv::face::FaceRecognizer** faceRecognizerPtr,
 	cv::Ptr<cv::face::LBPHFaceRecognizer>** sharedPtr);
@@ -84,7 +108,7 @@ CVAPI(bool) cveFacemarkFit(cv::face::Facemark* facemark, cv::_InputArray* image,
 //CVAPI(bool) cveFacemarkAddTrainingSample(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* landmarks);
 //CVAPI(void) cveFacemarkTraining(cv::face::Facemark* facemark);
 
-CVAPI(void) cveDrawFacemarks(cv::_InputOutputArray* image, cv::_InputArray* points,	CvScalar* color);
+CVAPI(void) cveDrawFacemarks(cv::_InputOutputArray* image, cv::_InputArray* points, CvScalar* color);
 
 CVAPI(cv::face::MACE*) cveMaceCreate(int imgSize, cv::Ptr<cv::face::MACE>** sharedPtr);
 CVAPI(void) cveMaceSalt(cv::face::MACE* mace, cv::String* passphrase);

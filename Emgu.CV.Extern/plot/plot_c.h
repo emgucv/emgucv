@@ -9,7 +9,16 @@
 #define EMGU_PLOT_C_H
 
 #include "opencv2/core/core_c.h"
+#ifdef HAVE_OPENCV_PLOT
 #include "opencv2/plot.hpp"
+#else
+static inline CV_NORETURN void throw_no_plot() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without plot module support"); }
+namespace cv {
+namespace plot {
+class Plot2d {};
+}
+}
+#endif
 
 CVAPI(cv::plot::Plot2d*) cvePlot2dCreateFrom(cv::_InputArray* data, cv::Ptr<cv::plot::Plot2d>** sharedPtr);
 CVAPI(cv::plot::Plot2d*) cvePlot2dCreateFromXY(cv::_InputArray* dataX, cv::_InputArray* dataY, cv::Ptr<cv::plot::Plot2d>** sharedPtr);

@@ -52,24 +52,6 @@ namespace Emgu.CV.XPhoto
             CvInvoke.CheckLibraryLoaded();
         }
 
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveWhiteBalancerBalanceWhite(IntPtr whiteBalancer, IntPtr src, IntPtr dst);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveSimpleWBCreate(ref IntPtr whiteBalancer, ref IntPtr sharedPtr);
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveSimpleWBRelease(ref IntPtr whiteBalancer, ref IntPtr sharedPtr);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveGrayworldWBCreate(ref IntPtr whiteBalancer, ref IntPtr sharedPtr);
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveGrayworldWBRelease(ref IntPtr whiteBalancer, ref IntPtr sharedPtr);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveLearningBasedWBCreate(ref IntPtr whiteBalancer, ref IntPtr sharedPtr);
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveLearningBasedWBRelease(ref IntPtr whiteBalancer, ref IntPtr sharedPtr);
-
         /// <summary>
         /// The function implements simple dct-based denoising, link: http://www.ipol.im/pub/art/2011/ys-dct/.
         /// </summary>

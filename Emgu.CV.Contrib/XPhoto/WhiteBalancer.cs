@@ -40,4 +40,10 @@ namespace Emgu.CV.XPhoto
             _whiteBalancerPtr = IntPtr.Zero;
         }
     }
+
+    public static partial class XPhotoInvoke
+    {
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveWhiteBalancerBalanceWhite(IntPtr whiteBalancer, IntPtr src, IntPtr dst);
+    }
 }

@@ -1,8 +1,14 @@
 :: variables required for OpenCV build ::
 :: Note: all pathes should be specified without tailing slashes!
+@echo on
 
 SET MAKE_EXE=
 SET ANDROID_NDK_PARENT_DIR=C:\android
+
+:: variables required for android-opencv build ::
+IF EXIST "C:\Program Files (x86)\Android\android-sdk" SET ANDROID_SDK=C:\Program Files (x86)\Android\android-sdk
+IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-sdk" SET ANDROID_SDK=%ANDROID_NDK_PARENT_DIR%\android-sdk
+
 IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r10e" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r10e
 IF EXIST "%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r10e" SET ANDROID_NDK=%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r10e
 
@@ -29,7 +35,7 @@ IF EXIST "%PROGRAMDATA%\Microsoft\AndroidNDK64\android-ndk-r15c" SET ANDROID_NDK
 IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r16" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r16
 IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r16b" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r16b
 IF EXIST "C:\Microsoft\AndroidNDK64\android-ndk-r16b" SET ANDROID_NDK=C:\Microsoft\AndroidNDK64\android-ndk-r16b
-IF EXIST "%ANDROID_NDK%" SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows-x86_64\bin\make.exe
+
 
 IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r17c" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r17c
 
@@ -41,14 +47,19 @@ IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r20" SET ANDROID_NDK=%ANDROID_NDK
 
 IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r21" SET ANDROID_NDK=%ANDROID_NDK_PARENT_DIR%\android-ndk-r21
 
+IF EXIST "%programfiles(x86)%\Android\android-sdk\ndk-bundle" SET ANDROID_NDK=%programfiles(x86)%\Android\android-sdk\ndk-bundle
+IF EXIST "%ANDROID_SDK%\ndk-bundle" SET ANDROID_NDK=%ANDROID_SDK%\ndk-bundle
+
+
+REM SET MAKE_EXE
+IF EXIST "%ANDROID_NDK%" SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows-x86_64\bin\make.exe
+
 IF EXIST "%programfiles(x86)%\CMake 2.8\bin\cmake.exe" SET CMAKE_EXE=%programfiles(x86)%\CMake 2.8\bin\cmake.exe
 IF EXIST "%programfiles(x86)%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programfiles(x86)%\CMake\bin\cmake.exe
 IF EXIST "%programfiles%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programfiles%\CMake\bin\cmake.exe
 IF EXIST "%programw6432%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programw6432%\CMake\bin\cmake.exe
 
-:: variables required for android-opencv build ::
-IF EXIST "C:\Program Files (x86)\Android\android-sdk" SET ANDROID_SDK=C:\Program Files (x86)\Android\android-sdk
-IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-sdk" SET ANDROID_SDK=%ANDROID_NDK_PARENT_DIR%\android-sdk
+
 
 SET ANT_DIR="%VS140COMNTOOLS%..\..\Apps\apache-ant-1.9.3"
 
@@ -59,6 +70,8 @@ FOR /F "tokens=2*" %%a IN ('REG QUERY "HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java
 
 IF NOT "" == "%JavaHome17%" SET JAVA_HOME=%JavaHome17%
 IF NOT "" == "%JavaHome18%" set JAVA_HOME=%JavaHome18%
+IF EXIST "C:\Program Files\Android\jdk\microsoft_dist_openjdk_1.8.0.25" SET JAVA_HOME=C:\Program Files\Android\jdk\microsoft_dist_openjdk_1.8.0.25
+
 ECHO Java Home: %JAVA_HOME%
 :: configuration options ::
 :::: general ARM-V7 settings

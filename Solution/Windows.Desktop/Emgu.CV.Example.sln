@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoSurveillance", "..\..\
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "FaceDetectionVB", "..\..\Emgu.CV.Example\FaceDetectionVB\FaceDetectionVB.vbproj", "{89E9015F-DECF-4774-95DA-7F7D22B0A12F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPF", "..\..\Emgu.CV.Example\WPF\WPF.csproj", "{B1D43BE6-AF83-41E5-990E-3E163CE42C79}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OCR", "..\..\Emgu.CV.Example\OCR\OCR.csproj", "{32BFC19B-AE74-413F-90FC-345CBCE13B69}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stitching", "..\..\Emgu.CV.Example\Stitching\Stitching.csproj", "{331F904E-E7E8-42E0-8C82-22539C35E8F3}"
@@ -35,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aruco", "..\..\Emgu.CV.Exam
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.XamarinForms", "..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.shproj", "{F2A5CE86-0B21-40D2-AD3F-BB2D1D716CFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamarinForms.WPF", "..\..\Emgu.CV.Example\XamarinForms\WPF\XamarinForms.WPF.csproj", "{8792CF43-C2C4-4F39-8A12-99B2B8C86C91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XamarinForms.WPF", "..\..\Emgu.CV.Example\XamarinForms\WPF\XamarinForms.WPF.csproj", "{8792CF43-C2C4-4F39-8A12-99B2B8C86C91}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Windows", "..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.shproj", "{ADC3C8E5-EBCD-4D3C-B3A4-20CFE0E42FC1}"
 EndProject
@@ -63,6 +61,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Platform.Net", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj", "{586B61D2-F1FE-499E-884C-470054E00C35}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPF.NetCore", "..\..\Emgu.CV.Example\WPF.NetCore\WPF.NetCore.csproj", "{5F062E7D-B078-4F68-BF4A-F431DFC51002}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
@@ -80,8 +80,8 @@ Global
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{86a21342-2da9-4841-b1bd-b323ac5b81fd}*SharedItemsImports = 13
-		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{8792cf43-c2c4-4f39-8a12-99b2b8c86c91}*SharedItemsImports = 4
-		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{8792cf43-c2c4-4f39-8a12-99b2b8c86c91}*SharedItemsImports = 4
+		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{8792cf43-c2c4-4f39-8a12-99b2b8c86c91}*SharedItemsImports = 5
+		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{8792cf43-c2c4-4f39-8a12-99b2b8c86c91}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{89e9015f-decf-4774-95da-7f7d22b0a12f}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{8cce876e-cb72-446e-9b8a-f346a8eb9caa}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Raspbian\Emgu.CV.Runtime.Raspbian.projitems*{8cce876e-cb72-446e-9b8a-f346a8eb9caa}*SharedItemsImports = 5
@@ -89,13 +89,14 @@ Global
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{8cce876e-cb72-446e-9b8a-f346a8eb9caa}*SharedItemsImports = 5
 		..\..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.projitems*{90e78bbf-c7fe-4d8e-ade1-75448e866fdb}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{94c0c68e-e46f-4228-9dff-148f9498bc0e}*SharedItemsImports = 4
+		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{97c98fca-5f0d-4771-8063-881c620946af}*SharedItemsImports = 5
+		..\..\Emgu.CV.Runtime\Raspbian\Emgu.CV.Runtime.Raspbian.projitems*{97c98fca-5f0d-4771-8063-881c620946af}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{97c98fca-5f0d-4771-8063-881c620946af}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{97c98fca-5f0d-4771-8063-881c620946af}*SharedItemsImports = 5
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
 		..\..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.projitems*{ac06f404-0a97-4142-a021-572d686e231f}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{adc3c8e5-ebcd-4d3c-b3a4-20cfe0e42fc1}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{b18e1566-4833-4f90-9f6a-2c026d08265c}*SharedItemsImports = 4
-		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{b1d43be6-af83-41e5-990e-3e163ce42c79}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{bdcc078c-8d14-47dc-850d-9d5731503aec}*SharedItemsImports = 4
 		..\..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.projitems*{ce1b6bd1-7711-47ee-90d4-d0433aba85fc}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{e8a4de5c-be26-445f-bebd-8c99c80857e1}*SharedItemsImports = 4
@@ -188,18 +189,6 @@ Global
 		{89E9015F-DECF-4774-95DA-7F7D22B0A12F}.Release|x64.Build.0 = Release|x64
 		{89E9015F-DECF-4774-95DA-7F7D22B0A12F}.Release|x86.ActiveCfg = Release|x86
 		{89E9015F-DECF-4774-95DA-7F7D22B0A12F}.Release|x86.Build.0 = Release|x86
-		{B1D43BE6-AF83-41E5-990E-3E163CE42C79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B1D43BE6-AF83-41E5-990E-3E163CE42C79}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B1D43BE6-AF83-41E5-990E-3E163CE42C79}.Debug|x64.ActiveCfg = Debug|x64
-		{B1D43BE6-AF83-41E5-990E-3E163CE42C79}.Debug|x64.Build.0 = Debug|x64
-		{B1D43BE6-AF83-41E5-990E-3E163CE42C79}.Debug|x86.ActiveCfg = Debug|x86
-		{B1D43BE6-AF83-41E5-990E-3E163CE42C79}.Debug|x86.Build.0 = Debug|x86
-		{B1D43BE6-AF83-41E5-990E-3E163CE42C79}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B1D43BE6-AF83-41E5-990E-3E163CE42C79}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B1D43BE6-AF83-41E5-990E-3E163CE42C79}.Release|x64.ActiveCfg = Release|x64
-		{B1D43BE6-AF83-41E5-990E-3E163CE42C79}.Release|x64.Build.0 = Release|x64
-		{B1D43BE6-AF83-41E5-990E-3E163CE42C79}.Release|x86.ActiveCfg = Release|x86
-		{B1D43BE6-AF83-41E5-990E-3E163CE42C79}.Release|x86.Build.0 = Release|x86
 		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32BFC19B-AE74-413F-90FC-345CBCE13B69}.Debug|x64.ActiveCfg = Debug|x64
@@ -344,6 +333,18 @@ Global
 		{586B61D2-F1FE-499E-884C-470054E00C35}.Release|x64.Build.0 = Release|Any CPU
 		{586B61D2-F1FE-499E-884C-470054E00C35}.Release|x86.ActiveCfg = Release|Any CPU
 		{586B61D2-F1FE-499E-884C-470054E00C35}.Release|x86.Build.0 = Release|Any CPU
+		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Debug|x64.Build.0 = Debug|Any CPU
+		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Debug|x86.Build.0 = Debug|Any CPU
+		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Release|x64.ActiveCfg = Release|Any CPU
+		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Release|x64.Build.0 = Release|Any CPU
+		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Release|x86.ActiveCfg = Release|Any CPU
+		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
