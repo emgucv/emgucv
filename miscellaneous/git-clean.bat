@@ -3,6 +3,10 @@ pushd %~p0
 
 cd ..
 
+cd eigen
+git clean -d -f -x "."
+cd ..
+
 cd vtk
 git clean -d -f -x "."
 cd ..

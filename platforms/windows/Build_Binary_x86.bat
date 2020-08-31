@@ -12,6 +12,7 @@ REM %8%: "nuget", this indicates if we should build the nuget package
 REM %9%: This field if for the CUDA_ARCH_BIN_OPTION, if you want to specify manually. e.g. "6.1"
 
 SET BUILD_FOLDER=build
+SET BUILD_TOOLS_FOLDER=C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools
 
 IF "%1%"=="32" GOTO ENV_x86
 IF "%1%"=="64" GOTO ENV_x64
@@ -23,30 +24,30 @@ GOTO ENV_END
 :ENV_x86
 SET BUILD_FOLDER=%BUILD_FOLDER%_x86
 ECHO "BUILDING 32bit solution in %BUILD_FOLDER%"
-IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvars32.bat" SET ENV_SETUP_SCRIPT=c:\BuildTools\vc\Auxiliary\Build\vcvars32.bat
+IF EXIST "%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvars32.bat" SET ENV_SETUP_SCRIPT=%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvars32.bat
 GOTO ENV_END
 
 :ENV_x64
 SET BUILD_FOLDER=%BUILD_FOLDER%_x64
 ECHO "BUILDING 64bit solution in %BUILD_FOLDER%" 
-IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvars64.bat" SET ENV_SETUP_SCRIPT=c:\BuildTools\vc\Auxiliary\Build\vcvars64.bat
+IF EXIST "%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvars64.bat" SET ENV_SETUP_SCRIPT=%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvars64.bat
 GOTO ENV_END
 
 :ENV_ARM
 SET BUILD_FOLDER=%BUILD_FOLDER%_ARM
 ECHO "BUILDING ARM solution in %BUILD_FOLDER%"
-IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm.bat" SET ENV_SETUP_SCRIPT=c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm.bat
+IF EXIST "%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvarsamd64_arm.bat" SET ENV_SETUP_SCRIPT=%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvarsamd64_arm.bat
 GOTO ENV_END
 
 :ENV_ARM64
 SET BUILD_FOLDER=%BUILD_FOLDER%_ARM64
 ECHO "BUILDING ARM64 solution in %BUILD_FOLDER%"
-IF EXIST "c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm64.bat" SET ENV_SETUP_SCRIPT=c:\BuildTools\vc\Auxiliary\Build\vcvarsamd64_arm64.bat
+IF EXIST "%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvarsamd64_arm64.bat" SET ENV_SETUP_SCRIPT=%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvarsamd64_arm64.bat
 
 :ENV_END
 IF "%ENV_SETUP_SCRIPT%"=="" GOTO ENV_SETUP_END
 
-call %ENV_SETUP_SCRIPT%
+call "%ENV_SETUP_SCRIPT%"
 
 @echo on
 
@@ -102,12 +103,10 @@ SET VS2019="%VS2019_DIR%\Common7\IDE\devenv.com"
 
 FOR /F "tokens=* USEBACKQ" %%F IN (`..\miscellaneous\vswhere.exe -products * -property installationPath`) DO SET VS_BUILDTOOLS=%%F
 
-SET BUILDTOOLS=C:\BuildTools
-
 IF EXIST "%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe" SET MSBUILD35=%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe
 IF EXIST "%windir%\Microsoft.NET\Framework64\v3.5\MSBuild.exe" SET MSBUILD35=%windir%\Microsoft.NET\Framework64\v3.5\MSBuild.exe
 IF EXIST "%windir%\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe" SET MSBUILD40=%windir%\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe
-IF EXIST "%BUILDTOOLS%\MSBuild\Current\Bin\MSBuild.exe" SET MSBUILD_BUILDTOOLS=%BUILDTOOLS%\MSBuild\Current\Bin\MSBuild.exe
+IF EXIST "%BUILD_TOOLS_FOLDER%\MSBuild\Current\Bin\MSBuild.exe" SET MSBUILD_BUILDTOOLS=%BUILD_TOOLS_FOLDER%\MSBuild\Current\Bin\MSBuild.exe
 
 IF EXIST "%MSBUILD35%" SET DEVENV="%MSBUILD35%"
 IF EXIST "%MSBUILD40%" SET DEVENV="%MSBUILD40%"
@@ -310,7 +309,7 @@ IF %DEVENV%==%VS2017% SET CUDA_HOST_COMPILER=%VS2017_CUDA_HOST_COMPILER%
 for /d %%i in ( "%VS2019_DIR%\VC\Tools\MSVC\*" ) do SET VS2019_CUDA_HOST_COMPILER=%%i\bin\Hostx64\x64\cl.exe
 IF %DEVENV%==%VS2019% SET CUDA_HOST_COMPILER=%VS2019_CUDA_HOST_COMPILER%
 
-for /d %%i in ( "%BUILDTOOLS%\VC\Tools\MSVC\*" ) do SET BUILDTOOLS_CUDA_HOST_COMPILER=%%i\bin\Hostx64\x64\cl.exe
+for /d %%i in ( "%BUILD_TOOLS_FOLDER%\VC\Tools\MSVC\14.2*" ) do SET BUILDTOOLS_CUDA_HOST_COMPILER=%%i\bin\Hostx64\x64\cl.exe
 IF %DEVENV%=="%MSBUILD_BUILDTOOLS%" SET CUDA_HOST_COMPILER=%BUILDTOOLS_CUDA_HOST_COMPILER%
 
 REM Find cuda. Use latest Cuda release for 64 bit and Cuda 6.5 for 32bit
@@ -335,7 +334,7 @@ IF NOT EXIST "%CUDA_SDK_DIR%" SET CUDA_SDK_DIR=%CUDA_PATH_V9_0%
 IF NOT EXIST "%CUDA_SDK_DIR%" SET CUDA_SDK_DIR=%CUDA_PATH_V8_0%
 IF NOT EXIST "%CUDA_SDK_DIR%" SET CUDA_SDK_DIR=%CUDA_PATH_V7_5%
 SET CUDA_64_MODE=-DCUDA_64_BIT_DEVICE_CODE:BOOL=TRUE
-SET CUDA_NVCUVENC_DIR="%PROGRAMFILES_DIR%\NVIDIA GPU Computing Toolkit\CUDA\nvidia-video-sdk\nvidia_video_sdk_6.0.1"
+SET CUDA_NVCUVENC_DIR="%PROGRAMFILES_DIR%\NVIDIA GPU Computing Toolkit\CUDA\Video_Codec_SDK_10.0.26"
 IF EXIST %CUDA_NVCUVENC_DIR% SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 -DCUDA_nvcuvenc_LIBRARY:String=%CUDA_NVCUVENC_DIR% ^
 -DWITH_NVCUVID:BOOL=TRUE
