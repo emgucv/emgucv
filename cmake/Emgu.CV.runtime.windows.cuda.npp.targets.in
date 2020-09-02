@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
       <PropertyGroup>
-        <EmguCvCudaLinkTarget>Windows Runtime</EmguCvCudaLinkTarget>
-		<EmguCvCudaBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguCvCudaBuildX86>
-        <EmguCvCudaBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguCvCudaBuildX64>
-		<EmguCudaNativeFileX64>$(MSBuildThisFileDirectory)\x64\cudart64_${CUDA_VERSION_NUMERIC_ONLY}.dll</EmguCudaNativeFileX64>
-		<EmguCudaErrorMessage Condition="'$(EmguCvCudaBuildX86)'=='True'">X86 or AnyCPU is targeted, but ${EMGU_NPP_NUGET_ID} nuget package do not support 32-bit</EmguCudaErrorMessage>
-        <EmguCudaDeployMessage Condition="'$(EmguCvCudaBuildX64)'=='True' AND Exists('$(EmguCudaNativeFileX64)')">$(EmguCudaDeployMessage)x64 </EmguCudaDeployMessage>
-        <EmguCudaErrorMessage Condition="'$(EmguCvCudaBuildX64)'=='True' AND !Exists('$(EmguCudaNativeFileX64)')">${EMGU_NPP_NUGET_ID} nuget package do not contain necessary binary for $(EmguCvCudaLinkTarget). X64 is targeted, but file $(EmguCudaNativeFileX64) is missing.</EmguCudaErrorMessage>
+        <EmguCudaNppLinkTarget>Windows runtime</EmguCudaNppLinkTarget>
+		<EmguCudaNppBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguCudaNppBuildX86>
+        <EmguCudaNppBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguCudaNppBuildX64>
+		<EmguCudaNppErrorMessage Condition="'$(EmguCudaNppBuildX86)'=='True'">X86 or AnyCPU is targeted, but ${EMGU_NPP_NUGET_ID} nuget package do not support 32-bit. PInvoke may fail on Windows X86 platform.</EmguCudaNppErrorMessage>
+        <EmguCudaNppDeployMessage Condition="'$(EmguCudaNppBuildX64)'=='True'">$(EmguCudaDeployMessage)x64 </EmguCudaNppDeployMessage>
       </PropertyGroup>
-      <ItemGroup Condition="'$(EmguCvCudaBuildX64)'=='True' AND Exists('$(EmguCudaNativeFileX64)')">
+      <ItemGroup Condition="'$(EmguCudaNppBuildX64)'=='True'">
         <None Include="$(MSBuildThisFileDirectory)\x64\*.dll">
           <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
       </ItemGroup>
-	    <Target Name="EmguCvCudaPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <Warning Text="'$(EmguCudaErrorMessage)'" Condition="'$(EmguCudaErrorMessage)'!=''" />
-    <Message Text="${EMGU_NPP_NUGET_ID} nuget package deploying $(EmguCudaDeployMessage)binary." Condition="'$(EmguCudaDeployMessage)'!=''" Importance="High" />
-    <Message Text="No native binary is deployed by the ${EMGU_NPP_NUGET_ID} nuget package." Condition="'$(EmguCudaDeployMessage)'==''" Importance="High" />
-  </Target>
+	    <Target Name="EmguCudaNppPackageBuildImports" BeforeTargets="PrepareForBuild">
+          <Warning Text="'$(EmguCudaNppErrorMessage)'" Condition="'$(EmguCudaNppErrorMessage)'!=''" />
+          <Message Text="${EMGU_NPP_NUGET_ID} nuget package deploying $(EmguCudaNppDeployMessage)binary." Condition="'$(EmguCudaNppDeployMessage)'!=''" Importance="High" />
+          <Message Text="No native binary is deployed by the ${EMGU_NPP_NUGET_ID} nuget package." Condition="'$(EmguCudaNppDeployMessage)'==''" Importance="High" />
+        </Target>
 </Project>
