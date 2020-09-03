@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-      <EmguCvLinkTarget>WindowsForms</EmguCvLinkTarget>
+      <EmguCvLinkTarget>Windows runtime</EmguCvLinkTarget>
       <EmguCvBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguCvBuildX86>
       <EmguCvBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguCvBuildX64>
       <EmguCvNativeFileX86>$(MSBuildThisFileDirectory)\x86\cvextern.dll</EmguCvNativeFileX86>
@@ -40,10 +40,8 @@
       </None>
     </ItemGroup>
     <Target Name="EmguCVPackageBuildImports" BeforeTargets="PrepareForBuild">
-      <Warning Condition="'$(EmguCvLinkTarget)'==''" Text="Emgu CV is not able to detect the project type, unloading and reloading the project may fix this problem. If you are still having difficulty, please send an email to support@emgu.com" />
-      <Message Condition="'$(EmguCvLinkTarget)'!=''" Text="Emgu CV nuget package compiling against $(EmguCvLinkTarget)" Importance="High" />
       <Warning Text="'$(EmguCvErrorMessage)'" Condition="'$(EmguCvErrorMessage)'!=''" />
-      <Message Text="Emgu CV compiling with $(EmguCvDeployMessage)binary" Condition="'$(EmguCvDeployMessage)'!=''" Importance="High" />
-      <Message Text="No native binary is deployed by the Emgu CV project." Condition="'$(EmguCvDeployMessage)'==''" Importance="High" />
+      <Message Text="Emgu.CV.runtime.windows nuget package deploying $(EmguCvDeployMessage)binary for Windows" Condition="'$(EmguCvDeployMessage)'!=''" Importance="High" />
+      <Message Text="No native binary is deployed by the Emgu.CV.runtime.windows nuget package." Condition="'$(EmguCvDeployMessage)'==''" Importance="High" />
     </Target>
 </Project>
