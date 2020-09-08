@@ -7,20 +7,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using Emgu.CV.CvEnum;
-
-#if __UNIFIED__
-using CoreGraphics;
-#elif NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_WEBGL || UNITY_EDITOR 
-#else
-using System.Drawing.Imaging;
-#endif
-
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
-
-using Emgu.CV.Features2D;
 using Emgu.CV.Reflection;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -57,7 +45,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Create image from the specific multi-dimensional data, where the 1st dimesion is # of rows (height), the 2nd dimension is # cols (width) and the 3rd dimension is the channel
+        /// Create image from the specific multi-dimensional data, where the 1st dimension is # of rows (height), the 2nd dimension is # cols (width) and the 3rd dimension is the channel
         /// </summary>
         /// <param name="data">The multi-dimensional data where the 1st dimension is # of rows (height), the 2nd dimension is # cols (width) and the 3rd dimension is the channel </param>
         public Image(TDepth[,,] data)
@@ -1971,7 +1959,6 @@ namespace Emgu.CV
             }
         }
 
-#if !(UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO)
         /// <summary>
         /// Convert the image to log polar, simulating the human foveal vision
         /// </summary>
@@ -1991,7 +1978,7 @@ namespace Emgu.CV
             CvInvoke.LogPolar(this, imgPolar, center, magnitude, interpolationType, warpType);
             return imgPolar;
         }
-#endif
+
 #endregion
 
 #region Image color and depth conversion

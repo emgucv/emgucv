@@ -1259,80 +1259,9 @@ namespace Emgu.CV
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern double cveArcLength(
-           IntPtr curve,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool isClosed);
-
-        /*
-        /// <summary>
-        /// Find the perimeter of the contour
-        /// </summary>
-        /// <param name="contour">Pointer to the contour</param>
-        /// <returns>the perimeter of the contour</returns>
-        public static double cvContourPerimeter(IntPtr contour)
-        {
-           return cvArcLength(contour, MCvSlice.WholeSeq, 1);
-        }
-
-
-        /// <summary>
-        /// Creates binary tree representation for the input contour and returns the pointer to its root.
-        /// </summary>
-        /// <param name="contour">Input contour</param>
-        /// <param name="storage">Container for output tree</param>
-        /// <param name="threshold">If the parameter threshold is less than or equal to 0, the function creates full binary tree representation. If the threshold is greater than 0, the function creates representation with the precision threshold: if the vertices with the interceptive area of its base line are less than threshold, the tree should not be built any further</param>
-        /// <returns>The binary tree representation for the input contour</returns>
-        [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern IntPtr cvCreateContourTree(
-           IntPtr contour,
-           IntPtr storage,
-           double threshold);
-
-        /// <summary>
-        /// Return the contour from its binary tree representation
-        /// </summary>
-        /// <param name="tree">Contour tree</param>
-        /// <param name="storage">Container for the reconstructed contour</param>
-        /// <param name="criteria">Criteria, where to stop reconstruction</param>
-        /// <returns>The contour represented by this contour tree</returns>
-  #if ANDROID
-        public static IntPtr cvContourFromContourTree(
-           IntPtr tree,
-           IntPtr storage,
-           MCvTermCriteria criteria)
-        {
-           return cvContourFromContourTree(tree, storage, criteria.type, criteria.max_iter, criteria.epsilon);
-        }
-        [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern IntPtr cvContourFromContourTree(
-           IntPtr tree,
-           IntPtr storage,
-            CvEnum.TermCritType type,
-           int maxIter,
-           double epsilon);
-  #else
-        [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern IntPtr cvContourFromContourTree(
-           IntPtr tree,
-           IntPtr storage,
-           MCvTermCriteria criteria);
-  #endif
-
-        /// <summary>
-        /// Calculates the value of the matching measure for two contour trees. The similarity measure is calculated level by level from the binary tree roots. If at the certain level difference between contours becomes less than threshold, the reconstruction process is interrupted and the current difference is returned
-        /// </summary>
-        /// <param name="tree1">First contour tree</param>
-        /// <param name="tree2">Second contour tree</param>
-        /// <param name="method">Similarity measure, only CV_CONTOUR_TREES_MATCH_I1 is supported</param>
-        /// <param name="threshold">Similarity threshold</param>
-        /// <returns>The value of the matching measure for two contour trees</returns>
-        [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern double cvMatchContourTrees(
-           IntPtr tree1,
-           IntPtr tree2,
-           CvEnum.MatchContourTreeMethod method,
-           double threshold);
-        */
+            IntPtr curve,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool isClosed);
         #endregion
 
         /// <summary>
