@@ -48,6 +48,7 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
 using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
 #else
+using Emgu.CV.ML;
 using NUnit.Framework;
 #endif
 
@@ -4258,6 +4259,22 @@ namespace Emgu.CV.Test
                 }
                 EmguAssert.IsTrue(frameCount > 0, "BackgroundSubtractorMOG2 did not return any frames");
             }
+        }
+
+        [Test]
+        public static void TestIntensityTransform()
+        {
+            Mat m = new Mat("lena.jpg", ImreadModes.Color);
+            Mat bimef = new Mat();
+            Mat autoScaling = new Mat();
+            Mat gamma = new Mat();
+            Mat contrastStretch = new Mat();
+            Mat log = new Mat();
+            Emgu.CV.IntensityTransform.IntensityTransformInvoke.BIMEF(m, bimef);
+            Emgu.CV.IntensityTransform.IntensityTransformInvoke.Autoscaling(m, autoScaling);
+            Emgu.CV.IntensityTransform.IntensityTransformInvoke.GammaCorrection(m, gamma, 2.0f);
+            Emgu.CV.IntensityTransform.IntensityTransformInvoke.ContrastStretching(m, contrastStretch, 0, 0, 200, 200);
+            Emgu.CV.IntensityTransform.IntensityTransformInvoke.LogTransform(m, log);
         }
 
         [Test]
