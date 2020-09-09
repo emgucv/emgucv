@@ -626,44 +626,6 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveCopy")]
         public static extern void cvCopy(IntPtr src, IntPtr des, IntPtr mask);
 
-        /*
-        /// <summary>
-        /// Copies scalar value to every selected element of the destination array:
-        /// arr(I)=value if mask(I)!=0
-        /// If array arr is of IplImage type, then is ROI used, but COI must not be set
-        /// </summary>
-        /// <param name="arr">The destination array</param>
-        /// <param name="value">Fill value</param>
-        /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
-  #if ANDROID
-        public static void cvSet(IntPtr arr, MCvScalar value, IntPtr mask)
-        {
-           cvSet(arr, value.V0, value.V1, value.V2, value.V3, mask);
-        }
-
-        [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cvSet(IntPtr arr, double v0, double v1, double v2, double v3, IntPtr mask);
-  #else
-        [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern void cvSet(IntPtr arr, MCvScalar value, IntPtr mask);
-  #endif
-
-        /// <summary>
-        /// Clears the array. In case of dense arrays (CvMat, CvMatND or IplImage) cvZero(array) is equivalent to cvSet(array,cvScalarAll(0),0), in case of sparse arrays all the elements are removed
-        /// </summary>
-        /// <param name="arr">array to be cleared</param>
-        [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern void cvSetZero(IntPtr arr);
-
-        /// <summary>
-        /// Clears the array. In case of dense arrays (CvMat, CvMatND or IplImage) cvZero(array) is equivalent to cvSet(array,cvScalarAll(0),0), in case of sparse arrays all the elements are removed
-        /// </summary>
-        /// <param name="arr">array to be cleared</param>
-        public static void cvZero(IntPtr arr)
-        {
-           cvSetZero(arr);
-        }*/
-
         /// <summary>
         /// Initializes scaled identity matrix:
         /// arr(i,j)=value if i=j,

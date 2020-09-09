@@ -13,13 +13,6 @@ using Emgu.CV.Util;
 using Emgu.Util;
 using System.IO;
 
-#if __UNIFIED__
-using CoreGraphics;
-#elif NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
-//#else
-//using System.Drawing.Imaging;
-#endif
-
 namespace Emgu.CV
 {
     /// <summary>
