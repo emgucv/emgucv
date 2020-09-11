@@ -20,10 +20,10 @@ namespace Emgu.Util
         {
 #if UNITY_IPHONE 
             _os = OS.IOS;
-            _runtime = ClrType.Mono;
+            _runtime = Clr.Unity;
 #elif UNITY_ANDROID
             _os = OS.Android;
-            _runtime = ClrType.Mono;
+            _runtime = Clr.Unity;
 #else
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
@@ -133,7 +133,11 @@ namespace Emgu.Util
             /// <summary>
             /// Mono runtime
             /// </summary>
-            Mono
+            Mono,
+            /// <summary>
+            /// Unity runtime
+            /// </summary>
+            Unity
         }
     }
 

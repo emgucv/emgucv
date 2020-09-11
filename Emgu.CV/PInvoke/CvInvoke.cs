@@ -408,7 +408,7 @@ namespace Emgu.CV
 #else
             if (Emgu.Util.Platform.OperationSystem == Platform.OS.IOS)
                 return libraryLoaded;
-            else if (Emgu.Util.Platform.OperationSystem == Platform.OS.Android)
+            else if (Emgu.Util.Platform.OperationSystem == Platform.OS.Android && (Emgu.Util.Platform.ClrType != Platform.Clr.Unity))
             {
                 System.Reflection.Assembly monoAndroidAssembly = Emgu.Util.Toolbox.FindAssembly("Mono.Android.dll");
 
