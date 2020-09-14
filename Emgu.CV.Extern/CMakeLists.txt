@@ -1234,7 +1234,30 @@ ENDMACRO()
     "element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element"
     "M00;M10;M01;M20;M11;M02;M30;M21;M12;M03;Mu20;Mu11;Mu02;Mu30;Mu21;Mu12;Mu03;Nu20;Nu11;Nu02;Nu30;Nu21;Nu12;Nu03" 
     "double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double;double" 
-    "M00;M10;M01;M20;M11;M02;M30;M21;M12;M03;Mu20;Mu11;Mu02;Mu30;Mu21;Mu12;Mu03;Nu20;Nu11;Nu02;Nu30;Nu21;Nu12;Nu03"
+    "Spatial Moment M00;
+    Spatial Moment M10;
+    Spatial Moment M01;
+    Spatial Moment M20;
+    Spatial Moment M11;
+    Spatial Moment M02;
+    Spatial Moment M30;
+    Spatial Moment M21;
+    Spatial Moment M12;
+    Spatial Moment M03;
+    Central Moment Mu20;
+    Central Moment Mu11;
+    Central Moment Mu02;
+    Central Moment Mu30;
+    Central Moment Mu21;
+    Central Moment Mu12;
+    Central Moment Mu03;
+    Central Normalized Moment Nu20;
+    Central Normalized Moment Nu11;
+    Central Normalized Moment Nu02;
+    Central Normalized Moment Nu30;
+    Central Normalized Moment Nu21;
+    Central Normalized Moment Nu12;
+    Central Normalized Moment Nu03"
     "Emgu.CV"
     "CvInvoke"
     "Moments"
