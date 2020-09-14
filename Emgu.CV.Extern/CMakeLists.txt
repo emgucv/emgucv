@@ -2086,6 +2086,7 @@ ENDIF()
 IF (NOT HAVE_opencv_cudaobjdetect)
   SET(HAVE_opencv_cudaobjdetect FALSE)
 ENDIF()
+
   CREATE_OCV_CLASS_PROPERTY( 
     "cudaobjdetect/cuda_hog_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Objdetect/CudaHOG.g.cs"
@@ -2116,32 +2117,31 @@ ENDIF()
 	""
 	${HAVE_opencv_cudaobjdetect})
 
-
-#  CREATE_OCV_CLASS_PROPERTY( 
-#    "cudaobjdetect/cuda_cascade_classifier_property" 
-#    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Objdetect/CudaCascadeClassifier.g.cs"
-#    "cv::cuda::CascadeClassifier" 
-#    "CudaCascadeClassifier"
-#    "ScaleFactor;MinNeighbors;MaxNumObjects;FindLargestObject;MaxObjectSize;MinObjectSize;ClassifierSize" 
-#    "double;int;int;bool;CvSize;CvSize;CvSize" 
-#    "prop;prop;prop;prop;struct;struct;structR"
-#    "ScaleFactor;MinNeighbors;MaxNumObjects;FindLargestObject;MaxObjectSize;MinObjectSize;ClassifierSize" 
-#    "double;int;int;bool;System.Drawing.Size;System.Drawing.Size;System.Drawing.Size"
-#    "Parameter specifying how much the image size is reduced at each image scale;
-#  Parameter specifying how many neighbors each candidate rectangle should have to retain it;
-#  The maximum number of objects;
-#  If true, only return the largest object;
-#  The maximum object size;
-#  The minimum object size;
-#  The classifier size"
-#    "Emgu.CV.Cuda"
-#    "CudaInvoke"
-#    "CudaCascadeClassifier"
-#	""
-#    "#include \"opencv2/cudaobjdetect.hpp\"
-#	""
-#	""
-#	${HAVE_opencv_cudaobjdetect})
+  CREATE_OCV_CLASS_PROPERTY( 
+    "cudaobjdetect/cuda_cascade_classifier_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Objdetect/CudaCascadeClassifier.g.cs"
+    "cv::cuda::CascadeClassifier"
+    "CudaCascadeClassifier"
+    "ScaleFactor;MinNeighbors;MaxNumObjects;FindLargestObject;MaxObjectSize;MinObjectSize;ClassifierSize" 
+    "double;int;int;bool;CvSize;CvSize;CvSize" 
+    "prop;prop;prop;prop;struct;struct;structR"
+    "ScaleFactor;MinNeighbors;MaxNumObjects;FindLargestObject;MaxObjectSize;MinObjectSize;ClassifierSize" 
+    "double;int;int;bool;System.Drawing.Size;System.Drawing.Size;System.Drawing.Size"
+    "Parameter specifying how much the image size is reduced at each image scale;
+  Parameter specifying how many neighbors each candidate rectangle should have to retain it;
+  The maximum number of objects;
+  If true, only return the largest object;
+  The maximum object size;
+  The minimum object size;
+  The classifier size"
+    "Emgu.CV.Cuda"
+    "CudaInvoke"
+    "CudaCascadeClassifier"
+	""
+    "#include \"cudaobjdetect_c.h\""
+	""
+	""
+	${HAVE_opencv_cudaobjdetect})
 
 ############################### cudaobjdetect code gen END ##############################
 
