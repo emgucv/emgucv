@@ -13,9 +13,6 @@ using Emgu.CV.Structure;
 using Emgu.Util.TypeEnum;
 using Plugin.FilePicker;
 using Plugin.FilePicker.Abstractions;
-//#if !__MACOS__
-//using Plugin.Media;
-//#endif
 
 namespace Emgu.CV.XamarinForms
 {
@@ -84,7 +81,7 @@ namespace Emgu.CV.XamarinForms
             Mat[] mats = new Mat[imageNames.Length];
 
 #if __ANDROID__ || __IOS__ || NETFX_CORE
-            await CrossMedia.Current.Initialize();
+            await Plugin.Media.CrossMedia.Current.Initialize();
 #endif
 
             for (int i = 0; i < mats.Length; i++)
@@ -107,9 +104,9 @@ namespace Emgu.CV.XamarinForms
                 {
 #if __ANDROID__ || __IOS__ || NETFX_CORE
                     haveCameraOption =
-                        (CrossMedia.Current.IsCameraAvailable && CrossMedia.Current.IsTakePhotoSupported);
+                        (Plugin.Media.CrossMedia.Current.IsCameraAvailable && Plugin.Media.CrossMedia.Current.IsTakePhotoSupported);
                     havePickImgOption =
-                        CrossMedia.Current.IsPickVideoSupported;
+                        Plugin.Media.CrossMedia.Current.IsPickVideoSupported;
 #else
                     haveCameraOption = false;
                     havePickImgOption = false;
@@ -160,7 +157,7 @@ namespace Emgu.CV.XamarinForms
                 else if (action.Equals("Photo Library"))
                 {
 #if __ANDROID__ || __IOS__ || NETFX_CORE
-                    var photoResult = await CrossMedia.Current.PickPhotoAsync();
+                    var photoResult = await Plugin.Media.CrossMedia.Current.PickPhotoAsync();
                     if (photoResult == null) //canceled
                         return null;
                     mats[i] = CvInvoke.Imread(photoResult.Path);
@@ -192,7 +189,7 @@ namespace Emgu.CV.XamarinForms
                         Directory = "Emgu",
                         Name = $"{DateTime.UtcNow}.jpg"
                     };
-                    var file = await CrossMedia.Current.TakePhotoAsync(mediaOptions);
+                    var file = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(mediaOptions);
                     using (Stream s = file.GetStream())
                     using (MemoryStream ms = new MemoryStream())
                     {
