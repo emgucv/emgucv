@@ -74,17 +74,7 @@
     <EmguCVNativeFile>$(OpenCVBinaryDir)\iOS\libcvextern.a</EmguCVNativeFile>
     <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
     <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)ios </EmguCVDeployMessage>
-    <EmguCVLinkWithFile>$(MSBuildThisFileDirectory)\libcvextern.linkwith.cs</EmguCVLinkWithFile>
-    <EmguCVErrorMessage Condition="!Exists('$(EmguCVLinkWithFile)')"> This package do not contain necessary file for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVLinkWithFile) </EmguCVErrorMessage>
   </PropertyGroup>
-  <ItemGroup>
-    <ObjcBindingNativeLibrary Include="$(EmguCVNativeFile)" Condition="Exists('$(EmguCVNativeFile)')" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="$(EmguCVLinkWithFile)" Condition="Exists('$(EmguCVLinkWithFile)')">
-      <DependentUpon>libcvextern.a</DependentUpon>
-    </Compile>
-  </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
   </ItemGroup>
@@ -99,15 +89,24 @@
     <Compile Include="..\..\Emgu.CV.NativeImage\UIImageExtension.cs">
       <Link>UIImageExtension.cs</Link>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="CvInvokeIOS.cs" />
     <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj">
-      <Project>{B5A48CE0-D4E6-4112-B782-F4A948BA2974}</Project>
+      <Project>{79214DCD-3F36-4C50-97F4-11AF21F60711}</Project>
       <Name>Emgu.CV.Platform.NetStandard.IOS</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <NativeReference Include="..\..\libs\iOS\libcvextern.a">
+      <Kind>Static</Kind>
+      <SmartLink>True</SmartLink>
+      <ForceLoad>True</ForceLoad>
+      <IsCxx>True</IsCxx>
+      <LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
+      <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
+    </NativeReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.ObjCBinding.CSharp.targets" />
   <Target Name="BeforeBuild">

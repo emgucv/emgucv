@@ -30,7 +30,7 @@ namespace Example.iOS
             ButtonText = "Detect Pedestrian";
             OnButtonClick += delegate
             {
-                //long processingTime;
+                long processingTime;
                 using (Mat image = CvInvoke.Imread("pedestrian.png", ImreadModes.Color))
                     using (HOGDescriptor hog = new HOGDescriptor())
                 {

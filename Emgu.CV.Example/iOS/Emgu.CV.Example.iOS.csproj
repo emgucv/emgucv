@@ -104,6 +104,9 @@
     <Reference Include="System.Core" />
     <Reference Include="MonoTouch.Dialog-1" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="OpenTK-1.0" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
