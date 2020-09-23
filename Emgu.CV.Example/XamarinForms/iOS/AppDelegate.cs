@@ -25,7 +25,7 @@ namespace Emgu.CV.XamarinForms.iOS
 
 			global::Xamarin.Forms.Forms.Init ();
             
-			if (!Emgu.CV.CvInvokeIOS.IsLoaded)
+			if (!Emgu.CV.CvInvokeIOS.CheckLibraryLoaded())
 				throw new Exception("Failed to load Emgu.CV.Platform.IOS.dll");
 
             LoadApplication (new Emgu.CV.XamarinForms.App ());
