@@ -98,6 +98,9 @@
     </MtouchI18n>
     <MtouchArch>ARMv7s, ARM64</MtouchArch>
   </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
