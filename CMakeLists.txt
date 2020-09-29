@@ -1643,9 +1643,7 @@ ELSEIF (WIN32)
     #ENDFOREACH()
 	
     IF (HAS_WINDESKTOP_X86_NATIVE_BINARY)
-    #  SET(DEBUGER_VISUALIZER_FILES 
-	#    "Emgu.CV.Platform.NetStandard"
-	#    "Emgu.CV.Platform.NetFramework")
+      SET(DEBUGER_VISUALIZER_FILES "Emgu.CV.Platform.NetStandard")	#"Emgu.CV.Platform.NetFramework")
     
 	  SET(DEBUGGER_VISUALIZER_UNMANAGED_FILES)
 	  FOREACH(full_file_name ${UNMANAGED_DLL_32BIT})
