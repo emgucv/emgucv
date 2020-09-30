@@ -10,9 +10,9 @@
     <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
 	<icon>icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-	<summary>This package provides the native CUDA DNN dependencies for EMGU software libraries</summary>
-    <description>This package provides the native CUDA DNN dependencies for EMGU software libraries</description>
-    <releaseNotes>This is the CUDA DNN v${EMGU_CUDNN_VERSION} for CUDA v${EMGU_CUDA_VERSION}. </releaseNotes>
+	<summary>This package provides the native DNN component for CUDA.</summary>
+    <description>This package provides the native DNN component for CUDA.</description>
+    <releaseNotes>This DNN v${EMGU_CUDNN_VERSION} for CUDA v${EMGU_CUDA_VERSION}.</releaseNotes>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>emgu cudnn</tags>
 	${EMGU_CUDNN_NUGET_DEPENDENCY}

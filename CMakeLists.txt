@@ -857,16 +857,17 @@ SET(EMGUCV_NUGET_ID "Emgu.CV")
 SET(EMGUCV_BITMAP_NUGET_ID "Emgu.CV.Bitmap")
 SET(EMGUCV_UI_NUGET_ID "Emgu.CV.UI")
 SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.windows")
-SET(EMGU_WINDOWS_NUGET_ID "Emgu.runtime.windows")
+SET(EMGU_WINDOWS_CUDA_NUGET_ID "Emgu.runtime.windows.cuda")
 IF(WITH_CUDA)
-	SET(EMGUCV_WINDOWS_NUGET_ID "${EMGU_WINDOWS_NUGET_ID}.cuda")
+	SET(EMGUCV_WINDOWS_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.cuda")
 	#SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID_BASE}-CUDA")
-	SET(EMGU_CUDA_BLAS_NUGET_ID "${EMGU_WINDOWS_NUGET_ID}.blas")
-	SET(EMGU_NPP_NUGET_ID "${EMGU_WINDOWS_NUGET_ID}.npp")
-	SET(EMGU_CUFFT_NUGET_ID "${EMGU_WINDOWS_NUGET_ID}.cufft")
-	SET(EMGU_CUDNN_NUGET_ID "${EMGU_WINDOWS_NUGET_ID}.dnn")
-	SET(EMGU_CUDNN_CNN_NUGET_ID "${EMGU_WINDOWS_NUGET_ID}.dnn.cnn")
-	SET(EMGU_CUDNN_OPS_NUGET_ID "${EMGU_WINDOWS_NUGET_ID}.dnn.ops")
+	SET(EMGU_CUDA_BLAS_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.blas")
+	SET(EMGU_NPP_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.npp")
+	SET(EMGU_CUFFT_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.fft")
+	SET(EMGU_CUDNN_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.dnn")
+	SET(EMGU_CUDNN_ADV_NUGET_ID "${EMGU_CUDNN_NUGET_ID}.adv")
+	SET(EMGU_CUDNN_CNN_NUGET_ID "${EMGU_CUDNN_NUGET_ID}.cnn")
+	SET(EMGU_CUDNN_OPS_NUGET_ID "${EMGU_CUDNN_NUGET_ID}.ops")
 #ELSE()
 #	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID_BASE}")
 ENDIF()
@@ -1138,10 +1139,12 @@ IF(WITH_CUDA)
     SET(EMGU_CUDNN_VERSION "${CUDNN_MAJOR_VERSION}.${CUDNN_MINOR_VERSION}.${CUDNN_PATCH_VERSION}")
 	SET(EMGU_CUDNN_NUGET_TITLE "Native x64 CUDA DNN dependency for EMGU CV")
 	SET(EMGU_CUDNN_NUGET_FILE_LIST "<file src=\"${EMGU_CUDNN_NUGET_ID}.targets\" target=\"build\\${EMGU_CUDNN_NUGET_ID}.targets\" />")
-	SET(EMGU_CUDNN_CNN_NUGET_TITLE "Native x64 CNN component of CUDA DNN dependency for EMGU CV")
+	SET(EMGU_CUDNN_CNN_NUGET_TITLE "Native x64 CNN component for CUDA DNN")
 	SET(EMGU_CUDNN_CNN_NUGET_FILE_LIST "<file src=\"${EMGU_CUDNN_CNN_NUGET_ID}.targets\" target=\"build\\${EMGU_CUDNN_CNN_NUGET_ID}.targets\" />")
-	SET(EMGU_CUDNN_OPS_NUGET_TITLE "Native x64 OPS component of CUDA DNN dependency for EMGU CV")
+	SET(EMGU_CUDNN_OPS_NUGET_TITLE "Native x64 OPS component for CUDA DNN")
 	SET(EMGU_CUDNN_OPS_NUGET_FILE_LIST "<file src=\"${EMGU_CUDNN_OPS_NUGET_ID}.targets\" target=\"build\\${EMGU_CUDNN_OPS_NUGET_ID}.targets\" />")
+	SET(EMGU_CUDNN_CNN_NUGET_TITLE "Native x64 CNN component for CUDA DNN")
+	SET(EMGU_CUDNN_CNN_NUGET_FILE_LIST "<file src=\"${EMGU_CUDNN_CNN_NUGET_ID}.targets\" target=\"build\\${EMGU_CUDNN_CNN_NUGET_ID}.targets\" />")
 	SET(EMGU_NPP_VERSION "${EMGU_CUDA_VERSION}")
 	SET(EMGU_CUDA_BLAS_VERSION "${EMGU_CUDA_VERSION}")
 	SET(EMGU_NPP_NUGET_TITLE "Native x64 CUDA dependency for EMGU CV")
@@ -1187,7 +1190,7 @@ IF(WITH_CUDA)
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
 		SET(EMGU_CUDNN_NUGET_FILE_LIST "${EMGU_CUDNN_NUGET_FILE_LIST} 
-		<file src=\"..\\..\\..\\libs\\x64\\cudnn*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cudnn_ops_*.dll;..\\..\\..\\libs\\x64\\cudnn_cnn_*.dll\" target=\"build\\x64\" />
+		<file src=\"..\\..\\..\\libs\\x64\\cudnn*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cudnn_ops_*.dll;..\\..\\..\\libs\\x64\\cudnn_cnn_*.dll;..\\..\\..\\libs\\x64\\cudnn_adv_*.dll\" target=\"build\\x64\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
 		SET(EMGU_CUDNN_CNN_NUGET_FILE_LIST "${EMGU_CUDNN_CNN_NUGET_FILE_LIST} 
@@ -1196,6 +1199,10 @@ IF(WITH_CUDA)
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
 		SET(EMGU_CUDNN_OPS_NUGET_FILE_LIST "${EMGU_CUDNN_OPS_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cudnn_ops_*.dll\" target=\"build\\x64\" />
+		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
+		SET(EMGU_CUDNN_ADV_NUGET_FILE_LIST "${EMGU_CUDNN_ADV_NUGET_FILE_LIST} 
+		<file src=\"..\\..\\..\\libs\\x64\\cudnn_adv_*.dll\" target=\"build\\x64\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
 		SET(EMGU_CUDNN_NUGET_DEPENDENCY "
