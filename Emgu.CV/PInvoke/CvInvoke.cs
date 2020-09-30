@@ -473,7 +473,10 @@ namespace Emgu.CV
 
                         return System.Runtime.InteropServices.NativeLibrary.Load("ResolveLib", asm, null);
                     };
-                    */
+                */
+
+                //For iOS, library are static linked, assume correct loading by default.
+                _libraryLoaded = true;
                 return;
             }
 
