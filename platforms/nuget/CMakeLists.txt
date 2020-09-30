@@ -2,13 +2,14 @@
 #  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.cufft")
+ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.rt")
+ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.fft")
+ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.npp")
+ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.blas")
 ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.dnn")
 ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.dnn.cnn")
 ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.dnn.ops")
 ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.dnn.adv")
-ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.npp")
-ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.blas")
 
 ADD_SUBDIRECTORY("Emgu.CV")
 ADD_SUBDIRECTORY("Emgu.CV.Bitmap")

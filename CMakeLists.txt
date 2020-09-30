@@ -857,10 +857,11 @@ SET(EMGUCV_NUGET_ID "Emgu.CV")
 SET(EMGUCV_BITMAP_NUGET_ID "Emgu.CV.Bitmap")
 SET(EMGUCV_UI_NUGET_ID "Emgu.CV.UI")
 SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.windows")
-SET(EMGU_WINDOWS_CUDA_NUGET_ID "Emgu.runtime.windows.cuda")
+
 IF(WITH_CUDA)
-	SET(EMGUCV_WINDOWS_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.cuda")
-	#SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID_BASE}-CUDA")
+	SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_WINDOWS_NUGET_ID}.cuda")
+	SET(EMGU_WINDOWS_CUDA_NUGET_ID "Emgu.runtime.windows.cuda")
+	SET(EMGU_CUDART_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.rt")
 	SET(EMGU_CUDA_BLAS_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.blas")
 	SET(EMGU_NPP_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.npp")
 	SET(EMGU_CUFFT_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.fft")
@@ -1133,11 +1134,12 @@ IF(WITH_CUDA)
 	IF ( (${cuda_major}) AND (${cuda_minor}) )
 		SET(EMGU_CUDA_VERSION "${cuda_major}.${cuda_minor}.${npp_build}")
 	ENDIF()
+	SET(EMGU_CUDART_VERSION "${EMGU_CUDA_VERSION}")
 	SET(EMGU_CUFFT_VERSION "${EMGU_CUDA_VERSION}")
-	SET(EMGU_CUFFT_NUGET_TITLE "Native x64 CUDA CUFFT dependency for EMGU CV")
+	SET(EMGU_CUFFT_NUGET_TITLE "Native x64 FFT component for CUDA")
 	SET(EMGU_CUFFT_NUGET_FILE_LIST "<file src=\"${EMGU_CUFFT_NUGET_ID}.targets\" target=\"build\\${EMGU_CUFFT_NUGET_ID}.targets\" />")
     SET(EMGU_CUDNN_VERSION "${CUDNN_MAJOR_VERSION}.${CUDNN_MINOR_VERSION}.${CUDNN_PATCH_VERSION}")
-	SET(EMGU_CUDNN_NUGET_TITLE "Native x64 CUDA DNN dependency for EMGU CV")
+	SET(EMGU_CUDNN_NUGET_TITLE "Native x64 DNN component for CUDA")
 	SET(EMGU_CUDNN_NUGET_FILE_LIST "<file src=\"${EMGU_CUDNN_NUGET_ID}.targets\" target=\"build\\${EMGU_CUDNN_NUGET_ID}.targets\" />")
 	SET(EMGU_CUDNN_CNN_NUGET_TITLE "Native x64 CNN component for CUDA DNN")
 	SET(EMGU_CUDNN_CNN_NUGET_FILE_LIST "<file src=\"${EMGU_CUDNN_CNN_NUGET_ID}.targets\" target=\"build\\${EMGU_CUDNN_CNN_NUGET_ID}.targets\" />")
@@ -1147,14 +1149,12 @@ IF(WITH_CUDA)
 	SET(EMGU_CUDNN_CNN_NUGET_FILE_LIST "<file src=\"${EMGU_CUDNN_CNN_NUGET_ID}.targets\" target=\"build\\${EMGU_CUDNN_CNN_NUGET_ID}.targets\" />")
 	SET(EMGU_NPP_VERSION "${EMGU_CUDA_VERSION}")
 	SET(EMGU_CUDA_BLAS_VERSION "${EMGU_CUDA_VERSION}")
-	SET(EMGU_NPP_NUGET_TITLE "Native x64 CUDA dependency for EMGU CV")
-	SET(EMGU_CUDA_BLAS_NUGET_TITLE "Native x64 CUDA Blas dependency for EMGU CV")
+	SET(EMGU_NPP_NUGET_TITLE "Native x64 NPP component for CUDA")
+	SET(EMGU_CUDA_BLAS_NUGET_TITLE "Native x64 blas component for CUDA")
 	
 	SET(EMGU_CUDA_NPP_NUGET_FILE_LIST "<file src=\"${EMGU_NPP_NUGET_ID}.targets\" target=\"build\\${EMGU_NPP_NUGET_ID}.targets\" />")
 	SET(EMGU_CUDA_BLAS_NUGET_FILE_LIST "<file src=\"${EMGU_CUDA_BLAS_NUGET_ID}.targets\" target=\"build\\${EMGU_CUDA_BLAS_NUGET_ID}.targets\" />")
 	
-	#SET(EMGU_NPP_NUGET_FILE_LIST "<file src=\"${EMGU_NPP_NUGET_ID}.targets\" target=\"build\\${EMGU_NPP_NUGET_ID}.targets\" />")
-	#SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} <dependency id=\"${EMGUCV_WINDOWS_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />")
 	IF (WITH_CUDNN)
 		SET(EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}<dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />")
 		SET(EMGUCV_WINDOWS_NETCORE_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NETCORE_NUGET_DEPENDENCY}<dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />")
@@ -1176,8 +1176,11 @@ IF(WITH_CUDA)
 		#file(DOWNLOAD ${CUDA_EULA_URL} "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows.cuda.npp/EULA.pdf")
 		#file(DOWNLOAD ${CUDA_EULA_URL} "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows.cuda.cufft/EULA.pdf")
 		#file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cudnn")
-		SET(EMGU_CUDA_NPP_NUGET_FILE_LIST "${EMGU_CUDA_NPP_NUGET_FILE_LIST} 
+		SET(EMGU_CUDA_RT_NUGET_FILE_LIST "${EMGU_CUDA_RT_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cu*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cufft*.dll;..\\..\\..\\libs\\x64\\cudnn*.dll;..\\..\\..\\libs\\x64\\cublas*.dll\" target=\"build\\x64\" /> 
+		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
+		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
+		SET(EMGU_CUDA_NPP_NUGET_FILE_LIST "${EMGU_CUDA_NPP_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
 		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
@@ -1193,23 +1196,46 @@ IF(WITH_CUDA)
 		<file src=\"..\\..\\..\\libs\\x64\\cudnn*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cudnn_ops_*.dll;..\\..\\..\\libs\\x64\\cudnn_cnn_*.dll;..\\..\\..\\libs\\x64\\cudnn_adv_*.dll\" target=\"build\\x64\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
+		SET(EMGU_CUDNN_NUGET_DEPENDENCY "
+		<dependencies>
+		  <dependency id=\"${EMGU_CUDART_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />
+		</dependencies>")
 		SET(EMGU_CUDNN_CNN_NUGET_FILE_LIST "${EMGU_CUDNN_CNN_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cudnn_cnn_*.dll\" target=\"build\\x64\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
+		SET(EMGU_CUDNN_CNN_NUGET_DEPENDENCY "
+		<dependencies>
+		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
+		</dependencies>")
 		SET(EMGU_CUDNN_OPS_NUGET_FILE_LIST "${EMGU_CUDNN_OPS_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cudnn_ops_*.dll\" target=\"build\\x64\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
+		SET(EMGU_CUDNN_OPS_NUGET_DEPENDENCY "
+		<dependencies>
+		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
+		</dependencies>")
 		SET(EMGU_CUDNN_ADV_NUGET_FILE_LIST "${EMGU_CUDNN_ADV_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\x64\\cudnn_adv_*.dll\" target=\"build\\x64\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
+		SET(EMGU_CUDNN_ADV_NUGET_DEPENDENCY "
+		<dependencies>
+		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
+		</dependencies>")
 		SET(EMGU_CUDNN_NUGET_DEPENDENCY "
 		<dependencies>
+		  <dependency id=\"${EMGU_CUDART_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />
+		</dependencies>")
+		SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
+		  <dependency id=\"${EMGU_CUDA_BLAS_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />
+		  <dependency id=\"${EMGU_NPP_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />
+		  <dependency id=\"${EMGU_CUFFT_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />
+		  <dependency id=\"${EMGU_CUDNN_ADV_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
 		  <dependency id=\"${EMGU_CUDNN_CNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
 		  <dependency id=\"${EMGU_CUDNN_OPS_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
-		</dependencies>")
+		  ")		  
 	ENDIF()
 	
 	SET(NUGET_PACKAGE_VENDOR "${CPACK_PACKAGE_VENDOR}")
@@ -1240,21 +1266,27 @@ IF(WITH_CUDA)
 	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/Package.nuspec)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUFFT_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUFFT_NUGET_ID}/Package.nuspec)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_NUGET_ID}/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_ADV_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_ADV_NUGET_ID}/Package.nuspec)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_CNN_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_CNN_NUGET_ID}/Package.nuspec)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_OPS_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_OPS_NUGET_ID}/Package.nuspec)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_NPP_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_NPP_NUGET_ID}/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDART_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDART_NUGET_ID}/Package.nuspec)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDA_BLAS_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDA_BLAS_NUGET_ID}/Package.nuspec)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDA_BLAS_NUGET_ID}.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDA_BLAS_NUGET_ID}/${EMGU_CUDA_BLAS_NUGET_ID}.targets)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUFFT_NUGET_ID}.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUFFT_NUGET_ID}/${EMGU_CUFFT_NUGET_ID}.targets)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/${EMGUCV_WINDOWS_NUGET_ID}.targets)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_NUGET_ID}.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_NUGET_ID}/${EMGU_CUDNN_NUGET_ID}.targets)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_ADV_NUGET_ID}.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_ADV_NUGET_ID}/${EMGU_CUDNN_ADV_NUGET_ID}.targets)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_CNN_NUGET_ID}.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_CNN_NUGET_ID}/${EMGU_CUDNN_CNN_NUGET_ID}.targets)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_OPS_NUGET_ID}.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_OPS_NUGET_ID}/${EMGU_CUDNN_OPS_NUGET_ID}.targets)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_NPP_NUGET_ID}.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_NPP_NUGET_ID}/${EMGU_NPP_NUGET_ID}.targets)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDART_NUGET_ID}.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDART_NUGET_ID}/${EMGU_CUDART_NUGET_ID}.targets)
 ENDIF()
 
 SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "	<dependencies>
-      <group targetFramework=\".NETStandard2.0\">${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}</group>
+      <group targetFramework=\".NETStandard2.0\">
+	    ${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}
+		${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
+	  </group>
     </dependencies>")
 
 #SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "	<dependencies>

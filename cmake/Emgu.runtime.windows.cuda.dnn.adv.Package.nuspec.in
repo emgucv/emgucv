@@ -13,6 +13,7 @@
 	<summary>This package provides the native ADV component for CUDA DNN.</summary>
     <description>This package provides the native ADV component for CUDA DNN.</description>
     <releaseNotes>This DNN v${EMGU_CUDNN_VERSION} for CUDA v${EMGU_CUDA_VERSION}.</releaseNotes>
+	${EMGU_CUDNN_ADV_NUGET_DEPENDENCY}
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>emgu cuda dnn</tags>
   </metadata>

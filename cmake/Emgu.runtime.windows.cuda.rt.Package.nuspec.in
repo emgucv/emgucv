@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>${EMGU_CUDART_NUGET_ID}</id>
+	<title>Native x64 CUDA runtime</title>
+    <version>${EMGU_CUDART_VERSION}</version>
+    <authors>${CPACK_PACKAGE_VENDOR}</authors>
+    <owners>${CPACK_PACKAGE_VENDOR}</owners>
+    <license type="file">CUDA_EULA.txt</license>
+    <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
+	<icon>icon.png</icon>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<summary>This package provides the native CUDA runtime</summary>
+    <description>This package provides the native CUDA runtime</description>
+    <releaseNotes>This is the ${EMGU_CUDART_VERSION} release of CUDA runtime.</releaseNotes>
+	${EMGU_CUDART_NUGET_DEPENDENCY}
+    <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved</copyright>
+    <tags>emgu opencv cuda</tags>
+  </metadata>
+  <files>
+    ${EMGU_CUDA_RT_NUGET_FILE_LIST}
+  </files>
+</package>
