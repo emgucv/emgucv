@@ -48,7 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms.Platform.WPF" Version="4.8.0.1269" />
+    <PackageReference Include="Xamarin.Forms.Platform.WPF" Version="4.8.0.1451" />
     <PackageReference Include="Xamarin.Plugin.FilePicker" Version="2.1.41" />
   </ItemGroup>
 
@@ -60,10 +60,5 @@
     <ProjectReference Include="..\..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="D:\sourceforge\emgucv_nocontrib\Emgu.CV.Platform\DotNet\Properties\StringTable.Designer.cs">
-      <DesignTime>True</DesignTime>
-    </Compile>
-  </ItemGroup>
 
 </Project>
