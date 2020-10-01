@@ -3,13 +3,18 @@ REM @echo off
 REM POSSIBLE OPTIONS: 
 REM %1%: "64", "32", "ARM"
 REM %2%: "gpu", if omitted, it will not use CUDA
-REM %3%: "intel_inf" "intel", "inf", "WindowsPhone81", "WindowsStore81", "WindowsStore10", "vs2015"
+REM %3%: "intel_inf", build with intel compiler and using OpenVino
+REM %3%: "intel", build with intel compiler
+REM %3%: "inf", build with OpenVino 
+REM %3%: "WindowsStore10", target UWP 
+REM %3%: "vs2015", force to build with vs_2015, it may no longer work as of 2020
+REM %3%: "commercial", use to enable optimization with targeting 32-bit architecture
 REM %4%: "nonfree", "openni"
-REM %5%: "doc" this indicates if we should build the documentation
-REM %6%: "package", this indicates if we should build the ".zip" and ".exe" package
+REM %5%: "doc", this flag indicates if we should build the documentation
+REM %6%: "package", this flag indicates if we should build the ".zip" and ".exe" package
 REM %7%: "build", if set to "build", the script will also build the target
-REM %8%: "nuget", this indicates if we should build the nuget package
-REM %9%: This field if for the CUDA_ARCH_BIN_OPTION, if you want to specify manually. e.g. "6.1"
+REM %8%: "nuget", this flag indicates if we should build the nuget package
+REM %9%: Use this field for the CUDA_ARCH_BIN_OPTION if you want to specify it manually. e.g. "6.1"
 
 SET BUILD_FOLDER=build
 SET BUILD_TOOLS_FOLDER=C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools
@@ -439,6 +444,9 @@ IF "%3%"=="intel" GOTO INTEL_COMPILER
 IF "%3%"=="intel_inf" GOTO INTEL_COMPILER
 
 :NOT_INTEL_COMPILER
+
+IF "%3%"=="commercial" SET BUILD_TYPE=COMMERCIAL
+
 SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% -DWITH_LAPACK:BOOL=FALSE 
 GOTO VISUAL_STUDIO
 
