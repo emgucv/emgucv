@@ -11,8 +11,7 @@ using Emgu.CV.Util;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.Util.TypeEnum;
-using Plugin.FilePicker;
-using Plugin.FilePicker.Abstractions;
+
 
 namespace Emgu.CV.XamarinForms
 {
@@ -92,9 +91,8 @@ namespace Emgu.CV.XamarinForms
 
                 bool haveCameraOption;
                 bool havePickImgOption;
-                if (
-                    (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
-                  || Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS)
+                if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows
+                    || Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS)
                 {
                     //CrossMedia is not implemented on Windows.
                     haveCameraOption = false;
@@ -158,21 +156,9 @@ namespace Emgu.CV.XamarinForms
                 }
                 else if (action.Equals("Photo Library"))
                 {
-#if __ANDROID__ || __IOS__ || NETFX_CORE
-                    var photoResult = await Plugin.Media.CrossMedia.Current.PickPhotoAsync();
-                    if (photoResult == null) //canceled
-                        return null;
-                    mats[i] = CvInvoke.Imread(photoResult.Path);
-#else
-                    if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS)
+                    if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
                     {
-                        FileData fileData = await CrossFilePicker.Current.PickFile(new string[] { "jpg", "jpeg", "png", "bmp" });
-                        if (fileData == null)
-                            return null;
-                        mats[i] = CvInvoke.Imread(fileData.FilePath, ImreadModes.AnyColor);
-                    } else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
-                    {
-#if !__MACOS__
+#if !( __MACOS__ || __ANDROID__ || __IOS__ || NETFX_CORE )
                         Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
                         dialog.Multiselect = false;
                         dialog.Title = "Select an Image File";
@@ -181,17 +167,16 @@ namespace Emgu.CV.XamarinForms
                             return null;
                         mats[i] = CvInvoke.Imread(dialog.FileName, ImreadModes.AnyColor);
 
-                        //FileData fileData = await CrossFilePicker.Current.PickFile(new string[] { "Image | *.jpg;*.jpeg;*.png;*.bmp;*.gif;*.webp | All Files | *" });
-                        //if (fileData == null)
-                        //    return null;
-                        //mats[i] = CvInvoke.Imread(fileData.FilePath, ImreadModes.AnyColor);
 #endif
                     }
                     else
                     {
-                        throw new NotImplementedException(String.Format("Action '{0}' is not implemented", action));
+                        var fileResult = await Xamarin.Essentials.FilePicker.PickAsync(Xamarin.Essentials.PickOptions.Images);
+                        if (fileResult == null) //canceled
+                            return null;
+                        mats[i] = CvInvoke.Imread(fileResult.FullPath, ImreadModes.AnyColor);
+                        //throw new NotImplementedException(String.Format("Action '{0}' is not implemented", action));
                     }
-#endif
                 }
                 else if (action.Equals("Photo from Camera"))
                 {
