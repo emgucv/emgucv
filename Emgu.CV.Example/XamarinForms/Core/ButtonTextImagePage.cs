@@ -93,7 +93,7 @@ namespace Emgu.CV.XamarinForms
                 bool haveCameraOption;
                 bool havePickImgOption;
                 if (
-                    (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows && Emgu.Util.Platform.ClrType != Emgu.Util.Platform.Clr.NetFxCore)
+                    (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
                   || Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS)
                 {
                     //CrossMedia is not implemented on Windows.
@@ -124,11 +124,13 @@ namespace Emgu.CV.XamarinForms
 #if __ANDROID__ || __IOS__ || NETFX_CORE
                 if (this.HasCameraOption && haveCameraOption)
                     options.Add("Camera");
-#endif
-                if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows && Emgu.Util.Platform.ClrType != Emgu.Util.Platform.Clr.NetFxCore)
+#else
+                if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
                 {
                     options.Add("Camera");
                 }
+#endif
+
 
                 if (options.Count == 1)
                 {
@@ -170,10 +172,20 @@ namespace Emgu.CV.XamarinForms
                         mats[i] = CvInvoke.Imread(fileData.FilePath, ImreadModes.AnyColor);
                     } else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
                     {
-                        FileData fileData = await CrossFilePicker.Current.PickFile(new string[] { "Image | *.jpg;*.jpeg;*.png;*.bmp;*.gif;*.webp | All Files | *" });
-                        if (fileData == null)
+#if !__MACOS__
+                        Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+                        dialog.Multiselect = false;
+                        dialog.Title = "Select an Image File";
+                        dialog.Filter = "Image | *.jpg;*.jpeg;*.png;*.bmp;*.gif | All Files | *";
+                        if (dialog.ShowDialog() == false)
                             return null;
-                        mats[i] = CvInvoke.Imread(fileData.FilePath, ImreadModes.AnyColor);
+                        mats[i] = CvInvoke.Imread(dialog.FileName, ImreadModes.AnyColor);
+
+                        //FileData fileData = await CrossFilePicker.Current.PickFile(new string[] { "Image | *.jpg;*.jpeg;*.png;*.bmp;*.gif;*.webp | All Files | *" });
+                        //if (fileData == null)
+                        //    return null;
+                        //mats[i] = CvInvoke.Imread(fileData.FilePath, ImreadModes.AnyColor);
+#endif
                     }
                     else
                     {
