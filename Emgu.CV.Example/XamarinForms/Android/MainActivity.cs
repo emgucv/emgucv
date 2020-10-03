@@ -12,8 +12,7 @@ using Emgu.CV.Structure;
 using Android.Content;
 using System.Threading.Tasks;
 using Android.Graphics;
-using Plugin.Media;
-using Plugin.Media.Abstractions;
+
 using Plugin.CurrentActivity;
 
 namespace Emgu.CV.XamarinForms.Droid
@@ -55,14 +54,13 @@ namespace Emgu.CV.XamarinForms.Droid
         }
 
 
-        private static Mat ToMat(Task<MediaFile> task, int maxWidth, int maxHeight)
+        private static Mat ToMat(String filePath, int maxWidth, int maxHeight)
         {
-            MediaFile file = GetResultFromTask(task);
-            if (file == null)
+            if (filePath == null)
                 return null;
 
             int rotation = 0;
-            Android.Media.ExifInterface exif = new Android.Media.ExifInterface(file.Path);
+            Android.Media.ExifInterface exif = new Android.Media.ExifInterface(filePath);
             int orientation = exif.GetAttributeInt(Android.Media.ExifInterface.TagOrientation, int.MinValue);
             switch (orientation)
             {
@@ -77,7 +75,7 @@ namespace Emgu.CV.XamarinForms.Droid
                     break;
             }
 
-            using (Bitmap bmp = BitmapFactory.DecodeFile(file.Path))
+            using (Bitmap bmp = BitmapFactory.DecodeFile(filePath))
             {
                 if (bmp.Width <= maxWidth && bmp.Height <= maxHeight && rotation == 0)
                 {

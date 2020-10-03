@@ -12,7 +12,6 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.Util.TypeEnum;
 
-
 namespace Emgu.CV.XamarinForms
 {
     public class ButtonTextImagePage : Xamarin.Forms.ContentPage
@@ -79,55 +78,44 @@ namespace Emgu.CV.XamarinForms
         {
             Mat[] mats = new Mat[imageNames.Length];
 
-#if __ANDROID__ || __IOS__ || NETFX_CORE
-            await Plugin.Media.CrossMedia.Current.Initialize();
-#endif
-
             for (int i = 0; i < mats.Length; i++)
             {
                 String pickImgString = "Use Image from";
                 if (labels != null && labels.Length > i)
                     pickImgString = labels[i];
 
-                bool haveCameraOption;
-                bool havePickImgOption;
-                if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows
-                    || Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS)
+                bool captureSupported;
+                
+                if (Device.RuntimePlatform == Device.WPF
+                    || Device.RuntimePlatform == Device.macOS)
                 {
-                    //CrossMedia is not implemented on Windows.
-                    haveCameraOption = false;
-                    havePickImgOption = true; //We will provide our implementation of pick image option
+                    //Pick image from camera is not implemented on WPF.
+                    captureSupported = false;
                 }
                 else
                 {
-#if __ANDROID__ || __IOS__ || NETFX_CORE
-                    haveCameraOption =
-                        (Plugin.Media.CrossMedia.Current.IsCameraAvailable && Plugin.Media.CrossMedia.Current.IsTakePhotoSupported);
-                    havePickImgOption =
-                        Plugin.Media.CrossMedia.Current.IsPickVideoSupported;
-#else
-                    haveCameraOption = false;
-                    havePickImgOption = false;
-#endif
+                    captureSupported = Xamarin.Essentials.MediaPicker.IsCaptureSupported;
                 }
 
                 String action;
                 List<String> options = new List<string>();
                 options.Add("Default");
-                if (havePickImgOption)
-                    options.Add("Photo Library");
-                if (haveCameraOption)
+
+                options.Add("Photo Library");
+
+                if (captureSupported)
                     options.Add("Photo from Camera");
 
-#if __ANDROID__ || __IOS__ || NETFX_CORE
-                if (this.HasCameraOption && haveCameraOption)
-                    options.Add("Camera");
-#else
-                if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
+                if (Device.RuntimePlatform == Device.Android
+                    || Device.RuntimePlatform == Device.iOS
+                    || Device.RuntimePlatform == Device.UWP)
+                {
+                    if (this.HasCameraOption && captureSupported)
+                        options.Add("Camera");
+                } else if (Device.RuntimePlatform == Device.WPF)
                 {
                     options.Add("Camera");
                 }
-#endif
 
 
                 if (options.Count == 1)
@@ -156,7 +144,7 @@ namespace Emgu.CV.XamarinForms
                 }
                 else if (action.Equals("Photo Library"))
                 {
-                    if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
+                    if (Device.RuntimePlatform == Device.WPF)
                     {
 #if !( __MACOS__ || __ANDROID__ || __IOS__ || NETFX_CORE )
                         Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
@@ -166,7 +154,6 @@ namespace Emgu.CV.XamarinForms
                         if (dialog.ShowDialog() == false)
                             return null;
                         mats[i] = CvInvoke.Imread(dialog.FileName, ImreadModes.AnyColor);
-
 #endif
                     }
                     else
@@ -174,31 +161,18 @@ namespace Emgu.CV.XamarinForms
                         var fileResult = await Xamarin.Essentials.FilePicker.PickAsync(Xamarin.Essentials.PickOptions.Images);
                         if (fileResult == null) //canceled
                             return null;
-                        mats[i] = CvInvoke.Imread(fileResult.FullPath, ImreadModes.AnyColor);
-                        //throw new NotImplementedException(String.Format("Action '{0}' is not implemented", action));
+                        using (Stream s = await fileResult.OpenReadAsync())
+                            mats[i] = await ReadStream(s);
                     }
                 }
                 else if (action.Equals("Photo from Camera"))
                 {
-#if __ANDROID__ || __IOS__ || NETFX_CORE
-                    var mediaOptions = new Plugin.Media.Abstractions.StoreCameraMediaOptions
-                    {
-                        Directory = "Emgu",
-                        Name = $"{DateTime.UtcNow}.jpg"
-                    };
-                    var file = await Plugin.Media.CrossMedia.Current.TakePhotoAsync(mediaOptions);
-                    using (Stream s = file.GetStream())
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        s.CopyTo(ms);
-                        byte[] data = ms.ToArray();
-                        Mat m = new Mat();
-                        CvInvoke.Imdecode(data, ImreadModes.Color, m);
-                        mats[i] = m;
-                    }
-#else
-                    throw new NotImplementedException(String.Format("Action '{0}' is not implemented", action));
-#endif
+                    var takePhotoResult = await Xamarin.Essentials.MediaPicker.CapturePhotoAsync();
+                    
+                    if (takePhotoResult == null) //canceled
+                        return null;
+                    using (Stream stream = await takePhotoResult.OpenReadAsync())
+                        mats[i] = await ReadStream(stream);
                 }
                 else if (action.Equals("Camera"))
                 {
@@ -207,6 +181,18 @@ namespace Emgu.CV.XamarinForms
             }
 
             return mats;
+        }
+
+        private static async Task<Mat> ReadStream(Stream stream)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                await stream.CopyToAsync(ms);
+                byte[] data = ms.ToArray();
+                Mat m = new Mat();
+                CvInvoke.Imdecode(data, ImreadModes.Color, m);
+                return m;
+            }
         }
 
         public virtual void SetImage(IInputArray image)
