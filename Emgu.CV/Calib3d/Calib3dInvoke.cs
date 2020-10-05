@@ -346,7 +346,7 @@ namespace Emgu.CV
             CvEnum.HandEyeCalibrationMethod method)
         {
             using (InputArray iaRGripper2Base = rGripper2base.GetInputArray())
-            using (InputArray iaTGripper2Base = rGripper2base.GetInputArray())
+            using (InputArray iaTGripper2Base = tGripper2base.GetInputArray())
             using (InputArray iaRTarget2Cam = rTarget2cam.GetInputArray())
             using (InputArray iaTTarget2Cam = tTarget2cam.GetInputArray())
             using (OutputArray oaRCam2Gripper = rCam2gripper.GetOutputArray())
