@@ -2476,7 +2476,7 @@ namespace Emgu.CV
         {
             IntPtr lowerBoundPtr = IntPtr.Zero;
             GCHandle lbHandle;
-            if (lowerBound == null)
+            if (lowerBound != null)
             {
                 lbHandle = GCHandle.Alloc(lowerBound, GCHandleType.Pinned);
                 lowerBoundPtr = lbHandle.AddrOfPinnedObject();
@@ -2485,19 +2485,19 @@ namespace Emgu.CV
                 lbHandle = new GCHandle();
             try
             {
-                using (InputArray iaSigniture1 = signature1.GetInputArray())
-                using (InputArray iaSigniture2 = signature2.GetInputArray())
+                using (InputArray iaSignature1 = signature1.GetInputArray())
+                using (InputArray iaSignature2 = signature2.GetInputArray())
                 using (InputArray iaCost = cost == null ? InputArray.GetEmpty() : cost.GetInputArray())
                 using (OutputArray oaFlow = flow == null ? OutputArray.GetEmpty() : flow.GetOutputArray())
                     return cveEMD(
-                       iaSigniture1, iaSigniture2, distType,
+                       iaSignature1, iaSignature2, distType,
                        iaCost,
                        lowerBoundPtr,
                        oaFlow);
             }
             finally
             {
-                if (lowerBound == null)
+                if (lowerBound != null)
                 {
                     lbHandle.Free();
                 }
