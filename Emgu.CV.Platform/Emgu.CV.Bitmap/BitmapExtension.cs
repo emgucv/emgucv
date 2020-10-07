@@ -281,6 +281,182 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// Create a Mat from Bitmap
+        /// </summary>
+        /// <param name="bitmap">The Bitmap to be converted to Mat</param>
+        /// <returns>The Mat converted from Bitmap</returns>
+        public static Mat ToMat(this Bitmap bitmap)
+        {
+            Size size = bitmap.Size;
+
+            switch (bitmap.PixelFormat)
+            {
+                case PixelFormat.Format32bppRgb:
+                    Mat imageFrom32bppRgb = new Mat();
+                    BitmapData data32bppRgb = bitmap.LockBits(
+                        new Rectangle(Point.Empty, size),
+                        ImageLockMode.ReadOnly,
+                        bitmap.PixelFormat);
+                    try
+                    {
+                        using (Mat mat =
+                            new Mat(bitmap.Size, DepthType.Cv8U, 4, data32bppRgb.Scan0, data32bppRgb.Stride))
+                        {
+                            CvInvoke.MixChannels(mat, imageFrom32bppRgb, new[] { 0, 0, 1, 1, 2, 2 });
+                        }
+                    }
+                    finally
+                    {
+                        bitmap.UnlockBits(data32bppRgb);
+                    }
+                    return imageFrom32bppRgb;
+                case PixelFormat.Format32bppArgb:
+                    Mat imageFrom32bppArgb = new Mat();
+                    BitmapData data32bppArgb = bitmap.LockBits(
+                        new Rectangle(Point.Empty, size),
+                        ImageLockMode.ReadOnly,
+                        bitmap.PixelFormat);
+                    try
+                    {
+                        using (Mat mat =
+                            new Mat(bitmap.Size, DepthType.Cv8U, 4, data32bppArgb.Scan0, data32bppArgb.Stride))
+                        {
+                            mat.CopyTo(imageFrom32bppArgb);
+                        }
+                    }
+                    finally
+                    {
+                        bitmap.UnlockBits(data32bppArgb);
+                    }
+
+                    return imageFrom32bppArgb;
+                case PixelFormat.Format8bppIndexed:
+                    Mat imageFrom8bppIndexed = new Mat();
+                    Matrix<Byte> bTable, gTable, rTable, aTable;
+                    ColorPaletteToLookupTable(bitmap.Palette, out bTable, out gTable, out rTable, out aTable);
+                    BitmapData data8bppIndexed = bitmap.LockBits(
+                        new Rectangle(Point.Empty, size),
+                        ImageLockMode.ReadOnly,
+                        bitmap.PixelFormat);
+                    try
+                    {
+                        using (Mat indexValue =
+                            new Mat(bitmap.Size, DepthType.Cv8U, 1, data8bppIndexed.Scan0, data8bppIndexed.Stride))
+                        {
+                            using (Mat b = new Mat())
+                            using (Mat g = new Mat())
+                            using (Mat r = new Mat())
+                            using (Mat a = new Mat())
+                            {
+                                CvInvoke.LUT(indexValue, bTable, b);
+                                CvInvoke.LUT(indexValue, gTable, g);
+                                CvInvoke.LUT(indexValue, rTable, r);
+                                CvInvoke.LUT(indexValue, aTable, a);
+                                using (VectorOfMat mv = new VectorOfMat(new Mat[] { b, g, r, a }))
+                                {
+                                    CvInvoke.Merge(mv, imageFrom8bppIndexed);
+                                }
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        bTable.Dispose();
+                        gTable.Dispose();
+                        rTable.Dispose();
+                        aTable.Dispose();
+                        bitmap.UnlockBits(data8bppIndexed);
+                    }
+                    return imageFrom8bppIndexed;
+                case PixelFormat.Format24bppRgb:
+                    Mat imageFrom24bppRgb = new Mat();
+                    BitmapData data24bppRgb = bitmap.LockBits(
+                        new Rectangle(Point.Empty, size),
+                        ImageLockMode.ReadOnly,
+                        bitmap.PixelFormat);
+                    try
+                    {
+                        using (Mat mat =
+                            new Mat(bitmap.Size, DepthType.Cv8U, 3, data24bppRgb.Scan0, data24bppRgb.Stride))
+                        {
+                            mat.CopyTo(imageFrom24bppRgb);
+                        }
+                    }
+                    finally
+                    {
+                        bitmap.UnlockBits(data24bppRgb);
+                    }
+                    return imageFrom24bppRgb;
+                case PixelFormat.Format1bppIndexed:
+                    int rows = size.Height;
+                    int cols = size.Width;
+                    BitmapData data1bppIndexed = bitmap.LockBits(
+                        new Rectangle(Point.Empty, size),
+                        ImageLockMode.ReadOnly,
+                        bitmap.PixelFormat);
+
+                    int fullByteCount = cols >> 3;
+                    int partialBitCount = cols & 7;
+
+                    int mask = 1 << 7;
+
+                    Int64 srcAddress = data1bppIndexed.Scan0.ToInt64();
+                    Byte[,] imagedata = new byte[rows, cols];
+
+                    Byte[] row = new byte[fullByteCount + (partialBitCount == 0 ? 0 : 1)];
+
+                    int v = 0;
+                    for (int i = 0; i < rows; i++, srcAddress += data1bppIndexed.Stride)
+                    {
+                        Marshal.Copy((IntPtr)srcAddress, row, 0, row.Length);
+
+                        for (int j = 0; j < cols; j++, v <<= 1)
+                        {
+                            if ((j & 7) == 0)
+                            {
+                                //fetch the next byte 
+                                v = row[j >> 3];
+                            }
+
+                            imagedata[i, j] = (v & mask) == 0 ? (Byte)0 : (Byte)255;
+                        }
+                    }
+                    GCHandle imageDataHandle = GCHandle.Alloc(imagedata, GCHandleType.Pinned);
+                    try
+                    {
+                        return new Mat(new int[] { rows, cols }, DepthType.Cv8U, imageDataHandle.AddrOfPinnedObject());
+                    }
+                    finally
+                    {
+                        imageDataHandle.Free();
+                        bitmap.UnlockBits(data1bppIndexed);
+                    }
+                default:
+                #region Handle other image type
+                    Byte[,,] data = new byte[size.Height, size.Width, 4];
+                    for (int i = 0; i < size.Width; i++)
+                        for (int j = 0; j < size.Height; j++)
+                        {
+                            Color color = bitmap.GetPixel(i, j);
+                            data[j, i, 0] = color.B;
+                            data[j, i, 1] = color.G;
+                            data[j, i, 2] = color.R;
+                            data[j, i, 3] = color.A;
+                        }
+                    GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                    try
+                    {
+                        return new Mat(new int[] { size.Height, size.Width, 4 }, DepthType.Cv8U, dataHandle.AddrOfPinnedObject());
+                    }
+                    finally
+                    {
+                        dataHandle.Free();
+                    }
+                #endregion
+            }
+        }
+
+        /// <summary>
         /// Create an Image &lt; TColor, TDepth &gt; from Bitmap
         /// </summary>
         /// <param name="bitmap">The Bitmap to be converted to Image &lt; TColor, TDepth &gt;</param>
@@ -408,7 +584,7 @@ namespace Emgu.CV
                         int mask = 1 << 7;
 
                         Int64 srcAddress = data.Scan0.ToInt64();
-                        Byte[,,] imagedata = image.Data as Byte[,,];
+                        Byte[,,] imageData = image.Data as Byte[,,];
 
                         Byte[] row = new byte[fullByteCount + (partialBitCount == 0 ? 0 : 1)];
 
@@ -425,9 +601,10 @@ namespace Emgu.CV
                                     v = row[j >> 3];
                                 }
 
-                                imagedata[i, j, 0] = (v & mask) == 0 ? (Byte)0 : (Byte)255;
+                                imageData[i, j, 0] = (v & mask) == 0 ? (Byte)0 : (Byte)255;
                             }
                         }
+                        bitmap.UnlockBits(data);
                     }
                     else
                     {
@@ -437,9 +614,7 @@ namespace Emgu.CV
 
                     break;
                 default:
-
                     #region Handle other image type
-
                     //         Bitmap bgraImage = new Bitmap(value.Width, value.Height, PixelFormat.Format32bppArgb);
                     //         using (Graphics g = Graphics.FromImage(bgraImage))
                     //         {
@@ -461,9 +636,7 @@ namespace Emgu.CV
 
                         image.ConvertFrom<Bgra, Byte>(tmp1);
                     }
-
                     #endregion
-
                     break;
             }
 
