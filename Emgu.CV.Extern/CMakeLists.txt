@@ -1366,6 +1366,32 @@ ENDIF()
 
 ############################### features2d code gen END ################################
 
+############################### mcc code gen START ##############################
+IF (NOT HAVE_opencv_mcc)
+  SET(HAVE_opencv_mcc FALSE)
+ENDIF()
+  CREATE_OCV_CLASS_PROPERTY( 
+    "mcc/CChecker_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Mcc/CChecker.g.cs"
+    "cv::mcc::CChecker" 
+    "CChecker" 
+    "Target;Cost" 
+    "cv::mcc::TYPECHART;float" 
+    "prop;prop"
+    "Target;Cost" 
+    "CChecker.TypeChart;float"
+    "Target;Cost"
+    "Emgu.CV.Mcc"
+    "MccInvoke"
+    "CChecker"
+	""
+    "#include \"mcc_c.h\""
+	""
+	""
+	${HAVE_opencv_mcc})
+
+############################### features2d code gen END ################################
+
 ############################### ml code gen START ##############################
 IF (NOT HAVE_opencv_ml)
   SET(HAVE_opencv_ml FALSE)

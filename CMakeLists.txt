@@ -767,6 +767,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   alphamat
   intensity_transform
   rapid
+  mcc
   )
 
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})
