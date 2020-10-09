@@ -37,9 +37,18 @@ namespace Emgu.CV.Mcc
 
         };
 
+        private bool _needDispose;
+
+        internal CChecker(IntPtr ptr, bool needDispose)
+        {
+            _ptr = ptr;
+            _needDispose = needDispose;
+        }
+
         public CChecker()
         {
             _ptr = MccInvoke.cveCCheckerCreate(ref _sharedPtr);
+            _needDispose = true;
         }
 
         /// <summary>
@@ -47,7 +56,7 @@ namespace Emgu.CV.Mcc
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_sharedPtr == IntPtr.Zero)
+            if (_sharedPtr == IntPtr.Zero && _needDispose)
             {
                 MccInvoke.cveCCheckerRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;

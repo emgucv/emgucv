@@ -60,7 +60,54 @@ void cveCCheckerDrawRelease(cv::Ptr<cv::mcc::CCheckerDraw>** sharedPtr)
 	*sharedPtr = 0;
 #else
 	throw_no_mcc();
-#endif
-  
+#endif  
 }
 
+
+cv::mcc::CCheckerDetector* cveCCheckerDetectorCreate(cv::Algorithm** algorithm, cv::Ptr<cv::mcc::CCheckerDetector>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_MCC
+	cv::Ptr<cv::mcc::CCheckerDetector> checkerDetector = cv::mcc::CCheckerDetector::create();
+	*algorithm = dynamic_cast<cv::Algorithm*>((*sharedPtr)->get());
+	*sharedPtr = new cv::Ptr<cv::mcc::CCheckerDetector>(checkerDetector);
+	return (*sharedPtr)->get();
+#else
+	throw_no_mcc();
+#endif
+}
+
+bool cveCCheckerDetectorProcess(
+	cv::mcc::CCheckerDetector* detector,
+	cv::_InputArray* image,
+	const cv::mcc::TYPECHART chartType,
+	const int nc,
+	bool useNet,
+	cv::mcc::DetectorParameters* param)
+{
+#ifdef HAVE_OPENCV_MCC
+	if (param) {
+		cv::Ptr<cv::mcc::DetectorParameters> paramPtr(param, [](cv::mcc::DetectorParameters* p) {});
+		return detector->process(*image, chartType, nc, useNet, paramPtr);
+	} else
+	{
+		return detector->process(*image, chartType, nc, useNet);
+	}
+#else
+	throw_no_mcc();
+#endif
+}
+
+cv::mcc::CChecker* cveCCheckerDetectorGetBestColorChecker(cv::mcc::CCheckerDetector* detector)
+{
+	cv::Ptr<cv::mcc::CChecker> ptr = detector->getBestColorChecker();
+	return ptr.get();
+}
+void cveCCheckerDetectorRelease(cv::Ptr<cv::mcc::CCheckerDetector>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_MCC
+	delete* sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_mcc();
+#endif
+}

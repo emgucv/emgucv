@@ -29,4 +29,15 @@ CVAPI(cv::mcc::CCheckerDraw*) cveCCheckerDrawCreate(
 CVAPI(void) cveCCheckerDrawDraw(cv::mcc::CCheckerDraw* ccheckerDraw, cv::_InputOutputArray* img);
 CVAPI(void) cveCCheckerDrawRelease(cv::Ptr<cv::mcc::CCheckerDraw>** sharedPtr);
 
+CVAPI(cv::mcc::CCheckerDetector*) cveCCheckerDetectorCreate(cv::Algorithm** algorithm, cv::Ptr<cv::mcc::CCheckerDetector>** sharedPtr);
+CVAPI(bool) cveCCheckerDetectorProcess(
+    cv::mcc::CCheckerDetector* detector,
+    cv::_InputArray* image, 
+    const cv::mcc::TYPECHART chartType,
+    const int nc, 
+    bool useNet,
+    cv::mcc::DetectorParameters* param);
+CVAPI(cv::mcc::CChecker*) cveCCheckerDetectorGetBestColorChecker(cv::mcc::CCheckerDetector* detector);
+CVAPI(void) cveCCheckerDetectorRelease(cv::Ptr<cv::mcc::CCheckerDetector>** sharedPtr);
+
 #endif
