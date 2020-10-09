@@ -20,4 +20,13 @@ static inline CV_NORETURN void throw_no_mcc() { CV_Error(cv::Error::StsBadFunc, 
 CVAPI(cv::mcc::CChecker*) cveCCheckerCreate(cv::Ptr<cv::mcc::CChecker>** sharedPtr);
 CVAPI(void) cveCCheckerRelease(cv::Ptr<cv::mcc::CChecker>** sharedPtr);
 
+
+CVAPI(cv::mcc::CCheckerDraw*) cveCCheckerDrawCreate(
+    cv::mcc::CChecker* pChecker,
+    CvScalar* color,
+    int thickness,
+    cv::Ptr<cv::mcc::CCheckerDraw>** sharedPtr);
+CVAPI(void) cveCCheckerDrawDraw(cv::mcc::CCheckerDraw* ccheckerDraw, cv::_InputOutputArray* img);
+CVAPI(void) cveCCheckerDrawRelease(cv::Ptr<cv::mcc::CCheckerDraw>** sharedPtr);
+
 #endif
