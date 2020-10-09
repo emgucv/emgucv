@@ -8,10 +8,10 @@ IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND NOT ANDROID AND NOT NETFX_CORE A
     PROJECT(Emgu.CV.Platform.NetFramework)
     
     BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../../Solution/Windows.Desktop/Emgu.CV.Example.sln" "Emgu.CV.Platform.NetFramework" "${EXTRA_BUILD_FLAGS}" ALL)	
-    ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} 
-      PRE_BUILD
-      COMMAND ${MSBUILD_EXECUTABLE} -t:restore Emgu.CV.Example.sln
-      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../../../Solution/Windows.Desktop")
+    #ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} 
+    #  PRE_BUILD
+    #  COMMAND ${MSBUILD_EXECUTABLE} -t:restore Emgu.CV.Example.sln
+    #  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../../../Solution/Windows.Desktop")
 
     INSTALL(
       FILES 
