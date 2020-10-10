@@ -111,3 +111,21 @@ void cveCCheckerDetectorRelease(cv::Ptr<cv::mcc::CCheckerDetector>** sharedPtr)
 	throw_no_mcc();
 #endif
 }
+
+cv::mcc::DetectorParameters* cveCCheckerDetectorParametersCreate()
+{
+#ifdef HAVE_OPENCV_MCC
+	return new cv::mcc::DetectorParameters();
+#else
+	throw_no_mcc();
+#endif
+}
+void cveCCheckerDetectorParametersRelease(cv::mcc::DetectorParameters** parameters)
+{
+#ifdef HAVE_OPENCV_MCC
+	delete* parameters;
+	*parameters = 0;
+#else
+	throw_no_mcc();
+#endif	
+}

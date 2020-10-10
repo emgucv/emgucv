@@ -56,7 +56,7 @@ namespace Emgu.CV.Mcc
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_sharedPtr == IntPtr.Zero && _needDispose)
+            if (_sharedPtr != IntPtr.Zero && _needDispose)
             {
                 MccInvoke.cveCCheckerRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
@@ -70,6 +70,10 @@ namespace Emgu.CV.Mcc
     /// </summary>
     public static partial class MccInvoke
     {
+        static MccInvoke()
+        {
+            CvInvoke.CheckLibraryLoaded();
+        }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveCCheckerCreate(ref IntPtr sharedPtr);

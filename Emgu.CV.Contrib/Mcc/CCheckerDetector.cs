@@ -48,7 +48,7 @@ namespace Emgu.CV.Mcc
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_sharedPtr == IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
                 MccInvoke.cveCCheckerDetectorRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;

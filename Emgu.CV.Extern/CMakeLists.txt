@@ -66,6 +66,7 @@ MACRO(CREATE_VECTOR_CS vname velement velement_cs element_type cs_source_folder 
 ENDMACRO()
 
 CREATE_VECTOR_CS("Byte" "unsigned char" "byte" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
+#CREATE_VECTOR_CS("IntPtr" "void*" "IntPtr" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
 CREATE_VECTOR_CS("Int" "int" "int" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
 CREATE_VECTOR_CS("Float" "float" "float" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
 CREATE_VECTOR_CS("Double" "double" "double" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")

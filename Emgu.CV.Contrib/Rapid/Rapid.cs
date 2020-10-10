@@ -70,7 +70,7 @@ namespace Emgu.CV.Rapid
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_sharedPtr == IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
                 RapidInvoke.cveRapidRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
@@ -125,7 +125,7 @@ namespace Emgu.CV.Rapid
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_sharedPtr == IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
                 RapidInvoke.cveOLSTrackerRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
@@ -474,7 +474,7 @@ namespace Emgu.CV.Rapid
             IntPtr pts3d,
             IntPtr tris,
             int histBins,
-            Byte sobelThesh,
+            Byte sobelThresh,
             ref IntPtr tracker,
             ref IntPtr algorithm,
             ref IntPtr sharedPtr);

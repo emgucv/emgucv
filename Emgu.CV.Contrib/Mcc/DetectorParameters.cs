@@ -15,20 +15,13 @@ using Emgu.Util;
 
 namespace Emgu.CV.Mcc
 {
-    public partial class CCheckerDraw : SharedPtrObject
+    public partial class DetectorParameters : UnmanagedObject
     {
 
-        public CCheckerDraw(CChecker cchecker, MCvScalar color, int thickness)
+        public DetectorParameters()
         {
-            _ptr = MccInvoke.cveCCheckerDrawCreate(cchecker, ref color, thickness, ref _sharedPtr);
-        }
-
-        public void Draw(IInputOutputArray img)
-        {
-            using (InputOutputArray ioaImg = img.GetInputOutputArray())
-            {
-                MccInvoke.cveCCheckerDrawDraw(_ptr, ioaImg);
-            }
+            _ptr = MccInvoke.cveCCheckerDetectorParametersCreate();
+            
         }
 
         /// <summary>
@@ -36,10 +29,9 @@ namespace Emgu.CV.Mcc
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_sharedPtr != IntPtr.Zero)
+            if (_ptr != IntPtr.Zero )
             {
-                MccInvoke.cveCCheckerDrawRelease(ref _sharedPtr);
-                _ptr = IntPtr.Zero;
+                MccInvoke.cveCCheckerDetectorParametersRelease(ref _ptr);
             }
         }
     }
@@ -50,18 +42,12 @@ namespace Emgu.CV.Mcc
     /// </summary>
     public static partial class MccInvoke
     {
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveCCheckerDrawCreate(
-            IntPtr pChecker,
-            ref MCvScalar color,
-            int thickness,
-            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveCCheckerDrawDraw(IntPtr ccheckerDraw, IntPtr img);
+        internal static extern IntPtr cveCCheckerDetectorParametersCreate();
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveCCheckerDrawRelease(ref IntPtr sharedPtr);
+        internal static extern void cveCCheckerDetectorParametersRelease(ref IntPtr sharedPtr);
 
     }
 }

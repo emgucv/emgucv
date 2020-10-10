@@ -40,4 +40,6 @@ CVAPI(bool) cveCCheckerDetectorProcess(
 CVAPI(cv::mcc::CChecker*) cveCCheckerDetectorGetBestColorChecker(cv::mcc::CCheckerDetector* detector);
 CVAPI(void) cveCCheckerDetectorRelease(cv::Ptr<cv::mcc::CCheckerDetector>** sharedPtr);
 
+CVAPI(cv::mcc::DetectorParameters*) cveCCheckerDetectorParametersCreate();
+CVAPI(void) cveCCheckerDetectorParametersRelease(cv::mcc::DetectorParameters** parameters);
 #endif
