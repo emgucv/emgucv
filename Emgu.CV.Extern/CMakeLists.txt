@@ -1391,6 +1391,44 @@ ENDIF()
 	""
 	${HAVE_opencv_mcc})
 
+      CREATE_OCV_CLASS_PROPERTY( 
+    "mcc/DetectorParameters_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Mcc/DetectorParameters.g.cs"
+    "cv::mcc::DetectorParameters" 
+    "DetectorParameters" 
+    "adaptiveThreshWinSizeMin;adaptiveThreshWinSizeMax;adaptiveThreshWinSizeStep;adaptiveThreshConstant;minContoursAreaRate;minContoursArea;confidenceThreshold;minContourSolidity;findCandidatesApproxPolyDPEpsMultiplier;borderWidth;B0factor;maxError;minContourPointsAllowed;minContourLengthAllowed;minInterContourDistance;minInterCheckerDistance;minImageSize;minGroupSize" 
+    "int;int;int;double;double;double;double;double;double;int;float;float;int;int;int;int;int;unsigned" 
+    "element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element"
+    "AdaptiveThreshWinSizeMin;AdaptiveThreshWinSizeMax;AdaptiveThreshWinSizeStep;AdaptiveThreshConstant;MinContoursAreaRate;MinContoursArea;ConfidenceThreshold;MinContourSolidity;FindCandidatesApproxPolyDPEpsMultiplier;BorderWidth;B0factor;MaxError;MinContourPointsAllowed;MinContourLengthAllowed;MinInterContourDistance;MinInterCheckerDistance;MinImageSize;MinGroupSize" 
+    "int;int;int;double;double;double;double;double;double;int;float;float;int;int;int;int;int;uint"
+    "AdaptiveThreshold minimum window size;
+    AdaptiveThreshold maximum window size;
+    AdaptiveThreshold window size step;
+    AdaptiveThreshold constant;
+    Minimum Contours Area Rate;
+    Minimum Contours Area;
+    Confidence Threshold;
+    Minimum Contour Solidity;
+    Find Candidates Approx Poly DP Eps Multiplier;
+    Border Width;
+    B0factor;
+    Max Error;
+    Minimum Contour Points Allowed;
+    Minimum Contour Length Allowed;
+    Minimum InterContour Distance;
+    Minimum InterChecker Distance;
+    Minimum Image Size;
+    Minimum Group Size
+    "  # documentation
+    "Emgu.CV.Mcc"
+    "MccInvoke"
+    "DetectorParameters"
+	""
+    "#include \"mcc_c.h\""
+	""
+	""
+	${HAVE_opencv_mcc})
+
 ############################### features2d code gen END ################################
 
 ############################### ml code gen START ##############################

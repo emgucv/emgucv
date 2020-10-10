@@ -11,7 +11,7 @@ namespace Emgu.CV.Util
    public partial class VectorOfMat : Emgu.Util.UnmanagedObject, IInputArray, IOutputArray, IInputOutputArray
    {
       /// <summary>
-      /// Convert a CvArray to cv::Mat and push it into the vector
+      /// Convert a CvArray to Mat and push it into the vector
       /// </summary>
       /// <typeparam name="TDepth">The type of depth of the cvArray</typeparam>
       /// <param name="cvArray">The cvArray to be pushed into the vector</param>
@@ -21,7 +21,7 @@ namespace Emgu.CV.Util
       }
 
       /// <summary>
-      /// Convert a group of CvArray to cv::Mat and push them into the vector
+      /// Convert a group of CvArray to Mat and push them into the vector
       /// </summary>
       /// <typeparam name="TDepth">The type of depth of the cvArray</typeparam>
       /// <param name="values">The values to be pushed to the vector</param>

@@ -31,6 +31,7 @@ using Emgu.CV.Freetype;
 
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
+using Emgu.CV.Mcc;
 using Emgu.CV.Tiff;
 using Emgu.CV.Util;
 using Emgu.CV.VideoStab;
@@ -38,7 +39,7 @@ using Emgu.CV.XFeatures2D;
 using Emgu.CV.XImgproc;
 //using Emgu.CV.Softcascade;
 using Emgu.Util;
-
+using DetectorParameters = Emgu.CV.Aruco.DetectorParameters;
 #if VS_TEST
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
@@ -4327,6 +4328,19 @@ namespace Emgu.CV.Test
             bool loaded = (IntPtr.Zero != Emgu.Util.Toolbox.LoadLibrary("not_exist"));
             EmguAssert.IsFalse(loaded);
         }
+
+        [Test]
+        public void TestMcc()
+        {
+            using (CChecker checker = new CChecker())
+            using (CCheckerDraw drawer = new CCheckerDraw(checker, new MCvScalar(0, 255, 0), 1))
+            using (Mat img = new Mat(new Size(480, 320), DepthType.Cv8U, 3))
+            {
+                drawer.Draw(img);
+            }
+
+        }
+
 
         [Test]
         public void TestERFilter()

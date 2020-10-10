@@ -59,7 +59,9 @@ namespace Emgu.CV.Mcc
             IInputArray image,
             CChecker.TypeChart chartType,
             int nc,
-            bool useNet)
+            bool useNet, 
+            DetectorParameters p = null
+            )
         {
             using (InputArray iaImage = image.GetInputArray())
             {
@@ -69,7 +71,7 @@ namespace Emgu.CV.Mcc
                     chartType,
                     nc,
                     useNet,
-                    IntPtr.Zero);
+                    p ?? IntPtr.Zero);
             }
         }
     }

@@ -15,13 +15,19 @@ using Emgu.Util;
 
 namespace Emgu.CV.Mcc
 {
+    /// <summary>
+    /// Parameters for the detectMarker process
+    /// </summary>
     public partial class DetectorParameters : UnmanagedObject
     {
 
+        /// <summary>
+        /// Parameters for the detectMarker process
+        /// </summary>
         public DetectorParameters()
         {
             _ptr = MccInvoke.cveCCheckerDetectorParametersCreate();
-            
+
         }
 
         /// <summary>
@@ -29,7 +35,7 @@ namespace Emgu.CV.Mcc
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero )
+            if (_ptr != IntPtr.Zero)
             {
                 MccInvoke.cveCCheckerDetectorParametersRelease(ref _ptr);
             }
