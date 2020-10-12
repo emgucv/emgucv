@@ -17,7 +17,7 @@
     <!-- SHFB properties -->
     <OutputPath>..\Help\</OutputPath>
     <HtmlHelpName>Emgu.CV.Documentation</HtmlHelpName>
-    <ProjectSummary>A cross platform .Net wrapper for the OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages. The wrapper can be compiled in Mono and run on Windows, Android, iOS, Mac OS and Linux.</ProjectSummary>
+    <ProjectSummary>A cross platform .Net wrapper for the OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages. The wrapper can run on Windows, Android, iOS, Mac OS and Linux.</ProjectSummary>
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected, EditorBrowsableNever, NonBrowsable</VisibleItems>
     <HtmlHelp1xCompilerPath>
@@ -37,7 +37,7 @@
     <CopyrightText>2020 Emgu Corporation, All Rights Reserved,</CopyrightText>
     <FeedbackEMailAddress>support%40emgu.com</FeedbackEMailAddress>
     <HeaderText>http://www.emgu.com</HeaderText>
-    <FooterText>For questions and discussions please visit http://www.emgu.com/forum</FooterText>
+    <FooterText>For questions and discussions please visit https://github.com/emgucv/emgucv/issues</FooterText>
     <PresentationStyle>VS2013</PresentationStyle>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\Solution\Windows.Desktop\Emgu.CV.sln" />
@@ -93,12 +93,12 @@ Base functions (L1) can be found in CvInvoke class</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.PhaseUnwrapping" isDocumented="True">Phase Unwrapping API</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Saliency" isDocumented="True">Saliency API</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.XObjdetect" isDocumented="True">Extended object detection</NamespaceSummaryItem>
-	  <NamespaceSummaryItem name="Emgu.CV.PpfMatch3d" isDocumented="True">Surface Matching module</NamespaceSummaryItem>
-	  <NamespaceSummaryItem name="Emgu.CV.Rapid" isDocumented="True">Silhouette based 3D object tracking</NamespaceSummaryItem>
-	  <NamespaceSummaryItem name="Emgu.CV.IntensityTransform" isDocumented="True">The module brings implementations of intensity transformation algorithms to adjust image contrast.</NamespaceSummaryItem>
-	  <NamespaceSummaryItem name="Emgu.CV.Alphamat" isDocumented="True">Information Flow algorithm implementaton for alphamatting</NamespaceSummaryItem>
-	  <NamespaceSummaryItem name="Emgu.CV.Quality" isDocumented="True">Image Quality Analysis (IQA) API</NamespaceSummaryItem>
-	  <NamespaceSummaryItem name="Emgu.CV.Stereo" isDocumented="True">Stereo API</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.PpfMatch3d" isDocumented="True">Surface Matching module</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Rapid" isDocumented="True">Silhouette based 3D object tracking</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.IntensityTransform" isDocumented="True">The module brings implementations of intensity transformation algorithms to adjust image contrast.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Alphamat" isDocumented="True">Information Flow algorithm implementaton for alphamatting</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Quality" isDocumented="True">Image Quality Analysis (IQA) API</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Stereo" isDocumented="True">Stereo API</NamespaceSummaryItem>
     </NamespaceSummaries>
     <PlugInConfigurations>
     </PlugInConfigurations>

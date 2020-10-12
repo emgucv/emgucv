@@ -25,7 +25,7 @@ namespace Emgu.CV.Cuda
         /// </summary>
         /// <param name="threshold">Threshold on difference between intensity of center pixel and pixels on circle around
         /// this pixel. Use 10 for default.</param>
-        /// <param name="nonmaxSupression">Specifiy if non-maximum supression should be used.</param>
+        /// <param name="nonmaxSupression">Specify if non-maximum supression should be used.</param>
         /// <param name="maxNKeypoints">The maximum number of keypoints to be extracted.</param>
         /// <param name="type">The detector type</param>
         public CudaFastFeatureDetector(
