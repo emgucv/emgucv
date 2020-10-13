@@ -99,8 +99,12 @@ bool cveCCheckerDetectorProcess(
 
 cv::mcc::CChecker* cveCCheckerDetectorGetBestColorChecker(cv::mcc::CCheckerDetector* detector)
 {
+#ifdef HAVE_OPENCV_MCC
 	cv::Ptr<cv::mcc::CChecker> ptr = detector->getBestColorChecker();
 	return ptr.get();
+#else
+	throw_no_mcc();
+#endif
 }
 void cveCCheckerDetectorRelease(cv::Ptr<cv::mcc::CCheckerDetector>** sharedPtr)
 {

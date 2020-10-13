@@ -15,6 +15,15 @@
 #else
 static inline CV_NORETURN void throw_no_mcc() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without mcc support"); }
 
+namespace cv {
+namespace mcc {
+class CChecker {};
+class CCheckerDraw {};
+class CCheckerDetector {};
+class DetectorParameters {};
+enum TYPECHART {};
+}
+}
 #endif
 
 CVAPI(cv::mcc::CChecker*) cveCCheckerCreate(cv::Ptr<cv::mcc::CChecker>** sharedPtr);
