@@ -51,6 +51,39 @@ namespace Emgu.CV.Mcc
             _needDispose = true;
         }
 
+        public PointF[] Box
+        {
+            get
+            {
+                using (VectorOfPointF vp = new VectorOfPointF())
+                {
+                    MccInvoke.cveCCheckerGetBox(_ptr, vp);
+                    return vp.ToArray();
+                }
+            }
+            set
+            {
+                using (VectorOfPointF vp = new VectorOfPointF(value))
+                {
+                    MccInvoke.cveCCheckerSetBox(_ptr, vp);
+                }
+            }
+        }
+
+        public PointF Center
+        {
+            get
+            {
+                PointF p = new PointF();
+                MccInvoke.cveCCheckerGetCenter(_ptr, ref p);
+                return p;
+            }
+            set
+            {
+                MccInvoke.cveCCheckerSetCenter(_ptr, ref value);
+            }
+        }
+
         /// <summary>
         /// Release the unmanaged memory associated with this object
         /// </summary>
@@ -80,6 +113,17 @@ namespace Emgu.CV.Mcc
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveCCheckerRelease(ref IntPtr sharedPtr);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveCCheckerGetBox(IntPtr checker, IntPtr box);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveCCheckerSetBox(IntPtr checker, IntPtr box);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveCCheckerGetCenter(IntPtr checker, ref PointF center);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveCCheckerSetCenter(IntPtr checker, ref PointF center);
 
     }
 }

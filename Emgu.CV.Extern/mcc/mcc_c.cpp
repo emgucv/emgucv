@@ -16,6 +16,29 @@ cv::mcc::CChecker* cveCCheckerCreate(cv::Ptr<cv::mcc::CChecker>** sharedPtr)
 	throw_no_mcc();
 #endif
 }
+
+void cveCCheckerGetBox(cv::mcc::CChecker* checker, std::vector< cv::Point2f >* box)
+{
+  std::vector<cv::Point2f> pts = checker->getBox();
+  *box = pts;
+}
+void cveCCheckerSetBox(cv::mcc::CChecker* checker, std::vector< cv::Point2f >* box)
+{
+	checker->setBox(*box);
+}
+
+void cveCCheckerGetCenter(cv::mcc::CChecker* checker, CvPoint2D32f* center)
+{
+	cv::Point2f p = checker->getCenter();
+	center->x = p.x;
+	center->y = p.y;
+}
+void cveCCheckerSetCenter(cv::mcc::CChecker* checker, CvPoint2D32f* center)
+{
+	cv::Point2f p = *center;
+	checker->setCenter(p);
+}
+
 void cveCCheckerRelease(cv::Ptr<cv::mcc::CChecker>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_MCC
@@ -68,8 +91,8 @@ cv::mcc::CCheckerDetector* cveCCheckerDetectorCreate(cv::Algorithm** algorithm, 
 {
 #ifdef HAVE_OPENCV_MCC
 	cv::Ptr<cv::mcc::CCheckerDetector> checkerDetector = cv::mcc::CCheckerDetector::create();
-	*algorithm = dynamic_cast<cv::Algorithm*>((*sharedPtr)->get());
 	*sharedPtr = new cv::Ptr<cv::mcc::CCheckerDetector>(checkerDetector);
+	*algorithm = dynamic_cast<cv::Algorithm*>((*sharedPtr)->get());
 	return (*sharedPtr)->get();
 #else
 	throw_no_mcc();

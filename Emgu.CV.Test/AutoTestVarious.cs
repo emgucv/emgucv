@@ -33,6 +33,7 @@ using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
 using Emgu.CV.Mcc;
 using Emgu.CV.Tiff;
+//using Emgu.CV.UI;
 using Emgu.CV.Util;
 using Emgu.CV.VideoStab;
 using Emgu.CV.XFeatures2D;
@@ -4332,11 +4333,27 @@ namespace Emgu.CV.Test
         [Test]
         public void TestMcc()
         {
-            using (CChecker checker = new CChecker())
-            using (CCheckerDraw drawer = new CCheckerDraw(checker, new MCvScalar(0, 255, 0), 1))
-            using (Mat img = new Mat(new Size(480, 320), DepthType.Cv8U, 3))
+            using (Mat image = EmguAssert.LoadMat("MCC24.png"))
+            using (CCheckerDetector detector = new CCheckerDetector())
             {
-                drawer.Draw(img);
+                if (detector.Process(image, CChecker.TypeChart.MCC24))
+                {
+                    using (CChecker checker = detector.BestColorChecker)
+                    using (CCheckerDraw drawer = new CCheckerDraw(checker, new MCvScalar(0, 255, 0), 1))
+                    {
+                        drawer.Draw(image);
+                        //image.Save("c:\\tmp.out.png");
+                    }
+                    //using (Mat img = new Mat(new Size(480, 320), DepthType.Cv8U, 3))
+                    //{
+                    //    drawer.Draw(img);
+                    //}
+                }
+            }
+
+            using (CChecker c = new CChecker())
+            {
+                PointF p = c.Center;
             }
 
         }

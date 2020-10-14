@@ -32,6 +32,10 @@ namespace Emgu.CV.Mcc
             get { return _algorithmPtr; }
         }
 
+        /// <summary>
+        /// Get the best color checker. By the best it means the one
+        /// detected with the highest confidence.
+        /// </summary>
         public CChecker BestColorChecker
         {
             get
@@ -55,11 +59,23 @@ namespace Emgu.CV.Mcc
             }
         }
 
+        /// <summary>
+        /// Find the ColorCharts in the given image. The found charts are not returned but instead stored in the
+        /// detector, these can be accessed later on using BestColorChecker
+        /// and GetListColorChecker()
+        /// </summary>
+        /// <param name="image">Image in color space BGR</param>
+        /// <param name="chartType">Type of the chart to detect</param>
+        /// <param name="nc">Number of charts in the image, if you don't know the exact then keeping this number high helps.</param>
+        /// <param name="useNet">If it is true, the network provided using the setNet() is used for preliminary search for regions where chart
+        /// could be present, inside the regionsOfInterest provided.</param>
+        /// <param name="p">Parameters of the detection system</param>
+        /// <returns>true if at least one chart is detected, otherwise false</returns>
         public bool Process(
             IInputArray image,
             CChecker.TypeChart chartType,
-            int nc,
-            bool useNet, 
+            int nc = 1,
+            bool useNet = false, 
             DetectorParameters p = null
             )
         {

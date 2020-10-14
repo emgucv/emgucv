@@ -118,6 +118,10 @@
       <Link>pascal-classes.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\opencv_extra\testdata\cv\mcc\MCC24.png">
+      <Link>MCC24.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\opencv_extra\testdata\dnn\dog416.png">
       <Link>dog416.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
