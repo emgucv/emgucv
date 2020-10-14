@@ -19,24 +19,40 @@ cv::mcc::CChecker* cveCCheckerCreate(cv::Ptr<cv::mcc::CChecker>** sharedPtr)
 
 void cveCCheckerGetBox(cv::mcc::CChecker* checker, std::vector< cv::Point2f >* box)
 {
+#ifdef HAVE_OPENCV_MCC
   std::vector<cv::Point2f> pts = checker->getBox();
   *box = pts;
+#else
+	throw_no_mcc();
+#endif
 }
 void cveCCheckerSetBox(cv::mcc::CChecker* checker, std::vector< cv::Point2f >* box)
 {
+#ifdef HAVE_OPENCV_MCC
 	checker->setBox(*box);
+#else
+	throw_no_mcc();
+#endif
 }
 
 void cveCCheckerGetCenter(cv::mcc::CChecker* checker, CvPoint2D32f* center)
 {
+#ifdef HAVE_OPENCV_MCC
 	cv::Point2f p = checker->getCenter();
 	center->x = p.x;
 	center->y = p.y;
+#else
+	throw_no_mcc();
+#endif
 }
 void cveCCheckerSetCenter(cv::mcc::CChecker* checker, CvPoint2D32f* center)
 {
+#ifdef HAVE_OPENCV_MCC
 	cv::Point2f p = *center;
 	checker->setCenter(p);
+#else
+	throw_no_mcc();
+#endif
 }
 
 void cveCCheckerRelease(cv::Ptr<cv::mcc::CChecker>** sharedPtr)
