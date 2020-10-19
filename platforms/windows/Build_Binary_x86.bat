@@ -9,7 +9,8 @@ REM %3%: "inf", build with OpenVino
 REM %3%: "WindowsStore10", target UWP 
 REM %3%: "vs2015", force to build with vs_2015, it may no longer work as of 2020
 REM %3%: "commercial", use to enable optimization with targeting 32-bit architecture
-REM %4%: "nonfree", "openni"
+REM %4%: "nonfree", build the nonfree module
+REM %4%: "openni", build the openni module
 REM %5%: "doc", this flag indicates if we should build the documentation
 REM %6%: "package", this flag indicates if we should build the ".zip" and ".exe" package
 REM %7%: "build", if set to "build", the script will also build the target

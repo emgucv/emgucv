@@ -1,3 +1,8 @@
+REM POSSIBLE OPTIONS: 
+REM %1%: "x86", "x86_64", "arm64-v8a" or "armeabi-v7a"
+REM %2%: "core", if set to "core", will not build the contrib module
+REM %3%: optional android-toolchain
+
 pushd %~p0
 
 cd ..\..\..
@@ -24,7 +29,7 @@ IF EXIST .\jni\nul (SET BUILD_JAVA_PART=1) ELSE (SET BUILD_JAVA_PART=0)
 SET BUILD_OPENCV=1
 
 :: Check optional android-toolchain
-IF ("%2"=="") (SET ANDROID_TOOLCHAIN_CMAKE="") else (SET ANDROID_TOOLCHAIN_CMAKE=-DANDROID_TOOLCHAIN_NAME=%2)
+IF ("%3"=="") (SET ANDROID_TOOLCHAIN_CMAKE="") else (SET ANDROID_TOOLCHAIN_CMAKE=-DANDROID_TOOLCHAIN_NAME=%3)
 
 :: inherit old names
 IF NOT DEFINED CMAKE SET CMAKE=%CMAKE_EXE%
@@ -107,8 +112,13 @@ echo on
 ::c:\MinGW\bin\mingw32-make.exe
 ::cd ..\build
 
+::Setup the contrib modules
+IF "%2"=="core" GOTO END_CONTRIB
+SET OPENCV_EXTRA_MODULES_DIR=%SOURCE_DIR%\opencv_contrib\modules
+SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% -DOPENCV_EXTRA_MODULES_PATH:String="%OPENCV_EXTRA_MODULES_DIR:\=/%" 
+:END_CONTRIB
+
 SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
--DOPENCV_EXTRA_MODULES_PATH="%SOURCE_DIR%\opencv_contrib\modules" ^
 -DENABLE_THIN_LTO:BOOL=ON ^
 -DBUILD_SHARED_LIBS:BOOL=OFF ^
 -DBUILD_ANDROID_EXAMPLES:BOOL=OFF ^
