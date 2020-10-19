@@ -2,9 +2,9 @@
 
 cd ../../libs/osx
 rm *.dylib
-cd ../../platforms/osx/build
+cd ../../platforms/macos/build
 make cvextern
-#cd platforms/osx
+
 cd ..
 rm -rf emgucv.bundle
 mkdir emgucv.bundle

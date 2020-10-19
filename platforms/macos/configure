@@ -32,7 +32,7 @@ cmake $BUILD_ARCH $OSX_SYSROOT_OPTION -DCMAKE_BUILD_TYPE:BOOL=Release ..
 make
 
 cd ../..
-cd platforms/osx
+cd platforms/macos
 mkdir -p build
 cd build
 
