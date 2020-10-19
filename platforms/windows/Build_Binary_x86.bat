@@ -14,7 +14,8 @@ REM %5%: "doc", this flag indicates if we should build the documentation
 REM %6%: "package", this flag indicates if we should build the ".zip" and ".exe" package
 REM %7%: "build", if set to "build", the script will also build the target
 REM %8%: "nuget", this flag indicates if we should build the nuget package
-REM %9%: Use this field for the CUDA_ARCH_BIN_OPTION if you want to specify it manually. e.g. "6.1"
+REM %9%: "core", if set to core, will not build the contrib module
+REM %10%: Use this field for the CUDA_ARCH_BIN_OPTION if you want to specify it manually. e.g. "6.1"
 
 SET BUILD_FOLDER=build
 SET BUILD_TOOLS_FOLDER=C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools
@@ -171,7 +172,6 @@ IF %DEVENV%==%VS2015% SET CMAKE_CONF="Visual Studio 14%OS_MODE%"
 IF %DEVENV%==%VS2017% SET CMAKE_CONF="Visual Studio 15%OS_MODE%"
 IF %DEVENV%==%VS2019% SET CMAKE_CONF="Visual Studio 16" %BUILD_ARCH%
 
-SET OPENCV_EXTRA_MODULES_DIR=%cd%\..\opencv_contrib\modules
 REM Setup common flags
 SET CMAKE_CONF_FLAGS= -G %CMAKE_CONF% ^
 -DBUILD_DOCS:BOOL=FALSE ^
@@ -186,12 +186,17 @@ SET CMAKE_CONF_FLAGS= -G %CMAKE_CONF% ^
 -DCMAKE_DISABLE_FIND_PACKAGE_BZip2:BOOL=TRUE ^
 -DCMAKE_DISABLE_FIND_PACKAGE_ZLIB:BOOL=TRUE ^
 -DCMAKE_DISABLE_FIND_PACKAGE_PNG:BOOL=TRUE ^
--DVIDEOIO_PLUGIN_LIST:STRING="ffmpeg" ^
--DOPENCV_EXTRA_MODULES_PATH:String="%OPENCV_EXTRA_MODULES_DIR:\=/%" 
+-DVIDEOIO_PLUGIN_LIST:STRING="ffmpeg"
 
 REM For Freetype, removed the "d" postfix for debug mode.
 SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 -DDISABLE_FORCE_DEBUG_POSTFIX:BOOL=TRUE 
+
+REM Setup the contrib modules
+IF "%9%"=="core" GOTO END_CONTRIB
+SET OPENCV_EXTRA_MODULES_DIR=%cd%\..\opencv_contrib\modules
+SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% -DOPENCV_EXTRA_MODULES_PATH:String="%OPENCV_EXTRA_MODULES_DIR:\=/%" 
+:END_CONTRIB
 
 SET BUILD_TYPE=OPEN_SOURCE
 
@@ -408,6 +413,7 @@ REM IF EXIST "C:\Intel\computer_vision_sdk_2018.3.343" SET OPENVINO_DIR=C:\Intel
 REM IF EXIST "C:\Intel\computer_vision_sdk_2018.5.445" SET OPENVINO_DIR=C:\Intel\computer_vision_sdk_2018.5.445
 IF EXIST "%PROGRAMFILES_DIR_X86%\IntelSWTools\openvino" SET OPENVINO_DIR=%PROGRAMFILES_DIR_X86%\IntelSWTools\openvino
 IF EXIST "%PROGRAMFILES_DIR_X86%\Intel\openvino_2021" SET OPENVINO_DIR=%PROGRAMFILES_DIR_X86%\Intel\openvino_2021
+IF EXIST "%PROGRAMFILES_DIR_X86%\Intel\openvino_2021" SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% -DINF_ENGINE_RELEASE:STRING="2021010000"
 IF NOT EXIST "%OPENVINO_DIR%" GOTO WITHOUT_OPENVINO
 
 REM GOTO WITHOUT_OPENVINO
