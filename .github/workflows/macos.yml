@@ -17,14 +17,14 @@ jobs:
       run: git submodule update --init --recursive
     - name: Build Emgu CV native binary
       run: ./configure_x86_64
-      working-directory: ./platforms/osx/
+      working-directory: ./platforms/macos/
     - name: Build Emgu CV native binary - 2nd pass
       run: ./configure_x86_64
-      working-directory: ./platforms/osx/
+      working-directory: ./platforms/macos/
     - name: Build Emgu CV package (unsigned)
       run: make package
-      working-directory: ./platforms/osx/build/
+      working-directory: ./platforms/macos/build/
     - uses: actions/upload-artifact@v2
       with:
         name: emgucv-macos-zip-package
-        path: ${{ github.workspace }}/platforms/osx/build/*.zip
+        path: ${{ github.workspace }}/platforms/macos/build/*.zip
