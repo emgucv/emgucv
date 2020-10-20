@@ -2,4 +2,4 @@
 
 cd "$(dirname "$0")"
 
-./configure x86_64 full core
+./configure x86_64 core
