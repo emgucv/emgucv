@@ -2,7 +2,6 @@
 //  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if __ANDROID__
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,8 +9,6 @@ using System.Drawing;
 using Android.Graphics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization;
-using System.Security.Permissions;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
@@ -159,5 +156,3 @@ namespace Emgu.CV
         }
     }
 }
-
-#endif

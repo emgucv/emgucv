@@ -2,8 +2,6 @@
 //  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if __ANDROID__
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -18,7 +16,6 @@ using Android.Content.Res;
 
 namespace Emgu.CV
 {
-    //public partial class Mat : MatDataAllocator, IInputArray, IOutputArray, IInputOutputArray
     public static partial class AndroidExtension
     {
 
@@ -269,5 +266,3 @@ namespace Emgu.CV
         }
     }
 }
-
-#endif
