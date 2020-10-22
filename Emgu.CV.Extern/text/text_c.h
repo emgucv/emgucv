@@ -22,13 +22,15 @@ namespace cv
 	namespace text
 	{
 		class ERFilter
-		{
-			
+		{	
 		};
 
 		class ERStat
+		{	
+		};
+
+		class TextDetectorCNN
 		{
-			
 		};
 	}
 }
