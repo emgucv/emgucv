@@ -15,6 +15,9 @@ using Emgu.Util;
 
 namespace Emgu.CV.Mcc
 {
+    /// <summary>
+    /// This class contains the information about the detected checkers,i.e, their type, the corners of the chart, the color profile, the cost, centers chart, etc.
+    /// </summary>
     public partial class CChecker : SharedPtrObject
     {
         /// <summary>
@@ -45,12 +48,18 @@ namespace Emgu.CV.Mcc
             _needDispose = needDispose;
         }
 
+        /// <summary>
+        /// Create a new CChecker
+        /// </summary>
         public CChecker()
         {
             _ptr = MccInvoke.cveCCheckerCreate(ref _sharedPtr);
             _needDispose = true;
         }
 
+        /// <summary>
+        /// Get or Set the points that forms a box for the CChecker.
+        /// </summary>
         public PointF[] Box
         {
             get
@@ -70,6 +79,9 @@ namespace Emgu.CV.Mcc
             }
         }
 
+        /// <summary>
+        /// Get or Set the center of the CChecker
+        /// </summary>
         public PointF Center
         {
             get

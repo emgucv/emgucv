@@ -15,10 +15,16 @@ using Emgu.Util;
 
 namespace Emgu.CV.Mcc
 {
+    /// <summary>
+    /// A class to find the positions of the ColorCharts in the image.
+    /// </summary>
     public partial class CCheckerDetector : SharedPtrObject, IAlgorithm
     {
         private IntPtr _algorithmPtr;
 
+        /// <summary>
+        /// Create a new CCheckerDetector.
+        /// </summary>
         public CCheckerDetector()
         {
             _ptr = MccInvoke.cveCCheckerDetectorCreate(ref _algorithmPtr, ref _sharedPtr);

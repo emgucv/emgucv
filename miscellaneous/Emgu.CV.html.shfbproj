@@ -99,6 +99,7 @@ Base functions (L1) can be found in CvInvoke class</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Alphamat" isDocumented="True">Information Flow algorithm implementaton for alphamatting</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Quality" isDocumented="True">Image Quality Analysis (IQA) API</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Stereo" isDocumented="True">Stereo API</NamespaceSummaryItem>
+	  <NamespaceSummaryItem name="Emgu.CV.Mcc" isDocumented="True">Macbeth Chart detector</NamespaceSummaryItem>
     </NamespaceSummaries>
     <PlugInConfigurations>
     </PlugInConfigurations>
