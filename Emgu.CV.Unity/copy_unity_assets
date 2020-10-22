@@ -117,7 +117,7 @@ cp -r ../Emgu.CV.Contrib/IntensityTransform/*.cs Assets/Emgu.CV/Assets/Scripts/E
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rapid
 cp -r ../Emgu.CV.Contrib/Rapid/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rapid
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc
-cp -r ../Emgu.CV.Contrib/Rapid/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc
+cp -r ../Emgu.CV.Contrib/Mcc/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.OCR/
 
