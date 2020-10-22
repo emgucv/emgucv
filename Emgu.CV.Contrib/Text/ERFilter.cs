@@ -16,8 +16,9 @@ namespace Emgu.CV.Text
     /// <summary>
     /// Base class for 1st and 2nd stages of Neumann and Matas scene text detection algorithm
     /// </summary>
-    public abstract class ERFilter : Emgu.Util.UnmanagedObject
+    public abstract class ERFilter : SharedPtrObject
     {
+        /*
         /// <summary>
         /// The native pointer to the shared object.
         /// </summary>
@@ -26,15 +27,18 @@ namespace Emgu.CV.Text
         static ERFilter()
         {
             CvInvoke.CheckLibraryLoaded();
-        }
+        }*/
 
         /// <summary>
         /// Release all the unmanaged memory associate with this ERFilter
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                TextInvoke.cveERFilterRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+            {
+                TextInvoke.cveERFilterRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
         }
 
         /// <summary>
@@ -178,7 +182,7 @@ namespace Emgu.CV.Text
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveERFilterRelease(ref IntPtr filter, ref IntPtr sharedPtr);
+        internal static extern void cveERFilterRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveERFilterRun(IntPtr filter, IntPtr image, IntPtr regions);

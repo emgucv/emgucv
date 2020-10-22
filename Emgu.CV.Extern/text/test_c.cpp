@@ -35,11 +35,10 @@ cv::text::ERFilter* cveERFilterNM2Create(cv::String* classifier, float minProbab
 	throw_no_text();
 #endif
 }
-void cveERFilterRelease(cv::text::ERFilter** filter, cv::Ptr<cv::text::ERFilter>** sharedPtr)
+void cveERFilterRelease(cv::Ptr<cv::text::ERFilter>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_TEXT
 	delete *sharedPtr;
-	*filter = 0;
 	*sharedPtr = 0;
 #else
 	throw_no_text();
@@ -89,6 +88,44 @@ void cveComputeNMChannels(cv::_InputArray* src, cv::_OutputArray* channels, int 
 {
 #ifdef HAVE_OPENCV_TEXT
 	cv::text::computeNMChannels(*src, *channels, mode);
+#else
+	throw_no_text();
+#endif
+}
+
+cv::text::TextDetectorCNN* cveTextDetectorCNNCreate(cv::String* modelArchFilename, cv::String* modelWeightsFilename, cv::Ptr<cv::text::TextDetectorCNN>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_TEXT
+	cv::Ptr<cv::text::TextDetectorCNN> detector = cv::text::TextDetectorCNN::create(*modelArchFilename, *modelWeightsFilename);
+	*sharedPtr = new cv::Ptr<cv::text::TextDetectorCNN>(detector);
+	return detector.get();
+#else
+	throw_no_text();
+#endif
+}
+cv::text::TextDetectorCNN* cveTextDetectorCNNCreate2(cv::String* modelArchFilename, cv::String* modelWeightsFilename, std::vector<cv::Size>* detectionSizes, cv::Ptr<cv::text::TextDetectorCNN>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_TEXT
+	cv::Ptr<cv::text::TextDetectorCNN> detector = cv::text::TextDetectorCNN::create(*modelArchFilename, *modelWeightsFilename, *detectionSizes);
+	*sharedPtr = new cv::Ptr<cv::text::TextDetectorCNN>(detector);
+	return detector.get();
+#else
+	throw_no_text();
+#endif	
+}
+void cveTextDetectorCNNDetect(cv::text::TextDetectorCNN* detector, cv::_InputArray* inputImage, std::vector<cv::Rect>* bbox, std::vector<float>* confidence)
+{
+#ifdef HAVE_OPENCV_TEXT
+	detector->detect(*inputImage, *bbox, *confidence);
+#else
+	throw_no_text();
+#endif
+}
+void cveTextDetectorCNNRelease(cv::Ptr<cv::text::TextDetectorCNN>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_TEXT
+	delete* sharedPtr;
+	*sharedPtr = 0;
 #else
 	throw_no_text();
 #endif
