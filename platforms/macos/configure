@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+cd "$(dirname "$0")"
+cd ../..
+
 if [ "$1" == "all" ]; then 
   BUILD_ARCH=-DMACOSX_DEPLOYMENT_TARGET=11.0
   VTK_OPTION=  
@@ -27,16 +30,18 @@ else
     fi
 fi
 
-cd "$(dirname "$0")"
-cd ../..
+if [ "$CV_CONTRIB_OPTION" != "" ]; then    
+    cd vtk
+    mkdir -p build
+    cd build
+    cmake $BUILD_ARCH $OSX_SYSROOT_OPTION -DBUILD_TESTING:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_BUILD_TYPE:BOOL=Release ../
+    make
+    cd ../..
+    FREETYPE_OPTION=-DFT_WITH_HARFBUZZ:BOOL=TRUE -DHB_BUILD_TESTS:BOOL=FALSE 
+else
+    FREETYPE_OPTION=-DEMGU_CV_WITH_FREETYPE:BOOL=FALSE
+fi
 
-cd vtk
-mkdir -p build
-cd build
-cmake $BUILD_ARCH $OSX_SYSROOT_OPTION -DBUILD_TESTING:BOOL=OFF -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_BUILD_TYPE:BOOL=Release ../
-make
-
-cd ../..
 cd eigen
 mkdir -p build
 cd build
@@ -65,8 +70,7 @@ $CV_CONTRIB_OPTION \
 $VTK_OPTION \
 -DEigen3_DIR:STRING="$PWD/../../../eigen/build" \
 -DWITH_LAPACK:BOOL=OFF \
--DFT_WITH_HARFBUZZ:BOOL=TRUE \
--DHB_BUILD_TESTS:BOOL=FALSE \
+$FREETYPE_OPTION \
 -DCMAKE_CXX_FLAGS_RELEASE:STRING=-g0 \
 -DCMAKE_C_FLAGS_RELEASE:STRING=-g0 \
 -DCMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,-dead_strip \
