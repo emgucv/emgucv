@@ -20,13 +20,16 @@ fi
 
 if [[ $# -lt 2 ]]; then
     CV_CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules
+    TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
     echo "Building with contrib module"
 else
     if [ "$2" != "core" ]; then
-	CV_CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules
-	echo "Building with contrib module"
+      CV_CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules
+      TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
+      echo "Building with contrib module"
     else
-	echo "Building without contrib module"
+      TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE 
+      echo "Building without contrib module"
     fi
 fi
 
@@ -66,6 +69,7 @@ $CV_PNG_OPTION \
 -DBUILD_opencv_apps:BOOL=OFF \
 -DWITH_CUDA:BOOL=OFF \
 $CV_CONTRIB_OPTION \
+$TESSERACT_OPTION \
 -DBUILD_SHARED_LIBS:BOOL=OFF \
 $VTK_OPTION \
 -DEigen3_DIR:STRING="$PWD/../../../eigen/build" \
