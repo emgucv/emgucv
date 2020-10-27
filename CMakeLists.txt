@@ -9,8 +9,20 @@
 # --------------------------------------------------------
 
 PROJECT(emgucv)
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.1)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.9.4)
 cmake_policy(SET CMP0022 NEW)
+cmake_policy(SET CMP0069 NEW)
+
+#IF(ANDROID)
+#include(CheckIPOSupported)
+#check_ipo_supported(RESULT supported OUTPUT error)
+#if( supported )
+#    message(STATUS "IPO / LTO enabled")
+#    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+#else()
+#    message(STATUS "IPO / LTO not supported: <${error}>")
+#endif()
+#ENDIF()
 
 IF( WIN32 OR ANDROID OR APPLE OR NETFX_CORE)
 	SET(EMGU_CV_WITH_FREETYPE ON CACHE BOOL "BUILD FREETYPE")
