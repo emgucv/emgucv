@@ -17,6 +17,9 @@ typedef unsigned __int64 UINT64;
 #include "opencv2/core/core.hpp"
 #include "opencv2/core/core_c.h"
 #include "stdio.h"
+
+#if HAVE_EMGUCV_TESSERACT
+
 #include "baseapi.h"
 #include "allheaders.h"
 #include "renderer.h"
@@ -49,6 +52,29 @@ public:
       return tesseract::TessBaseAPI::TesseractExtractResult(text, lengths, costs, x0, y0, x1, y1, page_res_);
    }
 };
+
+#else
+
+class EmguTesseract {};
+class Pix {};
+
+namespace tesseract
+{
+	class TessResultRenderer {};
+	class PageIterator {};
+	class Orientation {};
+	class WritingDirection {};
+	class TextlineOrder {};
+	class TessPDFRenderer {};
+	
+	enum PageSegMode {};
+	enum PageIteratorLevel {};
+}
+
+static inline CV_NORETURN void throw_no_tesseract() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without tesseract ocr support"); }
+
+#endif
+
 
 struct TesseractResult
 {
