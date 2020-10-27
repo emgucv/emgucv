@@ -3227,9 +3227,9 @@ ENDIF()
 IF(ANDROID)
   ADD_DEFINITIONS(-DANDROID)
   # For Android, tell the linker to transform all the symbols in the static libraries to hidden.
-  # This can significantlt reduce the binary size
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--exclude-libs=ALL")
-  set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--exclude-libs=ALL")
+  # This can significantly reduce the binary size
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--exclude-libs,ALL")
+  #set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--exclude-libs,ALL")
 ENDIF()
 
 #disable warnings
