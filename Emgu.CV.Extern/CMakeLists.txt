@@ -2674,7 +2674,7 @@ ENDIF()
 SET(TESSERACT_OCR_ROOT_DIR "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/tesseract-ocr.git")
 SET(LEPT_ROOT_DIR "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/leptonica/leptonica.git")
 
-IF(ANDROID)
+
   IF(EMGU_CV_WITH_TESSERACT)
     ADD_SUBDIRECTORY(tesseract/libtesseract)
     IF(TESSERACT_FOUND)
@@ -2686,45 +2686,25 @@ IF(ANDROID)
         "${TESSERACT_OCR_ROOT_DIR}/src/ccstruct" 
         "${LEPT_ROOT_DIR}/src" 
         "${PROJECT_SOURCE_DIR}/tesseract")
-      #SET(TESSERACT_PROJECTS libleptonica tesseract_ccutil tesseract_viewer tesseract_cutil tesseract_opencl tesseract_ccstruct tesseract_dict tesseract_classify tesseract_wordrec tesseract_arch tesseract_textord tesseract_lstm tesseract_api tesseract_ccmain)
       SET(TESSERACT_PROJECTS tesseract_api tesseract_ccmain tesseract_lstm tesseract_textord tesseract_arch tesseract_wordrec tesseract_classify tesseract_dict tesseract_ccstruct tesseract_opencl tesseract_cutil tesseract_viewer tesseract_ccutil libleptonica)
     ENDIF()
-  ENDIF()
-ELSE() #ELSEIF(WIN32 OR APPLE)
-  IF(EMGU_CV_WITH_TESSERACT)
-    ADD_SUBDIRECTORY(tesseract/libtesseract)
-    IF(TESSERACT_FOUND)
-    ELSE()
-      SET(TESSERACT_INCLUDE_DIRS 
-        "${TESSERACT_OCR_ROOT_DIR}/src/ccutil" 
-        "${TESSERACT_OCR_ROOT_DIR}/src/api" 
-        "${TESSERACT_OCR_ROOT_DIR}/src/ccmain" 
-        "${TESSERACT_OCR_ROOT_DIR}/src/ccstruct" 
-        "${LEPT_ROOT_DIR}/src" 
-        "${PROJECT_SOURCE_DIR}/tesseract")
-      #SET(TESSERACT_PROJECTS libleptonica tesseract_ccutil tesseract_viewer tesseract_cutil tesseract_opencl tesseract_ccstruct tesseract_dict tesseract_classify tesseract_wordrec tesseract_arch tesseract_textord tesseract_lstm tesseract_api tesseract_ccmain)
-      SET(TESSERACT_PROJECTS tesseract_api tesseract_ccmain tesseract_lstm tesseract_textord tesseract_arch tesseract_wordrec tesseract_classify tesseract_dict tesseract_ccstruct tesseract_opencl tesseract_cutil tesseract_viewer tesseract_ccutil libleptonica)
-    ENDIF()
+	
+	IF (ANDROID)
+	ELSE()
     ADD_DEFINITIONS(-D__MSW32__)
+	ENDIF()
   ENDIF()
-ENDIF()
-#ELSE()
-#  SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/../cmake/modules")
-#  FIND_PACKAGE(TESSERACT)
-#  IF(TESSERACT_FOUND)
-#    SET(EMGU_CV_WITH_TESSERACT ON CACHE BOOL "BUILD OCR")
-#  ELSE()
-#    SET(EMGU_CV_WITH_TESSERACT OFF CACHE BOOL "BUILD OCR")
-#    SET(TESSERACT_INCLUDE_DIRS "")
-#    SET(TESSERACT_PROJECTS "")
-#  ENDIF()
-#ENDIF()
+
+
 
 IF(EMGU_CV_WITH_TESSERACT)
+  ADD_DEFINITIONS(-DHAVE_EMGUCV_TESSERACT)
   INCLUDE_DIRECTORIES(${TESSERACT_INCLUDE_DIRS})
-  LIST(APPEND extern_hdrs "${PROJECT_SOURCE_DIR}/tesseract/tesseract_c.h")
-  LIST(APPEND extern_srcs "${PROJECT_SOURCE_DIR}/tesseract/tesseract.cpp")
 ENDIF()
+
+LIST(APPEND extern_hdrs "${PROJECT_SOURCE_DIR}/tesseract/tesseract_c.h")
+LIST(APPEND extern_srcs "${PROJECT_SOURCE_DIR}/tesseract/tesseract.cpp")
+
 ############################### TESSERACT END ##########################
 
 IF(WITH_INF_ENGINE)
@@ -3281,10 +3261,6 @@ target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS}
   #  xtiff 
   ${CVBLOB_LIBRARY})
 
-#IF(EMGU_CV_WITH_TESSERACT)
-#  ADD_DEPENDENCIES(${TESSERACT_PROJECTS})
-#ENDIF()
-
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${the_target} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
@@ -3358,7 +3334,10 @@ IF (IOS)
     SET(IOS_RELEASE_FOLDER "Release-iphoneos")
   ENDIF()
   
-  SET(LIBTOOL_LINKING_COMMAND libtool -static -o ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_${IOS_ARCH}.a bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/Release/*.a libs/Release/*.a opencv/3rdparty/lib/Release/*.a opencv/lib/Release/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/*.a)
+  SET(LIBTOOL_LINKING_COMMAND libtool -static -o ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_${IOS_ARCH}.a bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/Release/*.a opencv/3rdparty/lib/Release/*.a opencv/lib/Release/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/*.a)
+  IF (EMGU_CV_WITH_TESSERACT)
+     LIST(APPEND LIBTOOL_LINKING_COMMAND libs/Release/*.a)
+  ENDIF()
   IF (EMGU_CV_WITH_FREETYPE) 
 	LIST(APPEND LIBTOOL_LINKING_COMMAND freetype2/${IOS_RELEASE_FOLDER}/*.a harfbuzz/${IOS_RELEASE_FOLDER}/*.a)
   ENDIF()
