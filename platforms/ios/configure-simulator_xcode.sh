@@ -19,8 +19,6 @@ ${CV_CONTRIB_OPTION[@]} \
 -DBUILD_opencv_apps:BOOL=FALSE \
 -DBUILD_opencv_java_bindings_generator:BOOL=FALSE \
 -DBUILD_opencv_python_bindings_generator:BOOL=FALSE \
--DIPHONEOS_DEPLOYMENT_TARGET:STRING=8.0 \
+-DIPHONEOS_DEPLOYMENT_TARGET:STRING=9.0 \
 ${@:2} `dirname $0`/../.. 
 
-#-DCMAKE_CXX_FLAGS_RELEASE:STRING=-g0 \
-#-DCMAKE_C_FLAGS_RELEASE:STRING=-g0 \
