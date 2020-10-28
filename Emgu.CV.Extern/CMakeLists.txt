@@ -3350,6 +3350,14 @@ IF (IOS)
     COMMENT "Linking multiple arch into a single file")  
 ENDIF()
 
+IF (ANDROID)
+add_custom_command(TARGET ${the_target}
+    POST_BUILD
+    COMMAND ${CMAKE_STRIP} libcvextern.so 
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}"
+    COMMENT "Stripping libcvextern.so")  
+ENDIF()
+
 #IF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
 #  add_custom_command(TARGET ${the_target}
 #    POST_BUILD
