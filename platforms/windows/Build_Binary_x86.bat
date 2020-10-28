@@ -2,7 +2,8 @@ REM @echo off
 
 REM POSSIBLE OPTIONS: 
 REM %1%: "64", "32", "ARM"
-REM %2%: "gpu", if omitted, it will not use CUDA
+REM %2%: "gpu", build with CUDA
+REM %2%: "core", build only the core components
 REM %3%: "intel_inf", build with intel compiler and using OpenVino
 REM %3%: "intel", build with intel compiler
 REM %3%: "inf", build with OpenVino 
@@ -15,8 +16,7 @@ REM %5%: "doc", this flag indicates if we should build the documentation
 REM %6%: "package", this flag indicates if we should build the ".zip" and ".exe" package
 REM %7%: "build", if set to "build", the script will also build the target
 REM %8%: "nuget", this flag indicates if we should build the nuget package
-REM %9%: "core", if set to core, will not build the contrib module
-REM %10%: Use this field for the CUDA_ARCH_BIN_OPTION if you want to specify it manually. e.g. "6.1"
+REM %9%: Use this field for the CUDA_ARCH_BIN_OPTION if you want to specify it manually. e.g. "6.1"
 
 SET BUILD_FOLDER=build
 SET BUILD_TOOLS_FOLDER=C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools
@@ -194,7 +194,7 @@ SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 -DDISABLE_FORCE_DEBUG_POSTFIX:BOOL=TRUE 
 
 REM Setup the contrib modules
-IF "%9%"=="core" GOTO CONFIG_CORE
+IF "%2%"=="core" GOTO CONFIG_CORE
 
 :CONFIG_FULL
 SET OPENCV_EXTRA_MODULES_DIR=%cd%\..\opencv_contrib\modules
@@ -373,7 +373,7 @@ REM -DCUDA_HOST_COMPILER:String="%CUDA_HOST_COMPILER:\=/%"
 
 REM :END_FIND_CL
 
-IF NOT "%10%"=="" GOTO GPU_ARCH_BIN_SPECIFIED
+IF NOT "%9%"=="" GOTO GPU_ARCH_BIN_SPECIFIED
 SET CUDA_ARCH_BIN_OPTION=""
 IF EXIST "%CUDA_SDK_DIR%" SET CUDA_ARCH_BIN_OPTION="6.0 6.1 7.0"
 IF "%CUDA_SDK_DIR%" == "%CUDA_PATH_V8_0%" SET CUDA_ARCH_BIN_OPTION="6.0 6.1"
@@ -385,7 +385,7 @@ IF "%CUDA_SDK_DIR%" == "%CUDA_PATH_V11_0%" SET CUDA_ARCH_BIN_OPTION="6.0 6.1 7.0
 GOTO END_GPU_ARCH_BIN
 
 :GPU_ARCH_BIN_SPECIFIED
-SET CUDA_ARCH_BIN_OPTION="%10%" 
+SET CUDA_ARCH_BIN_OPTION="%9%" 
 
 :END_GPU_ARCH_BIN
 
