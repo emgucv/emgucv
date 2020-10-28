@@ -1027,6 +1027,293 @@ void cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value)
 {
 	key->clear();
 	value->clear();
+
+	key->push_back("HAVE_OPENCV_ALPHAMAT");
+#ifdef HAVE_OPENCV_ALPHAMAT
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_ARUCO");
+#ifdef HAVE_OPENCV_ARUCO
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_BGSEGM");
+#ifdef HAVE_OPENCV_BGSEGM
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_BIOINSPIRED");
+#ifdef HAVE_OPENCV_BIOINSPIRED
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_CALIB3D");
+#ifdef HAVE_OPENCV_CALIB3D
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_CORE");
+#ifdef HAVE_OPENCV_CORE
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_DNN");
+#ifdef HAVE_OPENCV_DNN
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_DNN_OBJDETECT");
+#ifdef HAVE_OPENCV_DNN_OBJDETECT
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_DNN_SUPERRES");
+#ifdef HAVE_OPENCV_DNN_SUPERRES
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_DPM");
+#ifdef HAVE_OPENCV_DPM
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_FACE");
+#ifdef HAVE_OPENCV_FACE
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_FEATURES2D");
+#ifdef HAVE_OPENCV_FEATURES2D
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_FLANN");
+#ifdef HAVE_OPENCV_FLANN
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+	
+	key->push_back("HAVE_OPENCV_FREETYPE");
+#ifdef HAVE_OPENCV_FREETYPE
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_FUZZY");
+#ifdef HAVE_OPENCV_FUZZY
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_HFS");
+#ifdef HAVE_OPENCV_HFS
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_HIGHGUI");
+#ifdef HAVE_OPENCV_HIGHGUI
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_IMG_HASH");
+#ifdef HAVE_OPENCV_IMG_HASH
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_IMGCODECS");
+#ifdef HAVE_OPENCV_IMGCODECS
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_IMGPROC");
+#ifdef HAVE_OPENCV_IMGPROC
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_INTENSITY_TRANSFORM");
+#ifdef HAVE_OPENCV_INTENSITY_TRANSFORM
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_MCC");
+#ifdef HAVE_OPENCV_MCC
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_ML");
+#ifdef HAVE_OPENCV_ML
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_OBJDETECT");
+#ifdef HAVE_OPENCV_OBJDETECT
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_OPTFLOW");
+#ifdef HAVE_OPENCV_OPTFLOW
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_PHASE_UNWRAPPING");
+#ifdef HAVE_OPENCV_PHASE_UNWRAPPING
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_PHOTO");
+#ifdef HAVE_OPENCV_PHOTO
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_PLOT");
+#ifdef HAVE_OPENCV_PLOT
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_QUALITY");
+#ifdef HAVE_OPENCV_QUALITY
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_RAPID");
+#ifdef HAVE_OPENCV_RAPID
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_SALIENCY");
+#ifdef HAVE_OPENCV_SALIENCY
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_SHAPE");
+#ifdef HAVE_OPENCV_SHAPE
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_STEREO");
+#ifdef HAVE_OPENCV_STEREO
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_STITCHING");
+#ifdef HAVE_OPENCV_STITCHING
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_SUPERRES");
+#ifdef HAVE_OPENCV_SUPERRES
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_SURFACE_MATCHING");
+#ifdef HAVE_OPENCV_SURFACE_MATCHING
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_TEXT");
+#ifdef HAVE_OPENCV_TEXT
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_TRACKING");
+#ifdef HAVE_OPENCV_TRACKING
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_VIDEO");
+#ifdef HAVE_OPENCV_VIDEO
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_VIDEOIO");
+#ifdef HAVE_OPENCV_VIDEOIO
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_VIDEOSTAB");
+#ifdef HAVE_OPENCV_VIDEOSTAB
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
 	
 	key->push_back("HAVE_OPENCV_VIZ");
 #ifdef HAVE_OPENCV_VIZ
@@ -1035,15 +1322,36 @@ void cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value)
 	value->push_back(0);
 #endif
 	
-	key->push_back("HAVE_OPENCV_VIDEOIO");
-#ifdef HAVE_OPENCV_VIDEOIO
+	key->push_back("HAVE_OPENCV_XFEATURES2D");
+#ifdef HAVE_OPENCV_XFEATURES2D
 	value->push_back(1);
 #else
 	value->push_back(0);
 #endif
 
-	key->push_back("HAVE_OPENCV_DNN");
-#ifdef HAVE_OPENCV_DNN
+	key->push_back("HAVE_OPENCV_XIMGPROC");
+#ifdef HAVE_OPENCV_XIMGPROC
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_XOBJDETECT");
+#ifdef HAVE_OPENCV_XOBJDETECT
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_XPHOTO");
+#ifdef HAVE_OPENCV_XPHOTO
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+	
+	key->push_back("HAVE_EMGUCV_TESSERACT");
+#ifdef HAVE_EMGUCV_TESSERACT
 	value->push_back(1);
 #else
 	value->push_back(0);
