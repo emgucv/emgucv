@@ -21,12 +21,6 @@ ${CV_CONTRIB_OPTION[@]} \
 -DBUILD_opencv_python_bindings_generator:BOOL=FALSE \
 -DCMAKE_C_FLAGS=-fembed-bitcode \
 -DCMAKE_CXX_FLAGS=-fembed-bitcode \
--DIPHONEOS_DEPLOYMENT_TARGET:STRING=8.0 \
+-DIPHONEOS_DEPLOYMENT_TARGET:STRING=9.0 \
 ${@:2} `dirname $0`/../.. 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 77e5dbcdb8f64968fd928e9925105bd3bf705f95
-#-DCMAKE_C_FLAGS_RELEASE:STRING=-g0 \
-#-DCMAKE_CXX_FLAGS_RELEASE:STRING=-g0 \
