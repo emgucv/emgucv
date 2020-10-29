@@ -3351,14 +3351,21 @@ IF (IOS)
     COMMAND lipo -create -output ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern.a ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_*.a
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
     COMMENT "Linking multiple arch into a single file")  
-ENDIF()
-
-IF (ANDROID)
+ELSEIF (ANDROID)
 add_custom_command(TARGET ${the_target}
     POST_BUILD
     COMMAND ${CMAKE_STRIP} libcvextern.so 
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}"
-    COMMENT "Stripping libcvextern.so")  
+    COMMENT "Stripping libcvextern.so from ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}")
+ELSEIF (APPLE)
+  SET_TARGET_PROPERTIES(${the_target}
+    PROPERTIES
+    XCODE_ATTRIBUTE_COPY_PHASE_STRIP "YES"
+    XCODE_ATTRIBUTE_STRIP_INSTALLED_PRODUCT "YES"
+    XCODE_ATTRIBUTE_STRIP_STYLE "non-global"
+    XCODE_ATTRIBUTE_STRIPFLAGS "-x -u -r"
+    XCODE_ATTRIBUTE_DEAD_CODE_STRIPPING "YES"
+    )
 ENDIF()
 
 #IF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
