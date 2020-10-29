@@ -1,19 +1,69 @@
-#!/bin/sh
+#!/bin/bash
+
 cd "$(dirname "$0")"
+
+BUILD_TYPE=full
+if [[ $# -gt 0 ]]; then
+    if [ "$1" == "core" ]; then
+        BUILD_TYPE=core
+    fi
+fi
+
 cd ../..
-cd vtk
+
+if [ "$BUILD_TYPE" == "core" ]; then
+    echo "Performing core build"
+    TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE
+    VTK_OPTION=
+    CONTRIB_OPTION=
+else
+    echo "Performing full build"
+    TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
+    cd vtk
+    mkdir -p build
+    cd build
+    CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DCMAKE_BUILD_TYPE:STRING="Release" ..
+    make
+    VTK_OPTION=-DVTK_DIR:String="$PWD"
+    cd ../..
+    CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules
+fi
+
+cd eigen
 mkdir -p build
 cd build
-CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DBUILD_TESTING:BOOL=FALSE -DCMAKE_BUILD_TYPE:String="Release" -DBUILD_WITH_DEBUG_INFO:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE ../
+CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DCMAKE_BUILD_TYPE:STRING="Release" ..
 make
 cd ../..
 
 cd platforms/raspbian
 mkdir -p build
 cd build
-cmake -DBUILD_TESTS:BOOL=FALSE -DBUILD_PERF_TESTS:BOOL=FALSE -DBUILD_opencv_apps:BOOL=FALSE -DBUILD_DOCS:BOOL=FALSE -DWITH_TBB:BOOL=FALSE -DWITH_OPENMP:BOOL=TRUE -DWITH_CUDA:BOOL=FALSE -DWITH_IPP:BOOL=FALSE -DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules -DBUILD_opencv_ts:BOOL=FALSE -DBUILD_WITH_DEBUG_INFO:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DVTK_DIR:String="$PWD/../../../vtk/build" -DCMAKE_BUILD_TYPE:String="Release" -DWITH_TESSERACT:BOOL=FALSE -DEMGU_CV_WITH_TESSERACT:BOOL=TRUE -DWITH_EIGEN:BOOL=FALSE -DBUILD_TIFF:BOOL=TRUE -DEMGU_CV_WITH_TIFF:BOOL=FALSE -DBUILD_opencv_python2:BOOL=FALSE -DBUILD_opencv_python3:BOOL=FALSE ../../..
-make
+CFLAGS=-fPIC CXXFLAGS=-fPIC cmake\
+      -DBUILD_TESTS:BOOL=FALSE \
+      -DBUILD_PERF_TESTS:BOOL=FALSE \
+      -DBUILD_opencv_apps:BOOL=FALSE \
+      -DBUILD_DOCS:BOOL=FALSE \
+      -DWITH_CUDA:BOOL=FALSE \
+      -DWITH_IPP:BOOL=FALSE \
+      $CONTRIB_OPTION \
+      -DBUILD_opencv_ts:BOOL=FALSE \
+      -DBUILD_WITH_DEBUG_INFO:BOOL=FALSE \
+      -DBUILD_SHARED_LIBS:BOOL=FALSE \
+      $VTK_OPTION \
+      -DCMAKE_BUILD_TYPE:String="Release" \
+      $TESSERACT_OPTION \
+      -DWITH_EIGEN:BOOL=TRUE \
+      -DEigen3_DIR:String="$PWD/../../../eigen/build" \
+      -DBUILD_TIFF:BOOL=TRUE \
+      -DBUILD_opencv_python2:BOOL=FALSE \
+      -DBUILD_opencv_python3:BOOL=FALSE \
+      ../../..
+
+C_INCLUDE_PATH=$PWD/../../../eigen/ CPLUS_INCLUDE_PATH=$PWD/../../../eigen/ make
+#make
 cd ..
+
 #mkdir -p libs/arm
 #cp build/libcvextern.so libs/arm/libcvextern.so
 #cd ..
