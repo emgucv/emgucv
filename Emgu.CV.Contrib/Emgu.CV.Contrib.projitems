@@ -37,5 +37,6 @@
 	<Compile Include="$(MSBuildThisFileDirectory)IntensityTransform\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Rapid\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Mcc\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Hdf\*.cs" />
   </ItemGroup>
 </Project>

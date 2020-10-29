@@ -40,26 +40,31 @@ cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Aruco/*.cs ../Emgu.CV.Contri
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/BgSegm/*.cs ../Emgu.CV.Contrib/BgSegm  
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Bioinspired/*.cs ../Emgu.CV.Contrib/Bioinspired
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DnnModern/*.cs ../Emgu.CV.Contrib/DnnModern  
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DnnSuperres/*.cs ../Emgu.CV.Contrib/DnnSuperres
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Dpm/*.cs ../Emgu.CV.Contrib/Dpm  
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Face/*.cs ../Emgu.CV.Contrib/Face 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Freetype/*.cs ../Emgu.CV.Contrib/Freetype 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Fuzzy/*.cs ../Emgu.CV.Contrib/Fuzzy
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Hdf/*.cs ../Emgu.CV.Contrib/Hdf
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Hfs/*.cs ../Emgu.CV.Contrib/Hfs
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/ImgHash/*.cs ../Emgu.CV.Contrib/ImgHash
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/IntensityTransform/*.cs ../Emgu.CV.Contrib/IntensityTransform
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/LineDescriptor/*.cs ../Emgu.CV.Contrib/LineDescriptor
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc/*.cs ../Emgu.CV.Contrib/Mcc
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/PhaseUnwrapping/*.cs ../Emgu.CV.Contrib/PhaseUnwrapping/      
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Plot/*.cs ../Emgu.CV.Contrib/Plot  
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Quality/*.cs ../Emgu.CV.Contrib/Quality  
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rapid/*.cs ../Emgu.CV.Contrib/Rapid
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Saliency/*.cs ../Emgu.CV.Contrib/Saliency  
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Stereo/*.cs ../Emgu.CV.Contrib/Stereo  
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/SurfaceMatching/*.cs ../Emgu.CV.Contrib/SurfaceMatching 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Text/*.cs ../Emgu.CV.Contrib/Text 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Tracking/*.cs ../Emgu.CV.Contrib/Tracking  
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XFeatures2D/*.cs ../Emgu.CV.Contrib/XFeatures2D 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XImgproc/*.cs ../Emgu.CV.Contrib/XImgproc 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XObjdetect/*.cs ../Emgu.CV.Contrib/XObjdetect 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XPhoto/*.cs ../Emgu.CV.Contrib/XPhoto 
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/SurfaceMatching/*.cs ../Emgu.CV.Contrib/SurfaceMatching 
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DnnSuperres/*.cs ../Emgu.CV.Contrib/DnnSuperres
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/IntensityTransform/*.cs ../Emgu.CV.Contrib/IntensityTransform
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rapid/*.cs ../Emgu.CV.Contrib/Rapid
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc/*.cs ../Emgu.CV.Contrib/Mcc
+
 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.OCR/*.cs ../Emgu.CV.OCR 
 
