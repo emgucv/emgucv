@@ -1,6 +1,9 @@
 End User License Agreement
 --------------------------
 
+NVIDIA Software License Agreement and CUDA Supplement to
+Software License Agreement.
+
 
 Preface
 -------
@@ -304,12 +307,12 @@ SDK:
     application where the use or failure of the system or
     application can reasonably be expected to threaten or
     result in personal injury, death, or catastrophic loss.
-    Examples include use in avionics, navigation, military,
-    medical, life support or other life critical applications.
-    NVIDIA does not design, test or manufacture the SDK for
-    these critical uses and NVIDIA shall not be liable to you
-    or any third party, in whole or in part, for any claims or
-    damages arising from such uses.
+    Examples include use in nuclear, avionics, navigation,
+    military, medical, life support or other life critical
+    applications. NVIDIA does not design, test or manufacture
+    the SDK for these critical uses and NVIDIA shall not be
+    liable to you or any third party, in whole or in part, for
+    any claims or damages arising from such uses.
 
   7. You agree to defend, indemnify and hold harmless NVIDIA
     and its affiliates, and their respective employees,
@@ -328,8 +331,8 @@ SDK:
   1.  NVIDIA or its licensors hold all rights, title and
     interest in and to the SDK and its modifications and
     derivative works, including their respective intellectual
-    property rights, subject to your rights described in this
-    section. This SDK may include software and materials from
+    property rights, subject to your rights described here .
+    This SDK may include software and materials from
     NVIDIA’s licensors, and these licensors are intended
     third party beneficiaries that may enforce this Agreement
     with respect to their intellectual property rights.
@@ -338,7 +341,7 @@ SDK:
     applications and your derivative works of the sample
     source code delivered in the SDK, including their
     respective intellectual property rights, subject to
-    NVIDIA’s rights described in this section.
+    NVIDIA’s rights described here .
 
   3. You may, but don’t have to, provide to NVIDIA
     suggestions, feature requests or other feedback regarding
@@ -582,8 +585,12 @@ nvidia-compute-license-questions@nvidia.com.
 
 2.6. Attachment A
 
-The following portions of the SDK are distributable under the
-Agreement:
+The following CUDA Toolkit files may be distributed with
+Licensee Applications developed by you, including certain
+variations of these files that have version number or
+architecture specific information embedded in the file name -
+as an example only, for release version 9.0 of the 64-bit
+Windows software, the file cudart64_90.dll is redistributable.
 
 Component
 
@@ -726,10 +733,6 @@ libcurand.so, libcurand_static.a
 Android
 
 libcurand.so, libcurand_static.a
-
-Component
-
-CUDA Accelerated Graph Library
 
 Component
 
@@ -902,8 +905,19 @@ NVIDIA CUDA Driver Libraries
 
 Linux
 
-libcuda.so, libnvidia-fatbinaryloader.so,
-libnvidia-ptxjitcompiler.so
+libcuda.so, libnvidia-ptxjitcompiler.so
+
+Component
+
+PTX Compiler Static Library (nvPTXCompiler.h)
+
+Windows
+
+nvptxcompiler_static.lib
+
+Linux
+
+libnvptxcompiler_static.a
 
 The NVIDIA CUDA Driver Libraries are only distributable in
 applications that meet this criteria:
@@ -915,6 +929,17 @@ applications that meet this criteria:
   2. The resulting application is packaged as a Docker
     container and distributed to users on Docker Hub or the
     NVIDIA GPU Cloud only.
+
+In addition to the rights above, for parties that are
+developing software intended solely for use on Jetson
+development kits or Jetson modules, and running Linux for
+Tegra software, the following shall apply:
+
+  * The SDK may be distributed in its entirety, as provided by
+    NVIDIA, and without separation of its components, for you
+    and/or your licensees to create software development kits
+    for use only on the Jetson platform and running Linux for
+    Tegra software.
 
 
 2.7. Attachment B
