@@ -28,3 +28,6 @@
 [submodule "eigen"]
 	path = eigen
 	url = https://gitlab.com/libeigen/eigen.git
+[submodule "hdf5"]
+	path = hdf5
+	url = https://github.com/HDFGroup/hdf5.git
