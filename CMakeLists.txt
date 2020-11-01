@@ -56,6 +56,7 @@ IF (EMGU_CV_WITH_FREETYPE)
 	  SET(HB_HAVE_FREETYPE ON) 
 	  SET(HARFBUZZ_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/harfbuzz/src")
 	  SET(HARFBUZZ_LIBRARIES "harfbuzz")
+	  SET(HARFBUZZ_LIBRARY "harfbuzz")
 	  
 	  ADD_SUBDIRECTORY(harfbuzz)
 	  target_compile_definitions(harfbuzz PUBLIC HB_NO_VISIBILITY)
@@ -91,6 +92,7 @@ IF (EMGU_CV_WITH_FREETYPE)
 	  SET(HB_HAVE_FREETYPE ON) 
 	  SET(HARFBUZZ_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/harfbuzz/src")
 	  SET(HARFBUZZ_LIBRARIES "harfbuzz")
+	  SET(HARFBUZZ_LIBRARY "harfbuzz")
 	  
 	  ADD_SUBDIRECTORY(harfbuzz)
 	  #SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_BINARY_DIR}/harfbuzz/CMakeFiles/Export/lib/cmake/harfbuzz")
@@ -120,9 +122,55 @@ IF (EMGU_CV_WITH_FREETYPE)
 		ADD_SUBDIRECTORY(harfbuzz)
 		SET(HARFBUZZ_FOUND ON)
   ELSEIF(WIN32)
-	MESSAGE(STATUS "Setting up freetype for Windows")
-	find_package(Freetype) 
-	find_package(harfbuzz) 
+#    ExternalProject_Add(
+#		freetype
+#		GIT_REPOSITORY git://git.sv.nongnu.org/freetype/freetype2.git
+#		GIT_TAG VER-2-10-4
+#		PREFIX ${CMAKE_CURRENT_BINARY_DIR}/install
+#		)
+#	ExternalProject_Get_Property(freetype install_dir)
+#	SET(FREETYPE_INSTALL_DIR ${install_dir})
+#    #add_library(freetype STATIC IMPORTED)
+#    #set_property(TARGET freetype PROPERTY IMPORTED_LOCATION FREETYPE_INSTALL_DIR)
+	
+	
+#	ExternalProject_Add(
+#		harfbuzz
+#		GIT_REPOSITORY https://github.com/harfbuzz/harfbuzz.git
+#		GIT_TAG 2.7.2
+#		CMAKE_ARGS -DCMAKE_FIND_ROOT_PATH:STRING=${FREETYPE_INSTALL_DIR} -DHB_HAVE_FREETYPE:BOOL=TRUE
+#		PREFIX ${CMAKE_CURRENT_BINARY_DIR}/install
+#		)
+#	ExternalProject_Get_Property(harfbuzz install_dir)
+#	SET(HARFBUZZ_INSTALL_DIR ${install_dir})
+#    #add_library(harfbuzz STATIC IMPORTED)
+#    #set_property(TARGET harfbuzz PROPERTY IMPORTED_LOCATION HARFBUZZ_INSTALL_DIR)
+	
+	MESSAGE(STATUS "Setting up FREETYPE for Windows")
+	find_package(FREETYPE CONFIG REQUIRED)
+	if(NOT FREETYPE_FOUND)
+		message(STATUS "FREETYPE:   NO")
+	else()
+		message(STATUS "FREETYPE:   ${FREETYPE_DIR} (ver ${FREETYPE_VERSION})")
+		SET(FREETYPE_INCLUDE_DIRS "${FREETYPE_DIR}/../../../include/freetype2")
+		SET(FREETYPE_LIBRARY "freetype")
+		SET(FREETYPE_FOUND ON)
+	endif()	
+	find_package(HARFBUZZ CONFIG REQUIRED) 
+	if(NOT HARFBUZZ_FOUND)
+		message(STATUS "HARFBUZZ:    NO")
+	else()
+		message(STATUS "HARFBUZZ:    ${HARFBUZZ_DIR} (ver ${HARFBUZZ_VERSION})")
+		SET(HARFBUZZ_INCLUDE_DIRS "${HARFBUZZ_DIR}/../../../include/harfbuzz")
+		SET(HARFBUZZ_LIBRARY "${HARFBUZZ_DIR}/../../harfbuzz.lib")
+		#message(STATUS "HARFBUZZ_DIR: ${HARFBUZZ_DIR}")
+		
+		#message(STATUS "harfbuzz_INCLUDE_DIRS: ${harfbuzz_INCLUDE_DIRS}")
+		#message(STATUS "HARFBUZZ_INCLUDE_DIRS: ${HARFBUZZ_INCLUDE_DIRS}")
+		SET(HARFBUZZ_FOUND ON)
+		#MESSAGE(STATUS "Adding include_directory: ${HARFBUZZ_DIR}/../../../include/harfbuzz")
+		include_directories(${HARFBUZZ_INCLUDE_DIRS})
+	endif()
   ELSE()
   ENDIF()
 ELSE()
@@ -757,6 +805,7 @@ IF(MSVC)
   set(ENABLE_SOLUTION_FOLDERS ON CACHE BOOL "Solution folder in Visual Studio")
 ENDIF()
 ADD_SUBDIRECTORY(${OPENCV_SUBFOLDER})
+
 SET(CMAKE_SOURCE_DIR ${CMAKE_OLD_SOURCE_DIR})
 
 SET (OPENCV_MODULE_NAME_CANDIDATES
