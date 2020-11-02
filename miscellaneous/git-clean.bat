@@ -19,6 +19,10 @@ cd harfbuzz
 git clean -d -f -x "."
 cd ..
 
+cd hdf5 
+git clean -d -f -x "."
+cd ..
+
 cd opencv
 git clean -d -f -x "." 
 cd ..
