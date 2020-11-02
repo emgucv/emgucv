@@ -5,12 +5,15 @@
 [submodule "opencv_contrib"]
 	path = opencv_contrib
 	url = https://github.com/emgucv/opencv_contrib.git
+	ignore = dirty
 [submodule "opencv_extra"]
 	path = opencv_extra
 	url = https://github.com/opencv/opencv_extra.git
+	ignore = dirty
 [submodule "Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr.git"]
 	path = Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr.git
 	url = https://github.com/emgucv/tesseract.git
+	ignore = dirty
 [submodule "vtk"]
 	path = vtk
 	url = https://github.com/Kitware/VTK.git
@@ -22,12 +25,16 @@
 [submodule "freetype2"]
 	path = freetype2
 	url = git://git.sv.nongnu.org/freetype/freetype2.git
+	ignore = dirty
 [submodule "harfbuzz"]
 	path = harfbuzz
 	url = https://github.com/harfbuzz/harfbuzz.git
+	ignore = dirty
 [submodule "eigen"]
 	path = eigen
 	url = https://gitlab.com/libeigen/eigen.git
+	ignore = dirty
 [submodule "hdf5"]
 	path = hdf5
 	url = https://github.com/HDFGroup/hdf5.git
+	ignore = dirty
