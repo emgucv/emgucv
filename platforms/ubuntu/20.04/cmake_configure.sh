@@ -2,6 +2,8 @@
 
 cd "$(dirname "$0")"
 
+INSTALL_FOLDER=$PWD/build/install
+
 BUILD_TYPE=full
 if [[ $# -gt 0 ]]; then
     if [ "$1" == "core" ]; then
@@ -10,6 +12,13 @@ if [[ $# -gt 0 ]]; then
 fi
 
 cd ../../..
+
+cd eigen
+mkdir -p build
+cd build
+CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" ..
+cmake --build . --config Release --parallel --target install
+cd ../..
 
 if [ "$BUILD_TYPE" == "core" ]; then
     echo "Performing a core build"
@@ -22,24 +31,20 @@ else
     cd vtk
     mkdir -p build
     cd build
-    CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DCMAKE_BUILD_TYPE:STRING="Release" ..
-    make
+    CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" ..
+    cmake --build . --config Release --parallel --target install
     VTK_OPTION=-DVTK_DIR:String="$PWD"
     cd ../..
     CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../../opencv_contrib/modules 
 fi
 
-cd eigen
-mkdir -p build
-cd build
-CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DCMAKE_BUILD_TYPE:STRING="Release" ..
-make
-cd ../../platforms/ubuntu/20.04
+cd platforms/ubuntu/20.04
 
 mkdir -p build
 cd build
 CFLAGS=-fPIC CXXFLAGS=-fPIC cmake \
       $TESSERACT_OPTION \
+      -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" \
       -DBUILD_TESTS:BOOL=FALSE \
       -DBUILD_PERF_TESTS:BOOL=FALSE \
       -DBUILD_opencv_apps:BOOL=FALSE \
@@ -60,6 +65,6 @@ CFLAGS=-fPIC CXXFLAGS=-fPIC cmake \
 #      -DWITH_TBB:BOOL=TRUE \
 #      -DWITH_CUDA:BOOL=FALSE \
     
-C_INCLUDE_PATH=$PWD/../../../../eigen/ CPLUS_INCLUDE_PATH=$PWD/../../../../eigen/ make
+C_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-9.0 CPLUS_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-9.0 make
 
 cd ..
