@@ -31,42 +31,42 @@ ELSE()
 ENDIF()
 
 IF (EMGU_CV_WITH_FREETYPE)
-   IF (IOS)
-    MESSAGE(STATUS "Setting up freetype for IOS ")
-	
-	#FIND_PACKAGE(FREETYPE)
-	IF(NOT FREETYPE_FOUND)
-	  
-	  #MESSAGE(STATUS "((((((((((((((((((( FREETYPE2 added )))))))))))))))))))")
-	  ADD_SUBDIRECTORY(freetype2)
-	  
-	  SET(FREETYPE_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/freetype2/include")
-	  SET(FREETYPE_LIBRARIES "freetype")
-	  SET(FREETYPE_LIBRARY "freetype")
-
-	  #SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_BINARY_DIR}/freetype2/CMakeFiles/Export/lib/cmake/freetype")
-	  #SET(freetype_DIR "${CMAKE_BINARY_DIR}/freetype2/CMakeFiles/Export/lib/cmake/freetype")
-	  FIND_PACKAGE(freetype)
-	  SET(FREETYPE_FOUND ON)
-
-	ENDIF()
-	
-	#FIND_PACKAGE(HARFBUZZ)
-	IF(NOT HARFBUZZ_FOUND)
-	  SET(HB_HAVE_FREETYPE ON) 
-	  SET(HARFBUZZ_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/harfbuzz/src")
-	  SET(HARFBUZZ_LIBRARIES "harfbuzz")
-	  SET(HARFBUZZ_LIBRARY "harfbuzz")
-	  
-	  ADD_SUBDIRECTORY(harfbuzz)
-	  target_compile_definitions(harfbuzz PUBLIC HB_NO_VISIBILITY)
-	  #SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_BINARY_DIR}/harfbuzz/CMakeFiles/Export/lib/cmake/harfbuzz")
-	  #SET(harfbuzz_DIR "${CMAKE_BINARY_DIR}/harfbuzz/CMakeFiles/Export/lib/cmake/harfbuzz")
-	  MESSAGE(STATUS "harfbuzz_DIR: ${harfbuzz_DIR}")
-	  FIND_PACKAGE(harfbuzz)
-	  SET(HARFBUZZ_FOUND ON)
-	ENDIF()
-
+#   IF (IOS)
+#    MESSAGE(STATUS "Setting up freetype for IOS ")
+#	
+#	#FIND_PACKAGE(FREETYPE)
+#	IF(NOT FREETYPE_FOUND)
+#	  
+#	  #MESSAGE(STATUS "((((((((((((((((((( FREETYPE2 added )))))))))))))))))))")
+#	  ADD_SUBDIRECTORY(freetype2)
+#	  
+#	  SET(FREETYPE_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/freetype2/include")
+#	  SET(FREETYPE_LIBRARIES "freetype")
+#	  SET(FREETYPE_LIBRARY "freetype")
+#
+#	  #SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_BINARY_DIR}/freetype2/CMakeFiles/Export/lib/cmake/freetype")
+#	  #SET(freetype_DIR "${CMAKE_BINARY_DIR}/freetype2/CMakeFiles/Export/lib/cmake/freetype")
+#	  FIND_PACKAGE(freetype)
+#	  SET(FREETYPE_FOUND ON)
+#
+#	ENDIF()
+#	
+#	#FIND_PACKAGE(HARFBUZZ)
+#	IF(NOT HARFBUZZ_FOUND)
+#	  SET(HB_HAVE_FREETYPE ON) 
+#	  SET(HARFBUZZ_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}/harfbuzz/src")
+#	  SET(HARFBUZZ_LIBRARIES "harfbuzz")
+#	  SET(HARFBUZZ_LIBRARY "harfbuzz")
+#	  
+#	  ADD_SUBDIRECTORY(harfbuzz)
+#	  target_compile_definitions(harfbuzz PUBLIC HB_NO_VISIBILITY)
+#	  #SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_BINARY_DIR}/harfbuzz/CMakeFiles/Export/lib/cmake/harfbuzz")
+#	  #SET(harfbuzz_DIR "${CMAKE_BINARY_DIR}/harfbuzz/CMakeFiles/Export/lib/cmake/harfbuzz")
+#	  MESSAGE(STATUS "harfbuzz_DIR: ${harfbuzz_DIR}")
+#	  FIND_PACKAGE(harfbuzz)
+#	  SET(HARFBUZZ_FOUND ON)
+#	ENDIF()
+#
 #   ELSEIF (ANDROID)
 #    MESSAGE(STATUS "Setting up freetype for Android ")
 #	
@@ -121,7 +121,7 @@ IF (EMGU_CV_WITH_FREETYPE)
 #		SET(HARFBUZZ_LIBRARY "harfbuzz")
 #		ADD_SUBDIRECTORY(harfbuzz)
 #		SET(HARFBUZZ_FOUND ON)
-  ELSEIF(WIN32 OR APPLE OR ANDROID)
+#  ELSEIF(WIN32 OR APPLE OR ANDROID)
 #    ExternalProject_Add(
 #		freetype
 #		GIT_REPOSITORY git://git.sv.nongnu.org/freetype/freetype2.git
@@ -146,7 +146,7 @@ IF (EMGU_CV_WITH_FREETYPE)
 #    #add_library(harfbuzz STATIC IMPORTED)
 #    #set_property(TARGET harfbuzz PROPERTY IMPORTED_LOCATION HARFBUZZ_INSTALL_DIR)
 	
-	MESSAGE(STATUS "Setting up FREETYPE for Windows / Mac OS / Android")
+	MESSAGE(STATUS "Setting up FREETYPE")
 	find_package(FREETYPE CONFIG REQUIRED)
 	if(NOT FREETYPE_FOUND)
 		message(STATUS "FREETYPE:   NO")
@@ -177,8 +177,8 @@ IF (EMGU_CV_WITH_FREETYPE)
 		#MESSAGE(STATUS "Adding include_directory: ${HARFBUZZ_DIR}/../../../include/harfbuzz")
 		include_directories(${HARFBUZZ_INCLUDE_DIRS})
 	endif()
-  ELSE()
-  ENDIF()
+#  ELSE()
+#  ENDIF()
 ELSE()
   SET(FREETYPE_LIBRARY "")
 ENDIF()
