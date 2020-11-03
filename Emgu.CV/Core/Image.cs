@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using Emgu.CV.CvEnum;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
@@ -102,6 +103,8 @@ namespace Emgu.CV
         /// <param name="fileName">the name of the file that contains the image</param>
         public Image(String fileName)
         {
+            if (!File.Exists(fileName))
+                throw new ArgumentException(String.Format("File {0} does not exist", fileName));
             try
             {
                 using (Mat m = CvInvoke.Imread(fileName, CvEnum.ImreadModes.AnyColor | CvEnum.ImreadModes.AnyDepth))
@@ -116,9 +119,9 @@ namespace Emgu.CV
                 //possibly Exception in CvInvoke's static constructor.
                 throw e;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new ArgumentException(String.Format("Unable to decode file: {0}", fileName));
+                throw new ArgumentException(String.Format("Unable to decode file: {0}", fileName), e);
             }
         }
 
