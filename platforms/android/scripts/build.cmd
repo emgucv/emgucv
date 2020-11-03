@@ -38,7 +38,8 @@ IF NOT DEFINED MAKE SET MAKE=%MAKE_EXE%
 :: defaults
 IF NOT DEFINED BUILD_DIR SET BUILD_DIR=build_%1
 IF NOT DEFINED ANDROID_ABI SET ANDROID_ABI=%1
-SET OPENCV_BUILD_DIR=%SCRIPTS_DIR%\..\%BUILD_DIR%-%ANDROID_ABI%
+SET OPENCV_BUILD_DIR=%SCRIPTS_DIR%\..\%BUILD_DIR%
+SET INSTALL_FOLDER=%cd%\%BUILD_DIR%\install
 
 :: check that all required variables defined
 PUSHD .
@@ -97,22 +98,58 @@ SET CMAKE_CONF_FLAGS= -G "%CMAKE_GENERATOR%" ^
 -DCMAKE_SHARED_LINKER_FLAGS:STRING="-Wl,--gc-sections, -Wl,--exclude-libs,All" ^
 -DCMAKE_POLICY_DEFAULT_CMP0069=NEW ^
 -DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=ON ^
+-DCMAKE_INSTALL_PREFIX:STRING="%INSTALL_FOLDER:\=/%" ^
 -DCMAKE_BUILD_TYPE:STRING=RELEASE
 
 REM -DCMAKE_SHARED_LINKER_FLAGS:STRING="-Wl,--gc-sections" ^
 
-
-SET EIGEN_DIR=%cd%\eigen\%BUILD_DIR%
 cd eigen 
 IF NOT EXIST "%BUILD_DIR%" mkdir "%BUILD_DIR%"
 cd "%BUILD_DIR%"
 "%CMAKE%" %CMAKE_CONF_FLAGS% %* .. 
-
+SET EIGEN_DIR=%cd%
 echo on
-"%CMAKE%" --build . --config Release
-
+"%CMAKE%" --build . --config Release --target install
 cd .. 
 cd ..
+
+::cd ..\vtk 
+::mkdir install
+::"%CMAKE%" -G"%CMAKE_GENERATOR%" -DCMAKE_MAKE_PROGRAM="c:\MinGW\bin\mingw32-make.exe" -DANDROID_NDK="%ANDROID_NDK%" -DANDROID_ARCH_NAME=x86 -DANDROID_NATIVE_API_LEVEL=15 -DVTK_ANDROID_BUILD:BOOL=ON -DANDROID_EXECUTABLE="C:\Program Files (x86)\Android\android-sdk\tools\android.bat" -DANT_EXECUTABLE="C:\Program Files (x86)\Microsoft Visual Studio 14.0\Apps\apache-ant-1.9.3\bin\ant.cmd"  -DCMAKE_INSTALL_PREFIX:PATH="%cd%"
+::c:\MinGW\bin\mingw32-make.exe
+::cd ..\build
+
+::Setup the contrib modules
+IF "%2"=="core" GOTO CORE_BUILD_EMGU
+
+:FULL_BUILD_EMGU
+cd freetype2
+IF NOT EXIST "%BUILD_DIR%" mkdir "%BUILD_DIR%"
+cd "%BUILD_DIR%"
+"%CMAKE%" %CMAKE_CONF_FLAGS% %* .. 
+"%CMAKE%" --build . --config Release --parallel --target install
+cd .. 
+cd ..
+
+
+cd harfbuzz
+IF NOT EXIST "%BUILD_DIR%" mkdir "%BUILD_DIR%"
+cd "%BUILD_DIR%"
+"%CMAKE%" %CMAKE_CONF_FLAGS% -DCMAKE_FIND_ROOT_PATH:STRING=%INSTALL_FOLDER:\=/% -DHB_HAVE_FREETYPE:BOOL=TRUE ..
+"%CMAKE%" --build . --config Release --parallel --target install
+cd ..
+cd ..
+
+
+SET OPENCV_EXTRA_MODULES_DIR=%SOURCE_DIR%\opencv_contrib\modules
+SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% -DOPENCV_EXTRA_MODULES_PATH:String="%OPENCV_EXTRA_MODULES_DIR:\=/%" 
+GOTO END_CONTRIB_EMGU
+
+:CORE_BUILD_EMGU
+SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% -DEMGU_CV_WITH_FREETYPE:BOOL=OFF 
+
+:END_CONTRIB_EMGU
+
 
 :: create build dir
 IF DEFINED REBUILD rmdir /S /Q "%BUILD_DIR%" 2>NUL
@@ -127,24 +164,7 @@ IF NOT %BUILD_OPENCV%==1 GOTO other-cmake
 :opencv-cmake
 echo on
 
-::cd ..\vtk 
-::mkdir install
-::"%CMAKE%" -G"%CMAKE_GENERATOR%" -DCMAKE_MAKE_PROGRAM="c:\MinGW\bin\mingw32-make.exe" -DANDROID_NDK="%ANDROID_NDK%" -DANDROID_ARCH_NAME=x86 -DANDROID_NATIVE_API_LEVEL=15 -DVTK_ANDROID_BUILD:BOOL=ON -DANDROID_EXECUTABLE="C:\Program Files (x86)\Android\android-sdk\tools\android.bat" -DANT_EXECUTABLE="C:\Program Files (x86)\Microsoft Visual Studio 14.0\Apps\apache-ant-1.9.3\bin\ant.cmd"  -DCMAKE_INSTALL_PREFIX:PATH="%cd%"
-::c:\MinGW\bin\mingw32-make.exe
-::cd ..\build
 
-::Setup the contrib modules
-IF "%2"=="core" GOTO CORE_BUILD_EMGU
-
-:FULL_BUILD_EMGU
-SET OPENCV_EXTRA_MODULES_DIR=%SOURCE_DIR%\opencv_contrib\modules
-SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% -DOPENCV_EXTRA_MODULES_PATH:String="%OPENCV_EXTRA_MODULES_DIR:\=/%" 
-GOTO END_CONTRIB_EMGU
-
-:CORE_BUILD_EMGU
-SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% -DEMGU_CV_WITH_FREETYPE:BOOL=OFF 
-
-:END_CONTRIB_EMGU
 
 SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 %TESSERACT_OPTION% ^
@@ -158,7 +178,6 @@ SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 -DBUILD_opencv_java:BOOL=OFF ^
 -DBUILD_opencv_java_bindings_generator:BOOL=OFF ^
 -DBUILD_opencv_ts:BOOL=OFF ^
--DBUILD_opencv_hdf:BOOL=OFF ^
 -DWITH_ITT:BOOL=OFF ^
 -DWITH_OPENCL:BOOL=ON ^
 -DWITH_CUDA:BOOL=OFF ^
@@ -166,6 +185,7 @@ SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 -DWITH_EIGEN:BOOL=ON ^
 -DBUILD_FAT_JAVA_LIB:BOOL=FALSE ^
 -DBUILD_JAVA:BOOL=FALSE ^
+-DCMAKE_FIND_ROOT_PATH:STRING=%INSTALL_FOLDER:\=/% ^
 -DEigen3_DIR:STRING=%EIGEN_DIR% 
 
 REM -DENABLE_LTO:BOOL=ON ^
