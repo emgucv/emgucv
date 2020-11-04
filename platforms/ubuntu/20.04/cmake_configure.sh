@@ -28,6 +28,14 @@ if [ "$BUILD_TYPE" == "core" ]; then
 else
     echo "Performing a full build"
     TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
+
+    cd hdf5
+    mkdir -p build
+    cd build
+    CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_BUILD_TYPE:String="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DBUILD_TESTING:BOOL=FALSE -DHDF5_BUILD_EXAMPLES:BOOL=FALSE -DHDF5_BUILD_TOOLS:BOOL=FALSE -DHDF5_BUILD_UTILS:BOOL=FALSE ..
+    cmake --build . --config Release --parallel --target install
+    cd ../..
+    
     cd vtk
     mkdir -p build
     cd build
@@ -35,6 +43,7 @@ else
     cmake --build . --config Release --parallel --target install
     VTK_OPTION=-DVTK_DIR:String="$PWD"
     cd ../..
+
     CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../../opencv_contrib/modules 
 fi
 
