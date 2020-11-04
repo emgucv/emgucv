@@ -2,6 +2,10 @@
 
 cd "$(dirname "$0")"
 
+mkdir -p build
+
+INSTALL_FOLDER=$PWD/build/install
+
 BUILD_TYPE=full
 if [[ $# -gt 0 ]]; then
     if [ "$1" == "core" ]; then
@@ -11,33 +15,39 @@ fi
 
 cd ../..
 
+cd eigen
+mkdir -p build
+cd build
+CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" ..
+cmake --build . --config Release --parallel --target install
+cd ../..
+
+
 if [ "$BUILD_TYPE" == "core" ]; then
     echo "Performing core build"
-    TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE
+    EMGU_CV_TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE
+    TESSERACT_OPTION=-DWITH_TESSERACT:BOOL=FALSE
     VTK_OPTION=
     CONTRIB_OPTION=
 else
     echo "Performing full build"
-    TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
+    #Do not use system tesseract, build tesseract from source code instead
+    EMGU_CV_TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
+    TESSERACT_OPTION=-DWITH_TESSERACT:BOOL=FALSE
+    
     cd vtk
     mkdir -p build
     cd build
-    CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DCMAKE_BUILD_TYPE:STRING="Release" ..
-    make
+    CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DVTK_MODULE_ENABLE_VTK_RenderingFreeType:STRING="NO" -DVTK_MODULE_ENABLE_VTK_png:STRING="NO" ..
+    cmake --build . --config Release --parallel --target install
     VTK_OPTION=-DVTK_DIR:String="$PWD"
     cd ../..
+    
     CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules
 fi
 
-cd eigen
-mkdir -p build
-cd build
-CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DCMAKE_BUILD_TYPE:STRING="Release" ..
-make
-cd ../..
 
 cd platforms/raspbian
-mkdir -p build
 cd build
 CFLAGS=-fPIC CXXFLAGS=-fPIC cmake\
       -DBUILD_TESTS:BOOL=FALSE \
@@ -52,6 +62,7 @@ CFLAGS=-fPIC CXXFLAGS=-fPIC cmake\
       -DBUILD_SHARED_LIBS:BOOL=FALSE \
       $VTK_OPTION \
       -DCMAKE_BUILD_TYPE:String="Release" \
+      $EMGU_CV_TESSERACT_OPTION \
       $TESSERACT_OPTION \
       -DWITH_EIGEN:BOOL=TRUE \
       -DEigen3_DIR:String="$PWD/../../../eigen/build" \
