@@ -14,13 +14,14 @@ IF(DOTNET_FOUND AND (NOT (IOS OR ANDROID)))
 #    COMMAND ${MSBUILD_EXECUTABLE} -t:restore 
 #    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Test.Netcore")
 #ELSE()
-  BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Test.Netcore/Emgu.CV.Test.Netcore.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
+#  BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Test.Netcore/Emgu.CV.Test.Netcore.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
 #ENDIF()
-
-if(ENABLE_SOLUTION_FOLDERS)
+  BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../Solution/Windows.Desktop/Emgu.CV.Test.Netcore.sln" "Emgu.CV.Test.Netcore" "" ALL)
+  
+  if(ENABLE_SOLUTION_FOLDERS)
     set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
-endif()
+  endif()
 
-ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard)
+  ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard)
 
 ENDIF()
