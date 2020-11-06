@@ -6,11 +6,9 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
   IF (DOTNET_FOUND AND NOT (HAVE_IOS_ONLY))
     #IF(WIN32 AND (MSVC_VERSION GREATER 1900)) #need MSVC to be at least 2017
     PROJECT(Emgu.CV.Platform.NetStandard)
-    #IF (APPLE)
-    #BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/Windows.Desktop/Emgu.CV.sln" "" "" ALL)
-    #ELSE()
-    BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform.NetStandard.csproj" "" ALL)
-    #ENDIF()
+
+    BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/Windows.Desktop/Emgu.CV.sln" "Emgu.CV.Platform.NetStandard" "" ALL)
+
     INSTALL(
       FILES 
       ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.xml

@@ -6,7 +6,8 @@ IF (TARGET Emgu.CV.Platform.NetStandard)
 
   IF (DOTNET_FOUND)
     PROJECT(Emgu.CV.Bitmap)
-    BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.csproj" "" ALL)  
+    #BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.csproj" "" ALL)  
+	BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/Windows.Desktop/Emgu.CV.sln" "Emgu.CV.Bitmap" "" ALL)
   
     INSTALL(
       FILES 
