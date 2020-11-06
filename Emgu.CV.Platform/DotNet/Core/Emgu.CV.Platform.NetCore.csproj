@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj" />
-    <ProjectReference Include="..\..\Netstandard\Emgu.CV.Platform.Netstandard.csproj" />
+    <ProjectReference Include="..\..\Netstandard\Emgu.CV.Platform.NetStandard.csproj" />
   </ItemGroup>
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\..\..\libs" Importance="high" />
