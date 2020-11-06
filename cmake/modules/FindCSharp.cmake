@@ -71,7 +71,7 @@ $ENV{windir}/Microsoft.NET/Framework/v4.0.30319/
 /Library/Frameworks/Mono.framework/Commands/)
 
 FIND_PROGRAM (MSBUILD_EXECUTABLE_40 
-NAMES msbuild xbuild 
+NAMES msbuild 
 PATHS
 $ENV{windir}/Microsoft.NET/Framework64/v4.0.30319/
 "C:/Microsoft.NET/Framework64/v4.0.30319/"
