@@ -7,7 +7,7 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
     #IF(WIN32 AND (MSVC_VERSION GREATER 1900)) #need MSVC to be at least 2017
     PROJECT(Emgu.CV.Platform.NetStandard)
 
-    BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Platform.NetStandard" "" ALL)
+    BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Platform.NetStandard" "/p:Platform=\"Any CPU\"" ALL)
 
     INSTALL(
       FILES 
