@@ -18,9 +18,6 @@ jobs:
     - name: Build Emgu CV native binary
       run: ./configure_x86_64
       working-directory: ./platforms/macos/
-    - name: Build Emgu CV native binary - 2nd pass
-      run: ./configure_x86_64
-      working-directory: ./platforms/macos/
     - name: Build Emgu CV package (unsigned)
       run: make package
       working-directory: ./platforms/macos/build/
