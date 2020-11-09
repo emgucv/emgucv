@@ -41,9 +41,9 @@ else
     cd vtk
     mkdir -p build
     cd build
-    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE ..
+    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DVTK_MODULE_ENABLE_VTK_RenderingFreeType:STRING="NO" -DVTK_MODULE_ENABLE_VTK_png:STRING="NO" ..
     cmake --build . --config Release --parallel --target install
-    VTK_OPTION=-DVTK_DIR:String="$PWD"
+    VTK_OPTION=-DVTK_DIR:String="$INSTALL_FOLDER"
     cd ../..
 
     CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../../opencv_contrib/modules 
@@ -57,6 +57,11 @@ cmake \
       ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} \
       $TESSERACT_OPTION \
       -DBUILD_TESTS:BOOL=FALSE \
+      -DBUILD_PNG:BOOL=TRUE \
+      -DBUILD_JPEG:BOOL=TRUE \
+      -DBUILD_JASPER:BOOL=TRUE \
+      -DBUILD_TIFF:BOOL=TRUE \
+      -DBUILD_OPENEXR:BOOL=TRUE \
       -DBUILD_PERF_TESTS:BOOL=FALSE \
       -DBUILD_opencv_apps:BOOL=FALSE \
       -DBUILD_DOCS:BOOL=FALSE \
@@ -68,7 +73,7 @@ cmake \
       -DBUILD_SHARED_LIBS:BOOL=FALSE \
       $VTK_OPTION \
       -DWITH_EIGEN:BOOL=TRUE \
-      -DEigen3_DIR:String="$PWD/../../../../eigen/build" \
+      -DEigen3_DIR:String="$INSTALL_FOLDER" \
       $PWD/../../../..
 
 #      -DWITH_TBB:BOOL=TRUE \
