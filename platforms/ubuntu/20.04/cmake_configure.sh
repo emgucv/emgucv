@@ -11,12 +11,14 @@ if [[ $# -gt 0 ]]; then
     fi
 fi
 
+EMGUCV_CMAKE_SHARED_OPTIONS=( -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DCMAKE_CXX_STANDARD:String="11" )
+
 cd ../../..
 
 cd eigen
 mkdir -p build
 cd build
-CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" ..
+cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} ..
 cmake --build . --config Release --parallel --target install
 cd ../..
 
@@ -32,14 +34,14 @@ else
     cd hdf5
     mkdir -p build
     cd build
-    CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_BUILD_TYPE:String="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DBUILD_TESTING:BOOL=FALSE -DHDF5_BUILD_EXAMPLES:BOOL=FALSE -DHDF5_BUILD_TOOLS:BOOL=FALSE -DHDF5_BUILD_UTILS:BOOL=FALSE ..
+    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTING:BOOL=FALSE -DHDF5_BUILD_EXAMPLES:BOOL=FALSE -DHDF5_BUILD_TOOLS:BOOL=FALSE -DHDF5_BUILD_UTILS:BOOL=FALSE ..
     cmake --build . --config Release --parallel --target install
     cd ../..
     
     cd vtk
     mkdir -p build
     cd build
-    CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" ..
+    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE ..
     cmake --build . --config Release --parallel --target install
     VTK_OPTION=-DVTK_DIR:String="$PWD"
     cd ../..
@@ -51,9 +53,9 @@ cd platforms/ubuntu/20.04
 
 mkdir -p build
 cd build
-CFLAGS=-fPIC CXXFLAGS=-fPIC cmake \
+cmake \
+      ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} \
       $TESSERACT_OPTION \
-      -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" \
       -DBUILD_TESTS:BOOL=FALSE \
       -DBUILD_PERF_TESTS:BOOL=FALSE \
       -DBUILD_opencv_apps:BOOL=FALSE \
@@ -67,8 +69,6 @@ CFLAGS=-fPIC CXXFLAGS=-fPIC cmake \
       $VTK_OPTION \
       -DWITH_EIGEN:BOOL=TRUE \
       -DEigen3_DIR:String="$PWD/../../../../eigen/build" \
-      -DCMAKE_BUILD_TYPE:String="Release" \
-      -DCMAKE_CXX_STANDARD:String="11" \
       $PWD/../../../..
 
 #      -DWITH_TBB:BOOL=TRUE \
