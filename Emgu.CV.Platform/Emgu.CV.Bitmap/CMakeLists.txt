@@ -6,8 +6,12 @@ IF (TARGET Emgu.CV.Platform.NetStandard)
 
   IF (DOTNET_FOUND)
     PROJECT(Emgu.CV.Bitmap)
-    #BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.csproj" "" ALL)  
-	BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Bitmap" "/p:Platform=\"Any CPU\"" ALL)
+      SET(EXTRA_MSBUILD_FLAGS "")
+      IF(WIN32)
+        SET(EXTRA_MSBUILD_FLAGS "/p:Platform=\"Any CPU\"")
+      ENDIF()
+
+    BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Bitmap" "${EXTRA_MSBUILD_FLAGS}" ALL)
   
     INSTALL(
       FILES 
