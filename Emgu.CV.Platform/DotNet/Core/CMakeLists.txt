@@ -5,12 +5,15 @@
 IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND WIN32 AND NOT (NETFX_CORE))
   
     PROJECT(Emgu.CV.Platform.NetCore)
-    
+    SET(EXTRA_MSBUILD_FLAGS "")
+      IF(WIN32)
+        SET(EXTRA_MSBUILD_FLAGS "/p:Platform=\"Any CPU\"")
+      ENDIF()
     BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../../Solution/Windows.Desktop/Emgu.CV.Example.sln" "${PROJECT_NAME}" "${EXTRA_BUILD_FLAGS}" ALL)	
-    ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} 
-      PRE_BUILD
-      COMMAND ${MSBUILD_EXECUTABLE} -t:restore Emgu.CV.Example.sln
-      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../../../Solution/Windows.Desktop")
+#    ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} 
+#      PRE_BUILD
+#      COMMAND ${MSBUILD_EXECUTABLE} -t:restore Emgu.CV.Example.sln
+#      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../../../Solution/Windows.Desktop")
 
     INSTALL(
       FILES 
@@ -23,6 +26,6 @@ IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND WIN32 AND NOT (NETFX_CORE))
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
     endif()
     
-    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Bitmap)
+    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.Bitmap)
   
 ENDIF()
