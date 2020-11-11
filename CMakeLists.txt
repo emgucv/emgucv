@@ -1131,7 +1131,7 @@ SET(EMGUCV_BITMAP_NUGET_FILE_LIST "${EMGUCV_BITMAP_NUGET_FILE_LIST}
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "${EMGUCV_BITMAP_NUGET_DEPENDENCY} 
       <group targetFramework=\".NETStandard2.0\">
-        <dependency id=\"System.Drawing.Common\" version=\"4.7.0\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Drawing.Common\" version=\"5.0.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </group>")
 SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "

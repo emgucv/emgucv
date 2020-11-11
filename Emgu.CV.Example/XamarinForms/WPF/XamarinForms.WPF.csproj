@@ -49,8 +49,8 @@
 
   <ItemGroup>
     <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.6.0-pre2" />
-    <PackageReference Include="Xamarin.Forms.Platform.WPF" Version="4.8.0.1451" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.6.0-pre3" />
+    <PackageReference Include="Xamarin.Forms.Platform.WPF" Version="4.8.0.1560" />
   </ItemGroup>
 
   <Import Project="..\..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems" Label="Shared" />
