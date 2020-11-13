@@ -200,6 +200,7 @@ SET EMGU_CV_CMAKE_CONFIG_FLAGS= -G %CMAKE_CONF% %GENERAL_CMAKE_CONFIG_FLAGS% ^
 -DCMAKE_DISABLE_FIND_PACKAGE_ZLIB:BOOL=TRUE ^
 -DCMAKE_DISABLE_FIND_PACKAGE_PNG:BOOL=TRUE ^
 -DCMAKE_FIND_PACKAGE_PREFER_CONFIG:BOOL=TRUE ^
+-DCMAKE_IGNORE_PATH:STRING="C:/python-virt/python37/Library;C:/python-virt/python37/Library/include;C:/python-virt/python37/Library/lib" ^
 -DVIDEOIO_PLUGIN_LIST:STRING="ffmpeg"
 
 REM For Freetype, removed the "d" postfix for debug mode.
