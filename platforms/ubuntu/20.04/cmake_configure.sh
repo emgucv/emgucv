@@ -79,6 +79,6 @@ cmake \
 #      -DWITH_TBB:BOOL=TRUE \
 #      -DWITH_CUDA:BOOL=FALSE \
     
-C_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-9.0 CPLUS_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-9.0 make
+C_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-8.2 CPLUS_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-8.2 make
 
 cd ..
