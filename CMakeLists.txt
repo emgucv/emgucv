@@ -379,7 +379,11 @@ ELSEIF(WIN32)
   #MESSAGE(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> EMGUCV_ARCH: ${EMGUCV_ARCH}")
   #MESSAGE(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER: ${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}")
 ELSEIF(APPLE AND NOT IOS)
-  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/osx")
+  IF ("${EMGUCV_ARCH}" STREQUAL "arm64")
+    SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/macos/arm64")
+  ELSE()
+    SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/macos/x64")
+  ENDIF()
 ELSEIF("${EMGUCV_ARCH}" STREQUAL "ubuntu_x64")
   SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/x64")
 ELSEIF("${EMGUCV_ARCH}" STREQUAL "ubuntu_x86")
@@ -495,7 +499,7 @@ IF(APPLE AND (NOT IOS))
   SET(IS_OSX_BUILD ON)
   MESSAGE(STATUS "IS_OSX_BUILD: ${IS_OSX_BUILD}")
 ENDIF()
-CHECK_BINARY_EXIST("libs/osx" "libcvextern.dylib" HAVE_OSX ${IS_OSX_BUILD})
+CHECK_BINARY_EXIST("libs/macos" "libcvextern.dylib" HAVE_OSX ${IS_OSX_BUILD})
 
 SET(IS_ANDROID_ARM64_V8A_BUILD OFF)
 IF(ANDROID AND ("${ANDROID_ABI}" STREQUAL "arm64-v8a"))
@@ -732,7 +736,7 @@ SET(CPACK_PACKAGE_NAME "${PACKAGE_NAME}${IOS_LABEL}${ANDROID_LABEL}${OSX_LABEL}$
 #ENDIF()
 
 #IF (APPLE)
-#  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-osx")
+#  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-macos")
 #ENDIF()
 
 IF(WITH_CUDA)
@@ -1058,7 +1062,7 @@ ENDIF()
 SET(EMGUCV_MACOS_NUGET_FILE_LIST "")
 IF(HAVE_OSX)
 	SET(EMGUCV_MACOS_NUGET_FILE_LIST "${EMGUCV_MACOS_NUGET_FILE_LIST} 
-    <file src=\"..\\..\\..\\libs\\osx\\*.dylib\" target=\"build\" />
+    <file src=\"..\\..\\..\\libs\\macos\\*.dylib\" target=\"build\" />
     <file src=\"Emgu.CV.runtime.macos.targets\" target=\"build\\${EMGUCV_MACOS_NUGET_ID}.targets\" />
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
@@ -1689,8 +1693,8 @@ IF(HAVE_OSX)
   IF (NOT IS_OSX_BUILD)
     INSTALL(
       FILES
-      "libs/osx/libcvextern.dylib"
-      DESTINATION "libs/osx"
+      "libs/macos/libcvextern.dylib"
+      DESTINATION "libs/macos"
       COMPONENT emgucv_binary
       )
   ENDIF()
@@ -2252,7 +2256,7 @@ ELSEIF (APPLE)
   SET(CPACK_GENERATOR ZIP)
   SET(CPACK_BUNDLE_NAME ${CPACK_PACKAGE_NAME})
   
-  SET(CPACK_BUNDLE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/platforms/osx/icons.icns")
+  SET(CPACK_BUNDLE_ICON "${CMAKE_CURRENT_SOURCE_DIR}/platforms/macos/icons.icns")
   IF (IOS)
     SET(CPACK_ARCHIVE_COMPONENT_INSTALL ON) #enable components install for zip
     IF(CPACK_GENERATOR MATCHES "ZIP")
@@ -2344,7 +2348,7 @@ ELSEIF (APPLE)
   # ----------------------------------------------------------------------------
   #  Generate required common assembly file for Emgu CV project
   # ----------------------------------------------------------------------------
-  SET(CPACK_BUNDLE_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/CMake/osx/Info.plist)
+  SET(CPACK_BUNDLE_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/cmake/macos/Info.plist)
   FILE(WRITE ${CPACK_BUNDLE_PLIST}
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
