@@ -371,6 +371,11 @@ namespace Emgu.CV.Test
             bgraImg.SetRandNormal(new MCvScalar(100, 100, 100, 100), new MCvScalar(50, 50, 50, 50) );
             Mat yuv = new Mat();
             CvInvoke.CvtColor(bgraImg, yuv, ColorConversion.Bgra2YuvI420);
+
+            Image<Gray, double> img4 = bgraImg.Convert<Gray, double>();
+
+            Image<Bgr, Byte> bgrImg = new Image<Bgr, byte>(640, 480);
+            Image<Gray, double> img5 = bgrImg.Convert<Gray, double>();
         }
 
         [TestAttribute]
