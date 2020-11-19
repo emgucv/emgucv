@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-cmake_minimum_required(VERSION 2.8)
+#cmake_minimum_required(VERSION 2.8)
 SET(TESSERACT_DIR "tesseract-ocr.git")
 SET(TESSERACT_SRC_DIR "${TESSERACT_DIR}/src")
 SET(LEPTONICA_DIR "${LEPT_ROOT_DIR}/src")
