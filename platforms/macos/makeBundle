@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd ../../libs/osx
+cd ../../libs/macos
 rm *.dylib
 cd ../../platforms/macos/build
 make cvextern
@@ -11,6 +11,6 @@ mkdir emgucv.bundle
 mkdir emgucv.bundle/Contents
 mkdir emgucv.bundle/Contents/MacOS
 mkdir emgucv.bundle/Contents/Resources
-cp ../../libs/osx/libcvextern.dylib emgucv.bundle/Contents/MacOS/
+cp ../../libs/macos/libcvextern.dylib emgucv.bundle/Contents/MacOS/
 cp Info.plist emgucv.bundle/Contents/
 cp icons.icns emgucv.bundle/Contents/Resources/

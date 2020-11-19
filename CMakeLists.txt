@@ -2355,7 +2355,7 @@ ELSEIF (APPLE)
 <plist version=\"1.0\">
 <dict>
    <key>CFBundleIdentifier</key>
-   <string>com.emgu.emgucv</string>
+   <string>com.emgu.cv</string>
    <key>CFBundleName</key>
    <string>${CPACK_BUNDLE_NAME}</string>
    <key>CFBundleVersion</key>
