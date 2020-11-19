@@ -16,6 +16,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.NetStandar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj", "{0D749AFA-740A-42C5-9B29-C3FAC279082D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.NetStandard.IOS", "..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj", "{DFC4E468-8033-405A-A2B6-285810387E10}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
@@ -28,6 +30,11 @@ Global
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{dfc4e468-8033-405a-a2b6-285810387e10}*SharedItemsImports = 5
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{dfc4e468-8033-405a-a2b6-285810387e10}*SharedItemsImports = 5
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{dfc4e468-8033-405a-a2b6-285810387e10}*SharedItemsImports = 5
+		..\..\Emgu.CV\Emgu.CV.projitems*{dfc4e468-8033-405a-a2b6-285810387e10}*SharedItemsImports = 5
+		..\..\Emgu.Util\Emgu.Util.projitems*{dfc4e468-8033-405a-a2b6-285810387e10}*SharedItemsImports = 5
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,6 +109,34 @@ Global
 		{0D749AFA-740A-42C5-9B29-C3FAC279082D}.Release|x64.Build.0 = Release|Any CPU
 		{0D749AFA-740A-42C5-9B29-C3FAC279082D}.Release|x86.ActiveCfg = Release|Any CPU
 		{0D749AFA-740A-42C5-9B29-C3FAC279082D}.Release|x86.Build.0 = Release|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Debug|ARM.Build.0 = Debug|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Debug|x64.Build.0 = Debug|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Debug|x86.Build.0 = Debug|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Release|ARM.ActiveCfg = Release|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Release|ARM.Build.0 = Release|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Release|ARM64.Build.0 = Release|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Release|iPhone.Build.0 = Release|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Release|x64.ActiveCfg = Release|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Release|x64.Build.0 = Release|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Release|x86.ActiveCfg = Release|Any CPU
+		{DFC4E468-8033-405A-A2B6-285810387E10}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

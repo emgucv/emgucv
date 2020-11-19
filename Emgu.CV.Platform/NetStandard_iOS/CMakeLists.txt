@@ -6,11 +6,14 @@ IF( (EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND HAVE_IOS )
   IF (DOTNET_FOUND)
     #IF(WIN32 AND (MSVC_VERSION GREATER 1900)) #need MSVC to be at least 2017
     PROJECT(Emgu.CV.Platform.NetStandard.IOS)
-    #IF (APPLE)
-    #BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/Windows.Desktop/Emgu.CV.sln" "" "" ALL)
-    #ELSE()
-    BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform.NetStandard.IOS.csproj" "" ALL)
-    #ENDIF()
+    SET(EXTRA_MSBUILD_FLAGS "")
+    IF(WIN32)
+      SET(EXTRA_MSBUILD_FLAGS "/p:Platform=\"Any CPU\"")
+    ENDIF()
+    BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Platform.NetStandard.IOS" "${EXTRA_MSBUILD_FLAGS}" ALL)
+	
+    #BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform.NetStandard.IOS.csproj" "" ALL)
+    
     INSTALL(
       FILES 
       ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/iOS/Emgu.CV.Platform.NetStandard.xml
