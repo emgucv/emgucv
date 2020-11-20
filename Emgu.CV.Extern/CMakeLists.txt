@@ -3030,7 +3030,7 @@ ELSE()
   add_library(${the_target} SHARED ${extern_srcs} ${extern_hdrs} )
   IF (APPLE)
     set_target_properties(${the_target} PROPERTIES MACOSX_RPATH ON)    
-    #SET(DYLIBBUNDLER_PATH "${PROJECT_SOURCE_DIR}/../platform/osx/dylibbundler")
+    #SET(DYLIBBUNDLER_PATH "${PROJECT_SOURCE_DIR}/../platform/macos/dylibbundler")
     #MESSAGE(STATUS "DYLIBBUNDLER_PATH: ${DYLIBBUNDLER_PATH}")
   ENDIF()
 ENDIF()  
@@ -3359,6 +3359,26 @@ ELSEIF (APPLE)
     XCODE_ATTRIBUTE_STRIPFLAGS "-x -u -r"
     XCODE_ATTRIBUTE_DEAD_CODE_STRIPPING "YES"
     )
+  IF ("${EMGUCV_ARCH}" STREQUAL "arm64")
+    SET(CV_EXTERN_FILE_NAME "libcvextern_arm64.dylib")
+  ELSE()
+    SET(CV_EXTERN_FILE_NAME "libcvextern_x64.dylib")
+  ENDIF()
+  add_custom_command(TARGET ${the_target}
+    POST_BUILD
+    COMMAND mkdir -p ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch
+    #WORKING_DIRECTORY "${UNMANAGED_LIBRARY_OUTPUT_PATH}"
+    COMMENT "Creating arch folder: ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch")
+  add_custom_command(TARGET ${the_target}
+    POST_BUILD
+    COMMAND cp -f ${UNMANAGED_LIBRARY_OUTPUT_PATH}/libcvextern.dylib ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${CV_EXTERN_FILE_NAME}
+    #WORKING_DIRECTORY "${UNMANAGED_LIBRARY_OUTPUT_PATH}"
+    COMMENT "Copying file to ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${CV_EXTERN_FILE_NAME}")
+  add_custom_command(TARGET ${the_target}
+    POST_BUILD
+    COMMAND lipo ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/*.dylib -output ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libcvextern.dylib -create
+    #WORKING_DIRECTORY "${UNMANAGED_LIBRARY_OUTPUT_PATH}"
+    COMMENT "Linking target for all architectures and ouputing to ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libcvextern.dylib")
 ENDIF()
 
 #IF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")

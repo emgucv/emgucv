@@ -75,6 +75,8 @@ namespace Emgu.CV.XamarinForms
             var openCVConfigDict = CvInvoke.ConfigDict;
             bool haveViz = (openCVConfigDict["HAVE_OPENCV_VIZ"] != 0);
             bool haveDNN = (openCVConfigDict["HAVE_OPENCV_DNN"] != 0);
+            bool haveFreetype = (openCVConfigDict["HAVE_OPENCV_FREETYPE"] != 0);
+
             bool hasInferenceEngine = false;
             if (haveDNN)
             {
@@ -98,6 +100,19 @@ namespace Emgu.CV.XamarinForms
                     Mat right = CvInvoke.Imread("imR.png", ImreadModes.Color);
                     Viz3d v = Simple3DReconstruct.GetViz3d(left, right);
                     v.Spin();
+                };
+            }
+
+            if (haveFreetype)
+            {
+                Button freetypeButton = new Button();
+                freetypeButton.Text = "Free Type";
+
+                buttonList.Add(freetypeButton);
+
+                freetypeButton.Clicked += (sender, args) =>
+                {
+                    MainPage.Navigation.PushAsync(new FreetypePage());
                 };
             }
 
