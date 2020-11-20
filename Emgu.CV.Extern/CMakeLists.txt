@@ -3378,7 +3378,7 @@ ELSEIF (APPLE)
     POST_BUILD
     COMMAND lipo ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/*.dylib -output ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libcvextern.dylib -create
     #WORKING_DIRECTORY "${UNMANAGED_LIBRARY_OUTPUT_PATH}"
-    COMMENT "Linking target for all architectures.")
+    COMMENT "Linking target for all architectures and ouputing to ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libcvextern.dylib")
 ENDIF()
 
 #IF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
