@@ -27,19 +27,19 @@ if [ \( "$1" != "simulator" \) -a \( "$1" != "simulator_x86_64" \) ]; then
     mkdir -p platforms/ios/armv7s     
     cd platforms/ios/armv7s
     ../configure_xcode.sh $CV_CONTRIB_OPTION device -DIOS_ARCH="armv7s" ${@:3}
-    ./xcodebuild_wrapper BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD clean build
+    ./xcodebuild_wrapper BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
     cd ../../..
     
     mkdir -p platforms/ios/armv7
     cd platforms/ios/armv7
     ../configure_xcode.sh $CV_CONTRIB_OPTION device -DIOS_ARCH="armv7" ${@:3}
-    ./xcodebuild_wrapper BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD clean build
+    ./xcodebuild_wrapper BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
     cd ../../..
 
     mkdir -p platforms/ios/arm64
     cd platforms/ios/arm64
     ../configure_xcode.sh $CV_CONTRIB_OPTION device -DIOS_ARCH="arm64" ${@:3}
-    ./xcodebuild_wrapper BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD clean build
+    ./xcodebuild_wrapper BITCODE_GENERATION_MODE=bitcode -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
     cd ../../..
 fi
 
@@ -48,7 +48,7 @@ if [ "$1" != "simulator_x86_64" ]; then
     cd platforms/ios/arm64_simulator
     #skip the first two parameter
     ../configure_xcode.sh $CV_CONTRIB_OPTION simulator -DIOS_ARCH="arm64" -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE ${@:3}
-    ./xcodebuild_wrapper -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD clean build
+    ./xcodebuild_wrapper -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
     cd ../../..
 fi
 
@@ -57,7 +57,7 @@ cd platforms/ios/x86_64_simulator
 #skip the first two parameter    
 ../configure_xcode.sh $CV_CONTRIB_OPTION simulator -DIOS_ARCH="x86_64" -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE ${@:3}
 
-./xcodebuild_wrapper WARNING_CFLAGS=-Wno-implicit-function-declaration -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD clean build
+./xcodebuild_wrapper WARNING_CFLAGS=-Wno-implicit-function-declaration -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
 
 cd ../../..
 
