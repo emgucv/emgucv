@@ -3343,7 +3343,11 @@ IF (IOS)
     POST_BUILD
     COMMAND lipo -create -output ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern.a ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_*.a
     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-    COMMENT "Linking multiple arch into a single file")  
+    COMMENT "Linking multiple arch into a single file")
+  INSTALL(FILES
+    "${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern.a"
+    DESTINATION "libs/iOS/"
+    COMPONENT emgucv_binary)
 ELSEIF (ANDROID)
 add_custom_command(TARGET ${the_target}
     POST_BUILD
