@@ -43,14 +43,14 @@ if [ \( "$1" != "simulator" \) -a \( "$1" != "simulator_x86_64" \) ]; then
     cd ../../..
 fi
 
-if [ "$1" != "simulator_x86_64" ]; then
-    mkdir -p platforms/ios/arm64_simulator
-    cd platforms/ios/arm64_simulator
-    #skip the first two parameter
-    ../configure_xcode.sh $CV_CONTRIB_OPTION simulator -DIOS_ARCH="arm64" -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE ${@:3}
-    ./xcodebuild_wrapper -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
-    cd ../../..
-fi
+#if [ "$1" != "simulator_x86_64" ]; then
+#    mkdir -p platforms/ios/arm64_simulator
+#    cd platforms/ios/arm64_simulator
+#    #skip the first two parameter
+#    ../configure_xcode.sh $CV_CONTRIB_OPTION simulator -DIOS_ARCH="arm64" -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE ${@:3}
+#    ./xcodebuild_wrapper -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
+#    cd ../../..
+#fi
 
 mkdir -p platforms/ios/x86_64_simulator
 cd platforms/ios/x86_64_simulator
