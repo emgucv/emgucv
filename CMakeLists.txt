@@ -975,6 +975,8 @@ SET(EMGUCV_NUGET_ID "Emgu.CV")
 SET(EMGUCV_BITMAP_NUGET_ID "Emgu.CV.Bitmap")
 SET(EMGUCV_UI_NUGET_ID "Emgu.CV.UI")
 SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.windows")
+SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_ID "Emgu.runtime.windows.msvc.rt.x86")
+SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_ID "Emgu.runtime.windows.msvc.rt.x64")
 
 IF(WITH_CUDA)
 	SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_WINDOWS_NUGET_ID}.cuda")
@@ -1049,15 +1051,27 @@ ENDIF()
 
 SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "")
 IF(HAVE_WINDESKTOP_X86)
-	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x86\\*.dll\" exclude=\"..\\..\\..\\libs\\x86\\cu*.dll;..\\..\\..\\libs\\x86\\npp*.dll\" target=\"build\\x86\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x86\\*.dll\" exclude=\"..\\..\\..\\libs\\x86\\cu*.dll;..\\..\\..\\libs\\x86\\npp*.dll;..\\..\\..\\libs\\x86\\concrt*.dll;..\\..\\..\\libs\\x86\\msvcp*.dll;..\\..\\..\\libs\\x86\\vcruntime*.dll\" target=\"build\\x86\" />")
+	SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST} 
+	<file src=\"..\\..\\..\\libs\\x86\\concrt*.dll\" target=\"build\\x86\" /> 
+	<file src=\"..\\..\\..\\libs\\x86\\msvcp*.dll\" target=\"build\\x86\" /> 
+	<file src=\"..\\..\\..\\libs\\x86\\vcruntime*.dll\" target=\"build\\x86\" />     
+	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 IF(HAVE_WINDESKTOP_X64)
-	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cu*.dll;..\\..\\..\\libs\\x64\\npp*.dll\" target=\"build\\x64\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cu*.dll;..\\..\\..\\libs\\x64\\npp*.dll;..\\..\\..\\libs\\x64\\concrt*.dll;..\\..\\..\\libs\\x64\\msvcp*.dll;..\\..\\..\\libs\\x64\\vcruntime*.dll\" target=\"build\\x64\" />")
 	#Also added configuration files from OpenVino
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.xml\" target=\"build\\x64\" />")
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.json\" target=\"build\\x64\" />")
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.elf\" target=\"build\\x64\" />")
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.mvcmd\" target=\"build\\x64\" />")
+	SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST} 
+	<file src=\"..\\..\\..\\libs\\x64\\concrt*.dll\" target=\"build\\x64\" /> 
+	<file src=\"..\\..\\..\\libs\\x64\\msvcp*.dll\" target=\"build\\x64\" /> 
+	<file src=\"..\\..\\..\\libs\\x64\\vcruntime*.dll\" target=\"build\\x64\" />     
+	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} 
@@ -1184,6 +1198,11 @@ ${EMGUCV_BITMAP_NUGET_DEPENDENCY}
 
 
 IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
+  #SET(EMGU_WINDOWS_MSVCRT_VERSION ${MSVC_TOOLSET_VERSION})
+  IF(MSVC)
+    SET(EMGU_WINDOWS_MSVCRT_VERSION ${CMAKE_CXX_COMPILER_VERSION})
+  ENDIF()
+  
   SET(EMGUCV_UI_NUGET_TITLE "Windows UI components for Emgu CV")
   SET(EMGUCV_UI_NUGET_FILE_LIST "${EMGUCV_UI_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetFramework.dll\" target=\"lib\\net461\" />
@@ -1400,6 +1419,18 @@ IF(WITH_CUDA)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDART_NUGET_ID}.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDART_NUGET_ID}/${EMGU_CUDART_NUGET_ID}.targets)
 ENDIF()
 
+IF(HAVE_WINDESKTOP_X86)
+  SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
+	  <dependency id=\"${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}\" version=\"[${EMGU_WINDOWS_MSVCRT_VERSION}]\" />
+	  ")		
+ENDIF()
+
+IF(HAVE_WINDESKTOP_X64)
+  SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
+	  <dependency id=\"${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}\" version=\"[${EMGU_WINDOWS_MSVCRT_VERSION}]\" />
+	  ")		
+ENDIF()
+
 SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "	<dependencies>
       <group targetFramework=\".NETStandard2.0\">
 	    ${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}
@@ -1460,6 +1491,16 @@ ENDIF()
 IF(HAVE_WINSTORE_10)
   SET(EMGUCV_UWP_NUGET_TITLE "Emgu CV for UWP Native Runtime")
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.uwp.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.uwp/Package.nuspec)
+ENDIF()
+
+IF(HAVE_WINDESKTOP_X86)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}/Package.nuspec)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}.targets)
+ENDIF()
+
+IF(HAVE_WINDESKTOP_X64)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}/Package.nuspec)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}/${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}.targets)
 ENDIF()
 
 IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)

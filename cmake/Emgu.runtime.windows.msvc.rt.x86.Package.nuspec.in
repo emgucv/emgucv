@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}</id>
+	<title>${EMGU_WINDOWS_MSVCRT_X86_NUGET_TITLE}</title>
+    <version>${EMGU_WINDOWS_MSVCRT_VERSION}</version>
+    <authors>${CPACK_PACKAGE_VENDOR}</authors>
+    <owners>${CPACK_PACKAGE_VENDOR}</owners>
+    <license type="file">${EMGUCV_LICENSE_FILE}</license>
+    <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
+	<repository type="git" url="https://github.com/emgucv/emgucv" />
+	<icon>icon.png</icon>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+	<summary>MSVC X86 runtime package for Windows</summary>
+    <description>This package contains the native x86 MSVC runtime for Windows</description>
+    <releaseNotes>This is the x86 MSVC runtime v${MSVC_TOOLSET_VERSION} built by ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV.   	        
+    </releaseNotes>
+    <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
+    <tags>emgu</tags>
+  </metadata>
+  <files>
+  ${EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST}
+  </files>
+</package>

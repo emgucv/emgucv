@@ -30,3 +30,5 @@ IF (HAVE_LINUX_X86 OR HAVE_LINUX_X64)
   add_subdirectory("Emgu.CV.runtime.ubuntu")
 ENDIF()
 
+ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.x86")
+ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.x64")

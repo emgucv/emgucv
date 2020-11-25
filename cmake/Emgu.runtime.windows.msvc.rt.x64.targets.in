@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+      <PropertyGroup>
+        <EmguMsvcRtX64LinkTarget>Windows </EmguMsvcRtX64LinkTarget>
+		<EmguMsvcRtX64BuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguMsvcRtX64BuildX64>
+        <EmguMsvcRtX64DeployMessage Condition="'$(EmguMsvcRtX64BuildX64)'=='True' AND Exists('$(EmguMsvcRtX64NativeFileX64)')">$(EmguMsvcRtX64DeployMessage)x64 </EmguMsvcRtX64DeployMessage>
+      </PropertyGroup>
+      <ItemGroup Condition="'$(EmguMsvcRtX64BuildX64)'=='True'">
+        <None Include="$(MSBuildThisFileDirectory)\x64\*.dll">
+          <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+      </ItemGroup>
+	    <Target Name="EmguMsvcRtX64PackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Message Condition="'$(EmguMsvcRtX64LinkTarget)'!=''" Text="Emgu MSVC runtime nuget package compiling with $(EmguMsvcRtX64LinkTarget) runtime." Importance="High" />
+    <Message Text="Emgu MSVC runtime Compiling with $(EmguMsvcRtX64DeployMessage) runtime." Condition="'$(EmguMsvcRtX64DeployMessage)'!=''" Importance="High" />
+    <Message Text="No native binary is deployed by the Emgu MSVC x64 runtime package." Condition="'$(EmguMsvcRtX64DeployMessage)'==''" Importance="High" />
+  </Target>
+</Project>
