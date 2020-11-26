@@ -25,6 +25,7 @@ PATHS
 $ENV{windir}/Microsoft.NET/Framework/v2.0.50727/
 "C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727"
 /Library/Frameworks/Mono.framework/Commands/
+CMAKE_FIND_ROOT_PATH_BOTH
 )
 
 FIND_PROGRAM (MSBUILD_EXECUTABLE_20 
@@ -33,6 +34,7 @@ PATHS
 $ENV{windir}/Microsoft.NET/Framework/v2.0.50727/
 "C:/WINDOWS/Microsoft.NET/Framework/v2.0.50727"
 /Library/Frameworks/Mono.framework/Commands/
+CMAKE_FIND_ROOT_PATH_BOTH
 )
 IF(CSC_EXECUTABLE_20)
 SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_20})
@@ -44,12 +46,14 @@ $ENV{windir}/Microsoft.NET/Framework64/v3.5/
 "C:/Windows/Microsoft.NET/Framework64/v3.5"
 $ENV{windir}/Microsoft.NET/Framework/v3.5/
 "C:/Windows/Microsoft.NET/Framework/v3.5"
+CMAKE_FIND_ROOT_PATH_BOTH
 )
 FIND_PROGRAM (MSBUILD_EXECUTABLE_35 msbuild
 $ENV{windir}/Microsoft.NET/Framework64/v3.5/
 "C:/Windows/Microsoft.NET/Framework64/v3.5"
 $ENV{windir}/Microsoft.NET/Framework/v3.5/
 "C:/Windows/Microsoft.NET/Framework/v3.5"
+CMAKE_FIND_ROOT_PATH_BOTH
 )
 IF(CSC_EXECUTABLE_35)
 SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_35})
@@ -68,7 +72,9 @@ $ENV{windir}/Microsoft.NET/Framework64/v4.0.30319/
 "C:/Microsoft.NET/Framework64/v4.0.30319/"
 $ENV{windir}/Microsoft.NET/Framework/v4.0.30319/
 "C:/Microsoft.NET/Framework/v4.0.30319/"
-/Library/Frameworks/Mono.framework/Commands/)
+/Library/Frameworks/Mono.framework/Commands/
+CMAKE_FIND_ROOT_PATH_BOTH
+)
 
 FIND_PROGRAM (MSBUILD_EXECUTABLE_40 
 NAMES msbuild 
@@ -77,12 +83,16 @@ $ENV{windir}/Microsoft.NET/Framework64/v4.0.30319/
 "C:/Microsoft.NET/Framework64/v4.0.30319/"
 $ENV{windir}/Microsoft.NET/Framework/v4.0.30319/
 "C:/Microsoft.NET/Framework/v4.0.30319/"
-/Library/Frameworks/Mono.framework/Commands/)
+/Library/Frameworks/Mono.framework/Commands/
+CMAKE_FIND_ROOT_PATH_BOTH
+)
 
 FIND_PROGRAM (CSC_EXECUTABLE_120 
 NAMES csc 
 PATHS
-$ENV{${PROGRAM_FILES_X86_ENV_STR}}/MSBuild/12.0/Bin/)
+$ENV{${PROGRAM_FILES_X86_ENV_STR}}/MSBuild/12.0/Bin/
+CMAKE_FIND_ROOT_PATH_BOTH
+)
 MESSAGE(STATUS "CSC_EXECUTABLE_120: ${CSC_EXECUTABLE_120}")
 
 FIND_PROGRAM (MSBUILD_EXECUTABLE_120 
@@ -94,13 +104,17 @@ MESSAGE(STATUS "MSBUILD_EXECUTABLE_120 : ${MSBUILD_EXECUTABLE_120}")
 FIND_PROGRAM (CSC_EXECUTABLE_140 
 NAMES csc 
 PATHS
-$ENV{${PROGRAM_FILES_X86_ENV_STR}}/MSBuild/14.0/Bin/)
+$ENV{${PROGRAM_FILES_X86_ENV_STR}}/MSBuild/14.0/Bin/
+CMAKE_FIND_ROOT_PATH_BOTH
+)
 MESSAGE(STATUS "CSC_EXECUTABLE_140: ${CSC_EXECUTABLE_140}")
 
 FIND_PROGRAM (MSBUILD_EXECUTABLE_140 
 NAMES msbuild 
 PATHS
-$ENV{${PROGRAM_FILES_X86_ENV_STR}}/MSBuild/14.0/Bin/)
+$ENV{${PROGRAM_FILES_X86_ENV_STR}}/MSBuild/14.0/Bin/
+CMAKE_FIND_ROOT_PATH_BOTH
+)
 MESSAGE(STATUS "MSBUILD_EXECUTABLE_140 : ${MSBUILD_EXECUTABLE_140}")
 
 FIND_PROGRAM (CSC_EXECUTABLE_150 
@@ -108,6 +122,7 @@ NAMES csc
 PATHS
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2017/Community/MSBuild/15.0/Bin/Roslyn"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/Roslyn"
+CMAKE_FIND_ROOT_PATH_BOTH
 )
 MESSAGE(STATUS "CSC_EXECUTABLE_150: ${CSC_EXECUTABLE_150}")
 
@@ -115,21 +130,27 @@ FIND_PROGRAM (MSBUILD_EXECUTABLE_150
 NAMES msbuild 
 PATHS
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2017/Community/MSBuild/15.0/Bin"
-"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin")
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin"
+CMAKE_FIND_ROOT_PATH_BOTH
+)
 MESSAGE(STATUS "MSBUILD_EXECUTABLE_150 : ${MSBUILD_EXECUTABLE_150}")
 
 FIND_PROGRAM (CSC_EXECUTABLE_160 
 NAMES csc 
 PATHS
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/Roslyn"
-"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/Roslyn")
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/Roslyn"
+CMAKE_FIND_ROOT_PATH_BOTH
+)
 
 MESSAGE(STATUS "CSC_EXECUTABLE_160: ${CSC_EXECUTABLE_160}")
 FIND_PROGRAM (MSBUILD_EXECUTABLE_160 
 NAMES msbuild 
 PATHS
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin"
-"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin")
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin"
+CMAKE_FIND_ROOT_PATH_BOTH
+)
 MESSAGE(STATUS "MSBUILD_EXECUTABLE_160 : ${MSBUILD_EXECUTABLE_160}")
 
 
@@ -229,7 +250,9 @@ ELSE()
 ENDIF()  
 
 
-FIND_PROGRAM (GACUTIL_EXECUTABLE gacutil 
+FIND_PROGRAM (GACUTIL_EXECUTABLE
+NAMES gacutil
+PATHS
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6.1 Tools"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6 Tools"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v8.1A/bin/NETFX 4.5.1 Tools"
@@ -244,9 +267,12 @@ FIND_PROGRAM (GACUTIL_EXECUTABLE gacutil
 /usr/lib/mono/2.0
 /usr/bin
 /Library/Frameworks/Mono.framework/Commands/
+CMAKE_FIND_ROOT_PATH_BOTH
 )
 
-FIND_PROGRAM (AL_EXECUTABLE al
+FIND_PROGRAM (AL_EXECUTABLE
+NAMES al
+PATHS
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6.1 Tools"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6 Tools"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v8.1A/bin/NETFX 4.5.1 Tools"
@@ -267,9 +293,12 @@ $ENV{windir}/Microsoft.NET/Framework/v2.0.50727
 /usr/lib/mono/2.0
 /usr/bin
 /Library/Frameworks/Mono.framework/Commands/
+CMAKE_FIND_ROOT_PATH_BOTH
 )
 
-FIND_PROGRAM (RESGEN_EXECUTABLE resgen
+FIND_PROGRAM (RESGEN_EXECUTABLE
+NAMES resgen
+PATHS
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6.1 Tools"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6 Tools"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v8.1A/bin/NETFX 4.5.1 Tools"
@@ -287,18 +316,26 @@ FIND_PROGRAM (RESGEN_EXECUTABLE resgen
 "C:/Program Files/Microsoft Visual Studio 8/SDK/v2.0/Bin"
 /usr/bin
 /Library/Frameworks/Mono.framework/Commands/
+CMAKE_FIND_ROOT_PATH_BOTH
 )
 
-FIND_PROGRAM(DOTNET_EXECUTABLE dotnet
-/usr/local/share/dotnet)
+FIND_PROGRAM(DOTNET_EXECUTABLE
+NAMES dotnet
+PATHS
+/usr/local/share/dotnet/
+CMAKE_FIND_ROOT_PATH_BOTH
+)
 IF (DOTNET_EXECUTABLE)
   SET (DOTNET_FOUND TRUE)
 ELSE()
   SET (DOTNET_FOUND FALSE)
 ENDIF()  
 
-FIND_PROGRAM(VSTOOL_EXECUTABLE vstool
+FIND_PROGRAM(VSTOOL_EXECUTABLE
+NAMES vstool
+PATHS
 "/Applications/Visual Studio.app/Contents/MacOS"
+CMAKE_FIND_ROOT_PATH_BOTH
 )
 IF (VSTOOL_EXECUTABLE)
   SET (VSTOOL_FOUND TRUE)
