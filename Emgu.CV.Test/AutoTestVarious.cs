@@ -2417,7 +2417,7 @@ namespace Emgu.CV.Test
                         fileName,
                         backend_idx,
                         VideoWriter.Fourcc('H', '2', '6', '4'),
-                        5,
+                        29.97,
                         new Size(width, height),
                         true))
                 {
@@ -2448,7 +2448,7 @@ namespace Emgu.CV.Test
 
                     EmguAssert.IsTrue(numberOfFrames == count);
                 }
-                Trace.WriteLine(String.Format("File size: {0}", fi.Length));
+                Trace.WriteLine(String.Format("File {0} size: {1}", fi.FullName, fi.Length));
                 File.Delete(fi.FullName);
             }
         }
