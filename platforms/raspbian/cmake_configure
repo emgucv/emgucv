@@ -13,34 +13,44 @@ if [[ $# -gt 0 ]]; then
     fi
 fi
 
+EMGUCV_CMAKE_SHARED_OPTIONS=( -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DCMAKE_CXX_STANDARD:String="11" )
+
 cd ../..
 
 cd eigen
 mkdir -p build
 cd build
-CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" ..
-cmake --build . --config Release --parallel --target install
+cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} ..
+cmake --build . --config Release --parallel 1 --target install
 cd ../..
 
 
 if [ "$BUILD_TYPE" == "core" ]; then
     echo "Performing core build"
-    EMGU_CV_TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE
+    EMGU_CV_TESSERACT_OPTION=( -DEMGU_CV_WITH_TESSERACT:BOOL=FALSE )
     TESSERACT_OPTION=-DWITH_TESSERACT:BOOL=FALSE
-    VTK_OPTION=
+    VTK_OPTION=( )
     CONTRIB_OPTION=
 else
     echo "Performing full build"
+    
     #Do not use system tesseract, build tesseract from source code instead
-    EMGU_CV_TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
+    EMGU_CV_TESSERACT_OPTION=( -DEMGU_CV_WITH_TESSERACT:BOOL=TRUE )
     TESSERACT_OPTION=-DWITH_TESSERACT:BOOL=FALSE
+
+    cd hdf5
+    mkdir -p build
+    cd build
+    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_SHARED_LIBS:BOOL=FALSE -DBUILD_TESTING:BOOL=FALSE -DHDF5_BUILD_EXAMPLES:BOOL=FALSE -DHDF5_BUILD_TOOLS:BOOL=FALSE -DHDF5_BUILD_UTILS:BOOL=FALSE ..
+    cmake --build . --config Release --parallel 1 --target install
+    cd ../..
     
     cd vtk
     mkdir -p build
     cd build
-    CFLAGS=-fPIC CXXFLAGS=-fPIC cmake -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DVTK_MODULE_ENABLE_VTK_RenderingFreeType:STRING="NO" -DVTK_MODULE_ENABLE_VTK_png:STRING="NO" ..
-    cmake --build . --config Release --parallel --target install
-    VTK_OPTION=-DVTK_DIR:String="$PWD"
+    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DVTK_MODULE_ENABLE_VTK_RenderingFreeType:STRING="NO" -DVTK_MODULE_ENABLE_VTK_png:STRING="NO" ..
+    cmake --build . --config Release --parallel 1 --target install
+    VTK_OPTION=( -DVTK_DIR:String="$PWD" )
     cd ../..
     
     CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules
@@ -49,7 +59,8 @@ fi
 
 cd platforms/raspbian
 cd build
-CFLAGS=-fPIC CXXFLAGS=-fPIC cmake\
+cmake\
+      ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} \
       -DBUILD_TESTS:BOOL=FALSE \
       -DBUILD_PERF_TESTS:BOOL=FALSE \
       -DBUILD_opencv_apps:BOOL=FALSE \
@@ -60,18 +71,20 @@ CFLAGS=-fPIC CXXFLAGS=-fPIC cmake\
       -DBUILD_opencv_ts:BOOL=FALSE \
       -DBUILD_WITH_DEBUG_INFO:BOOL=FALSE \
       -DBUILD_SHARED_LIBS:BOOL=FALSE \
-      $VTK_OPTION \
-      -DCMAKE_BUILD_TYPE:String="Release" \
-      $EMGU_CV_TESSERACT_OPTION \
+      ${VTK_OPTION[@]} \
+      ${EMGU_CV_TESSERACT_OPTION[@]} \
       $TESSERACT_OPTION \
       -DWITH_EIGEN:BOOL=TRUE \
       -DEigen3_DIR:String="$PWD/../../../eigen/build" \
       -DBUILD_TIFF:BOOL=TRUE \
+      -DBUILD_PNG:BOOL=TRUE \
+      -DBUILD_JPEG:BOOL=TRUE \
+      -DBUILD_OPENEXR:BOOL=TRUE \
       -DBUILD_opencv_python2:BOOL=FALSE \
       -DBUILD_opencv_python3:BOOL=FALSE \
       ../../..
 
-C_INCLUDE_PATH=$PWD/../../../eigen/ CPLUS_INCLUDE_PATH=$PWD/../../../eigen/ make
+C_INCLUDE_PATH=$PWD/../../../eigen/:$INSTALL_FOLDER/include/vtk-8.2 CPLUS_INCLUDE_PATH=$PWD/../../../eigen/:$INSTALL_FOLDER/include/vtk-8.2 cmake --build . --config Release --parallel 1 --target package
 #make
 cd ..
 
