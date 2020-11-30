@@ -12,13 +12,13 @@
       <EmguCVUbuntuErrorMessage Condition="'$(EmguCVUbuntuBuildX86)'=='True' AND !Exists('$(EmguCVUbuntuNativeFileX86)')">This package do not contain necessary binary for $(EmguCVUbuntuLinkTarget). X86 is targeted, but file $(EmguCVUbuntuNativeFileX86) is missing. PInvoke may fail on Ubuntu X86 platform.</EmguCVUbuntuErrorMessage>
     </PropertyGroup>
     <ItemGroup Condition="'$(EmguCVUbuntuBuildX64)'=='True' AND Exists('$(EmguCVUbuntuNativeFileX64)')">
-      <None Include="$(MSBuildThisFileDirectory)\*.so">
+      <None Include="$(MSBuildThisFileDirectory)\x64\*.so">
         <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
 	<ItemGroup Condition="'$(EmguCVUbuntuBuildX86)'=='True' AND Exists('$(EmguCVUbuntuNativeFileX86)')">
-      <None Include="$(MSBuildThisFileDirectory)\*.so">
+      <None Include="$(MSBuildThisFileDirectory)\x86\*.so">
         <Link>x86\%(RecursiveDir)%(Filename)%(Extension)</Link>
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
