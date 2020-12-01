@@ -128,12 +128,6 @@ namespace Emgu.CV
                 }
 #endif
 
-                /*
-                else if (Platform.OperationSystem == Emgu.Util.TypeEnum.OS.MacOS)
-                {
-                   subfolder = "..";
-                }*/
-
                 System.Reflection.Assembly asm = typeof(CvInvoke).Assembly; //System.Reflection.Assembly.GetExecutingAssembly();
                 if ((String.IsNullOrEmpty(asm.Location) || !File.Exists(asm.Location)))
                 {
@@ -303,27 +297,48 @@ namespace Emgu.CV
 #endif
             }
 
-            String oldDir = Environment.CurrentDirectory;
+            String oldDir = String.Empty;
+
+            bool setDllDirectorySuccess = false;
             if (!String.IsNullOrEmpty(loadDirectory) && Directory.Exists(loadDirectory))
             {
-                Environment.CurrentDirectory = loadDirectory;
                 if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
                 {
-                    bool setDllDirectorySuccess = Emgu.Util.Toolbox.SetDllDirectory(loadDirectory);
+                    setDllDirectorySuccess = Emgu.Util.Toolbox.SetDllDirectory(loadDirectory);
                     if (!setDllDirectorySuccess)
                     {
                         System.Diagnostics.Debug.WriteLine(String.Format("Failed to set dll directory: {0}", loadDirectory));
                     }
+                } else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS)
+                {
+                    throw new Exception("iOS required static linking, Setting loadDirectory is not supported");
+                }
+                else
+                {
+                    oldDir = Environment.CurrentDirectory;
+                    Environment.CurrentDirectory = loadDirectory;
                 }
             }
-            
+
+            if (setDllDirectorySuccess)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    String.Format(
+                        "Loading Open CV binary for default locations. Current directory: {0}; Additional load folder: {1}",
+                        Environment.CurrentDirectory,
+                        loadDirectory));
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    String.Format(
+                        "Loading Open CV binary for default locations. Current directory: {0}", 
+                        Environment.CurrentDirectory));
+            }
 #endif
 
-            System.Diagnostics.Debug.WriteLine(String.Format("Loading open cv binary from {0}", loadDirectory));
             bool success = true;
-
             string prefix = string.Empty;
-
             foreach (String module in unmanagedModules)
             {
                 string mName = module;
@@ -343,16 +358,37 @@ namespace Emgu.CV
                 fullPath = Path.Combine(loadDirectory, fullPath);
 
                 bool fileExist = File.Exists(fullPath);
-                if (!fileExist)
-                    System.Diagnostics.Trace.WriteLine(String.Format("File {0} do not exist.", fullPath));
-                bool fileExistAndLoaded = fileExist && !IntPtr.Zero.Equals(Toolbox.LoadLibrary(fullPath));
-                if (fileExist && (!fileExistAndLoaded))
-                    System.Diagnostics.Trace.WriteLine(String.Format("File {0} cannot be loaded.", fullPath));
-                success &= fileExistAndLoaded;
+                bool loaded = false;
+
+                if (fileExist)
+                {
+                    //Try to load using the full path
+                    System.Diagnostics.Trace.WriteLine(String.Format("Found full path {0} for {1}. Trying to load it.", fullPath, mName));
+                    loaded = !IntPtr.Zero.Equals(Toolbox.LoadLibrary(fullPath));
+                    if (loaded)
+                        System.Diagnostics.Trace.WriteLine(String.Format("{0} loaded.", mName));
+                    else
+                        System.Diagnostics.Trace.WriteLine(String.Format("Failed to load {0} from {1}.", mName, fullPath));
+                }
+                if (loaded)
+                {
+                    System.Diagnostics.Trace.WriteLine(String.Format("Trying to load {0} using default path.", mName));
+                    loaded = !IntPtr.Zero.Equals(Toolbox.LoadLibrary(mName));
+                    if (loaded)
+                        System.Diagnostics.Trace.WriteLine(String.Format("{0} loaded using default path", mName));
+                    else
+                        System.Diagnostics.Trace.WriteLine(String.Format("Failed to load {0} using default path", mName));
+                }
+
+                if (!loaded)
+                    System.Diagnostics.Trace.WriteLine(String.Format("!!! Failed to load {0}.", mName));
+                success &= loaded;
             }
 
-
-            Environment.CurrentDirectory = oldDir;
+            if (!oldDir.Equals(String.Empty))
+            {
+                Environment.CurrentDirectory = oldDir;
+            }
 
             return success;
         }

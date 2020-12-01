@@ -405,7 +405,7 @@ namespace Emgu.Util
 
         #endregion
 
-        private static System.Collections.Generic.Dictionary<String, AssemblyName> _assemblyNameDict = new Dictionary<String,AssemblyName>();
+        private static System.Collections.Generic.Dictionary<String, AssemblyName> _assemblyNameDict = new Dictionary<String, AssemblyName>();
 
         /// <summary>
         /// Load all the assemblies.
@@ -480,7 +480,7 @@ namespace Emgu.Util
                     {
                         if (typeof(T).IsAssignableFrom(t) && typeof(T) != t)
                         {
-                            types.Add( t );
+                            types.Add(t);
                         }
                     }
                 }
@@ -526,39 +526,38 @@ namespace Emgu.Util
 #else
             if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
             {
+                const int loadLibrarySearchDllLoadDir = 0x00000100;
+                const int loadLibrarySearchDefaultDirs = 0x00001000;
+                const int loadLibrarySearchApplicationDir = 0x00000200;
+                //const int loadLibrarySearchUserDirs = 0x00000400;
+                IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs | loadLibrarySearchApplicationDir);
+                //IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchUserDirs);
+                if (handler == IntPtr.Zero)
+                {
+                    int error = Marshal.GetLastWin32Error();
 
-                    const int loadLibrarySearchDllLoadDir = 0x00000100;
-                    const int loadLibrarySearchDefaultDirs = 0x00001000;
-                    const int loadLibrarySearchApplicationDir = 0x00000200;
-                    //const int loadLibrarySearchUserDirs = 0x00000400;
-                    IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs | loadLibrarySearchApplicationDir );
-                    //IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchUserDirs);
-                    if (handler == IntPtr.Zero)
+                    System.ComponentModel.Win32Exception ex = new System.ComponentModel.Win32Exception(error);
+                    System.Diagnostics.Trace.WriteLine(String.Format("LoadLibraryEx {0} failed with error code {1}: {2}", dllname, (uint)error, ex.Message));
+                    if (error == 5)
                     {
-                        int error = Marshal.GetLastWin32Error();
+                        System.Diagnostics.Trace.WriteLine(String.Format("Please check if the current user has execute permission for file: {0} ", dllname));
+                    }
 
-                        System.ComponentModel.Win32Exception ex = new System.ComponentModel.Win32Exception(error);
-                        System.Diagnostics.Trace.WriteLine(String.Format("LoadLibraryEx {0} failed with error code {1}: {2}", dllname, (uint)error, ex.Message));
-                        if (error == 5)
-                        {
-                            System.Diagnostics.Trace.WriteLine(String.Format("Please check if the current user has execute permission for file: {0} ", dllname));
-                        }
-
-                        //Also try loadPackagedLibrary
-                        IntPtr packagedLibraryHandler = LoadPackagedLibrary(dllname, 0);
-                        if (packagedLibraryHandler == IntPtr.Zero)
-                        {
-                            error = Marshal.GetLastWin32Error();
-                            ex = new System.ComponentModel.Win32Exception(error);
-                            System.Diagnostics.Debug.WriteLine(String.Format("LoadPackagedLibrary {0} failed with error code {1}: {2}", dllname, (uint)error, ex.Message));
-                        }
-                        else
-                        {
-                            System.Diagnostics.Trace.WriteLine(String.Format("LoadPackagedLibrary loaded: {0}", dllname));
-                            return packagedLibraryHandler;
-                        }
-                    } 
-                    return handler;
+                    //Also try loadPackagedLibrary
+                    IntPtr packagedLibraryHandler = LoadPackagedLibrary(dllname, 0);
+                    if (packagedLibraryHandler == IntPtr.Zero)
+                    {
+                        error = Marshal.GetLastWin32Error();
+                        ex = new System.ComponentModel.Win32Exception(error);
+                        System.Diagnostics.Debug.WriteLine(String.Format("LoadPackagedLibrary {0} failed with error code {1}: {2}", dllname, (uint)error, ex.Message));
+                    }
+                    else
+                    {
+                        System.Diagnostics.Trace.WriteLine(String.Format("LoadPackagedLibrary loaded: {0}", dllname));
+                        return packagedLibraryHandler;
+                    }
+                }
+                return handler;
             }
             else
             {
