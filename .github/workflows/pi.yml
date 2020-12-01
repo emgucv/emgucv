@@ -1,4 +1,4 @@
-name: Ubuntu build.
+name: Raspberry Pi build
 
 on:
   push:
@@ -9,23 +9,23 @@ on:
 jobs:
   build:
 
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: [self-hosted, Linux, ARM]
 
     steps:
     - uses: actions/checkout@v2
     - name: Check out submodules
       run: git submodule update --init --recursive
     - name: Build Emgu CV native binary
-      run: ./cmake_configure.sh
-      working-directory: ${{ github.workspace }}/platforms/ubuntu/20.04
+      run: ./cmake_configure
+      working-directory: ${{ github.workspace }}/platforms/raspbian
     - name: Build Emgu CV package binary
       run: make package
-      working-directory: ${{ github.workspace }}/platforms/ubuntu/20.04/build/
+      working-directory: ${{ github.workspace }}/platforms/raspbian/build/
     - uses: actions/upload-artifact@v2
       with:
-        name: emgucv-ubuntu-zip-package
-        path: ${{ github.workspace }}/platforms/ubuntu/20.04/build/*.zip
+        name: emgucv-raspbian-zip-package
+        path: ${{ github.workspace }}/platforms/raspbian/build/*.zip
     - uses: actions/upload-artifact@v2
       with:
-        name: emgucv-ubuntu-nuget-package
+        name: emgucv-raspbian-nuget-package
         path: ${{ github.workspace }}/platforms/nuget/*.nupkg 
