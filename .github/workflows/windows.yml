@@ -33,3 +33,13 @@ jobs:
       with:
         name: emgucv-windows-zip-package
         path: ${{ github.workspace }}\build_x64\*.zip
+    - name: Clean up the non-gpu build
+      run: .\git-clean.bat 
+      working-directory: ${{ github.workspace }}\miscellaneous
+    - name: Build Emgu CV 64-bit native binary with GPU
+      run: .\Build_Binary_x86.bat 64 gpu vc no-openni no-doc package build nuget
+      working-directory: ${{ github.workspace }}\platforms\windows\
+    - uses: actions/upload-artifact@v2
+      with:
+        name: emgucv-windows-gpu-zip-package
+        path: ${{ github.workspace }}\build_x64\*.zip
