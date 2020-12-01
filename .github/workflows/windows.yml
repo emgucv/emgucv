@@ -9,9 +9,12 @@ on:
 jobs:
   build:
 
-    #runs-on: windows-latest
+    # runs-on: windows-latest
     runs-on: [self-hosted, Windows]
 
+    # two days time out
+    timeout-minutes: 2880
+    
     steps:
     - uses: actions/checkout@v2
     - name: Check out submodules
