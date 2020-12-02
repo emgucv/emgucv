@@ -122,9 +122,19 @@ namespace Emgu.CV
                 subfolder = IntPtr.Size == 8 ? "x86_64" : "x86";
 #elif UNITY_STANDALONE_WIN
 #else
-                if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
+                if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows 
+                    || Platform.OperationSystem == Emgu.Util.Platform.OS.Linux)
                 {
-                    subfolder = IntPtr.Size == 8 ? "x64" : "x86";
+                    if (RuntimeInformation.ProcessArchitecture == Architecture.X86)
+                        subfolder = "x86";
+                    else if (RuntimeInformation.ProcessArchitecture == Architecture.X64)
+                        subfolder = "x64";
+                    else if (RuntimeInformation.ProcessArchitecture == Architecture.Arm)
+                        subfolder = "arm";
+                    else if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+                        subfolder = "arm64";
+
+                    //subfolder = IntPtr.Size == 8 ? "x64" : "x86";
                 }
 #endif
 
