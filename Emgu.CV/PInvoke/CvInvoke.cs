@@ -148,15 +148,28 @@ namespace Emgu.CV
                     else
                     {
                         //we may be running in a debugger visualizer under a unit test in this case
-                        String visualStudioDir = AppDomain.CurrentDomain.BaseDirectory;
-                        DirectoryInfo visualStudioDirInfo = new DirectoryInfo(visualStudioDir);
+                        String baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                        DirectoryInfo baseDirectoryInfo = new DirectoryInfo(baseDirectory);
                         String debuggerVisualizerPath =
-                            Path.Combine(visualStudioDirInfo.Parent.FullName, "Packages", "Debugger", "Visualizers");
+                            Path.Combine(baseDirectoryInfo.Parent.FullName, "Packages", "Debugger", "Visualizers");
 
                         if (Directory.Exists(debuggerVisualizerPath))
                             loadDirectory = debuggerVisualizerPath;
                         else
-                            loadDirectory = String.Empty;
+                        {
+                            //we may also be running in a .Net native 
+                            String netNativeDirectory = Path.Combine(baseDirectoryInfo.FullName, subfolder);
+                            if (Directory.Exists(netNativeDirectory))
+                            {
+                                loadDirectory = baseDirectoryInfo.FullName;
+                            }
+                            else
+                            {
+                                loadDirectory = String.Empty;
+                            }
+                            
+                        }
+
                         /*
                            loadDirectory = Path.GetDirectoryName(new UriBuilder(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).Path);
 
@@ -362,6 +375,8 @@ namespace Emgu.CV
                     mName = module.Replace("_64", String.Empty);
                 }
 
+                bool optionalComponent = mName.Contains("ffmpeg");
+
                 String fullPath = Path.Combine(prefix, mName);
 
                 //Use absolute path for Windows Desktop
@@ -392,7 +407,9 @@ namespace Emgu.CV
 
                 if (!loaded)
                     System.Diagnostics.Trace.WriteLine(String.Format("!!! Failed to load {0}.", mName));
-                success &= loaded;
+
+                if (!optionalComponent)
+                    success &= loaded;
             }
 
             if (!oldDir.Equals(String.Empty))
@@ -533,8 +550,17 @@ namespace Emgu.CV
 
             if (Emgu.Util.Platform.OperationSystem != Emgu.Util.Platform.OS.IOS)
             {
-                //Use the custom error handler
-                RedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
+                try
+                {
+                    //Use the custom error handler
+                    RedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
+                }
+                catch (Exception e)
+                {
+                    System.Diagnostics.Trace.WriteLine(String.Format("Failed to register error handler using RedirectError : {0}",  e.StackTrace)); 
+                    throw;
+                }
+                
             }
         }
 
