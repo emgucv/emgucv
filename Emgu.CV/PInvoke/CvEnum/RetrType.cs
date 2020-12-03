@@ -26,6 +26,10 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Retrieve all the contours and reconstructs the full hierarchy of nested contours 
         /// </summary>
-        Tree = 3
+        Tree = 3,
+        /// <summary>
+        /// Flood fill type
+        /// </summary>
+        Floodfill = 4
     }
 }
