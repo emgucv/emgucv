@@ -2,10 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
       <EmguCvLinkTarget>UWP</EmguCvLinkTarget>
-      <EmguCvBuildUwpX86 Condition="'$(TargetPlatformIdentifier)'=='UAP' AND ('$(Platform)'=='x86' OR '$(Platform)'=='AnyCPU')">True</EmguCvBuildUwpX86>
-      <EmguCvBuildUwpX64 Condition="'$(TargetPlatformIdentifier)'=='UAP' AND ('$(Platform)'=='x64' OR '$(Platform)'=='AnyCPU')">True</EmguCvBuildUwpX64>
-	  <EmguCvBuildUwpArm Condition="'$(TargetPlatformIdentifier)'=='UAP' AND ('$(Platform)'=='ARM' OR '$(Platform)'=='AnyCPU')">True</EmguCvBuildUwpArm>
-	  <EmguCvBuildUwpArm64 Condition="'$(TargetPlatformIdentifier)'=='UAP' AND ('$(Platform)'=='ARM64' OR '$(Platform)'=='AnyCPU')">True</EmguCvBuildUwpArm64>
+      <EmguCvBuildUwpX86 Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x86'">True</EmguCvBuildUwpX86>
+      <EmguCvBuildUwpX64 Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x64'">True</EmguCvBuildUwpX64>
+	  <EmguCvBuildUwpArm Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='ARM'">True</EmguCvBuildUwpArm>
+	  <EmguCvBuildUwpArm64 Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='ARM64'">True</EmguCvBuildUwpArm64>
       <EmguCVNativeFileUwpX64>$(MSBuildThisFileDirectory)\UWP\x64\cvextern.dll</EmguCVNativeFileUwpX64>
       <EmguCVNativeFileUwpX86>$(MSBuildThisFileDirectory)\UWP\x86\cvextern.dll</EmguCVNativeFileUwpX86>
 	  <EmguCVNativeFileUwpArm>$(MSBuildThisFileDirectory)\UWP\arm\cvextern.dll</EmguCVNativeFileUwpArm>
@@ -22,28 +22,28 @@
 	<!-- Windows 10 UWP (x86) -->
     <ItemGroup Condition="'$(EmguCvBuildUwpX86)'=='True' AND Exists('$(EmguCVNativeFileUwpX86)')">
         <None Include="$(EmguCVNativeFileUwpX86)" >
-          <Link>x86\cvextern.dll</Link>
+          <Link>cvextern.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 	<!-- Windows 10 UWP (x64) -->
     <ItemGroup Condition="'$(EmguCvBuildUwpX64)'=='True' AND Exists('$(EmguCVNativeFileUwpX64)')">
         <None Include="$(EmguCVNativeFileUwpX64)" >
-          <Link>x64\cvextern.dll</Link>
+          <Link>cvextern.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
     <!-- Windows 10 UWP (ARM) -->
     <ItemGroup Condition="'$(EmguCvBuildUwpArm)'=='True' AND Exists('$(EmguCVNativeFileUwpArm)')">
         <None Include="$(EmguCVNativeFileUwpArm)" >
-          <Link>arm\cvextern.dll</Link>
+          <Link>cvextern.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 	<!-- Windows 10 UWP (ARM64) -->
     <ItemGroup Condition="'$(EmguCvBuildUwpArm64)'=='True' AND Exists('$(EmguCVNativeFileUwpArm64)')">
         <None Include="$(EmguCVNativeFileUwpArm64)" >
-          <Link>arm64\cvextern.dll</Link>
+          <Link>cvextern.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>

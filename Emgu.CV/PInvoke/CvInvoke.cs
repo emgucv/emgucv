@@ -125,6 +125,7 @@ namespace Emgu.CV
                 if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows 
                     || Platform.OperationSystem == Emgu.Util.Platform.OS.Linux)
                 {
+                    //var fd = RuntimeInformation.FrameworkDescription;
                     if (RuntimeInformation.ProcessArchitecture == Architecture.X86)
                         subfolder = "x86";
                     else if (RuntimeInformation.ProcessArchitecture == Architecture.X64)
@@ -150,24 +151,19 @@ namespace Emgu.CV
                         //we may be running in a debugger visualizer under a unit test in this case
                         String baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
                         DirectoryInfo baseDirectoryInfo = new DirectoryInfo(baseDirectory);
-                        String debuggerVisualizerPath =
-                            Path.Combine(baseDirectoryInfo.Parent.FullName, "Packages", "Debugger", "Visualizers");
+                        String debuggerVisualizerPath = String.Empty;
+                        if (baseDirectoryInfo.Parent != null)
+                            debuggerVisualizerPath = Path.Combine(baseDirectoryInfo.Parent.FullName, "Packages", "Debugger", "Visualizers");
 
-                        if (Directory.Exists(debuggerVisualizerPath))
+                        if (!debuggerVisualizerPath.Equals(String.Empty) && Directory.Exists(debuggerVisualizerPath))
                             loadDirectory = debuggerVisualizerPath;
                         else
                         {
-                            //we may also be running in a .Net native 
-                            String netNativeDirectory = Path.Combine(baseDirectoryInfo.FullName, subfolder);
-                            if (Directory.Exists(netNativeDirectory))
+                            loadDirectory = baseDirectoryInfo.FullName;
+                            if (!Directory.Exists(Path.Combine(baseDirectoryInfo.FullName, subfolder)))
                             {
-                                loadDirectory = baseDirectoryInfo.FullName;
+                                subfolder = String.Empty;
                             }
-                            else
-                            {
-                                loadDirectory = String.Empty;
-                            }
-                            
                         }
 
                         /*
@@ -204,6 +200,10 @@ namespace Emgu.CV
                 else
                 {
                     loadDirectory = Path.GetDirectoryName(asm.Location);
+                    if ((loadDirectory != null) && (!Directory.Exists(Path.Combine(loadDirectory, subfolder))))
+                    {
+                        subfolder = String.Empty;
+                    }
                 }
                 /*
                 FileInfo file = new FileInfo(asm.Location);
@@ -310,7 +310,7 @@ namespace Emgu.CV
                   else       
 #endif
                         {
-                            Debug.WriteLine("No suitable directory found to load unmanaged modules");
+                            System.Diagnostics.Debug.WriteLine("No suitable directory found to load unmanaged modules");
                             return false;
                         }
                     }
@@ -325,7 +325,11 @@ namespace Emgu.CV
             bool addDllDirectorySuccess = false;
             if (!String.IsNullOrEmpty(loadDirectory) && Directory.Exists(loadDirectory))
             {
-                if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
+                if (Platform.ClrType == Platform.Clr.DotNetNative )
+                {
+                    //do nothing
+                }
+                else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows )
                 {
                     addDllDirectorySuccess = Emgu.Util.Toolbox.AddDllDirectory(loadDirectory);
                     if (!addDllDirectorySuccess)
@@ -334,7 +338,8 @@ namespace Emgu.CV
                     }
                 } else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS)
                 {
-                    throw new Exception("iOS required static linking, Setting loadDirectory is not supported");
+                    //do nothing
+                    System.Diagnostics.Debug.WriteLine("iOS required static linking, Setting loadDirectory is not supported");
                 }
                 else
                 {

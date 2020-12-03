@@ -520,9 +520,9 @@ namespace Emgu.Util
         public static IntPtr LoadLibrary(String dllname)
         {
 #if UNITY_EDITOR_WIN
-          const int loadLibrarySearchDllLoadDir = 0x00000100;
-          const int loadLibrarySearchDefaultDirs = 0x00001000;
-          return LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
+            const int loadLibrarySearchDllLoadDir = 0x00000100;
+            const int loadLibrarySearchDefaultDirs = 0x00001000;
+            return LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
 #else
             if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
             {

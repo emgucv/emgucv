@@ -25,17 +25,14 @@ namespace Emgu.Util
             _os = OS.Android;
             _runtime = Clr.Unity;
 #else
+            if (RuntimeInformation.FrameworkDescription.ToLower().StartsWith(".net native"))
+                _runtime = Clr.DotNetNative;
+            else if (RuntimeInformation.FrameworkDescription.ToLower().StartsWith(".net core"))
+                _runtime = Clr.DotNet;
+
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 _os = OS.Windows;
-                if (RuntimeInformation.FrameworkDescription.StartsWith(".NET Native",
-                        StringComparison.OrdinalIgnoreCase) ||
-                    RuntimeInformation.FrameworkDescription.StartsWith(".NET Core", StringComparison.OrdinalIgnoreCase))
-                    _runtime = Clr.NetFxCore;
-                else
-                {
-                    _runtime = Clr.DotNet;
-                }
             }
             else if (Emgu.Util.Toolbox.FindAssembly("Mono.Android.dll") != null)
             {
@@ -50,18 +47,15 @@ namespace Emgu.Util
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 _os = OS.MacOS;
-                _runtime = Clr.Mono;
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 _os = OS.Linux;
-                _runtime = Clr.Mono;
             }
             else
             {
                 _os = OS.Unknown;
                 _runtime = Clr.Unknown;
-
             }
 #endif
         }
@@ -129,7 +123,7 @@ namespace Emgu.Util
             /// <summary>
             /// Windows Store app runtime
             /// </summary>
-            NetFxCore,
+            DotNetNative,
             /// <summary>
             /// Mono runtime
             /// </summary>

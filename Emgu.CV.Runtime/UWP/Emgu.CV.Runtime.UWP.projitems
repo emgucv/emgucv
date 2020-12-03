@@ -13,7 +13,7 @@
   </PropertyGroup>
   <Choose>
     <!-- Windows 10 UWP (32bit) -->
-    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND ('$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86')">
+    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x86'">
       <PropertyGroup>
         <EmguCVLinkTarget>Windows 10 UWP (32bit)</EmguCVLinkTarget>
         <EmguCVNativeFileUwpX86>$(EmguCVBinaryDir)\UWP\x86\cvextern.dll</EmguCVNativeFileUwpX86>
@@ -22,13 +22,13 @@
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFileUwpX86)" Condition="Exists('$(EmguCVNativeFileUwpX86)')">
-          <Link>x86\cvextern.dll</Link>
+          <Link>cvextern.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
     </When>
     <!-- Windows 10 UWP (64bit) -->
-    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND ('$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64')">
+    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x64'">
       <PropertyGroup>
         <EmguCVLinkTarget>Windows 10 UWP (64bit)</EmguCVLinkTarget>
         <EmguCVNativeFileUwpX64>$(EmguCVBinaryDir)\UWP\x64\cvextern.dll</EmguCVNativeFileUwpX64>
@@ -37,13 +37,13 @@
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFileUwpX64)" Condition="Exists('$(EmguCVNativeFileUwpX64)')">
-          <Link>x64\cvextern.dll</Link>
+          <Link>cvextern.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
     </When>
     <!-- Windows 10 UWP (ARM) -->
-    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND ('$(Platform)'=='AnyCPU' OR '$(Platform)'=='ARM')">
+    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='ARM'">
       <PropertyGroup>
         <EmguCVLinkTarget>Windows 10 UWP (ARM)</EmguCVLinkTarget>
         <EmguCVNativeFileUwpArm>$(EmguCVBinaryDir)\UWP\arm\cvextern.dll</EmguCVNativeFileUwpArm>
@@ -52,13 +52,13 @@
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFileUwpArm)" Condition="Exists('$(EmguCVNativeFileUwpArm)')">
-          <Link>arm\cvextern.dll</Link>
+          <Link>cvextern.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
     </When>
 	<!-- Windows 10 UWP (ARM64) -->
-    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND ('$(Platform)'=='AnyCPU' OR '$(Platform)'=='ARM64')">
+    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='ARM64'">
       <PropertyGroup>
         <EmguCVLinkTarget>Windows 10 UWP (ARM64)</EmguCVLinkTarget>
         <EmguCVNativeFileUwpArm64>$(EmguCVBinaryDir)\UWP\arm64\cvextern.dll</EmguCVNativeFileUwpArm64>
@@ -67,7 +67,7 @@
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFileUwpArm64)" Condition="Exists('$(EmguCVNativeFileUwpArm64)')">
-          <Link>arm64\cvextern.dll</Link>
+          <Link>cvextern.dll</Link>
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
       </ItemGroup>
