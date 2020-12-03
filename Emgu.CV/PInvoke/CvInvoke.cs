@@ -53,7 +53,7 @@ namespace Emgu.CV
         /// Attempts to load opencv modules from the specific location
         /// </summary>
         /// <param name="loadDirectory">The directory where the unmanaged modules will be loaded. If it is null, the default location will be used.</param>
-        /// <param name="unmanagedModules">The names of opencv modules. e.g. "opencv_cxcore.dll" on windows.</param>
+        /// <param name="unmanagedModules">The names of opencv modules. e.g. "opencv_core.dll" on windows.</param>
         /// <returns>True if all the modules has been loaded successfully</returns>
         /// <remarks>If <paramref name="loadDirectory"/> is null, the default location on windows is the dll's path appended by either "x64" or "x86", depends on the applications current mode.</remarks>
         public static bool LoadUnmanagedModules(String loadDirectory, params String[] unmanagedModules)
@@ -322,15 +322,15 @@ namespace Emgu.CV
 
             String oldDir = String.Empty;
 
-            bool setDllDirectorySuccess = false;
+            bool addDllDirectorySuccess = false;
             if (!String.IsNullOrEmpty(loadDirectory) && Directory.Exists(loadDirectory))
             {
                 if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
                 {
-                    setDllDirectorySuccess = Emgu.Util.Toolbox.SetDllDirectory(loadDirectory);
-                    if (!setDllDirectorySuccess)
+                    addDllDirectorySuccess = Emgu.Util.Toolbox.AddDllDirectory(loadDirectory);
+                    if (!addDllDirectorySuccess)
                     {
-                        System.Diagnostics.Debug.WriteLine(String.Format("Failed to set dll directory: {0}", loadDirectory));
+                        System.Diagnostics.Debug.WriteLine(String.Format("Failed to add dll directory: {0}", loadDirectory));
                     }
                 } else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS)
                 {
@@ -343,7 +343,7 @@ namespace Emgu.CV
                 }
             }
 
-            if (setDllDirectorySuccess)
+            if (addDllDirectorySuccess)
             {
                 System.Diagnostics.Debug.WriteLine(
                     String.Format(
@@ -560,7 +560,6 @@ namespace Emgu.CV
                     System.Diagnostics.Trace.WriteLine(String.Format("Failed to register error handler using RedirectError : {0}",  e.StackTrace)); 
                     throw;
                 }
-                
             }
         }
 

@@ -528,9 +528,9 @@ namespace Emgu.Util
             {
                 const int loadLibrarySearchDllLoadDir = 0x00000100;
                 const int loadLibrarySearchDefaultDirs = 0x00001000;
-                const int loadLibrarySearchApplicationDir = 0x00000200;
+                //const int loadLibrarySearchApplicationDir = 0x00000200;
                 //const int loadLibrarySearchUserDirs = 0x00000400;
-                IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs | loadLibrarySearchApplicationDir);
+                IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
                 //IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchUserDirs);
                 if (handler == IntPtr.Zero)
                 {
@@ -597,6 +597,7 @@ namespace Emgu.Util
             [MarshalAs(UnmanagedType.LPStr)]
             String dllname, int mode);
 
+        /*
         /// <summary>
         /// Decrements the reference count of the loaded dynamic-link library (DLL). When the reference count reaches zero, the module is unmapped from the address space of the calling process and the handle is no longer valid
         /// </summary>
@@ -606,6 +607,17 @@ namespace Emgu.Util
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool FreeLibrary(IntPtr handle);
 
+        
+        /// <summary>
+        /// Set the directory to the search path used to locate DLLs for the application
+        /// </summary>
+        /// <param name="path">The directory to be searched for DLLs</param>
+        /// <returns>True if success</returns>
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetDllDirectory(String path);
+        */
+
         /// <summary>
         /// Adds a directory to the search path used to locate DLLs for the application
         /// </summary>
@@ -613,7 +625,7 @@ namespace Emgu.Util
         /// <returns>True if success</returns>
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool SetDllDirectory(String path);
+        public static extern bool AddDllDirectory(String path);
 
     }
 }
