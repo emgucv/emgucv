@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(WIN32)
+IF(TARGET Emgu.CV.Platform.NetFramework)
   PROJECT(Example.Aruco)
   BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/Windows.Desktop/Emgu.CV.Example.sln" "Aruco" "" ALL)
   set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Emgu.CV.Examples")
