@@ -28,16 +28,25 @@ namespace Emgu.CV.XamarinForms
                    CvInvoke.OclGetPlatformsSummary());
             }
 
-            
-            var dnnBackends = DnnInvoke.AvailableBackends;
-            List<String> dnnBackendsText = new List<string>();
-            foreach (var dnnBackend in dnnBackends)
+            var openCVConfigDict = CvInvoke.ConfigDict;
+            bool haveDNN = (openCVConfigDict["HAVE_OPENCV_DNN"] != 0);
+            String dnnText;
+            if (haveDNN)
             {
-                dnnBackendsText.Add(String.Format("{0} - {1}", dnnBackend.Backend, dnnBackend.Target));
+                var dnnBackends = DnnInvoke.AvailableBackends;
+                List<String> dnnBackendsText = new List<string>();
+                foreach (var dnnBackend in dnnBackends)
+                {
+                    dnnBackendsText.Add(String.Format("{0} - {1}", dnnBackend.Backend, dnnBackend.Target));
+                }
+
+                dnnText = String.Join(";", dnnBackendsText.ToArray());
+            }
+            else
+            {
+                dnnText = "Not available on this platform";
             }
 
-            String dnnText = String.Join(";", dnnBackendsText.ToArray());
-            
 
             String osDescription = Emgu.Util.Platform.OperationSystem.ToString();
 
