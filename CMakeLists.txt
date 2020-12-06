@@ -1051,16 +1051,17 @@ ENDIF()
 
 SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "")
 IF(HAVE_WINDESKTOP_X86)
-	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x86\\*.dll\" exclude=\"..\\..\\..\\libs\\x86\\cu*.dll;..\\..\\..\\libs\\x86\\npp*.dll;..\\..\\..\\libs\\x86\\concrt*.dll;..\\..\\..\\libs\\x86\\msvcp*.dll;..\\..\\..\\libs\\x86\\vcruntime*.dll\" target=\"build\\x86\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x86\\*.dll\" exclude=\"..\\..\\..\\libs\\x86\\cu*.dll;..\\..\\..\\libs\\x86\\npp*.dll;..\\..\\..\\libs\\x86\\concrt*.dll;..\\..\\..\\libs\\x86\\msvcp*.dll;..\\..\\..\\libs\\x86\\vcruntime*.dll;..\\..\\..\\libs\\x86\\vccorlib*.dll\" target=\"build\\x86\" />")
 	SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST} 
 	<file src=\"..\\..\\..\\libs\\x86\\concrt*.dll\" target=\"build\\x86\" /> 
 	<file src=\"..\\..\\..\\libs\\x86\\msvcp*.dll\" target=\"build\\x86\" /> 
 	<file src=\"..\\..\\..\\libs\\x86\\vcruntime*.dll\" target=\"build\\x86\" />     
+	<file src=\"..\\..\\..\\libs\\x86\\vccorlib*.dll\" target=\"build\\x86\" />     
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 IF(HAVE_WINDESKTOP_X64)
-	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cu*.dll;..\\..\\..\\libs\\x64\\npp*.dll;..\\..\\..\\libs\\x64\\concrt*.dll;..\\..\\..\\libs\\x64\\msvcp*.dll;..\\..\\..\\libs\\x64\\vcruntime*.dll\" target=\"build\\x64\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cu*.dll;..\\..\\..\\libs\\x64\\npp*.dll;..\\..\\..\\libs\\x64\\concrt*.dll;..\\..\\..\\libs\\x64\\msvcp*.dll;..\\..\\..\\libs\\x64\\vcruntime*.dll;..\\..\\..\\libs\\x64\\vccorlib*.dll\" target=\"build\\x64\" />")
 	#Also added configuration files from OpenVino
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.xml\" target=\"build\\x64\" />")
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.json\" target=\"build\\x64\" />")
@@ -1070,6 +1071,7 @@ IF(HAVE_WINDESKTOP_X64)
 	<file src=\"..\\..\\..\\libs\\x64\\concrt*.dll\" target=\"build\\x64\" /> 
 	<file src=\"..\\..\\..\\libs\\x64\\msvcp*.dll\" target=\"build\\x64\" /> 
 	<file src=\"..\\..\\..\\libs\\x64\\vcruntime*.dll\" target=\"build\\x64\" />     
+	<file src=\"..\\..\\..\\libs\\x64\\vccorlib*.dll\" target=\"build\\x64\" />     
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
