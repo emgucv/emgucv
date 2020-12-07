@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if (UNITY_WSA || UNITY_STANDALONE_WIN)
+#if UNITY_WSA
 using System;
 using System.Runtime.InteropServices;
 
