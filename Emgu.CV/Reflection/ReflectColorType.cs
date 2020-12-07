@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 
-#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR || UNITY_WEBGL
+#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR || UNITY_WEBGL
 using UnityEngine;
 #elif NETFX_CORE
 using Windows.UI;
@@ -40,9 +40,8 @@ namespace Emgu.CV.Reflection
          //create default color
          Color[] res = new Color[color.Dimension];
          for (int i = 0; i < res.Length; i++)
-            //res[i] = Color.FromArgb(255, 125, 125, 125);
-#if ( UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_WEBGL)
-            res[i] = Color.gray;
+#if (UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_WSA || UNITY_WEBGL)
+                res[i] = Color.gray;
 #else
             res[i] = Color.Gray;
 #endif

@@ -36,10 +36,10 @@ public class FaceDetection : MonoBehaviour
         {
             TextAsset cascadeModel = Resources.Load<TextAsset>(fileName);
 
-#if UNITY_METRO
+#if UNITY_WSA
             UnityEngine.Windows.File.WriteAllBytes(filePath, cascadeModel.bytes);
 #else
-         File.WriteAllBytes(filePath, cascadeModel.bytes);
+            File.WriteAllBytes(filePath, cascadeModel.bytes);
 #endif
         }
 

@@ -30,7 +30,7 @@ namespace Emgu.CV.Structure
             //TODO: implement this
         }
 
-#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR
+#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR
         /// <summary>
         /// Create a Bgr565 color using the System.Drawing.Color
         /// </summary>

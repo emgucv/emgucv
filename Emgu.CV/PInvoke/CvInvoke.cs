@@ -58,70 +58,19 @@ namespace Emgu.CV
         /// <remarks>If <paramref name="loadDirectory"/> is null, the default location on windows is the dll's path appended by either "x64" or "x86", depends on the applications current mode.</remarks>
         public static bool LoadUnmanagedModules(String loadDirectory, params String[] unmanagedModules)
         {
-#if NETFX_CORE
-         if (loadDirectory != null)
-         {
-            throw new NotImplementedException("Loading modules from a specific directory is not implemented in Windows Store App");
-         }
-
-         String subfolder = String.Empty;
-         if (Emgu.Util.Platform.OperationSystem == Emgu.Util.TypeEnum.OS.Windows) //|| Platform.OperationSystem == Emgu.Util.TypeEnum.OS.WindowsPhone)
-         {
-            if (IntPtr.Size == 8)
-            {  //64bit process
-#if UNITY_METRO
-               subfolder = "x86_64";
-#else
-               subfolder = String.Empty;
-#endif
-            }
-            else
+#if UNITY_WSA
+            if (loadDirectory != null)
             {
-               subfolder = String.Empty;
+                throw new NotImplementedException("Loading modules from a specific directory is not implemented in Windows Store App");
             }
-         }
-
-         Windows.Storage.StorageFolder installFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
-         
-#if UNITY_METRO
-         loadDirectory = Path.Combine(
-            Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName( installFolder.Path))))
-            , "Plugins", "Metro", subfolder);
+            //Let unity handle the library loading
+            return true;
 #else
-         loadDirectory = Path.Combine(installFolder.Path, subfolder);
-#endif
-
-         var t = System.Threading.Tasks.Task.Run(async () =>
-         {
-            List<string> files = new List<string>();
-            Windows.Storage.StorageFolder loadFolder = installFolder;
-            try
-            {
-               
-               if (!String.IsNullOrEmpty(subfolder))
-                  loadFolder = await installFolder.GetFolderAsync(subfolder);
-
-               foreach (var file in await loadFolder.GetFilesAsync())
-                  files.Add(file.Name);
-            }
-            catch (Exception e)
-            {
-               System.Diagnostics.Debug.WriteLine(String.Format("Unable to retrieve files in folder '{0}':{1}", loadFolder.Path, e.StackTrace));
-            }
-
-            return files;
-         });
-         t.Wait();
-
-         List<String> loadableFiles = t.Result;
-#else
+            String oldDir = String.Empty;
             if (loadDirectory == null)
             {
                 String subfolder = String.Empty;
-#if UNITY_EDITOR_WIN
-                subfolder = IntPtr.Size == 8 ? "x86_64" : "x86";
-#elif UNITY_STANDALONE_WIN
-#else
+
                 if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows 
                     || Platform.OperationSystem == Emgu.Util.Platform.OS.Linux)
                 {
@@ -137,7 +86,6 @@ namespace Emgu.CV
 
                     //subfolder = IntPtr.Size == 8 ? "x64" : "x86";
                 }
-#endif
 
                 System.Reflection.Assembly asm = typeof(CvInvoke).Assembly; //System.Reflection.Assembly.GetExecutingAssembly();
                 if ((String.IsNullOrEmpty(asm.Location) || !File.Exists(asm.Location)))
@@ -320,8 +268,6 @@ namespace Emgu.CV
 #endif
             }
 
-            String oldDir = String.Empty;
-
             bool addDllDirectorySuccess = false;
             if (!String.IsNullOrEmpty(loadDirectory) && Directory.Exists(loadDirectory))
             {
@@ -363,7 +309,7 @@ namespace Emgu.CV
                         "Loading Open CV binary for default locations. Current directory: {0}", 
                         Environment.CurrentDirectory));
             }
-#endif
+
 
             bool success = true;
             string prefix = string.Empty;
@@ -382,10 +328,10 @@ namespace Emgu.CV
 
                 bool optionalComponent = mName.Contains("ffmpeg");
 
-                String fullPath = Path.Combine(prefix, mName);
+                String moduleName = Path.Combine(prefix, mName);
 
                 //Use absolute path for Windows Desktop
-                fullPath = Path.Combine(loadDirectory, fullPath);
+                String fullPath = Path.Combine(loadDirectory, moduleName);
 
                 bool fileExist = File.Exists(fullPath);
                 bool loaded = false;
@@ -423,6 +369,7 @@ namespace Emgu.CV
             }
 
             return success;
+#endif
         }
 
         /// <summary>
@@ -508,7 +455,8 @@ namespace Emgu.CV
                         return libraryLoaded;
                     }
                 }
-            } else if (Emgu.Util.Platform.OperationSystem != Emgu.Util.Platform.OS.MacOS)
+            }
+            else if (Emgu.Util.Platform.OperationSystem != Emgu.Util.Platform.OS.MacOS)
             {
                 String formatString = GetModuleFormatString();
                 for (int i = 0; i < modules.Length; ++i)
@@ -562,7 +510,7 @@ namespace Emgu.CV
                 }
                 catch (Exception e)
                 {
-                    System.Diagnostics.Trace.WriteLine(String.Format("Failed to register error handler using RedirectError : {0}",  e.StackTrace)); 
+                    System.Diagnostics.Trace.WriteLine(String.Format("Failed to register error handler using RedirectError : {0}", e.StackTrace));
                     throw;
                 }
             }

@@ -4,9 +4,7 @@
 using System;
 using System.Text;
 using System.Xml;
-#if !(UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR)
 using System.Xml.Linq;
-#endif
 using System.Xml.Serialization;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -22,7 +20,6 @@ namespace Emgu.Util
     /// </summary>
     public static class Toolbox
     {
-#if !(UNITY_ANDROID || UNITY_IPHONE || UNITY_STANDALONE || UNITY_METRO || UNITY_EDITOR )
         #region xml serilization and deserialization
         /// <summary>
         /// Convert an object to an xml document
@@ -108,7 +105,7 @@ namespace Emgu.Util
                 return (T)(new XmlSerializer(typeof(T))).Deserialize(stringReader);
         }
         #endregion
-#endif
+
 
         /// <summary>
         /// Similar to Marshal.SizeOf function
