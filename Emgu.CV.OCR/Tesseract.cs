@@ -261,19 +261,6 @@ namespace Emgu.CV.OCR
         public void Init(String dataPath, String language, OcrEngineMode mode)
         {
             /*
-            #if !NETFX_CORE
-                        if (!(dataPath.Length > 0 && dataPath.Substring(dataPath.Length - 1).ToCharArray()[0] == System.IO.Path.DirectorySeparatorChar))
-                        {  //if the data path end in slash
-                            int lastSlash = dataPath.LastIndexOf(System.IO.Path.DirectorySeparatorChar);
-                            if (lastSlash != -1)
-                            {
-                                //there is a directory separator, get the path up to the separator, the same way tesseract-ocr calculate the folder
-                                dataPath = dataPath.Substring(0, lastSlash + 1);
-                            }
-                        }
-            #endif
-            */
-            /*
             if (!System.IO.Directory.Exists(System.IO.Path.Combine(dataPath, "tessdata")))
             {
                throw new ArgumentException(String.Format("The directory {0} doesn't exist!", Path.Combine(dataPath, "tessdata")));
@@ -296,17 +283,13 @@ namespace Emgu.CV.OCR
                 int initResult = OcrInvoke.TessBaseAPIInit(_ptr, csDataPath, csLanguage, mode);
                 if (initResult != 0)
                 {
-#if !NETFX_CORE
                     if (dataPath.Equals(String.Empty))
                         dataPath = Path.GetFullPath(".");
-#endif
                     throw new ArgumentException(
                         String.Format("Unable to create ocr model using Path '{0}', language '{1}' and OcrEngineMode '{2}'.", dataPath,
                             language, mode));
                 }
             }
-
-
         }
 
         /// <summary>
@@ -445,12 +428,8 @@ namespace Emgu.CV.OCR
 
         private String UtfByteVectorToString(VectorOfByte bytes)
         {
-            //#if NETFX_CORE
             byte[] bArr = bytes.ToArray();
             return _utf8.GetString(bArr, 0, bArr.Length).Replace("\n", Environment.NewLine);
-            //#else
-            //            return _utf8.GetString(bytes.ToArray()).Replace("\n", Environment.NewLine);
-            //#endif
         }
 
         /// <summary>
