@@ -18,7 +18,7 @@ namespace Emgu.Util
 
         static Platform()
         {
-#if UNITY_IPHONE 
+#if UNITY_IPHONE
             _os = OS.IOS;
             _runtime = Clr.Unity;
 #elif UNITY_ANDROID
