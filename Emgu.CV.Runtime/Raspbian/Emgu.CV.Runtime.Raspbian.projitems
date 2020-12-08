@@ -21,7 +21,7 @@
   </PropertyGroup>
   <ItemGroup Condition="'$(EmguCVRaspbianBuildArm)'=='True' AND Exists('$(EmguCVRaspbianNativeFileArm)')">
     <Content Include="$(EmguCVRaspbianBinaryDir)\arm\*.so">
-      <Link>arm\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

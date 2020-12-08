@@ -21,7 +21,7 @@
   </PropertyGroup>
   <ItemGroup Condition="'$(EmguCVUbuntuBuildX64)'=='True' AND Exists('$(EmguCVUbuntuNativeFileX64)')">
     <Content Include="$(EmguCVUbuntuBinaryDir)\x64\*.so">
-      <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
 	<!--
