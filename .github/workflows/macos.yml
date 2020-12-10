@@ -10,6 +10,9 @@ jobs:
   build:
 
     runs-on: macos-latest
+    
+    # one day time out
+    timeout-minutes: 1440
 
     steps:
     - uses: actions/checkout@v2
