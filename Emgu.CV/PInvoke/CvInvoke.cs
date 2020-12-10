@@ -84,7 +84,6 @@ namespace Emgu.CV
                     else if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
                         subfolder = "arm64";
 
-                    //subfolder = IntPtr.Size == 8 ? "x64" : "x86";
                 }
 
                 System.Reflection.Assembly asm = typeof(CvInvoke).Assembly; //System.Reflection.Assembly.GetExecutingAssembly();
@@ -123,19 +122,12 @@ namespace Emgu.CV
                         subfolder = String.Empty;
                     }
                 }
-                /*
-                FileInfo file = new FileInfo(asm.Location);
-                //FileInfo file = new FileInfo(asm.CodeBase);
-                DirectoryInfo directory = file.Directory;
-                loadDirectory = directory.FullName;
-                */
 
                 if (!String.IsNullOrEmpty(subfolder))
                 {
-                    var temp = Path.Combine(loadDirectory, subfolder);
-                    if (Directory.Exists(temp))
+                    if (Directory.Exists(Path.Combine(loadDirectory, subfolder)))
                     {
-                        loadDirectory = temp;
+                        loadDirectory = Path.Combine(loadDirectory, subfolder);
                     }
                     else
                     {
@@ -147,30 +139,23 @@ namespace Emgu.CV
                 {
                     //try to find an alternative loadDirectory path
                     //The following code should handle finding the asp.NET BIN folder 
-                    String altLoadDirectory = Path.GetDirectoryName(asm.CodeBase);
-                    if (!String.IsNullOrEmpty(altLoadDirectory) && altLoadDirectory.StartsWith(@"file:\"))
-                        altLoadDirectory = altLoadDirectory.Substring(6);
-
-                    if (!String.IsNullOrEmpty(subfolder))
-                        altLoadDirectory = Path.Combine(altLoadDirectory, subfolder);
-
-                    if (!Directory.Exists(altLoadDirectory))
+                    if (String.IsNullOrEmpty(asm.Location) || !File.Exists(asm.Location))
                     {
-                        if (String.IsNullOrEmpty(asm.Location) || !File.Exists(asm.Location))
-                        {
-                            Debug.WriteLine(String.Format("asm.Location is invalid: '{0}'", asm.Location));
-                            return false;
-                        }
-                        FileInfo file = new FileInfo(asm.Location);
-                        DirectoryInfo directory = file.Directory;
-
-                        
-                        System.Diagnostics.Debug.WriteLine("No suitable directory found to load unmanaged modules");
-                        return false;
-                        
+                        Debug.WriteLine(String.Format("asm.Location is invalid: '{0}'", asm.Location));
                     }
                     else
-                        loadDirectory = altLoadDirectory;
+                    {
+                        FileInfo file = new FileInfo(asm.Location);
+                        DirectoryInfo directory = file.Directory;
+                        if (!String.IsNullOrEmpty(subfolder) && Directory.Exists(Path.Combine(directory.FullName, subfolder)))
+                        {
+                            loadDirectory = Path.Combine(directory.FullName, subfolder);
+                        }
+                        else if (Directory.Exists(directory.FullName))
+                        {
+                            loadDirectory = directory.FullName;
+                        }
+                    }
                 }
             }
 
