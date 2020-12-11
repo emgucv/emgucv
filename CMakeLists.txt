@@ -1164,14 +1164,17 @@ ENDIF()
 SET(EMGUCV_RASPBIAN_NUGET_FILE_LIST "")
 IF(HAVE_LINUX_ARM)
 	SET(EMGUCV_RASPBIAN_NUGET_FILE_LIST "${EMGUCV_RASPBIAN_NUGET_FILE_LIST} 
-        <file src=\"..\\..\\..\\libs\\arm\\*.so\" target=\"build\\arm\" />")
+      <file src=\"..\\..\\..\\libs\\arm\\*.so\" target=\"runtimes\\${NUGET_NATIVE_PLATFORM_ID_RASPBIAN}\\native\" />")
     SET(EMGUCV_RASPBIAN_NUGET_DEPENDENCY "    <dependencies>
       <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"[${CPACK_PACKAGE_VERSION}]\" />
-    </dependencies>")
+      </dependencies>")
+	#SET(EMGUCV_RASPBIAN_NUGET_FILE_LIST "${EMGUCV_RASPBIAN_NUGET_FILE_LIST} 
+    #<file src=\"Emgu.CV.runtime.raspbian.targets\" target=\"build\\${EMGUCV_RASPBIAN_NUGET_ID}.targets\" />
+    #<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+    #<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 	SET(EMGUCV_RASPBIAN_NUGET_FILE_LIST "${EMGUCV_RASPBIAN_NUGET_FILE_LIST} 
-    <file src=\"Emgu.CV.runtime.raspbian.targets\" target=\"build\\${EMGUCV_RASPBIAN_NUGET_ID}.targets\" />
-    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+      <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+      <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 
 SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "")
