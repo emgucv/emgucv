@@ -1176,7 +1176,7 @@ ENDIF()
 
 SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "")
 IF(HAVE_LINUX_X64)
-  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.so\" target=\"build\\x64\" />")
+  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.so\" target=\"runtimes\\${NUGET_NATIVE_PLATFORM_ID_UBUNTU}\" />")
 ENDIF()
 IF(HAVE_LINUX_X86)
   #SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x86\\*.so\" target=\"build\\x86\" />")
