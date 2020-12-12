@@ -1189,7 +1189,7 @@ ENDIF()
 IF(HAVE_LINUX_X64 OR HAVE_LINUX_X86)
     SET(EMGUCV_UBUNTU_NUGET_DEPENDENCY "
     <dependencies>
-      <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"[${CPACK_PACKAGE_VERSION}]\" />
+      <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
     </dependencies>")
 #	SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} 
 #    <file src=\"Emgu.CV.runtime.ubuntu.targets\" target=\"build\\${EMGUCV_UBUNTU_NUGET_ID}.targets\" />
