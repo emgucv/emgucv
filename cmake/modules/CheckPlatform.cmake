@@ -26,6 +26,19 @@ IF (UNIX AND NOT APPLE)
     ELSEIF (LSB_RELEASE_ID_SHORT STREQUAL "Raspbian")
       SET(IS_RASPBIAN TRUE)
     ENDIF()
+  ELSE()
+    find_program(UNAME_EXEC uname)
+    IF (UNAME_EXEC)
+#      MESSAGE(status "------------------------- Found uname: ${UNAME_EXEC}")
+      execute_process(COMMAND ${UNAME_EXEC} -a
+        OUTPUT_VARIABLE UNAME_ALL
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+	)
+#      MESSAGE(status "------------------------- UNAME_ALL: ${UNAME_ALL}")
+      IF ("${UNAME_ALL}" MATCHES ".*[Uu]buntu.*")
+	 SET(IS_UBUNTU TRUE)
+      ENDIF()
+    ENDIF()
   ENDIF()
 ENDIF()
 
