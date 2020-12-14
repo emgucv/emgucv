@@ -1140,24 +1140,24 @@ ENDIF()
 
 SET(EMGUCV_UWP_NUGET_FILE_LIST "")
 IF(HAVE_WINSTORE_10_X86)
-	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\x86\\*.dll\" target=\"build\\UWP\\x86\" />")
+	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\x86\\*.dll\" target=\"runtimes\\win10-x86\\native\" />")
 ENDIF()
 IF(HAVE_WINSTORE_10_X64)
-	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\x64\\*.dll\" target=\"build\\UWP\\x64\" />")
+	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\x64\\*.dll\" target=\"runtimes\\win10-x64\\native\" />")
 ENDIF()
 IF(HAVE_WINSTORE_10_ARM)
-	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\arm\\*.dll\" target=\"build\\UWP\\arm\" />")
+	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\arm\\*.dll\" target=\"runtimes\\win10-arm\\native\" />")
 ENDIF()
 IF(HAVE_WINSTORE_10_ARM64)
-	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\arm64\\*.dll\" target=\"build\\UWP\\arm64\" />")
+	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\arm64\\*.dll\" target=\"runtimes\\win10-arm64\\native\" />")
 ENDIF()
 IF(HAVE_WINSTORE_10)
     SET(EMGUCV_UWP_NUGET_DEPENDENCY "
     <dependencies>
-      <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"[${CPACK_PACKAGE_VERSION}]\" />
+      <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
     </dependencies>")
+	#<file src=\"Emgu.CV.runtime.uwp.targets\" target=\"build\\${EMGUCV_UWP_NUGET_ID}.targets\" />
 	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} 
-    <file src=\"Emgu.CV.runtime.uwp.targets\" target=\"build\\${EMGUCV_UWP_NUGET_ID}.targets\" />
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
