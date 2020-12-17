@@ -1081,6 +1081,7 @@ ENDIF()
 SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "")
 IF(HAVE_WINDESKTOP_X86)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x86\\*.dll\" exclude=\"..\\..\\..\\libs\\x86\\cu*.dll;..\\..\\..\\libs\\x86\\npp*.dll;..\\..\\..\\libs\\x86\\concrt*.dll;..\\..\\..\\libs\\x86\\msvcp*.dll;..\\..\\..\\libs\\x86\\vcruntime*.dll;..\\..\\..\\libs\\x86\\vccorlib*.dll\" target=\"runtimes\\win-x86\\native\" />")
+	SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_TITLE "MSVC x86 runtime for windows")
 	SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST} 
 	<file src=\"..\\..\\..\\libs\\x86\\concrt*.dll\" target=\"runtimes\\win-x86\\native\" /> 
 	<file src=\"..\\..\\..\\libs\\x86\\msvcp*.dll\" target=\"runtimes\\win-x86\\native\" /> 
@@ -1096,6 +1097,7 @@ IF(HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.json\" target=\"runtimes\\win-x64\\native\" />")
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.elf\" target=\"runtimes\\win-x64\\native\" />")
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.mvcmd\" target=\"runtimes\\win-x64\\native\" />")
+	SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_TITLE "MSVC x64 runtime for windows")
 	SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST} 
 	<file src=\"..\\..\\..\\libs\\x64\\concrt*.dll\" target=\"runtimes\\win-x64\\native\" /> 
 	<file src=\"..\\..\\..\\libs\\x64\\msvcp*.dll\" target=\"runtimes\\win-x64\\native\" /> 
