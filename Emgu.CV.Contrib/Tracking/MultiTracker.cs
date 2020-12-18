@@ -13,7 +13,7 @@ using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Emgu.CV.Tracking
+namespace Emgu.CV.Legacy
 {
     /// <summary>
     /// This class is used to track multiple objects using the specified tracker algorithm. The MultiTracker is naive implementation of multiple object tracking. It process the tracked objects independently without any optimization accross the tracked objects.
@@ -26,8 +26,7 @@ namespace Emgu.CV.Tracking
 
         public MultiTracker()
         {
-
-            _ptr = ContribInvoke.cveMultiTrackerCreate();
+            _ptr = TrackingInvoke.cveMultiTrackerCreate();
         }
 
         /// <summary>
@@ -40,7 +39,7 @@ namespace Emgu.CV.Tracking
         public bool Add(Tracker tracker, IInputArray image, Rectangle boundingBox)
         {
             using (InputArray iaImage = image.GetInputArray())
-                return ContribInvoke.cveMultiTrackerAdd(_ptr, tracker, iaImage, ref boundingBox);
+                return TrackingInvoke.cveMultiTrackerAdd(_ptr, tracker, iaImage, ref boundingBox);
         }
 
         /// <summary>
@@ -51,7 +50,7 @@ namespace Emgu.CV.Tracking
         /// <returns>True id update success</returns>
         public bool Update(Mat image, VectorOfRect boundingBox)
         {
-            return ContribInvoke.cveMultiTrackerUpdate(_ptr, image, boundingBox);
+            return TrackingInvoke.cveMultiTrackerUpdate(_ptr, image, boundingBox);
         }
 
         /// <summary>
@@ -62,7 +61,7 @@ namespace Emgu.CV.Tracking
         {
             using (VectorOfRect vr = new VectorOfRect())
             {
-                ContribInvoke.cveMultiTrackerGetObjects(_ptr, vr);
+                TrackingInvoke.cveMultiTrackerGetObjects(_ptr, vr);
                 return vr.ToArray();
             }
         }
@@ -73,7 +72,7 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                ContribInvoke.cveMultiTrackerRelease(ref _ptr);
+                TrackingInvoke.cveMultiTrackerRelease(ref _ptr);
         }
     }
 }
@@ -83,13 +82,8 @@ namespace Emgu.CV
     /// <summary>
     /// Class that contains entry points for the Contrib module.
     /// </summary>
-    public static partial class ContribInvoke
+    public static partial class TrackingInvoke
     {
-        static ContribInvoke()
-        {
-            CvInvoke.CheckLibraryLoaded();
-        }
-
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveMultiTrackerCreate();
 

@@ -7,13 +7,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
-using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Emgu.CV.Tracking
+namespace Emgu.CV.Legacy
 {
     /// <summary>
     /// MOSSE Visual Object Tracking using Adaptive Correlation Filters
@@ -28,7 +27,7 @@ namespace Emgu.CV.Tracking
         /// </summary>
         public TrackerMOSSE()
         {
-            _ptr = ContribInvoke.cveTrackerMOSSECreate(ref _trackerPtr, ref _sharedPtr);
+            _ptr = TrackingInvoke.cveTrackerMOSSECreate(ref _trackerPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -37,8 +36,21 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ContribInvoke.cveTrackerMOSSERelease(ref _ptr, ref _sharedPtr);
+                TrackingInvoke.cveTrackerMOSSERelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
+    }
+}
+
+namespace Emgu.CV
+{
+    public static partial class TrackingInvoke
+    {
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveTrackerMOSSECreate(ref IntPtr tracker, ref IntPtr sharedPtr);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveTrackerMOSSERelease(ref IntPtr tracker, ref IntPtr sharedPTr);
+
     }
 }

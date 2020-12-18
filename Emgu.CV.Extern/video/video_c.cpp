@@ -250,3 +250,99 @@ void cveVariationalRefinementRelease(cv::VariationalRefinement** flow, cv::Ptr<c
 	*flow = 0;
 	*sharedPtr = 0;
 }
+
+/*
+cv::Tracker* cveTrackerCreate(cv::String* trackerType)
+{
+   cv::Ptr<cv::Tracker> tracker = cv::Tracker::create(*trackerType);
+   tracker.addref();
+   return tracker.get();
+}*/
+void cveTrackerInit(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox)
+{
+#ifdef HAVE_OPENCV_VIDEO
+	return tracker->init(*image, *boundingBox);
+#else
+	throw_no_video();
+#endif
+}
+bool cveTrackerUpdate(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox)
+{
+#ifdef HAVE_OPENCV_VIDEO
+	cv::Rect box;
+	bool result = tracker->update(*image, box);
+	*boundingBox = cvRect(box);
+	return result;
+#else
+	throw_no_video();
+#endif
+}
+/*
+void cveTrackerRelease(cv::Tracker** tracker)
+{
+   delete *tracker;
+   *tracker = 0;
+}
+*/
+
+cv::TrackerMIL* cveTrackerMILCreate(
+	float samplerInitInRadius,
+	int samplerInitMaxNegNum,
+	float samplerSearchWinSize,
+	float samplerTrackInRadius,
+	int samplerTrackMaxPosNum,
+	int samplerTrackMaxNegNum,
+	int featureSetNumFeatures,
+	cv::Tracker** tracker,
+	cv::Ptr<cv::TrackerMIL>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_VIDEO
+	cv::TrackerMIL::Params p;
+	p.samplerInitInRadius = samplerInitInRadius;
+	p.samplerInitMaxNegNum = samplerInitMaxNegNum;
+	p.samplerSearchWinSize = samplerSearchWinSize;
+	p.samplerTrackInRadius = samplerTrackInRadius;
+	p.samplerTrackMaxPosNum = samplerTrackMaxPosNum;
+	p.samplerTrackMaxNegNum = samplerTrackMaxNegNum;
+	p.featureSetNumFeatures = featureSetNumFeatures;
+
+	cv::Ptr<cv::TrackerMIL> ptr = cv::TrackerMIL::create(p);
+	*sharedPtr = new cv::Ptr<cv::TrackerMIL>(ptr);
+	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
+	return ptr.get();
+#else
+	throw_no_tracking();
+#endif
+}
+void cveTrackerMILRelease(cv::TrackerMIL** tracker, cv::Ptr<cv::TrackerMIL>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_VIDEO
+	delete* sharedPtr;
+	*tracker = 0;
+	*sharedPtr = 0;
+#else
+	throw_no_video();
+#endif
+}
+
+cv::TrackerGOTURN* cveTrackerGOTURNCreate(cv::Tracker** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_TRACKING
+	cv::Ptr<cv::TrackerGOTURN> ptr = cv::TrackerGOTURN::create();
+	*sharedPtr = new cv::Ptr<cv::TrackerGOTURN>(ptr);
+	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
+	return ptr.get();
+#else
+	throw_no_video();
+#endif
+}
+void cveTrackerGOTURNRelease(cv::TrackerGOTURN** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_TRACKING
+	delete* sharedPtr;
+	*tracker = 0;
+	*sharedPtr = 0;
+#else
+	throw_no_video();
+#endif
+}

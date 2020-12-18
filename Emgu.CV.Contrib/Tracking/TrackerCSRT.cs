@@ -7,13 +7,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
-using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Emgu.CV.Tracking
+namespace Emgu.CV
 {
     /// <summary>
     /// Discriminative Correlation Filter Tracker with Channel and Spatial Reliability
@@ -81,7 +80,7 @@ namespace Emgu.CV.Tracking
             )
         {
             using (CvString csWindowFunction = new CvString(windowFunction))
-                _ptr = ContribInvoke.cveTrackerCSRTCreate(
+                _ptr = TrackingInvoke.cveTrackerCSRTCreate(
                     useHog,
                     useColorNames,
                     useGray,
@@ -118,8 +117,51 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ContribInvoke.cveTrackerCSRTRelease(ref _ptr, ref _sharedPtr);
+                TrackingInvoke.cveTrackerCSRTRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
+    }
+
+    public static partial class TrackingInvoke
+    {
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveTrackerCSRTCreate(
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool useHog,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool useColorNames,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool useGray,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool useRgb,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool useChannelWeights,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool useSegmentation,
+            IntPtr windowFunction,
+            float kaiserAlpha,
+            float chebAttenuation,
+            float templateSize,
+            float gslSigma,
+            float hogOrientations,
+            float hogClip,
+            float padding,
+            float filterLr,
+            float weightsLr,
+            int numHogChannelsUsed,
+            int admmIterations,
+            int histogramBins,
+            float histogramLr,
+            int backgroundRatio,
+            int numberOfScales,
+            float scaleSigmaFactor,
+            float scaleModelMaxArea,
+            float scaleLr,
+            float scaleStep,
+            ref IntPtr tracker,
+            ref IntPtr sharedPtr);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveTrackerCSRTRelease(ref IntPtr tracker, ref IntPtr sharedPtr);
     }
 }

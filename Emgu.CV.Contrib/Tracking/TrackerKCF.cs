@@ -7,13 +7,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
-using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Emgu.CV.Tracking
+namespace Emgu.CV
 {
     /// <summary>
     /// KCF is a novel tracking framework that utilizes properties of circulant matrix to enhance the processing speed.
@@ -79,7 +78,7 @@ namespace Emgu.CV.Tracking
             Mode descPca = Mode.Cn,
             Mode descNpca = Mode.Gray)
         {
-            _ptr = ContribInvoke.cveTrackerKCFCreate(
+            _ptr = TrackingInvoke.cveTrackerKCFCreate(
                 detectThresh,
                 sigma,
                 lambda,
@@ -104,8 +103,39 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ContribInvoke.cveTrackerKCFRelease(ref _ptr, ref _sharedPtr);
+                TrackingInvoke.cveTrackerKCFRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
+    }
+
+    public static partial class TrackingInvoke
+    {
+        //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        //internal static extern IntPtr cveTrackerKCFCreate(ref IntPtr tracker);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveTrackerKCFCreate(
+            float detectThresh,
+            float sigma,
+            float lambda,
+            float interpFactor,
+            float outputSigmaFactor,
+            float pcaLearningRate,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool resize,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool splitCoeff,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool wrapKernel,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool compressFeature,
+            int maxPatchSize,
+            int compressedSize,
+            TrackerKCF.Mode descPca,
+            TrackerKCF.Mode descNpca,
+            ref IntPtr tracker,
+            ref IntPtr sharedPtr);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveTrackerKCFRelease(ref IntPtr tracker, ref IntPtr sharedPtr);
+
     }
 }

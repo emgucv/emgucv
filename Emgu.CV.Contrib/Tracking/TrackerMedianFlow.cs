@@ -7,15 +7,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
-using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Emgu.CV.Tracking
+namespace Emgu.CV.Legacy
 {
-
     /// <summary>
     /// Median Flow tracker implementation.
     /// The tracker is suitable for very smooth and predictable movements when object is visible throughout
@@ -43,7 +41,7 @@ namespace Emgu.CV.Tracking
             Size winSizeNCC, 
             double maxMedianLengthOfDisplacementDifference = 10)
         {
-            ContribInvoke.cveTrackerMedianFlowCreate(pointsInGrid, ref winSize, maxLevel, ref termCriteria, ref winSizeNCC, maxMedianLengthOfDisplacementDifference, ref _trackerPtr, ref _sharedPtr);
+            TrackingInvoke.cveTrackerMedianFlowCreate(pointsInGrid, ref winSize, maxLevel, ref termCriteria, ref winSizeNCC, maxMedianLengthOfDisplacementDifference, ref _trackerPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -52,9 +50,22 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ContribInvoke.cveTrackerMedianFlowRelease(ref _ptr, ref _sharedPtr);
+                TrackingInvoke.cveTrackerMedianFlowRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
+}
 
+namespace Emgu.CV
+{
+    public static partial class TrackingInvoke
+    {
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveTrackerMedianFlowCreate(int pointsInGrid, ref Size winSize, int maxLevel,
+            ref MCvTermCriteria termCriteria, ref Size winSizeNCC, double maxMedianLengthOfDisplacementDifference,
+            ref IntPtr tracker, ref IntPtr sharedPtr);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveTrackerMedianFlowRelease(ref IntPtr tracker, ref IntPtr sharedPtr);
+    }
 }

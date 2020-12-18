@@ -7,13 +7,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
-using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Emgu.CV.Tracking
+namespace Emgu.CV
 {
     /// <summary>
     /// The MIL algorithm trains a classifier in an online manner to separate the object from the background.
@@ -36,21 +35,21 @@ namespace Emgu.CV.Tracking
         /// <param name="featureSetNumFeatures">features</param>
         public TrackerMIL(
             float samplerInitInRadius = 3.0f,
-            int samplerInitMaxNegNum = 65,  
-            float samplerSearchWinSize = 25.0f,  
-            float samplerTrackInRadius = 4.0f,  
-            int samplerTrackMaxPosNum = 100000,  
-            int samplerTrackMaxNegNum = 65,  
-            int featureSetNumFeatures = 250)  
+            int samplerInitMaxNegNum = 65,
+            float samplerSearchWinSize = 25.0f,
+            float samplerTrackInRadius = 4.0f,
+            int samplerTrackMaxPosNum = 100000,
+            int samplerTrackMaxNegNum = 65,
+            int featureSetNumFeatures = 250)
         {
-            ContribInvoke.cveTrackerMILCreate(
+            CvInvoke.cveTrackerMILCreate(
                 samplerInitInRadius,
                 samplerInitMaxNegNum,
                 samplerSearchWinSize,
                 samplerTrackInRadius,
                 samplerTrackMaxPosNum,
                 samplerTrackMaxNegNum,
-                featureSetNumFeatures, 
+                featureSetNumFeatures,
                 ref _trackerPtr,
                 ref _sharedPtr);
         }
@@ -61,9 +60,32 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ContribInvoke.cveTrackerMILRelease(ref _ptr, ref _sharedPtr);
+                CvInvoke.cveTrackerMILRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
 
+}
+
+
+namespace Emgu.CV
+{
+    public static partial class CvInvoke
+    {
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveTrackerMILCreate(
+            float samplerInitInRadius,
+            int samplerInitMaxNegNum,
+            float samplerSearchWinSize,
+            float samplerTrackInRadius,
+            int samplerTrackMaxPosNum,
+            int samplerTrackMaxNegNum,
+            int featureSetNumFeatures,
+            ref IntPtr tracker,
+            ref IntPtr sharedPtr);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveTrackerMILRelease(ref IntPtr tracker, ref IntPtr sharedPtr);
+
+    }
 }
