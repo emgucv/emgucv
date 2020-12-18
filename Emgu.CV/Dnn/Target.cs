@@ -49,6 +49,10 @@ namespace Emgu.CV.Dnn
 		/// <summary>
         /// Cuda fp16
         /// </summary>
-        CudaFp16
+        CudaFp16, 
+        /// <summary>
+        /// HDDL
+        /// </summary>
+        HDDL
     }
 }
