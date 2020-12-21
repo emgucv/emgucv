@@ -890,14 +890,14 @@ ADD_SUBDIRECTORY(${OPENCV_SUBFOLDER})
 SET(CMAKE_SOURCE_DIR ${CMAKE_OLD_SOURCE_DIR})
 
 SET (OPENCV_MODULE_NAME_CANDIDATES
-  core hal imgproc video flann ml imgcodecs videoio highgui objdetect features2d calib3d
+  core imgproc video flann ml imgcodecs videoio highgui objdetect features2d calib3d
   cudaarithm cudawarping cudafilters cudaimgproc cudalegacy cudaoptflow 
   cudastereo cudabgsegm cudafeatures2d cudacodec cudaobjdetect
   photo superres  
   videostab shape
   cudev  
   face ximgproc xobjdetect xfeatures2d xphoto bgsegm optflow
-  stitching latentsvm plot
+  stitching plot
   dnn dnn_objdetect dnn_superres aruco fuzzy viz bioinspired text tracking
   dpm
   saliency
@@ -912,6 +912,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   alphamat
   intensity_transform
   rapid
+  line_descriptor
   mcc
   hdf
   )

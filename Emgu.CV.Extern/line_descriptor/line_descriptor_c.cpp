@@ -4,7 +4,7 @@
 //
 //----------------------------------------------------------------------------
 
-/*
+
 
 #include "line_descriptor_c.h"
 
@@ -45,4 +45,3 @@ void cveLineDescriptorLSDDetectorRelease(cv::Ptr<cv::line_descriptor::LSDDetecto
 	*sharedPtr = 0;
 }
 
-*/

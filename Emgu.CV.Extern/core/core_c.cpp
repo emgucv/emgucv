@@ -1133,6 +1133,13 @@ void cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value)
 	value->push_back(0);
 #endif
 
+	key->push_back("HAVE_OPENCV_HDF");
+#ifdef HAVE_OPENCV_HDF
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+	
 	key->push_back("HAVE_OPENCV_HFS");
 #ifdef HAVE_OPENCV_HFS
 	value->push_back(1);
@@ -1175,6 +1182,13 @@ void cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value)
 	value->push_back(0);
 #endif
 
+	key->push_back("HAVE_OPENCV_LINE_DESCRIPTOR");
+#ifdef HAVE_OPENCV_LINE_DESCRIPTOR
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+	
 	key->push_back("HAVE_OPENCV_MCC");
 #ifdef HAVE_OPENCV_MCC
 	value->push_back(1);

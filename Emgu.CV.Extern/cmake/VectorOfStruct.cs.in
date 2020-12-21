@@ -24,7 +24,10 @@ namespace ${NAMESPACE_CS}
    /// </summary>
    [Serializable]
    [DebuggerTypeProxy(typeof(VectorOf${VECTOR_NAME}.DebuggerProxy))]
-   public partial class VectorOf${VECTOR_NAME} : Emgu.Util.UnmanagedObject, IInputOutputArray, ISerializable
+   public partial class VectorOf${VECTOR_NAME} : Emgu.Util.UnmanagedObject, ISerializable
+#if ${IS_INPUT_OUTPUT_ARRAY}
+      , IInputOutputArray
+#endif
    {
       private readonly bool _needDispose;
    
@@ -181,8 +184,9 @@ namespace ${NAMESPACE_CS}
             VectorOf${VECTOR_NAME}Release(ref _ptr);
       }
 
+#if ${IS_INPUT_OUTPUT_ARRAY}
       /// <summary>
-      /// Get the pointer to cv::_InputArray
+      /// Get the data as InputArray
       /// </summary>
       /// <returns>The input array </returns>
       public InputArray GetInputArray()
@@ -191,7 +195,7 @@ namespace ${NAMESPACE_CS}
       }
 	  
       /// <summary>
-      /// Get the pointer to cv::_OutputArray
+      /// Get the data as OutputArray
       /// </summary>
       /// <returns>The output array </returns>
       public OutputArray GetOutputArray()
@@ -200,13 +204,14 @@ namespace ${NAMESPACE_CS}
       }
 
       /// <summary>
-      /// Get the pointer to cv::_InputOutputArray
+      /// Get the data as InputOutputArray
       /// </summary>
       /// <returns>The input output array </returns>
       public InputOutputArray GetInputOutputArray()
       {
          return new InputOutputArray( cveInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
       }
+#endif
       
       /// <summary>
       /// The size of the item in this Vector, counted as size in bytes.
