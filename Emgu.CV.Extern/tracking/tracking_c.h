@@ -9,6 +9,15 @@
 #define EMGU_TRACKING_C_H
 
 #include "opencv2/core/core_c.h"
+
+#ifdef HAVE_OPENCV_VIDEO
+#include "opencv2/video/video.hpp"
+#else
+namespace cv {
+	class Tracker {};
+	}
+#endif
+
 #ifdef HAVE_OPENCV_TRACKING
 #include "opencv2/tracking/tracking.hpp"
 #include "opencv2/tracking/tracking_legacy.hpp"

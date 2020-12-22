@@ -311,7 +311,7 @@ cv::TrackerMIL* cveTrackerMILCreate(
 	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
 	return ptr.get();
 #else
-	throw_no_tracking();
+	throw_no_video();
 #endif
 }
 void cveTrackerMILRelease(cv::TrackerMIL** tracker, cv::Ptr<cv::TrackerMIL>** sharedPtr)
@@ -327,7 +327,7 @@ void cveTrackerMILRelease(cv::TrackerMIL** tracker, cv::Ptr<cv::TrackerMIL>** sh
 
 cv::TrackerGOTURN* cveTrackerGOTURNCreate(cv::Tracker** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_TRACKING
+#ifdef HAVE_OPENCV_VIDEO
 	cv::Ptr<cv::TrackerGOTURN> ptr = cv::TrackerGOTURN::create();
 	*sharedPtr = new cv::Ptr<cv::TrackerGOTURN>(ptr);
 	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
@@ -338,7 +338,7 @@ cv::TrackerGOTURN* cveTrackerGOTURNCreate(cv::Tracker** tracker, cv::Ptr<cv::Tra
 }
 void cveTrackerGOTURNRelease(cv::TrackerGOTURN** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_TRACKING
+#ifdef HAVE_OPENCV_VIDEO
 	delete* sharedPtr;
 	*tracker = 0;
 	*sharedPtr = 0;
