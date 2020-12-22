@@ -18,6 +18,16 @@ namespace cv {
 	class Tracker {};
 	class TrackerMIL {};
 	class TrackerGOTURN {};
+	class BackgroundSubtractorMOG2 {};
+	class BackgroundSubtractor {};
+	class BackgroundSubtractorKNN {};
+	class DenseOpticalFlow {};
+	class FarnebackOpticalFlow {};
+	class SparseOpticalFlow {};
+	class SparsePyrLKOpticalFlow {};
+	class KalmanFilter {};
+	class DISOpticalFlow {};
+	class VariationalRefinement {};
 }
 #endif
 
