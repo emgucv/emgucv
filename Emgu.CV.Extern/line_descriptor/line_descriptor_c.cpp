@@ -4,13 +4,11 @@
 //
 //----------------------------------------------------------------------------
 
-
-
 #include "line_descriptor_c.h"
 
 cv::line_descriptor::BinaryDescriptor* cveLineDescriptorBinaryDescriptorCreate(cv::Ptr<cv::line_descriptor::BinaryDescriptor>** sharedPtr)
 {
-#if HAVE_OPENCV_LINE_DESCRIPTOR
+#ifdef HAVE_OPENCV_LINE_DESCRIPTOR
 	cv::Ptr<cv::line_descriptor::BinaryDescriptor> ptr = cv::line_descriptor::BinaryDescriptor::createBinaryDescriptor();
 	*sharedPtr = new cv::Ptr<cv::line_descriptor::BinaryDescriptor>(ptr);
 	return ptr.get();
@@ -20,7 +18,7 @@ cv::line_descriptor::BinaryDescriptor* cveLineDescriptorBinaryDescriptorCreate(c
 }
 void cveLineDescriptorBinaryDescriptorDetect(cv::line_descriptor::BinaryDescriptor* descriptor, cv::Mat* image, std::vector<cv::line_descriptor::KeyLine>* keypoints, cv::Mat* mask)
 {
-#if HAVE_OPENCV_LINE_DESCRIPTOR
+#ifdef HAVE_OPENCV_LINE_DESCRIPTOR
 	descriptor->detect(*image, *keypoints, mask ? *mask : cv::Mat());
 #else
 	throw_no_line_descriptor();
@@ -28,7 +26,7 @@ void cveLineDescriptorBinaryDescriptorDetect(cv::line_descriptor::BinaryDescript
 }
 void cveLineDescriptorBinaryDescriptorCompute(cv::line_descriptor::BinaryDescriptor* descriptor, cv::Mat* image, std::vector<cv::line_descriptor::KeyLine>* keylines, cv::Mat* descriptors, bool returnFloatDescr)
 {
-#if HAVE_OPENCV_LINE_DESCRIPTOR
+#ifdef HAVE_OPENCV_LINE_DESCRIPTOR
 	descriptor->compute(*image, *keylines, *descriptors, returnFloatDescr);
 #else
 	throw_no_line_descriptor();
@@ -37,7 +35,7 @@ void cveLineDescriptorBinaryDescriptorCompute(cv::line_descriptor::BinaryDescrip
 
 void cveLineDescriptorBinaryDescriptorRelease(cv::Ptr<cv::line_descriptor::BinaryDescriptor>** sharedPtr)
 {
-#if HAVE_OPENCV_LINE_DESCRIPTOR
+#ifdef HAVE_OPENCV_LINE_DESCRIPTOR
 	delete *sharedPtr;
 	*sharedPtr = 0;
 #else
@@ -47,7 +45,7 @@ void cveLineDescriptorBinaryDescriptorRelease(cv::Ptr<cv::line_descriptor::Binar
 
 cv::line_descriptor::LSDDetector* cveLineDescriptorLSDDetectorCreate(cv::Ptr<cv::line_descriptor::LSDDetector>** sharedPtr)
 {
-#if HAVE_OPENCV_LINE_DESCRIPTOR
+#ifdef HAVE_OPENCV_LINE_DESCRIPTOR
 	cv::Ptr<cv::line_descriptor::LSDDetector> ptr = cv::line_descriptor::LSDDetector::createLSDDetector();
 	*sharedPtr = new cv::Ptr<cv::line_descriptor::LSDDetector>(ptr);
 	return ptr.get();
@@ -57,7 +55,7 @@ cv::line_descriptor::LSDDetector* cveLineDescriptorLSDDetectorCreate(cv::Ptr<cv:
 }
 void cveLineDescriptorLSDDetectorDetect(cv::line_descriptor::LSDDetector* detector, cv::Mat* image, std::vector<cv::line_descriptor::KeyLine>* keypoints, int scale, int numOctaves, cv::Mat* mask)
 {
-#if HAVE_OPENCV_LINE_DESCRIPTOR
+#ifdef HAVE_OPENCV_LINE_DESCRIPTOR
 	detector->detect(*image, *keypoints, scale, numOctaves, mask ? *mask : cv::Mat());
 #else
 	throw_no_line_descriptor();
@@ -65,7 +63,7 @@ void cveLineDescriptorLSDDetectorDetect(cv::line_descriptor::LSDDetector* detect
 }
 void cveLineDescriptorLSDDetectorRelease(cv::Ptr<cv::line_descriptor::LSDDetector>** sharedPtr)
 {
-#if HAVE_OPENCV_LINE_DESCRIPTOR
+#ifdef HAVE_OPENCV_LINE_DESCRIPTOR
 	delete *sharedPtr;
 	*sharedPtr = 0;
 #else
