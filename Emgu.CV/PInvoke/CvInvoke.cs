@@ -159,7 +159,7 @@ namespace Emgu.CV
                 }
             }
 
-            bool addDllDirectorySuccess = false;
+            bool setDllDirectorySuccess = false;
             if (!String.IsNullOrEmpty(loadDirectory) && Directory.Exists(loadDirectory))
             {
                 if (Platform.ClrType == Platform.Clr.DotNetNative )
@@ -168,10 +168,11 @@ namespace Emgu.CV
                 }
                 else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Windows )
                 {
-                    addDllDirectorySuccess = Emgu.Util.Toolbox.AddDllDirectory(loadDirectory);
-                    if (!addDllDirectorySuccess)
+                    //addDllDirectorySuccess = Emgu.Util.Toolbox.AddDllDirectory(loadDirectory);
+                    setDllDirectorySuccess = Emgu.Util.Toolbox.SetDllDirectory(loadDirectory);
+                    if (!setDllDirectorySuccess)
                     {
-                        System.Diagnostics.Debug.WriteLine(String.Format("Failed to add dll directory: {0}", loadDirectory));
+                        System.Diagnostics.Debug.WriteLine(String.Format("Failed to set dll directory: {0}", loadDirectory));
                     }
                 } else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS)
                 {
@@ -185,7 +186,7 @@ namespace Emgu.CV
                 }
             }
 
-            if (addDllDirectorySuccess)
+            if (setDllDirectorySuccess)
             {
                 System.Diagnostics.Debug.WriteLine(
                     String.Format(
