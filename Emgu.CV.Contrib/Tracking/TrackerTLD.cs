@@ -13,7 +13,7 @@ using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Emgu.CV.Tracking
+namespace Emgu.CV.Legacy
 {
     /// <summary>
     /// TLD is a novel tracking framework that explicitly decomposes the long-term tracking task into tracking, learning and detection.
@@ -28,7 +28,7 @@ namespace Emgu.CV.Tracking
         /// </summary>
         public TrackerTLD()
         {
-            _ptr = ContribInvoke.cveTrackerTLDCreate(ref _trackerPtr, ref _sharedPtr);
+            _ptr = TrackingInvoke.cveTrackerTLDCreate(ref _trackerPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -37,8 +37,21 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ContribInvoke.cveTrackerTLDRelease(ref _ptr, ref _sharedPtr);
+                TrackingInvoke.cveTrackerTLDRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
+    }
+}
+
+namespace Emgu.CV
+{
+    public static partial class TrackingInvoke
+    {
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveTrackerTLDCreate(ref IntPtr tracker, ref IntPtr sharedPtr);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveTrackerTLDRelease(ref IntPtr tracker, ref IntPtr sharedPtr);
+
     }
 }

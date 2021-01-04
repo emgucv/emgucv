@@ -238,6 +238,12 @@ void Test_SeamlessClone(int size)
 void Test_InferenceEngine()
 {
 	std::vector<std::pair<cv::dnn::Backend, cv::dnn::Target>> backends = cv::dnn::getAvailableBackends();
+	for (int i = 0; i < backends.size(); i++)
+	{
+		cv::dnn::Backend b = backends[i].first;
+		cv::dnn::Target t = backends[i].second;
+		cout << "Backend: " << b << "; Target: " << t << std::endl;
+	}
 }
 
 int main()

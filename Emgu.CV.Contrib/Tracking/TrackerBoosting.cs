@@ -7,13 +7,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
-using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Emgu.CV.Tracking
+namespace Emgu.CV.Legacy
 {
     /// <summary>
     /// This is a real-time object tracking based on a novel on-line version of the AdaBoost algorithm. 
@@ -38,7 +37,7 @@ namespace Emgu.CV.Tracking
             int iterationInit = 50, 
             int featureSetNumFeatures = 100*10+50)
         {
-            ContribInvoke.cveTrackerBoostingCreate(
+            TrackingInvoke.cveTrackerBoostingCreate(
                 numClassifiers, 
                 samplerOverlap, 
                 samplerSearchFactor, 
@@ -54,10 +53,24 @@ namespace Emgu.CV.Tracking
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                ContribInvoke.cveTrackerBoostingRelease(ref _ptr, ref _sharedPtr);
+                TrackingInvoke.cveTrackerBoostingRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
             
         }
     }
-
 }
+
+namespace Emgu.CV
+{
+    public static partial class TrackingInvoke
+    {
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveTrackerBoostingCreate(int numClassifiers, float samplerOverlap, float samplerSearchFactor, int iterationInit, int featureSetNumFeatures, ref IntPtr tracker, ref IntPtr sharedPtr);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveTrackerBoostingRelease(ref IntPtr tracker, ref IntPtr sharedPtr);
+
+    }
+}
+

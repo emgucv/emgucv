@@ -16,7 +16,6 @@ using Emgu.CV.UI;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
-using Emgu.CV.Tracking;
 using Emgu.CV.Util;
 
 namespace VideoSurveillance
@@ -41,7 +40,7 @@ namespace VideoSurveillance
         private static VideoCapture _cameraCapture;
 
         private static IBackgroundSubtractor _fgDetector;
-        private static SimpleBlobDetector _blobDetector;
+        //private static SimpleBlobDetector _blobDetector;
 
         public VideoSurveillance()
         {
@@ -62,9 +61,8 @@ namespace VideoSurveillance
             }
 
             _fgDetector = new BackgroundSubtractorMOG2();
-            _blobDetector = new SimpleBlobDetector();
+            //_blobDetector = new SimpleBlobDetector();
             
-
             Application.Idle += ProcessFrame;
         }
 

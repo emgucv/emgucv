@@ -7,13 +7,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
-using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
 
-namespace Emgu.CV.Legacy
+namespace Emgu.CV
 {
     /// <summary>
     /// Long-term tracker
@@ -30,10 +29,9 @@ namespace Emgu.CV.Legacy
         /// </summary>
         /// <param name="image">The initial frame</param>
         /// <param name="boundingBox">The initial bounding box</param>
-        /// <returns>True if successful.</returns>
-        public bool Init(Mat image, Rectangle boundingBox)
+        public void Init(Mat image, Rectangle boundingBox)
         {
-            return TrackingInvoke.cveLegacyTrackerInit(_trackerPtr, image, ref boundingBox);
+            CvInvoke.cveTrackerInit(_trackerPtr, image, ref boundingBox);
         }
 
         /// <summary>
@@ -45,7 +43,7 @@ namespace Emgu.CV.Legacy
         public bool Update(Mat image, out Rectangle boundingBox)
         {
             boundingBox = new Rectangle();
-            return TrackingInvoke.cveLegacyTrackerUpdate(_trackerPtr, image, ref boundingBox);
+            return CvInvoke.cveTrackerUpdate(_trackerPtr, image, ref boundingBox);
         }
 
 
@@ -62,25 +60,18 @@ namespace Emgu.CV.Legacy
 
 namespace Emgu.CV
 {
-    public static partial class TrackingInvoke
+    public static partial class CvInvoke
     {
-        static TrackingInvoke()
-        {
-            CvInvoke.CheckLibraryLoaded();
-        }
         //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         //internal static extern IntPtr cveTrackerCreate(IntPtr trackerType);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal static extern bool cveLegacyTrackerInit(IntPtr tracker, IntPtr image, ref Rectangle boundingBox);
+        internal static extern void cveTrackerInit(IntPtr tracker, IntPtr image, ref Rectangle boundingBox);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal static extern bool cveLegacyTrackerUpdate(IntPtr tracker, IntPtr image, ref Rectangle boundingBox);
+        internal static extern bool cveTrackerUpdate(IntPtr tracker, IntPtr image, ref Rectangle boundingBox);
 
-        //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        //internal static extern void cveTrackerRelease(ref IntPtr tracker);
     }
 }

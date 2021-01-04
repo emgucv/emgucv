@@ -46,7 +46,7 @@ namespace Emgu.CV.Models
             }
         }
 
-        private String _modelFolderName = "vehicle-license-plate-detection-barrier-0106";
+        private String _modelFolderName = "vehicle-license-plate-detection-barrier-0106-openvino-2021.2";
         private Net _vehicleLicensePlateDetector = null;
         private Net _vehicleAttrRecognizer = null;
         private Net _ocr = null;
@@ -58,10 +58,10 @@ namespace Emgu.CV.Models
                 FileDownloadManager manager = new FileDownloadManager();
 
                 manager.AddFile(
-                    "https://download.01.org/opencv/2020/openvinotoolkit/2020.4/open_model_zoo/models_bin/3/license-plate-recognition-barrier-0001/FP32/license-plate-recognition-barrier-0001.xml",
+                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/license-plate-recognition-barrier-0001/FP32/license-plate-recognition-barrier-0001.xml",
                     _modelFolderName);
                 manager.AddFile(
-                    "https://download.01.org/opencv/2020/openvinotoolkit/2020.4/open_model_zoo/models_bin/3/license-plate-recognition-barrier-0001/FP32/license-plate-recognition-barrier-0001.bin",
+                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/license-plate-recognition-barrier-0001/FP32/license-plate-recognition-barrier-0001.bin",
                     _modelFolderName);
 
                 if (onDownloadProgressChanged != null)
@@ -89,10 +89,10 @@ namespace Emgu.CV.Models
                 FileDownloadManager manager = new FileDownloadManager();
 
                 manager.AddFile(
-                    "https://download.01.org/opencv/2020/openvinotoolkit/2020.4/open_model_zoo/models_bin/3/vehicle-attributes-recognition-barrier-0042/FP32/vehicle-attributes-recognition-barrier-0042.xml",
+                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/vehicle-attributes-recognition-barrier-0042/FP32/vehicle-attributes-recognition-barrier-0042.xml",
                     _modelFolderName);
                 manager.AddFile(
-                    "https://download.01.org/opencv/2020/openvinotoolkit/2020.4/open_model_zoo/models_bin/3/vehicle-attributes-recognition-barrier-0042/FP32/vehicle-attributes-recognition-barrier-0042.bin",
+                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/vehicle-attributes-recognition-barrier-0042/FP32/vehicle-attributes-recognition-barrier-0042.bin",
                     _modelFolderName);
 
 
@@ -117,10 +117,10 @@ namespace Emgu.CV.Models
                 FileDownloadManager manager = new FileDownloadManager();
 
                 manager.AddFile(
-                    "https://download.01.org/opencv/2020/openvinotoolkit/2020.4/open_model_zoo/models_bin/3/vehicle-license-plate-detection-barrier-0106/FP32/vehicle-license-plate-detection-barrier-0106.xml",
+                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/vehicle-license-plate-detection-barrier-0106/FP32/vehicle-license-plate-detection-barrier-0106.xml",
                     _modelFolderName);
                 manager.AddFile(
-                    "https://download.01.org/opencv/2020/openvinotoolkit/2020.4/open_model_zoo/models_bin/3/vehicle-license-plate-detection-barrier-0106/FP32/vehicle-license-plate-detection-barrier-0106.bin",
+                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/vehicle-license-plate-detection-barrier-0106/FP32/vehicle-license-plate-detection-barrier-0106.bin",
                     _modelFolderName);
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;
@@ -265,7 +265,7 @@ namespace Emgu.CV.Models
                                 false,
                                 DepthType.Cv32F))
                             using (Mat seqInd = new Mat(
-                                new Size(88, 1),
+                                new Size(1, 88),
                                 DepthType.Cv32F,
                                 1))
                             {
@@ -300,7 +300,7 @@ namespace Emgu.CV.Models
                             }
                         }
                         #endregion
-
+                        
                         plates.Add(p);
                     }
                 }

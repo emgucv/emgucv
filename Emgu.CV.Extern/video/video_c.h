@@ -9,7 +9,27 @@
 #define EMGU_VIDEO_C_H
 
 #include "opencv2/core/core_c.h"
+
+#ifdef HAVE_OPENCV_VIDEO
 #include "opencv2/video/video.hpp"
+#else
+static inline CV_NORETURN void throw_no_video() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without video support"); }
+namespace cv {
+	class Tracker {};
+	class TrackerMIL {};
+	class TrackerGOTURN {};
+	class BackgroundSubtractorMOG2 {};
+	class BackgroundSubtractor {};
+	class BackgroundSubtractorKNN {};
+	class DenseOpticalFlow {};
+	class FarnebackOpticalFlow {};
+	class SparseOpticalFlow {};
+	class SparsePyrLKOpticalFlow {};
+	class KalmanFilter {};
+	class DISOpticalFlow {};
+	class VariationalRefinement {};
+}
+#endif
 
 //BackgroundSubtractorMOG2
 CVAPI(cv::BackgroundSubtractorMOG2*) cveBackgroundSubtractorMOG2Create(int history,  float varThreshold, bool bShadowDetection, cv::BackgroundSubtractor** bgSubtractor, cv::Algorithm** algorithm, cv::Ptr<cv::BackgroundSubtractorMOG2>** sharedPtr);
@@ -98,5 +118,25 @@ CVAPI(void) cveDISOpticalFlowRelease(cv::DISOpticalFlow** flow, cv::Ptr<cv::DISO
 
 CVAPI(cv::VariationalRefinement*) cveVariationalRefinementCreate(cv::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm, cv::Ptr<cv::VariationalRefinement>** sharedPtr);
 CVAPI(void) cveVariationalRefinementRelease(cv::VariationalRefinement** flow, cv::Ptr<cv::VariationalRefinement>** sharedPtr);
+
+//CVAPI(cv::Tracker*) cveTrackerCreate(cv::String* trackerType);
+CVAPI(void) cveTrackerInit(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox);
+CVAPI(bool) cveTrackerUpdate(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox);
+//CVAPI(void) cveTrackerRelease(cv::Tracker** tracker);
+
+CVAPI(cv::TrackerMIL*) cveTrackerMILCreate(
+	float samplerInitInRadius,
+	int samplerInitMaxNegNum,
+	float samplerSearchWinSize,
+	float samplerTrackInRadius,
+	int samplerTrackMaxPosNum,
+	int samplerTrackMaxNegNum,
+	int featureSetNumFeatures,
+	cv::Tracker** tracker,
+	cv::Ptr<cv::TrackerMIL>** sharedPtr);
+CVAPI(void) cveTrackerMILRelease(cv::TrackerMIL** tracker, cv::Ptr<cv::TrackerMIL>** sharedPtr);
+
+CVAPI(cv::TrackerGOTURN*) cveTrackerGOTURNCreate(cv::Tracker** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr);
+CVAPI(void) cveTrackerGOTURNRelease(cv::TrackerGOTURN** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr);
 
 #endif

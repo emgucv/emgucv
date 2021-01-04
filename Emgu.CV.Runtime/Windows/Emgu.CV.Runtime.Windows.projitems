@@ -24,29 +24,29 @@
   </PropertyGroup>
   <ItemGroup Condition="'$(EmguCVWindowsBuildX86)'=='True' AND Exists('$(EmguCVWindowsNativeFileX86)')">
     <Content Include="$(EmguCVWindowsBinaryDir)\x86\*.dll">
-      <Link>x86\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Link>runtimes\win-x86\native\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup Condition="'$(EmguCVWindowsBuildX64)'=='True' AND Exists('$(EmguCVWindowsNativeFileX64)')">
     <Content Include="$(EmguCVWindowsBinaryDir)\x64\*.dll">
-      <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Link>runtimes\win-x64\native\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
 	<Content Include="$(EmguCVWindowsBinaryDir)\x64\*.json">
-      <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Link>runtimes\win-x64\native\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
 	<Content Include="$(EmguCVWindowsBinaryDir)\x64\*.xml">
-      <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Link>runtimes\win-x64\native\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
 	<Content Include="$(EmguCVWindowsBinaryDir)\x64\*.elf">
-      <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Link>runtimes\win-x64\native\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
 	<Content Include="$(EmguCVWindowsBinaryDir)\x64\*.mvcmd">
-      <Link>x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Link>runtimes\win-x64\native\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

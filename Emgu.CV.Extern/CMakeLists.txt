@@ -11,7 +11,7 @@ INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include/opencv")
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include")
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/opencv/3rdparty/zlib")
 
-MACRO(CREATE_VECTOR_CS vname velement velement_cs element_type cs_source_folder namespace_cs cs_compilation_condition additional_c_header additional_c_code c_compilation_condition)
+MACRO(CREATE_VECTOR_CS vname velement velement_cs element_type cs_source_folder namespace_cs cs_compilation_condition additional_c_header additional_c_code c_compilation_condition )
   SET(VECTOR_NAME ${vname})
   SET(VECTOR_ELEMENT ${velement})
   SET(VECTOR_ELEMENT_CS ${velement_cs})
@@ -48,6 +48,12 @@ MACRO(CREATE_VECTOR_CS vname velement velement_cs element_type cs_source_folder 
   #ENDIF()
   
   if (${element_type} STREQUAL "struct")
+    SET(IS_INPUT_OUTPUT_ARRAY true)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfStruct_c.h.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.h)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfStruct_c.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.cpp)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfStruct.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}.cs)
+  ELSEIF(${element_type} STREQUAL "struct_not_array")
+    SET(IS_INPUT_OUTPUT_ARRAY false)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfStruct_c.h.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.h)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/vectorOfStruct_c.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/vector_${VECTOR_NAME}.cpp)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/VectorOfStruct.cs.in ${cs_source_folder}/VectorOf${VECTOR_NAME}.cs)
@@ -86,7 +92,7 @@ CREATE_VECTOR_CS("ERStat" "cv::text::ERStat" "MCvERStat" "struct" "${CMAKE_CURRE
 CREATE_VECTOR_CS("VectorOfERStat" "std::vector< cv::text::ERStat >" "MCvERStat" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Text" Emgu.CV.Text "" "#include \"opencv2/text/erfilter.hpp\"" "" "defined(HAVE_OPENCV_TEXT)")
 
 #IF(HAVE_opencv_line_descriptor)
-#  CREATE_VECTOR_CS("KeyLine" "cv::line_descriptor::KeyLine" "MKeyLine" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/LineDescriptor" Emgu.CV.LineDescriptor "" "#include \"opencv2/line_descriptor.hpp\"")
+CREATE_VECTOR_CS("KeyLine" "cv::line_descriptor::KeyLine" "MKeyLine" "struct_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/LineDescriptor" Emgu.CV.LineDescriptor "" "#include \"opencv2/line_descriptor.hpp\"" "" "defined(HAVE_OPENCV_LINE_DESCRIPTOR)")
 #ENDIF()
 
 CREATE_VECTOR_CS("ColorPoint" "ColorPoint" "ColorPoint" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"videoio_c_extra.h\"" "" "defined(HAVE_OPENCV_VIDEOIO)")
@@ -2712,7 +2718,6 @@ IF(WITH_INF_ENGINE)
 	#link_directories("${INF_ENGINE_LIB_DIRS}/Release")
 	link_directories("${IE_INCLUDE_DIR}/../lib/intel64/")
 	
-    
 	SET(INF_ENGINE_DLL_DIRS "${IE_INCLUDE_DIR}/../bin/intel64/Release")
 	FILE(GLOB INF_DLL_NAMES "${INF_ENGINE_DLL_DIRS}/*.dll" "${INF_ENGINE_DLL_DIRS}/*.xml" "${INF_ENGINE_DLL_DIRS}/*.mvcmd" "${INF_ENGINE_DLL_DIRS}/*.json" "${INF_ENGINE_DLL_DIRS}/*.elf")
     LIST(APPEND CVEXTERN_DEPENDENCY_DLLS ${INF_DLL_NAMES})
@@ -2727,9 +2732,14 @@ IF(WITH_INF_ENGINE)
 	LIST(APPEND CVEXTERN_DEPENDENCY_DLLS ${INF_TBB_DLL_NAMES})
     
     SET(INF_NGRAPH_DLL_DIRS "${IE_INCLUDE_DIR}/../../ngraph/lib")
-    FILE(GLOB INF_NGRAPH_DLL_NAMES "${INF_NGRAPH_DLL_DIRS}/*ngraph.dll")
+    FILE(GLOB INF_NGRAPH_DLL_NAMES "${INF_NGRAPH_DLL_DIRS}/*ngraph.dll" "${INF_NGRAPH_DLL_DIRS}/*_importer.dll")
     #MESSAGE(STATUS "^^^^^^^^^^^^^^  INF_NGRAPH_DLL_NAMES: ${INF_NGRAPH_DLL_NAMES}")
     LIST(APPEND CVEXTERN_DEPENDENCY_DLLS ${INF_NGRAPH_DLL_NAMES})
+	
+	SET(INF_HDDL_DLL_DIRS "${IE_INCLUDE_DIR}/../external/hddl/bin")
+    FILE(GLOB INF_HDDL_DLL_NAMES "${INF_HDDL_DLL_DIRS}/*.dll")
+    #MESSAGE(STATUS "^^^^^^^^^^^^^^  INF_HDDL_DLL_NAMES: ${INF_HDDL_DLL_NAMES}")
+    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS ${INF_HDDL_DLL_NAMES})
 	
 	SET(PROGRAMFILES_X86_ENV "ProgramFiles(x86)")
     SET(ICC_RUNTIME_DIRS "$ENV{${PROGRAMFILES_X86_ENV}}/Common Files/Intel/Shared Libraries/redist/intel64_win/compiler")

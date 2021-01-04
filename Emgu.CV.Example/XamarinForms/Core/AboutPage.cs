@@ -37,16 +37,15 @@ namespace Emgu.CV.XamarinForms
                 List<String> dnnBackendsText = new List<string>();
                 foreach (var dnnBackend in dnnBackends)
                 {
-                    dnnBackendsText.Add(String.Format("{0} - {1}", dnnBackend.Backend, dnnBackend.Target));
+                    dnnBackendsText.Add(String.Format("<p>{0} - {1}</p>", dnnBackend.Backend, dnnBackend.Target));
                 }
 
-                dnnText = String.Join(";", dnnBackendsText.ToArray());
+                dnnText = String.Join("", dnnBackendsText.ToArray());
             }
             else
             {
-                dnnText = "Not available on this platform";
+                dnnText = "DNN not available on this platform";
             }
-
 
             String osDescription = Emgu.Util.Platform.OperationSystem.ToString();
 
@@ -81,6 +80,8 @@ textarea { width: 100%; margin: 0; padding: 0; border - width: 0; }
 " + RuntimeInformation.ProcessArchitecture + @"
 <H4> Dnn Backends: </H4>
 " + dnnText + @"
+<H4> Capture Backends: </H4>
+" + GetCaptureInfo() + @"
 <H4> Build Info </H4>
 <textarea rows=""30"">"
                         + CvInvoke.BuildInformation + @"
@@ -91,6 +92,19 @@ textarea { width: 100%; margin: 0; padding: 0; border - width: 0; }
 
 
                   };
+        }
+
+        private static String GetCaptureInfo()
+        {
+            var captureBackends = CvInvoke.Backends;
+            List<String> captureBackendsText = new List<string>();
+            foreach (var captureBackend in captureBackends)
+            {
+                captureBackendsText.Add(String.Format("<p>{0} - {1}</p>", captureBackend.ID, captureBackend.Name));
+            }
+
+            String captureText = String.Join("", captureBackendsText.ToArray());
+            return captureText;
         }
     }
 }

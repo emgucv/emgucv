@@ -165,7 +165,8 @@ IF (EMGU_CV_WITH_FREETYPE)
 #    #set_property(TARGET harfbuzz PROPERTY IMPORTED_LOCATION HARFBUZZ_INSTALL_DIR)
 	
 	MESSAGE(STATUS "Setting up FREETYPE")
-	find_package(FREETYPE CONFIG REQUIRED)
+#	find_package(FREETYPE CONFIG REQUIRED)
+	find_package(FREETYPE CONFIG)
 	if(NOT FREETYPE_FOUND)
 		message(STATUS "FREETYPE:   NO")
 	else()
@@ -181,7 +182,8 @@ IF (EMGU_CV_WITH_FREETYPE)
 		#SET(FREETYPE_LIBRARIES freetype)
 		#SET(FREETYPE_FOUND ON)
 	endif()	
-	find_package(HARFBUZZ CONFIG REQUIRED) 
+#	find_package(HARFBUZZ CONFIG REQUIRED)
+	find_package(HARFBUZZ CONFIG) 
 	if(NOT HARFBUZZ_FOUND)
 		message(STATUS "HARFBUZZ:    NO")
 	else()
@@ -818,7 +820,8 @@ MESSAGE(STATUS "Package name will be ${CPACK_PACKAGE_NAME}")
 FILE(WRITE "emgucv.version.txt" "${CPACK_PACKAGE_VERSION}")
 
 MATH(EXPR CPACK_PACKAGE_VERSION_PATCH_PLUS_ONE "${CPACK_PACKAGE_VERSION_PATCH}+1")
-SET(CPACK_PACKAGE_DEPENDENCY_VERSION "[${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.0,${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH_PLUS_ONE}.0)")
+#SET(CPACK_PACKAGE_DEPENDENCY_VERSION "[${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.0,${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH_PLUS_ONE}.0)")
+SET(CPACK_PACKAGE_DEPENDENCY_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.*")
 
 #IF(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Commercial.License.txt")
 #  SET(LICENSE_FILE_NAME "Emgu.CV.Commercial.License.txt")
@@ -889,14 +892,14 @@ ADD_SUBDIRECTORY(${OPENCV_SUBFOLDER})
 SET(CMAKE_SOURCE_DIR ${CMAKE_OLD_SOURCE_DIR})
 
 SET (OPENCV_MODULE_NAME_CANDIDATES
-  core hal imgproc video flann ml imgcodecs videoio highgui objdetect features2d calib3d
+  core imgproc video flann ml imgcodecs videoio highgui objdetect features2d calib3d
   cudaarithm cudawarping cudafilters cudaimgproc cudalegacy cudaoptflow 
   cudastereo cudabgsegm cudafeatures2d cudacodec cudaobjdetect
   photo superres  
   videostab shape
   cudev  
   face ximgproc xobjdetect xfeatures2d xphoto bgsegm optflow
-  stitching latentsvm plot
+  stitching plot
   dnn dnn_objdetect dnn_superres aruco fuzzy viz bioinspired text tracking
   dpm
   saliency
@@ -911,6 +914,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   alphamat
   intensity_transform
   rapid
+  line_descriptor
   mcc
   hdf
   )
@@ -1081,6 +1085,7 @@ ENDIF()
 SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "")
 IF(HAVE_WINDESKTOP_X86)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x86\\*.dll\" exclude=\"..\\..\\..\\libs\\x86\\cu*.dll;..\\..\\..\\libs\\x86\\npp*.dll;..\\..\\..\\libs\\x86\\concrt*.dll;..\\..\\..\\libs\\x86\\msvcp*.dll;..\\..\\..\\libs\\x86\\vcruntime*.dll;..\\..\\..\\libs\\x86\\vccorlib*.dll\" target=\"runtimes\\win-x86\\native\" />")
+	SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_TITLE "MSVC x86 runtime for windows")
 	SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST} 
 	<file src=\"..\\..\\..\\libs\\x86\\concrt*.dll\" target=\"runtimes\\win-x86\\native\" /> 
 	<file src=\"..\\..\\..\\libs\\x86\\msvcp*.dll\" target=\"runtimes\\win-x86\\native\" /> 
@@ -1096,6 +1101,7 @@ IF(HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.json\" target=\"runtimes\\win-x64\\native\" />")
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.elf\" target=\"runtimes\\win-x64\\native\" />")
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.mvcmd\" target=\"runtimes\\win-x64\\native\" />")
+	SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_TITLE "MSVC x64 runtime for windows")
 	SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST} 
 	<file src=\"..\\..\\..\\libs\\x64\\concrt*.dll\" target=\"runtimes\\win-x64\\native\" /> 
 	<file src=\"..\\..\\..\\libs\\x64\\msvcp*.dll\" target=\"runtimes\\win-x64\\native\" /> 
@@ -1299,6 +1305,7 @@ SET(EMGUCV_WINDOWS_NETFRAMEWORK_NUGET_DEPENDENCY "<dependency id=\"${EMGUCV_NUGE
 SET(EMGUCV_WINDOWS_NUGET_TITLE "EMGU CV ${EMGUCV_NUGET_TITLE_ARCH}")
 #SET(EMGUCV_WINDOWS_NUGET_TITLE "EMGU CV ${EMGUCV_NUGET_TITLE_ARCH}")
 STRING(STRIP "${EMGUCV_WINDOWS_NUGET_TITLE}" EMGUCV_WINDOWS_NUGET_TITLE)
+SET(EMGUCV_WINDOWS_NUGET_TITLE "${EMGUCV_WINDOWS_NUGET_TITLE} runtime for windows")
 
 IF(WITH_CUDA)
     

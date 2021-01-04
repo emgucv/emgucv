@@ -47,11 +47,13 @@ CVAPI(void) VectorOf${VECTOR_NAME}GetItem(std::vector<  ${VECTOR_ELEMENT} >* vec
 
 CVAPI(void) VectorOf${VECTOR_NAME}GetItemPtr(std::vector<  ${VECTOR_ELEMENT} >* vec, int index,  ${VECTOR_ELEMENT}** element);
 
+#if ${IS_INPUT_OUTPUT_ARRAY}
 CVAPI(cv::_InputArray*) cveInputArrayFromVectorOf${VECTOR_NAME}(std::vector< ${VECTOR_ELEMENT} >* vec);
 
 CVAPI(cv::_OutputArray*) cveOutputArrayFromVectorOf${VECTOR_NAME}(std::vector< ${VECTOR_ELEMENT} >* vec);
 
 CVAPI(cv::_InputOutputArray*) cveInputOutputArrayFromVectorOf${VECTOR_NAME}(std::vector< ${VECTOR_ELEMENT} >* vec);
+#endif
 
 CVAPI(int) VectorOf${VECTOR_NAME}SizeOfItemInBytes();
 
@@ -81,11 +83,13 @@ CVAPI(void) VectorOf${VECTOR_NAME}GetItem(void* vec, int index, void* element);
 
 CVAPI(void) VectorOf${VECTOR_NAME}GetItemPtr(void* vec, int index, void** element);
 
+#if ${IS_INPUT_OUTPUT_ARRAY}
 CVAPI(cv::_InputArray*) cveInputArrayFromVectorOf${VECTOR_NAME}(void* vec);
 
 CVAPI(cv::_OutputArray*) cveOutputArrayFromVectorOf${VECTOR_NAME}(void* vec);
 
 CVAPI(cv::_InputOutputArray*) cveInputOutputArrayFromVectorOf${VECTOR_NAME}(void* vec);
+#endif
 
 CVAPI(int) VectorOf${VECTOR_NAME}SizeOfItemInBytes();
 
