@@ -42,14 +42,14 @@ namespace Emgu.CV.XImgproc
         public static void Filter(
             this IDisparityFilter filter,
             IInputArray disparityMapLeft,
-            IOutputArray leftView,
+            IInputArray leftView,
             IOutputArray filteredDisparityMap,
             IInputArray disparityMapRight = null,
             Rectangle roi = new Rectangle(),
             IInputArray rightView = null)
         {
             using (InputArray iaDisparityMapLeft = disparityMapLeft.GetInputArray())
-            using (OutputArray oaLeftView = leftView.GetOutputArray())
+            using (InputArray oaLeftView = leftView.GetInputArray())
             using (OutputArray oaFilteredDisparityMap = filteredDisparityMap.GetOutputArray())
             using (InputArray iaDisparityMapRight = disparityMapRight == null ? InputArray.GetEmpty() : disparityMapRight.GetInputArray())
             using (InputArray iaRightView = rightView == null ? OutputArray.GetEmpty() : rightView.GetInputArray())
