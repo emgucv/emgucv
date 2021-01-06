@@ -108,9 +108,9 @@ namespace Emgu.CV.Test
          return new Image<TColor, TDepth>(name);
       }
 
-      public static Mat LoadMat(string name)
+      public static Mat LoadMat(string name, ImreadModes modes = ImreadModes.AnyColor | ImreadModes.AnyDepth)
       {
-         return CvInvoke.Imread(name, ImreadModes.AnyColor | ImreadModes.AnyDepth);
+         return CvInvoke.Imread(name, modes);
       }
 #endif
 

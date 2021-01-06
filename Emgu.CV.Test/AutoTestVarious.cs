@@ -1682,23 +1682,32 @@ namespace Emgu.CV.Test
         [Test]
         public void TestStereoSGBMCorrespondence()
         {
-            Image<Gray, Byte> left = EmguAssert.LoadImage<Gray, byte>("aloeL.jpg");
-            Image<Gray, Byte> right = EmguAssert.LoadImage<Gray, byte>("aloeR.jpg");
+            Mat left = EmguAssert.LoadMat("aloeL.jpg", ImreadModes.Grayscale);
+            Mat right = EmguAssert.LoadMat("aloeR.jpg", ImreadModes.Grayscale);
             Size size = left.Size;
 
-            Image<Gray, Int16> disparity = new Image<Gray, Int16>(size);
-
-            StereoSGBM bm = new StereoSGBM(10, 64, 0, 0, 0, 0, 0, 0, 0, 0, StereoSGBM.Mode.SGBM);
+            Mat leftDisparity = new Mat();
+            Mat rightDisparity = new Mat();
+            
+            StereoSGBM bmLeft = new StereoSGBM(10, 64, 0, 0, 0, 0, 0, 0, 0, 0, StereoSGBM.Mode.SGBM);
+            RightMatcher bmRight = new RightMatcher(bmLeft);
+            DisparityWLSFilter wlsFilter = new DisparityWLSFilter(bmLeft);
+            
             Stopwatch watch = Stopwatch.StartNew();
-            bm.Compute(left, right, disparity);
+            bmLeft.Compute(left, right, leftDisparity);
             watch.Stop();
-
             EmguAssert.WriteLine(String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+            
+            bmRight.Compute(right, left, rightDisparity);
+
+            Mat filteredDisparity = new Mat();
+            wlsFilter.Filter(leftDisparity, left, filteredDisparity, rightDisparity, new Rectangle(), right);
+            
 
             Matrix<double> q = new Matrix<double>(4, 4);
             q.SetIdentity();
-            Image<Gray, Int16> disparityScaled = disparity * (-16);
-            MCvPoint3D32f[] points = PointCollection.ReprojectImageTo3D(disparityScaled.Mat, q);
+            Mat disparityScaled = leftDisparity * (-16);
+            MCvPoint3D32f[] points = PointCollection.ReprojectImageTo3D(disparityScaled, q);
 
             float min = (float)1.0e10, max = 0;
             foreach (MCvPoint3D32f p in points)
