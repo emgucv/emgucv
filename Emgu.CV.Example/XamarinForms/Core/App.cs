@@ -96,10 +96,15 @@ namespace Emgu.CV.XamarinForms
 
                 viz3dButton.Clicked += (sender, args) =>
                 {
-                    Mat left = CvInvoke.Imread("imL.png", ImreadModes.Color);
-                    Mat right = CvInvoke.Imread("imR.png", ImreadModes.Color);
-                    Viz3d v = Simple3DReconstruct.GetViz3d(left, right);
-                    v.Spin();
+                    using (Mat left = CvInvoke.Imread("imL.png", ImreadModes.Color))
+                    using (Mat right = CvInvoke.Imread("imR.png", ImreadModes.Color))
+                    using(Mat points = new Mat())
+                    using (Mat colors = new Mat())
+                    {
+                        Simple3DReconstruct.GetPointAndColor(left, right, points, colors);
+                        Viz3d v = Simple3DReconstruct.GetViz3d(points, colors);
+                        v.Spin();
+                    }
                 };
             }
 
