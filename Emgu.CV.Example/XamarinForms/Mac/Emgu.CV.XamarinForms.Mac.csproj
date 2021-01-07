@@ -18,10 +18,12 @@
     <UseSGen>false</UseSGen>
     <OutputPath>.</OutputPath>
     <AOTMode>None</AOTMode>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <UseSGen>false</UseSGen>
     <AOTMode>None</AOTMode>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -39,6 +41,7 @@
     <XamMacArch>
     </XamMacArch>
     <AOTMode>None</AOTMode>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>false</Optimize>
@@ -55,30 +58,39 @@
     <XamMacArch>
     </XamMacArch>
     <AOTMode>None</AOTMode>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ARM' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|ARM' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -170,10 +182,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms">
-      <Version>4.8.0.1269</Version>
+      <Version>5.0.0.1874</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Plugin.FilePicker">
-      <Version>2.1.41</Version>
+    <PackageReference Include="Xamarin.Essentials">
+      <Version>1.6.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
