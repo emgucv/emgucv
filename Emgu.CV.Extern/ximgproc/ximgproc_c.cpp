@@ -655,9 +655,9 @@ void cveDisparityFilterFilter(
 		*disparity_map_left, 
 		*left_view, 
 		*filtered_disparity_map, 
-		disparity_map_right->empty() ? cv::Mat() : *disparity_map_right, 
+		(disparity_map_right && (!disparity_map_right->empty())) ? *disparity_map_right : cv::Mat(),
 		*ROI, 
-		right_view->empty() ? cv::Mat() : *right_view);
+		(right_view && (!right_view->empty()) ? *right_view : cv::Mat()));
 #else
 	throw_no_ximgproc();
 #endif

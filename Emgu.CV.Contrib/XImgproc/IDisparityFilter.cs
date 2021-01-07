@@ -52,7 +52,7 @@ namespace Emgu.CV.XImgproc
             using (InputArray oaLeftView = leftView.GetInputArray())
             using (OutputArray oaFilteredDisparityMap = filteredDisparityMap.GetOutputArray())
             using (InputArray iaDisparityMapRight = disparityMapRight == null ? InputArray.GetEmpty() : disparityMapRight.GetInputArray())
-            using (InputArray iaRightView = rightView == null ? OutputArray.GetEmpty() : rightView.GetInputArray())
+            using (InputArray iaRightView = rightView == null ? InputArray.GetEmpty() : rightView.GetInputArray())
             {
                 cveDisparityFilterFilter(
                     filter.DisparityFilterPtr,
