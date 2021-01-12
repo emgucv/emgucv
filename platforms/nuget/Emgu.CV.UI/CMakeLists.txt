@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-#  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.
+#  Copyright (C) 2004-2021 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
 IF ((TARGET Emgu.CV.Platform.NetCore) AND (TARGET Emgu.CV.Platform.NetFramework))

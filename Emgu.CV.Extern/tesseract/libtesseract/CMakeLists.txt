@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-#  Copyright (C) 2004-2020 by EMGU Corporation. All rights reserved.
+#  Copyright (C) 2004-2021 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
 #cmake_minimum_required(VERSION 2.8)
