@@ -12,8 +12,8 @@ using System.Diagnostics;
 [assembly: DebuggerVisualizer(
     typeof(Emgu.CV.DebuggerVisualizers.MatrixVisualizer),
     typeof(VisualizerObjectSource),
-    //Target = typeof(Matrix<>),
-    TargetTypeName = "Emgu.CV.Matrix<,>, Emgu.CV.Platform.NetStandard",
+    Target = typeof(Matrix<>),
+    //TargetTypeName = "Emgu.CV.Matrix<,>, Emgu.CV.Platform.NetStandard",
     Description = "Matrix debugger visualizer")]
 
 namespace Emgu.CV.DebuggerVisualizers

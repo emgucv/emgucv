@@ -8,9 +8,18 @@ using Emgu.CV;
 using Emgu.CV.UI;
 using System.Diagnostics;
 
-[assembly: DebuggerVisualizer(typeof(Emgu.CV.DebuggerVisualizers.ImageVisualizer), Target = typeof(Image<,>))]
-[assembly: DebuggerVisualizer(typeof(Emgu.CV.DebuggerVisualizers.MatVisualizer), Target = typeof(Mat))]
-[assembly: DebuggerVisualizer(typeof(Emgu.CV.DebuggerVisualizers.UMatVisualizer), Target = typeof(UMat))]
+[assembly: DebuggerVisualizer(
+    typeof(Emgu.CV.DebuggerVisualizers.ImageVisualizer), 
+    typeof(VisualizerObjectSource), 
+    Target = typeof(Image<,>))]
+[assembly: DebuggerVisualizer(
+    typeof(Emgu.CV.DebuggerVisualizers.MatVisualizer), 
+    typeof(VisualizerObjectSource), 
+    Target = typeof(Mat))]
+[assembly: DebuggerVisualizer(
+    typeof(Emgu.CV.DebuggerVisualizers.UMatVisualizer), 
+    typeof(VisualizerObjectSource), 
+    Target = typeof(UMat))]
 
 namespace Emgu.CV.DebuggerVisualizers
 {
