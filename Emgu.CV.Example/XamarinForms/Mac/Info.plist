@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleName</key>
-	<string>Emgu CV OSX Xamarin.Forms</string>
+	<string>Emgu CV MacOS Demo</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.emgu.demo.mac.emgu-cv-osx-xamarin-forms</string>
+	<string>com.emgu.demo.mac.cv</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
