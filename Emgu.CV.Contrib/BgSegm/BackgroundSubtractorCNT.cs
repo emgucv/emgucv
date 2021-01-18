@@ -91,6 +91,6 @@ namespace Emgu.CV.BgSegm
             ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveBackgroundSubtractorCNTRelease(ref IntPtr bgSubstractor, ref IntPtr sharedPtr);
+        internal static extern void cveBackgroundSubtractorCNTRelease(ref IntPtr bgSubtractor, ref IntPtr sharedPtr);
     }
 }

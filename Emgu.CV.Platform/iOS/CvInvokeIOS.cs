@@ -29,7 +29,7 @@ namespace Emgu.CV
         /// </summary>
         public static bool Init()
         {
-            return CvInvoke.Init();
+            return _libraryLoaded;
         }
 
         /// <summary>
