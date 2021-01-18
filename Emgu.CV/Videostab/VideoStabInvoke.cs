@@ -14,7 +14,7 @@ namespace Emgu.CV.VideoStab
     {
         static VideoStabInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

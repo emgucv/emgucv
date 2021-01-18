@@ -88,7 +88,7 @@ namespace Emgu.CV.XObjdetect
     {
         static XObjdetectInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

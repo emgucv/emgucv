@@ -116,7 +116,7 @@ namespace Emgu.CV.Face
     {
         static FaceInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

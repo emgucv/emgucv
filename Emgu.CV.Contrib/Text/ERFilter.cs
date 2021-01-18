@@ -178,7 +178,7 @@ namespace Emgu.CV.Text
     {
         static TextInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

@@ -23,7 +23,7 @@ namespace Emgu.CV.OCR
         static OcrInvoke()
         {
             //dummy code that is used to involve the static constructor of CvInvoke, if it has not already been called.
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         #region Tesseract

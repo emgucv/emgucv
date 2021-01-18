@@ -25,7 +25,7 @@ namespace Emgu.CV.XFeatures2D
     {
         static XFeatures2DInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         /// <summary>

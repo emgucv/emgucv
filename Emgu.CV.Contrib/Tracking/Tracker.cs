@@ -66,7 +66,7 @@ namespace Emgu.CV
     {
         static TrackingInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
         //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         //internal static extern IntPtr cveTrackerCreate(IntPtr trackerType);

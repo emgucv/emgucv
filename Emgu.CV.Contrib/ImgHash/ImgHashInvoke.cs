@@ -21,7 +21,7 @@ namespace Emgu.CV.ImgHash
     {
         static ImgHashInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

@@ -23,7 +23,7 @@ namespace Emgu.CV
     /// </summary>
     public static partial class AndroidExtension
     {
-        
+
         /// <summary>
         /// Read image file from Assets
         /// </summary>

@@ -47,7 +47,7 @@ namespace Emgu.CV.Tiff
    {
       static TiffWriter()
       {
-         CvInvoke.CheckLibraryLoaded();
+         CvInvoke.Init();
       }
 
       /// <summary>

@@ -17,7 +17,7 @@ namespace Emgu.CV
    {
       static ScalarArray()
       {
-         CvInvoke.CheckLibraryLoaded();
+         CvInvoke.Init();
       }
 
       private enum DataType

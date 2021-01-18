@@ -19,7 +19,7 @@ namespace Emgu.CV.Bioinspired
     {
         static BioinspiredInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

@@ -15,7 +15,7 @@ namespace Emgu.CV.Features2D
    {
       static Features2DInvoke()
       {
-         CvInvoke.CheckLibraryLoaded();
+         CvInvoke.Init();
       }
    }
 }

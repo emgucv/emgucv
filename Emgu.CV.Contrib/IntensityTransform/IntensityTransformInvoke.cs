@@ -20,7 +20,7 @@ namespace Emgu.CV.IntensityTransform
     {
         static IntensityTransformInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         /// <summary>

@@ -92,7 +92,7 @@ namespace Emgu.CV.PhaseUnwrapping
     {
         static PhaseUnwrappingInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

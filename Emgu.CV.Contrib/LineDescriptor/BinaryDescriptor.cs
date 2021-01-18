@@ -70,7 +70,7 @@ namespace Emgu.CV.LineDescriptor
     {
         static LineDescriptorInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

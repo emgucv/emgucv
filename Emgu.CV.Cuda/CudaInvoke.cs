@@ -23,7 +23,7 @@ namespace Emgu.CV.Cuda
         static CudaInvoke()
         {
             //Dummy code to make sure the static constructor of CvInvoke has been called and the error handler has been registered.
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         #region device info

@@ -21,7 +21,7 @@ namespace Emgu.CV.Fuzzy
    {
       static FuzzyInvoke()
       {
-         CvInvoke.CheckLibraryLoaded();
+         CvInvoke.Init();
       }
 
       /// <summary>

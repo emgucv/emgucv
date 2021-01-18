@@ -16,7 +16,7 @@ namespace Emgu.CV.XImgproc
     {
         static XImgprocInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         /// <summary>

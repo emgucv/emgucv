@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Emgu.CV;
 using Foundation;
 using UIKit;
 
@@ -14,12 +14,12 @@ namespace Example.iOS
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
     // User Interface of the application, as well as listening (and optionally responding) to 
     // application events from iOS.
-    [Register ("AppDelegate")]
+    [Register("AppDelegate")]
     public partial class AppDelegate : UIApplicationDelegate
     {
         // class-level declarations
-        UIWindow window;
-        
+        UIWindow _window;
+
         //
         // This method is invoked when the application has loaded and is ready to run. In this 
         // method you should instantiate the window, load the UI into it and then make the window
@@ -29,23 +29,26 @@ namespace Example.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            window = new UIWindow(UIScreen.MainScreen.Bounds);
-			  UINavigationController navControl = new UINavigationController();
-         navControl.PushViewController(new ExamplesDialogViewController(), false);
+            CvInvokeIOS.Init();
 
-         window.RootViewController = navControl;
-            window.MakeKeyAndVisible();
-			
+            _window = new UIWindow(UIScreen.MainScreen.Bounds);
+            UINavigationController navControl = new UINavigationController();
+            navControl.PushViewController(new ExamplesDialogViewController(), false);
+
+            _window.RootViewController = navControl;
+            _window.MakeKeyAndVisible();
+
             return true;
         }
 
-         public static bool iOS7Plus
-         {
-            get {
-               System.Version version = new Version (UIDevice.CurrentDevice.SystemVersion);
-               return version.Major >= 7;
+        public static bool iOS7Plus
+        {
+            get
+            {
+                System.Version version = new Version(UIDevice.CurrentDevice.SystemVersion);
+                return version.Major >= 7;
             }
-         }
+        }
     }
 }
 

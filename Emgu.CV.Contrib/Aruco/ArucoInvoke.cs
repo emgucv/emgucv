@@ -23,7 +23,7 @@ namespace Emgu.CV.Aruco
     {
         static ArucoInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         /// <summary>

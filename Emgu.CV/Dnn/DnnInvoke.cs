@@ -21,7 +21,7 @@ namespace Emgu.CV.Dnn
     {
         static DnnInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         /// <summary>

@@ -132,7 +132,7 @@ namespace Emgu.CV.Freetype
     {
         static FreetypeInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

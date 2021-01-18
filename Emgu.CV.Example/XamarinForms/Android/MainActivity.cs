@@ -24,16 +24,18 @@ namespace Emgu.CV.XamarinForms.Droid
 
         private Emgu.CV.XamarinForms.App _app;
 
-        protected override void OnCreate(Bundle bundle)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(bundle);
-            Xamarin.Essentials.Platform.Init(this, bundle); // add this line to your code, it may also be called: bundle
+            base.OnCreate(savedInstanceState);
+            Xamarin.Essentials.Platform.Init(this, savedInstanceState); // add this line to your code, it may also be called: bundle
 
-            global::Xamarin.Forms.Forms.Init(this, bundle);
+            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
-            CrossCurrentActivity.Current.Init(this, bundle);
+            CrossCurrentActivity.Current.Init(this, savedInstanceState);
 
             CheckAppPermissions();
+
+            CvInvokeAndroid.Init();
 
             _app = new Emgu.CV.XamarinForms.App();
             LoadApplication(_app);

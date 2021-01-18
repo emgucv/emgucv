@@ -21,7 +21,7 @@ namespace Emgu.CV.Hfs
     {
         static HfsInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
 

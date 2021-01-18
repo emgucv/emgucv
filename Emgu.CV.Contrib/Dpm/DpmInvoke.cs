@@ -7,7 +7,7 @@
     {
         static DpmInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
     }
 }

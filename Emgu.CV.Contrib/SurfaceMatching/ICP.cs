@@ -95,7 +95,7 @@ namespace Emgu.CV.PpfMatch3d
     {
         static PpfMatch3dInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

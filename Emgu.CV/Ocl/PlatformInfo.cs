@@ -60,7 +60,7 @@ namespace Emgu.CV.Ocl
    {
       static OclInvoke()
       {
-         CvInvoke.CheckLibraryLoaded();
+         CvInvoke.Init();
       }
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

@@ -6,17 +6,17 @@ using System;
 
 namespace Emgu.CV
 {
-   /// <summary>
-   /// CvInvoke for Android
-   /// </summary>
-   public static class CvInvokeAndroid
-   {
-      /// <summary>
-      /// Return true if the class is loaded.
-      /// </summary>
-      public static bool CheckLibraryLoaded ()
-      {
-         return CvInvoke.CheckLibraryLoaded ();
-      }
-   }
+    /// <summary>
+    /// CvInvoke for Android
+    /// </summary>
+    public static class CvInvokeAndroid
+    {
+        /// <summary>
+        /// Return true if the class is loaded.
+        /// </summary>
+        public static bool Init()
+        {
+            return CvInvoke.Init();
+        }
+    }
 }

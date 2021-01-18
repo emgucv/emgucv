@@ -20,7 +20,7 @@ namespace Emgu.CV.Alphamat
     {
         static AlphamatInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         /// <summary>

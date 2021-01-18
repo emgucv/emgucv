@@ -80,7 +80,7 @@ namespace Emgu.CV.DnnSuperres
 
         static DnnSuperresInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

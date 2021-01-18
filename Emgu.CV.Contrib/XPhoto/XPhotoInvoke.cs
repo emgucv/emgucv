@@ -49,7 +49,7 @@ namespace Emgu.CV.XPhoto
     {
         static XPhotoInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
 
         /// <summary>
