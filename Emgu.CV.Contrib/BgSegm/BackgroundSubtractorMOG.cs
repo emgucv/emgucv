@@ -45,7 +45,7 @@ namespace Emgu.CV.BgSegm
             int history = 200, int nMixtures = 5, double backgroundRatio = 0.7,
             double noiseSigma = 0)
         {
-            _ptr = ContribInvoke.cveBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
+            _ptr = BgSegmInvoke.cveBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -55,17 +55,14 @@ namespace Emgu.CV.BgSegm
         {
             if (IntPtr.Zero != _ptr)
             {
-                ContribInvoke.cveBackgroundSubtractorMOGRelease(ref _ptr, ref _sharedPtr);
+                BgSegmInvoke.cveBackgroundSubtractorMOGRelease(ref _ptr, ref _sharedPtr);
                 _backgroundSubtractorPtr = IntPtr.Zero;
                 _algorithmPtr = IntPtr.Zero;
             }
         }
     }
-}
 
-namespace Emgu.CV
-{
-    public static partial class ContribInvoke
+    public static partial class BgSegmInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveBackgroundSubtractorMOGCreate(int history, int nmixtures, double backgroundRatio, double noiseSigma, ref IntPtr bgSubtractor, ref IntPtr algorithm, ref IntPtr sharedPtr);

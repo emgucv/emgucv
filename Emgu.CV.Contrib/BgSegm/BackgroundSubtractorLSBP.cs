@@ -77,7 +77,7 @@ namespace Emgu.CV.BgSegm
             int LSBPthreshold = 8, 
             int minCount = 2)
         {
-            _ptr = Emgu.CV.ContribInvoke.cveBackgroundSubtractorLSBPCreate(
+            _ptr = BgSegmInvoke.cveBackgroundSubtractorLSBPCreate(
                 mc, nSamples, LSBPRadius, tlower, tupper, tinc, tdec, rscale, rincdec, noiseRemovalThresholdFacBG, noiseRemovalThresholdFacFG, LSBPthreshold, minCount, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
@@ -88,18 +88,15 @@ namespace Emgu.CV.BgSegm
         {
             if (IntPtr.Zero != _ptr)
             {
-                Emgu.CV.ContribInvoke.cveBackgroundSubtractorLSBPRelease(ref _ptr, ref _sharedPtr);
+                BgSegmInvoke.cveBackgroundSubtractorLSBPRelease(ref _ptr, ref _sharedPtr);
                 _backgroundSubtractorPtr = IntPtr.Zero;
                 _algorithmPtr = IntPtr.Zero;
             }
         }
 
     }
-}
 
-namespace Emgu.CV
-{
-    public static partial class ContribInvoke
+    public static partial class BgSegmInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveBackgroundSubtractorLSBPCreate(

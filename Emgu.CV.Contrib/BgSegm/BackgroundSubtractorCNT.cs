@@ -44,7 +44,7 @@ namespace Emgu.CV.BgSegm
             int maxPixelStability = 15 * 60,
             bool isParallel = true)
         {
-            _ptr = ContribInvoke.cveBackgroundSubtractorCNTCreate(
+            _ptr = BgSegmInvoke.cveBackgroundSubtractorCNTCreate(
                 minPixelStability,
                 useHistory,
                 maxPixelStability,
@@ -61,18 +61,23 @@ namespace Emgu.CV.BgSegm
         {
             if (IntPtr.Zero != _ptr)
             {
-                ContribInvoke.cveBackgroundSubtractorCNTRelease(ref _ptr, ref _sharedPtr);
+                BgSegmInvoke.cveBackgroundSubtractorCNTRelease(ref _ptr, ref _sharedPtr);
                 _backgroundSubtractorPtr = IntPtr.Zero;
                 _algorithmPtr = IntPtr.Zero;
             }
         }
     }
-}
 
-namespace Emgu.CV
-{
-    public static partial class ContribInvoke
+    /// <summary>
+    /// Entry points for the BgSegm module.
+    /// </summary>
+    public static partial class BgSegmInvoke
     {
+        static BgSegmInvoke()
+        {
+            CvInvoke.Init();
+        }
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveBackgroundSubtractorCNTCreate(
             int minPixelStability,

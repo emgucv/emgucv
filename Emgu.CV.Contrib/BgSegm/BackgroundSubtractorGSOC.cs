@@ -58,7 +58,7 @@ namespace Emgu.CV.BgSegm
             float noiseRemovalThresholdFacBG = 0.0004f, 
             float noiseRemovalThresholdFacFG = 0.0008f)
         {
-            _ptr = ContribInvoke.cveBackgroundSubtractorGSOCCreate(mc, nSamples, replaceRate, propagationRate, hitsThreshold, alpha, beta, blinkingSupressionDecay, blinkingSupressionMultiplier, noiseRemovalThresholdFacBG, noiseRemovalThresholdFacFG, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
+            _ptr = BgSegmInvoke.cveBackgroundSubtractorGSOCCreate(mc, nSamples, replaceRate, propagationRate, hitsThreshold, alpha, beta, blinkingSupressionDecay, blinkingSupressionMultiplier, noiseRemovalThresholdFacBG, noiseRemovalThresholdFacFG, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
         }
 
         /// <summary>
@@ -68,17 +68,14 @@ namespace Emgu.CV.BgSegm
         {
             if (IntPtr.Zero != _ptr)
             {
-                ContribInvoke.cveBackgroundSubtractorGSOCRelease(ref _ptr, ref _sharedPtr);
+                BgSegmInvoke.cveBackgroundSubtractorGSOCRelease(ref _ptr, ref _sharedPtr);
                 _backgroundSubtractorPtr = IntPtr.Zero;
                 _algorithmPtr = IntPtr.Zero;
             }
         }
     }
-}
 
-namespace Emgu.CV
-{
-    public static partial class ContribInvoke
+    public static partial class BgSegmInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveBackgroundSubtractorGSOCCreate(
