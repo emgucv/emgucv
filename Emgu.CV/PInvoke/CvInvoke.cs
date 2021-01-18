@@ -89,12 +89,14 @@ namespace Emgu.CV
                     //var fd = RuntimeInformation.FrameworkDescription;
                     if (RuntimeInformation.ProcessArchitecture == Architecture.X86)
                     {
-                        subfolderOptions.Add(Path.Combine("runtimes", "win-x86", "native"));
+                        if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
+                            subfolderOptions.Add(Path.Combine("runtimes", "win-x86", "native"));
                         subfolderOptions.Add("x86");
                     }
                     else if (RuntimeInformation.ProcessArchitecture == Architecture.X64)
                     {
-                        subfolderOptions.Add(Path.Combine("runtimes", "win-x64", "native"));
+                        if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
+                            subfolderOptions.Add(Path.Combine("runtimes", "win-x64", "native"));
                         subfolderOptions.Add("x64");
                     }
                     else if (RuntimeInformation.ProcessArchitecture == Architecture.Arm)
