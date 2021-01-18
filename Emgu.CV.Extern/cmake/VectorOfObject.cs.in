@@ -30,7 +30,7 @@ namespace ${NAMESPACE_CS}
    
       static VectorOf${VECTOR_NAME}()
       {
-         CvInvoke.CheckLibraryLoaded();
+         CvInvoke.Init();
       }
 
       /// <summary>

@@ -33,7 +33,7 @@ namespace ${NAMESPACE_CS}
    
       static VectorOf${VECTOR_NAME}()
       {
-         CvInvoke.CheckLibraryLoaded();
+         CvInvoke.Init();
          Debug.Assert(Emgu.Util.Toolbox.SizeOf<${VECTOR_ELEMENT_CS}>() == SizeOfItemInBytes, "Size do not match");
       }
 
