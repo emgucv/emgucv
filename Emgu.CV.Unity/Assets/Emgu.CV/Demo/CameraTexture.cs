@@ -51,7 +51,7 @@ public class CameraTexture : MonoBehaviour
             baseRotation = transform.rotation;
             webcamTexture.Play();
             //data = new Color32[webcamTexture.width * webcamTexture.height];
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
     }
 
