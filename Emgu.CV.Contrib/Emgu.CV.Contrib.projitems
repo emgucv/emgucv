@@ -38,5 +38,6 @@
 	<Compile Include="$(MSBuildThisFileDirectory)Rapid\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Mcc\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Hdf\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)DepthAI\*.cs" />
   </ItemGroup>
 </Project>

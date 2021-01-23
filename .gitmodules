@@ -38,3 +38,6 @@
 	path = hdf5
 	url = https://github.com/HDFGroup/hdf5.git
 	ignore = dirty
+[submodule "Emgu.CV.Extern/depthai-core"]
+	path = Emgu.CV.Extern/depthai-core
+	url = https://github.com/luxonis/depthai-core.git

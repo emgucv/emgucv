@@ -8,10 +8,41 @@
 #
 # --------------------------------------------------------
 
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+
+IF( WIN32)
+  SET(EMGU_CV_WITH_DEPTHAI ON CACHE BOOL "Build support for OAK-1 and OAK-D")
+ELSE() 
+  SET(EMGU_CV_WITH_DEPTHAI OFF CACHE BOOL "Build support for OAK-1 and OAK-D")
+ENDIF()
+
+IF(EMGU_CV_WITH_DEPTHAI)
+  # Set defaults
+  set(HUNTER_CONFIGURATION_TYPES "Release" CACHE STRING "Hunter dependencies list of build configurations")
+  
+  include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/HunterGate.cmake")
+  
+  HunterGate(
+    URL "https://github.com/cpp-pm/hunter/archive/v0.23.258.tar.gz"
+    SHA1 "062a19ab13ce8dffa9a882b6ce3e43bdabdf75d3"
+    FILEPATH ${CMAKE_CURRENT_LIST_DIR}/Emgu.CV.Extern/depthai-core/cmake/Hunter/config.cmake # Add depthai-core config (hunter limitation)
+  )
+
+  # Move binary dir if windows, to shorten the path
+  if(WIN32)
+    set(HUNTER_BINARY_DIR "${HUNTER_GATE_ROOT}/_bin" CACHE STRING "Hunter binary directory")
+  endif()
+ENDIF()
+
+
 PROJECT(emgucv)
 CMAKE_MINIMUM_REQUIRED(VERSION 3.9.4)
 cmake_policy(SET CMP0022 NEW)
 cmake_policy(SET CMP0069 NEW)
+
+IF(EMGU_CV_WITH_DEPTHAI)  
+  add_subdirectory(Emgu.CV.Extern/depthai-core EXCLUDE_FROM_ALL)
+ENDIF()
 
 #IF(ANDROID)
 #include(CheckIPOSupported)
@@ -25,10 +56,11 @@ cmake_policy(SET CMP0069 NEW)
 #ENDIF()
 
 IF( WIN32 OR ANDROID OR APPLE OR NETFX_CORE)
-	SET(EMGU_CV_WITH_FREETYPE ON CACHE BOOL "BUILD FREETYPE")
+  SET(EMGU_CV_WITH_FREETYPE ON CACHE BOOL "BUILD FREETYPE")
 ELSE() 
-	SET(EMGU_CV_WITH_FREETYPE OFF CACHE BOOL "BUILD FREETYPE")
+  SET(EMGU_CV_WITH_FREETYPE OFF CACHE BOOL "BUILD FREETYPE")
 ENDIF()
+
 
 #IF(WIN32)
 #  FIND_PACKAGE(HDF5)
@@ -153,7 +185,7 @@ SET(OPENCV_SUBFOLDER ${CMAKE_CURRENT_SOURCE_DIR}/opencv)
 SET(OPENCV_CONTRIB_SUBFOLDER ${CMAKE_CURRENT_SOURCE_DIR}/opencv_contrib)
 SET(OPENCV_EXTRA_SUBFOLDER ${CMAKE_CURRENT_SOURCE_DIR}/opencv_extra)
 
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+
   
 SET(CSC_PREFERRED_VERSION "4.0")
 IF((NOT NETFX_CORE) AND MSVC) 

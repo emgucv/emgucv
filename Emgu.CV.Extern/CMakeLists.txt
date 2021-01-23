@@ -4,12 +4,19 @@
 #  CMake file for cvextern. See root CMakeLists.txt
 #
 # ----------------------------------------------------------------------------
+
+
 project(cvextern)
 set(the_target ${PROJECT_NAME})
 
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include/opencv")
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include")
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/opencv/3rdparty/zlib")
+
+IF(EMGU_CV_WITH_DEPTHAI)
+  INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/depthai-core/include/depthai")
+  add_definitions(-DHAVE_DEPTHAI)
+ENDIF()
 
 MACRO(CREATE_VECTOR_CS vname velement velement_cs element_type cs_source_folder namespace_cs cs_compilation_condition additional_c_header additional_c_code c_compilation_condition )
   SET(VECTOR_NAME ${vname})
@@ -2549,6 +2556,7 @@ IF(WITH_OPENMP)
 ENDIF()
 ############################### OPENMP END ################################
 
+
 SET(OPENCV_MODULES_DIR "${OPENCV_SUBFOLDER}/modules")
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}")
@@ -2579,6 +2587,64 @@ FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAME_CANDIDATES})
     LIST(APPEND extern_hdrs ${${CVEXTERN_OPTIONAL_DEP}_extern_hdrs})
   ENDIF()
 ENDFOREACH()
+
+############################### DEPTHAI START ##############################
+file(GLOB_RECURSE depthai_srcs "${PROJECT_SOURCE_DIR}/depthai/*.cpp")
+file(GLOB_RECURSE depthai_hdrs "${PROJECT_SOURCE_DIR}/depthai/*.h*")
+#message(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>  depthai_srcs: ${depthai_srcs}")
+#message(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>  depthai_hdrs: ${depthai_hdrs}")
+source_group("Src_depthai" FILES ${depthai_srcs})
+source_group("Include_depthai" FILES ${depthai_hdrs})
+LIST(APPEND extern_srcs ${depthai_srcs})
+LIST(APPEND extern_hdrs ${depthai_hdrs})
+
+  CREATE_OCV_CLASS_PROPERTY( 
+    "depthai/device_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/DepthAI/Device.g.cs"
+    "Device" 
+    "Device" 
+    "is_usb3;is_eeprom_loaded;is_rgb_connected;is_left_connected;is_right_connected" 
+    "bool;bool;bool;bool;bool" 
+    "val;val;val;val;val"
+    "IsUsb3;IsEepromLoaded;IsRgbConnected;IsLeftConnected;IsRightConnected" 
+    "bool;bool;bool;bool;bool"
+    "True if the connection is USB3;
+     True if eeprom is loaded;
+     True if rgb connected;
+     True if left connected;
+     True if right connected"
+    "Emgu.CV.DepthAI"
+    "DepthAIInvoke"
+    "Device"
+	""
+    "#include \"depthai_c.h\""
+	""
+	"" 
+	${EMGU_CV_WITH_DEPTHAI})
+
+      CREATE_OCV_CLASS_PROPERTY( 
+    "depthai/hostDataPacket_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/DepthAI/HostDataPacket.g.cs"
+    "HostDataPacket" 
+    "HostDataPacket" 
+    "stream_name;size;Data;elem_size" 
+    "cv::String;int;const unsigned char*;int" 
+    "elementR;val;propR;elementR"
+    "StreamName;Size;Data;ElemSize" 
+    "String;int;IntPtr;int"
+    "Stream Name;
+    Size;
+    Pointer to the native data;
+    Element size"
+    "Emgu.CV.DepthAI"
+    "DepthAIInvoke"
+    "HostDataPacket"
+	""
+    "#include \"depthai_c.h\""
+	""
+	"" 
+	${EMGU_CV_WITH_DEPTHAI})
+############################### DEPTHAI END ################################
 
 IF(WIN32 AND CV_ICC)
   STRING(REGEX REPLACE "/Qipo" "" CMAKE_C_FLAGS_RELEASE ${CMAKE_C_FLAGS_RELEASE})
@@ -3206,6 +3272,10 @@ IF(EMGU_CV_WITH_TESSERACT)
     #MESSAGE("TESSERACT not found, add dependency to ${TESSERACT_PROJECTS}")
     ADD_DEPENDENCIES(${TESSERACT_PROJECTS})
   ENDIF()
+ENDIF()
+
+IF(EMGU_CV_WITH_DEPTHAI)
+  target_link_libraries(${the_target} depthai-core) 
 ENDIF()
 
 FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})

@@ -35,7 +35,7 @@ namespace Emgu.CV.Cuda
         /// Finds line segments in a binary image using the probabilistic Hough transform.
         /// </summary>
         /// <param name="image">8-bit, single-channel binary source image</param>
-        /// <param name="lines">Output vector of lines.Output vector of lines. Each line is represented by a two-element vector. 
+        /// <param name="lines">Output vector of lines. Each line is represented by a two-element vector. 
         /// The first element is the distance from the coordinate origin (top-left corner of the image). 
         /// The second element is the line rotation angle in radians.</param>
         /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
@@ -63,11 +63,11 @@ namespace Emgu.CV.Cuda
     {
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cudaHoughLinesDetectorCreate(
-           float rho, float theta, int threshold,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool doSort,
-           int maxLines,
-           ref IntPtr sharedPtr);
+            float rho, float theta, int threshold,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool doSort,
+            int maxLines,
+            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cudaHoughLinesDetectorDetect(IntPtr detector, IntPtr src, IntPtr lines, IntPtr stream);

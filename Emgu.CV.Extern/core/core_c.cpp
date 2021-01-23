@@ -1371,6 +1371,13 @@ void cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value)
 	value->push_back(0);
 #endif
 	
+	key->push_back("HAVE_DEPTHAI");
+#ifdef HAVE_DEPTHAI
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
 }
 
 #if defined(CV_ICC) && defined(_M_IX86)

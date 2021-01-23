@@ -31,6 +31,7 @@ using Emgu.CV.Freetype;
 
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
+using Emgu.CV.DepthAI;
 using Emgu.CV.Mcc;
 using Emgu.CV.Tiff;
 //using Emgu.CV.UI;
@@ -40,6 +41,7 @@ using Emgu.CV.XFeatures2D;
 using Emgu.CV.XImgproc;
 //using Emgu.CV.Softcascade;
 using Emgu.Util;
+using Newtonsoft.Json;
 using DetectorParameters = Emgu.CV.Aruco.DetectorParameters;
 #if VS_TEST
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -4072,6 +4074,131 @@ namespace Emgu.CV.Test
             CvInvoke.SeamlessClone(img2, img1, mask, new System.Drawing.Point(img1.Height / 2, img1.Width / 2), blend, CloningMethod.Normal);
             return blend;
         }
+
+
+        [Test]
+        public void TestDepthAIDevice()
+        {
+            if (!DepthAIInvoke.HaveDepthAI)
+                return;
+
+            
+            Config config = new Config();
+            config.streams = new List<string>();
+            config.streams.Add("metaout");
+            config.streams.Add("previewout");
+            config.depth = new Depth();
+            config.depth.calibration_file = String.Empty;
+            config.depth.left_mesh_file = "D:\\sourceforge\\depthai\\resources\\mesh_left.calib";
+            config.depth.right_mesh_file = "D:\\sourceforge\\depthai\\resources\\mesh_right.calib";
+            config.depth.padding_factor = 0.3;
+            config.depth.depth_limit_m = 10.0;
+            config.depth.median_kernel_size = 7;
+            config.depth.lr_check = false;
+            config.depth.warp_rectify = new WarpRectify();
+            config.depth.warp_rectify.use_mesh = false;
+            config.depth.warp_rectify.mirror_frame = true;
+            config.depth.warp_rectify.edge_fill_color = 0;
+            config.ai = new Ai();
+            config.ai.blob_file =
+                "D:\\sourceforge\\depthai\\resources\\nn\\mobilenet-ssd\\mobilenet-ssd.blob.sh14cmx14NCE1";
+            config.ai.blob_file_config = "D:\\sourceforge\\depthai\\resources\\nn\\mobilenet-ssd\\mobilenet-ssd.json";
+            config.ai.blob_file2 = String.Empty;
+            config.ai.blob_file_config2 = String.Empty;
+            config.ai.calc_dist_to_bb = true;
+            config.ai.keep_aspect_ratio = true;
+            config.ai.camera_input = "rgb";
+            config.ai.shaves = 14;
+            config.ai.cmx_slices = 14;
+            config.ai.NN_engines = 1;
+            config.ot = new Ot();
+            config.ot.max_tracklets = 20;
+            config.ot.confidence_threshold = 0.5;
+            config.board_config = new BoardConfig();
+            config.board_config.swap_left_and_right_cameras = true;
+            config.board_config.left_fov_deg = 71.86;
+            config.board_config.rgb_fov_deg = 68.7938;
+            config.board_config.left_to_right_distance_cm = 9.0;
+            config.board_config.left_to_rgb_distance_cm = 2.0;
+            config.board_config.store_to_eeprom = false;
+            config.board_config.clear_eeprom = false;
+            config.board_config.override_eeprom = false;
+            config.camera = new Camera();
+            config.camera.rgb = new Camera.Setting();
+            config.camera.rgb.resolution_h = 1080;
+            config.camera.rgb.fps = 30.0;
+            config.camera.mono = new Camera.Setting();
+            config.camera.mono.resolution_h = 720;
+            config.camera.mono.fps = 30.0;
+            config.app = new App();
+            config.app.sync_video_meta_streams = false;
+            config.app.sync_sequence_numbers = false;
+            config.app.usb_chunk_KiB = 64;
+
+            //string config = {
+            //"streams": ["metaout", "previewout"],
+            //"depth": {
+            //  "calibration_file": "",
+            //  "left_mesh_file": "D:\\sourceforge\\depthai\\resources\\mesh_left.calib",
+            //  "right_mesh_file": "D:\\sourceforge\\depthai\\resources\\mesh_right.calib",
+            //  "padding_factor": 0.3,
+            //  "depth_limit_m": 10.0,
+            //  "median_kernel_size": 7,
+            //  "lr_check": false,
+            //  "warp_rectify": { "use_mesh": false, "mirror_frame": true, "edge_fill_color": 0}
+            // },
+            // "ai": {
+            //  "blob_file": "D:\\sourceforge\\depthai\\resources\\nn/mobilenet-ssd/mobilenet-ssd.blob.sh14cmx14NCE1",
+            //  "blob_file_config": "D:\\sourceforge\\depthai\\resources\\nn/mobilenet-ssd/mobilenet-ssd.json",
+            //  "blob_file2": "",
+            //  "blob_file_config2": "",
+            //  "calc_dist_to_bb": true,
+            //  "keep_aspect_ratio": true,
+            //  "camera_input": "rgb",
+            //  "shaves": 14,
+            //  "cmx_slices": 14,
+            //  "NN_engines": 1},
+            // "ot": {
+            //  "max_tracklets": 20,
+            //  "confidence_threshold": 0.5
+            // },
+            // "board_config": {
+            //  "swap_left_and_right_cameras": true,
+            //  "left_fov_deg": 71.86,
+            //  "rgb_fov_deg": 68.7938,
+            //  "left_to_right_distance_cm": 9.0,
+            //  "left_to_rgb_distance_cm": 2.0,
+            //  "store_to_eeprom": false,
+            //  "clear_eeprom": false,
+            //  "override_eeprom": false
+            // },
+            // "camera": {
+            //  "rgb": { "resolution_h": 1080, "fps": 30.0},
+            //  "mono": { "resolution_h": 720, "fps": 30.0} },
+            // "app": { "sync_video_meta_streams": false, "sync_sequence_numbers": false, "usb_chunk_KiB": 64}
+            //}
+
+            String configStr = JsonConvert.SerializeObject(config);
+
+            using (Emgu.CV.DepthAI.Device d = new Device(""))
+            {
+                using (CNNHostPipeline pipeline = d.CreatePipeline(configStr))
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        //String[] streams = d.GetAvailableStreams();
+                        using (NNetAndDataPackets packets = pipeline.GetAvailableNNetAndDataPackets(false))
+                        {
+                            HostDataPacket[] dataPackets = packets.HostDataPackets;
+                            NNetPacket[] nnetPackets = packets.NNetPackets;
+                        }
+                    }
+                }
+                
+            }
+        }
+    
+
 
 #if !NETFX_CORE
 
