@@ -8,9 +8,9 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using Emgu.Util;
 
-namespace Emgu.Models
+
+namespace Emgu.Util
 {
     /// <summary>
     /// This represent a file that can be downloaded from the internet

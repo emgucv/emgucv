@@ -63,6 +63,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPF.NetCore", "..\..\Emgu.CV.Example\WPF.NetCore\WPF.NetCore.csproj", "{5F062E7D-B078-4F68-BF4A-F431DFC51002}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models", "..\..\Emgu.CV.Models\Emgu.CV.Models.csproj", "{192A987E-273D-4A27-856B-0C58B82859E8}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
@@ -345,6 +347,18 @@ Global
 		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Release|x64.Build.0 = Release|x64
 		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Release|x86.ActiveCfg = Release|x86
 		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Release|x86.Build.0 = Release|x86
+		{192A987E-273D-4A27-856B-0C58B82859E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{192A987E-273D-4A27-856B-0C58B82859E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{192A987E-273D-4A27-856B-0C58B82859E8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{192A987E-273D-4A27-856B-0C58B82859E8}.Debug|x64.Build.0 = Debug|Any CPU
+		{192A987E-273D-4A27-856B-0C58B82859E8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{192A987E-273D-4A27-856B-0C58B82859E8}.Debug|x86.Build.0 = Debug|Any CPU
+		{192A987E-273D-4A27-856B-0C58B82859E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{192A987E-273D-4A27-856B-0C58B82859E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{192A987E-273D-4A27-856B-0C58B82859E8}.Release|x64.ActiveCfg = Release|Any CPU
+		{192A987E-273D-4A27-856B-0C58B82859E8}.Release|x64.Build.0 = Release|Any CPU
+		{192A987E-273D-4A27-856B-0C58B82859E8}.Release|x86.ActiveCfg = Release|Any CPU
+		{192A987E-273D-4A27-856B-0C58B82859E8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -18,7 +18,7 @@ using Emgu.Util;
 using Xamarin.Forms;
 using Emgu.CV.Dnn;
 using Emgu.CV.Util;
-using Emgu.Models;
+//using Emgu.Models;
 using Point = System.Drawing.Point;
 using Rectangle = System.Drawing.Rectangle;
 

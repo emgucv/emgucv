@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 #endif
 
-namespace Emgu.Models
+namespace Emgu.Util
 {
     /// <summary>
     /// Use to download files (e.g. models) from the internet

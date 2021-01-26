@@ -27,7 +27,7 @@ using Emgu.CV.Dnn;
 using Emgu.CV.Face;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-using Emgu.Models;
+//using Emgu.Models;
 using Emgu.Util;
 using Color = Xamarin.Forms.Color;
 using Environment = System.Environment;

@@ -12,7 +12,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Dnn;
 using Emgu.CV.Freetype;
-using Emgu.Models;
+using Emgu.Util;
 
 namespace Emgu.CV.XamarinForms
 {
