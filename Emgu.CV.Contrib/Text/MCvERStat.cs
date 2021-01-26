@@ -108,7 +108,7 @@ namespace Emgu.CV.Text
         {
             get
             {
-                if (IntPtr.Zero == Pixels)
+                if (IntPtr.Zero == _pixels)
                 {
                     return null;
                 }

@@ -61,7 +61,7 @@ namespace Emgu.CV.Quality
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_sharedPtr == IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
                 QualityInvoke.cveQualityBRISQUERelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
