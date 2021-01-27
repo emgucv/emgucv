@@ -71,7 +71,7 @@ namespace Emgu.CV.DnnSuperres
 
             protected override void DisposeObject()
             {
-                if (_ptr == IntPtr.Zero)
+                if (_ptr != IntPtr.Zero)
                 {
                     DnnSuperresInvoke.cveDnnSuperResImplRelease(ref _ptr);
                 }

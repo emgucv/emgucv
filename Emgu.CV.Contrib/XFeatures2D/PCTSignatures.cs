@@ -78,7 +78,7 @@ namespace Emgu.CV.XFeatures2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_sharedPtr == IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
                 XFeatures2DInvoke.cvePCTSignaturesRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
@@ -115,9 +115,9 @@ namespace Emgu.CV.XFeatures2D
             int borderThickness = 1)
         {
             using (InputArray iaSource = source.GetInputArray())
-            using (InputArray iaSigniture = signature.GetInputArray())
+            using (InputArray iaSignature = signature.GetInputArray())
             using (OutputArray oaResult = result.GetOutputArray())
-                XFeatures2DInvoke.cvePCTSignaturesDrawSignature(iaSource, iaSigniture, oaResult, radiusToShorterSideRatio, borderThickness);
+                XFeatures2DInvoke.cvePCTSignaturesDrawSignature(iaSource, iaSignature, oaResult, radiusToShorterSideRatio, borderThickness);
         }
     }
 

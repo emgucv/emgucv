@@ -73,7 +73,7 @@ namespace Emgu.CV.Face
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_sharedPtr == IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
                 FaceInvoke.cveLBPHFaceRecognizerRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;

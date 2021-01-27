@@ -70,8 +70,10 @@ namespace Emgu.CV.Features2D
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr == IntPtr.Zero)
+            if (_ptr != IntPtr.Zero)
+            {
                 Features2DInvoke.cveBOWKMeansTrainerRelease(ref _ptr);
+            }
         }
 
     }

@@ -38,7 +38,7 @@ namespace Emgu.CV.Stereo
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_sharedPtr == IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
                 StereoInvoke.cveQuasiDenseStereoRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
