@@ -37,8 +37,6 @@ using Point = System.Drawing.Point;
 
 namespace Emgu.CV.XamarinForms
 {
-
-
     public class YoloPage
 #if __ANDROID__
         : AndroidCameraPage

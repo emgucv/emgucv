@@ -32,6 +32,8 @@
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <DefineConstants>TRACE;NETSTANDARD</DefineConstants>
   </PropertyGroup>
+
+  
   
   <ItemGroup>
     <PackageReference Include="System.Drawing.Common" Version="5.0.0" />

@@ -81,10 +81,23 @@ namespace Emgu.CV.DepthAI
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void depthaiHostDataPacketGetDimensions(IntPtr packet, IntPtr dimensions);
 
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool depthaiHostDataPacketGetMetadata(IntPtr packet, IntPtr metadata);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern int depthaiNNetPacketGetDetectedObjectsCount(IntPtr packet);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void depthaiNNetPacketGetDetectedObjects(IntPtr packet, IntPtr detections);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool depthaiNNetPacketGetMetadata(IntPtr packet, IntPtr metadata);
+
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr depthaiFrameMetadataCreate();
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void depthaiFrameMetadataRelease(ref IntPtr metadata);
     }
 }

@@ -27,12 +27,15 @@ namespace Emgu.CV.DepthAI
                 _ptr = DepthAIInvoke.depthaiDeviceCreate(csUsbDevice, usb2Mode);
         }
 
-        public String[] GetAvailableStreams()
+        public String[] AvailableStreams
         {
-            using (VectorOfCvString vs = new VectorOfCvString())
+            get
             {
-                DepthAIInvoke.depthaiDeviceGetAvailableStreams(_ptr, vs);
-                return vs.ToArray();
+                using (VectorOfCvString vs = new VectorOfCvString())
+                {
+                    DepthAIInvoke.depthaiDeviceGetAvailableStreams(_ptr, vs);
+                    return vs.ToArray();
+                }
             }
         }
 

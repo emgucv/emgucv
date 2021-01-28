@@ -84,6 +84,24 @@ void depthaiHostDataPacketGetDimensions(HostDataPacket* packet, std::vector< int
 		dimensions->push_back(*i);
 	}
 }
+bool depthaiHostDataPacketGetMetadata(HostDataPacket* packet, FrameMetadata* metadata)
+{
+	auto meta = packet->getMetadata();
+	if (meta)
+	{
+		if (!meta->isValid())
+			return false;
+
+		//memcpy(metadata, &(*meta), sizeof(FrameMetadata));
+		*metadata = *meta;
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 
 int depthaiNNetPacketGetDetectedObjectsCount(NNetPacket* packet)
 {
@@ -98,4 +116,31 @@ void depthaiNNetPacketGetDetectedObjects(NNetPacket* packet, dai::Detection* det
 	{
 		detections[i] = sharedPtr->detections[i];
 	}
+}
+bool depthaiNNetPacketGetMetadata(NNetPacket* packet, FrameMetadata* metadata)
+{
+	auto meta = packet->getMetadata();
+	if (meta)
+	{
+		if (!meta->isValid())
+			return false;
+		
+		//memcpy(metadata, &(*meta), sizeof(FrameMetadata));
+		*metadata = *meta;
+		return true;
+	} else
+	{
+		return false;
+	}
+}
+
+
+FrameMetadata* depthaiFrameMetadataCreate()
+{
+	return new FrameMetadata();
+}
+void depthaiFrameMetadataRelease(FrameMetadata** metadata)
+{
+	delete* metadata;
+	*metadata = 0;
 }

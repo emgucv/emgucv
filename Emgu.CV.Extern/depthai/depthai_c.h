@@ -32,7 +32,7 @@ public:
 
 CVAPI(Device*) depthaiDeviceCreate(cv::String* usb_device, bool usb2_mode);
 CVAPI(void) depthaiDeviceRelease(Device** usb_device);
-CVAPI(void) depthaiDeviceGetAvailableStreams(Device* usb_device, std::vector< cv::String* >* availableStreams);
+CVAPI(void) depthaiDeviceGetAvailableStreams(Device* usb_device, std::vector< cv::String >* availableStreams);
 
 CVAPI(CNNHostPipeline*) depthaiDeviceCreatePipeline(Device* usb_device, cv::String* config_json_str, std::shared_ptr<CNNHostPipeline>** hostedPipelinePtr);
 CVAPI(void) depthaiCNNHostPipelineRelease(std::shared_ptr<CNNHostPipeline>** hostedPipelinePtr);
@@ -46,8 +46,13 @@ CVAPI(void) depthaiNNetAndDataPacketsRelease(NNetAndDataPackets** nnetAndDataPac
 
 
 CVAPI(void) depthaiHostDataPacketGetDimensions(HostDataPacket* packet, std::vector< int >* dimensions);
-
+CVAPI(bool) depthaiHostDataPacketGetMetadata(HostDataPacket* packet, FrameMetadata* metadata);
 
 CVAPI(int) depthaiNNetPacketGetDetectedObjectsCount(NNetPacket* packet);
 CVAPI(void) depthaiNNetPacketGetDetectedObjects(NNetPacket* packet, dai::Detection* detections);
+CVAPI(bool) depthaiNNetPacketGetMetadata(NNetPacket* packet, FrameMetadata* metadata);
+
+CVAPI(FrameMetadata*) depthaiFrameMetadataCreate();
+CVAPI(void) depthaiFrameMetadataRelease(FrameMetadata** metadata);
+
 #endif

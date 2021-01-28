@@ -2644,6 +2644,36 @@ LIST(APPEND extern_hdrs ${depthai_hdrs})
 	""
 	"" 
 	${EMGU_CV_WITH_DEPTHAI})
+
+    CREATE_OCV_CLASS_PROPERTY( 
+    "depthai/FrameMetadata_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/DepthAI/FrameMetadata.g.cs"
+    "FrameMetadata" 
+    "FrameMetadata" 
+    "CameraName;SequenceNum;InstanceNum;Category;Stride;FrameBytesPP;FrameHeight;FrameWidth;FrameType;Timestamp;isValid" 
+    "cv::String;int;int;int;unsigned int;unsigned int;unsigned int;unsigned int;int;double;bool" 
+    "propR;propR;propR;propR;propR;propR;propR;propR;propR;propR;val"
+    "CameraName;SequenceNum;InstanceNum;Category;Stride;FrameBytesPP;FrameHeight;FrameWidth;FrameType;Timestamp;IsValid" 
+    "String;int;int;int;UInt32;UInt32;UInt32;UInt32;int;double;bool"
+    "Camera Name; 
+    Sequence Number;
+    Instance Number;
+    Category;
+    Stride;
+    FrameBytesPP;
+    FrameHeight;
+    FrameWidth;
+    FrameType;
+    Timestamp;
+    True if the value is valid"
+    "Emgu.CV.DepthAI"
+    "DepthAIInvoke"
+    "FrameMetadata"
+	""
+    "#include \"depthai_c.h\""
+	""
+	"" 
+	${EMGU_CV_WITH_DEPTHAI})
 ############################### DEPTHAI END ################################
 
 IF(WIN32 AND CV_ICC)

@@ -65,6 +65,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPF.NetCore", "..\..\Emgu.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models", "..\..\Emgu.CV.Models\Emgu.CV.Models.csproj", "{192A987E-273D-4A27-856B-0C58B82859E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepthAI", "..\..\Emgu.CV.Example\DepthAI\DepthAI.csproj", "{A5216561-256F-4D28-A354-6125A05E99ED}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
@@ -96,6 +98,7 @@ Global
 		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{97c98fca-5f0d-4771-8063-881c620946af}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{97c98fca-5f0d-4771-8063-881c620946af}*SharedItemsImports = 5
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{a5216561-256f-4d28-a354-6125a05e99ed}*SharedItemsImports = 5
 		..\..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.projitems*{ac06f404-0a97-4142-a021-572d686e231f}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{adc3c8e5-ebcd-4d3c-b3a4-20cfe0e42fc1}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{b18e1566-4833-4f90-9f6a-2c026d08265c}*SharedItemsImports = 4
@@ -359,6 +362,18 @@ Global
 		{192A987E-273D-4A27-856B-0C58B82859E8}.Release|x64.Build.0 = Release|Any CPU
 		{192A987E-273D-4A27-856B-0C58B82859E8}.Release|x86.ActiveCfg = Release|Any CPU
 		{192A987E-273D-4A27-856B-0C58B82859E8}.Release|x86.Build.0 = Release|Any CPU
+		{A5216561-256F-4D28-A354-6125A05E99ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5216561-256F-4D28-A354-6125A05E99ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5216561-256F-4D28-A354-6125A05E99ED}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A5216561-256F-4D28-A354-6125A05E99ED}.Debug|x64.Build.0 = Debug|Any CPU
+		{A5216561-256F-4D28-A354-6125A05E99ED}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A5216561-256F-4D28-A354-6125A05E99ED}.Debug|x86.Build.0 = Debug|Any CPU
+		{A5216561-256F-4D28-A354-6125A05E99ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5216561-256F-4D28-A354-6125A05E99ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5216561-256F-4D28-A354-6125A05E99ED}.Release|x64.ActiveCfg = Release|Any CPU
+		{A5216561-256F-4D28-A354-6125A05E99ED}.Release|x64.Build.0 = Release|Any CPU
+		{A5216561-256F-4D28-A354-6125A05E99ED}.Release|x86.ActiveCfg = Release|Any CPU
+		{A5216561-256F-4D28-A354-6125A05E99ED}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

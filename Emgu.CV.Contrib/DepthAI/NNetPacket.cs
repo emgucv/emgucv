@@ -39,18 +39,33 @@ namespace Emgu.CV.DepthAI
             }
         }
 
+        public FrameMetadata GetFrameMetadata()
+        {
+            FrameMetadata metaData = new FrameMetadata();
+            bool success = DepthAIInvoke.depthaiNNetPacketGetMetadata(_ptr, metaData.Ptr);
+            if (success)
+            {
+                return metaData;
+            }
+            else
+            {
+                metaData.Dispose();
+                return null;
+            }
+
+        }
 
         public struct Detection
         {
-            UInt32 Label;
-            float Confidence;
-            float XMin;
-            float YMin;
-            float XMax;
-            float YMax;
-            float DepthX;
-            float DepthY;
-            float DepthZ;
+            public UInt32 Label;
+            public float Confidence;
+            public float XMin;
+            public float YMin;
+            public float XMax;
+            public float YMax;
+            public float DepthX;
+            public float DepthY;
+            public float DepthZ;
         };
     }
 }
