@@ -14,7 +14,20 @@
 #ifdef HAVE_DEPTHAI
 #include "depthai/device.hpp"
 #else
+#include <list>
+
 static inline CV_NORETURN void throw_no_depthai() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without depthai support"); }
+
+class NNetPacket {};
+class HostDataPacket {};
+class Device {};
+class CNNHostPipeline {};
+class FrameMetadata {};
+
+namespace dai
+{
+	class Detection {};
+}
 #endif
 
 class NNetAndDataPackets
