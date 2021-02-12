@@ -17,6 +17,19 @@ namespace Emgu.CV.VideoStab
             CvInvoke.Init();
         }
 
+        /// <summary>
+        /// Calculate the blurriness of a frame
+        /// </summary>
+        /// <param name="frame">An image frame</param>
+        /// <returns>The blurriness measure</returns>
+        public static float CalcBlurriness(Mat frame)
+        {
+            return cveCalcBlurriness(frame);
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern float cveCalcBlurriness(IntPtr frame);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveVideostabCaptureFrameSourceCreate(IntPtr capture, ref IntPtr frameSourcePtr);
 

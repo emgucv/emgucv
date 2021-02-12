@@ -42,11 +42,11 @@ bool cveVideostabFrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSourc
 }
 
 
-void cveStabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabalizer, cv::videostab::ImageMotionEstimatorBase* motionEstimator)
+void cveStabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabilizer, cv::videostab::ImageMotionEstimatorBase* motionEstimator)
 {
 #ifdef HAVE_OPENCV_VIDEOSTAB
 	cv::Ptr<cv::videostab::ImageMotionEstimatorBase> ptr(motionEstimator, [](cv::videostab::ImageMotionEstimatorBase*) {});
-	stabalizer->setMotionEstimator(ptr);
+	stabilizer->setMotionEstimator(ptr);
 #else
 	throw_no_videostab();
 #endif
@@ -131,4 +131,13 @@ void cveGaussianMotionFilterRelease(cv::videostab::GaussianMotionFilter** filter
 #else
 	throw_no_videostab();
 #endif
+}
+
+float cveCalcBlurriness(cv::Mat* frame)
+{
+#ifdef HAVE_OPENCV_VIDEOSTAB
+	return cv::videostab::calcBlurriness(*frame);
+#else
+	throw_no_videostab();
+#endif	
 }
