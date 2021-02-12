@@ -80,7 +80,16 @@ namespace BuildInfo.NetCore.Console
                 captureBackendsText.Add(String.Format("{0} - {1}", captureBackend.ID, captureBackend.Name));
             }
 
+
             String captureText = String.Format("Capture backends: {0}{1}", System.Environment.NewLine, String.Join(System.Environment.NewLine, captureBackendsText.ToArray()));
+            using (VideoCapture cap = new VideoCapture())
+            {
+                if (cap.IsOpened)
+                {
+                    String backendName = cap.BackendName;
+                    captureText += String.Format("{0}Capture device successfully opened with default backend: {1}", System.Environment.NewLine, backendName);
+                }
+            }
             return captureText;
         }
 
