@@ -25,6 +25,7 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Dnn;
 using Emgu.CV.Face;
+using Emgu.CV.Models;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 //using Emgu.Models;
@@ -35,6 +36,8 @@ using Point = System.Drawing.Point;
 
 namespace Emgu.CV.XamarinForms
 {
+
+
     public class FaceLandmarkDetectionPage
 #if __ANDROID__
         : AndroidCameraPage
@@ -42,129 +45,57 @@ namespace Emgu.CV.XamarinForms
         : ButtonTextImagePage
 #endif
     {
-        private String _modelFolderName = "dnn_samples_face_detector_20170830";
-        private Net _faceDetector = null;
-        private FacemarkLBF _facemark = null;
 
+        private FaceDetector _faceDetector = null;
+        private FacemarkDetector _facemarkDetector = null;
+
+  
         private async Task InitFaceDetector()
         {
             if (_faceDetector == null)
             {
-                FileDownloadManager manager = new FileDownloadManager();
-
-
-                manager.AddFile(
-                    "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel",
-                    _modelFolderName);
-
-                manager.AddFile(
-                    "https://raw.githubusercontent.com/opencv/opencv/4.0.1/samples/dnn/face_detector/deploy.prototxt",
-                    _modelFolderName);
-
-                manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
-                await manager.Download();
-                _faceDetector = DnnInvoke.ReadNetFromCaffe(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
-
-
-                if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
-                {
-                    _faceDetector.SetPreferableBackend(Emgu.CV.Dnn.Backend.Cuda);
-                    _faceDetector.SetPreferableTarget(Emgu.CV.Dnn.Target.Cuda);
-                }
+                _faceDetector = new FaceDetector();
+                await _faceDetector.Init(DownloadManager_OnDownloadProgressChanged);
             }
         }
 
         private async Task InitFacemark()
         {
-            if (_facemark == null)
+            if (_facemarkDetector == null)
             {
-                FileDownloadManager manager = new FileDownloadManager();
-                manager.AddFile("https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/lbfmodel.yaml", "facemark");
-                manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
-                await manager.Download();
-                using (FacemarkLBFParams facemarkParam = new CV.Face.FacemarkLBFParams())
-                {
-                    _facemark = new CV.Face.FacemarkLBF(facemarkParam);
-                    _facemark.LoadModel(manager.Files[0].LocalFile);
-                }
+                _facemarkDetector = new FacemarkDetector();
+                await _facemarkDetector.Init(DownloadManager_OnDownloadProgressChanged);
             }
         }
 
         private void DetectAndRender(Mat image)
         {
-            int imgDim = 300;
-            MCvScalar meanVal = new MCvScalar(104, 177, 123);
+            List<Rectangle> fullFaceRegions = new List<Rectangle>();
+            List<Rectangle> partialFaceRegions = new List<Rectangle>();
+            _faceDetector.Detect(image, fullFaceRegions, partialFaceRegions);
 
-            Size imageSize = image.Size;
-            using (Mat inputBlob = DnnInvoke.BlobFromImage(
-                image,
-                1.0,
-                new Size(imgDim, imgDim),
-                meanVal,
-                false,
-                false))
-                _faceDetector.SetInput(inputBlob, "data");
-            using (Mat detection = _faceDetector.Forward("detection_out"))
+            if (partialFaceRegions.Count > 0)
             {
-                float confidenceThreshold = 0.5f;
-
-                List<Rectangle> fullFaceRegions = new List<Rectangle>();
-                List<Rectangle> partialFaceRegions = new List<Rectangle>();
-                Rectangle imageRegion = new Rectangle(Point.Empty, image.Size);
-
-                float[,,,] values = detection.GetData(true) as float[,,,];
-                for (int i = 0; i < values.GetLength(2); i++)
+                foreach (Rectangle face in partialFaceRegions)
                 {
-                    float confident = values[0, 0, i, 2];
+                    CvInvoke.Rectangle(image, face, new MCvScalar(0, 255, 0));
+                }
+            }
 
-                    if (confident > confidenceThreshold)
-                    {
-                        float xLeftBottom = values[0, 0, i, 3] * imageSize.Width;
-                        float yLeftBottom = values[0, 0, i, 4] * imageSize.Height;
-                        float xRightTop = values[0, 0, i, 5] * imageSize.Width;
-                        float yRightTop = values[0, 0, i, 6] * imageSize.Height;
-                        RectangleF objectRegion = new RectangleF(
-                            xLeftBottom,
-                            yLeftBottom,
-                            xRightTop - xLeftBottom,
-                            yRightTop - yLeftBottom);
-                        Rectangle faceRegion = Rectangle.Round(objectRegion);
-
-                        if (imageRegion.Contains(faceRegion))
-                            fullFaceRegions.Add(faceRegion);
-                        else
-                        {
-                            partialFaceRegions.Add(faceRegion);
-                        }
-                    }
+            if (fullFaceRegions.Count > 0)
+            {
+                foreach (Rectangle face in fullFaceRegions)
+                {
+                    CvInvoke.Rectangle(image, face, new MCvScalar(0, 255, 0));
                 }
 
-                if (partialFaceRegions.Count > 0)
+                using (VectorOfVectorOfPointF landmarks = _facemarkDetector.Detect(image, fullFaceRegions.ToArray()))
                 {
-                    foreach (Rectangle face in partialFaceRegions)
+                    int len = landmarks.Size;
+                    for (int i = 0; i < len; i++)
                     {
-                        CvInvoke.Rectangle(image, face, new MCvScalar(0, 255, 0));
-                    }
-                }
-
-                if (fullFaceRegions.Count > 0)
-                {
-                    foreach (Rectangle face in fullFaceRegions)
-                    {
-                        CvInvoke.Rectangle(image, face, new MCvScalar(0, 255, 0));
-                    }
-
-                    using (VectorOfRect vr = new VectorOfRect(fullFaceRegions.ToArray()))
-                    using (VectorOfVectorOfPointF landmarks = new VectorOfVectorOfPointF())
-                    {
-                        _facemark.Fit(image, vr, landmarks);
-
-                        int len = landmarks.Size;
-                        for (int i = 0; i < landmarks.Size; i++)
-                        {
-                            using (VectorOfPointF vpf = landmarks[i])
-                                FaceInvoke.DrawFacemarks(image, vpf, new MCvScalar(255, 0, 0));
-                        }
+                        using (VectorOfPointF vpf = landmarks[i])
+                            FaceInvoke.DrawFacemarks(image, vpf, new MCvScalar(255, 0, 0));
                     }
                 }
             }
@@ -223,6 +154,7 @@ namespace Emgu.CV.XamarinForms
 
             if (images.Length == 0)
             {
+
                 await InitFaceDetector();
                 await InitFacemark();
 
