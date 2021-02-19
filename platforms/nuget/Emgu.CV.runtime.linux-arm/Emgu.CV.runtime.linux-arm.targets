@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+      <EmguCVRaspberryPiLinkTarget>RaspberryPi_arm</EmguCVRaspberryPiLinkTarget>
+      <EmguCVRaspberryPiBuildArm Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='arm'">True</EmguCVRaspberryPiBuildArm>
+      <EmguCVRaspberryPiNativeFileArm>$(MSBuildThisFileDirectory)\arm\libcvextern.so</EmguCVRaspberryPiNativeFileArm>
+      <EmguCVRaspberryPiDeployMessage Condition="'$(EmguCVRaspberryPiBuildArm)'=='True' AND Exists('$(EmguCVRaspberryPiNativeFileArm)')">$(EmguCVRaspberryPiDeployMessage)arm </EmguCVRaspberryPiDeployMessage>
+      <EmguCVRaspberryPiErrorMessage Condition="'$(EmguCVRaspberryPiBuildArm)'=='True' AND !Exists('$(EmguCVRaspberryPiNativeFileArm)')">This package do not contain necessary binary for $(EmguCVRaspberryPiLinkTarget). Arm is targeted, but file $(EmguCVRaspberryPiNativeFileArm) is missing. Pinvoke may fail on RaspberryPi ARM platform.</EmguCVRaspberryPiErrorMessage>
+    </PropertyGroup>
+    <ItemGroup Condition="'$(EmguCVRaspberryPiBuildArm)'=='True' AND Exists('$(EmguCVRaspberryPiNativeFileArm)')">
+      <None Include="$(MSBuildThisFileDirectory)\arm\*.so">
+        <Link>arm\%(RecursiveDir)%(Filename)%(Extension)</Link>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+    <Target Name="EmguCVRaspberryPiPackageBuildImports" BeforeTargets="PrepareForBuild">
+      <Message Condition="'$(EmguCVRaspberryPiLinkTarget)'!=''" Text="Emgu CV nuget package compiling against $(EmguCVRaspberryPiLinkTarget)" Importance="High" />
+      <Warning Text="'$(EmguCVRaspberryPiErrorMessage)'" Condition="'$(EmguCVRaspberryPiErrorMessage)'!=''" />
+      <Message Text="Emgu CV compiling with $(EmguCVRaspberryPiDeployMessage)binary" Condition="'$(EmguCVRaspberryPiDeployMessage)'!=''" Importance="High" />
+      <Message Text="No native binary is deployed by the Emgu CV project." Condition="'$(EmguCVRaspberryPiDeployMessage)'==''" Importance="High" />
+    </Target>
+</Project>

@@ -23,7 +23,7 @@ ADD_SUBDIRECTORY("Emgu.CV.runtime.uwp")
 ADD_SUBDIRECTORY("Emgu.CV.runtime.ios")
 
 IF (HAVE_LINUX_ARM)
-  add_subdirectory("Emgu.CV.runtime.raspbian")
+  add_subdirectory("Emgu.CV.runtime.linux-arm")
 ENDIF()
 
 IF (HAVE_LINUX_X86 OR HAVE_LINUX_X64)

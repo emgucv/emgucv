@@ -974,7 +974,7 @@ IF(HAVE_WINSTORE_10 AND WIN32)
 ENDIF()
 
 IF(HAVE_LINUX_ARM)
-	SET(EMGUCV_RASPBIAN_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.${NUGET_NATIVE_PLATFORM_ID_RASPBIAN}")
+	SET(EMGUCV_RASPBERRY_PI_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.${NUGET_NATIVE_PLATFORM_ID_RASPBIAN}")
 ENDIF()
 
 IF(HAVE_LINUX_X64 OR HAVE_LINUX_X86)
@@ -1000,7 +1000,7 @@ IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 #	  SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_WINDOWS_NUGET_ID}-CR")
 #	ENDIF()
 #	IF(HAVE_LINUX_ARM)
-#	  SET(EMGUCV_RASPBIAN_NUGET_ID "${EMGUCV_RASPBIAN_NUGET_ID}-CR")
+#	  SET(EMGUCV_RASPBERRY_PI_NUGET_ID "${EMGUCV_RASPBERRY_PI_NUGET_ID}-CR")
 #	ENDIF()
 #    IF(HAVE_LINUX_X64 OR HAVE_LINUX_X86)
 #	  SET(EMGUCV_UBUNTU_NUGET_ID "${EMGUCV_UBUNTU_NUGET_ID}-CR")
@@ -1086,18 +1086,14 @@ IF(HAVE_WINSTORE_10)
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 
-SET(EMGUCV_RASPBIAN_NUGET_FILE_LIST "")
+SET(EMGUCV_RASPBERRY_PI_NUGET_FILE_LIST "")
 IF(HAVE_LINUX_ARM)
-	SET(EMGUCV_RASPBIAN_NUGET_FILE_LIST "${EMGUCV_RASPBIAN_NUGET_FILE_LIST} 
+	SET(EMGUCV_RASPBERRY_PI_NUGET_FILE_LIST "${EMGUCV_RASPBERRY_PI_NUGET_FILE_LIST} 
       <file src=\"..\\..\\..\\libs\\arm\\*.so\" target=\"runtimes\\${NUGET_NATIVE_PLATFORM_ID_RASPBIAN}\\native\" />")
-    SET(EMGUCV_RASPBIAN_NUGET_DEPENDENCY "    <dependencies>
+    SET(EMGUCV_RASPBERRY_PI_NUGET_DEPENDENCY "    <dependencies>
       <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </dependencies>")
-	#SET(EMGUCV_RASPBIAN_NUGET_FILE_LIST "${EMGUCV_RASPBIAN_NUGET_FILE_LIST} 
-    #<file src=\"Emgu.CV.runtime.raspbian.targets\" target=\"build\\${EMGUCV_RASPBIAN_NUGET_ID}.targets\" />
-    #<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    #<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
-	SET(EMGUCV_RASPBIAN_NUGET_FILE_LIST "${EMGUCV_RASPBIAN_NUGET_FILE_LIST} 
+	SET(EMGUCV_RASPBERRY_PI_NUGET_FILE_LIST "${EMGUCV_RASPBERRY_PI_NUGET_FILE_LIST} 
       <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
       <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
@@ -1490,12 +1486,12 @@ IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
 ENDIF()
 
 if(HAVE_LINUX_ARM)
-  SET(EMGUCV_RASPBIAN_NUGET_TITLE "Emgu CV for Raspbian Native Runtime")
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.raspbian.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.raspbian/Package.nuspec)
+  SET(EMGUCV_RASPBERRY_PI_NUGET_TITLE "Emgu CV Native Runtime for Raspberry Pi OS")
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.linux-arm.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.linux-arm/Package.nuspec)
 ENDIF()
 
 if(HAVE_LINUX_X86 OR HAVE_LINUX_X64)
-  SET(EMGUCV_UBUNTU_NUGET_TITLE "Emgu CV for Ubuntu Native Runtime")
+  SET(EMGUCV_UBUNTU_NUGET_TITLE "Emgu CV Native Runtime for Ubuntu")
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ubuntu.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/Package.nuspec)
 ENDIF()
 
