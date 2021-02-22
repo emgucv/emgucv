@@ -66,6 +66,14 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestAgast()
+        {
+            AgastFeatureDetector agast = new AgastFeatureDetector();
+            SIFT sift = new SIFT();
+            TestFeature2DTracker(agast, sift);
+        }
+
+        [Test]
         public void TestAkaze()
         {
             AKAZE detector = new AKAZE();
@@ -83,6 +91,13 @@ namespace Emgu.CV.Test
             detector.DetectAndCompute(img, null, vp, descriptors, false);
         }
 
+        [Test]
+        public void TestSIFT()
+        {
+            SIFT detector = new SIFT();
+            EmguAssert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
+        }
+
         /*
         [Test]
         public void TestLUCID()
@@ -92,12 +107,7 @@ namespace Emgu.CV.Test
            EmguAssert.IsTrue(TestFeature2DTracker(surf, lucid ), "Unable to find homography matrix");
         }
 
-        [Test]
-        public void TestSIFT()
-        {
-           SIFT detector = new SIFT();
-           EmguAssert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
-        }
+        
 
 
         [Test]
@@ -108,7 +118,7 @@ namespace Emgu.CV.Test
            EmguAssert.IsTrue(TestFeature2DTracker(detector, extractor), "Unable to find homography matrix");
 
         }
-
+        
         [Test]
       public void TestSURF()
       {

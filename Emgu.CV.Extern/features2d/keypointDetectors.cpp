@@ -577,6 +577,7 @@ cv::AgastFeatureDetector* cveAgastFeatureDetectorCreate(int threshold, bool nonm
 {
 	cv::Ptr<cv::AgastFeatureDetector> agastPtr = cv::AgastFeatureDetector::create(threshold, nonmaxSuppression, static_cast<cv::AgastFeatureDetector::DetectorType>( type ));
 	*sharedPtr = new cv::Ptr<cv::AgastFeatureDetector>(agastPtr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(agastPtr.get());
 	return agastPtr.get();
 }
 void cveAgastFeatureDetectorRelease(cv::Ptr<cv::AgastFeatureDetector>** sharedPtr)
