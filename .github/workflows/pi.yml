@@ -20,15 +20,15 @@ jobs:
       run: git submodule update --init --recursive
     - name: Build Emgu CV native binary
       run: ./cmake_configure
-      working-directory: ${{ github.workspace }}/platforms/raspbian
+      working-directory: ${{ github.workspace }}/platforms/raspberry_pi_os
     - name: Build Emgu CV package binary
       run: make package
-      working-directory: ${{ github.workspace }}/platforms/raspbian/build/
+      working-directory: ${{ github.workspace }}/platforms/raspberry_pi_os/build/
     - uses: actions/upload-artifact@v2
       with:
-        name: emgucv-raspbian-zip-package
-        path: ${{ github.workspace }}/platforms/raspbian/build/*.zip
+        name: emgucv-raspberry-pi-zip-package
+        path: ${{ github.workspace }}/platforms/raspberry_pi_os/build/*.zip
     - uses: actions/upload-artifact@v2
       with:
-        name: emgucv-raspbian-nuget-package
+        name: emgucv-raspberry-pi-nuget-package
         path: ${{ github.workspace }}/platforms/nuget/*.nupkg 
