@@ -57,7 +57,7 @@ else
 fi
 
 
-cd platforms/raspbian
+cd platforms/raspberry_pi_os
 cd build
 cmake\
       ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} \
