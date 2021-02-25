@@ -361,8 +361,15 @@ namespace Emgu.CV
         /// Obtain the capture property
         /// </summary>
         /// <param name="index">The index for the property</param>
-        /// <returns>The value of the specific property</returns>
-        public double GetCaptureProperty(CvEnum.CapProp index)
+        /// <returns>Value for the specified property. Value 0 is returned when querying a property that is
+        /// not supported by the backend used by the VideoCapture instance.</returns>
+        /// <remarks>Reading / writing properties involves many layers. Some unexpected result might happens
+        /// along this chain. "VideoCapture -> API Backend -> Operating System -> Device Driver -> Device Hardware"
+        /// The returned value might be different from what really used by the device or it could be encoded
+        /// using device dependent rules(eg.steps or percentage). Effective behaviour depends from device
+        /// driver and API Backend
+        /// </remarks>
+        public double Get(CvEnum.CapProp index)
         {
             return CvInvoke.cveVideoCaptureGet(_ptr, index);
         }
