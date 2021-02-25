@@ -368,12 +368,13 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Sets the specified property of video capturing
+        /// Sets the specified property of video capture
         /// </summary>
         /// <param name="property">Property identifier</param>
         /// <param name="value">Value of the property</param>
-        /// <returns>True if success</returns>
-        public bool SetCaptureProperty(CvEnum.CapProp property, double value)
+        /// <returns>True if the property is supported by backend used by the VideoCapture instance.</returns>
+        /// <remarks>Even if it returns true this doesn't ensure that the property value has been accepted by the capture device.</remarks>
+        public bool Set(CvEnum.CapProp property, double value)
         {
             return CvInvoke.cveVideoCaptureSet(Ptr, property, value);
         }
