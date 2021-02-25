@@ -47,11 +47,39 @@ namespace Emgu.Util
         /// Add a file to download
         /// </summary>
         /// <param name="url">The url of the file to be downloaded</param>
-        public void AddFile(String url, String localSubfolder)
+        /// <param name="localSubfolder">The local subfolder name to download the model to.</param>
+        /// <param name="sha256Hash">The sha256 hash value for the file</param>
+        public void AddFile(String url, String localSubfolder, String sha256Hash = null)
         {
-            _files.Add(new DownloadableFile(url, localSubfolder));
+            _files.Add(new DownloadableFile(url, localSubfolder, sha256Hash));
         }
 
+        /// <summary>
+        /// Add a file to download
+        /// </summary>
+        /// <param name="downloadableFile">The file to be downloaded</param>
+        public void AddFile(DownloadableFile downloadableFile)
+        {
+            _files.Add(downloadableFile);
+        }
+
+        public bool AllFilesDownloaded
+        {
+            get
+            {
+                bool allDownloaded = true;
+                foreach (DownloadableFile file in _files)
+                {
+                    allDownloaded &= file.IsLocalFileValid;
+                }
+
+                return allDownloaded;
+            }
+        }
+
+        /// <summary>
+        /// Get the files that will be downloaded by this download manager.
+        /// </summary>
         public DownloadableFile[] Files
         {
             get
@@ -67,12 +95,11 @@ namespace Emgu.Util
         {
             foreach (DownloadableFile df in _files)
             {
-                String localFileName = df.LocalFile;
-
-                //Uncomment the following to force redownload every time
+                //Uncomment the following to force re-download every time
                 //File.Delete(localFileName);
-                if (!System.IO.File.Exists(localFileName) || !(new FileInfo(localFileName).Length > 0))
+                if (!df.IsLocalFileValid)
                 {
+                    String localFileName = df.LocalFile;
                     using (UnityEngine.Networking.UnityWebRequest webclient = new UnityEngine.Networking.UnityWebRequest(df.Url))
                     {
                         CurrentWebClient = webclient;
@@ -80,29 +107,34 @@ namespace Emgu.Util
 
                         webclient.downloadHandler = new UnityEngine.Networking.DownloadHandlerFile(localFileName);
                         yield return webclient.SendWebRequest();
-                        if (webclient.isNetworkError || webclient.isHttpError)
+                        if (webclient.result == UnityEngine.Networking.UnityWebRequest.Result.ConnectionError 
+                            || webclient.result == UnityEngine.Networking.UnityWebRequest.Result.ProtocolError)
                         {
                             UnityEngine.Debug.LogError(webclient.error);
                         }
 
-                        if (!System.IO.File.Exists(localFileName) || !(new FileInfo(localFileName).Length > 0))
+                        if (df.IsLocalFileValid)
                         {
-                            UnityEngine.Debug.LogError(String.Format("File {0} is empty, failed to download file.", localFileName));
+                            UnityEngine.Debug.Log("File successfully downloaded and saved to " + localFileName);
                         }
-
-                        UnityEngine.Debug.Log("File successfully downloaded and saved to " + localFileName);
+                        else
+                        {
+                            UnityEngine.Debug.LogError(String.Format("Failed to download file {0}.", localFileName));
+                        }
                         CurrentWebClient = null;
 
                     }
                 }
             }
-            if (OnDownloadCompleted != null)
-            {
-                UnityEngine.Debug.Log("All download completed.");
-                OnDownloadCompleted(this, null);
-            }
+
+            UnityEngine.Debug.Log("All download completed.");
         }
 #else
+        /// <summary>
+        /// Download the files. 
+        /// </summary>
+        /// <param name="retry">The number of retries.</param>
+        /// <returns>The async Task</returns>
         public async Task Download(int retry = 1)
         {
             await Download( _files.ToArray(), retry, this.OnDownloadProgressChanged);
@@ -150,7 +182,7 @@ namespace Emgu.Util
 
             //uncomment the following line to force re-download every time.
             //File.Delete(downloadableFile.LocalFile);
-            if (!File.Exists(downloadableFile.LocalFile) || new FileInfo(downloadableFile.LocalFile).Length == 0)
+            if (!downloadableFile.IsLocalFileValid)
             {
                 try
                 {
@@ -171,9 +203,11 @@ namespace Emgu.Util
                 }
                 catch (Exception e)
                 {
-                    if (File.Exists(downloadableFile.LocalFile))
+                    if (!downloadableFile.IsLocalFileValid)
+                    {
                         //The downloaded file may be corrupted, should delete it
                         File.Delete(downloadableFile.LocalFile);
+                    }
 
                     if (retry > 0)
                     {
@@ -181,11 +215,7 @@ namespace Emgu.Util
                     }
                     else
                     {
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-                        UnityEngine.Debug.Log(e.StackTrace);
-#else
                         Trace.WriteLine(e);
-#endif
                         throw;
                     }
                 }

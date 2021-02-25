@@ -209,6 +209,8 @@ namespace Emgu.CV
 
         private CaptureModuleType _captureModuleType;
 
+        private readonly bool _needDispose;
+
         #region Properties
         /// <summary>
         /// Get the type of the capture module
@@ -273,7 +275,7 @@ namespace Emgu.CV
         {
             get
             {
-                return Convert.ToInt32(GetCaptureProperty(CvEnum.CapProp.FrameWidth));
+                return Convert.ToInt32(Get(CvEnum.CapProp.FrameWidth));
             }
         }
 
@@ -282,7 +284,7 @@ namespace Emgu.CV
         {
             get
             {
-                return Convert.ToInt32(GetCaptureProperty(CvEnum.CapProp.FrameHeight));
+                return Convert.ToInt32(Get(CvEnum.CapProp.FrameHeight));
             }
         }
         #endregion
@@ -297,6 +299,12 @@ namespace Emgu.CV
            : this((int)captureType)
         {
         }*/
+
+        internal VideoCapture(IntPtr ptr, bool needDispose)
+        {
+            _ptr = ptr;
+            _needDispose = needDispose;
+        }
 
         /// <summary> Create a capture using the specific camera</summary>
         /// <param name="camIndex"> The index of the camera to create capture from, starting from 0</param>
@@ -350,9 +358,11 @@ namespace Emgu.CV
         {
 #if TEST_CAPTURE
 #else
-            Stop();
-            CvInvoke.cveVideoCaptureRelease(ref _ptr);
-
+            if (_needDispose && _ptr != IntPtr.Zero)
+            {
+                Stop();
+                CvInvoke.cveVideoCaptureRelease(ref _ptr);
+            }
 #endif
         }
         #endregion
