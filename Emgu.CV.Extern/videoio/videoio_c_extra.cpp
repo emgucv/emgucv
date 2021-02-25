@@ -141,6 +141,11 @@ void cveVideoCaptureGetBackendName(cv::VideoCapture* capture, cv::String* name)
 #endif
 }
 
+bool cveVideoCaptureWaitAny(std::vector<cv::VideoCapture>* streams, std::vector<int>* readyIndex, int timeoutNs)
+{
+	return cv::VideoCapture::waitAny(*streams, *readyIndex, timeoutNs);
+}
+
 #if WINAPI_FAMILY
 void cveWinrtSetFrameContainer(::Windows::UI::Xaml::Controls::Image^ image)
 {

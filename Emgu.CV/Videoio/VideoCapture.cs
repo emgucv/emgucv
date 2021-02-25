@@ -364,7 +364,7 @@ namespace Emgu.CV
         /// <returns>Value for the specified property. Value 0 is returned when querying a property that is
         /// not supported by the backend used by the VideoCapture instance.</returns>
         /// <remarks>Reading / writing properties involves many layers. Some unexpected result might happens
-        /// along this chain. "VideoCapture -> API Backend -> Operating System -> Device Driver -> Device Hardware"
+        /// along this chain: "VideoCapture -> API Backend -> Operating System -> Device Driver -> Device Hardware"
         /// The returned value might be different from what really used by the device or it could be encoded
         /// using device dependent rules(eg.steps or percentage). Effective behaviour depends from device
         /// driver and API Backend
@@ -553,6 +553,20 @@ namespace Emgu.CV
             }
         }
 
+        /// <summary>
+        /// Wait for ready frames from VideoCapture.
+        /// </summary>
+        /// <param name="streams">input video streams</param>
+        /// <param name="readyIndex">stream indexes with grabbed frames (ready to use .retrieve() to fetch actual frame)</param>
+        /// <param name="timeoutNs">number of nanoseconds (0 - infinite)</param>
+        /// <returns>true if streamReady is not empty</returns>
+        /// <remarks>The primary use of the function is in multi-camera environments. The method fills the ready state vector, grabs video frame, if camera is ready.
+        /// After this call use VideoCapture::retrieve() to decode and fetch frame data.</remarks>
+        public static bool WaitAny(VectorOfVideoCapture streams, VectorOfInt readyIndex, int timeoutNs = 0)
+        {
+            return CvInvoke.cveVideoCaptureWaitAny(streams, readyIndex, timeoutNs);
+        }
+
         #region implement ICapture
         /// <summary> 
         /// Capture a Bgr image frame
@@ -735,6 +749,10 @@ namespace Emgu.CV
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveGetBackendName(int api, IntPtr name);
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+        internal static extern bool cveVideoCaptureWaitAny(IntPtr streams, IntPtr readyIndex, int timeoutNs);
 
         /// <summary>
         /// Returns list of all built-in backends

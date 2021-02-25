@@ -78,6 +78,8 @@ CVAPI(bool) cveVideoCaptureRead(cv::VideoCapture* capture, cv::_OutputArray* ima
 //CVAPI(void) cveVideoCaptureReadToMat(cv::VideoCapture* capture, cv::Mat* mat);
 CVAPI(void) cveVideoCaptureGetBackendName(cv::VideoCapture* capture, cv::String* name);
 
+CVAPI(bool) cveVideoCaptureWaitAny(std::vector<cv::VideoCapture>* streams, std::vector<int>* readyIndex, int timeoutNs);
+
 #if WINAPI_FAMILY
 CVAPI(void) cveWinrtSetFrameContainer(::Windows::UI::Xaml::Controls::Image^ image);
 typedef void (CV_CDECL *CvWinrtMessageLoopCallback)();
