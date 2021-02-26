@@ -74,7 +74,9 @@ namespace Emgu.CV.XamarinForms
             _capture.Retrieve(_mat);
             Stopwatch watch = Stopwatch.StartNew();
             var detectedObjects = _yolo.Detect(_mat);
-            _yolo.Render(_mat, detectedObjects);
+            foreach (var detected in detectedObjects)
+                detected.Render(_mat);
+            
             watch.Stop();
             SetImage(_mat);
             this.DisplayImage.BackgroundColor = Color.Black;
@@ -148,8 +150,9 @@ namespace Emgu.CV.XamarinForms
                 Stopwatch watch = Stopwatch.StartNew();
 
                 var detectedObjects = _yolo.Detect(images[0]);
-                _yolo.Render(images[0], detectedObjects);
-                
+                foreach (var detected in detectedObjects)
+                    detected.Render(images[0]);                      
+
                 watch.Stop();
 
                 SetImage(images[0]);

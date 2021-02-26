@@ -28,15 +28,21 @@ namespace Emgu.CV.Models
             if (_facemark == null)
             {
                 FileDownloadManager manager = new FileDownloadManager();
-                manager.AddFile("https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/lbfmodel.yaml", "facemark");
+                manager.AddFile(
+                    "https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/lbfmodel.yaml", 
+                    "facemark",
+                    "70DD8B1657C42D1595D6BD13D97D932877B3BED54A95D3C4733A0F740D1FD66B");
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
                 await manager.Download();
-                using (FacemarkLBFParams facemarkParam = new CV.Face.FacemarkLBFParams())
+                if (manager.AllFilesDownloaded)
                 {
-                    _facemark = new FacemarkLBF(facemarkParam);
-                    _facemark.LoadModel(manager.Files[0].LocalFile);
-                }
+                    using (FacemarkLBFParams facemarkParam = new CV.Face.FacemarkLBFParams())
+                    {
+                        _facemark = new FacemarkLBF(facemarkParam);
+                        _facemark.LoadModel(manager.Files[0].LocalFile);
+                    }
+                } 
             }
         }
 

@@ -44,60 +44,59 @@ namespace Emgu.CV.Models
             {
                 FileDownloadManager manager = new FileDownloadManager();
 
+                version = YoloVersion.YoloV3;
+
                 if (version == YoloVersion.YoloV3Spp)
                 {
                     manager.AddFile(
                         "https://pjreddie.com/media/files/yolov3-spp.weights",
-                        _modelFolderName);
+                        _modelFolderName,
+                        "87A1E8C85C763316F34E428F2295E1DB9ED4ABCEC59DD9544F8052F50DE327B4");
                     manager.AddFile(
                         "https://github.com/pjreddie/darknet/raw/master/cfg/yolov3-spp.cfg",
-                        _modelFolderName);
+                        _modelFolderName,
+                        "7A4EC2D7427340FB12059F2B0EF76D6FCFCAC132CC287CBBF0BE5E3ABAA856FD");
                 }
                 else if (version == YoloVersion.YoloV3)
                 {
                     manager.AddFile(
                         "https://pjreddie.com/media/files/yolov3.weights",
-                        _modelFolderName);
+                        _modelFolderName,
+                        "523E4E69E1D015393A1B0A441CEF1D9C7659E3EB2D7E15F793F060A21B32F297");
                     manager.AddFile(
                         "https://github.com/pjreddie/darknet/raw/master/cfg/yolov3.cfg",
-                        _modelFolderName);
+                        _modelFolderName,
+                        "22489EA38575DFA36C67A90048E8759576416A79D32DC11E15D2217777B9A953");
                 }
                 else if (version == YoloVersion.YoloV3Tiny)
                 {
                     manager.AddFile(
                         "https://pjreddie.com/media/files/yolov3-tiny.weights",
-                        _modelFolderName);
+                        _modelFolderName,
+                        "DCCEA06F59B781EC1234DDF8D1E94B9519A97F4245748A7D4DB75D5B7080A42C");
                     manager.AddFile(
                         "https://github.com/pjreddie/darknet/raw/master/cfg/yolov3-tiny.cfg",
-                        _modelFolderName);
+                        _modelFolderName,
+                        "84EB7A675EF87C906019FF5A6E0EFFE275D175ADB75100DCB47F0727917DC2C7");
                 }
 
                 manager.AddFile("https://github.com/pjreddie/darknet/raw/master/data/coco.names",
-                    _modelFolderName);
+                    _modelFolderName,
+                    "634A1132EB33F8091D60F2C346ABABE8B905AE08387037AED883953B7329AF84");
 
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
                 await manager.Download();
-                _yoloDetector = DnnInvoke.ReadNetFromDarknet(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
-                _labels = File.ReadAllLines(manager.Files[2].LocalFile);
+
+                if (manager.AllFilesDownloaded)
+                {
+                    _yoloDetector =
+                        DnnInvoke.ReadNetFromDarknet(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
+                    _labels = File.ReadAllLines(manager.Files[2].LocalFile);
+                }
             }
         }
 
-        public void Render(Mat image, DetectedObject[] detectedObjects)
-        {
-            for (int i = 0; i < detectedObjects.Length; i++)
-            {
-                CvInvoke.Rectangle(image, detectedObjects[i].Region, new MCvScalar(0, 0, 255), 2);
-                CvInvoke.PutText(
-                    image,
-                    String.Format("{0}: {1}", detectedObjects[i].Label, detectedObjects[i].Confident),
-                    detectedObjects[i].Region.Location,
-                    FontFace.HersheyDuplex,
-                    1.0,
-                    new MCvScalar(0, 0, 255),
-                    1);
-            }
-        }
 
         public DetectedObject[] Detect(Mat image, double confThreshold = 0.5)
         {

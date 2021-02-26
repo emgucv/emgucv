@@ -59,10 +59,12 @@ namespace Emgu.CV.Models
 
                 manager.AddFile(
                     "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/license-plate-recognition-barrier-0001/FP32/license-plate-recognition-barrier-0001.xml",
-                    _modelFolderName);
+                    _modelFolderName,
+                    "B5B649B9566F5CF352554ACFFD44207F4AECEE1DA767F4B69F46060A102623FA");
                 manager.AddFile(
                     "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/license-plate-recognition-barrier-0001/FP32/license-plate-recognition-barrier-0001.bin",
-                    _modelFolderName);
+                    _modelFolderName,
+                    "685934518A930CC55D023A53AC2D5E47BBE81B80828354D8318DE6DC3AD5CFBA");
 
                 if (onDownloadProgressChanged != null)
                 {
@@ -90,10 +92,12 @@ namespace Emgu.CV.Models
 
                 manager.AddFile(
                     "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/vehicle-attributes-recognition-barrier-0042/FP32/vehicle-attributes-recognition-barrier-0042.xml",
-                    _modelFolderName);
+                    _modelFolderName,
+                    "9D1E877B153699CAF4547D08BFF7FE268F65B663441A42B929924B8D95DACDBB");
                 manager.AddFile(
                     "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/vehicle-attributes-recognition-barrier-0042/FP32/vehicle-attributes-recognition-barrier-0042.bin",
-                    _modelFolderName);
+                    _modelFolderName,
+                    "492520E55F452223E767D54227D6EF6B60B0C1752DD7B9D747BE65D57B685A0E");
 
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;

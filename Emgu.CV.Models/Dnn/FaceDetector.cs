@@ -32,21 +32,26 @@ namespace Emgu.CV.Models
 
                 manager.AddFile(
                     "https://github.com/opencv/opencv_3rdparty/raw/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel",
-                    _modelFolderName);
+                    _modelFolderName,
+                    "2A56A11A57A4A295956B0660B4A3D76BBDCA2206C4961CEA8EFE7D95C7CB2F2D");
 
                 manager.AddFile(
                     "https://raw.githubusercontent.com/opencv/opencv/4.0.1/samples/dnn/face_detector/deploy.prototxt",
-                    _modelFolderName);
+                    _modelFolderName,
+                    "F62621CAC923D6F37BD669298C428BB7EE72233B5F8C3389BB893E35EBBCF795");
 
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
                 await manager.Download();
-                _faceDetector = DnnInvoke.ReadNetFromCaffe(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
 
-                if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
+                if (manager.AllFilesDownloaded)
                 {
-                    _faceDetector.SetPreferableBackend(Emgu.CV.Dnn.Backend.Cuda);
-                    _faceDetector.SetPreferableTarget(Emgu.CV.Dnn.Target.Cuda);
+                    _faceDetector = DnnInvoke.ReadNetFromCaffe(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
+                    if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
+                    {
+                        _faceDetector.SetPreferableBackend(Emgu.CV.Dnn.Backend.Cuda);
+                        _faceDetector.SetPreferableTarget(Emgu.CV.Dnn.Target.Cuda);
+                    }
                 }
             }
         }
