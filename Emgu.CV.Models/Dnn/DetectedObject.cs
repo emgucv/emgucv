@@ -18,20 +18,17 @@ namespace Emgu.CV.Models
         public String Label;
         public int ClassId;
 
-        public static void Render(Mat image, DetectedObject[] detectedObjects)
+        public void Render(Mat image)
         {
-            for (int i = 0; i < detectedObjects.Length; i++)
-            {
-                CvInvoke.Rectangle(image, detectedObjects[i].Region, new MCvScalar(0, 0, 255), 2);
-                CvInvoke.PutText(
-                    image,
-                    String.Format("{0}: {1}", detectedObjects[i].Label, detectedObjects[i].Confident),
-                    detectedObjects[i].Region.Location,
-                    FontFace.HersheyDuplex,
-                    1.0,
-                    new MCvScalar(0, 0, 255),
-                    1);
-            }
+            CvInvoke.Rectangle(image, this.Region, new MCvScalar(0, 0, 255), 2);
+            CvInvoke.PutText(
+                image,
+                String.Format("{0}: {1}", this.Label, this.Confident),
+                this.Region.Location,
+                FontFace.HersheyDuplex,
+                1.0,
+                new MCvScalar(0, 0, 255),
+                1);
         }
     }
 }

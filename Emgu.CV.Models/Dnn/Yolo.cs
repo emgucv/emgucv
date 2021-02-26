@@ -44,8 +44,6 @@ namespace Emgu.CV.Models
             {
                 FileDownloadManager manager = new FileDownloadManager();
 
-                version = YoloVersion.YoloV3;
-
                 if (version == YoloVersion.YoloV3Spp)
                 {
                     manager.AddFile(
@@ -98,7 +96,14 @@ namespace Emgu.CV.Models
         }
 
 
-        public DetectedObject[] Detect(Mat image, double confThreshold = 0.5)
+        /// <summary>
+        /// Detect objects using Yolo model
+        /// </summary>
+        /// <param name="image">The input image</param>
+        /// <param name="confThreshold">The confident threshold. Only detection with confident larger than this will be returned.</param>
+        /// <param name="nmsThreshold">If positive, will perform non-maximum suppression using the threshold value. If less than or equals to 0, will not perform Non-maximum suppression.</param>
+        /// <returns>The detected objects</returns>
+        public DetectedObject[] Detect(Mat image, double confThreshold = 0.5, double nmsThreshold = 0.4)
         {
             MCvScalar meanVal = new MCvScalar();
 
@@ -147,7 +152,6 @@ namespace Emgu.CV.Models
                                     CvInvoke.MinMaxLoc(subM, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
                                     if (maxVal > confThreshold)
                                     {
-
                                         int centerX = (int)(data[j, 0] * imageSize.Width);
                                         int centerY = (int)(data[j, 1] * imageSize.Height);
                                         int width = (int)(data[j, 2] * imageSize.Width);
@@ -168,7 +172,21 @@ namespace Emgu.CV.Models
                         }
                     }
 
-                    return detectedObjects.ToArray();
+                    DetectedObject[] results = detectedObjects.ToArray();
+                    if (nmsThreshold <= 0)
+                    {
+                        return results;
+                    }
+
+                    Rectangle[] regions = Array.ConvertAll(results, input => input.Region);
+                    float[] scores = Array.ConvertAll(results, input => (float) input.Confident);
+                    int[] keepIdx = DnnInvoke.NMSBoxes(regions, scores, (float)confThreshold, (float) nmsThreshold);
+                    List<DetectedObject> nmsResults = new List<DetectedObject>();
+                    for (int i = 0; i < keepIdx.Length; i++)
+                    {
+                        nmsResults.Add(results[keepIdx[i]]);
+                    }
+                    return nmsResults.ToArray();
                 }
                 else
                 {
