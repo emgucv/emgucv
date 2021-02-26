@@ -343,6 +343,23 @@ void cveDnnNMSBoxes(
 #endif
 }
 
+void cveDnnNMSBoxes2(
+	std::vector<cv::RotatedRect>* bboxes,
+	std::vector<float>* scores,
+	float scoreThreshold,
+	float nmsThreshold,
+	std::vector<int>* indices,
+	float eta,
+	int topK)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::NMSBoxes(*bboxes, *scores, scoreThreshold, nmsThreshold, *indices, eta, topK);
+#else
+	throw_no_dnn();
+#endif
+}
+
+
 void cveDNNGetAvailableBackends(std::vector<int>* backends, std::vector<int>* targets)
 {
 #ifdef HAVE_OPENCV_DNN

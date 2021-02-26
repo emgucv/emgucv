@@ -474,6 +474,53 @@ namespace Emgu.CV.Dnn
             int topK);
 
         /// <summary>
+        /// Performs non maximum suppression given boxes and corresponding scores.
+        /// </summary>
+        /// <param name="bboxes">A set of bounding boxes to apply NMS.</param>
+        /// <param name="scores">A set of corresponding confidences.</param>
+        /// <param name="scoreThreshold">A threshold used to filter boxes by score.</param>
+        /// <param name="nmsThreshold">A threshold used in non maximum suppression.</param>
+        /// <param name="eta">A coefficient in adaptive threshold</param>
+        /// <param name="topK">If &gt;0, keep at most top_k picked indices.</param>
+        /// <returns>The indices of the boxes to keep after NMS</returns>
+        public static int[] NMSBoxes(RotatedRect[] bboxes, float[] scores, float scoreThreshold, float nmsThreshold, float eta = 1.0f, int topK = 0)
+        {
+            using (VectorOfRotatedRect vBoxes = new VectorOfRotatedRect(bboxes))
+            using (VectorOfFloat vScores = new VectorOfFloat(scores))
+            using (VectorOfInt indices = new VectorOfInt())
+            {
+                NMSBoxes(vBoxes, vScores, scoreThreshold, nmsThreshold, indices, eta, topK);
+                return indices.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Performs non maximum suppression given boxes and corresponding scores.
+        /// </summary>
+        /// <param name="bboxes">A set of bounding boxes to apply NMS.</param>
+        /// <param name="scores">A set of corresponding confidences.</param>
+        /// <param name="scoreThreshold">A threshold used to filter boxes by score.</param>
+        /// <param name="nmsThreshold">A threshold used in non maximum suppression.</param>
+        /// <param name="indices">The kept indices of bboxes after NMS.</param>
+        /// <param name="eta">A coefficient in adaptive threshold</param>
+        /// <param name="topK">If &gt;0, keep at most top_k picked indices.</param>
+        public static void NMSBoxes(VectorOfRotatedRect bboxes, VectorOfFloat scores, float scoreThreshold, float nmsThreshold, VectorOfInt indices, float eta = 1.0f, int topK = 0)
+        {
+            cveDnnNMSBoxes2(bboxes, scores, scoreThreshold, nmsThreshold, indices, eta, topK);
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveDnnNMSBoxes2(
+            IntPtr bboxes,
+            IntPtr scores,
+            float scoreThreshold,
+            float nmsThreshold,
+            IntPtr indices,
+            float eta,
+            int topK);
+
+
+        /// <summary>
         /// Get the list of available DNN Backends
         /// </summary>
         public static BackendTargetPair[] AvailableBackends

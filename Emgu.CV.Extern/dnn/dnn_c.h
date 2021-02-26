@@ -103,5 +103,14 @@ CVAPI(void) cveDnnNMSBoxes(
 	float eta,
 	int topK);
 
+CVAPI(void) cveDnnNMSBoxes2(
+	std::vector<cv::RotatedRect>* bboxes,
+	std::vector<float>* scores,
+	float scoreThreshold,
+	float nmsThreshold,
+	std::vector<int>* indices,
+	float eta,
+	int topK);
+
 CVAPI(void) cveDNNGetAvailableBackends(std::vector<int>* backends, std::vector<int>* targets);
 #endif
