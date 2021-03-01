@@ -2520,7 +2520,25 @@ ENDIF()
 	""
 	""
 	${HAVE_opencv_dnn})
-
+  #CREATE_OCV_CLASS_PROPERTY( 
+  #  "dnn/model_property" 
+  #  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/Model.g.cs"
+  #  "cv::dnn::Model" 
+  #  "Model" 
+  #  "InputScale" 
+  #  "double" 
+  #  "propW"
+  #  "InputScale" 
+  #  "double"
+  #  "input scale"
+  #  "Emgu.CV.Dnn"
+  #  "DnnInvoke"
+  #  "Model"
+#	""
+#	"#include \"dnn_c.h\""
+#	""
+#	""
+#	${HAVE_opencv_dnn})
 ############################### dnn code gen END ##############################
 
 ############################### stereo code gen START ##############################

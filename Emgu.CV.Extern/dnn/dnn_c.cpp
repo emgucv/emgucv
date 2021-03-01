@@ -375,3 +375,71 @@ void cveDNNGetAvailableBackends(std::vector<int>* backends, std::vector<int>* ta
 	throw_no_dnn();
 #endif
 }
+
+cv::dnn::TextDetectionModel_DB* cveDnnTextDetectionModelDbCreate1(cv::String* model, cv::String* config, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel)
+{
+	cv::dnn::TextDetectionModel_DB* ptr = new cv::dnn::TextDetectionModel_DB(*model, *config);
+	*textDetectionModel = dynamic_cast<cv::dnn::TextDetectionModel*>(ptr);
+	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
+	return ptr;
+}
+
+cv::dnn::TextDetectionModel_DB* cveDnnTextDetectionModelDbCreate2(cv::dnn::Net* network, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel)
+{
+	cv::dnn::TextDetectionModel_DB* ptr = new cv::dnn::TextDetectionModel_DB(*network);
+	*textDetectionModel = dynamic_cast<cv::dnn::TextDetectionModel*>(ptr);
+	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
+	return ptr;
+}
+
+void cveDnnTextDetectionModelDbRelease(cv::dnn::TextDetectionModel_DB** textDetectionModel)
+{
+	delete* textDetectionModel;
+	*textDetectionModel = 0;
+}
+
+cv::dnn::TextDetectionModel_EAST* cveDnnTextDetectionModelEastCreate1(cv::String* model, cv::String* config, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel)
+{
+	cv::dnn::TextDetectionModel_EAST* ptr = new cv::dnn::TextDetectionModel_EAST(*model, *config);
+	*textDetectionModel = dynamic_cast<cv::dnn::TextDetectionModel*>(ptr);
+	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
+	return ptr;
+}
+
+cv::dnn::TextDetectionModel_EAST* cveDnnTextDetectionModelEastCreate2(cv::dnn::Net* network, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel)
+{
+	cv::dnn::TextDetectionModel_EAST* ptr = new cv::dnn::TextDetectionModel_EAST(*network);
+	*textDetectionModel = dynamic_cast<cv::dnn::TextDetectionModel*>(ptr);
+	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
+	return ptr;
+}
+
+void cveDnnTextDetectionModelEastRelease(cv::dnn::TextDetectionModel_EAST** textDetectionModel)
+{
+	delete* textDetectionModel;
+	*textDetectionModel = 0;
+}
+
+void cveDnnTextDetectionModelDetect(
+	cv::dnn::TextDetectionModel* textDetectionModel,
+	cv::_InputArray* frame,
+	std::vector< std::vector< cv::Point > >* detections,
+	std::vector<float>* confidences
+)
+{
+	textDetectionModel->detect(*frame, *detections, *confidences);
+}
+
+
+void cveModelSetInputMean(cv::dnn::Model* model, CvScalar* mean)
+{
+	model->setInputMean(*mean);
+}
+void cveModelSetInputScale(cv::dnn::Model* model, double value)
+{
+	model->setInputScale(value);
+}
+void cveModelSetInputSize(cv::dnn::Model* model, CvSize* size)
+{
+	model->setInputSize(*size);
+}

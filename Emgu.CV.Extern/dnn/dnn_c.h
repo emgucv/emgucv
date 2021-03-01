@@ -113,4 +113,28 @@ CVAPI(void) cveDnnNMSBoxes2(
 	int topK);
 
 CVAPI(void) cveDNNGetAvailableBackends(std::vector<int>* backends, std::vector<int>* targets);
+
+
+CVAPI(cv::dnn::TextDetectionModel_DB*) cveDnnTextDetectionModelDbCreate1(cv::String* model, cv::String* config, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel);
+CVAPI(cv::dnn::TextDetectionModel_DB*) cveDnnTextDetectionModelDbCreate2(cv::dnn::Net* network, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel);
+CVAPI(void) cveDnnTextDetectionModelDbRelease(cv::dnn::TextDetectionModel_DB** textDetectionModel);
+
+CVAPI(cv::dnn::TextDetectionModel_EAST*) cveDnnTextDetectionModelEastCreate1(cv::String* model, cv::String* config, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel);
+CVAPI(cv::dnn::TextDetectionModel_EAST*) cveDnnTextDetectionModelEastCreate2(cv::dnn::Net* network, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel);
+CVAPI(void) cveDnnTextDetectionModelEastRelease(cv::dnn::TextDetectionModel_EAST** textDetectionModel);
+
+CVAPI(void) cveDnnTextDetectionModelDetect(
+	cv::dnn::TextDetectionModel* textDetectionModel,
+	cv::_InputArray* frame,
+	std::vector< std::vector< cv::Point > >* detections,
+	std::vector<float>* confidences
+);
+
+
+
+CVAPI(void) cveModelSetInputMean(cv::dnn::Model* model, CvScalar* mean);
+CVAPI(void) cveModelSetInputScale(cv::dnn::Model* model, double value);
+CVAPI(void) cveModelSetInputSize(cv::dnn::Model* model, CvSize* size);
+CVAPI(void) cveModelSetInputCrop(cv::dnn::Model* model, bool crop);
+CVAPI(void) cveModelSetInputSwapRB(cv::dnn::Model* model, bool swapRB);
 #endif
