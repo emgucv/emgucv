@@ -30,6 +30,14 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        public void DetectTextRectangles(IInputArray frame, VectorOfRotatedRect detections, VectorOfFloat confidences)
+        {
+            using (InputArray iaFrame = frame.GetInputArray())
+            {
+                DnnInvoke.cveDnnTextDetectionModelDetectTextRectangles(_textDetectionModel, iaFrame, detections, confidences);
+            }
+        }
+
         protected override void DisposeObject()
         {
             if (_textDetectionModel != IntPtr.Zero)
@@ -45,6 +53,14 @@ namespace Emgu.CV.Dnn
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnTextDetectionModelDetect(
+            IntPtr textDetectionModel,
+            IntPtr frame,
+            IntPtr detections,
+            IntPtr confidences
+        );
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnTextDetectionModelDetectTextRectangles(
             IntPtr textDetectionModel,
             IntPtr frame,
             IntPtr detections,

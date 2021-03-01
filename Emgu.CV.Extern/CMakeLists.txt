@@ -2520,25 +2520,67 @@ ENDIF()
 	""
 	""
 	${HAVE_opencv_dnn})
-  #CREATE_OCV_CLASS_PROPERTY( 
-  #  "dnn/model_property" 
-  #  "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/Model.g.cs"
-  #  "cv::dnn::Model" 
-  #  "Model" 
-  #  "InputScale" 
-  #  "double" 
-  #  "propW"
-  #  "InputScale" 
-  #  "double"
-  #  "input scale"
-  #  "Emgu.CV.Dnn"
-  #  "DnnInvoke"
-  #  "Model"
-#	""
-#	"#include \"dnn_c.h\""
-#	""
-#	""
-#	${HAVE_opencv_dnn})
+  CREATE_OCV_CLASS_PROPERTY( 
+    "dnn/TextDetectionModel_EAST_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/TextDetectionModel_EAST.g.cs"
+    "cv::dnn::TextDetectionModel_EAST" 
+    "TextDetectionModel_EAST" 
+    "ConfidenceThreshold;NMSThreshold" 
+    "float;float" 
+    "prop;prop"
+    "ConfidenceThreshold;NMSThreshold" 
+    "float;float"
+    "Confidence threshold;
+    Non-maximum suppression threshold"
+    "Emgu.CV.Dnn"
+    "DnnInvoke"
+    "TextDetectionModel_EAST"
+	""
+	"#include \"dnn_c.h\""
+	""
+	""
+	${HAVE_opencv_dnn})
+  CREATE_OCV_CLASS_PROPERTY( 
+    "dnn/TextDetectionModel_DB_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/TextDetectionModel_DB.g.cs"
+    "cv::dnn::TextDetectionModel_DB" 
+    "TextDetectionModel_DB" 
+    "BinaryThreshold;PolygonThreshold;UnclipRatio;MaxCandidates" 
+    "float;float;double;int" 
+    "prop;prop;prop;prop"
+    "BinaryThreshold;PolygonThreshold;UnclipRatio;MaxCandidates" 
+    "float;float;double;int"
+    "Binary threshold;
+    Polygon threshold;
+    Unclip ratio;
+    Max candidates"
+    "Emgu.CV.Dnn"
+    "DnnInvoke"
+    "TextDetectionModel_DB"
+	""
+	"#include \"dnn_c.h\""
+	""
+	""
+	${HAVE_opencv_dnn})
+  CREATE_OCV_CLASS_PROPERTY( 
+    "dnn/TextRecognitionModel_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/TextRecognitionModel.g.cs"
+    "cv::dnn::TextRecognitionModel" 
+    "TextRecognitionModel" 
+    "DecodeType" 
+    "cv::String" 
+    "prop"
+    "DecodeType" 
+    "String"
+    "Decode type"
+    "Emgu.CV.Dnn"
+    "DnnInvoke"
+    "TextRecognitionModel"
+	""
+	"#include \"dnn_c.h\""
+	""
+	""
+	${HAVE_opencv_dnn})
 ############################### dnn code gen END ##############################
 
 ############################### stereo code gen START ##############################

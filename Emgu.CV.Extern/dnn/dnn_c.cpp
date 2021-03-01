@@ -378,46 +378,70 @@ void cveDNNGetAvailableBackends(std::vector<int>* backends, std::vector<int>* ta
 
 cv::dnn::TextDetectionModel_DB* cveDnnTextDetectionModelDbCreate1(cv::String* model, cv::String* config, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel)
 {
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::TextDetectionModel_DB* ptr = new cv::dnn::TextDetectionModel_DB(*model, *config);
 	*textDetectionModel = dynamic_cast<cv::dnn::TextDetectionModel*>(ptr);
 	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
 	return ptr;
+#else
+	throw_no_dnn();
+#endif
 }
 
 cv::dnn::TextDetectionModel_DB* cveDnnTextDetectionModelDbCreate2(cv::dnn::Net* network, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel)
 {
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::TextDetectionModel_DB* ptr = new cv::dnn::TextDetectionModel_DB(*network);
 	*textDetectionModel = dynamic_cast<cv::dnn::TextDetectionModel*>(ptr);
 	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
 	return ptr;
+#else
+	throw_no_dnn();
+#endif
 }
 
 void cveDnnTextDetectionModelDbRelease(cv::dnn::TextDetectionModel_DB** textDetectionModel)
 {
+#ifdef HAVE_OPENCV_DNN
 	delete* textDetectionModel;
 	*textDetectionModel = 0;
+#else
+	throw_no_dnn();
+#endif
 }
 
 cv::dnn::TextDetectionModel_EAST* cveDnnTextDetectionModelEastCreate1(cv::String* model, cv::String* config, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel)
 {
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::TextDetectionModel_EAST* ptr = new cv::dnn::TextDetectionModel_EAST(*model, *config);
 	*textDetectionModel = dynamic_cast<cv::dnn::TextDetectionModel*>(ptr);
 	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
 	return ptr;
+#else
+	throw_no_dnn();
+#endif
 }
 
 cv::dnn::TextDetectionModel_EAST* cveDnnTextDetectionModelEastCreate2(cv::dnn::Net* network, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel)
 {
+#ifdef HAVE_OPENCV_DNN
 	cv::dnn::TextDetectionModel_EAST* ptr = new cv::dnn::TextDetectionModel_EAST(*network);
 	*textDetectionModel = dynamic_cast<cv::dnn::TextDetectionModel*>(ptr);
 	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
 	return ptr;
+#else
+	throw_no_dnn();
+#endif
 }
 
 void cveDnnTextDetectionModelEastRelease(cv::dnn::TextDetectionModel_EAST** textDetectionModel)
 {
+#ifdef HAVE_OPENCV_DNN
 	delete* textDetectionModel;
 	*textDetectionModel = 0;
+#else
+	throw_no_dnn();
+#endif
 }
 
 void cveDnnTextDetectionModelDetect(
@@ -427,19 +451,189 @@ void cveDnnTextDetectionModelDetect(
 	std::vector<float>* confidences
 )
 {
+#ifdef HAVE_OPENCV_DNN
 	textDetectionModel->detect(*frame, *detections, *confidences);
+#else
+	throw_no_dnn();
+#endif
+}
+
+void cveDnnTextDetectionModelDetectTextRectangles(
+	cv::dnn::TextDetectionModel* textDetectionModel,
+	cv::_InputArray* frame,
+	std::vector< cv::RotatedRect >* detections,
+	std::vector< float >* confidences
+)
+{
+#ifdef HAVE_OPENCV_DNN
+	textDetectionModel->detectTextRectangles(*frame, *detections, *confidences);
+#else
+	throw_no_dnn();
+#endif
+}
+
+cv::dnn::TextRecognitionModel* cveTextRecognitionModelCreate1(cv::String* model, cv::String* config, cv::dnn::Model** baseModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::TextRecognitionModel* ptr = new cv::dnn::TextRecognitionModel(*model, *config);
+	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
+	return ptr;
+#else
+	throw_no_dnn();
+#endif
+}
+
+cv::dnn::TextRecognitionModel* cveDnnTextDetectionModelEastCreate2(cv::dnn::Net* network, cv::dnn::Model** baseModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::TextRecognitionModel* ptr = new cv::dnn::TextRecognitionModel(*network);
+	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
+	return ptr;
+#else
+	throw_no_dnn();
+#endif
+}
+
+void cveDnnTextRecognitionModelRelease(cv::dnn::TextRecognitionModel** textRecognitionModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	delete* textRecognitionModel;
+	*textRecognitionModel = 0;
+#else
+	throw_no_dnn();
+#endif
+}
+
+void cveDnnTextRecognitionModelSetVocabulary(cv::dnn::TextRecognitionModel* textRecognitionModel, std::vector< std::string >* vocabulary)
+{
+#ifdef HAVE_OPENCV_DNN
+	textRecognitionModel->setVocabulary(*vocabulary);
+#else
+	throw_no_dnn();
+#endif
+}
+
+void cveDnnTextRecognitionModelGetVocabulary(cv::dnn::TextRecognitionModel* textRecognitionModel, std::vector< std::string >* vocabulary)
+{
+#ifdef HAVE_OPENCV_DNN
+	vocabulary->clear();
+	std::vector< std::string > result = textRecognitionModel->getVocabulary();
+	for (std::vector< std::string >::iterator iter = result.begin(); iter != result.end(); ++iter)
+	{
+		vocabulary->push_back(*iter);
+	}
+#else
+	throw_no_dnn();
+#endif
+}
+
+void cveDnnTextRecognitionModelRecognize1(cv::dnn::TextRecognitionModel* textRecognitionModel, cv::_InputArray* frame, cv::String* text)
+{
+#ifdef HAVE_OPENCV_DNN
+	std::string s = textRecognitionModel->recognize(*frame);
+	*text = s;
+#else
+	throw_no_dnn();
+#endif
+}
+
+void cveDnnTextRecognitionModelRecognize2(
+	cv::dnn::TextRecognitionModel* textRecognitionModel,
+	cv::_InputArray* frame,
+	cv::_InputArray* roiRects,
+	std::vector< std::string >* results)
+{
+#ifdef HAVE_OPENCV_DNN
+	textRecognitionModel->recognize(*frame, *roiRects, *results);
+#else
+	throw_no_dnn();
+#endif
 }
 
 
 void cveModelSetInputMean(cv::dnn::Model* model, CvScalar* mean)
 {
+#ifdef HAVE_OPENCV_DNN
 	model->setInputMean(*mean);
+#else
+	throw_no_dnn();
+#endif
 }
 void cveModelSetInputScale(cv::dnn::Model* model, double value)
 {
+#ifdef HAVE_OPENCV_DNN
 	model->setInputScale(value);
+#else
+	throw_no_dnn();
+#endif
 }
 void cveModelSetInputSize(cv::dnn::Model* model, CvSize* size)
 {
+#ifdef HAVE_OPENCV_DNN
 	model->setInputSize(*size);
+#else
+	throw_no_dnn();
+#endif
+}
+void cveModelSetInputCrop(cv::dnn::Model* model, bool crop)
+{
+#ifdef HAVE_OPENCV_DNN
+	model->setInputCrop(crop);
+#else
+	throw_no_dnn();
+#endif
+}
+void cveModelSetInputSwapRB(cv::dnn::Model* model, bool swapRB)
+{
+#ifdef HAVE_OPENCV_DNN
+	model->setInputSwapRB(swapRB);
+#else
+	throw_no_dnn();
+#endif
+}
+void cveModelSetPreferableBackend(cv::dnn::Model* model, int backendId)
+{
+#ifdef HAVE_OPENCV_DNN
+	model->setPreferableBackend((cv::dnn::Backend) backendId);
+#else
+	throw_no_dnn();
+#endif
+}
+void cveModelSetPreferableTarget(cv::dnn::Model* model, int targetId)
+{
+#ifdef HAVE_OPENCV_DNN
+	model->setPreferableTarget((cv::dnn::Target) targetId);
+#else
+	throw_no_dnn();
+#endif
+}
+
+cv::dnn::DetectionModel* cveDnnDetectionModelCreate1(cv::String* model, cv::String* config, cv::dnn::Model** baseModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::DetectionModel* ptr = new cv::dnn::DetectionModel(*model, *config);
+	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
+	return ptr;
+#else
+	throw_no_dnn();
+#endif
+}
+cv::dnn::DetectionModel* cveDnnDetectionModelCreate2(cv::dnn::Net* network, cv::dnn::Model** baseModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::DetectionModel* ptr = new cv::dnn::DetectionModel(*network);
+	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
+	return ptr;
+#else
+	throw_no_dnn();
+#endif
+}
+void cveDnnDetectionModelRelease(cv::dnn::DetectionModel** detectionModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	delete* detectionModel;
+	*detectionModel = 0;
+#else
+	throw_no_dnn();
+#endif
 }

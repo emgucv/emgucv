@@ -65,6 +65,24 @@ namespace Emgu.CV.Dnn
                 _model = IntPtr.Zero;
             }
         }
+
+        /// <summary>
+        /// Ask network to use specific computation backend where it supported.
+        /// </summary>
+        /// <param name="value">The value</param>
+        public void SetPreferableBackend(Net.Backend value)
+        {
+            DnnInvoke.cveModelSetPreferableBackend(_ptr, value);
+        }
+
+        /// <summary>
+        /// Ask network to make computations on specific target device.
+        /// </summary>
+        /// <param name="value">The value</param>
+        public void SetPreferableTarget(Net.Target value)
+        {
+            DnnInvoke.cveModelSetPreferableTarget(_ptr, value);
+        }
     }
 
     public static partial class DnnInvoke
@@ -95,5 +113,11 @@ namespace Emgu.CV.Dnn
             IntPtr model,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool swapRB);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveModelSetPreferableBackend(IntPtr model, Net.Backend backendId);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveModelSetPreferableTarget(IntPtr model, Net.Target targetId);
     }
 }
