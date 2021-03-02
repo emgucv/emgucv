@@ -159,5 +159,13 @@ CVAPI(void) cveModelSetPreferableTarget(cv::dnn::Model* model, int targetId);
 CVAPI(cv::dnn::DetectionModel*) cveDnnDetectionModelCreate1(cv::String* model, cv::String* config, cv::dnn::Model** baseModel);
 CVAPI(cv::dnn::DetectionModel*) cveDnnDetectionModelCreate2(cv::dnn::Net* network, cv::dnn::Model** baseModel);
 CVAPI(void) cveDnnDetectionModelRelease(cv::dnn::DetectionModel** detectionModel);
+CVAPI(void) cveDnnDetectionModelDetect(
+	cv::dnn::DetectionModel* detectionModel,
+	cv::_InputArray* frame, 
+	std::vector< int >* classIds,
+	std::vector< float >* confidences,
+	std::vector< cv::Rect >* boxes,
+	float confThreshold, 
+	float nmsThreshold);
 
 #endif

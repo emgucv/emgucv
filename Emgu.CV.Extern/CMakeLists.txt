@@ -2581,6 +2581,25 @@ ENDIF()
 	""
 	""
 	${HAVE_opencv_dnn})
+  CREATE_OCV_CLASS_PROPERTY( 
+    "dnn/DetectionModel_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/DetectionModel.g.cs"
+    "cv::dnn::DetectionModel" 
+    "DetectionModel" 
+    "NmsAcrossClasses" 
+    "bool" 
+    "prop"
+    "NmsAcrossClasses" 
+    "bool"
+    "It true, will perform non-maximum suppression across classes"
+    "Emgu.CV.Dnn"
+    "DnnInvoke"
+    "DetectionModel"
+	""
+	"#include \"dnn_c.h\""
+	""
+	""
+	${HAVE_opencv_dnn})
 ############################### dnn code gen END ##############################
 
 ############################### stereo code gen START ##############################

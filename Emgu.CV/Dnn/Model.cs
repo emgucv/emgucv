@@ -70,7 +70,7 @@ namespace Emgu.CV.Dnn
         /// Ask network to use specific computation backend where it supported.
         /// </summary>
         /// <param name="value">The value</param>
-        public void SetPreferableBackend(Net.Backend value)
+        public void SetPreferableBackend(Backend value)
         {
             DnnInvoke.cveModelSetPreferableBackend(_ptr, value);
         }
@@ -79,7 +79,7 @@ namespace Emgu.CV.Dnn
         /// Ask network to make computations on specific target device.
         /// </summary>
         /// <param name="value">The value</param>
-        public void SetPreferableTarget(Net.Target value)
+        public void SetPreferableTarget(Target value)
         {
             DnnInvoke.cveModelSetPreferableTarget(_ptr, value);
         }
@@ -115,9 +115,9 @@ namespace Emgu.CV.Dnn
             bool swapRB);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveModelSetPreferableBackend(IntPtr model, Net.Backend backendId);
+        internal static extern void cveModelSetPreferableBackend(IntPtr model, Backend backendId);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveModelSetPreferableTarget(IntPtr model, Net.Target targetId);
+        internal static extern void cveModelSetPreferableTarget(IntPtr model, Target targetId);
     }
 }

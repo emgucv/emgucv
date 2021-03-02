@@ -637,3 +637,20 @@ void cveDnnDetectionModelRelease(cv::dnn::DetectionModel** detectionModel)
 	throw_no_dnn();
 #endif
 }
+
+void cveDnnDetectionModelDetect(
+	cv::dnn::DetectionModel* detectionModel,
+	cv::_InputArray* frame,
+	std::vector< int >* classIds,
+	std::vector< float >* confidences,
+	std::vector< cv::Rect >* boxes,
+	float confThreshold,
+	float nmsThreshold)
+{
+#ifdef HAVE_OPENCV_DNN
+	detectionModel->detect(*frame, *classIds, *confidences, *boxes, confThreshold, nmsThreshold);
+#else
+	throw_no_dnn();
+#endif
+
+}
