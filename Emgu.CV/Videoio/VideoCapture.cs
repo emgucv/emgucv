@@ -351,6 +351,7 @@ namespace Emgu.CV
 #if TEST_CAPTURE
 #else
             Stop();
+            _runThreadStoppedEvent.WaitOne();
             CvInvoke.cveVideoCaptureRelease(ref _ptr);
 
 #endif
@@ -408,6 +409,8 @@ namespace Emgu.CV
             Stopping,
         }
 
+        private AutoResetEvent _runThreadStoppedEvent =  new AutoResetEvent(false);
+
         private volatile GrabState _grabState = GrabState.Stopped;
 
         private void Run(Emgu.Util.ExceptionHandler eh = null)
@@ -438,6 +441,7 @@ namespace Emgu.CV
             finally
             {
                 _grabState = GrabState.Stopped;
+                _runThreadStoppedEvent.Set();
             }
         }
 
