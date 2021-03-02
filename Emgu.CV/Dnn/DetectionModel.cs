@@ -13,9 +13,16 @@ using System.Diagnostics;
 
 namespace Emgu.CV.Dnn
 {
-
+    /// <summary>
+    /// This class represents high-level API for object detection networks.
+    /// </summary>
     public partial class  DetectionModel : Model
     {
+        /// <summary>
+        /// Create detection model from network represented in one of the supported formats.
+        /// </summary>
+        /// <param name="model">Binary file contains trained weights.</param>
+        /// <param name="config">Text file contains network configuration.</param>
         public DetectionModel(String model, String config = null)
         {
             using (CvString csModel = new CvString(model))
@@ -28,6 +35,10 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        /// <summary>
+        /// Create model from deep learning network.
+        /// </summary>
+        /// <param name="net">DNN Network</param>
         public DetectionModel(Net net)
         {
 
@@ -37,6 +48,15 @@ namespace Emgu.CV.Dnn
 
         }
 
+        /// <summary>
+        /// Given the input frame, create input blob, run net and return result detections.
+        /// </summary>
+        /// <param name="frame">The input image.</param>
+        /// <param name="classIds">Class indexes in result detection.</param>
+        /// <param name="confidences">A set of corresponding confidences.</param>
+        /// <param name="boxes">A set of bounding boxes.</param>
+        /// <param name="confThreshold">A threshold used to filter boxes by confidences.</param>
+        /// <param name="nmsThreshold">A threshold used in non maximum suppression.</param>
         public void Detect(
             IInputArray frame,
             VectorOfInt classIds,
@@ -58,6 +78,9 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        /// <summary>
+        /// Release the memory associated with this detection model.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)

@@ -21,12 +21,17 @@ namespace Emgu.CV.DepthAI
     /// </summary>
     public partial class FrameMetadata : UnmanagedObject
     {
+        /// <summary>
+        /// Create a FrameMetaData object
+        /// </summary>
         public FrameMetadata()
         {
             _ptr = DepthAIInvoke.depthaiFrameMetadataCreate();
         }
 
-		
+        /// <summary>
+        /// Release all unmanaged memory associated with the FrameMetadata.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)

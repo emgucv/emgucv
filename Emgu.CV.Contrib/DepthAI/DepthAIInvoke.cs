@@ -29,6 +29,9 @@ namespace Emgu.CV.DepthAI
             _haveDepthAI = (CvInvoke.ConfigDict["HAVE_DEPTHAI"] == 1);
         }
 
+        /// <summary>
+        /// True if the native binary is built with DepthAI support.
+        /// </summary>
         public static Boolean HaveDepthAI
         {
             get

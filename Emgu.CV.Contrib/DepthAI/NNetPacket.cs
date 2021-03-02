@@ -16,7 +16,9 @@ using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.DepthAI
 {
-
+    /// <summary>
+    /// The NNet packet
+    /// </summary>
     public class NNetPacket
     {
         private IntPtr _ptr;
@@ -26,6 +28,9 @@ namespace Emgu.CV.DepthAI
             _ptr = ptr;
         }
 
+        /// <summary>
+        /// Get the detections from the NNet packet
+        /// </summary>
         public Detection[] Detections
         {
             get
@@ -39,6 +44,10 @@ namespace Emgu.CV.DepthAI
             }
         }
 
+        /// <summary>
+        /// Get the frame meta data
+        /// </summary>
+        /// <returns>The frame meta data</returns>
         public FrameMetadata GetFrameMetadata()
         {
             FrameMetadata metaData = new FrameMetadata();
@@ -55,16 +64,46 @@ namespace Emgu.CV.DepthAI
 
         }
 
+        /// <summary>
+        /// The detection result
+        /// </summary>
         public struct Detection
         {
+            /// <summary>
+            /// The label
+            /// </summary>
             public UInt32 Label;
+            /// <summary>
+            /// The confidence
+            /// </summary>
             public float Confidence;
+            /// <summary>
+            /// Min x value
+            /// </summary>
             public float XMin;
+            /// <summary>
+            /// Min y value
+            /// </summary>
             public float YMin;
+            /// <summary>
+            /// Max x value
+            /// </summary>
             public float XMax;
+            /// <summary>
+            /// Max y value
+            /// </summary>
             public float YMax;
+            /// <summary>
+            /// The x value of the 3d location
+            /// </summary>
             public float DepthX;
+            /// <summary>
+            /// The y value of the 3d location
+            /// </summary>
             public float DepthY;
+            /// <summary>
+            /// The z value of the 3d location
+            /// </summary>
             public float DepthZ;
         };
     }

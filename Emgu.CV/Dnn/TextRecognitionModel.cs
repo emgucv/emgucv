@@ -13,8 +13,17 @@ using System.Diagnostics;
 
 namespace Emgu.CV.Dnn
 {
+    /// <summary>
+    /// This class represents high-level API for text recognition networks
+    /// </summary>
     public partial class TextRecognitionModel : Model
     {
+        /// <summary>
+        /// Create Text Recognition model from deep learning network
+        /// </summary>
+        /// <param name="model">Binary file contains trained weights</param>
+        /// <param name="config">Text file contains network configuration</param>
+        /// <remarks>Set DecodeType and Vocabulary after constructor to initialize the decoding method.</remarks>
         public TextRecognitionModel(String model, String config = null)
         {
             using (CvString csModel = new CvString(model))
@@ -27,6 +36,11 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        /// <summary>
+        /// Create Text Recognition model from deep learning network
+        /// </summary>
+        /// <param name="net">Dnn network</param>
+        /// <remarks>Set DecodeType and Vocabulary after constructor to initialize the decoding method.</remarks>
         public TextRecognitionModel(Net net)
         {
 
@@ -36,6 +50,9 @@ namespace Emgu.CV.Dnn
 
         }
 
+        /// <summary>
+        /// Get or Set the vocabulary for recognition.
+        /// </summary>
         public String[] Vocabulary
         {
             get
@@ -55,6 +72,11 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        /// <summary>
+        /// Given the input frame, create input blob, run net and return recognition result.
+        /// </summary>
+        /// <param name="frame">The input image</param>
+        /// <returns>The text recognition result</returns>
         public String Recognize(IInputArray frame)
         {
             using (CvString s = new CvString())
@@ -65,6 +87,12 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        /// <summary>
+        /// Given the input frame, create input blob, run net and return recognition result.
+        /// </summary>
+        /// <param name="frame">The input image</param>
+        /// <param name="roiRects">Vector of text detection regions of interest (Rect, CV_32SC4). ROIs is be cropped as the network inputs</param>
+        /// <returns>A set of text recognition results.</returns>
         public String[] Recognize(IInputArray frame, IInputArrayOfArrays roiRects)
         {
             using (VectorOfCvString vs = new VectorOfCvString())
@@ -76,6 +104,9 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        /// <summary>
+        /// Release the memory associated with this text recognition model.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)

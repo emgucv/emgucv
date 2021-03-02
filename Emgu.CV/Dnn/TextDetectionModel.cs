@@ -13,7 +13,9 @@ using System.Diagnostics;
 
 namespace Emgu.CV.Dnn
 {
-
+    /// <summary>
+    /// Base class for text detection networks.
+    /// </summary>
     public abstract class TextDetectionModel : Model
     {
 
@@ -22,6 +24,12 @@ namespace Emgu.CV.Dnn
         /// </summary>
         protected IntPtr _textDetectionModel;
 
+        /// <summary>
+        /// Given the input frame, prepare network input, run network inference, post-process network output and return result detections.
+        /// </summary>
+        /// <param name="frame">The input image</param>
+        /// <param name="detections">Array with detections' quadrangles (4 points per result) in this order: bottom-left, top-left, top-right, bottom-right</param>
+        /// <param name="confidences">Array with detection confidences</param>
         public void Detect(IInputArray frame, VectorOfVectorOfPoint detections, VectorOfFloat confidences)
         {
             using (InputArray iaFrame = frame.GetInputArray())
@@ -30,6 +38,12 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        /// <summary>
+        /// Given the input frame, prepare network input, run network inference, post-process network output and return result detections.
+        /// </summary>
+        /// <param name="frame">The input image</param>
+        /// <param name="detections">Array with detections' RotationRect results</param>
+        /// <param name="confidences">Array with detection confidences</param>
         public void DetectTextRectangles(IInputArray frame, VectorOfRotatedRect detections, VectorOfFloat confidences)
         {
             using (InputArray iaFrame = frame.GetInputArray())
@@ -38,6 +52,9 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        /// <summary>
+        /// Release the memory associated with this text detection model.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_textDetectionModel != IntPtr.Zero)

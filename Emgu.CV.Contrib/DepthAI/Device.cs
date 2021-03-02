@@ -27,6 +27,9 @@ namespace Emgu.CV.DepthAI
                 _ptr = DepthAIInvoke.depthaiDeviceCreate(csUsbDevice, usb2Mode);
         }
 
+        /// <summary>
+        /// Get the available streams
+        /// </summary>
         public String[] AvailableStreams
         {
             get
@@ -39,6 +42,11 @@ namespace Emgu.CV.DepthAI
             }
         }
 
+        /// <summary>
+        /// Create a pipeline
+        /// </summary>
+        /// <param name="jsonConfigStr">The Json configuration string</param>
+        /// <returns>The CNNHostPipeline</returns>
         public CNNHostPipeline CreatePipeline(string jsonConfigStr)
         {
             using (CvString csJsonConfigStr = new CvString(jsonConfigStr))
@@ -50,6 +58,9 @@ namespace Emgu.CV.DepthAI
             }
         }
 
+        /// <summary>
+        /// Release all unmanaged memory associated with the Device.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)

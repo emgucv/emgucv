@@ -16,6 +16,9 @@ using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.DepthAI
 {
+    /// <summary>
+    /// The CNNHostPipeline
+    /// </summary>
     public partial class CNNHostPipeline : SharedPtrObject
     {
         internal CNNHostPipeline(IntPtr sharedPtr, IntPtr ptr)
@@ -24,12 +27,20 @@ namespace Emgu.CV.DepthAI
             _ptr = ptr;
         }
 
+        /// <summary>
+        /// Get the available NNet and data packets
+        /// </summary>
+        /// <param name="blocking">If true, this will be a blocking function call</param>
+        /// <returns>The available NNet and data packets</returns>
         public NNetAndDataPackets GetAvailableNNetAndDataPackets(bool blocking)
         {
             return new NNetAndDataPackets(
                 DepthAIInvoke.depthaiCNNHostPipelineGetAvailableNNetAndDataPackets(_ptr, blocking));
         }
 
+        /// <summary>
+        /// Release all unmanaged memory associated with the CNNHostPipeline.
+        /// </summary>
         protected override void DisposeObject()
         {
             

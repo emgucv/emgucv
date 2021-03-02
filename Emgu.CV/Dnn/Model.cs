@@ -15,7 +15,7 @@ using System.Drawing;
 namespace Emgu.CV.Dnn
 {
     /// <summary>
-    /// This class allows to create and manipulate comprehensive artificial neural networks.
+    /// This class is presented high-level API for neural networks.
     /// </summary>
     public abstract class Model : UnmanagedObject
     {
@@ -26,38 +26,54 @@ namespace Emgu.CV.Dnn
         protected IntPtr _model;
 
         /// <summary>
-        /// Input scale
+        /// Set scalefactor value for frame.
         /// </summary>
-        /// <param name="scale">The scale</param>
+        /// <param name="scale">Multiplier for frame values.</param>
         public void SetInputScale(double scale)
         {
             DnnInvoke.cveModelSetInputScale(_model, scale);
         }
 
         /// <summary>
-        /// Input mean
+        /// Set mean value for frame.
         /// </summary>
-        /// <param name="mean">The mean</param>
+        /// <param name="mean">Scalar with mean values which are subtracted from channels.</param>
         public void SetInputMean(MCvScalar mean)
         {
             DnnInvoke.cveModelSetInputMean(_model, ref mean);
         }
 
+        /// <summary>
+        /// Set input size for frame.
+        /// </summary>
+        /// <param name="size">New input size.</param>
+        /// <remarks>If shape of the new blob less than 0, then frame size not change.</remarks>
         public void SetInputSize(Size size)
         {
             DnnInvoke.cveModelSetInputSize(_model, ref size);
         }
 
+        /// <summary>
+        /// Set flag crop for frame.
+        /// </summary>
+        /// <param name="crop">Flag which indicates whether image will be cropped after resize or not.</param>
         public void SetInputCrop(bool crop)
         {
             DnnInvoke.cveModelSetInputCrop(_model, crop);
         }
 
+        /// <summary>
+        /// Set flag swapRB for frame.
+        /// </summary>
+        /// <param name="swapRB">Flag which indicates that swap first and last channels.</param>
         public void SetInputSwapRB(bool swapRB)
         {
             DnnInvoke.cveModelSetInputSwapRB(_model, swapRB);
         }
 
+        /// <summary>
+        /// Release the memory associated with this Model.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_model != IntPtr.Zero)

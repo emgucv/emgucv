@@ -16,6 +16,9 @@ using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.DepthAI
 {
+    /// <summary>
+    /// The NNet and data packets
+    /// </summary>
     public partial class NNetAndDataPackets : UnmanagedObject
     {
         internal NNetAndDataPackets(IntPtr ptr)
@@ -23,6 +26,9 @@ namespace Emgu.CV.DepthAI
             _ptr = ptr;
         }
 
+        /// <summary>
+        /// Get the host data packets
+        /// </summary>
         public HostDataPacket[] HostDataPackets
         {
             get
@@ -36,6 +42,9 @@ namespace Emgu.CV.DepthAI
             }
         }
 
+        /// <summary>
+        /// Get the NNet packets
+        /// </summary>
         public NNetPacket[] NNetPackets
         {
             get
@@ -49,6 +58,9 @@ namespace Emgu.CV.DepthAI
             }
         }
 
+        /// <summary>
+        /// Release all unmanaged memory associated with the NNetAndDataPackets.
+        /// </summary>
         protected override void DisposeObject()
         {
             

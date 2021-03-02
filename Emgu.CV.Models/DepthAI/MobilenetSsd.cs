@@ -71,6 +71,11 @@ namespace Emgu.CV.Models.DepthAI
             return config;
         }
 
+        /// <summary>
+        /// Download and initialize the mobilenet model for depth AI
+        /// </summary>
+        /// <param name="onDownloadProgressChanged">Call back method during download</param>
+        /// <returns>Asyn task</returns>
         public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
             /*

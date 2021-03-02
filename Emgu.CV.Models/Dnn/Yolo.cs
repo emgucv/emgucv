@@ -18,6 +18,9 @@ using Emgu.Util;
 
 namespace Emgu.CV.Models
 {
+    /// <summary>
+    /// Yolo model
+    /// </summary>
     public class Yolo
     {
         private String _modelFolderName = "yolo_v3";
@@ -33,11 +36,26 @@ namespace Emgu.CV.Models
         /// </summary>
         public enum YoloVersion
         {
+            /// <summary>
+            /// Yolo v3
+            /// </summary>
             YoloV3,
+            /// <summary>
+            /// Yolo v3 spp
+            /// </summary>
             YoloV3Spp,
+            /// <summary>
+            /// Yolo v3 tiny
+            /// </summary>
             YoloV3Tiny
         }
 
+        /// <summary>
+        /// Download and initialize the yolo model
+        /// </summary>
+        /// <param name="version">The model version</param>
+        /// <param name="onDownloadProgressChanged">Call back method during download</param>
+        /// <returns>Asyn task</returns>
         public async Task Init(YoloVersion version = YoloVersion.YoloV3, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
             if (_yoloDetector == null)

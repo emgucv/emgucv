@@ -13,9 +13,16 @@ using System.Diagnostics;
 
 namespace Emgu.CV.Dnn
 {
-
+    /// <summary>
+    /// This class represents high-level API for text detection DL networks compatible with DB model. 
+    /// </summary>
     public partial class TextDetectionModel_DB : TextDetectionModel
     {
+        /// <summary>
+        /// Create text detection model from network represented in one of the supported formats.
+        /// </summary>
+        /// <param name="model">Binary file contains trained weights.</param>
+        /// <param name="config">Text file contains network configuration.</param>
         public TextDetectionModel_DB(String model, String config = null)
         {
             using (CvString csModel = new CvString(model))
@@ -29,6 +36,10 @@ namespace Emgu.CV.Dnn
             }
         }
 
+        /// <summary>
+        /// Create text detection algorithm from deep learning network
+        /// </summary>
+        /// <param name="net">The DNN network</param>
         public TextDetectionModel_DB(Net net)
         {
 
@@ -39,6 +50,9 @@ namespace Emgu.CV.Dnn
 
         }
 
+        /// <summary>
+        /// Release the memory associated with this text detection model.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)

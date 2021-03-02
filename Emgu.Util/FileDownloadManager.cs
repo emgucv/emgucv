@@ -63,6 +63,9 @@ namespace Emgu.Util
             _files.Add(downloadableFile);
         }
 
+        /// <summary>
+        /// Return true if all files has been downloaded and are valid.
+        /// </summary>
         public bool AllFilesDownloaded
         {
             get

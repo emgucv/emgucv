@@ -50,7 +50,6 @@ namespace DepthAI
         private static String[] ReadLabels(String blobFileConfig)
         {
 
-
             using (StreamReader sr =
                 new StreamReader(blobFileConfig))
             {
@@ -68,7 +67,10 @@ namespace DepthAI
             CvInvoke.Init();
 
             if (!DepthAIInvoke.HaveDepthAI)
+            {
+                Console.WriteLine("The native binary is built without Depth AI support.");
                 return;
+            }
 
             String win1 = "Depth AI"; //The name of the window
             CvInvoke.NamedWindow(win1); //Create the window using the specific name

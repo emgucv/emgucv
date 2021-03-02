@@ -16,11 +16,16 @@ using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.DepthAI
 {
-
+    /// <summary>
+    /// The host data packet
+    /// </summary>
     public partial class HostDataPacket
     {
         private IntPtr _ptr;
 
+        /// <summary>
+        /// Get the data dimension
+        /// </summary>
         public int[] Dimension
         {
             get
@@ -33,6 +38,10 @@ namespace Emgu.CV.DepthAI
             }
         }
 
+        /// <summary>
+        /// Get the frame meta data
+        /// </summary>
+        /// <returns>The frame meta data</returns>
         public FrameMetadata GetFrameMetadata()
         {
             FrameMetadata metaData = new FrameMetadata();
@@ -48,6 +57,11 @@ namespace Emgu.CV.DepthAI
             }
         }
 
+        /// <summary>
+        /// Get the preview image
+        /// </summary>
+        /// <param name="preview">The preview image</param>
+        /// <returns>True if successfully retrieve the preview image.</returns>
         public bool GetPreviewOut(Mat preview)
         {
             if (StreamName.Contains("previewout"))
