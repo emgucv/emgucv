@@ -10,12 +10,16 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Emgu.CV.DepthAI;
+using Emgu.CV.Dnn;
+using Emgu.Util;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace Emgu.CV.Models.DepthAI
 {
     public class MobilenetSsd
     {
-        public static Config GetConfig(String blobFile, String blobFileConfig)
+        private static Config GetConfig(String blobFile, String blobConfigFile)
         {
             Config config = new Config();
             config.streams = new List<string>();
@@ -23,7 +27,7 @@ namespace Emgu.CV.Models.DepthAI
             config.streams.Add("previewout");
             config.depth = new Depth();
             config.depth.calibration_file = String.Empty;
-            config.depth.left_mesh_file = System.IO.Path.Combine( Assembly.GetCallingAssembly().Location, "resources", "mesh_left.calib" );
+            config.depth.left_mesh_file = System.IO.Path.Combine(Assembly.GetCallingAssembly().Location, "resources", "mesh_left.calib");
             config.depth.right_mesh_file = System.IO.Path.Combine(Assembly.GetCallingAssembly().Location, "resources", "mesh_right.calib");
             config.depth.padding_factor = 0.3;
             config.depth.depth_limit_m = 10.0;
@@ -34,9 +38,8 @@ namespace Emgu.CV.Models.DepthAI
             config.depth.warp_rectify.mirror_frame = true;
             config.depth.warp_rectify.edge_fill_color = 0;
             config.ai = new Ai();
-            config.ai.blob_file =
-                "D:\\sourceforge\\depthai\\resources\\nn\\mobilenet-ssd\\mobilenet-ssd.blob.sh14cmx14NCE1";
-            config.ai.blob_file_config = "D:\\sourceforge\\depthai\\resources\\nn\\mobilenet-ssd\\mobilenet-ssd.json";
+            config.ai.blob_file = blobFile;
+            config.ai.blob_file_config = blobConfigFile;
             config.ai.blob_file2 = String.Empty;
             config.ai.blob_file_config2 = String.Empty;
             config.ai.calc_dist_to_bb = true;
@@ -71,55 +74,60 @@ namespace Emgu.CV.Models.DepthAI
             return config;
         }
 
+        private String _modelFolderName = "DaiMobilenetSSD";
+
+        private DownloadableFile _blobFile;
+        private DownloadableFile _blobConfigFile;
+        private FileDownloadManager _manager;
+
         /// <summary>
         /// Download and initialize the mobilenet model for depth AI
         /// </summary>
         /// <param name="onDownloadProgressChanged">Call back method during download</param>
         /// <returns>Asyn task</returns>
-        public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        public async Task<Config> Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
-            /*
-            if (_yoloDetector == null)
+            _blobFile = new DownloadableFile(
+                "https://github.com/emgucv/models/raw/master/DepthAI/mobilenet-ssd/mobilenet-ssd.blob.sh14cmx14NCE1",
+                _modelFolderName,
+                "952C8AA1759CAB442D82781579EE4B9BA828CBED8AB9AD3C94D5222AA45DCA6E");
+            _blobConfigFile = new DownloadableFile(
+                "https://github.com/emgucv/models/raw/master/DepthAI/mobilenet-ssd/mobilenet-ssd.json",
+                _modelFolderName,
+                "606A965DDF539857D3477AED659A69948D8B310A20B38C3B794F2369ECC685FE");
+
+            _manager = new FileDownloadManager();
+            _manager.AddFile(_blobFile);
+            _manager.AddFile(_blobConfigFile);
+            if (onDownloadProgressChanged != null)
+                    _manager.OnDownloadProgressChanged += onDownloadProgressChanged;
+            await _manager.Download();
+
+            if (!_manager.AllFilesDownloaded)
+                return null;
+
+            Config config = GetConfig(_blobFile.LocalFile, _blobConfigFile.LocalFile);
+            return config;
+        }
+
+        private static String[] ReadLabels(String blobConfigFile)
+        {
+            using (StreamReader sr = new StreamReader(blobConfigFile))
             {
-                FileDownloadManager manager = new FileDownloadManager();
+                dynamic configJson = JsonConvert.DeserializeObject(sr.ReadToEnd());
+                List<String> labels = new List<string>();
+                foreach (var l in configJson.mappings.labels)
+                    labels.Add(l.ToString());
+                return labels.ToArray();
+            }
+        }
 
-                if (version == YoloVersion.YoloV3Spp)
-                {
-                    manager.AddFile(
-                        "https://pjreddie.com/media/files/yolov3-spp.weights",
-                        _modelFolderName);
-                    manager.AddFile(
-                        "https://github.com/pjreddie/darknet/raw/master/cfg/yolov3-spp.cfg",
-                        _modelFolderName);
-                }
-                else if (version == YoloVersion.YoloV3)
-                {
-                    manager.AddFile(
-                        "https://pjreddie.com/media/files/yolov3.weights",
-                        _modelFolderName);
-                    manager.AddFile(
-                        "https://github.com/pjreddie/darknet/raw/master/cfg/yolov3.cfg",
-                        _modelFolderName);
-                }
-                else if (version == YoloVersion.YoloV3Tiny)
-                {
-                    manager.AddFile(
-                        "https://pjreddie.com/media/files/yolov3-tiny.weights",
-                        _modelFolderName);
-                    manager.AddFile(
-                        "https://github.com/pjreddie/darknet/raw/master/cfg/yolov3-tiny.cfg",
-                        _modelFolderName);
-                }
-
-                manager.AddFile("https://github.com/pjreddie/darknet/raw/master/data/coco.names",
-                    _modelFolderName);
-
-                if (onDownloadProgressChanged != null)
-                    manager.OnDownloadProgressChanged += onDownloadProgressChanged;
-                await manager.Download();
-                _yoloDetector = DnnInvoke.ReadNetFromDarknet(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
-                _labels = File.ReadAllLines(manager.Files[2].LocalFile);
-            }*/
+        public String[] Labels
+        {
+            get
+            {
+                return ReadLabels(_blobConfigFile.LocalFile);
+            }
         }
 
     }

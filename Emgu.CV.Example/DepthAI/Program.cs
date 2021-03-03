@@ -5,14 +5,17 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
+
+using System.Threading.Tasks;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.DepthAI;
 using Emgu.CV.ML;
+using Emgu.CV.Models.DepthAI;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Newtonsoft.Json;
+
 
 namespace DepthAI
 { 
@@ -47,22 +50,15 @@ namespace DepthAI
 
         }
 
-        private static String[] ReadLabels(String blobFileConfig)
+        private static void onDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
         {
-
-            using (StreamReader sr =
-                new StreamReader(blobFileConfig))
-            {
-                dynamic configJson = JsonConvert.DeserializeObject(sr.ReadToEnd());
-                List<String> labels = new List<string>();
-                foreach (var l in configJson.mappings.labels)
-                    labels.Add(l.ToString());
-                return labels.ToArray();
-            }
-            
+            if (e.TotalBytesToReceive <= 0)
+                System.Console.WriteLine(String.Format("{0} bytes downloaded", e.BytesReceived, e.ProgressPercentage));
+            else
+                System.Console.WriteLine(String.Format("{0} of {1} bytes downloaded ({2}%)", e.BytesReceived, e.TotalBytesToReceive, e.ProgressPercentage));
         }
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             CvInvoke.Init();
 
@@ -72,16 +68,19 @@ namespace DepthAI
                 return;
             }
 
-            String win1 = "Depth AI"; //The name of the window
+            String win1 = "Depth AI (Press 'q' to quit)"; //The name of the window
+
             CvInvoke.NamedWindow(win1); //Create the window using the specific name
 
-            String blobFile = "D:\\sourceforge\\depthai\\resources\\nn/mobilenet-ssd/mobilenet-ssd.blob.sh14cmx14NCE1";
-            String blobFileConfig = "D:\\sourceforge\\depthai\\resources\\nn/mobilenet-ssd/mobilenet-ssd.json";
+            //String blobFile = "D:\\sourceforge\\depthai\\resources\\nn/mobilenet-ssd/mobilenet-ssd.blob.sh14cmx14NCE1";
+            //String blobFileConfig = "D:\\sourceforge\\depthai\\resources\\nn/mobilenet-ssd/mobilenet-ssd.json";
 
-            Config config = Emgu.CV.Models.DepthAI.MobilenetSsd.GetConfig(blobFile, blobFileConfig);
+            //Config config = Emgu.CV.Models.DepthAI.MobilenetSsd.GetConfig(blobFile, blobFileConfig);
+
+            MobilenetSsd mobilenet = new MobilenetSsd();
+            Config config = await mobilenet.Init(onDownloadProgressChanged);
             String configStr = JsonConvert.SerializeObject(config);
-
-            String[] labels = ReadLabels(blobFileConfig);
+            String[] labels = mobilenet.Labels;
 
             using (Emgu.CV.DepthAI.Device d = new Device(""))
             {
@@ -124,7 +123,6 @@ namespace DepthAI
                                 }
                                 else
                                 {
-
                                 }
                                 
                             }
@@ -137,9 +135,9 @@ namespace DepthAI
                     }
                 }
             }
-
-
+            
             CvInvoke.DestroyAllWindows(); //Destroy all windows if key is pressed
+            
         }
     }
 }
