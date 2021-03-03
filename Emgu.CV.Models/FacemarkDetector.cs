@@ -54,6 +54,12 @@ namespace Emgu.CV.Models
             }
         }
 
+        /// <summary>
+        /// Detect the facial landmarks from the face regions
+        /// </summary>
+        /// <param name="image">The image to detect facial landmarks from</param>
+        /// <param name="fullFaceRegions">The face regions to detect landmarks from</param>
+        /// <returns>Vector of facial landmarks</returns>
         public VectorOfVectorOfPointF Detect(Mat image, Rectangle[] fullFaceRegions)
         {
             using (VectorOfRect vr = new VectorOfRect(fullFaceRegions))
