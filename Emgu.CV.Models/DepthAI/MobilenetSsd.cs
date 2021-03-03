@@ -17,6 +17,9 @@ using Newtonsoft.Json;
 
 namespace Emgu.CV.Models.DepthAI
 {
+    /// <summary>
+    /// Mobilenet SSD model for depth AI
+    /// </summary>
     public class MobilenetSsd
     {
         private static Config GetConfig(String blobFile, String blobConfigFile)
@@ -130,6 +133,9 @@ namespace Emgu.CV.Models.DepthAI
             }
         }
 
+        /// <summary>
+        /// The labels for the detection
+        /// </summary>
         public String[] Labels
         {
             get

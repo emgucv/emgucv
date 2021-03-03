@@ -21,6 +21,11 @@ namespace Emgu.CV.DepthAI
     /// </summary>
     public partial class Device : UnmanagedObject
     {
+        /// <summary>
+        /// Create a new device
+        /// </summary>
+        /// <param name="usbDevice">Usb device</param>
+        /// <param name="usb2Mode">If true, will use usb 2 mode</param>
         public Device(String usbDevice, bool usb2Mode=false)
         {
             using (CvString csUsbDevice = new CvString(usbDevice))

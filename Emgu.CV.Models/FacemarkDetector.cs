@@ -26,6 +26,11 @@ namespace Emgu.CV.Models
     {
         private FacemarkLBF _facemark = null;
 
+        /// <summary>
+        /// Download and initialize the facial landmark detector
+        /// </summary>
+        /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
+        /// <returns>Async task</returns>
         public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
             if (_facemark == null)

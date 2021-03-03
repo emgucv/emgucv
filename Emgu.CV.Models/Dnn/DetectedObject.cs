@@ -20,6 +20,7 @@ namespace Emgu.CV.Models
         /// The detected region
         /// </summary>
         public Rectangle Region;
+
         /// <summary>
         /// The confident
         /// </summary>
@@ -29,11 +30,16 @@ namespace Emgu.CV.Models
         /// The label
         /// </summary>
         public String Label;
+
         /// <summary>
         /// The class id
         /// </summary>
         public int ClassId;
 
+        /// <summary>
+        /// Draw the detected object on the image
+        /// </summary>
+        /// <param name="image">The image to draw on</param>
         public void Render(Mat image)
         {
             CvInvoke.Rectangle(image, this.Region, new MCvScalar(0, 0, 255), 2);

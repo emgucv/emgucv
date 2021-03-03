@@ -27,6 +27,11 @@ namespace Emgu.CV.Models
 
         private Net _faceDetector = null;
 
+        /// <summary>
+        /// Download and initialize the DNN face detector
+        /// </summary>
+        /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
+        /// <returns>Async task</returns>
         public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
             if (_faceDetector == null)

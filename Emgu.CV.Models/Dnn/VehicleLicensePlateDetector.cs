@@ -17,21 +17,54 @@ using Emgu.Util;
 
 namespace Emgu.CV.Models
 {
+    /// <summary>
+    /// DNN Vehicle license plate detector using OpenVino
+    /// </summary>
     public class VehicleLicensePlateDetector
     {
+        /// <summary>
+        /// License plate
+        /// </summary>
         public struct LicensePlate
         {
+            /// <summary>
+            /// The region of the license plate
+            /// </summary>
             public Rectangle Region;
+            /// <summary>
+            /// The text on the license plate
+            /// </summary>
             public String Text;
         }
 
+        /// <summary>
+        /// Vehicle
+        /// </summary>
         public class Vehicle
         {
+            /// <summary>
+            /// The vehicle region
+            /// </summary>
             public Rectangle Region;
+            /// <summary>
+            /// The color of the vehicle
+            /// </summary>
             public String Color;
+            /// <summary>
+            /// The vehicle type
+            /// </summary>
             public String Type;
+            /// <summary>
+            /// The license plate. If null, there is no license plate detected.
+            /// </summary>
             public LicensePlate? LicensePlate;
 
+            /// <summary>
+            /// If the license plate region is located within the vehicle region
+            /// </summary>
+            /// <param name="p">The license plate</param>
+            /// <param name="plateOverlapRatio">A license plate is overlapped with the vehicle if the specific ratio of the license plate area is overlapped.</param>
+            /// <returns>True if the license plate overlap with the vehicle.</returns>
             public bool ContainsPlate(LicensePlate p, double plateOverlapRatio = 0.8)
             {
                 if (Region.IsEmpty || p.Region.IsEmpty)
@@ -160,6 +193,12 @@ namespace Emgu.CV.Models
             "U", "V", "W", "X", "Y", "Z"
         };
 
+
+        /// <summary>
+        /// Download and initialize the vehicle detector, the license plate detector and OCR.
+        /// </summary>
+        /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
+        /// <returns>Async task</returns>
         public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
             await InitLicensePlateDetector(onDownloadProgressChanged);
@@ -167,6 +206,11 @@ namespace Emgu.CV.Models
             await InitOCR(onDownloadProgressChanged);
         }
 
+        /// <summary>
+        /// Detect vehicle from the given image
+        /// </summary>
+        /// <param name="image">The image</param>
+        /// <returns>The detected vehicles.</returns>
         public Vehicle[] Detect(Mat image)
         {
             int imgDim = 300;
@@ -324,6 +368,11 @@ namespace Emgu.CV.Models
             return vehicles.ToArray();
         }
 
+        /// <summary>
+        /// Draw the vehicles to the image.
+        /// </summary>
+        /// <param name="image">The image to be drawn to.</param>
+        /// <param name="vehicles">The vehicles.</param>
         public void Render(Mat image, Vehicle[] vehicles)
         {
             foreach (Vehicle v in vehicles)
