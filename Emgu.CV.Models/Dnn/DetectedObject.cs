@@ -11,11 +11,27 @@ using Emgu.CV.Structure;
 
 namespace Emgu.CV.Models
 {
+    /// <summary>
+    /// A detection result
+    /// </summary>
     public class DetectedObject
     {
+        /// <summary>
+        /// The detected region
+        /// </summary>
         public Rectangle Region;
+        /// <summary>
+        /// The confident
+        /// </summary>
         public double Confident;
+
+        /// <summary>
+        /// The label
+        /// </summary>
         public String Label;
+        /// <summary>
+        /// The class id
+        /// </summary>
         public int ClassId;
 
         public void Render(Mat image)

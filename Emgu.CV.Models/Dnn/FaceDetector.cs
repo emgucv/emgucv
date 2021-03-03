@@ -18,6 +18,9 @@ using Emgu.Util;
 
 namespace Emgu.CV.Models
 {
+    /// <summary>
+    /// Face detector using DNN
+    /// </summary>
     public class FaceDetector
     {
         private String _modelFolderName = "dnn_samples_face_detector_20170830";
@@ -56,6 +59,12 @@ namespace Emgu.CV.Models
             }
         }
 
+        /// <summary>
+        /// Detect faces on the image
+        /// </summary>
+        /// <param name="image">The image.</param>
+        /// <param name="fullFaceRegions">The faces where a full facial region is detected. These images can be send to facial landmark recognition for further processing.</param>
+        /// <param name="partialFaceRegions">The face region of which is close to the edge of the images. Because if may not contains all the facial landmarks, it is not recommended to send these regions to facial landmark detection.</param>
         public void Detect(Mat image, List<Rectangle> fullFaceRegions, List<Rectangle> partialFaceRegions)
         {
             int imgDim = 300;
@@ -73,8 +82,6 @@ namespace Emgu.CV.Models
             {
                 float confidenceThreshold = 0.5f;
 
-                //List<Rectangle> fullFaceRegions = new List<Rectangle>();
-                //List<Rectangle> partialFaceRegions = new List<Rectangle>();
                 Rectangle imageRegion = new Rectangle(Point.Empty, image.Size);
 
                 float[,,,] values = detection.GetData(true) as float[,,,];

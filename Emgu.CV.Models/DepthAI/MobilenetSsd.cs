@@ -96,7 +96,15 @@ namespace Emgu.CV.Models.DepthAI
                 _modelFolderName,
                 "606A965DDF539857D3477AED659A69948D8B310A20B38C3B794F2369ECC685FE");
 
-            _manager = new FileDownloadManager();
+            if (_manager == null)
+            {
+                _manager = new FileDownloadManager();
+            }
+            else
+            {
+                _manager.Clear();
+            }
+
             _manager.AddFile(_blobFile);
             _manager.AddFile(_blobConfigFile);
             if (onDownloadProgressChanged != null)
@@ -126,6 +134,11 @@ namespace Emgu.CV.Models.DepthAI
         {
             get
             {
+                if (_manager == null)
+                    return null;
+                if (!_manager.AllFilesDownloaded)
+                    return null;
+                
                 return ReadLabels(_blobConfigFile.LocalFile);
             }
         }

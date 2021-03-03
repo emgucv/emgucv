@@ -19,6 +19,9 @@ using Emgu.Util;
 
 namespace Emgu.CV.Models
 {
+    /// <summary>
+    /// Facial landmark detector
+    /// </summary>
     public class FacemarkDetector
     {
         private FacemarkLBF _facemark = null;

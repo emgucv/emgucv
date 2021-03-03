@@ -72,20 +72,17 @@ namespace DepthAI
 
             CvInvoke.NamedWindow(win1); //Create the window using the specific name
 
-            //String blobFile = "D:\\sourceforge\\depthai\\resources\\nn/mobilenet-ssd/mobilenet-ssd.blob.sh14cmx14NCE1";
-            //String blobFileConfig = "D:\\sourceforge\\depthai\\resources\\nn/mobilenet-ssd/mobilenet-ssd.json";
-
-            //Config config = Emgu.CV.Models.DepthAI.MobilenetSsd.GetConfig(blobFile, blobFileConfig);
-
+            
             MobilenetSsd mobilenet = new MobilenetSsd();
+
+            //This download the models and return the default configuration
             Config config = await mobilenet.Init(onDownloadProgressChanged);
-            String configStr = JsonConvert.SerializeObject(config);
             String[] labels = mobilenet.Labels;
 
             using (Emgu.CV.DepthAI.Device d = new Device(""))
             {
                 //String[] availableStreams = d.GetAvailableStreams();
-                using (CNNHostPipeline pipeline = d.CreatePipeline(configStr))
+                using (CNNHostPipeline pipeline = d.CreatePipeline(JsonConvert.SerializeObject(config)))
                 {
                     while (_is_running)
                     {
@@ -105,7 +102,6 @@ namespace DepthAI
                                             NNetPacket nnetPacket = nnetPackets[i];
                                             using (FrameMetadata meta = nnetPacket.GetFrameMetadata())
                                             {
-                                                
                                                 _mostRecentDetections = nnetPacket.Detections;
                                             }
                                         }
@@ -123,6 +119,7 @@ namespace DepthAI
                                 }
                                 else
                                 {
+                                    //failed to get preview image
                                 }
                                 
                             }
