@@ -21,15 +21,13 @@ namespace Emgu.CV.Models
     /// <summary>
     /// Yolo model
     /// </summary>
-    public class Yolo
+    public class Yolo : DisposableObject
     {
         private String _modelFolderName = "yolo_v3";
 
-        private Net _yoloDetector = null;
+        private DetectionModel _yoloDetectionModel = null;
 
         private string[] _labels = null;
-
-        private Mat _inputBlob = new Mat();
 
         /// <summary>
         /// The Yolo model version
@@ -56,9 +54,11 @@ namespace Emgu.CV.Models
         /// <param name="version">The model version</param>
         /// <param name="onDownloadProgressChanged">Call back method during download</param>
         /// <returns>Asyn task</returns>
-        public async Task Init(YoloVersion version = YoloVersion.YoloV3, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        public async Task Init(
+            YoloVersion version = YoloVersion.YoloV3, 
+            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
-            if (_yoloDetector == null)
+            if (_yoloDetectionModel == null)
             {
                 FileDownloadManager manager = new FileDownloadManager();
 
@@ -106,8 +106,11 @@ namespace Emgu.CV.Models
 
                 if (manager.AllFilesDownloaded)
                 {
-                    _yoloDetector =
-                        DnnInvoke.ReadNetFromDarknet(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
+                    _yoloDetectionModel = new DetectionModel(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
+                    _yoloDetectionModel.SetInputSize(new Size(416, 416));
+                    _yoloDetectionModel.SetInputScale(0.00392);
+                    _yoloDetectionModel.SetInputMean(new MCvScalar());
+
                     _labels = File.ReadAllLines(manager.Files[2].LocalFile);
                 }
             }
@@ -121,97 +124,44 @@ namespace Emgu.CV.Models
         /// <param name="confThreshold">The confident threshold. Only detection with confident larger than this will be returned.</param>
         /// <param name="nmsThreshold">If positive, will perform non-maximum suppression using the threshold value. If less than or equals to 0, will not perform Non-maximum suppression.</param>
         /// <returns>The detected objects</returns>
-        public DetectedObject[] Detect(Mat image, double confThreshold = 0.5, double nmsThreshold = 0.4)
+        public DetectedObject[] Detect(Mat image, double confThreshold = 0.5, double nmsThreshold = 0.5)
         {
-            MCvScalar meanVal = new MCvScalar();
-
-            Size imageSize = image.Size;
-
-            DnnInvoke.BlobFromImage(
-                image,
-                _inputBlob,
-                1.0,
-                new Size(416, 416),
-                meanVal,
-                true,
-                false,
-                DepthType.Cv8U);
-            _yoloDetector.SetInput(_inputBlob, "", 0.00392);
-            int[] outLayers = _yoloDetector.UnconnectedOutLayers;
-            String outLayerType = _yoloDetector.GetLayer(outLayers[0]).Type;
-            String[] outLayerNames = _yoloDetector.UnconnectedOutLayersNames;
-
-            using (VectorOfMat outs = new VectorOfMat())
+            if (_yoloDetectionModel == null)
             {
-                List<DetectedObject> detectedObjects = new List<DetectedObject>();
-                _yoloDetector.Forward(outs, outLayerNames);
-
-                if (outLayerType.Equals("Region"))
-                {
-                    int size = outs.Size;
-
-                    for (int i = 0; i < size; i++)
-                    {
-                        // Network produces output blob with a shape NxC where N is a number of
-                        // detected objects and C is a number of classes + 4 where the first 4
-                        // numbers are [center_x, center_y, width, height]
-                        using (Mat m = outs[i])
-                        {
-                            int rows = m.Rows;
-                            int cols = m.Cols;
-                            float[,] data = m.GetData(true) as float[,];
-                            for (int j = 0; j < rows; j++)
-                            {
-                                using (Mat subM = new Mat(m, new Emgu.CV.Structure.Range(j, j + 1), new Emgu.CV.Structure.Range(5, cols)))
-                                {
-                                    double minVal = 0, maxVal = 0;
-                                    Point minLoc = new Point();
-                                    Point maxLoc = new Point();
-                                    CvInvoke.MinMaxLoc(subM, ref minVal, ref maxVal, ref minLoc, ref maxLoc);
-                                    if (maxVal > confThreshold)
-                                    {
-                                        int centerX = (int)(data[j, 0] * imageSize.Width);
-                                        int centerY = (int)(data[j, 1] * imageSize.Height);
-                                        int width = (int)(data[j, 2] * imageSize.Width);
-                                        int height = (int)(data[j, 3] * imageSize.Height);
-                                        int left = centerX - width / 2;
-                                        int top = centerY - height / 2;
-                                        Rectangle rect = new Rectangle(left, top, width, height);
-
-                                        DetectedObject obj = new DetectedObject();
-                                        obj.ClassId = maxLoc.X;
-                                        obj.Confident = maxVal;
-                                        obj.Region = rect;
-                                        obj.Label = _labels[obj.ClassId];
-                                        detectedObjects.Add(obj);
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    DetectedObject[] results = detectedObjects.ToArray();
-                    if (nmsThreshold <= 0)
-                    {
-                        return results;
-                    }
-
-                    Rectangle[] regions = Array.ConvertAll(results, input => input.Region);
-                    float[] scores = Array.ConvertAll(results, input => (float) input.Confident);
-                    int[] keepIdx = DnnInvoke.NMSBoxes(regions, scores, (float)confThreshold, (float) nmsThreshold);
-                    List<DetectedObject> nmsResults = new List<DetectedObject>();
-                    for (int i = 0; i < keepIdx.Length; i++)
-                    {
-                        nmsResults.Add(results[keepIdx[i]]);
-                    }
-                    return nmsResults.ToArray();
-                }
-                else
-                {
-                    throw new Exception(String.Format("Unknown output layer type: {0}", outLayerType));
-                }
-
+                throw new Exception("Please initialize the model first");
             }
+
+            using (VectorOfInt classIds = new VectorOfInt())
+            using (VectorOfFloat confidents = new VectorOfFloat())
+            using (VectorOfRect regions = new VectorOfRect())
+            {
+                _yoloDetectionModel.Detect(image, classIds, confidents, regions, (float)confThreshold, (float)nmsThreshold);
+                var classIdArr = classIds.ToArray();
+                var confidentArr = confidents.ToArray();
+                var regionArr = regions.ToArray();
+                List<DetectedObject> nmsResults = new List<DetectedObject>();
+                for (int i = 0; i < classIdArr.Length; i++)
+                {
+                    DetectedObject o = new DetectedObject();
+                    o.ClassId = classIdArr[i];
+                    o.Confident = confidentArr[i];
+                    o.Region = regionArr[i];
+                    o.Label = _labels[o.ClassId];
+                    nmsResults.Add(o);
+                }
+                return nmsResults.ToArray();
+            }
+
+        }
+
+        protected override void DisposeObject()
+        {
+            if (_yoloDetectionModel != null)
+            {
+                _yoloDetectionModel.Dispose();
+                _yoloDetectionModel = null;
+            }
+            //throw new NotImplementedException();
         }
     }
 }

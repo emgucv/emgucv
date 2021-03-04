@@ -21,11 +21,15 @@ namespace Emgu.CV.Models
     /// <summary>
     /// Face detector using DNN
     /// </summary>
-    public class FaceDetector
+    public class FaceDetector : DisposableObject
     {
         private String _modelFolderName = "dnn_samples_face_detector_20170830";
 
-        private Net _faceDetector = null;
+        private Net _faceDetectorNet = null;
+
+        private Mat _inputBlob = new Mat();
+
+        private Mat _detection = new Mat();
 
         /// <summary>
         /// Download and initialize the DNN face detector
@@ -34,7 +38,7 @@ namespace Emgu.CV.Models
         /// <returns>Async task</returns>
         public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
-            if (_faceDetector == null)
+            if (_faceDetectorNet == null)
             {
                 FileDownloadManager manager = new FileDownloadManager();
 
@@ -54,11 +58,11 @@ namespace Emgu.CV.Models
 
                 if (manager.AllFilesDownloaded)
                 {
-                    _faceDetector = DnnInvoke.ReadNetFromCaffe(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
+                    _faceDetectorNet = DnnInvoke.ReadNetFromCaffe(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
                     if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
                     {
-                        _faceDetector.SetPreferableBackend(Emgu.CV.Dnn.Backend.Cuda);
-                        _faceDetector.SetPreferableTarget(Emgu.CV.Dnn.Target.Cuda);
+                        _faceDetectorNet.SetPreferableBackend(Emgu.CV.Dnn.Backend.Cuda);
+                        _faceDetectorNet.SetPreferableTarget(Emgu.CV.Dnn.Target.Cuda);
                     }
                 }
             }
@@ -70,51 +74,71 @@ namespace Emgu.CV.Models
         /// <param name="image">The image.</param>
         /// <param name="fullFaceRegions">The faces where a full facial region is detected. These images can be send to facial landmark recognition for further processing.</param>
         /// <param name="partialFaceRegions">The face region of which is close to the edge of the images. Because if may not contains all the facial landmarks, it is not recommended to send these regions to facial landmark detection.</param>
-        public void Detect(Mat image, List<Rectangle> fullFaceRegions, List<Rectangle> partialFaceRegions)
+        public void Detect(Mat image, List<Rectangle> fullFaceRegions, List<Rectangle> partialFaceRegions, float confidenceThreshold = 0.5f)
         {
             int imgDim = 300;
             MCvScalar meanVal = new MCvScalar(104, 177, 123);
             Size imageSize = image.Size;
-            using (Mat inputBlob = DnnInvoke.BlobFromImage(
+            DnnInvoke.BlobFromImage(
                 image,
+                _inputBlob,
                 1.0,
                 new Size(imgDim, imgDim),
                 meanVal,
                 false,
-                false))
-                _faceDetector.SetInput(inputBlob, "data");
-            using (Mat detection = _faceDetector.Forward("detection_out"))
+                false);
+            _faceDetectorNet.SetInput(_inputBlob, "data");
+            _faceDetectorNet.Forward(_detection, "detection_out");
+
+            Rectangle imageRegion = new Rectangle(Point.Empty, image.Size);
+
+            float[,,,] values = _detection.GetData(true) as float[,,,];
+            for (int i = 0; i < values.GetLength(2); i++)
             {
-                float confidenceThreshold = 0.5f;
+                float confident = values[0, 0, i, 2];
 
-                Rectangle imageRegion = new Rectangle(Point.Empty, image.Size);
-
-                float[,,,] values = detection.GetData(true) as float[,,,];
-                for (int i = 0; i < values.GetLength(2); i++)
+                if (confident > confidenceThreshold)
                 {
-                    float confident = values[0, 0, i, 2];
+                    float xLeftBottom = values[0, 0, i, 3] * imageSize.Width;
+                    float yLeftBottom = values[0, 0, i, 4] * imageSize.Height;
+                    float xRightTop = values[0, 0, i, 5] * imageSize.Width;
+                    float yRightTop = values[0, 0, i, 6] * imageSize.Height;
+                    RectangleF objectRegion = new RectangleF(
+                        xLeftBottom,
+                        yLeftBottom,
+                        xRightTop - xLeftBottom,
+                        yRightTop - yLeftBottom);
+                    Rectangle faceRegion = Rectangle.Round(objectRegion);
 
-                    if (confident > confidenceThreshold)
+                    if (imageRegion.Contains(faceRegion))
+                        fullFaceRegions.Add(faceRegion);
+                    else
                     {
-                        float xLeftBottom = values[0, 0, i, 3] * imageSize.Width;
-                        float yLeftBottom = values[0, 0, i, 4] * imageSize.Height;
-                        float xRightTop = values[0, 0, i, 5] * imageSize.Width;
-                        float yRightTop = values[0, 0, i, 6] * imageSize.Height;
-                        RectangleF objectRegion = new RectangleF(
-                            xLeftBottom,
-                            yLeftBottom,
-                            xRightTop - xLeftBottom,
-                            yRightTop - yLeftBottom);
-                        Rectangle faceRegion = Rectangle.Round(objectRegion);
-
-                        if (imageRegion.Contains(faceRegion))
-                            fullFaceRegions.Add(faceRegion);
-                        else
-                        {
-                            partialFaceRegions.Add(faceRegion);
-                        }
+                        partialFaceRegions.Add(faceRegion);
                     }
                 }
+            }
+
+        }
+
+        protected override void DisposeObject()
+        {
+            if (_faceDetectorNet != null)
+            {
+                _faceDetectorNet.Dispose();
+                _faceDetectorNet = null;
+            }
+
+            if (_inputBlob != null)
+            {
+                _inputBlob.Dispose();
+                _inputBlob = null;
+            }
+
+            if (_detection != null)
+            {
+                _detection.Dispose();
+                _detection = null;
             }
         }
     }
