@@ -2313,7 +2313,8 @@ namespace Emgu.CV
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveSetUseOptimized(
-            [MarshalAs(BoolMarshalType)] bool onoff);
+            [MarshalAs(BoolMarshalType)] 
+            bool onoff);
 
         /// <summary>
         /// Enables or disables the optimized code.
@@ -2326,6 +2327,30 @@ namespace Emgu.CV
         {
             get { return cveUseOptimized(); }
             set { cveSetUseOptimized(value); }
+        }
+
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveHaveOpenVX();
+        public static bool HaveOpenVX
+        {
+            get { return cveHaveOpenVX(); }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveUseOpenVX();
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveSetUseOpenVX(
+            [MarshalAs(BoolMarshalType)] 
+            bool flag);
+
+        public static bool UseOpenVX
+        {
+            get { return cveUseOpenVX(); }
+            set { cveSetUseOpenVX(value); }
         }
 
         /// <summary>

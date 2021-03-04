@@ -864,6 +864,20 @@ void cveSetUseOptimized(bool onoff)
 {
 	cv::setUseOptimized(onoff);
 }
+
+bool cveHaveOpenVX()
+{
+	return cv::haveOpenVX();
+}
+bool cveUseOpenVX()
+{
+	return cv::useOpenVX();
+}
+void cveSetUseOpenVX(bool flag)
+{
+	cv::setUseOpenVX(flag);
+}
+
 void cveGetBuildInformation(cv::String* buildInformation)
 {
 	cv::String bi = cv::getBuildInformation();
