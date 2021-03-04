@@ -6,9 +6,23 @@
 
 #include "imgcodecs_c_extra.h"
 
-bool cveImwrite(cv::String* filename, cv::_InputArray* img, const std::vector<int>* params)
+bool cveHaveImageReader(cv::String* filename)
+{
+	return cv::haveImageReader(*filename);
+}
+bool cveHaveImageWriter(cv::String* filename)
+{
+	return cv::haveImageWriter(*filename);
+}
+
+bool cveImwrite(cv::String* filename, cv::_InputArray* img, std::vector<int>* params)
 {
    return cv::imwrite(*filename, *img, params ? *params : std::vector<int>());
+}
+
+bool cveImwritemulti(cv::String* filename, cv::_InputArray* img, std::vector<int>* params)
+{
+	return cv::imwritemulti(*filename, *img, params ? *params : std::vector<int>());
 }
 
 void cveImread(cv::String* fileName, int flags, cv::Mat* result)

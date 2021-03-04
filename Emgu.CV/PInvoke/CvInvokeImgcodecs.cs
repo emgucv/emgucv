@@ -40,6 +40,43 @@ namespace Emgu.CV
            CvEnum.ImreadModes loadType,
            IntPtr result);
 
+
+        public static bool HaveImageReader(String fileName)
+        {
+            using (CvString csFileName = new CvString(fileName))
+                return cveHaveImageReader(csFileName);
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool cveHaveImageReader(IntPtr filename);
+
+        public static bool HaveImageWriter(String fileName)
+        {
+            using (CvString csFileName = new CvString(fileName))
+                return cveHaveImageWriter(csFileName);
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool cveHaveImageWriter(IntPtr filename);
+
+        public static bool Imwritemulti(String filename, IInputArrayOfArrays images, params KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
+        {
+            using (CvString strFilename = new CvString(filename))
+            using (Util.VectorOfInt vec = new Util.VectorOfInt())
+            using (InputArray iaImages = images.GetInputArray())
+            {
+                PushParameters(vec, parameters);
+                return cveImwritemulti(strFilename, iaImages, vec);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool cveImwritemulti(IntPtr filename, IntPtr mats, IntPtr flags);
+
+
         /// <summary>
         /// The function imreadmulti loads a multi-page image from the specified file into a vector of Mat objects.
         /// </summary>
