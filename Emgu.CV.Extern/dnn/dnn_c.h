@@ -168,4 +168,13 @@ CVAPI(void) cveDnnDetectionModelDetect(
 	float confThreshold, 
 	float nmsThreshold);
 
+CVAPI(cv::dnn::ClassificationModel*) cveDnnClassificationModelCreate1(cv::String* model, cv::String* config, cv::dnn::Model** baseModel);
+CVAPI(cv::dnn::ClassificationModel*) cveDnnClassificationModelCreate2(cv::dnn::Net* network, cv::dnn::Model** baseModel);
+CVAPI(void) cveDnnClassificationModelRelease(cv::dnn::ClassificationModel** classificationModel);
+CVAPI(void) cveDnnClassificationModelClassify(
+	cv::dnn::ClassificationModel* classificationModel,
+	cv::_InputArray* frame,
+	int* classId, 
+	float* conf);
+
 #endif

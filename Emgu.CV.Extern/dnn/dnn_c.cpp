@@ -652,5 +652,50 @@ void cveDnnDetectionModelDetect(
 #else
 	throw_no_dnn();
 #endif
+}
 
+cv::dnn::ClassificationModel* cveDnnClassificationModelCreate1(cv::String* model, cv::String* config, cv::dnn::Model** baseModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::ClassificationModel* ptr = new cv::dnn::ClassificationModel(*model, *config);
+	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
+	return ptr;
+#else
+	throw_no_dnn();
+#endif
+}
+cv::dnn::ClassificationModel* cveDnnClassificationModelCreate2(cv::dnn::Net* network, cv::dnn::Model** baseModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::ClassificationModel* ptr = new cv::dnn::ClassificationModel(*network);
+	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
+	return ptr;
+#else
+	throw_no_dnn();
+#endif
+}
+void cveDnnClassificationModelRelease(cv::dnn::ClassificationModel** classificationModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	delete* classificationModel;
+	*classificationModel = 0;
+#else
+	throw_no_dnn();
+#endif
+}
+void cveDnnClassificationModelClassify(
+	cv::dnn::ClassificationModel* classificationModel,
+	cv::_InputArray* frame,
+	int* classId,
+	float* conf)
+{
+#ifdef HAVE_OPENCV_DNN
+	int outClassId;
+	float outConf;
+	classificationModel->classify(*frame, outClassId, outConf);
+	*classId = outClassId;
+	*conf = outConf;
+#else
+	throw_no_dnn();
+#endif
 }
