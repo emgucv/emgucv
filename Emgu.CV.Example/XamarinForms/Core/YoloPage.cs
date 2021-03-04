@@ -75,7 +75,7 @@ namespace Emgu.CV.XamarinForms
             Stopwatch watch = Stopwatch.StartNew();
             var detectedObjects = _yolo.Detect(_mat);
             foreach (var detected in detectedObjects)
-                detected.Render(_mat);
+                detected.Render(_mat, new MCvScalar(0, 0, 255));
             
             watch.Stop();
             SetImage(_mat);
@@ -151,7 +151,7 @@ namespace Emgu.CV.XamarinForms
 
                 var detectedObjects = _yolo.Detect(images[0]);
                 foreach (var detected in detectedObjects)
-                    detected.Render(images[0]);                      
+                    detected.Render(images[0], new MCvScalar(0, 0, 255));                      
 
                 watch.Stop();
 

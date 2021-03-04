@@ -40,16 +40,16 @@ namespace Emgu.CV.Models
         /// Draw the detected object on the image
         /// </summary>
         /// <param name="image">The image to draw on</param>
-        public void Render(Mat image)
+        public virtual void Render(Mat image, MCvScalar color)
         {
-            CvInvoke.Rectangle(image, this.Region, new MCvScalar(0, 0, 255), 2);
+            CvInvoke.Rectangle(image, this.Region, color, 2);
             CvInvoke.PutText(
                 image,
                 String.Format("{0}: {1}", this.Label, this.Confident),
                 this.Region.Location,
                 FontFace.HersheyDuplex,
                 1.0,
-                new MCvScalar(0, 0, 255),
+                color,
                 1);
         }
     }

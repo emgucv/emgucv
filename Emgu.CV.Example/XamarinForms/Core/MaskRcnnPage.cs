@@ -17,6 +17,7 @@ using Emgu.CV.Structure;
 using Emgu.Util;
 using Xamarin.Forms;
 using Emgu.CV.Dnn;
+using Emgu.CV.Models;
 using Emgu.CV.Util;
 //using Emgu.Models;
 using Point = System.Drawing.Point;
@@ -24,6 +25,7 @@ using Rectangle = System.Drawing.Rectangle;
 
 namespace Emgu.CV.XamarinForms
 {
+
     public class MaskRcnnPage
 #if __ANDROID__
         : AndroidCameraPage
@@ -31,14 +33,12 @@ namespace Emgu.CV.XamarinForms
         : ButtonTextImagePage
 #endif
     {
-        //private String _modelFolderName = "dnn_data";
-        //private String _path = null;
-        private Net _maskRcnnDetector = null;
-        private string[] _labels = null;
-        private MCvScalar[] _colors = null;
         private String[] _objectsOfInterest = null;
         private String _defaultImage = "dog416.png";
 
+        private MaskRcnn _maskRcnnDetector = null;
+
+        
         public String[] ObjectsOfInterest
         {
             get { return _objectsOfInterest; }
@@ -59,41 +59,10 @@ namespace Emgu.CV.XamarinForms
         {
             if (_maskRcnnDetector == null)
             {
-                FileDownloadManager manager = new FileDownloadManager();
-                manager.AddFile("https://github.com/emgucv/models/raw/master/mask_rcnn_inception_v2_coco_2018_01_28/frozen_inference_graph.pb",
-                    "mask_rcnn_inception_v2_coco_2018_01_28");
-                manager.AddFile("https://github.com/emgucv/models/raw/master/mask_rcnn_inception_v2_coco_2018_01_28/coco-labels-paper.txt",
-                    "mask_rcnn_inception_v2_coco_2018_01_28");
-                manager.AddFile("https://github.com/opencv/opencv_extra/raw/4.1.0/testdata/dnn/mask_rcnn_inception_v2_coco_2018_01_28.pbtxt",
-                    "mask_rcnn_inception_v2_coco_2018_01_28");
-
-                manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
-
-                await manager.Download();
-                _maskRcnnDetector = Emgu.CV.Dnn.DnnInvoke.ReadNetFromTensorflow(manager.Files[0].LocalFile, manager.Files[2].LocalFile);
-
-                //prefer cuda backend if available
                 
-                foreach (BackendTargetPair p in DnnInvoke.AvailableBackends)
-                {
-                    if (p.Backend == Dnn.Backend.Cuda && p.Target == Target.Cuda)
-                    {
-                        _maskRcnnDetector.SetPreferableBackend(Dnn.Backend.Cuda);
-                        _maskRcnnDetector.SetPreferableTarget(Target.Cuda);
-                        break;
-                    }
-                }
-
-                //_maskRcnnDetector.SetPreferableBackend(Dnn.Backend.OpenCV);
-                //_maskRcnnDetector.SetPreferableTarget(Dnn.Target.Cpu);
-
-                _labels = File.ReadAllLines(manager.Files[1].LocalFile);
-                _colors = new MCvScalar[_labels.Length];
-                Random r = new Random(12345);
-                for (int i = 0; i < _colors.Length; i++)
-                {
-                    _colors[i] = new MCvScalar(r.Next(256), r.Next(256), r.Next(256));
-                }
+                _maskRcnnDetector = new MaskRcnn();
+                _maskRcnnDetector.ObjectsOfInterest = _objectsOfInterest;
+                await _maskRcnnDetector.Init(DownloadManager_OnDownloadProgressChanged);
             }
         }
 
@@ -102,110 +71,6 @@ namespace Emgu.CV.XamarinForms
         {
             await Task.Run(() => { ProcessImage(m); });
         }*/
-
-        public void ProcessImage(Mat m, float matchScoreThreshold = 0.5f, float nmsThreshold = 0.4f)
-        {
-            using (Mat blob = DnnInvoke.BlobFromImage(m))
-            using (VectorOfMat tensors = new VectorOfMat())
-            {
-                _maskRcnnDetector.SetInput(blob, "image_tensor");
-                _maskRcnnDetector.Forward(tensors, new string[] { "detection_out_final", "detection_masks" });
-
-                using (Mat boxes = tensors[0])
-                using (Mat masks = tensors[1])
-                {
-                    System.Drawing.Size imgSize = m.Size;
-                    float[,,,] boxesData = boxes.GetData(true) as float[,,,];
-                    int numDetections = boxesData.GetLength(2);
-
-                    List<int> classIds = new List<int>();
-                    List<Rectangle> regions = new List<Rectangle>();
-                    List<float> scores = new List<float>();
-
-                    for (int i = 0; i < numDetections; i++)
-                    {
-                        int classId = (int)boxesData[0, 0, i, 1];
-
-                        if (_objectsOfInterest == null || _objectsOfInterest.Contains(_labels[classId]))
-                        {
-                            float score = boxesData[0, 0, i, 2];
-                            float left = boxesData[0, 0, i, 3] * imgSize.Width;
-                            float top = boxesData[0, 0, i, 4] * imgSize.Height;
-                            float right = boxesData[0, 0, i, 5] * imgSize.Width;
-                            float bottom = boxesData[0, 0, i, 6] * imgSize.Height;
-
-                            RectangleF rectF = new RectangleF(left, top, right - left, bottom - top);
-                            Rectangle rect = Rectangle.Round(rectF);
-                            rect.Intersect(new Rectangle(Point.Empty, imgSize));
-
-                            regions.Add(rect);
-                            scores.Add(score);
-                            classIds.Add(classId);
-                        }
-
-                    }
-                    int[] validIdx = DnnInvoke.NMSBoxes(regions.ToArray(), scores.ToArray(), matchScoreThreshold, nmsThreshold);
-
-
-                    for (int i = 0; i < validIdx.Length; i++)
-                    {
-                        int idx = validIdx[i];
-                        int classId = classIds[idx];
-                        Rectangle rect = regions[idx];
-                        float score = scores[idx];
-
-                        MCvScalar color = _colors[classId];
-                        CvInvoke.Rectangle(m, rect, new MCvScalar(0, 0, 0, 0), 1);
-                        CvInvoke.PutText(m, String.Format("{0} ({1})", _labels[classId], score), rect.Location, FontFace.HersheyComplex, 1.0,
-                            new MCvScalar(0, 0, 255), 2);
-
-                        int[] masksDim = masks.SizeOfDimension;
-                        using (Mat mask = new Mat(
-                            masksDim[2],
-                            masksDim[3],
-                            DepthType.Cv32F,
-                            1,
-                            masks.GetDataPointer(i, classId),
-                            masksDim[3] * masks.ElementSize))
-                        using (Mat maskLarge = new Mat())
-                        using (Mat maskLargeInv = new Mat())
-                        using (Mat subRegion = new Mat(m, rect))
-                        using (Mat largeColor = new Mat(subRegion.Size, Emgu.CV.CvEnum.DepthType.Cv8U,
-                            3))
-                        {
-                            CvInvoke.Resize(mask, maskLarge, rect.Size);
-
-                            //give the mask at least 30% transparency
-                            using (ScalarArray sa = new ScalarArray(0.7))
-                                CvInvoke.Min(sa, maskLarge, maskLarge);
-
-                            //Create the inverse mask for the original image
-                            using (ScalarArray sa = new ScalarArray(1.0))
-                                CvInvoke.Subtract(sa, maskLarge, maskLargeInv);
-
-                            //The mask color
-                            largeColor.SetTo(color);
-                            if (subRegion.NumberOfChannels == 4)
-                            {
-                                using (Mat bgrSubRegion = new Mat())
-                                {
-                                    CvInvoke.CvtColor(subRegion, bgrSubRegion,
-                                        ColorConversion.Bgra2Bgr);
-                                    CvInvoke.BlendLinear(largeColor, bgrSubRegion, maskLarge,
-                                        maskLargeInv, bgrSubRegion);
-                                    CvInvoke.CvtColor(bgrSubRegion, subRegion,
-                                        ColorConversion.Bgr2Bgra);
-                                }
-
-                            }
-                            else
-                                CvInvoke.BlendLinear(largeColor, subRegion, maskLarge, maskLargeInv,
-                                    subRegion);
-                        }
-                    }
-                }
-            }
-        }
 
         private VideoCapture _capture = null;
         private Mat _mat = null;
@@ -249,7 +114,8 @@ namespace Emgu.CV.XamarinForms
                 _mat = new Mat();
             _capture.Retrieve(_mat);
             Stopwatch watch = Stopwatch.StartNew();
-            ProcessImage(_mat);
+            _maskRcnnDetector.DetectAndRender(_mat);
+            
             watch.Stop();
             SetImage(_mat);
             //this.DisplayImage.BackgroundColor = Color.Black;
@@ -292,7 +158,7 @@ namespace Emgu.CV.XamarinForms
                         try
                         {
                             Stopwatch watch = Stopwatch.StartNew();
-                            await Task.Run(() => { ProcessImage(m); });
+                            await Task.Run(() => { _maskRcnnDetector.DetectAndRender(m); });
                             watch.Stop();
                             SetImage(m);
                             SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
@@ -304,13 +170,13 @@ namespace Emgu.CV.XamarinForms
                     }
                 });
 #else
-                    //Handle video
-                    if (_capture == null)
-                    {
-                        _capture = new VideoCapture();
-                        _capture.ImageGrabbed += _capture_ImageGrabbed;
-                    }
-                    _capture.Start();
+                //Handle video
+                if (_capture == null)
+                {
+                    _capture = new VideoCapture();
+                    _capture.ImageGrabbed += _capture_ImageGrabbed;
+                }
+                _capture.Start();
 #endif
             }
             else
@@ -320,7 +186,10 @@ namespace Emgu.CV.XamarinForms
 
                 await InitDetector();
                 Stopwatch watch = Stopwatch.StartNew();
-                await Task.Run(() => ProcessImage(images[0]));
+                await Task.Run(() =>
+                {
+                    _maskRcnnDetector.DetectAndRender(images[0]);
+                });
                 watch.Stop();
                 String msg = String.Format("Mask RCNN inception completed in {0} milliseconds",
                     watch.ElapsedMilliseconds);
