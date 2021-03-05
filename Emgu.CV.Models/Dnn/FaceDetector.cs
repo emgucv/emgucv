@@ -16,8 +16,10 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 
+
 namespace Emgu.CV.Models
 {
+
     /// <summary>
     /// Face detector using DNN
     /// </summary>
@@ -61,7 +63,6 @@ namespace Emgu.CV.Models
                     _faceDetectionModel.SetInputScale(1.0);
                     _faceDetectionModel.SetInputCrop(false);
 
-                    
                     if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
                     {
                         _faceDetectionModel.SetPreferableBackend(Emgu.CV.Dnn.Backend.Cuda);

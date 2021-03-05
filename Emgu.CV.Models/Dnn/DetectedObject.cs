@@ -46,7 +46,7 @@ namespace Emgu.CV.Models
             CvInvoke.Rectangle(image, this.Region, color, 2);
             CvInvoke.PutText(
                 image,
-                String.Format("{0}: {1}", this.Label, this.Confident),
+                String.Format("{0}: {1}", this.Label == null? this.ClassId.ToString() : this.Label, this.Confident),
                 this.Region.Location,
                 FontFace.HersheyDuplex,
                 1.0,

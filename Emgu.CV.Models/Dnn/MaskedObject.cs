@@ -23,7 +23,6 @@ using Rectangle = System.Drawing.Rectangle;
 
 namespace Emgu.CV.Models
 {
-
     public class MaskedObject : DetectedObject, IDisposable
     {
         /// <summary> Track whether Dispose has been called. </summary>
@@ -52,14 +51,14 @@ namespace Emgu.CV.Models
         /// Draw the detected object on the image
         /// </summary>
         /// <param name="image">The image to draw on</param>
-        /// <param name="color">The color used for drawing</param>
-        public override void Render(Mat image, MCvScalar color)
+        /// <param name="color">The color used for drawing the mask</param>
+        public override void Render(Mat image, MCvScalar maskColor)
         {
             CvInvoke.Rectangle(image, Region, new MCvScalar(0, 0, 0, 0), 1);
             CvInvoke.PutText(image, String.Format("{0} ({1})", Label, Confident), Region.Location, FontFace.HersheyComplex, 1.0,
                 new MCvScalar(0, 0, 255), 2);
 
-            DrawMask(image, _mask, Region, color);
+            DrawMask(image, _mask, Region, maskColor);
         }
 
 
@@ -68,7 +67,9 @@ namespace Emgu.CV.Models
             using (Mat maskLarge = new Mat())
             using (Mat maskLargeInv = new Mat())
             using (Mat subRegion = new Mat(image, rect))
-            using (Mat largeColor = new Mat(subRegion.Size, Emgu.CV.CvEnum.DepthType.Cv8U,
+            using (Mat largeColor = new Mat(
+                subRegion.Size, 
+                Emgu.CV.CvEnum.DepthType.Cv8U,
                 3))
             {
                 CvInvoke.Resize(mask, maskLarge, rect.Size);
@@ -94,7 +95,6 @@ namespace Emgu.CV.Models
                         CvInvoke.CvtColor(bgrSubRegion, subRegion,
                             ColorConversion.Bgr2Bgra);
                     }
-
                 }
                 else
                     CvInvoke.BlendLinear(largeColor, subRegion, maskLarge, maskLargeInv,
@@ -180,6 +180,4 @@ namespace Emgu.CV.Models
         }
 
     }
-
-
 }

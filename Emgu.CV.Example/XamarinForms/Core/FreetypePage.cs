@@ -25,7 +25,6 @@ namespace Emgu.CV.XamarinForms
             button.Text = "Draw Freetype Text";
             button.Clicked += async (sender, args) =>
             {
-                
                 await InitFreetype();
                 Mat img = new Mat(new Size(640, 480), DepthType.Cv8U, 3);
                 img.SetTo(new MCvScalar(0, 0, 0, 0));
@@ -47,7 +46,8 @@ namespace Emgu.CV.XamarinForms
 
                 manager.AddFile(
                     "https://github.com/emgucv/emgucv/raw/4.4.0/Emgu.CV.Test/NotoSansCJK-Regular.ttc",
-                    "Freetype");
+                    "Freetype",
+                    "E3C629CB9F416E2E57CFDFEE7573D5CAC3A06A681C105EC081AB9707C1F147E8");
 
                 manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
                 await manager.Download();

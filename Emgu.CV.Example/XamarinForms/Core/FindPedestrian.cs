@@ -34,8 +34,6 @@ namespace PedestrianDetection
                 {
                     //this is the Cuda version
 
-                    
-
                     //watch = Stopwatch.StartNew();
                     using (GpuMat cudaBgra = new GpuMat())
                     using (VectorOfRect vr = new VectorOfRect())
@@ -50,7 +48,6 @@ namespace PedestrianDetection
                 {
                     //this is the CPU/OpenCL version
 
-                    
                     //watch = Stopwatch.StartNew();
 
                     MCvObjectDetection[] results = hog.DetectMultiScale(image);

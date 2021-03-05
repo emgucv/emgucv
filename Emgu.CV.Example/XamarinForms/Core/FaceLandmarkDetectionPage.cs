@@ -70,26 +70,29 @@ namespace Emgu.CV.XamarinForms
 
         private void DetectAndRender(Mat image)
         {
-            List<Rectangle> fullFaceRegions = new List<Rectangle>();
-            List<Rectangle> partialFaceRegions = new List<Rectangle>();
+            List<DetectedObject> fullFaceRegions = new List<DetectedObject>();
+            List<DetectedObject> partialFaceRegions = new List<DetectedObject>();
             _faceDetector.Detect(image, fullFaceRegions, partialFaceRegions);
 
             if (partialFaceRegions.Count > 0)
             {
-                foreach (Rectangle face in partialFaceRegions)
+                foreach (DetectedObject face in partialFaceRegions)
                 {
-                    CvInvoke.Rectangle(image, face, new MCvScalar(0, 255, 0));
+                    CvInvoke.Rectangle(image, face.Region, new MCvScalar(0, 255, 0));
                 }
             }
 
             if (fullFaceRegions.Count > 0)
             {
-                foreach (Rectangle face in fullFaceRegions)
+                foreach (DetectedObject face in fullFaceRegions)
                 {
-                    CvInvoke.Rectangle(image, face, new MCvScalar(0, 255, 0));
+                    CvInvoke.Rectangle(image, face.Region, new MCvScalar(0, 255, 0));
                 }
 
-                using (VectorOfVectorOfPointF landmarks = _facemarkDetector.Detect(image, fullFaceRegions.ToArray()))
+                var fullFaceRegionsArr = fullFaceRegions.ToArray();
+                var rectRegionArr = Array.ConvertAll(fullFaceRegionsArr, r => r.Region);
+
+                using (VectorOfVectorOfPointF landmarks = _facemarkDetector.Detect(image, rectRegionArr))
                 {
                     int len = landmarks.Size;
                     for (int i = 0; i < len; i++)

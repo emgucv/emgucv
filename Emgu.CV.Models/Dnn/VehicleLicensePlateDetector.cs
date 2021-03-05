@@ -81,9 +81,12 @@ namespace Emgu.CV.Models
 
         private String _modelFolderName = "vehicle-license-plate-detection-barrier-0106-openvino-2021.2";
         private Net _vehicleLicensePlateDetector = null;
+
+        private DetectionModel _vehicleLicensePlateDetectionModel = null;
+
         private Net _vehicleAttrRecognizer = null;
         private Net _ocr = null;
-        
+
         private async Task InitOCR(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
             if (_ocr == null)
@@ -105,8 +108,29 @@ namespace Emgu.CV.Models
                 }
 
                 await manager.Download();
+
                 _ocr =
                     DnnInvoke.ReadNetFromModelOptimizer(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
+
+                using (Mat seqInd = new Mat(
+                    new Size(1, 88),
+                    DepthType.Cv32F,
+                    1))
+                {
+                    if (seqInd.Depth == DepthType.Cv32F)
+                    {
+                        float[] seqIndValues = new float[seqInd.Width * seqInd.Height];
+                        for (int j = 1; j < seqIndValues.Length; j++)
+                        {
+                            seqIndValues[j] = 1.0f;
+                        }
+
+                        seqIndValues[0] = 0.0f;
+                        seqInd.SetTo(seqIndValues);
+                    }
+
+                    _ocr.SetInput(seqInd, "seq_ind");
+                }
 
                 /*
                 if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
@@ -131,7 +155,6 @@ namespace Emgu.CV.Models
                     "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/vehicle-attributes-recognition-barrier-0042/FP32/vehicle-attributes-recognition-barrier-0042.bin",
                     _modelFolderName,
                     "492520E55F452223E767D54227D6EF6B60B0C1752DD7B9D747BE65D57B685A0E");
-
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;
                 await manager.Download();
@@ -162,6 +185,15 @@ namespace Emgu.CV.Models
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;
                 await manager.Download();
+
+                _vehicleLicensePlateDetectionModel =
+                    new DetectionModel(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
+                _vehicleLicensePlateDetectionModel.SetInputSize(new Size(300, 300));
+                _vehicleLicensePlateDetectionModel.SetInputMean(new MCvScalar());
+                _vehicleLicensePlateDetectionModel.SetInputScale(1.0);
+                _vehicleLicensePlateDetectionModel.SetInputSwapRB(false);
+                _vehicleLicensePlateDetectionModel.SetInputCrop(false);
+
                 _vehicleLicensePlateDetector =
                     DnnInvoke.ReadNetFromModelOptimizer(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
 
@@ -213,156 +245,115 @@ namespace Emgu.CV.Models
         /// <returns>The detected vehicles.</returns>
         public Vehicle[] Detect(Mat image)
         {
-            int imgDim = 300;
-            int vehicleAttrSize = 72;
-            MCvScalar meanVal = new MCvScalar();
-            double scale = 1.0;
             float vehicleConfidenceThreshold = 0.5f;
             float licensePlateConfidenceThreshold = 0.5f;
 
-            //MCvScalar meanVal = new MCvScalar(127.5, 127.5, 127.5);
-            //double scale = 127.5;
-
-            Size imageSize = image.Size;
-            using (Mat inputBlob = DnnInvoke.BlobFromImage(
-                image,
-                scale,
-                new Size(imgDim, imgDim),
-                meanVal,
-                false,
-                false,
-                DepthType.Cv32F))
-                _vehicleLicensePlateDetector.SetInput(inputBlob, "Placeholder");
+            int vehicleAttrSize = 72;
+            double scale = 1.0;
+            MCvScalar meanVal = new MCvScalar();
 
             List<Vehicle> vehicles = new List<Vehicle>();
             List<LicensePlate> plates = new List<LicensePlate>();
-            using (Mat detection = _vehicleLicensePlateDetector.Forward("DetectionOutput_"))
+
+            foreach (DetectedObject vehicleOrPlate in _vehicleLicensePlateDetectionModel.Detect(image, 0.0f, 0.0f))
             {
-                float[,,,] values = detection.GetData(true) as float[,,,];
-                for (int i = 0; i < values.GetLength(2); i++)
+                Rectangle region = vehicleOrPlate.Region;
+
+                if (vehicleOrPlate.ClassId == 1 && vehicleOrPlate.Confident > vehicleConfidenceThreshold)
                 {
-                    float imageId = values[0, 0, i, 0];
-                    float label = values[0, 0, i, 1]; //if label == 1, it is a vehicle; if label == 2, it is a license plate
-                    float confident = values[0, 0, i, 2];
+                    //this is a vehicle
+                    Vehicle v = new Vehicle();
+                    v.Region = region;
 
-                    Rectangle region = DetectedObject.GetRectangle(
-                        values[0, 0, i, 3],
-                        values[0, 0, i, 4],
-                        values[0, 0, i, 5],
-                        values[0, 0, i, 6],
-                        imageSize.Width,
-                        imageSize.Height);
-
-                    if (label == 1 && confident > vehicleConfidenceThreshold)
-                    {   //this is a vehicle
-                        Vehicle v = new Vehicle();
-                        v.Region = region;
-
-                        #region find out the type and color of the vehicle
-                        using (Mat vehicle = new Mat(image, region))
-                        {
-                            using (Mat vehicleBlob = DnnInvoke.BlobFromImage(
-                                vehicle,
-                                scale,
-                                new Size(vehicleAttrSize, vehicleAttrSize),
-                                meanVal,
-                                false,
-                                false,
-                                DepthType.Cv32F))
-                            {
-                                _vehicleAttrRecognizer.SetInput(vehicleBlob, "input");
-
-                                using (VectorOfMat vm = new VectorOfMat(2))
-                                {
-                                    _vehicleAttrRecognizer.Forward(vm, new string[] { "color", "type" });
-                                    using (Mat vehicleColorMat = vm[0])
-                                    using (Mat vehicleTypeMat = vm[1])
-                                    {
-                                        float[] vehicleColorData = vehicleColorMat.GetData(false) as float[];
-                                        float maxProbColor = vehicleColorData.Max();
-                                        int maxIdxColor = Array.IndexOf(vehicleColorData, maxProbColor);
-                                        v.Color = _colorName[maxIdxColor];
-                                        float[] vehicleTypeData = vehicleTypeMat.GetData(false) as float[];
-                                        float maxProbType = vehicleTypeData.Max();
-                                        int maxIdxType = Array.IndexOf(vehicleTypeData, maxProbType);
-                                        v.Type = _vehicleType[maxIdxType];
-                                    }
-                                }
-                            }
-                        }
-                        #endregion
-                        vehicles.Add(v);
-                    }
-
-                    if (label == 2 && confident > licensePlateConfidenceThreshold)
-                    {   //this is a license plate
-                        LicensePlate p = new LicensePlate();
-                        p.Region = region;
-
-                        #region OCR on license plate
-                        using (Mat plate = new Mat(image, region))
-                        {
-                            using (Mat inputBlob = DnnInvoke.BlobFromImage(
-                                plate,
-                                scale,
-                                new Size(94, 24),
-                                meanVal,
-                                false,
-                                false,
-                                DepthType.Cv32F))
-                            using (Mat seqInd = new Mat(
-                                new Size(1, 88),
-                                DepthType.Cv32F,
-                                1))
-                            {
-                                _ocr.SetInput(inputBlob, "data");
-
-                                if (seqInd.Depth == DepthType.Cv32F)
-                                {
-                                    float[] seqIndValues = new float[seqInd.Width * seqInd.Height];
-                                    for (int j = 1; j < seqIndValues.Length; j++)
-                                    {
-                                        seqIndValues[j] = 1.0f;
-                                    }
-                                    seqIndValues[0] = 0.0f;
-                                    seqInd.SetTo(seqIndValues);
-                                }
-                                _ocr.SetInput(seqInd, "seq_ind");
-
-                                using (Mat output = _ocr.Forward("decode"))
-                                {
-                                    float[] plateValue = output.GetData(false) as float[];
-                                    StringBuilder licensePlateStringBuilder = new StringBuilder();
-                                    foreach (int j in plateValue)
-                                    {
-                                        if (j >= 0)
-                                        {
-                                            licensePlateStringBuilder.Append(_plateText[j]);
-                                        }
-                                    }
-
-                                    p.Text = licensePlateStringBuilder.ToString();
-                                }
-                            }
-                        }
-                        #endregion
-                        
-                        plates.Add(p);
-                    }
-                }
-
-                foreach (LicensePlate p in plates)
-                {
-                    foreach (Vehicle v in vehicles)
+                    #region find out the type and color of the vehicle
+                    using (Mat vehicle = new Mat(image, region))
                     {
-                        if (v.ContainsPlate(p))
+                        using (Mat vehicleBlob = DnnInvoke.BlobFromImage(
+                            vehicle,
+                            scale,
+                            new Size(vehicleAttrSize, vehicleAttrSize),
+                            meanVal,
+                            false,
+                            false,
+                            DepthType.Cv32F))
                         {
-                            v.LicensePlate = p;
-                            break;
+                            _vehicleAttrRecognizer.SetInput(vehicleBlob, "input");
+
+                            using (VectorOfMat vm = new VectorOfMat(2))
+                            {
+                                _vehicleAttrRecognizer.Forward(vm, new string[] { "color", "type" });
+                                using (Mat vehicleColorMat = vm[0])
+                                using (Mat vehicleTypeMat = vm[1])
+                                {
+                                    float[] vehicleColorData = vehicleColorMat.GetData(false) as float[];
+                                    float maxProbColor = vehicleColorData.Max();
+                                    int maxIdxColor = Array.IndexOf(vehicleColorData, maxProbColor);
+                                    v.Color = _colorName[maxIdxColor];
+                                    float[] vehicleTypeData = vehicleTypeMat.GetData(false) as float[];
+                                    float maxProbType = vehicleTypeData.Max();
+                                    int maxIdxType = Array.IndexOf(vehicleTypeData, maxProbType);
+                                    v.Type = _vehicleType[maxIdxType];
+                                }
+                            }
                         }
+                    }
+                    #endregion
+
+                    vehicles.Add(v);
+                }
+                else if (vehicleOrPlate.ClassId == 2 && vehicleOrPlate.Confident > licensePlateConfidenceThreshold)
+                {
+                    //this is a license plate
+                    LicensePlate p = new LicensePlate();
+                    p.Region = region;
+
+                    #region OCR on license plate
+                    using (Mat plate = new Mat(image, region))
+                    {
+                        using (Mat inputBlob = DnnInvoke.BlobFromImage(
+                            plate,
+                            scale,
+                            new Size(94, 24),
+                            meanVal,
+                            false,
+                            false,
+                            DepthType.Cv32F))
+                        {
+                            _ocr.SetInput(inputBlob, "data");
+                            using (Mat output = _ocr.Forward("decode"))
+                            {
+                                float[] plateValue = output.GetData(false) as float[];
+                                StringBuilder licensePlateStringBuilder = new StringBuilder();
+                                foreach (int j in plateValue)
+                                {
+                                    if (j >= 0)
+                                    {
+                                        licensePlateStringBuilder.Append(_plateText[j]);
+                                    }
+                                }
+
+                                p.Text = licensePlateStringBuilder.ToString();
+                            }
+                        }
+                    }
+                    #endregion
+
+                    plates.Add(p);
+                }
+            }
+
+            foreach (LicensePlate p in plates)
+            {
+                foreach (Vehicle v in vehicles)
+                {
+                    if (v.ContainsPlate(p))
+                    {
+                        v.LicensePlate = p;
+                        break;
                     }
                 }
             }
+
             return vehicles.ToArray();
         }
 

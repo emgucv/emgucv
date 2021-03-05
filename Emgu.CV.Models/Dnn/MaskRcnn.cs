@@ -180,7 +180,9 @@ namespace Emgu.CV.Models
             }
         }
 
-
+        /// <summary>
+        /// Release the memory associated with this Mask Rcnn detector.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_maskRcnnDetector != null)
