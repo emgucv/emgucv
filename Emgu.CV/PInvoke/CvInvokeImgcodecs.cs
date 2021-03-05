@@ -188,8 +188,25 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveImdecode(IntPtr buf, CvEnum.ImreadModes loadType, IntPtr dst);
 
+
         /// <summary>
-        /// encode image and store the result as a byte vector.
+        /// Encode image and return the result as a byte vector.
+        /// </summary>
+        /// <param name="ext">The image format</param>
+        /// <param name="image">The image</param>
+        /// <param name="parameters">The pointer to the array of integers, which contains the parameter for encoding, use IntPtr.Zero for default</param>
+        /// <returns>Byte array that contains the image in the specific image format.</returns>
+        public static byte[] Imencode(String ext, IInputArray image, params KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
+        {
+            using (VectorOfByte vb = new VectorOfByte())
+            {
+                Imencode(ext, image, vb, parameters);
+                return vb.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Encode image and store the result as a byte vector.
         /// </summary>
         /// <param name="ext">The image format</param>
         /// <param name="image">The image</param>
