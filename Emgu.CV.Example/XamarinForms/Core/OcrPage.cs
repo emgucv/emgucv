@@ -53,7 +53,6 @@ namespace Emgu.CV.XamarinForms
                 manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
                 await manager.Download();
                 FileInfo fi = new FileInfo(manager.Files[0].LocalFile);
-                
                 _ocr = new Tesseract(fi.DirectoryName, lang, mode);
                 
             }

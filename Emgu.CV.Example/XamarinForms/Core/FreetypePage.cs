@@ -45,11 +45,9 @@ namespace Emgu.CV.XamarinForms
             {
                 FileDownloadManager manager = new FileDownloadManager();
 
-
                 manager.AddFile(
                     "https://github.com/emgucv/emgucv/raw/4.4.0/Emgu.CV.Test/NotoSansCJK-Regular.ttc",
                     "Freetype");
-
 
                 manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
                 await manager.Download();

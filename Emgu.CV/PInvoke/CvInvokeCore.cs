@@ -2333,6 +2333,11 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         private static extern bool cveHaveOpenVX();
+
+        /// <summary>
+        /// Check if use of OpenVX is possible.
+        /// </summary>
+        /// <returns>True use of OpenVX is possible.</returns>
         public static bool HaveOpenVX
         {
             get { return cveHaveOpenVX(); }
@@ -2347,6 +2352,9 @@ namespace Emgu.CV
             [MarshalAs(BoolMarshalType)] 
             bool flag);
 
+        /// <summary>
+        /// Enable/disable use of OpenVX
+        /// </summary>
         public static bool UseOpenVX
         {
             get { return cveUseOpenVX(); }

@@ -40,7 +40,11 @@ namespace Emgu.CV
            CvEnum.ImreadModes loadType,
            IntPtr result);
 
-
+        /// <summary>
+        /// Returns true if the specified image can be decoded by OpenCV.
+        /// </summary>
+        /// <param name="fileName">File name of the image</param>
+        /// <returns>True if the specified image can be decoded by OpenCV.</returns>
         public static bool HaveImageReader(String fileName)
         {
             using (CvString csFileName = new CvString(fileName))
@@ -51,6 +55,11 @@ namespace Emgu.CV
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveHaveImageReader(IntPtr filename);
 
+        /// <summary>
+        /// Returns true if an image with the specified filename can be encoded by OpenCV.
+        /// </summary>
+        /// <param name="fileName">File name of the image</param>
+        /// <returns>True if an image with the specified filename can be encoded by OpenCV.</returns>
         public static bool HaveImageWriter(String fileName)
         {
             using (CvString csFileName = new CvString(fileName))
@@ -61,6 +70,13 @@ namespace Emgu.CV
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveHaveImageWriter(IntPtr filename);
 
+        /// <summary>
+        /// Save multiple images to a specified file (e.g. ".tiff" that support multiple images).
+        /// </summary>
+        /// <param name="filename">Name of the file.</param>
+        /// <param name="images">Images to be saved.</param>
+        /// <param name="parameters">The parameters</param>
+        /// <returns>true if success</returns>
         public static bool Imwritemulti(String filename, IInputArrayOfArrays images, params KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
         {
             using (CvString strFilename = new CvString(filename))

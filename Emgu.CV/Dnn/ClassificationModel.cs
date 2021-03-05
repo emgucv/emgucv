@@ -13,11 +13,13 @@ using System.Diagnostics;
 
 namespace Emgu.CV.Dnn
 {
-
+    /// <summary>
+    /// This class represents high-level API for classification models.
+    /// </summary>
     public partial class  ClassificationModel : Model
     {
         /// <summary>
-        /// 
+        /// Create a new classification model
         /// </summary>
         /// <param name="model">Binary file contains trained weights.</param>
         /// <param name="config">Text file contains network configuration.</param>
@@ -46,6 +48,12 @@ namespace Emgu.CV.Dnn
 
         }
 
+        /// <summary>
+        /// Given the input frame, create input blob, run net and return top-1 prediction.
+        /// </summary>
+        /// <param name="frame">The input image.</param>
+        /// <param name="classId">The top label.</param>
+        /// <param name="conf">The confident of the classification.</param>
         public void Classify(
             IInputArray frame,
             out int classId,
