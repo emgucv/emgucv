@@ -32,6 +32,9 @@ namespace Emgu.CV.XamarinForms
             Button faceLandmarkDetectionButton = new Button();
             faceLandmarkDetectionButton.Text = "Face Landmark Detection (DNN Module)";
 
+            Button sceneTextDetectionButton = new Button();
+            sceneTextDetectionButton.Text = "Scene Text detection (DNN Module)";
+
             Button featureDetectionButton = new Button();
             featureDetectionButton.Text = "Feature Matching";
 
@@ -62,6 +65,7 @@ namespace Emgu.CV.XamarinForms
                 planarSubdivisionButton,
                 faceDetectionButton,
                 faceLandmarkDetectionButton,
+                sceneTextDetectionButton,
                 featureDetectionButton,
                 shapeDetectionButton,
                 pedestrianDetectionButton,
@@ -200,8 +204,18 @@ namespace Emgu.CV.XamarinForms
                 MainPage.Navigation.PushAsync(new LicensePlateRecognitionPage());
             };
 
-            maskRcnnButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new MaskRcnnPage()); };
-            faceLandmarkDetectionButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new FaceLandmarkDetectionPage()); };
+            maskRcnnButton.Clicked += (sender, args) =>
+            {
+                MainPage.Navigation.PushAsync(new MaskRcnnPage());
+            };
+            faceLandmarkDetectionButton.Clicked += (sender, args) =>
+            {
+                MainPage.Navigation.PushAsync(new FaceLandmarkDetectionPage());
+            };
+            sceneTextDetectionButton.Clicked += (sender, args) =>
+            {
+                MainPage.Navigation.PushAsync(new SceneTextDetectionPage());
+            };
             stopSignDetectionButton.Clicked += (sender, args) =>
             {
                 MaskRcnnPage stopSignDetectionPage = new MaskRcnnPage();
@@ -220,6 +234,7 @@ namespace Emgu.CV.XamarinForms
             faceLandmarkDetectionButton.IsVisible = haveDNN;
             stopSignDetectionButton.IsVisible = haveDNN;
             yoloButton.IsVisible = haveDNN;
+            sceneTextDetectionButton.IsVisible = haveDNN;
             licensePlateRecognitionButton.IsVisible = hasInferenceEngine;
 
         }

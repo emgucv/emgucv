@@ -32,6 +32,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PedestrianDetectionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlanarSubdivisionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FeatureMatchingPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SceneTextDetectionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ShapeDetectionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Simple3DReconstruct.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)YoloPage.cs" />
