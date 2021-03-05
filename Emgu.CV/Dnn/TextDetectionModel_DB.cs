@@ -42,12 +42,10 @@ namespace Emgu.CV.Dnn
         /// <param name="net">The DNN network</param>
         public TextDetectionModel_DB(Net net)
         {
-
             _ptr = DnnInvoke.cveDnnTextDetectionModelDbCreate2(
                 net,
                 ref _textDetectionModel,
                 ref _model);
-
         }
 
         /// <summary>

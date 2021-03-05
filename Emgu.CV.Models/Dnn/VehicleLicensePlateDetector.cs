@@ -244,16 +244,14 @@ namespace Emgu.CV.Models
                     float imageId = values[0, 0, i, 0];
                     float label = values[0, 0, i, 1]; //if label == 1, it is a vehicle; if label == 2, it is a license plate
                     float confident = values[0, 0, i, 2];
-                    float xLeftBottom = values[0, 0, i, 3] * imageSize.Width;
-                    float yLeftBottom = values[0, 0, i, 4] * imageSize.Height;
-                    float xRightTop = values[0, 0, i, 5] * imageSize.Width;
-                    float yRightTop = values[0, 0, i, 6] * imageSize.Height;
-                    RectangleF objectRegion = new RectangleF(
-                        xLeftBottom,
-                        yLeftBottom,
-                        xRightTop - xLeftBottom,
-                        yRightTop - yLeftBottom);
-                    Rectangle region = Rectangle.Round(objectRegion);
+
+                    Rectangle region = DetectedObject.GetRectangle(
+                        values[0, 0, i, 3],
+                        values[0, 0, i, 4],
+                        values[0, 0, i, 5],
+                        values[0, 0, i, 6],
+                        imageSize.Width,
+                        imageSize.Height);
 
                     if (label == 1 && confident > vehicleConfidenceThreshold)
                     {   //this is a vehicle

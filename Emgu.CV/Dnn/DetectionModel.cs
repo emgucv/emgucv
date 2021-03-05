@@ -16,7 +16,7 @@ namespace Emgu.CV.Dnn
     /// <summary>
     /// This class represents high-level API for object detection networks.
     /// </summary>
-    public partial class  DetectionModel : Model
+    public partial class DetectionModel : Model
     {
         /// <summary>
         /// Create detection model from network represented in one of the supported formats.
@@ -41,11 +41,9 @@ namespace Emgu.CV.Dnn
         /// <param name="net">DNN Network</param>
         public DetectionModel(Net net)
         {
-
             _ptr = DnnInvoke.cveDnnDetectionModelCreate2(
                 net,
                 ref _model);
-
         }
 
         /// <summary>
@@ -56,14 +54,14 @@ namespace Emgu.CV.Dnn
         /// <param name="confidences">A set of corresponding confidences.</param>
         /// <param name="boxes">A set of bounding boxes.</param>
         /// <param name="confThreshold">A threshold used to filter boxes by confidences.</param>
-        /// <param name="nmsThreshold">A threshold used in non maximum suppression.</param>
+        /// <param name="nmsThreshold">A threshold used in non maximum suppression. The default value 0 means we will not perform non-maximum supression.</param>
         public void Detect(
             IInputArray frame,
             VectorOfInt classIds,
             VectorOfFloat confidences,
             VectorOfRect boxes,
             float confThreshold = 0.5f,
-            float nmsThreshold = 0.5f)
+            float nmsThreshold = 0.0f)
         {
             using (InputArray iaFrame = frame.GetInputArray())
             {
@@ -71,9 +69,9 @@ namespace Emgu.CV.Dnn
                     _ptr,
                     iaFrame,
                     classIds,
-                    confidences, 
+                    confidences,
                     boxes,
-                    confThreshold, 
+                    confThreshold,
                     nmsThreshold);
             }
         }
@@ -87,7 +85,7 @@ namespace Emgu.CV.Dnn
             {
                 DnnInvoke.cveDnnDetectionModelRelease(ref _ptr);
             }
-            base.DisposeObject();
+            _model = IntPtr.Zero;
         }
 
     }
@@ -102,15 +100,15 @@ namespace Emgu.CV.Dnn
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnDetectionModelRelease(ref IntPtr model);
-        
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnDetectionModelDetect(
             IntPtr detectionModel,
-            IntPtr frame, 
+            IntPtr frame,
             IntPtr classIds,
             IntPtr confidences,
             IntPtr boxes,
-            float confThreshold, 
+            float confThreshold,
             float nmsThreshold);
 
     }

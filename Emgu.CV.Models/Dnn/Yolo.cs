@@ -131,29 +131,12 @@ namespace Emgu.CV.Models
                 throw new Exception("Please initialize the model first");
             }
 
-            using (VectorOfInt classIds = new VectorOfInt())
-            using (VectorOfFloat confidents = new VectorOfFloat())
-            using (VectorOfRect regions = new VectorOfRect())
-            {
-                _yoloDetectionModel.Detect(image, classIds, confidents, regions, (float)confThreshold, (float)nmsThreshold);
-                var classIdArr = classIds.ToArray();
-                var confidentArr = confidents.ToArray();
-                var regionArr = regions.ToArray();
-                List<DetectedObject> nmsResults = new List<DetectedObject>();
-                for (int i = 0; i < classIdArr.Length; i++)
-                {
-                    DetectedObject o = new DetectedObject();
-                    o.ClassId = classIdArr[i];
-                    o.Confident = confidentArr[i];
-                    o.Region = regionArr[i];
-                    o.Label = _labels[o.ClassId];
-                    nmsResults.Add(o);
-                }
-                return nmsResults.ToArray();
-            }
-
+            return _yoloDetectionModel.Detect(image, (float)confThreshold, (float)nmsThreshold, _labels);
         }
 
+        /// <summary>
+        /// Release the memory associated with this Yolo detector.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_yoloDetectionModel != null)
@@ -161,7 +144,6 @@ namespace Emgu.CV.Models
                 _yoloDetectionModel.Dispose();
                 _yoloDetectionModel = null;
             }
-            //throw new NotImplementedException();
         }
     }
 }

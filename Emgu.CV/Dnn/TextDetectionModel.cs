@@ -18,7 +18,6 @@ namespace Emgu.CV.Dnn
     /// </summary>
     public abstract class TextDetectionModel : Model
     {
-
         /// <summary>
         /// The pointer to the TextDetectionModel object
         /// </summary>
@@ -57,13 +56,9 @@ namespace Emgu.CV.Dnn
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_textDetectionModel != IntPtr.Zero)
-            {
-                _textDetectionModel = IntPtr.Zero;
-            }
-            base.DisposeObject();
+            _textDetectionModel = IntPtr.Zero;
+            _model = IntPtr.Zero;     
         }
-
     }
 
     public static partial class DnnInvoke

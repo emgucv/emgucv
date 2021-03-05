@@ -18,7 +18,6 @@ using Emgu.Util;
 using Emgu.CV.Dnn;
 using Emgu.CV.Models;
 using Emgu.CV.Util;
-//using Emgu.Models;
 using Point = System.Drawing.Point;
 using Rectangle = System.Drawing.Rectangle;
 
@@ -53,6 +52,7 @@ namespace Emgu.CV.Models
         /// Draw the detected object on the image
         /// </summary>
         /// <param name="image">The image to draw on</param>
+        /// <param name="color">The color used for drawing</param>
         public override void Render(Mat image, MCvScalar color)
         {
             CvInvoke.Rectangle(image, Region, new MCvScalar(0, 0, 0, 0), 1);

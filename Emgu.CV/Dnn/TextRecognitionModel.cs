@@ -113,7 +113,7 @@ namespace Emgu.CV.Dnn
             {
                 DnnInvoke.cveDnnTextRecognitionModelRelease(ref _ptr);
             }
-            base.DisposeObject();
+            _model = IntPtr.Zero;
         }
     }
 

@@ -10,25 +10,26 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Emgu.CV.Dnn
 {
     /// <summary>
-    /// This class represents high-level API for classification models.
+    /// This class represents high-level API for keypoints models.
     /// </summary>
-    public partial class ClassificationModel : Model
+    public partial class KeypointsModel : Model
     {
         /// <summary>
-        /// Create a new classification model
+        /// Create a new keypoints model
         /// </summary>
         /// <param name="model">Binary file contains trained weights.</param>
         /// <param name="config">Text file contains network configuration.</param>
-        public ClassificationModel(String model, String config = null)
+        public KeypointsModel(String model, String config = null)
         {
             using (CvString csModel = new CvString(model))
             using (CvString csConfig = new CvString(config))
             {
-                _ptr = DnnInvoke.cveDnnClassificationModelCreate1(
+                _ptr = DnnInvoke.cveDnnKeypointsModelCreate1(
                     csModel,
                     csConfig,
                     ref _model);
@@ -39,48 +40,47 @@ namespace Emgu.CV.Dnn
         /// Create model from deep learning network.
         /// </summary>
         /// <param name="net">DNN Network</param>
-        public ClassificationModel(Net net)
+        public KeypointsModel(Net net)
         {
-            _ptr = DnnInvoke.cveDnnClassificationModelCreate2(
+
+            _ptr = DnnInvoke.cveDnnKeypointsModelCreate2(
                 net,
                 ref _model);
+
         }
 
         /// <summary>
-        /// Given the input frame, create input blob, run net and return top-1 prediction.
+        /// Given the input frame, create input blob, run net.
         /// </summary>
         /// <param name="frame">The input image.</param>
-        /// <param name="classId">The top label.</param>
-        /// <param name="conf">The confident of the classification.</param>
-        public void Classify(
-            IInputArray frame,
-            out int classId,
-            out float conf)
+        /// <param name="thresh">minimum confidence threshold to select a keypoint</param>
+        /// <returns>A vector holding the x and y coordinates of each detected keypoint</returns>
+        public PointF[] Estimate(IInputArray frame, float thresh = 0.5f)
         {
-            classId = -1;
-            conf = 0;
-
             using (InputArray iaFrame = frame.GetInputArray())
+            using (VectorOfPointF vpf = new VectorOfPointF())
             {
-                DnnInvoke.cveDnnClassificationModelClassify(
+                DnnInvoke.cveDnnKeypointsModelEstimate(
                     _ptr,
                     iaFrame,
-                    ref classId,
-                    ref conf);
+                    vpf,
+                    thresh);
+                return vpf.ToArray();
             }
         }
 
+
+
         /// <summary>
-        /// Release the memory associated with this detection model.
+        /// Release the memory associated with this keypoints model.
         /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
             {
-                DnnInvoke.cveDnnClassificationModelRelease(ref _ptr);
+                DnnInvoke.cveDnnKeypointsModelRelease(ref _ptr);
             }
             _model = IntPtr.Zero;
-
         }
 
     }
@@ -89,19 +89,19 @@ namespace Emgu.CV.Dnn
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveDnnClassificationModelCreate1(IntPtr model, IntPtr config, ref IntPtr baseModel);
+        internal static extern IntPtr cveDnnKeypointsModelCreate1(IntPtr model, IntPtr config, ref IntPtr baseModel);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveDnnClassificationModelCreate2(IntPtr network, ref IntPtr baseModel);
+        internal static extern IntPtr cveDnnKeypointsModelCreate2(IntPtr network, ref IntPtr baseModel);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveDnnClassificationModelRelease(ref IntPtr model);
+        internal static extern void cveDnnKeypointsModelRelease(ref IntPtr model);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveDnnClassificationModelClassify(
-            IntPtr classificationModel,
+        internal static extern void cveDnnKeypointsModelEstimate(
+            IntPtr keypointsModel,
             IntPtr frame,
-            ref int classId,
-            ref float conf);
+            IntPtr keypoints,
+            float thresh);
 
     }
 }

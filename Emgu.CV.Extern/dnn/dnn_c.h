@@ -177,4 +177,23 @@ CVAPI(void) cveDnnClassificationModelClassify(
 	int* classId, 
 	float* conf);
 
+
+CVAPI(cv::dnn::KeypointsModel*) cveDnnKeypointsModelCreate1(cv::String* model, cv::String* config, cv::dnn::Model** baseModel);
+CVAPI(cv::dnn::KeypointsModel*) cveDnnKeypointsModelCreate2(cv::dnn::Net* network, cv::dnn::Model** baseModel);
+CVAPI(void) cveDnnKeypointsModelRelease(cv::dnn::KeypointsModel** keypointsModel);
+CVAPI(void) cveDnnKeypointsModelEstimate(
+	cv::dnn::KeypointsModel* keypointsModel,
+	cv::_InputArray* frame,
+	std::vector< cv::Point2f >* keypoints,
+	float thresh);
+
+
+CVAPI(cv::dnn::SegmentationModel*) cveDnnSegmentationModelCreate1(cv::String* model, cv::String* config, cv::dnn::Model** baseModel);
+CVAPI(cv::dnn::SegmentationModel*) cveDnnSegmentationModelCreate2(cv::dnn::Net* network, cv::dnn::Model** baseModel);
+CVAPI(void) cveDnnSegmentationModelRelease(cv::dnn::SegmentationModel** segmentationModel);
+CVAPI(void) cveDnnSegmentationModelSegment(
+	cv::dnn::SegmentationModel* segmentationModel,
+	cv::_InputArray* frame,
+	cv::_OutputArray* mask);
+
 #endif

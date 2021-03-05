@@ -14,21 +14,21 @@ using System.Diagnostics;
 namespace Emgu.CV.Dnn
 {
     /// <summary>
-    /// This class represents high-level API for classification models.
+    /// This class represents high-level API for segmentation models.
     /// </summary>
-    public partial class ClassificationModel : Model
+    public partial class SegmentationModel : Model
     {
         /// <summary>
-        /// Create a new classification model
+        /// Create a new segmentation model
         /// </summary>
         /// <param name="model">Binary file contains trained weights.</param>
         /// <param name="config">Text file contains network configuration.</param>
-        public ClassificationModel(String model, String config = null)
+        public SegmentationModel(String model, String config = null)
         {
             using (CvString csModel = new CvString(model))
             using (CvString csConfig = new CvString(config))
             {
-                _ptr = DnnInvoke.cveDnnClassificationModelCreate1(
+                _ptr = DnnInvoke.cveDnnSegmentationModelCreate1(
                     csModel,
                     csConfig,
                     ref _model);
@@ -39,69 +39,58 @@ namespace Emgu.CV.Dnn
         /// Create model from deep learning network.
         /// </summary>
         /// <param name="net">DNN Network</param>
-        public ClassificationModel(Net net)
+        public SegmentationModel(Net net)
         {
-            _ptr = DnnInvoke.cveDnnClassificationModelCreate2(
+
+            _ptr = DnnInvoke.cveDnnSegmentationModelCreate2(
                 net,
                 ref _model);
+
         }
 
         /// <summary>
-        /// Given the input frame, create input blob, run net and return top-1 prediction.
+        /// Given the input frame, create input blob, run net
         /// </summary>
         /// <param name="frame">The input image.</param>
-        /// <param name="classId">The top label.</param>
-        /// <param name="conf">The confident of the classification.</param>
-        public void Classify(
-            IInputArray frame,
-            out int classId,
-            out float conf)
+        /// <param name="mask">Allocated class prediction for each pixel</param>
+        public void Segment(IInputArray frame, IOutputArray mask)
         {
-            classId = -1;
-            conf = 0;
-
-            using (InputArray iaFrame = frame.GetInputArray())
+            using(InputArray iaFrame = frame.GetInputArray())
+            using (OutputArray oaMask = mask.GetOutputArray())
             {
-                DnnInvoke.cveDnnClassificationModelClassify(
-                    _ptr,
-                    iaFrame,
-                    ref classId,
-                    ref conf);
+                DnnInvoke.cveDnnSegmentationModelSegment(_ptr, iaFrame, oaMask);
             }
         }
 
         /// <summary>
-        /// Release the memory associated with this detection model.
+        /// Release the memory associated with this segmentation model.
         /// </summary>
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
             {
-                DnnInvoke.cveDnnClassificationModelRelease(ref _ptr);
+                DnnInvoke.cveDnnSegmentationModelRelease(ref _ptr);
             }
             _model = IntPtr.Zero;
-
         }
-
     }
 
     public static partial class DnnInvoke
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveDnnClassificationModelCreate1(IntPtr model, IntPtr config, ref IntPtr baseModel);
+        internal static extern IntPtr cveDnnSegmentationModelCreate1(IntPtr model, IntPtr config, ref IntPtr baseModel);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveDnnClassificationModelCreate2(IntPtr network, ref IntPtr baseModel);
+        internal static extern IntPtr cveDnnSegmentationModelCreate2(IntPtr network, ref IntPtr baseModel);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveDnnClassificationModelRelease(ref IntPtr model);
+        internal static extern void cveDnnSegmentationModelRelease(ref IntPtr model);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveDnnClassificationModelClassify(
-            IntPtr classificationModel,
+        internal static extern void cveDnnSegmentationModelSegment(
+            IntPtr segmentationModel,
             IntPtr frame,
-            ref int classId,
-            ref float conf);
+            IntPtr mask);
 
     }
 }

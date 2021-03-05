@@ -106,6 +106,7 @@ namespace Emgu.CV.Models
             }
         }
 
+
         public MaskedObject[] Detect(Mat m, float matchScoreThreshold = 0.5f, float nmsThreshold = 0.4f)
         {
             using (Mat blob = DnnInvoke.BlobFromImage(m))
@@ -132,13 +133,13 @@ namespace Emgu.CV.Models
                         if (_objectsOfInterest == null || _objectsOfInterest.Contains(_labels[classId]))
                         {
                             float score = boxesData[0, 0, i, 2];
-                            float left = boxesData[0, 0, i, 3] * imgSize.Width;
-                            float top = boxesData[0, 0, i, 4] * imgSize.Height;
-                            float right = boxesData[0, 0, i, 5] * imgSize.Width;
-                            float bottom = boxesData[0, 0, i, 6] * imgSize.Height;
-
-                            RectangleF rectF = new RectangleF(left, top, right - left, bottom - top);
-                            Rectangle rect = Rectangle.Round(rectF);
+                            Rectangle rect = DetectedObject.GetRectangle(
+                                boxesData[0, 0, i, 3],
+                                boxesData[0, 0, i, 4],
+                                boxesData[0, 0, i, 5],
+                                boxesData[0, 0, i, 6],
+                                imgSize.Width,
+                                imgSize.Height);
                             rect.Intersect(new Rectangle(Point.Empty, imgSize));
 
                             regions.Add(rect);

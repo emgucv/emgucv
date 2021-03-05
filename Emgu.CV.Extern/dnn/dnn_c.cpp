@@ -699,3 +699,90 @@ void cveDnnClassificationModelClassify(
 	throw_no_dnn();
 #endif
 }
+
+cv::dnn::KeypointsModel* cveDnnKeypointsModelCreate1(cv::String* model, cv::String* config, cv::dnn::Model** baseModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::KeypointsModel* ptr = new cv::dnn::KeypointsModel(*model, *config);
+	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
+	return ptr;
+#else
+	throw_no_dnn();
+#endif
+}
+cv::dnn::KeypointsModel* cveDnnKeypointsModelCreate2(cv::dnn::Net* network, cv::dnn::Model** baseModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::KeypointsModel* ptr = new cv::dnn::KeypointsModel(*network);
+	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
+	return ptr;
+#else
+	throw_no_dnn();
+#endif
+}
+void cveDnnKeypointsModelRelease(cv::dnn::KeypointsModel** keypointsModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	delete* keypointsModel;
+	*keypointsModel = 0;
+#else
+	throw_no_dnn();
+#endif
+}
+void cveDnnKeypointsModelEstimate(
+	cv::dnn::KeypointsModel* keypointsModel,
+	cv::_InputArray* frame,
+	std::vector< cv::Point2f >* keypoints,
+	float thresh)
+{
+#ifdef HAVE_OPENCV_DNN
+	std::vector< cv::Point2f > kp = keypointsModel->estimate(*frame, thresh);
+	keypoints->clear();
+	for (std::vector< cv::Point2f >::iterator iter = kp.begin(); iter != kp.end(); ++iter)
+		keypoints->push_back(*iter);
+#else
+	throw_no_dnn();
+#endif	
+}
+
+
+cv::dnn::SegmentationModel* cveDnnSegmentationModelCreate1(cv::String* model, cv::String* config, cv::dnn::Model** baseModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::SegmentationModel* ptr = new cv::dnn::SegmentationModel(*model, *config);
+	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
+	return ptr;
+#else
+	throw_no_dnn();
+#endif	
+}
+cv::dnn::SegmentationModel* cveDnnSegmentationModelCreate2(cv::dnn::Net* network, cv::dnn::Model** baseModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::SegmentationModel* ptr = new cv::dnn::SegmentationModel(*network);
+	*baseModel = dynamic_cast<cv::dnn::Model*>(ptr);
+	return ptr;
+#else
+	throw_no_dnn();
+#endif
+}
+void cveDnnSegmentationModelRelease(cv::dnn::SegmentationModel** segmentationModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	delete* segmentationModel;
+	*segmentationModel = 0;
+#else
+	throw_no_dnn();
+#endif
+}
+void cveDnnSegmentationModelSegment(
+	cv::dnn::SegmentationModel* segmentationModel,
+	cv::_InputArray* frame,
+	cv::_OutputArray* mask)
+{
+#ifdef HAVE_OPENCV_DNN
+	segmentationModel->segment(*frame, *mask);
+#else
+	throw_no_dnn();
+#endif
+}

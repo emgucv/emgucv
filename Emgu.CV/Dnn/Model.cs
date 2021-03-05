@@ -88,7 +88,7 @@ namespace Emgu.CV.Dnn
         /// <param name="value">The value</param>
         public void SetPreferableBackend(Backend value)
         {
-            DnnInvoke.cveModelSetPreferableBackend(_ptr, value);
+            DnnInvoke.cveModelSetPreferableBackend(_model, value);
         }
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Emgu.CV.Dnn
         /// <param name="value">The value</param>
         public void SetPreferableTarget(Target value)
         {
-            DnnInvoke.cveModelSetPreferableTarget(_ptr, value);
+            DnnInvoke.cveModelSetPreferableTarget(_model, value);
         }
     }
 
