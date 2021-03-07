@@ -472,7 +472,7 @@ void cveDnnTextDetectionModelDetectTextRectangles(
 #endif
 }
 
-cv::dnn::TextRecognitionModel* cveTextRecognitionModelCreate1(cv::String* model, cv::String* config, cv::dnn::Model** baseModel)
+cv::dnn::TextRecognitionModel* cveDnnTextRecognitionModelCreate1(cv::String* model, cv::String* config, cv::dnn::Model** baseModel)
 {
 #ifdef HAVE_OPENCV_DNN
 	cv::dnn::TextRecognitionModel* ptr = new cv::dnn::TextRecognitionModel(*model, *config);
@@ -483,7 +483,7 @@ cv::dnn::TextRecognitionModel* cveTextRecognitionModelCreate1(cv::String* model,
 #endif
 }
 
-cv::dnn::TextRecognitionModel* cveDnnTextDetectionModelEastCreate2(cv::dnn::Net* network, cv::dnn::Model** baseModel)
+cv::dnn::TextRecognitionModel* cveDnnTextRecognitionModelCreate2(cv::dnn::Net* network, cv::dnn::Model** baseModel)
 {
 #ifdef HAVE_OPENCV_DNN
 	cv::dnn::TextRecognitionModel* ptr = new cv::dnn::TextRecognitionModel(*network);

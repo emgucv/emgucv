@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using Emgu.CV.CvEnum;
+using Emgu.CV.Freetype;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 
@@ -41,17 +42,33 @@ namespace Emgu.CV.Models
         /// Draw the detected object on the image
         /// </summary>
         /// <param name="image">The image to draw on</param>
-        public virtual void Render(Mat image, MCvScalar color)
+        public virtual void Render(IInputOutputArray image, MCvScalar color, Freetype2 freetype2 = null)
         {
             CvInvoke.Rectangle(image, this.Region, color, 2);
-            CvInvoke.PutText(
-                image,
-                String.Format("{0}: {1}", this.Label == null? this.ClassId.ToString() : this.Label, this.Confident),
-                this.Region.Location,
-                FontFace.HersheyDuplex,
-                1.0,
-                color,
-                1);
+            String label = String.Format("{0}: {1}", this.Label == null ? this.ClassId.ToString() : this.Label,
+                this.Confident);
+            if (freetype2 == null)
+                CvInvoke.PutText(
+                    image,
+                    label,
+                    this.Region.Location,
+                    FontFace.HersheyDuplex,
+                    1.0,
+                    color,
+                    1);
+            else
+            {
+                freetype2.PutText(
+                    image,
+                    label,
+                    this.Region.Location,
+                    16,
+                    color,
+                    1,
+                    LineType.EightConnected,
+                    false
+                    );
+            }
         }
 
         /// <summary>

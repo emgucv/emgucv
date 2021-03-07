@@ -1213,6 +1213,17 @@ namespace Emgu.CV
         /// <summary>
         /// Returns the up-right bounding rectangle for 2d point set
         /// </summary>
+        /// <param name="points"> Input 2D point set</param>
+        /// <returns>The up-right bounding rectangle for 2d point set</returns>
+        public static Rectangle BoundingRectangle(Point[] points)
+        {
+            using (VectorOfPoint vp = new VectorOfPoint(points))
+                return BoundingRectangle(vp);
+        }
+
+        /// <summary>
+        /// Returns the up-right bounding rectangle for 2d point set
+        /// </summary>
         /// <param name="points"> Input 2D point set, stored in std::vector or Mat.</param>
         /// <returns>The up-right bounding rectangle for 2d point set</returns>
         public static Rectangle BoundingRectangle(IInputArray points)
@@ -1242,7 +1253,7 @@ namespace Emgu.CV
         private static extern double cveContourArea(
            IntPtr contour,
            [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool oriented);
+           bool oriented);
 
         /// <summary>
         /// Calculates a contour perimeter or a curve length

@@ -22,7 +22,7 @@ namespace Emgu.CV.Models
     /// <summary>
     /// Facial landmark detector
     /// </summary>
-    public class FacemarkDetector
+    public class FacemarkDetector : DisposableObject
     {
         private FacemarkLBF _facemark = null;
 
@@ -60,13 +60,22 @@ namespace Emgu.CV.Models
         /// <param name="image">The image to detect facial landmarks from</param>
         /// <param name="fullFaceRegions">The face regions to detect landmarks from</param>
         /// <returns>Vector of facial landmarks</returns>
-        public VectorOfVectorOfPointF Detect(Mat image, Rectangle[] fullFaceRegions)
+        public VectorOfVectorOfPointF Detect(IInputArray image, Rectangle[] fullFaceRegions)
         {
             using (VectorOfRect vr = new VectorOfRect(fullFaceRegions))
             {
                 VectorOfVectorOfPointF landmarks = new VectorOfVectorOfPointF();
                 _facemark.Fit(image, vr, landmarks);
                 return landmarks;
+            }
+        }
+
+        protected override void DisposeObject()
+        {
+            if (_facemark != null)
+            {
+                _facemark.Dispose();
+                _facemark = null;
             }
         }
     }

@@ -16,6 +16,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.Util;
 using Emgu.CV.Dnn;
+using Emgu.CV.Freetype;
 using Emgu.CV.Models;
 using Emgu.CV.Util;
 using Point = System.Drawing.Point;
@@ -51,22 +52,22 @@ namespace Emgu.CV.Models
         /// Draw the detected object on the image
         /// </summary>
         /// <param name="image">The image to draw on</param>
-        /// <param name="color">The color used for drawing the mask</param>
-        public override void Render(Mat image, MCvScalar maskColor)
+        /// <param name="color">The color used for drawing the region</param>
+        /// <param name="maskColor">The color used for drawing the mask</param>
+        public virtual void Render(IInputOutputArray image, MCvScalar color, MCvScalar maskColor, Freetype2 freetype2 = null)
         {
-            CvInvoke.Rectangle(image, Region, new MCvScalar(0, 0, 0, 0), 1);
-            CvInvoke.PutText(image, String.Format("{0} ({1})", Label, Confident), Region.Location, FontFace.HersheyComplex, 1.0,
-                new MCvScalar(0, 0, 255), 2);
-
+            base.Render(image, color, freetype2);
             DrawMask(image, _mask, Region, maskColor);
         }
 
 
-        private static void DrawMask(Mat image, Mat mask, Rectangle rect, MCvScalar color)
+        private static void DrawMask(IInputOutputArray image, Mat mask, Rectangle rect, MCvScalar color)
         {
             using (Mat maskLarge = new Mat())
             using (Mat maskLargeInv = new Mat())
-            using (Mat subRegion = new Mat(image, rect))
+            using(InputArray iaImage = image.GetInputArray())
+            using(Mat matImage = iaImage.GetMat())
+            using (Mat subRegion = new Mat(matImage, rect))
             using (Mat largeColor = new Mat(
                 subRegion.Size, 
                 Emgu.CV.CvEnum.DepthType.Cv8U,

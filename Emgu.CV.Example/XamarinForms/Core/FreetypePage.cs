@@ -12,12 +12,15 @@ using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Dnn;
 using Emgu.CV.Freetype;
+using Emgu.CV.Models;
 using Emgu.Util;
 
 namespace Emgu.CV.XamarinForms
 {
     public class FreetypePage : ButtonTextImagePage
     {
+
+        private FreetypeNotoSansCJK _freetype2;
         public FreetypePage()
             : base()
         {
@@ -25,7 +28,12 @@ namespace Emgu.CV.XamarinForms
             button.Text = "Draw Freetype Text";
             button.Clicked += async (sender, args) =>
             {
-                await InitFreetype();
+                if (_freetype2 == null)
+                {
+                    _freetype2 = new FreetypeNotoSansCJK();
+                    await _freetype2.Init(DownloadManager_OnDownloadProgressChanged);
+                }
+
                 Mat img = new Mat(new Size(640, 480), DepthType.Cv8U, 3);
                 img.SetTo(new MCvScalar(0, 0, 0, 0));
                 _freetype2.PutText(img, "Hello", new Point(100, 50), 36, new MCvScalar(255, 255, 0), 1, LineType.EightConnected, false);
@@ -35,27 +43,6 @@ namespace Emgu.CV.XamarinForms
                 _freetype2.PutText(img, "Здравствуйте", new Point(100, 250), 36, new MCvScalar(255, 255, 0), 1, LineType.EightConnected, false);
                 SetImage(img);
             };
-        }
-
-        private Freetype.Freetype2 _freetype2 = null;
-        private async Task InitFreetype()
-        {
-            if (_freetype2 == null)
-            {
-                FileDownloadManager manager = new FileDownloadManager();
-
-                manager.AddFile(
-                    "https://github.com/emgucv/emgucv/raw/4.4.0/Emgu.CV.Test/NotoSansCJK-Regular.ttc",
-                    "Freetype",
-                    "E3C629CB9F416E2E57CFDFEE7573D5CAC3A06A681C105EC081AB9707C1F147E8");
-
-                manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
-                await manager.Download();
-
-                _freetype2 = new Freetype2();
-                _freetype2.LoadFontData(manager.Files[0].LocalFile, 0);
-                
-            }
         }
 
         private void DownloadManager_OnDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)

@@ -4,9 +4,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Emgu.CV;
@@ -21,7 +23,7 @@ namespace Emgu.CV.Models
     /// <summary>
     /// Yolo model
     /// </summary>
-    public class Yolo : DisposableObject
+    public class Yolo : DisposableObject, IProcessAndRenderModel
     {
         private String _modelFolderName = "yolo_v3";
 
@@ -124,7 +126,7 @@ namespace Emgu.CV.Models
         /// <param name="confThreshold">The confident threshold. Only detection with confident larger than this will be returned.</param>
         /// <param name="nmsThreshold">If positive, will perform non-maximum suppression using the threshold value. If less than or equals to 0, will not perform Non-maximum suppression.</param>
         /// <returns>The detected objects</returns>
-        public DetectedObject[] Detect(Mat image, double confThreshold = 0.5, double nmsThreshold = 0.5)
+        public DetectedObject[] Detect(IInputOutputArray image, double confThreshold = 0.5, double nmsThreshold = 0.5)
         {
             if (_yoloDetectionModel == null)
             {
@@ -144,6 +146,22 @@ namespace Emgu.CV.Models
                 _yoloDetectionModel.Dispose();
                 _yoloDetectionModel = null;
             }
+        }
+
+        public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        {
+            await Init(YoloVersion.YoloV3, onDownloadProgressChanged);
+        }
+
+        public String ProcessAndRender(IInputOutputArray image)
+        {
+            Stopwatch watch = Stopwatch.StartNew();
+            var detectedObjects = Detect(image);
+            watch.Stop();
+
+            foreach (var detected in detectedObjects)
+                detected.Render(image, new MCvScalar(0, 0, 255));
+            return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
         }
     }
 }

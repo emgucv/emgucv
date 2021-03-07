@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace Emgu.CV.Models
     /// <summary>
     /// DNN Vehicle license plate detector using OpenVino
     /// </summary>
-    public class VehicleLicensePlateDetector
+    public class VehicleLicensePlateDetector : DisposableObject, IProcessAndRenderModel
     {
         /// <summary>
         /// License plate
@@ -80,10 +81,8 @@ namespace Emgu.CV.Models
         }
 
         private String _modelFolderName = "vehicle-license-plate-detection-barrier-0106-openvino-2021.2";
-        private Net _vehicleLicensePlateDetector = null;
 
         private DetectionModel _vehicleLicensePlateDetectionModel = null;
-
         private Net _vehicleAttrRecognizer = null;
         private Net _ocr = null;
 
@@ -172,7 +171,7 @@ namespace Emgu.CV.Models
 
         private async Task InitLicensePlateDetector(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
-            if (_vehicleLicensePlateDetector == null)
+            if (_vehicleLicensePlateDetectionModel == null)
             {
                 FileDownloadManager manager = new FileDownloadManager();
 
@@ -193,10 +192,7 @@ namespace Emgu.CV.Models
                 _vehicleLicensePlateDetectionModel.SetInputScale(1.0);
                 _vehicleLicensePlateDetectionModel.SetInputSwapRB(false);
                 _vehicleLicensePlateDetectionModel.SetInputCrop(false);
-
-                _vehicleLicensePlateDetector =
-                    DnnInvoke.ReadNetFromModelOptimizer(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
-
+                
                 /*
                 if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
                 {
@@ -238,12 +234,21 @@ namespace Emgu.CV.Models
             await InitOCR(onDownloadProgressChanged);
         }
 
+        public string ProcessAndRender(IInputOutputArray image)
+        {
+            Stopwatch watch = Stopwatch.StartNew();
+            Vehicle[] detectionResult = Detect(image);
+            watch.Stop();
+            Render(image, detectionResult);
+            return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
+        }
+
         /// <summary>
         /// Detect vehicle from the given image
         /// </summary>
         /// <param name="image">The image</param>
         /// <returns>The detected vehicles.</returns>
-        public Vehicle[] Detect(Mat image)
+        public Vehicle[] Detect(IInputArray image)
         {
             float vehicleConfidenceThreshold = 0.5f;
             float licensePlateConfidenceThreshold = 0.5f;
@@ -254,20 +259,21 @@ namespace Emgu.CV.Models
 
             List<Vehicle> vehicles = new List<Vehicle>();
             List<LicensePlate> plates = new List<LicensePlate>();
-
-            foreach (DetectedObject vehicleOrPlate in _vehicleLicensePlateDetectionModel.Detect(image, 0.0f, 0.0f))
-            {
-                Rectangle region = vehicleOrPlate.Region;
-
-                if (vehicleOrPlate.ClassId == 1 && vehicleOrPlate.Confident > vehicleConfidenceThreshold)
+            using (InputArray iaImage = image.GetInputArray())
+            using (Mat iaImageMat = iaImage.GetMat())
+                foreach (DetectedObject vehicleOrPlate in _vehicleLicensePlateDetectionModel.Detect(image, 0.0f, 0.0f))
                 {
-                    //this is a vehicle
-                    Vehicle v = new Vehicle();
-                    v.Region = region;
+                    Rectangle region = vehicleOrPlate.Region;
 
-                    #region find out the type and color of the vehicle
-                    using (Mat vehicle = new Mat(image, region))
+                    if (vehicleOrPlate.ClassId == 1 && vehicleOrPlate.Confident > vehicleConfidenceThreshold)
                     {
+                        //this is a vehicle
+                        Vehicle v = new Vehicle();
+                        v.Region = region;
+
+                        #region find out the type and color of the vehicle
+
+                        using (Mat vehicle = new Mat(iaImageMat, region))
                         using (Mat vehicleBlob = DnnInvoke.BlobFromImage(
                             vehicle,
                             scale,
@@ -296,51 +302,51 @@ namespace Emgu.CV.Models
                                 }
                             }
                         }
+
+                        #endregion
+
+                        vehicles.Add(v);
                     }
-                    #endregion
-
-                    vehicles.Add(v);
-                }
-                else if (vehicleOrPlate.ClassId == 2 && vehicleOrPlate.Confident > licensePlateConfidenceThreshold)
-                {
-                    //this is a license plate
-                    LicensePlate p = new LicensePlate();
-                    p.Region = region;
-
-                    #region OCR on license plate
-                    using (Mat plate = new Mat(image, region))
+                    else if (vehicleOrPlate.ClassId == 2 && vehicleOrPlate.Confident > licensePlateConfidenceThreshold)
                     {
-                        using (Mat inputBlob = DnnInvoke.BlobFromImage(
-                            plate,
-                            scale,
-                            new Size(94, 24),
-                            meanVal,
-                            false,
-                            false,
-                            DepthType.Cv32F))
-                        {
-                            _ocr.SetInput(inputBlob, "data");
-                            using (Mat output = _ocr.Forward("decode"))
-                            {
-                                float[] plateValue = output.GetData(false) as float[];
-                                StringBuilder licensePlateStringBuilder = new StringBuilder();
-                                foreach (int j in plateValue)
-                                {
-                                    if (j >= 0)
-                                    {
-                                        licensePlateStringBuilder.Append(_plateText[j]);
-                                    }
-                                }
+                        //this is a license plate
+                        LicensePlate p = new LicensePlate();
+                        p.Region = region;
 
-                                p.Text = licensePlateStringBuilder.ToString();
+                        #region OCR on license plate
+                        using (Mat plate = new Mat(iaImageMat, region))
+                        {
+                            using (Mat inputBlob = DnnInvoke.BlobFromImage(
+                                plate,
+                                scale,
+                                new Size(94, 24),
+                                meanVal,
+                                false,
+                                false,
+                                DepthType.Cv32F))
+                            {
+                                _ocr.SetInput(inputBlob, "data");
+                                using (Mat output = _ocr.Forward("decode"))
+                                {
+                                    float[] plateValue = output.GetData(false) as float[];
+                                    StringBuilder licensePlateStringBuilder = new StringBuilder();
+                                    foreach (int j in plateValue)
+                                    {
+                                        if (j >= 0)
+                                        {
+                                            licensePlateStringBuilder.Append(_plateText[j]);
+                                        }
+                                    }
+
+                                    p.Text = licensePlateStringBuilder.ToString();
+                                }
                             }
                         }
-                    }
-                    #endregion
+                        #endregion
 
-                    plates.Add(p);
+                        plates.Add(p);
+                    }
                 }
-            }
 
             foreach (LicensePlate p in plates)
             {
@@ -362,7 +368,7 @@ namespace Emgu.CV.Models
         /// </summary>
         /// <param name="image">The image to be drawn to.</param>
         /// <param name="vehicles">The vehicles.</param>
-        public void Render(Mat image, Vehicle[] vehicles)
+        public void Render(IInputOutputArray image, Vehicle[] vehicles)
         {
             foreach (Vehicle v in vehicles)
             {
@@ -377,6 +383,27 @@ namespace Emgu.CV.Models
                     1.0,
                     new MCvScalar(0, 255, 0),
                     2);
+            }
+        }
+
+        protected override void DisposeObject()
+        {
+            if (_vehicleLicensePlateDetectionModel != null)
+            {
+                _vehicleLicensePlateDetectionModel.Dispose();
+                _vehicleLicensePlateDetectionModel = null;
+            }
+
+            if (_vehicleAttrRecognizer != null)
+            {
+                _vehicleAttrRecognizer.Dispose();
+                _vehicleAttrRecognizer = null;
+            }
+
+            if (_ocr != null)
+            {
+                _ocr.Dispose();
+                _ocr = null;
             }
         }
     }

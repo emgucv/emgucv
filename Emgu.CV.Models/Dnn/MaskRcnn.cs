@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace Emgu.CV.Models
     /// <summary>
     /// MaskRcnn model
     /// </summary>
-    public class MaskRcnn : DisposableObject
+    public class MaskRcnn : DisposableObject, IProcessAndRenderModel
     {
         private String _modelFolderName = "mask_rcnn_inception_v2_coco_2018_01_28";
 
@@ -96,29 +97,39 @@ namespace Emgu.CV.Models
             }
         }
 
-        public void DetectAndRender(Mat m, float matchScoreThreshold = 0.5f, float nmsThreshold = 0.4f)
+        String IProcessAndRenderModel.ProcessAndRender(IInputOutputArray image)
+        {
+            Stopwatch watch = Stopwatch.StartNew();
+            ProcessAndRender(image, 0.5f, 0.4f);
+            watch.Stop();
+            return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
+        }
+
+        public void ProcessAndRender(IInputOutputArray m, float matchScoreThreshold = 0.5f, float nmsThreshold = 0.4f)
         {
             MaskedObject[] objects = Detect(m, matchScoreThreshold, nmsThreshold);
             foreach (var obj in objects)
             {
-                obj.Render(m, _colors[obj.ClassId]);
+                obj.Render(m, new MCvScalar(0,0,255), _colors[obj.ClassId]);
                 obj.Dispose();
             }
         }
 
 
-        public MaskedObject[] Detect(Mat m, float matchScoreThreshold = 0.5f, float nmsThreshold = 0.4f)
+        public MaskedObject[] Detect(IInputArray m, float matchScoreThreshold = 0.5f, float nmsThreshold = 0.4f)
         {
+            using (InputArray iaM = m.GetInputArray())
             using (Mat blob = DnnInvoke.BlobFromImage(m))
             using (VectorOfMat tensors = new VectorOfMat())
             {
+                
                 _maskRcnnDetector.SetInput(blob, "image_tensor");
                 _maskRcnnDetector.Forward(tensors, new string[] { "detection_out_final", "detection_masks" });
 
                 using (Mat boxes = tensors[0])
                 using (Mat masks = tensors[1])
                 {
-                    System.Drawing.Size imgSize = m.Size;
+                    System.Drawing.Size imgSize = iaM.GetSize();
                     float[,,,] boxesData = boxes.GetData(true) as float[,,,];
                     int numDetections = boxesData.GetLength(2);
 

@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Dnn;
+using Emgu.CV.Models;
 using Xamarin.Forms;
 using Emgu.CV.Structure;
 using Emgu.Util.TypeEnum;
@@ -57,7 +58,7 @@ namespace Emgu.CV.XamarinForms
             stopSignDetectionButton.Text = "Stop Sign Detection (DNN module)";
 
             Button licensePlateRecognitionButton = new Button();
-            licensePlateRecognitionButton.Text = "License Plate Recognition";
+            licensePlateRecognitionButton.Text = "License Plate Recognition (DNN Module)";
 
             List<View> buttonList = new List<View>()
             {
@@ -201,29 +202,63 @@ namespace Emgu.CV.XamarinForms
 
             licensePlateRecognitionButton.Clicked += (sender, args) =>
             {
-                MainPage.Navigation.PushAsync(new LicensePlateRecognitionPage());
+                ProcessAndRenderPage vehicleLicensePlateDetectorPage = new ProcessAndRenderPage(
+                    new VehicleLicensePlateDetector(),
+                    "Perform License Plate Recognition",
+                    "cars_license_plate.png",
+                    "This demo is based on the security barrier camera demo in the OpenVino model zoo. The models is trained with BIT-vehicle dataset. License plate is trained based on Chinese license plate that has white character on blue background. You will need to re-train your own model if you intend to use this in other countries.");
+                MainPage.Navigation.PushAsync(vehicleLicensePlateDetectorPage);
             };
 
             maskRcnnButton.Clicked += (sender, args) =>
             {
-                MainPage.Navigation.PushAsync(new MaskRcnnPage());
+                ProcessAndRenderPage maskRcnnPage = new ProcessAndRenderPage(
+                    new MaskRcnn(),
+                    "Mask-rcnn Detection",
+                    "dog416.png",
+                    "");
+                MainPage.Navigation.PushAsync(maskRcnnPage);
             };
+
             faceLandmarkDetectionButton.Clicked += (sender, args) =>
             {
-                MainPage.Navigation.PushAsync(new FaceLandmarkDetectionPage());
+                ProcessAndRenderPage faceLandmarkDetectionPage = new ProcessAndRenderPage(
+                    new FaceAndLandmarkDetector(),
+                    "Perform Face Landmark Detection",
+                    "lena.jpg",
+                    "");
+                MainPage.Navigation.PushAsync(faceLandmarkDetectionPage);
             };
             sceneTextDetectionButton.Clicked += (sender, args) =>
             {
-                MainPage.Navigation.PushAsync(new SceneTextDetectionPage());
+                ProcessAndRenderPage sceneTextDetectionPage = new ProcessAndRenderPage(
+                    new SceneTextDetector(),
+                    "Perform Scene Text Detection",
+                    "cars_license_plate.png",
+                    "This model is trained on MSRA-TD500, so it can detect both English and Chinese text instances.");
+                MainPage.Navigation.PushAsync(sceneTextDetectionPage);
             };
             stopSignDetectionButton.Clicked += (sender, args) =>
             {
-                MaskRcnnPage stopSignDetectionPage = new MaskRcnnPage();
-                stopSignDetectionPage.DefaultImage = "stop-sign.jpg";
-                stopSignDetectionPage.ObjectsOfInterest = new string[] { "stop sign" };
+                MaskRcnn model = new MaskRcnn();
+                model.ObjectsOfInterest = new string[] { "stop sign" };
+                ProcessAndRenderPage stopSignDetectionPage = new ProcessAndRenderPage(
+                    model,
+                    "Mask-rcnn Detection",
+                    "stop-sign.jpg",
+                    "Stop sign detection using Mask RCNN");
+
                 MainPage.Navigation.PushAsync(stopSignDetectionPage);
             };
-            yoloButton.Clicked += (sender, args) => { MainPage.Navigation.PushAsync(new YoloPage()); };
+            yoloButton.Clicked += (sender, args) =>
+            {
+                ProcessAndRenderPage yoloPage = new ProcessAndRenderPage(
+                    new Yolo(),
+                    "Yolo Detection",
+                    "dog416.png",
+                    "");
+                MainPage.Navigation.PushAsync(yoloPage);
+            };
 
             ocrButton.Clicked += (sender, args) =>
             {

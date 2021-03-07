@@ -78,17 +78,20 @@ namespace Emgu.CV.Models
         /// <param name="image">The image.</param>
         /// <param name="fullFaceRegions">The faces where a full facial region is detected. These images can be send to facial landmark recognition for further processing.</param>
         /// <param name="partialFaceRegions">The face region of which is close to the edge of the images. Because if may not contains all the facial landmarks, it is not recommended to send these regions to facial landmark detection.</param>
-        public void Detect(Mat image, List<DetectedObject> fullFaceRegions, List<DetectedObject> partialFaceRegions, float confidenceThreshold = 0.5f, float nmsThreshold = 0.0f)
+        public void Detect(IInputArray image, List<DetectedObject> fullFaceRegions, List<DetectedObject> partialFaceRegions, float confidenceThreshold = 0.5f, float nmsThreshold = 0.0f)
         {
-            DetectedObject[] detectedFaces = _faceDetectionModel.Detect(image, confidenceThreshold, nmsThreshold);
-            Rectangle imageRegion = new Rectangle(Point.Empty, image.Size);
-            foreach (DetectedObject face in detectedFaces)
+            using (InputArray iaImage = image.GetInputArray())
             {
-                if (imageRegion.Contains(face.Region))
-                    fullFaceRegions.Add(face);
-                else
+                DetectedObject[] detectedFaces = _faceDetectionModel.Detect(image, confidenceThreshold, nmsThreshold);
+                Rectangle imageRegion = new Rectangle(Point.Empty, iaImage.GetSize());
+                foreach (DetectedObject face in detectedFaces)
                 {
-                    partialFaceRegions.Add(face);
+                    if (imageRegion.Contains(face.Region))
+                        fullFaceRegions.Add(face);
+                    else
+                    {
+                        partialFaceRegions.Add(face);
+                    }
                 }
             }
         }
