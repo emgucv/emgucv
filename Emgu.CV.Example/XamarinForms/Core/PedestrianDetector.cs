@@ -11,11 +11,16 @@ using System.Drawing;
 using System.Diagnostics;
 using Emgu.CV.Util;
 using Emgu.CV.Cuda;
+using System.Threading.Tasks;
+using System.Net;
 
-namespace PedestrianDetection
+namespace Emgu.CV.Models
 {
-    public static class FindPedestrian
+    public class PedestrianDetector : IProcessAndRenderModel
     {
+        private CudaHOG _hogCuda;
+        private HOGDescriptor _hog;
+
         /// <summary>
         /// Find the pedestrian in the image
         /// </summary>
@@ -23,7 +28,6 @@ namespace PedestrianDetection
         /// <returns>The region where pedestrians are detected</returns>
         public static Rectangle[] Find(IInputArray image, HOGDescriptor hog, CudaHOG hogCuda = null)
         {
-            //Stopwatch watch;
             Rectangle[] regions;
 
             using (InputArray iaImage = image.GetInputArray())
@@ -33,8 +37,6 @@ namespace PedestrianDetection
                 if (iaImage.Kind == InputArray.Type.CudaGpuMat && hogCuda != null)
                 {
                     //this is the Cuda version
-
-                    //watch = Stopwatch.StartNew();
                     using (GpuMat cudaBgra = new GpuMat())
                     using (VectorOfRect vr = new VectorOfRect())
                     {
@@ -42,26 +44,48 @@ namespace PedestrianDetection
                         hogCuda.DetectMultiScale(cudaBgra, vr);
                         regions = vr.ToArray();
                     }
-
                 }
                 else
                 {
                     //this is the CPU/OpenCL version
-
-                    //watch = Stopwatch.StartNew();
-
                     MCvObjectDetection[] results = hog.DetectMultiScale(image);
                     regions = new Rectangle[results.Length];
                     for (int i = 0; i < results.Length; i++)
                         regions[i] = results[i].Rect;
-                    //watch.Stop();
-
                 }
-
-                //processingTime = watch.ElapsedMilliseconds;
-
+                
                 return regions;
             }
+        }
+
+        public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        {
+            _hog = new HOGDescriptor();
+            _hog.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
+
+            if (CudaInvoke.HasCuda)
+            {
+                _hogCuda = new CudaHOG(
+                    new Size(64, 128),
+                    new Size(16, 16),
+                    new Size(8, 8),
+                    new Size(8, 8));
+                _hogCuda.SetSVMDetector(_hogCuda.GetDefaultPeopleDetector());
+            }
+
+        }
+
+        public string ProcessAndRender(IInputOutputArray image)
+        {
+            Stopwatch watch = Stopwatch.StartNew();
+            Rectangle[] pedestrians = Find(image, _hog, _hogCuda);
+            watch.Stop();
+            foreach (Rectangle rect in pedestrians)
+            {
+                CvInvoke.Rectangle(image, rect, new MCvScalar(0, 0, 255), 2);
+            }
+
+            return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
         }
     }
 }

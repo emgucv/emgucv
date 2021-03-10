@@ -192,7 +192,12 @@ namespace Emgu.CV.XamarinForms
 
             pedestrianDetectionButton.Clicked += (sender, args) =>
             {
-                MainPage.Navigation.PushAsync(new PedestrianDetectionPage());
+                ProcessAndRenderPage pedestrianDetectorPage = new ProcessAndRenderPage(
+                    new PedestrianDetector(),
+                    "Pedestrian detection",
+                    "pedestrian.png",
+                    "HOG pedestrian detection");
+                MainPage.Navigation.PushAsync(pedestrianDetectorPage);
             };
 
             featureDetectionButton.Clicked += (sender, args) =>

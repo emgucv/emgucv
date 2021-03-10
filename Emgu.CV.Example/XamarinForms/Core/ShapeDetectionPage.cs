@@ -17,8 +17,6 @@ using Emgu.CV.Structure;
 using Emgu.Util;
 using Emgu.CV.Util;
 
-using PedestrianDetection;
-
 namespace Emgu.CV.XamarinForms
 {
     public class ShapeDetectionPage : ButtonTextImagePage
