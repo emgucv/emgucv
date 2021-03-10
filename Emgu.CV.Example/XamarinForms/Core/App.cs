@@ -182,7 +182,12 @@ namespace Emgu.CV.XamarinForms
 
             faceDetectionButton.Clicked += (sender, args) =>
             {
-                MainPage.Navigation.PushAsync(new FaceDetectionPage());
+                ProcessAndRenderPage faceAndEyeDetectorPage = new ProcessAndRenderPage(
+                    new CascadeFaceAndEyeDetector(),
+                    "Face and eye detection (Cascade classifier)",
+                    "lena.jpg",
+                    "Cascade classifier");
+                MainPage.Navigation.PushAsync(faceAndEyeDetectorPage);
             };
 
             shapeDetectionButton.Clicked += (sender, args) =>
@@ -274,7 +279,7 @@ namespace Emgu.CV.XamarinForms
             faceLandmarkDetectionButton.IsVisible = haveDNN;
             stopSignDetectionButton.IsVisible = haveDNN;
             yoloButton.IsVisible = haveDNN;
-            sceneTextDetectionButton.IsVisible = haveDNN;
+            sceneTextDetectionButton.IsVisible = haveDNN && haveFreetype;
             licensePlateRecognitionButton.IsVisible = hasInferenceEngine;
 
         }

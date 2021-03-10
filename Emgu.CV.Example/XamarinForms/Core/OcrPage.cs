@@ -31,7 +31,6 @@ using Emgu.CV.OCR;
 using Emgu.CV.Structure;
 //using Emgu.Models;
 using Emgu.Util;
-using FaceDetection;
 using Xamarin.Forms;
 using Environment = System.Environment;
 

@@ -35,7 +35,7 @@ namespace Emgu.CV.XamarinForms
             using (UMat cannyEdges = new UMat())
             using (Mat triangleRectangleImage = new Mat(img.Size, DepthType.Cv8U, 3)) //image to draw triangles and rectangles on
             using (Mat circleImage = new Mat(img.Size, DepthType.Cv8U, 3)) //image to draw circles on
-            using (Mat lineImage = new Mat(img.Size, DepthType.Cv8U, 3)) //image to drtaw lines on
+            using (Mat lineImage = new Mat(img.Size, DepthType.Cv8U, 3)) //image to draw lines on
             {
                 //Convert the image to grayscale and filter out the noise
                 CvInvoke.CvtColor(img, gray, ColorConversion.Bgr2Gray);
