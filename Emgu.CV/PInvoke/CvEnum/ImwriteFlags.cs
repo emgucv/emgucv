@@ -53,8 +53,36 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         PxmBinary = 32,
         /// <summary>
+        /// override EXR storage type (FLOAT (FP32) is default)
+        /// </summary>
+        ExrType = 48,
+        /// <summary>
         /// For WEBP, it can be a quality from 1 to 100 (the higher is the better). By default (without any parameter) and for quality above 100 the lossless compression is used.
         /// </summary>
-        WebpQuality = 64
+        WebpQuality = 64,
+        /// <summary>
+        /// For PAM, sets the TUPLETYPE field to the corresponding string value that is defined for the format
+        /// </summary>
+        PamTupletype = 128,
+        /// <summary>
+        /// For TIFF, use to specify which DPI resolution unit to set; see libtiff documentation for valid values
+        /// </summary>
+        TiffResunit = 256,
+        /// <summary>
+        /// For TIFF, use to specify the X direction DPI
+        /// </summary>
+        TiffXdpi = 257,
+        /// <summary>
+        /// For TIFF, use to specify the Y direction DPI
+        /// </summary>
+        TiffYdpi = 258,
+        /// <summary>
+        /// For TIFF, use to specify the image compression scheme. See libtiff for integer constants corresponding to compression formats. Note, for images whose depth is CV_32F, only libtiff's SGILOG compression scheme is used. For other supported depths, the compression scheme can be specified by this flag; LZW compression is the default.
+        /// </summary>
+        TiffCompression = 259,
+        /// <summary>
+        /// For JPEG2000, use to specify the target compression rate (multiplied by 1000). The value can be from 0 to 1000. Default is 1000.
+        /// </summary>
+        Jpeg2000CompressionX1000 = 272 
     }
 }
