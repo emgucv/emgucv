@@ -28,7 +28,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)PlanarSubdivisionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FeatureMatchingPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProcessAndRenderPage.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ShapeDetectionPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ShapeDetector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Simple3DReconstruct.cs" />
   </ItemGroup>
   <ItemGroup>

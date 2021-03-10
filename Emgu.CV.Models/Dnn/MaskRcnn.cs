@@ -97,20 +97,27 @@ namespace Emgu.CV.Models
             }
         }
 
-        String IProcessAndRenderModel.ProcessAndRender(IInputOutputArray image)
+        String IProcessAndRenderModel.ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
             Stopwatch watch = Stopwatch.StartNew();
-            ProcessAndRender(image, 0.5f, 0.4f);
+            ProcessAndRender(imageIn, imageOut, 0.5f, 0.4f);
             watch.Stop();
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
         }
 
-        public void ProcessAndRender(IInputOutputArray m, float matchScoreThreshold = 0.5f, float nmsThreshold = 0.4f)
+        public void ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut, float matchScoreThreshold = 0.5f, float nmsThreshold = 0.4f)
         {
-            MaskedObject[] objects = Detect(m, matchScoreThreshold, nmsThreshold);
+            MaskedObject[] objects = Detect(imageIn, matchScoreThreshold, nmsThreshold);
+            if (imageOut != imageIn)
+            {
+                using (InputArray iaImageIn = imageIn.GetInputArray())
+                {
+                    iaImageIn.CopyTo(imageOut);
+                }
+            }
             foreach (var obj in objects)
             {
-                obj.Render(m, new MCvScalar(0,0,255), _colors[obj.ClassId]);
+                obj.Render(imageOut, new MCvScalar(0,0,255), _colors[obj.ClassId]);
                 obj.Dispose();
             }
         }

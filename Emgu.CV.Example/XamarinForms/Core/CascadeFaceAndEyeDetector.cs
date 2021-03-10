@@ -18,7 +18,6 @@ namespace Emgu.CV.Models
 {
     public class CascadeFaceAndEyeDetector : IProcessAndRenderModel
     {
-
         private CascadeClassifier _faceCascadeClassifier = null;
         private CascadeClassifier _eyeCascadeClassifier = null;
 
@@ -86,28 +85,33 @@ namespace Emgu.CV.Models
             }
         }
 
-        public string ProcessAndRender(IInputOutputArray image)
+        public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
-            //using (InputOutputArray ioaImage = image.GetInputOutputArray())
-            //{
-                List<Rectangle> faces = new List<Rectangle>();
-                List<Rectangle> eyes = new List<Rectangle>();
+            List<Rectangle> faces = new List<Rectangle>();
+            List<Rectangle> eyes = new List<Rectangle>();
 
-                Stopwatch watch = Stopwatch.StartNew();
-                Detect(image, _faceCascadeClassifier, _eyeCascadeClassifier, faces, eyes);
-                watch.Stop();
+            Stopwatch watch = Stopwatch.StartNew();
+            Detect(imageIn, _faceCascadeClassifier, _eyeCascadeClassifier, faces, eyes);
+            watch.Stop();
 
-                //Draw the faces in red
-                foreach (Rectangle rect in faces)
-                    CvInvoke.Rectangle(image, rect, new MCvScalar(0, 0, 255), 2);
+            if (imageOut != imageIn)
+            {
+                using (InputArray iaImageIn = imageIn.GetInputArray())
+                {
+                    iaImageIn.CopyTo(imageOut);
+                }
+            }
 
-                //Draw the eyes in blue
-                foreach (Rectangle rect in eyes)
-                    CvInvoke.Rectangle(image, rect, new MCvScalar(255, 0, 0), 2);
+            //Draw the faces in red
+            foreach (Rectangle rect in faces)
+                CvInvoke.Rectangle(imageOut, rect, new MCvScalar(0, 0, 255), 2);
 
-                String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
-                return String.Format("Detected with {1} in {0} milliseconds.", watch.ElapsedMilliseconds, computeDevice);
-            //}
+            //Draw the eyes in blue
+            foreach (Rectangle rect in eyes)
+                CvInvoke.Rectangle(imageOut, rect, new MCvScalar(255, 0, 0), 2);
+
+            return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
+
         }
     }
 }

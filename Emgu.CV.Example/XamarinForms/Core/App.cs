@@ -192,7 +192,12 @@ namespace Emgu.CV.XamarinForms
 
             shapeDetectionButton.Clicked += (sender, args) =>
             {
-                MainPage.Navigation.PushAsync(new ShapeDetectionPage());
+                ProcessAndRenderPage shapeDetectionPage = new ProcessAndRenderPage(
+                    new ShapeDetector(),
+                    "Shape detection",
+                    "pic3.png",
+                    "Shape detection");
+                MainPage.Navigation.PushAsync(shapeDetectionPage);
             };
 
             pedestrianDetectionButton.Clicked += (sender, args) =>

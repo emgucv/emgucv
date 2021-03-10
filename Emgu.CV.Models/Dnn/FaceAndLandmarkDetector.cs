@@ -65,19 +65,27 @@ namespace Emgu.CV.Models
             await InitFacemark(onDownloadProgressChanged);
         }
 
-        public string ProcessAndRender(IInputOutputArray image)
+        public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
+            if (imageOut != imageIn)
+            {
+                using (InputArray iaImageIn = imageIn.GetInputArray())
+                {
+                    iaImageIn.CopyTo(imageOut);
+                }
+            }
+
             Stopwatch watch = Stopwatch.StartNew();
 
             List<DetectedObject> fullFaceRegions = new List<DetectedObject>();
             List<DetectedObject> partialFaceRegions = new List<DetectedObject>();
-            _faceDetector.Detect(image, fullFaceRegions, partialFaceRegions);
+            _faceDetector.Detect(imageIn, fullFaceRegions, partialFaceRegions);
 
             if (partialFaceRegions.Count > 0)
             {
                 foreach (DetectedObject face in partialFaceRegions)
                 {
-                    CvInvoke.Rectangle(image, face.Region, new MCvScalar(0, 255, 0));
+                    CvInvoke.Rectangle(imageOut, face.Region, new MCvScalar(0, 255, 0));
                 }
             }
 
@@ -85,19 +93,19 @@ namespace Emgu.CV.Models
             {
                 foreach (DetectedObject face in fullFaceRegions)
                 {
-                    CvInvoke.Rectangle(image, face.Region, new MCvScalar(0, 255, 0));
+                    CvInvoke.Rectangle(imageOut, face.Region, new MCvScalar(0, 255, 0));
                 }
 
                 var fullFaceRegionsArr = fullFaceRegions.ToArray();
                 var rectRegionArr = Array.ConvertAll(fullFaceRegionsArr, r => r.Region);
 
-                using (VectorOfVectorOfPointF landmarks = _facemarkDetector.Detect(image, rectRegionArr))
+                using (VectorOfVectorOfPointF landmarks = _facemarkDetector.Detect(imageIn, rectRegionArr))
                 {
                     int len = landmarks.Size;
                     for (int i = 0; i < len; i++)
                     {
                         using (VectorOfPointF vpf = landmarks[i])
-                            FaceInvoke.DrawFacemarks(image, vpf, new MCvScalar(255, 0, 0));
+                            FaceInvoke.DrawFacemarks(imageOut, vpf, new MCvScalar(255, 0, 0));
                     }
                 }
             }

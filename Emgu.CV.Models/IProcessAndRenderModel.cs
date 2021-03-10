@@ -27,10 +27,11 @@ namespace Emgu.CV.Models
         Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null);
 
         /// <summary>
-        /// Prcocess the image and render directly on it.
+        /// Process the input image and render into the output image
         /// </summary>
-        /// <param name="image">The image to process and render on.</param>
+        /// <param name="imageIn">The input image</param>
+        /// <param name="imageOut">The output image, can be the same as imageIn, in which case we will render directly into the input image</param>
         /// <returns>The messages that we want to display.</returns>
-        String ProcessAndRender(IInputOutputArray image);
+        String ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut);
     }
 }

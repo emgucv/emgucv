@@ -126,7 +126,7 @@ namespace Emgu.CV.Models
         /// <param name="confThreshold">The confident threshold. Only detection with confident larger than this will be returned.</param>
         /// <param name="nmsThreshold">If positive, will perform non-maximum suppression using the threshold value. If less than or equals to 0, will not perform Non-maximum suppression.</param>
         /// <returns>The detected objects</returns>
-        public DetectedObject[] Detect(IInputOutputArray image, double confThreshold = 0.5, double nmsThreshold = 0.5)
+        public DetectedObject[] Detect(IInputArray image, double confThreshold = 0.5, double nmsThreshold = 0.5)
         {
             if (_yoloDetectionModel == null)
             {
@@ -153,14 +153,22 @@ namespace Emgu.CV.Models
             await Init(YoloVersion.YoloV3, onDownloadProgressChanged);
         }
 
-        public String ProcessAndRender(IInputOutputArray image)
+        public String ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
             Stopwatch watch = Stopwatch.StartNew();
-            var detectedObjects = Detect(image);
+            var detectedObjects = Detect(imageIn);
             watch.Stop();
 
+            if (imageOut != imageIn)
+            {
+                using (InputArray iaImageIn = imageIn.GetInputArray())
+                {
+                    iaImageIn.CopyTo(imageOut);
+                }
+            }
+
             foreach (var detected in detectedObjects)
-                detected.Render(image, new MCvScalar(0, 0, 255));
+                detected.Render(imageOut, new MCvScalar(0, 0, 255));
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
         }
     }

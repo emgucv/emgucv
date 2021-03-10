@@ -234,12 +234,19 @@ namespace Emgu.CV.Models
             await InitOCR(onDownloadProgressChanged);
         }
 
-        public string ProcessAndRender(IInputOutputArray image)
+        public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
             Stopwatch watch = Stopwatch.StartNew();
-            Vehicle[] detectionResult = Detect(image);
+            Vehicle[] detectionResult = Detect(imageIn);
             watch.Stop();
-            Render(image, detectionResult);
+            if (imageOut != imageIn)
+            {
+                using (InputArray iaImageIn = imageIn.GetInputArray())
+                {
+                    iaImageIn.CopyTo(imageOut);
+                }
+            }
+            Render(imageOut, detectionResult);
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
         }
 

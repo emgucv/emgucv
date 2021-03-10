@@ -201,12 +201,19 @@ namespace Emgu.CV.Models
             }*/
         }
 
-        public String ProcessAndRender(IInputOutputArray image)
+        public String ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
             Stopwatch watch = Stopwatch.StartNew();
-            var sceneTexts = Detect(image);
+            var sceneTexts = Detect(imageIn);
             watch.Stop();
-            Render(image, sceneTexts);
+            if (imageOut != imageIn)
+            {
+                using (InputArray iaImageIn = imageIn.GetInputArray())
+                {
+                    iaImageIn.CopyTo(imageOut);
+                }
+            }
+            Render(imageOut, sceneTexts);
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
         }
 

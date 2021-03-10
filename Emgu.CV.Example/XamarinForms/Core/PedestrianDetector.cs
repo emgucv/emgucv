@@ -75,14 +75,23 @@ namespace Emgu.CV.Models
 
         }
 
-        public string ProcessAndRender(IInputOutputArray image)
+        public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
             Stopwatch watch = Stopwatch.StartNew();
-            Rectangle[] pedestrians = Find(image, _hog, _hogCuda);
+            Rectangle[] pedestrians = Find(imageIn, _hog, _hogCuda);
             watch.Stop();
+
+            if (imageOut != imageIn)
+            {
+                using (InputArray iaImageIn = imageIn.GetInputArray())
+                {
+                    iaImageIn.CopyTo(imageOut);
+                }
+            }
+
             foreach (Rectangle rect in pedestrians)
             {
-                CvInvoke.Rectangle(image, rect, new MCvScalar(0, 0, 255), 2);
+                CvInvoke.Rectangle(imageOut, rect, new MCvScalar(0, 0, 255), 2);
             }
 
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);

@@ -47,7 +47,8 @@ namespace Emgu.CV.XamarinForms
 #endif
     {
         private VideoCapture _capture = null;
-        private Mat _mat = null;
+        private Mat _mat;
+        private Mat _renderMat;
         private String _defaultButtonText;
         private IProcessAndRenderModel _detector;
 
@@ -87,14 +88,16 @@ namespace Emgu.CV.XamarinForms
             if (_mat == null)
                 _mat = new Mat();
             _capture.Retrieve(_mat);
-            Stopwatch watch = Stopwatch.StartNew();
+            
+            if (_renderMat == null)
+                _renderMat = new Mat();
 
-            _detector.ProcessAndRender(_mat);
-            watch.Stop();
-            SetImage(_mat);
+            String msg = _detector.ProcessAndRender(_mat, _renderMat);
+            
+            SetImage(_renderMat);
             this.DisplayImage.BackgroundColor = Color.Black;
             this.DisplayImage.IsEnabled = true;
-            SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
+            SetMessage(msg);
         }
 
         private async void OnButtonClicked(Object sender, EventArgs args)
@@ -169,15 +172,13 @@ namespace Emgu.CV.XamarinForms
             }
             else
             {
-                Stopwatch watch = Stopwatch.StartNew();
-                String message = _detector.ProcessAndRender(images[0]);
-                watch.Stop();
-
-                SetImage(images[0]);
+                
+                if (_renderMat == null)
+                    _renderMat = new Mat();
+                String message = _detector.ProcessAndRender(images[0], _renderMat);
+                
+                SetImage(_renderMat);
                 SetMessage(message);
-
-                //String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
-                //SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
             }
         }
 
