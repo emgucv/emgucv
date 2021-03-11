@@ -40,7 +40,7 @@ void cveImdecode(cv::_InputArray* buf, int flags, cv::Mat* dst)
 {
    cv::imdecode(*buf, flags, dst);
 }
-void cveImencode(cv::String* ext, cv::_InputArray* img, std::vector< unsigned char >* buf, std::vector< int >* params)
+bool cveImencode(cv::String* ext, cv::_InputArray* img, std::vector< unsigned char >* buf, std::vector< int >* params)
 {
-   cv::imencode(*ext, *img, *buf, params ? *params : std::vector<int>());
+   return cv::imencode(*ext, *img, *buf, params ? *params : std::vector<int>());
 }

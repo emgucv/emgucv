@@ -211,12 +211,13 @@ namespace Emgu.CV
         /// <param name="ext">The image format</param>
         /// <param name="image">The image</param>
         /// <param name="parameters">The pointer to the array of integers, which contains the parameter for encoding, use IntPtr.Zero for default</param>
-        /// <returns>Byte array that contains the image in the specific image format.</returns>
+        /// <returns>Byte array that contains the image in the specific image format. If failed to encode, return null</returns>
         public static byte[] Imencode(String ext, IInputArray image, params KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
         {
             using (VectorOfByte vb = new VectorOfByte())
             {
-                Imencode(ext, image, vb, parameters);
+                if (!Imencode(ext, image, vb, parameters))
+                    return null;
                 return vb.ToArray();
             }
         }
@@ -228,18 +229,20 @@ namespace Emgu.CV
         /// <param name="image">The image</param>
         /// <param name="buf">Output buffer resized to fit the compressed image.</param>
         /// <param name="parameters">The pointer to the array of integers, which contains the parameter for encoding, use IntPtr.Zero for default</param>
-        public static void Imencode(String ext, IInputArray image, VectorOfByte buf, params KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
+        public static bool Imencode(String ext, IInputArray image, VectorOfByte buf, params KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
         {
             using (CvString extStr = new CvString(ext))
             using (VectorOfInt p = new VectorOfInt())
             {
                 PushParameters(p, parameters);
                 using (InputArray iaImage = image.GetInputArray())
-                    cveImencode(extStr, iaImage, buf, p);
+                    return cveImencode(extStr, iaImage, buf, p);
             }
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveImencode(IntPtr ext, IntPtr image, IntPtr buffer, IntPtr parameters);
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveImencode(IntPtr ext, IntPtr image, IntPtr buffer, IntPtr parameters);
 
 
     }
