@@ -24,6 +24,11 @@ namespace Emgu.CV.Models
     /// </summary>
     public interface IProcessAndRenderModel
     {
+        /// <summary>
+        /// Download and initialize the model
+        /// </summary>
+        /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
+        /// <returns>Async task</returns>
         Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null);
 
         /// <summary>

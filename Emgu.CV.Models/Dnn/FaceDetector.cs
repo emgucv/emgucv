@@ -78,6 +78,8 @@ namespace Emgu.CV.Models
         /// <param name="image">The image.</param>
         /// <param name="fullFaceRegions">The faces where a full facial region is detected. These images can be send to facial landmark recognition for further processing.</param>
         /// <param name="partialFaceRegions">The face region of which is close to the edge of the images. Because if may not contains all the facial landmarks, it is not recommended to send these regions to facial landmark detection.</param>
+        /// <param name="confidenceThreshold">The confident threshold for face detection</param>
+        /// <param name="nmsThreshold">The non maximum suppression threshold for face detection.</param>
         public void Detect(IInputArray image, List<DetectedObject> fullFaceRegions, List<DetectedObject> partialFaceRegions, float confidenceThreshold = 0.5f, float nmsThreshold = 0.0f)
         {
             using (InputArray iaImage = image.GetInputArray())

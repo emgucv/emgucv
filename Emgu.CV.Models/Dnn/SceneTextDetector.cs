@@ -24,6 +24,10 @@ namespace Emgu.CV.Models
     /// </summary>
     public class SceneTextDetector : DisposableObject, IProcessAndRenderModel
     {
+        /// <summary>
+        /// Create a new SceneTextDetector
+        /// </summary>
+        /// <param name="modelFolderName">The subfolder name where the model will be saved to.</param>
         public SceneTextDetector(String modelFolderName = "scene_text_detector")
         {
             _modelFolderName = modelFolderName;
@@ -201,6 +205,12 @@ namespace Emgu.CV.Models
             }*/
         }
 
+        /// <summary>
+        /// Process the input image and render into the output image
+        /// </summary>
+        /// <param name="imageIn">The input image</param>
+        /// <param name="imageOut">The output image, can be the same as imageIn, in which case we will render directly into the input image</param>
+        /// <returns>The messages that we want to display.</returns>
         public String ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
             Stopwatch watch = Stopwatch.StartNew();
@@ -217,6 +227,9 @@ namespace Emgu.CV.Models
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
         }
 
+        /// <summary>
+        /// Release the memory associated with this scene text detector.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_textDetector != null)

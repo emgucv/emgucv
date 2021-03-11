@@ -32,6 +32,11 @@ namespace Emgu.CV.Models
 
         private String[] _objectsOfInterest = null;
 
+        /// <summary>
+        /// Get or Set the list of object of interest.
+        /// If null, all detected objects will be returned during the detection.
+        /// Otherwise, only those objects with a label included in the list will be returned.
+        /// </summary>
         public String[] ObjectsOfInterest
         {
             get { return _objectsOfInterest; }
@@ -97,6 +102,12 @@ namespace Emgu.CV.Models
             }
         }
 
+        /// <summary>
+        /// Process the input image and render into the output image
+        /// </summary>
+        /// <param name="imageIn">The input image</param>
+        /// <param name="imageOut">The output image, can be the same as imageIn, in which case we will render directly into the input image</param>
+        /// <returns>The messages that we want to display.</returns>
         String IProcessAndRenderModel.ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
             Stopwatch watch = Stopwatch.StartNew();
@@ -105,6 +116,14 @@ namespace Emgu.CV.Models
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
         }
 
+        /// <summary>
+        /// Process the input image and render into the output image
+        /// </summary>
+        /// <param name="imageIn">The input image</param>
+        /// <param name="imageOut">The output image, can be the same as imageIn, in which case we will render directly into the input image</param>
+        /// <param name="matchScoreThreshold">A threshold used to filter boxes by score.</param>
+        /// <param name="nmsThreshold">A threshold used in non maximum suppression.</param>
+        /// <returns>The messages that we want to display.</returns>
         public void ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut, float matchScoreThreshold = 0.5f, float nmsThreshold = 0.4f)
         {
             MaskedObject[] objects = Detect(imageIn, matchScoreThreshold, nmsThreshold);
@@ -122,14 +141,19 @@ namespace Emgu.CV.Models
             }
         }
 
-
+        /// <summary>
+        /// Perform detection on the input image and return the results
+        /// </summary>
+        /// <param name="m">The input image</param>
+        /// <param name="matchScoreThreshold">A threshold used to filter boxes by score.</param>
+        /// <param name="nmsThreshold">A threshold used in non maximum suppression.</param>
+        /// <returns>The detected objects</returns>
         public MaskedObject[] Detect(IInputArray m, float matchScoreThreshold = 0.5f, float nmsThreshold = 0.4f)
         {
             using (InputArray iaM = m.GetInputArray())
             using (Mat blob = DnnInvoke.BlobFromImage(m))
             using (VectorOfMat tensors = new VectorOfMat())
             {
-                
                 _maskRcnnDetector.SetInput(blob, "image_tensor");
                 _maskRcnnDetector.Forward(tensors, new string[] { "detection_out_final", "detection_masks" });
 

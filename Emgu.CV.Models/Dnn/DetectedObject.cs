@@ -42,6 +42,8 @@ namespace Emgu.CV.Models
         /// Draw the detected object on the image
         /// </summary>
         /// <param name="image">The image to draw on</param>
+        /// <param name="color">The color to draw the rectangle around the detected object</param>
+        /// <param name="freetype2">Optional freetype2 object, if provided, it will be used to draw the label. If null, will use CvInvoke.PutText instead.</param>
         public virtual void Render(IInputOutputArray image, MCvScalar color, Freetype2 freetype2 = null)
         {
             CvInvoke.Rectangle(image, this.Region, color, 2);
@@ -89,8 +91,19 @@ namespace Emgu.CV.Models
 
     }
 
+    /// <summary>
+    /// Extesnion functions for Emgu.CV.Dnn.DetectionModel
+    /// </summary>
     public static class ModelExtension
     {
+        /// <summary>
+        /// Given the input frame, create input blob, run net and return result detections.
+        /// </summary>
+        /// <param name="model">The Dnn DetectionModel</param>
+        /// <param name="frame">The input image.</param>
+        /// <param name="confThreshold">A threshold used to filter boxes by confidences.</param>
+        /// <param name="nmsThreshold">A threshold used in non maximum suppression. The default value 0 means we will not perform non-maximum supression.</param>
+        /// <param name="labels">Optional labels mapping, if provided, it will use classId as lookup index to get the Label. If null, the Label field of the DetectedObject will be null.</param>
         public static DetectedObject[] Detect(
             this Emgu.CV.Dnn.DetectionModel model,
             IInputArray frame,

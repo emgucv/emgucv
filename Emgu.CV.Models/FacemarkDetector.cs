@@ -70,6 +70,9 @@ namespace Emgu.CV.Models
             }
         }
 
+        /// <summary>
+        /// Release the memory associated with this facemark detector.
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_facemark != null)

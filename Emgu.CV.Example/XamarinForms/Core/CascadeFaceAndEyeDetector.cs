@@ -66,6 +66,12 @@ namespace Emgu.CV.Models
 
         }
 
+
+        /// <summary>
+        /// Download and initialize the face and eye cascade classifier detection model
+        /// </summary>
+        /// <param name="onDownloadProgressChanged">Call back method during download</param>
+        /// <returns>Asyn task</returns>
         public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
             if (_faceCascadeClassifier == null && _eyeCascadeClassifier == null)

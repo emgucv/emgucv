@@ -24,6 +24,9 @@ using Rectangle = System.Drawing.Rectangle;
 
 namespace Emgu.CV.Models
 {
+    /// <summary>
+    /// A DetectedObject associated with a mask
+    /// </summary>
     public class MaskedObject : DetectedObject, IDisposable
     {
         /// <summary> Track whether Dispose has been called. </summary>
@@ -54,6 +57,7 @@ namespace Emgu.CV.Models
         /// <param name="image">The image to draw on</param>
         /// <param name="color">The color used for drawing the region</param>
         /// <param name="maskColor">The color used for drawing the mask</param>
+        /// <param name="freetype2">Optional freetype2 object, if provided, it will be used to draw the label. If null, will use CvInvoke.PutText instead.</param>
         public virtual void Render(IInputOutputArray image, MCvScalar color, MCvScalar maskColor, Freetype2 freetype2 = null)
         {
             base.Render(image, color, freetype2);

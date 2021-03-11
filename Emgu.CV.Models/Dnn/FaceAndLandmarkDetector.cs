@@ -21,11 +21,17 @@ using Emgu.Util;
 
 namespace Emgu.CV.Models
 {
+    /// <summary>
+    /// Face and facial landmark detector
+    /// </summary>
     public class FaceAndLandmarkDetector : DisposableObject, IProcessAndRenderModel
     {
         private FaceDetector _faceDetector = null;
         private FacemarkDetector _facemarkDetector = null;
 
+        /// <summary>
+        /// Release the memory associated with this face and facial landmark detector
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_faceDetector != null)
@@ -59,12 +65,23 @@ namespace Emgu.CV.Models
             }
         }
 
+        /// <summary>
+        /// Download and initialize the DNN face and facemark detector
+        /// </summary>
+        /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
+        /// <returns>Async task</returns>
         public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
             await InitFaceDetector(onDownloadProgressChanged);
             await InitFacemark(onDownloadProgressChanged);
         }
 
+        /// <summary>
+        /// Process the input image and render into the output image
+        /// </summary>
+        /// <param name="imageIn">The input image</param>
+        /// <param name="imageOut">The output image, can be the same as imageIn, in which case we will render directly into the input image</param>
+        /// <returns>The messages that we want to display.</returns>
         public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
             if (imageOut != imageIn)
