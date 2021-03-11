@@ -20,11 +20,11 @@ IF ((TARGET Emgu.CV.Platform.NetStandard) AND (HAVE_WINDESKTOP_X86 OR HAVE_WINDE
   	ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.runtime.windows.cuda.fft.nuget Emgu.runtime.windows.cuda.dnn.cnn.nuget Emgu.runtime.windows.cuda.dnn.ops.nuget Emgu.runtime.windows.cuda.dnn.adv.nuget Emgu.runtime.windows.cuda.blas.nuget Emgu.runtime.windows.cuda.npp.nuget)
   ENDIF()
 
-  IF (HAVE_WINDESKTOP_X64)
+  IF (TARGET Emgu.runtime.windows.msvc.rt.x64.nuget)
   	ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.runtime.windows.msvc.rt.x64.nuget)
   ENDIF()
 
-  IF (HAVE_WINDESKTOP_X86)
+  IF (TARGET Emgu.runtime.windows.msvc.rt.x86.nuget)
   	ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.runtime.windows.msvc.rt.x86.nuget)
   ENDIF()
 

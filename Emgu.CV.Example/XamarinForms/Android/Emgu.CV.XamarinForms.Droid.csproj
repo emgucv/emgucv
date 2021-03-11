@@ -52,7 +52,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <AndroidLinkMode>None</AndroidLinkMode>
     <AotAssemblies>false</AotAssemblies>
     <EnableLLVM>false</EnableLLVM>
     <BundleAssemblies>false</BundleAssemblies>
@@ -119,6 +119,9 @@
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
+    </PackageReference>
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>2.1.0.4</Version>
     </PackageReference>
@@ -264,6 +267,10 @@
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Emgu.CV.Models\Emgu.CV.Models.csproj">
+      <Project>{f8917cae-56a6-4be6-84a7-feff6ec72a0a}</Project>
+      <Name>Emgu.CV.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Emgu.CV.Platform\Android\Emgu.CV.Platform.Android.csproj">
       <Project>{5f102c71-65c3-4d77-ae48-29c1e75f82be}</Project>
       <Name>Emgu.CV.Platform.Android</Name>

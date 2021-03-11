@@ -17,7 +17,7 @@ using Plugin.CurrentActivity;
 
 namespace Emgu.CV.XamarinForms.Droid
 {
-    [Activity(Label = "Emgu.CV.XamarinForms", Icon = "@drawable/ic_launcher", MainLauncher = true,
+    [Activity(Label = "Emgu CV", Icon = "@drawable/ic_launcher", MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
     {

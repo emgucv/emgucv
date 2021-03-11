@@ -30,7 +30,6 @@ using Emgu.CV.Face;
 using Emgu.CV.Models;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-//using Emgu.Models;
 using Emgu.Util;
 using Color = Xamarin.Forms.Color;
 using Environment = System.Environment;
@@ -50,7 +49,7 @@ namespace Emgu.CV.XamarinForms
         private Mat _mat;
         private Mat _renderMat;
         private String _defaultButtonText;
-        private IProcessAndRenderModel _detector;
+        private IProcessAndRenderModel _model;
 
         private String _StopCameraButtonText = "Stop Camera";
         private String _deaultImage;
@@ -59,7 +58,7 @@ namespace Emgu.CV.XamarinForms
         private bool _isBusy = false;
 #endif
         public ProcessAndRenderPage( 
-            IProcessAndRenderModel detector, 
+            IProcessAndRenderModel model, 
             String defaultButtonText,
             String defaultImage,
             String defaultLabelText = null
@@ -80,7 +79,7 @@ namespace Emgu.CV.XamarinForms
             var label = this.GetLabel();
             label.Text = defaultLabelText;
 
-            _detector = detector;
+            _model = model;
         }
 
         private void _capture_ImageGrabbed(object sender, EventArgs e)
@@ -92,7 +91,7 @@ namespace Emgu.CV.XamarinForms
             if (_renderMat == null)
                 _renderMat = new Mat();
 
-            String msg = _detector.ProcessAndRender(_mat, _renderMat);
+            String msg = _model.ProcessAndRender(_mat, _renderMat);
             
             SetImage(_renderMat);
             this.DisplayImage.BackgroundColor = Color.Black;
@@ -127,7 +126,7 @@ namespace Emgu.CV.XamarinForms
             SetMessage("Please wait...");
             SetImage(null);
 
-            await _detector.Init(DownloadManager_OnDownloadProgressChanged);
+            await _model.Init(DownloadManager_OnDownloadProgressChanged);
 
             if (images.Length == 0)
             {
@@ -142,15 +141,16 @@ namespace Emgu.CV.XamarinForms
                         _isBusy = true;
                         try
                         {
-                            Stopwatch watch = Stopwatch.StartNew();
+                            String message = String.Empty;
                             await Task.Run(() => 
                             {
-                                var vehicles = _detector.Detect(_mat);
-                                _detector.Render(_mat, vehicles);
+                                if (_renderMat == null)
+                                    _renderMat = new Mat();
+                                message = _model.ProcessAndRender(m, _renderMat);
                             });
-                            watch.Stop();
-                            SetImage(m);
-                            SetMessage(String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds));
+                            SetImage(_renderMat);
+                            SetMessage(message);
+
                         }
                         finally
                         {
@@ -175,19 +175,39 @@ namespace Emgu.CV.XamarinForms
                 
                 if (_renderMat == null)
                     _renderMat = new Mat();
-                String message = _detector.ProcessAndRender(images[0], _renderMat);
+                String message = _model.ProcessAndRender(images[0], _renderMat);
                 
                 SetImage(_renderMat);
                 SetMessage(message);
             }
         }
 
-        private void DownloadManager_OnDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
+
+        private static String ByteToSizeStr(long byteCount)
         {
-            if (e.TotalBytesToReceive <= 0)
-                SetMessage(String.Format("{0} bytes downloaded.", e.BytesReceived));
+            if (byteCount < 1024)
+            {
+                return String.Format("{0} B", byteCount);
+            }
+            else if (byteCount < 1024 * 1024)
+            {
+                return String.Format("{0} KB", byteCount / 1024);
+            }
             else
-                SetMessage(String.Format("{0} of {1} bytes downloaded ({2}%)", e.BytesReceived, e.TotalBytesToReceive, e.ProgressPercentage));
+            {
+                return String.Format("{0} MB", byteCount / (1024 * 1024));
+            }
         }
+
+        protected void DownloadManager_OnDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
+        {
+            String msg;
+            if (e.TotalBytesToReceive > 0)
+                msg = String.Format("{0} of {1} downloaded ({2}%)", ByteToSizeStr(e.BytesReceived), ByteToSizeStr(e.TotalBytesToReceive), e.ProgressPercentage);
+            else
+                msg = String.Format("{0} downloaded", ByteToSizeStr(e.BytesReceived));
+            SetMessage(msg);
+        }
+        
     }
 }
