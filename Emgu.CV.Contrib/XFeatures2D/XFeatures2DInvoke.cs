@@ -62,7 +62,7 @@ namespace Emgu.CV.XFeatures2D
             bool withScale, 
             double thresholdFactor);
 
-        public void MatchLOGOS(
+        public static void MatchLOGOS(
             VectorOfKeyPoint keypoints1,
             VectorOfKeyPoint keypoints2,
             VectorOfInt nn1,
