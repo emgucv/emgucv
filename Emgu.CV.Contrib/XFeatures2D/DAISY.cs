@@ -17,7 +17,7 @@ using Emgu.CV.Features2D;
 namespace Emgu.CV.XFeatures2D
 {
     /// <summary>
-    /// Daisy descriptor.
+    /// DAISY descriptor.
     /// </summary>
     public class DAISY : Feature2D
     {
@@ -68,7 +68,7 @@ namespace Emgu.CV.XFeatures2D
         }
 
         /// <summary>
-        /// Release all the unmanaged resource associated with BRIEF
+        /// Release all the unmanaged resource associated with DAISY
         /// </summary>
         protected override void DisposeObject()
         {

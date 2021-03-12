@@ -61,6 +61,30 @@ namespace Emgu.CV.XFeatures2D
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool withScale, 
             double thresholdFactor);
+
+        public void MatchLOGOS(
+            VectorOfKeyPoint keypoints1,
+            VectorOfKeyPoint keypoints2,
+            VectorOfInt nn1,
+            VectorOfInt nn2,
+            VectorOfDMatch matches1to2)
+        {
+            cveMatchLOGOS(
+                keypoints1,
+                keypoints2,
+                nn1,
+                nn2,
+                matches1to2
+                );
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveMatchLOGOS(
+            IntPtr keypoints1, 
+            IntPtr keypoints2,
+            IntPtr nn1, 
+            IntPtr nn2,
+            IntPtr matches1to2);
     }
 }
 

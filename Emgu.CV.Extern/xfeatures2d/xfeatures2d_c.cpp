@@ -6,6 +6,66 @@
 
 #include "xfeatures2d_c.h"
 
+//BEBLID
+cv::xfeatures2d::BEBLID* cveBEBLIDCreate(
+	float scaleFactor,
+	int nBits,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::xfeatures2d::BEBLID>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_XFEATURES2D
+	cv::Ptr<cv::xfeatures2d::BEBLID> detectorPtr = cv::xfeatures2d::BEBLID::create(
+		scaleFactor,
+		nBits);
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::BEBLID>(detectorPtr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(detectorPtr.get());
+	return detectorPtr.get();
+#else
+	throw_no_xfeatures2d();
+#endif
+}
+void cveBEBLIDRelease(cv::Ptr<cv::xfeatures2d::BEBLID>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_XFEATURES2D
+	delete* sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_xfeatures2d();
+#endif
+}
+
+//TBMR
+cv::xfeatures2d::TBMR* cveTBMRCreate(
+	int minArea,
+	float maxAreaRelative,
+	float scaleFactor,
+	int nScales,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::xfeatures2d::TBMR>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_XFEATURES2D
+	cv::Ptr<cv::xfeatures2d::TBMR> detectorPtr = cv::xfeatures2d::TBMR::create(
+		minArea,
+		maxAreaRelative,
+		scaleFactor,
+		nScales);
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::TBMR>(detectorPtr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(detectorPtr.get());
+	return detectorPtr.get();
+#else
+	throw_no_xfeatures2d();
+#endif
+}
+void cveTBMRRelease(cv::Ptr<cv::xfeatures2d::TBMR>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_XFEATURES2D
+	delete* sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_xfeatures2d();
+#endif
+}
+
 //StarDetector
 cv::xfeatures2d::StarDetector* cveStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::StarDetector>** sharedPtr)
 {
@@ -220,32 +280,6 @@ void cveBoostDescRelease(cv::Ptr<cv::xfeatures2d::BoostDesc>** sharedPtr)
 #endif
 }
 
-//MSD
-cv::xfeatures2d::MSDDetector* cveMSDDetectorCreate(int m_patch_radius, int m_search_area_radius,
-	int m_nms_radius, int m_nms_scale_radius, float m_th_saliency, int m_kNN,
-	float m_scale_factor, int m_n_scales, bool m_compute_orientation, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::MSDDetector>** sharedPtr)
-{
-#ifdef HAVE_OPENCV_XFEATURES2D
-	cv::Ptr<cv::xfeatures2d::MSDDetector> ptr = cv::xfeatures2d::MSDDetector::create(
-		m_patch_radius, m_search_area_radius, m_nms_radius, m_nms_scale_radius, m_th_saliency,
-		m_kNN, m_scale_factor, m_n_scales, m_compute_orientation);
-	*sharedPtr = new cv::Ptr<cv::xfeatures2d::MSDDetector>(ptr);
-	*feature2D = dynamic_cast<cv::Feature2D*>(ptr.get());
-	return ptr.get();
-#else
-	throw_no_xfeatures2d();
-#endif
-}
-void cveMSDDetectorRelease(cv::Ptr<cv::xfeatures2d::MSDDetector>** sharedPtr)
-{
-#ifdef HAVE_OPENCV_XFEATURES2D
-	delete *sharedPtr;
-	*sharedPtr = 0;
-#else
-	throw_no_xfeatures2d();
-#endif
-}
-
 //VGG
 cv::xfeatures2d::VGG* cveVGGCreate(
 	int desc, float isigma, bool imgNormalize, bool useScaleOrientation,
@@ -407,6 +441,20 @@ void cveMatchGMS(
 {
 #ifdef HAVE_OPENCV_XFEATURES2D
 	cv::xfeatures2d::matchGMS(*size1, *size2, *keypoints1, *keypoints2, *matches1to2, *matchesGMS, withRotation, withScale, thresholdFactor);
+#else
+	throw_no_xfeatures2d();
+#endif
+}
+
+void cveMatchLOGOS(
+	std::vector< cv::KeyPoint >*keypoints1,
+	std::vector< cv::KeyPoint >*keypoints2,
+	std::vector< int >* nn1,
+	std::vector< int >* nn2,
+	std::vector< cv::DMatch >* matches1to2)
+{
+#ifdef HAVE_OPENCV_XFEATURES2D
+	cv::xfeatures2d::matchLOGOS(*keypoints1, *keypoints2, *nn1, *nn2, *matches1to2);
 #else
 	throw_no_xfeatures2d();
 #endif

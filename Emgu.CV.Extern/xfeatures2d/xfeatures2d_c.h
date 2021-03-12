@@ -18,6 +18,8 @@ static inline CV_NORETURN void throw_no_xfeatures2d() { CV_Error(cv::Error::StsB
 namespace cv {
 
 	namespace xfeatures2d {
+		class BEBLID {};
+		class TBMR {};
 		class StarDetector {};
 		class FREAK {};
 		class BriefDescriptorExtractor {};
@@ -35,6 +37,24 @@ namespace cv {
 }
 #endif
 
+//BEBLID
+CVAPI(cv::xfeatures2d::BEBLID*) cveBEBLIDCreate(
+	float scaleFactor, 
+	int nBits, 
+	cv::Feature2D** feature2D, 
+	cv::Ptr<cv::xfeatures2d::BEBLID>** sharedPtr);
+CVAPI(void) cveBEBLIDRelease(cv::Ptr<cv::xfeatures2d::BEBLID>** sharedPtr);
+
+//TBMR
+CVAPI(cv::xfeatures2d::TBMR*) cveTBMRCreate(
+	int minArea,
+	float maxAreaRelative,
+	float scaleFactor,
+	int nScales, 
+	cv::Feature2D** feature2D, 
+	cv::Ptr<cv::xfeatures2d::TBMR>** sharedPtr);
+CVAPI(void) cveTBMRRelease(cv::Ptr<cv::xfeatures2d::TBMR>** sharedPtr);
+
 //StarDetector
 CVAPI(cv::xfeatures2d::StarDetector*) cveStarDetectorCreate(int maxSize, int responseThreshold, int lineThresholdProjected, int lineThresholdBinarized, int suppressNonmaxSize, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::StarDetector>** sharedPtr);
 CVAPI(void) cveStarDetectorRelease(cv::Ptr<cv::xfeatures2d::StarDetector>** sharedPtr);
@@ -48,6 +68,7 @@ CVAPI(cv::xfeatures2d ::GridAdaptedFeatureDetector*) GridAdaptedFeatureDetectorC
 
 CVAPI(void) GridAdaptedFeatureDetectorRelease(cv::GridAdaptedFeatureDetector** detector);
 */
+
 //Freak
 CVAPI(cv::xfeatures2d::FREAK*) cveFreakCreate(bool orientationNormalized, bool scaleNormalized, float patternScale, int nOctaves, cv::Feature2D** descriptorExtractor, cv::Ptr<cv::xfeatures2d::FREAK>** sharedPtr);
 CVAPI(void) cveFreakRelease(cv::Ptr<cv::xfeatures2d::FREAK>** sharedPtr);
@@ -133,4 +154,11 @@ CVAPI(void) cveMatchGMS(
 	std::vector< cv::KeyPoint >* keypoints1, std::vector< cv::KeyPoint >* keypoints2,
 	std::vector< cv::DMatch >* matches1to2, std::vector< cv::DMatch >* matchesGMS,
 	bool withRotation, bool withScale, double thresholdFactor);
+
+CVAPI(void) cveMatchLOGOS(
+	std::vector< cv::KeyPoint >* keypoints1, 
+	std::vector< cv::KeyPoint >* keypoints2,
+	std::vector< int >* nn1, 
+	std::vector< int >* nn2,
+	std::vector< cv::DMatch >* matches1to2);
 #endif
