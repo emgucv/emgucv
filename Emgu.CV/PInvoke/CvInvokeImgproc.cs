@@ -797,8 +797,14 @@ namespace Emgu.CV
         /// <param name="anchor">Anchor point; default value Point(-1,-1) means that the anchor is at the kernel center.</param>
         /// <param name="normalize">Specifying whether the kernel is normalized by its area or not.</param>
         /// <param name="borderType">Border mode used to extrapolate pixels outside of the image.</param>
-        public static void BoxFilter(IInputArray src, IOutputArray dst, DepthType ddepth, Size ksize, Point anchor,
-           bool normalize = true, CvEnum.BorderType borderType = BorderType.Default)
+        public static void BoxFilter(
+            IInputArray src, 
+            IOutputArray dst, 
+            DepthType ddepth, 
+            Size ksize, 
+            Point anchor,
+            bool normalize = true, 
+            CvEnum.BorderType borderType = BorderType.Default)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())

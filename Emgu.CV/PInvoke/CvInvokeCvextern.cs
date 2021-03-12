@@ -259,8 +259,13 @@ namespace Emgu.CV
         /// <param name="anchor">The anchor of the kernel that indicates the relative position of a filtered point within the kernel. The anchor shoud lie within the kernel. The special default value (-1,-1) means that it is at the kernel center</param>
         /// <param name="delta">The optional value added to the filtered pixels before storing them in dst</param>
         /// <param name="borderType">The pixel extrapolation method.</param>
-        public static void Filter2D(IInputArray src, IOutputArray dst, IInputArray kernel, Point anchor, double delta = 0,
-           Emgu.CV.CvEnum.BorderType borderType = CvEnum.BorderType.Default)
+        public static void Filter2D(
+            IInputArray src, 
+            IOutputArray dst, 
+            IInputArray kernel, 
+            Point anchor, 
+            double delta = 0,
+            Emgu.CV.CvEnum.BorderType borderType = CvEnum.BorderType.Default)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
@@ -283,7 +288,15 @@ namespace Emgu.CV
         /// <param name="anchor">Anchor position within the kernel. The value (-1,-1) means that the anchor is at the kernel center.</param>
         /// <param name="delta">Value added to the filtered results before storing them.</param>
         /// <param name="borderType">Pixel extrapolation method</param>
-        public static void SepFilter2D(IInputArray src, IOutputArray dst, CvEnum.DepthType ddepth, IInputArray kernelX, IInputArray kernelY, Point anchor, double delta = 0, CvEnum.BorderType borderType = CvEnum.BorderType.Default)
+        public static void SepFilter2D(
+            IInputArray src, 
+            IOutputArray dst, 
+            CvEnum.DepthType ddepth, 
+            IInputArray kernelX, 
+            IInputArray kernelY, 
+            Point anchor, 
+            double delta = 0, 
+            CvEnum.BorderType borderType = CvEnum.BorderType.Default)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())

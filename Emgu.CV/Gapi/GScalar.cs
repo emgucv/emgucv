@@ -16,28 +16,31 @@ using System.IO;
 namespace Emgu.CV
 {
     /// <summary>
-    /// The equivalent of cv::GMat
+    /// The equivalent of cv::GScalar
     /// </summary>
-    
-    public partial class GMat : UnmanagedObject
+
+    public partial class GScalar : UnmanagedObject
     {
-        internal bool _needDispose;
-        internal GMat(IntPtr ptr, bool needDispose)
+        internal GScalar(IntPtr ptr)
         {
             _ptr = ptr;
-            _needDispose = needDispose;
         }
 
-        public GMat()
-            : this(GapiInvoke.cveGMatCreate(), true)
+        public GScalar(MCvScalar value)
+        {
+            _ptr = GapiInvoke.cveGScalarCreate(ref value);
+        }
+
+        public GScalar(double value)
+            : this(new MCvScalar(value))
         {
         }
 
         protected override void DisposeObject()
         {
-            if (_needDispose && (IntPtr.Zero == _ptr))
+            if (IntPtr.Zero == _ptr)
             {
-                GapiInvoke.cveGMatRelease(ref _ptr);
+                GapiInvoke.cveGScalarRelease(ref _ptr);
             }
         }
     }
@@ -45,10 +48,10 @@ namespace Emgu.CV
     public static partial class GapiInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveGMatCreate();
+        internal extern static IntPtr cveGScalarCreate(ref MCvScalar value);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveGMatRelease(ref IntPtr gmat);
+        internal extern static void cveGScalarRelease(ref IntPtr gscalar);
 
     }
 }

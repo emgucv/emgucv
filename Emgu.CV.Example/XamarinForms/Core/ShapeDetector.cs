@@ -29,25 +29,24 @@ namespace Emgu.CV.Models
             using (Mat cannyEdges = new Mat())
             {
                 Stopwatch watch = Stopwatch.StartNew();
+
+                #region Pre-processing
                 //Convert the image to grayscale and filter out the noise
                 CvInvoke.CvtColor(imageIn, gray, ColorConversion.Bgr2Gray);
-
                 //Remove noise
                 CvInvoke.GaussianBlur(gray, gray, new Size(3, 3), 1);
-                
-                #region circle detection
-
                 double cannyThreshold = 180.0;
+                double cannyThresholdLinking = 120.0;
+                CvInvoke.Canny(gray, cannyEdges, cannyThreshold, cannyThresholdLinking);
+                #endregion
+
+                #region circle detection
                 double circleAccumulatorThreshold = 120;
                 CircleF[] circles = CvInvoke.HoughCircles(gray, HoughModes.Gradient, 2.0, 20.0, cannyThreshold,
                     circleAccumulatorThreshold, 5);
-
                 #endregion
 
-                #region Canny and edge detection
-
-                double cannyThresholdLinking = 120.0;
-                CvInvoke.Canny(gray, cannyEdges, cannyThreshold, cannyThresholdLinking);
+                #region Edge detection
                 LineSegment2D[] lines = CvInvoke.HoughLinesP(
                     cannyEdges,
                     1, //Distance resolution in pixel-related units
@@ -55,11 +54,9 @@ namespace Emgu.CV.Models
                     20, //threshold
                     30, //min Line width
                     10); //gap between lines
-
                 #endregion
 
                 #region Find triangles and rectangles
-
                 List<Triangle2DF> triangleList = new List<Triangle2DF>();
                 List<RotatedRect> boxList = new List<RotatedRect>(); //a box is a rotated rectangle
                 using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
@@ -113,7 +110,6 @@ namespace Emgu.CV.Models
                         }
                     }
                 }
-
                 #endregion
 
                 watch.Stop();

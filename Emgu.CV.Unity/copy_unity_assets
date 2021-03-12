@@ -34,6 +34,7 @@ cp ../Emgu.CV/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Calib3d Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Color Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Core Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
+cp -r ../Emgu.CV/Gapi Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Cvb Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Dnn Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Features2D Assets/Emgu.CV/Assets/Scripts/Emgu.CV/

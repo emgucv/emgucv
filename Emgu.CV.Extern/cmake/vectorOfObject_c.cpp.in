@@ -73,28 +73,28 @@ void VectorOf${VECTOR_NAME}GetItemPtr(std::vector<  ${VECTOR_ELEMENT} >* vec, in
 
 cv::_InputArray* cveInputArrayFromVectorOf${VECTOR_NAME}(std::vector< ${VECTOR_ELEMENT} >* vec)
 {
-#if defined(NOT_INPUT_OUTPUT_ARRAY)
-   CV_Error(cv::Error::StsBadFunc, "Cannot be converted to InputArray");
-#else
+#if $(IS_INPUT_OUTPUT_ARRAY)
    return new cv::_InputArray(*vec);
+#else
+   CV_Error(cv::Error::StsBadFunc, "Cannot be converted to InputArray");
 #endif
 }
 
 cv::_OutputArray* cveOutputArrayFromVectorOf${VECTOR_NAME}(std::vector< ${VECTOR_ELEMENT} >* vec)
 {
-#if defined(NOT_INPUT_OUTPUT_ARRAY)
-   CV_Error(cv::Error::StsBadFunc, "Cannot be converted to OutputArray");
-#else
+#if $(IS_INPUT_OUTPUT_ARRAY)
    return new cv::_OutputArray(*vec);
+#else
+   CV_Error(cv::Error::StsBadFunc, "Cannot be converted to OutputArray");
 #endif
 }
 
 cv::_InputOutputArray* cveInputOutputArrayFromVectorOf${VECTOR_NAME}(std::vector< ${VECTOR_ELEMENT} >* vec)
 {
-#if defined(NOT_INPUT_OUTPUT_ARRAY)
-   CV_Error(cv::Error::StsBadFunc, "Cannot be converted to InputOutputArray");
-#else
+#if $(IS_INPUT_OUTPUT_ARRAY)
    return new cv::_InputOutputArray(*vec);
+#else
+   CV_Error(cv::Error::StsBadFunc, "Cannot be converted to InputOutputArray");
 #endif
 }
 
