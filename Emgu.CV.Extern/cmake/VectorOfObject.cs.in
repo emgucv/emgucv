@@ -24,7 +24,10 @@ namespace ${NAMESPACE_CS}
    /// </summary>
    [Serializable]
    [DebuggerTypeProxy(typeof(VectorOf${VECTOR_NAME}.DebuggerProxy))]
-   public partial class VectorOf${VECTOR_NAME} : Emgu.Util.UnmanagedObject, IInputOutputArray
+   public partial class VectorOf${VECTOR_NAME} : Emgu.Util.UnmanagedObject
+#if ${IS_INPUT_OUTPUT_ARRAY}
+      , IInputOutputArray
+#endif
    {
       private readonly bool _needDispose;
    
@@ -40,7 +43,7 @@ namespace ${NAMESPACE_CS}
          : this(VectorOf${VECTOR_NAME}Create(), true)
       {
       }
-	  
+
       internal VectorOf${VECTOR_NAME}(IntPtr ptr, bool needDispose)
       {
          _ptr = ptr;
@@ -55,16 +58,16 @@ namespace ${NAMESPACE_CS}
          : this( VectorOf${VECTOR_NAME}CreateSize(size), true)
       {
       }
-	  
+
       /// <summary>
       /// Create an standard vector of ${VECTOR_NAME} with the initial values
       /// </summary>
       /// <param name="values">The initial values</param>
-	  public VectorOf${VECTOR_NAME}(params ${VECTOR_ELEMENT_CS}[] values)
-	    : this()
-	  {
+      public VectorOf${VECTOR_NAME}(params ${VECTOR_ELEMENT_CS}[] values)
+        : this()
+      {
         Push(values);
-	  }
+      }
 
       /// <summary>
       /// Get the size of the vector
@@ -84,8 +87,8 @@ namespace ${NAMESPACE_CS}
       {
          VectorOf${VECTOR_NAME}Clear(_ptr);
       }
-	  
-	   /// <summary>
+
+      /// <summary>
       /// Push a value into the standard vector
       /// </summary>
       /// <param name="value">The value to be pushed to the vector</param>
@@ -113,7 +116,7 @@ namespace ${NAMESPACE_CS}
          VectorOf${VECTOR_NAME}PushVector(_ptr, other);
       }
       
-	   /// <summary>
+      /// <summary>
       /// Get the item in the specific index
       /// </summary>
       /// <param name="index">The index</param>
@@ -122,7 +125,7 @@ namespace ${NAMESPACE_CS}
       {
          get
          {
-		    IntPtr itemPtr = IntPtr.Zero;
+            IntPtr itemPtr = IntPtr.Zero;
             VectorOf${VECTOR_NAME}GetItemPtr(_ptr, index, ref itemPtr);
             return new ${VECTOR_ELEMENT_CS}(itemPtr, false);
          }
@@ -137,6 +140,7 @@ namespace ${NAMESPACE_CS}
             VectorOf${VECTOR_NAME}Release(ref _ptr);
       }
 
+#if ${IS_INPUT_OUTPUT_ARRAY}
       /// <summary>
       /// Get the pointer to cv::_InputArray
       /// </summary>
@@ -145,7 +149,7 @@ namespace ${NAMESPACE_CS}
       {
         return new InputArray( cveInputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
       }
-	  
+
       /// <summary>
       /// Get the pointer to cv::_OutputArray
       /// </summary>
@@ -162,7 +166,8 @@ namespace ${NAMESPACE_CS}
       public InputOutputArray GetInputOutputArray()
       {
          return new InputOutputArray( cveInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
-      }     
+      }
+#endif
       
       /// <summary>
       /// The size of the item in this Vector, counted as size in bytes.
@@ -176,7 +181,7 @@ namespace ${NAMESPACE_CS}
       /// <summary>
       /// Create the standard vector of ${VECTOR_NAME} 
       /// </summary>
-	  /// <param name="values">The values to be pushed to the vector</param>
+      /// <param name="values">The values to be pushed to the vector</param>
       public VectorOf${VECTOR_NAME}(${ELEMENT_OF_ELEMENT}[][] values)
          : this()
       {
@@ -190,11 +195,11 @@ namespace ${NAMESPACE_CS}
             }
          }
       }
-	  
-	   /// <summary>
-      /// Convert the standard vector to arrays of int
+
+      /// <summary>
+      /// Convert the standard vector to arrays of arrays of ${ELEMENT_OF_ELEMENT}
       /// </summary>
-      /// <returns>Arrays of int</returns>
+      /// <returns>Arrays of arrays of the ${ELEMENT_OF_ELEMENT}</returns>
       public ${ELEMENT_OF_ELEMENT}[][] ToArrayOfArray()
       {
          int size = Size;
@@ -225,17 +230,17 @@ namespace ${NAMESPACE_CS}
             get { return _v.ToArrayOfArray(); }
          }
 #else
-		 public ${VECTOR_ELEMENT_CS}[] Values
+         public ${VECTOR_ELEMENT_CS}[] Values
          {
-			get
-			{
-			   ${VECTOR_ELEMENT_CS}[] result = new ${VECTOR_ELEMENT_CS}[_v.Size];
-			   for (int i = 0; i < result.Length; i++)
-			   {
-				  result[i] = _v[i];
-			   }
-			   return result;
-			}
+            get
+            {
+               ${VECTOR_ELEMENT_CS}[] result = new ${VECTOR_ELEMENT_CS}[_v.Size];
+               for (int i = 0; i < result.Length; i++)
+               {
+                  result[i] = _v[i];
+               }
+               return result;
+            }
          }
 #endif
       }

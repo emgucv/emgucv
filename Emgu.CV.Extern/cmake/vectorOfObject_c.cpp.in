@@ -16,12 +16,12 @@ ${COMPILATION_CONDITION_C_OPEN}
 ${VECTOR_ADDITIONAL_CODE}
 
 std::vector< ${VECTOR_ELEMENT} >* VectorOf${VECTOR_NAME}Create() 
-{ 
+{
    return new std::vector< ${VECTOR_ELEMENT} >(); 
 }
 
 std::vector< ${VECTOR_ELEMENT} >* VectorOf${VECTOR_NAME}CreateSize(int size) 
-{ 
+{
    return new std::vector< ${VECTOR_ELEMENT} >(size); 
 }
 
@@ -41,7 +41,7 @@ void VectorOf${VECTOR_NAME}Push(std::vector< ${VECTOR_ELEMENT} >* v, ${VECTOR_EL
 //}
 
 void VectorOf${VECTOR_NAME}PushVector(std::vector< ${VECTOR_ELEMENT} >* v, std::vector< ${VECTOR_ELEMENT} >* other)
-{  
+{
    v->insert(v->end(), other->begin(), other->end());
 }
 
@@ -67,36 +67,26 @@ ${VECTOR_ELEMENT}* VectorOf${VECTOR_NAME}GetStartAddress(std::vector< ${VECTOR_E
 }
 
 void VectorOf${VECTOR_NAME}GetItemPtr(std::vector<  ${VECTOR_ELEMENT} >* vec, int index,  ${VECTOR_ELEMENT}** element)
-{ 
-	*element = &vec->at(index);
+{
+   *element = &vec->at(index);
 }
 
+#if ${IS_INPUT_OUTPUT_ARRAY}
 cv::_InputArray* cveInputArrayFromVectorOf${VECTOR_NAME}(std::vector< ${VECTOR_ELEMENT} >* vec)
 {
-#if $(IS_INPUT_OUTPUT_ARRAY)
    return new cv::_InputArray(*vec);
-#else
-   CV_Error(cv::Error::StsBadFunc, "Cannot be converted to InputArray");
-#endif
 }
 
 cv::_OutputArray* cveOutputArrayFromVectorOf${VECTOR_NAME}(std::vector< ${VECTOR_ELEMENT} >* vec)
 {
-#if $(IS_INPUT_OUTPUT_ARRAY)
    return new cv::_OutputArray(*vec);
-#else
-   CV_Error(cv::Error::StsBadFunc, "Cannot be converted to OutputArray");
-#endif
 }
 
 cv::_InputOutputArray* cveInputOutputArrayFromVectorOf${VECTOR_NAME}(std::vector< ${VECTOR_ELEMENT} >* vec)
 {
-#if $(IS_INPUT_OUTPUT_ARRAY)
    return new cv::_InputOutputArray(*vec);
-#else
-   CV_Error(cv::Error::StsBadFunc, "Cannot be converted to InputOutputArray");
-#endif
 }
+#endif
 
 int VectorOf${VECTOR_NAME}SizeOfItemInBytes()
 {
@@ -107,74 +97,77 @@ int VectorOf${VECTOR_NAME}SizeOfItemInBytes()
 
 void * VectorOf${VECTOR_NAME}Create()
 {
-  CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
+   CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
 }
 
 void * VectorOf${VECTOR_NAME}CreateSize(int size)
 {
-  CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
+   CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
 }
 
 int VectorOf${VECTOR_NAME}GetSize(void* v)
 {
-  CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
+   CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
 }
 
 void VectorOf${VECTOR_NAME}Push(void* v, void* value)
 {
-  CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
+   CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
 }
 
 //CVAPI(void) VectorOf${VECTOR_NAME}PushMulti(std::vector< ${VECTOR_ELEMENT} >* v, ${VECTOR_ELEMENT}* values, int count);
 
 void VectorOf${VECTOR_NAME}PushVector(void* v, void* other)
 {
-  CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
+   CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
 }
 
 void VectorOf${VECTOR_NAME}Clear(void* v)
 {
-  CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
+   CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
 }
 
 void VectorOf${VECTOR_NAME}Release(void** v)
 {
-  CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
+   CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
 }
 
 void VectorOf${VECTOR_NAME}CopyData(void* v, void* data)
 {
-  CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
+   CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
 }
 
 void* VectorOf${VECTOR_NAME}GetStartAddress(void* v)
 {
-  CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
+   CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
 }
 
 void VectorOf${VECTOR_NAME}GetItemPtr(void* vec, int index,  void** element)
 {
-  CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
+   CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
 }
 
+#if ${IS_INPUT_OUTPUT_ARRAY}
 cv::_InputArray* cveInputArrayFromVectorOf${VECTOR_NAME}(void* vec)
 {
-  CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
+   CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
 }
 
 cv::_OutputArray* cveOutputArrayFromVectorOf${VECTOR_NAME}(void* vec)
 {
-  CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
+   CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
 }
 
 cv::_InputOutputArray* cveInputOutputArrayFromVectorOf${VECTOR_NAME}(void* vec)
 {
-  CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
+   CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
 }
+#endif
 
 int VectorOf${VECTOR_NAME}SizeOfItemInBytes()
 {
-  CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
+   CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support");
 }
+
 
 ${COMPILATION_CONDITION_C_CLOSE}
