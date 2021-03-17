@@ -517,7 +517,9 @@ macro(HunterGate)
         hunter_gate_internal_error("${_sha1_location} not found")
       endif()
       file(READ "${_sha1_location}" _sha1_value)
-      string(COMPARE EQUAL "${_sha1_value}" "${HUNTER_GATE_SHA1}" _is_equal)
+      string(TOLOWER "${_sha1_value}" _sha1_value_lower)
+      string(TOLOWER "${HUNTER_GATE_SHA1}" _HUNTER_GATE_SHA1_lower)
+      string(COMPARE EQUAL "${_sha1_value_lower}" "${_HUNTER_GATE_SHA1_lower}" _is_equal)
       if(NOT _is_equal)
         hunter_gate_internal_error(
             "Short SHA1 collision:"

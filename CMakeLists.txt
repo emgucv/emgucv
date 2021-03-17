@@ -9,8 +9,9 @@
 # --------------------------------------------------------
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+INCLUDE (CheckPlatform)
 
-IF( WIN32)
+IF( WIN32 OR IS_UBUNTU )
   SET(EMGU_CV_WITH_DEPTHAI ON CACHE BOOL "Build support for OAK-1 and OAK-D")
 ELSE() 
   SET(EMGU_CV_WITH_DEPTHAI OFF CACHE BOOL "Build support for OAK-1 and OAK-D")
@@ -23,8 +24,8 @@ IF(EMGU_CV_WITH_DEPTHAI)
   include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/HunterGate.cmake")
   
   HunterGate(
-    URL "https://github.com/cpp-pm/hunter/archive/v0.23.258.tar.gz"
-    SHA1 "062a19ab13ce8dffa9a882b6ce3e43bdabdf75d3"
+    URL "https://github.com/cpp-pm/hunter/archive/v0.23.296.tar.gz"
+    SHA1 "232f5022ee1d45955a7e8d3e1720f31bac1bb534"
     FILEPATH ${CMAKE_CURRENT_LIST_DIR}/Emgu.CV.Extern/depthai-core/cmake/Hunter/config.cmake # Add depthai-core config (hunter limitation)
   )
 
@@ -32,6 +33,7 @@ IF(EMGU_CV_WITH_DEPTHAI)
   if(WIN32)
     set(HUNTER_BINARY_DIR "${HUNTER_GATE_ROOT}/_bin" CACHE STRING "Hunter binary directory")
   endif()
+  #MESSAGE(STATUS: "CMAKE_MODULE_PATH --- ${CMAKE_MODULE_PATH}")
 ENDIF()
 
 
@@ -40,7 +42,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.9.4)
 cmake_policy(SET CMP0022 NEW)
 cmake_policy(SET CMP0069 NEW)
 
-IF(EMGU_CV_WITH_DEPTHAI)  
+IF(EMGU_CV_WITH_DEPTHAI )
   add_subdirectory(Emgu.CV.Extern/depthai-core EXCLUDE_FROM_ALL)
 ENDIF()
 
@@ -198,7 +200,7 @@ ENDIF()
   
 FIND_PACKAGE(CSharp REQUIRED)
 INCLUDE (CSharpMacros)
-INCLUDE (CheckPlatform)
+
 IF ( (IS_UBUNTU OR IS_RASPBIAN) AND NOT (DOTNET_FOUND))
   MESSAGE(FATAL_ERROR "dotnet core is required to build Emgu CV on Ubuntu, please follow the instructions to install dotnet core on Ubuntu: https://dotnet.microsoft.com/download/linux-package-manager/ubuntu18-04/sdk-current")  
 ENDIF()

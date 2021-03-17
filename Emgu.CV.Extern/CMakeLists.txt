@@ -3355,7 +3355,7 @@ ELSE()
   SET(TIFF_LIBRARY "")
 ENDIF()
 
-IF(WIN32 OR APPLE OR NETFX_CORE)
+IF(WIN32 OR APPLE OR NETFX_CORE OR IS_UBUNTU)
   #always build from source on windows / Mac
   MESSAGE(STATUS "Building zlib from source")
   ADD_DEPENDENCIES(${the_target} zlib)
