@@ -16,7 +16,9 @@ using System.Security.Cryptography;
 
 namespace Emgu.CV
 {
-
+    /// <summary>
+    /// Class that provide access to native GAPI functions from OpenCV
+    /// </summary>
     public static partial class GapiInvoke
     {
         static GapiInvoke()
@@ -24,7 +26,21 @@ namespace Emgu.CV
             CvInvoke.Init();
         }
 
-        public static GMat Resize(GMat src, Size dsize, double fx = 0, double fy = 0, CvEnum.Inter interpolation = Inter.Linear)
+        /// <summary>
+        /// Resizes an image.
+        /// </summary>
+        /// <param name="src">Input image.</param>
+        /// <param name="dsize">Output image size</param>
+        /// <param name="fx">Scale factor along the horizontal axis</param>
+        /// <param name="fy">Scale factor along the vertical axis</param>
+        /// <param name="interpolation">Interpolation method</param>
+        /// <returns>The resized image</returns>
+        public static GMat Resize(
+            GMat src, 
+            Size dsize, 
+            double fx = 0, 
+            double fy = 0, 
+            CvEnum.Inter interpolation = Inter.Linear)
         {
             return new GMat(cveGapiResize(src, ref dsize, fx, fy, interpolation), true);
         }
@@ -77,29 +93,66 @@ namespace Emgu.CV
         private extern static IntPtr cveGapiAddC(IntPtr src1, IntPtr c, CvEnum.DepthType ddepth);
 
 
-        public static GMat Sub(GMat src1, GMat src2, CvEnum.DepthType ddepth)
+        /// <summary>
+        /// Calculates the per-element difference between two matrices.
+        /// </summary>
+        /// <param name="src1">First input matrix.</param>
+        /// <param name="src2">Second input matrix.</param>
+        /// <param name="ddepth">Optional depth of the output matrix.</param>
+        /// <returns>The per-element difference between two matrices.</returns>
+        public static GMat Sub(
+            GMat src1, 
+            GMat src2, 
+            CvEnum.DepthType ddepth = DepthType.Default)
         {
             return new GMat(cveGapiSub(src1, src2, ddepth), true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private extern static IntPtr cveGapiSub(IntPtr src1, IntPtr src2, CvEnum.DepthType ddepth);
 
-        public static GMat SubC(GMat src1, GScalar c, CvEnum.DepthType ddepth)
+        /// <summary>
+        /// Calculates the per-element difference between matrix and given scalar.
+        /// </summary>
+        /// <param name="src">First input matrix.</param>
+        /// <param name="c">Scalar value to subtracted.</param>
+        /// <param name="ddepth">Optional depth of the output matrix.</param>
+        /// <returns>The per-element difference between matrix and given scalar.</returns>
+        public static GMat SubC(
+            GMat src, 
+            GScalar c, 
+            CvEnum.DepthType ddepth = DepthType.Default)
         {
-            return new GMat(cveGapiSubC(src1, c, ddepth), true);
+            return new GMat(cveGapiSubC(src, c, ddepth), true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private extern static IntPtr cveGapiSubC(IntPtr src1, IntPtr c, CvEnum.DepthType ddepth);
 
-        public static GMat SubRC(GScalar c, GMat src1, CvEnum.DepthType ddepth)
+        /// <summary>
+        /// Calculates the per-element difference between given scalar and the matrix.
+        /// </summary>
+        /// <param name="c">Scalar value to subtract from</param>
+        /// <param name="src">Input matrix to be subtracted.</param>
+        /// <param name="ddepth">Optional depth of the output matrix.</param>
+        /// <returns>Per-element difference between given scalar and the matrix.</returns>
+        public static GMat SubRC(
+            GScalar c, 
+            GMat src, 
+            CvEnum.DepthType ddepth = DepthType.Default)
         {
-            return new GMat(cveGapiSubRC(c, src1, ddepth), true);
+            return new GMat(cveGapiSubRC(c, src, ddepth), true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private extern static IntPtr cveGapiSubRC(IntPtr c, IntPtr src1, CvEnum.DepthType ddepth);
 
-
+        /// <summary>
+        /// Calculates the per-element scaled product of two matrices.
+        /// </summary>
+        /// <param name="src1">First input matrix.</param>
+        /// <param name="src2">Second input matrix of the same size and the same depth as src1.</param>
+        /// <param name="scale">Optional scale factor.</param>
+        /// <param name="ddepth">Optional depth of the output matrix.</param>
+        /// <returns>The per-element scaled product of two matrices.</returns>
         public static GMat Mul(GMat src1, GMat src2, double scale, CvEnum.DepthType ddepth)
         {
             return new GMat(cveGapiMul(src1, src2, scale, ddepth), true);
@@ -107,7 +160,14 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private extern static IntPtr cveGapiMul(IntPtr src1, IntPtr src2, double scale, CvEnum.DepthType ddepth);
 
-        public static GMat MulC(GMat src1, GScalar c, CvEnum.DepthType ddepth)
+        /// <summary>
+        /// Multiplies matrix by scalar.
+        /// </summary>
+        /// <param name="src1">Input matrix.</param>
+        /// <param name="c">Factor to be multiplied</param>
+        /// <param name="ddepth">Optional depth of the output matrix.</param>
+        /// <returns>The per-element scaled product of the matrix and the scale.</returns>
+        public static GMat MulC(GMat src1, GScalar c, CvEnum.DepthType ddepth = DepthType.Default)
         {
             return new GMat(cveGapiMulC(src1, c, ddepth), true);
         }
@@ -174,11 +234,17 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private extern static IntPtr cveGapiMean(IntPtr src);
 
-
+        /// <summary>
+        /// Calculates x and y coordinates of 2D vectors from their magnitude and angle.
+        /// </summary>
+        /// <param name="magnitude">Input floating-point CV_32FC1 matrix (1xN) of magnitudes of 2D vectors</param>
+        /// <param name="angle">Input floating-point CV_32FC1 matrix (1xN) of angles of 2D vectors.</param>
+        /// <param name="angleInDegrees">When true, the input angles are measured in degrees, otherwise, they are measured in radians.</param>
+        /// <returns>The first GMat contains the X coordinates, the second GMat contains the Y coordinates.</returns>
         public static Tuple<GMat, GMat> PolarToCart(
             GMat magnitude,
             GMat angle,
-            bool angleInDegrees)
+            bool angleInDegrees = false)
         {
             GMat outX = new GMat();
             GMat outY = new GMat();
@@ -221,7 +287,13 @@ namespace Emgu.CV
             IntPtr outMagnitude,
             IntPtr outAngle);
 
-
+        /// <summary>
+        /// Calculates the rotation angle of 2D vectors.
+        /// </summary>
+        /// <param name="x">Input floating-point array of x-coordinates of 2D vectors.</param>
+        /// <param name="y">Input array of y-coordinates of 2D vectors; it must have the same size and the same type as x.</param>
+        /// <param name="angleInDegrees">When true, the function calculates the angle in degrees, otherwise, they are measured in radians.</param>
+        /// <returns>Array of vector angles; it has the same size and same type as x.</returns>
         public static GMat Phase(GMat x, GMat y, bool angleInDegrees)
         {
             return new GMat(cveGapiPhase(x, y, angleInDegrees), true);
@@ -453,6 +525,12 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private extern static IntPtr cveGapiBitwiseOrS(IntPtr src1, IntPtr src2);
 
+        /// <summary>
+        /// Calculates the per-element bit-wise logical "exclusive or" of two matrices of the same size.
+        /// </summary>
+        /// <param name="src1">First input matrix.</param>
+        /// <param name="src2">Second input matrix.</param>
+        /// <returns>The per-element bit-wise logical "exclusive or" of two matrices of the same size.</returns>
         public static GMat BitwiseXor(GMat src1, GMat src2)
         {
             return new GMat(cveGapiBitwiseXor(src1, src2), true);
@@ -460,6 +538,12 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private extern static IntPtr cveGapiBitwiseXor(IntPtr src1, IntPtr src2);
 
+        /// <summary>
+        /// Calculates the per-element bit-wise logical "exclusive or" of a matrix and a scalar.
+        /// </summary>
+        /// <param name="src1">First input matrix</param>
+        /// <param name="src2">Scalar, for which per-lemenet "logical or" operation on elements of src1 will be performed.</param>
+        /// <returns>The per-element bit-wise logical "exclusive or" of a matrix and a scalar.</returns>
         public static GMat BitwiseXor(GMat src1, GScalar src2)
         {
             return new GMat(cveGapiBitwiseXorS(src1, src2), true);
@@ -480,7 +564,18 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private extern static IntPtr cveGapiMask(IntPtr src, IntPtr mask);
 
-
+        /// <summary>
+        /// Applies a separable linear filter to a matrix(image).
+        /// </summary>
+        /// <param name="src">Source image.</param>
+        /// <param name="ddepth">Desired depth of the destination image</param>
+        /// <param name="kernelX">Coefficients for filtering each row.</param>
+        /// <param name="kernelY">Coefficients for filtering each column.</param>
+        /// <param name="anchor">Anchor position within the kernel. The default value (−1,−1) means that the anchor is at the kernel center.</param>
+        /// <param name="delta">Value added to the filtered results before storing them.</param>
+        /// <param name="borderType">Pixel extrapolation method</param>
+        /// <param name="borderValue">Border value in case of constant border type</param>
+        /// <returns>Result of applying the filter</returns>
         public static GMat SepFilter(
             GMat src,
             CvEnum.DepthType ddepth,
@@ -488,8 +583,8 @@ namespace Emgu.CV
             Mat kernelY,
             Point anchor,
             MCvScalar delta,
-            CvEnum.BorderType borderType,
-            MCvScalar borderValue)
+            CvEnum.BorderType borderType = BorderType.Default,
+            MCvScalar borderValue = new MCvScalar())
         {
             return new GMat(
                 cveGapiSepFilter(
@@ -1450,6 +1545,13 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private extern static IntPtr cveGapiRGB2YUV422(IntPtr src);
 
+        /// <summary>
+        /// Select values from either first or second of input matrices by given mask. The function set to the output matrix either the value from the first input matrix if corresponding value of mask matrix is 255, or value from the second input matrix (if value of mask matrix set to 0).
+        /// </summary>
+        /// <param name="src1">First input matrix.</param>
+        /// <param name="src2">Second input matrix.</param>
+        /// <param name="mask">Mask input matrix.</param>
+        /// <returns>Select result from either first or second of input matrices by given mask.</returns>
         public static GMat Select(GMat src1, GMat src2, GMat mask)
         {
             return new GMat(
@@ -1747,13 +1849,23 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private extern static void cveGapiSplit3(IntPtr src, IntPtr dst1, IntPtr dst2, IntPtr dst3);
 
+        /// <summary>
+        /// Applies a generic geometrical transformation to an image.
+        /// </summary>
+        /// <param name="src">Source image.</param>
+        /// <param name="map1">The first map of either (x,y) points or just x values having the type CV_16SC2, CV_32FC1, or CV_32FC2.</param>
+        /// <param name="map2">The second map of y values having the type CV_16UC1, CV_32FC1, or none (empty map if map1 is (x,y) points), respectively.</param>
+        /// <param name="interpolation">Interpolation method</param>
+        /// <param name="borderMode">Pixel extrapolation method</param>
+        /// <param name="borderValue">Value used in case of a constant border. By default, it is 0.</param>
+        /// <returns>The transformed image.</returns>
         public static GMat Remap(
             GMat src,
             Mat map1,
             Mat map2,
-            int interpolation,
-            int borderMode,
-            MCvScalar borderValue)
+            CvEnum.Inter interpolation,
+            CvEnum.BorderType borderMode = BorderType.Constant,
+            MCvScalar borderValue = new MCvScalar())
         {
             return new GMat(
                 cveGapiRemap(src, map1, map2, interpolation, borderMode, ref borderValue),
@@ -1765,8 +1877,8 @@ namespace Emgu.CV
             IntPtr src,
             IntPtr map1,
             IntPtr map2,
-            int interpolation,
-            int borderMode,
+            CvEnum.Inter interpolation,
+            CvEnum.BorderType borderMode,
             ref MCvScalar borderValue);
 
         /// <summary>

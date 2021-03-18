@@ -41,7 +41,7 @@ namespace Emgu.CV
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_needDispose && (IntPtr.Zero == _ptr))
+            if (_needDispose && (IntPtr.Zero != _ptr))
             {
                 GapiInvoke.cveGMatRelease(ref _ptr);
             }

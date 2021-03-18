@@ -48,7 +48,7 @@ namespace Emgu.CV
         /// </summary>
         protected override void DisposeObject()
         {
-            if (IntPtr.Zero == _ptr)
+            if (IntPtr.Zero != _ptr)
             {
                 GapiInvoke.cveGScalarRelease(ref _ptr);
             }

@@ -16,14 +16,36 @@ using Emgu.CV.Features2D;
 
 namespace Emgu.CV.XFeatures2D
 {
-    
+    /// <summary>
+    /// Class implementing BEBLID (Boosted Efficient Binary Local Image Descriptor)
+    /// </summary>
     public class BEBLID : Feature2D
     {
-        public BEBLID(float scaleFactor, int nBits)
+        /// <summary>
+        /// Beblid size
+        /// </summary>
+        public enum BeblidSize
+        {
+            /// <summary>
+            /// 512 bit descriptor
+            /// </summary>
+            BitSize512 = 100,
+            /// <summary>
+            /// 256 bit descriptor
+            /// </summary>
+            BitSize256 = 101
+        }
+
+        /// <summary>
+        /// Creates BEBLID (Boosted Efficient Binary Local Image Descriptor).
+        /// </summary>
+        /// <param name="scaleFactor">Adjust the sampling window around detected keypoints: 1.00f should be the scale for ORB keypoints; 6.75f should be the scale for SIFT detected keypoints; 6.25f is default and fits for KAZE, SURF detected keypoints; 5.00f should be the scale for AKAZE, MSD, AGAST, FAST, BRISK keypoints</param>
+        /// <param name="size">Determine the number of bits in the descriptor. </param>
+        public BEBLID(float scaleFactor, BeblidSize size)
         {
             _ptr = XFeatures2DInvoke.cveBEBLIDCreate(
                 scaleFactor,
-                nBits,
+                size,
                 ref _feature2D,
                 ref _sharedPtr);
         }
@@ -47,7 +69,7 @@ namespace Emgu.CV.XFeatures2D
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveBEBLIDCreate(
             float scaleFactor,
-            int nBits,
+            BEBLID.BeblidSize size,
             ref IntPtr beblid,
             ref IntPtr sharedPtr);
 

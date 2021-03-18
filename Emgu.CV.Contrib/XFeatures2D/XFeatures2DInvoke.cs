@@ -62,6 +62,14 @@ namespace Emgu.CV.XFeatures2D
             bool withScale, 
             double thresholdFactor);
 
+        /// <summary>
+        /// LOGOS (Local geometric support for high-outlier spatial verification) feature matching strategy
+        /// </summary>
+        /// <param name="keypoints1">Input keypoints of image1.</param>
+        /// <param name="keypoints2">Input keypoints of image2.</param>
+        /// <param name="nn1">Index to the closest BoW centroid for each descriptors of image1.</param>
+        /// <param name="nn2">Index to the closest BoW centroid for each descriptors of image2.</param>
+        /// <param name="matches1to2">Matches returned by the LOGOS matching strategy.</param>
         public static void MatchLOGOS(
             VectorOfKeyPoint keypoints1,
             VectorOfKeyPoint keypoints2,
