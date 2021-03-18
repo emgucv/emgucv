@@ -28,11 +28,17 @@ namespace Emgu.CV
             _needDispose = needDispose;
         }
 
+        /// <summary>
+        /// Create a new GMat
+        /// </summary>
         public GMat()
             : this(GapiInvoke.cveGMatCreate(), true)
         {
         }
 
+        /// <summary>
+        /// Release all the unmanaged memory associated with this GMat
+        /// </summary>
         protected override void DisposeObject()
         {
             if (_needDispose && (IntPtr.Zero == _ptr))

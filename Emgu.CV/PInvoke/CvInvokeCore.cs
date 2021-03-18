@@ -2512,7 +2512,7 @@ namespace Emgu.CV
         private static extern void cveEigen(IntPtr src, IntPtr eigenValues, IntPtr eigenVectors);
 
         /// <summary>
-        /// normalizes the input array so that it's norm or value range takes the certain value(s).
+        /// Normalizes the input array so that it's norm or value range takes the certain value(s).
         /// </summary>
         /// <param name="src">The input array</param>
         /// <param name="dst">The output array; in-place operation is supported</param>

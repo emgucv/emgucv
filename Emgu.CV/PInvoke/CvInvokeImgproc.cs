@@ -104,16 +104,16 @@ namespace Emgu.CV
         /// <param name="dst">Destination image</param>
         /// <param name="mapMatrix">2x3 transformation matrix</param>
         /// <param name="dsize">Size of the output image.</param>
-        /// <param name="interpMethod">Interpolation method</param>
+        /// <param name="interMethod">Interpolation method</param>
         /// <param name="warpMethod">Warp method</param>
         /// <param name="borderMode">Pixel extrapolation method</param>
         /// <param name="borderValue">A value used to fill outliers</param>
-        public static void WarpAffine(IInputArray src, IOutputArray dst, IInputArray mapMatrix, Size dsize, CvEnum.Inter interpMethod = CvEnum.Inter.Linear, CvEnum.Warp warpMethod = CvEnum.Warp.Default, CvEnum.BorderType borderMode = CvEnum.BorderType.Constant, MCvScalar borderValue = new MCvScalar())
+        public static void WarpAffine(IInputArray src, IOutputArray dst, IInputArray mapMatrix, Size dsize, CvEnum.Inter interMethod = CvEnum.Inter.Linear, CvEnum.Warp warpMethod = CvEnum.Warp.Default, CvEnum.BorderType borderMode = CvEnum.BorderType.Constant, MCvScalar borderValue = new MCvScalar())
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMapMatrix = mapMatrix.GetInputArray())
-                cveWarpAffine(iaSrc, oaDst, iaMapMatrix, ref dsize, (int)interpMethod | (int)warpMethod, borderMode, ref borderValue);
+                cveWarpAffine(iaSrc, oaDst, iaMapMatrix, ref dsize, (int)interMethod | (int)warpMethod, borderMode, ref borderValue);
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
