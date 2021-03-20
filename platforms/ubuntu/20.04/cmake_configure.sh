@@ -1,15 +1,22 @@
-#!/bin/bash
+#!/bin/bash -v
 
 cd "$(dirname "$0")"
 
 INSTALL_FOLDER=$PWD/build/install
+
+CUDA_OPTIONS=( -DWITH_CUDA:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE )
 
 BUILD_TYPE=full
 if [[ $# -gt 0 ]]; then
     if [ "$1" == "core" ]; then
 	BUILD_TYPE=core
     fi
+    if [ "$1" == "cuda" ]; then
+	#CUDA_OPTIONS=( -DWITH_CUDA:BOOL=TRUE -DCUDA_TOOLKIT_ROOT_DIR:STRING="/usr" )
+	CUDA_OPTIONS=( -DWITH_CUDA:BOOL=TRUE -DBUILD_SHARED_LIBS:BOOL=TRUE )
+    fi 
 fi
+
 
 EMGUCV_CMAKE_SHARED_OPTIONS=( -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DCMAKE_CXX_STANDARD:String="11" )
 
@@ -56,6 +63,7 @@ cd build
 cmake \
       ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} \
       $TESSERACT_OPTION \
+      ${CUDA_OPTIONS[@]} \
       -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=TRUE \
       -DBUILD_TESTS:BOOL=FALSE \
       -DBUILD_PNG:BOOL=TRUE \
@@ -74,7 +82,6 @@ cmake \
       -DBUILD_opencv_java:BOOL=FALSE \
       -DBUILD_opencv_python2:BOOL=FALSE \
       -DBUILD_opencv_python3:BOOL=FALSE \
-      -DBUILD_SHARED_LIBS:BOOL=FALSE \
       $VTK_OPTION \
       -DWITH_EIGEN:BOOL=TRUE \
       -DEigen3_DIR:String="$INSTALL_FOLDER" \
@@ -85,4 +92,10 @@ cmake \
     
 C_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-8.2 CPLUS_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-8.2 make
 
+if [ "$1" == "cuda" ]; then
+    cp -rf bin/x64/*.so ../../../../libs/x64
+    cp -rf bin/x64/*.so.* ../../../../libs/x64
+fi
+
 cd ..
+
