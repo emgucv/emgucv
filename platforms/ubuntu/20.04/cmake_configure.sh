@@ -92,10 +92,10 @@ cmake \
     
 C_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-8.2 CPLUS_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-8.2 make
 
-if [ "$1" == "cuda" ]; then
-    cp -rf bin/x64/*.so ../../../../libs/x64
-    cp -rf bin/x64/*.so.* ../../../../libs/x64
-fi
+#if [ "$1" == "cuda" ]; then
+#    cp -rf bin/x64/*.so ../../../../libs/x64
+#    cp -rf bin/x64/*.so.* ../../../../libs/x64
+#fi
 
 cd ..
 
