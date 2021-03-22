@@ -17,6 +17,9 @@
 #else
 static inline CV_NORETURN void throw_no_gapi() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without gapi support"); }
 namespace cv {
+	class GMat {};
+	class GScalar {};
+	class GComputation {};
 	namespace gapi {
 
 	}
