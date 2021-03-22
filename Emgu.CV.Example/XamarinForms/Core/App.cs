@@ -222,6 +222,14 @@ namespace Emgu.CV.XamarinForms
                     "Perform License Plate Recognition",
                     "cars_license_plate.png",
                     "This demo is based on the security barrier camera demo in the OpenVino model zoo. The models is trained with BIT-vehicle dataset. License plate is trained based on Chinese license plate that has white character on blue background. You will need to re-train your own model if you intend to use this in other countries.");
+                Picker p = vehicleLicensePlateDetectorPage.Picker;
+                p.IsVisible = true;
+                p.Title = "Preferred DNN backend & target";
+
+                foreach (String option in GetDnnBackends())
+                {
+                    p.Items.Add(option);
+                }
                 MainPage.Navigation.PushAsync(vehicleLicensePlateDetectorPage);
             };
 
@@ -232,6 +240,15 @@ namespace Emgu.CV.XamarinForms
                     "Mask-rcnn Detection",
                     "dog416.png",
                     "");
+                Picker p = maskRcnnPage.Picker;
+                p.IsVisible = true;
+                p.Title = "Preferred DNN backend & target";
+                
+                foreach (String option in GetDnnBackends())
+                {
+                    p.Items.Add(option);
+                }
+
                 MainPage.Navigation.PushAsync(maskRcnnPage);
             };
 
@@ -262,7 +279,14 @@ namespace Emgu.CV.XamarinForms
                     "Mask-rcnn Detection",
                     "stop-sign.jpg",
                     "Stop sign detection using Mask RCNN");
+                Picker p = stopSignDetectionPage.Picker;
+                p.IsVisible = true;
+                p.Title = "Preferred DNN backend & target";
 
+                foreach (String option in GetDnnBackends())
+                {
+                    p.Items.Add(option);
+                }
                 MainPage.Navigation.PushAsync(stopSignDetectionPage);
             };
             yoloButton.Clicked += (sender, args) =>
@@ -272,6 +296,12 @@ namespace Emgu.CV.XamarinForms
                     "Yolo Detection",
                     "dog416.png",
                     "");
+                Picker p = yoloPage.Picker;
+                p.Title = "Yolo model version";
+                p.IsVisible = true;
+                p.Items.Add("YoloV3");
+                p.Items.Add("YoloV3Spp");
+                p.Items.Add("YoloV3Tiny");
                 MainPage.Navigation.PushAsync(yoloPage);
             };
 
@@ -298,7 +328,27 @@ namespace Emgu.CV.XamarinForms
             }
         }
 
+        private String[] GetDnnBackends()
+        {
+            var openCVConfigDict = CvInvoke.ConfigDict;
+            bool haveDNN = (openCVConfigDict["HAVE_OPENCV_DNN"] != 0);
+            
+            if (haveDNN)
+            {
+                var dnnBackends = DnnInvoke.AvailableBackends;
+                List<String> dnnBackendsText = new List<string>();
+                foreach (var dnnBackend in dnnBackends)
+                {
+                    dnnBackendsText.Add(String.Format("{0};{1}", dnnBackend.Backend, dnnBackend.Target));
+                }
 
+                return dnnBackendsText.ToArray();
+            }
+            else
+            {
+                return new string[0];
+            }
+        }
         protected override void OnStart()
         {
             // Handle when your app starts

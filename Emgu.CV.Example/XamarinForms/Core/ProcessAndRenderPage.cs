@@ -31,6 +31,7 @@ using Emgu.CV.Models;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
+using Xamarin.Forms;
 using Color = Xamarin.Forms.Color;
 using Environment = System.Environment;
 using Point = System.Drawing.Point;
@@ -80,6 +81,13 @@ namespace Emgu.CV.XamarinForms
             label.Text = defaultLabelText;
 
             _model = model;
+
+            Picker.SelectedIndexChanged += Picker_SelectedIndexChanged;
+        }
+
+        private void Picker_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _model.Clear();
         }
 
         private void _capture_ImageGrabbed(object sender, EventArgs e)
@@ -114,8 +122,12 @@ namespace Emgu.CV.XamarinForms
                 _capture = null;
 #endif
                 button.Text = _defaultButtonText;
-
+                Picker.IsEnabled = true;
                 return;
+            }
+            else
+            {
+                Picker.IsEnabled = false;
             }
 
             Mat[] images = await LoadImages(new string[] { _deaultImage });
@@ -126,7 +138,13 @@ namespace Emgu.CV.XamarinForms
             SetMessage("Please wait...");
             SetImage(null);
 
-            await _model.Init(DownloadManager_OnDownloadProgressChanged);
+            Picker p = this.Picker;
+            if ((!p.IsVisible) || p.SelectedIndex < 0)
+                await _model.Init(DownloadManager_OnDownloadProgressChanged, null);
+            else
+            {
+                await _model.Init(DownloadManager_OnDownloadProgressChanged, p.Items[p.SelectedIndex].ToString());
+            }
 
             if (images.Length == 0)
             {
@@ -172,13 +190,13 @@ namespace Emgu.CV.XamarinForms
             }
             else
             {
-                
                 if (_renderMat == null)
                     _renderMat = new Mat();
                 String message = _model.ProcessAndRender(images[0], _renderMat);
                 
                 SetImage(_renderMat);
                 SetMessage(message);
+                Picker.IsEnabled = true;
             }
         }
 

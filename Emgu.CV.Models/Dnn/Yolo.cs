@@ -137,6 +137,14 @@ namespace Emgu.CV.Models
         }
 
         /// <summary>
+        /// Clear and reset the model. Required Init function to be called again before calling ProcessAndRender.
+        /// </summary>
+        public void Clear()
+        {
+            DisposeObject();
+        }
+
+        /// <summary>
         /// Release the memory associated with this Yolo detector.
         /// </summary>
         protected override void DisposeObject()
@@ -153,10 +161,20 @@ namespace Emgu.CV.Models
         /// Download and initialize the yolo model
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
+        /// <param name="initOptions">A string, can be either "YoloV3", "YoloV3Spp", "YoloV3Tiny", specify the yolo model to use. Deafult to use "YoloV3". </param>
         /// <returns>Async task</returns>
-        public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
         {
-            await Init(YoloVersion.YoloV3, onDownloadProgressChanged);
+            YoloVersion v = YoloVersion.YoloV3;
+            if (initOptions != null && ((initOptions as String) != null))
+            {
+                String versionStr = initOptions as String;
+                if (versionStr.Equals("YoloV3Spp"))
+                    v = YoloVersion.YoloV3Spp;
+                else if (versionStr.Equals("YoloV3Tiny"))
+                    v = YoloVersion.YoloV3Tiny;
+            }
+            await Init(v, onDownloadProgressChanged);
         }
 
         /// <summary>

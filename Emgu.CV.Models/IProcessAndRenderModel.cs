@@ -22,14 +22,20 @@ namespace Emgu.CV.Models
     /// <summary>
     /// Process and render model
     /// </summary>
-    public interface IProcessAndRenderModel
+    public interface IProcessAndRenderModel : IDisposable
     {
+        /// <summary>
+        /// Clear and reset the model. Required Init function to be called again before calling ProcessAndRender.
+        /// </summary>
+        void Clear();
+
         /// <summary>
         /// Download and initialize the model
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
+        /// <param name="initOptions">Initialization options</param>
         /// <returns>Async task</returns>
-        Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null);
+        Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged, Object initOptions);
 
         /// <summary>
         /// Process the input image and render into the output image

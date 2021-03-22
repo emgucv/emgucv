@@ -16,6 +16,13 @@ namespace Emgu.CV.XamarinForms
 {
     public class ButtonTextImagePage : Xamarin.Forms.ContentPage
     {
+        private Picker _picker = new Picker();
+
+        public Picker Picker
+        {
+            get { return _picker; }
+        }
+
         private Button _topButton = new Button();
         public Button TopButton
         {
@@ -50,12 +57,15 @@ namespace Emgu.CV.XamarinForms
             MessageLabel.Text = "";
             MessageLabel.HorizontalOptions = LayoutOptions.Center;
 
-            
+
             //DisplayImage.HeightRequest = 100;
             //DisplayImage.WidthRequest = 100;
             //DisplayImage.MinimumHeightRequest = 10;
-            
+
             //StackLayout mainLayout = new StackLayout();
+            _mainLayout.Children.Add(Picker);
+            Picker.IsVisible = false;
+
             _mainLayout.Children.Add(TopButton);
             _mainLayout.Children.Add(MessageLabel);
             _mainLayout.Children.Add(DisplayImage);

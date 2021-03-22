@@ -30,6 +30,14 @@ namespace Emgu.CV.Models
         private FacemarkDetector _facemarkDetector = null;
 
         /// <summary>
+        /// Clear and reset the model. Required Init function to be called again before calling ProcessAndRender.
+        /// </summary>
+        public void Clear()
+        {
+            DisposeObject();
+        }
+
+        /// <summary>
         /// Release the memory associated with this face and facial landmark detector
         /// </summary>
         protected override void DisposeObject()
@@ -70,7 +78,9 @@ namespace Emgu.CV.Models
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <returns>Async task</returns>
-        public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        public async Task Init(
+            DownloadProgressChangedEventHandler onDownloadProgressChanged = null, 
+            Object initOptions = null)
         {
             await InitFaceDetector(onDownloadProgressChanged);
             await InitFacemark(onDownloadProgressChanged);

@@ -13,13 +13,37 @@ using Emgu.CV.Util;
 using Emgu.CV.Cuda;
 using System.Threading.Tasks;
 using System.Net;
+using Emgu.Util;
 
 namespace Emgu.CV.Models
 {
-    public class PedestrianDetector : IProcessAndRenderModel
+    public class PedestrianDetector : DisposableObject, IProcessAndRenderModel
     {
         private CudaHOG _hogCuda;
         private HOGDescriptor _hog;
+
+        /// <summary>
+        /// Clear and reset the model. Required Init function to be called again before calling ProcessAndRender.
+        /// </summary>
+        public void Clear()
+        {
+            DisposeObject();
+        }
+
+        protected override void DisposeObject()
+        {
+            if (_hog != null)
+            {
+                _hog.Dispose();
+                _hog = null;
+            }
+
+            if (_hogCuda != null)
+            {
+                _hogCuda.Dispose();
+                _hog = null;
+            }
+        }
 
         /// <summary>
         /// Find the pedestrian in the image
@@ -53,12 +77,12 @@ namespace Emgu.CV.Models
                     for (int i = 0; i < results.Length; i++)
                         regions[i] = results[i].Rect;
                 }
-                
+
                 return regions;
             }
         }
 
-        public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
         {
             _hog = new HOGDescriptor();
             _hog.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());

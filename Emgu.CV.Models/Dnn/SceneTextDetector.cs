@@ -46,7 +46,9 @@ namespace Emgu.CV.Models
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <returns>Async task</returns>
-        public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        public async Task Init(
+            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
+            Object initOptions = null)
         {
             await InitTextDetector(onDownloadProgressChanged);
             await InitTextRecognizer(onDownloadProgressChanged);
@@ -225,6 +227,14 @@ namespace Emgu.CV.Models
             }
             Render(imageOut, sceneTexts);
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
+        }
+
+        /// <summary>
+        /// Clear and reset the model. Required Init function to be called again before calling ProcessAndRender.
+        /// </summary>
+        public void Clear()
+        {
+            DisposeObject();
         }
 
         /// <summary>

@@ -86,7 +86,7 @@ namespace Emgu.CV.Models
         private Net _vehicleAttrRecognizer = null;
         private Net _ocr = null;
 
-        private async Task InitOCR(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private async Task InitOCR(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
             if (_ocr == null)
             {
@@ -140,7 +140,7 @@ namespace Emgu.CV.Models
             }
         }
 
-        private async Task InitVehicleAttributesRecognizer(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private async Task InitVehicleAttributesRecognizer(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
             if (_vehicleAttrRecognizer == null)
             {
@@ -169,7 +169,7 @@ namespace Emgu.CV.Models
             }
         }
 
-        private async Task InitLicensePlateDetector(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private async Task InitLicensePlateDetector(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
             if (_vehicleLicensePlateDetectionModel == null)
             {
@@ -227,11 +227,32 @@ namespace Emgu.CV.Models
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <returns>Async task</returns>
-        public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        public async Task Init(
+            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, 
+            Object initOptions = null)
         {
-            await InitLicensePlateDetector(onDownloadProgressChanged);
-            await InitVehicleAttributesRecognizer(onDownloadProgressChanged);
-            await InitOCR(onDownloadProgressChanged);
+            Dnn.Backend backend = Dnn.Backend.OpenCV;
+            Dnn.Target target = Target.Cpu;
+            if (initOptions != null && ((initOptions as String) != null))
+            {
+                String[] backendOptions = (initOptions as String).Split(';');
+                if (backendOptions.Length == 2)
+                {
+                    String backendStr = backendOptions[0];
+                    String targetStr = backendOptions[1];
+
+                    if (!(Enum.TryParse(backendStr, true, out backend) &&
+                        Enum.TryParse(targetStr, true, out target)))
+                    {
+                        //If failed to part either backend or target, use the following default
+                        backend = Dnn.Backend.OpenCV;
+                        target = Target.Cpu;
+                    }
+                }
+            }
+            await InitLicensePlateDetector(backend, target, onDownloadProgressChanged);
+            await InitVehicleAttributesRecognizer(backend, target, onDownloadProgressChanged);
+            await InitOCR(backend, target, onDownloadProgressChanged);
         }
 
         /// <summary>
@@ -397,6 +418,14 @@ namespace Emgu.CV.Models
                     new MCvScalar(0, 255, 0),
                     2);
             }
+        }
+
+        /// <summary>
+        /// Clear and reset the model. Required Init function to be called again before calling ProcessAndRender.
+        /// </summary>
+        public void Clear()
+        {
+            DisposeObject();
         }
 
         /// <summary>

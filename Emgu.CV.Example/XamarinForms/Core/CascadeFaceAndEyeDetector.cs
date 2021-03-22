@@ -16,7 +16,7 @@ using Emgu.Util;
 
 namespace Emgu.CV.Models
 {
-    public class CascadeFaceAndEyeDetector : IProcessAndRenderModel
+    public class CascadeFaceAndEyeDetector : DisposableObject, IProcessAndRenderModel
     {
         private CascadeClassifier _faceCascadeClassifier = null;
         private CascadeClassifier _eyeCascadeClassifier = null;
@@ -72,9 +72,9 @@ namespace Emgu.CV.Models
         /// </summary>
         /// <param name="onDownloadProgressChanged">Call back method during download</param>
         /// <returns>Asyn task</returns>
-        public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
         {
-            if (_faceCascadeClassifier == null && _eyeCascadeClassifier == null)
+            if (_faceCascadeClassifier == null || _eyeCascadeClassifier == null)
             {
                 FileDownloadManager downloadManager = new FileDownloadManager();
                 String url = "https://github.com/opencv/opencv/raw/4.2.0/data/haarcascades/";
@@ -118,6 +118,26 @@ namespace Emgu.CV.Models
 
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
 
+        }
+
+        public void Clear()
+        {
+            DisposeObject();
+        }
+
+        protected override void DisposeObject()
+        {
+            if (_faceCascadeClassifier != null)
+            {
+                _faceCascadeClassifier.Dispose();
+                _faceCascadeClassifier = null;
+            }
+
+            if (_eyeCascadeClassifier != null)
+            {
+                _eyeCascadeClassifier.Dispose();
+                _eyeCascadeClassifier = null;
+            }
         }
     }
 }

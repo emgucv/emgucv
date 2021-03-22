@@ -49,9 +49,11 @@ namespace Emgu.CV.Models
         /// Download and initialize the Mask Rcnn model
         /// </summary>
         /// <param name="onDownloadProgressChanged">Call back method during download</param>
+        /// <param name="initOptions">A string, such as "OpenCV;CPU", in the format of "{backend};{option}"</param>
         /// <returns>Asyn task</returns>
         public async Task Init(
-            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
+            Object initOptions = null)
         {
             if (_maskRcnnDetector == null)
             {
@@ -81,16 +83,25 @@ namespace Emgu.CV.Models
 
                     _labels = File.ReadAllLines(manager.Files[2].LocalFile);
 
-                    //prefer cuda backend if available
-                    foreach (BackendTargetPair p in DnnInvoke.AvailableBackends)
+                    if (initOptions != null && ((initOptions as String) != null))
                     {
-                        if (p.Backend == Dnn.Backend.Cuda && p.Target == Target.Cuda)
+                        String[] backendOptions = (initOptions as String).Split(';');
+                        if (backendOptions.Length == 2)
                         {
-                            _maskRcnnDetector.SetPreferableBackend(Dnn.Backend.Cuda);
-                            _maskRcnnDetector.SetPreferableTarget(Target.Cuda);
-                            break;
+                            String backendStr = backendOptions[0];
+                            String targetStr = backendOptions[1];
+
+                            Dnn.Backend backend;
+                            Dnn.Target target;
+                            if (Enum.TryParse(backendStr, true, out backend) &&
+                                Enum.TryParse(targetStr, true, out target))
+                            {
+                                _maskRcnnDetector.SetPreferableBackend(backend);
+                                _maskRcnnDetector.SetPreferableTarget(target);
+                            }
                         }
                     }
+                    
 
                     _colors = new MCvScalar[_labels.Length];
                     Random r = new Random(12345);
@@ -113,6 +124,7 @@ namespace Emgu.CV.Models
             Stopwatch watch = Stopwatch.StartNew();
             ProcessAndRender(imageIn, imageOut, 0.5f, 0.4f);
             watch.Stop();
+            
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
         }
 
@@ -136,7 +148,7 @@ namespace Emgu.CV.Models
             }
             foreach (var obj in objects)
             {
-                obj.Render(imageOut, new MCvScalar(0,0,255), _colors[obj.ClassId]);
+                obj.Render(imageOut, new MCvScalar(0, 0, 255), _colors[obj.ClassId]);
                 obj.Dispose();
             }
         }
@@ -220,6 +232,14 @@ namespace Emgu.CV.Models
 
                 }
             }
+        }
+
+        /// <summary>
+        /// Clear and reset the model. Required Init function to be called again before calling ProcessAndRender.
+        /// </summary>
+        public void Clear()
+        {
+            DisposeObject();
         }
 
         /// <summary>
