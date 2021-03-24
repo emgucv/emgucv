@@ -39,5 +39,6 @@
 	<Compile Include="$(MSBuildThisFileDirectory)Mcc\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Hdf\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)DepthAI\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)WechatQrcode\*.cs" />
   </ItemGroup>
 </Project>
