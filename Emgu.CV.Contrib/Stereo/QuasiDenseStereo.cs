@@ -60,12 +60,11 @@ namespace Emgu.CV.Stereo
         /// <summary>
         /// Compute and return the disparity map based on the correspondences found in the "process" method.
         /// </summary>
-        /// <param name="disparityLvls">The level of detail in output disparity image.</param>
         /// <returns>Mat containing a the disparity image in grayscale.</returns>
-        public Mat GetDisparity(byte disparityLvls = (byte)50)
+        public Mat GetDisparity()
         {
             Mat disparity = new Mat();
-            StereoInvoke.cveQuasiDenseStereoGetDisparity(_ptr, disparityLvls, disparity);
+            StereoInvoke.cveQuasiDenseStereoGetDisparity(_ptr, disparity);
             return disparity;
         }
 
@@ -174,7 +173,6 @@ namespace Emgu.CV.Stereo
         internal extern static void cveQuasiDenseStereoProcess(IntPtr stereo, IntPtr imgLeft, IntPtr imgRight);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveQuasiDenseStereoGetDisparity(IntPtr stereo, byte disparityLvls,
-            IntPtr disparity);
+        internal extern static void cveQuasiDenseStereoGetDisparity(IntPtr stereo, IntPtr disparity);
     }
 }

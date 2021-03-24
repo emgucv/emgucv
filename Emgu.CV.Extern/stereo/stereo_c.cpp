@@ -33,10 +33,10 @@ void cveQuasiDenseStereoProcess(cv::stereo::QuasiDenseStereo* stereo, cv::Mat* i
 #endif
 }
 
-void cveQuasiDenseStereoGetDisparity(cv::stereo::QuasiDenseStereo* stereo, uint8_t disparityLvls, cv::Mat* disparity)
+void cveQuasiDenseStereoGetDisparity(cv::stereo::QuasiDenseStereo* stereo, cv::Mat* disparity)
 {
 #ifdef HAVE_OPENCV_STEREO
-	cv::Mat d = stereo->getDisparity(disparityLvls);
+	cv::Mat d = stereo->getDisparity();
 	cv::swap(d, *disparity);
 #else
 	throw_no_stereo();
