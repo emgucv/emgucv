@@ -34,7 +34,7 @@
     <CppCommentsFixup>False</CppCommentsFixup>
     <FrameworkVersion>Cross-platform (.NET Core/.NET Standard)</FrameworkVersion>
     <HelpTitle>Emgu CV Library Documentation</HelpTitle>
-    <CopyrightText>2020 Emgu Corporation, All Rights Reserved,</CopyrightText>
+    <CopyrightText>2021 Emgu Corporation, All Rights Reserved,</CopyrightText>
     <FeedbackEMailAddress>support%40emgu.com</FeedbackEMailAddress>
     <HeaderText>http://www.emgu.com</HeaderText>
     <FooterText>For questions and discussions please visit https://github.com/emgucv/emgucv/issues</FooterText>
@@ -82,12 +82,14 @@ Base functions (L1) can be found in CvInvoke class</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.LineDescriptor" isDocumented="True">Binary descriptors for lines extracted from an image</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Plot" isDocumented="True">This Plot module allows you to easily plot data in 1D or 2D.</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Tracking" isDocumented="True">Long-term optical tracking API</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Legacy" isDocumented="True">Legacy Tracking API</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.XImgproc" isDocumented="True">Extended Image Processing</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.XPhoto" isDocumented="True">Additional photo processing algorithms</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Bioinspired" isDocumented="True">Biologically inspired vision models and derivated tools</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Dpm" isDocumented="True">Deformable Part-based Models</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Freetype" isDocumented="True">Drawing UTF-8 strings with freetype/harfbuzz</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Hfs" isDocumented="True">Hierarchical Feature Selection for Efficient Image Segmentation</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Hdf" isDocumented="True">Hierarchical Data Format I/O routines</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.ImgHash" isDocumented="True">The module brings implementations of different image hashing algorithms.</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Ocl" isDocumented="True">Open CL module</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.PhaseUnwrapping" isDocumented="True">Phase Unwrapping API</NamespaceSummaryItem>
@@ -98,8 +100,11 @@ Base functions (L1) can be found in CvInvoke class</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.IntensityTransform" isDocumented="True">The module brings implementations of intensity transformation algorithms to adjust image contrast.</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Alphamat" isDocumented="True">Information Flow algorithm implementaton for alphamatting</NamespaceSummaryItem>
       <NamespaceSummaryItem name="Emgu.CV.Quality" isDocumented="True">Image Quality Analysis (IQA) API</NamespaceSummaryItem>
-      <NamespaceSummaryItem name="Emgu.CV.Stereo" isDocumented="True">Stereo API</NamespaceSummaryItem>
-	  <NamespaceSummaryItem name="Emgu.CV.Mcc" isDocumented="True">Macbeth Chart detector</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Stereo" isDocumented="True">Stereo Correspondance Algorithms</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Mcc" isDocumented="True">Macbeth Chart detector</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Models" isDocumented="True">Experimental component to help download, initialize and execute image processing/AI models. This is under development and API may change from time to time.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Models.DepthAI" isDocumented="True">Experimental component to help download, initialize and execute DepthAI models. This is under development and API may change from time to time.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.DepthAI" isDocumented="True">This module exposed the DepthAI SDK for OAK-D and OAK-1 devices.</NamespaceSummaryItem>
     </NamespaceSummaries>
     <PlugInConfigurations>
     </PlugInConfigurations>
