@@ -837,7 +837,6 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   dnn dnn_objdetect dnn_superres aruco fuzzy viz bioinspired text tracking
   dpm
   saliency
-  dnn_modern
   img_hash
   phase_unwrapping
   freetype
