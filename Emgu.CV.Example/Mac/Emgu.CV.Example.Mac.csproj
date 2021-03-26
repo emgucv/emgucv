@@ -48,9 +48,11 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -64,6 +66,7 @@
     <LinkMode></LinkMode>
     <XamMacArch></XamMacArch>
     <AssemblyName>Emgu.CV.Example.Mac</AssemblyName>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>false</Optimize>
@@ -76,24 +79,31 @@
     <LinkMode></LinkMode>
     <XamMacArch></XamMacArch>
     <AssemblyName>Emgu.CV.Example.Mac</AssemblyName>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ARM' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|ARM' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <UseSGen>false</UseSGen>
+    <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -103,6 +113,9 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="OpenTK" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\nugetpackages\Newtonsoft.Json.13.0.1\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -124,6 +137,7 @@
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -135,17 +149,14 @@
     <Compile Include="..\XamarinForms\Core\DrawSubdivision.cs">
       <Link>DrawSubdivision.cs</Link>
     </Compile>
-    <Compile Include="..\XamarinForms\Core\DetectFace.cs">
-      <Link>DetectFace.cs</Link>
-    </Compile>
     <Compile Include="..\XamarinForms\Core\DrawMatches.cs">
       <Link>DrawMatches.cs</Link>
     </Compile>
-    <Compile Include="..\XamarinForms\Core\FindPedestrian.cs">
-      <Link>FindPedestrian.cs</Link>
-    </Compile>
     <Compile Include="..\..\Emgu.CV.NativeImage\CGImageExtension.cs" />
     <Compile Include="..\..\Emgu.CV.NativeImage\NSImageExtension.cs" />
+    <Compile Include="..\XamarinForms\Core\PedestrianDetector.cs">
+      <Link>PedestrianDetector.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
@@ -178,6 +189,10 @@
     <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
       <Project>{AFA9D3CF-62EB-47A8-BC3D-BC9006D495F9}</Project>
       <Name>Emgu.CV.Platform.NetStandard</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.Models\Emgu.CV.Models.csproj">
+      <Project>{6C040F50-BE10-4692-AB69-3B028B0CA6A8}</Project>
+      <Name>Emgu.CV.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems')" />

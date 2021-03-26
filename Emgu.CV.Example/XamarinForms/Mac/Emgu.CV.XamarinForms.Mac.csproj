@@ -147,6 +147,9 @@
     <Content Include="..\Core\pic3.png">
       <Link>pic3.png</Link>
     </Content>
+    <Content Include="..\Core\cars_license_plate.png">
+      <Link>cars_license_plate.png</Link>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -182,16 +185,23 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms">
-      <Version>5.0.0.1874</Version>
+      <Version>5.0.0.2012</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Essentials">
-      <Version>1.6.0</Version>
+      <Version>1.6.1</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
       <Project>{AFA9D3CF-62EB-47A8-BC3D-BC9006D495F9}</Project>
       <Name>Emgu.CV.Platform.NetStandard</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Emgu.CV.Models\Emgu.CV.Models.csproj">
+      <Project>{6C040F50-BE10-4692-AB69-3B028B0CA6A8}</Project>
+      <Name>Emgu.CV.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems" Label="Shared" Condition="Exists('..\..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems')" />
