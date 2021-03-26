@@ -82,14 +82,20 @@ namespace BuildInfo.NetCore.Console
 
 
             String captureText = String.Format("Capture backends: {0}{1}", System.Environment.NewLine, String.Join(System.Environment.NewLine, captureBackendsText.ToArray()));
-            using (VideoCapture cap = new VideoCapture())
+
+            //We don't want to create VideoCapture on Mac OS unless we have requested permission
+            if (Emgu.Util.Platform.OperationSystem != Platform.OS.MacOS)
             {
-                if (cap.IsOpened)
+                using (VideoCapture cap = new VideoCapture())
                 {
-                    String backendName = cap.BackendName;
-                    captureText += String.Format("{0}Capture device successfully opened with default backend: {1}", System.Environment.NewLine, backendName);
+                    if (cap.IsOpened)
+                    {
+                        String backendName = cap.BackendName;
+                        captureText += String.Format("{0}Capture device successfully opened with default backend: {1}", System.Environment.NewLine, backendName);
+                    }
                 }
             }
+
             return captureText;
         }
 
