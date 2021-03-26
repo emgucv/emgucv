@@ -8,6 +8,6 @@ rm -rf emgucv.bundle
 
 mkdir -p emgucv.bundle/Contents/MacOS
 mkdir -p emgucv.bundle/Contents/Resources
-cp ../../libs/macos/libcvextern.dylib emgucv.bundle/Contents/MacOS/
+cp ../../libs/macos/*.dylib emgucv.bundle/Contents/MacOS/
 cp Info.plist emgucv.bundle/Contents/
 cp icons.icns emgucv.bundle/Contents/Resources/

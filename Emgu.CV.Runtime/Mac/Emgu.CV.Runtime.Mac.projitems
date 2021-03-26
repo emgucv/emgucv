@@ -18,14 +18,14 @@
     <EmguCVMacDeployMessage Condition="Exists('$(MSBuildThisFileDirectory)$(EmguCVMacNativeFile)')">$(EmguCVMacDeployMessage)MacOS x64 </EmguCVMacDeployMessage>
   </PropertyGroup>
   <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)$(EmguCVMacNativeFile)')">
-    <Content Include="$(MSBuildThisFileDirectory)$(EmguCVMacNativeFile)">
-      <Link>libcvextern.dylib</Link>
+    <Content Include="$(MSBuildThisFileDirectory)$(EmguCVMacBinaryDir)\*.dylib">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Target Name="EmguCVMacPackageBuildImports" BeforeTargets="PrepareForBuild">
     <Warning Text="'$(EmguCVMacErrorMessage)'" Condition="'$(EmguCVMacErrorMessage)'!=''" />
-	<Warning Text="'$(EmguCVMacErrorMessage2)'" Condition="'$(EmguCVMacErrorMessage2)'!=''" />
+    <Warning Text="'$(EmguCVMacErrorMessage2)'" Condition="'$(EmguCVMacErrorMessage2)'!=''" />
     <Message Text="Emgu.CV.Runtime.Mac Compiling with $(EmguCVMacDeployMessage)binary" Condition="'$(EmguCVMacDeployMessage)'!=''" Importance="High" />
     <Message Text="Native binary is NOT deployed by the Emgu.CV.Runtime.Mac shared project." Condition="'$(EmguCVMacDeployMessage)'==''" Importance="High" />
   </Target>

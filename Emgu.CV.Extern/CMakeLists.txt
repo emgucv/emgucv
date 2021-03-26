@@ -3622,32 +3622,64 @@ ELSEIF (APPLE)
     )
   IF ("${EMGUCV_ARCH}" STREQUAL "arm64")
     SET(CV_EXTERN_FILE_NAME "libcvextern_arm64.dylib")
+    SET(LIBUSB_FILE_NAME "libusb_arm64.dylib")
   ELSE()
     SET(CV_EXTERN_FILE_NAME "libcvextern_x64.dylib")
+    SET(LIBUSB_FILE_NAME "libusb_x64.dylib")
   ENDIF()
   add_custom_command(TARGET ${the_target}
     POST_BUILD
     COMMAND mkdir -p ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch
-    #WORKING_DIRECTORY "${UNMANAGED_LIBRARY_OUTPUT_PATH}"
     COMMENT "Creating arch folder: ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch")
+    
   add_custom_command(TARGET ${the_target}
     POST_BUILD
     COMMAND cp -f ${UNMANAGED_LIBRARY_OUTPUT_PATH}/libcvextern.dylib ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${CV_EXTERN_FILE_NAME}
-    #WORKING_DIRECTORY "${UNMANAGED_LIBRARY_OUTPUT_PATH}"
     COMMENT "Copying file to ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${CV_EXTERN_FILE_NAME}")
   add_custom_command(TARGET ${the_target}
     POST_BUILD
-    COMMAND lipo ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/*.dylib -output ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libcvextern.dylib -create
-    #WORKING_DIRECTORY "${UNMANAGED_LIBRARY_OUTPUT_PATH}"
+    COMMAND lipo ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/libcvextern_*.dylib -output ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libcvextern.dylib -create
     COMMENT "Linking target for all architectures and ouputing to ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libcvextern.dylib")
-  #INSTALL(FILES ${the_target} 
-  #  RUNTIME DESTINATION libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT libs
-  #  LIBRARY DESTINATION libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT libs
-  #  ARCHIVE DESTINATION libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT libs)
+
+
+  IF(EMGU_CV_WITH_DEPTHAI)  
+    add_custom_command(TARGET ${the_target}
+      POST_BUILD
+      COMMAND cp -f /usr/local/opt/libusb/lib/libusb-1.0.0.dylib ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${LIBUSB_FILE_NAME}
+      COMMENT "Copying file to ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${LIBUSB_FILE_NAME}")
+    add_custom_command(TARGET ${the_target}
+      POST_BUILD
+      COMMAND lipo ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/libusb*.dylib -output ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib -create
+      COMMENT "Linking target for all architectures and ouputing to ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib")
+    INSTALL(FILES
+      ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib
+      DESTINATION "libs/macos/"
+      COMPONENT emgucv_binary)
+#    add_custom_command(TARGET ${the_target}
+#      POST_BUILD
+#      COMMAND install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib 
+#      COMMENT "Altering dependency for ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib")
+    add_custom_command(TARGET ${the_target}
+      POST_BUILD
+      COMMAND install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libcvextern.dylib 
+      COMMENT "Altering dependency for ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libcvextern.dylib")
+    add_custom_command(TARGET ${the_target}
+      POST_BUILD
+      COMMAND install_name_tool -id "@rpath/libusb-1.0.0.dylib" ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib
+      COMMAND chmod a+x ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib
+      COMMENT "Altering id for ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib")
+  ENDIF()
+
   INSTALL(FILES
     ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libcvextern.dylib
     DESTINATION "libs/macos/"
     COMPONENT emgucv_binary)
+
+  #INSTALL(FILES ${the_target} 
+  #  RUNTIME DESTINATION libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT libs
+  #  LIBRARY DESTINATION libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT libs
+  #  ARCHIVE DESTINATION libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT libs)
+  
 ENDIF()
 
 #IF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
