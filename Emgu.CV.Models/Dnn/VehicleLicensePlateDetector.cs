@@ -83,7 +83,8 @@ namespace Emgu.CV.Models
         private String _modelFolderName = "vehicle-license-plate-detection-barrier-0106-openvino-2021.2";
 
         private DetectionModel _vehicleLicensePlateDetectionModel = null;
-        private Net _vehicleAttrRecognizer = null;
+        
+        private Model _vehicleAttrRecognizerModel = null;
         private Net _ocr = null;
 
         private async Task InitOCR(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
@@ -131,18 +132,15 @@ namespace Emgu.CV.Models
                     _ocr.SetInput(seqInd, "seq_ind");
                 }
 
-                /*
-                if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
-                {
-                    _ocr.SetPreferableBackend(Emgu.CV.Dnn.Backend.Cuda);
-                    _ocr.SetPreferableTarget(Emgu.CV.Dnn.Target.Cuda);
-                }*/
+                _ocr.SetPreferableBackend(preferredBackend);
+                _ocr.SetPreferableTarget(preferredTarget);
+                
             }
         }
 
         private async Task InitVehicleAttributesRecognizer(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
-            if (_vehicleAttrRecognizer == null)
+            if (_vehicleAttrRecognizerModel == null)
             {
                 FileDownloadManager manager = new FileDownloadManager();
 
@@ -157,15 +155,17 @@ namespace Emgu.CV.Models
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;
                 await manager.Download();
-                _vehicleAttrRecognizer =
-                    DnnInvoke.ReadNetFromModelOptimizer(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
+                //_vehicleAttrRecognizer =
+                //    DnnInvoke.ReadNetFromModelOptimizer(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
+                _vehicleAttrRecognizerModel = new Model(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
+                _vehicleAttrRecognizerModel.SetInputSize(new Size(72, 72));
+                _vehicleAttrRecognizerModel.SetInputMean(new MCvScalar());
+                _vehicleAttrRecognizerModel.SetInputCrop(false);
+                _vehicleAttrRecognizerModel.SetInputSwapRB(false);
+                _vehicleAttrRecognizerModel.SetInputScale(1.0);
 
-                /*
-                if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
-                {
-                    _vehicleAttrRecognizer.SetPreferableBackend(Emgu.CV.Dnn.Backend.Cuda);
-                    _vehicleAttrRecognizer.SetPreferableTarget(Emgu.CV.Dnn.Target.Cuda);
-                }*/
+                _vehicleAttrRecognizerModel.SetPreferableBackend(preferredBackend);
+                _vehicleAttrRecognizerModel.SetPreferableTarget(preferredTarget);
             }
         }
 
@@ -192,13 +192,11 @@ namespace Emgu.CV.Models
                 _vehicleLicensePlateDetectionModel.SetInputScale(1.0);
                 _vehicleLicensePlateDetectionModel.SetInputSwapRB(false);
                 _vehicleLicensePlateDetectionModel.SetInputCrop(false);
+
+
+                _vehicleLicensePlateDetectionModel.SetPreferableBackend(preferredBackend);
+                _vehicleLicensePlateDetectionModel.SetPreferableTarget(preferredTarget);
                 
-                /*
-                if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
-                {
-                    _vehicleLicensePlateDetector.SetPreferableBackend(Emgu.CV.Dnn.Backend.Cuda);
-                    _vehicleLicensePlateDetector.SetPreferableTarget(Emgu.CV.Dnn.Target.Cuda);
-                }*/
             }
         }
 
@@ -287,7 +285,7 @@ namespace Emgu.CV.Models
             float vehicleConfidenceThreshold = 0.5f;
             float licensePlateConfidenceThreshold = 0.5f;
 
-            int vehicleAttrSize = 72;
+            
             double scale = 1.0;
             MCvScalar meanVal = new MCvScalar();
 
@@ -308,35 +306,23 @@ namespace Emgu.CV.Models
                         #region find out the type and color of the vehicle
 
                         using (Mat vehicle = new Mat(iaImageMat, region))
-                        using (Mat vehicleBlob = DnnInvoke.BlobFromImage(
-                            vehicle,
-                            scale,
-                            new Size(vehicleAttrSize, vehicleAttrSize),
-                            meanVal,
-                            false,
-                            false,
-                            DepthType.Cv32F))
+                        using (VectorOfMat vm = new VectorOfMat(2))
                         {
-                            _vehicleAttrRecognizer.SetInput(vehicleBlob, "input");
-
-                            using (VectorOfMat vm = new VectorOfMat(2))
+                            _vehicleAttrRecognizerModel.Predict(vehicle, vm);
+                            //_vehicleAttrRecognizer.Forward(vm, new string[] { "color", "type" });
+                            using (Mat vehicleColorMat = vm[0])
+                            using (Mat vehicleTypeMat = vm[1])
                             {
-                                _vehicleAttrRecognizer.Forward(vm, new string[] { "color", "type" });
-                                using (Mat vehicleColorMat = vm[0])
-                                using (Mat vehicleTypeMat = vm[1])
-                                {
-                                    float[] vehicleColorData = vehicleColorMat.GetData(false) as float[];
-                                    float maxProbColor = vehicleColorData.Max();
-                                    int maxIdxColor = Array.IndexOf(vehicleColorData, maxProbColor);
-                                    v.Color = _colorName[maxIdxColor];
-                                    float[] vehicleTypeData = vehicleTypeMat.GetData(false) as float[];
-                                    float maxProbType = vehicleTypeData.Max();
-                                    int maxIdxType = Array.IndexOf(vehicleTypeData, maxProbType);
-                                    v.Type = _vehicleType[maxIdxType];
-                                }
+                                float[] vehicleColorData = vehicleColorMat.GetData(false) as float[];
+                                float maxProbColor = vehicleColorData.Max();
+                                int maxIdxColor = Array.IndexOf(vehicleColorData, maxProbColor);
+                                v.Color = _colorName[maxIdxColor];
+                                float[] vehicleTypeData = vehicleTypeMat.GetData(false) as float[];
+                                float maxProbType = vehicleTypeData.Max();
+                                int maxIdxType = Array.IndexOf(vehicleTypeData, maxProbType);
+                                v.Type = _vehicleType[maxIdxType];
                             }
                         }
-
                         #endregion
 
                         vehicles.Add(v);
@@ -439,10 +425,10 @@ namespace Emgu.CV.Models
                 _vehicleLicensePlateDetectionModel = null;
             }
 
-            if (_vehicleAttrRecognizer != null)
+            if (_vehicleAttrRecognizerModel != null)
             {
-                _vehicleAttrRecognizer.Dispose();
-                _vehicleAttrRecognizer = null;
+                _vehicleAttrRecognizerModel.Dispose();
+                _vehicleAttrRecognizerModel = null;
             }
 
             if (_ocr != null)
