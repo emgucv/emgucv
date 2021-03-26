@@ -19,11 +19,13 @@
     <OutputPath>.</OutputPath>
     <AOTMode>None</AOTMode>
     <EnableCodeSigning>false</EnableCodeSigning>
+    <LinkMode>None</LinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <UseSGen>false</UseSGen>
     <AOTMode>None</AOTMode>
     <EnableCodeSigning>false</EnableCodeSigning>
+    <LinkMode>None</LinkMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -36,8 +38,7 @@
     <UseSGen>false</UseSGen>
     <HttpClientHandler>
     </HttpClientHandler>
-    <LinkMode>
-    </LinkMode>
+    <LinkMode>None</LinkMode>
     <XamMacArch>
     </XamMacArch>
     <AOTMode>None</AOTMode>
@@ -53,8 +54,7 @@
     <UseSGen>false</UseSGen>
     <HttpClientHandler>
     </HttpClientHandler>
-    <LinkMode>
-    </LinkMode>
+    <LinkMode>None</LinkMode>
     <XamMacArch>
     </XamMacArch>
     <AOTMode>None</AOTMode>
@@ -63,34 +63,26 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <UseSGen>false</UseSGen>
     <EnableCodeSigning>false</EnableCodeSigning>
+    <LinkMode>None</LinkMode>
+    <AOTMode>None</AOTMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ARM' ">
     <UseSGen>false</UseSGen>
     <EnableCodeSigning>false</EnableCodeSigning>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
-    <UseSGen>false</UseSGen>
-    <EnableCodeSigning>false</EnableCodeSigning>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
-    <UseSGen>false</UseSGen>
-    <EnableCodeSigning>false</EnableCodeSigning>
+    <LinkMode>None</LinkMode>
+    <AOTMode>None</AOTMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <UseSGen>false</UseSGen>
     <EnableCodeSigning>false</EnableCodeSigning>
+    <LinkMode>None</LinkMode>
+    <AOTMode>None</AOTMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|ARM' ">
     <UseSGen>false</UseSGen>
     <EnableCodeSigning>false</EnableCodeSigning>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
-    <UseSGen>false</UseSGen>
-    <EnableCodeSigning>false</EnableCodeSigning>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
-    <UseSGen>false</UseSGen>
-    <EnableCodeSigning>false</EnableCodeSigning>
+    <LinkMode>None</LinkMode>
+    <AOTMode>None</AOTMode>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
