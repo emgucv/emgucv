@@ -5,8 +5,8 @@
 //----------------------------------------------------------------------------
 
 #pragma once
-#ifndef EMGU_SURFACE_MATCHING_C_H
-#define EMGU_SURFACE_MATCHING_C_H
+#ifndef EMGU_WECHAT_QRCODE_C_H
+#define EMGU_WECHAT_QRCODE_C_H
 
 #include "opencv2/core/core_c.h"
 #ifdef HAVE_OPENCV_WECHAT_QRCODE
@@ -14,6 +14,13 @@
 #else
 static inline CV_NORETURN void throw_no_wechat_qrcode() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without wechat qrcode support"); }
 
+namespace cv
+{
+	namespace wechat_qrcode
+	{
+		class WeChatQRCode {};
+	}
+}
 
 #endif
 
