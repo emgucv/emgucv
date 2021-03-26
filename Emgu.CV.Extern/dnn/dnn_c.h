@@ -148,6 +148,11 @@ CVAPI(void) cveDnnTextRecognitionModelRecognize2(
 	cv::_InputArray* roiRects, 
 	std::vector< std::string >* results);
 
+CVAPI(cv::dnn::Model*) cveModelCreate(cv::String* model, cv::String* config);
+CVAPI(cv::dnn::Model*) cveModelCreateFromNet(cv::dnn::Net* network);
+CVAPI(void) cveModelRelease(cv::dnn::Model** model);
+CVAPI(void) cveModelPredict(cv::dnn::Model* model, cv::_InputArray* frame, cv::_OutputArray* outs);
+
 CVAPI(void) cveModelSetInputMean(cv::dnn::Model* model, CvScalar* mean);
 CVAPI(void) cveModelSetInputScale(cv::dnn::Model* model, double value);
 CVAPI(void) cveModelSetInputSize(cv::dnn::Model* model, CvSize* size);

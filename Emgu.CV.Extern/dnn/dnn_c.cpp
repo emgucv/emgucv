@@ -550,6 +550,39 @@ void cveDnnTextRecognitionModelRecognize2(
 #endif
 }
 
+cv::dnn::Model* cveModelCreate(cv::String* model, cv::String* config)
+{
+#ifdef HAVE_OPENCV_DNN
+	return new cv::dnn::Model(*model, *config);
+#else
+	throw_no_dnn();
+#endif
+}
+cv::dnn::Model* cveModelCreateFromNet(cv::dnn::Net* network)
+{
+#ifdef HAVE_OPENCV_DNN
+	return new cv::dnn::Model(*network);
+#else
+	throw_no_dnn();
+#endif
+}
+void cveModelRelease(cv::dnn::Model** model)
+{
+#ifdef HAVE_OPENCV_DNN
+	delete* model;
+	*model = 0;
+#else
+	throw_no_dnn();
+#endif
+}
+void cveModelPredict(cv::dnn::Model* model, cv::_InputArray* frame, cv::_OutputArray* outs)
+{
+#ifdef HAVE_OPENCV_DNN
+	model->predict(*frame, *outs);
+#else
+	throw_no_dnn();
+#endif
+}
 
 void cveModelSetInputMean(cv::dnn::Model* model, CvScalar* mean)
 {

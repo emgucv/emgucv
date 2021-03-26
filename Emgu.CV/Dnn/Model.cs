@@ -17,8 +17,50 @@ namespace Emgu.CV.Dnn
     /// <summary>
     /// This class is presented high-level API for neural networks.
     /// </summary>
-    public abstract class Model : UnmanagedObject
+    public class Model : UnmanagedObject
     {
+        internal Model()
+        {
+        }
+
+        /// <summary>
+        /// Create DNN model from network represented in one of the supported formats.
+        /// </summary>
+        /// <param name="model">Binary file contains trained weights.</param>
+        /// <param name="config">Text file contains network configuration.</param>
+        public Model(String model, String config)
+        {
+            using (CvString csModel = new CvString(model))
+            using (CvString csConfig = new CvString(config))
+            {
+                _ptr = DnnInvoke.cveModelCreate(csModel, csConfig);
+                _model = _ptr;
+            }
+        }
+
+        /// <summary>
+        /// Create model from deep learning network.
+        /// </summary>
+        /// <param name="network">DNN Network</param>
+        public Model(Net network)
+        {
+            _ptr = DnnInvoke.cveModelCreateFromNet(network);
+            _model = _ptr;
+        }
+
+        /// <summary>
+        /// Given the input frame, create input blob, run net and return the output blobs.
+        /// </summary>
+        /// <param name="frame">The input image.</param>
+        /// <param name="outs">Allocated output blobs, which will store results of the computation.</param>
+        public void Predict(IInputArray frame, IOutputArrayOfArrays outs)
+        {
+            using (InputArray iaFrame = frame.GetInputArray())
+            using (OutputArray oaOuts = outs.GetOutputArray())
+            {
+                DnnInvoke.cveModelPredict(_model, iaFrame, oaOuts);
+            }
+        }
 
         /// <summary>
         /// The pointer to the Model object
@@ -76,10 +118,11 @@ namespace Emgu.CV.Dnn
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_model != IntPtr.Zero)
+            if (_ptr != IntPtr.Zero)
             {
-                _model = IntPtr.Zero;
+                DnnInvoke.cveModelRelease(ref _ptr);
             }
+            _model = IntPtr.Zero;
         }
 
         /// <summary>
@@ -104,6 +147,17 @@ namespace Emgu.CV.Dnn
     public static partial class DnnInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveModelCreate(IntPtr model, IntPtr config);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveModelCreateFromNet(IntPtr network);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveModelRelease(ref IntPtr model);
+
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveModelPredict(IntPtr model, IntPtr frame, IntPtr outs);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveModelSetInputScale(
            IntPtr model,
            double scale);
@@ -115,7 +169,7 @@ namespace Emgu.CV.Dnn
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveModelSetInputSize(
-            IntPtr model, 
+            IntPtr model,
             ref Size size);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
