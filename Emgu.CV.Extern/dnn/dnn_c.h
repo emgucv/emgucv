@@ -20,13 +20,27 @@ namespace cv
 {
 	namespace dnn
 	{
-		class Net
-		{
-		};
+		class Net {};
 
-		class Layer
-		{
-		};
+		class Layer	{};
+
+		class Model {};
+
+		class DetectionModel {};
+		
+		class ClassificationModel {};
+
+		class SegmentationModel {};
+		
+		class TextDetectionModel {};
+
+		class TextDetectionModel_EAST {};
+
+		class TextDetectionModel_DB {};
+
+		class TextRecognitionModel {};
+		
+		class KeypointsModel {};
 	}
 }
 #endif
