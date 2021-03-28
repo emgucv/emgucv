@@ -121,6 +121,38 @@ namespace Example.iOS
         }
 
         public event EventHandler<EventArgs> OnButtonClick;
+
+        private static String ByteToSizeStr(long byteCount)
+        {
+            if (byteCount < 1024)
+            {
+                return String.Format("{0} B", byteCount);
+            }
+            else if (byteCount < 1024 * 1024)
+            {
+                return String.Format("{0} KB", byteCount / 1024);
+            }
+            else
+            {
+                return String.Format("{0} MB", byteCount / (1024 * 1024));
+            }
+        }
+
+        protected void DownloadManager_OnDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
+        {
+            String msg;
+            if (e.TotalBytesToReceive > 0)
+                msg = String.Format("{0} of {1} downloaded ({2}%)", ByteToSizeStr(e.BytesReceived), ByteToSizeStr(e.TotalBytesToReceive), e.ProgressPercentage);
+            else
+                msg = String.Format("{0} downloaded", ByteToSizeStr(e.BytesReceived));
+            SetMessage(msg);
+        }
+
+        public void SetMessage(String msg)
+        {
+            MessageText = msg;
+        }
+
     }
 
     public class ProgressView : UIAlertView

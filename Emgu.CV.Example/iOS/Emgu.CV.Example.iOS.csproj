@@ -124,17 +124,11 @@
       <Link>DrawMatches.cs</Link>
     </Compile>
     <Compile Include="FeatureMatchingDialogViewController.cs" />
-    <Compile Include="..\XamarinForms\Core\FindPedestrian.cs">
-      <Link>FindPedestrian.cs</Link>
-    </Compile>
     <Compile Include="PlanarSubdivisionDialogViewController.cs" />
     <Compile Include="..\XamarinForms\Core\DrawSubdivision.cs">
       <Link>DrawSubdivision.cs</Link>
     </Compile>
     <Compile Include="FaceDetectionDialogViewController.cs" />
-    <Compile Include="..\XamarinForms\Core\DetectFace.cs">
-      <Link>DetectFace.cs</Link>
-    </Compile>
     <Compile Include="ButtonMessageImageDialogViewController.cs" />
     <Compile Include="CameraDialogViewController.cs" />
     <Compile Include="PedestrianDetectionDialogViewController.cs" />
@@ -149,12 +143,6 @@
     <Content Include="..\XamarinForms\Core\pedestrian.png">
       <Link>pedestrian.png</Link>
     </Content>
-    <Content Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
-      <Link>haarcascade_eye.xml</Link>
-    </Content>
-    <Content Include="..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
-      <Link>haarcascade_frontalface_default.xml</Link>
-    </Content>
     <Content Include="..\XamarinForms\Core\lena.jpg">
       <Link>lena.jpg</Link>
     </Content>
@@ -165,6 +153,10 @@
     <Content Include="AppIcons\iTunesArtwork_512x512.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV.Models\Emgu.CV.Models.IOS\Emgu.CV.Models.IOS.csproj">
+      <Project>{6d718341-c245-45bd-b866-d35902fd0db1}</Project>
+      <Name>Emgu.CV.Models.IOS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV.Platform\iOS\Emgu.CV.Platform.IOS.csproj">
       <Project>{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}</Project>
       <Name>Emgu.CV.Platform.IOS</Name>
@@ -172,10 +164,6 @@
     <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj">
       <Project>{79214dcd-3f36-4c50-97f4-11af21f60711}</Project>
       <Name>Emgu.CV.Platform.NetStandard.IOS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Models\Emgu.CV.Models.csproj">
-      <Project>{1C536610-54F5-4F85-A0F1-AB59E31236A0}</Project>
-      <Name>Emgu.CV.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />

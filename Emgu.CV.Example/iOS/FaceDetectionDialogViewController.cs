@@ -9,11 +9,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using MonoTouch.Dialog;
 using Foundation;
 using UIKit;
-using FaceDetection;
+using Emgu.CV.Models;
 
 namespace Example.iOS
 {
@@ -24,43 +25,26 @@ namespace Example.iOS
         {
         }
 
+
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
             ButtonText = "Detect Face & Eyes";
-            OnButtonClick += delegate
+            OnButtonClick += async delegate
             {
-                long processingTime;
-                using (CascadeClassifier faceCascadeClassifier = new CascadeClassifier("haarcascade_frontalface_default.xml"))
-                using (CascadeClassifier eyeCascadeClassifier = new CascadeClassifier("haarcascade_eye.xml"))
-                using (Image<Bgr, Byte> image = new Image<Bgr, Byte>("lena.jpg"))
+                //Read the files as an 8-bit Bgr image  
+                using (Mat image = CvInvoke.Imread("lena.jpg", ImreadModes.Color))
                 {
-                    List<Rectangle> faces = new List<Rectangle>();
-                    List<Rectangle> eyes = new List<Rectangle>();
-                    DetectFace.Detect(
-                          image.Mat,
-                          faceCascadeClassifier,
-                          eyeCascadeClassifier,
-                          faces,
-                          eyes,
-                          out processingTime
-                 );
-                    foreach (Rectangle face in faces)
-                        image.Draw(face, new Bgr(Color.Red), 1);
-                    foreach (Rectangle eye in eyes)
-                        image.Draw(eye, new Bgr(Color.Blue), 1);
-                    Size frameSize = FrameSize;
-                    using (Image<Bgr, Byte> resized = image.Resize(frameSize.Width, frameSize.Height, Emgu.CV.CvEnum.Inter.Nearest, true))
-                    {
-                        SetImage(resized);
-                    }
-                }
-                MessageText = String.Format(
-                     "Processing Time: {0} milliseconds.",
-                     processingTime
-             );
+                    Emgu.CV.Models.FaceAndLandmarkDetector detector = new Emgu.CV.Models.FaceAndLandmarkDetector();
+                    await detector.Init(DownloadManager_OnDownloadProgressChanged);
+                    SetMessage(detector.ProcessAndRender(image, image));
+                    Mat resized = new Mat();
 
+                    CvInvoke.Resize(image, resized, FrameSize, 0, 0, Inter.Linear);
+                    SetImage(resized);
+                }
             };
         }
 

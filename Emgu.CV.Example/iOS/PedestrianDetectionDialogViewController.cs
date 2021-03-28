@@ -13,7 +13,7 @@ using Emgu.CV.Structure;
 using MonoTouch.Dialog;
 using Foundation;
 using UIKit;
-using PedestrianDetection;
+using Emgu.CV.Models;
 
 namespace Example.iOS
 {
@@ -28,38 +28,17 @@ namespace Example.iOS
         {
             base.ViewDidLoad();
             ButtonText = "Detect Pedestrian";
-            OnButtonClick += delegate
+            OnButtonClick += async delegate
             {
-                //long processingTime;
                 using (Mat image = CvInvoke.Imread("pedestrian.png", ImreadModes.Color))
-                    using (HOGDescriptor hog = new HOGDescriptor())
                 {
-                    
-                    hog.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
-                    Stopwatch watch = Stopwatch.StartNew();
-                    Rectangle[] pedestrians = FindPedestrian.Find(image, hog);
-                    watch.Stop();
+                    Emgu.CV.Models.PedestrianDetector detector = new Emgu.CV.Models.PedestrianDetector();
+                    await detector.Init(DownloadManager_OnDownloadProgressChanged);
+                    SetMessage(detector.ProcessAndRender(image, image));
+                    Mat resized = new Mat();
 
-
-                    foreach (Rectangle rect in pedestrians)
-                    {
-                        CvInvoke.Rectangle(
-                        image,
-                        rect,
-                        new MCvScalar(0, 0, 255),
-                        1);
-                    }
-                    Size frameSize = FrameSize;
-
-                    using (Mat resized = new Mat())
-                    {
-                        CvInvoke.ResizeForFrame(image, resized, frameSize);
-                        MessageText = String.Format(
-                               "Detection Time: {0} milliseconds.",
-                               watch.ElapsedMilliseconds
-                     );
-                        SetImage(resized);
-                    }
+                    CvInvoke.Resize(image, resized, FrameSize, 0, 0, Inter.Linear);
+                    SetImage(resized);
                 }
             };
 

@@ -19,8 +19,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FreetypePage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DrawSubdivision.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)CascadeFaceAndEyeDetector.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)PedestrianDetector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DrawMatches.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ButtonTextImagePage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HelloWorldPage.cs" />

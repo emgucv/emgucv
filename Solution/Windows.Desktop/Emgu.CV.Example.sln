@@ -63,18 +63,22 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPF.NetCore", "..\..\Emgu.CV.Example\WPF.NetCore\WPF.NetCore.csproj", "{5F062E7D-B078-4F68-BF4A-F431DFC51002}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models", "..\..\Emgu.CV.Models\Emgu.CV.Models.csproj", "{192A987E-273D-4A27-856B-0C58B82859E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DepthAI", "..\..\Emgu.CV.Example\DepthAI\DepthAI.csproj", "{A5216561-256F-4D28-A354-6125A05E99ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DepthAI", "..\..\Emgu.CV.Example\DepthAI\DepthAI.csproj", "{A5216561-256F-4D28-A354-6125A05E99ED}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Models.Shared", "..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.shproj", "{0BFAD282-50C1-449C-B01C-62FD23BBDBE5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models.NetStandard", "..\..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj", "{28C60677-F335-4592-8FC9-7E38FB3227A7}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{0bfad282-50c1-449c-b01c-62fd23bbdbe5}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{1cf0c8b2-0fde-4e28-9c7c-ebe0f303f601}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Raspbian\Emgu.CV.Runtime.Raspbian.projitems*{1cf0c8b2-0fde-4e28-9c7c-ebe0f303f601}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{1cf0c8b2-0fde-4e28-9c7c-ebe0f303f601}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{1cf0c8b2-0fde-4e28-9c7c-ebe0f303f601}*SharedItemsImports = 5
+		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{28c60677-f335-4592-8fc9-7e38fb3227a7}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{32bfc19b-ae74-413f-90fc-345cbce13b69}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{331f904e-e7e8-42e0-8c82-22539c35e8f3}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{3ec66d5c-1b05-4b4f-bb13-82bd76c992ee}*SharedItemsImports = 4
@@ -98,6 +102,7 @@ Global
 		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{97c98fca-5f0d-4771-8063-881c620946af}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{97c98fca-5f0d-4771-8063-881c620946af}*SharedItemsImports = 5
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{a5216561-256f-4d28-a354-6125a05e99ed}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{a5216561-256f-4d28-a354-6125a05e99ed}*SharedItemsImports = 5
 		..\..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.projitems*{ac06f404-0a97-4142-a021-572d686e231f}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{adc3c8e5-ebcd-4d3c-b3a4-20cfe0e42fc1}*SharedItemsImports = 13
@@ -350,18 +355,6 @@ Global
 		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Release|x64.Build.0 = Release|x64
 		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Release|x86.ActiveCfg = Release|x86
 		{5F062E7D-B078-4F68-BF4A-F431DFC51002}.Release|x86.Build.0 = Release|x86
-		{192A987E-273D-4A27-856B-0C58B82859E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{192A987E-273D-4A27-856B-0C58B82859E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{192A987E-273D-4A27-856B-0C58B82859E8}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{192A987E-273D-4A27-856B-0C58B82859E8}.Debug|x64.Build.0 = Debug|Any CPU
-		{192A987E-273D-4A27-856B-0C58B82859E8}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{192A987E-273D-4A27-856B-0C58B82859E8}.Debug|x86.Build.0 = Debug|Any CPU
-		{192A987E-273D-4A27-856B-0C58B82859E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{192A987E-273D-4A27-856B-0C58B82859E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{192A987E-273D-4A27-856B-0C58B82859E8}.Release|x64.ActiveCfg = Release|Any CPU
-		{192A987E-273D-4A27-856B-0C58B82859E8}.Release|x64.Build.0 = Release|Any CPU
-		{192A987E-273D-4A27-856B-0C58B82859E8}.Release|x86.ActiveCfg = Release|Any CPU
-		{192A987E-273D-4A27-856B-0C58B82859E8}.Release|x86.Build.0 = Release|Any CPU
 		{A5216561-256F-4D28-A354-6125A05E99ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A5216561-256F-4D28-A354-6125A05E99ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5216561-256F-4D28-A354-6125A05E99ED}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -374,6 +367,18 @@ Global
 		{A5216561-256F-4D28-A354-6125A05E99ED}.Release|x64.Build.0 = Release|Any CPU
 		{A5216561-256F-4D28-A354-6125A05E99ED}.Release|x86.ActiveCfg = Release|Any CPU
 		{A5216561-256F-4D28-A354-6125A05E99ED}.Release|x86.Build.0 = Release|Any CPU
+		{28C60677-F335-4592-8FC9-7E38FB3227A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28C60677-F335-4592-8FC9-7E38FB3227A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28C60677-F335-4592-8FC9-7E38FB3227A7}.Debug|x64.ActiveCfg = Debug|x64
+		{28C60677-F335-4592-8FC9-7E38FB3227A7}.Debug|x64.Build.0 = Debug|x64
+		{28C60677-F335-4592-8FC9-7E38FB3227A7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{28C60677-F335-4592-8FC9-7E38FB3227A7}.Debug|x86.Build.0 = Debug|Any CPU
+		{28C60677-F335-4592-8FC9-7E38FB3227A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28C60677-F335-4592-8FC9-7E38FB3227A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28C60677-F335-4592-8FC9-7E38FB3227A7}.Release|x64.ActiveCfg = Release|x64
+		{28C60677-F335-4592-8FC9-7E38FB3227A7}.Release|x64.Build.0 = Release|x64
+		{28C60677-F335-4592-8FC9-7E38FB3227A7}.Release|x86.ActiveCfg = Release|Any CPU
+		{28C60677-F335-4592-8FC9-7E38FB3227A7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -209,6 +209,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj">
+      <Project>{59aa9a6d-16f1-4541-8784-4a34dd94e2fc}</Project>
+      <Name>Emgu.CV.Models.NetStandard</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.Netstandard.csproj">
       <Project>{5e912dcc-e7ac-491f-8293-c985e3ab5ca7}</Project>
       <Name>Emgu.CV.Platform.Netstandard</Name>
