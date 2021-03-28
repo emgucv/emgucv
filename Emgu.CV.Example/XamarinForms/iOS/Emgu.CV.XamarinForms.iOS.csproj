@@ -170,10 +170,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Essentials">
-      <Version>1.6.0</Version>
+      <Version>1.6.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>5.0.0.1874</Version>
+      <Version>5.0.0.2012</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +184,10 @@
     <ProjectReference Include="..\..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj">
       <Project>{79214dcd-3f36-4c50-97f4-11af21f60711}</Project>
       <Name>Emgu.CV.Platform.NetStandard.IOS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Emgu.CV.Models\Emgu.CV.Models.csproj">
+      <Project>{1C536610-54F5-4F85-A0F1-AB59E31236A0}</Project>
+      <Name>Emgu.CV.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\Core\Emgu.CV.XamarinForms.projitems" Label="Shared" />

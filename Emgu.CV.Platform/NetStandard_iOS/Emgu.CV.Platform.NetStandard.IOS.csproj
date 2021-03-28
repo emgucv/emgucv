@@ -8,6 +8,7 @@
     <AssemblyOriginatorKeyFile>..\..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
     <Platforms>AnyCPU</Platforms>
     <Description>This is the .NetStandard dll that targets iOS platforms.</Description>
+    <Configurations>Release;Debug</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
