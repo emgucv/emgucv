@@ -48,9 +48,9 @@
   </ItemGroup>
 
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
-    <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\libs" Importance="high" />
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\libs" ContinueOnError="true" />
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="..\libs" ContinueOnError="true" />
+    <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\..\libs" Importance="high" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\..\libs" ContinueOnError="true" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="..\..\libs" ContinueOnError="true" />
   </Target>
 
   <Import Project="..\Emgu.CV.Models.Shared.projitems" Label="Shared" />
