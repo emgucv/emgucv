@@ -14,9 +14,9 @@
 
 #include "vectors_c.h"
 
-${COMPILATION_CONDITION_C_OPEN}
-
 ${VECTOR_ADDITIONAL_INCLUDE}
+
+${COMPILATION_CONDITION_C_OPEN}
 
 //----------------------------------------------------------------------------
 //
@@ -55,7 +55,7 @@ CVAPI(cv::_InputOutputArray*) cveInputOutputArrayFromVectorOf${VECTOR_NAME}(std:
 
 CVAPI(int) VectorOf${VECTOR_NAME}SizeOfItemInBytes();
 
-#else
+${COMPILATION_CONDITION_C_ELSE}
 
 CVAPI(void *) VectorOf${VECTOR_NAME}Create();
 
@@ -88,6 +88,8 @@ CVAPI(cv::_InputOutputArray*) cveInputOutputArrayFromVectorOf${VECTOR_NAME}(void
 #endif
 
 CVAPI(int) VectorOf${VECTOR_NAME}SizeOfItemInBytes();
+
+static inline CV_NORETURN void throw_no_vector() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without VectorOf${VECTOR_NAME} support"); }
 
 ${COMPILATION_CONDITION_C_CLOSE}
 

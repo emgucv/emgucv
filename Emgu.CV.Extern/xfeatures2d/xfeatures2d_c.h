@@ -105,9 +105,18 @@ CVAPI(cv::xfeatures2d::BoostDesc*) cveBoostDescCreate(int desc, bool useScaleOri
 CVAPI(void) cveBoostDescRelease(cv::Ptr<cv::xfeatures2d::BoostDesc>** sharedPtr);
 
 //MSD
-CVAPI(cv::xfeatures2d::MSDDetector*) cveMSDDetectorCreate(int m_patch_radius, int m_search_area_radius,
-	int m_nms_radius, int m_nms_scale_radius, float m_th_saliency, int m_kNN,
-	float m_scale_factor, int m_n_scales, bool m_compute_orientation, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::MSDDetector>** sharedPtr);
+CVAPI(cv::xfeatures2d::MSDDetector*) cveMSDDetectorCreate(
+	int m_patch_radius, 
+	int m_search_area_radius,
+	int m_nms_radius, 
+	int m_nms_scale_radius, 
+	float m_th_saliency, 
+	int m_kNN,
+	float m_scale_factor, 
+	int m_n_scales, 
+	bool m_compute_orientation, 
+	cv::Feature2D** feature2D, 
+	cv::Ptr<cv::xfeatures2d::MSDDetector>** sharedPtr);
 CVAPI(void) cveMSDDetectorRelease(cv::Ptr<cv::xfeatures2d::MSDDetector>** sharedPtr);
 
 //VGG

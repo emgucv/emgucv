@@ -143,7 +143,11 @@ void cveVideoCaptureGetBackendName(cv::VideoCapture* capture, cv::String* name)
 
 bool cveVideoCaptureWaitAny(std::vector<cv::VideoCapture>* streams, std::vector<int>* readyIndex, int timeoutNs)
 {
+#ifdef HAVE_OPENCV_VIDEOIO
 	return cv::VideoCapture::waitAny(*streams, *readyIndex, timeoutNs);
+#else
+	throw_no_videoio();
+#endif
 }
 
 #if WINAPI_FAMILY

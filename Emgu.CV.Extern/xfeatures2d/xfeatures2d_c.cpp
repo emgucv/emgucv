@@ -280,6 +280,47 @@ void cveBoostDescRelease(cv::Ptr<cv::xfeatures2d::BoostDesc>** sharedPtr)
 #endif
 }
 
+cv::xfeatures2d::MSDDetector* cveMSDDetectorCreate(
+	int m_patch_radius,
+	int m_search_area_radius,
+	int m_nms_radius,
+	int m_nms_scale_radius,
+	float m_th_saliency,
+	int m_kNN,
+	float m_scale_factor,
+	int m_n_scales,
+	bool m_compute_orientation,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::xfeatures2d::MSDDetector>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_XFEATURES2D
+	cv::Ptr<cv::xfeatures2d::MSDDetector> ptr = cv::xfeatures2d::MSDDetector::create(
+		m_patch_radius,
+		m_search_area_radius,
+		m_nms_radius,
+		m_nms_scale_radius,
+		m_th_saliency,
+		m_kNN,
+		m_scale_factor,
+		m_n_scales,
+		m_compute_orientation);
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::MSDDetector>(ptr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(ptr.get());
+	return ptr.get();
+#else
+	throw_no_xfeatures2d();
+#endif
+}
+void cveMSDDetectorRelease(cv::Ptr<cv::xfeatures2d::MSDDetector>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_XFEATURES2D
+	delete* sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_xfeatures2d();
+#endif
+}
+
 //VGG
 cv::xfeatures2d::VGG* cveVGGCreate(
 	int desc, float isigma, bool imgNormalize, bool useScaleOrientation,

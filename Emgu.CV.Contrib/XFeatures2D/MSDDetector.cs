@@ -25,25 +25,38 @@ namespace Emgu.CV.XFeatures2D
         /// <summary>
         /// Create a MSD (Maximal Self-Dissimilarity) keypoint detector.
         /// </summary>
-        /// <param name="m_patch_radius">Patch radius</param>
-        /// <param name="m_search_area_radius">Search area raduis</param>
-        /// <param name="m_nms_radius">Nms radius</param>
-        /// <param name="m_nms_scale_radius">Nms scale radius</param>
-        /// <param name="m_th_saliency">Th saliency</param>
-        /// <param name="m_kNN">Knn</param>
-        /// <param name="m_scale_factor">Scale factor</param>
-        /// <param name="m_n_scales">N scales</param>
-        /// <param name="m_compute_orientation">Compute orientation</param>
+        /// <param name="patchRadius">Patch radius</param>
+        /// <param name="searchAreaRadius">Search area raduis</param>
+        /// <param name="nmsRadius">Nms radius</param>
+        /// <param name="nmsScaleRadius">Nms scale radius</param>
+        /// <param name="thSaliency">Th saliency</param>
+        /// <param name="kNN">Knn</param>
+        /// <param name="scaleFactor">Scale factor</param>
+        /// <param name="nScales">N scales</param>
+        /// <param name="computeOrientation">Compute orientation</param>
         public MSDDetector(
-            int m_patch_radius, int m_search_area_radius,
-            int m_nms_radius, int m_nms_scale_radius, float m_th_saliency, int m_kNN,
-            float m_scale_factor, int m_n_scales, bool m_compute_orientation)
+            int patchRadius, 
+            int searchAreaRadius,
+            int nmsRadius, 
+            int nmsScaleRadius, 
+            float thSaliency, 
+            int kNN,
+            float scaleFactor, 
+            int nScales, 
+            bool computeOrientation)
         {
             _ptr = XFeatures2DInvoke.cveMSDDetectorCreate(
-                m_patch_radius, m_search_area_radius, m_nms_radius,
-                m_nms_scale_radius, m_th_saliency, m_kNN,
-                m_scale_factor, m_n_scales, m_compute_orientation,
-                ref _feature2D, ref _sharedPtr);
+                patchRadius, 
+                searchAreaRadius, 
+                nmsRadius,
+                nmsScaleRadius,
+                thSaliency, 
+                kNN,
+                scaleFactor, 
+                nScales, 
+                computeOrientation,
+                ref _feature2D, 
+                ref _sharedPtr);
         }
 
         /// <summary>
@@ -62,11 +75,16 @@ namespace Emgu.CV.XFeatures2D
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveMSDDetectorCreate(
-            int m_patch_radius, int m_search_area_radius, int m_nms_radius, 
-            int m_nms_scale_radius, float m_th_saliency, int m_kNN,
-            float m_scale_factor, int m_n_scales, 
+            int patchRadius,
+            int searchAreaRadius,
+            int nmsRadius,
+            int nmsScaleRadius,
+            float thSaliency,
+            int kNN,
+            float scaleFactor,
+            int nScales,
             [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool m_compute_orientation, 
+            bool computeOrientation,
             ref IntPtr feature2D, 
             ref IntPtr sharedPtr);
 

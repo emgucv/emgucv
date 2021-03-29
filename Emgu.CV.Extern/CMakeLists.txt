@@ -51,6 +51,7 @@ MACRO(CREATE_VECTOR_CS vname velement velement_cs element_type cs_source_folder 
   #SET(COMPILATION_CONDITION_C_CLOSE "")    
   #IF (NOT ("${c_compilation_condition}" STREQUAL ""))
 	SET(COMPILATION_CONDITION_C_OPEN "#if ${c_compilation_condition}")
+	SET(COMPILATION_CONDITION_C_ELSE "#else")
 	SET(COMPILATION_CONDITION_C_CLOSE "#endif")
   #ENDIF()
   
@@ -116,7 +117,7 @@ IF(EMGU_CV_WITH_TESSERACT)
 ELSE()
   SET(EMGU_CV_WITH_TESSERACT_FLAG "0")
 ENDIF()
-CREATE_VECTOR_CS("TesseractResult" "TesseractResult" "TesseractResult" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.OCR/" Emgu.CV.OCR "" "#include \"tesseract_c.h\"" "" "${EMGU_CV_WITH_TESSERACT_FLAG}")
+CREATE_VECTOR_CS("TesseractResult" "TesseractResult" "TesseractResult" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.OCR/" Emgu.CV.OCR "" "#include \"tesseract_c.h\"" "" "defined(HAVE_EMGUCV_TESSERACT)")
 
 CREATE_VECTOR_CS("Mat" "cv::Mat" "Mat" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
 CREATE_VECTOR_CS("UMat" "cv::UMat" "UMat" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")

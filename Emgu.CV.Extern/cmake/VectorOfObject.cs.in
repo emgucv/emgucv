@@ -273,6 +273,7 @@ namespace ${NAMESPACE_CS}
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern int VectorOf${VECTOR_NAME}SizeOfItemInBytes();
 
+#if ${IS_INPUT_OUTPUT_ARRAY}
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveInputArrayFromVectorOf${VECTOR_NAME}(IntPtr vec);
 
@@ -281,6 +282,7 @@ namespace ${NAMESPACE_CS}
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr cveInputOutputArrayFromVectorOf${VECTOR_NAME}(IntPtr vec);
+#endif
    }
 }
 
