@@ -112,7 +112,7 @@ namespace Emgu.CV
             return bmp;
         }
 
-        public static async Task<Mat> ToMat(this StorageFile file)
+        public static async Task<Mat> ToMat(this StorageFile file, ImreadModes modes = ImreadModes.AnyColor | ImreadModes.AnyDepth)
         {
             using (IRandomAccessStream fileStream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read))
             {
@@ -130,7 +130,14 @@ namespace Emgu.CV
                 using (Image<Bgra, Byte> img = new Image<Bgra, byte>(s.Width, s.Height, s.Width * 4, handle.AddrOfPinnedObject()))
                 {
                     Mat m = new Mat();
-                    CvInvoke.CvtColor(img, m, ColorConversion.Bgra2Bgr);
+                    if (modes.HasFlag( ImreadModes.Grayscale ))
+                    {
+                        CvInvoke.CvtColor(img, m, ColorConversion.Bgra2Gray);
+                    } else
+                    {
+                        CvInvoke.CvtColor(img, m, ColorConversion.Bgra2Bgr);
+                    }
+
                     handle.Free();
                     return m;
                 }

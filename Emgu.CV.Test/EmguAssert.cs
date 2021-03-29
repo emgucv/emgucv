@@ -74,7 +74,7 @@ namespace Emgu.CV.Test
          return fileName;
       }
 
-      private static async Task<Mat> ReadFile(String fileName)
+      private static async Task<Mat> ReadFile(String fileName, ImreadModes modes = ImreadModes.AnyColor | ImreadModes.AnyDepth)
       {
          StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///" + fileName));
          Mat m = await file.ToMat();
@@ -91,9 +91,9 @@ namespace Emgu.CV.Test
          }
       }
 
-      public static Mat LoadMat(String name)
+      public static Mat LoadMat(String name, ImreadModes modes = ImreadModes.AnyColor | ImreadModes.AnyDepth)
       {
-         return Task.Run(async () => await ReadFile(name)).Result;
+         return Task.Run(async () => await ReadFile(name, modes)).Result;
       }
 #else
       public static String GetFile(String fileName)

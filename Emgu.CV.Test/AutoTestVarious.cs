@@ -41,7 +41,7 @@ using Emgu.CV.XFeatures2D;
 using Emgu.CV.XImgproc;
 //using Emgu.CV.Softcascade;
 using Emgu.Util;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 using DetectorParameters = Emgu.CV.Aruco.DetectorParameters;
 #if VS_TEST
 using Microsoft.VisualStudio.TestTools.UnitTesting;
