@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2021 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
+IF( (EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND HAVE_IOS )
   IF (DOTNET_FOUND)
     #IF(WIN32 AND (MSVC_VERSION GREATER 1900)) #need MSVC to be at least 2017
     PROJECT(Emgu.CV.Models.IOS)

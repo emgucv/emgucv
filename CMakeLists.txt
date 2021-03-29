@@ -1175,6 +1175,19 @@ SET(EMGUCV_MODELS_NUGET_TITLE "Experimental component to help download, initiali
 SET(EMGUCV_MODELS_NUGET_SUMMARY "Experimental component to help download, initialize and execute image processing/AI models. This is under active development and API may change from time to time.")
 SET(EMGUCV_MODELS_NUGET_FILE_LIST "")
 SET(EMGUCV_MODELS_NUGET_DEPENDENCY "")
+
+IF (HAVE_IOS)
+  SET(EMGUCV_MODELS_NUGET_FILE_LIST "${EMGUCV_MODELS_NUGET_FILE_LIST} 
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\xamarinios10\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\xamarinios10\" />")
+  SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY}
+      <group targetFramework=\"Xamarin.iOS1.0\">
+        <dependency id=\"System.Drawing.Common\" version=\"5.0.2\" exclude=\"Build,Analyzers\" />
+		<dependency id=\"Newtonsoft.Json\" version=\"13.0.1\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+      </group>")
+ENDIF()
+
 SET(EMGUCV_MODELS_NUGET_FILE_LIST "${EMGUCV_MODELS_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Models.dll\" target=\"lib\\netstandard2.0\" />
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Models.xml\" target=\"lib\\netstandard2.0\" />

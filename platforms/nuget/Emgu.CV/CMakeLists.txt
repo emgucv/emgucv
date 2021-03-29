@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2021 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF (TARGET Emgu.CV.Platform.NetStandard)
+IF ((TARGET Emgu.CV.Platform.NetStandard) OR (TARGET Emgu.CV.Platform.NetStandard.IOS))
   PROJECT(Emgu.CV.nuget)
 #  IF (APPLE)
 #  ADD_CUSTOM_TARGET(
@@ -17,7 +17,10 @@ IF (TARGET Emgu.CV.Platform.NetStandard)
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     )
 #  ENDIF()
-  ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard)
+
+  IF (TARGET Emgu.CV.Platform.NetStandard)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard)
+  ENDIF()
   
   IF (TARGET Emgu.CV.Platform.NetStandard.IOS)
     ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard.IOS)
