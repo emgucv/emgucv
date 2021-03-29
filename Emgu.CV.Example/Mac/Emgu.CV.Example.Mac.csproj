@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin</OutputPath>
+    <OutputPath>..\..\bin\$(AssemblyName)\$(Platform)\$(Configuration)</OutputPath>
     <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -35,7 +35,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\bin</OutputPath>
+    <OutputPath>..\..\bin\$(AssemblyName)\$(Platform)\$(Configuration)</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <EnableCodeSigning>true</EnableCodeSigning>
@@ -52,19 +52,21 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <UseSGen>false</UseSGen>
     <EnableCodeSigning>false</EnableCodeSigning>
+    <OutputPath>..\..\bin\$(AssemblyName)\$(Platform)\$(Configuration)</OutputPath>
     <LinkMode>None</LinkMode>
     <AOTMode>None</AOTMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <UseSGen>false</UseSGen>
     <EnableCodeSigning>false</EnableCodeSigning>
+    <OutputPath>..\..\bin\$(AssemblyName)\$(Platform)\$(Configuration)</OutputPath>
     <LinkMode>None</LinkMode>
     <AOTMode>None</AOTMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
+    <OutputPath>..\..\bin\$(AssemblyName)\$(Platform)\$(Configuration)</OutputPath>
     <DefineConstants></DefineConstants>
     <WarningLevel>4</WarningLevel>
     <IncludeMonoRuntime>false</IncludeMonoRuntime>
@@ -78,7 +80,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>false</Optimize>
-    <OutputPath>bin\Release</OutputPath>
+    <OutputPath>..\..\bin\$(AssemblyName)\$(Platform)\$(Configuration)</OutputPath>
     <DefineConstants></DefineConstants>
     <WarningLevel>4</WarningLevel>
     <IncludeMonoRuntime>false</IncludeMonoRuntime>
@@ -93,12 +95,14 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ARM' ">
     <UseSGen>false</UseSGen>
     <EnableCodeSigning>false</EnableCodeSigning>
+    <OutputPath>..\..\bin\$(AssemblyName)\$(Platform)\$(Configuration)</OutputPath>
     <LinkMode>None</LinkMode>
     <AOTMode>None</AOTMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|ARM' ">
     <UseSGen>false</UseSGen>
     <EnableCodeSigning>false</EnableCodeSigning>
+    <OutputPath>..\..\bin\$(AssemblyName)\$(Platform)\$(Configuration)</OutputPath>
     <LinkMode>None</LinkMode>
     <AOTMode>None</AOTMode>
   </PropertyGroup>
@@ -151,9 +155,6 @@
     </Compile>
     <Compile Include="..\..\Emgu.CV.NativeImage\CGImageExtension.cs" />
     <Compile Include="..\..\Emgu.CV.NativeImage\NSImageExtension.cs" />
-    <Compile Include="..\XamarinForms\Core\PedestrianDetector.cs">
-      <Link>PedestrianDetector.cs</Link>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
@@ -187,9 +188,9 @@
       <Project>{AFA9D3CF-62EB-47A8-BC3D-BC9006D495F9}</Project>
       <Name>Emgu.CV.Platform.NetStandard</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Models\Emgu.CV.Models.csproj">
-      <Project>{6C040F50-BE10-4692-AB69-3B028B0CA6A8}</Project>
-      <Name>Emgu.CV.Models</Name>
+    <ProjectReference Include="..\..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj">
+      <Project>{A593599A-8B00-45F6-B161-5AB794DED450}</Project>
+      <Name>Emgu.CV.Models.NetStandard</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems')" />

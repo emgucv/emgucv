@@ -191,9 +191,9 @@
       <Project>{AFA9D3CF-62EB-47A8-BC3D-BC9006D495F9}</Project>
       <Name>Emgu.CV.Platform.NetStandard</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Emgu.CV.Models\Emgu.CV.Models.csproj">
-      <Project>{6C040F50-BE10-4692-AB69-3B028B0CA6A8}</Project>
-      <Name>Emgu.CV.Models</Name>
+    <ProjectReference Include="..\..\..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj">
+      <Project>{A593599A-8B00-45F6-B161-5AB794DED450}</Project>
+      <Name>Emgu.CV.Models.NetStandard</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems" Label="Shared" Condition="Exists('..\..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems')" />
