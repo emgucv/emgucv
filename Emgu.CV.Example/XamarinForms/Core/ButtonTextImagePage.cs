@@ -116,15 +116,22 @@ namespace Emgu.CV.XamarinForms
                 if (captureSupported)
                     options.Add("Photo from Camera");
 
-                if (Device.RuntimePlatform == Device.Android
-                    || Device.RuntimePlatform == Device.iOS
-                    || Device.RuntimePlatform == Device.UWP)
+                if (this.HasCameraOption)
                 {
-                    if (this.HasCameraOption && captureSupported)
-                        options.Add("Camera");
-                } else if (Device.RuntimePlatform == Device.WPF)
-                {
-                    options.Add("Camera");
+                    if (Device.RuntimePlatform == Device.Android
+                        || Device.RuntimePlatform == Device.iOS
+                        || Device.RuntimePlatform == Device.UWP)
+                    {
+                        if (captureSupported)
+                            options.Add("Camera");
+                    }
+                    else if (Device.RuntimePlatform == Device.WPF)
+                    {
+                        var openCVConfigDict = CvInvoke.ConfigDict;
+                        bool haveVideoio = (openCVConfigDict["HAVE_OPENCV_VIDEOIO"] != 0);
+                        if (haveVideoio)
+                            options.Add("Camera");
+                    }
                 }
 
 

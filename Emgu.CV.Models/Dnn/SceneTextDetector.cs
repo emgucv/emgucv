@@ -234,14 +234,6 @@ namespace Emgu.CV.Models
         /// </summary>
         public void Clear()
         {
-            DisposeObject();
-        }
-
-        /// <summary>
-        /// Release the memory associated with this scene text detector.
-        /// </summary>
-        protected override void DisposeObject()
-        {
             if (_textDetector != null)
             {
                 _textDetector.Dispose();
@@ -259,6 +251,14 @@ namespace Emgu.CV.Models
                 _freetype.Dispose();
                 _freetype = null;
             }
+        }
+
+        /// <summary>
+        /// Release the memory associated with this scene text detector.
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            Clear();
         }
     }
 }

@@ -249,7 +249,11 @@ namespace Emgu.CV.Models
         /// </summary>
         public void Clear()
         {
-            DisposeObject();
+            if (_maskRcnnDetector != null)
+            {
+                _maskRcnnDetector.Dispose();
+                _maskRcnnDetector = null;
+            }
         }
 
         /// <summary>
@@ -257,12 +261,7 @@ namespace Emgu.CV.Models
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_maskRcnnDetector != null)
-            {
-                _maskRcnnDetector.Dispose();
-                _maskRcnnDetector = null;
-            }
-            //throw new NotImplementedException();
+            Clear();
         }
     }
 }

@@ -34,14 +34,6 @@ namespace Emgu.CV.Models
         /// </summary>
         public void Clear()
         {
-            DisposeObject();
-        }
-
-        /// <summary>
-        /// Release the memory associated with this face and facial landmark detector
-        /// </summary>
-        protected override void DisposeObject()
-        {
             if (_faceDetector != null)
             {
                 _faceDetector.Dispose();
@@ -53,6 +45,14 @@ namespace Emgu.CV.Models
                 _facemarkDetector.Dispose();
                 _facemarkDetector = null;
             }
+        }
+
+        /// <summary>
+        /// Release the memory associated with this face and facial landmark detector
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            Clear();
         }
 
         private async Task InitFaceDetector(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)

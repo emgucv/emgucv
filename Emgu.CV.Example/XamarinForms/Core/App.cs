@@ -103,7 +103,7 @@ namespace Emgu.CV.XamarinForms
                 {
                     using (Mat left = CvInvoke.Imread("imL.png", ImreadModes.Color))
                     using (Mat right = CvInvoke.Imread("imR.png", ImreadModes.Color))
-                    using(Mat points = new Mat())
+                    using (Mat points = new Mat())
                     using (Mat colors = new Mat())
                     {
                         Simple3DReconstruct.GetPointAndColor(left, right, points, colors);
@@ -162,7 +162,7 @@ namespace Emgu.CV.XamarinForms
             //Fix for UWP navigation text
             if (Device.RuntimePlatform == Device.WPF)
                 navigationPage.BarTextColor = Color.Green;
-            
+
 
             ToolbarItem aboutItem = new ToolbarItem("About", aboutIcon,
                 () =>
@@ -243,7 +243,7 @@ namespace Emgu.CV.XamarinForms
                 Picker p = maskRcnnPage.Picker;
                 p.IsVisible = true;
                 p.Title = "Preferred DNN backend & target";
-                
+
                 foreach (String option in GetDnnBackends())
                 {
                     p.Items.Add(option);
@@ -307,7 +307,13 @@ namespace Emgu.CV.XamarinForms
 
             ocrButton.Clicked += (sender, args) =>
             {
-                MainPage.Navigation.PushAsync(new OcrPage());
+                ProcessAndRenderPage ocrPage = new ProcessAndRenderPage(
+                    new TesseractModel(),
+                    "Perform Text Detection",
+                    "test_image.png",
+                    "");
+                ocrPage.HasCameraOption = false;
+                MainPage.Navigation.PushAsync(ocrPage);
             };
 
             maskRcnnButton.IsVisible = haveDNN;
@@ -332,7 +338,7 @@ namespace Emgu.CV.XamarinForms
         {
             var openCVConfigDict = CvInvoke.ConfigDict;
             bool haveDNN = (openCVConfigDict["HAVE_OPENCV_DNN"] != 0);
-            
+
             if (haveDNN)
             {
                 var dnnBackends = DnnInvoke.AvailableBackends;

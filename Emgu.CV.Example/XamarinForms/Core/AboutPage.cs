@@ -47,6 +47,8 @@ namespace Emgu.CV.XamarinForms
                 dnnText = "DNN not available on this platform";
             }
 
+            bool haveVideoio = (openCVConfigDict["HAVE_OPENCV_VIDEOIO"] != 0);
+
             String osDescription = Emgu.Util.Platform.OperationSystem.ToString();
 
             Content =
@@ -81,7 +83,7 @@ textarea { width: 100%; margin: 0; padding: 0; border - width: 0; }
 <H4> Dnn Backends: </H4>
 " + dnnText + @"
 <H4> Capture Backends: </H4>
-" + GetCaptureInfo() + @"
+" + (haveVideoio ? GetCaptureInfo() : "Videoio backend not supported.") + @"
 <H4> Build Info </H4>
 <textarea rows=""30"">"
                         + CvInvoke.BuildInformation + @"

@@ -411,14 +411,6 @@ namespace Emgu.CV.Models
         /// </summary>
         public void Clear()
         {
-            DisposeObject();
-        }
-
-        /// <summary>
-        /// Release the memory associated with this vehicle license plate detector
-        /// </summary>
-        protected override void DisposeObject()
-        {
             if (_vehicleLicensePlateDetectionModel != null)
             {
                 _vehicleLicensePlateDetectionModel.Dispose();
@@ -436,6 +428,14 @@ namespace Emgu.CV.Models
                 _ocr.Dispose();
                 _ocr = null;
             }
+        }
+
+        /// <summary>
+        /// Release the memory associated with this vehicle license plate detector
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            Clear();
         }
     }
 }
