@@ -14,8 +14,8 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
 
     INSTALL(
       FILES 
-      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/Emgu.CV.Models.xml
-      ${CMAKE_CURRENT_SOURCE_DIR}/../libs/Emgu.CV.Models.dll 
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.Models.xml
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.Models.dll 
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
       COMPONENT emgucv_binary)	  
 
