@@ -46,9 +46,8 @@
   
   
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.Platform\iOS\Emgu.CV.Platform.IOS.csproj" />
+    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj" />
   </ItemGroup>
-
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\..\libs\iOS" Importance="high" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\..\libs\iOS" ContinueOnError="true" />
