@@ -11,26 +11,26 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(MSBuildThisFileDirectory)..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutputPath>..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(MSBuildThisFileDirectory)..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(MSBuildThisFileDirectory)..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <DefineConstants>TRACE;NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutputPath>..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(MSBuildThisFileDirectory)..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <DefineConstants>TRACE;NETSTANDARD</DefineConstants>
@@ -49,7 +49,7 @@
   </ItemGroup>
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\..\libs" Importance="high" />
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\..\libs" ContinueOnError="true" />
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="..\..\libs" ContinueOnError="true" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(MSBuildThisFileDirectory)..\..\libs" ContinueOnError="true" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="$(MSBuildThisFileDirectory)..\..\libs" ContinueOnError="true" />
   </Target>
 </Project>

@@ -2,30 +2,24 @@
 #  Copyright (C) 2004-2021 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF ((TARGET Emgu.CV.Platform.NetStandard) OR (TARGET Emgu.CV.Platform.NetStandard.IOS))
+IF ((TARGET Emgu.CV.Platform.NetStandard) AND (TARGET Emgu.CV.Platform.NetStandard.IOS))
   PROJECT(Emgu.CV.nuget)
-#  IF (APPLE)
-#  ADD_CUSTOM_TARGET(
-#   ${PROJECT_NAME} ALL
-#   COMMAND mono "${CMAKE_CURRENT_SOURCE_DIR}/../../../miscellaneous/nuget.exe" pack Package.nuspec -OutputDirectory "${CMAKE_CURRENT_SOURCE_DIR}/../"
-#   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-#  )
-#  ELSE()
-  ADD_CUSTOM_TARGET(
-    ${PROJECT_NAME} ALL
-    COMMAND ${DOTNET_EXECUTABLE} pack -c ${DEFAULT_CS_CONFIG} "${CMAKE_CURRENT_SOURCE_DIR}/../../../Emgu.CV.Platform/NetStandard/Emgu.CV.Platform.NetStandard.csproj" -p:NuspecFile="${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" -o "${CMAKE_CURRENT_SOURCE_DIR}/../"
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-    )
+
+  SET(EMGU_CV_NUGET_PROJECT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../../Emgu.CV.Platform/NetStandard/Emgu.CV.Platform.NetStandard.csproj")
+  
+#  IF (TARGET Emgu.CV.Platform.NetStandard.IOS)
+#    SET(EMGU_CV_NUGET_PROJECT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/../../../Emgu.CV.Platform/NetStandard_iOS/Emgu.CV.Platform.NetStandard.IOS.csproj")
 #  ENDIF()
 
-  IF (TARGET Emgu.CV.Platform.NetStandard)
-    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard)
-  ENDIF()
-  
-  IF (TARGET Emgu.CV.Platform.NetStandard.IOS)
-    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard.IOS)
-  ENDIF()
+  ADD_CUSTOM_TARGET(
+    ${PROJECT_NAME} ALL
+    COMMAND ${DOTNET_EXECUTABLE} pack -c ${DEFAULT_CS_CONFIG} ${EMGU_CV_NUGET_PROJECT_FILE} -p:NuspecFile="${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" -o "${CMAKE_CURRENT_SOURCE_DIR}/../"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    )
 
+  ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard)  
+  ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard.IOS)
+  
   if(ENABLE_SOLUTION_FOLDERS)
     set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "nuget")
   endif() 
