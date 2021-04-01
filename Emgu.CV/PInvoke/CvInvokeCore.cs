@@ -230,6 +230,26 @@ namespace Emgu.CV
         #endregion
 
         /// <summary>
+        /// Get or Set the log level.
+        /// </summary>
+        public static CvEnum.LogLevel LogLevel
+        {
+            get
+            {
+                return cveGetLogLevel();
+            }
+            set
+            {
+                cveSetLogLevel(value);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern CvEnum.LogLevel cveSetLogLevel(CvEnum.LogLevel logLevel);
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern CvEnum.LogLevel cveGetLogLevel();
+
+        /// <summary>
         /// initializes CvMat header so that it points to the same data as the original array but has different shape - different number of channels, different number of rows or both
         /// </summary>
         /// <param name="arr">Input array</param>

@@ -32,6 +32,15 @@ const char* cveErrorStr(int status)
 	return cvErrorStr(status);
 }
 
+int cveSetLogLevel(int logLevel)
+{
+	return cv::utils::logging::setLogLevel( static_cast<cv::utils::logging::LogLevel>(logLevel));
+}
+int cveGetLogLevel()
+{
+	return cv::utils::logging::getLogLevel();
+}
+
 int cveGetThreadNum()
 {
 	return cv::getThreadNum();
@@ -207,42 +216,42 @@ void cveScalarRelease(cv::Scalar** scalar)
 
 void cveMinMaxIdx(cv::_InputArray* src, double* minVal, double* maxVal, int* minIdx, int* maxIdx, cv::_InputArray* mask)
 {
-	cv::minMaxIdx(*src, minVal, maxVal, minIdx, maxIdx, mask ? *mask : (cv::InputArray) cv::noArray());
+	cv::minMaxIdx(*src, minVal, maxVal, minIdx, maxIdx, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
 
 void cveMinMaxLoc(cv::_InputArray* src, double* minVal, double* maxVal, CvPoint* minLoc, CvPoint* maxLoc, cv::_InputArray* mask)
 {
 	cv::Point minPt;
 	cv::Point maxPt;
-	cv::minMaxLoc(*src, minVal, maxVal, &minPt, &maxPt, mask ? *mask : (cv::InputArray) cv::noArray());
+	cv::minMaxLoc(*src, minVal, maxVal, &minPt, &maxPt, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 	minLoc->x = minPt.x; minLoc->y = minPt.y;
 	maxLoc->x = maxPt.x; maxLoc->y = maxPt.y;
 }
 
 void cveBitwiseAnd(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::_InputArray* mask)
 {
-	cv::bitwise_and(*src1, *src2, *dst, mask ? *mask : (cv::InputArray) cv::noArray());
+	cv::bitwise_and(*src1, *src2, *dst, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
 void cveBitwiseNot(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* mask)
 {
-	cv::bitwise_not(*src, *dst, mask ? *mask : (cv::InputArray) cv::noArray());
+	cv::bitwise_not(*src, *dst, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
 void cveBitwiseOr(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::_InputArray* mask)
 {
-	cv::bitwise_or(*src1, *src2, *dst, mask ? *mask : (cv::InputArray) cv::noArray());
+	cv::bitwise_or(*src1, *src2, *dst, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
 void cveBitwiseXor(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::_InputArray* mask)
 {
-	cv::bitwise_xor(*src1, *src2, *dst, mask ? *mask : (cv::InputArray) cv::noArray());
+	cv::bitwise_xor(*src1, *src2, *dst, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
 
 void cveAdd(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::_InputArray* mask, int dtype)
 {
-	cv::add(*src1, *src2, *dst, mask ? *mask : (cv::InputArray) cv::noArray(), dtype);
+	cv::add(*src1, *src2, *dst, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()), dtype);
 }
 void cveSubtract(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::_InputArray* mask, int dtype)
 {
-	cv::subtract(*src1, *src2, *dst, mask ? *mask : (cv::InputArray) cv::noArray(), dtype);
+	cv::subtract(*src1, *src2, *dst, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()), dtype);
 }
 void cveDivide(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, double scale, int dtype)
 {
@@ -313,12 +322,12 @@ void cveSum(cv::_InputArray* src, CvScalar* result)
 }
 void cveMean(cv::_InputArray* src, cv::_InputArray* mask, CvScalar* result)
 {
-	cv::Scalar mean = cv::mean(*src, mask ? *mask : (cv::InputArray) cv::noArray());
+	cv::Scalar mean = cv::mean(*src, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 	memcpy(&result->val[0], &mean.val[0], sizeof(double) * 4);
 }
 void cveMeanStdDev(cv::_InputArray* src, cv::_OutputArray* mean, cv::_OutputArray* stddev, cv::_InputArray* mask)
 {
-	cv::meanStdDev(*src, *mean, *stddev, mask ? *mask : (cv::InputArray) cv::noArray());
+	cv::meanStdDev(*src, *mean, *stddev, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
 void cveTrace(cv::_InputArray* mtx, CvScalar* result)
 {
@@ -333,11 +342,11 @@ double cveNorm(cv::_InputArray* src1, cv::_InputArray* src2, int normType, cv::_
 {
 	if (src2)
 	{
-		return cv::norm(*src1, *src2, normType, mask ? *mask : (cv::InputArray) cv::noArray());
+		return cv::norm(*src1, *src2, normType, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 	}
 	else
 	{
-		return cv::norm(*src1, normType, mask ? *mask : (cv::InputArray) cv::noArray());
+		return cv::norm(*src1, normType, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 	}
 }
 bool cveCheckRange(cv::_InputArray* arr, bool quiet, CvPoint* index, double minVal, double maxVal)
@@ -355,7 +364,7 @@ void cvePatchNaNs(cv::_InputOutputArray* a, double val)
 
 void cveGemm(cv::_InputArray* src1, cv::_InputArray* src2, double alpha, cv::_InputArray* src3, double beta, cv::_OutputArray* dst, int flags)
 {
-	cv::gemm(*src1, *src2, alpha, src3 ? *src3 : (cv::InputArray) cv::noArray(), beta, *dst, flags);
+	cv::gemm(*src1, *src2, alpha, src3 ? *src3 : static_cast<cv::InputArray>(cv::noArray()), beta, *dst, flags);
 }
 
 void cveScaleAdd(cv::_InputArray* src1, double alpha, cv::_InputArray* src2, cv::_OutputArray* dst)
@@ -401,7 +410,7 @@ void cveLog(cv::_InputArray* src, cv::_OutputArray* dst)
 }
 void cveCartToPolar(cv::_InputArray* x, cv::_InputArray* y, cv::_OutputArray* magnitude, cv::_OutputArray* angle, bool angleInDegrees)
 {
-	cv::cartToPolar(*x, *y, *magnitude, angle ? *angle : (cv::OutputArray) cv::noArray(), angleInDegrees);
+	cv::cartToPolar(*x, *y, *magnitude, angle ? *angle : static_cast<cv::OutputArray>(cv::noArray()), angleInDegrees);
 }
 void cvePolarToCart(cv::_InputArray* magnitude, cv::_InputArray* angle, cv::_OutputArray* x, cv::_OutputArray* y, bool angleInDegrees)
 {
@@ -471,7 +480,7 @@ void cveCalcCovarMatrix(cv::_InputArray* samples, cv::_OutputArray* covar, cv::_
 
 void cveNormalize(cv::_InputArray* src, cv::_InputOutputArray* dst, double alpha, double beta, int normType, int dType, cv::_InputArray* mask)
 {
-	cv::normalize(*src, *dst, alpha, beta, normType, dType, mask ? *mask : (cv::InputArray) cv::noArray());
+	cv::normalize(*src, *dst, alpha, beta, normType, dType, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
 
 void cvePerspectiveTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* m)
@@ -481,7 +490,7 @@ void cvePerspectiveTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_I
 
 void cveMulTransposed(cv::_InputArray* src, cv::_OutputArray* dst, bool aTa, cv::_InputArray* delta, double scale, int dtype)
 {
-	cv::mulTransposed(*src, *dst, aTa, delta ? *delta : (cv::InputArray) cv::noArray(), dtype);
+	cv::mulTransposed(*src, *dst, aTa, delta ? *delta : static_cast<cv::InputArray>(cv::noArray()), dtype);
 }
 
 void cveSplit(cv::_InputArray* src, cv::_OutputArray* mv)
@@ -509,7 +518,7 @@ void cveInsertChannel(cv::_InputArray* src, cv::_InputOutputArray* dst, int coi)
 
 double cveKmeans(cv::_InputArray* data, int k, cv::_InputOutputArray* bestLabels, CvTermCriteria* criteria, int attempts, int flags, cv::_OutputArray* centers)
 {
-	return cv::kmeans(*data, k, *bestLabels, *criteria, attempts, flags, centers ? *centers : (cv::OutputArray) cv::noArray());
+	return cv::kmeans(*data, k, *bestLabels, *criteria, attempts, flags, centers ? *centers : static_cast<cv::OutputArray>(cv::noArray()));
 }
 
 void cveHConcat(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst)
@@ -538,7 +547,7 @@ double cvePSNR(cv::_InputArray* src1, cv::_InputArray* src2)
 
 bool cveEigen(cv::_InputArray* src, cv::_OutputArray* eigenValues, cv::_OutputArray* eigenVectors)
 {
-	return cv::eigen(*src, *eigenValues, eigenVectors ? *eigenVectors : (cv::OutputArray) cv::noArray());
+	return cv::eigen(*src, *eigenValues, eigenVectors ? *eigenVectors : static_cast<cv::OutputArray>(cv::noArray()));
 }
 
 //Algorithm 

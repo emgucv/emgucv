@@ -39,7 +39,6 @@ using Emgu.CV.Util;
 using Emgu.CV.VideoStab;
 using Emgu.CV.XFeatures2D;
 using Emgu.CV.XImgproc;
-//using Emgu.CV.Softcascade;
 using Emgu.Util;
 //using Newtonsoft.Json;
 using DetectorParameters = Emgu.CV.Aruco.DetectorParameters;
@@ -387,6 +386,14 @@ namespace Emgu.CV.Test
 
                 //Emgu.CV.UI.ImageViewer.Show(image);
             }
+        }
+
+        [Test]
+        public void TestLogLevel()
+        {
+            CvEnum.LogLevel level = CvInvoke.LogLevel;
+            CvInvoke.LogLevel = CvEnum.LogLevel.Debug;
+            level = CvInvoke.LogLevel;
         }
 
         [Test]

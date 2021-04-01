@@ -14,6 +14,7 @@
 #include "opencv2/core/cuda.hpp"
 #include "emgu_c.h"
 #include "opencv2/core/affine.hpp"
+#include "opencv2/core/utils/logger.hpp"
 
 CVAPI(CvErrorCallback) cveRedirectError(CvErrorCallback error_handler, void* userdata, void** prev_userdata);
 CVAPI(int) cveGetErrMode();
@@ -21,6 +22,9 @@ CVAPI(int) cveSetErrMode(int mode);
 CVAPI(int) cveGetErrStatus();
 CVAPI(void) cveSetErrStatus(int status);
 CVAPI(const char*) cveErrorStr(int status);
+
+CVAPI(int) cveSetLogLevel(int logLevel);
+CVAPI(int) cveGetLogLevel();
 
 CVAPI(int) cveGetNumThreads();
 CVAPI(void) cveSetNumThreads(int nthreads);
