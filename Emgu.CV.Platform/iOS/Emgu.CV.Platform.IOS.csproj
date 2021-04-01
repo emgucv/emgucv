@@ -99,7 +99,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="..\..\libs\iOS\libcvextern.a">
+    <NativeReference Include="$(MSBuildThisFileDirectory)..\..\libs\iOS\libcvextern.a">
       <Kind>Static</Kind>
       <SmartLink>True</SmartLink>
       <ForceLoad>True</ForceLoad>
