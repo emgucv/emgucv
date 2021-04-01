@@ -24,7 +24,7 @@ IF( (EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND HAVE_IOS )
     INSTALL(
       DIRECTORY
       ${CMAKE_CURRENT_SOURCE_DIR}
-      DESTINATION .
+      DESTINATION Emgu.CV.Models
       COMPONENT emgucv_source
       FILES_MATCHING 
       PATTERN "Emgu.CV.Models.IOS.csproj"
