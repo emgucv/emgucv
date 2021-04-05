@@ -51,6 +51,15 @@ namespace Emgu.CV.XamarinForms
 
             String osDescription = Emgu.Util.Platform.OperationSystem.ToString();
 
+            String parallelText;
+            List<String> parallelBackendText = new List<string>();
+            foreach (var parallelBackend in CvInvoke.AvailableParallelBackends)
+            {
+                parallelBackendText.Add(String.Format("<p>{0}</p>", parallelBackend));
+            }
+
+            parallelText = String.Join("", parallelBackendText.ToArray());
+
             Content =
                   new WebView()
                   {
@@ -80,6 +89,8 @@ textarea { width: 100%; margin: 0; padding: 0; border - width: 0; }
 " + RuntimeInformation.FrameworkDescription + @"
 <H4> Process Architecture: </H4>
 " + RuntimeInformation.ProcessArchitecture + @"
+<H4> Available Parallel Backends: </H4>
+" + parallelText + @"
 <H4> Dnn Backends: </H4>
 " + dnnText + @"
 <H4> Capture Backends (VideoCapture from device): </H4>
