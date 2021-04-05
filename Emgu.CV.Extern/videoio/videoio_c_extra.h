@@ -66,8 +66,8 @@ CVAPI(void) OpenniGetColorPoints(
                                  IplImage* mask // CV_8UC1
                                  );
 
-CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromDevice(int device, int apiPreference);
-CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromFile(cv::String* fileName, int apiPreference);
+CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromDevice(int device, int apiPreference, std::vector< int >* params);
+CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromFile(cv::String* fileName, int apiPreference, std::vector< int >* params);
 
 CVAPI(void) cveVideoCaptureRelease(cv::VideoCapture** capture);
 CVAPI(bool) cveVideoCaptureSet(cv::VideoCapture* capture, int propId, double value);
@@ -90,6 +90,7 @@ CVAPI(void) cveWinrtOnVisibilityChanged(bool visible);
 
 CVAPI(cv::VideoWriter*) cveVideoWriterCreate(cv::String* filename, int fourcc, double fps, CvSize* frameSize, bool isColor);
 CVAPI(cv::VideoWriter*) cveVideoWriterCreate2(cv::String* filename, int apiPreference, int fourcc, double fps, CvSize* frameSize, bool isColor);
+CVAPI(cv::VideoWriter*) cveVideoWriterCreate3(cv::String* filename, int apiPreference, int fourcc, double fps, CvSize* frameSize, std::vector< int >* params);
 CVAPI(bool) cveVideoWriterIsOpened(cv::VideoWriter* writer);
 CVAPI(bool) cveVideoWriterSet(cv::VideoWriter* writer, int propId, double value);
 CVAPI(double) cveVideoWriterGet(cv::VideoWriter* writer, int propId);

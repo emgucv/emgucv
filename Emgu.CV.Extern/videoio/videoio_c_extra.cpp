@@ -52,19 +52,33 @@ void OpenniGetColorPoints(CvCapture* capture, std::vector<ColorPoint>* points, I
 #endif
 }
 
-cv::VideoCapture* cveVideoCaptureCreateFromDevice(int device, int apiPreference)
+cv::VideoCapture* cveVideoCaptureCreateFromDevice(int device, int apiPreference, std::vector< int >* params)
 {
 #ifdef HAVE_OPENCV_VIDEOIO
-	return new cv::VideoCapture(device, apiPreference);
+	if (params && !params->empty())
+	{
+		return new cv::VideoCapture(device, apiPreference, *params);
+	}
+	else
+	{
+		return new cv::VideoCapture(device, apiPreference);
+	}
 #else
 	throw_no_videoio();
 #endif
 }
 
-cv::VideoCapture* cveVideoCaptureCreateFromFile(cv::String* fileName, int apiPreference)
+cv::VideoCapture* cveVideoCaptureCreateFromFile(cv::String* fileName, int apiPreference, std::vector< int >* params)
 {
 #ifdef HAVE_OPENCV_VIDEOIO
-	return new cv::VideoCapture(*fileName, apiPreference);
+	if (params && !params->empty())
+	{
+		return new cv::VideoCapture(*fileName, apiPreference, *params);
+	}
+	else
+	{
+		return new cv::VideoCapture(*fileName, apiPreference);
+	}
 #else
 	throw_no_videoio();
 #endif
@@ -201,6 +215,14 @@ cv::VideoWriter* cveVideoWriterCreate2(cv::String* filename, int apiPreference, 
 	throw_no_videoio();
 #endif
 }
+cv::VideoWriter* cveVideoWriterCreate3(cv::String* filename, int apiPreference, int fourcc, double fps, CvSize* frameSize, std::vector< int >* params)
+{
+#ifdef HAVE_OPENCV_VIDEOIO
+	return new cv::VideoWriter(*filename, apiPreference, fourcc, fps, *frameSize, *params);
+#else
+	throw_no_videoio();
+#endif
+}
 void cveVideoWriterRelease(cv::VideoWriter** writer)
 {
 #ifdef HAVE_OPENCV_VIDEOIO
@@ -273,6 +295,7 @@ void cveGetBackends(std::vector<int>* backends)
 	throw_no_videoio();
 #endif
 }
+
 void cveGetCameraBackends(std::vector<int>* backends)
 {
 #ifdef HAVE_OPENCV_VIDEOIO

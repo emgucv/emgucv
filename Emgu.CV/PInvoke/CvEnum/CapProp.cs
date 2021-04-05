@@ -213,6 +213,31 @@ namespace Emgu.CV.CvEnum
         WbTemperature = 45,
 
         /// <summary>
+        /// (read-only) codec's pixel format. 4-character code - see VideoWriter::fourcc. Subset of [AV_PIX_FMT_*](https://github.com/FFmpeg/FFmpeg/blob/master/libavcodec/raw.c) or -1 if unknown
+        /// </summary>
+        CodecPixelFormat = 46,
+        /// <summary>
+        /// (read-only) Video bitrate in kbits/s
+        /// </summary>
+        Bitrate = 47,
+        /// <summary>
+        /// (read-only) Frame rotation defined by stream meta (applicable for FFmpeg back-end only)
+        /// </summary>
+        OrientationMeta = 48,
+        /// <summary>
+        /// if true - rotates output frames of CvCapture considering video file's metadata  (applicable for FFmpeg back-end only) (https://github.com/opencv/opencv/issues/15499)
+        /// </summary>
+        OrientationAuto = 49,
+        /// <summary>
+        /// (**open-only**) Hardware acceleration type (see #VideoAccelerationType). Setting supported only via `params` parameter in cv::VideoCapture constructor / .open() method. Default value is backend-specific.
+        /// </summary>
+        HwAcceleration = 50,
+        /// <summary>
+        /// (**open-only**) Hardware device index (select GPU if multiple available)
+        /// </summary>
+        HwDevice = 51, 
+
+        /// <summary>
         /// property for highgui class CvCapture_Android only
         /// </summary>
         Autograb = 1024,
@@ -1102,8 +1127,48 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Intelperc Generators Mask
         /// </summary>
-        IntelpercGeneratorsMask = IntelpercDepthGenerator + IntelpercImageGenerator
+        IntelpercGeneratorsMask = IntelpercDepthGenerator + IntelpercImageGenerator,
 
+        /// <summary>
+        /// Capture only preview from liveview mode.
+        /// </summary>
+        Gphoto2Preview = 17001,
+        /// <summary>
+        /// Readonly, returns (const char *).
+        /// </summary>
+        Gphoto2WidgetEnumerate = 17002,
+        /// <summary>
+        /// Trigger, only by set. Reload camera settings.
+        /// </summary>
+        Gphoto2ReloadConfig = 17003,
+        /// <summary>
+        /// Reload all settings on set.
+        /// </summary>
+        Gphoto2ReloadOnChange = 17004,
+        /// <summary>
+        /// Collect messages with details.
+        /// </summary>
+        Gphoto2CollectMsgs = 17005,
+        /// <summary>
+        /// Readonly, returns (const char *).
+        /// </summary>
+        Gphoto2FlushMsgs = 17006,
+        /// <summary>
+        /// Exposure speed. Can be readonly, depends on camera program.
+        /// </summary>
+        Gphoto2Speed = 17007,
+        /// <summary>
+        /// Aperture. Can be readonly, depends on camera program.
+        /// </summary>
+        Gphoto2Aperture = 17008,
+        /// <summary>
+        /// Camera exposure program.
+        /// </summary>
+        Gphoto2Exposureprogram = 17009,
+        /// <summary>
+        /// Enter liveview mode.
+        /// </summary>
+        Gphoto2Viewfinder = 17010  
     }
 
 }

@@ -73,6 +73,43 @@ namespace Emgu.CV
                 throw new NullReferenceException("Unable to create VideoWriter. Make sure you have the specific codec installed");
         }
 
+        private static VectorOfInt ConvertWriterProperties(Tuple<WriterProperty, int>[] captureProperties)
+        {
+            VectorOfInt vectInt = new VectorOfInt();
+
+            if (captureProperties != null)
+            {
+                foreach (Tuple<WriterProperty, int> cp in captureProperties)
+                {
+                    vectInt.Push(new int[] { (int)cp.Item1, cp.Item2 });
+                }
+            }
+
+            return vectInt;
+        }
+
+        /// <summary>
+        /// Create a video writer using the specific information
+        /// </summary>
+        /// <param name="fileName">The name of the video file to be written to </param>
+        /// <param name="compressionCode">Compression code. Usually computed using CvInvoke.CV_FOURCC. 
+        /// On windows use -1 to open a codec selection dialog.
+        /// On Linux, use VideoWriter.Fourcc('I', 'Y', 'U', 'V') for default codec for the specific file name.
+        /// </param>
+        /// <param name="fps">frame rate per second</param>
+        /// <param name="size">the size of the frame</param>
+        /// <param name="apiPreference">Allows to specify API backends to use.</param>
+        /// <param name="writerProperties">Optional writer properties. e.g. new Tuple&lt;VideoWriter.WriterProperty&gt;(VideoWriter.WriterProperty.HwAcceleration, (int) VideoAccelerationType.Any)</param>
+        public VideoWriter(String fileName, int apiPreference, int compressionCode, double fps, System.Drawing.Size size, params Tuple<WriterProperty, int>[] writerProperties)
+        {
+            using (CvString s = new CvString(fileName))
+            using (VectorOfInt vectInt = ConvertWriterProperties(writerProperties))
+                _ptr = CvInvoke.cveVideoWriterCreate3(s, apiPreference, compressionCode, fps, ref size, vectInt);
+
+            if (_ptr == IntPtr.Zero || IsOpened == false)
+                throw new NullReferenceException("Unable to create VideoWriter. Make sure you have the specific codec installed");
+        }
+
         /// <summary>
         /// Write a single frame to the video writer
         /// </summary>
@@ -152,7 +189,27 @@ namespace Emgu.CV
             /// <summary>
             /// Number of stripes for parallel encoding. -1 for auto detection.
             /// </summary>
-            NStripes = 3
+            NStripes = 3,
+
+            /// <summary>
+            /// If it is not zero, the encoder will expect and encode color frames, otherwise it will work with grayscale frames.
+            /// </summary>
+            IsColor = 4,
+
+            /// <summary>
+            /// Defaults to CV_8U
+            /// </summary>
+            Depth = 5,
+
+            /// <summary>
+            /// (**open-only**) Hardware acceleration type (see #VideoAccelerationType). Setting supported only via `params` parameter in VideoWriter constructor / .open() method. Default value is backend-specific.
+            /// </summary>
+            HwAcceleration = 6,
+
+            /// <summary>
+            /// (**open-only**) Hardware device index (select GPU if multiple available)
+            /// </summary>
+            HwDevice = 7, 
         }
     }
 
@@ -185,6 +242,15 @@ namespace Emgu.CV
             ref System.Drawing.Size frameSize,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool isColor);
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveVideoWriterCreate3(
+            IntPtr filename,
+            int apiPreference,
+            int fourcc,
+            double fps,
+            ref System.Drawing.Size frameSize,
+            IntPtr parameters);
 
         /// <summary>
         /// Finishes writing to video file and releases the structure.

@@ -306,16 +306,36 @@ namespace Emgu.CV
             _needDispose = needDispose;
         }
 
+        private static VectorOfInt ConvertCaptureProperties(Tuple<CvEnum.CapProp, int>[] captureProperties)
+        {
+            VectorOfInt vectInt = new VectorOfInt();
+
+            if (captureProperties != null)
+            {
+                foreach (Tuple<CvEnum.CapProp, int> cp in captureProperties)
+                {
+                    vectInt.Push(new int[] { (int)cp.Item1, cp.Item2 });
+                }
+            }
+
+            return vectInt;
+        }
+
         /// <summary> Create a capture using the specific camera</summary>
         /// <param name="camIndex"> The index of the camera to create capture from, starting from 0</param>
         /// <param name="captureApi">The preferred Capture API backends to use. Can be used to enforce a specific reader implementation if multiple are available.</param>
-        public VideoCapture(int camIndex = 0, API captureApi = API.Any)
+        /// <param name="captureProperties">Optional capture properties. e.g. new Tuple&lt;CvEnum.CapProp&gt;(CvEnum.CapProp.HwAcceleration, (int) VideoAccelerationType.Any)</param>
+        public VideoCapture(int camIndex = 0, API captureApi = API.Any, params Tuple<CvEnum.CapProp, int>[] captureProperties)
         {
             _captureModuleType = CaptureModuleType.Camera;
 
 #if TEST_CAPTURE
 #else
-            _ptr = CvInvoke.cveVideoCaptureCreateFromDevice(camIndex, captureApi);
+            using (VectorOfInt vectInt = ConvertCaptureProperties(captureProperties))
+            {
+                _ptr = CvInvoke.cveVideoCaptureCreateFromDevice(camIndex, captureApi, vectInt);
+            }
+
             if (_ptr == IntPtr.Zero)
             {
                 throw new NullReferenceException(String.Format("Error: Unable to create capture from camera {0}", camIndex));
@@ -328,20 +348,15 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="fileName">The name of a file, or an url pointed to a stream.</param>
         /// <param name="captureApi">The preferred Capture API backends to use. Can be used to enforce a specific reader implementation if multiple are available.</param>
-        public VideoCapture(String fileName, API captureApi = API.Any)
+        /// <param name="captureProperties">Optional capture properties. e.g. new Tuple&lt;CvEnum.CapProp&gt;(CvEnum.CapProp.HwAcceleration, (int) VideoAccelerationType.Any)</param>
+        public VideoCapture(String fileName, API captureApi = API.Any, params Tuple<CvEnum.CapProp, int>[] captureProperties)
         {
             using (CvString s = new CvString(fileName))
             {
-                /*
-                if (Util.CvToolbox.HasFFMPEG)
-                {
-                   _captureModuleType = CaptureModuleType.FFMPEG;
-                   _ptr = CvInvoke.cvCreateFileCapture_FFMPEG(fileName);
-                }
-                else*/
+                using (VectorOfInt vectInt = ConvertCaptureProperties(captureProperties))
                 {
                     _captureModuleType = CaptureModuleType.Highgui;
-                    _ptr = CvInvoke.cveVideoCaptureCreateFromFile(s, captureApi);
+                    _ptr = CvInvoke.cveVideoCaptureCreateFromFile(s, captureApi, vectInt);
                 }
 
                 if (_ptr == IntPtr.Zero)
@@ -727,10 +742,10 @@ namespace Emgu.CV
         //internal static extern void cveVideoCaptureReadToMat(IntPtr capture, IntPtr mat);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveVideoCaptureCreateFromDevice(int index, VideoCapture.API apiPreference);
+        internal static extern IntPtr cveVideoCaptureCreateFromDevice(int index, VideoCapture.API apiPreference, IntPtr captureProperties);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveVideoCaptureCreateFromFile(IntPtr filename, VideoCapture.API api);
+        internal static extern IntPtr cveVideoCaptureCreateFromFile(IntPtr filename, VideoCapture.API api, IntPtr captureProperties);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveVideoCaptureRelease(ref IntPtr capture);
