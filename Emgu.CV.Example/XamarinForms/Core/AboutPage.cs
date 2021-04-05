@@ -82,8 +82,12 @@ textarea { width: 100%; margin: 0; padding: 0; border - width: 0; }
 " + RuntimeInformation.ProcessArchitecture + @"
 <H4> Dnn Backends: </H4>
 " + dnnText + @"
-<H4> Capture Backends: </H4>
-" + (haveVideoio ? GetCaptureInfo() : "Videoio backend not supported.") + @"
+<H4> Capture Backends (VideoCapture from device): </H4>
+" + (haveVideoio ? GetBackendInfo(CvInvoke.Backends) : "Videoio backend not supported.") + @"
+<H4> Stream Backends (VideoCapture from file/Stream): </H4>
+" + (haveVideoio ? GetBackendInfo(CvInvoke.StreamBackends) : "Videoio backend not supported.") + @"
+<H4> VideoWriter Backends: </H4>
+" + (haveVideoio ? GetBackendInfo(CvInvoke.WriterBackends) : "Videoio backend not supported.") + @"
 <H4> Build Info </H4>
 <textarea rows=""30"">"
                         + CvInvoke.BuildInformation + @"
@@ -96,17 +100,15 @@ textarea { width: 100%; margin: 0; padding: 0; border - width: 0; }
                   };
         }
 
-        private static String GetCaptureInfo()
+        private static String GetBackendInfo(Backend[] backends)
         {
-            var captureBackends = CvInvoke.Backends;
-            List<String> captureBackendsText = new List<string>();
-            foreach (var captureBackend in captureBackends)
+            List<String> backendsText = new List<string>();
+            foreach (var backend in backends)
             {
-                captureBackendsText.Add(String.Format("<p>{0} - {1}</p>", captureBackend.ID, captureBackend.Name));
+                backendsText.Add(String.Format("<p>{0} - {1}</p>", backend.ID, backend.Name));
             }
 
-            String captureText = String.Join("", captureBackendsText.ToArray());
-            return captureText;
+            return String.Join("", backendsText.ToArray());
         }
     }
 }
