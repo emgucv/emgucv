@@ -10,6 +10,7 @@ project(cvextern)
 set(the_target ${PROJECT_NAME})
 
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include/opencv")
+INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/modules/core/src/parallel")
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include")
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/opencv/3rdparty/zlib")
 

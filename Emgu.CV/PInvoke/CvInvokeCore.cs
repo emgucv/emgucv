@@ -3052,6 +3052,31 @@ namespace Emgu.CV
         private static extern int cveGetNumberOfCPUs();
 #endif
 
+        public static bool SetParallelForBackend(String backendName, bool propagateNumThreads = true)
+        {
+            using (CvString csBackendName = new CvString(backendName))
+                return cveSetParallelForBackend(csBackendName, propagateNumThreads);
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveSetParallelForBackend(IntPtr backendName, bool propagateNumThreads);
+
+        public static String[] AvailableParallelBackends
+        {
+            get
+            {
+                using (VectorOfCvString backendNames = new VectorOfCvString())
+                {
+                    cveGetParallelBackends(backendNames);
+                    return backendNames.ToArray();
+                }
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveGetParallelBackends(IntPtr backendNames);
+
         /// <summary>
         /// Compares the corresponding elements of two arrays and fills the destination mask array:
         /// dst(I)=src1(I) op src2(I),

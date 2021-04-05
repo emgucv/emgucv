@@ -31,6 +31,8 @@ namespace BuildInfo.NetCore.Console
             System.Console.WriteLine(GetCaptureInfo() + System.Environment.NewLine);
 
             System.Console.WriteLine(GetRuntimeInfo() + System.Environment.NewLine);
+
+            System.Console.WriteLine(GetParallelBackendInfo() + System.Environment.NewLine);
         }
 
         private static String GetDnnInfo()
@@ -181,6 +183,17 @@ namespace BuildInfo.NetCore.Console
             }
 
             return cudaStringBuilder.ToString();
+        }
+
+        private static String GetParallelBackendInfo()
+        {
+            StringBuilder parallelBackendStringBuilder = new StringBuilder();
+
+            String[] availableParallelBackends = CvInvoke.AvailableParallelBackends;
+            parallelBackendStringBuilder.Append(String.Format("Available Parallel backends:{0}", Environment.NewLine));
+            parallelBackendStringBuilder.Append(String.Join(Environment.NewLine, availableParallelBackends));
+
+            return parallelBackendStringBuilder.ToString();
         }
     }
 }

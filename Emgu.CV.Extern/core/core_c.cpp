@@ -57,12 +57,20 @@ int cveGetNumberOfCPUs()
 {
 	return cv::getNumberOfCPUs();
 }
-/*
-void cveCurrentParallelFramework(cv::String* framework)
+
+bool cveSetParallelForBackend(cv::String* backendName, bool propagateNumThreads)
 {
-	*framework = cv::currentParallelFramework();
+	return cv::parallel::setParallelForBackend(*backendName, propagateNumThreads);
 }
-*/
+void cveGetParallelBackends(std::vector< cv::String >* backendNames)
+{
+	backendNames->clear();
+	std::vector< cv::parallel::ParallelBackendInfo > backendsInfo = cv::parallel::getParallelBackendsInfo();
+	for (std::vector< cv::parallel::ParallelBackendInfo >::iterator it = backendsInfo.begin(); it != backendsInfo.end(); ++it)
+	{
+		backendNames->push_back(it->name);
+	}
+}
 
 cv::String* cveStringCreate()
 {
