@@ -686,3 +686,55 @@ int cveConnectedComponentsWithStats(cv::_InputArray* image, cv::_OutputArray* la
 {
 	return cv::connectedComponentsWithStats(*image, *labels, *stats, *centroids, connectivity, type);
 }
+
+cv::segmentation::IntelligentScissorsMB* cveIntelligentScissorsMBCreate()
+{
+	return new cv::segmentation::IntelligentScissorsMB();
+}
+void cveIntelligentScissorsMBRelease(cv::segmentation::IntelligentScissorsMB** ptr)
+{
+	delete* ptr;
+	*ptr = 0;
+}
+void cveIntelligentScissorsMBSetWeights(
+	cv::segmentation::IntelligentScissorsMB* ptr,
+	float weightNonEdge,
+	float weightGradientDirection,
+	float weightGradientMagnitude)
+{
+	ptr->setWeights(weightNonEdge, weightGradientDirection, weightGradientMagnitude);
+}
+void cveIntelligentScissorsMBSetEdgeFeatureCannyParameters(
+	cv::segmentation::IntelligentScissorsMB* ptr,
+	double threshold1,
+	double threshold2,
+	int apertureSize,
+	bool L2gradient)
+{
+	ptr->setEdgeFeatureCannyParameters(threshold1, threshold2, apertureSize, L2gradient);
+}
+void cveIntelligentScissorsMBApplyImage(cv::segmentation::IntelligentScissorsMB* ptr, cv::_InputArray* image)
+{
+	ptr->applyImage(*image);
+}
+void cveIntelligentScissorsMBApplyImageFeatures(
+	cv::segmentation::IntelligentScissorsMB* ptr,
+	cv::_InputArray* nonEdge,
+	cv::_InputArray* gradientDirection,
+	cv::_InputArray* gradientMagnitude,
+	cv::_InputArray* image)
+{
+	ptr->applyImageFeatures(*nonEdge, *gradientDirection, *gradientMagnitude, image ? *image : static_cast<cv::InputArray>(cv::noArray()));
+}
+void cveIntelligentScissorsMBBuildMap(cv::segmentation::IntelligentScissorsMB* ptr, CvPoint* sourcePt)
+{
+	ptr->buildMap(*sourcePt);
+}
+void cveIntelligentScissorsMBGetContour(
+	cv::segmentation::IntelligentScissorsMB* ptr,
+	CvPoint* targetPt,
+	cv::_OutputArray* contour,
+	bool backward)
+{
+	ptr->getContour(*targetPt, *contour, backward);
+}

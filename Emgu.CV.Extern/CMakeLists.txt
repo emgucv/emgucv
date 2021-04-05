@@ -1439,6 +1439,28 @@ ENDIF()
 	""
 	""
 	${HAVE_opencv_imgproc})
+  CREATE_OCV_CLASS_PROPERTY( 
+    "imgproc/IntelligentScissorsMB_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Imgproc/IntelligentScissorsMB.g.cs"
+    "cv::segmentation::IntelligentScissorsMB" 
+    "IntelligentScissorsMB" 
+    "EdgeFeatureZeroCrossingParameters;GradientMagnitudeMaxLimit" 
+    "float;float" 
+    "propW;propW"
+    "EdgeFeatureZeroCrossingParameters;GradientMagnitudeMaxLimit" 
+    "float;float"
+    "Switch to Laplacian Zero-Crossing edge feature extractor and specify its parameters. This feature extractor is used by default according to article. Implementation has additional filtering for regions with low-amplitude noise. This filtering is enabled through parameter of minimal gradient amplitude (use some small value 4, 8, 16).;
+    Specify gradient magnitude max value threshold. Zero limit value is used to disable gradient magnitude thresholding (default behavior, as described in original article). Otherwize pixels with gradient magnitude greater than threshold have zero cost."
+    "Emgu.CV"
+    "CvInvoke"
+    "IntelligentScissorsMB"
+	""
+    "#include \"imgproc_c.h\""
+	""
+	""
+	${HAVE_opencv_imgproc})
+    
+
 
 ############################### imgproc code gen END ################################
 

@@ -217,4 +217,31 @@ CVAPI(void) cveMaxRect(CvRect* rect1, CvRect* rect2, CvRect* result);
 
 CVAPI(int) cveConnectedComponents(cv::_InputArray* image, cv::_OutputArray* labels, int connectivity, int type);
 CVAPI(int) cveConnectedComponentsWithStats(cv::_InputArray* image, cv::_OutputArray* labels, cv::_OutputArray* stats, cv::_OutputArray* centroids, int connectivity, int type);
+
+CVAPI(cv::segmentation::IntelligentScissorsMB*) cveIntelligentScissorsMBCreate();
+CVAPI(void) cveIntelligentScissorsMBRelease(cv::segmentation::IntelligentScissorsMB** ptr);
+CVAPI(void) cveIntelligentScissorsMBSetWeights(
+	cv::segmentation::IntelligentScissorsMB* ptr, 
+	float weightNonEdge, 
+	float weightGradientDirection, 
+	float weightGradientMagnitude);
+CVAPI(void) cveIntelligentScissorsMBSetEdgeFeatureCannyParameters(
+	cv::segmentation::IntelligentScissorsMB* ptr,
+	double threshold1, 
+	double threshold2,
+	int apertureSize, 
+	bool L2gradient);
+CVAPI(void) cveIntelligentScissorsMBApplyImage(cv::segmentation::IntelligentScissorsMB* ptr, cv::_InputArray* image);
+CVAPI(void) cveIntelligentScissorsMBApplyImageFeatures(
+	cv::segmentation::IntelligentScissorsMB* ptr,
+	cv::_InputArray* nonEdge, 
+	cv::_InputArray* gradientDirection, 
+	cv::_InputArray* gradientMagnitude,
+	cv::_InputArray* image);
+CVAPI(void) cveIntelligentScissorsMBBuildMap(cv::segmentation::IntelligentScissorsMB* ptr, CvPoint* sourcePt);
+CVAPI(void) cveIntelligentScissorsMBGetContour(
+	cv::segmentation::IntelligentScissorsMB* ptr, 
+	CvPoint* targetPt, 
+	cv::_OutputArray* contour, 
+	bool backward);
 #endif
