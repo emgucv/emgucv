@@ -264,8 +264,7 @@ void cudaCreateOpticalFlowNeedleMap(const cv::cuda::GpuMat* u, const cv::cuda::G
 //
 //----------------------------------------------------------------------------
 cv::cuda::NvidiaOpticalFlow_1_0* cudaNvidiaOpticalFlow_1_0_Create(
-	int width,
-	int height,
+	CvSize* imageSize,
 	int perfPreset,
 	bool enableTemporalHints,
 	bool enableExternalHints,
@@ -277,8 +276,7 @@ cv::cuda::NvidiaOpticalFlow_1_0* cudaNvidiaOpticalFlow_1_0_Create(
 {
 #ifdef HAVE_OPENCV_CUDAOPTFLOW
 	cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0> ptr = cv::cuda::NvidiaOpticalFlow_1_0::create(
-		width,
-		height,
+		*imageSize,
 		(cv::cuda::NvidiaOpticalFlow_1_0::NVIDIA_OF_PERF_LEVEL) perfPreset,
 		enableTemporalHints,
 		enableExternalHints,
@@ -297,13 +295,12 @@ cv::cuda::NvidiaOpticalFlow_1_0* cudaNvidiaOpticalFlow_1_0_Create(
 void cudaNvidiaOpticalFlow_1_0_UpSampler(
 	cv::cuda::NvidiaOpticalFlow_1_0* nFlow,
 	cv::_InputArray* flow,
-	int width,
-	int height,
+	CvSize* imageSize,
 	int gridSize,
 	cv::_InputOutputArray* upsampledFlow)
 {
 #ifdef HAVE_OPENCV_CUDAOPTFLOW
-	nFlow->upSampler(*flow, width, height, gridSize, *upsampledFlow);
+	nFlow->upSampler(*flow, *imageSize, gridSize, *upsampledFlow);
 #else
 	throw_no_cudaoptflow();
 #endif	

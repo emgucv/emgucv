@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -57,8 +58,7 @@ namespace Emgu.CV.Cuda
         /// <param name="enableCostBuffer">Optional Parameter. Flag to enable cost buffer output from calc(). Defaults to false.</param>
         /// <param name="gpuId">Optional parameter to select the GPU ID on which the optical flow should be computed. Useful in multi-GPU systems. Defaults to 0.</param>
         public NvidiaOpticalFlow_1_0(
-            int width,
-            int height,
+            Size imageSize,
             NvidiaOpticalFlow_1_0.PerfLevel perfPreset = PerfLevel.Slow,
             bool enableTemporalHints = false,
             bool enableExternalHints = false,
@@ -66,8 +66,7 @@ namespace Emgu.CV.Cuda
             int gpuId = 0)
         {
             _ptr = CudaInvoke.cudaNvidiaOpticalFlow_1_0_Create(
-                width,
-                height,
+                ref imageSize,
                 perfPreset,
                 enableTemporalHints,
                 enableExternalHints,
@@ -77,6 +76,25 @@ namespace Emgu.CV.Cuda
                 ref _algorithm,
                 ref _sharedPtr);
         }
+
+        public void UpSampler(
+            IInputArray flow,
+            Size imageSize,
+            int gridSize,
+            IInputOutputArray upsampledFlow)
+        {
+            using (InputArray iaFlow = flow.GetInputArray())
+            using (InputOutputArray ioaUpsampledFlow = upsampledFlow.GetInputOutputArray())
+            {
+                CudaInvoke.cudaNvidiaOpticalFlow_1_0_UpSampler(
+                    _ptr, 
+                    iaFlow,
+                    ref imageSize,
+                    gridSize,
+                    ioaUpsampledFlow);
+            }
+        }
+
 
         /// <summary>
         /// Release all the unmanaged memory associated with this optical flow solver.
@@ -110,8 +128,7 @@ namespace Emgu.CV.Cuda
     {
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cudaNvidiaOpticalFlow_1_0_Create(
-            int width,
-            int height,
+            ref Size imageSize,
             NvidiaOpticalFlow_1_0.PerfLevel perfPreset,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool enableTemporalHints,
@@ -123,6 +140,15 @@ namespace Emgu.CV.Cuda
             ref IntPtr nHWOpticalFlow,
             ref IntPtr algorithm,
             ref IntPtr sharedPtr);
+
+
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cudaNvidiaOpticalFlow_1_0_UpSampler(
+            IntPtr nFlow,
+            IntPtr flow,
+            ref Size imageSize,
+            int gridSize,
+            IntPtr upsampledFlow);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cudaNvidiaOpticalFlow_1_0_Release(ref IntPtr flow);
