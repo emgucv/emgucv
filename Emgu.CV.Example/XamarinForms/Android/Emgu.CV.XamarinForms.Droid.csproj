@@ -16,7 +16,6 @@
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
-    <AndroidSupportedAbis>armeabi-v7a;x86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <LangVersion>8.0</LangVersion>
     <MandroidI18n />
@@ -40,9 +39,11 @@
     <EnableLLVM>false</EnableLLVM>
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
-    <AndroidSupportedAbis>
-    </AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidPackageFormat>aab</AndroidPackageFormat>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+    <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -58,6 +59,9 @@
     <BundleAssemblies>false</BundleAssemblies>
     <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
     <AndroidSupportedAbis>armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
+    <AndroidPackageFormat>aab</AndroidPackageFormat>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+    <AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Java.Interop" />
@@ -267,9 +271,9 @@
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Emgu.CV.Models\Emgu.CV.Models.csproj">
-      <Project>{f8917cae-56a6-4be6-84a7-feff6ec72a0a}</Project>
-      <Name>Emgu.CV.Models</Name>
+    <ProjectReference Include="..\..\..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj">
+      <Project>{ca227646-ef16-49d4-9398-6410931d080c}</Project>
+      <Name>Emgu.CV.Models.NetStandard</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Emgu.CV.Platform\Android\Emgu.CV.Platform.Android.csproj">
       <Project>{5f102c71-65c3-4d77-ae48-29c1e75f82be}</Project>
