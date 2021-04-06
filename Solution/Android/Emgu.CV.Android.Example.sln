@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.Netstandar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Platform.Android", "..\..\Emgu.CV.Platform\Android\Emgu.CV.Platform.Android.csproj", "{5F102C71-65C3-4D77-AE48-29C1E75F82BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models", "..\..\Emgu.CV.Models\Emgu.CV.Models.csproj", "{F8917CAE-56A6-4BE6-84A7-FEFF6EC72A0A}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Models.Shared", "..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.shproj", "{0BFAD282-50C1-449C-B01C-62FD23BBDBE5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models.NetStandard", "..\..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj", "{CA227646-EF16-49D4-9398-6410931D080C}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -30,12 +32,14 @@ Global
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{04e2a4f0-b178-4c96-b792-91db114896b2}*SharedItemsImports = 5
 		..\..\Emgu.CV\Emgu.CV.projitems*{04e2a4f0-b178-4c96-b792-91db114896b2}*SharedItemsImports = 5
 		..\..\Emgu.Util\Emgu.Util.projitems*{04e2a4f0-b178-4c96-b792-91db114896b2}*SharedItemsImports = 5
+		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{0bfad282-50c1-449c-b01c-62fd23bbdbe5}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
 		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{590bdc36-c47d-45b4-a24a-f907df9922f5}*SharedItemsImports = 4
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{ca227646-ef16-49d4-9398-6410931d080c}*SharedItemsImports = 5
 		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,18 +93,18 @@ Global
 		{5F102C71-65C3-4D77-AE48-29C1E75F82BE}.Release|x64.Build.0 = Release|Any CPU
 		{5F102C71-65C3-4D77-AE48-29C1E75F82BE}.Release|x86.ActiveCfg = Release|x86
 		{5F102C71-65C3-4D77-AE48-29C1E75F82BE}.Release|x86.Build.0 = Release|x86
-		{F8917CAE-56A6-4BE6-84A7-FEFF6EC72A0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8917CAE-56A6-4BE6-84A7-FEFF6EC72A0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F8917CAE-56A6-4BE6-84A7-FEFF6EC72A0A}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{F8917CAE-56A6-4BE6-84A7-FEFF6EC72A0A}.Debug|x64.Build.0 = Debug|Any CPU
-		{F8917CAE-56A6-4BE6-84A7-FEFF6EC72A0A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F8917CAE-56A6-4BE6-84A7-FEFF6EC72A0A}.Debug|x86.Build.0 = Debug|Any CPU
-		{F8917CAE-56A6-4BE6-84A7-FEFF6EC72A0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F8917CAE-56A6-4BE6-84A7-FEFF6EC72A0A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F8917CAE-56A6-4BE6-84A7-FEFF6EC72A0A}.Release|x64.ActiveCfg = Release|Any CPU
-		{F8917CAE-56A6-4BE6-84A7-FEFF6EC72A0A}.Release|x64.Build.0 = Release|Any CPU
-		{F8917CAE-56A6-4BE6-84A7-FEFF6EC72A0A}.Release|x86.ActiveCfg = Release|Any CPU
-		{F8917CAE-56A6-4BE6-84A7-FEFF6EC72A0A}.Release|x86.Build.0 = Release|Any CPU
+		{CA227646-EF16-49D4-9398-6410931D080C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA227646-EF16-49D4-9398-6410931D080C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA227646-EF16-49D4-9398-6410931D080C}.Debug|x64.ActiveCfg = Debug|x64
+		{CA227646-EF16-49D4-9398-6410931D080C}.Debug|x64.Build.0 = Debug|x64
+		{CA227646-EF16-49D4-9398-6410931D080C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CA227646-EF16-49D4-9398-6410931D080C}.Debug|x86.Build.0 = Debug|Any CPU
+		{CA227646-EF16-49D4-9398-6410931D080C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA227646-EF16-49D4-9398-6410931D080C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA227646-EF16-49D4-9398-6410931D080C}.Release|x64.ActiveCfg = Release|x64
+		{CA227646-EF16-49D4-9398-6410931D080C}.Release|x64.Build.0 = Release|x64
+		{CA227646-EF16-49D4-9398-6410931D080C}.Release|x86.ActiveCfg = Release|Any CPU
+		{CA227646-EF16-49D4-9398-6410931D080C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
