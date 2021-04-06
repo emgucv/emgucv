@@ -81,6 +81,18 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern int cveWaitKey(int delay);
 
+
+        /// <summary>
+        /// Polls for a key event without waiting.
+        /// </summary>
+        /// <returns>The code of the pressed key or -1 if no key was pressed since the last invocation.</returns>
+        public static int PollKey()
+        {
+            return cvePollKey();
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern int cvePollKey();
+
         /// <summary>
         /// Shows the image in the specified window
         /// </summary>

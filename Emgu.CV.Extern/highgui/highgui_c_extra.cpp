@@ -77,6 +77,15 @@ int cveWaitKey(int delay)
 #endif
 }
 
+int cvePollKey()
+{
+#ifdef HAVE_OPENCV_HIGHGUI
+	return cv::pollKey();
+#else
+	throw_no_highgui();
+#endif	
+}
+
 void cveSelectROI(cv::String* windowName, cv::_InputArray* img, bool showCrosshair, bool fromCenter, CvRect* roi)
 {
 #ifdef HAVE_OPENCV_HIGHGUI

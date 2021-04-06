@@ -26,6 +26,7 @@ CVAPI(double) cveGetWindowProperty(cv::String* winname, int propId);
 CVAPI(void) cveDestroyWindow(cv::String* winname);
 CVAPI(void) cveDestroyAllWindows();
 CVAPI(int) cveWaitKey(int delay);
+CVAPI(int) cvePollKey();
 
 CVAPI(void) cveSelectROI(
 	cv::String* windowName,
