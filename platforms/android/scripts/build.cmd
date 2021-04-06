@@ -99,9 +99,19 @@ SET CMAKE_CONF_FLAGS= -G "%CMAKE_GENERATOR%" ^
 -DCMAKE_POLICY_DEFAULT_CMP0069=NEW ^
 -DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=ON ^
 -DCMAKE_INSTALL_PREFIX:STRING="%INSTALL_FOLDER:\=/%" ^
--DCMAKE_BUILD_TYPE:STRING=RELEASE
+-DCMAKE_BUILD_TYPE:STRING=Release
 
 REM -DCMAKE_SHARED_LINKER_FLAGS:STRING="-Wl,--gc-sections" ^
+
+REM cd openvino 
+REM IF NOT EXIST "%BUILD_DIR%" mkdir "%BUILD_DIR%"
+REM cd "%BUILD_DIR%"
+REM "%CMAKE%" %CMAKE_CONF_FLAGS% %* -DENABLE_OPENCV:BOOL=OFF -DENABLE_MKL_DNN:BOOL=OFF -DANDROID_LD=deprecated .. 
+REM SET OPENVINO_DIR=%cd%
+REM echo on
+REM "%CMAKE%" --build . --config Release --target install
+REM cd .. 
+REM cd ..
 
 cd eigen 
 IF NOT EXIST "%BUILD_DIR%" mkdir "%BUILD_DIR%"
@@ -112,6 +122,7 @@ echo on
 "%CMAKE%" --build . --config Release --target install
 cd .. 
 cd ..
+
 
 ::cd ..\vtk 
 ::mkdir install
