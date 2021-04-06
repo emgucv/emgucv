@@ -30,6 +30,7 @@ namespace Example.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             CvInvokeIOS.Init();
+         CvInvoke.LogLevel = Emgu.CV.CvEnum.LogLevel.Verbose;
 
             _window = new UIWindow(UIScreen.MainScreen.Bounds);
             UINavigationController navControl = new UINavigationController();
