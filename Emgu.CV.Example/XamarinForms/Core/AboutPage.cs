@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using Emgu.CV.Cuda;
 using Emgu.CV.Dnn;
 using Emgu.CV.ML;
 using Xamarin.Forms;
@@ -17,15 +18,24 @@ namespace Emgu.CV.XamarinForms
         public AboutPage()
         {
 
-            String openclTxt = String.Format("Has OpenCL: {0}", CvInvoke.HaveOpenCL);
-
             String lineBreak = "<br/>";
+
+            String openclTxt = String.Format("Has OpenCL: {0}", CvInvoke.HaveOpenCL);
             if (CvInvoke.HaveOpenCL)
             {
                 openclTxt = String.Format("{0}{1}Use OpenCL: {2}{1}<textarea rows=\"5\">{3}</textarea>{1}",
                    openclTxt, lineBreak,
                    CvInvoke.UseOpenCL,
                    CvInvoke.OclGetPlatformsSummary());
+            }
+
+            String cudaTxt = String.Format("Has CUDA: {0}", CudaInvoke.HasCuda);
+            if (CudaInvoke.HasCuda)
+            {
+                cudaTxt = String.Format("{0}{1}<textarea rows=\"5\">{2}</textarea>{1}",
+                    cudaTxt, 
+                    lineBreak,
+                    CudaInvoke.GetCudaDevicesSummary());
             }
 
             var openCVConfigDict = CvInvoke.ConfigDict;
@@ -81,6 +91,8 @@ textarea { width: 100%; margin: 0; padding: 0; border - width: 0; }
 <a href=mailto:support@emgu.com>Email Support</a> <br/><br/>
 <H4> OpenCL Info </H4>
 " + openclTxt + @"
+<H4> Cuda Info </H4>
+" + cudaTxt + @"
 <H4> OS: </H4>
 " + osDescription + @"
 <H4> OS Architecture: </H4>

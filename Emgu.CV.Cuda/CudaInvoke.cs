@@ -75,13 +75,21 @@ namespace Emgu.CV.Cuda
                 builder.Append(String.Format("Has cuda: true{0}", Environment.NewLine));
 
                 int deviceCount = GetCudaEnabledDeviceCount();
-                builder.Append(String.Format("Cuda devices: {0}{1}", deviceCount, Environment.NewLine));
+                builder.Append(String.Format("Cuda devices count: {0}{1}", deviceCount, Environment.NewLine));
 
                 for (int i = 0; i < deviceCount; i++)
                 {
                     using (CudaDeviceInfo deviceInfo = new CudaDeviceInfo(i))
                     {
-                        builder.Append(String.Format("  Device {0}: {1}{2}", i, deviceInfo.Name, Environment.NewLine));
+                        builder.Append(String.Format(
+                            "Device {0}:{1}  Name: {2}{1}  Cuda Compute Capability: {3}{1}  Multi-Processor count: {4}{1}  Total Memory: {5}{1}  Free Memory: {6}{1}", 
+                            i,
+                            Environment.NewLine,
+                            deviceInfo.Name, 
+                            deviceInfo.CudaComputeCapability,
+                            deviceInfo.MultiProcessorCount,
+                            deviceInfo.TotalMemory,
+                            deviceInfo.FreeMemory));
                     }
                 }
 
