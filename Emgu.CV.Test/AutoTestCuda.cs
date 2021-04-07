@@ -1213,7 +1213,7 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void TestNVidiaOpticalFlow()
+        public void TestNVidiaOpticalFlow_1_0()
         {
             if (!CudaInvoke.HasCuda)
                 return;
@@ -1230,6 +1230,36 @@ namespace Emgu.CV.Test
             NvidiaOpticalFlow_1_0 flow = new NvidiaOpticalFlow_1_0(images[0].Size);
 
             flow.Calc(images[0], images[1], result);
+
+            watch.Stop();
+            EmguAssert.WriteLine(String.Format(
+                "Time: {0} milliseconds",
+                watch.ElapsedMilliseconds));
+            for (int i = 0; i < images.Length; i++)
+            {
+                images[i].Dispose();
+            }
+        }
+
+        [Test]
+        public void TestNVidiaOpticalFlow_2_0()
+        {
+            if (!CudaInvoke.HasCuda)
+                return;
+            int cudaDevice = CudaInvoke.GetDevice();
+            using (CudaDeviceInfo deviceInfo = new CudaDeviceInfo(cudaDevice))
+            {
+                if (deviceInfo.CudaComputeCapability < new Version(7, 5))
+                    return;
+            }
+            GpuMat[] images = OpticalFlowImage();
+            GpuMat flow = new GpuMat();
+            GpuMat floatFlow = new GpuMat();
+            Stopwatch watch = Stopwatch.StartNew();
+            NvidiaOpticalFlow_2_0 nof = new NvidiaOpticalFlow_2_0(images[0].Size);
+
+            nof.Calc(images[0], images[1], flow);
+            nof.ConvertToFloat(flow, floatFlow);
 
             watch.Stop();
             EmguAssert.WriteLine(String.Format(
