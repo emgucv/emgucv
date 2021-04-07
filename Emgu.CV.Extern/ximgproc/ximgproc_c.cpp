@@ -758,3 +758,66 @@ void cveEdgeBoxesRelease(cv::Ptr<cv::ximgproc::EdgeBoxes>** sharedPtr)
 	throw_no_ximgproc();
 #endif
 }
+
+cv::ximgproc::EdgeDrawing* cveEdgeDrawingCreate(
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::ximgproc::EdgeDrawing>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_XIMGPROC
+	cv::Ptr<cv::ximgproc::EdgeDrawing> ptr = cv::ximgproc::createEdgeDrawing();
+	*sharedPtr = new cv::Ptr<cv::ximgproc::EdgeDrawing>(ptr);
+	*algorithm = (*sharedPtr)->dynamicCast<cv::Algorithm>();
+	return (*sharedPtr)->get();
+#else
+	throw_no_ximgproc();
+#endif	
+}
+void cveEdgeDrawingDetectEdges(cv::ximgproc::EdgeDrawing* edgeDrawing, cv::_InputArray* src)
+{
+#ifdef HAVE_OPENCV_XIMGPROC
+	edgeDrawing->detectEdges(*src);
+#else
+	throw_no_ximgproc();
+#endif		
+}
+void cveEdgeDrawingGetEdgeImage(cv::ximgproc::EdgeDrawing* edgeDrawing, cv::_OutputArray* dst)
+{
+#ifdef HAVE_OPENCV_XIMGPROC
+	edgeDrawing->getEdgeImage(*dst);
+#else
+	throw_no_ximgproc();
+#endif
+}
+void cveEdgeDrawingGetGradientImage(cv::ximgproc::EdgeDrawing* edgeDrawing, cv::_OutputArray* dst)
+{
+#ifdef HAVE_OPENCV_XIMGPROC
+	edgeDrawing->getGradientImage(*dst);
+#else
+	throw_no_ximgproc();
+#endif
+}
+void cveEdgeDrawingDetectLines(cv::ximgproc::EdgeDrawing* edgeDrawing, cv::_OutputArray* lines)
+{
+#ifdef HAVE_OPENCV_XIMGPROC
+	edgeDrawing->detectLines(*lines);
+#else
+	throw_no_ximgproc();
+#endif
+}
+void cveEdgeDrawingDetectEllipses(cv::ximgproc::EdgeDrawing* edgeDrawing, cv::_OutputArray* ellipses)
+{
+#ifdef HAVE_OPENCV_XIMGPROC
+	edgeDrawing->detectEllipses(*ellipses);
+#else
+	throw_no_ximgproc();
+#endif
+}
+void cveEdgeDrawingRelease(cv::Ptr<cv::ximgproc::EdgeDrawing>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_XIMGPROC
+	delete* sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_ximgproc();
+#endif	
+}
