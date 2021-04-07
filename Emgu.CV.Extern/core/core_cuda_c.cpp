@@ -36,6 +36,11 @@ int cudaGetDevice()
 	return cv::cuda::getDevice();
 }
 
+void cudaResetDevice()
+{
+	return cv::cuda::resetDevice();
+}
+
 cv::cuda::DeviceInfo* cudaDeviceInfoCreate(int* deviceId)
 {
 	if (*deviceId < 0)
@@ -85,6 +90,21 @@ bool cudaDeviceInfoSupports(cv::cuda::DeviceInfo* device, cv::cuda::FeatureSet f
 bool cudaDeviceInfoIsCompatible(cv::cuda::DeviceInfo* device)
 {
 	return device->isCompatible();
+}
+
+void cudaPrintCudaDeviceInfo(int device)
+{
+	cv::cuda::printCudaDeviceInfo(device);
+}
+
+void cudaPrintShortCudaDeviceInfo(int device)
+{
+	cv::cuda::printShortCudaDeviceInfo(device);
+}
+
+void cudaConvertFp16(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream)
+{
+	cv::cuda::convertFp16(*src, *dst, *stream ? *stream : cv::cuda::Stream::Null());
 }
 
 //----------------------------------------------------------------------------

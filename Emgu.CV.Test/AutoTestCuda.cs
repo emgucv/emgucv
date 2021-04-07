@@ -1217,6 +1217,12 @@ namespace Emgu.CV.Test
         {
             if (!CudaInvoke.HasCuda)
                 return;
+            int cudaDevice = CudaInvoke.GetDevice();
+            using (CudaDeviceInfo deviceInfo = new CudaDeviceInfo(cudaDevice))
+            {
+                if (deviceInfo.CudaComputeCapability < new Version(7, 5))
+                    return;
+            } 
             GpuMat[] images = OpticalFlowImage();
             GpuMat result = new GpuMat();
 

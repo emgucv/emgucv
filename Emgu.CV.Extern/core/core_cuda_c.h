@@ -26,6 +26,8 @@ CVAPI(void) cudaSetDevice(int deviceId);
 
 CVAPI(int) cudaGetDevice();
 
+CVAPI(void) cudaResetDevice();
+
 CVAPI(cv::cuda::DeviceInfo*) cudaDeviceInfoCreate(int* deviceId);
 
 CVAPI(void) cudaDeviceInfoRelease(cv::cuda::DeviceInfo** di);
@@ -43,6 +45,12 @@ CVAPI(void) cudaDeviceInfoTotalMemInfo(cv::cuda::DeviceInfo* info, size_t* total
 CVAPI(bool) cudaDeviceInfoSupports(cv::cuda::DeviceInfo* device, cv::cuda::FeatureSet feature);
 
 CVAPI(bool) cudaDeviceInfoIsCompatible(cv::cuda::DeviceInfo* device);
+
+CVAPI(void) cudaPrintCudaDeviceInfo(int device);
+
+CVAPI(void) cudaPrintShortCudaDeviceInfo(int device);
+
+CVAPI(void) cudaConvertFp16(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream);
 
 //----------------------------------------------------------------------------
 //
@@ -116,6 +124,8 @@ CVAPI(cv::cuda::GpuMat*) gpuMatGetSubRect(const cv::cuda::GpuMat* arr, CvRect* r
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::Stream*) streamCreate();
+
+CVAPI(cv::cuda::Stream*) streamCreateWithFlag(int flag);
 
 CVAPI(void) streamRelease(cv::cuda::Stream** stream);
 

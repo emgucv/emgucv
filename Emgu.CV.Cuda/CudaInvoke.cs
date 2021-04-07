@@ -63,9 +63,9 @@ namespace Emgu.CV.Cuda
         #endregion
 
         /// <summary>
-        /// Get the opencl platform summary as a string
+        /// Get the cuda platform summary as a string
         /// </summary>
-        /// <returns>An opencl platfor summary</returns>
+        /// <returns>A cuda platform summary</returns>
         public static String GetCudaDevicesSummary()
         {
 
@@ -113,6 +113,14 @@ namespace Emgu.CV.Cuda
         /// <returns>The current Cuda device id</returns>
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaGetDevice")]
         public static extern int GetDevice();
+
+        /// <summary>
+        /// Explicitly destroys and cleans up all resources associated with the current device in the current process.
+        /// Any subsequent API call to this device will reinitialize the device.
+        /// </summary>
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaResetDevice")]
+        public static extern int ResetDevice();
+
         #endregion
 
         /// <summary>
@@ -1315,7 +1323,6 @@ namespace Emgu.CV.Cuda
             {
                 cudaDrawColorDisp(iaSrcDisp, oaDstDisp, ndisp, stream);
             }
-
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaDrawColorDisp(
@@ -1340,5 +1347,22 @@ namespace Emgu.CV.Cuda
         private static extern void cudaCreateOpticalFlowNeedleMap(IntPtr u, IntPtr v, IntPtr vertex, IntPtr colors);
         */
 
+        /// <summary>
+        /// Converts an array to half precision floating number.
+        /// </summary>
+        /// <param name="src">Input array.</param>
+        /// <param name="dst">Output array.</param>
+        /// <param name="stream">Stream for the asynchronous version.</param>
+        public static void ConvertFp16(IInputArray src, IOutputArray dst, Stream stream = null)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+            {
+                cudaConvertFp16(iaSrc, oaDst, stream);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cudaConvertFp16(IntPtr src, IntPtr dst, IntPtr stream);
     }
 }
