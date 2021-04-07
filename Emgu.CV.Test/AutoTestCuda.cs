@@ -858,6 +858,7 @@ namespace Emgu.CV.Test
         {
             if (!CudaInvoke.HasCuda)
                 return;
+
             //Image<Gray, Byte> prevImg, currImg;
             //AutoTestVarious.OpticalFlowImage(out prevImg, out currImg);
             GpuMat[] images = OpticalFlowImage();
