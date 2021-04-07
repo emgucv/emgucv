@@ -2690,17 +2690,28 @@ namespace Emgu.CV
         /// <param name="labels">The connected components labeled image of boolean image</param>
         /// <param name="connectivity">4 or 8 way connectivity</param>
         /// <param name="labelType">Specifies the output label image type, an important consideration based on the total number of labels or alternatively the total number of pixels in the source image</param>
+        /// <param name="cclType">connected components algorithm type </param>
         /// <returns>N, the total number of labels [0, N-1] where 0 represents the background label.</returns>
-        public static int ConnectedComponents(IInputArray image, IOutputArray labels, CvEnum.LineType connectivity = LineType.EightConnected, DepthType labelType = DepthType.Cv32S)
+        public static int ConnectedComponents(
+            IInputArray image, 
+            IOutputArray labels, 
+            CvEnum.LineType connectivity = LineType.EightConnected, 
+            DepthType labelType = DepthType.Cv32S,
+            ConnectedComponentsAlgorithmsTypes cclType = ConnectedComponentsAlgorithmsTypes.Default)
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaLabels = labels.GetOutputArray())
             {
-                return cveConnectedComponents(iaImage, oaLabels, connectivity, labelType);
+                return cveConnectedComponents(iaImage, oaLabels, connectivity, labelType, cclType);
             }
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern int cveConnectedComponents(IntPtr image, IntPtr labels, CvEnum.LineType connectivity, DepthType labelType);
+        private static extern int cveConnectedComponents(
+            IntPtr image, 
+            IntPtr labels, 
+            CvEnum.LineType connectivity, 
+            DepthType labelType, 
+            ConnectedComponentsAlgorithmsTypes cclType);
 
         /// <summary>
         /// Computes the connected components labeled image of boolean image
@@ -2711,21 +2722,35 @@ namespace Emgu.CV
         /// <param name="centroids">Centroid output for each label, including the background label. Centroids are accessed via centroids(label, 0) for x and centroids(label, 1) for y. The data type CV_64F.</param>
         /// <param name="connectivity">4 or 8 way connectivity</param>
         /// <param name="labelType">Specifies the output label image type, an important consideration based on the total number of labels or alternatively the total number of pixels in the source image</param>
+        /// <param name="cclType">connected components algorithm type </param>
         /// <returns>N, the total number of labels [0, N-1] where 0 represents the background label.</returns>
-        public static int ConnectedComponentsWithStats(IInputArray image, IOutputArray labels, IOutputArray stats,
-           IOutputArray centroids, CvEnum.LineType connectivity = LineType.EightConnected, DepthType labelType = DepthType.Cv32S)
+        public static int ConnectedComponentsWithStats(
+            IInputArray image, 
+            IOutputArray labels, 
+            IOutputArray stats,
+            IOutputArray centroids, 
+            CvEnum.LineType connectivity = LineType.EightConnected, 
+            DepthType labelType = DepthType.Cv32S,
+            ConnectedComponentsAlgorithmsTypes cclType = ConnectedComponentsAlgorithmsTypes.Default)
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaLabels = labels.GetOutputArray())
             using (OutputArray oaStats = stats.GetOutputArray())
             using (OutputArray oaCentroids = centroids.GetOutputArray())
             {
-                return cveConnectedComponentsWithStats(iaImage, oaLabels, oaStats, oaCentroids, connectivity, labelType);
+                return cveConnectedComponentsWithStats(iaImage, oaLabels, oaStats, oaCentroids, connectivity, labelType, cclType);
             }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern int cveConnectedComponentsWithStats(IntPtr image, IntPtr labels, IntPtr stats, IntPtr centroids, CvEnum.LineType connectivity, DepthType type);
+        private static extern int cveConnectedComponentsWithStats(
+            IntPtr image, 
+            IntPtr labels, 
+            IntPtr stats, 
+            IntPtr centroids, 
+            CvEnum.LineType connectivity, 
+            DepthType type,
+            ConnectedComponentsAlgorithmsTypes cllType);
 
 
         /// <summary>
