@@ -263,7 +263,6 @@ namespace Emgu.CV.Cuda
         /// <summary>
         /// Print short cuda device info
         /// </summary>
-        /// <param name="device"></param>
         /// <param name="device">cuda device id</param>
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaPrintShortCudaDeviceInfo")]
         public static extern void PrintShortCudaDeviceInfo(int device);

@@ -224,6 +224,7 @@ namespace Emgu.CV.Models
         /// Download and initialize the vehicle detector, the license plate detector and OCR.
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
+        /// <param name="initOptions">Initialization options. A string in the format of "backend;target" that represent the DNN backend and target.</param>
         /// <returns>Async task</returns>
         public async Task Init(
             System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, 

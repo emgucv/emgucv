@@ -3052,6 +3052,13 @@ namespace Emgu.CV
         private static extern int cveGetNumberOfCPUs();
 #endif
 
+        /// <summary>
+        /// Replace OpenCV parallel_for backend.
+        /// </summary>
+        /// <param name="backendName">The name of the backend.</param>
+        /// <param name="propagateNumThreads">It true, the number of threads of the current enviroment will be passed to the new backend.</param>
+        /// <returns>True if backend is set</returns>
+        /// <remarks>This call is not thread-safe. Consider calling this function from the main() before any other OpenCV processing functions (and without any other created threads).</remarks>
         public static bool SetParallelForBackend(String backendName, bool propagateNumThreads = true)
         {
             using (CvString csBackendName = new CvString(backendName))
@@ -3062,6 +3069,9 @@ namespace Emgu.CV
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         private static extern bool cveSetParallelForBackend(IntPtr backendName, bool propagateNumThreads);
 
+        /// <summary>
+        /// Get a list of the available parallel backends.
+        /// </summary>
         public static String[] AvailableParallelBackends
         {
             get

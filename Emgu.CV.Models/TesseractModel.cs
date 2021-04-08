@@ -20,6 +20,9 @@ using System.Diagnostics;
 
 namespace Emgu.CV.Models
 {
+    /// <summary>
+    /// Tesseract Ocr model.
+    /// </summary>
     public class TesseractModel : DisposableObject, IProcessAndRenderModel
     {
         private String _modelFolderName = "tessdata";
@@ -59,11 +62,21 @@ namespace Emgu.CV.Models
                 _ocr = null;
             }
         }
+
+        /// <summary>
+        /// Release all the unmanaged memory associated to this tesseract OCR model.
+        /// </summary>
         protected override void DisposeObject()
         {
             Clear();
         }
 
+        /// <summary>
+        /// Process the input image and render into the output image
+        /// </summary>
+        /// <param name="imageIn">The input image</param>
+        /// <param name="imageOut">The output image, can be the same as imageIn, in which case we will render directly into the input image</param>
+        /// <returns>The messages that we want to display.</returns>
         public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
             Stopwatch watch = Stopwatch.StartNew();
@@ -90,11 +103,16 @@ namespace Emgu.CV.Models
 
         }
 
+        /// <summary>
+        /// Initialize the tesseract ocr model
+        /// </summary>
+        /// <param name="onDownloadProgressChanged">Call back method during download</param>
+        /// <param name="initOptions">Initialization options. None supported at the moment, any value passed will be ignored.</param>
+        /// <returns>Asyn task</returns>
         public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
         {
             await InitTesseract("eng", OcrEngineMode.TesseractOnly, onDownloadProgressChanged);
         }
-
 
     }
 }

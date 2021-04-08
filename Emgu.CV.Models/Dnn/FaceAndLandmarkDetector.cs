@@ -77,6 +77,7 @@ namespace Emgu.CV.Models
         /// Download and initialize the DNN face and facemark detector
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
+        /// <param name="initOptions">Initialization options. None supported at the moment, any value passed will be ignored.</param>
         /// <returns>Async task</returns>
         public async Task Init(
             DownloadProgressChangedEventHandler onDownloadProgressChanged = null, 

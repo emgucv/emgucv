@@ -13,7 +13,9 @@ using Emgu.CV.Util;
 
 namespace Emgu.CV.XImgproc
 {
-    
+    /// <summary>
+    /// Class implementing the ED (EdgeDrawing)
+    /// </summary>
     public class EdgeDrawing : SharedPtrObject, IAlgorithm
     {
         private IntPtr _algorithm;
@@ -27,6 +29,9 @@ namespace Emgu.CV.XImgproc
         }
 
         
+        /// <summary>
+        /// Create a new Edge Drawing object using default parameters.
+        /// </summary>
         public EdgeDrawing()
 		{
             _ptr = XImgprocInvoke.cveEdgeDrawingCreate(ref _algorithm, ref _sharedPtr);
@@ -43,34 +48,54 @@ namespace Emgu.CV.XImgproc
             }
         }
 
+        /// <summary>
+        /// Detects edges and prepares them to detect lines and ellipses.
+        /// </summary>
+        /// <param name="src">Input image</param>
         public void DetectEdges(IInputArray src)
         {
             using (InputArray iaSrc = src.GetInputArray())
                 XImgprocInvoke.cveEdgeDrawingDetectEdges(_ptr, iaSrc);
         }
 
+        /// <summary>
+        /// Get the edge image
+        /// </summary>
+        /// <param name="dst">The output edge image</param>
         public void GetEdgeImage(IOutputArray dst)
         {
             using (OutputArray oaDst = dst.GetOutputArray())
                 XImgprocInvoke.cveEdgeDrawingGetEdgeImage(_ptr, oaDst);
         }
 
+        /// <summary>
+        /// Get the gradient image
+        /// </summary>
+        /// <param name="dst">The output gradient image</param>
         public void GetGradientImage(IOutputArray dst)
         {
             using (OutputArray oaDst = dst.GetOutputArray())
                 XImgprocInvoke.cveEdgeDrawingGetGradientImage(_ptr, oaDst);
         }
 
+        /// <summary>
+        /// Detects lines.
+        /// </summary>
+        /// <param name="dst">Output Vec&lt;4f&gt; contains start point and end point of detected lines.</param>
         public void DetectLines(IOutputArray dst)
         {
             using (OutputArray oaDst = dst.GetOutputArray())
-                XImgprocInvoke.cveEdgeDrawingGetGradientImage(_ptr, oaDst);
+                XImgprocInvoke.cveEdgeDrawingDetectLines(_ptr, oaDst);
         }
 
-        public void DetectDetectEllipses(IOutputArray dst)
+        /// <summary>
+        /// Detects circles and ellipses.
+        /// </summary>
+        /// <param name="dst">Output Vec&lt;6d&gt; contains center point and perimeter for circles.</param>
+        public void DetectEllipses(IOutputArray dst)
         {
             using (OutputArray oaDst = dst.GetOutputArray())
-                XImgprocInvoke.cveEdgeDrawingGetGradientImage(_ptr, oaDst);
+                XImgprocInvoke.cveEdgeDrawingDetectEllipses(_ptr, oaDst);
         }
     }
 
