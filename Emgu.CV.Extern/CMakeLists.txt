@@ -2798,14 +2798,7 @@ FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAME_CANDIDATES})
 ENDFOREACH()
 
 ############################### DEPTHAI START ##############################
-file(GLOB_RECURSE depthai_srcs "${PROJECT_SOURCE_DIR}/depthai/*.cpp")
-file(GLOB_RECURSE depthai_hdrs "${PROJECT_SOURCE_DIR}/depthai/*.h*")
-#message(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>  depthai_srcs: ${depthai_srcs}")
-#message(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>  depthai_hdrs: ${depthai_hdrs}")
-source_group("Src_depthai" FILES ${depthai_srcs})
-source_group("Include_depthai" FILES ${depthai_hdrs})
-LIST(APPEND extern_srcs ${depthai_srcs})
-LIST(APPEND extern_hdrs ${depthai_hdrs})
+
 
   CREATE_OCV_CLASS_PROPERTY( 
     "depthai/device_property" 
@@ -2883,6 +2876,15 @@ LIST(APPEND extern_hdrs ${depthai_hdrs})
 	""
 	"" 
 	${EMGU_CV_WITH_DEPTHAI})
+	
+file(GLOB_RECURSE depthai_srcs "${PROJECT_SOURCE_DIR}/depthai/*.cpp")
+file(GLOB_RECURSE depthai_hdrs "${PROJECT_SOURCE_DIR}/depthai/*.h*")
+#message(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>  depthai_srcs: ${depthai_srcs}")
+#message(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>  depthai_hdrs: ${depthai_hdrs}")
+source_group("Src_depthai" FILES ${depthai_srcs})
+source_group("Include_depthai" FILES ${depthai_hdrs})
+LIST(APPEND extern_srcs ${depthai_srcs})
+LIST(APPEND extern_hdrs ${depthai_hdrs})
 ############################### DEPTHAI END ################################
 
 IF(WIN32 AND CV_ICC)
