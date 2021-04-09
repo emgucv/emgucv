@@ -3706,10 +3706,17 @@ ELSEIF (APPLE)
     COMMENT "Linking target for all architectures and ouputing to ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libcvextern.dylib")
 
 
-  IF(EMGU_CV_WITH_DEPTHAI)  
+  IF(EMGU_CV_WITH_DEPTHAI)
+    IF ("${EMGUCV_ARCH}" STREQUAL "arm64")
+       # Apple silicon
+       SET(LIBUSB_PATH /opt/homebrew/opt/libusb/lib/libusb-1.0.0.dylib)
+    ELSE()
+       # Intel Mac
+       SET(LIBUSB_PATH /usr/local/opt/libusb/lib/libusb-1.0.0.dylib)
+    ENDIF()
     add_custom_command(TARGET ${the_target}
       POST_BUILD
-      COMMAND cp -f /usr/local/opt/libusb/lib/libusb-1.0.0.dylib ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${LIBUSB_FILE_NAME}
+      COMMAND cp -f ${LIBUSB_PATH} ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${LIBUSB_FILE_NAME}
       COMMENT "Copying file to ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${LIBUSB_FILE_NAME}")
     add_custom_command(TARGET ${the_target}
       POST_BUILD
