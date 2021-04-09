@@ -55,6 +55,10 @@ namespace cv
 		{
 		};
 
+		class NvidiaOpticalFlow_2_0
+		{
+		};
+		
 		class NvidiaHWOpticalFlow
 		{
 		};
@@ -188,6 +192,8 @@ CVAPI(cv::cuda::NvidiaOpticalFlow_1_0*) cudaNvidiaOpticalFlow_1_0_Create(
 	bool enableExternalHints,
 	bool enableCostBuffer,
 	int gpuId,
+	cv::cuda::Stream* inputStream,
+	cv::cuda::Stream* outputStream,
 	cv::cuda::NvidiaHWOpticalFlow** nHWOpticalFlow,
 	cv::Algorithm** algorithm,
 	cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0>** sharedPtr);
@@ -199,6 +205,13 @@ CVAPI(void) cudaNvidiaOpticalFlow_1_0_UpSampler(
 	int gridSize, 
 	cv::_InputOutputArray* upsampledFlow);
 
+CVAPI(void) cudaNvidiaOpticalFlow_1_0_Release(cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0>** flow);
+
+//----------------------------------------------------------------------------
+//
+//  NvidiaHWOpticalFlow
+//
+//----------------------------------------------------------------------------
 CVAPI(void) cudaNvidiaOpticalFlowCalc(
 	cv::cuda::NvidiaHWOpticalFlow* nHWOpticalFlow,
 	cv::_InputArray* inputImage,
@@ -212,5 +225,28 @@ CVAPI(void) cudaNvidiaOpticalFlowCollectGarbage(cv::cuda::NvidiaHWOpticalFlow* n
 
 CVAPI(int) cudaNvidiaOpticalFlowGetGridSize(cv::cuda::NvidiaHWOpticalFlow* nHWOpticalFlow);
 
-CVAPI(void) cudaNvidiaOpticalFlow_1_0_Release(cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0>** flow);
+
+//----------------------------------------------------------------------------
+//
+//  NvidiaOpticalFlow_2_0
+//
+//----------------------------------------------------------------------------
+CVAPI(cv::cuda::NvidiaOpticalFlow_2_0*) cudaNvidiaOpticalFlow_2_0_Create(
+	CvSize* imageSize,
+	int perfPreset,
+	int outputGridSize,
+	int hintGridSize,
+	bool enableTemporalHints,
+	bool enableExternalHints,
+	bool enableCostBuffer,
+	int gpuId,
+	cv::cuda::Stream* inputStream,
+	cv::cuda::Stream* outputStream,
+	cv::cuda::NvidiaHWOpticalFlow** nHWOpticalFlow,
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::cuda::NvidiaOpticalFlow_2_0>** sharedPtr);
+
+CVAPI(void) cudaNvidiaOpticalFlow_2_0_ConvertToFloat(cv::cuda::NvidiaOpticalFlow_2_0* nvof, cv::_InputArray* flow, cv::_InputOutputArray* floatFlow);
+
+CVAPI(void) cudaNvidiaOpticalFlow_2_0_Release(cv::Ptr<cv::cuda::NvidiaOpticalFlow_2_0>** flow);
 #endif

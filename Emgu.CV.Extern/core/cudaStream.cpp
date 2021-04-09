@@ -11,6 +11,11 @@ cv::cuda::Stream* streamCreate()
    return new cv::cuda::Stream(); 
 }
 
+cv::cuda::Stream* streamCreateWithFlag(int flag)
+{
+	return new cv::cuda::Stream(flag);
+}
+
 void streamRelease(cv::cuda::Stream** stream) 
 { 
    delete *stream; 

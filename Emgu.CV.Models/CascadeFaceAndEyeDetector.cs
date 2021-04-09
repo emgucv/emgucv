@@ -16,14 +16,24 @@ using Emgu.Util;
 
 namespace Emgu.CV.Models
 {
+    /// <summary>
+    /// Face and eye detector using HaarCascade.
+    /// </summary>
     public class CascadeFaceAndEyeDetector : DisposableObject, IProcessAndRenderModel
     {
         private CascadeClassifier _faceCascadeClassifier = null;
         private CascadeClassifier _eyeCascadeClassifier = null;
 
-        public static void Detect(
-           IInputArray image, CascadeClassifier face, CascadeClassifier eye,
-           List<Rectangle> faces, List<Rectangle> eyes)
+        /// <summary>
+        /// Detect faces and eyes region from the input image
+        /// </summary>
+        /// <param name="image">The input image.</param>
+        /// <param name="faces">The region of the faces.</param>
+        /// <param name="eyes">The region of the eyes.</param>
+        public void Detect(
+           IInputArray image,
+           List<Rectangle> faces, 
+           List<Rectangle> eyes)
         {
             using (Mat gray = new Mat())
             {
@@ -35,7 +45,7 @@ namespace Emgu.CV.Models
                 //Detect the faces from the gray scale image and store the locations as rectangle
                 //The first dimensional is the channel
                 //The second dimension is the index of the rectangle in the specific channel                     
-                Rectangle[] facesDetected = face.DetectMultiScale(
+                Rectangle[] facesDetected = _faceCascadeClassifier.DetectMultiScale(
                    gray,
                    1.1,
                    10,
@@ -48,7 +58,7 @@ namespace Emgu.CV.Models
                     //Get the region of interest on the faces
                     using (Mat faceRegion = new Mat(gray, f))
                     {
-                        Rectangle[] eyesDetected = eye.DetectMultiScale(
+                        Rectangle[] eyesDetected = _eyeCascadeClassifier.DetectMultiScale(
                            faceRegion,
                            1.1,
                            10,
@@ -63,7 +73,6 @@ namespace Emgu.CV.Models
                     }
                 }
             }
-
         }
 
 
@@ -71,6 +80,7 @@ namespace Emgu.CV.Models
         /// Download and initialize the face and eye cascade classifier detection model
         /// </summary>
         /// <param name="onDownloadProgressChanged">Call back method during download</param>
+        /// <param name="initOptions">Initialization options. None supported at the moment, any value passed will be ignored.</param>
         /// <returns>Asyn task</returns>
         public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
         {
@@ -91,13 +101,19 @@ namespace Emgu.CV.Models
             }
         }
 
+        /// <summary>
+        /// Process the input image and render into the output image
+        /// </summary>
+        /// <param name="imageIn">The input image</param>
+        /// <param name="imageOut">The output image, can be the same as imageIn, in which case we will render directly into the input image</param>
+        /// <returns>The messages that we want to display.</returns>
         public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
             List<Rectangle> faces = new List<Rectangle>();
             List<Rectangle> eyes = new List<Rectangle>();
 
             Stopwatch watch = Stopwatch.StartNew();
-            Detect(imageIn, _faceCascadeClassifier, _eyeCascadeClassifier, faces, eyes);
+            Detect(imageIn, faces, eyes);
             watch.Stop();
 
             if (imageOut != imageIn)
@@ -120,12 +136,10 @@ namespace Emgu.CV.Models
 
         }
 
+        /// <summary>
+        /// Clear and reset the model. Required Init function to be called again before calling ProcessAndRender.
+        /// </summary>
         public void Clear()
-        {
-            DisposeObject();
-        }
-
-        protected override void DisposeObject()
         {
             if (_faceCascadeClassifier != null)
             {
@@ -138,6 +152,14 @@ namespace Emgu.CV.Models
                 _eyeCascadeClassifier.Dispose();
                 _eyeCascadeClassifier = null;
             }
+        }
+
+        /// <summary>
+        /// Release the memory associated with this face and eye detector
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            Clear();
         }
     }
 }

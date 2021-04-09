@@ -555,3 +555,12 @@ void cudaConvolutionRelease(cv::Ptr<cv::cuda::Convolution>** convolution)
 	throw_no_cudaarithm();
 #endif
 }
+
+void cudaInRange(cv::_InputArray* src, CvScalar* lowerb, CvScalar* upperb, cv::_OutputArray* dst, cv::cuda::Stream* stream)
+{
+#ifdef HAVE_OPENCV_CUDAARITHM
+	cv::cuda::inRange(*src, *lowerb, *upperb, *dst, stream ? *stream : cv::cuda::Stream::Null());
+#else
+	throw_no_cudaarithm();
+#endif	
+}

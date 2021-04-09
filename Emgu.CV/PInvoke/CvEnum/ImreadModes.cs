@@ -71,7 +71,12 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// If set, always convert image to the 3 channel BGR color image and the image size reduced 1/8.
         /// </summary>
-        ReducedColor8 = 65
+        ReducedColor8 = 65,
+
+        /// <summary>
+        /// If set, do not rotate the image according to EXIF's orientation flag.
+        /// </summary>
+        IgnoreOrientation = 128
     }
 
 }

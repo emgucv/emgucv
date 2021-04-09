@@ -270,6 +270,8 @@ cv::cuda::NvidiaOpticalFlow_1_0* cudaNvidiaOpticalFlow_1_0_Create(
 	bool enableExternalHints,
 	bool enableCostBuffer,
 	int gpuId,
+	cv::cuda::Stream* inputStream,
+	cv::cuda::Stream* outputStream,
 	cv::cuda::NvidiaHWOpticalFlow** nHWOpticalFlow,
 	cv::Algorithm** algorithm,
 	cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0>** sharedPtr)
@@ -277,11 +279,13 @@ cv::cuda::NvidiaOpticalFlow_1_0* cudaNvidiaOpticalFlow_1_0_Create(
 #ifdef HAVE_OPENCV_CUDAOPTFLOW
 	cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0> ptr = cv::cuda::NvidiaOpticalFlow_1_0::create(
 		*imageSize,
-		(cv::cuda::NvidiaOpticalFlow_1_0::NVIDIA_OF_PERF_LEVEL) perfPreset,
+		static_cast<cv::cuda::NvidiaOpticalFlow_1_0::NVIDIA_OF_PERF_LEVEL>(perfPreset),
 		enableTemporalHints,
 		enableExternalHints,
 		enableCostBuffer,
-		gpuId);
+		gpuId,
+		inputStream ? *inputStream : cv::cuda::Stream::Null(),
+		outputStream ? *outputStream : cv::cuda::Stream::Null());
 	*sharedPtr = new cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0>(ptr);
 	cv::cuda::NvidiaOpticalFlow_1_0* flow = ptr.get();
 	*nHWOpticalFlow = dynamic_cast<cv::cuda::NvidiaHWOpticalFlow*>(flow);
@@ -306,6 +310,23 @@ void cudaNvidiaOpticalFlow_1_0_UpSampler(
 #endif	
 }
 
+
+void cudaNvidiaOpticalFlow_1_0_Release(cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0>** flow)
+{
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
+	delete* flow;
+	*flow = 0;
+#else
+	throw_no_cudaoptflow();
+#endif	
+}
+
+//----------------------------------------------------------------------------
+//
+//  NvidiaHWOpticalFlow
+//
+//----------------------------------------------------------------------------
+
 void cudaNvidiaOpticalFlowCalc(
 	cv::cuda::NvidiaHWOpticalFlow* nHWOpticalFlow,
 	cv::_InputArray* inputImage,
@@ -317,13 +338,13 @@ void cudaNvidiaOpticalFlowCalc(
 {
 #ifdef HAVE_OPENCV_CUDAOPTFLOW
 	nHWOpticalFlow->calc(
-		*inputImage, 
-		*referenceImage, 
-		*flow, 
+		*inputImage,
+		*referenceImage,
+		*flow,
 		stream ? *stream : cv::cuda::Stream::Null(),
-		hint ? *hint : (cv::InputArray) cv::noArray(),
-		cost ? *cost : (cv::OutputArray) cv::noArray()
-		);
+		hint ? *hint : static_cast<cv::InputArray>(cv::noArray()),
+		cost ? *cost : static_cast<cv::OutputArray>(cv::noArray())
+	);
 #else
 	throw_no_cudaoptflow();
 #endif	
@@ -347,7 +368,58 @@ int cudaNvidiaOpticalFlowGetGridSize(cv::cuda::NvidiaHWOpticalFlow* nHWOpticalFl
 #endif
 }
 
-void cudaNvidiaOpticalFlow_1_0_Release(cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0>** flow)
+//----------------------------------------------------------------------------
+//
+//  NvidiaOpticalFlow_2_0
+//
+//----------------------------------------------------------------------------
+cv::cuda::NvidiaOpticalFlow_2_0* cudaNvidiaOpticalFlow_2_0_Create(
+	CvSize* imageSize,
+	int perfPreset,
+	int outputGridSize,
+	int hintGridSize,
+	bool enableTemporalHints,
+	bool enableExternalHints,
+	bool enableCostBuffer,
+	int gpuId,
+	cv::cuda::Stream* inputStream,
+	cv::cuda::Stream* outputStream,
+	cv::cuda::NvidiaHWOpticalFlow** nHWOpticalFlow,
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::cuda::NvidiaOpticalFlow_2_0>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
+	cv::Ptr<cv::cuda::NvidiaOpticalFlow_2_0> ptr = cv::cuda::NvidiaOpticalFlow_2_0::create(
+		*imageSize,
+		static_cast<cv::cuda::NvidiaOpticalFlow_2_0::NVIDIA_OF_PERF_LEVEL>(perfPreset),
+		static_cast<cv::cuda::NvidiaOpticalFlow_2_0::NVIDIA_OF_OUTPUT_VECTOR_GRID_SIZE>(outputGridSize),
+		static_cast<cv::cuda::NvidiaOpticalFlow_2_0::NVIDIA_OF_HINT_VECTOR_GRID_SIZE>(hintGridSize),
+		enableTemporalHints,
+		enableExternalHints,
+		enableCostBuffer,
+		gpuId,
+		inputStream? *inputStream : cv::cuda::Stream::Null(),
+		outputStream? *outputStream : cv::cuda::Stream::Null());
+	*sharedPtr = new cv::Ptr<cv::cuda::NvidiaOpticalFlow_2_0>(ptr);
+	cv::cuda::NvidiaOpticalFlow_2_0* flow = ptr.get();
+	*nHWOpticalFlow = dynamic_cast<cv::cuda::NvidiaHWOpticalFlow*>(flow);
+	*algorithm = dynamic_cast<cv::Algorithm*>(flow);
+	return flow;
+#else
+	throw_no_cudaoptflow();
+#endif
+}
+
+void cudaNvidiaOpticalFlow_2_0_ConvertToFloat(cv::cuda::NvidiaOpticalFlow_2_0* nvof, cv::_InputArray* flow, cv::_InputOutputArray* floatFlow)
+{
+#ifdef HAVE_OPENCV_CUDAOPTFLOW
+	nvof->convertToFloat(*flow, *floatFlow);
+#else
+	throw_no_cudaoptflow();
+#endif
+}
+
+void cudaNvidiaOpticalFlow_2_0_Release(cv::Ptr<cv::cuda::NvidiaOpticalFlow_2_0>** flow)
 {
 #ifdef HAVE_OPENCV_CUDAOPTFLOW
 	delete* flow;

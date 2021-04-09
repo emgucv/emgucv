@@ -141,7 +141,7 @@ ENDMACRO(SET_CS_TARGET_FRAMEWORK)
 SET(DEFAULT_CS_CONFIG "Release" CACHE STRING "Default C# build configuration")
 
 MACRO(BUILD_CSPROJ target csproj_file extra_flags)
-  IF(APPLE)
+  IF(APPLE AND ("${EMGUCV_ARCH}" STREQUAL "x64"))
     SET(MAC_FRESH_SHELL_PREFIX env -i zsh)
   ENDIF()
   
@@ -169,7 +169,7 @@ MACRO(BUILD_CSPROJ target csproj_file extra_flags)
 ENDMACRO()
 
 MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
-  IF(APPLE)
+  IF(APPLE AND ("${EMGUCV_ARCH}" STREQUAL "x64"))
     SET(MAC_FRESH_SHELL_PREFIX env -i zsh)
   ENDIF()
   ADD_CUSTOM_TARGET (${target} ${ARGV4})
@@ -199,18 +199,18 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
     STRING(REGEX REPLACE "\\." "_" msbuild_target_name ${project_name})
 	SET(MSBUILD_TARGET_OPTION /target:${msbuild_target_name})
   ENDIF()
-  IF(MSBUILD_EXECUTABLE)
-    ADD_CUSTOM_COMMAND (
-	TARGET ${target}
-	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
-	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}
-	COMMENT "Building ${target} with command: ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}")
-  ELSEIF (DOTNET_EXECUTABLE)
+  IF (DOTNET_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
 	TARGET ${target}
 	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild -t:restore ${solution_file}
 	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}
 	COMMENT "Building ${target} with command: ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}")
+  ELSEIF(MSBUILD_EXECUTABLE)
+    ADD_CUSTOM_COMMAND (
+	TARGET ${target}
+	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
+	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}
+	COMMENT "Building ${target} with command: ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}")
   ELSE()
     MESSAGE(FATAL_ERROR "Neither Visual Studio, msbuild nor dotnot is found!")
   ENDIF()

@@ -53,9 +53,13 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         PxmBinary = 32,
         /// <summary>
-        /// override EXR storage type (FLOAT (FP32) is default)
+        /// Override EXR storage type (FLOAT (FP32) is default)
         /// </summary>
         ExrType = 48,
+        /// <summary>
+        /// Override EXR compression type (ZIP_COMPRESSION = 3 is default)
+        /// </summary>
+        ExrCompression = 49,
         /// <summary>
         /// For WEBP, it can be a quality from 1 to 100 (the higher is the better). By default (without any parameter) and for quality above 100 the lossless compression is used.
         /// </summary>

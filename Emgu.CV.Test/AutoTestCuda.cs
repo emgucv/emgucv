@@ -77,6 +77,7 @@ namespace Emgu.CV.Test
                     {
                         if (counter <= int.MaxValue) counter++;
                     }
+
                     Trace.WriteLine(String.Format("Counter has been incremented {0} times", counter));
 
                     counter = 0;
@@ -85,8 +86,10 @@ namespace Emgu.CV.Test
                     {
                         if (counter <= int.MaxValue) counter++;
                     }
+
                     Trace.WriteLine(String.Format("Counter has been incremented {0} times", counter));
                 }
+
                 watch.Stop();
                 Trace.WriteLine(String.Format("Total time: {0} milliseconds", watch.ElapsedMilliseconds));
             }
@@ -131,9 +134,11 @@ namespace Emgu.CV.Test
                 for (int i = 0; i < repeat; i++)
                     CvInvoke.Add(img1, img2, cpuImgSum, null, CvEnum.DepthType.Cv8U);
                 watch.Stop();
-                Trace.WriteLine(String.Format("CPU processing time: {0}ms", (double)watch.ElapsedMilliseconds / repeat));
+                Trace.WriteLine(
+                    String.Format("CPU processing time: {0}ms", (double)watch.ElapsedMilliseconds / repeat));
 
-                watch.Reset(); watch.Start();
+                watch.Reset();
+                watch.Start();
                 CudaImage<Gray, Byte> gpuImg1 = new CudaImage<Gray, byte>(img1);
                 CudaImage<Gray, Byte> gpuImg2 = new CudaImage<Gray, byte>(img2);
                 CudaImage<Gray, Byte> gpuImgSum = new CudaImage<Gray, byte>(gpuImg1.Size);
@@ -143,7 +148,8 @@ namespace Emgu.CV.Test
                 watch2.Stop();
                 Image<Gray, Byte> cpuImgSumFromGpu = gpuImgSum.ToImage();
                 watch.Stop();
-                Trace.WriteLine(String.Format("Core GPU processing time: {0}ms", (double)watch2.ElapsedMilliseconds / repeat));
+                Trace.WriteLine(String.Format("Core GPU processing time: {0}ms",
+                    (double)watch2.ElapsedMilliseconds / repeat));
                 //Trace.WriteLine(String.Format("Total GPU processing time: {0}ms", (double)watch.ElapsedMilliseconds/repeat));
 
                 Assert.IsTrue(cpuImgSum.Equals(cpuImgSumFromGpu));
@@ -201,7 +207,8 @@ namespace Emgu.CV.Test
                     using (CudaImage<Bgr, Byte> cudaImage = new CudaImage<Bgr, byte>(img1))
                     using (CudaImage<Bgr, Byte> cudaFlip = new CudaImage<Bgr, byte>(img1.Size))
                     {
-                        CudaInvoke.Flip(cudaImage, cudaFlip, CvEnum.FlipType.Horizontal | CvEnum.FlipType.Vertical, null);
+                        CudaInvoke.Flip(cudaImage, cudaFlip, CvEnum.FlipType.Horizontal | CvEnum.FlipType.Vertical,
+                            null);
                         cudaFlip.Download(img1);
                         Assert.IsTrue(img1.Equals(img1Flip));
                     }
@@ -217,16 +224,21 @@ namespace Emgu.CV.Test
                 Image<Gray, Byte> image = new Image<Gray, byte>(300, 400);
                 image.SetRandUniform(new MCvScalar(0.0), new MCvScalar(255.0));
 
-                float[,] k = { {0, 1, 0},
-                        {1, -4, 1},
-                        {0, 1, 0}};
+                float[,] k =
+                {
+                    {0, 1, 0},
+                    {1, -4, 1},
+                    {0, 1, 0}
+                };
                 using (ConvolutionKernelF kernel = new ConvolutionKernelF(k))
                 using (Stream s = new Stream())
                 using (GpuMat cudaImg = new GpuMat(image))
                 using (GpuMat cudaLaplace = new GpuMat())
-                using (CudaLinearFilter cudaLinear = new CudaLinearFilter(DepthType.Cv8U, 1, DepthType.Cv8U, 1, kernel, kernel.Center))
+                using (CudaLinearFilter cudaLinear =
+                    new CudaLinearFilter(DepthType.Cv8U, 1, DepthType.Cv8U, 1, kernel, kernel.Center))
                 using (GpuMat cudaConv = new GpuMat())
-                using (CudaLaplacianFilter laplacian = new CudaLaplacianFilter(DepthType.Cv8U, 1, DepthType.Cv8U, 1, 1, 1.0))
+                using (CudaLaplacianFilter laplacian =
+                    new CudaLaplacianFilter(DepthType.Cv8U, 1, DepthType.Cv8U, 1, 1, 1.0))
                 {
                     cudaLinear.Apply(cudaImg, cudaConv, s);
                     laplacian.Apply(cudaImg, cudaLaplace, s);
@@ -245,8 +257,10 @@ namespace Emgu.CV.Test
                 image.SetRandUniform(new MCvScalar(0.0), new MCvScalar(255.0));
                 using (GpuMat cudaImg1 = new GpuMat(image))
                 using (GpuMat cudaImg2 = new GpuMat())
-                using (CudaGaussianFilter gaussian = new CudaGaussianFilter(DepthType.Cv8U, 1, DepthType.Cv8U, 1, new Size(5, 5), 0, 0, CvEnum.BorderType.Default, CvEnum.BorderType.Default))
-                using (CudaSobelFilter sobel = new CudaSobelFilter(DepthType.Cv8U, 1, DepthType.Cv8U, 1, 1, 1, 3, 1.0, CvEnum.BorderType.Default, CvEnum.BorderType.Default))
+                using (CudaGaussianFilter gaussian = new CudaGaussianFilter(DepthType.Cv8U, 1, DepthType.Cv8U, 1,
+                    new Size(5, 5), 0, 0, CvEnum.BorderType.Default, CvEnum.BorderType.Default))
+                using (CudaSobelFilter sobel = new CudaSobelFilter(DepthType.Cv8U, 1, DepthType.Cv8U, 1, 1, 1, 3, 1.0,
+                    CvEnum.BorderType.Default, CvEnum.BorderType.Default))
                 {
                     gaussian.Apply(cudaImg1, cudaImg2, null);
                     sobel.Apply(cudaImg1, cudaImg2, null);
@@ -408,7 +422,8 @@ namespace Emgu.CV.Test
         {
             if (CudaInvoke.HasCuda)
             {
-                using (CudaHOG hog = new CudaHOG(new Size(64, 128), new Size(16, 16), new Size(8, 8), new Size(8, 8), 9))
+                using (CudaHOG hog = new CudaHOG(new Size(64, 128), new Size(16, 16), new Size(8, 8), new Size(8, 8),
+                    9))
                 using (Mat pedestrianDescriptor = hog.GetDefaultPeopleDetector())
                 using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
                 {
@@ -423,6 +438,7 @@ namespace Emgu.CV.Test
                         hog.DetectMultiScale(gpuBgra, vRect);
                         rects = vRect.ToArray();
                     }
+
                     watch.Stop();
 
                     Assert.AreEqual(1, rects.Length);
@@ -442,11 +458,11 @@ namespace Emgu.CV.Test
             if (CudaInvoke.HasCuda)
             {
                 using (CudaHOG hog = new CudaHOG(
-                   new Size(48, 96), //winSize
-                   new Size(16, 16), //blockSize
-                   new Size(8, 8), //blockStride
-                   new Size(8, 8)  //cellSize
-                   ))
+                    new Size(48, 96), //winSize
+                    new Size(16, 16), //blockSize
+                    new Size(8, 8), //blockStride
+                    new Size(8, 8) //cellSize
+                ))
                 using (Mat pedestrianDescriptor = hog.GetDefaultPeopleDetector())
                 using (Image<Bgr, Byte> image = new Image<Bgr, byte>("pedestrian.png"))
                 {
@@ -463,6 +479,7 @@ namespace Emgu.CV.Test
                         hog.DetectMultiScale(gpuBgra, vRect);
                         rects = vRect.ToArray();
                     }
+
                     watch.Stop();
 
                     //Assert.AreEqual(1, rects.Length);
@@ -487,7 +504,8 @@ namespace Emgu.CV.Test
                 using (GpuMat cudaImage = new GpuMat(img))
                 using (GpuMat reduced = new GpuMat())
                 {
-                    CudaInvoke.Reduce(cudaImage, reduced, CvEnum.ReduceDimension.SingleRow, CvEnum.ReduceType.ReduceAvg);
+                    CudaInvoke.Reduce(cudaImage, reduced, CvEnum.ReduceDimension.SingleRow,
+                        CvEnum.ReduceType.ReduceAvg);
                 }
             }
         }
@@ -507,8 +525,10 @@ namespace Emgu.CV.Test
             using (GpuMat cudaImage = new GpuMat(image))
             using (GpuMat cudaTemp = new GpuMat())
             using (Stream stream = new Stream())
-            using (CudaBoxMaxFilter dilate = new CudaBoxMaxFilter(DepthType.Cv8U, 1, ksize, new Point(-1, -1), CvEnum.BorderType.Default, new MCvScalar()))
-            using (CudaBoxMinFilter erode = new CudaBoxMinFilter(DepthType.Cv8U, 1, ksize, new Point(-1, -1), CvEnum.BorderType.Default, new MCvScalar()))
+            using (CudaBoxMaxFilter dilate = new CudaBoxMaxFilter(DepthType.Cv8U, 1, ksize, new Point(-1, -1),
+                CvEnum.BorderType.Default, new MCvScalar()))
+            using (CudaBoxMinFilter erode = new CudaBoxMinFilter(DepthType.Cv8U, 1, ksize, new Point(-1, -1),
+                CvEnum.BorderType.Default, new MCvScalar()))
             {
                 //run the GPU version asyncrhonously with stream
                 erode.Apply(cudaImage, cudaTemp, stream);
@@ -517,8 +537,10 @@ namespace Emgu.CV.Test
                 //run the CPU version in parallel to the gpu version.
                 using (Image<Gray, Byte> temp = new Image<Gray, byte>(image.Size))
                 {
-                    CvInvoke.Erode(image, temp, null, new Point(-1, -1), morphIter, CvEnum.BorderType.Constant, new MCvScalar());
-                    CvInvoke.Dilate(temp, image, null, new Point(-1, -1), morphIter, CvEnum.BorderType.Constant, new MCvScalar());
+                    CvInvoke.Erode(image, temp, null, new Point(-1, -1), morphIter, CvEnum.BorderType.Constant,
+                        new MCvScalar());
+                    CvInvoke.Dilate(temp, image, null, new Point(-1, -1), morphIter, CvEnum.BorderType.Constant,
+                        new MCvScalar());
                 }
 
                 //syncrhonize with the GPU version
@@ -557,7 +579,8 @@ namespace Emgu.CV.Test
             using (Image<Bgr, Byte> img = new Image<Bgr, byte>("box.png"))
             using (CudaImage<Bgr, Byte> CudaImage = new CudaImage<Bgr, byte>(img))
             using (CudaImage<Gray, Byte> grayCudaImage = CudaImage.Convert<Gray, Byte>())
-            using (CudaFastFeatureDetector featureDetector = new CudaFastFeatureDetector(10, true, FastFeatureDetector.DetectorType.Type9_16, 1000))
+            using (CudaFastFeatureDetector featureDetector =
+                new CudaFastFeatureDetector(10, true, FastFeatureDetector.DetectorType.Type9_16, 1000))
             using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
             using (GpuMat keyPointsMat = new GpuMat())
             {
@@ -594,7 +617,7 @@ namespace Emgu.CV.Test
                 //Async version
                 detector.DetectAsync(grayCudaImage, keyPointMat);
                 detector.Convert(keyPointMat, kpts);
-                
+
                 foreach (MKeyPoint kpt in kpts.ToArray())
                 {
                     img.Draw(new CircleF(kpt.Point, 3.0f), new Bgr(0, 255, 0), 1);
@@ -634,6 +657,7 @@ namespace Emgu.CV.Test
                 if (maxVals[i] > maxVal)
                     maxVal = maxVals[i];
             }
+
             Trace.WriteLine(String.Format("Max diff: {0}", maxVal));
             EmguAssert.IsTrue(maxVal <= 1.0);
             //Assert.LessOrEqual(maxVal, 1.0);
@@ -645,6 +669,7 @@ namespace Emgu.CV.Test
                 if (maxVals[i] > maxVal)
                     maxVal = maxVals[i];
             }
+
             Trace.WriteLine(String.Format("Max diff: {0}", maxVal));
             EmguAssert.IsTrue(maxVal <= 1.0);
             //Assert.LessOrEqual(maxVal, 1.0);
@@ -657,7 +682,8 @@ namespace Emgu.CV.Test
             if (!CudaInvoke.HasCuda)
                 return;
 
-#region prepare synthetic image for testing
+            #region prepare synthetic image for testing
+
             int templWidth = 50;
             int templHeight = 50;
             Point templCenter = new Point(120, 100);
@@ -668,11 +694,13 @@ namespace Emgu.CV.Test
 
             //Draw the object in image1 center at templCenter;
             Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 200);
-            Rectangle objectLocation = new Rectangle(templCenter.X - (templWidth >> 1), templCenter.Y - (templHeight >> 1), templWidth, templHeight);
+            Rectangle objectLocation = new Rectangle(templCenter.X - (templWidth >> 1),
+                templCenter.Y - (templHeight >> 1), templWidth, templHeight);
             img.ROI = objectLocation;
             randomObj.Copy(img, null);
             img.ROI = Rectangle.Empty;
-#endregion
+
+            #endregion
 
             Image<Gray, Single> match = img.MatchTemplate(randomObj, Emgu.CV.CvEnum.TemplateMatchingType.Sqdiff);
             double[] minVal, maxVal;
@@ -684,7 +712,8 @@ namespace Emgu.CV.Test
             GpuMat cudaImage = new GpuMat(img);
             GpuMat gpuRandomObj = new GpuMat(randomObj);
             GpuMat gpuMatch = new GpuMat();
-            using (CudaTemplateMatching buffer = new CudaTemplateMatching(DepthType.Cv8U, 3, CvEnum.TemplateMatchingType.Sqdiff))
+            using (CudaTemplateMatching buffer =
+                new CudaTemplateMatching(DepthType.Cv8U, 3, CvEnum.TemplateMatchingType.Sqdiff))
             using (Stream stream = new Stream())
             {
                 buffer.Match(cudaImage, gpuRandomObj, gpuMatch, stream);
@@ -706,11 +735,15 @@ namespace Emgu.CV.Test
             if (!CudaInvoke.HasCuda)
                 return;
             Image<Gray, float> xmap = new Image<Gray, float>(2, 2);
-            xmap.Data[0, 0, 0] = 0; xmap.Data[0, 1, 0] = 0;
-            xmap.Data[1, 0, 0] = 1; xmap.Data[1, 1, 0] = 1;
+            xmap.Data[0, 0, 0] = 0;
+            xmap.Data[0, 1, 0] = 0;
+            xmap.Data[1, 0, 0] = 1;
+            xmap.Data[1, 1, 0] = 1;
             Image<Gray, float> ymap = new Image<Gray, float>(2, 2);
-            ymap.Data[0, 0, 0] = 0; ymap.Data[0, 1, 0] = 1;
-            ymap.Data[1, 0, 0] = 0; ymap.Data[1, 1, 0] = 1;
+            ymap.Data[0, 0, 0] = 0;
+            ymap.Data[0, 1, 0] = 1;
+            ymap.Data[1, 0, 0] = 0;
+            ymap.Data[1, 1, 0] = 1;
 
             Image<Gray, Byte> image = new Image<Gray, byte>(2, 2);
             image.SetRandNormal(new MCvScalar(), new MCvScalar(255));
@@ -720,7 +753,8 @@ namespace Emgu.CV.Test
             using (CudaImage<Gray, float> yCudaImage = new CudaImage<Gray, float>(ymap))
             using (CudaImage<Gray, Byte> remapedImage = new CudaImage<Gray, byte>(CudaImage.Size))
             {
-                CudaInvoke.Remap(CudaImage, remapedImage, xCudaImage, yCudaImage, CvEnum.Inter.Cubic, CvEnum.BorderType.Default, new MCvScalar(), null);
+                CudaInvoke.Remap(CudaImage, remapedImage, xCudaImage, yCudaImage, CvEnum.Inter.Cubic,
+                    CvEnum.BorderType.Default, new MCvScalar(), null);
             }
         }
 
@@ -738,7 +772,8 @@ namespace Emgu.CV.Test
             using (GpuMat cudaImage = new GpuMat(image))
             using (CudaImage<Gray, Byte> resultCudaImage = new CudaImage<Gray, byte>())
             {
-                CudaInvoke.WarpPerspective(cudaImage, resultCudaImage, transformation, cudaImage.Size, CvEnum.Inter.Cubic, CvEnum.BorderType.Default, new MCvScalar(), null);
+                CudaInvoke.WarpPerspective(cudaImage, resultCudaImage, transformation, cudaImage.Size,
+                    CvEnum.Inter.Cubic, CvEnum.BorderType.Default, new MCvScalar(), null);
             }
         }
 
@@ -747,34 +782,40 @@ namespace Emgu.CV.Test
         {
             if (!CudaInvoke.HasCuda)
                 return;
-            Image<Gray, Byte> prevImg, currImg;
-            AutoTestVarious.OpticalFlowImage(out prevImg, out currImg);
+            //Image<Gray, Byte> prevImg, currImg;
+            //AutoTestVarious.OpticalFlowImage(out prevImg, out currImg);
+            GpuMat[] images = OpticalFlowImage();
             Mat flow = new Mat();
-            using (CudaDensePyrLKOpticalFlow opticalflow = new CudaDensePyrLKOpticalFlow(new Size(21, 21), 3, 30, false))
-            using(CudaSparsePyrLKOpticalFlow opticalFlowSparse = new CudaSparsePyrLKOpticalFlow(new Size(21, 21)))
-            using (CudaImage<Gray, Byte> prevGpu = new CudaImage<Gray, byte>(prevImg))
-            using (CudaImage<Gray, byte> currGpu = new CudaImage<Gray, byte>(currImg))
+            using (CudaDensePyrLKOpticalFlow opticalflow = new CudaDensePyrLKOpticalFlow(new Size(21, 21), 3, 30, false)
+            )
+            using (CudaSparsePyrLKOpticalFlow opticalFlowSparse = new CudaSparsePyrLKOpticalFlow(new Size(21, 21)))
+            //using (CudaImage<Gray, Byte> prevGpu = new CudaImage<Gray, byte>(prevImg))
+            //using (CudaImage<Gray, byte> currGpu = new CudaImage<Gray, byte>(currImg))
             using (GpuMat flowGpu = new GpuMat())
             using (VectorOfPointF prevPts = new VectorOfPointF())
             using (GpuMat currPtrsGpu = new GpuMat())
             using (GpuMat statusGpu = new GpuMat())
             {
-                opticalflow.Calc(prevGpu, currGpu, flowGpu);
+                opticalflow.Calc(images[0], images[1], flowGpu);
 
                 flowGpu.Download(flow);
 
                 int pointsCount = 100;
-                Size s = prevGpu.Size;
+                Size s = images[0].Size;
                 PointF[] points = new PointF[pointsCount];
                 Random r = new Random(1234);
                 for (int i = 0; i < points.Length; i++)
                 {
                     points[i] = new PointF(r.Next(s.Height), r.Next(s.Width));
                 }
+
                 prevPts.Push(points);
                 using (GpuMat prevPtsGpu = new GpuMat(prevPts))
-                    opticalFlowSparse.Calc(prevGpu, currGpu, prevPtsGpu, currPtrsGpu, statusGpu);
+                    opticalFlowSparse.Calc(images[0], images[1], prevPtsGpu, currPtrsGpu, statusGpu);
             }
+
+            for (int i = 0; i < images.Length; i++)
+                images[i].Dispose();
         }
 
         [Test]
@@ -786,7 +827,8 @@ namespace Emgu.CV.Test
             Mat m = new Mat(new Size(480, 320), DepthType.Cv8U, 3);
             CvInvoke.Randu(m, new MCvScalar(), new MCvScalar(255, 255, 255));
 
-#region test for async download & upload
+            #region test for async download & upload
+
             Stream stream = new Stream();
             GpuMat gm1 = new GpuMat();
             gm1.Upload(m, stream);
@@ -796,15 +838,18 @@ namespace Emgu.CV.Test
 
             stream.WaitForCompletion();
             EmguAssert.IsTrue(m.Equals(m2));
-#endregion
 
-#region test for blocking download & upload
+            #endregion
+
+            #region test for blocking download & upload
+
             GpuMat gm2 = new GpuMat();
             gm2.Upload(m);
             Mat m3 = new Mat();
             gm2.Download(m3);
             EmguAssert.IsTrue(m.Equals(m3));
-#endregion
+
+            #endregion
         }
 
 
@@ -813,18 +858,23 @@ namespace Emgu.CV.Test
         {
             if (!CudaInvoke.HasCuda)
                 return;
-            Image<Gray, Byte> prevImg, currImg;
-            AutoTestVarious.OpticalFlowImage(out prevImg, out currImg);
+
+            //Image<Gray, Byte> prevImg, currImg;
+            //AutoTestVarious.OpticalFlowImage(out prevImg, out currImg);
+            GpuMat[] images = OpticalFlowImage();
             Mat flow = new Mat();
             CudaBroxOpticalFlow opticalflow = new CudaBroxOpticalFlow();
-            using (CudaImage<Gray, float> prevGpu = new CudaImage<Gray, float>(prevImg.Convert<Gray, float>()))
-            using (CudaImage<Gray, float> currGpu = new CudaImage<Gray, float>(currImg.Convert<Gray, float>()))
+            //using (CudaImage<Gray, float> prevGpu = new CudaImage<Gray, float>(prevImg.Convert<Gray, float>()))
+            //using (CudaImage<Gray, float> currGpu = new CudaImage<Gray, float>(currImg.Convert<Gray, float>()))
             using (GpuMat flowGpu = new GpuMat())
             {
-                opticalflow.Calc(prevGpu, currGpu, flowGpu);
+                opticalflow.Calc(images[0], images[1], flowGpu);
 
                 flowGpu.Download(flow);
             }
+
+            for (int i = 0; i < images.Length; i++)
+                images[i].Dispose();
         }
 
 
@@ -892,7 +942,8 @@ namespace Emgu.CV.Test
             //using (VideoWriter writer = new VideoWriter(fileName, VideoWriter.Fourcc('M', 'J', 'P', 'G'), 5, new Size(width, height), true))
             //using (VideoWriter writer = new VideoWriter(fileName, VideoWriter.Fourcc('X', '2', '6', '4'), 5, new Size(width, height), true))
             //using (VideoWriter writer = new VideoWriter(fileName, -1, 5, new Size( width, height ), true))
-            using (VideoWriter writer = new VideoWriter(fileName, backend_idx, fourcc, 24, new Size(width, height), true))
+            using (VideoWriter writer =
+ new VideoWriter(fileName, backend_idx, fourcc, 24, new Size(width, height), true))
             {
                 //EmguAssert.IsTrue(writer.IsOpened);
                 for (int i = 0; i < numberOfFrames; i++)
@@ -996,7 +1047,8 @@ namespace Emgu.CV.Test
                     circlesGpu.Download(circlesMat);
                     CircleF[] circles = new CircleF[circlesMat.Cols];
                     GCHandle circlesHandle = GCHandle.Alloc(circles, GCHandleType.Pinned);
-                    Emgu.CV.Util.CvToolbox.Memcpy(circlesHandle.AddrOfPinnedObject(), circlesMat.DataPointer, Marshal.SizeOf(typeof(CircleF)) * circles.Length);
+                    Emgu.CV.Util.CvToolbox.Memcpy(circlesHandle.AddrOfPinnedObject(), circlesMat.DataPointer,
+                        Marshal.SizeOf(typeof(CircleF)) * circles.Length);
                     circlesHandle.Free();
                     foreach (var circle in circles)
                     {
@@ -1038,32 +1090,41 @@ namespace Emgu.CV.Test
                 FastFeatureDetector fast = new FastFeatureDetector(100, true);
                 BriefDescriptorExtractor brief = new BriefDescriptorExtractor(32);
 
-#region extract features from the object image
+                #region extract features from the object image
+
                 Stopwatch stopwatch = Stopwatch.StartNew();
                 VectorOfKeyPoint modelKeypoints = new VectorOfKeyPoint();
                 fast.DetectRaw(box, modelKeypoints);
                 Mat modelDescriptors = new Mat();
                 brief.Compute(box, modelKeypoints, modelDescriptors);
                 stopwatch.Stop();
-                Trace.WriteLine(String.Format("Time to extract feature from model: {0} milli-sec", stopwatch.ElapsedMilliseconds));
-#endregion
+                Trace.WriteLine(String.Format("Time to extract feature from model: {0} milli-sec",
+                    stopwatch.ElapsedMilliseconds));
+
+                #endregion
 
                 Image<Gray, Byte> observedImage = new Image<Gray, byte>("box_in_scene.png");
 
-#region extract features from the observed image
-                stopwatch.Reset(); stopwatch.Start();
+                #region extract features from the observed image
+
+                stopwatch.Reset();
+                stopwatch.Start();
                 VectorOfKeyPoint observedKeypoints = new VectorOfKeyPoint();
                 fast.DetectRaw(observedImage, observedKeypoints);
                 Mat observedDescriptors = new Mat();
                 brief.Compute(observedImage, observedKeypoints, observedDescriptors);
                 stopwatch.Stop();
-                Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec", stopwatch.ElapsedMilliseconds));
-#endregion
+                Trace.WriteLine(String.Format("Time to extract feature from image: {0} milli-sec",
+                    stopwatch.ElapsedMilliseconds));
+
+                #endregion
 
                 Mat homography = null;
-                using (GpuMat<Byte> gpuModelDescriptors = new GpuMat<byte>(modelDescriptors)) //initialization of GPU code might took longer time.
+                using (GpuMat<Byte> gpuModelDescriptors = new GpuMat<byte>(modelDescriptors)
+                ) //initialization of GPU code might took longer time.
                 {
-                    stopwatch.Reset(); stopwatch.Start();
+                    stopwatch.Reset();
+                    stopwatch.Start();
                     CudaBFMatcher hammingMatcher = new CudaBFMatcher(DistanceType.Hamming);
 
                     //BFMatcher hammingMatcher = new BFMatcher(BFMatcher.DistanceType.Hamming, modelDescriptors);
@@ -1080,8 +1141,9 @@ namespace Emgu.CV.Test
                         //hammingMatcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, matches, k);
                         hammingMatcher.KnnMatch(gpuObservedDescriptors, gpuModelDescriptors, matches, k, null, true);
                         w2.Stop();
-                        Trace.WriteLine(String.Format("Time for feature matching (excluding data transfer): {0} milli-sec",
-                           w2.ElapsedMilliseconds));
+                        Trace.WriteLine(String.Format(
+                            "Time for feature matching (excluding data transfer): {0} milli-sec",
+                            w2.ElapsedMilliseconds));
                         //gpuTrainIdx.Download(trainIdx);
                         //gpuDistance.Download(distance);
 
@@ -1093,28 +1155,32 @@ namespace Emgu.CV.Test
                         int nonZeroCount = CvInvoke.CountNonZero(mask);
                         if (nonZeroCount >= 4)
                         {
-                            nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints,
-                               matches, mask, 1.5, 20);
+                            nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeypoints,
+                                observedKeypoints,
+                                matches, mask, 1.5, 20);
                             if (nonZeroCount >= 4)
                                 homography = Features2DToolbox.GetHomographyMatrixFromMatchedFeatures(modelKeypoints,
-                                   observedKeypoints, matches, mask, 2);
+                                    observedKeypoints, matches, mask, 2);
                             nonZeroCount = CvInvoke.CountNonZero(mask);
                         }
 
                         stopwatch.Stop();
-                        Trace.WriteLine(String.Format("Time for feature matching (including data transfer): {0} milli-sec",
-                           stopwatch.ElapsedMilliseconds));
+                        Trace.WriteLine(String.Format(
+                            "Time for feature matching (including data transfer): {0} milli-sec",
+                            stopwatch.ElapsedMilliseconds));
                     }
                 }
 
                 if (homography != null)
                 {
                     Rectangle rect = box.ROI;
-                    PointF[] pts = new PointF[] {
-               new PointF(rect.Left, rect.Bottom),
-               new PointF(rect.Right, rect.Bottom),
-               new PointF(rect.Right, rect.Top),
-               new PointF(rect.Left, rect.Top)};
+                    PointF[] pts = new PointF[]
+                    {
+                        new PointF(rect.Left, rect.Bottom),
+                        new PointF(rect.Right, rect.Bottom),
+                        new PointF(rect.Right, rect.Top),
+                        new PointF(rect.Left, rect.Top)
+                    };
 
                     PointF[] points = CvInvoke.PerspectiveTransform(pts, homography);
                     //homography.ProjectPoints(points);
@@ -1127,6 +1193,81 @@ namespace Emgu.CV.Test
                     res.DrawPolyline(Array.ConvertAll<PointF, Point>(points, Point.Round), true, new Gray(255.0), 5);
                     //ImageViewer.Show(res);
                 }
+            }
+        }
+
+        public GpuMat[] OpticalFlowImage()
+        {
+            Mat[] images = AutoTestVarious.OpticalFlowImage();
+            GpuMat[] gmats = new GpuMat[images.Length];
+            for (int i = 0; i < images.Length; i++)
+            {
+                GpuMat g = new GpuMat();
+                g.Upload(images[i]);
+                images[i].Dispose();
+                gmats[i] = g;
+            }
+
+            return gmats;
+
+        }
+
+        [Test]
+        public void TestNVidiaOpticalFlow_1_0()
+        {
+            if (!CudaInvoke.HasCuda)
+                return;
+            int cudaDevice = CudaInvoke.GetDevice();
+            using (CudaDeviceInfo deviceInfo = new CudaDeviceInfo(cudaDevice))
+            {
+                if (deviceInfo.CudaComputeCapability < new Version(7, 5))
+                    return;
+            } 
+            GpuMat[] images = OpticalFlowImage();
+            GpuMat result = new GpuMat();
+
+            Stopwatch watch = Stopwatch.StartNew();
+            NvidiaOpticalFlow_1_0 flow = new NvidiaOpticalFlow_1_0(images[0].Size);
+
+            flow.Calc(images[0], images[1], result);
+
+            watch.Stop();
+            EmguAssert.WriteLine(String.Format(
+                "Time: {0} milliseconds",
+                watch.ElapsedMilliseconds));
+            for (int i = 0; i < images.Length; i++)
+            {
+                images[i].Dispose();
+            }
+        }
+
+        [Test]
+        public void TestNVidiaOpticalFlow_2_0()
+        {
+            if (!CudaInvoke.HasCuda)
+                return;
+            int cudaDevice = CudaInvoke.GetDevice();
+            using (CudaDeviceInfo deviceInfo = new CudaDeviceInfo(cudaDevice))
+            {
+                if (deviceInfo.CudaComputeCapability < new Version(7, 5))
+                    return;
+            }
+            GpuMat[] images = OpticalFlowImage();
+            GpuMat flow = new GpuMat();
+            GpuMat floatFlow = new GpuMat();
+            Stopwatch watch = Stopwatch.StartNew();
+            NvidiaOpticalFlow_2_0 nof = new NvidiaOpticalFlow_2_0(images[0].Size);
+
+            nof.Calc(images[0], images[1], flow);
+            nof.ConvertToFloat(flow, floatFlow);
+
+            watch.Stop();
+            EmguAssert.WriteLine(String.Format(
+                "Time: {0} milliseconds",
+                watch.ElapsedMilliseconds));
+            for (int i = 0; i < images.Length; i++)
+            {
+                images[i].Dispose();
             }
         }
     }

@@ -678,13 +678,13 @@ void cveMaxRect(CvRect* rect1, CvRect* rect2, CvRect* result)
 	*result = cvMaxRect(rect1, rect2);
 }
 
-int cveConnectedComponents(cv::_InputArray* image, cv::_OutputArray* labels, int connectivity, int type)
+int cveConnectedComponents(cv::_InputArray* image, cv::_OutputArray* labels, int connectivity, int ltype, int ccltype)
 {
-	return cv::connectedComponents(*image, *labels, connectivity, type);
+	return cv::connectedComponents(*image, *labels, connectivity, ltype, ccltype);
 }
-int cveConnectedComponentsWithStats(cv::_InputArray* image, cv::_OutputArray* labels, cv::_OutputArray* stats, cv::_OutputArray* centroids, int connectivity, int type)
+int cveConnectedComponentsWithStats(cv::_InputArray* image, cv::_OutputArray* labels, cv::_OutputArray* stats, cv::_OutputArray* centroids, int connectivity, int ltype, int ccltype)
 {
-	return cv::connectedComponentsWithStats(*image, *labels, *stats, *centroids, connectivity, type);
+	return cv::connectedComponentsWithStats(*image, *labels, *stats, *centroids, connectivity, ltype, ccltype);
 }
 
 cv::segmentation::IntelligentScissorsMB* cveIntelligentScissorsMBCreate()

@@ -63,9 +63,9 @@ namespace Emgu.CV.Cuda
         #endregion
 
         /// <summary>
-        /// Get the opencl platform summary as a string
+        /// Get the cuda platform summary as a string
         /// </summary>
-        /// <returns>An opencl platfor summary</returns>
+        /// <returns>A cuda platform summary</returns>
         public static String GetCudaDevicesSummary()
         {
 
@@ -75,13 +75,21 @@ namespace Emgu.CV.Cuda
                 builder.Append(String.Format("Has cuda: true{0}", Environment.NewLine));
 
                 int deviceCount = GetCudaEnabledDeviceCount();
-                builder.Append(String.Format("Cuda devices: {0}{1}", deviceCount, Environment.NewLine));
+                builder.Append(String.Format("Cuda devices count: {0}{1}", deviceCount, Environment.NewLine));
 
                 for (int i = 0; i < deviceCount; i++)
                 {
                     using (CudaDeviceInfo deviceInfo = new CudaDeviceInfo(i))
                     {
-                        builder.Append(String.Format("  Device {0}: {1}{2}", i, deviceInfo.Name, Environment.NewLine));
+                        builder.Append(String.Format(
+                            "Device {0}:{1}  Name: {2}{1}  Cuda Compute Capability: {3}{1}  Multi-Processor count: {4}{1}  Total Memory: {5}{1}  Free Memory: {6}{1}", 
+                            i,
+                            Environment.NewLine,
+                            deviceInfo.Name, 
+                            deviceInfo.CudaComputeCapability,
+                            deviceInfo.MultiProcessorCount,
+                            deviceInfo.TotalMemory,
+                            deviceInfo.FreeMemory));
                     }
                 }
 
@@ -113,6 +121,14 @@ namespace Emgu.CV.Cuda
         /// <returns>The current Cuda device id</returns>
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaGetDevice")]
         public static extern int GetDevice();
+
+        /// <summary>
+        /// Explicitly destroys and cleans up all resources associated with the current device in the current process.
+        /// Any subsequent API call to this device will reinitialize the device.
+        /// </summary>
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaResetDevice")]
+        public static extern int ResetDevice();
+
         #endregion
 
         /// <summary>
@@ -1315,7 +1331,6 @@ namespace Emgu.CV.Cuda
             {
                 cudaDrawColorDisp(iaSrcDisp, oaDstDisp, ndisp, stream);
             }
-
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaDrawColorDisp(
@@ -1340,5 +1355,42 @@ namespace Emgu.CV.Cuda
         private static extern void cudaCreateOpticalFlowNeedleMap(IntPtr u, IntPtr v, IntPtr vertex, IntPtr colors);
         */
 
+        /// <summary>
+        /// Converts an array to half precision floating number.
+        /// </summary>
+        /// <param name="src">Input array.</param>
+        /// <param name="dst">Output array.</param>
+        /// <param name="stream">Stream for the asynchronous version.</param>
+        public static void ConvertFp16(IInputArray src, IOutputArray dst, Stream stream = null)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+            {
+                cudaConvertFp16(iaSrc, oaDst, stream);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cudaConvertFp16(IntPtr src, IntPtr dst, IntPtr stream);
+
+        /// <summary>
+        /// Checks if array elements lie between two scalars.
+        /// </summary>
+        /// <param name="src">First input array.</param>
+        /// <param name="lowerb">Inclusive lower boundary</param>
+        /// <param name="upperb">Inclusive upper boundary</param>
+        /// <param name="dst">Output array of the same size as src and CV_8U type.</param>
+        /// <param name="stream">Stream for the asynchronous version.</param>
+        public static void InRange(IInputArray src, MCvScalar lowerb, MCvScalar upperb, IOutputArray dst, Stream stream = null)
+        {
+            using (InputArray iaSrc = src.GetInputArray()) 
+            using (OutputArray oaDst = dst.GetOutputArray())
+            {
+                cudaInRange(iaSrc, ref lowerb, ref upperb, oaDst, stream);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cudaInRange(IntPtr src, ref MCvScalar lowerb, ref MCvScalar upperb, IntPtr dst, IntPtr stream);
     }
 }
