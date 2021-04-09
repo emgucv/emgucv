@@ -1372,5 +1372,25 @@ namespace Emgu.CV.Cuda
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaConvertFp16(IntPtr src, IntPtr dst, IntPtr stream);
+
+        /// <summary>
+        /// Checks if array elements lie between two scalars.
+        /// </summary>
+        /// <param name="src">First input array.</param>
+        /// <param name="lowerb">Inclusive lower boundary</param>
+        /// <param name="upperb">Inclusive upper boundary</param>
+        /// <param name="dst">Output array of the same size as src and CV_8U type.</param>
+        /// <param name="stream">Stream for the asynchronous version.</param>
+        public static void InRange(IInputArray src, MCvScalar lowerb, MCvScalar upperb, IOutputArray dst, Stream stream = null)
+        {
+            using (InputArray iaSrc = src.GetInputArray()) 
+            using (OutputArray oaDst = dst.GetOutputArray())
+            {
+                cudaInRange(iaSrc, ref lowerb, ref upperb, oaDst, stream);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cudaInRange(IntPtr src, ref MCvScalar lowerb, ref MCvScalar upperb, IntPtr dst, IntPtr stream);
     }
 }
