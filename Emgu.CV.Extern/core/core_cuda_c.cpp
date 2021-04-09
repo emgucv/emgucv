@@ -104,7 +104,11 @@ void cudaPrintShortCudaDeviceInfo(int device)
 
 void cudaConvertFp16(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream)
 {
+#ifdef HAVE_OPENCV_CUDEV
 	cv::cuda::convertFp16(*src, *dst, *stream ? *stream : cv::cuda::Stream::Null());
+#else
+	CV_Error(CV_GpuNotSupported, "The library is compiled without CUDEV support");
+#endif
 }
 
 //----------------------------------------------------------------------------
