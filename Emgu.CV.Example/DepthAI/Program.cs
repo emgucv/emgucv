@@ -84,6 +84,11 @@ namespace DepthAI
                 //String[] availableStreams = d.GetAvailableStreams();
                 using (CNNHostPipeline pipeline = d.CreatePipeline(JsonConvert.SerializeObject(config)))
                 {
+                    if (pipeline.Ptr == IntPtr.Zero)
+                    {
+                        Console.WriteLine("Failed to create device pipeline.");
+                        return;
+                    }
                     while (_is_running)
                     {
                         using (NNetAndDataPackets packets = pipeline.GetAvailableNNetAndDataPackets(false))

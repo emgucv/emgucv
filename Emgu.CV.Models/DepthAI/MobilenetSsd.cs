@@ -13,7 +13,10 @@ using Emgu.CV.DepthAI;
 using Emgu.CV.Dnn;
 using Emgu.Util;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 
 namespace Emgu.CV.Models.DepthAI
 {
@@ -125,10 +128,16 @@ namespace Emgu.CV.Models.DepthAI
         {
             using (StreamReader sr = new StreamReader(blobConfigFile))
             {
-                dynamic configJson = JsonConvert.DeserializeObject(sr.ReadToEnd());
+                JObject jObject = JObject.Parse(sr.ReadToEnd());
                 List<String> labels = new List<string>();
-                foreach (var l in configJson.mappings.labels)
-                    labels.Add(l.ToString());
+                if (jObject.ContainsKey("mappings"))
+                {
+                    var mappings = jObject["mappings"];
+                    var token = mappings["labels"];
+                    foreach (var l in token)
+                        labels.Add(l.ToString());
+                }
+                
                 return labels.ToArray();
             }
         }
