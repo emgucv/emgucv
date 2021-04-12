@@ -12,7 +12,9 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-#if __ANDROID__
+
+
+#if __ANDROID__ && __USE_ANDROID_CAMERA2__
 using Android.App;
 using Android.Content;
 using Android.Runtime;
@@ -40,7 +42,7 @@ namespace Emgu.CV.XamarinForms
 {
 
     public class ProcessAndRenderPage
-#if __ANDROID__
+#if __ANDROID__ && __USE_ANDROID_CAMERA2__
         : AndroidCameraPage
 #else
         : ButtonTextImagePage
@@ -55,7 +57,7 @@ namespace Emgu.CV.XamarinForms
         private String _StopCameraButtonText = "Stop Camera";
         private String _deaultImage;
 
-#if __ANDROID__
+#if __ANDROID__ && __USE_ANDROID_CAMERA2__
         private bool _isBusy = false;
 #endif
         public ProcessAndRenderPage( 
@@ -66,12 +68,35 @@ namespace Emgu.CV.XamarinForms
             )
             : base()
         {
-#if __ANDROID__
-            HasCameraOption = true;
-#endif
+            var openCVConfigDict = CvInvoke.ConfigDict;
+            bool haveVideoio = (openCVConfigDict["HAVE_OPENCV_VIDEOIO"] != 0);
+            if (haveVideoio && (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Android))
+            {
+                HasCameraOption = true;
+            }
+            
+            /*
+            if (haveVideoio)
+            {
+                if (CvInvoke.Backends.Length > 0)
+                {
+                    _capture = new VideoCapture(0, VideoCapture.API.Android);
+                    if (_capture.IsOpened)
+                    {
+                        _capture.ImageGrabbed += _capture_ImageGrabbed;
+                        HasCameraOption = true;
+                    }
+                    else
+                    {
+                        _capture.Dispose();
+                        _capture = null;
+                        HasCameraOption = false;
+                    }
+                }
+            }*/
+
             _deaultImage = defaultImage;
             _defaultButtonText = defaultButtonText;
-            
 
             var button = this.GetButton();
             button.Text = _defaultButtonText;
@@ -113,9 +138,9 @@ namespace Emgu.CV.XamarinForms
 
             if (button.Text.Equals(_StopCameraButtonText))
             {
-#if __ANDROID__
+#if __ANDROID__ && __USE_ANDROID_CAMERA2__
                 StopCapture();
-                //AndroidImageView.Visibility = ViewStates.Invisible;
+                AndroidImageView.Visibility = ViewStates.Invisible;
 #else
                 _capture.Stop();
                 _capture.Dispose();
@@ -148,7 +173,7 @@ namespace Emgu.CV.XamarinForms
 
             if (images.Length == 0)
             {
-#if __ANDROID__
+#if __ANDROID__ && __USE_ANDROID_CAMERA2__
                 button.Text = _StopCameraButtonText;
                 StartCapture(async delegate (Object captureSender, Mat m)
                 {
@@ -180,7 +205,15 @@ namespace Emgu.CV.XamarinForms
                 //Handle video
                 if (_capture == null)
                 {
-                    _capture = new VideoCapture();
+                    if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Android)
+                    {
+                        _capture = new VideoCapture(0, VideoCapture.API.Android);
+                    }
+                    else
+                    {
+                        _capture = new VideoCapture();
+                    }
+
                     _capture.ImageGrabbed += _capture_ImageGrabbed;
                 }
 

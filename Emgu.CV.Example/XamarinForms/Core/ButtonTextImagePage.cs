@@ -236,8 +236,12 @@ namespace Emgu.CV.XamarinForms
 
             using (VectorOfByte vb = new VectorOfByte())
             {
-                //CvInvoke.Imencode(".jpg", image, vb);
-                CvInvoke.Imencode(".png", image, vb);
+                //Use 0-level compression PNG format to reduce cpu load.
+                CvInvoke.Imencode(
+                    ".png", 
+                    image, 
+                    vb, 
+                    new KeyValuePair<ImwriteFlags, int>(ImwriteFlags.PngCompression, 0));
                 byte[] rawData = vb.ToArray();
                 //_imageData = vb.ToArray();
                 //_imageStream = new MemoryStream(_imageData);
