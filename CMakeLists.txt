@@ -24,8 +24,8 @@ IF(EMGU_CV_WITH_DEPTHAI)
   include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/HunterGate.cmake")
   
   HunterGate(
-    URL "https://github.com/cpp-pm/hunter/archive/v0.23.296.tar.gz"
-    SHA1 "232f5022ee1d45955a7e8d3e1720f31bac1bb534"
+    URL "https://github.com/cpp-pm/hunter/archive/v0.23.297.tar.gz"
+    SHA1 "3319fe6a3b08090df7df98dee75134d68e2ef5a3"
     FILEPATH ${CMAKE_CURRENT_LIST_DIR}/Emgu.CV.Extern/depthai-core/cmake/Hunter/config.cmake # Add depthai-core config (hunter limitation)
   )
 

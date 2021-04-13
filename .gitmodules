@@ -41,3 +41,4 @@
 [submodule "Emgu.CV.Extern/depthai-core"]
 	path = Emgu.CV.Extern/depthai-core
 	url = https://github.com/luxonis/depthai-core.git
+	ignore = dirty
