@@ -202,17 +202,40 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
   IF (DOTNET_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
 	TARGET ${target}
-	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild -t:restore ${solution_file}
+	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild -t:restore /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
 	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}
 	COMMENT "Building ${target} with command: ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}")
   ELSEIF(MSBUILD_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
 	TARGET ${target}
-	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore ${solution_file}
+	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
 	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}
 	COMMENT "Building ${target} with command: ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}")
   ELSE()
-    MESSAGE(FATAL_ERROR "Neither Visual Studio, msbuild nor dotnot is found!")
+    MESSAGE(FATAL_ERROR "dotnet command is not found!")
+  ENDIF()
+ENDMACRO()
+
+MACRO(MSBUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
+  IF(APPLE AND ("${EMGUCV_ARCH}" STREQUAL "x64"))
+    SET(MAC_FRESH_SHELL_PREFIX env -i zsh)
+  ENDIF()
+  ADD_CUSTOM_TARGET (${target} ${ARGV4})
+  IF ("${project_name}" STREQUAL "")
+	SET(MSBUILD_TARGET_OPTION "")
+  ELSE()
+	#MESSAGE(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> msbuild_target_name: ${msbuild_target_name}")
+    STRING(REGEX REPLACE "\\." "_" msbuild_target_name ${project_name})
+	SET(MSBUILD_TARGET_OPTION /target:${msbuild_target_name})
+  ENDIF()
+  IF(MSBUILD_EXECUTABLE)
+    ADD_CUSTOM_COMMAND (
+	TARGET ${target}
+	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
+	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}
+	COMMENT "Building ${target} with command: ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}")
+  ELSE()
+    MESSAGE(FATAL_ERROR "msbuild command is not found!")
   ENDIF()
 ENDMACRO()
 

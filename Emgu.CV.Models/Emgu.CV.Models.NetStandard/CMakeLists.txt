@@ -8,9 +8,9 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
     PROJECT(Emgu.CV.Models.NetStandard)
     SET(EXTRA_MSBUILD_FLAGS "")
     IF(WIN32)
-      SET(EXTRA_MSBUILD_FLAGS "/p:Platform=\"Any CPU\"")
+      SET(EXTRA_BUILD_FLAGS "/p:Platform=\"Any CPU\"")
     ENDIF()
-    BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Models.NetStandard" "${EXTRA_MSBUILD_FLAGS}" ALL)
+    BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Models.NetStandard" "${EXTRA_BUILD_FLAGS}" ALL)
 
     INSTALL(
       FILES 
