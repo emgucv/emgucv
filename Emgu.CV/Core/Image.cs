@@ -44,6 +44,27 @@ namespace Emgu.CV
         protected Image()
         {
         }
+            
+        /// <summary>
+        /// Create an Image from an existing one and move its data to the new one
+        /// </summary>
+        /// <param name="img">the existing source image whose data is moved to the new image</param>
+        protected Image(Image<TColor, TDepth> img)
+        {
+            if (img != null)
+            {
+                _ptr = img._ptr;
+                _dataHandle = img._dataHandle;
+                _imageDataReleaseMode = img._imageDataReleaseMode;
+                _array = img._array;
+
+                img._ptr = IntPtr.Zero;
+                img._dataHandle = new GCHandle();
+                img._imageDataReleaseMode = ImageDataReleaseMode.ReleaseHeaderOnly;
+                img._array = null;
+                img.Dispose();
+            }
+        }            
 
         /// <summary>
         /// Create image from the specific multi-dimensional data, where the 1st dimension is # of rows (height), the 2nd dimension is # cols (width) and the 3rd dimension is the channel
