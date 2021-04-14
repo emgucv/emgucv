@@ -217,7 +217,8 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
 ENDMACRO()
 
 MACRO(MSBUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
-  IF(APPLE AND ("${EMGUCV_ARCH}" STREQUAL "x64"))
+  IF((APPLE AND ("${EMGUCV_ARCH}" STREQUAL "x64")) OR ("${CMAKE_SYSTEM_NAME}" STREQUAL "iOS"))
+    # Mac OS targeting intel cpu, or iOS
     SET(MAC_FRESH_SHELL_PREFIX env -i zsh)
   ENDIF()
   ADD_CUSTOM_TARGET (${target} ${ARGV4})
