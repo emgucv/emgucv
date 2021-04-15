@@ -3,15 +3,25 @@
 # --------------------------------------------------------
 
 IF( (EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND HAVE_IOS )
-  IF (DOTNET_FOUND)
+  
     #IF(WIN32 AND (MSVC_VERSION GREATER 1900)) #need MSVC to be at least 2017
     PROJECT(Emgu.CV.Models.IOS)
     SET(EXTRA_MSBUILD_FLAGS "")
+    
     IF(WIN32)
       SET(EXTRA_MSBUILD_FLAGS "/p:Platform=\"Any CPU\"")
     ENDIF()
-    BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Models.IOS" "${EXTRA_MSBUILD_FLAGS}" ALL)
-
+    
+    IF (APPLE)
+      # Need to use MSBUILD instead of dotnet to build the project.
+      # dotnet seems to have a bug on Mac OS, it do not respect the assembly name.
+      # It output Emgu.CV.Model.IOS.dll instead of Emgu.CV.Model.dll specified in
+      # the csproj file. MSBUILD seems to work just fine.
+      MSBUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Models.IOS" "${EXTRA_MSBUILD_FLAGS}" ALL)
+    ELSEIF (DOTNET_FOUND)
+      BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Models.IOS" "${EXTRA_MSBUILD_FLAGS}" ALL)
+    ENDIF()
+    
     INSTALL(
       FILES 
       ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/iOS/Emgu.CV.Models.xml
@@ -36,5 +46,5 @@ IF( (EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND HAVE_IOS )
     if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
 	endif() 
-  ENDIF()
+  
 ENDIF()
