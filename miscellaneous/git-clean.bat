@@ -51,7 +51,10 @@ cd ..
 cd ..
 
 cd ..
- 
+cd ..
+
+cd depthai-core
+git clean -d -f -x "."
 cd ..
 
 cd ..
