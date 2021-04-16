@@ -20,6 +20,8 @@ namespace BuildInfo.NetCore.Console
     {
         static void Main(string[] args)
         {
+            CvInvoke.LogLevel = LogLevel.Verbose;
+
             System.Console.WriteLine(CvInvoke.BuildInformation);
 
             System.Console.WriteLine(GetDnnInfo() + System.Environment.NewLine);
@@ -86,6 +88,114 @@ namespace BuildInfo.NetCore.Console
             return String.Join(System.Environment.NewLine, backendsText.ToArray());
         }
 
+        private static String GetVideoWriterFFMPEGInfo()
+        {
+            if (Emgu.Util.Platform.OperationSystem == Platform.OS.Windows)
+            {
+                Emgu.CV.Backend[] backends = CvInvoke.WriterBackends;
+                int backend_idx = 0; //any backend;
+                String backendName = String.Empty;
+                foreach (Emgu.CV.Backend be in backends)
+                {
+                    if (be.Name.Equals("FFMPEG"))
+                        //if (be.Name.Equals("INTEL_MFX"))
+                    {
+                        backend_idx = be.ID;
+                        backendName = be.Name;
+                        break;
+                    }
+                }
+
+                if (backend_idx > 0) //FFMPEG backend is available
+                {
+                    try
+                    {
+                        using (VideoWriter writer = new VideoWriter(
+                            "tmp.avi",
+                            backend_idx,
+                            VideoWriter.Fourcc('X', 'V', 'I', 'D'),
+                            25,
+                            new Size(640, 480),
+                            new Tuple<VideoWriter.WriterProperty, int>[]
+                            {
+                                new Tuple<VideoWriter.WriterProperty, int>(VideoWriter.WriterProperty.IsColor, 1),
+                                new Tuple<VideoWriter.WriterProperty, int>(VideoWriter.WriterProperty.HwAcceleration, (int) VideoAccelerationType.Any)
+                            }))
+                        {
+
+                            VideoAccelerationType hwAcceleration =
+                                (VideoAccelerationType)writer.Get(VideoWriter.WriterProperty.HwAcceleration);
+                            return String.Format("{0}VideoWriter successfully created with backend: {1} (hw acceleration: {2})", System.Environment.NewLine, backendName, hwAcceleration);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        //System.Console.WriteLine(e);
+                        return Environment.NewLine + "Failed to create VideoWriter with FFMPEG backend.";
+                    }
+                }
+                else
+                {
+                    return Environment.NewLine + "FFMPEG backend not found.";
+                }
+            }
+
+            return String.Empty;
+        }
+
+        private static String GetVideoWriterIntelMfxInfo()
+        {
+            if (Emgu.Util.Platform.OperationSystem == Platform.OS.Windows)
+            {
+                Emgu.CV.Backend[] backends = CvInvoke.WriterBackends;
+                int backend_idx = 0; //any backend;
+                String backendName = String.Empty;
+                foreach (Emgu.CV.Backend be in backends)
+                {
+                    if (be.Name.Equals("INTEL_MFX"))
+                    {
+                        backend_idx = be.ID;
+                        backendName = be.Name;
+                        break;
+                    }
+                }
+
+                if (backend_idx > 0) //Intel MFX backend is available
+                {
+                    try
+                    {
+                        using (VideoWriter writer = new VideoWriter(
+                            "tmp.avi",
+                            backend_idx,
+                            VideoWriter.Fourcc('H', '2', '6', '4'),
+                            25,
+                            new Size(640, 480),
+                            new Tuple<VideoWriter.WriterProperty, int>[]
+                            {
+                                new Tuple<VideoWriter.WriterProperty, int>(VideoWriter.WriterProperty.IsColor, 1),
+                                new Tuple<VideoWriter.WriterProperty, int>(VideoWriter.WriterProperty.HwAcceleration, (int) VideoAccelerationType.Any)
+                            }))
+                        {
+
+                            VideoAccelerationType hwAcceleration =
+                                (VideoAccelerationType)writer.Get(VideoWriter.WriterProperty.HwAcceleration);
+                            return String.Format("{0}VideoWriter successfully created with backend: {1} (hw acceleration: {2})", System.Environment.NewLine, backendName, hwAcceleration);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        //System.Console.WriteLine(e);
+                        return Environment.NewLine + "Failed to create VideoWriter with Intel MFX backend.";
+                    }
+                }
+                else
+                {
+                    return Environment.NewLine + "Intel MFX backend not found.";
+                }
+            }
+            return String.Empty;
+        }
+
         private static String GetCaptureInfo()
         {
             String captureText = String.Format("Capture Backends (VideoCapture from device): {0}{1}", System.Environment.NewLine, GetBackendInfo(CvInvoke.Backends));
@@ -104,6 +214,12 @@ namespace BuildInfo.NetCore.Console
                             String.Format(
                                 "{0}VideoCapture device successfully opened with default backend: {1} (hw acceleration: {2})",
                                 System.Environment.NewLine, backendName, hwAcceleration);
+                    } else
+                    {
+                        captureText +=
+                            String.Format(
+                                "{0}VideoCapture device failed to opened with default backend: {1}",
+                                System.Environment.NewLine, cap.BackendName);
                     }
                 }
             }
@@ -112,45 +228,8 @@ namespace BuildInfo.NetCore.Console
             captureText += String.Format("{0}{0}VideoWriter backends: {0}{1}{0}", Environment.NewLine,
                 GetBackendInfo(CvInvoke.WriterBackends));
 
-            if (Emgu.Util.Platform.OperationSystem == Platform.OS.Windows)
-            {
-                Emgu.CV.Backend[] backends = CvInvoke.WriterBackends;
-                int backend_idx = 0; //any backend;
-                String backendName = String.Empty;
-                foreach (Emgu.CV.Backend be in backends)
-                {
-                    if (be.Name.Equals("FFMPEG"))
-                    //if (be.Name.Equals("INTEL_MFX"))
-                    {
-                        backend_idx = be.ID;
-                        backendName = be.Name;
-                        break;
-                    }
-                }
-
-                if (backend_idx > 0) //FFMPEG backend is available
-                {
-
-                    using (VideoWriter writer = new VideoWriter(
-                        "tmp.avi",
-                        backend_idx,
-                        VideoWriter.Fourcc('X', 'V', 'I', 'D'),
-                        25,
-                        new Size(640, 480),
-                        new Tuple<VideoWriter.WriterProperty, int>[]
-                        {
-                                new Tuple<VideoWriter.WriterProperty, int>(VideoWriter.WriterProperty.IsColor, 1),
-                                new Tuple<VideoWriter.WriterProperty, int>(VideoWriter.WriterProperty.HwAcceleration, (int) VideoAccelerationType.Any)
-                        }))
-                    {
-                        
-                        VideoAccelerationType hwAcceleration =
-                            (VideoAccelerationType)writer.Get(VideoWriter.WriterProperty.HwAcceleration);
-                        captureText += String.Format("{0}VideoWriter successfully created with backend: {1} (hw acceleration: {2})", System.Environment.NewLine, backendName, hwAcceleration);
-                    }
-                }
-            }
-
+            captureText += GetVideoWriterFFMPEGInfo();
+            //captureText += GetVideoWriterIntelMfxInfo();
 
             return captureText;
         }
