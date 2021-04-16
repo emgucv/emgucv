@@ -12,6 +12,9 @@ IF ((TARGET Emgu.CV.Platform.NetCore) AND (TARGET Emgu.CV.Platform.NetFramework)
   
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetCore)
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetFramework)
+  IF (TARGET Emgu.CV.Bitmap.nuget)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Bitmap.nuget)
+  ENDIF()
 
   if(ENABLE_SOLUTION_FOLDERS)
     set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "nuget")
