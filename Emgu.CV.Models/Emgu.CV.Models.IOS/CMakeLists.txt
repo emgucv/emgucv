@@ -12,7 +12,7 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
       SET(EXTRA_MSBUILD_FLAGS "/p:Platform=\"Any CPU\"")
     ENDIF()
     
-    IF (APPLE)
+    IF (APPLE AND ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64"))
       # Need to use MSBUILD instead of dotnet to build the project.
       # dotnet seems to have a bug on Mac OS, it do not respect the assembly name.
       # It output Emgu.CV.Model.IOS.dll instead of Emgu.CV.Model.dll specified in
