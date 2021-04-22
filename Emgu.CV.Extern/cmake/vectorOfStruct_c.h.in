@@ -14,9 +14,9 @@
 
 #include "vectors_c.h"
 
-${VECTOR_ADDITIONAL_INCLUDE}
-
 ${COMPILATION_CONDITION_C_OPEN}
+
+${VECTOR_ADDITIONAL_INCLUDE}
 
 //----------------------------------------------------------------------------
 //

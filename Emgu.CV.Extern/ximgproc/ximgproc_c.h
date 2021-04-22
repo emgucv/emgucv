@@ -27,6 +27,7 @@ namespace cv {
 		class DisparityWLSFilter {};
 		class RidgeDetectionFilter {};
 		class EdgeBoxes {};
+		class EdgeDrawing {};
 		namespace  segmentation {
 			class GraphSegmentation {};
 				class SelectiveSearchSegmentation {};
