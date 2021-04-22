@@ -24,7 +24,7 @@ namespace ${NAMESPACE_CS}
    /// </summary>
    [Serializable]
    [DebuggerTypeProxy(typeof(VectorOf${VECTOR_NAME}.DebuggerProxy))]
-   public partial class VectorOf${VECTOR_NAME} : Emgu.Util.UnmanagedObject, ISerializable
+   public partial class VectorOf${VECTOR_NAME} : Emgu.CV.Util.UnmanagedVector, ISerializable
 #if ${IS_INPUT_OUTPUT_ARRAY}
       , IInputOutputArray
 #endif
@@ -133,7 +133,7 @@ namespace ${NAMESPACE_CS}
       /// <summary>
       /// Get the size of the vector
       /// </summary>
-      public int Size
+      public override int Size
       {
          get
          {
@@ -152,11 +152,22 @@ namespace ${NAMESPACE_CS}
       /// <summary>
       /// The pointer to the first element on the vector. In case of an empty vector, IntPtr.Zero will be returned.
       /// </summary>
-      public IntPtr StartAddress
+      public override IntPtr StartAddress
       {
          get
          {
             return VectorOf${VECTOR_NAME}GetStartAddress(_ptr);
+         }
+      }
+	  
+	  /// <summary>
+      /// The pointer to memory address at the end of the vector. In case of an empty vector, IntPtr.Zero will be returned.
+      /// </summary>
+      public override IntPtr EndAddress
+      {
+         get
+         {
+            return VectorOf${VECTOR_NAME}GetEndAddress(_ptr);
          }
       }
 	  
@@ -253,6 +264,9 @@ namespace ${NAMESPACE_CS}
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern IntPtr VectorOf${VECTOR_NAME}GetStartAddress(IntPtr v);
+	  
+	  [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+      internal static extern IntPtr VectorOf${VECTOR_NAME}GetEndAddress(IntPtr v);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void VectorOf${VECTOR_NAME}PushMulti(IntPtr v, IntPtr values, int count);

@@ -35,6 +35,10 @@ CVAPI(void) VectorOf${VECTOR_NAME}Push(std::vector< ${VECTOR_ELEMENT} >* v, ${VE
 
 CVAPI(void) VectorOf${VECTOR_NAME}PushVector(std::vector< ${VECTOR_ELEMENT} >* v, std::vector< ${VECTOR_ELEMENT} >* other);
 
+CVAPI(${VECTOR_ELEMENT}*) VectorOf${VECTOR_NAME}GetStartAddress(std::vector< ${VECTOR_ELEMENT} >* v);
+
+CVAPI(void*) VectorOf${VECTOR_NAME}GetEndAddress(std::vector< ${VECTOR_ELEMENT} >* v);
+
 CVAPI(void) VectorOf${VECTOR_NAME}Clear(std::vector< ${VECTOR_ELEMENT} >* v);
 
 CVAPI(void) VectorOf${VECTOR_NAME}Release(std::vector< ${VECTOR_ELEMENT} >** v);
@@ -42,6 +46,8 @@ CVAPI(void) VectorOf${VECTOR_NAME}Release(std::vector< ${VECTOR_ELEMENT} >** v);
 CVAPI(void) VectorOf${VECTOR_NAME}CopyData(std::vector< ${VECTOR_ELEMENT} >* v,  ${VECTOR_ELEMENT}* data);
 
 CVAPI(${VECTOR_ELEMENT}*) VectorOf${VECTOR_NAME}GetStartAddress(std::vector< ${VECTOR_ELEMENT} >* v);
+
+CVAPI(void*) VectorOf${VECTOR_NAME}GetEndAddress(std::vector< ${VECTOR_ELEMENT} >* v);
 
 CVAPI(void) VectorOf${VECTOR_NAME}GetItemPtr(std::vector<  ${VECTOR_ELEMENT} >* vec, int index,  ${VECTOR_ELEMENT}** element);
 

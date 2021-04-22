@@ -11,7 +11,7 @@ using Emgu.CV.Structure;
 
 namespace Emgu.CV.Util
 {
-   public partial class VectorOfKeyPoint : Emgu.Util.UnmanagedObject, IInputArray, IOutputArray, IInputOutputArray
+   public partial class VectorOfKeyPoint : Emgu.CV.Util.UnmanagedVector, IInputArray, IOutputArray, IInputOutputArray
    {
  
       /// <summary>

@@ -30,6 +30,7 @@ int VectorOf${VECTOR_NAME}GetSize(std::vector< ${VECTOR_ELEMENT} >* v)
    return v->size();
 }
 
+
 void VectorOf${VECTOR_NAME}Push(std::vector< ${VECTOR_ELEMENT} >* v, ${VECTOR_ELEMENT}* value)
 {
    v->push_back(*value);
@@ -64,6 +65,12 @@ void VectorOf${VECTOR_NAME}CopyData(std::vector< ${VECTOR_ELEMENT} >* v, ${VECTO
 ${VECTOR_ELEMENT}* VectorOf${VECTOR_NAME}GetStartAddress(std::vector< ${VECTOR_ELEMENT} >* v)
 {
    return v->empty() ? NULL : &(*v)[0];
+}
+
+void* VectorOf${VECTOR_NAME}GetEndAddress(std::vector< ${VECTOR_ELEMENT} >* v)
+{
+   if (v->empty()) return NULL;
+   return (void*) &(*v)[v->size()];
 }
 
 void VectorOf${VECTOR_NAME}GetItemPtr(std::vector<  ${VECTOR_ELEMENT} >* vec, int index,  ${VECTOR_ELEMENT}** element)

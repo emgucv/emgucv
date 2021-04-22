@@ -13,7 +13,7 @@ namespace Emgu.CV.Util
     /// <summary>
     /// Wrapped class of the C++ standard vector of CvString.
     /// </summary>
-    public partial class VectorOfCvString : Emgu.Util.UnmanagedObject, IInputOutputArray
+    public partial class VectorOfCvString : Emgu.CV.Util.UnmanagedVector, IInputOutputArray
     {
 
         /// <summary>

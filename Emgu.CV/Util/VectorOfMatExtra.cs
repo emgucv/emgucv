@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Util
 {
-   public partial class VectorOfMat : Emgu.Util.UnmanagedObject, IInputArray, IOutputArray, IInputOutputArray
+   public partial class VectorOfMat : Emgu.CV.Util.UnmanagedVector, IInputArray, IOutputArray, IInputOutputArray
    {
       /// <summary>
       /// Convert a CvArray to Mat and push it into the vector

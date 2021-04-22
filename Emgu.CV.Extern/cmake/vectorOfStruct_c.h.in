@@ -43,6 +43,8 @@ CVAPI(void) VectorOf${VECTOR_NAME}CopyData(std::vector< ${VECTOR_ELEMENT} >* v, 
 
 CVAPI(${VECTOR_ELEMENT}*) VectorOf${VECTOR_NAME}GetStartAddress(std::vector< ${VECTOR_ELEMENT} >* v);
 
+CVAPI(void*) VectorOf${VECTOR_NAME}GetEndAddress(std::vector< ${VECTOR_ELEMENT} >* v);
+
 CVAPI(void) VectorOf${VECTOR_NAME}GetItem(std::vector<  ${VECTOR_ELEMENT} >* vec, int index,  ${VECTOR_ELEMENT}* element);
 
 CVAPI(void) VectorOf${VECTOR_NAME}GetItemPtr(std::vector<  ${VECTOR_ELEMENT} >* vec, int index,  ${VECTOR_ELEMENT}** element);
