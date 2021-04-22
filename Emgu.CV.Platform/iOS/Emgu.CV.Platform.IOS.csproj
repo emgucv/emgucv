@@ -71,7 +71,7 @@
   </ItemGroup>
   <PropertyGroup>
     <EmguCVLinkTarget>Xamarin iOS Native Binding Library</EmguCVLinkTarget>
-    <EmguCVNativeFile>$(OpenCVBinaryDir)\iOS\libcvextern.a</EmguCVNativeFile>
+    <EmguCVNativeFile>$(OpenCVBinaryDir)\iOS\libcvextern_iphoneos.a</EmguCVNativeFile>
     <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
     <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)ios </EmguCVDeployMessage>
   </PropertyGroup>
@@ -99,7 +99,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="$(MSBuildThisFileDirectory)..\..\libs\iOS\libcvextern.a">
+    <NativeReference Include="$(MSBuildThisFileDirectory)..\..\libs\iOS\libcvextern_iphoneos.a">
       <Kind>Static</Kind>
       <SmartLink>True</SmartLink>
       <ForceLoad>True</ForceLoad>

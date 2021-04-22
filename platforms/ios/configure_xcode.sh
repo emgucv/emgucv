@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -v
 set -e
 set -x
 CURRENT_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -24,6 +24,7 @@ fi
 
 INSTALL_PREFIX_OPTION=( -DCMAKE_INSTALL_PREFIX=$INSTALL_FOLDER )
 
+CMAKE_COMMON_OPTION=( -DIOS_ARCH="$3" -DCMAKE_XCODE_ATTRIBUTE_BITCODE_GENERATION_MODE:STRING="bitcode" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DIPHONEOS_DEPLOYMENT_TARGET:STRING=9.0 )
 
 pushd $CURRENT_SCRIPT_DIR/../../eigen
 mkdir -p build_$3
@@ -33,9 +34,7 @@ cmake \
     -GXcode \
     ${CV_TOOLCHAIN_OPTION[@]} \
     ${INSTALL_PREFIX_OPTION[@]} \
-    -DIOS_ARCH="$3"\
-    -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" \
-    -DIPHONEOS_DEPLOYMENT_TARGET:STRING=9.0 \
+    ${CMAKE_COMMON_OPTION[@]} \
     ${@:4} \
     ..
 cmake --build . --config Release --target install
@@ -48,9 +47,7 @@ cmake \
     -GXcode \
     ${CV_TOOLCHAIN_OPTION[@]} \
     ${INSTALL_PREFIX_OPTION[@]} \
-    -DIOS_ARCH="$3"\
-    -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" \
-    -DIPHONEOS_DEPLOYMENT_TARGET:STRING=9.0 \
+    ${CMAKE_COMMON_OPTION[@]} \
     -DCMAKE_DISABLE_FIND_PACKAGE_ZLIB:BOOL=TRUE \
     -DCMAKE_DISABLE_FIND_PACKAGE_BZip2:BOOL=TRUE \
     -DCMAKE_DISABLE_FIND_PACKAGE_PNG:BOOL=TRUE \
@@ -67,10 +64,8 @@ cmake \
     -GXcode \
     ${CV_TOOLCHAIN_OPTION[@]} \
     ${INSTALL_PREFIX_OPTION[@]} \
-    -DIOS_ARCH="$3"\
+    ${CMAKE_COMMON_OPTION[@]} \
     -DHB_HAVE_FREETYPE:BOOL=TRUE \
-    -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" \
-    -DIPHONEOS_DEPLOYMENT_TARGET:STRING=9.0 \
     ${@:4} \
     ..
 cmake --build . --config Release --target install
@@ -82,8 +77,7 @@ cmake \
 ${CV_TOOLCHAIN_OPTION[@]} \
 ${CV_CONTRIB_OPTION[@]} \
 ${INSTALL_PREFIX_OPTION[@]} \
--DIOS_ARCH="$3" \
--DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" \
+${CMAKE_COMMON_OPTION[@]} \
 -DWITH_EIGEN:BOOL=ON \
 -DEigen3_DIR:STRING="$EIGEN_DIR" \
 -DBUILD_SHARED_LIBS:BOOL=FALSE \
@@ -92,6 +86,5 @@ ${INSTALL_PREFIX_OPTION[@]} \
 -DBUILD_opencv_apps:BOOL=FALSE \
 -DBUILD_opencv_java_bindings_generator:BOOL=FALSE \
 -DBUILD_opencv_python_bindings_generator:BOOL=FALSE \
--DIPHONEOS_DEPLOYMENT_TARGET:STRING=9.0 \
 ${@:4} $CURRENT_SCRIPT_DIR/../.. 
 

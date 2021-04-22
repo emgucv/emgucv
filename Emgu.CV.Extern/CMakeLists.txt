@@ -3642,11 +3642,13 @@ IF (IOS)
   SET(IOS_RELEASE_FOLDER "")
   IF (IPHONESIMULATOR)
     SET(IOS_RELEASE_FOLDER "Release-iphonesimulator")
+    SET(IOS_RELEASE_FILENAME "libcvextern_simulator_${IOS_ARCH}.a")
   ELSEIF(IPHONEOS)
     SET(IOS_RELEASE_FOLDER "Release-iphoneos")
+    SET(IOS_RELEASE_FILENAME "libcvextern_iphoneos_${IOS_ARCH}.a")
   ENDIF()
   #MESSAGE(STATUS "<<<<<< IOS_RELEASE_FOLDER: ${IOS_RELEASE_FOLDER} >>>>>>") 
-  SET(LIBTOOL_LINKING_COMMAND libtool -static -o ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_${IOS_ARCH}.a bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/Release/*.a opencv/3rdparty/lib/Release/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/*.a)
+  SET(LIBTOOL_LINKING_COMMAND libtool -static -o ${CMAKE_SOURCE_DIR}/libs/iOS/${IOS_RELEASE_FILENAME} bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/Release/*.a opencv/3rdparty/lib/Release/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/*.a)
   IF (EMGU_CV_WITH_TESSERACT)
      LIST(APPEND LIBTOOL_LINKING_COMMAND libs/Release/*.a)
   ENDIF()
@@ -3658,13 +3660,37 @@ IF (IOS)
     COMMAND ${LIBTOOL_LINKING_COMMAND}
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
     COMMENT "Linking target for ${IOS_ARCH}")
-  add_custom_command(TARGET ${the_target}
-    POST_BUILD
-    COMMAND lipo -create -output ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern.a ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_*.a
-    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
-    COMMENT "Linking multiple arch into a single file")
+    
+  SET(IPHONEOS_STATIC_LIB_FILE ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_iphoneos.a)
+  SET(IPHONESIMULATOR_STATIC_LIB_FILE ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_simulator.a)
+  
+  IF (IPHONESIMULATOR)
+    IF (EXISTS ${IPHONEOS_STATIC_LIB_FILE})
+    ELSE()
+      FILE(WRITE ${IPHONEOS_STATIC_LIB_FILE} "")
+    ENDIF()
+    add_custom_command(TARGET ${the_target}
+      POST_BUILD
+      COMMAND lipo -create -output ${IPHONESIMULATOR_STATIC_LIB_FILE} ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_simulator_*.a
+      WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+      COMMENT "Linking multiple arch into a single file for iOS simulator") 
+  ELSEIF(IPHONEOS)
+    IF (EXISTS ${IPHONESIMULATOR_STATIC_LIB_FILE})
+    ELSE()
+      FILE(WRITE ${IPHONESIMULATOR_STATIC_LIB_FILE} "")
+    ENDIF()
+    add_custom_command(TARGET ${the_target}
+      POST_BUILD
+      COMMAND lipo -create -output ${IPHONEOS_STATIC_LIB_FILE} ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_iphoneos_*.a
+      WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+      COMMENT "Linking multiple arch into a single file for iOS device")
+  ENDIF()
   INSTALL(FILES
-    "${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern.a"
+    "${IPHONEOS_STATIC_LIB_FILE}"
+    DESTINATION "libs/iOS/"
+    COMPONENT emgucv_binary)
+  INSTALL(FILES
+    "${IPHONESIMULATOR_STATIC_LIB_FILE}"
     DESTINATION "libs/iOS/"
     COMPONENT emgucv_binary)
 ELSEIF (ANDROID)
