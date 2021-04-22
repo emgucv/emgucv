@@ -27,12 +27,6 @@ namespace Emgu.CV.XamarinForms
             Button planarSubdivisionButton = new Button();
             planarSubdivisionButton.Text = "Planar Subdivision";
 
-            Button faceDetectionButton = new Button();
-            faceDetectionButton.Text = "Face Detection (CascadeClassifier)";
-
-            Button faceLandmarkDetectionButton = new Button();
-            faceLandmarkDetectionButton.Text = "Face Landmark Detection (DNN Module)";
-
             Button sceneTextDetectionButton = new Button();
             sceneTextDetectionButton.Text = "Scene Text detection (DNN Module)";
 
@@ -45,8 +39,7 @@ namespace Emgu.CV.XamarinForms
             Button pedestrianDetectionButton = new Button();
             pedestrianDetectionButton.Text = "Pedestrian Detection";
 
-            Button ocrButton = new Button();
-            ocrButton.Text = "OCR";
+            
 
             Button maskRcnnButton = new Button();
             maskRcnnButton.Text = "Mask RCNN (DNN module)";
@@ -64,13 +57,10 @@ namespace Emgu.CV.XamarinForms
             {
                 helloWorldButton,
                 planarSubdivisionButton,
-                faceDetectionButton,
-                faceLandmarkDetectionButton,
                 sceneTextDetectionButton,
                 featureDetectionButton,
                 shapeDetectionButton,
                 pedestrianDetectionButton,
-                ocrButton,
                 maskRcnnButton,
                 stopSignDetectionButton,
                 yoloButton,
@@ -81,6 +71,61 @@ namespace Emgu.CV.XamarinForms
             bool haveViz = (openCVConfigDict["HAVE_OPENCV_VIZ"] != 0);
             bool haveDNN = (openCVConfigDict["HAVE_OPENCV_DNN"] != 0);
             bool haveFreetype = (openCVConfigDict["HAVE_OPENCV_FREETYPE"] != 0);
+            bool haveFace = (openCVConfigDict["HAVE_OPENCV_FACE"] != 0);
+            bool haveObjdetect = (openCVConfigDict["HAVE_OPENCV_OBJDETECT"] != 0);
+            bool haveTesseract = (openCVConfigDict["HAVE_EMGUCV_TESSERACT"] != 0);
+
+            if (haveTesseract)
+            {
+                Button ocrButton = new Button();
+                ocrButton.Text = "Tesseract OCR";
+                buttonList.Add(ocrButton);
+
+                ocrButton.Clicked += (sender, args) =>
+                {
+                    ProcessAndRenderPage ocrPage = new ProcessAndRenderPage(
+                        new TesseractModel(),
+                        "Perform Text Detection",
+                        "test_image.png",
+                        "");
+                    ocrPage.HasCameraOption = false;
+                    MainPage.Navigation.PushAsync(ocrPage);
+                };
+            }
+
+            if (haveObjdetect)
+            {
+                Button faceDetectionButton = new Button();
+                faceDetectionButton.Text = "Face Detection (CascadeClassifier)";
+                buttonList.Add(faceDetectionButton);
+
+                faceDetectionButton.Clicked += (sender, args) =>
+                {
+                    ProcessAndRenderPage faceAndEyeDetectorPage = new ProcessAndRenderPage(
+                        new CascadeFaceAndEyeDetector(),
+                        "Face and eye detection (Cascade classifier)",
+                        "lena.jpg",
+                        "Cascade classifier");
+                    MainPage.Navigation.PushAsync(faceAndEyeDetectorPage);
+                };
+                
+            }
+
+            if (haveFace && haveDNN)
+            {
+                Button faceLandmarkDetectionButton = new Button();
+                faceLandmarkDetectionButton.Text = "Face Landmark Detection (DNN Module)";
+                buttonList.Add(faceLandmarkDetectionButton);
+                faceLandmarkDetectionButton.Clicked += (sender, args) =>
+                {
+                    ProcessAndRenderPage faceLandmarkDetectionPage = new ProcessAndRenderPage(
+                        new FaceAndLandmarkDetector(),
+                        "Perform Face Landmark Detection",
+                        "lena.jpg",
+                        "");
+                    MainPage.Navigation.PushAsync(faceLandmarkDetectionPage);
+                };
+            }
 
             bool hasInferenceEngine = false;
             if (haveDNN)
@@ -180,15 +225,7 @@ namespace Emgu.CV.XamarinForms
                 MainPage.Navigation.PushAsync(new PlanarSubdivisionPage());
             };
 
-            faceDetectionButton.Clicked += (sender, args) =>
-            {
-                ProcessAndRenderPage faceAndEyeDetectorPage = new ProcessAndRenderPage(
-                    new CascadeFaceAndEyeDetector(),
-                    "Face and eye detection (Cascade classifier)",
-                    "lena.jpg",
-                    "Cascade classifier");
-                MainPage.Navigation.PushAsync(faceAndEyeDetectorPage);
-            };
+            
 
             shapeDetectionButton.Clicked += (sender, args) =>
             {
@@ -252,15 +289,7 @@ namespace Emgu.CV.XamarinForms
                 MainPage.Navigation.PushAsync(maskRcnnPage);
             };
 
-            faceLandmarkDetectionButton.Clicked += (sender, args) =>
-            {
-                ProcessAndRenderPage faceLandmarkDetectionPage = new ProcessAndRenderPage(
-                    new FaceAndLandmarkDetector(),
-                    "Perform Face Landmark Detection",
-                    "lena.jpg",
-                    "");
-                MainPage.Navigation.PushAsync(faceLandmarkDetectionPage);
-            };
+
             sceneTextDetectionButton.Clicked += (sender, args) =>
             {
                 ProcessAndRenderPage sceneTextDetectionPage = new ProcessAndRenderPage(
@@ -305,19 +334,10 @@ namespace Emgu.CV.XamarinForms
                 MainPage.Navigation.PushAsync(yoloPage);
             };
 
-            ocrButton.Clicked += (sender, args) =>
-            {
-                ProcessAndRenderPage ocrPage = new ProcessAndRenderPage(
-                    new TesseractModel(),
-                    "Perform Text Detection",
-                    "test_image.png",
-                    "");
-                ocrPage.HasCameraOption = false;
-                MainPage.Navigation.PushAsync(ocrPage);
-            };
+
 
             maskRcnnButton.IsVisible = haveDNN;
-            faceLandmarkDetectionButton.IsVisible = haveDNN;
+            //faceLandmarkDetectionButton.IsVisible = haveDNN;
             stopSignDetectionButton.IsVisible = haveDNN;
             yoloButton.IsVisible = haveDNN;
             sceneTextDetectionButton.IsVisible = haveDNN && haveFreetype;
