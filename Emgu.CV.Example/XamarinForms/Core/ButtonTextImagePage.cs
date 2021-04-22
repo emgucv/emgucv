@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -70,7 +71,7 @@ namespace Emgu.CV.XamarinForms
             _mainLayout.Children.Add(MessageLabel);
             _mainLayout.Children.Add(DisplayImage);
             _mainLayout.Children.Add(MessageLabel);
-            _mainLayout.Padding = new Thickness( 10, 10, 10, 10);
+            _mainLayout.Padding = new Thickness(10, 10, 10, 10);
 
             //MessageLabel.BackgroundColor = Color.AliceBlue;
             //DisplayImage.BackgroundColor = Color.Aqua;
@@ -95,7 +96,7 @@ namespace Emgu.CV.XamarinForms
                     pickImgString = labels[i];
 
                 bool captureSupported;
-                
+
                 if (Device.RuntimePlatform == Device.WPF
                     || Device.RuntimePlatform == Device.macOS)
                 {
@@ -148,7 +149,7 @@ namespace Emgu.CV.XamarinForms
                     )
                         return null;
                 }
-                
+
                 if (action.Equals("Default"))
                 {
 #if __ANDROID__
@@ -185,7 +186,7 @@ namespace Emgu.CV.XamarinForms
                 else if (action.Equals("Photo from Camera"))
                 {
                     var takePhotoResult = await Xamarin.Essentials.MediaPicker.CapturePhotoAsync();
-                    
+
                     if (takePhotoResult == null) //canceled
                         return null;
                     using (Stream stream = await takePhotoResult.OpenReadAsync())
@@ -212,6 +213,9 @@ namespace Emgu.CV.XamarinForms
             }
         }
 
+        private VectorOfByte _imageStream = new VectorOfByte();
+        private static Mutex _imageStreamMutex = new Mutex();
+
         public virtual void SetImage(IInputArray image)
         {
             if (image == null)
@@ -224,7 +228,7 @@ namespace Emgu.CV.XamarinForms
                     });
                 return;
             }
-            
+
             int width = 0;
             int height = 0;
             using (InputArray iaImage = image.GetInputArray())
@@ -234,30 +238,33 @@ namespace Emgu.CV.XamarinForms
                 height = s.Height;
             }
 
-            using (VectorOfByte vb = new VectorOfByte())
-            {
-                //Use 0-level compression PNG format to reduce cpu load.
-                CvInvoke.Imencode(
-                    ".png", 
-                    image, 
-                    vb, 
-                    new KeyValuePair<ImwriteFlags, int>(ImwriteFlags.PngCompression, 0));
-                byte[] rawData = vb.ToArray();
-                //_imageData = vb.ToArray();
-                //_imageStream = new MemoryStream(_imageData);
-                Xamarin.Forms.Device.BeginInvokeOnMainThread(
-                    () =>
+            _imageStreamMutex.WaitOne();
+            CvInvoke.Imencode(
+                ".png",
+                image,
+                _imageStream,
+                new KeyValuePair<ImwriteFlags, int>(ImwriteFlags.PngCompression, 0));
+            _imageStreamMutex.ReleaseMutex();
+
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(
+                () =>
+                {
+                    this.DisplayImage.IsVisible = true;
+                    this.DisplayImage.Source = ImageSource.FromStream(() =>
                     {
-                        this.DisplayImage.IsVisible = true;
-                        this.DisplayImage.Source = ImageSource.FromStream(() => new MemoryStream(rawData));
-                        
-                        this.DisplayImage.WidthRequest = Math.Min(this.Width, width);
-                        this.DisplayImage.HeightRequest = height;
-                        //this.MainLayout.ForceLayout();
-                        //this.ForceLayout();
-                        //var bounds = this.DisplayImage.Bounds;
+                        MemoryStream ms = new MemoryStream();
+                        _imageStreamMutex.WaitOne();
+                        _imageStream.Position = 0;
+                        _imageStream.CopyTo(ms);
+                        _imageStreamMutex.ReleaseMutex();
+                        return ms;
                     });
-            }
+
+                    this.DisplayImage.WidthRequest = Math.Min(this.Width, width);
+                    this.DisplayImage.HeightRequest = height;
+
+                });
+            //}
         }
 
         public Label GetLabel()
