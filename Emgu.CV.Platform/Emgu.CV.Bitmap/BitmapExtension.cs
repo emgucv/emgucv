@@ -258,6 +258,7 @@ namespace Emgu.CV
         /// Convert the umat into Bitmap, the pixel values are copied over to the Bitmap
         /// </summary>
         /// <param name="umat">The UMat to be converted to Bitmap</param>
+        /// <returns>A bitmap representation of the image.</returns>
         public static Bitmap ToBitmap(this UMat umat)
         {
             using (Mat tmp = umat.GetMat(CvEnum.AccessType.Read))
