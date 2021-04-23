@@ -87,7 +87,21 @@ namespace Emgu.CV
             return new NSImage(cgImage, new CGSize(cgImage.Width, cgImage.Height));
             }
       }
-   }
+
+        /// <summary>
+        /// Converts to NSImage.
+        /// </summary>
+        /// <returns>The NSImage.</returns>
+        public static NSImage ToNSImage(this IInputArray inputArray)
+        {
+            using (InputArray array = inputArray.GetInputArray())
+            using (Mat m = array.GetMat())
+            {
+                return m.ToNSImage();
+            }
+        }
+
+    }
 }
 
 #endif

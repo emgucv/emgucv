@@ -239,8 +239,25 @@ namespace Emgu.CV.XamarinForms
                UIImageView.Hidden = false;
                DisplayImage.IsVisible = false;
             });
+#elif __MACOS__
+            NSImage uiimage;
+            if (image == null)
+                uiimage = null;
+            else
+                uiimage = image.ToNSImage();
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(
+               () => {
+                   NSImage oldImage = NSImageView.Image;
+                   NSImageView.Image = uiimage;
+                   if (oldImage != null)
+                       oldImage.Dispose();
+                   if ((uiimage != null) && (NSImageView.Frame.Size != uiimage.Size))
+                       NSImageView.Frame = new CGRect(CGPoint.Empty, uiimage.Size);
+                   NSImageView.Hidden = false;
+                   DisplayImage.IsVisible = false;
+               });
 #else
-         if (image == null)
+            if (image == null)
             {
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(
                     () =>
@@ -288,7 +305,7 @@ namespace Emgu.CV.XamarinForms
                 });
             //}
 #endif
-      }
+        }
 
       public Label GetLabel ()
       {

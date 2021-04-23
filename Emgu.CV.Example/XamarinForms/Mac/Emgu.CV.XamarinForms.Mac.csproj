@@ -195,6 +195,10 @@
       <Project>{A593599A-8B00-45F6-B161-5AB794DED450}</Project>
       <Name>Emgu.CV.Models.NetStandard</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Emgu.CV.Platform\Mac\Emgu.CV.Platform.Mac.csproj">
+      <Project>{0B5E34B6-C01B-42A1-96D2-2FA34E626A2D}</Project>
+      <Name>Emgu.CV.Platform.Mac</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems" Label="Shared" Condition="Exists('..\..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems')" />
   <Import Project="..\Core\Emgu.CV.XamarinForms.projitems" Label="Shared" Condition="Exists('..\Core\Emgu.CV.XamarinForms.projitems')" />
