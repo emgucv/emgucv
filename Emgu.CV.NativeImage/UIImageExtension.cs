@@ -92,12 +92,25 @@ namespace Emgu.CV
         /// <summary>
         /// Converts to UIImage.
         /// </summary>
-        /// <returns>The UIImage.</returns>
+        /// <returns>The UIImage</returns>
         public static UIImage ToUIImage(this Mat mat)
         {
             using (CGImage tmp = mat.ToCGImage())
             {
                 return UIImage.FromImage(tmp);
+            }
+        }
+
+      /// <summary>
+      /// Converts to UIImage.
+      /// </summary>
+      /// <returns>The UIImage</returns>
+      public static UIImage ToUIImage(this IInputArray inputArray)
+        {
+            using(InputArray ia = inputArray.GetInputArray())
+            using(Mat mat = ia.GetMat())
+            {
+            return mat.ToUIImage ();
             }
         }
 
