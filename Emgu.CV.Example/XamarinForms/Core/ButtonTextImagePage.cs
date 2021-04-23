@@ -139,13 +139,14 @@ namespace Emgu.CV.XamarinForms
             if (captureSupported)
                options.Add ("Photo from Camera");
 
-            if (this.HasCameraOption) {
-               if (Device.RuntimePlatform == Device.Android
-                   || Device.RuntimePlatform == Device.iOS
-                   || Device.RuntimePlatform == Device.UWP) {
-                  if (captureSupported)
-                     options.Add ("Camera");
-               } else if (Device.RuntimePlatform == Device.WPF) {
+                if (this.HasCameraOption) {
+                    if (Device.RuntimePlatform == Device.Android
+                        || Device.RuntimePlatform == Device.iOS
+                        || Device.RuntimePlatform == Device.UWP) {
+                        if (captureSupported)
+                            options.Add("Camera");
+                    } else if (Device.RuntimePlatform == Device.WPF
+                            || Device.RuntimePlatform == Device.macOS) {
                   var openCVConfigDict = CvInvoke.ConfigDict;
                   bool haveVideoio = (openCVConfigDict ["HAVE_OPENCV_VIDEOIO"] != 0);
                   if (haveVideoio)
@@ -240,19 +241,21 @@ namespace Emgu.CV.XamarinForms
                DisplayImage.IsVisible = false;
             });
 #elif __MACOS__
-            NSImage uiimage;
+            
+            NSImage nsimage;
             if (image == null)
-                uiimage = null;
+                nsimage = null;
             else
-                uiimage = image.ToNSImage();
+                nsimage = image.ToNSImage();
             Xamarin.Forms.Device.BeginInvokeOnMainThread(
                () => {
+
                    NSImage oldImage = NSImageView.Image;
-                   NSImageView.Image = uiimage;
+                   NSImageView.Image = nsimage;
                    if (oldImage != null)
                        oldImage.Dispose();
-                   if ((uiimage != null) && (NSImageView.Frame.Size != uiimage.Size))
-                       NSImageView.Frame = new CGRect(CGPoint.Empty, uiimage.Size);
+                   if ((nsimage != null) && (NSImageView.Frame.Size != nsimage.Size))
+                       NSImageView.Frame = new CGRect(CGPoint.Empty, nsimage.Size);
                    NSImageView.Hidden = false;
                    DisplayImage.IsVisible = false;
                });

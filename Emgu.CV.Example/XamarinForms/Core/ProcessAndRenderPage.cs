@@ -60,6 +60,44 @@ namespace Emgu.CV.XamarinForms
 #if __ANDROID__ && __USE_ANDROID_CAMERA2__
         private bool _isBusy = false;
 #endif
+
+        public bool InitVideoCapture()
+        {
+            var openCVConfigDict = CvInvoke.ConfigDict;
+            bool haveVideoio = (openCVConfigDict["HAVE_OPENCV_VIDEOIO"] != 0);
+            if (haveVideoio && (
+                Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Android
+                || Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS))
+            {
+#if __ANDROID__ && __USE_ANDROID_CAMERA2__
+                return true;
+#else
+                if (CvInvoke.Backends.Length > 0)
+                {
+                    if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Android)
+                    {
+                        _capture = new VideoCapture(0, VideoCapture.API.Android);
+                    }
+                    else
+                    {
+                        _capture = new VideoCapture();
+                    }
+                    if (_capture.IsOpened)
+                    {
+                        _capture.ImageGrabbed += _capture_ImageGrabbed;
+                        return true;
+                    }
+                    else
+                    {
+                        _capture.Dispose();
+                        _capture = null;
+                    }
+                }
+#endif
+            }
+            return false;
+        }
+
         public ProcessAndRenderPage( 
             IProcessAndRenderModel model, 
             String defaultButtonText,
@@ -68,19 +106,19 @@ namespace Emgu.CV.XamarinForms
             )
             : base()
         {
+            /*
             var openCVConfigDict = CvInvoke.ConfigDict;
             bool haveVideoio = (openCVConfigDict["HAVE_OPENCV_VIDEOIO"] != 0);
-            if (haveVideoio && (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Android))
+            if (haveVideoio && (
+                Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Android
+                || Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS))
             {
+#if __ANDROID__ && __USE_ANDROID_CAMERA2__
                 HasCameraOption = true;
-            }
-            
-            /*
-            if (haveVideoio)
-            {
+#else
                 if (CvInvoke.Backends.Length > 0)
                 {
-                    _capture = new VideoCapture(0, VideoCapture.API.Android);
+                    _capture = new VideoCapture(0);
                     if (_capture.IsOpened)
                     {
                         _capture.ImageGrabbed += _capture_ImageGrabbed;
@@ -93,7 +131,9 @@ namespace Emgu.CV.XamarinForms
                         HasCameraOption = false;
                     }
                 }
+#endif
             }*/
+            HasCameraOption = InitVideoCapture();
 
             _deaultImage = defaultImage;
             _defaultButtonText = defaultButtonText;
@@ -127,8 +167,9 @@ namespace Emgu.CV.XamarinForms
             String msg = _model.ProcessAndRender(_mat, _renderMat);
             
             SetImage(_renderMat);
-            this.DisplayImage.BackgroundColor = Color.Black;
-            this.DisplayImage.IsEnabled = true;
+
+            //this.DisplayImage.BackgroundColor = Color.Black;
+            //this.DisplayImage.IsEnabled = true;
             SetMessage(msg);
         }
 
@@ -205,19 +246,11 @@ namespace Emgu.CV.XamarinForms
                 //Handle video
                 if (_capture == null)
                 {
-                    if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Android)
-                    {
-                        _capture = new VideoCapture(0, VideoCapture.API.Android);
-                    }
-                    else
-                    {
-                        _capture = new VideoCapture();
-                    }
-
-                    _capture.ImageGrabbed += _capture_ImageGrabbed;
+                    InitVideoCapture();
                 }
 
-                _capture.Start();
+                if (_capture != null)
+                    _capture.Start();
                 button.Text = _StopCameraButtonText;
 #endif
             }

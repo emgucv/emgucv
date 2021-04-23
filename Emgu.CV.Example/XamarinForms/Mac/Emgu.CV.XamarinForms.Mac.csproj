@@ -2,7 +2,7 @@
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
     <ProjectGuid>{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}</ProjectGuid>
     <ProjectTypeGuids>{A3F8F2AB-B479-4A4A-A458-A89E7DC349F1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Exe</OutputType>
@@ -60,19 +60,7 @@
     <AOTMode>None</AOTMode>
     <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <UseSGen>false</UseSGen>
-    <EnableCodeSigning>false</EnableCodeSigning>
-    <LinkMode>None</LinkMode>
-    <AOTMode>None</AOTMode>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ARM' ">
-    <UseSGen>false</UseSGen>
-    <EnableCodeSigning>false</EnableCodeSigning>
-    <LinkMode>None</LinkMode>
-    <AOTMode>None</AOTMode>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <UseSGen>false</UseSGen>
     <EnableCodeSigning>false</EnableCodeSigning>
     <LinkMode>None</LinkMode>
@@ -100,14 +88,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\..\opencv\data\haarcascades\haarcascade_eye.xml">
-      <Link>haarcascade_eye.xml</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\..\opencv\data\haarcascades\haarcascade_frontalface_default.xml">
-      <Link>haarcascade_frontalface_default.xml</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\Core\lena.jpg">
       <Link>lena.jpg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
