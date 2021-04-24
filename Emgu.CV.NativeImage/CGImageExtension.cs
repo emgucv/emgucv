@@ -94,7 +94,7 @@ namespace Emgu.CV
             }
         }
 
-        internal static void ToArray(this CGImage cgImage, IOutputArray mat, ImreadModes modes = ImreadModes.AnyColor)
+        public static void ToArray(this CGImage cgImage, IOutputArray mat, ImreadModes modes = ImreadModes.AnyColor)
         {
             Size sz = new Size((int)cgImage.Width, (int)cgImage.Height);
             using (Mat m = new Mat(sz, DepthType.Cv8U, 4))

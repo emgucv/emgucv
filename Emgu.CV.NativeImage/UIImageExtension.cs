@@ -89,11 +89,24 @@ namespace Emgu.CV
             }
         }
 
-        /// <summary>
-        /// Converts to UIImage.
-        /// </summary>
-        /// <returns>The UIImage</returns>
-        public static UIImage ToUIImage(this Mat mat)
+      /// <summary>
+      /// Initializes a new instance of the <see cref="Emgu.CV.Mat"/> class from UIImage
+      /// </summary>
+      /// <param name="mode">The color conversion mode. By default, it convert the UIImage to BGRA color type to preserve all the image channels.</param>
+      /// <param name="uiImage">The UIImage.</param>
+      /// <param name="outputArray">The output array</param>
+      public static void ToArray (this UIImage uiImage, IOutputArray outputArray, ImreadModes mode = ImreadModes.AnyColor)
+      {
+         using (CGImage cgImage = uiImage.CGImage) {
+            cgImage.ToArray (outputArray, mode);
+         }
+      }
+
+      /// <summary>
+      /// Converts to UIImage.
+      /// </summary>
+      /// <returns>The UIImage</returns>
+      public static UIImage ToUIImage(this Mat mat)
         {
             using (CGImage tmp = mat.ToCGImage())
             {

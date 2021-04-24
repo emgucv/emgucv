@@ -27,6 +27,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)ProcessAndRenderPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ShapeDetector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Simple3DReconstruct.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)iOS\CMSampleBufferExtensions.macos.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)iOS\AvCaptureSessionPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)iOS\CMSampleBufferExtensions.ios.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)iOS\OutputRecorder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="$(MSBuildThisFileDirectory)GettingStarted.Xamarin" />

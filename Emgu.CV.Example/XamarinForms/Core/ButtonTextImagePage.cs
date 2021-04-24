@@ -25,7 +25,12 @@ using Xamarin.Forms.Platform.iOS;
 
 namespace Emgu.CV.XamarinForms
 {
-   public class ButtonTextImagePage : Xamarin.Forms.ContentPage
+   public class ButtonTextImagePage
+#if __IOS__
+        : Emgu.Util.AvCaptureSessionPage
+#else
+        : ContentPage
+#endif
    {
       private Picker _picker = new Picker ();
 

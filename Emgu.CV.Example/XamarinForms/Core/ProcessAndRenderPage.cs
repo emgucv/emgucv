@@ -25,6 +25,12 @@ using Android.Graphics;
 using Android.Preferences;
 #endif
 
+#if __IOS__
+using UIKit;
+using CoreGraphics;
+using Xamarin.Forms.Platform.iOS;
+#endif
+
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Dnn;
@@ -41,7 +47,7 @@ using Point = System.Drawing.Point;
 namespace Emgu.CV.XamarinForms
 {
 
-    public class ProcessAndRenderPage
+   public class ProcessAndRenderPage
 #if __ANDROID__ && __USE_ANDROID_CAMERA2__
         : AndroidCameraPage
 #else
@@ -106,35 +112,13 @@ namespace Emgu.CV.XamarinForms
             )
             : base()
         {
-            /*
-            var openCVConfigDict = CvInvoke.ConfigDict;
-            bool haveVideoio = (openCVConfigDict["HAVE_OPENCV_VIDEOIO"] != 0);
-            if (haveVideoio && (
-                Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Android
-                || Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS))
-            {
-#if __ANDROID__ && __USE_ANDROID_CAMERA2__
-                HasCameraOption = true;
+#if __IOS__
+         AllowAvCaptureSession = true;
+         HasCameraOption = true;
+         outputRecorder.BufferReceived += OutputRecorder_BufferReceived;
 #else
-                if (CvInvoke.Backends.Length > 0)
-                {
-                    _capture = new VideoCapture(0);
-                    if (_capture.IsOpened)
-                    {
-                        _capture.ImageGrabbed += _capture_ImageGrabbed;
-                        HasCameraOption = true;
-                    }
-                    else
-                    {
-                        _capture.Dispose();
-                        _capture = null;
-                        HasCameraOption = false;
-                    }
-                }
+         HasCameraOption = InitVideoCapture();
 #endif
-            }*/
-            HasCameraOption = InitVideoCapture();
-
             _deaultImage = defaultImage;
             _defaultButtonText = defaultButtonText;
 
@@ -150,7 +134,59 @@ namespace Emgu.CV.XamarinForms
             Picker.SelectedIndexChanged += Picker_SelectedIndexChanged;
         }
 
-        private void Picker_SelectedIndexChanged(object sender, EventArgs e)
+#if __IOS__
+     
+      //private int _counter = 0;
+      private void OutputRecorder_BufferReceived (object sender, OutputRecorder.BufferReceivedEventArgs e)
+      {
+         if (_mat == null)
+            _mat = new Mat ();
+         try {
+            //_counter++;
+
+            var sampleBuffer = e.Buffer;
+            using (CoreVideo.CVPixelBuffer pixelBuffer = sampleBuffer.GetImageBuffer () as CoreVideo.CVPixelBuffer) {
+               // Lock the base address
+               pixelBuffer.Lock (CoreVideo.CVPixelBufferLock.ReadOnly);
+               using (CoreImage.CIImage ciImage = new CoreImage.CIImage (pixelBuffer))
+               using (UIImage uiImage = new UIImage(ciImage))
+               using (UIImage uiImage2 = uiImage.Scale (uiImage.Size)) //Scaling make a copy of the above UIImage (back by ci image) into a new UIImage (back by cg image)
+               using (CGImage cgimage = uiImage2.CGImage)
+               {
+                  cgimage.ToArray (_mat, ImreadModes.Color);
+
+
+               }
+               pixelBuffer.Unlock (CoreVideo.CVPixelBufferLock.ReadOnly);
+            }
+            /*
+            using (UIImage image = e.Buffer.ToUIImage ())
+            using (CGImage cgimage = image.CGImage)
+               {
+               if (cgimage == null) {
+                  SetMessage ("Empty image received");
+                  return;
+               }
+               cgimage.ToArray (_mat, ImreadModes.Color);
+            }*/
+            
+
+         } catch (Exception ex) {
+            Console.WriteLine (e);
+            SetMessage (ex.Message);
+         }
+
+         if (_renderMat == null)
+            _renderMat = new Mat ();
+
+         String msg = _model.ProcessAndRender (_mat, _renderMat);
+
+         SetImage (_renderMat);
+         SetMessage (msg);
+      }
+#endif
+
+      private void Picker_SelectedIndexChanged(object sender, EventArgs e)
         {
             _model.Clear();
         }
@@ -167,9 +203,6 @@ namespace Emgu.CV.XamarinForms
             String msg = _model.ProcessAndRender(_mat, _renderMat);
             
             SetImage(_renderMat);
-
-            //this.DisplayImage.BackgroundColor = Color.Black;
-            //this.DisplayImage.IsEnabled = true;
             SetMessage(msg);
         }
 
@@ -182,12 +215,14 @@ namespace Emgu.CV.XamarinForms
 #if __ANDROID__ && __USE_ANDROID_CAMERA2__
                 StopCapture();
                 AndroidImageView.Visibility = ViewStates.Invisible;
+#elif __IOS__
+            this.StopCaptureSession ();
 #else
                 _capture.Stop();
                 _capture.Dispose();
                 _capture = null;
 #endif
-                button.Text = _defaultButtonText;
+            button.Text = _defaultButtonText;
                 Picker.IsEnabled = true;
                 return;
             }
@@ -215,7 +250,7 @@ namespace Emgu.CV.XamarinForms
             if (images.Length == 0)
             {
 #if __ANDROID__ && __USE_ANDROID_CAMERA2__
-                button.Text = _StopCameraButtonText;
+               
                 StartCapture(async delegate (Object captureSender, Mat m)
                 {
                     //Skip the frame if busy, 
@@ -242,19 +277,21 @@ namespace Emgu.CV.XamarinForms
                         }
                     }
                 });
+#elif __IOS__
+            CheckVideoPermissionAndStart ();
 #else
-                //Handle video
-                if (_capture == null)
+            //Handle video
+            if (_capture == null)
                 {
                     InitVideoCapture();
                 }
 
                 if (_capture != null)
                     _capture.Start();
-                button.Text = _StopCameraButtonText;
+
 #endif
-            }
-            else
+            button.Text = _StopCameraButtonText;
+         } else
             {
                 if (_renderMat == null)
                     _renderMat = new Mat();
