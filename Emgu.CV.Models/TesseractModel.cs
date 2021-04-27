@@ -32,10 +32,11 @@ namespace Emgu.CV.Models
         private OcrEngineMode _mode;
 
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-        private IEnumerator InitTesseract(String lang, OcrEngineMode mode, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private IEnumerator
 #else
-        private async Task InitTesseract(String lang, OcrEngineMode mode, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private async Task 
 #endif
+            InitTesseract(String lang, OcrEngineMode mode, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
             if (_ocr == null)
             {
@@ -104,6 +105,12 @@ namespace Emgu.CV.Models
                 }
             }
 
+            Tesseract.Character[] characters = _ocr.GetCharacters();
+            foreach (Tesseract.Character c in characters)
+            {
+                CvInvoke.Rectangle(imageOut, c.Region, new MCvScalar(255, 0, 0));
+            }
+
             return String.Format(
                 "tesseract version {2}; lang: {0}; mode: {1}{3}Text Detected:{3}{4}",
                 _lang,
@@ -120,16 +127,18 @@ namespace Emgu.CV.Models
         /// <param name="initOptions">Initialization options. None supported at the moment, any value passed will be ignored.</param>
         /// <returns>Asyn task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-        public IEnumerator Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
+        public IEnumerator
 #else
-        public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
+        public async Task 
 #endif
+            Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
         {
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
-            yield return InitTesseract("eng", OcrEngineMode.TesseractOnly, onDownloadProgressChanged);
+            yield return
 #else
-            await InitTesseract("eng", OcrEngineMode.TesseractOnly, onDownloadProgressChanged);
+            await 
 #endif
+                InitTesseract("eng", OcrEngineMode.TesseractOnly, onDownloadProgressChanged);
         }
 
     }

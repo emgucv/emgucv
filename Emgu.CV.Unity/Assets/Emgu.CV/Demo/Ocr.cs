@@ -16,87 +16,65 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Runtime.InteropServices;
-
+using Emgu.CV.Models;
 using Emgu.CV.OCR;
 
 public class Ocr : MonoBehaviour
 {
-    private Tesseract _ocr;
-
-    private static IEnumerator TesseractDownloadLangFile(String folder, String lang)
-    {
-        String subfolderName = "tessdata";
-        String folderName = System.IO.Path.Combine(folder, subfolderName);
-        if (!System.IO.Directory.Exists(folderName))
-        {
-            System.IO.Directory.CreateDirectory(folderName);
-        }
-        String dest = System.IO.Path.Combine(folderName, String.Format("{0}.traineddata", lang));
-
-
-        if (!System.IO.File.Exists(dest) || !(new FileInfo(dest).Length > 0))
-        {
-            String source = Tesseract.GetLangFileUrl(lang);
-            using (UnityEngine.Networking.UnityWebRequest webclient = new UnityEngine.Networking.UnityWebRequest(source))
-            {
-                Debug.Log(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
-
-                webclient.downloadHandler = new UnityEngine.Networking.DownloadHandlerFile(dest);
-                yield return webclient.SendWebRequest();
-                if (webclient.isNetworkError || webclient.isHttpError)
-                {
-                    Debug.LogError(webclient.error);
-                }
-
-                if (!System.IO.File.Exists(dest) || !(new FileInfo(dest).Length > 0))
-                {
-                    Debug.LogError(String.Format("File {0} is empty, failed to download file.", dest));
-                }
-
-                Debug.Log("File successfully downloaded and saved to " + dest);
-                //Debug.Log(String.Format("Download completed"));
-            }
-        }
-    }
-//#endif
+    private TesseractModel _ocrModel;
 
     // Use this for initialization
     void Start()
     {
+        _ocrModel = new TesseractModel();
         StartCoroutine(workflow());
     }
 
     private IEnumerator workflow()
     {
-        yield return TesseractDownloadLangFile(Application.persistentDataPath, "eng");
-        yield return TesseractDownloadLangFile(Application.persistentDataPath, "osd"); //script orientation detection
+        yield return _ocrModel.Init(DownloadManager_OnDownloadProgressChanged, null);
+        Debug.Log("OCR engine loaded.");
         yield return performOCR();
     }
 
+    private static String ByteToSizeStr(long byteCount)
+    {
+        if (byteCount < 1024)
+        {
+            return String.Format("{0} B", byteCount);
+        }
+        else if (byteCount < 1024 * 1024)
+        {
+            return String.Format("{0} KB", byteCount / 1024);
+        }
+        else
+        {
+            return String.Format("{0} MB", byteCount / (1024 * 1024));
+        }
+    }
+
+    protected void DownloadManager_OnDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
+    {
+        String msg;
+        if (e.TotalBytesToReceive > 0)
+            msg = String.Format("{0} of {1} downloaded ({2}%)", ByteToSizeStr(e.BytesReceived), ByteToSizeStr(e.TotalBytesToReceive), e.ProgressPercentage);
+        else
+            msg = String.Format("{0} downloaded", ByteToSizeStr(e.BytesReceived));
+        updateTextureWithString(msg);
+    }
     private IEnumerator performOCR()
     {
-        _ocr = new Tesseract(Path.Combine(Application.persistentDataPath, "tessdata"), "eng", OcrEngineMode.TesseractOnly);
-
-        Debug.Log("OCR engine loaded.");
-
-        Image<Bgr, Byte> img = new Image<Bgr, byte>(480, 200);
-
+        Mat img = new Mat(new Size(480, 200), DepthType.Cv8U, 3);
+        img.SetTo(new MCvScalar());
         String message = "Hello, World";
-        CvInvoke.PutText(img, message, new Point(50, 100), Emgu.CV.CvEnum.FontFace.HersheySimplex, 1.0, new MCvScalar(255, 255, 255));
+        CvInvoke.PutText(img, message, new Point(50, 100), Emgu.CV.CvEnum.FontFace.HersheyPlain, 2.0, new MCvScalar(255, 255, 255), 2);
+        Mat imgOut = new Mat();
+        String outMessage = _ocrModel.ProcessAndRender(img, imgOut);
+        
+        Debug.Log(outMessage);
+        //updateTextureWithString(outMessage);
 
-        _ocr.SetImage(img);
-        _ocr.Recognize();
-
-        Tesseract.Character[] characters = _ocr.GetCharacters();
-        foreach (Tesseract.Character c in characters)
-        {
-            CvInvoke.Rectangle(img, c.Region, new MCvScalar(255, 0, 0));
-        }
-
-        String messageOcr = _ocr.GetUTF8Text().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text   
-        Debug.Log("Detected text: " + message);
-
-        Texture2D texture = TextureConvert.InputArrayToTexture2D(img, FlipType.Vertical);
+        Texture2D texture = TextureConvert.InputArrayToTexture2D(imgOut, FlipType.Vertical);
 
         RenderTexture(texture);
         ResizeTexture(texture);
