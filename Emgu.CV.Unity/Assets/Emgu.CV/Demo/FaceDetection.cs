@@ -15,76 +15,29 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Runtime.InteropServices;
 using UnityEngine.UI;
+using Emgu.CV.Models;
 
-public class FaceDetection : MonoBehaviour
+
+public class FaceDetection : ProcessAndRenderModelBehaviour
 {
-
     // Use this for initialization
     void Start()
     {
+        _model = new FaceAndLandmarkDetector();
+        StartCoroutine(Workflow());
+    }
+
+    /// <summary>
+    /// Get the input image
+    /// </summary>
+    /// <returns>The input image</returns>
+    public override Mat GetInputMat()
+    {
         Texture2D lenaTexture = Resources.Load<Texture2D>("lena");
+        Mat imgBgr = new Mat();
+        lenaTexture.ToOutputArray(imgBgr);
 
-        UMat img = new UMat();
-        TextureConvert.Texture2dToOutputArray(lenaTexture, img);
-        CvInvoke.Flip(img, img, FlipType.Vertical);
-
-        //String fileName = "haarcascade_frontalface_default";
-        //String fileName = "lbpcascade_frontalface";
-        String fileName = "haarcascade_frontalface_alt2";
-        String filePath = Path.Combine(Application.persistentDataPath, fileName + ".xml");
-        //if (!File.Exists(filePath))
-        {
-            TextAsset cascadeModel = Resources.Load<TextAsset>(fileName);
-
-#if UNITY_WSA
-            UnityEngine.Windows.File.WriteAllBytes(filePath, cascadeModel.bytes);
-#else
-            File.WriteAllBytes(filePath, cascadeModel.bytes);
-#endif
-        }
-
-        using (CascadeClassifier classifier = new CascadeClassifier(filePath))
-        using (UMat gray = new UMat())
-        {
-            CvInvoke.CvtColor(img, gray, ColorConversion.Bgr2Gray);
-
-            Rectangle[] faces = null;
-            try
-            {
-                faces = classifier.DetectMultiScale(gray);
-
-                foreach (Rectangle face in faces)
-                {
-                    CvInvoke.Rectangle(img, face, new MCvScalar(0, 255, 0));
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e.Message);
-
-                return;
-            }
-        }
-
-        Texture2D texture = TextureConvert.InputArrayToTexture2D(img, FlipType.Vertical);
-
-        ResizeTexture(texture);
-        RenderTexture(texture);
-    }
-
-    private void RenderTexture(Texture2D texture)
-    {
-        Image image = this.GetComponent<Image>();
-        image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-    }
-
-    private void ResizeTexture(Texture2D texture)
-    {
-        Image image = this.GetComponent<Image>();
-        var transform = image.rectTransform;
-        transform.sizeDelta = new Vector2(texture.width, texture.height);
-        transform.position = new Vector3(-texture.width / 2, -texture.height / 2);
-        transform.anchoredPosition = new Vector2(0, 0);
+        return imgBgr;
     }
 
     // Update is called once per frame
@@ -92,4 +45,5 @@ public class FaceDetection : MonoBehaviour
     {
 
     }
+
 }

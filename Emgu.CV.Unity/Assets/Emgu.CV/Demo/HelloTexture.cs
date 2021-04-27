@@ -44,7 +44,7 @@ public class HelloTexture : MonoBehaviour
         CvInvoke.PutText(img, String.Format("OpenCL: {0}", openclStr), new System.Drawing.Point(10, 120), Emgu.CV.CvEnum.FontFace.HersheyDuplex,
                          1.0, new MCvScalar(0, 0, 255));
 
-        Texture2D texture = TextureConvert.InputArrayToTexture2D(img, FlipType.Vertical);
+        Texture2D texture = img.ToTexture2D();
 
         RenderTexture(texture);
         ResizeTexture(texture);

@@ -33,11 +33,11 @@ public class CameraTexture : MonoBehaviour
 
         if (cameraCount == 0)
         {
-            Image<Bgr, Byte> img = new Image<Bgr, byte>(640, 240);
+            Mat img = new Mat(new Size(640, 240), DepthType.Cv8U, 3);
             CvInvoke.PutText(img, String.Format("{0} camera found", devices.Length), new System.Drawing.Point(10, 60),
                Emgu.CV.CvEnum.FontFace.HersheyDuplex,
                1.0, new MCvScalar(0, 255, 0));
-            Texture2D texture = TextureConvert.ImageToTexture2D(img, FlipType.Vertical);
+            Texture2D texture = img.ToTexture2D();
 
             RenderTexture(texture);
             ResizeTexture(texture);

@@ -22,29 +22,19 @@ public class FeatureMatching : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
         Texture2D boxTexture = Resources.Load<Texture2D>("box");
         Texture2D boxInSceneTexture = Resources.Load<Texture2D>("box_in_scene");
 
-        Mat box3Channels = new Mat();
-        TextureConvert.Texture2dToOutputArray(boxTexture, box3Channels);
         Mat box = new Mat();
-        CvInvoke.CvtColor(box3Channels, box, ColorConversion.Bgra2Gray);
-        CvInvoke.Flip(box, box, FlipType.Vertical);
+        boxTexture.ToOutputArray(box, FlipType.Vertical, typeof(Gray));
 
-        Mat boxInScene3Channels = new Mat();
-        TextureConvert.Texture2dToOutputArray(boxInSceneTexture, boxInScene3Channels);
         Mat boxInScene = new Mat();
-        CvInvoke.CvtColor(boxInScene3Channels, boxInScene, ColorConversion.Bgra2Gray);
-        CvInvoke.Flip(boxInScene, boxInScene, FlipType.Vertical);
-
+        boxInSceneTexture.ToOutputArray(boxInScene, FlipType.Vertical, typeof(Gray));
+        
         long time;
         Mat img = FeatureMatchingExample.DrawMatches.Draw(box, boxInScene, out time);
-        //CvInvoke.Imwrite("c:\\tmp\\tmp.png", img);
-        //Mat outImg = new Mat();
-        //CvInvoke.CvtColor(img, outImg, ColorConversion.Bgr2Bgra);
-        //CvInvoke.Imwrite("c:\\tmp\\tmp.png", outImg);
-        Texture2D texture = TextureConvert.InputArrayToTexture2D(img);
+        
+        Texture2D texture = img.ToTexture2D();
 
         RenderTexture(texture);
         ResizeTexture(texture);

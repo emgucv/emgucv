@@ -25,9 +25,8 @@ public class Stitch : MonoBehaviour
         {
             Texture2D tex = Resources.Load<Texture2D>(textureNames[i]);
             imgs[i] = new Mat();
-            TextureConvert.Texture2dToOutputArray(tex, tmp);
-            CvInvoke.Flip(tmp, tmp, FlipType.Vertical);
-            CvInvoke.CvtColor(tmp, imgs[i], ColorConversion.Bgra2Bgr);
+            tex.ToOutputArray(imgs[i]);
+            
             if (imgs[i].IsEmpty)
                 Debug.Log("Image " + i + " is empty");
             else
@@ -39,7 +38,7 @@ public class Stitch : MonoBehaviour
             stitcher.Stitch(vms, result);
         //CvInvoke.Flip(result, result, FlipType.Vertical);
 
-        Texture2D texture = TextureConvert.InputArrayToTexture2D(result, FlipType.Vertical);
+        Texture2D texture = result.ToTexture2D();
 
         RenderTexture(texture);
         ResizeTexture(texture);
@@ -47,11 +46,11 @@ public class Stitch : MonoBehaviour
 
     private void updateTextureWithString(String text)
     {
-        Image<Bgr, Byte> img = new Image<Bgr, byte>(640, 240);
+        Mat img = new Mat(new Size(640, 240), DepthType.Cv8U, 3);
         CvInvoke.PutText(img, text, new System.Drawing.Point(10, 60), Emgu.CV.CvEnum.FontFace.HersheyDuplex,
                          1.0, new MCvScalar(0, 255, 0));
 
-        Texture2D texture = TextureConvert.ImageToTexture2D(img);
+        Texture2D texture = img.ToTexture2D();
 
         RenderTexture(texture);
         ResizeTexture(texture);
