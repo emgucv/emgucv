@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -55,21 +56,37 @@ namespace Emgu.CV.Models
             Clear();
         }
 
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+        private IEnumerator InitFaceDetector(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#else
         private async Task InitFaceDetector(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#endif
         {
             if (_faceDetector == null)
             {
                 _faceDetector = new FaceDetector();
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+                yield return _faceDetector.Init(onDownloadProgressChanged);
+#else
                 await _faceDetector.Init(onDownloadProgressChanged);
+#endif
             }
         }
 
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+        private IEnumerator InitFacemark(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#else
         private async Task InitFacemark(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#endif
         {
             if (_facemarkDetector == null)
             {
                 _facemarkDetector = new FacemarkDetector();
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+                yield return _facemarkDetector.Init(onDownloadProgressChanged);
+#else
                 await _facemarkDetector.Init(onDownloadProgressChanged);
+#endif
             }
         }
 
@@ -79,12 +96,23 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <param name="initOptions">Initialization options. None supported at the moment, any value passed will be ignored.</param>
         /// <returns>Async task</returns>
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+        public IEnumerator Init(
+            DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
+            Object initOptions = null)
+#else
         public async Task Init(
             DownloadProgressChangedEventHandler onDownloadProgressChanged = null, 
             Object initOptions = null)
+#endif
         {
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+            yield return InitFaceDetector(onDownloadProgressChanged);
+            yield return InitFacemark(onDownloadProgressChanged);
+#else
             await InitFaceDetector(onDownloadProgressChanged);
             await InitFacemark(onDownloadProgressChanged);
+#endif
         }
 
         /// <summary>

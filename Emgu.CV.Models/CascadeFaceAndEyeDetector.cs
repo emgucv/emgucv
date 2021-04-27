@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -10,7 +11,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using Emgu.CV.Cuda;
 using Emgu.CV.CvEnum;
 using Emgu.Util;
 
@@ -82,7 +82,11 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Call back method during download</param>
         /// <param name="initOptions">Initialization options. None supported at the moment, any value passed will be ignored.</param>
         /// <returns>Asyn task</returns>
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+        public IEnumerator Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
+#else
         public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
+#endif
         {
             if (_faceCascadeClassifier == null || _eyeCascadeClassifier == null)
             {
@@ -93,7 +97,11 @@ namespace Emgu.CV.Models
 
                 downloadManager.OnDownloadProgressChanged += onDownloadProgressChanged;
 
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+                yield return downloadManager.Download();
+#else
                 await downloadManager.Download();
+#endif
                 String faceFile = downloadManager.Files[0].LocalFile;
                 String eyeFile = downloadManager.Files[1].LocalFile;
                 _faceCascadeClassifier = new CascadeClassifier(faceFile);

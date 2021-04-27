@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -52,9 +53,15 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Call back method during download</param>
         /// <param name="initOptions">A string, such as "OpenCV;CPU", in the format of "{backend};{option}"</param>
         /// <returns>Asyn task</returns>
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+        public IEnumerator Init(
+            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
+            Object initOptions = null)
+#else
         public async Task Init(
             System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
             Object initOptions = null)
+#endif
         {
             if (_maskRcnnDetector == null)
             {
@@ -76,7 +83,11 @@ namespace Emgu.CV.Models
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
 
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+                yield return manager.Download();
+#else
                 await manager.Download();
+#endif
 
                 if (manager.AllFilesDownloaded)
                 {

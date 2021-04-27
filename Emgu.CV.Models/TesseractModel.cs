@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
@@ -29,7 +30,12 @@ namespace Emgu.CV.Models
         private Tesseract _ocr;
         private String _lang;
         private OcrEngineMode _mode;
+
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+        private IEnumerator InitTesseract(String lang, OcrEngineMode mode, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#else
         private async Task InitTesseract(String lang, OcrEngineMode mode, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#endif
         {
             if (_ocr == null)
             {
@@ -39,7 +45,11 @@ namespace Emgu.CV.Models
 
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+                yield return manager.Download();
+#else
                 await manager.Download();
+#endif
 
                 if (manager.AllFilesDownloaded)
                 {
@@ -109,9 +119,17 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Call back method during download</param>
         /// <param name="initOptions">Initialization options. None supported at the moment, any value passed will be ignored.</param>
         /// <returns>Asyn task</returns>
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+        public IEnumerator Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
+#else
         public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
+#endif
         {
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+            yield return InitTesseract("eng", OcrEngineMode.TesseractOnly, onDownloadProgressChanged);
+#else
             await InitTesseract("eng", OcrEngineMode.TesseractOnly, onDownloadProgressChanged);
+#endif
         }
 
     }

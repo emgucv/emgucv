@@ -67,6 +67,8 @@ cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XObjdetect/*.cs ../Emgu.CV.C
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XPhoto/*.cs ../Emgu.CV.Contrib/XPhoto 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/WechatQrcode/*.cs ../Emgu.CV.Contrib/WechatQrcode 
 
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/*.cs ../Emgu.CV.Models
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/Dnn/*.cs ../Emgu.CV.Models/Dnn
 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.OCR/*.cs ../Emgu.CV.OCR 
 

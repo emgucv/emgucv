@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -87,7 +88,11 @@ namespace Emgu.CV.Models
         private Model _vehicleAttrRecognizerModel = null;
         private Net _ocr = null;
 
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+        private IEnumerator InitOCR(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#else
         private async Task InitOCR(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#endif
         {
             if (_ocr == null)
             {
@@ -107,7 +112,11 @@ namespace Emgu.CV.Models
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
                 }
 
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+                yield return manager.Download();
+#else
                 await manager.Download();
+#endif
 
                 _ocr =
                     DnnInvoke.ReadNetFromModelOptimizer(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
@@ -138,7 +147,11 @@ namespace Emgu.CV.Models
             }
         }
 
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+        private IEnumerator InitVehicleAttributesRecognizer(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#else
         private async Task InitVehicleAttributesRecognizer(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#endif
         {
             if (_vehicleAttrRecognizerModel == null)
             {
@@ -154,7 +167,12 @@ namespace Emgu.CV.Models
                     "492520E55F452223E767D54227D6EF6B60B0C1752DD7B9D747BE65D57B685A0E");
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;
+
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+                yield return manager.Download();
+#else
                 await manager.Download();
+#endif
                 //_vehicleAttrRecognizer =
                 //    DnnInvoke.ReadNetFromModelOptimizer(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
                 _vehicleAttrRecognizerModel = new Model(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
@@ -169,7 +187,11 @@ namespace Emgu.CV.Models
             }
         }
 
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+        private IEnumerator InitLicensePlateDetector(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#else
         private async Task InitLicensePlateDetector(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#endif
         {
             if (_vehicleLicensePlateDetectionModel == null)
             {
@@ -183,7 +205,12 @@ namespace Emgu.CV.Models
                     _modelFolderName);
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;
+
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+                yield return manager.Download();
+#else
                 await manager.Download();
+#endif
 
                 _vehicleLicensePlateDetectionModel =
                     new DetectionModel(manager.Files[1].LocalFile, manager.Files[0].LocalFile);
@@ -226,9 +253,15 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <param name="initOptions">Initialization options. A string in the format of "backend;target" that represent the DNN backend and target.</param>
         /// <returns>Async task</returns>
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+        public IEnumerator Init(
+            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
+            Object initOptions = null)
+#else
         public async Task Init(
             System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, 
             Object initOptions = null)
+#endif
         {
             Dnn.Backend backend = Dnn.Backend.OpenCV;
             Dnn.Target target = Target.Cpu;
@@ -249,9 +282,16 @@ namespace Emgu.CV.Models
                     }
                 }
             }
+
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+            yield return InitLicensePlateDetector(backend, target, onDownloadProgressChanged);
+            yield return InitVehicleAttributesRecognizer(backend, target, onDownloadProgressChanged);
+            yield return InitOCR(backend, target, onDownloadProgressChanged);
+#else
             await InitLicensePlateDetector(backend, target, onDownloadProgressChanged);
             await InitVehicleAttributesRecognizer(backend, target, onDownloadProgressChanged);
             await InitOCR(backend, target, onDownloadProgressChanged);
+#endif
         }
 
         /// <summary>
@@ -304,7 +344,7 @@ namespace Emgu.CV.Models
                         Vehicle v = new Vehicle();
                         v.Region = region;
 
-                        #region find out the type and color of the vehicle
+#region find out the type and color of the vehicle
 
                         using (Mat vehicle = new Mat(iaImageMat, region))
                         using (VectorOfMat vm = new VectorOfMat(2))
@@ -324,7 +364,7 @@ namespace Emgu.CV.Models
                                 v.Type = _vehicleType[maxIdxType];
                             }
                         }
-                        #endregion
+#endregion
 
                         vehicles.Add(v);
                     }
@@ -334,7 +374,7 @@ namespace Emgu.CV.Models
                         LicensePlate p = new LicensePlate();
                         p.Region = region;
 
-                        #region OCR on license plate
+#region OCR on license plate
                         using (Mat plate = new Mat(iaImageMat, region))
                         {
                             using (Mat inputBlob = DnnInvoke.BlobFromImage(
@@ -363,7 +403,7 @@ namespace Emgu.CV.Models
                                 }
                             }
                         }
-                        #endregion
+#endregion
 
                         plates.Add(p);
                     }

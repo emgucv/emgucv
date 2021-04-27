@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using Emgu.CV;
@@ -38,22 +39,30 @@ namespace Emgu.CV.Models
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <returns>Async task</returns>
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+        public IEnumerator Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#else
         public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#endif
         {
-            
-                FileDownloadManager manager = new FileDownloadManager();
 
-                manager.AddFile(
-                    "https://github.com/emgucv/emgucv/raw/4.4.0/Emgu.CV.Test/NotoSansCJK-Regular.ttc",
-                    _modelFolderName,
-                    "E3C629CB9F416E2E57CFDFEE7573D5CAC3A06A681C105EC081AB9707C1F147E8");
+            FileDownloadManager manager = new FileDownloadManager();
 
-                manager.OnDownloadProgressChanged += onDownloadProgressChanged;
-                await manager.Download();
+            manager.AddFile(
+                "https://github.com/emgucv/emgucv/raw/4.4.0/Emgu.CV.Test/NotoSansCJK-Regular.ttc",
+                _modelFolderName,
+                "E3C629CB9F416E2E57CFDFEE7573D5CAC3A06A681C105EC081AB9707C1F147E8");
 
-                if (manager.AllFilesDownloaded)
-                    LoadFontData(manager.Files[0].LocalFile, 0);
-            
+            manager.OnDownloadProgressChanged += onDownloadProgressChanged;
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+            yield return manager.Download();
+#else
+            await manager.Download();
+#endif
+
+            if (manager.AllFilesDownloaded)
+                LoadFontData(manager.Files[0].LocalFile, 0);
+
         }
     }
 }

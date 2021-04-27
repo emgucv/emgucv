@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -34,7 +35,11 @@ namespace Emgu.CV.Models
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <returns>Async task</returns>
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+        public IEnumerator Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#else
         public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#endif
         {
             if (_faceDetectionModel == null)
             {
@@ -52,7 +57,11 @@ namespace Emgu.CV.Models
 
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+                yield return manager.Download();
+#else
                 await manager.Download();
+#endif
 
                 if (manager.AllFilesDownloaded)
                 {
@@ -63,11 +72,13 @@ namespace Emgu.CV.Models
                     _faceDetectionModel.SetInputScale(1.0);
                     _faceDetectionModel.SetInputCrop(false);
 
+#if !(UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
                     if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
                     {
                         _faceDetectionModel.SetPreferableBackend(Emgu.CV.Dnn.Backend.Cuda);
                         _faceDetectionModel.SetPreferableTarget(Emgu.CV.Dnn.Target.Cuda);
                     }
+#endif
                 }
             }
         }

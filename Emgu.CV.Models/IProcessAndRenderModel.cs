@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -35,7 +36,11 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <param name="initOptions">Initialization options</param>
         /// <returns>Async task</returns>
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+        IEnumerator Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged, Object initOptions);
+#else
         Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged, Object initOptions);
+#endif
 
         /// <summary>
         /// Process the input image and render into the output image

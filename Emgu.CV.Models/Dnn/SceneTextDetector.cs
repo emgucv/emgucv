@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -47,25 +48,49 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <param name="initOptions">Initialization options. None supported at the moment, any value passed will be ignored.</param>
         /// <returns>Async task</returns>
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+        public IEnumerator Init(
+            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
+            Object initOptions = null)
+#else
         public async Task Init(
             System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
             Object initOptions = null)
+#endif
         {
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+            yield return InitTextDetector(onDownloadProgressChanged);
+            yield return InitTextRecognizer(onDownloadProgressChanged);
+            yield return InitFreetype(onDownloadProgressChanged);
+#else
             await InitTextDetector(onDownloadProgressChanged);
             await InitTextRecognizer(onDownloadProgressChanged);
             await InitFreetype(onDownloadProgressChanged);
+#endif
         }
 
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+        private IEnumerator InitFreetype(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#else
         private async Task InitFreetype(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#endif
         {
             if (_freetype == null)
             {
                 _freetype = new FreetypeNotoSansCJK(_modelFolderName);
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+                yield return _freetype.Init(onDownloadProgressChanged);
+#else
                 await _freetype.Init(onDownloadProgressChanged);
+#endif
             }
         }
 
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+        private IEnumerator InitTextDetector(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#else
         private async Task InitTextDetector(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#endif
         {
             if (_textDetector == null)
             {
@@ -77,7 +102,11 @@ namespace Emgu.CV.Models
                     "7B83A5E7AFBBD9D70313C902D188FF328656510DBF57D66A711E07DFDB81DF20");
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+                yield return manager.Download();
+#else
                 await manager.Download();
+#endif
 
                 if (manager.AllFilesDownloaded)
                 {
@@ -90,7 +119,6 @@ namespace Emgu.CV.Models
                     _textDetector.SetInputSize(new Size(736, 736));
                     _textDetector.SetInputMean(new MCvScalar(122.67891434, 116.66876762, 104.00698793));
 
-
                     /*
                     if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
                     {
@@ -101,7 +129,11 @@ namespace Emgu.CV.Models
             }
         }
 
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+        private IEnumerator InitTextRecognizer(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#else
         private async Task InitTextRecognizer(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#endif
         {
             if (_ocr == null)
             {
@@ -118,7 +150,11 @@ namespace Emgu.CV.Models
                     "8027C9832D86764FECCD9BDD8974829C86994617E5787F178ED97DB2BDA1481A");
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+                yield return manager.Download();
+#else
                 await manager.Download();
+#endif
 
                 if (manager.AllFilesDownloaded)
                 {

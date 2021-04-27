@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
@@ -10,7 +11,9 @@ using Emgu.CV.Structure;
 using System.Drawing;
 using System.Diagnostics;
 using Emgu.CV.Util;
+#if !(UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
 using Emgu.CV.Cuda;
+#endif
 using System.Threading.Tasks;
 using System.Net;
 using Emgu.Util;
@@ -22,7 +25,9 @@ namespace Emgu.CV.Models
     /// </summary>
     public class PedestrianDetector : DisposableObject, IProcessAndRenderModel
     {
+#if !(UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
         private CudaHOG _hogCuda;
+#endif
         private HOGDescriptor _hog;
 
         /// <summary>
@@ -36,11 +41,13 @@ namespace Emgu.CV.Models
                 _hog = null;
             }
 
+#if !(UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
             if (_hogCuda != null)
             {
                 _hogCuda.Dispose();
                 _hog = null;
             }
+#endif
         }
 
         /// <summary>
@@ -62,6 +69,8 @@ namespace Emgu.CV.Models
 
             using (InputArray iaImage = image.GetInputArray())
             {
+
+#if !(UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
                 //if the input array is a GpuMat
                 //check if there is a compatible Cuda device to run pedestrian detection
                 if (iaImage.Kind == InputArray.Type.CudaGpuMat && _hogCuda != null)
@@ -76,6 +85,7 @@ namespace Emgu.CV.Models
                     }
                 }
                 else
+#endif
                 {
                     //this is the CPU/OpenCL version
                     MCvObjectDetection[] results = _hog.DetectMultiScale(image);
@@ -94,11 +104,18 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Call back method during download</param>
         /// <param name="initOptions">Initialization options. None supported at the moment, any value passed will be ignored.</param>
         /// <returns>Asyn task</returns>
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+        public IEnumerator Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
+#else
         public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
+#endif
         {
             _hog = new HOGDescriptor();
             _hog.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
 
+#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+            yield return null;
+#else
             if (CudaInvoke.HasCuda)
             {
                 _hogCuda = new CudaHOG(
@@ -108,7 +125,7 @@ namespace Emgu.CV.Models
                     new Size(8, 8));
                 _hogCuda.SetSVMDetector(_hogCuda.GetDefaultPeopleDetector());
             }
-
+#endif
         }
 
         /// <summary>

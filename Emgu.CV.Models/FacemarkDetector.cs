@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -31,7 +32,11 @@ namespace Emgu.CV.Models
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <returns>Async task</returns>
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+        public IEnumerator Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#else
         public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#endif
         {
             if (_facemark == null)
             {
@@ -42,7 +47,11 @@ namespace Emgu.CV.Models
                     "70DD8B1657C42D1595D6BD13D97D932877B3BED54A95D3C4733A0F740D1FD66B");
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+                yield return manager.Download();
+#else
                 await manager.Download();
+#endif
                 if (manager.AllFilesDownloaded)
                 {
                     using (FacemarkLBFParams facemarkParam = new CV.Face.FacemarkLBFParams())
