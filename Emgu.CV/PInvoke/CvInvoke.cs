@@ -70,10 +70,10 @@ namespace Emgu.CV
         /// <remarks>If <paramref name="loadDirectory"/> is null, the default location on windows is the dll's path appended by either "x64" or "x86", depends on the applications current mode.</remarks>
         public static bool LoadUnmanagedModules(String loadDirectory, params String[] unmanagedModules)
         {
-#if UNITY_WSA || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS
+#if UNITY_WSA || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL
             if (loadDirectory != null)
             {
-                throw new NotImplementedException("Loading modules from a specific directory is not implemented in Windows Store App");
+                throw new NotImplementedException("Loading modules from a specific directory is not implemented on the current platform");
             }
             //Let unity handle the library loading
             return true;
@@ -314,7 +314,7 @@ namespace Emgu.CV
         {
             bool libraryLoaded = true;
 
-#if !(UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE || UNITY_WSA)
+#if !(UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE || UNITY_WSA  || UNITY_WEBGL)
             if (Emgu.Util.Platform.OperationSystem == Platform.OS.IOS)
                 return libraryLoaded;
             else if (Emgu.Util.Platform.OperationSystem == Platform.OS.Android && (Emgu.Util.Platform.ClrType != Platform.Clr.Unity))
@@ -367,6 +367,9 @@ namespace Emgu.CV
         /// </summary>
         static CvInvoke()
         {
+#if ( UNITY_WEBGL && ! UNITY_EDITOR )
+            _libraryLoaded = true;
+#else
             if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS)
             {
                 /*
@@ -389,14 +392,13 @@ namespace Emgu.CV
                 _libraryLoaded = true;
                 return;
             }
-
-            List<String> modules = CvInvoke.OpenCVModuleList;
-            modules.RemoveAll(String.IsNullOrEmpty);
-
-            _libraryLoaded = DefaultLoadUnmanagedModules(modules.ToArray());
-
-            if (Emgu.Util.Platform.OperationSystem != Emgu.Util.Platform.OS.IOS)
+            else
             {
+                List<String> modules = CvInvoke.OpenCVModuleList;
+                modules.RemoveAll(String.IsNullOrEmpty);
+
+                _libraryLoaded = DefaultLoadUnmanagedModules(modules.ToArray());
+                
                 try
                 {
                     //Use the custom error handler
@@ -404,13 +406,16 @@ namespace Emgu.CV
                 }
                 catch (Exception e)
                 {
-                    System.Diagnostics.Trace.WriteLine(String.Format("Failed to register error handler using RedirectError : {0}", e.StackTrace));
+                    System.Diagnostics.Trace.WriteLine(
+                        String.Format("Failed to register error handler using RedirectError : {0}", e.StackTrace));
                     throw;
                 }
+
             }
+#endif
         }
 
-        #region CV MACROS
+#region CV MACROS
 
         /// <summary>
         /// Get the corresponding depth type
@@ -506,7 +511,7 @@ namespace Emgu.CV
         {
            return (((c1) & 255) + (((c2) & 255) << 8) + (((c3) & 255) << 16) + (((c4) & 255) << 24));
         }*/
-        #endregion
+#endregion
 
         /// <summary>
         /// Check if the size of the C structures match those of C#

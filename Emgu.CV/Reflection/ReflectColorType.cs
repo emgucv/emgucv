@@ -38,8 +38,8 @@ namespace Emgu.CV.Reflection
          //create default color
          Color[] res = new Color[color.Dimension];
          for (int i = 0; i < res.Length; i++)
-#if (UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_WSA || UNITY_WEBGL)
-             res[i] = Color.gray;
+#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR || UNITY_WEBGL
+            res[i] = Color.gray;
 #else
             res[i] = Color.Gray;
 #endif

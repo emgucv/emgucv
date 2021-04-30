@@ -155,7 +155,7 @@ namespace Emgu.Util
         /// <returns>The local path of the file</returns>
         public String GetLocalFileName(String fileName)
         {
-#if  UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#if  UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
             return System.IO.Path.Combine(UnityEngine.Application.persistentDataPath, _localSubfolder, fileName);
 #else
             //String personalFolder = Environment.GetFolderPath(Environment.SpecialFolder.Personal);

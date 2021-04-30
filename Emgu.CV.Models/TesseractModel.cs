@@ -31,7 +31,7 @@ namespace Emgu.CV.Models
         private String _lang;
         private OcrEngineMode _mode;
 
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         private IEnumerator
 #else
         private async Task 
@@ -46,7 +46,7 @@ namespace Emgu.CV.Models
 
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
                 yield return manager.Download();
 #else
                 await manager.Download();
@@ -126,14 +126,14 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Call back method during download</param>
         /// <param name="initOptions">Initialization options. None supported at the moment, any value passed will be ignored.</param>
         /// <returns>Asyn task</returns>
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator
 #else
         public async Task 
 #endif
             Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
         {
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
             yield return
 #else
             await 

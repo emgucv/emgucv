@@ -54,7 +54,7 @@ namespace Emgu.CV.Models
             Clear();
         }
 
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         private IEnumerator InitFaceDetector(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
         private async Task InitFaceDetector(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
@@ -63,7 +63,7 @@ namespace Emgu.CV.Models
             if (_faceDetector == null)
             {
                 _faceDetector = new FaceDetector();
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
                 yield return _faceDetector.Init(onDownloadProgressChanged);
 #else
                 await _faceDetector.Init(onDownloadProgressChanged);
@@ -71,7 +71,7 @@ namespace Emgu.CV.Models
             }
         }
 
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         private IEnumerator InitFacemark(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
         private async Task InitFacemark(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
@@ -80,7 +80,7 @@ namespace Emgu.CV.Models
             if (_facemarkDetector == null)
             {
                 _facemarkDetector = new FacemarkDetector();
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
                 yield return _facemarkDetector.Init(onDownloadProgressChanged);
 #else
                 await _facemarkDetector.Init(onDownloadProgressChanged);
@@ -94,7 +94,7 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <param name="initOptions">Initialization options. None supported at the moment, any value passed will be ignored.</param>
         /// <returns>Async task</returns>
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator
 #else
         public async Task
@@ -103,7 +103,7 @@ namespace Emgu.CV.Models
             DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
             Object initOptions = null)
         {
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
             yield return InitFaceDetector(onDownloadProgressChanged);
             yield return InitFacemark(onDownloadProgressChanged);
 #else

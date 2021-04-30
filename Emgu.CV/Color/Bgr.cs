@@ -27,7 +27,7 @@ namespace Emgu.CV.Structure
             _scalar = new MCvScalar(blue, green, red);
         }
 
-#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR
+#if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR || UNITY_WEBGL
         /// <summary>
         /// Create a Bgr color using the System.Drawing.Color
         /// </summary>

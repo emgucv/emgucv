@@ -82,7 +82,7 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Call back method during download</param>
         /// <param name="initOptions">Initialization options. None supported at the moment, any value passed will be ignored.</param>
         /// <returns>Asyn task</returns>
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
 #else
         public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
@@ -97,7 +97,7 @@ namespace Emgu.CV.Models
 
                 downloadManager.OnDownloadProgressChanged += onDownloadProgressChanged;
 
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
                 yield return downloadManager.Download();
 #else
                 await downloadManager.Download();

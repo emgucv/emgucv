@@ -53,7 +53,7 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Call back method during download</param>
         /// <param name="initOptions">A string, such as "OpenCV;CPU", in the format of "{backend};{option}"</param>
         /// <returns>Asyn task</returns>
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(
             System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
             Object initOptions = null)
@@ -83,7 +83,7 @@ namespace Emgu.CV.Models
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
 
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
                 yield return manager.Download();
 #else
                 await manager.Download();

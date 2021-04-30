@@ -1680,7 +1680,7 @@ FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})
       public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${MACOS_UNITY_EDITOR_ENTRYPOINT}\";   
       #elif UNITY_STANDALONE_OSX
       public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${MACOS_UNITY_STANDALONE_ENTRYPOINT}\";   
-      #elif __IOS__ || UNITY_IPHONE
+      #elif __IOS__ || UNITY_IPHONE || UNITY_WEBGL
       public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${IOS_ENTRYPOINT}\";
       #elif __ANDROID__ || UNITY_ANDROID
       public const string Opencv${OPENCV_MODULE_NAME_FIRST_LETTER_UPPER}Library = \"${ANDROID_ENTRYPOINT}\";
@@ -1703,7 +1703,7 @@ ENDFOREACH()
 
 SET(ENTRYPOINT_MODULES_STRING "public static List<String> OpenCVModuleList = new List<String>
 	  {
-#if !(__ANDROID__ || __IOS__ || UNITY_IPHONE || UNITY_ANDROID || NETFX_CORE)
+#if !(__ANDROID__ || __IOS__ || UNITY_IPHONE  || UNITY_WEBGL || UNITY_ANDROID || NETFX_CORE)
         OpencvFFMpegLibrary,
 #endif        
         ${ENTRYPOINT_MODULES_STRING}

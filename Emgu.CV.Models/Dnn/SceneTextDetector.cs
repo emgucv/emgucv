@@ -48,7 +48,7 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <param name="initOptions">Initialization options. None supported at the moment, any value passed will be ignored.</param>
         /// <returns>Async task</returns>
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(
             System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
             Object initOptions = null)
@@ -58,7 +58,7 @@ namespace Emgu.CV.Models
             Object initOptions = null)
 #endif
         {
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE  || UNITY_WEBGL
             yield return InitTextDetector(onDownloadProgressChanged);
             yield return InitTextRecognizer(onDownloadProgressChanged);
             yield return InitFreetype(onDownloadProgressChanged);
@@ -69,7 +69,7 @@ namespace Emgu.CV.Models
 #endif
         }
 
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         private IEnumerator InitFreetype(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
         private async Task InitFreetype(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
@@ -78,7 +78,7 @@ namespace Emgu.CV.Models
             if (_freetype == null)
             {
                 _freetype = new FreetypeNotoSansCJK(_modelFolderName);
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
                 yield return _freetype.Init(onDownloadProgressChanged);
 #else
                 await _freetype.Init(onDownloadProgressChanged);
@@ -86,7 +86,7 @@ namespace Emgu.CV.Models
             }
         }
 
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         private IEnumerator InitTextDetector(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
         private async Task InitTextDetector(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
@@ -102,7 +102,7 @@ namespace Emgu.CV.Models
                     "7B83A5E7AFBBD9D70313C902D188FF328656510DBF57D66A711E07DFDB81DF20");
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
                 yield return manager.Download();
 #else
                 await manager.Download();
@@ -129,7 +129,7 @@ namespace Emgu.CV.Models
             }
         }
 
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         private IEnumerator InitTextRecognizer(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
         private async Task InitTextRecognizer(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
@@ -150,7 +150,7 @@ namespace Emgu.CV.Models
                     "8027C9832D86764FECCD9BDD8974829C86994617E5787F178ED97DB2BDA1481A");
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
                 yield return manager.Download();
 #else
                 await manager.Download();

@@ -1,4 +1,4 @@
-#if !(UNITY_IPHONE || UNITY_ANDROID || UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_STANDALONE_WIN || UNITY_WSA || UNITY_EDITOR_WIN)
+#if !(UNITY_IPHONE || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR || UNITY_WEBGL)
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2021 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------

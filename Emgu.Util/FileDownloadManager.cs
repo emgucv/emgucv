@@ -10,7 +10,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
 using UnityEngine;
 #endif
 
@@ -91,7 +91,7 @@ namespace Emgu.Util
             }
         }
 
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public UnityEngine.Networking.UnityWebRequest CurrentWebClient = null;
 
         public IEnumerator Download()

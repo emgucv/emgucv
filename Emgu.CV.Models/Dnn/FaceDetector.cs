@@ -35,7 +35,7 @@ namespace Emgu.CV.Models
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <returns>Async task</returns>
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
         public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
@@ -57,7 +57,7 @@ namespace Emgu.CV.Models
 
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
                 yield return manager.Download();
 #else
                 await manager.Download();
@@ -72,7 +72,7 @@ namespace Emgu.CV.Models
                     _faceDetectionModel.SetInputScale(1.0);
                     _faceDetectionModel.SetInputCrop(false);
 
-#if !(UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if !(UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE  || UNITY_WEBGL)
                     if (Emgu.CV.Cuda.CudaInvoke.HasCuda)
                     {
                         _faceDetectionModel.SetPreferableBackend(Emgu.CV.Dnn.Backend.Cuda);

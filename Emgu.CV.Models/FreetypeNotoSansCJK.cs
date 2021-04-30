@@ -39,7 +39,7 @@ namespace Emgu.CV.Models
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <returns>Async task</returns>
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
         public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
@@ -54,7 +54,7 @@ namespace Emgu.CV.Models
                 "E3C629CB9F416E2E57CFDFEE7573D5CAC3A06A681C105EC081AB9707C1F147E8");
 
             manager.OnDownloadProgressChanged += onDownloadProgressChanged;
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
             yield return manager.Download();
 #else
             await manager.Download();

@@ -88,7 +88,7 @@ namespace Emgu.CV.Models
         private Model _vehicleAttrRecognizerModel = null;
         private Net _ocr = null;
 
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         private IEnumerator InitOCR(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
         private async Task InitOCR(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
@@ -112,7 +112,7 @@ namespace Emgu.CV.Models
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
                 }
 
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
                 yield return manager.Download();
 #else
                 await manager.Download();
@@ -147,7 +147,7 @@ namespace Emgu.CV.Models
             }
         }
 
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         private IEnumerator InitVehicleAttributesRecognizer(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
         private async Task InitVehicleAttributesRecognizer(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
@@ -168,7 +168,7 @@ namespace Emgu.CV.Models
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;
 
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
                 yield return manager.Download();
 #else
                 await manager.Download();
@@ -187,7 +187,7 @@ namespace Emgu.CV.Models
             }
         }
 
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         private IEnumerator InitLicensePlateDetector(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
         private async Task InitLicensePlateDetector(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
@@ -206,7 +206,7 @@ namespace Emgu.CV.Models
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;
 
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
                 yield return manager.Download();
 #else
                 await manager.Download();
@@ -253,7 +253,7 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <param name="initOptions">Initialization options. A string in the format of "backend;target" that represent the DNN backend and target.</param>
         /// <returns>Async task</returns>
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(
             System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
             Object initOptions = null)
@@ -283,7 +283,7 @@ namespace Emgu.CV.Models
                 }
             }
 
-#if (UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
             yield return InitLicensePlateDetector(backend, target, onDownloadProgressChanged);
             yield return InitVehicleAttributesRecognizer(backend, target, onDownloadProgressChanged);
             yield return InitOCR(backend, target, onDownloadProgressChanged);
