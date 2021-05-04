@@ -328,6 +328,8 @@ namespace Emgu.CV.XamarinForms
                 Picker p = yoloPage.Picker;
                 p.Title = "Yolo model version";
                 p.IsVisible = true;
+                p.Items.Add("YoloV4");
+                p.Items.Add("YoloV4Tiny");
                 p.Items.Add("YoloV3");
                 p.Items.Add("YoloV3Spp");
                 p.Items.Add("YoloV3Tiny");
