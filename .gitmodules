@@ -38,3 +38,7 @@
 	path = Emgu.CV.Extern/depthai-core
 	url = https://github.com/luxonis/depthai-core.git
 	ignore = dirty
+[submodule "3rdParty/freetype2"]
+	path = 3rdParty/freetype2
+	url = https://gitlab.freedesktop.org/freetype/freetype.git
+	ignore = dirty
