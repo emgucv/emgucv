@@ -27,7 +27,7 @@ IF (HAVE_LINUX_ARM)
   add_subdirectory("Emgu.CV.runtime.linux-arm")
 ENDIF()
 
-IF (HAVE_LINUX_X86 OR HAVE_LINUX_X64)
+IF (HAVE_LINUX_X86 OR HAVE_LINUX_X64 OR HAVE_LINUX_ARM64)
   add_subdirectory("Emgu.CV.runtime.ubuntu")
 ENDIF()
 
