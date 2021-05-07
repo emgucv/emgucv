@@ -214,6 +214,7 @@ IF "%2%"=="core" GOTO CONFIG_CORE
 
 :CONFIG_FULL
 cd ..
+cd 3rdParty
 cd freetype2
 IF NOT EXIST %BUILD_FOLDER% mkdir %BUILD_FOLDER%
 cd %BUILD_FOLDER%
@@ -226,7 +227,8 @@ cd %BUILD_FOLDER%
 %CMAKE% --build . --config Release --parallel --target install
 cd ..
 cd ..
-SET FREETYPE_DIR=%cd%\freetype2\%BUILD_FOLDER%
+cd ..
+SET FREETYPE_DIR=%cd%\3rdParty\freetype2\%BUILD_FOLDER%
 REM SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% -DFreetype_DIR:STRING=%FREETYPE_DIR% 
 
 cd harfbuzz

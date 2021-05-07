@@ -41,12 +41,13 @@ cmake --build . --config Release --parallel --target install
 cd ../..
 
 if [ "$CV_CONTRIB_OPTION" != "" ]; then
+	cd 3rdParty
     cd freetype2
     mkdir -p build
     cd build
     cmake $BUILD_ARCH $OSX_SYSROOT_OPTION -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" ../
     cmake --build . --config Release --parallel --target install
-    cd ../..
+    cd ../../..
 
     cd harfbuzz
     mkdir -p build

@@ -134,12 +134,14 @@ cd ..
 IF "%2"=="core" GOTO CORE_BUILD_EMGU
 
 :FULL_BUILD_EMGU
+cd 3rdParty
 cd freetype2
 IF NOT EXIST "%BUILD_DIR%" mkdir "%BUILD_DIR%"
 cd "%BUILD_DIR%"
 "%CMAKE%" %CMAKE_CONF_FLAGS% %* .. 
 "%CMAKE%" --build . --config Release --parallel --target install
 cd .. 
+cd ..
 cd ..
 
 

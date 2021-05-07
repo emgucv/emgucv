@@ -40,7 +40,7 @@ cmake \
 cmake --build . --config Release --target install
 popd
 
-pushd $CURRENT_SCRIPT_DIR/../../freetype2
+pushd $CURRENT_SCRIPT_DIR/../../3rdParty/freetype2
 mkdir -p build_$3
 cd build_$3
 cmake \
