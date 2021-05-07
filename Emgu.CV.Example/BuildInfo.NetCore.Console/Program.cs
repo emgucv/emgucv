@@ -200,29 +200,37 @@ namespace BuildInfo.NetCore.Console
         {
             String captureText = String.Format("Capture Backends (VideoCapture from device): {0}{1}", System.Environment.NewLine, GetBackendInfo(CvInvoke.Backends));
 
+	    /*
             //We don't want to create VideoCapture on Mac OS unless we have requested camera permission
             if (Emgu.Util.Platform.OperationSystem != Platform.OS.MacOS)
             {
-                using (VideoCapture cap = new VideoCapture(0, VideoCapture.API.Any,
-                    new Tuple<CapProp, int>(CapProp.HwAcceleration, (int)VideoAccelerationType.Any)))
-                {
-                    if (cap.IsOpened)
-                    {
-                        String backendName = cap.BackendName;
-                        VideoAccelerationType hwAcceleration = (VideoAccelerationType)cap.Get(CapProp.HwAcceleration);
-                        captureText +=
-                            String.Format(
-                                "{0}VideoCapture device successfully opened with default backend: {1} (hw acceleration: {2})",
-                                System.Environment.NewLine, backendName, hwAcceleration);
-                    } else
-                    {
-                        captureText +=
-                            String.Format(
-                                "{0}VideoCapture device failed to opened with default backend: {1}",
-                                System.Environment.NewLine, cap.BackendName);
-                    }
-                }
-            }
+	        try {
+                  using (VideoCapture cap = new VideoCapture(0, VideoCapture.API.Any,
+                      new Tuple<CapProp, int>(CapProp.HwAcceleration, (int)VideoAccelerationType.Any)))
+                  {
+                      if (cap.IsOpened)
+                      {
+                          String backendName = cap.BackendName;
+                          VideoAccelerationType hwAcceleration = (VideoAccelerationType)cap.Get(CapProp.HwAcceleration);
+                          captureText +=
+                              String.Format(
+                                  "{0}VideoCapture device successfully opened with default backend: {1} (hw acceleration: {2})",
+                                  System.Environment.NewLine, backendName, hwAcceleration);
+                      } else
+                      {
+                          captureText +=
+                              String.Format(
+                                  "{0}VideoCapture device failed to opened with default backend: {1}",
+                                  System.Environment.NewLine, cap.BackendName);
+                      }
+                  }
+		} catch (Emgu.CV.Util.CvException e)
+		{
+		        //System.Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>");
+			captureText += String.Format("{0}No capture device found.", System.Environment.NewLine);
+		}
+            }*/
+	    
             captureText += String.Format("{0}{0}Stream Backends (VideoCapture from file/Stream): {0}{1}", System.Environment.NewLine, GetBackendInfo(CvInvoke.StreamBackends));
 
             captureText += String.Format("{0}{0}VideoWriter backends: {0}{1}{0}", Environment.NewLine,
