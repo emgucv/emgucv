@@ -1087,6 +1087,8 @@ IF(HAVE_MACOS)
 # <file src=\"Emgu.CV.runtime.macos.targets\" target=\"build\\${EMGUCV_MACOS_NUGET_ID}.targets\" />
   SET(EMGUCV_MACOS_NUGET_FILE_LIST "${EMGUCV_MACOS_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\libs\\macos\\*.dylib\" target=\"runtimes\\osx\\native\" />
+    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Mac.dll\" target=\"lib\\Xamarin.Mac\" />
+    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Mac.xml\" target=\"lib\\Xamarin.Mac\" />
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 	SET(EMGUCV_MACOS_NUGET_DEPENDENCY "
