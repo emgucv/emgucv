@@ -3,6 +3,7 @@
 cd "$(dirname "$0")"
 
 INSTALL_FOLDER=$PWD/build/install
+SCRIPT_FOLDER=$PWD
 
 CUDA_OPTIONS=( -DWITH_CUDA:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE )
 
@@ -29,6 +30,7 @@ cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} ..
 cmake --build . --config Release --parallel --target install
 cd ../..
 
+
 if [ "$BUILD_TYPE" == "core" ]; then
     echo "Performing a core build"
     TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE
@@ -38,6 +40,21 @@ else
     echo "Performing a full build"
     TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
 
+    cd 3rdParty
+    cd freetype2
+    mkdir -p build
+    cd build
+    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} ..
+    cmake --build . --config Release --parallel --target install
+    cd ../../..
+    
+    cd harfbuzz
+    mkdir -p build
+    cd build
+    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} ..
+    cmake --build . --config Release --parallel --target install
+    cd ../..
+    
     cd hdf5
     mkdir -p build
     cd build
@@ -56,7 +73,8 @@ else
     CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../../opencv_contrib/modules 
 fi
 
-cd platforms/ubuntu/20.04
+#cd platforms/ubuntu/20.04
+cd $SCRIPT_FOLDER
 
 mkdir -p build
 cd build
