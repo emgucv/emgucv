@@ -219,7 +219,7 @@ ENDIF()
 INCLUDE (CheckTargetArch)
 INCLUDE (OpenCVVersion)
 
-SET(LIBRARY_3RDPARTY_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/3rdParty)
+#SET(LIBRARY_3RDPARTY_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/3rdParty)
 
 # ----------------------------------------------------------------------------
 #  Autodetect if we are in a GIT repository
@@ -902,7 +902,7 @@ ELSE()
 ENDIF()
 
 IF(TESSERACT_OPENCL)
-  ADD_SUBDIRECTORY(${CMAKE_SOURCE_DIR}/lib/opencl-icd-1.2.11.0/icd)
+  ADD_SUBDIRECTORY(${CMAKE_SOURCE_DIR}/3rdParty/opencl-icd-1.2.11.0/icd)
 ENDIF()
 
 IF (TARGET_ARCH_64)
