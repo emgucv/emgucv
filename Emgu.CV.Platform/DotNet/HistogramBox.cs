@@ -41,7 +41,7 @@ namespace Emgu.CV.UI
         /// <param name="binSize">The size of the bin</param>
         /// <param name="ranges">The ranges</param>
         /// <returns>The image of the histogram</returns>
-        public Mat GenerateHistogram(String name, Color color, Mat histogram, int binSize, float[] ranges)
+        public static Mat GenerateHistogram(String name, Color color, Mat histogram, int binSize, float[] ranges)
         {
             //Debug.Assert(histogram.Dimension == 1, Properties.StringTable.Only1DHistogramSupported);
 
@@ -74,7 +74,7 @@ namespace Emgu.CV.UI
                 {
                     plot.SetShowText(false);
                     plot.SetPlotBackgroundColor(new MCvScalar(255, 255, 255));
-                    plot.SetPlotLineColor(new MCvScalar(0, 0, 0));
+                    plot.SetPlotLineColor(new MCvScalar(color.B, color.G, color.R));
                     plot.SetPlotGridColor(new MCvScalar(220, 220, 220));
                     plot.SetGridLinesNumber(255);
                     plot.SetPlotSize(512, 200);
@@ -155,7 +155,7 @@ namespace Emgu.CV.UI
                     for (int i = 0; i < channelCount; i++)
                     {
                         channelNames[i] = String.Format("Channel {0}", i);
-                        colors[i] = Color.Red;
+                        colors[i] = Color.Black;
                     }
 
                     if (image is Mat)
