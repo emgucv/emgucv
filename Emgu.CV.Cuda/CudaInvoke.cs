@@ -127,7 +127,7 @@ namespace Emgu.CV.Cuda
         /// Any subsequent API call to this device will reinitialize the device.
         /// </summary>
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cudaResetDevice")]
-        public static extern int ResetDevice();
+        public static extern void ResetDevice();
 
         #endregion
 

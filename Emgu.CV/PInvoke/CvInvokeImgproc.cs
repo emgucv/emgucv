@@ -1057,7 +1057,7 @@ namespace Emgu.CV
         /// <param name="p2">The second convex polygon</param>
         /// <param name="p12">The intersection of the convex polygon</param>
         /// <param name="handleNested">Handle nest</param>
-        /// <returns></returns>
+        /// <returns>Absolute value of area of intersecting polygon.</returns>
         public static float IntersectConvexConvex(IInputArray p1, IInputArray p2, IOutputArray p12, bool handleNested=true)
         {
             using (InputArray iaP1 = p1.GetInputArray())

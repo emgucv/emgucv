@@ -49,7 +49,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="img">Supports grayscale or color (BGR) image</param>
         /// <param name="points">Optional output array of vertices of the found QR code quadrangle. Will be empty if not found.</param>
-        /// <returns></returns>
+        /// <returns>The array of decoded string.</returns>
         public String[] DetectAndDecode(
             IInputArray img,
             IOutputArrayOfArrays points = null)
