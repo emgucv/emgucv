@@ -224,7 +224,8 @@ namespace Emgu.Util
         /// </summary>
         /// <param name="src">The sorted data that will be interpolated from</param>
         /// <param name="indexes">The indexes of the interpolate result</param>
-        /// <returns></returns>
+        /// <typeparam name="T">The type of the data to be interpolated</typeparam>
+        /// <returns>The interpolated data</returns>
         public static IEnumerable<T> LinearInterpolate<T>(IEnumerable<T> src, IEnumerable<double> indexes) where T : IInterpolatable<T>, new()
         {
             using (IEnumerator<T> sampleEnumerator = src.GetEnumerator())

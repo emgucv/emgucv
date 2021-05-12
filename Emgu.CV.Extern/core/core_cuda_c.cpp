@@ -38,7 +38,7 @@ int cudaGetDevice()
 
 void cudaResetDevice()
 {
-	return cv::cuda::resetDevice();
+	cv::cuda::resetDevice();
 }
 
 cv::cuda::DeviceInfo* cudaDeviceInfoCreate(int* deviceId)

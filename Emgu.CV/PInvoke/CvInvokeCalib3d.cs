@@ -823,12 +823,12 @@ namespace Emgu.CV
         /// <param name="distCoeffs">Input vector of distortion coefficients (k1,k2,p1,p2[,k3[,k4,k5,k6[,s1,s2,s3,s4[,τx,τy]]]]) of 4, 5, 8, 12 or 14 elements. If the vector is NULL/empty, the zero distortion coefficients are assumed.</param>
         /// <param name="rvecs">Vector of output rotation vectors (see Rodrigues ) that, together with tvecs, brings points from the model coordinate system to the camera coordinate system.</param>
         /// <param name="tvecs">Vector of output translation vectors.</param>
-        /// <param name="useExtrinsicGuess">Parameter used for SOLVEPNP_ITERATIVE. If true, the function uses the provided rvec and tvec values as initial approximations of the rotation and translation vectors, respectively, and further optimizes them.</param>
+        /// <param name="useExtrinsicGuess">Parameter used for SolvePnpMethod.Iterative. If true, the function uses the provided rvec and tvec values as initial approximations of the rotation and translation vectors, respectively, and further optimizes them.</param>
         /// <param name="flags">Method for solving a PnP problem</param>
         /// <param name="rvec">Rotation vector used to initialize an iterative PnP refinement algorithm, when flag is SOLVEPNP_ITERATIVE and useExtrinsicGuess is set to true.</param>
         /// <param name="tvec">Translation vector used to initialize an iterative PnP refinement algorithm, when flag is SOLVEPNP_ITERATIVE and useExtrinsicGuess is set to true.</param>
         /// <param name="reprojectionError">Optional vector of reprojection error, that is the RMS error between the input image points and the 3D object points projected with the estimated pose.</param>
-        /// <returns></returns>
+        /// <returns>The number of solutions</returns>
         public static int SolvePnPGeneric(
             IInputArray objectPoints,
             IInputArray imagePoints,
@@ -1438,7 +1438,7 @@ namespace Emgu.CV
            ref Size imageSize, IntPtr R, IntPtr P, double balance, ref Size newSize, double fovScale);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveFisheyeSteteoRectify(
+        internal static extern void cveFisheyeStereoRectify(
            IntPtr K1, IntPtr D1, IntPtr K2,
            IntPtr D2, ref Size imageSize,
            IntPtr R, IntPtr tvec, IntPtr R1, IntPtr R2, IntPtr P1,
@@ -1640,15 +1640,21 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="K">Camera matrix</param>
         /// <param name="D">Input vector of distortion coefficients (k1,k2,k3,k4).</param>
-        /// <param name="imageSize"></param>
+        /// <param name="imageSize">Size of the image</param>
         /// <param name="R">Rectification transformation in the object space: 3x3 1-channel, or vector: 3x1/1x3 1-channel or 1x1 3-channel</param>
         /// <param name="P">New camera matrix (3x3) or new projection matrix (3x4)</param>
         /// <param name="balance">Sets the new focal length in range between the min focal length and the max focal length. Balance is in range of [0, 1]</param>
-        /// <param name="newSize"></param>
+        /// <param name="newSize">the new size</param>
         /// <param name="fovScale">Divisor for new focal length.</param>
-        public static void EstimateNewCameraMatrixForUndistorRectify(IInputArray K, IInputArray D,
-           Size imageSize, IInputArray R, IOutputArray P, double balance = 0.0, Size newSize = new Size(),
-           double fovScale = 1.0)
+        public static void EstimateNewCameraMatrixForUndistorRectify(
+            IInputArray K, 
+            IInputArray D,
+            Size imageSize, 
+            IInputArray R, 
+            IOutputArray P, 
+            double balance = 0.0, 
+            Size newSize = new Size(),
+            double fovScale = 1.0)
         {
             using (InputArray iaK = K.GetInputArray())
             using (InputArray iaD = D.GetInputArray())
@@ -1679,7 +1685,7 @@ namespace Emgu.CV
         /// <param name="newImageSize">New image resolution after rectification. The same size should be passed to initUndistortRectifyMap. When (0,0) is passed (default), it is set to the original imageSize . Setting it to larger value can help you preserve details in the original image, especially when there is a big radial distortion.</param>
         /// <param name="balance">Sets the new focal length in range between the min focal length and the max focal length. Balance is in range of [0, 1].</param>
         /// <param name="fovScale">Divisor for new focal length.</param>
-        public static void SteteoRectify(IInputArray K1, IInputArray D1, IInputArray K2, IInputArray D2, Size imageSize,
+        public static void StereoRectify(IInputArray K1, IInputArray D1, IInputArray K2, IInputArray D2, Size imageSize,
            IInputArray R, IInputArray tvec, IOutputArray R1, IOutputArray R2, IOutputArray P1, IOutputArray P2,
            IOutputArray Q, int flags,
            Size newImageSize = new Size(), double balance = 0.0, double fovScale = 1.0)
@@ -1696,7 +1702,7 @@ namespace Emgu.CV
             using (OutputArray oaP2 = P2.GetOutputArray())
             using (OutputArray oaQ = Q.GetOutputArray())
             {
-                CvInvoke.cveFisheyeSteteoRectify(iaK1, iaD1, iaK2, iaD2, ref imageSize, iaR, iaTvec, oaR1, oaR2, oaP1, oaP2,
+                CvInvoke.cveFisheyeStereoRectify(iaK1, iaD1, iaK2, iaD2, ref imageSize, iaR, iaTvec, oaR1, oaR2, oaP1, oaP2,
                    oaQ, flags, ref newImageSize, balance, fovScale);
             }
         }

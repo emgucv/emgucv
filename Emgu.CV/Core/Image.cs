@@ -2232,7 +2232,7 @@ namespace Emgu.CV
         /// First it convolves <i>this</i> image with the specified filter and then downsamples the image 
         /// by rejecting even rows and columns.
         /// </summary>
-        /// <returns> The downsampled image</returns>
+        /// <returns> The down-sampled image</returns>
         [ExposableMethod(Exposable = true, Category = "Pyramids")]
         public Image<TColor, TDepth> PyrDown()
         {
@@ -2243,11 +2243,11 @@ namespace Emgu.CV
 
         /// <summary>
         /// Performs up-sampling step of Gaussian pyramid decomposition. 
-        /// First it upsamples <i>this</i> image by injecting even zero rows and columns and then convolves 
+        /// First it up-samples <i>this</i> image by injecting even zero rows and columns and then convolves 
         /// result with the specified filter multiplied by 4 for interpolation. 
         /// So the resulting image is four times larger than the source image.
         /// </summary>
-        /// <returns> The upsampled image</returns>
+        /// <returns> The up-sampled image</returns>
         [ExposableMethod(Exposable = true, Category = "Pyramids")]
         public Image<TColor, TDepth> PyrUp()
         {
@@ -2436,6 +2436,7 @@ namespace Emgu.CV
         /// Compute the element of a new image based on the value as well as the x and y positions of each pixel on the image
         /// </summary>
         /// <param name="converter">The function to be applied to the image pixels</param>
+        /// <typeparam name="TOtherDepth">The depth type to convert the image to.</typeparam>
         /// <returns>The result image</returns>
         public Image<TColor, TOtherDepth> Convert<TOtherDepth>(Func<TDepth, int, int, TOtherDepth> converter)
            where TOtherDepth : new()
