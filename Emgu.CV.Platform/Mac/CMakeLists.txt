@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2021 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND APPLE)
+IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND APPLE AND HAVE_MACOS AND (NOT ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm64")))
   
     PROJECT(Emgu.CV.Platform.Mac)
     
@@ -24,16 +24,18 @@ IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND APPLE)
 
 ENDIF()
 
-INSTALL(
-  DIRECTORY
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  DESTINATION Emgu.CV.Platform
-  COMPONENT emgucv_source
-  FILES_MATCHING 
-  PATTERN "*.cs"
-  PATTERN "*.csproj"
-  PATTERN ".svn" EXCLUDE
-  PATTERN "obj" EXCLUDE
-  PATTERN "bin" EXCLUDE
-  PATTERN "CMakeFiles" EXCLUDE
-  )
+IF (HAVE_MACOS)
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    DESTINATION Emgu.CV.Platform
+    COMPONENT emgucv_source
+    FILES_MATCHING 
+    PATTERN "*.cs"
+    PATTERN "*.csproj"
+    PATTERN ".svn" EXCLUDE
+    PATTERN "obj" EXCLUDE
+    PATTERN "bin" EXCLUDE
+    PATTERN "CMakeFiles" EXCLUDE
+    )
+ENDIF()
