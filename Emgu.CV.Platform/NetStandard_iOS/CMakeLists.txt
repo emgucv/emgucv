@@ -19,7 +19,7 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}/iOS
       COMPONENT emgucv_binary)	  
 
-    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern)  
+    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.Platform.NetStandard)  
     
     INSTALL(
       DIRECTORY
