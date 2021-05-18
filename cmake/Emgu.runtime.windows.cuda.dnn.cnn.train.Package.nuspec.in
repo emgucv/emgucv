@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>${EMGU_CUDNN_CNN_TRAIN_NUGET_ID}</id>
+	<title>${EMGU_CUDNN_CNN_TRAIN_NUGET_TITLE}</title>
+    <version>${EMGU_CUDNN_VERSION}</version>
+    <authors>${NUGET_PACKAGE_VENDOR}</authors>
+    <owners>${NUGET_PACKAGE_VENDOR}</owners>
+    <license type="file">cuDNN_SLA.txt</license>
+    <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
+	<icon>icon.png</icon>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<summary>This package provides the native CNN training component for CUDA DNN.</summary>
+    <description>This package provides the native CNN training component for CUDA DNN.</description>
+    <releaseNotes>This DNN v${EMGU_CUDNN_VERSION} for CUDA v${EMGU_CUDA_VERSION}.</releaseNotes>
+	${EMGU_CUDNN_CNN_TRAIN_NUGET_DEPENDENCY}
+    <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
+    <tags>emgu cuda dnn</tags>
+  </metadata>
+  <files>
+	${EMGU_CUDNN_CNN_TRAIN_NUGET_FILE_LIST}
+  </files>
+</package>
