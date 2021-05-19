@@ -28,7 +28,3 @@ jobs:
       with:
         name: emgucv-raspberry-pi-zip-package
         path: ${{ github.workspace }}/platforms/raspberry_pi_os/build/*.zip
-    - uses: actions/upload-artifact@v2
-      with:
-        name: emgucv-raspberry-pi-nuget-package
-        path: ${{ github.workspace }}/platforms/nuget/*.nupkg 
