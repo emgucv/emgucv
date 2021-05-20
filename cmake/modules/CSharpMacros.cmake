@@ -257,10 +257,14 @@ MACRO(BUILD_DOTNET_PROJ target csproj_file extra_flags)
   ENDIF()
 ENDMACRO()
 
-MACRO(BUILD_NUGET_PACKAGE target csproj_file nuspec_file output_dir working_dir) 
+MACRO(BUILD_NUGET_PACKAGE target csproj_file nuspec_file output_dir working_dir)
+  IF(APPLE AND ("${EMGUCV_ARCH}" STREQUAL "x64"))
+    SET(MAC_FRESH_SHELL_PREFIX env -i zsh)
+  ENDIF()
   IF (DOTNET_EXECUTABLE)
     ADD_CUSTOM_TARGET(
       ${target} ALL
+	  COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild -t:restore /p:Configuration=${DEFAULT_CS_CONFIG} ${csproj_file}
       COMMAND ${DOTNET_EXECUTABLE} pack "${csproj_file}" -p:NuspecFile="${nuspec_file}" --no-build -o "${output_dir}"
       WORKING_DIRECTORY "${working_dir}"
 	  COMMENT "Building ${target} with command: ${DOTNET_EXECUTABLE} pack \"${csproj_file}\" -p:NuspecFile=\"${nuspec_file}\" --no-build -o \"${output_dir}\""

@@ -23,7 +23,7 @@ namespace Emgu.CV
         /// Creates a uniform 1-D histogram of the specified size
         /// </summary>
         /// <param name="binSize">The number of bins in this 1-D histogram. </param>
-        /// <param name="range">The upper and lower boundary of the bin</param>
+        /// <param name="range">The lower (inclusive) and upper (exclusive) boundary of the bin</param>
         public DenseHistogram(int binSize, RangeF range)
            : this(new int[1] { binSize }, new RangeF[1] { range })
         {
@@ -33,7 +33,7 @@ namespace Emgu.CV
         /// Creates a uniform multi-dimension histogram of the specified size
         /// </summary>
         /// <param name="binSizes">The length of this array is the dimension of the histogram. The values of the array contains the number of bins in each dimension. The total number of bins eaquals the multiplication of all numbers in the array</param>
-        /// <param name="ranges">the upper and lower boundaries of the bins</param>
+        /// <param name="ranges">The lower (inclusive) and upper (exclusive) boundaries of the bins</param>
         public DenseHistogram(int[] binSizes, RangeF[] ranges)
         {
             _binSizes = binSizes;

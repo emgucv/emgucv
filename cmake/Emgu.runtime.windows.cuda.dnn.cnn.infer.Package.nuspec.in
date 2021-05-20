@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>${EMGU_CUDNN_CNN_NUGET_ID}</id>
-	<title>${EMGU_CUDNN_CNN_NUGET_TITLE}</title>
+    <id>${EMGU_CUDNN_CNN_INFER_NUGET_ID}</id>
+	<title>${EMGU_CUDNN_CNN_INFER_NUGET_TITLE}</title>
     <version>${EMGU_CUDNN_VERSION}</version>
     <authors>${NUGET_PACKAGE_VENDOR}</authors>
     <owners>${NUGET_PACKAGE_VENDOR}</owners>
@@ -10,14 +10,14 @@
     <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
 	<icon>icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-	<summary>This package provides the native CNN component for CUDA DNN.</summary>
-    <description>This package provides the native CNN component for CUDA DNN.</description>
+	<summary>This package provides the native CNN inference component for CUDA DNN.</summary>
+    <description>This package provides the native CNN inference component for CUDA DNN.</description>
     <releaseNotes>This DNN v${EMGU_CUDNN_VERSION} for CUDA v${EMGU_CUDA_VERSION}.</releaseNotes>
-	${EMGU_CUDNN_CNN_NUGET_DEPENDENCY}
+	${EMGU_CUDNN_CNN_INFER_NUGET_DEPENDENCY}
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>emgu cuda dnn</tags>
   </metadata>
   <files>
-	${EMGU_CUDNN_CNN_NUGET_FILE_LIST}
+	${EMGU_CUDNN_CNN_INFER_NUGET_FILE_LIST}
   </files>
 </package>

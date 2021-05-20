@@ -38,7 +38,7 @@ namespace Emgu.CV.Structure
         }
 
         /// <summary>
-        /// The Maximum value of this range
+        /// The maximum value of this range
         /// </summary>
         public float Max
         {

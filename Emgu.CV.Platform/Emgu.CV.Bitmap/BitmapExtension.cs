@@ -204,11 +204,15 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Convert the mat into Bitmap, the pixel values are copied over to the Bitmap
+        /// Convert the mat into Bitmap
         /// </summary>
-        /// <param name="mat">The Mat to be converted to Bitmap</param>
+        /// <param name="mat">The Mat to be converted into Bitmap</param>
+        /// <param name="tryDataSharing">
+        /// If true, the Bitmap created will try to use the same raw pixel data from the Mat if possible.
+        /// In which case, do not disposed the input Mat before you disposed the Bitmap, or you will get an memory access violation.
+        /// If you are not sure about it, use the default value of "false", in which case the data will be copied over to the Bitmap.</param>
         /// <returns>A bitmap representation of the image.</returns>
-        public static Bitmap ToBitmap(this Mat mat)
+        public static Bitmap ToBitmap(this Mat mat, bool tryDataSharing = false)
         {
             if (mat.Dims > 3)
                 return null;
@@ -250,7 +254,7 @@ namespace Emgu.CV
             }
 
             return RawDataToBitmap(mat.DataPointer, mat.Step, s, colorType, mat.NumberOfChannels,
-                CvInvoke.GetDepthType(mat.Depth), true);
+                CvInvoke.GetDepthType(mat.Depth), tryDataSharing);
         }
 
 
