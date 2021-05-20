@@ -577,7 +577,13 @@ namespace Emgu.Util
             }
             else
             {
-                return Dlopen(dllname, 0x00102); // 0x00002 == RTLD_NOW, 0x00100 = RTL_GLOBAL
+                IntPtr handler = Dlopen(dllname, 0x00102); // 0x00002 == RTLD_NOW, 0x00100 = RTL_GLOBAL
+                if (handler == IntPtr.Zero)
+                {
+                    System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen to load {0}", dllname));
+                }
+
+                return handler;
             }
 #endif
         }
