@@ -83,6 +83,7 @@ Global
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{331f904e-e7e8-42e0-8c82-22539c35e8f3}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{3ec66d5c-1b05-4b4f-bb13-82bd76c992ee}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Raspbian\Emgu.CV.Runtime.Raspbian.projitems*{47cf52b9-ab6d-4bf6-a791-1ac4d2ccd140}*SharedItemsImports = 13
+		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{5f062e7d-b078-4f68-bf4a-f431dfc51002}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{5f6b97f8-7ea6-4b5d-9a5d-f5581505c303}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{74db1213-249e-44dc-b193-bc5cec981d3c}*SharedItemsImports = 13
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
