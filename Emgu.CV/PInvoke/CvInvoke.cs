@@ -165,7 +165,7 @@ namespace Emgu.CV
                     //The following code should handle finding the asp.NET BIN folder 
                     if (String.IsNullOrEmpty(asm.Location) || !File.Exists(asm.Location))
                     {
-                        Debug.WriteLine(String.Format("asm.Location is invalid: '{0}'", asm.Location));
+                        System.Diagnostics.Trace.WriteLine(String.Format("asm.Location is invalid: '{0}'", asm.Location));
                     }
                     else
                     {
@@ -196,12 +196,12 @@ namespace Emgu.CV
                     setDllDirectorySuccess = Emgu.Util.Toolbox.SetDllDirectory(loadDirectory);
                     if (!setDllDirectorySuccess)
                     {
-                        System.Diagnostics.Debug.WriteLine(String.Format("Failed to set dll directory: {0}", loadDirectory));
+                        System.Diagnostics.Trace.WriteLine(String.Format("Failed to set dll directory: {0}", loadDirectory));
                     }
                 } else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS)
                 {
                     //do nothing
-                    System.Diagnostics.Debug.WriteLine("iOS required static linking, Setting loadDirectory is not supported");
+                    System.Diagnostics.Trace.WriteLine("iOS required static linking, Setting loadDirectory is not supported");
                 }
                 else
                 {
@@ -212,7 +212,7 @@ namespace Emgu.CV
 
             if (setDllDirectorySuccess)
             {
-                System.Diagnostics.Debug.WriteLine(
+                System.Diagnostics.Trace.WriteLine(
                     String.Format(
                         "Loading Open CV binary for default locations. Current directory: {0}; Additional load folder: {1}",
                         Environment.CurrentDirectory,
@@ -220,7 +220,7 @@ namespace Emgu.CV
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine(
+                System.Diagnostics.Trace.WriteLine(
                     String.Format(
                         "Loading Open CV binary for default locations. Current directory: {0}", 
                         Environment.CurrentDirectory));

@@ -503,11 +503,62 @@ namespace Emgu.Util
                         return asm;
                 }
             }
-            catch
+            catch (Exception exception)
             {
-
+                Trace.WriteLine(String.Format("FindAssembly({0}) failed: {1}", assembleName, exception.Message));
             }
             return null;
+        }
+
+        private static IntPtr LoadLibraryWindows(String dllname)
+        {
+            const int loadLibrarySearchDllLoadDir = 0x00000100;
+            const int loadLibrarySearchDefaultDirs = 0x00001000;
+            //const int loadLibrarySearchApplicationDir = 0x00000200;
+            //const int loadLibrarySearchUserDirs = 0x00000400;
+            IntPtr handler;
+            if (System.IO.Path.IsPathRooted(dllname))
+            {
+                handler = LoadLibraryEx(dllname, IntPtr.Zero,
+                    loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
+            }
+            else
+            {
+                handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDefaultDirs);
+            }
+
+            //IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchUserDirs);
+            if (handler == IntPtr.Zero)
+            {
+                int error = Marshal.GetLastWin32Error();
+
+                System.ComponentModel.Win32Exception ex = new System.ComponentModel.Win32Exception(error);
+                System.Diagnostics.Trace.WriteLine(String.Format(
+                    "LoadLibraryEx {0} failed with error code {1}: {2}", dllname, (uint)error, ex.Message));
+                if (error == 5)
+                {
+                    System.Diagnostics.Trace.WriteLine(String.Format(
+                        "Please check if the current user has execute permission for file: {0} ", dllname));
+                }
+
+                //Also try loadPackagedLibrary
+                IntPtr packagedLibraryHandler = LoadPackagedLibrary(dllname, 0);
+                if (packagedLibraryHandler == IntPtr.Zero)
+                {
+                    error = Marshal.GetLastWin32Error();
+                    ex = new System.ComponentModel.Win32Exception(error);
+                    System.Diagnostics.Debug.WriteLine(String.Format(
+                        "LoadPackagedLibrary {0} failed with error code {1}: {2}", dllname, (uint)error,
+                        ex.Message));
+                }
+                else
+                {
+                    System.Diagnostics.Trace.WriteLine(String.Format("LoadPackagedLibrary loaded: {0}", dllname));
+                    return packagedLibraryHandler;
+                }
+            }
+
+            return handler;
         }
 
         /// <summary>
@@ -518,48 +569,21 @@ namespace Emgu.Util
         public static IntPtr LoadLibrary(String dllname)
         {
 #if UNITY_EDITOR_WIN
-            const int loadLibrarySearchDllLoadDir = 0x00000100;
-            const int loadLibrarySearchDefaultDirs = 0x00001000;
-            return LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
+            return LoadLibraryWindows(dllname);
 #else
             if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
             {
-                const int loadLibrarySearchDllLoadDir = 0x00000100;
-                const int loadLibrarySearchDefaultDirs = 0x00001000;
-                //const int loadLibrarySearchApplicationDir = 0x00000200;
-                //const int loadLibrarySearchUserDirs = 0x00000400;
-                IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
-                //IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchUserDirs);
-                if (handler == IntPtr.Zero)
-                {
-                    int error = Marshal.GetLastWin32Error();
-
-                    System.ComponentModel.Win32Exception ex = new System.ComponentModel.Win32Exception(error);
-                    System.Diagnostics.Trace.WriteLine(String.Format("LoadLibraryEx {0} failed with error code {1}: {2}", dllname, (uint)error, ex.Message));
-                    if (error == 5)
-                    {
-                        System.Diagnostics.Trace.WriteLine(String.Format("Please check if the current user has execute permission for file: {0} ", dllname));
-                    }
-
-                    //Also try loadPackagedLibrary
-                    IntPtr packagedLibraryHandler = LoadPackagedLibrary(dllname, 0);
-                    if (packagedLibraryHandler == IntPtr.Zero)
-                    {
-                        error = Marshal.GetLastWin32Error();
-                        ex = new System.ComponentModel.Win32Exception(error);
-                        System.Diagnostics.Debug.WriteLine(String.Format("LoadPackagedLibrary {0} failed with error code {1}: {2}", dllname, (uint)error, ex.Message));
-                    }
-                    else
-                    {
-                        System.Diagnostics.Trace.WriteLine(String.Format("LoadPackagedLibrary loaded: {0}", dllname));
-                        return packagedLibraryHandler;
-                    }
-                }
-                return handler;
+                return LoadLibraryWindows(dllname);
             }
             else
             {
-                return Dlopen(dllname, 2); // 2 == RTLD_NOW
+                IntPtr handler = Dlopen(dllname, 0x00102); // 0x00002 == RTLD_NOW, 0x00100 = RTL_GLOBAL
+                if (handler == IntPtr.Zero)
+                {
+                    System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen to load {0}", dllname));
+                }
+
+                return handler;
             }
 #endif
         }
