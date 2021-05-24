@@ -20,11 +20,11 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Linear = 1,
         /// <summary>
-        /// Resampling using pixel area relation. It is the preferred method for image decimation that gives moire-free results. In case of zooming it is similar to CV_INTER_NN method
+        /// Bicubic interpolation
         /// </summary>
         Cubic = 2,
         /// <summary>
-        /// Bicubic interpolation
+        /// Resampling using pixel area relation. It is the preferred method for image decimation that gives moire-free results. In case of zooming it is similar to CV_INTER_NN method
         /// </summary>
         Area = 3,
         /// <summary>
