@@ -510,43 +510,67 @@ namespace Emgu.Util
             return null;
         }
 
-        private static IntPtr LoadLibraryWindows(String dllname)
+        private static IntPtr LoadLibraryExWindows(String dllname, int flags)
         {
-            const int loadLibrarySearchDllLoadDir = 0x00000100;
-            const int loadLibrarySearchDefaultDirs = 0x00001000;
-            //const int loadLibrarySearchApplicationDir = 0x00000200;
-            //const int loadLibrarySearchUserDirs = 0x00000400;
-            IntPtr handler;
-            if (System.IO.Path.IsPathRooted(dllname))
-            {
-                handler = LoadLibraryEx(dllname, IntPtr.Zero,
-                    loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs);
-            }
-            else
-            {
-                handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchDefaultDirs);
-            }
+            IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, flags);
 
-            //IntPtr handler = LoadLibraryEx(dllname, IntPtr.Zero, loadLibrarySearchUserDirs);
             if (handler == IntPtr.Zero)
             {
                 int error = Marshal.GetLastWin32Error();
 
                 System.ComponentModel.Win32Exception ex = new System.ComponentModel.Win32Exception(error);
                 System.Diagnostics.Trace.WriteLine(String.Format(
-                    "LoadLibraryEx {0} failed with error code {1}: {2}", dllname, (uint)error, ex.Message));
+                    "LoadLibraryEx {0} using flag {3}. Failed with error code {1}: {2}", 
+                    dllname, 
+                    (uint) error,
+                    ex.Message, 
+                    flags));
                 if (error == 5)
                 {
                     System.Diagnostics.Trace.WriteLine(String.Format(
                         "Please check if the current user has execute permission for file: {0} ", dllname));
                 }
+            }
+            else
+            {
+                System.Diagnostics.Trace.WriteLine(String.Format("LoadLibraryEx successfully loaded {0}.", dllname));
+            }
 
+            return handler;
+        }
+
+        private static IntPtr LoadLibraryWindows(String dllname)
+        {
+            const int loadLibrarySearchDllLoadDir = 0x00000100;
+            const int loadLibrarySearchDefaultDirs = 0x00001000;
+            int flags;
+            if (System.IO.Path.IsPathRooted(dllname))
+            {
+                flags = loadLibrarySearchDllLoadDir | loadLibrarySearchDefaultDirs;
+            }
+            else
+            {
+                flags = loadLibrarySearchDefaultDirs;
+            }
+
+            IntPtr handler = LoadLibraryExWindows(dllname, flags);
+
+            if (handler == IntPtr.Zero)
+            {
+                //Try again with the '0' flags. 
+                //The first attempt above may fail, if the native dll is within a folder in the PATH environment variable.
+                //The call below will also search for folders in PATH environment variable.
+                handler = LoadLibraryExWindows(dllname, 0);
+            }
+
+            if (handler == IntPtr.Zero)
+            {
                 //Also try loadPackagedLibrary
                 IntPtr packagedLibraryHandler = LoadPackagedLibrary(dllname, 0);
                 if (packagedLibraryHandler == IntPtr.Zero)
                 {
-                    error = Marshal.GetLastWin32Error();
-                    ex = new System.ComponentModel.Win32Exception(error);
+                    int error = Marshal.GetLastWin32Error();
+                    var ex = new System.ComponentModel.Win32Exception(error);
                     System.Diagnostics.Debug.WriteLine(String.Format(
                         "LoadPackagedLibrary {0} failed with error code {1}: {2}", dllname, (uint)error,
                         ex.Message));
@@ -557,6 +581,7 @@ namespace Emgu.Util
                     return packagedLibraryHandler;
                 }
             }
+
 
             return handler;
         }
@@ -580,7 +605,7 @@ namespace Emgu.Util
                 IntPtr handler = Dlopen(dllname, 0x00102); // 0x00002 == RTLD_NOW, 0x00100 = RTL_GLOBAL
                 if (handler == IntPtr.Zero)
                 {
-                    System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen to load {0}", dllname));
+                    System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen to load {0} (RTLD_NOW | RTL_GLOBAL)", dllname));
                 }
 
                 return handler;
