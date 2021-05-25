@@ -35,7 +35,7 @@ namespace Emgu.CV
         /// <param name="line">The line number in the source where error is encountered</param>
         /// <param name="userData">Arbitrary pointer that is transparently passed to the error handler.</param>
         /// <returns>if 0, signal the process to continue</returns>
-#if (UNITY_WSA || UNITY_ANDROID) && (!UNITY_EDITOR)
+#if UNITY_WSA || UNITY_ANDROID || UNITY_STANDALONE
         [AOT.MonoPInvokeCallback(typeof(CvErrorCallback))]
 #endif
         private static int CvIgnoreErrorErrorHandler(
@@ -60,7 +60,7 @@ namespace Emgu.CV
         /// <param name="line">The line number in the source where error is encountered</param>
         /// <param name="userData">Arbitrary pointer that is transparently passed to the error handler.</param>
         /// <returns>If 0, signal the process to continue</returns>
-#if (UNITY_WSA || UNITY_ANDROID) && (!UNITY_EDITOR)
+#if UNITY_WSA || UNITY_ANDROID || UNITY_STANDALONE
         [AOT.MonoPInvokeCallback(typeof(CvErrorCallback))]
 #endif
         private static int CvErrorHandler(
