@@ -1,0 +1,57 @@
+name: CodeQL Analysis
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 8 * * *'
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: [ self-hosted, Windows ]
+    timeout-minutes: 180
+    steps:
+      - name: Add Visual Studio MSBuild to PATH
+        id: msbuild_path
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - name: Checkout repository
+        id: checkout_repo
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout submodules
+        id: checkout_submodules
+        run: |
+          git submodule update --init --recursive
+
+      - name: Build native binary
+        id: build_native_binary
+        run: |
+          Push-Location .\platforms\windows\
+          .\Build_Binary_x86-64_doc.bat
+
+      - name: Initialize CodeQL
+        id: init_codeql
+        uses: github/codeql-action/init@v1
+        with:
+          languages: csharp
+
+      - name: Build solution
+        id: build_solution
+        run: |
+          Push-Location .\Solution\Windows.Desktop\
+          msbuild Emgu.CV.sln `
+          -p:Configuration=Release `
+          -p:Platform=x64 `
+          -p:UseSharedCompilation=false `
+          -t:Restore,Build
+
+      - name: Perform CodeQL Analysis
+        id: analyze_codeql
+        uses: github/codeql-action/analyze@v1
+
+# Built with ❤ by [Pipeline Foundation](https://pipeline.foundation)
