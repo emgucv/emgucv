@@ -296,7 +296,7 @@ namespace Emgu.CV
         /// <returns>The UMat</returns>
         public UMat GetUMat(CvEnum.AccessType access, UMat.Usage usageFlags = UMat.Usage.Default)
         {
-            return new UMat(MatInvoke.cvMatGetUMat(Ptr, access, usageFlags), true);
+            return new UMat(MatInvoke.cveMatGetUMat(Ptr, access, usageFlags), true);
         }
 
         /// <summary>
@@ -905,7 +905,7 @@ namespace Emgu.CV
         {
             using (InputArray iaValue = value.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-                MatInvoke.cvMatSetTo(Ptr, iaValue, iaMask);
+                MatInvoke.cveMatSetTo(Ptr, iaValue, iaMask);
         }
 
         /// <summary>
@@ -1564,10 +1564,10 @@ namespace Emgu.CV
            );
         */
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cvMatGetUMat(IntPtr mat, CvEnum.AccessType access, UMat.Usage usageFlags);
+        internal extern static IntPtr cveMatGetUMat(IntPtr mat, CvEnum.AccessType access, UMat.Usage usageFlags);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cvMatSetTo(IntPtr mat, IntPtr value, IntPtr mask);
+        internal extern static void cveMatSetTo(IntPtr mat, IntPtr value, IntPtr mask);
 
         //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         //internal extern static IntPtr cveMatUseCustomAllocator(IntPtr mat, MatDataAllocatorInvoke.MatAllocateCallback allocator, MatDataAllocatorInvoke.MatDeallocateCallback deallocator, IntPtr allocateDataActionPtr, IntPtr freeDataActionPtr);

@@ -38,8 +38,8 @@ CVAPI(uchar*) cveMatGetDataPointer(cv::Mat* mat);
 CVAPI(uchar*) cveMatGetDataPointer2(cv::Mat* mat, int* indices);
 CVAPI(size_t) cveMatGetStep(cv::Mat* mat);
 
-CVAPI(void) cvMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* mask);
-CVAPI(cv::UMat*) cvMatGetUMat(cv::Mat* mat, int access, cv::UMatUsageFlags usageFlags);
+CVAPI(void) cveMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* mask);
+CVAPI(cv::UMat*) cveMatGetUMat(cv::Mat* mat, int access, cv::UMatUsageFlags usageFlags);
 CVAPI(void) cveMatConvertTo( cv::Mat* mat, cv::_OutputArray* out, int rtype, double alpha, double beta );
 CVAPI(cv::Mat*) cveMatReshape(cv::Mat* mat, int cn, int rows);
 

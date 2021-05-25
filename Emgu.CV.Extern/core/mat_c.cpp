@@ -41,7 +41,7 @@ public:
 			total *= sizes[i];
 		}
 		//uchar* data = data0 ? (uchar*)data0 : (uchar*)fastMalloc(total);
-		uchar* data = data0 ? (uchar*)data0 : dataAllocator(CV_MAT_DEPTH(type), CV_MAT_CN(type), total, allocateDataAction);
+		uchar* data = data0 ? static_cast<uchar*>(data0) : dataAllocator(CV_MAT_DEPTH(type), CV_MAT_CN(type), total, allocateDataAction);
 		cv::UMatData* u = new cv::UMatData(this);
 		u->data = u->origdata = data;
 		u->size = total;
@@ -155,7 +155,7 @@ IplImage* cveMatToIplImage(cv::Mat* m)
 	IplImage* result = new IplImage();
 	CV_Assert(m->dims <= 2);
 	cvInitImageHeader(result, cvSize(m->size()), cvIplDepth(m->flags), m->channels());
-	cvSetData(result, m->data, (int)m->step[0]);
+	cvSetData(result, m->data, static_cast<int>(m->step[0]));
 	return result;
 }
 int cveMatGetElementSize(cv::Mat* mat)
@@ -181,12 +181,12 @@ size_t cveMatGetStep(cv::Mat* mat)
 	return mat->step;
 }
 
-void cvMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* mask)
+void cveMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* mask)
 {
-	mat->setTo(*value, mask ? *mask : (cv::InputArray) cv::noArray());
+	mat->setTo(*value, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
 
-cv::UMat* cvMatGetUMat(cv::Mat* mat, int access, cv::UMatUsageFlags usageFlags)
+cv::UMat* cveMatGetUMat(cv::Mat* mat, int access, cv::UMatUsageFlags usageFlags)
 {
 	cv::UMat* result = new cv::UMat();
 	cv::UMat tmp = mat->getUMat(static_cast<cv::AccessFlag>(access), usageFlags);
