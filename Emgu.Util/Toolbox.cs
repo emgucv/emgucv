@@ -520,7 +520,7 @@ namespace Emgu.Util
 
                 System.ComponentModel.Win32Exception ex = new System.ComponentModel.Win32Exception(error);
                 System.Diagnostics.Trace.WriteLine(String.Format(
-                    "LoadLibraryEx {0} using flag {3}. Failed with error code {1}: {2}", 
+                    "LoadLibraryEx(\"{0}\", 0, {3}) failed with error code {1}: {2}", 
                     dllname, 
                     (uint) error,
                     ex.Message, 
@@ -533,7 +533,7 @@ namespace Emgu.Util
             }
             else
             {
-                System.Diagnostics.Trace.WriteLine(String.Format("LoadLibraryEx successfully loaded {0}.", dllname));
+                System.Diagnostics.Trace.WriteLine(String.Format("LoadLibraryEx(\"{0}\", 0, {1}) successfully loaded library.", dllname, flags));
             }
 
             return handler;

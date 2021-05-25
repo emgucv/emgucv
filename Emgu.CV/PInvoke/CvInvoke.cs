@@ -214,7 +214,7 @@ namespace Emgu.CV
             {
                 System.Diagnostics.Trace.WriteLine(
                     String.Format(
-                        "Loading Open CV binary for default locations. Current directory: {0}; Additional load folder: {1}",
+                        "Loading Open CV binary from default locations. Current directory: {0}; Additional load folder: {1}",
                         Environment.CurrentDirectory,
                         loadDirectory));
             }
@@ -222,10 +222,9 @@ namespace Emgu.CV
             {
                 System.Diagnostics.Trace.WriteLine(
                     String.Format(
-                        "Loading Open CV binary for default locations. Current directory: {0}", 
+                        "Loading Open CV binary from default locations. Current directory: {0}", 
                         Environment.CurrentDirectory));
             }
-
 
             bool success = true;
             string prefix = string.Empty;
