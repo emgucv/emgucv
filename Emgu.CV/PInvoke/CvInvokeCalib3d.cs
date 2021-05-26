@@ -409,16 +409,33 @@ namespace Emgu.CV
 
 
         /// <summary>
-        /// Estimates intrinsic camera parameters and extrinsic parameters for each of the views
+        /// Finds the camera intrinsic and extrinsic parameters from several views of a calibration pattern.
         /// </summary>
-        /// <param name="objectPoints">The 3D location of the object points. The first index is the index of image, second index is the index of the point</param>
-        /// <param name="imagePoints">The 2D image location of the points. The first index is the index of the image, second index is the index of the point</param>
-        /// <param name="imageSize">The size of the image, used only to initialize intrinsic camera matrix</param>
-        /// <param name="rotationVectors">The output 3xM or Mx3 array of rotation vectors (compact representation of rotation matrices, see cvRodrigues2). </param>
-        /// <param name="translationVectors">The output 3xM or Mx3 array of translation vectors</param>/// <param name="calibrationType">cCalibration type</param>
+        /// <param name="objectPoints">
+        /// In the new interface it is a vector of vectors of calibration pattern points in the calibration pattern coordinate space.
+        /// The outer vector contains as many elements as the number of pattern views. If the same calibration pattern is shown in each
+        /// view and it is fully visible, all the vectors will be the same. Although, it is possible to use partially occluded patterns
+        /// or even different patterns in different views. Then, the vectors will be different. Although the points are 3D, they all
+        /// lie in the calibration pattern's XY coordinate plane (thus 0 in the Z-coordinate), if the used calibration pattern is a
+        /// planar rig. In the old interface all the vectors of object points from different views are concatenated together.
+        /// </param>
+        /// <param name="imagePoints">
+        /// In the new interface it is a vector of vectors of the projections of calibration pattern points.
+        /// In the old interface all the vectors of object points from different views are concatenated together.
+        /// </param>
+        /// <param name="imageSize">Size of the image used only to initialize the camera intrinsic matrix.</param>
+        /// <param name="rotationVectors">
+        /// Output vector of rotation vectors (Rodrigues) estimated for each pattern view. That is, each i-th rotation vector together
+        /// with the corresponding i-th translation vector (see the next output parameter description) brings the calibration pattern from
+        /// the object coordinate space (in which object points are specified) to the camera coordinate space. In more technical terms,
+        /// the tuple of the i-th rotation and translation vector performs a change of basis from object coordinate space to camera
+        /// coordinate space. Due to its duality, this tuple is equivalent to the position of the calibration pattern with respect to the
+        /// camera coordinate space.
+        /// </param>
+        /// <param name="translationVectors">Output vector of translation vectors estimated for each pattern view, see parameter describtion above.</param>
         /// <param name="termCriteria">The termination criteria</param>
-        /// <param name="cameraMatrix">The output camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS and/or CV_CALIB_FIX_ASPECT_RATION are specified, some or all of fx, fy, cx, cy must be initialized</param>
-        /// <param name="distortionCoeffs">The output 4x1 or 1x4 vector of distortion coefficients [k1, k2, p1, p2]</param>
+        /// <param name="cameraMatrix">Input/output 3x3 floating-point camera intrinsic matrix A [fx 0 cx; 0 fy cy; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS and/or CV_CALIB_FIX_ASPECT_RATION are specified, some or all of fx, fy, cx, cy must be initialized</param>
+        /// <param name="distortionCoeffs">Input/output vector of distortion coefficients (k1,k2,p1,p2[,k3[,k4,k5,k6[,s1,s2,s3,s4[,τx,τy]]]]) of 4, 5, 8, 12 or 14 elements.</param>
         /// <returns>The final reprojection error</returns>
         public static double CalibrateCamera(
            MCvPoint3D32f[][] objectPoints,
@@ -470,15 +487,32 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Estimates intrinsic camera parameters and extrinsic parameters for each of the views
+        /// Finds the camera intrinsic and extrinsic parameters from several views of a calibration pattern.
         /// </summary>
-        /// <param name="objectPoints">The joint matrix of object points, 3xN or Nx3, where N is the total number of points in all views</param>
-        /// <param name="imagePoints">The joint matrix of corresponding image points, 2xN or Nx2, where N is the total number of points in all views</param>
-        /// <param name="imageSize">Size of the image, used only to initialize intrinsic camera matrix</param>
-        /// <param name="cameraMatrix">The output camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS and/or CV_CALIB_FIX_ASPECT_RATION are specified, some or all of fx, fy, cx, cy must be initialized</param>
-        /// <param name="distortionCoeffs">The output 4x1 or 1x4 vector of distortion coefficients [k1, k2, p1, p2]</param>
-        /// <param name="rotationVectors">The output 3xM or Mx3 array of rotation vectors (compact representation of rotation matrices, see cvRodrigues2). </param>
-        /// <param name="translationVectors">The output 3xM or Mx3 array of translation vectors</param>
+        /// <param name="objectPoints">
+        /// In the new interface it is a vector of vectors of calibration pattern points in the calibration pattern coordinate space.
+        /// The outer vector contains as many elements as the number of pattern views. If the same calibration pattern is shown in each
+        /// view and it is fully visible, all the vectors will be the same. Although, it is possible to use partially occluded patterns
+        /// or even different patterns in different views. Then, the vectors will be different. Although the points are 3D, they all
+        /// lie in the calibration pattern's XY coordinate plane (thus 0 in the Z-coordinate), if the used calibration pattern is a
+        /// planar rig. In the old interface all the vectors of object points from different views are concatenated together.
+        /// </param>
+        /// <param name="imagePoints">
+        /// In the new interface it is a vector of vectors of the projections of calibration pattern points.
+        /// In the old interface all the vectors of object points from different views are concatenated together.
+        /// </param>
+        /// <param name="imageSize">Size of the image used only to initialize the camera intrinsic matrix.</param>
+        /// <param name="cameraMatrix">Input/output 3x3 floating-point camera intrinsic matrix A [fx 0 cx; 0 fy cy; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS and/or CV_CALIB_FIX_ASPECT_RATION are specified, some or all of fx, fy, cx, cy must be initialized</param>
+        /// <param name="distortionCoeffs">Input/output vector of distortion coefficients (k1,k2,p1,p2[,k3[,k4,k5,k6[,s1,s2,s3,s4[,τx,τy]]]]) of 4, 5, 8, 12 or 14 elements.</param>
+        /// <param name="rotationVectors">
+        /// Output vector of rotation vectors (Rodrigues) estimated for each pattern view. That is, each i-th rotation vector together
+        /// with the corresponding i-th translation vector (see the next output parameter description) brings the calibration pattern from
+        /// the object coordinate space (in which object points are specified) to the camera coordinate space. In more technical terms,
+        /// the tuple of the i-th rotation and translation vector performs a change of basis from object coordinate space to camera
+        /// coordinate space. Due to its duality, this tuple is equivalent to the position of the calibration pattern with respect to the
+        /// camera coordinate space.
+        /// </param>
+        /// <param name="translationVectors">Output vector of translation vectors estimated for each pattern view, see parameter describtion above.</param>
         /// <param name="flags">Different flags</param>
         /// <param name="termCriteria">The termination criteria</param>
         /// <returns>The final reprojection error</returns>
