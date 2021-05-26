@@ -2782,5 +2782,107 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveHuMoments2(IntPtr moments, IntPtr hu);
 
+        /// <summary>
+        /// Returns Gaussian filter coefficients.
+        /// </summary>
+        /// <param name="ksize">Aperture size. It should be odd and positive.</param>
+        /// <param name="sigma">Gaussian standard deviation. If it is non-positive, it is computed from ksize.</param>
+        /// <param name="ktype">Type of filter coefficients. It can be CV_32F or CV_64F </param>
+        /// <returns>Gaussian filter coefficients.</returns>
+        public static Mat GetGaussianKernel(
+            int ksize,
+            double sigma,
+            DepthType ktype = DepthType.Cv64F)
+        {
+            Mat kernel = new Mat();
+            cveGetGaussianKernel(ksize, sigma, ktype, kernel);
+            return kernel;
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveGetGaussianKernel(
+            int ksize,
+            double sigma,
+            DepthType ktype,
+            IntPtr result);
+
+        /// <summary>
+        /// Returns filter coefficients for computing spatial image derivatives.
+        /// </summary>
+        /// <param name="kx">Output matrix of row filter coefficients.</param>
+        /// <param name="ky">Output matrix of column filter coefficients.</param>
+        /// <param name="dx">Derivative order in respect of x.</param>
+        /// <param name="dy">Derivative order in respect of y.</param>
+        /// <param name="ksize">Aperture size. It can be FILTER_SCHARR, 1, 3, 5, or 7.</param>
+        /// <param name="normalize">Flag indicating whether to normalize (scale down) the filter coefficients or not. </param>
+        /// <param name="ktype">Type of filter coefficients. It can be CV_32f or CV_64F .</param>
+        public static void GetDerivKernels(
+            IOutputArray kx,
+            IOutputArray ky,
+            int dx,
+            int dy,
+            int ksize,
+            bool normalize = false,
+            DepthType ktype = DepthType.Cv32F)
+        {
+            using (OutputArray oaKx = kx.GetOutputArray())
+            using (OutputArray oaKy = ky.GetOutputArray())
+            {
+                cveGetDerivKernels(
+                    oaKx,
+                    oaKy,
+                    dx,
+                    dy,
+                    ksize,
+                    normalize,
+                    ktype);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveGetDerivKernels(
+            IntPtr kx,
+            IntPtr ky,
+            int dx,
+            int dy,
+            int ksize,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool normalize,
+            DepthType ktype);
+
+        /// <summary>
+        /// Returns Gabor filter coefficients.
+        /// </summary>
+        /// <param name="ksize">Size of the filter returned.</param>
+        /// <param name="sigma">Standard deviation of the gaussian envelope.</param>
+        /// <param name="theta">Orientation of the normal to the parallel stripes of a Gabor function.</param>
+        /// <param name="lambd">Wavelength of the sinusoidal factor.</param>
+        /// <param name="gamma">Spatial aspect ratio.</param>
+        /// <param name="psi">Phase offset.</param>
+        /// <param name="ktype">Type of filter coefficients. It can be CV_32F or CV_64F .</param>
+        /// <returns>Gabor filter coefficients.</returns>
+        public static Mat GetGaborKernel(
+            Size ksize,
+            double sigma,
+            double theta,
+            double lambd,
+            double gamma,
+            double psi = Math.PI * 0.5,
+            DepthType ktype = DepthType.Cv64F)
+        {
+            Mat kernel = new Mat();
+            cveGetGaborKernel(ref ksize, sigma, theta, lambd, gamma, psi, ktype, kernel);
+            return kernel;
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveGetGaborKernel(
+            ref Size ksize,
+            double sigma,
+            double theta,
+            double lambd,
+            double gamma,
+            double psi,
+            DepthType ktype,
+            IntPtr result);
     }
 }

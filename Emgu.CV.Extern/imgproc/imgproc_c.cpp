@@ -738,3 +738,42 @@ void cveIntelligentScissorsMBGetContour(
 {
 	ptr->getContour(*targetPt, *contour, backward);
 }
+
+void cveGetGaussianKernel(
+	int ksize,
+	double sigma,
+	int ktype,
+	cv::Mat* result)
+{
+	cv::Mat m = cv::getGaussianKernel(
+		ksize,
+		sigma,
+		ktype);
+	cv::swap(m, *result);
+}
+
+void cveGetDerivKernels(
+	cv::_OutputArray* kx,
+	cv::_OutputArray* ky,
+	int dx,
+	int dy,
+	int ksize,
+	bool normalize,
+	int ktype)
+{
+	cv::getDerivKernels(*kx, *ky, dx, dy, ksize, normalize, ktype);
+}
+
+void cveGetGaborKernel(
+	CvSize* ksize,
+	double sigma,
+	double theta,
+	double lambd,
+	double gamma,
+	double psi,
+	int ktype,
+	cv::Mat* result)
+{
+	cv::Mat m = cv::getGaborKernel(*ksize, sigma, theta, lambd, gamma, psi, ktype);
+	cv::swap(m, *result);
+}

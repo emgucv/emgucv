@@ -244,4 +244,30 @@ CVAPI(void) cveIntelligentScissorsMBGetContour(
 	CvPoint* targetPt, 
 	cv::_OutputArray* contour, 
 	bool backward);
+
+CVAPI(void) cveGetGaussianKernel(
+	int ksize, 
+	double sigma, 
+	int ktype, 
+	cv::Mat* result);
+
+CVAPI(void) cveGetDerivKernels(
+	cv::_OutputArray* kx, 
+	cv::_OutputArray* ky,
+	int dx, 
+	int dy, 
+	int ksize,
+	bool normalize, 
+	int ktype);
+
+CVAPI(void) cveGetGaborKernel(
+	CvSize* ksize, 
+	double sigma, 
+	double theta, 
+	double lambd,
+	double gamma, 
+	double psi, 
+	int ktype,
+	cv::Mat* result);
+
 #endif
