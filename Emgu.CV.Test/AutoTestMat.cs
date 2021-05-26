@@ -169,6 +169,12 @@ namespace Emgu.CV.Test
                 mStr = fs.ReleaseAndGetString();
             }
 
+            using (FileStorage fs = new FileStorage(".xml", FileStorage.Mode.FormatXml | FileStorage.Mode.Write | FileStorage.Mode.Memory))
+            {
+                fs.Write(m, "m");
+                mStr = fs.ReleaseAndGetString();
+            }
+
             //Treat the Mat as image data and convert it to png format.
             using (VectorOfByte bytes = new VectorOfByte())
             {
