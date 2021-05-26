@@ -42,6 +42,7 @@ using Emgu.CV.XImgproc;
 using Emgu.Util;
 //using Newtonsoft.Json;
 using DetectorParameters = Emgu.CV.Aruco.DetectorParameters;
+using DistType = Emgu.CV.CvEnum.DistType;
 #if VS_TEST
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
@@ -4376,6 +4377,18 @@ namespace Emgu.CV.Test
                 PointF p = c.Center;
             }
 
+        }
+
+        [Test]
+        public void TestEMD()
+        {
+            using (Mat signature1 = new Mat(new Size(100, 1), DepthType.Cv32F, 1))
+            using (Mat signature2 = new Mat(new Size(100, 1), DepthType.Cv32F, 1))
+            {
+                CvInvoke.Randu(signature1, new MCvScalar(), new MCvScalar(1.0));
+                CvInvoke.Randu(signature2, new MCvScalar(), new MCvScalar(1.0));
+                double dist = CvInvoke.EMD(signature1, signature2, DistType.L2);
+            }
         }
 
 
