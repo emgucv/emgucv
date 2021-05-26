@@ -372,5 +372,110 @@ namespace Emgu.CV
             IntPtr rCam2gripper, 
             IntPtr tCam2gripper,
             CvEnum.HandEyeCalibrationMethod method);
+
+        /// <summary>
+        /// Computes an RQ decomposition of 3x3 matrices.
+        /// </summary>
+        /// <param name="src">3x3 input matrix.</param>
+        /// <param name="mtxR">Output 3x3 upper-triangular matrix.</param>
+        /// <param name="mtxQ">Output 3x3 orthogonal matrix.</param>
+        /// <param name="Qx">Optional output 3x3 rotation matrix around x-axis.</param>
+        /// <param name="Qy">Optional output 3x3 rotation matrix around y-axis.</param>
+        /// <param name="Qz">Optional output 3x3 rotation matrix around z-axis.</param>
+        /// <returns>The euler angles</returns>
+        public static MCvPoint3D64f RQDecomp3x3(
+            IInputArray src,
+            IOutputArray mtxR,
+            IOutputArray mtxQ,
+            IOutputArray Qx = null,
+            IOutputArray Qy = null,
+            IOutputArray Qz = null)
+        {
+            MCvPoint3D64f results = new MCvPoint3D64f();
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaMtxR = mtxR.GetOutputArray())
+            using (OutputArray oaMtxQ = mtxQ.GetOutputArray())
+            using (OutputArray oaQx = Qx == null ? OutputArray.GetEmpty() : Qx.GetOutputArray())
+            using (OutputArray oaQy = Qy == null ? OutputArray.GetEmpty() : Qy.GetOutputArray())
+            using (OutputArray oaQz = Qz == null ? OutputArray.GetEmpty() : Qz.GetOutputArray())
+            {    
+                cveRQDecomp3x3(
+                    iaSrc,
+                    ref results,
+                    oaMtxR,
+                    oaMtxQ,
+                    oaQx,
+                    oaQy,
+                    oaQz
+                );
+                return results;
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveRQDecomp3x3(
+            IntPtr src,
+            ref MCvPoint3D64f result,
+            IntPtr mtxR,
+            IntPtr mtxQ,
+            IntPtr Qx,
+            IntPtr Qy,
+            IntPtr Qz);
+
+
+        /// <summary>
+        /// Decomposes a projection matrix into a rotation matrix and a camera intrinsic matrix.
+        /// </summary>
+        /// <param name="projMatrix">3x4 input projection matrix P.</param>
+        /// <param name="cameraMatrix">Output 3x3 camera intrinsic matrix A</param>
+        /// <param name="rotMatrix">Output 3x3 external rotation matrix R.</param>
+        /// <param name="transVect">Output 4x1 translation vector T.</param>
+        /// <param name="rotMatrixX">Optional 3x3 rotation matrix around x-axis.</param>
+        /// <param name="rotMatrixY">Optional 3x3 rotation matrix around y-axis.</param>
+        /// <param name="rotMatrixZ">Optional 3x3 rotation matrix around z-axis.</param>
+        /// <param name="eulerAngles">Optional three-element vector containing three Euler angles of rotation in degrees.</param>
+        public static void DecomposeProjectionMatrix(
+            IInputArray projMatrix,
+            IOutputArray cameraMatrix,
+            IOutputArray rotMatrix,
+            IOutputArray transVect,
+            IOutputArray rotMatrixX = null,
+            IOutputArray rotMatrixY = null,
+            IOutputArray rotMatrixZ = null,
+            IOutputArray eulerAngles = null)
+        {
+            using (InputArray iaProjMatrix = projMatrix.GetInputArray())
+            using (OutputArray oaCameraMatrix = cameraMatrix.GetOutputArray())
+            using (OutputArray oaRotMatrix = rotMatrix.GetOutputArray())
+            using (OutputArray oaTransVect = transVect.GetOutputArray())
+            using (OutputArray oaRotMatrixX = rotMatrixX == null ? OutputArray.GetEmpty() : rotMatrixX.GetOutputArray())
+            using (OutputArray oaRotMatrixY = rotMatrixY == null ? OutputArray.GetEmpty() : rotMatrixY.GetOutputArray())
+            using (OutputArray oaRotMatrixZ = rotMatrixZ == null ? OutputArray.GetEmpty() : rotMatrixZ.GetOutputArray())
+            using (OutputArray oaEulerAngles = eulerAngles == null
+                ? OutputArray.GetEmpty()
+                : eulerAngles.GetOutputArray())
+            {
+                cveDecomposeProjectionMatrix(
+                    iaProjMatrix,
+                    oaCameraMatrix,
+                    oaRotMatrix,
+                    oaTransVect,
+                    oaRotMatrixX,
+                    oaRotMatrixY,
+                    oaRotMatrixZ,
+                    oaEulerAngles);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveDecomposeProjectionMatrix(
+            IntPtr projMatrix,
+            IntPtr cameraMatrix,
+            IntPtr rotMatrix,
+            IntPtr transVect,
+            IntPtr rotMatrixX,
+            IntPtr rotMatrixY,
+            IntPtr rotMatrixZ,
+            IntPtr eulerAngles);
     }
 }

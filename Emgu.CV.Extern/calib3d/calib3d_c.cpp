@@ -53,7 +53,7 @@ bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, st
 {
 	//cv::Mat_<int> indMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
 
-	cv::Mat_<uchar> maskMat = mask ? (cv::Mat_<uchar>) *mask : cv::Mat_<uchar>(matches->size(), 1, 255);
+	cv::Mat_<uchar> maskMat = mask ? static_cast<cv::Mat_<uchar>>(*mask) : cv::Mat_<uchar>(matches->size(), 1, 255);
 	int nonZero = mask ? cv::countNonZero(maskMat) : matches->size();
 	if (nonZero < 4) return false;
 
@@ -120,7 +120,7 @@ void cveEstimateChessboardSharpness(
 	cv::_OutputArray* sharpness,
 	CvScalar* result)
 {
-	cv::Scalar r = cv::estimateChessboardSharpness(*image, *patternSize, *corners, riseDistance, vertical, sharpness ? *sharpness : (cv::OutputArray) cv::noArray()) ;
+	cv::Scalar r = cv::estimateChessboardSharpness(*image, *patternSize, *corners, riseDistance, vertical, sharpness ? *sharpness : static_cast<cv::OutputArray>(cv::noArray())) ;
 	result->val[0] = r.val[0];
 	result->val[1] = r.val[1];
 	result->val[2] = r.val[2];
@@ -134,7 +134,7 @@ void cveDrawChessboardCorners(cv::_InputOutputArray* image, CvSize* patternSize,
 
 void cveFilterSpeckles(cv::_InputOutputArray* img, double newVal, int maxSpeckleSize, double maxDiff, cv::_InputOutputArray* buf)
 {
-	cv::filterSpeckles(*img, newVal, maxSpeckleSize, maxDiff, buf ? *buf : (cv::_InputOutputArray) cv::noArray());
+	cv::filterSpeckles(*img, newVal, maxSpeckleSize, maxDiff, buf ? *buf : static_cast<cv::_InputOutputArray>(cv::noArray()));
 }
 
 bool cveFindChessboardCorners(cv::_InputArray* image, CvSize* patternSize, cv::_OutputArray* corners, int flags)
@@ -171,7 +171,7 @@ void cveStereoRectify(
 
 void cveRodrigues(cv::_InputArray* src, cv::_OutputArray* dst, cv::_OutputArray* jacobian)
 {
-	cv::Rodrigues(*src, *dst, jacobian ? *jacobian : (cv::OutputArray) cv::noArray());
+	cv::Rodrigues(*src, *dst, jacobian ? *jacobian : static_cast<cv::OutputArray>(cv::noArray()));
 }
 
 double cveCalibrateCamera(
@@ -199,19 +199,37 @@ void cveConvertPointsFromHomogeneous(cv::_InputArray* src, cv::_OutputArray* dst
 
 void cveFindEssentialMat(cv::_InputArray* points1, cv::_InputArray* points2, cv::_InputArray* cameraMatrix, int method, double prob, double threshold, cv::_OutputArray* mask, cv::Mat* essentialMat)
 {
-	cv::Mat res = cv::findEssentialMat(*points1, *points2, *cameraMatrix, method, prob, threshold, mask ? *mask : (cv::OutputArray) cv::noArray());
+	cv::Mat res = cv::findEssentialMat(
+		*points1, 
+		*points2, 
+		*cameraMatrix, 
+		method, 
+		prob, 
+		threshold, 
+		mask ? *mask : static_cast<cv::OutputArray>(cv::noArray()));
 	cv::swap(res, *essentialMat);
 }
 
 void cveFindFundamentalMat(cv::_InputArray* points1, cv::_InputArray* points2, cv::_OutputArray* dst, int method, double param1, double param2, cv::_OutputArray* mask)
 {
-	cv::Mat tmp = cv::findFundamentalMat(*points1, *points2, method, param1, param2, mask ? *mask : (cv::OutputArray) cv::noArray());
+	cv::Mat tmp = cv::findFundamentalMat(
+		*points1, 
+		*points2, 
+		method, 
+		param1, 
+		param2, 
+		mask ? *mask : static_cast<cv::OutputArray>(cv::noArray()));
 	tmp.copyTo(*dst);
 }
 
 void cveFindHomography(cv::_InputArray* srcPoints, cv::_InputArray* dstPoints, cv::_OutputArray* dst, int method, double ransacReprojThreshold, cv::_OutputArray* mask)
 {
-	cv::Mat tmp = cv::findHomography(*srcPoints, *dstPoints, method, ransacReprojThreshold, mask ? *mask : (cv::OutputArray) cv::noArray());
+	cv::Mat tmp = cv::findHomography(
+		*srcPoints, 
+		*dstPoints, 
+		method, 
+		ransacReprojThreshold, 
+		mask ? *mask : static_cast<cv::OutputArray>(cv::noArray()));
 	tmp.copyTo(*dst);
 }
 
@@ -224,7 +242,13 @@ void cveProjectPoints(
 	cv::_InputArray* objPoints, cv::_InputArray* rvec, cv::_InputArray* tvec, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs,
 	cv::_OutputArray* imagePoints, cv::_OutputArray* jacobian, double aspectRatio)
 {
-	cv::projectPoints(*objPoints, *rvec, *tvec, *cameraMatrix, distCoeffs ? *distCoeffs : (cv::InputArray) cv::noArray(), *imagePoints, jacobian ? *jacobian : (cv::OutputArray) cv::noArray(), aspectRatio);
+	cv::projectPoints(
+		*objPoints, 
+		*rvec, *tvec, 
+		*cameraMatrix, 
+		distCoeffs ? *distCoeffs : static_cast<cv::InputArray>(cv::noArray()), 
+		*imagePoints, 
+		jacobian ? *jacobian : static_cast<cv::OutputArray>(cv::noArray()), aspectRatio);
 }
 
 void cveCalibrationMatrixValues(
@@ -235,7 +259,12 @@ void cveCalibrationMatrixValues(
 	cv::Point2d _principalPoint;
 
 	cv::calibrationMatrixValues(*cameraMatrix, *imageSize, apertureWidth, apertureHeight, _fovx, _fovy, _focalLength, _principalPoint, _aspectRatio);
-	*fovx = _fovx; *fovy = _fovy; *focalLength = _focalLength; *aspectRatio = _aspectRatio; principalPoint->x = _principalPoint.x; principalPoint->y = _principalPoint.y;
+	*fovx = _fovx;
+	*fovy = _fovy;
+	*focalLength = _focalLength;
+	*aspectRatio = _aspectRatio;
+	principalPoint->x = _principalPoint.x;
+	principalPoint->y = _principalPoint.y;
 }
 
 double cveStereoCalibrate(
@@ -270,14 +299,14 @@ bool cveSolvePnPRansac(
 		*objectPoints,
 		*imagePoints,
 		*cameraMatrix,
-		distCoeffs ? *distCoeffs : (cv::InputArray) cv::noArray(),
+		distCoeffs ? *distCoeffs : static_cast<cv::InputArray>(cv::noArray()),
 		*rvec,
 		*tvec,
 		useExtrinsicGuess,
 		iterationsCount,
 		reprojectionError,
 		confident,
-		inliers ? *inliers : (cv::OutputArray) cv::noArray(),
+		inliers ? *inliers : static_cast<cv::OutputArray>(cv::noArray()),
 		flags);
 }
 
@@ -354,8 +383,14 @@ void cveGetOptimalNewCameraMatrix(
 	cv::Mat* newCameraMatrix)
 {
 	cv::Rect r;
-	cv::Mat m = cv::getOptimalNewCameraMatrix(*cameraMatrix, distCoeffs ? *distCoeffs : (cv::InputArray) cv::noArray(),
-		*imageSize, alpha, *imageSize, &r, centerPrincipalPoint);
+	cv::Mat m = cv::getOptimalNewCameraMatrix(
+		*cameraMatrix, 
+		distCoeffs ? *distCoeffs : static_cast<cv::InputArray>(cv::noArray()),
+		*imageSize, 
+		alpha, 
+		*newImgSize,
+		&r, 
+		centerPrincipalPoint);
 	if (validPixROI)
 	{
 		validPixROI->x = r.x;
@@ -381,7 +416,15 @@ void cveInitCameraMatrix2D(
 void cveFisheyeProjectPoints(cv::_InputArray* objectPoints, cv::_OutputArray* imagePoints, cv::_InputArray* rvec, cv::_InputArray* tvec,
 	cv::_InputArray* K, cv::_InputArray* D, double alpha, cv::_OutputArray* jacobian)
 {
-	cv::fisheye::projectPoints(*objectPoints, *imagePoints, *rvec, *tvec, *K, *D, alpha, jacobian ? *jacobian : (cv::OutputArray) cv::noArray());
+	cv::fisheye::projectPoints(
+		*objectPoints, 
+		*imagePoints, 
+		*rvec, 
+		*tvec, 
+		*K, 
+		*D, 
+		alpha, 
+		jacobian ? *jacobian : static_cast<cv::OutputArray>(cv::noArray()));
 }
 
 void cveFisheyeDistortPoints(cv::_InputArray* undistored, cv::_OutputArray* distorted, cv::_InputArray* K, cv::_InputArray* D, double alpha)
@@ -391,7 +434,13 @@ void cveFisheyeDistortPoints(cv::_InputArray* undistored, cv::_OutputArray* dist
 
 void cveFisheyeUndistorPoints(cv::_InputArray* distorted, cv::_OutputArray* undistorted, cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* R, cv::_InputArray* P)
 {
-	cv::fisheye::undistortPoints(*distorted, *undistorted, *K, *D, R ? *R : (cv::InputArray) cv::noArray(), P ? *P : (cv::InputArray) cv::noArray());
+	cv::fisheye::undistortPoints(
+		*distorted, 
+		*undistorted, 
+		*K, 
+		*D, 
+		R ? *R : static_cast<cv::InputArray>(cv::noArray()), 
+		P ? *P : static_cast<cv::InputArray>(cv::noArray()));
 }
 
 void cveFisheyeInitUndistorRectifyMap(cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* R, cv::_InputArray* P, CvSize* size, int m1Type, cv::_OutputArray* map1, cv::_OutputArray* map2)
@@ -401,7 +450,13 @@ void cveFisheyeInitUndistorRectifyMap(cv::_InputArray* K, cv::_InputArray* D, cv
 
 void cveFisheyeUndistorImage(cv::_InputArray* distorted, cv::_OutputArray* undistored, cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* Knew, CvSize* newSize)
 {
-	cv::fisheye::undistortImage(*distorted, *undistored, *K, *D, Knew ? *Knew : (cv::InputArray) cv::noArray(), *newSize);
+	cv::fisheye::undistortImage(
+		*distorted, 
+		*undistored, 
+		*K, 
+		*D, 
+		Knew ? *Knew : static_cast<cv::InputArray>(cv::noArray()), 
+		*newSize);
 }
 
 void cveFisheyeEstimateNewCameraMatrixForUndistorRectify(cv::_InputArray* K, cv::_InputArray* D, CvSize* imageSize, cv::_InputArray* R, cv::_OutputArray* P, double balance, CvSize* newSize, double fovScale)
@@ -432,17 +487,35 @@ void cveFisheyeStereoCalibrate(cv::_InputArray* objectPoints, cv::_InputArray* i
 
 void cveInitUndistortRectifyMap(cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* r, cv::_InputArray* newCameraMatrix, CvSize* size, int m1type, cv::_OutputArray* map1, cv::_OutputArray* map2)
 {
-	cv::initUndistortRectifyMap(*cameraMatrix, *distCoeffs, r ? *r : (cv::_InputArray) cv::noArray(), *newCameraMatrix, *size, m1type, *map1, map2 ? *map2 : (cv::OutputArray) cv::noArray());
+	cv::initUndistortRectifyMap(
+		*cameraMatrix, *distCoeffs, 
+		r ? *r : static_cast<cv::_InputArray>(cv::noArray()), 
+		*newCameraMatrix, 
+		*size, 
+		m1type, 
+		*map1, 
+		map2 ? *map2 : static_cast<cv::OutputArray>(cv::noArray()));
 }
 
 void cveUndistort(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* cameraMatrix, cv::_InputArray* distorCoeffs, cv::_InputArray* newCameraMatrix)
 {
-	cv::undistort(*src, *dst, *cameraMatrix, *distorCoeffs, newCameraMatrix ? *newCameraMatrix : (cv::InputArray) cv::noArray());
+	cv::undistort(
+		*src, 
+		*dst, 
+		*cameraMatrix, 
+		*distorCoeffs, 
+		newCameraMatrix ? *newCameraMatrix : static_cast<cv::InputArray>(cv::noArray()));
 }
 
 void cveUndistortPoints(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* r, cv::_InputArray* p)
 {
-	cv::undistortPoints(*src, *dst, *cameraMatrix, *distCoeffs, r ? *r : (cv::InputArray) cv::noArray(), p ? *p : (cv::InputArray) cv::noArray());
+	cv::undistortPoints(
+		*src, 
+		*dst, 
+		*cameraMatrix, 
+		*distCoeffs, 
+		r ? *r : static_cast<cv::InputArray>(cv::noArray()), 
+		p ? *p : static_cast<cv::InputArray>(cv::noArray()));
 }
 
 void cveGetDefaultNewCameraMatrix(cv::_InputArray* cameraMatrix, CvSize* imgsize, bool centerPrincipalPoint, cv::Mat* cm)
@@ -461,7 +534,7 @@ void cveEstimateAffine2D(
 {
 	cv::Mat m = cv::estimateAffine2D(
 		*from, *to, 
-		inliners ? *inliners : (cv::OutputArray) cv::noArray(), 
+		inliners ? *inliners : static_cast<cv::OutputArray>(cv::noArray()), 
 		method, ransacReprojThreshold, maxIters, confidence, refineIters);
 	cv::swap(m, *affine);
 }
@@ -476,7 +549,7 @@ void cveEstimateAffinePartial2D(
 {
 	cv::Mat m = cv::estimateAffinePartial2D(
 		*from, *to,
-		inliners ? *inliners : (cv::OutputArray) cv::noArray(),
+		inliners ? *inliners : static_cast<cv::OutputArray>(cv::noArray()),
 		method, ransacReprojThreshold, maxIters, confidence, refineIters);
 	cv::swap(m, *affine);
 }
@@ -491,5 +564,49 @@ void cveCalibrateHandEye(
 		*R_gripper2base, *t_gripper2base,
 		*R_target2cam, *t_target2cam,
 		*R_cam2gripper, *t_cam2gripper,
-		(cv::HandEyeCalibrationMethod) method);
+		static_cast<cv::HandEyeCalibrationMethod>(method));
+}
+
+void cveRQDecomp3x3(
+	cv::_InputArray* src,
+	CvPoint3D64f* out,
+	cv::_OutputArray* mtxR,
+	cv::_OutputArray* mtxQ,
+	cv::_OutputArray* Qx,
+	cv::_OutputArray* Qy,
+	cv::_OutputArray* Qz)
+{
+	cv::Vec3d result = cv::RQDecomp3x3(
+		*src,
+		*mtxR,
+		*mtxQ,
+		Qx ? *Qx : static_cast<cv::OutputArray>(cv::noArray()),
+		Qy ? *Qy : static_cast<cv::OutputArray>(cv::noArray()),
+		Qz ? *Qz : static_cast<cv::OutputArray>(cv::noArray())
+	);
+	out->x = result[0];
+	out->y = result[1];
+	out->z = result[2];
+}
+
+void cveDecomposeProjectionMatrix(
+	cv::_InputArray* projMatrix,
+	cv::_OutputArray* cameraMatrix,
+	cv::_OutputArray* rotMatrix,
+	cv::_OutputArray* transVect,
+	cv::_OutputArray* rotMatrixX,
+	cv::_OutputArray* rotMatrixY,
+	cv::_OutputArray* rotMatrixZ,
+	cv::_OutputArray* eulerAngles)
+{
+	cv::decomposeProjectionMatrix(
+		*projMatrix,
+		*cameraMatrix,
+		*rotMatrix,
+		*transVect,
+		rotMatrixX ? *rotMatrixX : static_cast<cv::_OutputArray>(cv::noArray()),
+		rotMatrixY ? *rotMatrixY : static_cast<cv::_OutputArray>(cv::noArray()),
+		rotMatrixZ ? *rotMatrixZ : static_cast<cv::_OutputArray>(cv::noArray()),
+		eulerAngles ? *eulerAngles : static_cast<cv::_OutputArray>(cv::noArray())
+	);
 }

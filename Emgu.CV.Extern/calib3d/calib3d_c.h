@@ -217,4 +217,22 @@ CVAPI(void) cveCalibrateHandEye(cv::_InputArray* R_gripper2base, cv::_InputArray
 	cv::_OutputArray* R_cam2gripper, cv::_OutputArray* t_cam2gripper,
 	int method);
 
+CVAPI(void) cveRQDecomp3x3(
+	cv::_InputArray* src,
+	CvPoint3D64f* out,
+	cv::_OutputArray* mtxR, 
+	cv::_OutputArray* mtxQ,
+	cv::_OutputArray* Qx,
+	cv::_OutputArray* Qy,
+	cv::_OutputArray* Qz);
+
+CVAPI(void) cveDecomposeProjectionMatrix(
+	cv::_InputArray* projMatrix,
+	cv::_OutputArray* cameraMatrix,
+	cv::_OutputArray* rotMatrix,
+	cv::_OutputArray* transVect,
+	cv::_OutputArray* rotMatrixX,
+	cv::_OutputArray* rotMatrixY,
+	cv::_OutputArray* rotMatrixZ,
+	cv::_OutputArray* eulerAngles);
 #endif
