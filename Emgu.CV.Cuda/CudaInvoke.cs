@@ -903,19 +903,12 @@ namespace Emgu.CV.Cuda
         /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>      
         public static void Flip(IInputArray src, IOutputArray dst, CvEnum.FlipType flipType, Stream stream = null)
         {
-            int flipMode =
-               //-1 indicates vertical and horizontal flip
-               flipType == (Emgu.CV.CvEnum.FlipType.Horizontal | Emgu.CV.CvEnum.FlipType.Vertical) ? -1 :
-               //1 indicates horizontal flip only
-               flipType == Emgu.CV.CvEnum.FlipType.Horizontal ? 1 :
-               //0 indicates vertical flip only
-               0;
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
-                cudaFlip(iaSrc, oaDst, flipMode, stream);
+                cudaFlip(iaSrc, oaDst, flipType, stream);
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cudaFlip(IntPtr src, IntPtr dst, int flipMode, IntPtr stream);
+        private static extern void cudaFlip(IntPtr src, IntPtr dst, CvEnum.FlipType flipMode, IntPtr stream);
 
 
         #region Logical operators

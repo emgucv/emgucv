@@ -1455,27 +1455,20 @@ namespace Emgu.CV
         /// <param name="flipType">Specifies how to flip the array.</param>
         public static void Flip(IInputArray src, IOutputArray dst, CvEnum.FlipType flipType)
         {
-            int flipMode =
-                //-1 indicates vertical and horizontal flip
-                flipType == (Emgu.CV.CvEnum.FlipType.Horizontal | Emgu.CV.CvEnum.FlipType.Vertical) ? -1 :
-                //1 indicates horizontal flip only
-                flipType == Emgu.CV.CvEnum.FlipType.Horizontal ? 1 :
-                //0 indicates vertical flip only
-                0;
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
-                cveFlip(iaSrc, oaDst, flipMode);
+                cveFlip(iaSrc, oaDst, flipType);
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveFlip(IntPtr src, IntPtr dst, int flipMode);
+        private static extern void cveFlip(IntPtr src, IntPtr dst, CvEnum.FlipType flipMode);
 
         /// <summary>
         /// Rotates a 2D array in multiples of 90 degrees.
         /// </summary>
-        /// <param name="src">input array.</param>
-        /// <param name="dst">output array of the same type as src.  The size is the same with ROTATE_180, and the rows and cols are switched for ROTATE_90 and ROTATE_270.</param>
-        /// <param name="rotateCode">an enum to specify how to rotate the array</param>
+        /// <param name="src">Input array.</param>
+        /// <param name="dst">Output array of the same type as src.  The size is the same with ROTATE_180, and the rows and cols are switched for ROTATE_90 and ROTATE_270.</param>
+        /// <param name="rotateCode">A flag to specify how to rotate the array</param>
         public static void Rotate(IInputArray src, IOutputArray dst, RotateFlags rotateCode)
         {
             using (InputArray iaSrc = src.GetInputArray())

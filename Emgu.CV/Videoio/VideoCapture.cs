@@ -9,6 +9,7 @@
 //#define TEST_CAPTURE
 
 using System;
+using System.Diagnostics;
 #if WITH_SERVICE_MODEL
 using System.ServiceModel;
 #endif
@@ -189,7 +190,7 @@ namespace Emgu.CV
         /// <summary>
         /// the type of flipping
         /// </summary>
-        private CvEnum.FlipType _flipType = Emgu.CV.CvEnum.FlipType.None;
+        private CvEnum.FlipType? _flipType = null;
 
         /// <summary>
         /// The type of capture source
@@ -224,9 +225,9 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Get and set the flip type
+        /// Get and set the flip type. If null, no flipping will be done.
         /// </summary>
-        public CvEnum.FlipType FlipType
+        public CvEnum.FlipType? FlipType
         {
             get
             {
@@ -245,12 +246,35 @@ namespace Emgu.CV
         {
             get
             {
-                return (_flipType & Emgu.CV.CvEnum.FlipType.Horizontal) == Emgu.CV.CvEnum.FlipType.Horizontal;
+                if (_flipType == null)
+                    return false;
+                return (_flipType.Value == CvEnum.FlipType.Horizontal) || (_flipType.Value == CvEnum.FlipType.Both);
             }
             set
             {
-                if (value != FlipHorizontal)
-                    _flipType ^= Emgu.CV.CvEnum.FlipType.Horizontal;
+                if (_flipType == null)
+                {
+                    if (value)
+                        _flipType = CvEnum.FlipType.Horizontal;
+                }
+                else
+                {
+                    switch (_flipType.Value)
+                    {
+                        case CvEnum.FlipType.Both:
+                            if (!value)
+                                _flipType = CvEnum.FlipType.Vertical;
+                            break;
+                        case CvEnum.FlipType.Horizontal:
+                            if (!value)
+                                _flipType = null;
+                            break;
+                        case CvEnum.FlipType.Vertical:
+                            if (value)
+                                _flipType = CvEnum.FlipType.Both;
+                            break;
+                    }
+                }
             }
         }
 
@@ -261,12 +285,36 @@ namespace Emgu.CV
         {
             get
             {
-                return (_flipType & Emgu.CV.CvEnum.FlipType.Vertical) == Emgu.CV.CvEnum.FlipType.Vertical;
+                if (_flipType == null)
+                    return false;
+                return (_flipType.Value == CvEnum.FlipType.Vertical) || (_flipType.Value == CvEnum.FlipType.Both);
             }
             set
             {
-                if (value != FlipVertical)
-                    _flipType ^= Emgu.CV.CvEnum.FlipType.Vertical;
+                if (_flipType == null)
+                {
+                    if (value)
+                        _flipType = CvEnum.FlipType.Vertical;
+                }
+                else
+                {
+                    switch (FlipType.Value)
+                    {
+                        case CvEnum.FlipType.Vertical:
+                            if (!value)
+                                _flipType = null;
+                            break;
+                        case CvEnum.FlipType.Horizontal:
+                            if (value)
+                                _flipType = CvEnum.FlipType.Both;
+                            break;
+                        case CvEnum.FlipType.Both:
+                            if (!value)
+                                _flipType = CvEnum.FlipType.Horizontal;
+                            break;
+                    }
+                    
+                }
             }
         }
 
@@ -466,6 +514,7 @@ namespace Emgu.CV
             {
                 if (eh != null && eh.HandleException(e))
                         return;
+                Trace.WriteLine(e.StackTrace);
                 throw new Exception("Capture error", e);
             }
             finally
@@ -536,20 +585,15 @@ namespace Emgu.CV
         /// <returns>False if no frames has been grabbed</returns>
         public virtual bool Retrieve(IOutputArray image, int flag = 0)
         {
+            bool success;
             using (OutputArray oaImage = image.GetOutputArray())
             {
-                if (FlipType == CvEnum.FlipType.None)
-                {
-                    return CvInvoke.cveVideoCaptureRetrieve(Ptr, oaImage, flag);
-                }
-                else
-                {
-                    bool success = CvInvoke.cveVideoCaptureRetrieve(Ptr, oaImage, flag);
-                    if (success)
-                        CvInvoke.Flip(image, image, FlipType);
-                    return success;
-                }
+                success = CvInvoke.cveVideoCaptureRetrieve(Ptr, oaImage, flag);
             }
+            if (success && (FlipType != null))
+                CvInvoke.Flip(image, image, FlipType.Value);
+
+            return success;
         }
 
         /// <summary>

@@ -5,6 +5,7 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using Emgu.CV.CvEnum;
 
 namespace Emgu.CV
 {
@@ -71,15 +72,15 @@ namespace Emgu.CV
 
       /// <summary> Get a flipped copy of the convolution kernel</summary>
       /// <param name="flipType">The type of the flipping</param>
-      /// <returns> The flipped copy of <i>this</i> image </returns>
+      /// <returns> The flipped copy of <i>this</i> kernel </returns>
       public ConvolutionKernelF Flip(CvEnum.FlipType flipType)
       {
          ConvolutionKernelF res = new ConvolutionKernelF(Height, Width);
          CvInvoke.Flip(this, res, flipType);
 
          res.Center = new System.Drawing.Point(
-          (Center.X == -1 ? -1 : ((flipType & Emgu.CV.CvEnum.FlipType.Horizontal) == Emgu.CV.CvEnum.FlipType.Horizontal ? Width - Center.X - 1 : Center.X)),
-          (Center.Y == -1 ? -1 : ((flipType & Emgu.CV.CvEnum.FlipType.Vertical) == Emgu.CV.CvEnum.FlipType.Vertical ? Height - Center.Y - 1 : Center.Y)));
+          (Center.X == -1 ? -1 : (flipType == FlipType.Both || flipType == Emgu.CV.CvEnum.FlipType.Horizontal) ? Width - Center.X - 1 : Center.X),
+          (Center.Y == -1 ? -1 : (flipType == FlipType.Both || flipType == Emgu.CV.CvEnum.FlipType.Vertical) ? Height - Center.Y - 1 : Center.Y));
          return res;
       }
 

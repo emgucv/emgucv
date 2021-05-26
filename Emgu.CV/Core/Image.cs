@@ -246,9 +246,9 @@ namespace Emgu.CV
                 }
             }
         }
-#endregion
+        #endregion
 
-#region Implement ISerializable interface
+        #region Implement ISerializable interface
         /// <summary>
         /// Constructor used to deserialize runtime serialized object
         /// </summary>
@@ -281,9 +281,9 @@ namespace Emgu.CV
                 info.AddValue("Roi", ROI);
             }
         }
-#endregion
+        #endregion
 
-#region Image Properties
+        #region Image Properties
 
         /// <summary>
         /// The IplImage structure
@@ -424,9 +424,9 @@ namespace Emgu.CV
             res.MCvScalar = CvInvoke.Sum(this);
             return res;
         }
-#endregion
+        #endregion
 
-#region Coping and Filling
+        #region Coping and Filling
         /// <summary>
         /// Set every pixel of the image to the specific color 
         /// </summary>
@@ -540,11 +540,11 @@ namespace Emgu.CV
             CvInvoke.cvSetImageCOI(Ptr, 0); //clear COI for current image
             ROI = Rectangle.Empty; // clear ROI for current image
 
-#region create a clone of the current image with the same COI and ROI
+            #region create a clone of the current image with the same COI and ROI
             Image<TColor, TDepth> res = Copy();
             CvInvoke.cvSetImageCOI(res.Ptr, coi);
             res.ROI = roi;
-#endregion
+            #endregion
 
             CvInvoke.cvSetImageCOI(Ptr, coi); //reset the COI for the current image
             ROI = roi; // reset the ROI for the current image
@@ -568,10 +568,10 @@ namespace Emgu.CV
             return subRect;
         }
 
-#endregion
+        #endregion
 
 
-#region Drawing functions
+        #region Drawing functions
         /// <summary>Draw an Rectangle of the specific color and thickness </summary>
         /// <param name="rect">The rectangle to be drawn</param>
         /// <param name="color">The color of the rectangle </param>
@@ -813,9 +813,9 @@ namespace Emgu.CV
             }
         }
 
-#endregion
+        #endregion
 
-#region Hough line and circles
+        #region Hough line and circles
         /// <summary>
         /// Apply Probabilistic Hough transform to find line segments.
         /// The current image must be a binary image (eg. the edges as a result of the Canny edge detector)
@@ -880,9 +880,9 @@ namespace Emgu.CV
                    return CvInvoke.HoughCircles(img, CvEnum.HoughModes.Gradient, dp, minDist, cannyThresh[channel], accumulatorThresh[channel], minRadius, maxRadius);
                });
         }
-#endregion
+        #endregion
 
-#region Indexer
+        #region Indexer
         /// <summary>
         /// Get or Set the specific channel of the current image.
         /// For Get operation, a copy of the specific channel is returned.
@@ -940,9 +940,9 @@ namespace Emgu.CV
                 this[location.Y, location.X] = value;
             }
         }
-#endregion
+        #endregion
 
-#region utilities
+        #region utilities
         /// <summary>
         /// Return parameters based on ROI
         /// </summary>
@@ -1029,9 +1029,9 @@ namespace Emgu.CV
                 }
             }
         }
-#endregion
+        #endregion
 
-#region Gradient, Edges and Features
+        #region Gradient, Edges and Features
         /// <summary>
         /// Calculates the image derivative by convolving the image with the appropriate kernel
         /// The Sobel operators combine Gaussian smoothing and differentiation so the result is more or less robust to the noise. Most often, the function is called with (xorder=1, yorder=0, aperture_size=3) or (xorder=0, yorder=1, aperture_size=3) to calculate first x- or y- image derivative.
@@ -1119,9 +1119,9 @@ namespace Emgu.CV
                 });
         }
 
-#endregion
+        #endregion
 
-#region Matching
+        #region Matching
         /// <summary>
         /// The function slides through image, compares overlapped patches of size wxh with templ using the specified method and return the comparison results 
         /// </summary>
@@ -1134,10 +1134,10 @@ namespace Emgu.CV
             CvInvoke.MatchTemplate(this, template, res, method);
             return res;
         }
-#endregion
+        #endregion
 
-#region Logic
-#region And Methods
+        #region Logic
+        #region And Methods
         /// <summary> Perform an elementwise AND operation with another image and return the result</summary>
         /// <param name="img2">The second image for the AND operation</param>
         /// <returns> The result of the AND operation</returns>
@@ -1182,9 +1182,9 @@ namespace Emgu.CV
             }
             return res;
         }
-#endregion
+        #endregion
 
-#region Or Methods
+        #region Or Methods
         /// <summary> Perform an elementwise OR operation with another image and return the result</summary>
         /// <param name="img2">The second image for the OR operation</param>
         /// <returns> The result of the OR operation</returns>
@@ -1224,9 +1224,9 @@ namespace Emgu.CV
             }
             return res;
         }
-#endregion
+        #endregion
 
-#region Xor Methods
+        #region Xor Methods
         /// <summary> Perform an elementwise XOR operation with another image and return the result</summary>
         /// <param name="img2">The second image for the XOR operation</param>
         /// <returns> The result of the XOR operation</returns>
@@ -1274,7 +1274,7 @@ namespace Emgu.CV
             }
             return res;
         }
-#endregion
+        #endregion
 
         /// <summary> 
         /// Compute the complement image
@@ -1286,9 +1286,9 @@ namespace Emgu.CV
             CvInvoke.BitwiseNot(this, res, null);
             return res;
         }
-#endregion
+        #endregion
 
-#region Comparison
+        #region Comparison
         /// <summary> Find the elementwise maximum value </summary>
         /// <param name="img2">The second image for the Max operation</param>
         /// <returns> An image where each pixel is the maximum of <i>this</i> image and the parameter image</returns>
@@ -1468,9 +1468,9 @@ namespace Emgu.CV
                 }
             }
         }
-#endregion
+        #endregion
 
-#region Segmentation
+        #region Segmentation
         /// <summary>
         /// Use grabcut to perform background foreground segmentation.
         /// </summary>
@@ -1488,10 +1488,10 @@ namespace Emgu.CV
             }
             return mask;
         }
-#endregion
+        #endregion
 
-#region Arithmatic
-#region Subtraction methods
+        #region Arithmatic
+        #region Subtraction methods
         /// <summary> Elementwise subtract another image from the current image </summary>
         /// <param name="img2">The second image to be subtracted from the current image</param>
         /// <returns> The result of elementwise subtracting img2 from the current image</returns>
@@ -1553,9 +1553,9 @@ namespace Emgu.CV
             }
             return res;
         }
-#endregion
+        #endregion
 
-#region Addition methods
+        #region Addition methods
         /// <summary> Elementwise add another image with the current image </summary>
         /// <param name="img2">The image to be added to the current image</param>
         /// <returns> The result of elementwise adding img2 to the current image</returns>
@@ -1588,9 +1588,9 @@ namespace Emgu.CV
             }
             return res;
         }
-#endregion
+        #endregion
 
-#region Multiplication methods
+        #region Multiplication methods
         /// <summary> Elementwise multiply another image with the current image and the <paramref name="scale"/></summary>
         /// <param name="img2">The image to be elementwise multiplied to the current image</param>
         /// <param name="scale">The scale to be multiplied</param>
@@ -1620,7 +1620,7 @@ namespace Emgu.CV
             CvInvoke.cvConvertScale(Ptr, res.Ptr, scale, 0.0);
             return res;
         }
-#endregion
+        #endregion
 
         /// <summary>
         /// Accumulate <paramref name="img2"/> to the current image using the specific mask
@@ -1704,9 +1704,9 @@ namespace Emgu.CV
             }
             return res;
         }
-#endregion
+        #endregion
 
-#region Math Functions
+        #region Math Functions
         /// <summary>
         /// Raises every element of input array to p
         /// dst(I)=src(I)^p, if p is integer
@@ -1747,9 +1747,9 @@ namespace Emgu.CV
             CvInvoke.Log(this, res);
             return res;
         }
-#endregion
+        #endregion
 
-#region Sampling, Interpolation and Geometrical Transforms
+        #region Sampling, Interpolation and Geometrical Transforms
         /*
         ///<summary> Sample the pixel values on the specific line segment </summary>
         ///<param name="line"> The line to obtain samples</param>
@@ -1982,9 +1982,9 @@ namespace Emgu.CV
             return imgPolar;
         }
 
-#endregion
+        #endregion
 
-#region Image color and depth conversion
+        #region Image color and depth conversion
         /// <summary> Convert the current image to the specific color and depth </summary>
         /// <typeparam name="TOtherColor"> The type of color to be converted to </typeparam>
         /// <typeparam name="TOtherDepth"> The type of pixel depth to be converted to </typeparam>
@@ -2028,7 +2028,7 @@ namespace Emgu.CV
 
             if (typeof(TColor) == typeof(TSrcColor))
             {
-#region same color
+                #region same color
                 if (typeof(TDepth) == typeof(TSrcDepth))
                 {   //same depth
                     srcImage.Mat.CopyTo(this);
@@ -2067,11 +2067,11 @@ namespace Emgu.CV
                         }
                     }
                 }
-#endregion
+                #endregion
             }
             else
             {
-#region different color
+                #region different color
                 if (typeof(TDepth) == typeof(TSrcDepth))
                 {   //same depth
                     CvInvoke.CvtColor(srcImage, this, typeof(TSrcColor), typeof(TColor));
@@ -2080,7 +2080,7 @@ namespace Emgu.CV
                 {   //different depth
                     if (typeof(TSrcDepth) == typeof(Byte))
                     {   //Do color conversion first, then depth conversion
-                        using (Image< TColor, TSrcDepth > tmp = srcImage.Convert<TColor, TSrcDepth>())
+                        using (Image<TColor, TSrcDepth> tmp = srcImage.Convert<TColor, TSrcDepth>())
                         {
                             this.ConvertFrom(tmp);
                         }
@@ -2088,14 +2088,14 @@ namespace Emgu.CV
                     else
                     {   //Do depth conversion first, then color conversion
                         using (Image<TSrcColor, TDepth> tmp = srcImage.Convert<TSrcColor, TDepth>()) //convert depth
-                            //using (Mat tmp = new CV.Mat())
+                                                                                                     //using (Mat tmp = new CV.Mat())
                         {
                             //srcImage.Mat.ConvertTo(tmp, CvInvoke.GetDepthType(typeof(TDepth), 
                             CvInvoke.CvtColor(tmp, this, typeof(TSrcColor), typeof(TColor));
                         }
                     }
                 }
-#endregion
+                #endregion
             }
         }
 
@@ -2123,7 +2123,7 @@ namespace Emgu.CV
                 int srcImageNumberOfChannels = iaSrcImage.GetChannels();
                 if (NumberOfChannels == srcImageNumberOfChannels)
                 {
-#region same color
+                    #region same color
 
                     DepthType srcImageDepth = iaSrcImage.GetDepth();
                     if (CvInvoke.GetDepthType(typeof(TDepth)) == srcImageDepth)
@@ -2169,7 +2169,7 @@ namespace Emgu.CV
                         }
                     }
 
-#endregion
+                    #endregion
                 }
                 else
                 {
@@ -2182,7 +2182,7 @@ namespace Emgu.CV
                              ? typeof(Bgr)
                              : typeof(Bgra);
 
-#region different color
+                    #region different color
                     DepthType srcImageDepth = iaSrcImage.GetDepth();
                     if (CvInvoke.GetDepthType(typeof(TDepth)) == srcImageDepth)
                     {
@@ -2202,7 +2202,7 @@ namespace Emgu.CV
                         }
                     }
 
-#endregion
+                    #endregion
                 }
             }
         }
@@ -2224,9 +2224,9 @@ namespace Emgu.CV
 
             return res;
         }
-#endregion
+        #endregion
 
-#region Pyramids
+        #region Pyramids
         /// <summary>
         /// Performs downsampling step of Gaussian pyramid decomposition. 
         /// First it convolves <i>this</i> image with the specified filter and then downsamples the image 
@@ -2272,9 +2272,9 @@ namespace Emgu.CV
 
             return pyr;
         }
-#endregion
+        #endregion
 
-#region Special Image Transforms
+        #region Special Image Transforms
         /// <summary> Use inpaint to recover the intensity of the pixels which location defined by <paramref name="mask"/> on <i>this</i> image </summary>
         /// <param name="mask">The inpainting mask. Non-zero pixels indicate the area that needs to be inpainted</param>
         /// <param name="radius">The radius of circular neighborhood of each point inpainted that is considered by the algorithm</param>
@@ -2285,9 +2285,9 @@ namespace Emgu.CV
             CvInvoke.Inpaint(this, mask, res, radius, CvEnum.InpaintType.Telea);
             return res;
         }
-#endregion
+        #endregion
 
-#region Morphological Operations
+        #region Morphological Operations
         /// <summary>
         /// Perform advanced morphological transformations using erosion and dilation as basic operations.
         /// </summary>
@@ -2371,9 +2371,9 @@ namespace Emgu.CV
         {
             CvInvoke.Dilate(this, this, null, new Point(-1, -1), iterations, CvEnum.BorderType.Constant, CvInvoke.MorphologyDefaultBorderValue);
         }
-#endregion
+        #endregion
 
-#region generic operations
+        #region generic operations
         /// <summary> 
         /// perform an generic action based on each element of the image
         /// </summary>
@@ -2679,9 +2679,9 @@ namespace Emgu.CV
 
             return res;
         }
-#endregion
+        #endregion
 
-#region Implment UnmanagedObject
+        #region Implment UnmanagedObject
         /// <summary>
         /// Release all unmanaged memory associate with the image
         /// </summary>
@@ -2705,9 +2705,9 @@ namespace Emgu.CV
 
             _array = null;
         }
-#endregion
+        #endregion
 
-#region Operator overload
+        #region Operator overload
 
         /// <summary>
         /// Perform an element wise AND operation on the two images
@@ -3007,9 +3007,9 @@ namespace Emgu.CV
             return res;
         }
 
-#endregion
+        #endregion
 
-#region Filters
+        #region Filters
         /// <summary>
         /// Summation over a pixel param1 x param2 neighborhood with subsequent scaling by 1/(param1 x param2)
         /// </summary>
@@ -3064,7 +3064,7 @@ namespace Emgu.CV
             return res;
         }
 
-#region Gaussian Smooth
+        #region Gaussian Smooth
         /// <summary> Perform Gaussian Smoothing in the current image and return the result </summary>
         /// <param name="kernelSize"> The size of the Gaussian kernel (<paramref name="kernelSize"/> x <paramref name="kernelSize"/>)</param>
         /// <returns> The smoothed image</returns>
@@ -3186,9 +3186,9 @@ namespace Emgu.CV
             titledSum = new Image<TColor, double>(Width + 1, Height + 1);
             CvInvoke.Integral(this, sum, squareSum, titledSum, CvEnum.DepthType.Cv64F);
         }
-#endregion
+        #endregion
 
-#region Threshold methods
+        #region Threshold methods
         /// <summary>
         /// Transforms grayscale image to binary image. 
         /// Threshold calculated individually for each pixel. 
@@ -3336,10 +3336,10 @@ namespace Emgu.CV
         {
             ThresholdBase(this, threshold, maxValue, CvEnum.ThresholdType.BinaryInv);
         }
-#endregion
-#endregion
+        #endregion
+        #endregion
 
-#region Statistic
+        #region Statistic
         /// <summary>
         /// Calculates the average value and standard deviation of array elements, independently for each channel
         /// </summary>
@@ -3401,17 +3401,15 @@ namespace Emgu.CV
         {
             Mat.MinMax(out minValues, out maxValues, out minLocations, out maxLocations);
         }
-#endregion
+        #endregion
 
-#region Image Flipping
+        #region Image Flipping
 
         /// <summary> Return a flipped copy of the current image</summary>
         /// <param name="flipType">The type of the flipping</param>
         /// <returns> The flipped copy of <i>this</i> image </returns>
         public Image<TColor, TDepth> Flip(CvEnum.FlipType flipType)
         {
-            if (flipType == Emgu.CV.CvEnum.FlipType.None) return Copy();
-
             Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.Flip(this, res, flipType);
             return res;
@@ -3423,17 +3421,14 @@ namespace Emgu.CV
         [ExposableMethod(Exposable = true, Category = "Transform")]
         public void _Flip(CvEnum.FlipType flipType)
         {
-            if (flipType != Emgu.CV.CvEnum.FlipType.None)
-            {
-                CvInvoke.Flip(
+            CvInvoke.Flip(
                    this,
                    this,
                    flipType);
-            }
         }
-#endregion
+        #endregion
 
-#region various
+        #region various
 
         /// <summary>
         /// Concate the current image with another image vertically.
@@ -3622,7 +3617,7 @@ namespace Emgu.CV
                 }
             }
         }
-#endregion
+        #endregion
 
         /// <summary>
         /// This function load the image data from Mat
