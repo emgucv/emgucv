@@ -29,7 +29,7 @@ namespace Emgu.CV
         /// <param name="result">The output array (3 channel - BGR) where the results will be written to.</param>
         /// <param name="flipType">Optional Flip type</param>
         /// <param name="dstColorType">Destination color type, if null, will use typeof(Bgr)</param>
-        public static void ToOutputArray(this Texture2D texture, IOutputArray result, FlipType flipType = FlipType.Vertical, Type dstColorType = null)
+        public static void ToOutputArray(this Texture2D texture, IOutputArray result, FlipType? flipType = FlipType.Vertical, Type dstColorType = null)
         {
             int width = texture.width;
             int height = texture.height;
@@ -42,9 +42,9 @@ namespace Emgu.CV
                 {
                     Type dct = dstColorType == null ? typeof(Bgr) : dstColorType;
                     CvInvoke.CvtColor(rgba, result, typeof(Rgba), dct);
-                    if (flipType != FlipType.None)
+                    if (flipType != null)
                     {
-                        CvInvoke.Flip(result, result, flipType);
+                        CvInvoke.Flip(result, result, flipType.Value);
                     }
                 }
                 handle.Free();
@@ -79,7 +79,7 @@ namespace Emgu.CV
         /// <param name="flipType"></param>
         /// <param name="buffer">Optional buffer for the texture conversion, should be big enough to hold the image data. e.g. width*height*pixel_size</param>
         /// <returns>The texture 2D</returns>
-        public static Texture2D ToTexture2D(this IInputArray image, Emgu.CV.CvEnum.FlipType flipType = FlipType.Vertical, byte[] buffer = null)
+        public static Texture2D ToTexture2D(this IInputArray image, Emgu.CV.CvEnum.FlipType? flipType = FlipType.Vertical, byte[] buffer = null)
         {
             using (InputArray iaImage = image.GetInputArray())
             {
@@ -104,8 +104,8 @@ namespace Emgu.CV
                     using (Mat rgb = new Mat(size, DepthType.Cv8U, 3, dataHandle.AddrOfPinnedObject(), size.Width * 3))
                     {
                         CvInvoke.CvtColor(image, rgb, ColorConversion.Bgr2Rgb);
-                        if (flipType != FlipType.None)
-                            CvInvoke.Flip(rgb, rgb, flipType);
+                        if (flipType != null)
+                            CvInvoke.Flip(rgb, rgb, flipType.Value);
                     }
 
                     dataHandle.Free();
@@ -133,8 +133,8 @@ namespace Emgu.CV
                     using (Mat rgba = new Mat(size, DepthType.Cv8U, 4, dataHandle.AddrOfPinnedObject(), size.Width * 4))
                     {
                         CvInvoke.CvtColor(image, rgba, ColorConversion.Bgr2Rgb);
-                        if (flipType != FlipType.None)
-                            CvInvoke.Flip(rgba, rgba, flipType);
+                        if (flipType != null)
+                            CvInvoke.Flip(rgba, rgba, flipType.Value);
                     }
 
                     dataHandle.Free();

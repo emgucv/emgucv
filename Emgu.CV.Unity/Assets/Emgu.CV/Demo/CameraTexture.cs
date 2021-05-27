@@ -55,7 +55,7 @@ public class CameraTexture : MonoBehaviour
         }
     }
 
-    private FlipType flip = FlipType.None;
+    private FlipType? flip = null;
     // Update is called once per frame
     void Update()
     {
@@ -84,8 +84,8 @@ public class CameraTexture : MonoBehaviour
 
                 #endregion
 
-                if (flip != FlipType.None)
-                    CvInvoke.Flip(bgr, bgr, flip);
+                if (flip != null)
+                    CvInvoke.Flip(bgr, bgr, flip.Value);
             }
             handle.Free();
             resultHandle.Free();
