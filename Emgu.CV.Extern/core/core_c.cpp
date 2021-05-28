@@ -690,6 +690,18 @@ int cveFileNodeGetType(cv::FileNode* node)
 {
 	return node->type();
 }
+void cveFileNodeGetName(cv::FileNode* node, cv::String* name)
+{
+	cv::String n = node->name();
+	*name = n;
+}
+void cveFileNodeGetKeys(cv::FileNode* node, std::vector< cv::String >* keys)
+{
+	std::vector< cv::String > kv = node->keys();
+	keys->clear();
+	for (std::vector< cv::String >::iterator it = kv.begin(); it != kv.end(); ++it)
+		keys->push_back(*it);
+}
 /*
 bool cveFileNodeIsEmpty(cv::FileNode* node)
 {
@@ -722,6 +734,35 @@ void cveFileNodeRelease(cv::FileNode** node)
 	delete *node;
 	*node = 0;
 }
+
+cv::FileNodeIterator* cveFileNodeIteratorCreate()
+{
+	return new cv::FileNodeIterator();
+}
+cv::FileNodeIterator* cveFileNodeIteratorCreateFromNode(cv::FileNode* node, bool seekEnd)
+{
+	return new cv::FileNodeIterator(*node, seekEnd);
+}
+bool cveFileNodeIteratorEqualTo(cv::FileNodeIterator* iterator, cv::FileNodeIterator* otherIterator)
+{
+	return iterator->equalTo(*otherIterator);
+}
+void cveFileNodeIteratorNext(cv::FileNodeIterator* iterator)
+{
+	++(*iterator);
+}
+cv::FileNode* cveFileNodeIteratorGetFileNode(cv::FileNodeIterator* iterator)
+{
+	cv::FileNode* node = new cv::FileNode();
+	*node = *(*iterator);
+	return node;
+}
+void cveFileNodeIteratorRelease(cv::FileNodeIterator** iterator)
+{
+	delete* iterator;
+	*iterator = 0;
+}
+
 
 IplImage* cveCreateImage(CvSize* size, int depth, int channels)
 {

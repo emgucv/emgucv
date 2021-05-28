@@ -3,6 +3,8 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -25,7 +27,7 @@ namespace Emgu.CV
     /// Note that file nodes are only used for navigating file storages opened for reading. When a file
     /// storage is opened for writing, no data is stored in memory after it is written.
     /// </summary>
-    public partial class FileNode : UnmanagedObject
+    public partial class FileNode : UnmanagedObject, IEnumerable<FileNode>
     {
         /// <summary>
         /// Type of the file storage node
@@ -56,44 +58,42 @@ namespace Emgu.CV
             /// Synonym for Str
             /// </summary>
             String = Str,
-            /// <summary>
-            /// Integer of size size_t. Typically used for storing complex dynamic structures where some elements reference the others
-            /// </summary>
-            Ref = 4,
+    
             /// <summary>
             /// The sequence
             /// </summary>
-            Seq = 5,
+            Seq = 4,
             /// <summary>
             /// Mapping
             /// </summary>
-            Map = 6,
+            Map = 5,
             /// <summary>
             /// The type mask
             /// </summary>
             TypeMask = 7,
             /// <summary>
-            /// Compact representation of a sequence or mapping. Used only by YAML writer
+            /// Used only when writing. Compact representation of a sequence or mapping. Used only by YAML writer
             /// </summary>
             Flow = 8,
             /// <summary>
-            /// A registered object (e.g. a matrix)
+            /// Used only when reading FileStorage. If set, means that all the collection elements are numbers of the same type (real's or int's).
             /// </summary>
-            User = 16,
+            Uniform = 8,
             /// <summary>
             /// Empty structure (sequence or mapping)
             /// </summary>
-            Empty = 32,
+            Empty = 16,
             /// <summary>
             /// The node has a name (i.e. it is element of a mapping)
             /// </summary>
-            Named = 64
+            Named = 32
         };
 
         internal FileNode(IntPtr ptr)
         {
             _ptr = ptr;
         }
+
 
         /// <summary>
         /// Reads a Mat from the node
@@ -113,19 +113,6 @@ namespace Emgu.CV
             }
         }
 
-        /*
-        /// <summary>
-        /// Gets a value indicating whether this instance is empty.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is empty; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsEmpty
-        {
-           get { return CvInvoke.cveFileNodeIsEmpty(_ptr); }
-        }
-        */
-
         /// <summary>
         /// Gets the type of the node.
         /// </summary>
@@ -136,6 +123,39 @@ namespace Emgu.CV
         {
             get { return (Type)CvInvoke.cveFileNodeGetType(_ptr); }
         }
+
+        /// <summary>
+        /// Get the node name or an empty string if the node is nameless
+        /// </summary>
+        public String Name
+        {
+            get
+            {
+                if (!IsNamed)
+                    return String.Empty;
+                using (CvString csName = new CvString())
+                {
+                    CvInvoke.cveFileNodeGetName(_ptr, csName);
+                    return csName.ToString();
+                }
+            }
+        }
+
+        /*
+        /// <summary>
+        /// Get the keys of a mapping node.
+        /// </summary>
+        public String[] Keys
+        {
+            get
+            {
+                using (VectorOfCvString vsKeys = new VectorOfCvString())
+                {
+                    CvInvoke.cveFileNodeGetName(_ptr, vsKeys);
+                    return vsKeys.ToArray();
+                }
+            }
+        }*/
 
         /// <summary>
         /// Release the unmanaged resources
@@ -191,6 +211,23 @@ namespace Emgu.CV
             return CvInvoke.cveFileNodeReadDouble(_ptr, defaultDouble);
         }
 
+        public IEnumerator<FileNode> GetEnumerator()
+        {
+            using (FileNodeIterator it = new FileNodeIterator(this, false))
+            using (FileNodeIterator end = new FileNodeIterator(this, true))
+            {
+                while (!it.Equals(end))
+                {
+                    yield return it.GetFileNode();
+                    it.Next();
+                }
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
     }
 
     public static partial class CvInvoke
@@ -205,11 +242,12 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern int cveFileNodeGetType(IntPtr node);
 
-        /*
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal static extern bool cveFileNodeIsEmpty(IntPtr node);
-        */
+        internal static extern void cveFileNodeGetName(IntPtr node, IntPtr name);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveFileNodeGetKeys(IntPtr node, IntPtr keys);
+
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveFileNodeReadString(IntPtr node, IntPtr str, IntPtr defaultStr);

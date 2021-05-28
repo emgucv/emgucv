@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;  
 using System.Runtime.Serialization;
 
 using System.Text;
@@ -765,10 +765,18 @@ namespace Emgu.CV.Test
                 fs.Write(intValue, "int");
                 fs.Write(floatValue, "float");
                 fs.Write(doubleValue, "double");
+
                 string s = fs.ReleaseAndGetString();
 
                 using (FileStorage fs2 = new FileStorage(s, FileStorage.Mode.Read | FileStorage.Mode.Memory))
                 {
+                    using (FileNode root = fs2.GetRoot())
+                        foreach (FileNode n in root)
+                        {
+                            //String[] keys = n.Keys;
+                            String name = n.Name;
+                            n.Dispose();
+                        }
 
                     using (FileNode node = fs2.GetFirstTopLevelNode())
                     {

@@ -197,6 +197,8 @@ CVAPI(cv::FileNode*) cveFileStorageGetFirstTopLevelNode(cv::FileStorage* fs);
 CVAPI(cv::FileNode*) cveFileStorageGetNode(cv::FileStorage* fs, cv::String* nodeName);
 
 CVAPI(int) cveFileNodeGetType(cv::FileNode* node);
+CVAPI(void) cveFileNodeGetName(cv::FileNode* node, cv::String* name);
+CVAPI(void) cveFileNodeGetKeys(cv::FileNode* node, std::vector< cv::String >* keys);
 //CVAPI(bool) cveFileNodeIsEmpty(cv::FileNode* node);
 CVAPI(void) cveFileNodeReadMat(cv::FileNode* node, cv::Mat* mat, cv::Mat* defaultMat);
 CVAPI(void) cveFileNodeReadString(cv::FileNode* node, cv::String* str, cv::String* defaultStr);
@@ -204,6 +206,13 @@ CVAPI(int) cveFileNodeReadInt(cv::FileNode* node, int defaultInt);
 CVAPI(double) cveFileNodeReadDouble(cv::FileNode* node, double defaultDouble);
 CVAPI(float) cveFileNodeReadFloat(cv::FileNode* node, float defaultFloat);
 CVAPI(void) cveFileNodeRelease(cv::FileNode** node);
+
+CVAPI(cv::FileNodeIterator*) cveFileNodeIteratorCreate();
+CVAPI(cv::FileNodeIterator*) cveFileNodeIteratorCreateFromNode(cv::FileNode* node, bool seekEnd);
+CVAPI(bool) cveFileNodeIteratorEqualTo(cv::FileNodeIterator* iterator, cv::FileNodeIterator* otherIterator);
+CVAPI(void) cveFileNodeIteratorNext(cv::FileNodeIterator* iterator);
+CVAPI(cv::FileNode*) cveFileNodeIteratorGetFileNode(cv::FileNodeIterator* iterator);
+CVAPI(void) cveFileNodeIteratorRelease(cv::FileNodeIterator** iterator);
 
 CVAPI(IplImage*) cveCreateImage(CvSize* size, int depth, int channels);
 CVAPI(IplImage*) cveCreateImageHeader(CvSize* size, int depth, int channels);
