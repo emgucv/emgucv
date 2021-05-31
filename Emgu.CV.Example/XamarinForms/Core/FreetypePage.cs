@@ -42,6 +42,7 @@ namespace Emgu.CV.XamarinForms
                 _freetype2.PutText(img, "여보세요", new Point(100, 200), 36, new MCvScalar(255, 255, 0), 1, LineType.EightConnected, false);
                 _freetype2.PutText(img, "Здравствуйте", new Point(100, 250), 36, new MCvScalar(255, 255, 0), 1, LineType.EightConnected, false);
                 SetImage(img);
+                SetMessage("\"Hello\" in 5 languages using freetype");
             };
         }
 

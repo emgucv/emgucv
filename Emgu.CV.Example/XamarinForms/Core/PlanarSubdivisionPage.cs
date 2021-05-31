@@ -20,6 +20,7 @@ namespace Emgu.CV.XamarinForms
              int maxValue = 600, pointCount = 30;
 
              SetImage(DrawSubdivision.Draw(maxValue, pointCount));
+             SetMessage(String.Format( "Generated planar subdivision for {0} points", pointCount));
           };
        }
     }

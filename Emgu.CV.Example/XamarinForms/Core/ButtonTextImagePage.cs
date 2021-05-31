@@ -21,6 +21,8 @@ using Xamarin.Forms.Platform.MacOS;
 using UIKit;
 using CoreGraphics;
 using Xamarin.Forms.Platform.iOS;
+#elif NETFX_CORE
+using Xamarin.Forms.Platform.UWP;
 #endif
 
 namespace Emgu.CV.XamarinForms
@@ -67,9 +69,11 @@ namespace Emgu.CV.XamarinForms
 #elif __IOS__
 
       public UIImageView UIImageView { get; set; }
+#elif NETFX_CORE
+       public Windows.UI.Xaml.Controls.Image ImageView { get; set; }
 #endif
 
-      public ButtonTextImagePage ()
+        public ButtonTextImagePage ()
       {
          TopButton.Text = "Click me";
          TopButton.IsEnabled = true;
@@ -103,9 +107,13 @@ namespace Emgu.CV.XamarinForms
          UIImageView = new UIImageView ();
          UIImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
          _mainLayout.Children.Add (UIImageView.ToView ());
-
+#elif NETFX_CORE
+         this.ImageView = new Windows.UI.Xaml.Controls.Image();
+         _mainLayout.Children.Add(this.ImageView.ToView());
+         //this.ImageView.Stretch = Windows.UI.Xaml.Media.Stretch.Uniform;
+         this.ImageView.Stretch = Windows.UI.Xaml.Media.Stretch.None;
 #endif
-         _mainLayout.Children.Add (DisplayImage);
+            _mainLayout.Children.Add (DisplayImage);
          //_mainLayout.Children.Add(MessageLabel);
          _mainLayout.Padding = new Thickness (10, 10, 10, 10);
 
@@ -264,6 +272,22 @@ namespace Emgu.CV.XamarinForms
                    NSImageView.Hidden = false;
                    DisplayImage.IsVisible = false;
                });
+#elif NETFX_CORE
+         Xamarin.Forms.Device.BeginInvokeOnMainThread(
+            () => {
+               if (image == null)
+               {
+                  this.ImageView.Source = null;
+                  this.ImageView.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+               }
+               else
+               {
+                  this.ImageView.Source = image.ToWritableBitmap();
+                  //this.ImageView.InvalidateMeasure();
+                  this.ImageView.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                    //this.ImageView.Parent.
+                }
+            });
 #else
             if (image == null)
             {

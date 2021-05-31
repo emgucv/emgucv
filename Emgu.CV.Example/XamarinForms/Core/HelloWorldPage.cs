@@ -33,6 +33,7 @@ namespace Emgu.CV.XamarinForms
                new Bgr(0, 255, 0).MCvScalar);
 
             SetImage(img);
+            SetMessage("Hello, world");
         }
 
     }
