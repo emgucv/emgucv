@@ -13,7 +13,7 @@ namespace Emgu.CV
     {
         static WinrtInvoke()
         {
-            CvInvoke.CheckLibraryLoaded();
+            CvInvoke.Init();
         }
         [UnmanagedFunctionPointer(CvInvoke.CvCallingConvention)]
         public delegate void WinrtMessageLoopCallback();
