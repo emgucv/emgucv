@@ -331,7 +331,14 @@ void cveSolvePnPRefineLM(
 	cv::_InputOutputArray* tvec,
 	CvTermCriteria* criteria)
 {
-	cv::solvePnPRefineLM(*objectPoints, *imagePoints, *cameraMatrix, *distCoeffs, *rvec, *tvec, *criteria);
+	cv::solvePnPRefineLM(
+		*objectPoints, 
+		*imagePoints, 
+		*cameraMatrix, 
+		distCoeffs ? *distCoeffs : static_cast<cv::InputArray>(cv::noArray()), 
+		*rvec, 
+		*tvec, 
+		*criteria);
 }
 
 void cveSolvePnPRefineVVS(
@@ -344,7 +351,15 @@ void cveSolvePnPRefineVVS(
 	CvTermCriteria* criteria,
 	double VVSlambda)
 {
-	cv::solvePnPRefineVVS(*objectPoints, *imagePoints, *cameraMatrix, *distCoeffs, *rvec, *tvec, *criteria, VVSlambda);
+	cv::solvePnPRefineVVS(
+		*objectPoints, 
+		*imagePoints, 
+		*cameraMatrix, 
+		distCoeffs ? *distCoeffs : static_cast<cv::InputArray>(cv::noArray()),
+		*rvec, 
+		*tvec, 
+		*criteria, 
+		VVSlambda);
 }
 
 int cveSolvePnPGeneric(
