@@ -75,7 +75,8 @@ CVAPI(double) cveVideoCaptureGet(cv::VideoCapture* capture, int propId);
 CVAPI(bool) cveVideoCaptureGrab(cv::VideoCapture* capture);
 CVAPI(bool) cveVideoCaptureRetrieve(cv::VideoCapture* capture, cv::_OutputArray* image, int flag);
 CVAPI(bool) cveVideoCaptureRead(cv::VideoCapture* capture, cv::_OutputArray* image);
-//CVAPI(void) cveVideoCaptureReadToMat(cv::VideoCapture* capture, cv::Mat* mat);
+CVAPI(void) cveVideoCaptureReadToMat(cv::VideoCapture* capture, cv::Mat* mat);
+CVAPI(void) cveVideoCaptureReadToUMat(cv::VideoCapture* capture, cv::UMat* umat);
 CVAPI(void) cveVideoCaptureGetBackendName(cv::VideoCapture* capture, cv::String* name);
 
 CVAPI(bool) cveVideoCaptureWaitAny(std::vector<cv::VideoCapture>* streams, std::vector<int>* readyIndex, int timeoutNs);
