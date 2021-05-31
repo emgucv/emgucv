@@ -474,26 +474,7 @@ namespace Emgu.CV
                 ImageGrabbed(this, new EventArgs());
             return grabbed;
         }
-
-        /// <summary>
-        /// Same to cv::VideoCapture &gt;gt; cv::Mat function
-        /// </summary>
-        /// <param name="mat">The Mat to be written to. If no more frame is available, the resulting Mat will be empty.</param>
-        public void QueryFrame(Mat mat)
-        {
-            CvInvoke.cveVideoCaptureReadToMat(_ptr, mat);
-        }
         
-        /// <summary>
-        /// Same to cv::VideoCapture &gt;gt; cv::UMat function
-        /// </summary>
-        /// <param name="umat">The UMat to be written to.  If no more frame is available, the resulting UMat will be empty.</param>
-        public void QueryFrame(UMat umat)
-        {
-            CvInvoke.cveVideoCaptureReadToMat(_ptr, umat);
-        }
-
-
         #region Grab process
         /// <summary>
         /// The event to be called when an image is grabbed
@@ -626,6 +607,26 @@ namespace Emgu.CV
                 return CvInvoke.cveVideoCaptureRead(Ptr, oaM);
         }
 
+        /// <summary>
+        /// Same to cv::VideoCapture &gt;gt; cv::Mat function
+        /// </summary>
+        /// <param name="mat">The Mat to be written to. If no more frame is available, the resulting Mat will be empty.</param>
+        public bool Read(Mat mat)
+        {
+            CvInvoke.cveVideoCaptureReadToMat(_ptr, mat);
+            return mat.IsEmpty;
+        }
+        
+        /// <summary>
+        /// Same to cv::VideoCapture &gt;gt; cv::UMat function
+        /// </summary>
+        /// <param name="umat">The UMat to be written to. If no more frame is available, the resulting UMat will be empty.</param>
+        public bool Read(UMat umat)
+        {
+            CvInvoke.cveVideoCaptureReadToUMat(_ptr, umat);
+            return umat.IsEmpty;
+        }
+        
         /// <summary>
         /// The name of the backend used by this VideoCapture
         /// </summary>
