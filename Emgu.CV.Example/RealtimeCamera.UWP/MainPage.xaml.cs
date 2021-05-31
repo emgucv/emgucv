@@ -61,14 +61,7 @@ namespace RealtimeCamera
             {
                 if (_capture != null)
                 {
-                    bool grabbed = _capture.Grab();
-
-                    //Read the camera data to the mat
-                    //Note that m is in 3 channel RGB color space, 
-                    //Open CV's default color space is BGR for 3 channel Mat
-                    bool retrieved = _capture.Retrieve(_capturedMat);
-
-                    if (grabbed && retrieved)
+                    if (_capture.Read(_capturedMat))
                         try
                         {
                             if (!_capturedMat.IsEmpty)
