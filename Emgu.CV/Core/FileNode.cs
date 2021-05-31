@@ -211,6 +211,10 @@ namespace Emgu.CV
             return CvInvoke.cveFileNodeReadDouble(_ptr, defaultDouble);
         }
 
+        /// <summary>
+        /// Get an enumerator of the file node children
+        /// </summary>
+        /// <returns>An enumerator of the file node children</returns>
         public IEnumerator<FileNode> GetEnumerator()
         {
             using (FileNodeIterator it = new FileNodeIterator(this, false))

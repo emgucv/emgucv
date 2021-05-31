@@ -432,6 +432,7 @@ namespace Emgu.CV
         /// coordinate space. Due to its duality, this tuple is equivalent to the position of the calibration pattern with respect to the
         /// camera coordinate space.
         /// </param>
+        /// <param name="calibrationType">The camera calibration flags.</param>
         /// <param name="translationVectors">Output vector of translation vectors estimated for each pattern view, see parameter describtion above.</param>
         /// <param name="termCriteria">The termination criteria</param>
         /// <param name="cameraMatrix">Input/output 3x3 floating-point camera intrinsic matrix A [fx 0 cx; 0 fy cy; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS and/or CV_CALIB_FIX_ASPECT_RATION are specified, some or all of fx, fy, cx, cy must be initialized</param>
