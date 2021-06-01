@@ -2,22 +2,14 @@
 //  Copyright (C) 2004-2021 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if !(__ANDROID__ || __UNIFIED__ || UNITY_WSA || NETSTANDARD || UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || UNITY_EDITOR || UNITY_STANDALONE)
-#define WITH_SERVICE_MODEL
-#endif
-
 //#define TEST_CAPTURE
 
 using System;
 using System.Diagnostics;
-#if WITH_SERVICE_MODEL
-using System.ServiceModel;
-#endif
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
-//using System.Threading.Tasks;
 using Emgu.Util;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
@@ -29,15 +21,8 @@ namespace Emgu.CV
     /// Capture images from either camera or video file. 
     /// </summary>
     /// <remarks>VideoCapture class is NOT implemented in Open CV for Android, iOS or UWP platforms</remarks>
-#if WITH_SERVICE_MODEL
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-#endif
     public partial class VideoCapture :
-        UnmanagedObject,
-#if WITH_SERVICE_MODEL
-        IDuplexCapture,
-#endif
-        ICapture
+        UnmanagedObject
     {
 
         /// <summary>
@@ -727,31 +712,6 @@ namespace Emgu.CV
               }
           }*/
 
-#if WITH_SERVICE_MODEL
-        /// <summary>
-        /// Query a frame duplexly over WCF
-        /// </summary>
-        public virtual void DuplexQueryFrame()
-        {
-            IDuplexCaptureCallback callback = OperationContext.Current.GetCallbackChannel<IDuplexCaptureCallback>();
-            using (Mat img = QueryFrame())
-            {
-                callback.ReceiveFrame(img);
-            }
-        }
-
-        /// <summary>
-        /// Query a small frame duplexly over WCF
-        /// </summary>
-        public virtual void DuplexQuerySmallFrame()
-        {
-            IDuplexCaptureCallback callback = OperationContext.Current.GetCallbackChannel<IDuplexCaptureCallback>();
-            using (Mat img = QuerySmallFrame())
-            {
-                callback.ReceiveFrame(img);
-            }
-        }
-#endif
     }
 
     /// <summary>
