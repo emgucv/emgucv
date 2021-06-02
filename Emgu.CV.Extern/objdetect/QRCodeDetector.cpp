@@ -21,7 +21,7 @@ bool cveQRCodeDetectorDetect(cv::QRCodeDetector* detector, cv::_InputArray* img,
 
 void cveQRCodeDetectorDecode(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightQrcode)
 {
-	std::string s = detector->decode(*img, *points, *straightQrcode);
+	std::string s = detector->decode(*img, *points, straightQrcode ? *straightQrcode : static_cast<cv::OutputArray>(cv::noArray()));
 	*decodedInfo = s;
 }
 
