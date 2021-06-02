@@ -49,6 +49,19 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// Detects QR codes in image and returns the vector of the quadrangles containing the codes.
+        /// </summary>
+        /// <param name="img">Grayscale or color (BGR) image containing (or not) QR codes</param>
+        /// <param name="points">Output vector of vector of vertices of the minimum-area quadrangle containing the codes.</param>
+        /// <returns>True if a QRCode is found.</returns>
+        public bool DetectMulti(IInputArray img, IOutputArray points)
+        {
+            using (InputArray iaInput = img.GetInputArray())
+            using (OutputArray oaPoints = points.GetOutputArray())
+                return CvInvoke.cveQRCodeDetectorDetectMulti(_ptr, iaInput, oaPoints);
+        }
+
+        /// <summary>
         /// Decodes QR code in image once it's found by the detect() method.
         /// </summary>
         /// <param name="image">grayscale or color (BGR) image containing QR code.</param>
@@ -63,6 +76,25 @@ namespace Emgu.CV
             using (CvString decodedInfo = new CvString())
             {
                 CvInvoke.cveQRCodeDetectorDecode(_ptr, iaImage, iaPoints, decodedInfo, oaStraightQrcode);
+                return decodedInfo.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Decodes QR code on a curved surface in image once it's found by the detect() method.
+        /// </summary>
+        /// <param name="img">grayscale or color (BGR) image containing QR code.</param>
+        /// <param name="points">Quadrangle vertices found by detect() method (or some other algorithm).</param>
+        /// <param name="straightQrcode">The optional output image containing rectified and binarized QR code</param>
+        /// <returns>UTF8-encoded output string or empty string if the code cannot be decoded.</returns>
+        public String DecodeCurved(IInputArray img, IInputArray points, IOutputArray straightQrcode = null)
+        {
+            using (InputArray iaImage = img.GetInputArray())
+            using (InputArray iaPoints = points.GetInputArray())
+            using (OutputArray oaStraightQrcode = straightQrcode == null ? OutputArray.GetEmpty() : straightQrcode.GetOutputArray())
+            using (CvString decodedInfo = new CvString())
+            {
+                CvInvoke.cveQRCodeDetectorDecodeCurved(_ptr, iaImage, iaPoints, decodedInfo, oaStraightQrcode);
                 return decodedInfo.ToString();
             }
         }
@@ -82,7 +114,14 @@ namespace Emgu.CV
         internal extern static bool cveQRCodeDetectorDetect(IntPtr detector, IntPtr input, IntPtr points);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal extern static bool cveQRCodeDetectorDetectMulti(IntPtr detector, IntPtr input, IntPtr points);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveQRCodeDetectorDecode(IntPtr detector, IntPtr img, IntPtr points, IntPtr decodedInfo, IntPtr straightQrcode);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveQRCodeDetectorDecodeCurved(IntPtr detector, IntPtr img, IntPtr points, IntPtr decodedInfo, IntPtr straightQrcode);
 
         /*
         /// <summary>
