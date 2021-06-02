@@ -4353,11 +4353,26 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestQCCode()
+        {
+            using (Mat m = EmguAssert.LoadMat("link_github_ocv.jpg"))
+            using (QRCodeDetector detector = new QRCodeDetector())
+            using (VectorOfPoint pts = new VectorOfPoint())
+            {
+                if (detector.Detect(m, pts))
+                {
+                    String text = detector.Decode(m, pts);
+                }
+            }
+        }
+
+        [Test]
         public void TestLoadLibrary()
         {
             bool loaded = (IntPtr.Zero != Emgu.Util.Toolbox.LoadLibrary("not_exist"));
             EmguAssert.IsFalse(loaded);
         }
+
 
         [Test]
         public void TestMcc()

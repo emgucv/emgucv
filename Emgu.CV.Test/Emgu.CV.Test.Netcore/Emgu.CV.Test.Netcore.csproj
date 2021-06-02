@@ -63,6 +63,9 @@
     <Content Include="..\..\opencv_extra\testdata\cv\mcc\MCC24.png" Link="MCC24.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\..\opencv_extra\testdata\cv\qrcode\link_github_ocv.jpg" Link="link_github_ocv.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\..\opencv_extra\testdata\dnn\dog416.png">
       <Link>dog416.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
