@@ -19,7 +19,7 @@ jobs:
     - name: Check out submodules
       run: git submodule update --init --recursive
     - name: Build Emgu CV native binary
-      run: ./cmake_configure.sh
+      run: ./cmake_configure
       working-directory: ${{ github.workspace }}/platforms/ubuntu/20.04
     - name: Build Emgu CV package binary
       run: make package
