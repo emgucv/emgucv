@@ -198,6 +198,11 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
 	#MESSAGE(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> msbuild_target_name: ${msbuild_target_name}")
     STRING(REGEX REPLACE "\\." "_" msbuild_target_name ${project_name})
 	SET(MSBUILD_TARGET_OPTION /target:${msbuild_target_name})
+	if (WIN32)
+	  #TODO: This should not be necessary if dotnot msbuild command is fixed. Currently looking up the "Build" target is broken, need to use the "Rebuild" targe.
+	  #Should be removed when dotnet msbuild is fixed.
+	  SET(MSBUILD_TARGET_OPTION ${MSBUILD_TARGET_OPTION}:Rebuild)
+	ENDIF()
   ENDIF()
   IF (DOTNET_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
