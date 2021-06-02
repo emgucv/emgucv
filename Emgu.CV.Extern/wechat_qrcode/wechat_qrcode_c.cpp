@@ -39,7 +39,7 @@ void cveWeChatQRCodeDetectAndDecode(
     std::vector<std::string>* results)
 {
 #ifdef HAVE_OPENCV_WECHAT_QRCODE
-    std::vector<std::string> r = detector->detectAndDecode(*img, *points);
+    std::vector<std::string> r = detector->detectAndDecode(*img, points ? *points : static_cast<cv::OutputArrayOfArrays>(cv::noArray()));
     results->clear();
 	for (std::vector<std::string>::iterator it = r.begin(); it != r.end(); it++)
 	{

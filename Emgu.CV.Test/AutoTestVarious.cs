@@ -33,6 +33,7 @@ using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
 using Emgu.CV.DepthAI;
 using Emgu.CV.Mcc;
+using Emgu.CV.Models;
 using Emgu.CV.Tiff;
 //using Emgu.CV.UI;
 using Emgu.CV.Util;
@@ -40,6 +41,9 @@ using Emgu.CV.VideoStab;
 using Emgu.CV.XFeatures2D;
 using Emgu.CV.XImgproc;
 using Emgu.Util;
+
+using System.Threading.Tasks;
+
 //using Newtonsoft.Json;
 using DetectorParameters = Emgu.CV.Aruco.DetectorParameters;
 using DistType = Emgu.CV.CvEnum.DistType;
@@ -4373,6 +4377,25 @@ namespace Emgu.CV.Test
             EmguAssert.IsFalse(loaded);
         }
 
+        private static void DownloadManager_OnDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
+        {
+            if (e.TotalBytesToReceive <= 0)
+                Trace.WriteLine(String.Format("{0} bytes downloaded.", e.BytesReceived));
+            else
+                Trace.WriteLine(String.Format("{0} of {1} bytes downloaded ({2}%)", e.BytesReceived, e.TotalBytesToReceive, e.ProgressPercentage));
+        }
+        
+        [Test]
+        public async Task TestWeChatQRCode()
+        {
+            using (Mat m = EmguAssert.LoadMat("link_github_ocv.jpg"))
+            using (Emgu.CV.Models.WeChatQRCodeDetector detector = new WeChatQRCodeDetector())
+            {
+                await detector.Init(DownloadManager_OnDownloadProgressChanged);
+                String text = detector.ProcessAndRender(m, m);
+            }
+
+        }
 
         [Test]
         public void TestMcc()
