@@ -14,6 +14,9 @@
     <Compile Include="..\AutoTestMat.cs" Link="AutoTestMat.cs" />
     <Compile Include="..\AutoTestMatrix.cs" Link="AutoTestMatrix.cs" />
     <Compile Include="..\AutoTestML.cs" Link="AutoTestML.cs" />
+    <Compile Include="..\AutoTestModels.cs">
+      <Link>AutoTestModels.cs</Link>
+    </Compile>
     <Compile Include="..\AutoTestOcr.cs" Link="AutoTestOcr.cs" />
     <Compile Include="..\AutoTestOpenCL.cs" Link="AutoTestOpenCL.cs" />
     <Compile Include="..\AutoTestQuaternions.cs" Link="AutoTestQuaternions.cs" />
