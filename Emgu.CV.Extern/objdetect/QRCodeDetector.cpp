@@ -35,13 +35,17 @@ void cveQRCodeDetectorDecodeCurved(cv::QRCodeDetector* detector, cv::_InputArray
 	*decodedInfo = s;
 }
 
-/*
-bool cveDetectQRCode(cv::_InputArray* in, std::vector< cv::Point >* points, double epsX, double epsY)
+bool cveQRCodeDetectorDecodeMulti(
+	cv::QRCodeDetector* detector,
+	cv::_InputArray* img,
+	cv::_InputArray* points,
+	std::vector< std::string >* decodedInfo,
+	cv::_OutputArray* straightQrcode)
 {
-	return cv::detectQRCode(*in, *points, epsX, epsY);
+	return detector->decodeMulti(
+		*img,
+		*points,
+		*decodedInfo,
+		straightQrcode ? *straightQrcode : static_cast<cv::OutputArray>(cv::noArray())
+	);
 }
-
-bool cveDecodeQRCode(cv::_InputArray* in, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightQrcode)
-{
-	return cv::decodeQRCode(*in, *points, *decodedInfo, *straightQrcode);
-}*/

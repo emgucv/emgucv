@@ -99,7 +99,11 @@ CVAPI(bool) cveQRCodeDetectorDetect(cv::QRCodeDetector* detector, cv::_InputArra
 CVAPI(bool) cveQRCodeDetectorDetectMulti(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_OutputArray* points);
 CVAPI(void) cveQRCodeDetectorDecode(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightQrcode);
 CVAPI(void) cveQRCodeDetectorDecodeCurved(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightQrcode);
-//CVAPI(bool) cveDetectQRCode(cv::_InputArray* in, std::vector< cv::Point >* points, double epsX, double epsY);
+CVAPI(bool) cveQRCodeDetectorDecodeMulti(
+    cv::QRCodeDetector* detector,
+    cv::_InputArray* img,
+    cv::_InputArray* points,
+    std::vector< std::string >* decodedInfo,
+    cv::_OutputArray* straightQrcode);
 
-//CVAPI(bool) cveDecodeQRCode(cv::_InputArray* in, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightQrcode);
 #endif
