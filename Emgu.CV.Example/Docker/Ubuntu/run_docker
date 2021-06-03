@@ -1,0 +1,4 @@
+#!/usr/bin/bash -v
+
+docker run emgu/ubuntu_demo
+
