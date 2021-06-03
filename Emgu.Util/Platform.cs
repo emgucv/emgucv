@@ -29,6 +29,8 @@ namespace Emgu.Util
                 _runtime = Clr.DotNetNative;
             else if (RuntimeInformation.FrameworkDescription.ToLower().StartsWith(".net core"))
                 _runtime = Clr.DotNet;
+            else if (RuntimeInformation.FrameworkDescription.ToLower().StartsWith(".net ")) // "e.g. .NET 5.0.6
+                _runtime = Clr.DotNet;
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
