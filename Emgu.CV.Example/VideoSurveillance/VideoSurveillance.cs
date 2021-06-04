@@ -40,7 +40,6 @@ namespace VideoSurveillance
         private static VideoCapture _cameraCapture;
 
         private static IBackgroundSubtractor _fgDetector;
-        //private static SimpleBlobDetector _blobDetector;
 
         public VideoSurveillance()
         {
@@ -72,9 +71,9 @@ namespace VideoSurveillance
             Mat smoothedFrame = new Mat();
             CvInvoke.GaussianBlur(frame, smoothedFrame, new Size(3, 3), 1); //filter out noises
             
-            #region use the BG/FG detector to find the forground mask
-            Mat forgroundMask = new Mat();
-            _fgDetector.Apply(smoothedFrame, forgroundMask);
+            #region use the BG/FG detector to find the foreground mask
+            Mat foregroundMask = new Mat();
+            _fgDetector.Apply(smoothedFrame, foregroundMask);
             #endregion
 
             List<TrackedObject> toBeRemovedList = new List<TrackedObject>();
@@ -106,7 +105,7 @@ namespace VideoSurveillance
             using (Mat canny = new Mat())
             using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
             {
-                CvInvoke.Canny(forgroundMask, canny, 180, 100);
+                CvInvoke.Canny(foregroundMask, canny, 180, 100);
                 CvInvoke.FindContours(canny, contours, null, RetrType.External, ChainApproxMethod.ChainApproxSimple);
                 int count = contours.Size;
                 for (int i = 0; i < count; i++)
@@ -115,7 +114,7 @@ namespace VideoSurveillance
                     using (VectorOfPoint approxContour = new VectorOfPoint())
                     {
                         CvInvoke.ApproxPolyDP(contour, approxContour, CvInvoke.ArcLength(contour, true) * 0.05, true);
-                        if (CvInvoke.ContourArea(approxContour, false) > minAreaThreshold) //only consider contours with area greater than 250
+                        if (CvInvoke.ContourArea(approxContour, false) > minAreaThreshold) //only consider contours with area greater than threshold
                         {
                             Rectangle r = CvInvoke.BoundingRectangle(approxContour);
                             bool overlapped = false;
@@ -153,7 +152,7 @@ namespace VideoSurveillance
             }
 
             imageBox1.Image = frame;
-            imageBox2.Image = forgroundMask;
+            imageBox2.Image = foregroundMask;
         }
     }
 }
