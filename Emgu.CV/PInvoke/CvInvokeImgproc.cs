@@ -71,7 +71,7 @@ namespace Emgu.CV
         private static extern void cveResize(IntPtr src, IntPtr dst, ref Size dsize, double fx, double fy, CvEnum.Inter interpolation);
 
         /// <summary>
-        /// Resize an image such that it fits in a given frame
+        /// Resize an image such that it fits in a given frame, keeping the aspect ratio.
         /// </summary>
         /// <param name="src">The source image</param>
         /// <param name="dst">The result image</param>
