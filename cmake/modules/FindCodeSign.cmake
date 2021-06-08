@@ -1,0 +1,25 @@
+# - Try to find the code signing command for Emgu
+#
+# defines
+#
+# EMGU_SIGN_EXECUTABLE - Path to the 'EmguSign.bat' command
+# copyright (c) 2009 - 2021 Canming Huang support@emgu.com
+
+
+SET(EMGU_SIGN_FOUND FALSE)
+
+FIND_PROGRAM (EMGU_SIGN_EXECUTABLE 
+NAMES EmguSign.bat 
+PATHS
+"C:/CodeSignTool"
+CMAKE_FIND_ROOT_PATH_BOTH
+)
+
+IF(EMGU_SIGN_EXECUTABLE)
+  MESSAGE( STATUS "FOUND EMGU_SIGN_EXECUTABLE: ${EMGU_SIGN_EXECUTABLE}" )
+  SET(EMGU_SIGN_FOUND TRUE)
+ENDIF()
+
+MARK_AS_ADVANCED(EMGU_SIGN_EXECUTABLE EMGU_SIGN_FOUND)
+
+

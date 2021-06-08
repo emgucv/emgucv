@@ -219,6 +219,10 @@ ENDIF()
 INCLUDE (CheckTargetArch)
 INCLUDE (OpenCVVersion)
 
+IF(WIN32)
+  INCLUDE (FindCodeSign)
+ENDIF()
+
 #SET(LIBRARY_3RDPARTY_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/3rdParty)
 
 # ----------------------------------------------------------------------------
