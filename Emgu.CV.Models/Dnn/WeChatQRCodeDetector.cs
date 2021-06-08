@@ -39,7 +39,6 @@ namespace Emgu.CV.Models
         /// <returns>Asyn task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(
-            YoloVersion version = YoloVersion.YoloV3,
             System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
         public async Task Init(
