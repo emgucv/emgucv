@@ -181,7 +181,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestMSER()
         {
-            MSERDetector keyPointDetector = new MSERDetector();
+            MSER keyPointDetector = new MSER();
             BriefDescriptorExtractor descriptorGenerator = new BriefDescriptorExtractor(32);
             //ParamDef[] parameters = keyPointDetector.GetParams();
             TestFeature2DTracker(keyPointDetector, descriptorGenerator);
@@ -217,7 +217,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestORB()
         {
-            ORBDetector orb = new ORBDetector(700);
+            ORB orb = new ORB(700);
             //String[] parameters = orb.GetParamNames();
             EmguAssert.IsTrue(TestFeature2DTracker(orb, orb), "Unable to find homography matrix");
         }

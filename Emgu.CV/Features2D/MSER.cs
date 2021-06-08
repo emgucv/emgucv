@@ -14,7 +14,7 @@ namespace Emgu.CV.Features2D
     /// <summary>
     /// MSER detector
     /// </summary>
-    public class MSERDetector : Feature2D
+    public partial class MSER : Feature2D
     {
         /// <summary>
         /// Create a MSER detector using the specific parameters
@@ -28,7 +28,7 @@ namespace Emgu.CV.Features2D
         /// <param name="areaThreshold">The area threshold to cause re-initialize</param>
         /// <param name="minMargin">Ignore too small margin</param>
         /// <param name="edgeBlurSize">The aperture size for edge blur</param>
-        public MSERDetector(
+        public MSER(
            int delta = 5, int minArea = 60, int maxArea = 14400, double maxVariation = 0.25, double minDiversity = 0.2,
            int maxEvolution = 200, double areaThreshold = 1.01, double minMargin = 0.003, int edgeBlurSize = 5)
         {

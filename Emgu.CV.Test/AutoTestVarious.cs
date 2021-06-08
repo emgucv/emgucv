@@ -2830,7 +2830,7 @@ namespace Emgu.CV.Test
             images[3] = EmguAssert.LoadImage<Bgr, Byte>("stitch4.jpg");
 
             using (Stitcher stitcher = new Stitcher())
-            using (ORBDetector finder = new ORBDetector())
+            using (ORB finder = new ORB())
             {
                 stitcher.SetFeaturesFinder(finder);
                 Mat result = new Mat();
@@ -2900,7 +2900,7 @@ namespace Emgu.CV.Test
             images[3] = EmguAssert.LoadMat("stitch4.jpg");
 
             using (Stitcher stitcher = new Stitcher(Stitcher.Mode.Panorama))
-            using (ORBDetector detector = new ORBDetector())
+            using (ORB detector = new ORB())
             using (SphericalWarper warper = new SphericalWarper())
             using (SeamFinder finder = new GraphCutSeamFinder())
             using (BlocksChannelsCompensator compensator = new BlocksChannelsCompensator())
