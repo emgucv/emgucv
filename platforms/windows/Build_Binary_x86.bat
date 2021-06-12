@@ -224,7 +224,7 @@ cd %BUILD_FOLDER%
 -DCMAKE_DISABLE_FIND_PACKAGE_PNG:BOOL=TRUE ^
 -DCMAKE_DISABLE_FIND_PACKAGE_HarfBuzz:BOOL=TRUE ^
 ..
-%CMAKE% --build . --config Release --parallel --target install
+%CMAKE% --build . --config Release --target INSTALL
 cd ..
 cd ..
 cd ..
@@ -235,7 +235,7 @@ cd harfbuzz
 IF NOT EXIST %BUILD_FOLDER% mkdir %BUILD_FOLDER%
 cd %BUILD_FOLDER%
 %CMAKE% -G %CMAKE_CONF% %GENERAL_CMAKE_CONFIG_FLAGS% -DHB_HAVE_FREETYPE:BOOL=TRUE ..
-%CMAKE% --build . --config Release --parallel --target install
+%CMAKE% --build . --config Release --target INSTALL
 cd ..
 cd ..
 REM SET HARFBUZZ_DIR=%cd%\harfbuzz\%BUILD_FOLDER%
@@ -254,7 +254,7 @@ cd hdf5
 IF NOT EXIST %BUILD_FOLDER% mkdir %BUILD_FOLDER%
 cd %BUILD_FOLDER%
 %CMAKE% -G %CMAKE_CONF% %GENERAL_CMAKE_CONFIG_FLAGS% -DBUILD_SHARED_LIBS:BOOL=FALSE -DBUILD_TESTING:BOOL=FALSE -DHDF5_BUILD_EXAMPLES:BOOL=FALSE -DHDF5_BUILD_TOOLS:BOOL=FALSE ..
-%CMAKE% --build . --config Release --parallel --target install
+%CMAKE% --build . --config Release --target INSTALL
 cd ..
 cd ..
 SET HDF5_DIR=%BUILD_FOLDER%\install\cmake
@@ -339,7 +339,7 @@ cd eigen
 IF NOT EXIST %BUILD_FOLDER% mkdir %BUILD_FOLDER%
 cd %BUILD_FOLDER%
 %CMAKE% -G %CMAKE_CONF% %GENERAL_CMAKE_CONFIG_FLAGS% -DCMAKE_INSTALL_PREFIX:STRING="%INSTALL_FOLDER:\=/%" ..
-%CMAKE% --build . --config Release --parallel --target install
+%CMAKE% --build . --config Release --target INSTALL
 SET EIGEN_DIR=%cd%
 cd ..
 cd ..
@@ -357,7 +357,7 @@ IF NOT EXIST %BUILD_FOLDER% mkdir %BUILD_FOLDER%
 cd %BUILD_FOLDER%
 SET VTK_DIR=%cd%
 %CMAKE% -G %CMAKE_CONF% %GENERAL_CMAKE_CONFIG_FLAGS% -DVTK_DATA_EXCLUDE_FROM_ALL:BOOL=TRUE -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DCMAKE_INSTALL_PREFIX:STRING="%INSTALL_FOLDER:\=/%" -DCMAKE_FIND_ROOT_PATH:STRING=%INSTALL_FOLDER:\=/% -DVTK_MODULE_ENABLE_VTK_RenderingFreeType:STRING="NO"  -DVTK_MODULE_ENABLE_VTK_png:STRING="NO" ..
-%CMAKE% --build . --config Release --parallel --target install
+%CMAKE% --build . --config Release --target INSTALL
 cd ..
 cd ..
 REM SET VTK_DIR=%cd%\vtk\%BUILD_FOLDER%
