@@ -443,7 +443,8 @@ namespace Emgu.CV
                     }
                     return imageFrom1bppIndexed;
                 default:
-                #region Handle other image type
+                    #region Handle other image type
+                    Mat imageDefault = new Mat();
                     Byte[,,] data = new byte[size.Height, size.Width, 4];
                     for (int i = 0; i < size.Width; i++)
                         for (int j = 0; j < size.Height; j++)
@@ -457,13 +458,18 @@ namespace Emgu.CV
                     GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                     try
                     {
-                        return new Mat(new int[] { size.Height, size.Width, 4 }, DepthType.Cv8U, dataHandle.AddrOfPinnedObject());
+                        using (Mat mat = new Mat(new int[] {size.Height, size.Width, 4}, DepthType.Cv8U,
+                            dataHandle.AddrOfPinnedObject()))
+                        {
+                            mat.CopyTo(imageDefault);
+                        }
                     }
                     finally
                     {
                         dataHandle.Free();
                     }
-                #endregion
+                    return imageDefault;
+                    #endregion
             }
         }
 
