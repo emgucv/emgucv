@@ -90,7 +90,10 @@ namespace Emgu.Util
                                 byte[] hashValue = sha256.ComputeHash(fileStream);
                                 String hashStr = ByteArrayToString(hashValue);
                                 if (hashStr != _sha256Hash)
+                                {
+                                    Trace.WriteLine(String.Format("{0}: expecting SHA256 of \"{1}\", got \"{2}\"", localFile, _sha256Hash, hashStr));
                                     return false;
+                                }
                             }
                         }
                         catch (IOException e)

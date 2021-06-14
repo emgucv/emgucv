@@ -26,12 +26,11 @@ INSTALL(
 
 PROJECT(Emgu.CV.DebuggerVisualizers)
 SET(EXTRA_BUILD_FLAGS "/p:Platform=\"x86\"")
+
 MSBUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../Solution/Windows.Desktop/Emgu.CV.DebuggerVisualizers.sln" "Emgu.CV.DebuggerVisualizers" "${EXTRA_BUILD_FLAGS}" ALL)	
-#BUILD_CSPROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.DebuggerVisualizers/Emgu.CV.DebuggerVisualizers.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
-ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} 
-  PRE_BUILD
-  COMMAND ${MSBUILD_EXECUTABLE} -t:restore Emgu.CV.DebuggerVisualizers.sln
-  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../Solution/Windows.Desktop/")
+IF (EMGU_SIGN_FOUND)
+  EMGU_SIGN_BINARY(${PROJECT_NAME} ${LIBRARY_OUTPUT_PATH}/${PROJECT_NAME}.dll)
+ENDIF()
 
 IF (TARGET Emgu.CV.Platform.NetStandard)
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard)

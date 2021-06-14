@@ -14,7 +14,7 @@ namespace Emgu.CV.Features2D
     /// <summary>
     /// MSER detector
     /// </summary>
-    public class MSERDetector : Feature2D
+    public partial class MSER : Feature2D
     {
         /// <summary>
         /// Create a MSER detector using the specific parameters
@@ -28,11 +28,11 @@ namespace Emgu.CV.Features2D
         /// <param name="areaThreshold">The area threshold to cause re-initialize</param>
         /// <param name="minMargin">Ignore too small margin</param>
         /// <param name="edgeBlurSize">The aperture size for edge blur</param>
-        public MSERDetector(
+        public MSER(
            int delta = 5, int minArea = 60, int maxArea = 14400, double maxVariation = 0.25, double minDiversity = 0.2,
            int maxEvolution = 200, double areaThreshold = 1.01, double minMargin = 0.003, int edgeBlurSize = 5)
         {
-            _ptr = Features2DInvoke.cveMserGetFeatureDetector(
+            _ptr = Features2DInvoke.cveMserCreate(
                delta,
                minArea,
                maxArea,
@@ -52,7 +52,7 @@ namespace Emgu.CV.Features2D
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                Features2DInvoke.cveMserFeatureDetectorRelease(ref _sharedPtr);
+                Features2DInvoke.cveMserRelease(ref _sharedPtr);
             base.DisposeObject();
         }
 
@@ -72,7 +72,7 @@ namespace Emgu.CV.Features2D
     public static partial class Features2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMserGetFeatureDetector(
+        internal extern static IntPtr cveMserCreate(
            int delta,
            int minArea,
            int maxArea,
@@ -86,7 +86,7 @@ namespace Emgu.CV.Features2D
            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMserFeatureDetectorRelease(ref IntPtr sharedPtr);
+        internal extern static void cveMserRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveMserDetectRegions(

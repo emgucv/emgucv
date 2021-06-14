@@ -7,7 +7,7 @@
 #include "features2d_c.h"
 
 //ORB
-cv::ORB* cveOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D, cv::Ptr<cv::ORB>** sharedPtr)
+cv::ORB* cveOrbCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D, cv::Ptr<cv::ORB>** sharedPtr)
 {
 	cv::Ptr<cv::ORB> orbPtr = cv::ORB::create(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, static_cast<cv::ORB::ScoreType>( scoreType ), patchSize, fastThreshold);
 	*sharedPtr = new cv::Ptr<cv::ORB>(orbPtr);
@@ -15,7 +15,7 @@ cv::ORB* cveOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLeve
 	return orbPtr.get();
 }
 
-void cveOrbDetectorRelease(cv::Ptr<cv::ORB>** sharedPtr)
+void cveOrbRelease(cv::Ptr<cv::ORB>** sharedPtr)
 {
 	delete *sharedPtr;
 	*sharedPtr = 0;
@@ -37,7 +37,7 @@ void cveBriskRelease(cv::Ptr<cv::BRISK>** sharedPtr)
 }
 
 // detect corners using FAST algorithm
-cv::FastFeatureDetector* cveFASTGetFeatureDetector(int threshold, bool nonmax_supression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::FastFeatureDetector>** sharedPtr)
+cv::FastFeatureDetector* cveFASTFeatureDetectorCreate(int threshold, bool nonmax_supression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::FastFeatureDetector>** sharedPtr)
 {
 	cv::Ptr<cv::FastFeatureDetector> fastPtr = cv::FastFeatureDetector::create(threshold, nonmax_supression, static_cast<cv::FastFeatureDetector::DetectorType>( type ));
 	*sharedPtr = new cv::Ptr<cv::FastFeatureDetector>(fastPtr);
@@ -52,7 +52,7 @@ void cveFASTFeatureDetectorRelease(cv::Ptr<cv::FastFeatureDetector>** sharedPtr)
 }
 
 // MSER detector
-cv::MSER* cveMserGetFeatureDetector(
+cv::MSER* cveMserCreate(
 	int delta,
 	int minArea,
 	int maxArea,
@@ -76,7 +76,7 @@ cv::MSER* cveMserGetFeatureDetector(
 		minMargin,
 		edgeBlurSize);
 	*sharedPtr = new cv::Ptr<cv::MSER>(mserPtr);
-	*feature2D = dynamic_cast<cv::MSER*>(mserPtr.get());
+	*feature2D = dynamic_cast<cv::Feature2D*>(mserPtr.get());
 	return mserPtr.get();
 }
 
@@ -89,7 +89,7 @@ void cveMserDetectRegions(
 	mserPtr->detectRegions(*image, *msers, *bboxes);
 }
 
-void cveMserFeatureDetectorRelease(cv::Ptr<cv::MSER>** sharedPtr)
+void cveMserRelease(cv::Ptr<cv::MSER>** sharedPtr)
 {
 	delete *sharedPtr;
 	*sharedPtr = 0;

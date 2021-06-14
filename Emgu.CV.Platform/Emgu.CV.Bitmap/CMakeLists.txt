@@ -12,7 +12,10 @@ IF (TARGET Emgu.CV.Platform.NetStandard)
       ENDIF()
 
     BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Bitmap" "${EXTRA_MSBUILD_FLAGS}" ALL)
-  
+    IF (EMGU_SIGN_FOUND)
+      EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.dll)
+    ENDIF()
+
     INSTALL(
       FILES 
       ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.xml

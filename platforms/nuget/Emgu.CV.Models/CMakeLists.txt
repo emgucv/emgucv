@@ -15,6 +15,10 @@ IF ((TARGET Emgu.CV.Models.NetStandard) AND (TARGET Emgu.CV.Models.IOS))
   
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Models.NetStandard)
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Models.IOS)
+
+  IF (TARGET Emgu.CV.nuget)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.nuget)
+  ENDIF()
   
   if(ENABLE_SOLUTION_FOLDERS)
     set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "nuget")

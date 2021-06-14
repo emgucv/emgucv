@@ -16,7 +16,7 @@ namespace Emgu.CV.Cuda
     /// <summary>
     /// An ORB detector using Cuda
     /// </summary>
-    public class CudaORBDetector : ORBDetector, IFeature2DAsync
+    public class CudaORBDetector : ORB, IFeature2DAsync
     {
         private IntPtr _feature2DAsyncPtr;
 
@@ -40,7 +40,7 @@ namespace Emgu.CV.Cuda
            int edgeThreshold = 31,
            int firstLevel = 0,
            int WTK_A = 2,
-           ORBDetector.ScoreType scoreType = ORBDetector.ScoreType.Harris,
+           ORB.ScoreType scoreType = ORB.ScoreType.Harris,
            int patchSize = 31,
            int fastThreshold = 20,
            bool blurForDescriptor = false)
@@ -78,7 +78,7 @@ namespace Emgu.CV.Cuda
            int edgeThreshold,
            int firstLevel,
            int WTA_K,
-           ORBDetector.ScoreType scoreType,
+           ORB.ScoreType scoreType,
            int patchSize,
            int fastThreshold,
            [MarshalAs(CvInvoke.BoolMarshalType)]

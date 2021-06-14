@@ -1506,6 +1506,28 @@ ENDIF()
 	""
 	""
 	${HAVE_opencv_features2d})
+  CREATE_OCV_CLASS_PROPERTY( 
+    "features2d/MSER_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Features2D/MSER.g.cs"
+    "cv::MSER" 
+    "MSER" 
+    "Pass2Only;Delta;MinArea;MaxArea" 
+    "bool;int;int;int" 
+    "prop;prop;prop;prop"
+    "Pass2Only;Delta;MinArea;MaxArea" 
+    "bool;int;int;int"
+    "Pass2 only;
+    Delta;
+    Min Area;
+    Max Area"
+    "Emgu.CV.Features2D"
+    "Features2DInvoke"
+    "MSER"
+	""
+    "#include \"features2d_c.h\""
+	""
+	""
+	${HAVE_opencv_features2d})
 
 ############################### features2d code gen END ################################
 
@@ -3638,7 +3660,11 @@ ELSE()
 ENDIF()
 
 #add_subdirectory(gpu)
-IF (IOS)
+IF (WIN32)
+  IF (EMGU_SIGN_FOUND)
+    EMGU_SIGN_BINARY(${the_target} ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/cvextern.dll)
+  ENDIF()
+ELSEIF (IOS)
   SET(IOS_RELEASE_FOLDER "")
   IF (IPHONESIMULATOR)
     SET(IOS_RELEASE_FOLDER "Release-iphonesimulator")

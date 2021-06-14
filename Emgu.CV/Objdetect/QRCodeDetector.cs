@@ -49,6 +49,19 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// Detects QR codes in image and returns the vector of the quadrangles containing the codes.
+        /// </summary>
+        /// <param name="img">Grayscale or color (BGR) image containing (or not) QR codes</param>
+        /// <param name="points">Output vector of vector of vertices of the minimum-area quadrangle containing the codes.</param>
+        /// <returns>True if a QRCode is found.</returns>
+        public bool DetectMulti(IInputArray img, IOutputArray points)
+        {
+            using (InputArray iaInput = img.GetInputArray())
+            using (OutputArray oaPoints = points.GetOutputArray())
+                return CvInvoke.cveQRCodeDetectorDetectMulti(_ptr, iaInput, oaPoints);
+        }
+
+        /// <summary>
         /// Decodes QR code in image once it's found by the detect() method.
         /// </summary>
         /// <param name="image">grayscale or color (BGR) image containing QR code.</param>
@@ -66,11 +79,52 @@ namespace Emgu.CV
                 return decodedInfo.ToString();
             }
         }
+
+        /// <summary>
+        /// Decodes QR code on a curved surface in image once it's found by the detect() method.
+        /// </summary>
+        /// <param name="img">grayscale or color (BGR) image containing QR code.</param>
+        /// <param name="points">Quadrangle vertices found by detect() method (or some other algorithm).</param>
+        /// <param name="straightQrcode">The optional output image containing rectified and binarized QR code</param>
+        /// <returns>UTF8-encoded output string or empty string if the code cannot be decoded.</returns>
+        public String DecodeCurved(IInputArray img, IInputArray points, IOutputArray straightQrcode = null)
+        {
+            using (InputArray iaImage = img.GetInputArray())
+            using (InputArray iaPoints = points.GetInputArray())
+            using (OutputArray oaStraightQrcode = straightQrcode == null ? OutputArray.GetEmpty() : straightQrcode.GetOutputArray())
+            using (CvString decodedInfo = new CvString())
+            {
+                CvInvoke.cveQRCodeDetectorDecodeCurved(_ptr, iaImage, iaPoints, decodedInfo, oaStraightQrcode);
+                return decodedInfo.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Decodes QR codes in image once it's found by the detect() method.
+        /// </summary>
+        /// <param name="img">Grayscale or color (BGR) image containing QR codes.</param>
+        /// <param name="points">Vector of Quadrangle vertices found by detect() method (or some other algorithm).</param>
+        /// <param name="decodedInfo">UTF8-encoded output vector of string or empty vector of string if the codes cannot be decoded.</param>
+        /// <param name="straightQrcode">The optional output vector of images containing rectified and binarized QR codes</param>
+        /// <returns>True if decoding is successful.</returns>
+        public bool DecodeMulti(
+            IInputArray img, 
+            IInputArray points, 
+            VectorOfCvString decodedInfo,
+            IOutputArray straightQrcode = null)
+        {
+            using (InputArray iaImg = img.GetInputArray())
+            using (InputArray iaPoints = points.GetInputArray())
+            using (OutputArray oaStraightQrcode =
+                (straightQrcode == null ? OutputArray.GetEmpty() : straightQrcode.GetOutputArray()))
+            {
+                return CvInvoke.cveQRCodeDetectorDecodeMulti(_ptr, iaImg, iaPoints, decodedInfo, oaStraightQrcode);
+            }
+        }
     }
 
     public static partial class CvInvoke
     {
-
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static IntPtr cveQRCodeDetectorCreate();
 
@@ -82,49 +136,24 @@ namespace Emgu.CV
         internal extern static bool cveQRCodeDetectorDetect(IntPtr detector, IntPtr input, IntPtr points);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal extern static bool cveQRCodeDetectorDetectMulti(IntPtr detector, IntPtr input, IntPtr points);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveQRCodeDetectorDecode(IntPtr detector, IntPtr img, IntPtr points, IntPtr decodedInfo, IntPtr straightQrcode);
 
-        /*
-        /// <summary>
-        /// Detect QR code in image and return minimum area of quadrangle that describes QR code.
-        /// </summary>
-        /// <param name="input">Matrix of the type CV_8U containing an image where QR code are detected.</param>
-        /// <param name="points">Output vector of vertices of a quadrangle of minimal area that describes QR code.</param>
-        /// <param name="epsX">Epsilon neighborhood, which allows you to determine the horizontal pattern of the scheme 1:1:3:1:1 according to QR code standard.</param>
-        /// <param name="epsY">Epsilon neighborhood, which allows you to determine the vertical pattern of the scheme 1:1:3:1:1 according to QR code standard.</param>
-        /// <returns>True if QR code is found</returns>
-        public static bool DetectQRCode(IInputArray input, VectorOfPoint points, double epsX, double epsY)
-        {
-            using (InputArray iaInput = input.GetInputArray())
-                return cveDetectQRCode(iaInput, points, epsX, epsY);
-        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal extern static void cveQRCodeDetectorDecodeCurved(IntPtr detector, IntPtr img, IntPtr points, IntPtr decodedInfo, IntPtr straightQrcode);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal extern static bool cveDetectQRCode(IntPtr input, IntPtr points, double epsX, double epsY);
-
-        /// <summary>
-        /// Decode QR code in image and return text that is encrypted in QR code.
-        /// </summary>
-        /// <param name="input">Matrix of the type CV_8UC1 containing an image where QR code are detected.</param>
-        /// <param name="points">Input vector of vertices of a quadrangle of minimal area that describes QR code.</param>
-        /// <param name="decodeInfo">String information that is encrypted in QR code.</param>
-        /// <param name="straightQRCode">Matrix of the type CV_8UC1 containing an binary straight QR code.</param>
-        /// <returns>True if the QR code is found.</returns>
-        public static bool DecodeQRCode(IInputArray input, IInputArray points, CvString decodeInfo, IOutputArray straightQRCode = null)
-        {
-            using (InputArray iaInput = input.GetInputArray())
-            using (InputArray iaPoints = points.GetInputArray())
-            using (OutputArray oaStraightQRCode = straightQRCode == null ? OutputArray.GetEmpty() : straightQRCode.GetOutputArray())
-            {
-                return cveDecodeQRCode(iaInput, iaPoints, decodeInfo, oaStraightQRCode);
-            }
-        }
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal extern static bool cveDecodeQRCode(IntPtr input, IntPtr points, IntPtr decodedInfo, IntPtr straightQrcode);
-        */
+        internal extern static bool cveQRCodeDetectorDecodeMulti(
+            IntPtr detector,
+            IntPtr img,
+            IntPtr points,
+            IntPtr decodedInfo,
+            IntPtr straightQrcode);
+        
     }
 
 }

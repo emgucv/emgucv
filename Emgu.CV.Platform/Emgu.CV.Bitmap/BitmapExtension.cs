@@ -393,6 +393,7 @@ namespace Emgu.CV
                     }
                     return imageFrom24bppRgb;
                 case PixelFormat.Format1bppIndexed:
+                    Mat imageFrom1bppIndexed = new Mat();
                     int rows = size.Height;
                     int cols = size.Width;
                     BitmapData data1bppIndexed = bitmap.LockBits(
@@ -429,13 +430,18 @@ namespace Emgu.CV
                     GCHandle imageDataHandle = GCHandle.Alloc(imagedata, GCHandleType.Pinned);
                     try
                     {
-                        return new Mat(new int[] { rows, cols }, DepthType.Cv8U, imageDataHandle.AddrOfPinnedObject());
+                        using (Mat mat = new Mat(new int[] {rows, cols}, DepthType.Cv8U,
+                            imageDataHandle.AddrOfPinnedObject()))
+                        {
+                            mat.CopyTo(imageFrom1bppIndexed);
+                        }
                     }
                     finally
                     {
                         imageDataHandle.Free();
                         bitmap.UnlockBits(data1bppIndexed);
                     }
+                    return imageFrom1bppIndexed;
                 default:
                 #region Handle other image type
                     Byte[,,] data = new byte[size.Height, size.Width, 4];

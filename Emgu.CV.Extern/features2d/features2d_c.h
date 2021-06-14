@@ -14,15 +14,15 @@
 #include "vectors_c.h"
 
 //ORB
-CVAPI(cv::ORB*) cveOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D, cv::Ptr<cv::ORB>** sharedPtr);
-CVAPI(void) cveOrbDetectorRelease(cv::Ptr<cv::ORB>** sharedPtr);
+CVAPI(cv::ORB*) cveOrbCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D, cv::Ptr<cv::ORB>** sharedPtr);
+CVAPI(void) cveOrbRelease(cv::Ptr<cv::ORB>** sharedPtr);
 
 //Brisk
 CVAPI(cv::BRISK*) cveBriskCreate(int thresh, int octaves, float patternScale, cv::Feature2D** feature2D, cv::Ptr<cv::BRISK>** sharedPtr);
 CVAPI(void) cveBriskRelease(cv::Ptr<cv::BRISK>** sharedPtr);
 
 //FAST algorithm
-CVAPI(cv::FastFeatureDetector*) cveFASTGetFeatureDetector(int threshold, bool nonmax_supression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::FastFeatureDetector>** sharedPtr);
+CVAPI(cv::FastFeatureDetector*) cveFASTFeatureDetectorCreate(int threshold, bool nonmax_supression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::FastFeatureDetector>** sharedPtr);
 CVAPI(void) cveFASTFeatureDetectorRelease(cv::Ptr<cv::FastFeatureDetector>** sharedPtr);
 
 //GFTT
@@ -30,7 +30,7 @@ CVAPI(cv::GFTTDetector*) cveGFTTDetectorCreate(int maxCorners, double qualityLev
 CVAPI(void) cveGFTTDetectorRelease(cv::Ptr<cv::GFTTDetector>** sharedPtr);
 
 // MSER detector
-CVAPI(cv::MSER*) cveMserGetFeatureDetector(
+CVAPI(cv::MSER*) cveMserCreate(
 	int delta,
 	int minArea,
 	int maxArea,
@@ -47,7 +47,7 @@ CVAPI(void) cveMserDetectRegions(
 	cv::_InputArray* image,
 	std::vector< std::vector<cv::Point> >* msers,
 	std::vector< cv::Rect >* bboxes);
-CVAPI(void) cveMserFeatureDetectorRelease(cv::Ptr<cv::MSER>** sharedPtr);
+CVAPI(void) cveMserRelease(cv::Ptr<cv::MSER>** sharedPtr);
 
 
 // SimpleBlobDetector

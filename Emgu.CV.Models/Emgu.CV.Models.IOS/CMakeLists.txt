@@ -22,6 +22,10 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
       BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Models.IOS" "${EXTRA_MSBUILD_FLAGS}" ALL)
     ENDIF()
     
+    IF (EMGU_SIGN_FOUND)
+      EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/iOS/Emgu.CV.Models.dll)
+    ENDIF()
+
     INSTALL(
       FILES 
       ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/iOS/Emgu.CV.Models.xml

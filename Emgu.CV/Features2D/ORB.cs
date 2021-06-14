@@ -15,7 +15,7 @@ namespace Emgu.CV.Features2D
     /// <summary>
     /// Wrapped ORB detector
     /// </summary>
-    public class ORBDetector : Feature2D
+    public class ORB : Feature2D
     {
 
         /// <summary>
@@ -45,9 +45,9 @@ namespace Emgu.CV.Features2D
         /// <param name="scoreType">Type of the score to use.</param>
         /// <param name="patchSize">Patch size.</param>
         /// <param name="fastThreshold">FAST threshold</param>
-        public ORBDetector(int numberOfFeatures = 500, float scaleFactor = 1.2f, int nLevels = 8, int edgeThreshold = 31, int firstLevel = 0, int WTK_A = 2, ScoreType scoreType = ScoreType.Harris, int patchSize = 31, int fastThreshold = 20)
+        public ORB(int numberOfFeatures = 500, float scaleFactor = 1.2f, int nLevels = 8, int edgeThreshold = 31, int firstLevel = 0, int WTK_A = 2, ScoreType scoreType = ScoreType.Harris, int patchSize = 31, int fastThreshold = 20)
         {
-            _ptr = Features2DInvoke.cveOrbDetectorCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType, patchSize, fastThreshold, ref _feature2D, ref _sharedPtr);
+            _ptr = Features2DInvoke.cveOrbCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType, patchSize, fastThreshold, ref _feature2D, ref _sharedPtr);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Emgu.CV.Features2D
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                Features2DInvoke.cveOrbDetectorRelease(ref _sharedPtr);
+                Features2DInvoke.cveOrbRelease(ref _sharedPtr);
             base.DisposeObject();
         }
     }
@@ -65,9 +65,9 @@ namespace Emgu.CV.Features2D
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveOrbDetectorCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTK_A, Features2D.ORBDetector.ScoreType scoreType, int patchSize, int fastThreshold, ref IntPtr feature2D, ref IntPtr sharedPtr);
+        internal extern static IntPtr cveOrbCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTK_A, Features2D.ORB.ScoreType scoreType, int patchSize, int fastThreshold, ref IntPtr feature2D, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveOrbDetectorRelease(ref IntPtr sharedPtr);
+        internal extern static void cveOrbRelease(ref IntPtr sharedPtr);
     }
 }

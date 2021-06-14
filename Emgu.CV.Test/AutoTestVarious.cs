@@ -33,6 +33,7 @@ using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
 using Emgu.CV.DepthAI;
 using Emgu.CV.Mcc;
+using Emgu.CV.Models;
 using Emgu.CV.Tiff;
 //using Emgu.CV.UI;
 using Emgu.CV.Util;
@@ -40,6 +41,9 @@ using Emgu.CV.VideoStab;
 using Emgu.CV.XFeatures2D;
 using Emgu.CV.XImgproc;
 using Emgu.Util;
+
+using System.Threading.Tasks;
+
 //using Newtonsoft.Json;
 using DetectorParameters = Emgu.CV.Aruco.DetectorParameters;
 using DistType = Emgu.CV.CvEnum.DistType;
@@ -217,8 +221,7 @@ namespace Emgu.CV.Test
         {
             String bi = CvInvoke.BuildInformation;
         }
-
-#if !WINDOWS_PHONE_APP
+        
         [Test]
         public void TestXmlSerialization()
         {
@@ -249,7 +252,7 @@ namespace Emgu.CV.Test
             img1.Dispose();
             img2.Dispose();
         }
-#endif
+
 
         [Test]
         public void TestRotationMatrix3D()
@@ -262,23 +265,28 @@ namespace Emgu.CV.Test
             Matrix<double> diff = rodVec - rodVec2;
             EmguAssert.IsTrue(diff.Norm < 1.0e-8);
         }
-
-#if !(NETFX_CORE || __ANDROID__ || __IOS__ || UNITY_IOS || UNITY_ANDROID)
+        
         [Test]
         public void TestViz()
         {
-            Viz3d viz = new Viz3d("show_simple_widgets");
-            viz.SetBackgroundMeshLab();
-            WCoordinateSystem coor = new WCoordinateSystem();
-            viz.ShowWidget("coor", coor);
-            WCube cube = new WCube(new MCvPoint3D64f(-.5, -.5, -.5), new MCvPoint3D64f(.5, .5, .5), true, new MCvScalar(255, 255, 255));
-            viz.ShowWidget("cube", cube);
-            WCube cube0 = new WCube(new MCvPoint3D64f(-1, -1, -1), new MCvPoint3D64f(-.5, -.5, -.5), false, new MCvScalar(123, 45, 200));
-            viz.ShowWidget("cub0", cube0);
-            //viz.Spin();
+            var openCVConfigDict = CvInvoke.ConfigDict;
+            bool haveViz = (openCVConfigDict["HAVE_OPENCV_VIZ"] != 0);
+            if (haveViz && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Viz3d viz = new Viz3d("show_simple_widgets");
+                viz.SetBackgroundMeshLab();
+                WCoordinateSystem coor = new WCoordinateSystem();
+                viz.ShowWidget("coor", coor);
+                WCube cube = new WCube(new MCvPoint3D64f(-.5, -.5, -.5), new MCvPoint3D64f(.5, .5, .5), true,
+                    new MCvScalar(255, 255, 255));
+                viz.ShowWidget("cube", cube);
+                WCube cube0 = new WCube(new MCvPoint3D64f(-1, -1, -1), new MCvPoint3D64f(-.5, -.5, -.5), false,
+                    new MCvScalar(123, 45, 200));
+                viz.ShowWidget("cub0", cube0);
+                //viz.Spin();
+            }
         }
-#endif
-
+        
         [Test]
         public void TestContour()
         {
@@ -300,50 +308,7 @@ namespace Emgu.CV.Test
                         EmguAssert.IsTrue(CvInvoke.IsContourConvex(firstContour));
                     }
                 }
-                /*
-                using (MemStorage stor = new MemStorage())
-                {
-                   //Contour<Point> cs = img.FindContours(CvEnum.ChainApproxMethod.ChainApproxSimple, CvEnum.RetrType.List, stor);
-                   //EmguAssert.IsTrue(cs.MCvContour.elem_size == Marshal.SizeOf(typeof(Point)));
-                   //EmguAssert.IsTrue(rect.Width * rect.Height == cs.Area);
-
-                   //EmguAssert.IsTrue(cs.Convex);
-                   //EmguAssert.IsTrue(rect.Width * 2 + rect.Height * 2 == cs.Perimeter);
-                   Rectangle rect2 = cs.BoundingRectangle;
-                   rect2.Width -= 1;
-                   rect2.Height -= 1;
-                   //rect2.Center.X -= 0.5;
-                   //rect2.Center.Y -= 0.5;
-                   //EmguAssert.IsTrue(rect2.Equals(rect));
-                   EmguAssert.IsTrue(cs.InContour(pIn) > 0);
-                   EmguAssert.IsTrue(cs.InContour(pOut) < 0);
-                   //EmguAssert.IsTrue(cs.Distance(pIn) == 10);
-                   //EmguAssert.IsTrue(cs.Distance(pOut) == -50);
-                   img.Draw(cs, new Gray(100), new Gray(100), 0, 1);
-
-                   MCvPoint2D64f rectangleCenter = new MCvPoint2D64f(rect.X + rect.Width / 2.0, rect.Y + rect.Height / 2.0);
-
-                   using (VectorOfPoint vp = new VectorOfPoint(cs.ToArray()))
-                   {    
-                      MCvMoments moment = CvInvoke.Moments(vp, false);
-                      MCvPoint2D64f center = moment.GravityCenter;
-                      //EmguAssert.IsTrue(center.Equals(rectangleCenter));
-                   }
-
-                }
-
-                using (MemStorage stor = new MemStorage())
-                {
-                   Image<Gray, Byte> img2 = new Image<Gray, byte>(300, 200);
-                   Contour<Point> c = img2.FindContours(Emgu.CV.CvEnum.ChainApproxMethod.ChainApproxSimple, Emgu.CV.CvEnum.RetrType.List, stor);
-                   EmguAssert.IsTrue(c == null);
-                }*/
             }
-
-            //int s1 = Marshal.SizeOf(typeof(MCvSeq));
-            //int s2 = Marshal.SizeOf(typeof(MCvContour));
-            //int sizeRect = Marshal.SizeOf(typeof(Rectangle));
-            //EmguAssert.IsTrue(s1 + sizeRect + 4 * Marshal.SizeOf(typeof(int)) == s2);
         }
 
         [Test]
@@ -743,7 +708,6 @@ namespace Emgu.CV.Test
         public void TestFileStorage1()
         {
             FileStorage fs = new FileStorage("haarcascade_eye.xml", FileStorage.Mode.Read);
-
         }
 
         [Test]
@@ -2866,7 +2830,7 @@ namespace Emgu.CV.Test
             images[3] = EmguAssert.LoadImage<Bgr, Byte>("stitch4.jpg");
 
             using (Stitcher stitcher = new Stitcher())
-            using (ORBDetector finder = new ORBDetector())
+            using (ORB finder = new ORB())
             {
                 stitcher.SetFeaturesFinder(finder);
                 Mat result = new Mat();
@@ -2936,7 +2900,7 @@ namespace Emgu.CV.Test
             images[3] = EmguAssert.LoadMat("stitch4.jpg");
 
             using (Stitcher stitcher = new Stitcher(Stitcher.Mode.Panorama))
-            using (ORBDetector detector = new ORBDetector())
+            using (ORB detector = new ORB())
             using (SphericalWarper warper = new SphericalWarper())
             using (SeamFinder finder = new GraphCutSeamFinder())
             using (BlocksChannelsCompensator compensator = new BlocksChannelsCompensator())
@@ -4350,6 +4314,20 @@ namespace Emgu.CV.Test
             bool success;
             using (Mat m = new Mat())
                 success = Emgu.CV.NativeMatFileIO.ReadFileToMat("scenetext01.jpg", m, ImreadModes.AnyColor);
+        }
+
+        [Test]
+        public void TestQCCode()
+        {
+            using (Mat m = EmguAssert.LoadMat("link_github_ocv.jpg"))
+            using (QRCodeDetector detector = new QRCodeDetector())
+            using (VectorOfPoint pts = new VectorOfPoint())
+            {
+                if (detector.Detect(m, pts))
+                {
+                    String text = detector.Decode(m, pts);
+                }
+            }
         }
 
         [Test]

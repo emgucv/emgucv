@@ -18,20 +18,34 @@ bool cveQRCodeDetectorDetect(cv::QRCodeDetector* detector, cv::_InputArray* img,
 {
 	return detector->detect(*img, *points);
 }
+bool cveQRCodeDetectorDetectMulti(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_OutputArray* points)
+{
+	return detector->detectMulti(*img, *points);
+}
 
 void cveQRCodeDetectorDecode(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightQrcode)
 {
-	std::string s = detector->decode(*img, *points, *straightQrcode);
+	std::string s = detector->decode(*img, *points, straightQrcode ? *straightQrcode : static_cast<cv::OutputArray>(cv::noArray()));
 	*decodedInfo = s;
 }
 
-/*
-bool cveDetectQRCode(cv::_InputArray* in, std::vector< cv::Point >* points, double epsX, double epsY)
+void cveQRCodeDetectorDecodeCurved(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightQrcode)
 {
-	return cv::detectQRCode(*in, *points, epsX, epsY);
+	std::string s = detector->decodeCurved(*img, *points, straightQrcode ? *straightQrcode : static_cast<cv::OutputArray>(cv::noArray()));
+	*decodedInfo = s;
 }
 
-bool cveDecodeQRCode(cv::_InputArray* in, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightQrcode)
+bool cveQRCodeDetectorDecodeMulti(
+	cv::QRCodeDetector* detector,
+	cv::_InputArray* img,
+	cv::_InputArray* points,
+	std::vector< std::string >* decodedInfo,
+	cv::_OutputArray* straightQrcode)
 {
-	return cv::decodeQRCode(*in, *points, *decodedInfo, *straightQrcode);
-}*/
+	return detector->decodeMulti(
+		*img,
+		*points,
+		*decodedInfo,
+		straightQrcode ? *straightQrcode : static_cast<cv::OutputArray>(cv::noArray())
+	);
+}

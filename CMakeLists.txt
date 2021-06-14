@@ -219,6 +219,10 @@ ENDIF()
 INCLUDE (CheckTargetArch)
 INCLUDE (OpenCVVersion)
 
+IF(WIN32)
+  INCLUDE (FindCodeSign)
+ENDIF()
+
 #SET(LIBRARY_3RDPARTY_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib/3rdParty)
 
 # ----------------------------------------------------------------------------
@@ -1076,7 +1080,7 @@ IF(HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.elf\" target=\"runtimes\\win-x64\\native\" />")
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.mvcmd\" target=\"runtimes\\win-x64\\native\" />")
 	SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_TITLE "MSVC x64 runtime for windows")
-	SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST} 
+	SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X64_NUGET_FILE_LIST} 
 	<file src=\"..\\..\\..\\libs\\x64\\concrt*.dll\" target=\"runtimes\\win-x64\\native\" /> 
 	<file src=\"..\\..\\..\\libs\\x64\\msvcp*.dll\" target=\"runtimes\\win-x64\\native\" /> 
 	<file src=\"..\\..\\..\\libs\\x64\\vcruntime*.dll\" target=\"runtimes\\win-x64\\native\" />     
@@ -2359,6 +2363,24 @@ ELSEIF (WIN32)
   set(CPACK_COMPONENT_EMGUCV_SOURCE_DEPENDS libs)
   set(CPACK_COMPONENT_EMGUCV_EXAMPLE_SOURCE_DISPLAY_NAME "Emgu CV Examples (Source)")
   set(CPACK_COMPONENT_EMGUCV_EXAMPLE_SOURCE_DEPENDS emgucv_source)
+  
+  
+  IF (${CMAKE_VERSION} VERSION_GREATER "3.19.0")
+    IF(EMGU_SIGN_FOUND AND WIN32)
+	  SET(NSIS_PACKAGE_FILE ${CMAKE_BINARY_DIR}/lib${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}.exe)
+      #MESSAGE(STATUS "CPACK_PACKAGE_FILES: ${NSIS_PACKAGE_FILE}")
+	  STRING(REGEX REPLACE "/" "\\\\\\\\" WIN_CMAKE_COMMAND "${CMAKE_COMMAND}" )
+	  STRING(REGEX REPLACE "/" "\\\\\\\\" WIN_EMGU_SIGN_EXECUTABLE "${EMGU_SIGN_EXECUTABLE}")
+	  STRING(REGEX REPLACE "/" "\\\\\\\\" WIN_PACKAGE_FILE "${CMAKE_BINARY_DIR}/lib${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}.exe")
+	  STRING(REGEX REPLACE "/" "\\\\\\\\" WIN_PACKAGE_FOLDER "${CMAKE_BINARY_DIR}/signed")
+	  #FILE(WRITE "${CMAKE_BINARY_DIR}/sign_package.txt" "add_custom_command(OUTPUT ${WIN_PACKAGE_FOLDER}/lib${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}.exe\n")
+	  FILE(WRITE "${CMAKE_BINARY_DIR}/sign_package.cmake" "EXECUTE_PROCESS(COMMAND \"${WIN_CMAKE_COMMAND}\" -E make_directory \"${CMAKE_BINARY_DIR}/signed\")\n")
+	  FILE(APPEND "${CMAKE_BINARY_DIR}/sign_package.cmake" "EXECUTE_PROCESS(COMMAND \"${WIN_EMGU_SIGN_EXECUTABLE}\" \"${WIN_PACKAGE_FILE}\" \"${WIN_PACKAGE_FOLDER}\")")
+      LIST(APPEND CPACK_POST_BUILD_SCRIPTS "${CMAKE_BINARY_DIR}/sign_package.cmake")
+	  #LIST(APPEND CPACK_POST_BUILD_SCRIPTS "${WIN_EMGU_SIGN_EXECUTABLE} ${CMAKE_BINARY_DIR}/lib${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}.exe ${CMAKE_BINARY_DIR}/signed")
+	ENDIF()
+  ENDIF()
+ 
   
 ELSEIF (APPLE)
   
