@@ -160,6 +160,12 @@ namespace Emgu.CV.Aruco
         /// should the thresholded image be deglitched? Only useful for very noisy images
         /// </summary>
         public int AprilTagDeglitch;
+        
+        /// <summary>
+        /// To detect white (inverted) markers
+        /// </summary>
+        [MarshalAs(CvInvoke.BoolMarshalType)]
+        public bool DetectInvertedMarker;
 
         /// <summary>
         /// Get the detector parameters with default values
