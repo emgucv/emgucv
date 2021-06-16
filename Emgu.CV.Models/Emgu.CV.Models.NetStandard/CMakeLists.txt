@@ -13,13 +13,13 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
     BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Models.NetStandard" "${EXTRA_BUILD_FLAGS}" ALL)
 
     IF (EMGU_SIGN_FOUND)
-      EMGU_SIGN_BINARY(${PROJECT_NAME} ${LIBRARY_OUTPUT_PATH}/Emgu.CV.Models.dll)
+      EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.Models.dll)
     ENDIF()
 
     INSTALL(
       FILES 
-      ${LIBRARY_OUTPUT_PATH}/Emgu.CV.Models.xml
-      ${LIBRARY_OUTPUT_PATH}/Emgu.CV.Models.dll 
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.Models.xml
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.Models.dll 
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
       COMPONENT emgucv_binary)	  
 
