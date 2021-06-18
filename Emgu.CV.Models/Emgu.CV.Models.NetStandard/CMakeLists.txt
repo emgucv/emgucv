@@ -3,7 +3,7 @@
 # --------------------------------------------------------
 
 IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
-  IF (DOTNET_FOUND AND NOT (HAVE_IOS_ONLY))
+  #IF (DOTNET_FOUND AND NOT (HAVE_IOS_ONLY))
     #IF(WIN32 AND (MSVC_VERSION GREATER 1900)) #need MSVC to be at least 2017
     PROJECT(Emgu.CV.Models.NetStandard)
     SET(EXTRA_MSBUILD_FLAGS "")
@@ -28,7 +28,7 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
     INSTALL(
       DIRECTORY
       ${CMAKE_CURRENT_SOURCE_DIR}
-      DESTINATION .
+      DESTINATION Emgu.CV.Models
       COMPONENT emgucv_source
       FILES_MATCHING 
       PATTERN "Emgu.CV.Models.NetStandard.csproj"
@@ -41,5 +41,5 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
     if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
 	endif() 
-  ENDIF()
+  #ENDIF()
 ENDIF()
