@@ -55,12 +55,22 @@ namespace Emgu.CV
         /// <param name="bitmap">The bitmap to copy into mat</param>
         public static void ToMat(this Android.Graphics.Bitmap bitmap, Mat mat)
         {
+            ToArray(bitmap, mat);
+        }
+
+        /// <summary>
+        /// Convert a Bitmap to an image
+        /// </summary>
+        /// <param name="image">The image to copy Bitmap into</param>
+        /// <param name="bitmap">The bitmap to copy into image</param>
+        public static void ToArray(this Android.Graphics.Bitmap bitmap, IOutputArray image)
+        {
             Android.Graphics.Bitmap.Config config = bitmap.GetConfig();
             if (config.Equals(Android.Graphics.Bitmap.Config.Argb8888))
             {
                 using (BitmapArgb8888Image bi = new BitmapArgb8888Image(bitmap))
                 {
-                    CvInvoke.CvtColor(bi, mat, ColorConversion.Rgba2Bgra);
+                    CvInvoke.CvtColor(bi, image, ColorConversion.Rgba2Bgra);
                 }
             }
             else if (config.Equals(Android.Graphics.Bitmap.Config.Rgb565))
@@ -71,7 +81,7 @@ namespace Emgu.CV
                 GCHandle handle = GCHandle.Alloc(values, GCHandleType.Pinned);
                 using (Mat bgra = new Mat(size, DepthType.Cv8U, 4, handle.AddrOfPinnedObject(), size.Width * 4))
                 {
-                    bgra.CopyTo(mat);
+                    bgra.CopyTo(image);
                 }
                 handle.Free();
             }
