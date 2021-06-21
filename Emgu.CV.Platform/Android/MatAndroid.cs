@@ -68,10 +68,11 @@ namespace Emgu.CV
             Android.Graphics.Bitmap.Config config = bitmap.GetConfig();
             if (config.Equals(Android.Graphics.Bitmap.Config.Argb8888))
             {
-                using (BitmapArgb8888Image bi = new BitmapArgb8888Image(bitmap))
+                using (Mat m = new Mat(new Size(bitmap.Width, bitmap.Height), DepthType.Cv8U, 4, bitmap.LockPixels(), bitmap.RowBytes))
                 {
-                    CvInvoke.CvtColor(bi, image, ColorConversion.Rgba2Bgra);
+                    CvInvoke.CvtColor(m, image, ColorConversion.Rgba2Bgra);
                 }
+                bitmap.UnlockPixels();
             }
             else if (config.Equals(Android.Graphics.Bitmap.Config.Rgb565))
             {
@@ -133,32 +134,53 @@ namespace Emgu.CV
                 if (config == Android.Graphics.Bitmap.Config.Argb8888)
                 {
                     int channels = iaImage.GetChannels();
-                    using (BitmapArgb8888Image bi = new BitmapArgb8888Image(bitmap))
+                    using (Mat m = new Mat(new Size(bitmap.Width, bitmap.Height), DepthType.Cv8U, 4, bitmap.LockPixels(), bitmap.RowBytes))
                     {
                         if (channels == 1)
                         {
-                            CvInvoke.CvtColor(image, bi.Mat, ColorConversion.Gray2Rgba);
+                            CvInvoke.CvtColor(image, m, ColorConversion.Gray2Rgba);
                         }
                         else if (channels == 3)
                         {
-                            CvInvoke.CvtColor(image, bi, ColorConversion.Bgr2Rgba);
+                            CvInvoke.CvtColor(image, m, ColorConversion.Bgr2Rgba);
                         }
                         else if (channels == 4)
                         {
-                            CvInvoke.CvtColor(image, bi, ColorConversion.Bgra2Rgba);
+                            CvInvoke.CvtColor(image, m, ColorConversion.Bgra2Rgba);
                         }
                         else
                         {
                             throw new NotImplementedException(
                                 String.Format("InputArray of {0} channels is supported.", channels));
                         }
+                        bitmap.UnlockPixels();
                     }
-
                 }
                 else if (config == Android.Graphics.Bitmap.Config.Rgb565)
                 {
-                    using (BitmapRgb565Image bi = new BitmapRgb565Image(bitmap))
-                        bi.ConvertFrom(image);
+                    int channels = iaImage.GetChannels();
+                    using (Mat m = new Mat(new Size(bitmap.Width, bitmap.Height), DepthType.Cv8U, 2, bitmap.LockPixels(), bitmap.RowBytes))
+                    {
+                        if (channels == 1)
+                        {
+                            CvInvoke.CvtColor(image, m, ColorConversion.Gray2Bgr565);
+                        }
+                        else if (channels == 3)
+                        {
+                            CvInvoke.CvtColor(image, m, ColorConversion.Bgr2Bgr565);
+                        }
+                        else if (channels == 4)
+                        {
+                            CvInvoke.CvtColor(image, m, ColorConversion.Bgra2Bgr565);
+                        }
+                        else
+                        {
+                            throw new NotImplementedException(
+                                String.Format("InputArray of {0} channels is supported.", channels));
+                        }
+                        bitmap.UnlockPixels();
+                    }
+
                 }
                 else
                 {
