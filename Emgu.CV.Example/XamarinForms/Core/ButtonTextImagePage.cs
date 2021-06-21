@@ -300,6 +300,8 @@ namespace Emgu.CV.XamarinForms
                     ImageView.SetImageBitmap(bitmap);
                     ImageView.Visibility = ViewStates.Visible;
                     DisplayImage.IsVisible = false;
+                    if (bitmap != null)
+                        bitmap.Dispose();
                 });
 #elif __MACOS__
             
