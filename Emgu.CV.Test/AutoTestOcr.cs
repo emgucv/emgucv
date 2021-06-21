@@ -7,9 +7,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using Emgu.CV.CvEnum;
 using Emgu.CV.OCR;
 using Emgu.CV.Structure;
-
+using Orientation = Emgu.CV.OCR.Orientation;
 #if VS_TEST
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
@@ -106,20 +107,25 @@ namespace Emgu.CV.Test
             }
         }
 
+        
         [Test]
         public void TestOCREngBlankPage()
         {
             Version version = Tesseract.Version;
             int i = version.Major;
             using (Tesseract ocr = GetTesseract())
-            using (Image<Gray, Byte> img = new Image<Gray, byte>(1024, 960))
+            using (Mat img = new Mat(new Size(1024, 960), DepthType.Cv8U, 3))
             {
                 ocr.SetImage(img);
-                ocr.Recognize();
-                Tesseract.Character[] results = ocr.GetCharacters();
-                EmguAssert.IsTrue(results.Length == 0);
+                bool success = ocr.Recognize() == 0;
+                if (success)
+                {
+                    Tesseract.Character[] results = ocr.GetCharacters();
+                    EmguAssert.IsTrue(results.Length == 0);
+                }
             }
         }
+        
 
         private static void TesseractDownloadLangFile(String folder, String lang)
         {

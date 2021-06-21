@@ -2426,7 +2426,10 @@ namespace Emgu.CV.Test
                 FileInfo fi = new FileInfo(fileName);
                 EmguAssert.IsTrue(fi.Exists && fi.Length != 0, "File should not be empty");
 
-                using (VideoCapture capture = new VideoCapture(fileName))
+                using (VideoCapture capture = new VideoCapture(
+                    fileName, 
+                    VideoCapture.API.Msmf, 
+                    new Tuple<CapProp, int>(CapProp.HwAcceleration, (int) VideoAccelerationType.Any)))
                 {
                     Mat img2 = capture.QueryFrame();
                     int count = 0;
