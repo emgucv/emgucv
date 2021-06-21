@@ -100,6 +100,9 @@ namespace Emgu.CV
         {
         }
 
+        /// <summary>
+        /// A reference to the Parent object
+        /// </summary>
         protected object _parent;
 
         /// <summary>
