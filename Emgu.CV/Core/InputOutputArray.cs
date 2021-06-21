@@ -40,12 +40,13 @@ namespace Emgu.CV
       }
 
       /// <summary>
-      /// Release all the memory associated with this InputOutputArry
+      /// Release all the memory associated with this InputOutputArray
       /// </summary>
       protected override void DisposeObject()
       {
          if (_ptr != IntPtr.Zero)
             CvInvoke.cveInputOutputArrayRelease(ref _ptr);
+         _parent = null;
       }
    }
 

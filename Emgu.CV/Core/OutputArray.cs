@@ -47,6 +47,7 @@ namespace Emgu.CV
       {
          if (_ptr != IntPtr.Zero)
             CvInvoke.cveOutputArrayRelease(ref _ptr);
+         _parent = null;
       }
    }
 

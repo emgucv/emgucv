@@ -100,7 +100,7 @@ namespace Emgu.CV
         {
         }
 
-        private object _parent;
+        protected object _parent;
 
         /// <summary>
         /// Create a Input array from an existing unmanaged inputArray pointer
@@ -229,6 +229,7 @@ namespace Emgu.CV
         {
             if (_ptr != IntPtr.Zero)
                 CvInvoke.cveInputArrayRelease(ref _ptr);
+            _parent = null;
         }
     }
 
