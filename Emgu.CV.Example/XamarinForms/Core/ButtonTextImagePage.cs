@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Xamarin.Forms;
 using Emgu.CV;
 using Emgu.CV.Util;
@@ -21,6 +20,11 @@ using Xamarin.Forms.Platform.MacOS;
 using UIKit;
 using CoreGraphics;
 using Xamarin.Forms.Platform.iOS;
+#elif __ANDROID__
+using Android.Graphics;
+using Android.Views;
+using Android.Widget;
+using Xamarin.Forms.Platform.Android;
 #elif NETFX_CORE
 using Xamarin.Forms.Platform.UWP;
 #endif
@@ -41,8 +45,8 @@ namespace Emgu.CV.XamarinForms
             get { return _picker; }
         }
 
-        private Button _topButton = new Button();
-        public Button TopButton
+        private Xamarin.Forms.Button _topButton = new Xamarin.Forms.Button();
+        public Xamarin.Forms.Button TopButton
         {
             get { return _topButton; }
         }
@@ -69,11 +73,11 @@ namespace Emgu.CV.XamarinForms
         }
 
 #if __MACOS__
-
         public NSImageView NSImageView { get; set; }
 #elif __IOS__
-
       public UIImageView UIImageView { get; set; }
+#elif __ANDROID__
+        public ImageView ImageView { get; set; }
 #elif NETFX_CORE
        public Windows.UI.Xaml.Controls.Image ImageView { get; set; }
 #endif
@@ -112,6 +116,9 @@ namespace Emgu.CV.XamarinForms
          UIImageView = new UIImageView ();
          UIImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
          _mainLayout.Children.Add (UIImageView.ToView ());
+#elif __ANDROID__
+            ImageView = new ImageView(Android.App.Application.Context);
+            _mainLayout.Children.Add(ImageView.ToView());
 #elif NETFX_CORE
          this.ImageView = new Windows.UI.Xaml.Controls.Image();
          _mainLayout.Children.Add(this.ImageView.ToView());
@@ -122,7 +129,7 @@ namespace Emgu.CV.XamarinForms
             //_mainLayout.Children.Add(MessageLabel);
             _mainLayout.Padding = new Thickness(10, 10, 10, 10);
 
-            Content = new ScrollView()
+            Content = new Xamarin.Forms.ScrollView()
             {
                 Content = _mainLayout
             };
@@ -281,6 +288,19 @@ namespace Emgu.CV.XamarinForms
                UIImageView.Hidden = false;
                DisplayImage.IsVisible = false;
             });
+#elif __ANDROID__
+            Android.Graphics.Bitmap bitmap;
+            if (image == null)
+                bitmap = null;
+            else
+                bitmap = image.ToBitmap();
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(
+                () =>
+                {
+                    ImageView.SetImageBitmap(bitmap);
+                    ImageView.Visibility = ViewStates.Visible;
+                    DisplayImage.IsVisible = false;
+                });
 #elif __MACOS__
             
             NSImage nsimage;
@@ -387,7 +407,7 @@ namespace Emgu.CV.XamarinForms
             );
         }
 
-        public Button GetButton()
+        public Xamarin.Forms.Button GetButton()
         {
             //return null;
             return this.TopButton;
