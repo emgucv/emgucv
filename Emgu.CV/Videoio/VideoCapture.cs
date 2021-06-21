@@ -599,7 +599,7 @@ namespace Emgu.CV
         public bool Read(Mat mat)
         {
             CvInvoke.cveVideoCaptureReadToMat(_ptr, mat);
-            return mat.IsEmpty;
+            return !mat.IsEmpty;
         }
         
         /// <summary>
@@ -609,7 +609,7 @@ namespace Emgu.CV
         public bool Read(UMat umat)
         {
             CvInvoke.cveVideoCaptureReadToUMat(_ptr, umat);
-            return umat.IsEmpty;
+            return !umat.IsEmpty;
         }
         
         /// <summary>
@@ -649,7 +649,8 @@ namespace Emgu.CV
         public virtual Mat QueryFrame()
         {
             Mat image = new Mat();
-            if (image.IsEmpty)
+
+            if (!Read(image))
             {
                 image.Dispose();
                 return null;
