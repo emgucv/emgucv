@@ -32,9 +32,8 @@ namespace Emgu.CV.Models
         private WeChatQRCode _weChatQRCodeDetectionModel = null;
 
         /// <summary>
-        /// Download and initialize the yolo model
+        /// Download and initialize the WeChatQRCode model
         /// </summary>
-        /// <param name="version">The model version</param>
         /// <param name="onDownloadProgressChanged">Call back method during download</param>
         /// <returns>Asyn task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
@@ -88,10 +87,7 @@ namespace Emgu.CV.Models
                 }
             }
         }
-
-
-
-
+        
         /// <summary>
         /// Clear and reset the model. Required Init function to be called again before calling ProcessAndRender.
         /// </summary>
@@ -105,7 +101,7 @@ namespace Emgu.CV.Models
         }
 
         /// <summary>
-        /// Release the memory associated with this Yolo detector.
+        /// Release the memory associated with this WeChatQRCode detector.
         /// </summary>
         protected override void DisposeObject()
         {
@@ -114,7 +110,7 @@ namespace Emgu.CV.Models
 
 
         /// <summary>
-        /// Download and initialize the yolo model
+        /// Download and initialize the WeChatQRCode model
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <param name="initOptions">A string, not used right now.</param>
@@ -148,7 +144,6 @@ namespace Emgu.CV.Models
         /// <param name="imageIn">The input image</param>
         /// <param name="imageOut">The output image, can be the same as imageIn, in which case we will render directly into the input image</param>
         /// <returns>The messages that we want to display.</returns>
-
         public String ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
             using (VectorOfMat points = new VectorOfMat())
@@ -187,10 +182,6 @@ namespace Emgu.CV.Models
             }
 
             //var detectedObjects = Detect(imageIn);
-
-
-
-            
         }
     }
 }
