@@ -10,8 +10,17 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
     IF(WIN32)
       SET(EXTRA_BUILD_FLAGS "/p:Platform=\"Any CPU\"")
     ENDIF()
-    BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Models.NetStandard" "${EXTRA_BUILD_FLAGS}" ALL)
 
+    IF (APPLE AND ("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "x86_64"))
+      # Need to use MSBUILD instead of dotnet to build the project.
+      # dotnet seems to have a bug on Mac OS, it do not respect the assembly name.
+      # It output Emgu.CV.Model.NetStandard.dll instead of Emgu.CV.Model.dll specified in
+      # the csproj file. MSBUILD seems to work just fine.
+      MSBUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Models.NetStandard" "${EXTRA_MSBUILD_FLAGS}" ALL)
+    ELSEIF (DOTNET_FOUND)
+      BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Models.NetStandard" "${EXTRA_BUILD_FLAGS}" ALL)
+    ENDIF()
+    
     IF (EMGU_SIGN_FOUND)
       EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.Models.dll)
     ENDIF()
