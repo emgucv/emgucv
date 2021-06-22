@@ -68,11 +68,11 @@ namespace Emgu.CV.Models
         /// <returns>Asyn task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(
-            YoloVersion version = YoloVersion.YoloV3,
+            YoloVersion version = YoloVersion.YoloV4,
             System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
         public async Task Init(
-            YoloVersion version = YoloVersion.YoloV3, 
+            YoloVersion version = YoloVersion.YoloV4, 
             System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #endif
         {
@@ -215,7 +215,7 @@ namespace Emgu.CV.Models
         /// Download and initialize the yolo model
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
-        /// <param name="initOptions">A string, can be either "YoloV3", "YoloV3Spp", "YoloV3Tiny", specify the yolo model to use. Deafult to use "YoloV3". </param>
+        /// <param name="initOptions">A string, can be either "YoloV4", "YoloV4Tiny", "YoloV3", "YoloV3Spp", "YoloV3Tiny", specify the yolo model to use. Deafult to use "YoloV4". </param>
         /// <returns>Async task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
