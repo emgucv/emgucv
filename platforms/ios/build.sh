@@ -23,7 +23,7 @@ fi
 
 JOB_COUNT=1
 
-if [ \( "$1" != "simulator" \) -a \( "$1" != "simulator_x86_64" \) ]; then    
+if [ \( "$1" != "simulator_arm64" \) -a \( "$1" != "simulator_x86_64" \) ]; then    
     mkdir -p platforms/ios/iphoneos_armv7s     
     cd platforms/ios/iphoneos_armv7s
     ../configure_xcode.sh $CV_CONTRIB_OPTION device armv7s ${@:3}
@@ -43,14 +43,14 @@ if [ \( "$1" != "simulator" \) -a \( "$1" != "simulator_x86_64" \) ]; then
     cd ../../..
 fi
 
-#if [ "$1" != "simulator_x86_64" ]; then
-#    mkdir -p platforms/ios/simulator_arm64
-#    cd platforms/ios/simulator_arm64
-#    #skip the first two parameter
-#    ../configure_xcode.sh $CV_CONTRIB_OPTION simulator arm64 -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE ${@:3}
-#    ./xcodebuild_wrapper -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
-#    cd ../../..
-#fi
+if [ "$1" = "simulator_arm64" ]; then
+    mkdir -p platforms/ios/simulator_arm64
+    cd platforms/ios/simulator_arm64
+    #skip the first two parameter
+    ../configure_xcode.sh $CV_CONTRIB_OPTION simulator arm64 -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE ${@:3}
+    ./xcodebuild_wrapper -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
+    cd ../../..
+fi
 
 mkdir -p platforms/ios/simulator_x86_64
 cd platforms/ios/simulator_x86_64
