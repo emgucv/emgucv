@@ -11,8 +11,16 @@ IF ((TARGET Emgu.CV.Platform.NetStandard) AND (TARGET Emgu.CV.Platform.NetStanda
 	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" #nuspec_file 
 	"${CMAKE_CURRENT_SOURCE_DIR}/../" #output_dir 
 	"${CMAKE_CURRENT_SOURCE_DIR}" #working_dir
-	) 
+	)
 	
+  IF (APPLE)
+    add_custom_command(TARGET ${PROJECT_NAME}
+      PRE_BUILD
+      COMMAND dotnet build -c ${DEFAULT_CS_CONFIG} "${CMAKE_CURRENT_SOURCE_DIR}/../../../Emgu.CV.Platform/NetStandard/Emgu.CV.Platform.NetStandard.csproj"
+      COMMAND dotnet build -c ${DEFAULT_CS_CONFIG} "${CMAKE_CURRENT_SOURCE_DIR}/../../../Emgu.CV.Platform/NetStandard_iOS/Emgu.CV.Platform.NetStandard.IOS.csproj"
+      COMMENT "Building binary for Emgu.CV.nuget")
+  ENDIF()
+  
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard)  
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard.IOS)
   

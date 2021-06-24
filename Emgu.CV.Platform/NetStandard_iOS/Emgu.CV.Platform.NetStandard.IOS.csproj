@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Emgu.CV.Platform.NetStandard</AssemblyName>
+    <TargetName>$(AssemblyName)</TargetName>
     <RootNamespace>Emgu.CV</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
