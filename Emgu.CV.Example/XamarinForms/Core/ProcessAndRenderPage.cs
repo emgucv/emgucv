@@ -72,15 +72,16 @@ namespace Emgu.CV.XamarinForms
             var openCVConfigDict = CvInvoke.ConfigDict;
             bool haveVideoio = (openCVConfigDict["HAVE_OPENCV_VIDEOIO"] != 0);
             if (haveVideoio && (
-                Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Android
-                || Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS))
+                Xamarin.Forms.Device.RuntimePlatform == Xamarin.Forms.Device.Android
+                || Xamarin.Forms.Device.RuntimePlatform == Xamarin.Forms.Device.macOS
+                || Xamarin.Forms.Device.RuntimePlatform == Xamarin.Forms.Device.WPF))
             {
 #if __ANDROID__ && __USE_ANDROID_CAMERA2__
                 return true;
 #else
                 if (CvInvoke.Backends.Length > 0)
                 {
-                    if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Android)
+                    if (Xamarin.Forms.Device.RuntimePlatform == Xamarin.Forms.Device.Android)
                     {
                         _capture = new VideoCapture(0, VideoCapture.API.Android);
                     }
