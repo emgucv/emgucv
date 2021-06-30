@@ -263,7 +263,7 @@ namespace Emgu.CV.Models
             Object initOptions = null)
 #endif
         {
-            Dnn.Backend backend = Dnn.Backend.OpenCV;
+            Dnn.Backend backend = Dnn.Backend.InferenceEngine;
             Dnn.Target target = Target.Cpu;
             if (initOptions != null && ((initOptions as String) != null))
             {
@@ -277,7 +277,7 @@ namespace Emgu.CV.Models
                         Enum.TryParse(targetStr, true, out target)))
                     {
                         //If failed to part either backend or target, use the following default
-                        backend = Dnn.Backend.OpenCV;
+                        backend = Dnn.Backend.InferenceEngine;
                         target = Target.Cpu;
                     }
                 }

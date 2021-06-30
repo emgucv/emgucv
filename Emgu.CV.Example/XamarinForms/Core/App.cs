@@ -263,7 +263,7 @@ namespace Emgu.CV.XamarinForms
                 p.IsVisible = true;
                 p.Title = "Preferred DNN backend & target";
 
-                foreach (String option in GetDnnBackends())
+                foreach (String option in GetDnnBackends(DnnBackendType.InferenceEngineOnly))
                 {
                     p.Items.Add(option);
                 }
@@ -356,7 +356,13 @@ namespace Emgu.CV.XamarinForms
             }
         }
 
-        private String[] GetDnnBackends()
+        private enum DnnBackendType
+        {
+            Default,
+            InferenceEngineOnly
+        }
+
+        private String[] GetDnnBackends(DnnBackendType backendType = DnnBackendType.Default)
         {
             var openCVConfigDict = CvInvoke.ConfigDict;
             bool haveDNN = (openCVConfigDict["HAVE_OPENCV_DNN"] != 0);
@@ -367,6 +373,11 @@ namespace Emgu.CV.XamarinForms
                 List<String> dnnBackendsText = new List<string>();
                 foreach (var dnnBackend in dnnBackends)
                 {
+                    if (backendType == DnnBackendType.InferenceEngineOnly &&
+                        !((dnnBackend.Backend == Dnn.Backend.InferenceEngine)
+                        || (dnnBackend.Backend == Dnn.Backend.InferenceEngineNgraph)
+                        || (dnnBackend.Backend == Dnn.Backend.InferenceEngineNnBuilder2019)))
+                        continue;
                     dnnBackendsText.Add(String.Format("{0};{1}", dnnBackend.Backend, dnnBackend.Target));
                 }
 
