@@ -7,36 +7,52 @@ PluginImporter:
   iconMap: {}
   executionOrder: {}
   defineConstraints: []
-  isPreloaded: 0
+  isPreloaded: 1
   isOverridable: 0
   isExplicitlyReferenced: 0
   validateReferences: 1
   platformData:
   - first:
-      '': Linux
+      : Any
+    second:
+      enabled: 0
+      settings:
+        Exclude Android: 1
+        Exclude Editor: 0
+        Exclude Linux64: 1
+        Exclude Lumin: 1
+        Exclude OSXUniversal: 0
+        Exclude WebGL: 1
+        Exclude Win: 1
+        Exclude Win64: 1
+        Exclude WindowsStoreApps: 1
+        Exclude iOS: 1
+        Exclude tvOS: 1
+  - first:
+      : Linux
     second:
       enabled: 0
       settings:
         CPU: x86
   - first:
-      '': LinuxUniversal
+      : LinuxUniversal
     second:
       enabled: 0
       settings: {}
   - first:
-      '': OSXIntel
+      : OSXIntel
     second:
       enabled: 1
       settings:
         CPU: AnyCPU
   - first:
-      '': OSXIntel64
+      : OSXIntel64
     second:
       enabled: 1
       settings:
         CPU: AnyCPU
   - first:
-      '': WP8
+      : WP8
     second:
       enabled: 0
       settings:
@@ -48,7 +64,7 @@ PluginImporter:
     second:
       enabled: 0
       settings:
-        CPU: AnyCPU
+        CPU: ARMv7
   - first:
       Any: 
     second:
@@ -59,7 +75,7 @@ PluginImporter:
     second:
       enabled: 1
       settings:
-        CPU: AnyCPU
+        CPU: x86_64
         DefaultValueInitialized: true
         OS: OSX
   - first:
@@ -85,7 +101,7 @@ PluginImporter:
     second:
       enabled: 1
       settings:
-        CPU: 
+        CPU: AnyCPU
   - first:
       Standalone: Win
     second:
@@ -104,14 +120,25 @@ PluginImporter:
       enabled: 0
       settings:
         CPU: AnyCPU
-        DontProcess: False
+        DontProcess: false
         PlaceholderPath: 
         SDK: AnySDK
+        ScriptingBackend: AnyScriptingBackend
   - first:
       iPhone: iOS
     second:
       enabled: 0
       settings:
+        AddToEmbeddedBinaries: false
+        CPU: AnyCPU
+        CompileFlags: 
+        FrameworkDependencies: 
+  - first:
+      tvOS: tvOS
+    second:
+      enabled: 0
+      settings:
+        CPU: AnyCPU
         CompileFlags: 
         FrameworkDependencies: 
   userData: 
