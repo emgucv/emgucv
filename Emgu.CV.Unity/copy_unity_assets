@@ -138,11 +138,11 @@ cp -r ../Emgu.CV.Models/Dnn/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/Dn
 cd Assets/Emgu.CV/Plugins/iOS
 if test -f "../../../../../libs/iOS/libcvextern_iphoneos.a"
 then
-  cp -f ../../../../../Emgu.CV/PInvoke/iOS/libcvextern_iphoneos.a ./
+  cp -f ../../../../../libs/iOS/libcvextern_iphoneos.a ./
 fi
 if test -f "../../../../../libs/iOS/libcvextern_simulator.a"
 then
-  cp -f ../../../../../Emgu.CV/PInvoke/iOS/libcvextern_simulator.a ./
+  cp -f ../../../../../libs/iOS/libcvextern_simulator.a ./
 fi
 cd ..
 if test -d "../../../../platforms/macos/emgucv.bundle"
