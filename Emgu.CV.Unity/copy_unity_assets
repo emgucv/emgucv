@@ -145,9 +145,9 @@ then
   cp -f ../../../../../libs/iOS/libcvextern_simulator.a ./
 fi
 cd ..
-if test -d "../../../../platforms/macos/emgucv.bundle"
+if test -d "../../../../platforms/macos/cvextern.bundle"
 then
-  cp -rf ../../../../platforms/macos/emgucv.bundle ./
+  cp -rf ../../../../platforms/macos/cvextern.bundle ./
 fi
 cd ..
 cd ..

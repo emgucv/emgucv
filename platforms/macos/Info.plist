@@ -7,9 +7,11 @@
   <key>CFBundleIdentifier</key>
   <string>com.emgu.cv</string>
   <key>CFBundleName</key>
-  <string>EmguCV</string>
+  <string>cvextern</string>
   <key>CFBundleIconFile</key>
   <string>icons.icns</string>
+  <key>CFBundleExecutable</key>
+  <string>libcvextern.dylib</string>
   <key>CFBundleShortVersionString</key>
   <string>0.01</string>
   <key>CFBundleInfoDictionaryVersion</key>
