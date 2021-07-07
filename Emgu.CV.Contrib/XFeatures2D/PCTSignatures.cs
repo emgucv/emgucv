@@ -125,19 +125,19 @@ namespace Emgu.CV.XFeatures2D
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cvePCTSignaturesCreate(int initSampleCount, int initSeedCount, PCTSignatures.PointDistributionType pointDistribution, ref IntPtr sharedPtr);
+        internal static extern IntPtr cvePCTSignaturesCreate(int initSampleCount, int initSeedCount, PCTSignatures.PointDistributionType pointDistribution, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cvePCTSignaturesCreate2(IntPtr initSamplingPoints, int initSeedCount, ref IntPtr sharedPtr);
+        internal static extern IntPtr cvePCTSignaturesCreate2(IntPtr initSamplingPoints, int initSeedCount, ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cvePCTSignaturesCreate3(IntPtr initSamplingPoints, IntPtr initClusterSeedIndexes, ref IntPtr sharedPtr);
+        internal static extern IntPtr cvePCTSignaturesCreate3(IntPtr initSamplingPoints, IntPtr initClusterSeedIndexes, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cvePCTSignaturesRelease(ref IntPtr sharedPtr);
+        internal static extern void cvePCTSignaturesRelease(ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cvePCTSignaturesComputeSignature(IntPtr pct, IntPtr image, IntPtr signature);
+        internal static extern void cvePCTSignaturesComputeSignature(IntPtr pct, IntPtr image, IntPtr signature);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cvePCTSignaturesDrawSignature(IntPtr source, IntPtr signature, IntPtr result, float radiusToShorterSideRatio, int borderThickness);
+        internal static extern void cvePCTSignaturesDrawSignature(IntPtr source, IntPtr signature, IntPtr result, float radiusToShorterSideRatio, int borderThickness);
 
     }
 }

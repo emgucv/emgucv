@@ -137,20 +137,20 @@ namespace Emgu.CV.Shape
     public static partial class ShapeInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveShapeContextDistanceExtractorCreate(
+        internal static extern IntPtr cveShapeContextDistanceExtractorCreate(
            int nAngularBins, int nRadialBins, float innerRadius, float outerRadius, int iterations,
            IntPtr comparer, IntPtr transformer, ref IntPtr shapeDistanceExtractor, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveShapeContextDistanceExtractorRelease(ref IntPtr sharedPtr);
+        internal static extern void cveShapeContextDistanceExtractorRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveHausdorffDistanceExtractorCreate(CvEnum.DistType distanceFlag, float rankProp, ref IntPtr shapeDistanceExtractor, ref IntPtr sharedPtr);
+        internal static extern IntPtr cveHausdorffDistanceExtractorCreate(CvEnum.DistType distanceFlag, float rankProp, ref IntPtr shapeDistanceExtractor, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveHausdorffDistanceExtractorRelease(ref IntPtr sharedPtr);
+        internal static extern void cveHausdorffDistanceExtractorRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static float cveShapeDistanceExtractorComputeDistance(IntPtr extractor, IntPtr contour1, IntPtr contour2);
+        internal static extern float cveShapeDistanceExtractorComputeDistance(IntPtr extractor, IntPtr contour1, IntPtr contour2);
     }
 }

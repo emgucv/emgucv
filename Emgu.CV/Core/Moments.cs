@@ -80,9 +80,9 @@ namespace Emgu.CV
         
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMomentsCreate();
+        internal static extern IntPtr cveMomentsCreate();
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMomentsRelease(ref IntPtr moments);
+        internal static extern void cveMomentsRelease(ref IntPtr moments);
 
         /*
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

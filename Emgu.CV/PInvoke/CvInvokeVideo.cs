@@ -385,7 +385,7 @@ namespace Emgu.CV
                 cveCalcOpticalFlowFarneback(iaPrev0, iaNext0, ioaFlow, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private extern static void cveCalcOpticalFlowFarneback(
+        private static extern void cveCalcOpticalFlowFarneback(
            IntPtr prev0,
            IntPtr next0,
            IntPtr flow0,

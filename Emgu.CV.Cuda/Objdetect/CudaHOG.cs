@@ -135,10 +135,10 @@ namespace Emgu.CV.Cuda
     public static partial class CudaInvoke
     {
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cudaHOGGetDefaultPeopleDetector(IntPtr hog, IntPtr detector);
+        internal static extern void cudaHOGGetDefaultPeopleDetector(IntPtr hog, IntPtr detector);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cudaHOGCreate(
+        internal static extern IntPtr cudaHOGCreate(
            ref Size winSize,
            ref Size blockSize,
            ref Size blockStride,
@@ -147,13 +147,13 @@ namespace Emgu.CV.Cuda
            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cudaHOGRelease(ref IntPtr descriptor);
+        internal static extern void cudaHOGRelease(ref IntPtr descriptor);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cudaHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector);
+        internal static extern void cudaHOGSetSVMDetector(IntPtr descriptor, IntPtr svmDetector);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cudaHOGDetectMultiScale(
+        internal static extern void cudaHOGDetectMultiScale(
            IntPtr descriptor,
            IntPtr img,
            IntPtr foundLocations,

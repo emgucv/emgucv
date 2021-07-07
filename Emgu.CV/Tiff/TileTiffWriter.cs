@@ -15,19 +15,19 @@ namespace Emgu.CV.Tiff
    {
       #region PInvoke
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void tiffWriteTileInfo(IntPtr pTiff, ref Size tileSize);
+      public static extern void tiffWriteTileInfo(IntPtr pTiff, ref Size tileSize);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void tiffWriteTile(IntPtr pTiff, int row, int col, IntPtr tileImage);
+      public static extern void tiffWriteTile(IntPtr pTiff, int row, int col, IntPtr tileImage);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static int tiffTileRowSize(IntPtr pTiff);
+      public static extern int tiffTileRowSize(IntPtr pTiff);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static int tiffTileSize(IntPtr pTiff);
+      public static extern int tiffTileSize(IntPtr pTiff);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      public extern static void tiffWriteImageSize(IntPtr pTiff, ref Size imageSize);
+      public static extern void tiffWriteImageSize(IntPtr pTiff, ref Size imageSize);
       #endregion
    }
 

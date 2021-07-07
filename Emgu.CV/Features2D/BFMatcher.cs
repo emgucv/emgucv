@@ -94,13 +94,13 @@ namespace Emgu.CV.Features2D
     public static partial class Features2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveBFMatcherCreate(
+        internal static extern IntPtr cveBFMatcherCreate(
                Features2D.DistanceType distanceType,
                [MarshalAs(CvInvoke.BoolMarshalType)]
          bool crossCheck,
                ref IntPtr dmPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveBFMatcherRelease(ref IntPtr matcher);
+        internal static extern void cveBFMatcherRelease(ref IntPtr matcher);
     }
 }

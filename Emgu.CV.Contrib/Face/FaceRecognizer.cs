@@ -120,22 +120,22 @@ namespace Emgu.CV.Face
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveFaceRecognizerTrain(IntPtr recognizer, IntPtr images, IntPtr labels);
+        internal static extern void cveFaceRecognizerTrain(IntPtr recognizer, IntPtr images, IntPtr labels);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveFaceRecognizerPredict(IntPtr recognizer, IntPtr image, ref int label, ref double distance);
+        internal static extern void cveFaceRecognizerPredict(IntPtr recognizer, IntPtr image, ref int label, ref double distance);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveFaceRecognizerWrite(
+        internal static extern void cveFaceRecognizerWrite(
            IntPtr recognizer,
            IntPtr fileName);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveFaceRecognizerRead(
+        internal static extern void cveFaceRecognizerRead(
            IntPtr recognizer,
            IntPtr fileName);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveFaceRecognizerUpdate(IntPtr recognizer, IntPtr images, IntPtr labels);
+        internal static extern void cveFaceRecognizerUpdate(IntPtr recognizer, IntPtr images, IntPtr labels);
     }
 
 

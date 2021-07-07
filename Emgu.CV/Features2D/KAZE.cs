@@ -77,7 +77,7 @@ namespace Emgu.CV.Features2D
     public static partial class Features2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveKAZEDetectorCreate(
+        internal static extern IntPtr cveKAZEDetectorCreate(
            [MarshalAs(CvInvoke.BoolMarshalType)]
            bool extended,
            [MarshalAs(CvInvoke.BoolMarshalType)]
@@ -90,6 +90,6 @@ namespace Emgu.CV.Features2D
            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveKAZEDetectorRelease(ref IntPtr sharedPtr);
+        internal static extern void cveKAZEDetectorRelease(ref IntPtr sharedPtr);
     }
 }

@@ -73,7 +73,7 @@ namespace Emgu.CV.Cuda
     public static partial class CudaInvoke
     {
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cudaGoodFeaturesToTrackDetectorCreate(
+        internal static extern IntPtr cudaGoodFeaturesToTrackDetectorCreate(
             int srcType, 
             int maxCorners, 
             double qualityLevel, 
@@ -85,9 +85,9 @@ namespace Emgu.CV.Cuda
             ref IntPtr _sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cudaCornersDetectorDetect(IntPtr detector, IntPtr image, IntPtr corners, IntPtr mask, IntPtr stream);
+        internal static extern void cudaCornersDetectorDetect(IntPtr detector, IntPtr image, IntPtr corners, IntPtr mask, IntPtr stream);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cudaCornersDetectorRelease(ref IntPtr detector);
+        internal static extern void cudaCornersDetectorRelease(ref IntPtr detector);
     }
 }

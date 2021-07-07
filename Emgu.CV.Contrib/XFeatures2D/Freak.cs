@@ -61,7 +61,7 @@ namespace Emgu.CV.XFeatures2D
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveFreakCreate(
+        internal static extern IntPtr cveFreakCreate(
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool orientationNormalized,
             [MarshalAs(CvInvoke.BoolMarshalType)]
@@ -72,7 +72,7 @@ namespace Emgu.CV.XFeatures2D
             ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveFreakRelease(ref IntPtr sharedPtr);
+        internal static extern void cveFreakRelease(ref IntPtr sharedPtr);
     }
 }
 

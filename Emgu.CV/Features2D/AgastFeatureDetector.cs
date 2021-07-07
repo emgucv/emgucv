@@ -73,7 +73,7 @@ namespace Emgu.CV.Features2D
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveAgastFeatureDetectorCreate(
+        internal static extern IntPtr cveAgastFeatureDetectorCreate(
            int threshold,
            [MarshalAs(CvInvoke.BoolMarshalType)]
            bool nonmaxSuppression,
@@ -82,6 +82,6 @@ namespace Emgu.CV.Features2D
            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveAgastFeatureDetectorRelease(ref IntPtr sharedPtr);
+        internal static extern void cveAgastFeatureDetectorRelease(ref IntPtr sharedPtr);
     }
 }

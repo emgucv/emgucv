@@ -45,10 +45,10 @@ namespace Emgu.CV.ImgHash
     internal static partial class ImgHashInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveAverageHashCreate(ref IntPtr imgHash, ref IntPtr sharedPtr);
+        internal static extern IntPtr cveAverageHashCreate(ref IntPtr imgHash, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveAverageHashRelease(ref IntPtr hash, ref IntPtr sharedPtr);
+        internal static extern void cveAverageHashRelease(ref IntPtr hash, ref IntPtr sharedPtr);
     }
 }
 

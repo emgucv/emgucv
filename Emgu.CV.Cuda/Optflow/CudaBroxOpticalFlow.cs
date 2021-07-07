@@ -67,9 +67,9 @@ namespace Emgu.CV.Cuda
     public static partial class CudaInvoke
     {
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cudaBroxOpticalFlowCreate(double alpha, double gamma, double scaleFactor, int innerIterations, int outerIterations, int solverIterations, ref IntPtr denseFlow, ref IntPtr algorithm, ref IntPtr sharedPtr);
+        internal static extern IntPtr cudaBroxOpticalFlowCreate(double alpha, double gamma, double scaleFactor, int innerIterations, int outerIterations, int solverIterations, ref IntPtr denseFlow, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cudaBroxOpticalFlowRelease(ref IntPtr flow);
+        internal static extern void cudaBroxOpticalFlowRelease(ref IntPtr flow);
     }
 }

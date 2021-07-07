@@ -75,14 +75,14 @@ namespace Emgu.CV.Quality
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveQualityGMSDCreate(
+        internal static extern IntPtr cveQualityGMSDCreate(
             IntPtr refImgs,
             ref IntPtr qualityBase,
             ref IntPtr algorithm,
             ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveQualityGMSDRelease(ref IntPtr sharedPtr);
+        internal static extern void cveQualityGMSDRelease(ref IntPtr sharedPtr);
     }
 
 

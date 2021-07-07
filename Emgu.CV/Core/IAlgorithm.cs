@@ -164,25 +164,25 @@ namespace Emgu.CV
     public partial class CvInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveAlgorithmRead(IntPtr algorithm, IntPtr node);
+        internal static extern void cveAlgorithmRead(IntPtr algorithm, IntPtr node);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveAlgorithmWrite(IntPtr algorithm, IntPtr storage);
+        internal static extern void cveAlgorithmWrite(IntPtr algorithm, IntPtr storage);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveAlgorithmWrite2(IntPtr algorithm, IntPtr storage, IntPtr name);
+        internal static extern void cveAlgorithmWrite2(IntPtr algorithm, IntPtr storage, IntPtr name);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveAlgorithmSave(IntPtr algorithm, IntPtr filename);
+        internal static extern void cveAlgorithmSave(IntPtr algorithm, IntPtr filename);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveAlgorithmClear(IntPtr algorithm);
+        internal static extern void cveAlgorithmClear(IntPtr algorithm);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal extern static bool cveAlgorithmEmpty(IntPtr algorithm);
+        internal static extern bool cveAlgorithmEmpty(IntPtr algorithm);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveAlgorithmGetDefaultName(IntPtr algorithm, IntPtr defaultName);
+        internal static extern void cveAlgorithmGetDefaultName(IntPtr algorithm, IntPtr defaultName);
     }
 }

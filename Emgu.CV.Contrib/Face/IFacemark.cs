@@ -67,7 +67,7 @@ namespace Emgu.CV.Face
             }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveFacemarkLoadModel(IntPtr facemark, IntPtr model);
+        internal static extern void cveFacemarkLoadModel(IntPtr facemark, IntPtr model);
 
         /*
         /// <summary>
@@ -109,7 +109,7 @@ namespace Emgu.CV.Face
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal extern static bool cveFacemarkFit(IntPtr facemark, IntPtr image, IntPtr faces, IntPtr landmarks);
+        internal static extern bool cveFacemarkFit(IntPtr facemark, IntPtr image, IntPtr faces, IntPtr landmarks);
 
         /// <summary>
         /// Utility to draw the detected facial landmark points.
@@ -126,7 +126,7 @@ namespace Emgu.CV.Face
             }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveDrawFacemarks(IntPtr image, IntPtr points, ref MCvScalar color);
+        internal static extern void cveDrawFacemarks(IntPtr image, IntPtr points, ref MCvScalar color);
 
         /*
         /// <summary>

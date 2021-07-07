@@ -56,12 +56,12 @@ namespace Emgu.CV.Face
     public static partial class FaceInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveBIFCreate(int numBands, int numRotations, ref IntPtr sharedPtr);
+        internal static extern IntPtr cveBIFCreate(int numBands, int numRotations, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveBIFCompute(IntPtr bif, IntPtr image, IntPtr features);
+        internal static extern void cveBIFCompute(IntPtr bif, IntPtr image, IntPtr features);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveBIFRelease(ref IntPtr sharedPtr);
+        internal static extern void cveBIFRelease(ref IntPtr sharedPtr);
     }
 }

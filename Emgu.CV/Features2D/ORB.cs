@@ -65,9 +65,9 @@ namespace Emgu.CV.Features2D
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveOrbCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTK_A, Features2D.ORB.ScoreType scoreType, int patchSize, int fastThreshold, ref IntPtr feature2D, ref IntPtr sharedPtr);
+        internal static extern IntPtr cveOrbCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTK_A, Features2D.ORB.ScoreType scoreType, int patchSize, int fastThreshold, ref IntPtr feature2D, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveOrbRelease(ref IntPtr sharedPtr);
+        internal static extern void cveOrbRelease(ref IntPtr sharedPtr);
     }
 }

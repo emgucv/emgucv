@@ -162,28 +162,28 @@ namespace Emgu.CV
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        static internal extern IntPtr cveRngCreate();
+        internal static extern IntPtr cveRngCreate();
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        static internal extern IntPtr cveRngCreateWithSeed(UInt64 state);
+        internal static extern IntPtr cveRngCreateWithSeed(UInt64 state);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        static internal extern void cveRngFill(IntPtr rng, IntPtr mat, RNG.DistType distType, IntPtr a, IntPtr b, bool saturateRange);
+        internal static extern void cveRngFill(IntPtr rng, IntPtr mat, RNG.DistType distType, IntPtr a, IntPtr b, bool saturateRange);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        static internal extern double cveRngGaussian(IntPtr rng, double sigma);
+        internal static extern double cveRngGaussian(IntPtr rng, double sigma);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        static internal extern UInt32 cveRngNext(IntPtr rng);
+        internal static extern UInt32 cveRngNext(IntPtr rng);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        static internal extern int cveRngUniformInt(IntPtr rng, int a, int b);
+        internal static extern int cveRngUniformInt(IntPtr rng, int a, int b);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        static internal extern float cveRngUniformFloat(IntPtr rng, float a, float b);
+        internal static extern float cveRngUniformFloat(IntPtr rng, float a, float b);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        static internal extern double cveRngUniformDouble(IntPtr rng, double a, double b);
+        internal static extern double cveRngUniformDouble(IntPtr rng, double a, double b);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        static internal extern void cveRngRelease(ref IntPtr rng);
+        internal static extern void cveRngRelease(ref IntPtr rng);
     }
 
 }

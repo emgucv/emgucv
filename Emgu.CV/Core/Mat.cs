@@ -1509,34 +1509,34 @@ namespace Emgu.CV
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveInputArrayFromMat(IntPtr mat);
+        internal static extern IntPtr cveInputArrayFromMat(IntPtr mat);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveOutputArrayFromMat(IntPtr mat);
+        internal static extern IntPtr cveOutputArrayFromMat(IntPtr mat);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveInputOutputArrayFromMat(IntPtr mat);
+        internal static extern IntPtr cveInputOutputArrayFromMat(IntPtr mat);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMatCreate();
+        internal static extern IntPtr cveMatCreate();
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMatRelease(ref IntPtr mat);
+        internal static extern void cveMatRelease(ref IntPtr mat);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMatGetSize(IntPtr mat, ref Size s);
+        internal static extern void cveMatGetSize(IntPtr mat, ref Size s);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMatCopyTo(IntPtr mat, IntPtr m, IntPtr mask);
+        internal static extern void cveMatCopyTo(IntPtr mat, IntPtr m, IntPtr mask);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static int cveMatGetElementSize(IntPtr mat);
+        internal static extern int cveMatGetElementSize(IntPtr mat);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMatGetDataPointer(IntPtr mat);
+        internal static extern IntPtr cveMatGetDataPointer(IntPtr mat);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMatGetDataPointer2(IntPtr mat, IntPtr indices);
+        internal static extern IntPtr cveMatGetDataPointer2(IntPtr mat, IntPtr indices);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMatGetStep(IntPtr mat);
+        internal static extern IntPtr cveMatGetStep(IntPtr mat);
 
         /*
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1544,16 +1544,16 @@ namespace Emgu.CV
         internal extern static bool cvMatIsEmpty(IntPtr mat);*/
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMatCreateData(IntPtr mat, int row, int cols, int type);
+        internal static extern void cveMatCreateData(IntPtr mat, int row, int cols, int type);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMatCreateWithData(int rows, int cols, int type, IntPtr data, IntPtr step);
+        internal static extern IntPtr cveMatCreateWithData(int rows, int cols, int type, IntPtr data, IntPtr step);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMatCreateFromRect(IntPtr mat, ref Rectangle roi);
+        internal static extern IntPtr cveMatCreateFromRect(IntPtr mat, ref Rectangle roi);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMatCreateFromRange(IntPtr mat, ref Emgu.CV.Structure.Range rowRange, ref Emgu.CV.Structure.Range colRange);
+        internal static extern IntPtr cveMatCreateFromRange(IntPtr mat, ref Emgu.CV.Structure.Range rowRange, ref Emgu.CV.Structure.Range colRange);
 
         /*
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1564,37 +1564,37 @@ namespace Emgu.CV
            );
         */
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMatGetUMat(IntPtr mat, CvEnum.AccessType access, UMat.Usage usageFlags);
+        internal static extern IntPtr cveMatGetUMat(IntPtr mat, CvEnum.AccessType access, UMat.Usage usageFlags);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMatSetTo(IntPtr mat, IntPtr value, IntPtr mask);
+        internal static extern void cveMatSetTo(IntPtr mat, IntPtr value, IntPtr mask);
 
         //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         //internal extern static IntPtr cveMatUseCustomAllocator(IntPtr mat, MatDataAllocatorInvoke.MatAllocateCallback allocator, MatDataAllocatorInvoke.MatDeallocateCallback deallocator, IntPtr allocateDataActionPtr, IntPtr freeDataActionPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMatConvertTo(IntPtr mat, IntPtr outArray, CvEnum.DepthType rtype, double alpha, double beta);
+        internal static extern void cveMatConvertTo(IntPtr mat, IntPtr outArray, CvEnum.DepthType rtype, double alpha, double beta);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMatReshape(IntPtr mat, int cn, int rows);
+        internal static extern IntPtr cveMatReshape(IntPtr mat, int cn, int rows);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMatToIplImage(IntPtr mat);
+        internal static extern IntPtr cveMatToIplImage(IntPtr mat);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static double cveMatDot(IntPtr mat, IntPtr m);
+        internal static extern double cveMatDot(IntPtr mat, IntPtr m);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMatCross(IntPtr mat, IntPtr m, IntPtr result);
+        internal static extern void cveMatCross(IntPtr mat, IntPtr m, IntPtr result);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMatCopyDataTo(IntPtr mat, IntPtr dest);
+        internal static extern void cveMatCopyDataTo(IntPtr mat, IntPtr dest);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMatCopyDataFrom(IntPtr mat, IntPtr source);
+        internal static extern void cveMatCopyDataFrom(IntPtr mat, IntPtr source);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMatGetSizeOfDimension(IntPtr mat, IntPtr sizes);
+        internal static extern void cveMatGetSizeOfDimension(IntPtr mat, IntPtr sizes);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveMatCreateMultiDimWithData(int ndims, IntPtr sizes, CvEnum.DepthType type, IntPtr data,
@@ -1633,18 +1633,18 @@ namespace Emgu.CV
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMatEye(int rows, int cols, int type, IntPtr m);
+        internal static extern void cveMatEye(int rows, int cols, int type, IntPtr m);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMatDiag(IntPtr src, int d, IntPtr dst);
+        internal static extern void cveMatDiag(IntPtr src, int d, IntPtr dst);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMatT(IntPtr src, IntPtr dst);
+        internal static extern void cveMatT(IntPtr src, IntPtr dst);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMatZeros(int rows, int cols, int type, IntPtr dst);
+        internal static extern void cveMatZeros(int rows, int cols, int type, IntPtr dst);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMatOnes(int rows, int cols, int type, IntPtr dst);
+        internal static extern void cveMatOnes(int rows, int cols, int type, IntPtr dst);
 
     }
 }

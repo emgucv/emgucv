@@ -59,7 +59,7 @@ namespace Emgu.CV.XFeatures2D
     public static partial class XFeatures2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveTBMRCreate(
+        internal static extern IntPtr cveTBMRCreate(
             int minArea,
             float maxAreaRelative,
             float scaleFactor,
@@ -68,6 +68,6 @@ namespace Emgu.CV.XFeatures2D
             ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveTBMRRelease(ref IntPtr shared);
+        internal static extern void cveTBMRRelease(ref IntPtr shared);
     }
 }

@@ -25,9 +25,9 @@ namespace Emgu.CV.ImgHash
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveImgHashBaseCompute(IntPtr imgHash, IntPtr inputArr, IntPtr outputArr);
+        internal static extern void cveImgHashBaseCompute(IntPtr imgHash, IntPtr inputArr, IntPtr outputArr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static double cveImgHashBaseCompare(IntPtr imgHash, IntPtr hashOne, IntPtr hashTwo);
+        internal static extern double cveImgHashBaseCompare(IntPtr imgHash, IntPtr hashOne, IntPtr hashTwo);
 
     }
 }

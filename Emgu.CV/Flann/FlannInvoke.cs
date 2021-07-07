@@ -58,52 +58,52 @@ namespace Emgu.CV.Flann
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveLinearIndexParamsCreate(ref IntPtr ip);
+        internal static extern IntPtr cveLinearIndexParamsCreate(ref IntPtr ip);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveLinearIndexParamsRelease(ref IntPtr p);
+        internal static extern void cveLinearIndexParamsRelease(ref IntPtr p);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveKDTreeIndexParamsCreate(ref IntPtr ip, int trees);
+        internal static extern IntPtr cveKDTreeIndexParamsCreate(ref IntPtr ip, int trees);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveKDTreeIndexParamsRelease(ref IntPtr p);
+        internal static extern void cveKDTreeIndexParamsRelease(ref IntPtr p);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveLshIndexParamsCreate(ref IntPtr ip, int tableNumber, int keySize, int multiProbeLevel);
+        internal static extern IntPtr cveLshIndexParamsCreate(ref IntPtr ip, int tableNumber, int keySize, int multiProbeLevel);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveLshIndexParamsRelease(ref IntPtr p);
+        internal static extern void cveLshIndexParamsRelease(ref IntPtr p);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveKMeansIndexParamsCreate(ref IntPtr ip, int branching, int iterations, Flann.CenterInitType centersInit, float cbIndex);
+        internal static extern IntPtr cveKMeansIndexParamsCreate(ref IntPtr ip, int branching, int iterations, Flann.CenterInitType centersInit, float cbIndex);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveKMeansIndexParamsRelease(ref IntPtr p);
+        internal static extern void cveKMeansIndexParamsRelease(ref IntPtr p);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveCompositeIndexParamsCreate(ref IntPtr ip, int trees, int branching, int iterations, Flann.CenterInitType centersInit, float cbIndex);
+        internal static extern IntPtr cveCompositeIndexParamsCreate(ref IntPtr ip, int trees, int branching, int iterations, Flann.CenterInitType centersInit, float cbIndex);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCompositeIndexParamsRelease(ref IntPtr p);
+        internal static extern void cveCompositeIndexParamsRelease(ref IntPtr p);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveAutotunedIndexParamsCreate(ref IntPtr ip, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction);
+        internal static extern IntPtr cveAutotunedIndexParamsCreate(ref IntPtr ip, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveAutotunedIndexParamsRelease(ref IntPtr p);
+        internal static extern void cveAutotunedIndexParamsRelease(ref IntPtr p);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveHierarchicalClusteringIndexParamsCreate(ref IntPtr ip, int branching, Flann.CenterInitType centersInit, int trees, int leafSize);
+        internal static extern IntPtr cveHierarchicalClusteringIndexParamsCreate(ref IntPtr ip, int branching, Flann.CenterInitType centersInit, int trees, int leafSize);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveHierarchicalClusteringIndexParamsRelease(ref IntPtr p);
+        internal static extern void cveHierarchicalClusteringIndexParamsRelease(ref IntPtr p);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveSearchParamsCreate(
+        internal static extern IntPtr cveSearchParamsCreate(
             ref IntPtr ip, int checks, float eps,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool sorted);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveSearchParamsRelease(ref IntPtr p);
+        internal static extern void cveSearchParamsRelease(ref IntPtr p);
     }
 }

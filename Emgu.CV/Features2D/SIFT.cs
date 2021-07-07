@@ -50,13 +50,13 @@ namespace Emgu.CV.Features2D
     public static partial class Features2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveSIFTCreate(
+        internal static extern IntPtr cveSIFTCreate(
            int nFeatures, int nOctaveLayers,
            double contrastThreshold, double edgeThreshold,
            double sigma, ref IntPtr feature2D, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveSIFTRelease(ref IntPtr sharedPtr);
+        internal static extern void cveSIFTRelease(ref IntPtr sharedPtr);
     }
 }
 

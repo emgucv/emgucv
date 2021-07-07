@@ -79,17 +79,17 @@ namespace Emgu.CV.Face
     public static partial class FaceInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr  cveMaceCreate(int imgSize, ref IntPtr sharedPtr);
+        internal static extern IntPtr  cveMaceCreate(int imgSize, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMaceSalt(IntPtr mace, IntPtr passphrase);
+        internal static extern void cveMaceSalt(IntPtr mace, IntPtr passphrase);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMaceTrain(IntPtr mace, IntPtr images);
+        internal static extern void cveMaceTrain(IntPtr mace, IntPtr images);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal extern static bool cveMaceSame(IntPtr mace, IntPtr query);
+        internal static extern bool cveMaceSame(IntPtr mace, IntPtr query);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMaceRelease(ref IntPtr sharedPtr);
+        internal static extern void cveMaceRelease(ref IntPtr sharedPtr);
     }
 }

@@ -58,10 +58,10 @@ namespace Emgu.CV
     public static partial class GapiInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveGScalarCreate(ref MCvScalar value);
+        internal static extern IntPtr cveGScalarCreate(ref MCvScalar value);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveGScalarRelease(ref IntPtr gscalar);
+        internal static extern void cveGScalarRelease(ref IntPtr gscalar);
 
     }
 }

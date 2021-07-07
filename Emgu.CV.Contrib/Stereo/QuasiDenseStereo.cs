@@ -161,18 +161,18 @@ namespace Emgu.CV.Stereo
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveQuasiDenseStereoCreate(
+        internal static extern IntPtr cveQuasiDenseStereoCreate(
             ref Size monoImgSize,
             IntPtr paramFilepath,
             ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveQuasiDenseStereoRelease(ref IntPtr sharedPtr);
+        internal static extern void cveQuasiDenseStereoRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveQuasiDenseStereoProcess(IntPtr stereo, IntPtr imgLeft, IntPtr imgRight);
+        internal static extern void cveQuasiDenseStereoProcess(IntPtr stereo, IntPtr imgLeft, IntPtr imgRight);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveQuasiDenseStereoGetDisparity(IntPtr stereo, IntPtr disparity);
+        internal static extern void cveQuasiDenseStereoGetDisparity(IntPtr stereo, IntPtr disparity);
     }
 }

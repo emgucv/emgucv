@@ -520,13 +520,13 @@ namespace Emgu.CV.Cuda
     public static partial class CudaInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveInputArrayFromGpuMat(IntPtr mat);
+        internal static extern IntPtr cveInputArrayFromGpuMat(IntPtr mat);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveOutputArrayFromGpuMat(IntPtr mat);
+        internal static extern IntPtr cveOutputArrayFromGpuMat(IntPtr mat);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveInputOutputArrayFromGpuMat(IntPtr mat);
+        internal static extern IntPtr cveInputOutputArrayFromGpuMat(IntPtr mat);
 
         /// <summary>
         /// Release the GpuMat

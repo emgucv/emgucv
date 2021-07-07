@@ -483,32 +483,32 @@ namespace Emgu.CV.Cuda
     public static partial class CudaInvoke
     {
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveCudaDescriptorMatcherCreateBFMatcher(DistanceType distType, ref IntPtr algorithm, ref IntPtr sharedPtr);
+        internal static extern IntPtr cveCudaDescriptorMatcherCreateBFMatcher(DistanceType distType, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherRelease(ref IntPtr sharedPtr);
+        internal static extern void cveCudaDescriptorMatcherRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherAdd(IntPtr matcher, IntPtr trainDescs);
+        internal static extern void cveCudaDescriptorMatcherAdd(IntPtr matcher, IntPtr trainDescs);
 
-
-        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal extern static bool cveCudaDescriptorMatcherIsMaskSupported(IntPtr matcher);
-
-        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherClear(IntPtr matcher);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal extern static bool cveCudaDescriptorMatcherEmpty(IntPtr matcher);
+        internal static extern bool cveCudaDescriptorMatcherIsMaskSupported(IntPtr matcher);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherTrain(IntPtr matcher);
+        internal static extern void cveCudaDescriptorMatcherClear(IntPtr matcher);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherMatch1(
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool cveCudaDescriptorMatcherEmpty(IntPtr matcher);
+
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveCudaDescriptorMatcherTrain(IntPtr matcher);
+
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveCudaDescriptorMatcherMatch1(
             IntPtr matcher,
             IntPtr queryDescriptors,
             IntPtr trainDescriptors,
@@ -516,14 +516,14 @@ namespace Emgu.CV.Cuda
             IntPtr mask);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherMatch2(
+        internal static extern void cveCudaDescriptorMatcherMatch2(
             IntPtr matcher,
             IntPtr queryDescriptors,
             IntPtr matches,
             IntPtr masks);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherMatchAsync1(
+        internal static extern void cveCudaDescriptorMatcherMatchAsync1(
             IntPtr matcher,
             IntPtr queryDescriptors,
             IntPtr trainDescriptors,
@@ -532,7 +532,7 @@ namespace Emgu.CV.Cuda
             IntPtr stream);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherMatchAsync2(
+        internal static extern void cveCudaDescriptorMatcherMatchAsync2(
             IntPtr matcher,
             IntPtr queryDescriptors,
             IntPtr matches,
@@ -540,13 +540,13 @@ namespace Emgu.CV.Cuda
             IntPtr stream);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherMatchConvert(
+        internal static extern void cveCudaDescriptorMatcherMatchConvert(
             IntPtr matcher,
             IntPtr gpuMatches,
             IntPtr matches);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherKnnMatch1(
+        internal static extern void cveCudaDescriptorMatcherKnnMatch1(
             IntPtr matcher,
             IntPtr queryDescs,
             IntPtr trainDescs,
@@ -556,7 +556,7 @@ namespace Emgu.CV.Cuda
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool compactResult);
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherKnnMatch2(
+        internal static extern void cveCudaDescriptorMatcherKnnMatch2(
             IntPtr matcher,
             IntPtr queryDescriptors,
             IntPtr matches,
@@ -566,7 +566,7 @@ namespace Emgu.CV.Cuda
             bool compactResult);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherKnnMatchAsync1(
+        internal static extern void cveCudaDescriptorMatcherKnnMatchAsync1(
             IntPtr matcher,
             IntPtr queryDescriptors,
             IntPtr trainDescriptors,
@@ -576,7 +576,7 @@ namespace Emgu.CV.Cuda
             IntPtr stream);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherKnnMatchAsync2(
+        internal static extern void cveCudaDescriptorMatcherKnnMatchAsync2(
             IntPtr matcher,
             IntPtr queryDescriptors,
             IntPtr matches,
@@ -585,7 +585,7 @@ namespace Emgu.CV.Cuda
             IntPtr stream);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherKnnMatchConvert(
+        internal static extern void cveCudaDescriptorMatcherKnnMatchConvert(
             IntPtr matcher,
             IntPtr gpuMatches,
             IntPtr matches,
@@ -593,7 +593,7 @@ namespace Emgu.CV.Cuda
             bool compactResult);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherRadiusMatch1(
+        internal static extern void cveCudaDescriptorMatcherRadiusMatch1(
             IntPtr matcher,
             IntPtr queryDescriptors,
             IntPtr trainDescriptors,
@@ -604,7 +604,7 @@ namespace Emgu.CV.Cuda
             bool compactResult);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherRadiusMatch2(
+        internal static extern void cveCudaDescriptorMatcherRadiusMatch2(
             IntPtr matcher,
             IntPtr queryDescriptors,
             IntPtr matches,
@@ -614,7 +614,7 @@ namespace Emgu.CV.Cuda
             bool compactResult);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherRadiusMatchAsync1(
+        internal static extern void cveCudaDescriptorMatcherRadiusMatchAsync1(
             IntPtr matcher,
             IntPtr queryDescriptors,
             IntPtr trainDescriptors,
@@ -624,7 +624,7 @@ namespace Emgu.CV.Cuda
             IntPtr stream);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherRadiusMatchAsync2(
+        internal static extern void cveCudaDescriptorMatcherRadiusMatchAsync2(
             IntPtr matcher,
             IntPtr queryDescriptors,
             IntPtr matches,
@@ -633,7 +633,7 @@ namespace Emgu.CV.Cuda
             IntPtr stream);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveCudaDescriptorMatcherRadiusMatchConvert(
+        internal static extern void cveCudaDescriptorMatcherRadiusMatchConvert(
             IntPtr matcher,
             IntPtr gpuMatches,
             IntPtr matches,

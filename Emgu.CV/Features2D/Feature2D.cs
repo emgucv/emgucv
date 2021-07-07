@@ -138,10 +138,10 @@ namespace Emgu.CV.Features2D
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr CvFeature2DGetAlgorithm(IntPtr detector);
+        internal static extern IntPtr CvFeature2DGetAlgorithm(IntPtr detector);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void CvFeature2DDetectAndCompute(
+        internal static extern void CvFeature2DDetectAndCompute(
             IntPtr feature2D,
             IntPtr image,
             IntPtr mask,
@@ -151,17 +151,17 @@ namespace Emgu.CV.Features2D
             bool useProvidedKeyPoints);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void CvFeature2DDetect(
+        internal static extern void CvFeature2DDetect(
            IntPtr detector,
            IntPtr image,
            IntPtr keypoints,
            IntPtr mask);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void CvFeature2DCompute(IntPtr extractor, IntPtr image, IntPtr keypoints, IntPtr descriptors);
+        internal static extern void CvFeature2DCompute(IntPtr extractor, IntPtr image, IntPtr keypoints, IntPtr descriptors);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static int CvFeature2DGetDescriptorSize(IntPtr extractor);
+        internal static extern int CvFeature2DGetDescriptorSize(IntPtr extractor);
     }
 
 }

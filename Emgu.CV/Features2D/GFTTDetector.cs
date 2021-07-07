@@ -47,7 +47,7 @@ namespace Emgu.CV.Features2D
     public static partial class Features2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveGFTTDetectorCreate(
+        internal static extern IntPtr cveGFTTDetectorCreate(
                int maxCorners,
                double qualityLevel,
                double minDistance,
@@ -59,6 +59,6 @@ namespace Emgu.CV.Features2D
                ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveGFTTDetectorRelease(ref IntPtr sharedPtr);
+        internal static extern void cveGFTTDetectorRelease(ref IntPtr sharedPtr);
     }
 }

@@ -111,20 +111,20 @@ namespace Emgu.CV
    {
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cveCascadeClassifierCreate();
+      internal static extern IntPtr cveCascadeClassifierCreate();
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static IntPtr cveCascadeClassifierCreateFromFile(IntPtr fileName);
+      internal static extern IntPtr cveCascadeClassifierCreateFromFile(IntPtr fileName);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      internal extern static bool cveCascadeClassifierRead(IntPtr classifier, IntPtr node);
+      internal static extern bool cveCascadeClassifierRead(IntPtr classifier, IntPtr node);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveCascadeClassifierRelease(ref IntPtr classifier);
+      internal static extern void cveCascadeClassifierRelease(ref IntPtr classifier);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveCascadeClassifierDetectMultiScale(
+      internal static extern void cveCascadeClassifierDetectMultiScale(
          IntPtr classifier,
          IntPtr image,
          IntPtr objects,
@@ -135,10 +135,10 @@ namespace Emgu.CV
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       [return: MarshalAs(CvInvoke.BoolMarshalType)]
-      internal extern static bool cveCascadeClassifierIsOldFormatCascade(IntPtr classifier);
+      internal static extern bool cveCascadeClassifierIsOldFormatCascade(IntPtr classifier);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveCascadeClassifierGetOriginalWindowSize(IntPtr classifier, ref Size size);
+      internal static extern void cveCascadeClassifierGetOriginalWindowSize(IntPtr classifier, ref Size size);
    }
 
 }

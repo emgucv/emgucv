@@ -102,7 +102,7 @@ namespace Emgu.CV.Face
     public static partial class FaceInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveLBPHFaceRecognizerCreate(
+        internal static extern IntPtr cveLBPHFaceRecognizerCreate(
             int radius, 
             int neighbors, 
             int gridX, 
@@ -111,10 +111,10 @@ namespace Emgu.CV.Face
             ref IntPtr faceRecognizerPtr,
             ref IntPtr sharedPtr);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveLBPHFaceRecognizerRelease(ref IntPtr sharedPtr);
+        internal static extern void cveLBPHFaceRecognizerRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveLBPHFaceRecognizerGetHistograms(IntPtr recognizer, IntPtr histograms);
+        internal static extern void cveLBPHFaceRecognizerGetHistograms(IntPtr recognizer, IntPtr histograms);
     }
 
 

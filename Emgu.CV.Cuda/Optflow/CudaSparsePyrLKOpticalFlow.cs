@@ -68,7 +68,7 @@ namespace Emgu.CV.Cuda
     public static partial class CudaInvoke
     {
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cudaSparsePyrLKOpticalFlowCreate(
+        internal static extern IntPtr cudaSparsePyrLKOpticalFlowCreate(
             ref Size winSize, 
             int maxLevel, 
             int iters,
@@ -79,7 +79,7 @@ namespace Emgu.CV.Cuda
             ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cudaSparsePyrLKOpticalFlowRelease(ref IntPtr flow);
+        internal static extern void cudaSparsePyrLKOpticalFlowRelease(ref IntPtr flow);
     }
 
 }

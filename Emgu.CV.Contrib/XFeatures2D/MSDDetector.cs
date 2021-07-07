@@ -74,7 +74,7 @@ namespace Emgu.CV.XFeatures2D
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMSDDetectorCreate(
+        internal static extern IntPtr cveMSDDetectorCreate(
             int patchRadius,
             int searchAreaRadius,
             int nmsRadius,
@@ -89,7 +89,7 @@ namespace Emgu.CV.XFeatures2D
             ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMSDDetectorRelease(ref IntPtr sharedPtr);
+        internal static extern void cveMSDDetectorRelease(ref IntPtr sharedPtr);
     }
 }
 

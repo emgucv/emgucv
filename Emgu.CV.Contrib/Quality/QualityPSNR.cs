@@ -77,7 +77,7 @@ namespace Emgu.CV.Quality
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveQualityPSNRCreate(
+        internal static extern IntPtr cveQualityPSNRCreate(
             IntPtr refImgs,
             double maxPixelValue,
             ref IntPtr qualityBase,
@@ -85,7 +85,7 @@ namespace Emgu.CV.Quality
             ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveQualityPSNRRelease(ref IntPtr sharedPtr);
+        internal static extern void cveQualityPSNRRelease(ref IntPtr sharedPtr);
     }
 
 

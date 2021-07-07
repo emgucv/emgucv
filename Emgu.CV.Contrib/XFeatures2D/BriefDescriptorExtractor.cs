@@ -43,9 +43,9 @@ namespace Emgu.CV.XFeatures2D
     public static partial class XFeatures2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveBriefDescriptorExtractorCreate(int descriptorSize, ref IntPtr feature2D, ref IntPtr sharedPtr);
+        internal static extern IntPtr cveBriefDescriptorExtractorCreate(int descriptorSize, ref IntPtr feature2D, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveBriefDescriptorExtractorRelease(ref IntPtr sharedPtr);
+        internal static extern void cveBriefDescriptorExtractorRelease(ref IntPtr sharedPtr);
     }
 }

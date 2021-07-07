@@ -3116,7 +3116,7 @@ namespace Emgu.CV
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private extern static IntPtr cveArrToMat(
+        private static extern IntPtr cveArrToMat(
             IntPtr cvArray,
             [MarshalAs(CvInvoke.BoolMarshalType)] bool copyData,
             [MarshalAs(CvInvoke.BoolMarshalType)] bool allowND,
@@ -3137,7 +3137,7 @@ namespace Emgu.CV
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private extern static void cveHConcat(IntPtr src1, IntPtr src2, IntPtr dst);
+        private static extern void cveHConcat(IntPtr src1, IntPtr src2, IntPtr dst);
 
         /// <summary>
         /// Horizontally concatenate two images
@@ -3165,7 +3165,7 @@ namespace Emgu.CV
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private extern static void cveHConcat2(IntPtr src, IntPtr dst);
+        private static extern void cveHConcat2(IntPtr src, IntPtr dst);
 
         /// <summary>
         /// Vertically concatenate two images
@@ -3181,7 +3181,7 @@ namespace Emgu.CV
                 cveVConcat(iaSrc1, iaSrc2, oaDst);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private extern static void cveVConcat(IntPtr src1, IntPtr src2, IntPtr dst);
+        private static extern void cveVConcat(IntPtr src1, IntPtr src2, IntPtr dst);
 
         /// <summary>
         /// The function vertically concatenates two or more matrices
@@ -3209,7 +3209,7 @@ namespace Emgu.CV
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private extern static void cveVConcat2(IntPtr src, IntPtr dst);
+        private static extern void cveVConcat2(IntPtr src, IntPtr dst);
 
         /// <summary>
         /// Swaps two matrices
@@ -3221,7 +3221,7 @@ namespace Emgu.CV
             cveSwapMat(m1, m2);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private extern static void cveSwapMat(IntPtr mat1, IntPtr mat2);
+        private static extern void cveSwapMat(IntPtr mat1, IntPtr mat2);
 
         /// <summary>
         /// Swaps two matrices
@@ -3233,7 +3233,7 @@ namespace Emgu.CV
             cveSwapUMat(m1, m2);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private extern static void cveSwapUMat(IntPtr mat1, IntPtr mat2);
+        private static extern void cveSwapUMat(IntPtr mat1, IntPtr mat2);
 
         #region OpenCL
 
@@ -3249,7 +3249,7 @@ namespace Emgu.CV
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        private extern static bool cveHaveOpenCL();
+        private static extern bool cveHaveOpenCL();
 
         /// <summary>
         /// Get or set if OpenCL should be used
@@ -3267,9 +3267,9 @@ namespace Emgu.CV
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        private extern static bool cveUseOpenCL();
+        private static extern bool cveUseOpenCL();
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private extern static void cveSetUseOpenCL([MarshalAs(CvInvoke.BoolMarshalType)] bool flag);
+        private static extern void cveSetUseOpenCL([MarshalAs(CvInvoke.BoolMarshalType)] bool flag);
 
         /// <summary>
         /// Finishes OpenCL queue.
@@ -3279,7 +3279,7 @@ namespace Emgu.CV
             cveOclFinish();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private extern static void cveOclFinish();
+        private static extern void cveOclFinish();
 
         /// <summary>
         /// Get the OpenCL platform summary as a string
@@ -3376,7 +3376,7 @@ namespace Emgu.CV
         #endregion
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveGetRangeAll(ref Emgu.CV.Structure.Range range);
+        internal static extern void cveGetRangeAll(ref Emgu.CV.Structure.Range range);
 
         #region Clustering
         /// <summary>

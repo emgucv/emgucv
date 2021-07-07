@@ -107,7 +107,7 @@ namespace Emgu.CV.Cuda
    {
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveCudaFeature2dAsyncDetectAsync(
+      internal static extern void cveCudaFeature2dAsyncDetectAsync(
          IntPtr feature2d,
          IntPtr image,
          IntPtr keypoints,
@@ -115,7 +115,7 @@ namespace Emgu.CV.Cuda
          IntPtr stream);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveCudaFeature2dAsyncComputeAsync(
+      internal static extern void cveCudaFeature2dAsyncComputeAsync(
          IntPtr feature2d,
          IntPtr image,
          IntPtr keypoints,
@@ -123,7 +123,7 @@ namespace Emgu.CV.Cuda
          IntPtr stream);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveCudaFeature2dAsyncDetectAndComputeAsync(
+      internal static extern void cveCudaFeature2dAsyncDetectAndComputeAsync(
          IntPtr feature2d,
          IntPtr image,
          IntPtr mask,
@@ -134,7 +134,7 @@ namespace Emgu.CV.Cuda
          IntPtr stream);
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void cveCudaFeature2dAsyncConvert(
+      internal static extern void cveCudaFeature2dAsyncConvert(
          IntPtr feature2d,
          IntPtr gpuKeypoints,
          IntPtr keypoints);

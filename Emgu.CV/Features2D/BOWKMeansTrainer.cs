@@ -81,18 +81,18 @@ namespace Emgu.CV.Features2D
     public static partial class Features2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveBOWKMeansTrainerCreate(int clusterCount, ref MCvTermCriteria termcrit, int attempts, CvEnum.KMeansInitType flags);
+        internal static extern IntPtr cveBOWKMeansTrainerCreate(int clusterCount, ref MCvTermCriteria termcrit, int attempts, CvEnum.KMeansInitType flags);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveBOWKMeansTrainerRelease(ref IntPtr trainer);
+        internal static extern void cveBOWKMeansTrainerRelease(ref IntPtr trainer);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static int cveBOWKMeansTrainerGetDescriptorCount(IntPtr trainer);
+        internal static extern int cveBOWKMeansTrainerGetDescriptorCount(IntPtr trainer);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveBOWKMeansTrainerAdd(IntPtr trainer, IntPtr descriptors);
+        internal static extern void cveBOWKMeansTrainerAdd(IntPtr trainer, IntPtr descriptors);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveBOWKMeansTrainerCluster(IntPtr trainer, IntPtr cluster);
+        internal static extern void cveBOWKMeansTrainerCluster(IntPtr trainer, IntPtr cluster);
     }
 }

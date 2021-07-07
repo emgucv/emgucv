@@ -263,30 +263,30 @@ namespace Emgu.CV
    public static partial class CvInvoke
    {
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void eulerToQuaternions(double x, double y, double z, ref Quaternions q);
+      internal static extern void eulerToQuaternions(double x, double y, double z, ref Quaternions q);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void quaternionsToEuler(ref Quaternions q, ref double x, ref double y, ref double z);
+      internal static extern void quaternionsToEuler(ref Quaternions q, ref double x, ref double y, ref double z);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void axisAngleToQuaternions(ref MCvPoint3D64f axisAngle, ref Quaternions q);
+      internal static extern void axisAngleToQuaternions(ref MCvPoint3D64f axisAngle, ref Quaternions q);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void quaternionsToAxisAngle(ref Quaternions q, ref MCvPoint3D64f axisAngle);
+      internal static extern void quaternionsToAxisAngle(ref Quaternions q, ref MCvPoint3D64f axisAngle);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void quaternionsToRotationMatrix(ref Quaternions quaternions, IntPtr rotation);
+      internal static extern void quaternionsToRotationMatrix(ref Quaternions quaternions, IntPtr rotation);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void quaternionsRotatePoint(ref Quaternions quaternions, ref MCvPoint3D64f point, ref MCvPoint3D64f pointDst);
+      internal static extern void quaternionsRotatePoint(ref Quaternions quaternions, ref MCvPoint3D64f point, ref MCvPoint3D64f pointDst);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void quaternionsRotatePoints(ref Quaternions quaternions, IntPtr pointSrc, IntPtr pointDst);
+      internal static extern void quaternionsRotatePoints(ref Quaternions quaternions, IntPtr pointSrc, IntPtr pointDst);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void quaternionsMultiply(ref Quaternions quaternions1, ref Quaternions quaternions2, ref Quaternions quaternionsDst);
+      internal static extern void quaternionsMultiply(ref Quaternions quaternions1, ref Quaternions quaternions2, ref Quaternions quaternionsDst);
 
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal extern static void quaternionsSlerp(ref Quaternions qa, ref Quaternions qb, double t, ref Quaternions qm);
+      internal static extern void quaternionsSlerp(ref Quaternions qa, ref Quaternions qb, double t, ref Quaternions qm);
    }
 }

@@ -72,7 +72,7 @@ namespace Emgu.CV.Features2D
     public static partial class Features2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveMserCreate(
+        internal static extern IntPtr cveMserCreate(
            int delta,
            int minArea,
            int maxArea,
@@ -86,10 +86,10 @@ namespace Emgu.CV.Features2D
            ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMserRelease(ref IntPtr sharedPtr);
+        internal static extern void cveMserRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveMserDetectRegions(
+        internal static extern void cveMserDetectRegions(
             IntPtr mser,
             IntPtr image,
             IntPtr msers,

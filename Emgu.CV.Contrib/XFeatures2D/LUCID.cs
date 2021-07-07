@@ -50,9 +50,9 @@ namespace Emgu.CV.XFeatures2D
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveLUCIDCreate(int lucidKernel, int blurKernel, ref IntPtr feature2D, ref IntPtr sharedPtr);
+        internal static extern IntPtr cveLUCIDCreate(int lucidKernel, int blurKernel, ref IntPtr feature2D, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveLUCIDRelease(ref IntPtr sharedPtr);
+        internal static extern void cveLUCIDRelease(ref IntPtr sharedPtr);
     }
 }

@@ -207,10 +207,10 @@ namespace Emgu.CV.Cuda
     public static partial class CudaInvoke
     {
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cudaDeviceInfoCreate(ref int deviceId);
+        internal static extern IntPtr cudaDeviceInfoCreate(ref int deviceId);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cudaDeviceInfoRelease(ref IntPtr di);
+        internal static extern void cudaDeviceInfoRelease(ref IntPtr di);
 
         /// <summary>
         /// Get the compute capability of the device

@@ -157,7 +157,7 @@ namespace Emgu.CV.Cuda
 
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cudaNvidiaOpticalFlow_1_0_UpSampler(
+        internal static extern void cudaNvidiaOpticalFlow_1_0_UpSampler(
             IntPtr nFlow,
             IntPtr flow,
             ref Size imageSize,
@@ -165,7 +165,7 @@ namespace Emgu.CV.Cuda
             IntPtr upsampledFlow);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cudaNvidiaOpticalFlow_1_0_Release(ref IntPtr flow);
+        internal static extern void cudaNvidiaOpticalFlow_1_0_Release(ref IntPtr flow);
 
     }
 }

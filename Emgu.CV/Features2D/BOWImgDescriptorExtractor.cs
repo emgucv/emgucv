@@ -67,15 +67,15 @@ namespace Emgu.CV.Features2D
    public static partial class Features2DInvoke
    {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static IntPtr cveBOWImgDescriptorExtractorCreate(IntPtr descriptorExtractor, IntPtr descriptorMatcher);
+        internal static extern IntPtr cveBOWImgDescriptorExtractorCreate(IntPtr descriptorExtractor, IntPtr descriptorMatcher);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveBOWImgDescriptorExtractorRelease(ref IntPtr descriptorExtractor);
+        internal static extern void cveBOWImgDescriptorExtractorRelease(ref IntPtr descriptorExtractor);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveBOWImgDescriptorExtractorCompute(IntPtr bowImgDescriptorExtractor, IntPtr image, IntPtr keypoints, IntPtr imgDescriptor);
+        internal static extern void cveBOWImgDescriptorExtractorCompute(IntPtr bowImgDescriptorExtractor, IntPtr image, IntPtr keypoints, IntPtr imgDescriptor);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal extern static void cveBOWImgDescriptorExtractorSetVocabulary(IntPtr bowImgDescriptorExtractor, IntPtr vocabulary);
+        internal static extern void cveBOWImgDescriptorExtractorSetVocabulary(IntPtr bowImgDescriptorExtractor, IntPtr vocabulary);
     }
 }
