@@ -2775,6 +2775,32 @@ ENDIF()
 
 ############################### stereo code gen END ##############################
 
+############################### stereo code gen START ##############################
+IF (NOT HAVE_opencv_tracking)
+  SET(HAVE_opencv_tracking FALSE)
+ENDIF()
+  CREATE_OCV_CLASS_PROPERTY( 
+    "tracking/TrackerDaSiamRPN_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Tracking/TrackerDaSiamRPN.g.cs"
+    "cv::TrackerDaSiamRPN" 
+    "TrackerDaSiamRPN" 
+    "TrackingScore" 
+    "float" 
+    "propR"
+    "TrackingScore" 
+    "float"
+    "Tracking score"
+    "Emgu.CV"
+    "TrackingInvoke"
+    "TrackerDaSiamRPN"
+	""
+	"#include \"tracking_c.h\""
+	""
+	""
+	${HAVE_opencv_stereo})
+
+############################### stereo code gen END ##############################
+
 ############################### OPENMP START ##############################
 IF(WITH_OPENMP)
   FIND_PACKAGE( OpenMP REQUIRED)

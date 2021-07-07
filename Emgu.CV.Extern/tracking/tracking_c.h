@@ -88,6 +88,16 @@ CVAPI(cv::TrackerCSRT*) cveTrackerCSRTCreate(
 	cv::Ptr<cv::TrackerCSRT>** sharedPtr);
 CVAPI(void) cveTrackerCSRTRelease(cv::TrackerCSRT** tracker, cv::Ptr<cv::TrackerCSRT>** sharedPtr);
 
+CVAPI(cv::TrackerDaSiamRPN*) cveTrackerDaSiamRPNCreate(
+	cv::String* model,
+	cv::String* kernel_cls1,
+	cv::String* kernel_r1,
+	int backend,
+	int target,
+	cv::Tracker** tracker,
+	cv::Ptr<cv::TrackerDaSiamRPN>** sharedPtr);
+CVAPI(void) cveTrackerDaSiamRPNRelease(cv::TrackerDaSiamRPN** tracker, cv::Ptr<cv::TrackerDaSiamRPN>** sharedPtr);
+
 CVAPI(bool) cveLegacyTrackerInit(cv::legacy::Tracker* tracker, cv::Mat* image, CvRect* boundingBox);
 CVAPI(bool) cveLegacyTrackerUpdate(cv::legacy::Tracker* tracker, cv::Mat* image, CvRect* boundingBox);
 
