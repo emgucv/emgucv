@@ -40,5 +40,6 @@
 	<Compile Include="$(MSBuildThisFileDirectory)Hdf\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)DepthAI\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)WechatQrcode\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Barcode\*.cs" />
   </ItemGroup>
 </Project>
