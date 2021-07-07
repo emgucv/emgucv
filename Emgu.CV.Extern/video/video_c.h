@@ -18,6 +18,7 @@ namespace cv {
 	class Tracker {};
 	class TrackerMIL {};
 	class TrackerGOTURN {};
+	class TrackerDaSiamRPN {};
 	class BackgroundSubtractorMOG2 {};
 	class BackgroundSubtractor {};
 	class BackgroundSubtractorKNN {};
@@ -138,5 +139,15 @@ CVAPI(void) cveTrackerMILRelease(cv::TrackerMIL** tracker, cv::Ptr<cv::TrackerMI
 
 CVAPI(cv::TrackerGOTURN*) cveTrackerGOTURNCreate(cv::Tracker** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr);
 CVAPI(void) cveTrackerGOTURNRelease(cv::TrackerGOTURN** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr);
+
+CVAPI(cv::TrackerDaSiamRPN*) cveTrackerDaSiamRPNCreate(
+	cv::String* model,
+	cv::String* kernel_cls1,
+	cv::String* kernel_r1,
+	int backend,
+	int target,
+	cv::Tracker** tracker,
+	cv::Ptr< cv::TrackerDaSiamRPN >** sharedPtr);
+CVAPI(void) cveTrackerDaSiamRPNRelease(cv::TrackerDaSiamRPN** tracker, cv::Ptr< cv::TrackerDaSiamRPN >** sharedPtr);
 
 #endif

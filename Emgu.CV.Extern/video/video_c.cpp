@@ -452,3 +452,41 @@ void cveTrackerGOTURNRelease(cv::TrackerGOTURN** tracker, cv::Ptr<cv::TrackerGOT
 	throw_no_video();
 #endif
 }
+
+cv::TrackerDaSiamRPN* cveTrackerDaSiamRPNCreate(
+	cv::String* model,
+	cv::String* kernel_cls1,
+	cv::String* kernel_r1,
+	int backend,
+	int target,
+	cv::Tracker** tracker,
+	cv::Ptr<cv::TrackerDaSiamRPN>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_VIDEO
+	cv::TrackerDaSiamRPN::Params p;
+	p.model = *model;
+	p.kernel_cls1 = *kernel_cls1;
+	p.kernel_r1 = *kernel_r1;
+	p.backend = backend;
+	p.target = target;
+
+	cv::Ptr<cv::TrackerDaSiamRPN> ptr = cv::TrackerDaSiamRPN::create(p);
+	*sharedPtr = new cv::Ptr<cv::TrackerDaSiamRPN>(ptr);
+	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
+	return ptr.get();
+#else
+	throw_no_video();
+#endif
+}
+
+
+void cveTrackerDaSiamRPNRelease(cv::TrackerDaSiamRPN** tracker, cv::Ptr<cv::TrackerDaSiamRPN>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_VIDEO
+	delete* sharedPtr;
+	*tracker = 0;
+	*sharedPtr = 0;
+#else
+	throw_no_video();
+#endif	
+}

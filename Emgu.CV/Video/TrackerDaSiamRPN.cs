@@ -40,7 +40,7 @@ namespace Emgu.CV
             using (CvString csModel = new CvString(model))
             using (CvString csKernelCls1 = new CvString(kernelCls1))
             using (CvString csKernelR1 = new CvString(kernelR1))
-                _ptr = TrackingInvoke.cveTrackerDaSiamRPNCreate(
+                _ptr = CvInvoke.cveTrackerDaSiamRPNCreate(
                     csModel,
                     csKernelCls1,
                     csKernelR1,
@@ -56,12 +56,12 @@ namespace Emgu.CV
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                TrackingInvoke.cveTrackerDaSiamRPNRelease(ref _ptr, ref _sharedPtr);
+                CvInvoke.cveTrackerDaSiamRPNRelease(ref _ptr, ref _sharedPtr);
             base.DisposeObject();
         }
     }
 
-    public static partial class TrackingInvoke
+    public static partial class CvInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveTrackerDaSiamRPNCreate(

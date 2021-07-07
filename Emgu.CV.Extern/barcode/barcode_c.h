@@ -19,6 +19,7 @@ namespace cv
 	namespace barcode
 	{
 		class BarcodeDetector {};
+		enum BarcodeType;
 	}
 }
 
