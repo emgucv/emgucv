@@ -147,6 +147,7 @@ CVAPI(cv::GMat*) cveGapiWarpAffine(
 	int borderMode,
 	CvScalar* borderValue);
 
+CVAPI(cv::GMat*) cveGapiTranspose(cv::GMat* src);
 
 CVAPI(cv::GComputation*) cveGComputationCreate1(cv::GMat* input, cv::GMat* output);
 CVAPI(cv::GComputation*) cveGComputationCreate2(cv::GMat* input, cv::GScalar* output);

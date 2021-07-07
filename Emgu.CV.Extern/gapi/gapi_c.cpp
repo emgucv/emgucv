@@ -743,6 +743,17 @@ cv::GMat* cveGapiWarpAffine(
 #endif
 }
 
+cv::GMat* cveGapiTranspose(cv::GMat* src)
+{
+#ifdef HAVE_OPENCV_GAPI
+	cv::GMat* result = new cv::GMat();
+	*result = cv::gapi::transpose(*src);
+	return result;
+#else
+	throw_no_gapi();
+#endif	
+}
+
 cv::GComputation* cveGComputationCreate1(cv::GMat* in, cv::GMat* out)
 {
 #ifdef HAVE_OPENCV_GAPI

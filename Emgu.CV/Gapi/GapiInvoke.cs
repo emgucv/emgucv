@@ -2129,6 +2129,19 @@ namespace Emgu.CV
             int flags,
             CvEnum.BorderType borderMode,
             ref MCvScalar borderValue);
+
+
+        /// <summary>
+        /// Transposes a matrix.
+        /// </summary>
+        /// <param name="src">Source matrix</param>
+        /// <returns>The transposed matrix.</returns>
+        public static GMat Transpose(GMat src)
+        {
+            return new GMat(cveGapiTranspose(src), true);
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private extern static IntPtr cveGapiTranspose(IntPtr src);
     }
 }
 
