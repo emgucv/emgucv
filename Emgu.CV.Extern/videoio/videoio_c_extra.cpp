@@ -264,7 +264,7 @@ double cveVideoWriterGet(cv::VideoWriter* writer, int propId)
 #endif
 }
 
-void cveVideoWriterWrite(cv::VideoWriter* writer, cv::Mat* image)
+void cveVideoWriterWrite(cv::VideoWriter* writer, cv::_InputArray* image)
 {
 #ifdef HAVE_OPENCV_VIDEOIO
 	writer->write(*image);

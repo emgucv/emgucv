@@ -114,9 +114,10 @@ namespace Emgu.CV
         /// Write a single frame to the video writer
         /// </summary>
         /// <param name="frame">The frame to be written to the video writer</param>
-        public void Write(Mat frame)
+        public void Write(IInputArray frame)
         {
-            CvInvoke.cveVideoWriterWrite(_ptr, frame);
+            using (InputArray iaFrame = frame.GetInputArray())
+                CvInvoke.cveVideoWriterWrite(_ptr, iaFrame);
         }
 
         /// <summary>
@@ -209,7 +210,12 @@ namespace Emgu.CV
             /// <summary>
             /// (**open-only**) Hardware device index (select GPU if multiple available)
             /// </summary>
-            HwDevice = 7, 
+            HwDevice = 7,
+
+            /// <summary>
+            /// (**open-only**) If non-zero, create new OpenCL context and bind it to current thread. The OpenCL context created with Video Acceleration context attached it (if not attached yet) for optimized GPU data copy between cv::UMat and HW accelerated encoder.
+            /// </summary>
+            HwAccelerationUseOpencl = 8, 
         }
     }
 

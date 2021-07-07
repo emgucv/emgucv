@@ -235,7 +235,11 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// (**open-only**) Hardware device index (select GPU if multiple available)
         /// </summary>
-        HwDevice = 51, 
+        HwDevice = 51,
+        /// <summary>
+        /// (**open-only**) If non-zero, create new OpenCL context and bind it to current thread. The OpenCL context created with Video Acceleration context attached it (if not attached yet) for optimized GPU data copy between HW accelerated decoder and cv::UMat.
+        /// </summary>
+        HwAccelerationUseOpencl = 52, 
 
         /// <summary>
         /// property for highgui class CvCapture_Android only

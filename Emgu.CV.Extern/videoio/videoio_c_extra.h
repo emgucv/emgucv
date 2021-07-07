@@ -96,7 +96,7 @@ CVAPI(bool) cveVideoWriterIsOpened(cv::VideoWriter* writer);
 CVAPI(bool) cveVideoWriterSet(cv::VideoWriter* writer, int propId, double value);
 CVAPI(double) cveVideoWriterGet(cv::VideoWriter* writer, int propId);
 CVAPI(void) cveVideoWriterRelease(cv::VideoWriter** writer);
-CVAPI(void) cveVideoWriterWrite(cv::VideoWriter* writer, cv::Mat* image);
+CVAPI(void) cveVideoWriterWrite(cv::VideoWriter* writer, cv::_InputArray* image);
 CVAPI(int) cveVideoWriterFourcc(char c1, char c2, char c3, char c4);
 
 CVAPI(void) cveGetBackendName(int api, cv::String* name);
