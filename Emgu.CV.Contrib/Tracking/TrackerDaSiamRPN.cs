@@ -18,7 +18,7 @@ namespace Emgu.CV
     /// <summary>
     /// TrackerDaSiamRPN
     /// </summary>
-    public class TrackerDaSiamRPN : Tracker
+    public partial class TrackerDaSiamRPN : Tracker
     {
         private IntPtr _sharedPtr;
 
