@@ -9,9 +9,30 @@
 #define EMGU_PHOTO_C_H
 
 #include "opencv2/core/core_c.h"
+#ifdef HAVE_OPENCV_PHOTO
 #include "opencv2/photo/photo.hpp"
-
 #include "opencv2/photo/cuda.hpp"
+#else
+static inline CV_NORETURN void throw_no_photo() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without photo support"); }
+
+namespace cv
+{
+	class CalibrateCRF {};
+	class CalibrateDebevec {};
+	class CalibrateRobertson {};
+	class MergeExposures {};
+	class MergeDebevec {};
+	class MergeMertens {};
+	class MergeRobertson {};
+	class Tonemap {};
+	class TonemapDrago {};
+	class TonemapReinhard {};
+	class TonemapMantiuk {};
+	class AlignExposures {};
+	class AlignMTB {};
+}
+
+#endif
 
 CVAPI(void) cveInpaint( cv::_InputArray* src, cv::_InputArray* inpaintMask, cv::_OutputArray* dst, double inpaintRadius, int flags );
 
