@@ -2142,6 +2142,20 @@ namespace Emgu.CV
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private extern static IntPtr cveGapiTranspose(IntPtr src);
+
+        /// <summary>
+        /// Computes disparity/depth map for the specified stereo-pair. The function computes disparity or depth map depending on passed StereoOutputFormat argument.
+        /// </summary>
+        /// <param name="left">8-bit single-channel left image of CV_8UC1 type.</param>
+        /// <param name="right">8-bit single-channel right image of CV_8UC1 type.</param>
+        /// <param name="of">enum to specified output kind: depth or disparity and corresponding type</param>
+        /// <returns>disparity/depth map for the specified stereo-pair</returns>
+        public static GMat Stereo(GMat left, GMat right, StereoOutputFormat of)
+        {
+            return new GMat(cveGapiStereo(left, right, of), true);
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private extern static IntPtr cveGapiStereo(IntPtr left, IntPtr right, StereoOutputFormat of);
     }
 }
 

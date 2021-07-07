@@ -1454,3 +1454,15 @@ cv::GMat* cveGapiRGB2YUV422(cv::GMat* src)
 	throw_no_gapi();
 #endif
 }
+
+
+cv::GMat* cveGapiStereo(cv::GMat* left, cv::GMat* right, int of)
+{
+#ifdef HAVE_OPENCV_GAPI
+	cv::GMat* result = new cv::GMat();
+	*result = cv::gapi::stereo(*left, *right, static_cast<cv::gapi::StereoOutputFormat>(of));
+	return result;
+#else
+	throw_no_gapi();
+#endif	
+}

@@ -14,6 +14,7 @@
 #include "opencv2/gapi.hpp"
 #include "opencv2/gapi/core.hpp"
 #include "opencv2/gapi/imgproc.hpp"
+#include "opencv2/gapi/stereo.hpp"
 #else
 static inline CV_NORETURN void throw_no_gapi() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without gapi support"); }
 namespace cv {
@@ -305,4 +306,6 @@ CVAPI(cv::GMat*) cveGapiBayerGR2RGB(cv::GMat* srcGR);
 CVAPI(cv::GMat*) cveGapiRGB2HSV(cv::GMat* src);
 CVAPI(cv::GMat*) cveGapiRGB2YUV422(cv::GMat* src);
 
+
+CVAPI(cv::GMat*) cveGapiStereo(cv::GMat* left, cv::GMat* right, int of);
 #endif
