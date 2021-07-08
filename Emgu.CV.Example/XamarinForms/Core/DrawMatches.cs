@@ -16,7 +16,16 @@ namespace FeatureMatchingExample
 {
     public static class DrawMatches
     {
-        public static void FindMatch(Mat modelImage, Mat observedImage, out long matchTime, out VectorOfKeyPoint modelKeyPoints, out VectorOfKeyPoint observedKeyPoints, VectorOfVectorOfDMatch matches, out Mat mask, out Mat homography)
+        public static void FindMatch(
+            Mat modelImage, 
+            Mat observedImage, 
+            Feature2D featureDetectorExtractor,
+            out long matchTime, 
+            out VectorOfKeyPoint modelKeyPoints, 
+            out VectorOfKeyPoint observedKeyPoints, 
+            VectorOfVectorOfDMatch matches, 
+            out Mat mask, 
+            out Mat homography)
         {
             int k = 2;
             double uniquenessThreshold = 0.80;
@@ -30,17 +39,16 @@ namespace FeatureMatchingExample
             using (UMat uModelImage = modelImage.GetUMat(AccessType.Read))
             using (UMat uObservedImage = observedImage.GetUMat(AccessType.Read))
             {
-                KAZE featureDetector = new KAZE();
 
                 //extract features from the object image
                 Mat modelDescriptors = new Mat();
-                featureDetector.DetectAndCompute(uModelImage, null, modelKeyPoints, modelDescriptors, false);
+                featureDetectorExtractor.DetectAndCompute(uModelImage, null, modelKeyPoints, modelDescriptors, false);
 
                 watch = Stopwatch.StartNew();
 
                 // extract features from the observed image
                 Mat observedDescriptors = new Mat();
-                featureDetector.DetectAndCompute(uObservedImage, null, observedKeyPoints, observedDescriptors, false);
+                featureDetectorExtractor.DetectAndCompute(uObservedImage, null, observedKeyPoints, observedDescriptors, false);
 
                 // Bruteforce, slower but more accurate
                 // You can use KDTree for faster matching with slight loss in accuracy
@@ -78,7 +86,7 @@ namespace FeatureMatchingExample
         /// <param name="observedImage">The observed image</param>
         /// <param name="matchTime">The output total time for computing the homography matrix.</param>
         /// <returns>The model image and observed image, the matched features and homography projection.</returns>
-        public static Mat Draw(Mat modelImage, Mat observedImage, out long matchTime)
+        public static Mat Draw(Mat modelImage, Mat observedImage, Feature2D featureDetectorExtrator, out long matchTime)
         {
             Mat homography;
             VectorOfKeyPoint modelKeyPoints;
@@ -86,7 +94,7 @@ namespace FeatureMatchingExample
             using (VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch())
             {
                 Mat mask;
-                FindMatch(modelImage, observedImage, out matchTime, out modelKeyPoints, out observedKeyPoints, matches,
+                FindMatch(modelImage, observedImage, featureDetectorExtrator, out matchTime, out modelKeyPoints, out observedKeyPoints, matches,
                    out mask, out homography);
 
                 //Draw the matched keypoints

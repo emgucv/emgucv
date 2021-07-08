@@ -21,6 +21,7 @@ using Android.Preferences;
 
 using Emgu.CV;
 using Emgu.CV.CvEnum;
+using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.Util;
 using FeatureMatchingExample;
@@ -36,6 +37,11 @@ namespace Emgu.CV.XamarinForms
             button.Text = "Perform Feature Matching";
             button.Clicked += OnButtonClicked;
 
+            var p = this.Picker;
+            p.Title = "Feature2D type";
+            p.IsVisible = true;
+            p.Items.Add("KAZE");
+            p.Items.Add("SIFT");
         }
 
         private async void OnButtonClicked(Object sender, EventArgs args)
@@ -49,7 +55,19 @@ namespace Emgu.CV.XamarinForms
                 () =>
                 {
                     long time;
-                    Mat matchResult = DrawMatches.Draw(images[0], images[1], out time);
+                    Emgu.CV.Features2D.Feature2D featureDetectorExtrator;
+                    String pickedFeature2D = this.Picker.SelectedItem.ToString();
+                    if (pickedFeature2D.Equals("SIFT"))
+                    {
+                        featureDetectorExtrator = new SIFT();
+                    }
+                    else
+                    {
+                        featureDetectorExtrator = new KAZE();
+                    }
+
+                    Mat matchResult = DrawMatches.Draw(images[0], images[1], featureDetectorExtrator, out time);
+                    featureDetectorExtrator.Dispose();
                     return new Tuple<Mat, long>(matchResult, time);
                 });
             t.Start();
