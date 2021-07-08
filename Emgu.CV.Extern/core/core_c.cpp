@@ -498,7 +498,7 @@ void cvePerspectiveTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_I
 
 void cveMulTransposed(cv::_InputArray* src, cv::_OutputArray* dst, bool aTa, cv::_InputArray* delta, double scale, int dtype)
 {
-	cv::mulTransposed(*src, *dst, aTa, delta ? *delta : static_cast<cv::InputArray>(cv::noArray()), dtype);
+	cv::mulTransposed(*src, *dst, aTa, delta ? *delta : static_cast<cv::InputArray>(cv::noArray()), scale, dtype);
 }
 
 void cveSplit(cv::_InputArray* src, cv::_OutputArray* mv)
