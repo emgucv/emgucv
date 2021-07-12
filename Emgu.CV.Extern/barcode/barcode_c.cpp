@@ -45,11 +45,16 @@ bool cveBarcodeDetectorDecode(
 	cv::barcode::BarcodeDetector* detector,
 	cv::_InputArray* img,
 	cv::_InputArray* points,
-	std::vector< cv::String >* decoded_info,
-	std::vector< cv::barcode::BarcodeType >* decoded_type)
+	std::vector< cv::String >* decodedInfo,
+	std::vector< int >* decodedType)
 {
 #ifdef HAVE_OPENCV_BARCODE
-	return detector->decode(*img, *points, *decoded_info, *decoded_type);
+	std::vector< cv::barcode::BarcodeType > decodedTypeVec;
+	bool result = detector->decode(*img, *points, *decodedInfo, decodedTypeVec);
+	decodedType->clear();
+	for (std::vector< cv::barcode::BarcodeType >::iterator it = decodedTypeVec.begin(); it != decodedTypeVec.end(); ++it)
+		decodedType->push_back(static_cast<int>(*it));
+	return result;
 #else
 	throw_no_barcode();
 #endif
@@ -58,12 +63,16 @@ bool cveBarcodeDetectorDecode(
 bool cveBarcodeDetectorDetectAndDecode(
 	cv::barcode::BarcodeDetector* detector,
 	cv::_InputArray* img,
-	std::vector< cv::String >* decoded_info,
-	std::vector< cv::barcode::BarcodeType >* decoded_type,
+	std::vector< cv::String >* decodedInfo,
+	std::vector< int >* decodedType,
 	cv::_OutputArray* points)
 {
 #ifdef HAVE_OPENCV_BARCODE
-	return detector->detectAndDecode(*img, *decoded_info, *decoded_type, points ? *points : static_cast<cv::OutputArray>(cv::noArray()));
+	std::vector< cv::barcode::BarcodeType > decodedTypeVec;
+	bool result = detector->detectAndDecode(*img, *decodedInfo, decodedTypeVec, points ? *points : static_cast<cv::OutputArray>(cv::noArray()));
+	for (std::vector< cv::barcode::BarcodeType >::iterator it = decodedTypeVec.begin(); it != decodedTypeVec.end(); ++it)
+		decodedType->push_back(static_cast<int>(*it));
+	return result;
 #else
 	throw_no_barcode();
 #endif

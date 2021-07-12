@@ -19,7 +19,7 @@ namespace cv
 	namespace barcode
 	{
 		class BarcodeDetector {};
-		enum BarcodeType;
+		//enum BarcodeType;
 	}
 }
 
@@ -42,13 +42,13 @@ CVAPI(bool) cveBarcodeDetectorDecode(
 	cv::_InputArray* img, 
 	cv::_InputArray* points, 
 	std::vector< cv::String >* decoded_info,
-    std::vector< cv::barcode::BarcodeType >* decoded_type);
+    std::vector< int >* decoded_type);
 
 CVAPI(bool) cveBarcodeDetectorDetectAndDecode(
 	cv::barcode::BarcodeDetector* detector, 
 	cv::_InputArray* img, 
 	std::vector< cv::String >* decoded_info, 
-    std::vector< cv::barcode::BarcodeType >* decoded_type, 
+    std::vector< int >* decoded_type, 
 	cv::_OutputArray* points);
 
 #endif
