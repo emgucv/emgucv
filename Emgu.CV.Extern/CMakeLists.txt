@@ -3632,9 +3632,9 @@ IF(EMGU_CV_WITH_TESSERACT AND TESSERACT_OPENCL)
   target_link_libraries(${the_target} OpenCL)
 ENDIF()
 
-IF(WITH_INF_ENGINE)
-  target_link_libraries(${the_target} inference_engine)
-ENDIF()
+#IF(WITH_INF_ENGINE)
+#  target_link_libraries(${the_target} inference_engine)
+#ENDIF()
 
 #message(STATUS "EMGU_CV_WITH_FREETYPE: ${EMGU_CV_WITH_FREETYPE}")
 IF (TARGET opencv_freetype)
