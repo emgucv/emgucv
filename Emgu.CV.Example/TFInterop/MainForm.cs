@@ -140,13 +140,13 @@ namespace TFInterop
             {
                 //First run of the recognition graph, here we will compile the graph and initialize the session
                 //This is expected to take much longer time than consecutive runs.
-                results = _inceptionGraph.Recognize(_imageTensor);
+                results = _inceptionGraph.Recognize(_imageTensor)[0];
                 _coldSession = false;
             }
 
             //Here we are trying to time the execution of the graph after it is loaded
             Stopwatch sw = Stopwatch.StartNew();
-            results = _inceptionGraph.Recognize(_imageTensor);
+            results = _inceptionGraph.Recognize(_imageTensor)[0];
             sw.Stop();
             int goodResultCount = 0;
             foreach (var r in results)
