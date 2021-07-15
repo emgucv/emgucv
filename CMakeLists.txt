@@ -39,8 +39,15 @@ ENDIF()
 
 PROJECT(emgucv)
 CMAKE_MINIMUM_REQUIRED(VERSION 3.16)
-cmake_policy(SET CMP0022 NEW)
-cmake_policy(SET CMP0069 NEW)
+if(POLICY CMP0022)
+  #cmake_policy(SET CMP0022 NEW)
+  SET(CMAKE_POLICY_DEFAULT_CMP0022 NEW)
+endif()
+if(POLICY CMP0069)
+  #cmake_policy(SET CMP0069 NEW)
+  SET(CMAKE_POLICY_DEFAULT_CMP0069 NEW)
+endif()
+
 
 IF(EMGU_CV_WITH_DEPTHAI)
   # Always build depthai-core as a static library
