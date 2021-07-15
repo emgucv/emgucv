@@ -16,6 +16,7 @@ namespace Emgu.CV.Dnn
     /// <summary>
     /// This class allows to create and manipulate comprehensive artificial neural networks.
     /// </summary>
+    [DebuggerTypeProxy(typeof(Net.DebuggerProxy))]
     public partial class Net : UnmanagedObject
     {
         /// <summary>
@@ -209,7 +210,9 @@ namespace Emgu.CV.Dnn
         }
 
         /// <summary>
-        /// Returns overall time for inference and timings (in ticks) for layers. Indexes in returned vector correspond to layers ids. Some layers can be fused with others, in this case zero ticks count will be return for that skipped layers.
+        /// Returns overall time for inference and timings (in ticks) for layers.
+        /// Indexes in returned vector correspond to layers ids. Some layers can be fused with others, in this case zero ticks count will be return for that skipped layers.
+        /// Supported by DNN_BACKEND_OPENCV on DNN_TARGET_CPU only.
         /// </summary>
         /// <param name="timings">Vector for tick timings for all layers.</param>
         /// <returns>Overall ticks for model inference.</returns>
@@ -221,6 +224,24 @@ namespace Emgu.CV.Dnn
             {
                 using (VectorOfDouble vd = new VectorOfDouble())
                     return DnnInvoke.cveDnnNetGetPerfProfile(_ptr, vd);
+            }
+        }
+
+        internal class DebuggerProxy
+        {
+            private Net _net;
+
+            public DebuggerProxy(Net net)
+            {
+                _net = net;
+            }
+
+            public String Graph
+            {
+                get
+                {
+                    return _net.Dump();
+                }
             }
         }
     }
