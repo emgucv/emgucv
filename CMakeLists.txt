@@ -1541,7 +1541,6 @@ IF(HAVE_IOS AND WIN32)
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.IOS.dll\" target=\"lib\\Xamarin.iOS10\" />
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.IOS.XML\" target=\"lib\\Xamarin.iOS10\" />")
     SET(EMGUCV_IOS_NUGET_FILE_LIST "${EMGUCV_IOS_NUGET_FILE_LIST} 
-    <file src=\"Emgu.CV.runtime.ios.targets\" target=\"build\\${EMGUCV_IOS_NUGET_ID}.targets\" />
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
 	<file src=\"readme.txt\" target=\"\" />")
