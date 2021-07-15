@@ -35,6 +35,8 @@ namespace BuildInfo.NetCore.Console
             System.Console.WriteLine(GetRuntimeInfo() + System.Environment.NewLine);
 
             System.Console.WriteLine(GetParallelBackendInfo() + System.Environment.NewLine);
+
+            System.Console.WriteLine(GetDepthAIInfo() + System.Environment.NewLine);
         }
 
         private static String GetDnnInfo()
@@ -281,6 +283,23 @@ namespace BuildInfo.NetCore.Console
             parallelBackendStringBuilder.Append(String.Join(Environment.NewLine, availableParallelBackends));
 
             return parallelBackendStringBuilder.ToString();
+        }
+
+        private static String GetDepthAIInfo()
+        {
+            var openCVConfigDict = CvInvoke.ConfigDict;
+            bool haveDepthAI = (openCVConfigDict["HAVE_DEPTHAI"] != 0);
+            String depthAIText;
+            if (haveDepthAI)
+            {
+                depthAIText = "DepthAI module available.";
+            }
+            else
+            {
+                depthAIText = "DNN module not available.";
+            }
+
+            return depthAIText;
         }
     }
 }
