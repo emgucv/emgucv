@@ -3796,6 +3796,7 @@ ELSEIF (APPLE)
        # Intel Mac
        SET(LIBUSB_PATH /usr/local/opt/libusb/lib/libusb-1.0.0.dylib)
     ENDIF()
+    IF(EXISTS ${LIBUSB_PATH})
     add_custom_command(TARGET ${the_target}
       POST_BUILD
       COMMAND cp -f ${LIBUSB_PATH} ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${LIBUSB_FILE_NAME}
@@ -3808,19 +3809,16 @@ ELSEIF (APPLE)
       ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib
       DESTINATION "libs/macos/"
       COMPONENT emgucv_binary)
-#    add_custom_command(TARGET ${the_target}
-#      POST_BUILD
-#      COMMAND install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib 
-#      COMMENT "Altering dependency for ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib")
     add_custom_command(TARGET ${the_target}
       POST_BUILD
-      COMMAND install_name_tool -change /usr/local/opt/libusb/lib/libusb-1.0.0.dylib @rpath/libusb-1.0.0.dylib ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libcvextern.dylib 
+      COMMAND install_name_tool -change ${LIBUSB_PATH} @rpath/libusb-1.0.0.dylib ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libcvextern.dylib 
       COMMENT "Altering dependency for ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libcvextern.dylib")
     add_custom_command(TARGET ${the_target}
       POST_BUILD
       COMMAND install_name_tool -id "@rpath/libusb-1.0.0.dylib" ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib
       COMMAND chmod a+x ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib
       COMMENT "Altering id for ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib")
+    ENDIF()
   ENDIF()
 
   INSTALL(FILES

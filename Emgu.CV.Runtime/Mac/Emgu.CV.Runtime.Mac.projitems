@@ -19,7 +19,7 @@
   </PropertyGroup>
   <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)$(EmguCVMacNativeFile)')">
     <Content Include="$(MSBuildThisFileDirectory)$(EmguCVMacBinaryDir)\*.dylib">
-      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <Link>runtimes\osx\native\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

@@ -84,8 +84,12 @@ namespace Emgu.CV
                 List<String> subfolderOptions = new List<string>();
 
                 if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows 
-                    || Platform.OperationSystem == Emgu.Util.Platform.OS.Linux)
+                    || Platform.OperationSystem == Emgu.Util.Platform.OS.Linux
+                    || Platform.OperationSystem == Platform.OS.MacOS)
                 {
+                    if (Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS)
+                        subfolderOptions.Add(Path.Combine("runtimes", "osx", "native"));
+                    
                     //var fd = RuntimeInformation.FrameworkDescription;
                     if (RuntimeInformation.ProcessArchitecture == Architecture.X86)
                     {
@@ -348,8 +352,8 @@ namespace Emgu.CV
                         return libraryLoaded;
                     }
                 }
-            }
-            else if (Emgu.Util.Platform.OperationSystem != Emgu.Util.Platform.OS.MacOS)
+            } 
+            else //if (Emgu.Util.Platform.OperationSystem != Emgu.Util.Platform.OS.MacOS)
             {
                 String formatString = GetModuleFormatString();
                 for (int i = 0; i < modules.Length; ++i)
