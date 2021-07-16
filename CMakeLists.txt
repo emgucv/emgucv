@@ -40,8 +40,15 @@ ENDIF()
 
 PROJECT(emgucv)
 CMAKE_MINIMUM_REQUIRED(VERSION 3.16)
-cmake_policy(SET CMP0022 NEW)
-cmake_policy(SET CMP0069 NEW)
+if(POLICY CMP0022)
+  #cmake_policy(SET CMP0022 NEW)
+  SET(CMAKE_POLICY_DEFAULT_CMP0022 NEW)
+endif()
+if(POLICY CMP0069)
+  #cmake_policy(SET CMP0069 NEW)
+  SET(CMAKE_POLICY_DEFAULT_CMP0069 NEW)
+endif()
+
 
 IF(EMGU_CV_WITH_DEPTHAI)
   # Always build depthai-core as a static library
@@ -1516,8 +1523,7 @@ IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
   SET(EMGUCV_ANDROID_NUGET_FILE_LIST " 
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Android.dll\" target=\"lib\\MonoAndroid50\" />
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Android.xml\" target=\"lib\\MonoAndroid50\" />")
-    SET(EMGUCV_ANDROID_NUGET_FILE_LIST "${EMGUCV_ANDROID_NUGET_FILE_LIST} 
-    <file src=\"Emgu.CV.runtime.android.targets\" target=\"build\\${EMGUCV_ANDROID_NUGET_ID}.targets\" />
+    SET(EMGUCV_ANDROID_NUGET_FILE_LIST "${EMGUCV_ANDROID_NUGET_FILE_LIST}
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
     <file src=\"readme.txt\" target=\"\" />")
@@ -1531,12 +1537,11 @@ IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
 ENDIF()
 
 IF(HAVE_IOS AND WIN32)
-  SET(EMGUCV_IOS_NUGET_TITLE "Emgu CV for iOS")	
+  SET(EMGUCV_IOS_NUGET_TITLE "Emgu CV for iOS Native Runtime")	
   SET(EMGUCV_IOS_NUGET_FILE_LIST " 
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.IOS.dll\" target=\"lib\\Xamarin.iOS10\" />
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.IOS.XML\" target=\"lib\\Xamarin.iOS10\" />")
     SET(EMGUCV_IOS_NUGET_FILE_LIST "${EMGUCV_IOS_NUGET_FILE_LIST} 
-    <file src=\"Emgu.CV.runtime.ios.targets\" target=\"build\\${EMGUCV_IOS_NUGET_ID}.targets\" />
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
 	<file src=\"readme.txt\" target=\"\" />")
