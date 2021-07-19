@@ -113,8 +113,9 @@ namespace Emgu.CV.Example.Mac
             long matchTime;
             using (Mat modelImage = CvInvoke.Imread("box.png", ImreadModes.Grayscale))
             using (Mat observedImage = CvInvoke.Imread("box_in_scene.png", ImreadModes.Grayscale))
+            using (Features2D.Feature2D f = new Features2D.KAZE())
             {
-                Mat result = FeatureMatchingExample.DrawMatches.Draw(modelImage, observedImage, out matchTime);
+                Mat result = FeatureMatchingExample.DrawMatches.Draw(modelImage, observedImage, f, out matchTime);
                 //ImageViewer.Show(result, String.Format("Matched in {0} milliseconds", matchTime));
                 mainImageView.Image = result.ToNSImage();
             }
