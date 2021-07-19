@@ -136,8 +136,8 @@ cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.OCR/
 cp -r ../Emgu.CV.Models/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/Dnn
 cp -r ../Emgu.CV.Models/Dnn/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/Dnn
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/DepthAI
-cp -r ../Emgu.CV.Models/DepthAI/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/DepthAI
+#mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/DepthAI
+#cp -r ../Emgu.CV.Models/DepthAI/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/DepthAI
 
 
 cd Assets/Emgu.CV/Plugins/iOS

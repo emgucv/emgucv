@@ -13,6 +13,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Runtime.InteropServices;
+using Emgu.CV.Features2D;
 using Emgu.CV.Ocl;
 using UnityEngine.UI;
 
@@ -32,10 +33,13 @@ public class FeatureMatching : MonoBehaviour
         boxInSceneTexture.ToOutputArray(boxInScene, FlipType.Vertical, typeof(Gray));
         
         long time;
-        Mat img = FeatureMatchingExample.DrawMatches.Draw(box, boxInScene, out time);
+        Texture2D texture;
+        using (Emgu.CV.Features2D.Feature2D f2d = new KAZE())
+        using (Mat img = FeatureMatchingExample.DrawMatches.Draw(box, boxInScene, f2d, out time))
+        {
+            texture = img.ToTexture2D();
+        }
         
-        Texture2D texture = img.ToTexture2D();
-
         RenderTexture(texture);
         ResizeTexture(texture);
         

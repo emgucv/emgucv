@@ -71,7 +71,7 @@ cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DepthAI/*.cs ../Emgu.CV.Cont
 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/*.cs ../Emgu.CV.Models
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/Dnn/*.cs ../Emgu.CV.Models/Dnn
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/DepthAI/*.cs ../Emgu.CV.Models/DepthAI
+#cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/DepthAI/*.cs ../Emgu.CV.Models/DepthAI
 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.OCR/*.cs ../Emgu.CV.OCR 
 
