@@ -76,7 +76,8 @@ namespace DepthAI
             MobilenetSsd mobilenet = new MobilenetSsd();
 
             //This download the models and return the default configuration
-            Config config = await mobilenet.Init(onDownloadProgressChanged);
+            await mobilenet.Init(onDownloadProgressChanged);
+            Config config = mobilenet.ModelConfig;
             String[] labels = mobilenet.Labels;
 
             using (Emgu.CV.DepthAI.Device d = new Device(""))

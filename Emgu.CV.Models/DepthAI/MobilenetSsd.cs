@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net.Http;
@@ -14,6 +15,7 @@ using Emgu.CV.Dnn;
 using Emgu.Util;
 using System.IO;
 using System.Linq;
+using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -91,7 +93,11 @@ namespace Emgu.CV.Models.DepthAI
         /// </summary>
         /// <param name="onDownloadProgressChanged">Call back method during download</param>
         /// <returns>Asyn task</returns>
-        public async Task<Config> Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
+        public IEnumerator Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#else
+        public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+#endif
         {
             _blobFile = new DownloadableFile(
                 "https://github.com/emgucv/models/raw/master/DepthAI/mobilenet-ssd/mobilenet-ssd.blob.sh14cmx14NCE1",
@@ -115,13 +121,24 @@ namespace Emgu.CV.Models.DepthAI
             _manager.AddFile(_blobConfigFile);
             if (onDownloadProgressChanged != null)
                     _manager.OnDownloadProgressChanged += onDownloadProgressChanged;
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
+                yield return _manager.Download();
+#else
             await _manager.Download();
+#endif
 
-            if (!_manager.AllFilesDownloaded)
-                return null;
+        }
 
-            Config config = GetConfig(_blobFile.LocalFile, _blobConfigFile.LocalFile);
-            return config;
+        public Config ModelConfig
+        {
+            get
+            {
+                if (!_manager.AllFilesDownloaded)
+                    return null;
+
+                Config config = GetConfig(_blobFile.LocalFile, _blobConfigFile.LocalFile);
+                return config;
+            }
         }
 
         private static String[] ReadLabels(String blobConfigFile)
