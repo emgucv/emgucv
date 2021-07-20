@@ -36,9 +36,12 @@ jobs:
       with:
         name: emgucv-windows-zip-package
         path: ${{ github.workspace }}\build_x64\*.zip
-    - name: Run Unit Test
-      run: dotnet test --blame-crash
-      working-directory: ${{ github.workspace }}\Emgu.CV.Test\Emgu.CV.Test.Netcore\   
+    - name: Run a test program
+      run: dotnet run
+      working-directory: ${{ github.workspace }}\Emgu.CV.Example\BuildInfo.NetCore.Console\   
+    #- name: Run Unit Test
+    #  run: dotnet test --blame-crash
+    #  working-directory: ${{ github.workspace }}\Emgu.CV.Test\Emgu.CV.Test.Netcore\   
     #- name: Clean up the non-gpu build
     #  run: .\git-clean.bat 
     #  working-directory: ${{ github.workspace }}\miscellaneous
