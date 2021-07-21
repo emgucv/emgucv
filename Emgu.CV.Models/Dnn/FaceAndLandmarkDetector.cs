@@ -120,14 +120,6 @@ namespace Emgu.CV.Models
         /// <returns>The messages that we want to display.</returns>
         public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
-            if (imageOut != imageIn)
-            {
-                using (InputArray iaImageIn = imageIn.GetInputArray())
-                {
-                    iaImageIn.CopyTo(imageOut);
-                }
-            }
-
             Stopwatch watch = Stopwatch.StartNew();
 
             List<DetectedObject> fullFaceRegions = new List<DetectedObject>();

@@ -180,6 +180,9 @@ namespace Emgu.CV.XamarinForms
          if (_renderMat == null)
             _renderMat = new Mat ();
 
+         using (InputArray iaImage = _mat.GetInputArray())
+                iaImage.CopyTo(_renderMat);
+            
          String msg = _model.ProcessAndRender (_mat, _renderMat);
 
          SetImage (_renderMat);
@@ -187,7 +190,7 @@ namespace Emgu.CV.XamarinForms
       }
 #endif
 
-      private void Picker_SelectedIndexChanged(object sender, EventArgs e)
+        private void Picker_SelectedIndexChanged(object sender, EventArgs e)
         {
             _model.Clear();
         }
@@ -200,6 +203,11 @@ namespace Emgu.CV.XamarinForms
             
             if (_renderMat == null)
                 _renderMat = new Mat();
+
+            using (InputArray iaImage = _mat.GetInputArray())
+            {
+                iaImage.CopyTo(_renderMat);
+            }
 
             String msg = _model.ProcessAndRender(_mat, _renderMat);
             
@@ -266,6 +274,10 @@ namespace Emgu.CV.XamarinForms
                             {
                                 if (_renderMat == null)
                                     _renderMat = new Mat();
+                                using (InputArray iaImage = m.GetInputArray())
+                                {
+                                    iaImage.CopyTo(_renderMat);
+                                }
                                 message = _model.ProcessAndRender(m, _renderMat);
                             });
                             SetImage(_renderMat);
@@ -281,8 +293,8 @@ namespace Emgu.CV.XamarinForms
 #elif __IOS__
             CheckVideoPermissionAndStart ();
 #else
-            //Handle video
-            if (_capture == null)
+                //Handle video
+                if (_capture == null)
                 {
                     InitVideoCapture();
                 }
@@ -296,6 +308,10 @@ namespace Emgu.CV.XamarinForms
             {
                 if (_renderMat == null)
                     _renderMat = new Mat();
+                using (InputArray iaImage = images[0].GetInputArray())
+                {
+                    iaImage.CopyTo(_renderMat);
+                }
                 String message = _model.ProcessAndRender(images[0], _renderMat);
                 
                 SetImage(_renderMat);

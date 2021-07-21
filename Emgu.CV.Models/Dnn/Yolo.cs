@@ -256,13 +256,14 @@ namespace Emgu.CV.Models
             var detectedObjects = Detect(imageIn);
             watch.Stop();
 
+            /*
             if (imageOut != imageIn)
             {
                 using (InputArray iaImageIn = imageIn.GetInputArray())
                 {
                     iaImageIn.CopyTo(imageOut);
                 }
-            }
+            }*/
 
             foreach (var detected in detectedObjects)
                 detected.Render(imageOut, new MCvScalar(0, 0, 255));

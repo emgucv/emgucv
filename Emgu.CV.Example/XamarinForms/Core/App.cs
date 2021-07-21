@@ -72,8 +72,11 @@ namespace Emgu.CV.XamarinForms
             bool haveDNN = (openCVConfigDict["HAVE_OPENCV_DNN"] != 0);
             bool haveFreetype = (openCVConfigDict["HAVE_OPENCV_FREETYPE"] != 0);
             bool haveFace = (openCVConfigDict["HAVE_OPENCV_FACE"] != 0);
+            bool haveWechatQRCode = (openCVConfigDict["HAVE_OPENCV_WECHAT_QRCODE"] != 0);
+            bool haveBarcode = (openCVConfigDict["HAVE_OPENCV_BARCODE"] != 0);
             bool haveObjdetect = (openCVConfigDict["HAVE_OPENCV_OBJDETECT"] != 0);
             bool haveTesseract = (openCVConfigDict["HAVE_EMGUCV_TESSERACT"] != 0);
+            
 
             if (haveTesseract)
             {
@@ -126,6 +129,27 @@ namespace Emgu.CV.XamarinForms
                     MainPage.Navigation.PushAsync(faceLandmarkDetectionPage);
                 };
             }
+
+            if (haveWechatQRCode && haveBarcode)
+            {
+                Button barcodeQrcodeDetectionButton = new Button();
+                barcodeQrcodeDetectionButton.Text = "Barcode and QRCode Detection";
+                buttonList.Add(barcodeQrcodeDetectionButton);
+                barcodeQrcodeDetectionButton.Clicked += (sender, args) =>
+                {
+                    BarcodeDetectorModel barcodeDetector = new BarcodeDetectorModel();
+                    WeChatQRCodeDetector qrcodeDetector = new WeChatQRCodeDetector();
+                    CombinedModel combinedModel = new CombinedModel(barcodeDetector, qrcodeDetector);
+
+                    ProcessAndRenderPage barcodeQrcodeDetectionPage = new ProcessAndRenderPage(
+                        combinedModel,
+                        "Perform Barcode and QRCode Detection",
+                        "qrcode_barcode.png",
+                        "");
+                    MainPage.Navigation.PushAsync(barcodeQrcodeDetectionPage);
+                };
+            }
+
 
             bool hasInferenceEngine = false;
             if (haveDNN)

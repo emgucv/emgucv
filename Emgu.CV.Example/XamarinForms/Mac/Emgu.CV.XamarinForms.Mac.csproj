@@ -100,6 +100,10 @@
       <Link>box_in_scene.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+	<Content Include="..\Core\qrcode_barcode.png">
+      <Link>qrcode_barcode.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\Core\pedestrian.png">
       <Link>pedestrian.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -107,6 +107,9 @@
     <AndroidAsset Include="..\Core\box_in_scene.png">
       <Link>Assets\box_in_scene.png</Link>
     </AndroidAsset>
+	<AndroidAsset Include="..\Core\qrcode_barcode.png">
+      <Link>Assets\qrcode_barcode.png</Link>
+    </AndroidAsset>
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>

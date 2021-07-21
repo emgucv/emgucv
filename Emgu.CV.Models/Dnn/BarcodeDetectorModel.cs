@@ -23,16 +23,16 @@ using Emgu.Util;
 namespace Emgu.CV.Models
 {
     /// <summary>
-    /// WeChatQRCodeDetector model
+    /// BarcodeDetector model
     /// </summary>
-    public class WeChatQRCodeDetector : DisposableObject, IProcessAndRenderModel
+    public class BarcodeDetectorModel : DisposableObject, IProcessAndRenderModel
     {
         private String _modelFolderName = "wechat";
 
-        private WeChatQRCode _weChatQRCodeDetectionModel = null;
+        private BarcodeDetector _barcodeDetector = null;
 
         /// <summary>
-        /// Download and initialize the WeChatQRCode model
+        /// Download and initialize the BarcodeDetector model
         /// </summary>
         /// <param name="onDownloadProgressChanged">Call back method during download</param>
         /// <returns>Asyn task</returns>
@@ -44,18 +44,9 @@ namespace Emgu.CV.Models
             System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #endif
         {
-            if (_weChatQRCodeDetectionModel == null)
+            if (_barcodeDetector == null)
             {
                 FileDownloadManager manager = new FileDownloadManager();
-                manager.AddFile(
-                    "https://github.com/WeChatCV/opencv_3rdparty/raw/wechat_qrcode/detect.prototxt",
-                    _modelFolderName,
-                    "E8ACFC395CAF443A47F15686A9B9207B36CB8F7E6CEB8FBAF6466665E68A9466");
-
-                manager.AddFile(
-                        "https://github.com/WeChatCV/opencv_3rdparty/raw/wechat_qrcode/detect.caffemodel",
-                        _modelFolderName,
-                        "CC49B8C9BABAF45F3037610FE499DF38C8819EBDA29E90CA9F2E33270F6EF809");
 
                 manager.AddFile(
                     "https://github.com/WeChatCV/opencv_3rdparty/raw/wechat_qrcode/sr.prototxt",
@@ -78,11 +69,9 @@ namespace Emgu.CV.Models
 
                 if (manager.AllFilesDownloaded)
                 {
-                    _weChatQRCodeDetectionModel = new WeChatQRCode(
+                    _barcodeDetector = new BarcodeDetector(
                         manager.Files[0].LocalFile, 
-                        manager.Files[1].LocalFile,
-                        manager.Files[2].LocalFile,
-                        manager.Files[3].LocalFile
+                        manager.Files[1].LocalFile
                         );
                 }
             }
@@ -93,10 +82,10 @@ namespace Emgu.CV.Models
         /// </summary>
         public void Clear()
         {
-            if (_weChatQRCodeDetectionModel != null)
+            if (_barcodeDetector != null)
             {
-                _weChatQRCodeDetectionModel.Dispose();
-                _weChatQRCodeDetectionModel = null;
+                _barcodeDetector.Dispose();
+                _barcodeDetector = null;
             }
         }
 
@@ -129,7 +118,14 @@ namespace Emgu.CV.Models
 #endif
         }
 
-
+        private static Point[] MatToPoints(Mat m)
+        {
+            PointF[] points = new PointF[ m.Width * m.Height / 2 ];
+            GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
+            Emgu.CV.Util.CvToolbox.Memcpy( handle.AddrOfPinnedObject(), m.DataPointer,points.Length * Marshal.SizeOf<PointF>());
+            handle.Free();
+            return Array.ConvertAll(points, Point.Round);
+        }
         
         /// <summary>
         /// Process the input image and render into the output image
@@ -139,35 +135,46 @@ namespace Emgu.CV.Models
         /// <returns>The messages that we want to display.</returns>
         public String ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
-            Stopwatch watch = Stopwatch.StartNew();
-            var qrCodesFound = _weChatQRCodeDetectionModel.DetectAndDecode(imageIn);
-            watch.Stop();
-            MCvScalar drawColor = new MCvScalar(0, 0, 255);
-            for (int i = 0; i < qrCodesFound.Length; i++)
+            using (VectorOfMat points = new VectorOfMat())
             {
-                using (VectorOfVectorOfPoint vpp = new VectorOfVectorOfPoint(new Point[][] { qrCodesFound[i].Region }))
+                Stopwatch watch = Stopwatch.StartNew();
+                var barcodesFound = _barcodeDetector.DetectAndDecode(imageIn);
+                watch.Stop();
+
+                MCvScalar drawColor = new MCvScalar(255,0,0);
+                for (int i = 0; i < barcodesFound.Length; i++)
                 {
-                    CvInvoke.DrawContours(imageOut, vpp, -1, drawColor);
+                    Point[] contour = Array.ConvertAll(barcodesFound[i].Points, Point.Round);
+
+                    using (VectorOfVectorOfPoint vpp = new VectorOfVectorOfPoint(new Point[][] { contour }))
+                    {
+                        CvInvoke.DrawContours(imageOut, vpp, -1, drawColor);
+                    }
+
+                    CvInvoke.PutText(
+                        imageOut, 
+                        barcodesFound[i].DecodedInfo, 
+                        Point.Round( barcodesFound[i].Points[0]),
+                        FontFace.HersheySimplex,
+                        1.0,
+                        drawColor
+                        );
                 }
-                CvInvoke.PutText(
-                    imageOut,
-                    qrCodesFound[i].Code,
-                    Point.Round(qrCodesFound[i].Region[0]),
-                    FontFace.HersheySimplex,
-                    1.0,
-                    drawColor
-                    );
-            }
 
-            if (qrCodesFound.Length == 0)
-            {
-                return String.Format("No QR codes found (in {0} milliseconds)", watch.ElapsedMilliseconds);
-            }
 
-            return String.Format(
-                "QR codes found (in {1} milliseconds): {0}",
-                String.Join(";", String.Format("\"{0}\"", Array.ConvertAll( qrCodesFound, v => v.Code))),
-                watch.ElapsedMilliseconds);
+                if (barcodesFound.Length == 0)
+                {
+                    return String.Format("No barcodes found (in {0} milliseconds)", watch.ElapsedMilliseconds);
+                } 
+
+                String[] barcodesTexts = Array.ConvertAll(barcodesFound,
+                    delegate(BarcodeDetector.Barcode input) { return input.DecodedInfo; });
+                String allBarcodeText = String.Join(";", barcodesTexts);
+                return String.Format(
+                    "Barcodes found (in {1} milliseconds): {0}", 
+                    allBarcodeText, 
+                    watch.ElapsedMilliseconds);
+            }
         }
     }
 }

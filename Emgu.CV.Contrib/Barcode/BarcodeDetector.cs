@@ -11,6 +11,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Drawing;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Emgu.CV
 {
@@ -81,6 +82,24 @@ namespace Emgu.CV
             }
         }
 
+        public class Barcode
+        {
+            /// <summary>
+            /// The number that the barcode represents
+            /// </summary>
+            public String DecodedInfo { get; set; }
+
+            /// <summary>
+            /// Barcode type
+            /// </summary>
+            public BarcodeType Type { get; set; }
+
+            /// <summary>
+            /// The barcode region
+            /// </summary>
+            public PointF[] Points { get; set; }
+        }
+
         /// <summary>
         /// Both detects and decodes barcode
         /// </summary>
@@ -103,6 +122,53 @@ namespace Emgu.CV
                     decodedInfo,
                     decodedType,
                     oaPoints);
+        }
+
+        /// <summary>
+        /// Both detects and decodes barcode
+        /// </summary>
+        /// <returns>The barcode found. If nothing is found, an empty array is returned.</returns>
+        public Barcode[] DetectAndDecode(IInputArray image)
+        {
+            using (VectorOfCvString decodedInfoVec = new VectorOfCvString())
+            using (VectorOfInt decodedTypeVec = new VectorOfInt())
+            //using (VectorOfMat pointsVec = new VectorOfMat())
+            //using (VectorOfPointF pointsVec = new VectorOfPointF())
+            using (Mat pointsVec = new Mat())
+            {
+                if (!DetectAndDecode(image, decodedInfoVec, decodedTypeVec, pointsVec))
+                    return new Barcode[0];
+                
+                PointF[] points = new PointF[4 * pointsVec.Rows];
+
+                if (points.Length > 0)
+                {
+                    GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
+                    CvInvoke.cveMemcpy(handle.AddrOfPinnedObject(), pointsVec.DataPointer,
+                        points.Length * Marshal.SizeOf<PointF>());
+                    handle.Free();
+                }
+
+
+                string[] decodedInfo = decodedInfoVec.ToArray();
+                int[] decodedType = decodedTypeVec.ToArray();
+                //Point[][] points = WeChatQRCode.VectorOfMatToPoints(pointsVec);
+                //points = pointsVec.ToArray();
+                Barcode[] barcodes = new Barcode[decodedInfo.Length];
+                for (int i = 0; i < barcodes.Length; i++)
+                {
+                    Barcode barcode = new Barcode();
+                    barcode.DecodedInfo = decodedInfo[i];
+                    barcode.Type = (BarcodeType)decodedType[i];
+                    PointF[] region = new PointF[4];
+                    Array.Copy(points, 4 * i, region, 0, 4);
+                    barcode.Points =  region ;
+
+                    barcodes[i] = barcode;
+                }
+
+                return barcodes;
+            }
         }
 
         /// <summary>

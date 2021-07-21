@@ -97,13 +97,14 @@ namespace Emgu.CV.Models
             String ocrResult = _ocr.GetUTF8Text();
             watch.Stop();
 
+            /*
             if (imageOut != imageIn)
             {
                 using (InputArray iaImageIn = imageIn.GetInputArray())
                 {
                     iaImageIn.CopyTo(imageOut);
                 }
-            }
+            }*/
 
             Tesseract.Character[] characters = _ocr.GetCharacters();
             foreach (Tesseract.Character c in characters)

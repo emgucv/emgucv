@@ -140,13 +140,14 @@ namespace Emgu.CV.Models
             Rectangle[] pedestrians = Find(imageIn);
             watch.Stop();
 
+            /*
             if (imageOut != imageIn)
             {
                 using (InputArray iaImageIn = imageIn.GetInputArray())
                 {
                     iaImageIn.CopyTo(imageOut);
                 }
-            }
+            }*/
 
             foreach (Rectangle rect in pedestrians)
             {

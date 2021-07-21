@@ -70,8 +70,11 @@ bool cveBarcodeDetectorDetectAndDecode(
 #ifdef HAVE_OPENCV_BARCODE
 	std::vector< cv::barcode::BarcodeType > decodedTypeVec;
 	bool result = detector->detectAndDecode(*img, *decodedInfo, decodedTypeVec, points ? *points : static_cast<cv::OutputArray>(cv::noArray()));
+
+	decodedType->clear();
 	for (std::vector< cv::barcode::BarcodeType >::iterator it = decodedTypeVec.begin(); it != decodedTypeVec.end(); ++it)
 		decodedType->push_back(static_cast<int>(*it));
+	
 	return result;
 #else
 	throw_no_barcode();

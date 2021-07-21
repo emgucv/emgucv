@@ -305,13 +305,7 @@ namespace Emgu.CV.Models
             Stopwatch watch = Stopwatch.StartNew();
             Vehicle[] detectionResult = Detect(imageIn);
             watch.Stop();
-            if (imageOut != imageIn)
-            {
-                using (InputArray iaImageIn = imageIn.GetInputArray())
-                {
-                    iaImageIn.CopyTo(imageOut);
-                }
-            }
+
             Render(imageOut, detectionResult);
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
         }

@@ -158,13 +158,7 @@ namespace Emgu.CV.Models
         public void ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut, float matchScoreThreshold = 0.5f, float nmsThreshold = 0.4f)
         {
             MaskedObject[] objects = Detect(imageIn, matchScoreThreshold, nmsThreshold);
-            if (imageOut != imageIn)
-            {
-                using (InputArray iaImageIn = imageIn.GetInputArray())
-                {
-                    iaImageIn.CopyTo(imageOut);
-                }
-            }
+
             foreach (var obj in objects)
             {
                 obj.Render(imageOut, new MCvScalar(0, 0, 255), _colors[obj.ClassId]);

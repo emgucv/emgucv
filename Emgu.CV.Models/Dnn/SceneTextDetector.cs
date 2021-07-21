@@ -254,13 +254,7 @@ namespace Emgu.CV.Models
             Stopwatch watch = Stopwatch.StartNew();
             var sceneTexts = Detect(imageIn);
             watch.Stop();
-            if (imageOut != imageIn)
-            {
-                using (InputArray iaImageIn = imageIn.GetInputArray())
-                {
-                    iaImageIn.CopyTo(imageOut);
-                }
-            }
+
             Render(imageOut, sceneTexts);
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
         }

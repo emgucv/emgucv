@@ -152,6 +152,9 @@
     <Content Include="..\Core\box_in_scene.png">
       <Link>box_in_scene.png</Link>
     </Content>
+	<Content Include="..\Core\qrcode_barcode.png">
+      <Link>qrcode_barcode.png</Link>
+    </Content>
     <Content Include="..\Core\pedestrian.png">
       <Link>pedestrian.png</Link>
     </Content>

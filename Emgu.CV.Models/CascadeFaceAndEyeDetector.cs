@@ -124,13 +124,14 @@ namespace Emgu.CV.Models
             Detect(imageIn, faces, eyes);
             watch.Stop();
 
+            /*
             if (imageOut != imageIn)
             {
                 using (InputArray iaImageIn = imageIn.GetInputArray())
                 {
                     iaImageIn.CopyTo(imageOut);
                 }
-            }
+            }*/
 
             //Draw the faces in red
             foreach (Rectangle rect in faces)

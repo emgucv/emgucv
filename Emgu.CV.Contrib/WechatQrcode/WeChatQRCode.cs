@@ -52,7 +52,7 @@ namespace Emgu.CV
         /// <returns>The array of decoded string.</returns>
         public String[] DetectAndDecode(
             IInputArray img,
-            IOutputArrayOfArrays points = null)
+            IOutputArrayOfArrays points)
         {
             using (InputArray iaImg = img.GetInputArray())
             using (OutputArray oaPoints = points == null? OutputArray.GetEmpty() : points.GetOutputArray())
@@ -65,6 +65,70 @@ namespace Emgu.CV
                     result);
                 return result.ToArray();
             }
+        }
+
+        /// <summary>
+        /// Both detects and decodes QR code.
+        /// </summary>
+        /// <param name="img">Supports grayscale or color (BGR) image</param>
+        /// <returns>The detected QRCode.</returns>
+        public QRCode[] DetectAndDecode(IInputArray img)
+        {
+            using (InputArray iaImg = img.GetInputArray())
+            using (VectorOfMat pointsVec = new VectorOfMat())
+            using (VectorOfCvString result = new VectorOfCvString())
+            {
+                String[] codes = DetectAndDecode(img, pointsVec);
+                if (codes.Length == 0)
+                {
+                    return new QRCode[0];
+                }
+                Point[][] points = WeChatQRCode.VectorOfMatToPoints(pointsVec);
+
+                QRCode[] results = new QRCode[codes.Length];
+                for (int i = 0;i < codes.Length;i++)
+                {
+                    QRCode c = new QRCode();
+                    c.Code = codes[i];
+                    c.Region = points[i];
+                    results[i] = c;
+                }
+                return results;
+            }
+        }
+
+        public class QRCode
+        {
+            public String Code { get; set; }
+            public Point[] Region { get; set; }
+        }
+
+        /// <summary>
+        /// Can be used to convert the second parameter of DetectAndDecode function from VectorOfMat to points
+        /// </summary>
+        /// <param name="vm">The VectorOfMat that is passed to the second parameter of DetectAndDecode</param>
+        /// <returns>The detected points</returns>
+        private static Point[][] VectorOfMatToPoints(VectorOfMat vm)
+        {
+            Point[][] points = new Point[vm.Size][];
+            for (int i = 0; i < points.Length; i++)
+            {
+                using (Mat p = vm[i])
+                {
+                    points[i] = MatToPoints(p);
+                }
+            }
+
+            return points;
+        }
+
+        private static Point[] MatToPoints(Mat m)
+        {
+            PointF[] points = new PointF[m.Width * m.Height / 2];
+            GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
+            Emgu.CV.Util.CvToolbox.Memcpy(handle.AddrOfPinnedObject(), m.DataPointer, points.Length * Marshal.SizeOf<PointF>());
+            handle.Free();
+            return Array.ConvertAll(points, Point.Round);
         }
 
         /// <summary>
