@@ -39,8 +39,6 @@ namespace Emgu.CV.XamarinForms
             Button pedestrianDetectionButton = new Button();
             pedestrianDetectionButton.Text = "Pedestrian Detection";
 
-            
-
             Button maskRcnnButton = new Button();
             maskRcnnButton.Text = "Mask RCNN (DNN module)";
 
@@ -130,7 +128,11 @@ namespace Emgu.CV.XamarinForms
                 };
             }
 
-            if (haveWechatQRCode && haveBarcode)
+            if (haveWechatQRCode && haveBarcode
+              //TODO: WeChatQRCode detector doesn't work on iOS, probably a bug in iOS
+              //Will need to figure out why.
+              && (Xamarin.Forms.Device.RuntimePlatform != Device.iOS) 
+              )
             {
                 Button barcodeQrcodeDetectionButton = new Button();
                 barcodeQrcodeDetectionButton.Text = "Barcode and QRCode Detection";
