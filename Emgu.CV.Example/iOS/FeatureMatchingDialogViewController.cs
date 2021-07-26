@@ -35,7 +35,8 @@ namespace Example.iOS
             Size frameSize = FrameSize;
             using (Mat modelImage = CvInvoke.Imread("box.png", Emgu.CV.CvEnum.ImreadModes.Grayscale))
             using (Mat observedImage = CvInvoke.Imread("box_in_scene.png", Emgu.CV.CvEnum.ImreadModes.Grayscale))
-            using (Mat image = DrawMatches.Draw(modelImage, observedImage, out processingTime))
+            using (Emgu.CV.Features2D.KAZE kaze = new Emgu.CV.Features2D.KAZE())
+            using (Mat image = DrawMatches.Draw(modelImage, observedImage, kaze, out processingTime))
             using (Mat resized = new Mat())
             {
                double dx = ((double) frameSize.Width) / image.Width ;
