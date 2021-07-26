@@ -73,7 +73,7 @@ namespace Emgu.CV.Models
                 foreach (var model in _models)
                 {
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-                    yield model.Init(onDownloadProgressChanged, initOptions);
+                    yield return model.Init(onDownloadProgressChanged, initOptions);
 #else
                     await model.Init(onDownloadProgressChanged, initOptions);
 #endif
