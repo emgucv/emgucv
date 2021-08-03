@@ -4381,6 +4381,43 @@ namespace Emgu.CV.Test
             }
         }
 
+        [Ignore("Ignore from test run by default to avoid downloading data.")]
+        [Test]
+        public async Task TestPhaseUnwrapping()
+        {
+            FileDownloadManager manager = new FileDownloadManager();
+
+            manager.AddFile(new DownloadableFile(
+                "https://github.com/opencv/opencv_extra/raw/4.5.3/testdata/cv/phase_unwrapping/data/wrappedpeaks.yml",
+                "PhaseUnwrapping"));
+            await manager.Download();
+            using (FileStorage fs = new FileStorage(manager.Files[0].LocalFile, FileStorage.Mode.Read))
+            using (Mat wPhaseMat = new Mat())
+            using (Mat uPhaseMat = new Mat())
+            using (Mat reliabilities = new Mat())
+            using (FileNode pvNode = fs["phaseValues"])
+            {
+                pvNode.ReadMat(wPhaseMat);
+                using (Emgu.CV.PhaseUnwrapping.HistogramPhaseUnwrapping phaseUnwrapping =
+                    new PhaseUnwrapping.HistogramPhaseUnwrapping(
+                    wPhaseMat.Cols, wPhaseMat.Rows))
+                {
+                    phaseUnwrapping.UnwrapPhaseMap(wPhaseMat, uPhaseMat);
+                    phaseUnwrapping.GetInverseReliabilityMap(reliabilities);
+                    using (Mat uPhaseMap8 = new Mat())
+                    using (Mat wPhaseMap8 = new Mat())
+                    using (Mat reliabilities8 = new Mat())
+                    {
+                        wPhaseMat.ConvertTo(wPhaseMap8, DepthType.Cv8U, 255, 128);
+                        uPhaseMat.ConvertTo(uPhaseMap8, DepthType.Cv8U, 1, 128);
+                        reliabilities.ConvertTo(reliabilities8, DepthType.Cv8U, 255, 128);
+                    }
+                }
+            }
+
+
+        }
+
 
         [Test]
         public void TestERFilter()
