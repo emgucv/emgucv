@@ -1,0 +1,150 @@
+//----------------------------------------------------------------------------
+//
+//  Copyright (C) 2004-2021 by EMGU Corporation. All rights reserved.
+//
+//----------------------------------------------------------------------------
+
+#include "structured_light_c.h"
+
+
+bool cveStructuredLightPatternGenerate(cv::structured_light::StructuredLightPattern* structuredLight, cv::_OutputArray* patternImages)
+{
+#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+    return structuredLight->generate(*patternImages);
+#else
+    throw_no_structured_light();
+#endif
+}
+
+bool cveStructuredLightPatternDecode(
+    cv::structured_light::StructuredLightPattern* structuredLight,
+    std::vector< std::vector< cv::Mat > >* patternImages,
+    cv::_OutputArray* disparityMap,
+    cv::_InputArray* blackImages,
+    cv::_InputArray* whiteImages,
+    int flags)
+{
+#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+    return structuredLight->decode(
+        *patternImages, 
+        *disparityMap, 
+        blackImages ? *blackImages : (cv::InputArray) cv::noArray(),
+        whiteImages ? *whiteImages : (cv::InputArray) cv::noArray(), 
+        flags);
+#else
+    throw_no_structured_light();
+#endif
+}
+
+cv::structured_light::GrayCodePattern* cveGrayCodePatternCreate(
+    int width,
+    int height,
+    cv::Ptr<cv::structured_light::GrayCodePattern>** sharedPtr,
+    cv::structured_light::StructuredLightPattern** structuredLightPattern,
+    cv::Algorithm** algorithm)
+{
+#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+    cv::structured_light::GrayCodePattern::Params p;
+    p.width = width;
+    p.height = height;
+    cv::Ptr<cv::structured_light::GrayCodePattern> pattern = cv::structured_light::GrayCodePattern::create(p);
+    *sharedPtr = new cv::Ptr<cv::structured_light::GrayCodePattern>(pattern);
+    cv::structured_light::GrayCodePattern* patternPtr = (*sharedPtr)->get();
+    *algorithm = dynamic_cast<cv::Algorithm*>(patternPtr);
+    return patternPtr;
+#else
+    throw_no_structured_light();
+#endif
+}
+void cveGrayCodePatternRelease(cv::Ptr<cv::structured_light::GrayCodePattern>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+    delete* sharedPtr;
+    *sharedPtr = 0;
+#else
+    throw_no_structured_light();
+#endif
+}
+
+cv::structured_light::SinusoidalPattern* cveSinusoidalPatternCreate(
+    int width,
+    int height,
+    int nbrOfPeriods,
+    float shiftValue,
+    int methodId,
+    int nbrOfPixelsBetweenMarkers,
+    bool horizontal,
+    bool setMarkers,
+    std::vector< cv::Point2f >* markersLocation,
+    cv::Ptr<cv::structured_light::SinusoidalPattern>** sharedPtr,
+    cv::structured_light::StructuredLightPattern** structuredLightPattern,
+    cv::Algorithm** algorithm)
+{
+#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+    cv::Ptr<cv::structured_light::SinusoidalPattern::Params> p =
+        cv::makePtr<cv::structured_light::SinusoidalPattern::Params>();
+    p->width = width;
+    p->height = height;
+    p->nbrOfPeriods = nbrOfPeriods;
+    p->shiftValue = shiftValue;
+    p->methodId = methodId;
+    p->nbrOfPixelsBetweenMarkers = nbrOfPixelsBetweenMarkers;
+    p->horizontal = horizontal;
+    p->setMarkers = setMarkers;
+    if (markersLocation)
+        p->markersLocation = *markersLocation;
+    cv::Ptr<cv::structured_light::SinusoidalPattern> pattern = cv::structured_light::SinusoidalPattern::create(p);
+    *sharedPtr = new cv::Ptr<cv::structured_light::SinusoidalPattern>(pattern);
+    cv::structured_light::SinusoidalPattern* patternPtr = (*sharedPtr)->get();
+    *algorithm = dynamic_cast<cv::Algorithm*>(patternPtr);
+    return patternPtr;
+#else
+    throw_no_structured_light();
+#endif
+}
+void cveSinusoidalPatternRelease(cv::Ptr<cv::structured_light::SinusoidalPattern>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+    delete* sharedPtr;
+    *sharedPtr = 0;
+#else
+    throw_no_structured_light();
+#endif
+}
+void cveSinusoidalPatternComputePhaseMap(
+    cv::structured_light::SinusoidalPattern* pattern,
+    cv::_InputArray* patternImages,
+    cv::_OutputArray* wrappedPhaseMap,
+    cv::_OutputArray* shadowMask,
+    cv::_InputArray* fundamental)
+{
+#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+    pattern->computePhaseMap(
+        *patternImages,
+        *wrappedPhaseMap,
+        shadowMask ? *shadowMask : (cv::OutputArray) cv::noArray(),
+        fundamental ? *fundamental : (cv::InputArray) cv::noArray());
+#else
+    throw_no_structured_light();
+#endif
+}
+
+void cveSinusoidalPatternUnwrapPhaseMap(
+    cv::structured_light::SinusoidalPattern* pattern,
+    cv::_InputArray* wrappedPhaseMap,
+    cv::_OutputArray* unwrappedPhaseMap,
+    CvSize* camSize,
+    cv::_InputArray* shadowMask)
+{
+#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+    pattern->unwrapPhaseMap(
+        *wrappedPhaseMap,
+        *unwrappedPhaseMap,
+        *camSize,
+        shadowMask ? *shadowMask : (cv::OutputArray)cv::noArray());
+#else
+    throw_no_structured_light();
+#endif
+}
+
+

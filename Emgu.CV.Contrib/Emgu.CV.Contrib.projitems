@@ -41,5 +41,6 @@
 	<Compile Include="$(MSBuildThisFileDirectory)DepthAI\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)WechatQrcode\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Barcode\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)StructuredLight\*.cs" />
   </ItemGroup>
 </Project>
