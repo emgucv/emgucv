@@ -28,8 +28,8 @@ bool cveStructuredLightPatternDecode(
     return structuredLight->decode(
         *patternImages, 
         *disparityMap, 
-        blackImages ? *blackImages : (cv::InputArray) cv::noArray(),
-        whiteImages ? *whiteImages : (cv::InputArray) cv::noArray(), 
+        blackImages ? *blackImages : static_cast<cv::InputArray>(cv::noArray()),
+        whiteImages ? *whiteImages : static_cast<cv::InputArray>(cv::noArray()), 
         flags);
 #else
     throw_no_structured_light();
@@ -122,8 +122,8 @@ void cveSinusoidalPatternComputePhaseMap(
     pattern->computePhaseMap(
         *patternImages,
         *wrappedPhaseMap,
-        shadowMask ? *shadowMask : (cv::OutputArray) cv::noArray(),
-        fundamental ? *fundamental : (cv::InputArray) cv::noArray());
+        shadowMask ? *shadowMask : static_cast<cv::OutputArray>(cv::noArray()),
+        fundamental ? *fundamental : static_cast<cv::InputArray>(cv::noArray()));
 #else
     throw_no_structured_light();
 #endif
@@ -141,7 +141,7 @@ void cveSinusoidalPatternUnwrapPhaseMap(
         *wrappedPhaseMap,
         *unwrappedPhaseMap,
         *camSize,
-        shadowMask ? *shadowMask : (cv::OutputArray)cv::noArray());
+        shadowMask ? *shadowMask : static_cast<cv::InputArray>(cv::noArray()));
 #else
     throw_no_structured_light();
 #endif
