@@ -2796,7 +2796,34 @@ ENDIF()
 
 ############################### stereo code gen END ##############################
 
+############################### structed_light code gen START ##############################
+IF (NOT HAVE_opencv_structured_light)
+  SET(HAVE_opencv_structured_light FALSE)
+ENDIF()
+  CREATE_OCV_CLASS_PROPERTY( 
+    "structured_light/graycodepattern_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/StructuredLight/GrayCodePattern.g.cs"
+    "cv::structured_light::GrayCodePattern" 
+    "GrayCodePattern" 
+    "NumberOfPatternImages;WhiteThreshold;BlackThreshold" 
+    "int;int;int" 
+    "propR;propW;propW"
+    "NumberOfPatternImages;WhiteThreshold;BlackThreshold" 
+    "int;int;int"
+    "Get the number of pattern images needed for the graycode pattern;
+    White threshold is a number between 0-255 that represents the minimum brightness difference required for valid pixels, between the graycode pattern and its inverse images, used in getProjPixel method;
+    Black threshold is a number between 0-255 that represents the minimum brightness difference required for valid pixels, between the fully illuminated (white) and the not illuminated images (black), used in computeShadowMasks method
+    "
+    "Emgu.CV.StructuredLight"
+    "StructuredLightInvoke"
+    "GrayCodePattern"
+	""
+	"#include \"structured_light_c.h\""
+	""
+	""
+	${HAVE_opencv_structured_light})
 
+############################### structed_light code gen END ##############################
 
 ############################### OPENMP START ##############################
 IF(WITH_OPENMP)
@@ -3354,12 +3381,12 @@ ENDIF()
 
 ############################### xfeatures2d START ##############################
 
-  IF( (NOT WITH_CUDA) OR (NOT (TARGET opencv_cudaimgproc)) )
-    FILE(GLOB xfeatures2d_srcs_excludes "xfeatures2d/nonfree_gpu_c.cpp")
-    LIST(REMOVE_ITEM extern_srcs ${xfeatures2d_srcs_excludes})
-    FILE(GLOB xfeatures2d_hdrs_excludes "xfeatures2d/nonfree_gpu_c.h")
-    LIST(REMOVE_ITEM extern_hdrs ${xfeatures2d_hdrs_excludes})
-  ENDIF()
+#  IF( (NOT WITH_CUDA) OR (NOT (TARGET opencv_cudaimgproc)) )
+#    FILE(GLOB xfeatures2d_srcs_excludes "xfeatures2d/nonfree_gpu_c.cpp")
+#    LIST(REMOVE_ITEM extern_srcs ${xfeatures2d_srcs_excludes})
+#    FILE(GLOB xfeatures2d_hdrs_excludes "xfeatures2d/nonfree_gpu_c.h")
+#    LIST(REMOVE_ITEM extern_hdrs ${xfeatures2d_hdrs_excludes})
+#  ENDIF()
 
 ############################### xfeatures2d END ################################
 

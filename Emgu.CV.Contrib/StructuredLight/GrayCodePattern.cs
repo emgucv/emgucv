@@ -19,7 +19,7 @@ namespace Emgu.CV.StructuredLight
     /// Class implementing the Gray-code pattern, based on 
     /// Kyriakos Herakleous and Charalambos Poullis. 3DUNDERWORLD-SLS: An Open-Source Structured-Light Scanning System for Rapid Geometry Acquisition. arXiv preprint arXiv:1406.6595, 2014.
     /// </summary>
-    public class GrayCodePattern : SharedPtrObject, IStructuredLightPattern
+    public partial class GrayCodePattern : SharedPtrObject, IStructuredLightPattern
     {
         private IntPtr _structuredLightPatternPtr;
         private IntPtr _algorithmPtr;

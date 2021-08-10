@@ -50,6 +50,7 @@ cv::structured_light::GrayCodePattern* cveGrayCodePatternCreate(
     cv::Ptr<cv::structured_light::GrayCodePattern> pattern = cv::structured_light::GrayCodePattern::create(p);
     *sharedPtr = new cv::Ptr<cv::structured_light::GrayCodePattern>(pattern);
     cv::structured_light::GrayCodePattern* patternPtr = (*sharedPtr)->get();
+    *structuredLightPattern = dynamic_cast<cv::structured_light::StructuredLightPattern*>(patternPtr);
     *algorithm = dynamic_cast<cv::Algorithm*>(patternPtr);
     return patternPtr;
 #else
@@ -96,6 +97,7 @@ cv::structured_light::SinusoidalPattern* cveSinusoidalPatternCreate(
     cv::Ptr<cv::structured_light::SinusoidalPattern> pattern = cv::structured_light::SinusoidalPattern::create(p);
     *sharedPtr = new cv::Ptr<cv::structured_light::SinusoidalPattern>(pattern);
     cv::structured_light::SinusoidalPattern* patternPtr = (*sharedPtr)->get();
+    *structuredLightPattern = dynamic_cast<cv::structured_light::StructuredLightPattern*>(patternPtr);
     *algorithm = dynamic_cast<cv::Algorithm*>(patternPtr);
     return patternPtr;
 #else
