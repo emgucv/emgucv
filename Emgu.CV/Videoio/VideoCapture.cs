@@ -308,6 +308,8 @@ namespace Emgu.CV
         {
             get
             {
+                if (_ptr == IntPtr.Zero)
+                    return 0;
                 return Convert.ToInt32(Get(CvEnum.CapProp.FrameWidth));
             }
         }
@@ -317,6 +319,8 @@ namespace Emgu.CV
         {
             get
             {
+                if (_ptr == IntPtr.Zero)
+                    return 0;
                 return Convert.ToInt32(Get(CvEnum.CapProp.FrameHeight));
             }
         }
@@ -374,6 +378,7 @@ namespace Emgu.CV
                 throw new NullReferenceException(String.Format("Error: Unable to create capture from camera {0}", camIndex));
             }
 #endif
+            _needDispose = true;
         }
 
         /// <summary>
@@ -385,16 +390,15 @@ namespace Emgu.CV
         public VideoCapture(String fileName, API captureApi = API.Any, params Tuple<CvEnum.CapProp, int>[] captureProperties)
         {
             using (CvString s = new CvString(fileName))
+            using (VectorOfInt vectInt = ConvertCaptureProperties(captureProperties))
             {
-                using (VectorOfInt vectInt = ConvertCaptureProperties(captureProperties))
-                {
-                    _captureModuleType = CaptureModuleType.Highgui;
-                    _ptr = CvInvoke.cveVideoCaptureCreateFromFile(s, captureApi, vectInt);
-                }
-
+                _captureModuleType = CaptureModuleType.Highgui;
+                _ptr = CvInvoke.cveVideoCaptureCreateFromFile(s, captureApi, vectInt);
+                
                 if (_ptr == IntPtr.Zero)
                     throw new NullReferenceException(String.Format("Unable to create capture from {0}", fileName));
             }
+            _needDispose = true;
         }
         #endregion
 
@@ -619,6 +623,9 @@ namespace Emgu.CV
         {
             get
             {
+                if (_ptr == IntPtr.Zero)
+                    return String.Empty;
+
                 using (CvString s = new CvString())
                 {
                     CvInvoke.cveVideoCaptureGetBackendName(Ptr, s);

@@ -2331,7 +2331,6 @@ namespace Emgu.CV.Test
             return Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename));
         }
 
-        [Ignore("Ignore for now, may cause System.IO.IOException")]
         [Test]
         public void TestVideoWriter()
         {
