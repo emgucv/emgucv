@@ -1594,6 +1594,33 @@ ENDIF()
 	""
 	${HAVE_opencv_mcc})
 
+      CREATE_OCV_CLASS_PROPERTY( 
+    "mcc/ColorCorrectionModel_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Mcc/ColorCorrectionModel.g.cs"
+    "cv::ccm::ColorCorrectionModel" 
+    "ColorCorrectionModel" 
+    "CCM_TYPE;Loss;Distance;Linear;LinearGamma;LinearDegree;WeightCoeff;MaxCount" 
+    "cv::ccm::CCM_TYPE;double;cv::ccm::DISTANCE_TYPE;cv::ccm::LINEAR_TYPE;double;int;double;int" 
+    "propW;propR;propW;propW;propW;propW;propW;propW"
+    "CcmType;Loss;DistanceType;LinearType;LinearGamma;LinearDegree;WeightCoeff;MaxCount" 
+    "ColorCorrectionModel.CcmType;double;ColorCorrectionModel.DistanceType;ColorCorrectionModel.LinearType;double;int;double;int"
+    "Ccm type;
+     Loss;
+     The type of color distance;
+     The method of linearization;
+     The gamma value of gamma correction;
+     The degree of linearization polynomial;
+     The exponent number of L* component of the reference color in CIE Lab color space;
+     Used in MinProblemSolver-DownhillSolver, terminal criteria to the algorithm"
+    "Emgu.CV.Ccm"
+    "CcmInvoke"
+    "ColorCorrectionModel"
+	""
+    "#include \"mcc_c.h\""
+	""
+	""
+	${HAVE_opencv_mcc})
+
 ############################### features2d code gen END ################################
 
 ############################### ml code gen START ##############################

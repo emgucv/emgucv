@@ -20,8 +20,8 @@ cv::mcc::CChecker* cveCCheckerCreate(cv::Ptr<cv::mcc::CChecker>** sharedPtr)
 void cveCCheckerGetBox(cv::mcc::CChecker* checker, std::vector< cv::Point2f >* box)
 {
 #ifdef HAVE_OPENCV_MCC
-  std::vector<cv::Point2f> pts = checker->getBox();
-  *box = pts;
+	std::vector<cv::Point2f> pts = checker->getBox();
+	*box = pts;
 #else
 	throw_no_mcc();
 #endif
@@ -60,6 +60,25 @@ void cveCCheckerRelease(cv::Ptr<cv::mcc::CChecker>** sharedPtr)
 #ifdef HAVE_OPENCV_MCC
 	delete* sharedPtr;
 	*sharedPtr = 0;
+#else
+	throw_no_mcc();
+#endif
+}
+
+void cveCCheckerGetChartsRGB(cv::mcc::CChecker* checker, cv::_OutputArray* chartsRgb)
+{
+#ifdef HAVE_OPENCV_MCC
+	cv::Mat m = checker->getChartsRGB();
+	m.copyTo(*chartsRgb);
+#else
+	throw_no_mcc();
+#endif
+}
+
+void cveCCheckerSetChartsRGB(cv::mcc::CChecker* checker, cv::Mat* chartsRgb)
+{
+#ifdef HAVE_OPENCV_MCC
+	checker->setChartsRGB(*chartsRgb);
 #else
 	throw_no_mcc();
 #endif
@@ -127,7 +146,8 @@ bool cveCCheckerDetectorProcess(
 	if (param) {
 		cv::Ptr<cv::mcc::DetectorParameters> paramPtr(param, [](cv::mcc::DetectorParameters* p) {});
 		return detector->process(*image, chartType, nc, useNet, paramPtr);
-	} else
+	}
+	else
 	{
 		return detector->process(*image, chartType, nc, useNet);
 	}
@@ -171,4 +191,38 @@ void cveCCheckerDetectorParametersRelease(cv::mcc::DetectorParameters** paramete
 #else
 	throw_no_mcc();
 #endif	
+}
+
+
+cv::ccm::ColorCorrectionModel* cveColorCorrectionModelCreate(cv::Mat* src, int constcolor)
+{
+#ifdef HAVE_OPENCV_MCC
+	return new cv::ccm::ColorCorrectionModel(*src, static_cast<cv::ccm::CONST_COLOR>(constcolor));
+#else
+	throw_no_mcc();
+#endif	
+}
+
+void cveColorCorrectionModelRelease(cv::ccm::ColorCorrectionModel** ccm)
+{
+#ifdef HAVE_OPENCV_MCC
+	delete* ccm;
+	*ccm = 0;
+#else
+	throw_no_mcc();
+#endif	
+}
+void cveColorCorrectionModelRun(cv::ccm::ColorCorrectionModel* ccm)
+{
+#ifdef HAVE_OPENCV_MCC
+	ccm->run();
+#else
+	throw_no_mcc();
+#endif	
+}
+
+void cveColorCorrectionModelGetCCM(cv::ccm::ColorCorrectionModel* ccm, cv::_OutputArray* result)
+{
+	cv::Mat m = ccm->getCCM();
+	m.copyTo(*result);
 }

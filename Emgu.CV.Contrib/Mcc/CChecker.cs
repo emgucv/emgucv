@@ -96,6 +96,28 @@ namespace Emgu.CV.Mcc
             }
         }
 
+
+        /// <summary>
+        /// Get the RGB charts
+        /// </summary>
+        /// <param name="chartsRgb">The RGB charts</param>
+        public void GetChartsRGB(IOutputArray chartsRgb)
+        {
+            using (OutputArray oaChartsRgb = chartsRgb.GetOutputArray())
+            {
+                MccInvoke.cveCCheckerGetChartsRGB(_ptr, oaChartsRgb);
+            }
+        }
+
+        /// <summary>
+        /// Set the RGB charts
+        /// </summary>
+        /// <param name="chartsRgb">The RGB charts</param>
+        public void SetChartsRGB(Mat chartsRgb)
+        {
+            MccInvoke.cveCCheckerSetChartsRGB(_ptr, chartsRgb);
+        }
+
         /// <summary>
         /// Release the unmanaged memory associated with this object
         /// </summary>
@@ -136,6 +158,12 @@ namespace Emgu.CV.Mcc
         internal static extern void cveCCheckerGetCenter(IntPtr checker, ref PointF center);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveCCheckerSetCenter(IntPtr checker, ref PointF center);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveCCheckerGetChartsRGB(IntPtr checker, IntPtr chartsRgb);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveCCheckerSetChartsRGB(IntPtr checker, IntPtr chartsRgb);
 
     }
 }
