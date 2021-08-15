@@ -907,6 +907,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   wechat_qrcode
   barcode
   structured_light
+  rgbd
   )
 
 FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})
