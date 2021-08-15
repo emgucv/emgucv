@@ -28,6 +28,11 @@ namespace Emgu.CV.Quality
 
     public static partial class QualityInvoke
     {
+        static QualityInvoke()
+        {
+            CvInvoke.Init();
+        }
+
         /// <summary>
         /// Compute quality score per channel with the per-channel score in each element of the result
         /// </summary>

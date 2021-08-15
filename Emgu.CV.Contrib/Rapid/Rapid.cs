@@ -140,6 +140,11 @@ namespace Emgu.CV.Rapid
     /// </summary>
     public static partial class RapidInvoke
     {
+        static RapidInvoke()
+        {
+            CvInvoke.Init();
+        }
+
         /// <summary>
         /// Debug draw markers of matched correspondences onto a lineBundle
         /// </summary>
