@@ -97,9 +97,19 @@ namespace Emgu.CV
             }
         }
 
+        /// <summary>
+        /// The detected QR code
+        /// </summary>
         public class QRCode
         {
+            /// <summary>
+            /// The string that this QR code represents
+            /// </summary>
             public String Code { get; set; }
+
+            /// <summary>
+            /// The region of the QR code.
+            /// </summary>
             public Point[] Region { get; set; }
         }
 

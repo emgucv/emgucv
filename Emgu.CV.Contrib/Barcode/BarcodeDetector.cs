@@ -82,6 +82,9 @@ namespace Emgu.CV
             }
         }
 
+        /// <summary>
+        /// The detected barcode
+        /// </summary>
         public class Barcode
         {
             /// <summary>
