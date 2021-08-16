@@ -131,6 +131,8 @@ mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/StructuredLight
 cp -r ../Emgu.CV.Contrib/StructuredLight/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/StructuredLight
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rgbd
 cp -r ../Emgu.CV.Contrib/StructuredLight/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rgbd
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Reg
+cp -r ../Emgu.CV.Contrib/StructuredLight/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Reg
 #mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DepthAI
 #cp -r ../Emgu.CV.Contrib/DepthAI/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DepthAI
 

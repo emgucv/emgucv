@@ -43,5 +43,6 @@
 	<Compile Include="$(MSBuildThisFileDirectory)Barcode\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)StructuredLight\*.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)Rgbd\*.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)Reg\*.cs" />
   </ItemGroup>
 </Project>
