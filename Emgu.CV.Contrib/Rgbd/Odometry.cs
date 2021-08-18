@@ -16,12 +16,17 @@ using Emgu.Util;
 
 namespace Emgu.CV.Rgbd
 {
-
+    /// <summary>
+    /// Base class for computation of odometry.
+    /// </summary>
     public class Odometry : SharedPtrObject, IAlgorithm
     {
         private IntPtr _algorithmPtr;
 
-
+        /// <summary>
+        /// Create an Odometry instance.
+        /// </summary>
+        /// <param name="odometryType">One of the odometry type: "RgbdOdometry", "ICPOdometry", "RgbdICPOdometry" or "FastICPOdometry" </param>
         public Odometry(String odometryType)
         {
             using (CvString csOdometryType = new CvString(odometryType))
@@ -36,6 +41,18 @@ namespace Emgu.CV.Rgbd
             get { return _algorithmPtr; }
         }
 
+        /// <summary>
+        /// Method to compute a transformation from the source frame to the destination one. Some odometry algorithms do not used some data of frames (eg. ICP does not use images). In such case corresponding arguments can be set as empty Mat. The method returns true if all internal computations were possible (e.g. there were enough correspondences, system of equations has a solution, etc) and resulting transformation satisfies some test if it's provided by the Odometry inheritor implementation (e.g. thresholds for maximum translation and rotation).
+        /// </summary>
+        /// <param name="srcImage">Image data of the source frame (CV_8UC1)</param>
+        /// <param name="srcDepth">Depth data of the source frame (CV_32FC1, in meters)</param>
+        /// <param name="srcMask">Mask that sets which pixels have to be used from the source frame (CV_8UC1)</param>
+        /// <param name="dstImage">Image data of the destination frame (CV_8UC1)</param>
+        /// <param name="dstDepth">Depth data of the destination frame (CV_32FC1, in meters)</param>
+        /// <param name="dstMask">Mask that sets which pixels have to be used from the destination frame (CV_8UC1)</param>
+        /// <param name="rt">Resulting transformation from the source frame to the destination one (rigid body motion): dst_p = Rt * src_p, where dst_p is a homogeneous point in the destination frame and src_p is homogeneous point in the source frame, Rt is 4x4 matrix of CV_64FC1 type.</param>
+        /// <param name="initRt">Initial transformation from the source frame to the destination one (optional)</param>
+        /// <returns>True if all internal computations were possible</returns>
         public bool Compute(
             Mat srcImage,
             Mat srcDepth,
@@ -72,7 +89,10 @@ namespace Emgu.CV.Rgbd
             }
         }
     }
-    
+
+    /// <summary>
+    /// Entry points for the cv::rgb functions
+    /// </summary>
     public static partial class RgbdInvoke
     {
 
