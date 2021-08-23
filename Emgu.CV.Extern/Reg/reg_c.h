@@ -29,6 +29,16 @@ namespace cv
 	namespace reg
 	{
 		class Map {};
+		class Mapper {};
+		class MapShift {};
+		class MapProjec {};
+		class MapAffine {};
+		class MapperGradAffine {};
+		class MapperGradEuclid {};
+		class MapperGradProj {};
+		class MapperGradShift {};
+		class MapperGradSimilar {};
+		class MapperPyramid {};
 	}
 }
 

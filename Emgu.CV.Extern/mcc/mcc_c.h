@@ -25,6 +25,9 @@ namespace cv {
 	}
 	namespace ccm {
 		class ColorCorrectionModel {};
+		enum CCM_TYPE {};
+		enum DISTANCE_TYPE {};
+		enum LINEAR_TYPE {};
 	}
 }
 #endif

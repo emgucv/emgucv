@@ -223,6 +223,10 @@ void cveColorCorrectionModelRun(cv::ccm::ColorCorrectionModel* ccm)
 
 void cveColorCorrectionModelGetCCM(cv::ccm::ColorCorrectionModel* ccm, cv::_OutputArray* result)
 {
+#ifdef HAVE_OPENCV_MCC
 	cv::Mat m = ccm->getCCM();
 	m.copyTo(*result);
+#else
+	throw_no_mcc();
+#endif	
 }

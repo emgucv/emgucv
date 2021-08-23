@@ -19,6 +19,7 @@ namespace cv
 	namespace rgbd
 	{
 		class Odometry {};
+		class RgbdNormals {};
 	}
 }
 

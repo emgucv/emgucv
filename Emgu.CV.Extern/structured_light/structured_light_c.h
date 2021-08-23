@@ -12,11 +12,13 @@
 #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
 #include "opencv2/structured_light.hpp"
 #else
-static inline CV_NORETURN void throw_no_structure_light() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without structure light support"); }
+static inline CV_NORETURN void throw_no_structured_light() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without structure light support"); }
 namespace cv {
-namespace structured_light {
-class StructuredLightPattern {};
-}
+    namespace structured_light {
+        class StructuredLightPattern {};
+        class SinusoidalPattern {};
+        class GrayCodePattern {};
+	}
 }
 
 #endif
