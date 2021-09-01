@@ -423,6 +423,23 @@ namespace Emgu.CV.Models
             return vehicles.ToArray();
         }
 
+        private MCvScalar _renderColor = new MCvScalar(255, 0, 0);
+
+        /// <summary>
+        /// Get or Set the color used in rendering.
+        /// </summary>
+        public MCvScalar RenderColor
+        {
+            get
+            {
+                return _renderColor;
+            }
+            set
+            {
+                _renderColor = value;
+            }
+        }
+
         /// <summary>
         /// Draw the vehicles to the image.
         /// </summary>
@@ -432,7 +449,7 @@ namespace Emgu.CV.Models
         {
             foreach (Vehicle v in vehicles)
             {
-                CvInvoke.Rectangle(image, v.Region, new MCvScalar(0, 0, 255), 2);
+                CvInvoke.Rectangle(image, v.Region, RenderColor, 2);
                 String label = String.Format("{0} {1} {2}",
                     v.Color, v.Type, v.LicensePlate == null ? String.Empty : v.LicensePlate.Value.Text);
                 CvInvoke.PutText(
@@ -441,7 +458,7 @@ namespace Emgu.CV.Models
                     new Point(v.Region.Location.X, v.Region.Location.Y + 20),
                     FontFace.HersheyComplex,
                     1.0,
-                    new MCvScalar(0, 255, 0),
+                    RenderColor,
                     2);
             }
         }

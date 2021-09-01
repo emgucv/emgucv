@@ -109,6 +109,40 @@ namespace Emgu.CV.Models
             }
         }
 
+        private MCvScalar _renderColorFace = new MCvScalar(0, 0, 255);
+
+        /// <summary>
+        /// Get or Set the color used in rendering face.
+        /// </summary>
+        public MCvScalar RenderColorFace
+        {
+            get
+            {
+                return _renderColorFace;
+            }
+            set
+            {
+                _renderColorFace = value;
+            }
+        }
+
+        private MCvScalar _renderColorEye = new MCvScalar(255, 0, 0);
+
+        /// <summary>
+        /// Get or Set the color used in rendering eye.
+        /// </summary>
+        public MCvScalar RenderColorEye
+        {
+            get
+            {
+                return _renderColorEye;
+            }
+            set
+            {
+                _renderColorEye = value;
+            }
+        }
+
         /// <summary>
         /// Process the input image and render into the output image
         /// </summary>
@@ -129,13 +163,13 @@ namespace Emgu.CV.Models
             Detect(imageIn, faces, eyes);
             watch.Stop();
 
-            //Draw the faces in red
+            //Draw the faces
             foreach (Rectangle rect in faces)
-                CvInvoke.Rectangle(imageOut, rect, new MCvScalar(0, 0, 255), 2);
+                CvInvoke.Rectangle(imageOut, rect, RenderColorFace, 2);
 
-            //Draw the eyes in blue
+            //Draw the eyes 
             foreach (Rectangle rect in eyes)
-                CvInvoke.Rectangle(imageOut, rect, new MCvScalar(255, 0, 0), 2);
+                CvInvoke.Rectangle(imageOut, rect, RenderColorEye, 2);
 
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
 

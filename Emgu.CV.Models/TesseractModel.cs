@@ -82,6 +82,23 @@ namespace Emgu.CV.Models
             Clear();
         }
 
+        private MCvScalar _renderColor = new MCvScalar(255, 0, 0);
+
+        /// <summary>
+        /// Get or Set the color used in rendering.
+        /// </summary>
+        public MCvScalar RenderColor
+        {
+            get
+            {
+                return _renderColor;
+            }
+            set
+            {
+                _renderColor = value;
+            }
+        }
+
         /// <summary>
         /// Process the input image and render into the output image
         /// </summary>
@@ -105,7 +122,7 @@ namespace Emgu.CV.Models
             Tesseract.Character[] characters = _ocr.GetCharacters();
             foreach (Tesseract.Character c in characters)
             {
-                CvInvoke.Rectangle(imageOut, c.Region, new MCvScalar(255, 0, 0));
+                CvInvoke.Rectangle(imageOut, c.Region, RenderColor);
             }
 
             return String.Format(

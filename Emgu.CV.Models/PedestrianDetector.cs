@@ -69,7 +69,6 @@ namespace Emgu.CV.Models
 
             using (InputArray iaImage = image.GetInputArray())
             {
-
 #if !(UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL)
                 //if the input array is a GpuMat
                 //check if there is a compatible Cuda device to run pedestrian detection
@@ -128,6 +127,23 @@ namespace Emgu.CV.Models
 #endif
         }
 
+        private MCvScalar _renderColor = new MCvScalar(0, 0, 255);
+
+        /// <summary>
+        /// Get or Set the color used in rendering the rectangle around the object.
+        /// </summary>
+        public MCvScalar RenderColor
+        {
+            get
+            {
+                return _renderColor;
+            }
+            set
+            {
+                _renderColor = value;
+            }
+        }
+
         /// <summary>
         /// Process the input image and render into the output image
         /// </summary>
@@ -147,7 +163,7 @@ namespace Emgu.CV.Models
 
             foreach (Rectangle rect in pedestrians)
             {
-                CvInvoke.Rectangle(imageOut, rect, new MCvScalar(0, 0, 255), 2);
+                CvInvoke.Rectangle(imageOut, rect, RenderColor, 2);
             }
 
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);

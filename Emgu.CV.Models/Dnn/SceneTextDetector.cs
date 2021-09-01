@@ -227,6 +227,23 @@ namespace Emgu.CV.Models
             }
         }
 
+        private MCvScalar _renderColor = new MCvScalar(0, 0, 255);
+
+        /// <summary>
+        /// Get or Set the color used in rendering.
+        /// </summary>
+        public MCvScalar RenderColor
+        {
+            get
+            {
+                return _renderColor;
+            }
+            set
+            {
+                _renderColor = value;
+            }
+        }
+
         /// <summary>
         /// Draw the vehicles to the image.
         /// </summary>
@@ -235,7 +252,7 @@ namespace Emgu.CV.Models
         public void Render(IInputOutputArray image, DetectedObject[] sceneTexts)
         {
             foreach (var detected in sceneTexts)
-                detected.Render(image, new MCvScalar(0, 0, 255), _freetype);
+                detected.Render(image, RenderColor, _freetype);
             /*
             foreach (SceneText st in sceneTexts)
             {

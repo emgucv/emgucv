@@ -127,6 +127,23 @@ namespace Emgu.CV.Models
             return Array.ConvertAll(points, Point.Round);
         }
 
+        private MCvScalar _renderColor = new MCvScalar(255, 0, 0);
+
+        /// <summary>
+        /// Get or Set the color used in rendering.
+        /// </summary>
+        public MCvScalar RenderColor
+        {
+            get
+            {
+                return _renderColor;
+            }
+            set
+            {
+                _renderColor = value;
+            }
+        }
+
         /// <summary>
         /// Process the input image and render into the output image
         /// </summary>
@@ -146,14 +163,13 @@ namespace Emgu.CV.Models
                 var barcodesFound = _barcodeDetector.DetectAndDecode(imageIn);
                 watch.Stop();
 
-                MCvScalar drawColor = new MCvScalar(255,0,0);
                 for (int i = 0; i < barcodesFound.Length; i++)
                 {
                     Point[] contour = Array.ConvertAll(barcodesFound[i].Points, Point.Round);
 
                     using (VectorOfVectorOfPoint vpp = new VectorOfVectorOfPoint(new Point[][] { contour }))
                     {
-                        CvInvoke.DrawContours(imageOut, vpp, -1, drawColor);
+                        CvInvoke.DrawContours(imageOut, vpp, -1, RenderColor);
                     }
 
                     CvInvoke.PutText(
@@ -162,7 +178,7 @@ namespace Emgu.CV.Models
                         Point.Round( barcodesFound[i].Points[0]),
                         FontFace.HersheySimplex,
                         1.0,
-                        drawColor
+                        RenderColor
                         );
                 }
 

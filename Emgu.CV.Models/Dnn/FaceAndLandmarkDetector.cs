@@ -112,6 +112,40 @@ namespace Emgu.CV.Models
 #endif
         }
 
+        private MCvScalar _renderColorRectangle = new MCvScalar(0, 255, 0);
+
+        /// <summary>
+        /// Get or Set the color used in rendering the rectangle around the object.
+        /// </summary>
+        public MCvScalar RenderColorRectangle
+        {
+            get
+            {
+                return _renderColorRectangle;
+            }
+            set
+            {
+                _renderColorRectangle = value;
+            }
+        }
+
+        private MCvScalar _renderColorLandmark = new MCvScalar(255, 0, 0);
+
+        /// <summary>
+        /// Get or Set the color used in rendering the rectangle around the object.
+        /// </summary>
+        public MCvScalar RenderColorLandmark
+        {
+            get
+            {
+                return _renderColorLandmark;
+            }
+            set
+            {
+                _renderColorLandmark = value;
+            }
+        }
+
         /// <summary>
         /// Process the input image and render into the output image
         /// </summary>
@@ -135,7 +169,7 @@ namespace Emgu.CV.Models
             {
                 foreach (DetectedObject face in partialFaceRegions)
                 {
-                    CvInvoke.Rectangle(imageOut, face.Region, new MCvScalar(0, 255, 0));
+                    CvInvoke.Rectangle(imageOut, face.Region, RenderColorRectangle);
                 }
             }
 
@@ -143,7 +177,7 @@ namespace Emgu.CV.Models
             {
                 foreach (DetectedObject face in fullFaceRegions)
                 {
-                    CvInvoke.Rectangle(imageOut, face.Region, new MCvScalar(0, 255, 0));
+                    CvInvoke.Rectangle(imageOut, face.Region, RenderColorRectangle);
                 }
 
                 var fullFaceRegionsArr = fullFaceRegions.ToArray();
@@ -155,7 +189,7 @@ namespace Emgu.CV.Models
                     for (int i = 0; i < len; i++)
                     {
                         using (VectorOfPointF vpf = landmarks[i])
-                            FaceInvoke.DrawFacemarks(imageOut, vpf, new MCvScalar(255, 0, 0));
+                            FaceInvoke.DrawFacemarks(imageOut, vpf, RenderColorLandmark);
                     }
                 }
             }

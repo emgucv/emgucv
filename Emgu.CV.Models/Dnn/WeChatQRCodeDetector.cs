@@ -129,7 +129,22 @@ namespace Emgu.CV.Models
 #endif
         }
 
+        private MCvScalar _renderColor = new MCvScalar(0, 0, 255);
 
+        /// <summary>
+        /// Get or Set the color used in rendering.
+        /// </summary>
+        public MCvScalar RenderColor
+        {
+            get
+            {
+                return _renderColor;
+            }
+            set
+            {
+                _renderColor = value;
+            }
+        }
 
         /// <summary>
         /// Process the input image and render into the output image
@@ -147,12 +162,12 @@ namespace Emgu.CV.Models
             Stopwatch watch = Stopwatch.StartNew();
             var qrCodesFound = _weChatQRCodeDetectionModel.DetectAndDecode(imageIn);
             watch.Stop();
-            MCvScalar drawColor = new MCvScalar(0, 0, 255);
+
             for (int i = 0; i < qrCodesFound.Length; i++)
             {
                 using (VectorOfVectorOfPoint vpp = new VectorOfVectorOfPoint(new Point[][] { qrCodesFound[i].Region }))
                 {
-                    CvInvoke.DrawContours(imageOut, vpp, -1, drawColor);
+                    CvInvoke.DrawContours(imageOut, vpp, -1, RenderColor);
                 }
                 CvInvoke.PutText(
                     imageOut,
@@ -160,7 +175,7 @@ namespace Emgu.CV.Models
                     Point.Round(qrCodesFound[i].Region[0]),
                     FontFace.HersheySimplex,
                     1.0,
-                    drawColor
+                    RenderColor
                     );
             }
 
