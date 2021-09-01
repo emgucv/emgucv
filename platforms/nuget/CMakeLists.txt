@@ -24,13 +24,13 @@ ADD_SUBDIRECTORY("Emgu.CV.runtime.uwp")
 
 ADD_SUBDIRECTORY("Emgu.CV.runtime.ios")
 
-IF (HAVE_LINUX_ARM)
-  add_subdirectory("Emgu.CV.runtime.linux-arm")
-ENDIF()
+#IF (HAVE_LINUX_ARM)
+add_subdirectory("Emgu.CV.runtime.linux-arm")
+#ENDIF()
 
-IF (HAVE_LINUX_X86 OR HAVE_LINUX_X64 OR HAVE_LINUX_ARM64)
-  add_subdirectory("Emgu.CV.runtime.ubuntu")
-ENDIF()
+#IF (HAVE_LINUX_X86 OR HAVE_LINUX_X64 OR HAVE_LINUX_ARM64)
+add_subdirectory("Emgu.CV.runtime.ubuntu")
+#ENDIF()
 
 ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.x86")
 ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.x64")

@@ -3,7 +3,7 @@
   <metadata>
     <id>${EMGUCV_UBUNTU_NUGET_ID}</id>
 	<title>${EMGUCV_UBUNTU_NUGET_TITLE}</title>
-    <version>${CPACK_PACKAGE_VERSION}${TENSORFLOW_VERSION_SUFFIX}</version>
+    <version>${CPACK_PACKAGE_VERSION}</version>
     <authors>${CPACK_PACKAGE_VENDOR}</authors>
     <owners>${CPACK_PACKAGE_VENDOR}</owners>
     <license type="file">${EMGUCV_LICENSE_FILE}</license>

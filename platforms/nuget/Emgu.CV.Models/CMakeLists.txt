@@ -5,14 +5,20 @@
 IF ((TARGET Emgu.CV.Models.NetStandard) AND (TARGET Emgu.CV.Models.IOS))
   PROJECT(Emgu.CV.Models.nuget)
 
+  get_filename_component(NUGET_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
+
   BUILD_NUGET_PACKAGE(
     ${PROJECT_NAME} 
 	"${CMAKE_CURRENT_SOURCE_DIR}/../../../Emgu.CV.Models/Emgu.CV.Models.NetStandard/Emgu.CV.Models.NetStandard.csproj"  #csproj_file 
 	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" #nuspec_file 
-	"${CMAKE_CURRENT_SOURCE_DIR}/../" #output_dir 
+	"${NUGET_OUTPUT_DIR}" #output_dir 
 	"${CMAKE_CURRENT_SOURCE_DIR}" #working_dir
 	)
 	
+  IF (EMGU_NUGET_SIGN_FOUND)
+    EMGU_SIGN_NUGET(${PROJECT_NAME} "${NUGET_OUTPUT_DIR}/${EMGUCV_MODELS_NUGET_ID}.${CPACK_PACKAGE_VERSION}.nupkg")
+  ENDIF()
+
   IF (APPLE)
     add_custom_command(TARGET ${PROJECT_NAME}
       PRE_BUILD

@@ -5,6 +5,8 @@
 IF ((TARGET Emgu.CV.Platform.NetCore) AND (TARGET Emgu.CV.Platform.NetFramework))
   PROJECT(Emgu.CV.UI.nuget)
 
+  get_filename_component(NUGET_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
+
   BUILD_NUGET_PACKAGE(
     ${PROJECT_NAME} 
 	"${CMAKE_CURRENT_SOURCE_DIR}/../../../Emgu.CV.Platform/DotNet/Core/Emgu.CV.Platform.NetCore.csproj"  #csproj_file 
@@ -12,6 +14,10 @@ IF ((TARGET Emgu.CV.Platform.NetCore) AND (TARGET Emgu.CV.Platform.NetFramework)
 	"${CMAKE_CURRENT_SOURCE_DIR}/../" #output_dir 
 	"${CMAKE_CURRENT_SOURCE_DIR}" #working_dir
 	) 
+
+  IF (EMGU_NUGET_SIGN_FOUND)
+    EMGU_SIGN_NUGET(${PROJECT_NAME} "${NUGET_OUTPUT_DIR}/${EMGUCV_UI_NUGET_ID}.${CPACK_PACKAGE_VERSION}.nupkg")
+  ENDIF()
 
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetCore)
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetFramework)
