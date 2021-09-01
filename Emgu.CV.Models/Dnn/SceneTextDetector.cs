@@ -247,7 +247,12 @@ namespace Emgu.CV.Models
         /// Process the input image and render into the output image
         /// </summary>
         /// <param name="imageIn">The input image</param>
-        /// <param name="imageOut">The output image, can be the same as imageIn, in which case we will render directly into the input image</param>
+        /// <param name="imageOut">
+        /// The output image, can be the same as <paramref name="imageIn"/>, in which case we will render directly into the input image.
+        /// Note that if no text is detected, <paramref name="imageOut"/> will remain unchanged.
+        /// If text is detected, we will draw the text and (rectangle) region on top of the existing pixels of <paramref name="imageOut"/>.
+        /// If the <paramref name="imageOut"/> is not the same object as <paramref name="imageIn"/>, it is a good idea to copy the pixels over from the input image before passing it to this function.
+        /// </param>
         /// <returns>The messages that we want to display.</returns>
         public String ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {

@@ -86,7 +86,12 @@ namespace Emgu.CV.Models
         /// Process the input image and render into the output image
         /// </summary>
         /// <param name="imageIn">The input image</param>
-        /// <param name="imageOut">The output image, can be the same as imageIn, in which case we will render directly into the input image</param>
+        /// <param name="imageOut">
+        /// The output image, can be the same as imageIn, in which case we will render directly into the input image.
+        /// Note that if no text is detected, the output image will remain unchanged. 
+        /// If text are detected, we will render the text region on top of the existing output image.
+        /// If the output image is not the same object as the input image, it is a good idea to copy the pixels over from the input image before passing it to this function.
+        /// </param>
         /// <returns>The messages that we want to display.</returns>
         public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
@@ -96,15 +101,6 @@ namespace Emgu.CV.Models
                 throw new Exception("Failed to recognize image");
             String ocrResult = _ocr.GetUTF8Text();
             watch.Stop();
-
-            /*
-            if (imageOut != imageIn)
-            {
-                using (InputArray iaImageIn = imageIn.GetInputArray())
-                {
-                    iaImageIn.CopyTo(imageOut);
-                }
-            }*/
 
             Tesseract.Character[] characters = _ocr.GetCharacters();
             foreach (Tesseract.Character c in characters)
