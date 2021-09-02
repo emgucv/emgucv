@@ -112,11 +112,50 @@ namespace Emgu.CV.Models
 #endif
         }
 
+        private MCvScalar _renderColorRectangle = new MCvScalar(0, 255, 0);
+
+        /// <summary>
+        /// Get or Set the color used in rendering the rectangle around the object.
+        /// </summary>
+        public MCvScalar RenderColorRectangle
+        {
+            get
+            {
+                return _renderColorRectangle;
+            }
+            set
+            {
+                _renderColorRectangle = value;
+            }
+        }
+
+        private MCvScalar _renderColorLandmark = new MCvScalar(255, 0, 0);
+
+        /// <summary>
+        /// Get or Set the color used in rendering the rectangle around the object.
+        /// </summary>
+        public MCvScalar RenderColorLandmark
+        {
+            get
+            {
+                return _renderColorLandmark;
+            }
+            set
+            {
+                _renderColorLandmark = value;
+            }
+        }
+
         /// <summary>
         /// Process the input image and render into the output image
         /// </summary>
         /// <param name="imageIn">The input image</param>
-        /// <param name="imageOut">The output image, can be the same as imageIn, in which case we will render directly into the input image</param>
+        /// <param name="imageOut">
+        /// The output image, can be the same as <paramref name="imageIn"/>, in which case we will render directly into the input image.
+        /// Note that if no faces are detected, <paramref name="imageOut"/> will remain unchanged.
+        /// If faces/landmarks are detected, we will draw the regions and markers on top of the existing pixels of <paramref name="imageOut"/>.
+        /// If the <paramref name="imageOut"/> is not the same object as <paramref name="imageIn"/>, it is a good idea to copy the pixels over from the input image before passing it to this function.
+        /// </param>
         /// <returns>The messages that we want to display.</returns>
         public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
@@ -130,7 +169,7 @@ namespace Emgu.CV.Models
             {
                 foreach (DetectedObject face in partialFaceRegions)
                 {
-                    CvInvoke.Rectangle(imageOut, face.Region, new MCvScalar(0, 255, 0));
+                    CvInvoke.Rectangle(imageOut, face.Region, RenderColorRectangle);
                 }
             }
 
@@ -138,7 +177,7 @@ namespace Emgu.CV.Models
             {
                 foreach (DetectedObject face in fullFaceRegions)
                 {
-                    CvInvoke.Rectangle(imageOut, face.Region, new MCvScalar(0, 255, 0));
+                    CvInvoke.Rectangle(imageOut, face.Region, RenderColorRectangle);
                 }
 
                 var fullFaceRegionsArr = fullFaceRegions.ToArray();
@@ -150,7 +189,7 @@ namespace Emgu.CV.Models
                     for (int i = 0; i < len; i++)
                     {
                         using (VectorOfPointF vpf = landmarks[i])
-                            FaceInvoke.DrawFacemarks(imageOut, vpf, new MCvScalar(255, 0, 0));
+                            FaceInvoke.DrawFacemarks(imageOut, vpf, RenderColorLandmark);
                     }
                 }
             }

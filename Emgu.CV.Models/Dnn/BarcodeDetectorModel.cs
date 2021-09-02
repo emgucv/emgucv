@@ -126,12 +126,34 @@ namespace Emgu.CV.Models
             handle.Free();
             return Array.ConvertAll(points, Point.Round);
         }
-        
+
+        private MCvScalar _renderColor = new MCvScalar(255, 0, 0);
+
+        /// <summary>
+        /// Get or Set the color used in rendering.
+        /// </summary>
+        public MCvScalar RenderColor
+        {
+            get
+            {
+                return _renderColor;
+            }
+            set
+            {
+                _renderColor = value;
+            }
+        }
+
         /// <summary>
         /// Process the input image and render into the output image
         /// </summary>
         /// <param name="imageIn">The input image</param>
-        /// <param name="imageOut">The output image, can be the same as imageIn, in which case we will render directly into the input image</param>
+        /// <param name="imageOut">
+        /// The output image, can be the same as <paramref name="imageIn"/>, in which case we will render directly into the input image.
+        /// Note that if no bar codes are detected, <paramref name="imageOut"/> will remain unchanged.
+        /// If bar codes are detected, we will draw the code and (rectangle) regions on top of the existing pixels of <paramref name="imageOut"/>.
+        /// If the <paramref name="imageOut"/> is not the same object as <paramref name="imageIn"/>, it is a good idea to copy the pixels over from the input image before passing it to this function.
+        /// </param>
         /// <returns>The messages that we want to display.</returns>
         public String ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
@@ -141,14 +163,13 @@ namespace Emgu.CV.Models
                 var barcodesFound = _barcodeDetector.DetectAndDecode(imageIn);
                 watch.Stop();
 
-                MCvScalar drawColor = new MCvScalar(255,0,0);
                 for (int i = 0; i < barcodesFound.Length; i++)
                 {
                     Point[] contour = Array.ConvertAll(barcodesFound[i].Points, Point.Round);
 
                     using (VectorOfVectorOfPoint vpp = new VectorOfVectorOfPoint(new Point[][] { contour }))
                     {
-                        CvInvoke.DrawContours(imageOut, vpp, -1, drawColor);
+                        CvInvoke.DrawContours(imageOut, vpp, -1, RenderColor);
                     }
 
                     CvInvoke.PutText(
@@ -157,7 +178,7 @@ namespace Emgu.CV.Models
                         Point.Round( barcodesFound[i].Points[0]),
                         FontFace.HersheySimplex,
                         1.0,
-                        drawColor
+                        RenderColor
                         );
                 }
 

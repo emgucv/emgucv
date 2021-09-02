@@ -89,5 +89,20 @@ namespace Emgu.CV.Test
 
         }
 
+#if !TEST_MODELS
+        [Ignore("Ignore from test run by default.")]
+#endif
+        [Test]
+        public async Task TestPedestrianDetector()
+        {
+            using (Mat m = EmguAssert.LoadMat("pedestrian"))
+            using (Emgu.CV.Models.PedestrianDetector detector = new PedestrianDetector())
+            {
+                await detector.Init(DownloadManager_OnDownloadProgressChanged);
+                String text = detector.ProcessAndRender(m, m);
+            }
+
+        }
+
     }
 }

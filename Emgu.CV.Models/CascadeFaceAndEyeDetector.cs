@@ -109,11 +109,50 @@ namespace Emgu.CV.Models
             }
         }
 
+        private MCvScalar _renderColorFace = new MCvScalar(0, 0, 255);
+
+        /// <summary>
+        /// Get or Set the color used in rendering face.
+        /// </summary>
+        public MCvScalar RenderColorFace
+        {
+            get
+            {
+                return _renderColorFace;
+            }
+            set
+            {
+                _renderColorFace = value;
+            }
+        }
+
+        private MCvScalar _renderColorEye = new MCvScalar(255, 0, 0);
+
+        /// <summary>
+        /// Get or Set the color used in rendering eye.
+        /// </summary>
+        public MCvScalar RenderColorEye
+        {
+            get
+            {
+                return _renderColorEye;
+            }
+            set
+            {
+                _renderColorEye = value;
+            }
+        }
+
         /// <summary>
         /// Process the input image and render into the output image
         /// </summary>
         /// <param name="imageIn">The input image</param>
-        /// <param name="imageOut">The output image, can be the same as imageIn, in which case we will render directly into the input image</param>
+        /// <param name="imageOut">
+        /// The output image, can be the same as <paramref name="imageIn"/>, in which case we will render directly into the input image.
+        /// Note that if no faces are detected, <paramref name="imageOut"/> will remain unchanged.
+        /// If faces/eyes are detected, we will draw the (rectangle) regions on top of the existing pixels of <paramref name="imageOut"/>.
+        /// If the <paramref name="imageOut"/> is not the same object as <paramref name="imageIn"/>, it is a good idea to copy the pixels over from the input image before passing it to this function.
+        /// </param>
         /// <returns>The messages that we want to display.</returns>
         public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
@@ -124,22 +163,13 @@ namespace Emgu.CV.Models
             Detect(imageIn, faces, eyes);
             watch.Stop();
 
-            /*
-            if (imageOut != imageIn)
-            {
-                using (InputArray iaImageIn = imageIn.GetInputArray())
-                {
-                    iaImageIn.CopyTo(imageOut);
-                }
-            }*/
-
-            //Draw the faces in red
+            //Draw the faces
             foreach (Rectangle rect in faces)
-                CvInvoke.Rectangle(imageOut, rect, new MCvScalar(0, 0, 255), 2);
+                CvInvoke.Rectangle(imageOut, rect, RenderColorFace, 2);
 
-            //Draw the eyes in blue
+            //Draw the eyes 
             foreach (Rectangle rect in eyes)
-                CvInvoke.Rectangle(imageOut, rect, new MCvScalar(255, 0, 0), 2);
+                CvInvoke.Rectangle(imageOut, rect, RenderColorEye, 2);
 
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
 

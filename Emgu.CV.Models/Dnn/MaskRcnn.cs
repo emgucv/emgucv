@@ -120,15 +120,47 @@ namespace Emgu.CV.Models
                             }
                         }
                     }
-                    
 
-                    _colors = new MCvScalar[_labels.Length];
-                    Random r = new Random(12345);
-                    for (int i = 0; i < _colors.Length; i++)
+                    if (_colors == null || _colors.Length != _labels.Length)
                     {
-                        _colors[i] = new MCvScalar(r.Next(256), r.Next(256), r.Next(256));
+                        _colors = new MCvScalar[_labels.Length];
+                        Random r = new Random(12345);
+                        for (int i = 0; i < _colors.Length; i++)
+                        {
+                            _colors[i] = new MCvScalar(r.Next(256), r.Next(256), r.Next(256));
+                        }
                     }
                 }
+            }
+        }
+
+        private MCvScalar _renderColor = new MCvScalar(0, 0, 255);
+
+        /// <summary>
+        /// Get or Set the color used in rendering the rectangle around the object.
+        /// </summary>
+        public MCvScalar RenderColorRectangle
+        {
+            get
+            {
+                return _renderColor;
+            }
+            set
+            {
+                _renderColor = value;
+            }
+        }
+
+        /// <summary>
+        /// Get the rendering colors for the mask. The size of the array equals to the size of labels.
+        /// You can change the colors for rendering masks by updating this array.
+        /// It will only contains value after the Init function is called.
+        /// </summary>
+        public MCvScalar[] RenderColorMask
+        {
+            get
+            {
+                return _colors;
             }
         }
 
@@ -161,7 +193,7 @@ namespace Emgu.CV.Models
 
             foreach (var obj in objects)
             {
-                obj.Render(imageOut, new MCvScalar(0, 0, 255), _colors[obj.ClassId]);
+                obj.Render(imageOut, RenderColorRectangle, RenderColorMask[obj.ClassId]);
                 obj.Dispose();
             }
         }

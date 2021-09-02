@@ -129,25 +129,45 @@ namespace Emgu.CV.Models
 #endif
         }
 
+        private MCvScalar _renderColor = new MCvScalar(0, 0, 255);
 
-        
+        /// <summary>
+        /// Get or Set the color used in rendering.
+        /// </summary>
+        public MCvScalar RenderColor
+        {
+            get
+            {
+                return _renderColor;
+            }
+            set
+            {
+                _renderColor = value;
+            }
+        }
+
         /// <summary>
         /// Process the input image and render into the output image
         /// </summary>
         /// <param name="imageIn">The input image</param>
-        /// <param name="imageOut">The output image, can be the same as imageIn, in which case we will render directly into the input image</param>
+        /// <param name="imageOut">
+        /// The output image, can be the same as <paramref name="imageIn"/>, in which case we will render directly into the input image.
+        /// Note that if no qr codes are detected, <paramref name="imageOut"/> will remain unchanged.
+        /// If qr codes are detected, we will draw the code and (rectangle) regions on top of the existing pixels of <paramref name="imageOut"/>.
+        /// If the <paramref name="imageOut"/> is not the same object as <paramref name="imageIn"/>, it is a good idea to copy the pixels over from the input image before passing it to this function.
+        /// </param>
         /// <returns>The messages that we want to display.</returns>
         public String ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
             Stopwatch watch = Stopwatch.StartNew();
             var qrCodesFound = _weChatQRCodeDetectionModel.DetectAndDecode(imageIn);
             watch.Stop();
-            MCvScalar drawColor = new MCvScalar(0, 0, 255);
+
             for (int i = 0; i < qrCodesFound.Length; i++)
             {
                 using (VectorOfVectorOfPoint vpp = new VectorOfVectorOfPoint(new Point[][] { qrCodesFound[i].Region }))
                 {
-                    CvInvoke.DrawContours(imageOut, vpp, -1, drawColor);
+                    CvInvoke.DrawContours(imageOut, vpp, -1, RenderColor);
                 }
                 CvInvoke.PutText(
                     imageOut,
@@ -155,7 +175,7 @@ namespace Emgu.CV.Models
                     Point.Round(qrCodesFound[i].Region[0]),
                     FontFace.HersheySimplex,
                     1.0,
-                    drawColor
+                    RenderColor
                     );
             }
 

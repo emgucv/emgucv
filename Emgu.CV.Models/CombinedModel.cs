@@ -28,6 +28,10 @@ namespace Emgu.CV.Models
         public IProcessAndRenderModel[] _models;
         public bool _disposeChildren = false;
 
+        /// <summary>
+        /// Combine multiple IProcessAndRenderModel into a single model.
+        /// </summary>
+        /// <param name="models">The models to be combined.</param>
         public CombinedModel(params IProcessAndRenderModel[] models)
         {
             _models = models;
@@ -85,20 +89,22 @@ namespace Emgu.CV.Models
         /// Process the input image and render into the output image
         /// </summary>
         /// <param name="imageIn">The input image</param>
-        /// <param name="imageOut">The output image, can be the same as imageIn, in which case we will render directly into the input image</param>
+        /// <param name="imageOut">
+        /// The output image. In a combined model, it should be different than <paramref name="imageIn"/> to avoid having the output of one model being passed as the input of the other model.
+        /// Note that if nothing is detected, the output image will remain unchanged.
+        /// It is a good idea to copy the pixels over from the <paramref name="imageIn"/> to <paramref name="imageOut"/> before passing it to this function.
+        /// </param>
         /// <returns>The messages that we want to display.</returns>
         public String ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
             //Mat outMat = new Mat();
             StringBuilder allMsg = new StringBuilder();
             
-            
             foreach (var model in _models)
             {
                 String msg = model.ProcessAndRender(imageIn, imageOut);
                 allMsg.AppendLine(msg);
             }
-            //outMat.CopyTo(imageOut);
 
             return allMsg.ToString();
         }
