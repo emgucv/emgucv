@@ -25,8 +25,8 @@ namespace Emgu.CV.Models
     /// </summary>
     public class CombinedModel : DisposableObject, IProcessAndRenderModel
     {
-        public IProcessAndRenderModel[] _models;
-        public bool _disposeChildren = false;
+        private IProcessAndRenderModel[] _models;
+        private bool _disposeChildren = false;
 
         /// <summary>
         /// Combine multiple IProcessAndRenderModel into a single model.
@@ -35,6 +35,17 @@ namespace Emgu.CV.Models
         public CombinedModel(params IProcessAndRenderModel[] models)
         {
             _models = models;
+        }
+
+        /// <summary>
+        /// Get the list of combined models.
+        /// </summary>
+        public IProcessAndRenderModel[] Models
+        {
+            get
+            {
+                return _models;
+            }
         }
 
         /// <summary>
@@ -97,7 +108,6 @@ namespace Emgu.CV.Models
         /// <returns>The messages that we want to display.</returns>
         public String ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
-            //Mat outMat = new Mat();
             StringBuilder allMsg = new StringBuilder();
             
             foreach (var model in _models)
