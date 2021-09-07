@@ -153,10 +153,11 @@ namespace Emgu.CV.StructuredLight
         /// <inheritdoc/>
         protected override void DisposeObject()
         {
-            if (_sharedPtr != null)
+            if (_sharedPtr != IntPtr.Zero)
             {
                 StructuredLightInvoke.cveSinusoidalPatternRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
+                _structuredLightPatternPtr = IntPtr.Zero;
                 _algorithmPtr = IntPtr.Zero;
             }
         }

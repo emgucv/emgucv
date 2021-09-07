@@ -69,7 +69,7 @@ CVAPI(cv::structured_light::GrayCodePattern*) cveGrayCodePatternCreate(
     cv::structured_light::StructuredLightPattern** structuredLightPattern,
     cv::Algorithm** algorithm);
 CVAPI(void) cveGrayCodePatternRelease(cv::Ptr<cv::structured_light::GrayCodePattern>** pattern);
-
-
+CVAPI(void) cveGrayCodePatternGetImagesForShadowMasks(cv::structured_light::GrayCodePattern* grayCodePattern, cv::_InputOutputArray* blackImage, cv::_InputOutputArray* whiteImage);
+CVAPI(bool) cveGrayCodePatternGetProjPixel(cv::structured_light::GrayCodePattern* grayCodePattern, cv::_InputArray* patternImages, int x, int y, CvPoint* projPix);
 
 #endif

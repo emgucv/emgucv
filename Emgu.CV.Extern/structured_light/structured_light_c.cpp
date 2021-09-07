@@ -66,6 +66,27 @@ void cveGrayCodePatternRelease(cv::Ptr<cv::structured_light::GrayCodePattern>** 
     throw_no_structured_light();
 #endif
 }
+void cveGrayCodePatternGetImagesForShadowMasks(cv::structured_light::GrayCodePattern* grayCodePattern, cv::_InputOutputArray* blackImage, cv::_InputOutputArray* whiteImage)
+{
+#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+    grayCodePattern->getImagesForShadowMasks(*blackImage, *whiteImage);
+#else
+    throw_no_structured_light();
+#endif	
+}
+
+bool cveGrayCodePatternGetProjPixel(cv::structured_light::GrayCodePattern* grayCodePattern, cv::_InputArray* patternImages, int x, int y, CvPoint* projPix)
+{
+#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+    cv::Point p;
+    bool result = grayCodePattern->getProjPixel(*patternImages, x, y, p);
+    projPix->x = p.x;
+    projPix->y = p.y;
+    return result;
+#else
+    throw_no_structured_light();
+#endif		
+}
 
 cv::structured_light::SinusoidalPattern* cveSinusoidalPatternCreate(
     int width,
