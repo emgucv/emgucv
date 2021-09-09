@@ -132,14 +132,12 @@ CREATE_VECTOR_CS("VectorOfInt" "std::vector< int >" "int" "vector" "${CMAKE_CURR
 CREATE_VECTOR_CS("VectorOfByte" "std::vector< unsigned char >" "Byte" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
 CREATE_VECTOR_CS("VectorOfDMatch" "std::vector< cv::DMatch >" "MDMatch" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
 CREATE_VECTOR_CS("VectorOfRect" "std::vector< cv::Rect >" "Rectangle" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
-CREATE_VECTOR_CS("VectorOfMat" "std::vector< cv::Mat >" "Mat" "object_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
-
 
 CREATE_VECTOR_CS("OclPlatformInfo" "cv::ocl::PlatformInfo" "Ocl.PlatformInfo" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"opencv2/core/ocl.hpp\"" "" "1")
-
 CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda" Emgu.CV.Cuda "" "#include \"opencv2/core/cuda.hpp\"" "" "1")
 
 CREATE_VECTOR_CS("VideoCapture" "cv::VideoCapture" "VideoCapture" "object_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"videoio_c_extra.h\"" "" "defined(HAVE_OPENCV_VIDEOIO)")
+CREATE_VECTOR_CS("VectorOfMat" "std::vector< cv::Mat >" "VectorOfMat" "object_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
 
 
 MACRO(WRITE_IF_DIFFERENT fname content)

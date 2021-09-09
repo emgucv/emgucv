@@ -184,6 +184,20 @@ namespace Emgu.CV.Test
             }
         }
 
+        [TestAttribute]
+        public void TestVectorOfVectorOfMat()
+        {
+            using (Mat m = new Mat())
+            using (VectorOfMat vm = new VectorOfMat())
+            {
+                vm.Push(m);
+                using (VectorOfVectorOfMat vvm = new VectorOfVectorOfMat())
+                {
+                    vvm.Push(vm);
+                }
+            }
+        }
+
 #if !NETFX_CORE
         [TestAttribute]
         public void TestRuntimeSerialize()
