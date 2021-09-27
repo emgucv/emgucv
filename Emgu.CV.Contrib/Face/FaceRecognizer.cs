@@ -28,7 +28,7 @@ namespace Emgu.CV.Face
         /// </summary>
         /// <param name="images">The images used in the training. This can be a VectorOfMat</param>
         /// <param name="labels">The labels of the images. This can be a VectorOfInt</param>
-        public void Train(IInputArray images, IInputArray labels)
+        public void Train(IInputArrayOfArrays images, IInputArray labels)
         {
             using (InputArray iaImage = images.GetInputArray())
             using (InputArray iaLabels = labels.GetInputArray())
