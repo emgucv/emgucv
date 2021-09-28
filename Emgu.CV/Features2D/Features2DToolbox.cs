@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
-//using System.Runtime.Remoting.Messaging;
 using System.Text;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
