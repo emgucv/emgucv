@@ -1554,7 +1554,7 @@ IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
     SET(EMGUCV_ANDROID_NUGET_FILE_LIST "${EMGUCV_ANDROID_NUGET_FILE_LIST}
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-    <file src=\"readme.txt\" target=\"\" />")
+    <file src=\"README.md\" target=\"docs\\\" />")
     SET(EMGUCV_ANDROID_NUGET_DEPENDENCY "
     <dependencies>
       <group targetFramework=\"MonoAndroid5.0\">
