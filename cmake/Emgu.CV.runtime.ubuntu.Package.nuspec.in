@@ -17,7 +17,7 @@
 http://www.emgu.com/wiki/files/EMGUCV/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/</releaseNotes>
 	${EMGUCV_UBUNTU_NUGET_DEPENDENCY}
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
-    <tags>tensorflow emgu emgucv vison ubuntu</tags>
+    <tags>opencv emgu emgucv vison ubuntu</tags>
   </metadata>
   <files>
   ${EMGUCV_UBUNTU_NUGET_FILE_LIST}
