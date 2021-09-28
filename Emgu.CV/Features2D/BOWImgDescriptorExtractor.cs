@@ -60,7 +60,10 @@ namespace Emgu.CV.Features2D
       /// </summary>
       protected override void DisposeObject()
       {
-          Features2DInvoke.cveBOWImgDescriptorExtractorRelease(ref _ptr);
+          if (IntPtr.Zero != _ptr)
+          {
+              Features2DInvoke.cveBOWImgDescriptorExtractorRelease(ref _ptr);
+          }
       }
    }
 

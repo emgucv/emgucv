@@ -42,43 +42,11 @@ namespace Emgu.CV.Features2D
         }
 
         /// <summary>
-        /// Draw the matched keypoints between the model image and the observered image.
+        /// Draw the matched keypoints between the model image and the observed image.
         /// </summary>
         /// <param name="modelImage">The model image</param>
         /// <param name="modelKeypoints">The keypoints in the model image</param>
-        /// <param name="observerdImage">The observed image</param>
-        /// <param name="observedKeyPoints">The keypoints in the observed image</param>
-        /// <param name="matchColor">The color for the match correspondence lines</param>
-        /// <param name="singlePointColor">The color for highlighting the keypoints</param>
-        /// <param name="mask">The mask for the matches. Use null for all matches.</param>
-        /// <param name="flags">The drawing type</param>
-        /// <param name="result">The image where model and observed image is displayed side by side. Matches are drawn as indicated by the flag</param>
-        /// <param name="matches">Matches. Each matches[i] is k or less matches for the same query descriptor.</param>
-        public static void DrawMatches(
-           IInputArray modelImage, 
-           VectorOfKeyPoint modelKeypoints,
-           IInputArray observerdImage, 
-           VectorOfKeyPoint observedKeyPoints,
-           VectorOfVectorOfDMatch matches,
-           IInputOutputArray result,
-           MCvScalar matchColor, 
-           MCvScalar singlePointColor,
-           VectorOfVectorOfByte mask = null,
-           KeypointDrawType flags = KeypointDrawType.Default)
-        {
-            using (InputArray iaModelImage = modelImage.GetInputArray())
-            using (InputArray iaObserverdImage = observerdImage.GetInputArray())
-            using (InputOutputArray ioaResult = result.GetInputOutputArray())
-                Features2DInvoke.drawMatchedFeatures2(iaObserverdImage, observedKeyPoints, iaModelImage,
-               modelKeypoints, matches, ioaResult, ref matchColor, ref singlePointColor, mask, flags);
-        }
-
-        /// <summary>
-        /// Draw the matched keypoints between the model image and the observered image.
-        /// </summary>
-        /// <param name="modelImage">The model image</param>
-        /// <param name="modelKeypoints">The keypoints in the model image</param>
-        /// <param name="observerdImage">The observed image</param>
+        /// <param name="observedImage">The observed image</param>
         /// <param name="observedKeyPoints">The keypoints in the observed image</param>
         /// <param name="matchColor">The color for the match correspondence lines</param>
         /// <param name="singlePointColor">The color for highlighting the keypoints</param>
@@ -89,7 +57,48 @@ namespace Emgu.CV.Features2D
         public static void DrawMatches(
            IInputArray modelImage,
            VectorOfKeyPoint modelKeypoints,
-           IInputArray observerdImage,
+           IInputArray observedImage,
+           VectorOfKeyPoint observedKeyPoints,
+           VectorOfVectorOfDMatch matches,
+           IInputOutputArray result,
+           MCvScalar matchColor,
+           MCvScalar singlePointColor,
+           VectorOfVectorOfByte mask = null,
+           KeypointDrawType flags = KeypointDrawType.Default)
+        {
+            using (InputArray iaModelImage = modelImage.GetInputArray())
+            using (InputArray iaObservedImage = observedImage.GetInputArray())
+            using (InputOutputArray ioaResult = result.GetInputOutputArray())
+                Features2DInvoke.drawMatchedFeatures2(
+                    iaObservedImage,
+                    observedKeyPoints,
+                    iaModelImage,
+                    modelKeypoints,
+                    matches,
+                    ioaResult,
+                    ref matchColor,
+                    ref singlePointColor,
+                    mask,
+                    flags);
+        }
+
+        /// <summary>
+        /// Draw the matched keypoints between the model image and the observered image.
+        /// </summary>
+        /// <param name="modelImage">The model image</param>
+        /// <param name="modelKeypoints">The keypoints in the model image</param>
+        /// <param name="observedImage">The observed image</param>
+        /// <param name="observedKeyPoints">The keypoints in the observed image</param>
+        /// <param name="matchColor">The color for the match correspondence lines</param>
+        /// <param name="singlePointColor">The color for highlighting the keypoints</param>
+        /// <param name="mask">The mask for the matches. Use null for all matches.</param>
+        /// <param name="flags">The drawing type</param>
+        /// <param name="result">The image where model and observed image is displayed side by side. Matches are drawn as indicated by the flag</param>
+        /// <param name="matches">Matches. Each matches[i] is k or less matches for the same query descriptor.</param>
+        public static void DrawMatches(
+           IInputArray modelImage,
+           VectorOfKeyPoint modelKeypoints,
+           IInputArray observedImage,
            VectorOfKeyPoint observedKeyPoints,
            VectorOfDMatch matches,
            IInputOutputArray result,
@@ -99,9 +108,9 @@ namespace Emgu.CV.Features2D
            KeypointDrawType flags = KeypointDrawType.Default)
         {
             using (InputArray iaModelImage = modelImage.GetInputArray())
-            using (InputArray iaObserverdImage = observerdImage.GetInputArray())
+            using (InputArray iaObservedImage = observedImage.GetInputArray())
             using (InputOutputArray ioaResult = result.GetInputOutputArray())
-                Features2DInvoke.drawMatchedFeatures1(iaObserverdImage, observedKeyPoints, iaModelImage,
+                Features2DInvoke.drawMatchedFeatures1(iaObservedImage, observedKeyPoints, iaModelImage,
                modelKeypoints, matches, ioaResult, ref matchColor, ref singlePointColor, mask, flags);
         }
 
@@ -110,7 +119,7 @@ namespace Emgu.CV.Features2D
         /// </summary>
         /// <param name="modelImage">The model image</param>
         /// <param name="modelKeypoints">The keypoints in the model image</param>
-        /// <param name="observerdImage">The observed image</param>
+        /// <param name="observedImage">The observed image</param>
         /// <param name="observedKeyPoints">The keypoints in the observed image</param>
         /// <param name="matchColor">The color for the match correspondence lines</param>
         /// <param name="singlePointColor">The color for highlighting the keypoints</param>
@@ -119,19 +128,22 @@ namespace Emgu.CV.Features2D
         /// <param name="result">The image where model and observed image is displayed side by side. Matches are drawn as indicated by the flag</param>
         /// <param name="matches">Matches. Each matches[i] is k or less matches for the same query descriptor.</param>
         public static void DrawMatches(
-           IInputArray modelImage, VectorOfKeyPoint modelKeypoints,
-           IInputArray observerdImage, VectorOfKeyPoint observedKeyPoints,
+           IInputArray modelImage, 
+           VectorOfKeyPoint modelKeypoints,
+           IInputArray observedImage, 
+           VectorOfKeyPoint observedKeyPoints,
            VectorOfVectorOfDMatch matches,
            IInputOutputArray result,
-           MCvScalar matchColor, MCvScalar singlePointColor,
+           MCvScalar matchColor,
+           MCvScalar singlePointColor,
            IInputArray mask = null,
            KeypointDrawType flags = KeypointDrawType.Default)
         {
             using (InputArray iaModelImage = modelImage.GetInputArray())
-            using (InputArray iaObserverdImage = observerdImage.GetInputArray())
+            using (InputArray iaObservedImage = observedImage.GetInputArray())
             using (InputOutputArray ioaResult = result.GetInputOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-                Features2DInvoke.drawMatchedFeatures3(iaObserverdImage, observedKeyPoints, iaModelImage,
+                Features2DInvoke.drawMatchedFeatures3(iaObservedImage, observedKeyPoints, iaModelImage,
                modelKeypoints, matches, ioaResult, ref matchColor, ref singlePointColor, iaMask, flags);
         }
 
@@ -169,8 +181,13 @@ namespace Emgu.CV.Features2D
         /// <param name="mask">This is both input and output. This matrix indicates which row is valid for the matches.</param>
         /// <param name="matches">Matches. Each matches[i] is k or less matches for the same query descriptor.</param>
         /// <returns> The number of non-zero elements in the resulting mask</returns>
-        public static int VoteForSizeAndOrientation(VectorOfKeyPoint modelKeyPoints, VectorOfKeyPoint observedKeyPoints,
-           VectorOfVectorOfDMatch matches, Mat mask, double scaleIncrement, int rotationBins)
+        public static int VoteForSizeAndOrientation(
+            VectorOfKeyPoint modelKeyPoints,
+            VectorOfKeyPoint observedKeyPoints,
+            VectorOfVectorOfDMatch matches,
+            Mat mask,
+            double scaleIncrement,
+            int rotationBins)
         {
             return Features2DInvoke.voteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, matches, mask, scaleIncrement,
                rotationBins);
@@ -192,8 +209,12 @@ namespace Emgu.CV.Features2D
         /// </param>
         /// <returns>The homography matrix, if it cannot be found, null is returned</returns>
         /// <param name="matches">Matches. Each matches[i] is k or less matches for the same query descriptor.</param>
-        public static Mat GetHomographyMatrixFromMatchedFeatures(VectorOfKeyPoint model,
-           VectorOfKeyPoint observed, VectorOfVectorOfDMatch matches, Mat mask, double ransacReprojThreshold)
+        public static Mat GetHomographyMatrixFromMatchedFeatures(
+            VectorOfKeyPoint model,
+            VectorOfKeyPoint observed,
+            VectorOfVectorOfDMatch matches,
+            Mat mask,
+            double ransacReprojThreshold)
         {
             Mat homography = new Mat();
             bool found = Features2DInvoke.getHomographyMatrixFromMatchedFeatures(model, observed, matches, mask,
@@ -249,39 +270,39 @@ namespace Emgu.CV.Features2D
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void drawMatchedFeatures1(
-           IntPtr img1, 
+           IntPtr img1,
            IntPtr keypoints1,
-           IntPtr img2, 
+           IntPtr img2,
            IntPtr keypoints2,
            IntPtr matchIndices,
            IntPtr outImg,
-           ref MCvScalar matchColor, 
+           ref MCvScalar matchColor,
            ref MCvScalar singlePointColor,
            IntPtr matchesMask,
            Features2D.Features2DToolbox.KeypointDrawType flags);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void drawMatchedFeatures2(
-            IntPtr img1, 
+            IntPtr img1,
             IntPtr keypoints1,
-            IntPtr img2, 
+            IntPtr img2,
             IntPtr keypoints2,
             IntPtr matchIndices,
             IntPtr outImg,
-            ref MCvScalar matchColor, 
+            ref MCvScalar matchColor,
             ref MCvScalar singlePointColor,
             IntPtr matchesMask,
             Features2D.Features2DToolbox.KeypointDrawType flags);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void drawMatchedFeatures3(
-            IntPtr img1, 
+            IntPtr img1,
             IntPtr keypoints1,
-            IntPtr img2, 
+            IntPtr img2,
             IntPtr keypoints2,
             IntPtr matchIndices,
             IntPtr outImg,
-            ref MCvScalar matchColor, 
+            ref MCvScalar matchColor,
             ref MCvScalar singlePointColor,
             IntPtr matchesMask,
             Features2D.Features2DToolbox.KeypointDrawType flags);

@@ -120,7 +120,7 @@ namespace Emgu.CV.Shape
         }
 
         /// <summary>
-        /// Release the memory associated with this Hausdorff distance extrator
+        /// Release the memory associated with this Hausdorff distance extractor
         /// </summary>
         protected override void DisposeObject()
         {

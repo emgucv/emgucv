@@ -39,7 +39,6 @@ namespace FeatureMatchingExample
             using (UMat uModelImage = modelImage.GetUMat(AccessType.Read))
             using (UMat uObservedImage = observedImage.GetUMat(AccessType.Read))
             {
-
                 //extract features from the object image
                 Mat modelDescriptors = new Mat();
                 featureDetectorExtractor.DetectAndCompute(uModelImage, null, modelKeyPoints, modelDescriptors, false);
@@ -50,7 +49,7 @@ namespace FeatureMatchingExample
                 Mat observedDescriptors = new Mat();
                 featureDetectorExtractor.DetectAndCompute(uObservedImage, null, observedKeyPoints, observedDescriptors, false);
 
-                // Bruteforce, slower but more accurate
+                // Brute force, slower but more accurate
                 // You can use KDTree for faster matching with slight loss in accuracy
                 using (Emgu.CV.Flann.LinearIndexParams ip = new Emgu.CV.Flann.LinearIndexParams()) 
                 using (Emgu.CV.Flann.SearchParams sp = new SearchParams())
@@ -85,8 +84,9 @@ namespace FeatureMatchingExample
         /// <param name="modelImage">The model image</param>
         /// <param name="observedImage">The observed image</param>
         /// <param name="matchTime">The output total time for computing the homography matrix.</param>
+        /// <param name="featureDetectorExtractor">The feature detector extractor</param>
         /// <returns>The model image and observed image, the matched features and homography projection.</returns>
-        public static Mat Draw(Mat modelImage, Mat observedImage, Feature2D featureDetectorExtrator, out long matchTime)
+        public static Mat Draw(Mat modelImage, Mat observedImage, Feature2D featureDetectorExtractor, out long matchTime)
         {
             Mat homography;
             VectorOfKeyPoint modelKeyPoints;
@@ -94,7 +94,7 @@ namespace FeatureMatchingExample
             using (VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch())
             {
                 Mat mask;
-                FindMatch(modelImage, observedImage, featureDetectorExtrator, out matchTime, out modelKeyPoints, out observedKeyPoints, matches,
+                FindMatch(modelImage, observedImage, featureDetectorExtractor, out matchTime, out modelKeyPoints, out observedKeyPoints, matches,
                    out mask, out homography);
 
                 //Draw the matched keypoints
@@ -110,10 +110,10 @@ namespace FeatureMatchingExample
                     Rectangle rect = new Rectangle(Point.Empty, modelImage.Size);
                     PointF[] pts = new PointF[]
                     {
-                  new PointF(rect.Left, rect.Bottom),
-                  new PointF(rect.Right, rect.Bottom),
-                  new PointF(rect.Right, rect.Top),
-                  new PointF(rect.Left, rect.Top)
+                        new PointF(rect.Left, rect.Bottom),
+                        new PointF(rect.Right, rect.Bottom),
+                        new PointF(rect.Right, rect.Top),
+                        new PointF(rect.Left, rect.Top)
                     };
                     pts = CvInvoke.PerspectiveTransform(pts, homography);
 
