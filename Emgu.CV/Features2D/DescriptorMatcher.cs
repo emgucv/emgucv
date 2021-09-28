@@ -38,14 +38,14 @@ namespace Emgu.CV.Features2D
             IInputArray mask = null,
             bool compactResult = false)
         {
-            using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
-            using (InputArray iaTrainDescriptot = trainDescriptors.GetInputArray())
+            using (InputArray iaQueryDescriptor = queryDescriptors.GetInputArray())
+            using (InputArray iaTrainDescriptor = trainDescriptors.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             {
                 Features2DInvoke.cveDescriptorMatcherKnnMatch1(
                     _descriptorMatcherPtr, 
-                    iaQueryDesccriptor, 
-                    iaTrainDescriptot, 
+                    iaQueryDescriptor, 
+                    iaTrainDescriptor, 
                     matches,
                     k,
                     iaMask,
@@ -72,9 +72,9 @@ namespace Emgu.CV.Features2D
             IInputArray mask = null, 
             bool compactResult = false)
         {
-            using (InputArray iaQueryDesccriptor = queryDescriptor.GetInputArray())
+            using (InputArray iaQueryDescriptor = queryDescriptor.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-                Features2DInvoke.cveDescriptorMatcherKnnMatch2(_descriptorMatcherPtr, iaQueryDesccriptor, matches, k, iaMask, compactResult);
+                Features2DInvoke.cveDescriptorMatcherKnnMatch2(_descriptorMatcherPtr, iaQueryDescriptor, matches, k, iaMask, compactResult);
         }
 
         /// <summary>
@@ -221,10 +221,10 @@ namespace Emgu.CV.Features2D
             IInputArray masks = null,
             bool compactResult = false)
         {
-            using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
+            using (InputArray iaQueryDescriptor = queryDescriptors.GetInputArray())
             using (InputArray iaMasks = masks == null ? InputArray.GetEmpty() : masks.GetInputArray())
             {
-                Features2DInvoke.cveDescriptorMatcherRadiusMatch2(_descriptorMatcherPtr, iaQueryDesccriptor, matches, maxDistance, iaMasks, compactResult);
+                Features2DInvoke.cveDescriptorMatcherRadiusMatch2(_descriptorMatcherPtr, iaQueryDescriptor, matches, maxDistance, iaMasks, compactResult);
             }
         }
     }

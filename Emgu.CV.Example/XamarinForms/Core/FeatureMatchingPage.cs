@@ -55,19 +55,19 @@ namespace Emgu.CV.XamarinForms
                 () =>
                 {
                     long time;
-                    Emgu.CV.Features2D.Feature2D featureDetectorExtrator;
+                    Emgu.CV.Features2D.Feature2D featureDetectorExtractor;
                     String pickedFeature2D = this.Picker.SelectedItem.ToString();
                     if (pickedFeature2D.Equals("SIFT"))
                     {
-                        featureDetectorExtrator = new SIFT();
+                        featureDetectorExtractor = new SIFT();
                     }
                     else
                     {
-                        featureDetectorExtrator = new KAZE();
+                        featureDetectorExtractor = new KAZE();
                     }
 
-                    Mat matchResult = DrawMatches.Draw(images[0], images[1], featureDetectorExtrator, out time);
-                    featureDetectorExtrator.Dispose();
+                    Mat matchResult = DrawMatches.Draw(images[0], images[1], featureDetectorExtractor, out time);
+                    featureDetectorExtractor.Dispose();
                     return new Tuple<Mat, long>(matchResult, time);
                 });
             t.Start();
