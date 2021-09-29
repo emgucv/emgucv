@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <PropertyGroup>
+    <ProjectSummary>A cross platform .Net wrapper for the OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages. The wrapper can run on Windows, Android, iOS, Mac OS and Linux.</ProjectSummary>
+	<CopyrightText>2021 Emgu Corporation, All Rights Reserved,</CopyrightText>
+    <FeedbackEMailAddress>support%40emgu.com</FeedbackEMailAddress>
+    <HeaderText>http://www.emgu.com</HeaderText>
+    <FooterText>For questions and discussions please visit https://github.com/emgucv/emgucv/issues</FooterText>
+	<NamingMethod>MemberName</NamingMethod>
+    <Language>en-US</Language>
+    <FeedbackEMailLinkText>support%40emgu.com</FeedbackEMailLinkText>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="(global)" isDocumented="True">Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library. Allowing OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython etc. The wrapper can be compiled in Mono and run on Windows, Linux, Mac OS, iPhone, iPad and Android devices.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu" isDocumented="True">Root namespace for class and functions implemented by Emgu</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV" isDocumented="True">Wrapper of OpenCV's image processing functions. 
+Base functions (L1) can be found in CvInvoke class</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.CameraCalibration" isDocumented="True">Camera calibration related functions</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.CvEnum" isDocumented="True">OpenCV Enumeration</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.ML" isDocumented="True">Wrapper of OpenCV's  Machine Learning Library</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.ML.MlEnum" isDocumented="True">OpenCV's Machine Learning enumeration</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.ML.Structure" isDocumented="True">OpenCV's Machine Learning structures</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Properties" isDocumented="False" />
+      <NamespaceSummaryItem name="Emgu.CV.Reflection" isDocumented="True">Code that use reflection to get image information from Emgu CV objects</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Structure" isDocumented="True">Wrapped OpenCV structures</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.UI" isDocumented="True">User interface (ImageBox) for displaying Image object.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.VideoSurveillance" isDocumented="True">Background/Foreground segmentation and Blob tracking</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.Reflection" isDocumented="True">Contains functions that use reflection to create menu for ImageBox</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.Util" isDocumented="True">A collection of utilities used by Emgu projects</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.Util.TypeEnum" isDocumented="True">Various enumeration for Emgu.Util namespace</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Flann" isDocumented="True">Fast Library for Approximate Nearest Neighbors (Marius Muja and David Lowe)</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Features2D" isDocumented="True">Contains classes for 2D feature detection, extraction and matching.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Geodetic" isDocumented="True">Contains library that can be use for geomatic transformation.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Tiff" isDocumented="True">Contains writer classes that can be used to write different tiff formats, such as tile tiff and geotiff.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Util" isDocumented="True">A collection of utilities used by Emgu.CV projects</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.OCR" isDocumented="True">Optical character recognition. Wraps the tesseract-ocr engine.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Stitching" isDocumented="True">Image stitching</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.VideoStab" isDocumented="True">The video stabilization module contains a set of functions and classes that can be used to solve the problem of video stabilization.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.OpenCL" isDocumented="True">Computer vision using OpenCL</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Cuda" isDocumented="True">NVidia Cuda image processing functions</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Shape" isDocumented="True">The module contains algorithms that embed a notion of shape distance. These algorithms may be used for shape matching and retrieval, or shape comparison.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Superres" isDocumented="True">The Super Resolution module contains a set of functions and classes that can be used to solve the problem of resolution enhancement.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Face" isDocumented="True">The module contains some recently added functionality that has not been stabilized, or functionality that is considered optional.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Text" isDocumented="True">This module provides different algorithms for text detection and recognition in natural scene images.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.XFeatures2D" isDocumented="True">Extra 2D Features Framework</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.BgSegm" isDocumented="True">Background Segmentation.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Aruco" isDocumented="True">ArUco Marker Detection</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Dnn" isDocumented="True">Deep Neural Network module</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Fuzzy" isDocumented="True">Fuzzy image processing</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.LineDescriptor" isDocumented="True">Binary descriptors for lines extracted from an image</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Plot" isDocumented="True">This Plot module allows you to easily plot data in 1D or 2D.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Tracking" isDocumented="True">Long-term optical tracking API</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Legacy" isDocumented="True">Legacy Tracking API</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.XImgproc" isDocumented="True">Extended Image Processing</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.XPhoto" isDocumented="True">Additional photo processing algorithms</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Bioinspired" isDocumented="True">Biologically inspired vision models and derivated tools</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Dpm" isDocumented="True">Deformable Part-based Models</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Freetype" isDocumented="True">Drawing UTF-8 strings with freetype/harfbuzz</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Hfs" isDocumented="True">Hierarchical Feature Selection for Efficient Image Segmentation</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Hdf" isDocumented="True">Hierarchical Data Format I/O routines</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.ImgHash" isDocumented="True">The module brings implementations of different image hashing algorithms.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Ocl" isDocumented="True">Open CL module</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.PhaseUnwrapping" isDocumented="True">Phase Unwrapping API</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Saliency" isDocumented="True">Saliency API</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.XObjdetect" isDocumented="True">Extended object detection</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.PpfMatch3d" isDocumented="True">Surface Matching module</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Rapid" isDocumented="True">Silhouette based 3D object tracking</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.IntensityTransform" isDocumented="True">The module brings implementations of intensity transformation algorithms to adjust image contrast.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Alphamat" isDocumented="True">Information Flow algorithm implementaton for alphamatting</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Quality" isDocumented="True">Image Quality Analysis (IQA) API</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Stereo" isDocumented="True">Stereo Correspondance Algorithms</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Mcc" isDocumented="True">Macbeth Chart detector</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Models" isDocumented="True">Experimental component to help download, initialize and execute image processing/AI models. This is under development and API may change from time to time.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.Models.DepthAI" isDocumented="True">Experimental component to help download, initialize and execute DepthAI models. This is under development and API may change from time to time.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Emgu.CV.DepthAI" isDocumented="True">This module exposed the DepthAI SDK for OAK-D and OAK-1 devices.</NamespaceSummaryItem>
+    </NamespaceSummaries>
+  </PropertyGroup>
+</Project>
