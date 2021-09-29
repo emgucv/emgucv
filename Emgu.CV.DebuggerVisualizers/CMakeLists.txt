@@ -25,7 +25,8 @@ INSTALL(
     COMPONENT emgucv_binary)
 
 PROJECT(Emgu.CV.DebuggerVisualizers)
-SET(EXTRA_BUILD_FLAGS "/p:Platform=\"x86\"")
+#SET(EXTRA_BUILD_FLAGS "/p:Platform=\"x86\"")
+SET(EXTRA_BUILD_FLAGS "/p:Platform=\"Any CPU\"")
 
 MSBUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../Solution/Windows.Desktop/Emgu.CV.DebuggerVisualizers.sln" "Emgu.CV.DebuggerVisualizers" "${EXTRA_BUILD_FLAGS}" ALL)	
 IF (EMGU_SIGN_FOUND)
