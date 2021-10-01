@@ -226,7 +226,7 @@ namespace Emgu.CV.UI
                                     //execute the inplace operation
                                     operation.InvokeMethod(imageToBeDisplayed);
                                 }
-                                else if (operation.Method.ReturnType.GetInterface("IImage") != null)
+                                else if (operation.Method.ReturnType.GetInterface("IInputArray") != null)
                                 {  //if this operation has return value
                                     IInputArray tmp = null;
                                     if (isCloned == true) //if intermediate image exist, keep a reference of it
