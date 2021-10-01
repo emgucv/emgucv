@@ -4380,7 +4380,11 @@ namespace Emgu.CV.Test
             }
         }
 
+#if VS_TEST
+        [Ignore]
+#else
         [Ignore("Ignore from test run by default to avoid downloading data.")]
+#endif
         [Test]
         public async Task TestPhaseUnwrapping()
         {

@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29503.13
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31717.71
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Test.NetFramework", "..\..\Emgu.CV.Test\Emgu.CV.Test.NetFramework.csproj", "{68EE22E9-3C65-4DFE-9BD9-37A1DE925A4D}"
 EndProject
@@ -28,11 +28,17 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Platform.Net", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj", "{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Models.Shared", "..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.shproj", "{0BFAD282-50C1-449C-B01C-62FD23BBDBE5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models.NetStandard", "..\..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj", "{4673685A-632F-46DD-A0FE-0A5BA76E9CAD}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{0bfad282-50c1-449c-b01c-62fd23bbdbe5}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
 		..\..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.projitems*{3fb1cc15-6d06-4e97-8a36-a9941a9a9fa3}*SharedItemsImports = 5
+		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{4673685a-632f-46dd-a0fe-0a5ba76e9cad}*SharedItemsImports = 5
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
 		..\..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.projitems*{90e78bbf-c7fe-4d8e-ade1-75448e866fdb}*SharedItemsImports = 4
@@ -126,6 +132,18 @@ Global
 		{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}.Release|x64.Build.0 = Release|Any CPU
 		{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}.Release|x86.ActiveCfg = Release|Any CPU
 		{ADDE3586-3EB3-4806-B1B2-F9537D4E220D}.Release|x86.Build.0 = Release|Any CPU
+		{4673685A-632F-46DD-A0FE-0A5BA76E9CAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4673685A-632F-46DD-A0FE-0A5BA76E9CAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4673685A-632F-46DD-A0FE-0A5BA76E9CAD}.Debug|x64.ActiveCfg = Debug|x64
+		{4673685A-632F-46DD-A0FE-0A5BA76E9CAD}.Debug|x64.Build.0 = Debug|x64
+		{4673685A-632F-46DD-A0FE-0A5BA76E9CAD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4673685A-632F-46DD-A0FE-0A5BA76E9CAD}.Debug|x86.Build.0 = Debug|Any CPU
+		{4673685A-632F-46DD-A0FE-0A5BA76E9CAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4673685A-632F-46DD-A0FE-0A5BA76E9CAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4673685A-632F-46DD-A0FE-0A5BA76E9CAD}.Release|x64.ActiveCfg = Release|x64
+		{4673685A-632F-46DD-A0FE-0A5BA76E9CAD}.Release|x64.Build.0 = Release|x64
+		{4673685A-632F-46DD-A0FE-0A5BA76E9CAD}.Release|x86.ActiveCfg = Release|Any CPU
+		{4673685A-632F-46DD-A0FE-0A5BA76E9CAD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

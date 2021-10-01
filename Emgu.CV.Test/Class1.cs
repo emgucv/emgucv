@@ -486,6 +486,7 @@ namespace Emgu.CV.Test
             Trace.WriteLine(String.Format("Time: {0} milliseconds", timeSpan.TotalMilliseconds));
         }
 
+        //[TestAttribute]
         public void TestImageViewer()
         {
             //System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("zh-CN");

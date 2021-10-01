@@ -107,7 +107,11 @@ namespace Emgu.CV.Test
             }
         }
 
+#if VS_TEST
+        [Ignore]
+#else
         [Ignore("Ignore for now, seems to crash unit test.")]
+#endif
         [Test]
         public void TestOCREngBlankPage()
         {

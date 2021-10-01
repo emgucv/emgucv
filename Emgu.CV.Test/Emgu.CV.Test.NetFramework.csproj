@@ -313,6 +313,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj">
+      <Project>{4673685a-632f-46dd-a0fe-0a5ba76e9cad}</Project>
+      <Name>Emgu.CV.Models.NetStandard</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.Platform\DotNet\Framework\Emgu.CV.Platform.NetFramework.csproj">
       <Project>{90e78bbf-c7fe-4d8e-ade1-75448e866fdb}</Project>
       <Name>Emgu.CV.Platform.NetFramework</Name>
