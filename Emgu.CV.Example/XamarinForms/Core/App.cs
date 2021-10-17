@@ -36,9 +36,6 @@ namespace Emgu.CV.XamarinForms
             Button shapeDetectionButton = new Button();
             shapeDetectionButton.Text = "Shape Detection";
 
-            Button pedestrianDetectionButton = new Button();
-            pedestrianDetectionButton.Text = "Pedestrian Detection";
-
             Button maskRcnnButton = new Button();
             maskRcnnButton.Text = "Mask RCNN (DNN module)";
 
@@ -58,7 +55,6 @@ namespace Emgu.CV.XamarinForms
                 sceneTextDetectionButton,
                 featureDetectionButton,
                 shapeDetectionButton,
-                pedestrianDetectionButton,
                 maskRcnnButton,
                 stopSignDetectionButton,
                 yoloButton,
@@ -108,6 +104,20 @@ namespace Emgu.CV.XamarinForms
                         "lena.jpg",
                         "Cascade classifier");
                     MainPage.Navigation.PushAsync(faceAndEyeDetectorPage);
+                };
+
+                Button pedestrianDetectionButton = new Button();
+                pedestrianDetectionButton.Text = "Pedestrian Detection";
+                buttonList.Add(pedestrianDetectionButton);
+
+                pedestrianDetectionButton.Clicked += (sender, args) =>
+                {
+                    ProcessAndRenderPage pedestrianDetectorPage = new ProcessAndRenderPage(
+                        new PedestrianDetector(),
+                        "Pedestrian detection",
+                        "pedestrian.png",
+                        "HOG pedestrian detection");
+                    MainPage.Navigation.PushAsync(pedestrianDetectorPage);
                 };
                 
             }
@@ -261,16 +271,6 @@ namespace Emgu.CV.XamarinForms
                     "pic3.png",
                     "Shape detection");
                 MainPage.Navigation.PushAsync(shapeDetectionPage);
-            };
-
-            pedestrianDetectionButton.Clicked += (sender, args) =>
-            {
-                ProcessAndRenderPage pedestrianDetectorPage = new ProcessAndRenderPage(
-                    new PedestrianDetector(),
-                    "Pedestrian detection",
-                    "pedestrian.png",
-                    "HOG pedestrian detection");
-                MainPage.Navigation.PushAsync(pedestrianDetectorPage);
             };
 
             featureDetectionButton.Clicked += (sender, args) =>
