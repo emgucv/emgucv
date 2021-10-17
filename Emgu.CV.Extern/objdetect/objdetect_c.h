@@ -9,8 +9,18 @@
 #define EMGU_OBJDETECT_C_H
 
 #include "opencv2/core/core_c.h"
+#if HAVE_OPENCV_OBJDETECT
 #include "opencv2/objdetect/objdetect.hpp"
 //#include "opencv2/objdetect/objdetect_c.h"
+#else
+static inline CV_NORETURN void throw_no_objdetect() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without objdetect support"); }
+namespace cv
+{
+    class HOGDescriptor {};
+    class CascadeClassifier {};
+    class QRCodeDetector {};
+}
+#endif
 #include "vectors_c.h"
 
 CVAPI(void) cveHOGDescriptorPeopleDetectorCreate(std::vector<float>* seq);

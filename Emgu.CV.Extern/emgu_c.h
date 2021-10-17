@@ -10,7 +10,9 @@
 
 #include "opencv2/core/core_c.h"
 #include "opencv2/imgproc/imgproc.hpp"
+#if HAVE_OPENCV_OBJDETECT
 #include "opencv2/objdetect/objdetect.hpp"
+#endif
 //#include "opencv2/text/erfilter.hpp"
 
 namespace emgu
