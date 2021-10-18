@@ -359,6 +359,23 @@ void cveDnnNMSBoxes2(
 #endif
 }
 
+void cveDnnSoftNMSBoxes(
+	std::vector<cv::Rect>* bboxes,
+	std::vector<float>* scores,
+	std::vector<float>* updatedScores,
+	float scoreThreshold,
+	float nmsThreshold,
+	std::vector<int>* indices,
+	int topK,
+	float sigma,
+	int method)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::softNMSBoxes(*bboxes, *scores, *updatedScores, scoreThreshold, nmsThreshold, *indices, topK, sigma, static_cast<cv::dnn::SoftNMSMethod>(method));
+#else
+	throw_no_dnn();
+#endif	
+}
 
 void cveDNNGetAvailableBackends(std::vector<int>* backends, std::vector<int>* targets)
 {

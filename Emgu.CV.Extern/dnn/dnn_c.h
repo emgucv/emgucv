@@ -126,6 +126,17 @@ CVAPI(void) cveDnnNMSBoxes2(
 	float eta,
 	int topK);
 
+CVAPI(void) cveDnnSoftNMSBoxes(
+	std::vector<cv::Rect>* bboxes,
+	std::vector<float>* scores,
+	std::vector<float>* updatedScores,
+	float scoreThreshold,
+	float nmsThreshold,
+	std::vector<int>* indices,
+	int topK,
+	float sigma,
+	int method);
+
 CVAPI(void) cveDNNGetAvailableBackends(std::vector<int>* backends, std::vector<int>* targets);
 
 CVAPI(cv::dnn::TextDetectionModel_DB*) cveDnnTextDetectionModelDbCreate1(cv::String* model, cv::String* config, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel);

@@ -11,6 +11,7 @@ using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
 using System.Drawing;
+using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.Dnn
 {
@@ -519,6 +520,43 @@ namespace Emgu.CV.Dnn
             float eta,
             int topK);
 
+        /// <summary>
+        /// Performs soft non maximum suppression given boxes and corresponding scores. Reference: https://arxiv.org/abs/1704.04503
+        /// </summary>
+        /// <param name="bboxes">A set of bounding boxes to apply Soft NMS.</param>
+        /// <param name="scores">A set of corresponding confidences.</param>
+        /// <param name="updatedScores">A set of corresponding updated confidences.</param>
+        /// <param name="scoreThreshold">A threshold used to filter boxes by score.</param>
+        /// <param name="nmsThreshold">A threshold used in non maximum suppression.</param>
+        /// <param name="indices">The kept indices of bboxes after NMS.</param>
+        /// <param name="topK">Keep at most <paramref name="topK"/> picked indices.</param>
+        /// <param name="sigma">Parameter of Gaussian weighting.</param>
+        /// <param name="method">Gaussian or linear.</param>
+        public static void SoftNMSBoxes(
+            VectorOfRect bboxes, 
+            VectorOfFloat scores, 
+            VectorOfFloat updatedScores,
+            float scoreThreshold, 
+            float nmsThreshold, 
+            VectorOfInt indices, 
+            int topK = 0,
+            float sigma = 0.5f, 
+            SoftNMSMethod method = SoftNMSMethod.Gaussian)
+        {
+            cveDnnSoftNMSBoxes(bboxes, scores, updatedScores, scoreThreshold, nmsThreshold, indices, topK, sigma, method);
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveDnnSoftNMSBoxes(
+            IntPtr bboxes,
+            IntPtr scores,
+            IntPtr updatedScores,
+            float scoreThreshold,
+            float nmsThreshold,
+            IntPtr indices,
+            int topK,
+            float sigma,
+            SoftNMSMethod method);
 
         /// <summary>
         /// Get the list of available DNN Backends
