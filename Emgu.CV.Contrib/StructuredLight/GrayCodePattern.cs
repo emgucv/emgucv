@@ -39,7 +39,7 @@ namespace Emgu.CV.StructuredLight
                 width,
                 height,
                 ref _sharedPtr,
-                ref _structuredLightPatternPtr, 
+                ref _structuredLightPatternPtr,
                 ref _algorithmPtr);
         }
 
@@ -55,7 +55,7 @@ namespace Emgu.CV.StructuredLight
         /// <inheritdoc/>
         public IntPtr AlgorithmPtr
         {
-            get {return _algorithmPtr; }
+            get { return _algorithmPtr; }
         }
 
         /// <summary>

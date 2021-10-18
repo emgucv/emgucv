@@ -28,7 +28,7 @@ using Emgu.CV.Dpm;
 using Emgu.CV.ImgHash;
 using Emgu.CV.Face;
 using Emgu.CV.Freetype;
-
+using Emgu.CV.StructuredLight;
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
 using Emgu.CV.DepthAI;
@@ -4330,6 +4330,26 @@ namespace Emgu.CV.Test
                 {
                     String text = detector.Decode(m, pts);
                 }
+            }
+        }
+
+        [Test]
+        public void TestGrayCodePattern()
+        {
+            using (GrayCodePattern gcp = new GrayCodePattern(1024, 768))
+            using (VectorOfMat vm = new VectorOfMat())
+            {
+                bool generated = gcp.Generate(vm);
+            }
+        }
+
+        [Test]
+        public void SinusoidalPattern()
+        {
+            using (SinusoidalPattern sp = new SinusoidalPattern())
+            using (VectorOfMat vm = new VectorOfMat())
+            {
+                bool generated = sp.Generate(vm);
             }
         }
 
