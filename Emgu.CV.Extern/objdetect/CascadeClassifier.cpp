@@ -8,7 +8,7 @@
 
 cv::CascadeClassifier* cveCascadeClassifierCreate()
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	return new cv::CascadeClassifier();
 #else 
 	throw_no_objdetect();
@@ -16,7 +16,7 @@ cv::CascadeClassifier* cveCascadeClassifierCreate()
 }
 cv::CascadeClassifier* cveCascadeClassifierCreateFromFile(cv::String* fileName)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	return new cv::CascadeClassifier(*fileName);
 #else 
 	throw_no_objdetect();
@@ -24,7 +24,7 @@ cv::CascadeClassifier* cveCascadeClassifierCreateFromFile(cv::String* fileName)
 }
 bool cveCascadeClassifierRead(cv::CascadeClassifier* classifier, cv::FileNode* node)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	return classifier->read(*node);
 #else 
 	throw_no_objdetect();
@@ -32,7 +32,7 @@ bool cveCascadeClassifierRead(cv::CascadeClassifier* classifier, cv::FileNode* n
 }
 void cveCascadeClassifierRelease(cv::CascadeClassifier** classifier)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	delete* classifier;
 	*classifier = 0;
 #else 
@@ -48,7 +48,7 @@ void cveCascadeClassifierDetectMultiScale(
 	CvSize* minSize,
 	CvSize* maxSize)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	classifier->detectMultiScale(*image, *objects, scaleFactor, minNeighbors, flags, *minSize, *maxSize);
 #else 
 	throw_no_objdetect();
@@ -56,7 +56,7 @@ void cveCascadeClassifierDetectMultiScale(
 }
 bool cveCascadeClassifierIsOldFormatCascade(cv::CascadeClassifier* classifier)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	return classifier->isOldFormatCascade();
 #else 
 	throw_no_objdetect();
@@ -65,7 +65,7 @@ bool cveCascadeClassifierIsOldFormatCascade(cv::CascadeClassifier* classifier)
 
 void cveCascadeClassifierGetOriginalWindowSize(cv::CascadeClassifier* classifier, CvSize* size)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::Size s = classifier->getOriginalWindowSize();
 	size->width = s.width;
 	size->height = s.height;
@@ -76,7 +76,7 @@ void cveCascadeClassifierGetOriginalWindowSize(cv::CascadeClassifier* classifier
 
 void cveGroupRectangles1(std::vector< cv::Rect >* rectList, int groupThreshold, double eps)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::groupRectangles(*rectList, groupThreshold, eps);
 #else 
 	throw_no_objdetect();
@@ -84,7 +84,7 @@ void cveGroupRectangles1(std::vector< cv::Rect >* rectList, int groupThreshold, 
 }
 void cveGroupRectangles2(std::vector<cv::Rect>* rectList, std::vector<int>* weights, int groupThreshold, double eps)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::groupRectangles(*rectList, *weights, groupThreshold, eps);
 #else 
 	throw_no_objdetect();
@@ -92,7 +92,7 @@ void cveGroupRectangles2(std::vector<cv::Rect>* rectList, std::vector<int>* weig
 }
 void cveGroupRectangles3(std::vector<cv::Rect>* rectList, int groupThreshold, double eps, std::vector<int>* weights, std::vector<double>* levelWeights)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::groupRectangles(*rectList, groupThreshold, eps, weights, levelWeights);
 #else 
 	throw_no_objdetect();
@@ -100,7 +100,7 @@ void cveGroupRectangles3(std::vector<cv::Rect>* rectList, int groupThreshold, do
 }
 void cveGroupRectangles4(std::vector<cv::Rect>* rectList, std::vector<int>* rejectLevels, std::vector<double>* levelWeights, int groupThreshold, double eps)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::groupRectangles(*rectList, *rejectLevels, *levelWeights, groupThreshold, eps);
 #else 
 	throw_no_objdetect();
@@ -108,7 +108,7 @@ void cveGroupRectangles4(std::vector<cv::Rect>* rectList, std::vector<int>* reje
 }
 void cveGroupRectanglesMeanshift(std::vector<cv::Rect>* rectList, std::vector<double>* foundWeights, std::vector<double>* foundScales, double detectThreshold, CvSize* winDetSize)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::groupRectangles_meanshift(*rectList, *foundWeights, *foundScales, detectThreshold, *winDetSize);
 #else 
 	throw_no_objdetect();

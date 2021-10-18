@@ -9,7 +9,7 @@
 #define EMGU_OBJDETECT_C_H
 
 #include "opencv2/core/core_c.h"
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 #include "opencv2/objdetect/objdetect.hpp"
 //#include "opencv2/objdetect/objdetect_c.h"
 #else

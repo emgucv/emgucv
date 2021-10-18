@@ -7,7 +7,7 @@
 #include "objdetect_c.h"
 cv::QRCodeDetector* cveQRCodeDetectorCreate()
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	return new cv::QRCodeDetector();
 #else 
 	throw_no_objdetect();
@@ -15,7 +15,7 @@ cv::QRCodeDetector* cveQRCodeDetectorCreate()
 }
 void cveQRCodeDetectorRelease(cv::QRCodeDetector** detector)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	delete *detector;
 	*detector = 0;
 #else 
@@ -24,7 +24,7 @@ void cveQRCodeDetectorRelease(cv::QRCodeDetector** detector)
 }
 bool cveQRCodeDetectorDetect(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_OutputArray* points)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	return detector->detect(*img, *points);
 #else 
 	throw_no_objdetect();
@@ -32,7 +32,7 @@ bool cveQRCodeDetectorDetect(cv::QRCodeDetector* detector, cv::_InputArray* img,
 }
 bool cveQRCodeDetectorDetectMulti(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_OutputArray* points)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	return detector->detectMulti(*img, *points);
 #else 
 	throw_no_objdetect();
@@ -41,7 +41,7 @@ bool cveQRCodeDetectorDetectMulti(cv::QRCodeDetector* detector, cv::_InputArray*
 
 void cveQRCodeDetectorDecode(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightQrcode)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	std::string s = detector->decode(*img, *points, straightQrcode ? *straightQrcode : static_cast<cv::OutputArray>(cv::noArray()));
 	*decodedInfo = s;
 #else 
@@ -51,7 +51,7 @@ void cveQRCodeDetectorDecode(cv::QRCodeDetector* detector, cv::_InputArray* img,
 
 void cveQRCodeDetectorDecodeCurved(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightQrcode)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	std::string s = detector->decodeCurved(*img, *points, straightQrcode ? *straightQrcode : static_cast<cv::OutputArray>(cv::noArray()));
 	*decodedInfo = s;
 #else 
@@ -66,7 +66,7 @@ bool cveQRCodeDetectorDecodeMulti(
 	std::vector< std::string >* decodedInfo,
 	cv::_OutputArray* straightQrcode)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	return detector->decodeMulti(
 		*img,
 		*points,

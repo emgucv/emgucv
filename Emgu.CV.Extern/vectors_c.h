@@ -13,7 +13,7 @@
 #include "opencv2/opencv_modules.hpp"
 #include "opencv2/core/core_c.h"
 #include "opencv2/features2d/features2d.hpp"
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 #include "opencv2/objdetect/objdetect.hpp"
 #endif
 

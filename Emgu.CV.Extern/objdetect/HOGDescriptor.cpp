@@ -8,7 +8,7 @@
 
 void cveHOGDescriptorPeopleDetectorCreate(std::vector<float>* seq)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	std::vector<float> v = cv::HOGDescriptor::getDefaultPeopleDetector();
 	seq->resize(v.size());
 	memcpy(&(*seq)[0], &v[0], sizeof(float) * seq->size());
@@ -30,7 +30,7 @@ cv::HOGDescriptor* cveHOGDescriptorCreate(
 	double _L2HysThreshold,
 	bool _gammaCorrection)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	return new cv::HOGDescriptor(*_winSize, *_blockSize, *_blockStride, *_cellSize, _nbins, _derivAperture, _winSigma, static_cast<cv::HOGDescriptor::HistogramNormType>(_histogramNormType), _L2HysThreshold, _gammaCorrection);
 #else 
 	throw_no_objdetect();
@@ -39,7 +39,7 @@ cv::HOGDescriptor* cveHOGDescriptorCreate(
 
 void cveHOGSetSVMDetector(cv::HOGDescriptor* descriptor, std::vector<float>* vector)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	descriptor->setSVMDetector(*vector);
 #else 
 	throw_no_objdetect();
@@ -48,7 +48,7 @@ void cveHOGSetSVMDetector(cv::HOGDescriptor* descriptor, std::vector<float>* vec
 
 void cveHOGDescriptorRelease(cv::HOGDescriptor** descriptor)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	delete* descriptor;
 	*descriptor = 0;
 #else 
@@ -69,7 +69,7 @@ void cveHOGDescriptorDetectMultiScale(
 	double finalThreshold,
 	bool useMeanshiftGrouping)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	descriptor->detectMultiScale(*img, *foundLocations, *weights, hitThreshold, *winStride, *padding, scale, finalThreshold, useMeanshiftGrouping);
 #else 
 	throw_no_objdetect();
@@ -84,7 +84,7 @@ void cveHOGDescriptorCompute(
 	CvSize* padding,
 	std::vector< cv::Point >* locations)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	std::vector<cv::Point> emptyVec;
 
 	descriptor->compute(
@@ -119,7 +119,7 @@ void CvHOGDescriptorDetect(
 
 unsigned int cveHOGDescriptorGetDescriptorSize(cv::HOGDescriptor* descriptor)
 {
-#if HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_OBJDETECT
 	return static_cast<unsigned int>(descriptor->getDescriptorSize());
 #else 
 	throw_no_objdetect();
