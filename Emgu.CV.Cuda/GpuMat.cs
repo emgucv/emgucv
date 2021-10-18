@@ -101,7 +101,7 @@ namespace Emgu.CV.Cuda
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
+            if (_needDispose && _ptr != IntPtr.Zero)
                 CudaInvoke.gpuMatRelease(ref _ptr);
         }
 
