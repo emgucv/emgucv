@@ -521,6 +521,15 @@ void cveDnnTextRecognitionModelRelease(cv::dnn::TextRecognitionModel** textRecog
 #endif
 }
 
+void cveDnnTextRecognitionModelSetDecodeOptsCTCPrefixBeamSearch(cv::dnn::TextRecognitionModel* textRecognitionModel, int beamSize, int vocPruneSize)
+{
+#ifdef HAVE_OPENCV_DNN
+	textRecognitionModel->setDecodeOptsCTCPrefixBeamSearch(beamSize, vocPruneSize);
+#else
+	throw_no_dnn();
+#endif
+}
+
 void cveDnnTextRecognitionModelSetVocabulary(cv::dnn::TextRecognitionModel* textRecognitionModel, std::vector< std::string >* vocabulary)
 {
 #ifdef HAVE_OPENCV_DNN

@@ -73,6 +73,16 @@ namespace Emgu.CV.Dnn
         }
 
         /// <summary>
+        /// Set the decoding method options for "CTC-prefix-beam-search" decode usage
+        /// </summary>
+        /// <param name="beamSize">Beam size for search</param>
+        /// <param name="vocPruneSize">Parameter to optimize big vocabulary search, only take top <paramref name="vocPruneSize"/> tokens in each search step, <paramref name="vocPruneSize"/> &lt;= 0 stands for disable this prune.</param>
+        public void SetDecodeOptsCTCPrefixBeamSearch(int beamSize, int vocPruneSize)
+        {
+            DnnInvoke.cveDnnTextRecognitionModelSetDecodeOptsCTCPrefixBeamSearch(_ptr, beamSize, vocPruneSize);
+        }
+
+        /// <summary>
         /// Given the input frame, create input blob, run net and return recognition result.
         /// </summary>
         /// <param name="frame">The input image</param>
@@ -133,6 +143,9 @@ namespace Emgu.CV.Dnn
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnTextRecognitionModelRelease(ref IntPtr textDetectionModel);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnTextRecognitionModelSetDecodeOptsCTCPrefixBeamSearch(IntPtr textRecognitionModel, int beamSize, int vocPruneSize);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnTextRecognitionModelSetVocabulary(IntPtr textRecognitionModel, IntPtr vocabulary);
