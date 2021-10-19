@@ -116,4 +116,17 @@ CVAPI(bool) cveQRCodeDetectorDecodeMulti(
     std::vector< std::string >* decodedInfo,
     cv::_OutputArray* straightQrcode);
 
+CVAPI(cv::FaceDetectorYN*) cveFaceDetectorYNCreate(
+    cv::String* model,
+    cv::String* config,
+    CvSize* inputSize,
+    float scoreThreshold,
+    float nmsThreshold,
+    int topK,
+    int backendId,
+    int targetId,
+    cv::Ptr<cv::FaceDetectorYN>** sharedPtr);
+CVAPI(void) cveFaceDetectorYNRelease(cv::Ptr<cv::FaceDetectorYN>** faceDetector);
+CVAPI(int) cveFaceDetectorYNDetect(cv::FaceDetectorYN* faceDetetor, cv::_InputArray* image, cv::_OutputArray* faces);
+
 #endif

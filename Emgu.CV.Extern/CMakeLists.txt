@@ -1414,6 +1414,26 @@ ENDIF()
 	""
 	${HAVE_opencv_objdetect})
 
+  CREATE_OCV_CLASS_PROPERTY( 
+    "objdetect/FaceDetectorYN_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Objdetect/FaceDetectorYN.g.cs"
+    "cv::FaceDetectorYN" 
+    "FaceDetectorYN" 
+    "ScoreThreshold;NMSThreshold" 
+    "float;float" 
+    "propW;propW"
+    "ScoreThreshold;NMSThreshold" 
+    "float;float"
+    "The score threshold to filter out bounding boxes of score less than the given value;
+     The Non-maximum-suppression threshold to suppress bounding boxes that have IoU greater than the given value"
+    "Emgu.CV"
+    "CvInvoke"
+    "FaceDetectorYN"
+	""
+    "#include \"objdetect_c.h\""
+	""
+	""
+	${HAVE_opencv_objdetect})
 ############################### objdetect code gen END ################################
 
 ############################### imgproc code gen START ##############################
