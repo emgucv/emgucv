@@ -1419,13 +1419,15 @@ ENDIF()
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Objdetect/FaceDetectorYN.g.cs"
     "cv::FaceDetectorYN" 
     "FaceDetectorYN" 
-    "ScoreThreshold;NMSThreshold" 
-    "float;float" 
-    "propW;propW"
-    "ScoreThreshold;NMSThreshold" 
-    "float;float"
+    "ScoreThreshold;NMSThreshold;TopK;InputSize" 
+    "float;float;int;CvSize" 
+    "propW;propW;propW;struct"
+    "ScoreThreshold;NMSThreshold;TopK;InputSize" 
+    "float;float;int;System.Drawing.Size"
     "The score threshold to filter out bounding boxes of score less than the given value;
-     The Non-maximum-suppression threshold to suppress bounding boxes that have IoU greater than the given value"
+     The Non-maximum-suppression threshold to suppress bounding boxes that have IoU greater than the given value;
+     The number of bounding boxes to preserve from top rank based on score;
+     The size for the network input, which overwrites the input size of creating model."
     "Emgu.CV"
     "CvInvoke"
     "FaceDetectorYN"

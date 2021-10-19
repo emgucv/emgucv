@@ -127,6 +127,17 @@ CVAPI(cv::FaceDetectorYN*) cveFaceDetectorYNCreate(
     int targetId,
     cv::Ptr<cv::FaceDetectorYN>** sharedPtr);
 CVAPI(void) cveFaceDetectorYNRelease(cv::Ptr<cv::FaceDetectorYN>** faceDetector);
-CVAPI(int) cveFaceDetectorYNDetect(cv::FaceDetectorYN* faceDetetor, cv::_InputArray* image, cv::_OutputArray* faces);
+CVAPI(int) cveFaceDetectorYNDetect(cv::FaceDetectorYN* faceDetector, cv::_InputArray* image, cv::_OutputArray* faces);
 
+
+CVAPI(cv::FaceRecognizerSF*) cveFaceRecognizerSFCreate(
+    cv::String* model, 
+    cv::String* config, 
+    int backendId, 
+    int targetId, 
+    cv::Ptr<cv::FaceRecognizerSF>** sharedPtr);
+CVAPI(void) cveFaceRecognizerSFRelease(cv::Ptr<cv::FaceRecognizerSF>** faceRecognizer);
+CVAPI(void) cveFaceRecognizerSFAlignCrop(cv::FaceRecognizerSF* faceRecognizer, cv::_InputArray* srcImg, cv::_InputArray* faceBox, cv::_OutputArray* alignedImg);
+CVAPI(void) cveFaceRecognizerSFFeature(cv::FaceRecognizerSF* faceRecognizer, cv::_InputArray* alignedImg, cv::_OutputArray* faceFeature);
+CVAPI(double) cveFaceRecognizerSFMatch(cv::FaceRecognizerSF* faceRecognizer, cv::_InputArray* faceFeature1, cv::_InputArray* faceFeature2, int disType);
 #endif

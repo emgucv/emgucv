@@ -67,7 +67,8 @@ namespace Emgu.CV.Cuda
         /// </summary>
         protected override void DisposeObject()
         {
-            CudaInvoke.streamRelease(ref _ptr);
+            if (!IntPtr.Zero.Equals(_ptr))
+                CudaInvoke.streamRelease(ref _ptr);
         }
     }
 
