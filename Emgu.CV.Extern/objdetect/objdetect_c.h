@@ -19,6 +19,8 @@ namespace cv
     class HOGDescriptor {};
     class CascadeClassifier {};
     class QRCodeDetector {};
+    class FaceDetectorYN {};
+    class FaceRecognizerSF {};
 }
 #endif
 #include "vectors_c.h"
