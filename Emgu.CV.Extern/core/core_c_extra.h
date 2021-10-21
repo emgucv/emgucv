@@ -181,7 +181,7 @@ CVAPI(void) cveRandn(cv::_InputOutputArray* dst, cv::_InputArray* mean, cv::_Inp
 CVAPI(void) cveRandu(cv::_InputOutputArray* dst, cv::_InputArray* low, cv::_InputArray* high);
 
 //File Storage
-CVAPI(cv::FileStorage*) cveFileStorageCreate(const cv::String* source, int flags, const cv::String* encoding);
+CVAPI(cv::FileStorage*) cveFileStorageCreate(cv::String* source, int flags, cv::String* encoding);
 CVAPI(bool) cveFileStorageIsOpened(cv::FileStorage* storage);
 CVAPI(void) cveFileStorageReleaseAndGetString(cv::FileStorage* storage, cv::String* result);
 CVAPI(void) cveFileStorageRelease(cv::FileStorage** storage);

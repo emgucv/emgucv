@@ -616,7 +616,7 @@ void cveRandu(cv::_InputOutputArray* dst, cv::_InputArray* low, cv::_InputArray*
 }
 
 //File Storage
-cv::FileStorage* cveFileStorageCreate(const cv::String* source, int flags, const cv::String* encoding)
+cv::FileStorage* cveFileStorageCreate(cv::String* source, int flags, cv::String* encoding)
 {
 	return new cv::FileStorage(*source, flags, *encoding);
 }
@@ -626,8 +626,7 @@ bool cveFileStorageIsOpened(cv::FileStorage* storage)
 }
 void cveFileStorageReleaseAndGetString(cv::FileStorage* storage, cv::String* result)
 {
-	cv::String res = storage->releaseAndGetString();
-	res.swap(*result);
+	*result = storage->releaseAndGetString();
 }
 void cveFileStorageRelease(cv::FileStorage** storage)
 {
@@ -938,8 +937,7 @@ void cveSetUseOpenVX(bool flag)
 
 void cveGetBuildInformation(cv::String* buildInformation)
 {
-	cv::String bi = cv::getBuildInformation();
-	*buildInformation = bi;
+	*buildInformation = cv::getBuildInformation();
 }
 
 void cveGetRawData(CvArr* arr, uchar** data, int* step, CvSize* roiSize)
@@ -1016,9 +1014,8 @@ cv::Affine3d* cveAffine3dCreate()
 }
 cv::Affine3d* cveAffine3dGetIdentity()
 {
-	cv::Affine3d i = cv::Affine3d::Identity();
 	cv::Affine3d* result = new cv::Affine3d();
-	*result = i;
+	*result = cv::Affine3d::Identity();
 	return result;
 }
 cv::Affine3d* cveAffine3dRotate(cv::Affine3d* affine, double r0, double r1, double r2)
