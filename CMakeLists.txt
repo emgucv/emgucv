@@ -1017,6 +1017,8 @@ SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.windows")
 SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_ID "Emgu.runtime.windows.msvc.rt.x86")
 SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_ID "Emgu.runtime.windows.msvc.rt.x64")
 
+SET(NUGET_EMGU_URL "https://www.emgu.com")
+
 IF(WITH_CUDA)
 	SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_WINDOWS_NUGET_ID}.cuda")
 	SET(EMGU_WINDOWS_CUDA_NUGET_ID "Emgu.runtime.windows.cuda")
@@ -1633,7 +1635,7 @@ IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 	ENDIF()
 ENDIF()
 
-SET(NUGET_EMGU_URL "https://www.emgu.com")
+
 
 #generate nuget config file for Emgu.CV 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV/Package.nuspec)

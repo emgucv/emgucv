@@ -1,6 +1,6 @@
-## About this package
+## About
 
-This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. 
+This package is part of the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. 
 
 For online documentation please visit
 <https://www.emgu.com/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html>
@@ -8,7 +8,19 @@ For online documentation please visit
 Release note can be found at
 <https://www.emgu.com/wiki/index.php/Version_History#Emgu.CV-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}>
 
-## Note
+## How to Use
 
-To deploy Emgu CV to a specific platform, you will also need to add one of the Emgu.CV.runtime.{platform} nuget packages to your executable project, use the following link to search for an Emgu.CV.runtime nuget packages:
-<https://www.nuget.org/packages?q=Emgu.CV.runtime>
+```csharp
+Bitmap bmp = ... //Some bitmap object
+Mat mat = bmp.ToMat() //convert Bitmap to Mat
+... // modify on your Mat
+Bitmap otherBmp = mat.ToBitmap(); // convert Mat to Bitmap
+```
+
+## Supported platforms
+
+* Windows
+* Linux (require GDI+)
+* Mac OS (require GDI+)
+
+This package do not support mobile platforms. GDI+ is not available on iOS or Android
