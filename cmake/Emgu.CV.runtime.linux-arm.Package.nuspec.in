@@ -7,14 +7,14 @@
     <authors>${CPACK_PACKAGE_VENDOR}</authors>
     <owners>${CPACK_PACKAGE_VENDOR}</owners>
     <license type="file">${EMGUCV_LICENSE_FILE}</license>
-    <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
+    <projectUrl>${NUGET_EMGU_URL}</projectUrl>
 	<repository type="git" url="https://github.com/emgucv/emgucv" />
 	<icon>icon.png</icon>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
 	<summary>Emgu CV native runtime for Raspberry Pi OS</summary>
     <description>This package contains the Emgu CV native runtime for Raspberry Pi OS</description>
     <releaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV native runtime for Raspberry Pi OS. For online documentation please visit
-http://www.emgu.com/wiki/files/emgucv/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/
+${NUGET_EMGU_URL}/wiki/files/emgucv/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/
     </releaseNotes>
 	${EMGUCV_RASPBERRY_PI_NUGET_DEPENDENCY}
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>

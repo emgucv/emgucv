@@ -7,7 +7,7 @@
     <authors>${CPACK_PACKAGE_VENDOR}</authors>
     <owners>${CPACK_PACKAGE_VENDOR}</owners>
     <license type="file">CUDA_EULA.txt</license>
-    <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
+    <projectUrl>${NUGET_EMGU_URL}</projectUrl>
 	<icon>icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<summary>This package provides the native CUDA dependencies for ${EMGUCV_NUGET_ID}</summary>

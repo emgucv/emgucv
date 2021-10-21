@@ -7,7 +7,7 @@
     <authors>${NUGET_PACKAGE_VENDOR}</authors>
     <owners>${NUGET_PACKAGE_VENDOR}</owners>
     <license type="file">cuDNN_SLA.txt</license>
-    <projectUrl>http://www.emgu.com/wiki/index.php</projectUrl>
+    <projectUrl>${NUGET_EMGU_URL}</projectUrl>
 	<icon>icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
 	<summary>This package provides the native ADV component for CUDA DNN.</summary>
