@@ -1270,5 +1270,34 @@ namespace Emgu.CV.Test
                 images[i].Dispose();
             }
         }
+
+        [Test]
+        public void TestCLAHE()
+        {
+            if (!CudaInvoke.HasCuda)
+                return;
+            using (Mat image = EmguAssert.LoadMat("lena.jpg", ImreadModes.Color))
+            using (Mat result = new Mat())
+            {
+                for (int i = 0; i <= 1000; i++)
+                {
+                    using (CudaClahe clahe = new Emgu.CV.Cuda.CudaClahe(10, new System.Drawing.Size(8, 8)))
+                    using (GpuMat gMat = new GpuMat())
+                    using (GpuMat gMatLab = new GpuMat())
+                    using (VectorOfGpuMat vectorOfGMats = new VectorOfGpuMat(3))
+                    using (GpuMat gMatOut = new GpuMat())
+                    {
+                        gMat.Upload(image);
+                        CudaInvoke.CvtColor(gMat, gMatLab, Emgu.CV.CvEnum.ColorConversion.Bgr2Lab, 0);
+                        CudaInvoke.Split(gMatLab, vectorOfGMats);
+                        clahe.Apply(vectorOfGMats[0], gMatOut);
+                        gMatOut.CopyTo(vectorOfGMats[0]);
+                        CudaInvoke.Merge(vectorOfGMats, gMatLab);
+                        CudaInvoke.CvtColor(gMatLab, gMat, Emgu.CV.CvEnum.ColorConversion.Lab2Bgr, 0);
+                        gMat.Download(result);
+                    }
+                }
+            }
+        }
     }
 }
