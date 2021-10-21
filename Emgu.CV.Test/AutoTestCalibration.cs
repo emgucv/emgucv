@@ -56,19 +56,19 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void TestChessboardCalibration()
+        public void TestChessboardCalibrationSolvePnPRansac()
         {
             Size patternSize = new Size(9, 6);
 
-            Image<Gray, Byte> chessboardImage = EmguAssert.LoadImage<Gray, byte>("left01.jpg");
+            Mat chessboardImage = EmguAssert.LoadMat("left01.jpg", ImreadModes.Grayscale);
             Util.VectorOfPointF corners = new Util.VectorOfPointF();
             bool patternWasFound = CvInvoke.FindChessboardCorners(chessboardImage, patternSize, corners);
-
-            chessboardImage.FindCornerSubPix(
-               new PointF[][] { corners.ToArray() },
-               new Size(10, 10),
-               new Size(-1, -1),
-               new MCvTermCriteria(0.05));
+            CvInvoke.CornerSubPix(
+                chessboardImage,
+                corners,
+                new Size(10, 10),
+                new Size(-1, -1),
+                new MCvTermCriteria(0.05));
 
             MCvPoint3D32f[] objectPts = CalcChessboardCorners(patternSize, 1.0f);
 
@@ -95,8 +95,7 @@ namespace Emgu.CV.Test
                         cameraMatrix,
                         distortionCoeff,
                         rotation,
-                        translation,
-                        true);
+                        translation);
                 }
 
                 CvInvoke.DrawChessboardCorners(chessboardImage, patternSize, corners, patternWasFound);
@@ -110,7 +109,62 @@ namespace Emgu.CV.Test
                     //UI.ImageViewer.Show(undistorted, String.Format("Reprojection error: {0}", error));
                 }
             }
+        }
 
+        [Test]
+        public void TestChessboardCalibrationSolvePnP()
+        {
+            Size patternSize = new Size(9, 6);
+
+            Mat chessboardImage = EmguAssert.LoadMat("left01.jpg", ImreadModes.Grayscale);
+            Util.VectorOfPointF corners = new Util.VectorOfPointF();
+            bool patternWasFound = CvInvoke.FindChessboardCorners(chessboardImage, patternSize, corners);
+            CvInvoke.CornerSubPix(
+                chessboardImage,
+                corners,
+                new Size(10, 10),
+                new Size(-1, -1),
+                new MCvTermCriteria(0.05));
+
+            MCvPoint3D32f[] objectPts = CalcChessboardCorners(patternSize, 1.0f);
+
+            using (VectorOfVectorOfPoint3D32F ptsVec = new VectorOfVectorOfPoint3D32F(new MCvPoint3D32f[][] { objectPts }))
+            using (VectorOfVectorOfPointF imgPtsVec = new VectorOfVectorOfPointF(corners))
+            using (Mat cameraMatrix = new Mat())
+            using (Mat distortionCoeff = new Mat())
+            using (VectorOfMat rotations = new VectorOfMat())
+            using (VectorOfMat translations = new VectorOfMat())
+            {
+                Mat calMat = CvInvoke.InitCameraMatrix2D(ptsVec, imgPtsVec, chessboardImage.Size, 0);
+                Matrix<double> calMatF = new Matrix<double>(calMat.Rows, calMat.Cols, calMat.NumberOfChannels);
+                calMat.CopyTo(calMatF);
+                double error = CvInvoke.CalibrateCamera(ptsVec, imgPtsVec, chessboardImage.Size, cameraMatrix,
+                    distortionCoeff,
+                    rotations, translations, CalibType.Default, new MCvTermCriteria(30, 1.0e-10));
+                using (Mat rotation = new Mat())
+                using (Mat translation = new Mat())
+                using (VectorOfPoint3D32F vpObject = new VectorOfPoint3D32F(objectPts))
+                {
+                    CvInvoke.SolvePnP(
+                        vpObject,
+                        corners,
+                        cameraMatrix,
+                        distortionCoeff,
+                        rotation,
+                        translation);
+                }
+
+                CvInvoke.DrawChessboardCorners(chessboardImage, patternSize, corners, patternWasFound);
+                using (Mat undistorted = new Mat())
+                {
+                    CvInvoke.Undistort(chessboardImage, undistorted, cameraMatrix, distortionCoeff);
+                    String title = String.Format("Reprojection error: {0}", error);
+                    //CvInvoke.NamedWindow(title);
+                    //CvInvoke.Imshow(title, undistorted);
+                    //CvInvoke.WaitKey();
+                    //UI.ImageViewer.Show(undistorted, String.Format("Reprojection error: {0}", error));
+                }
+            }
         }
 
         [Test]

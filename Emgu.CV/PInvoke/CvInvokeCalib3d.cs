@@ -659,9 +659,14 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         private static extern bool cveSolvePnP(
-           IntPtr objectPoints, IntPtr imagePoints, IntPtr cameraMatrix, IntPtr distCoeffs,
-           IntPtr rvec, IntPtr tvec,
-           [MarshalAs(CvInvoke.BoolMarshalType)] bool useExtrinsicGuess,
+           IntPtr objectPoints, 
+           IntPtr imagePoints, 
+           IntPtr cameraMatrix, 
+           IntPtr distCoeffs,
+           IntPtr rvec, 
+           IntPtr tvec,
+           [MarshalAs(CvInvoke.BoolMarshalType)] 
+           bool useExtrinsicGuess,
            CvEnum.SolvePnpMethod flags);
 
         /// <summary>
