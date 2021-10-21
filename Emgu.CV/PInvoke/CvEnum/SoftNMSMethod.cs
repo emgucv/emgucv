@@ -11,7 +11,13 @@ namespace Emgu.CV.CvEnum
     /// </summary>
     public enum SoftNMSMethod
     {
+        /// <summary>
+        /// Linear
+        /// </summary>
         Linear = 1,
+        /// <summary>
+        /// Gaussian
+        /// </summary>
         Gaussian = 2
     }
 }

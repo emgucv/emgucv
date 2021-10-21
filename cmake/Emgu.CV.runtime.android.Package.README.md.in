@@ -8,7 +8,6 @@ For online documentation please visit
 Release note can be found at
 <https://www.emgu.com/wiki/index.php/Version_History#Emgu.CV-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}>
 
-## Note
+## Setup
 
-To deploy Emgu CV to a specific platform, you will also need to add one of the Emgu.CV.runtime.{platform} nuget packages to your executable project, use the following link to search for an Emgu.CV.runtime nuget packages:
-<https://www.nuget.org/packages?q=Emgu.CV.runtime>
+Please make sure to call Emgu.CV.CvInvokeAndroid.Init() before making any other calls to Emgu CV library on Android.
