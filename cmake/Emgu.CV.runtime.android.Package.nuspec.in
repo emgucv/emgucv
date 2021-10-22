@@ -13,10 +13,10 @@
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
 	<summary>Runtime package of Emgu CV for Android</summary>
     <description>This package contains the native runtime of Emgu CV for Android</description>
-	<readme>docs\README.md</readme>
     <releaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. For online documentation please visit
 ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html    	        
     </releaseNotes>
+	<readme>docs\README.md</readme>
 	${EMGUCV_ANDROID_NUGET_DEPENDENCY}
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>opencv emgu emgucv ai image android</tags>

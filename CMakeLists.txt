@@ -1271,7 +1271,8 @@ SET(EMGUCV_MODELS_NUGET_FILE_LIST "${EMGUCV_MODELS_NUGET_FILE_LIST}
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Models.dll\" target=\"lib\\netstandard2.0\" />
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Models.xml\" target=\"lib\\netstandard2.0\" />
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+	<file src=\"README.md\" target=\"docs\\\" />")
 SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY} 
       <group targetFramework=\".NETStandard2.0\">
         <dependency id=\"System.Drawing.Common\" version=\"5.0.2\" exclude=\"Build,Analyzers\" />
@@ -1578,7 +1579,7 @@ IF(HAVE_IOS AND WIN32)
     SET(EMGUCV_IOS_NUGET_FILE_LIST "${EMGUCV_IOS_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-	<file src=\"readme.txt\" target=\"\" />")
+	<file src=\"README.md\" target=\"docs\\\" />")
     SET(EMGUCV_IOS_NUGET_DEPENDENCY "
     <dependencies>
       <group targetFramework=\"Xamarin.iOS10\">
@@ -1586,6 +1587,7 @@ IF(HAVE_IOS AND WIN32)
       </group>
     </dependencies>")
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ios.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ios/Package.nuspec)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ios/README.md)
 ENDIF()
 
 IF(HAVE_MACOS)
@@ -1648,6 +1650,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Bitmap.Package.README.m
 
 #generate nuget config file for Emgu.CV.Models
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Models.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.Models/Package.nuspec)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Models.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.Models/README.md)
 
 #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/component.yaml.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/xamarin/emgucv_v3/component/component.yaml)
 
@@ -2149,9 +2152,9 @@ ELSEIF (WIN32)
 	  SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
 	    "${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
 	    Delete '$${vs_version}_INSTALL_FOLDER${file}.dll'
-	    MessageBox MB_OK 'removing $${vs_version}_INSTALL_FOLDER${file}.dll'
+	    ;MessageBox MB_OK 'removing $${vs_version}_INSTALL_FOLDER${file}.dll'
 		")
-	  MESSAGE(STATUS "Will remove ${file}.dll from debuger visualizer folder '$${vs_version}_INSTALL_FOLDER' for ${vs_version}")
+	  #MESSAGE(STATUS "Will remove ${file}.dll from debuger visualizer folder '$${vs_version}_INSTALL_FOLDER' for ${vs_version}")
 	ENDFOREACH()
 	
 	#UNINSTALL 32bit native DLLs
@@ -2159,7 +2162,7 @@ ELSEIF (WIN32)
 	  SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
 	    "${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
 	Delete '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_DEPLOY_SUBFOLDER}${file}.dll'
-	MessageBox MB_OK 'removing $${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_DEPLOY_SUBFOLDER}${file}.dll'
+	;MessageBox MB_OK 'removing $${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_DEPLOY_SUBFOLDER}${file}.dll'
 	")
 	MESSAGE(STATUS "Will remove 32-bit ${file}.dll from debuger visualizer folder '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_DEPLOY_SUBFOLDER}' for ${vs_version}")
 	ENDFOREACH()
@@ -2169,9 +2172,9 @@ ELSEIF (WIN32)
 	  SET(UNINSTALL_DEBUGER_VISUALIZER_COMMAND
 	    "${UNINSTALL_DEBUGER_VISUALIZER_COMMAND}
 	Delete '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X64_FILES_DEPLOY_SUBFOLDER}${file}.dll'
-	MessageBox MB_OK 'removing $${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X64_FILES_DEPLOY_SUBFOLDER}${file}.dll'
+	;MessageBox MB_OK 'removing $${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X64_FILES_DEPLOY_SUBFOLDER}${file}.dll'
 	")
-	  MESSAGE(STATUS "Will remove 64-bit ${file}.dll from debuger visualizer folder '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X64_FILES_DEPLOY_SUBFOLDER}' for ${vs_version}")
+	  #MESSAGE(STATUS "Will remove 64-bit ${file}.dll from debuger visualizer folder '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X64_FILES_DEPLOY_SUBFOLDER}' for ${vs_version}")
 	ENDFOREACH()
 	
 	#IF(DEFINED UNIVERSAL_BUILD)
