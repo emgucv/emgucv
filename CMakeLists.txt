@@ -1310,7 +1310,7 @@ IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetCore.xml\" target=\"lib\\netcoreapp3.1\" />
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-	")
+	<file src=\"README.md\" target=\"docs\\\" />")
   SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
       <group targetFramework=\".NETFramework4.6.1\">
         <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
@@ -1611,7 +1611,9 @@ ENDIF()
 
 IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/Package.nuspec)
+  
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.UI/Package.nuspec)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.UI/README.md)
 ENDIF()
 
 if(HAVE_LINUX_ARM)
@@ -2052,13 +2054,13 @@ ELSEIF (WIN32)
 	  SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
 	    "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
 	  CreateDirectory '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_DEPLOY_SUBFOLDER}'
-	  MessageBox MB_OK 'Creating directory $${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_DEPLOY_SUBFOLDER}'
+	  ;MessageBox MB_OK 'Creating directory $${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_DEPLOY_SUBFOLDER}'
 	  ")
 	  FOREACH (file ${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES})
 	    SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
 	      "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
 	  CopyFiles /SILENT '\\\$INSTDIR\\\\libs\\\\x86\\\\${file}.dll' '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_DEPLOY_SUBFOLDER}'
-	  MessageBox MB_OK 'copying \\\$INSTDIR\\\\libs\\\\x86\\\\${file}.dll to $${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_DEPLOY_SUBFOLDER}'
+	  ;MessageBox MB_OK 'copying \\\$INSTDIR\\\\libs\\\\x86\\\\${file}.dll to $${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_DEPLOY_SUBFOLDER}'
 	  ")
 	  #MESSAGE(STATUS " --- Adding libs\\x86\\${file}.dll to debuger visualizer folder '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_SUBFOLDER}' for ${vs_description}")
 	  ENDFOREACH()
