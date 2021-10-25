@@ -91,6 +91,7 @@ public abstract class ProcessAndRenderModelBehaviour : MonoBehaviour
         using (Mat img = GetInputMat())
         using (Mat imgOut = new Mat())
         {
+            img.CopyTo(imgOut);
             String outMessage = _model.ProcessAndRender(img, imgOut);
 
             Debug.Log(outMessage);
