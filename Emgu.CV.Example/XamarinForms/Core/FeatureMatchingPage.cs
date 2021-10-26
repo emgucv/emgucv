@@ -44,6 +44,18 @@ namespace Emgu.CV.XamarinForms
             p.Items.Add("SIFT");
         }
 
+        private String GetSelectedFeatrure2D()
+        {
+            if (this.Picker.SelectedItem == null)
+            {
+                return "KAZE"; // default 
+            }
+            else
+            {
+                return this.Picker.SelectedItem.ToString();
+            }
+        }
+
         private async void OnButtonClicked(Object sender, EventArgs args)
         {
             Mat[] images = await LoadImages(new String[] { "box.png", "box_in_scene.png" }, new string[] { "Pick a model image from", "Pick a observed image from" });
@@ -56,7 +68,8 @@ namespace Emgu.CV.XamarinForms
                 {
                     long time;
                     Emgu.CV.Features2D.Feature2D featureDetectorExtractor;
-                    String pickedFeature2D = this.Picker.SelectedItem.ToString();
+                    String pickedFeature2D = GetSelectedFeatrure2D();
+
                     if (pickedFeature2D.Equals("SIFT"))
                     {
                         featureDetectorExtractor = new SIFT();
@@ -78,7 +91,7 @@ namespace Emgu.CV.XamarinForms
 
             SetImage(t.Result.Item1);
             String computeDevice = CvInvoke.UseOpenCL ? "OpenCL: " + Ocl.Device.Default.Name : "CPU";
-            SetMessage(String.Format("Detected with {1} in {0} milliseconds.", t.Result.Item2, computeDevice));
+            SetMessage(String.Format("Detected with {1} using {2} in {0} milliseconds.", t.Result.Item2, computeDevice, GetSelectedFeatrure2D()));
         }
     }
 }
