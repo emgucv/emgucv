@@ -1,0 +1,17 @@
+## About this package
+
+This package is part of the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. 
+
+For online documentation please visit
+<${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html>
+
+Release note can be found at
+<${NUGET_EMGU_URL}/wiki/index.php/Version_History#Emgu.CV-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}>
+
+## Note
+
+If you are targeting .Net Framework, please read this first:
+<${NUGET_EMGU_URL}/wiki/index.php/Download_And_Installation#Targeting_.Net_Framework>
+
+If you have issues getting the pacakge installed for your project, and your project use packages.config to manage nuget packages, the following instructions will help:
+<${NUGET_EMGU_URL}/wiki/index.php/Download_And_Installation#Upgrade_from_packages.config_to_package_reference>
