@@ -1202,7 +1202,8 @@ IF(HAVE_LINUX_X64 OR HAVE_LINUX_X86 OR HAVE_LINUX_ARM64)
     </dependencies>")
 	SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+    <file src=\"README.md\" target=\"docs\\\" />")
 ENDIF()
 
 SET(EMGUCV_NUGET_FILE_LIST "")
@@ -1631,6 +1632,7 @@ ENDIF()
 if(HAVE_LINUX_X86 OR HAVE_LINUX_X64 OR HAVE_LINUX_ARM64)
   SET(EMGUCV_UBUNTU_NUGET_TITLE "Emgu CV Native Runtime for Ubuntu")
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ubuntu.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/Package.nuspec)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ubuntu.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/README.md)
 ENDIF()
 
 SET(EMGUCV_NUGET_TITLE "Emgu CV")

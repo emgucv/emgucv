@@ -15,6 +15,7 @@
     <description>This package contains the native runtime of Emgu CV for Ubuntu</description>
     <releaseNotes>This is the ${CPACK_PACKAGE_VERSION}${TENSORFLOW_VERSION_SUFFIX} release of Emgu CV for Ubuntu. For online documentation please visit
 ${NUGET_EMGU_URL}/wiki/files/EMGUCV/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/</releaseNotes>
+	<readme>docs\README.md</readme>
 	${EMGUCV_UBUNTU_NUGET_DEPENDENCY}
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>opencv emgu emgucv vison ubuntu</tags>
