@@ -1252,7 +1252,7 @@ SET(EMGUCV_BITMAP_NUGET_FILE_LIST "${EMGUCV_BITMAP_NUGET_FILE_LIST}
 	<file src=\"README.md\" target=\"docs\\\" />")
 SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "${EMGUCV_BITMAP_NUGET_DEPENDENCY} 
       <group targetFramework=\".NETStandard2.0\">
-        <dependency id=\"System.Drawing.Common\" version=\"5.0.2\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Drawing.Common\" version=\"6.0.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </group>")
 SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "
@@ -1271,7 +1271,7 @@ IF (HAVE_IOS)
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\xamarinios10\" />")
   SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY}
       <group targetFramework=\"Xamarin.iOS1.0\">
-        <dependency id=\"System.Drawing.Common\" version=\"5.0.2\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Drawing.Common\" version=\"6.0.0\" exclude=\"Build,Analyzers\" />
 		<dependency id=\"Newtonsoft.Json\" version=\"13.0.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </group>")
@@ -1285,7 +1285,7 @@ SET(EMGUCV_MODELS_NUGET_FILE_LIST "${EMGUCV_MODELS_NUGET_FILE_LIST}
 	<file src=\"README.md\" target=\"docs\\\" />")
 SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY} 
       <group targetFramework=\".NETStandard2.0\">
-        <dependency id=\"System.Drawing.Common\" version=\"5.0.2\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Drawing.Common\" version=\"6.0.0\" exclude=\"Build,Analyzers\" />
 		<dependency id=\"Newtonsoft.Json\" version=\"13.0.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </group>")
