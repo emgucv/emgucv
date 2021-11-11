@@ -280,6 +280,15 @@ int cveVideoWriterFourcc(char c1, char c2, char c3, char c4)
 	throw_no_videoio();
 #endif
 }
+void cveVideoWriterGetBackendName(cv::VideoWriter* writer, cv::String* name)
+{
+#ifdef HAVE_OPENCV_VIDEOIO
+	* name = writer->getBackendName();
+#else
+	throw_no_videoio();
+#endif
+}
+
 
 void cveGetBackendName(int api, cv::String* name)
 {

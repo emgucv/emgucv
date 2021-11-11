@@ -100,7 +100,6 @@ namespace BuildInfo.NetCore.Console
                 foreach (Emgu.CV.Backend be in backends)
                 {
                     if (be.Name.Equals("FFMPEG"))
-                        //if (be.Name.Equals("INTEL_MFX"))
                     {
                         backend_idx = be.ID;
                         backendName = be.Name;
@@ -112,12 +111,13 @@ namespace BuildInfo.NetCore.Console
                 {
                     try
                     {
+                        //Environment.SetEnvironmentVariable("OPENCV_FFMPEG_WRITER_OPTIONS", "hw_encoders_any;cuda");
                         using (VideoWriter writer = new VideoWriter(
                             "tmp.avi",
                             backend_idx,
-                            VideoWriter.Fourcc('X', 'V', 'I', 'D'),
+                            VideoWriter.Fourcc('H', '2', '6', '3'), //VideoWriter.Fourcc('X', 'V', 'I', 'D'),
                             25,
-                            new Size(640, 480),
+                            new Size(704, 576),
                             new Tuple<VideoWriter.WriterProperty, int>[]
                             {
                                 new Tuple<VideoWriter.WriterProperty, int>(VideoWriter.WriterProperty.IsColor, 1),
@@ -127,13 +127,13 @@ namespace BuildInfo.NetCore.Console
 
                             VideoAccelerationType hwAcceleration =
                                 (VideoAccelerationType)writer.Get(VideoWriter.WriterProperty.HwAcceleration);
-                            return String.Format("{0}VideoWriter successfully created with backend: {1} (hw acceleration: {2})", System.Environment.NewLine, backendName, hwAcceleration);
+                            return String.Format("{0}Trying to create H263 video writer with FFMPEG backend...{0}H263 VideoWriter successfully created with backend: {1} (hw acceleration: {2})", System.Environment.NewLine, backendName, hwAcceleration);
                         }
                     }
                     catch (Exception e)
                     {
                         //System.Console.WriteLine(e);
-                        return Environment.NewLine + "Failed to create VideoWriter with FFMPEG backend.";
+                        return Environment.NewLine + "Failed to create H263 VideoWriter with FFMPEG backend.";
                     }
                 }
                 else
@@ -181,7 +181,7 @@ namespace BuildInfo.NetCore.Console
 
                             VideoAccelerationType hwAcceleration =
                                 (VideoAccelerationType)writer.Get(VideoWriter.WriterProperty.HwAcceleration);
-                            return String.Format("{0}VideoWriter successfully created with backend: {1} (hw acceleration: {2})", System.Environment.NewLine, backendName, hwAcceleration);
+                            return String.Format("{0}Trying to create H264 video writer with Intel MFX backend...{0}VideoWriter successfully created with backend: {1} (hw acceleration: {2})", System.Environment.NewLine, backendName, hwAcceleration);
                         }
                     }
                     catch (Exception e)
@@ -198,49 +198,183 @@ namespace BuildInfo.NetCore.Console
             return String.Empty;
         }
 
+        private static String GetVideoWriterMSMFInfo()
+        {
+            if (Emgu.Util.Platform.OperationSystem == Platform.OS.Windows)
+            {
+                Emgu.CV.Backend[] backends = CvInvoke.WriterBackends;
+                int backend_idx = 0; //any backend;
+                String backendName = String.Empty;
+                foreach (Emgu.CV.Backend be in backends)
+                {
+                    if (be.Name.Equals("MSMF"))
+                    {
+                        backend_idx = be.ID;
+                        backendName = be.Name;
+                        break;
+                    }
+                }
+
+                if (backend_idx > 0) //MSMF backend is available
+                {
+                    try
+                    {
+
+                        using (VideoWriter writer = new VideoWriter(
+                            "tmp.mp4",
+                            backend_idx,
+                            VideoWriter.Fourcc('H', '2', '6', '4'),
+                            30,
+                            new Size(640, 480),
+                            new Tuple<VideoWriter.WriterProperty, int>[]
+                            {
+                                new Tuple<VideoWriter.WriterProperty, int>(VideoWriter.WriterProperty.IsColor, 1),
+                                new Tuple<VideoWriter.WriterProperty, int>(VideoWriter.WriterProperty.HwAcceleration, (int) VideoAccelerationType.Any)
+                            }))
+                        {
+
+                            VideoAccelerationType hwAcceleration =
+                                (VideoAccelerationType)writer.Get(VideoWriter.WriterProperty.HwAcceleration);
+                            return String.Format("{0}Trying to create H264 video writer with MSMF backend...{0}H264 VideoWriter successfully created with backend: {1} (hw acceleration: {2})", System.Environment.NewLine, backendName, hwAcceleration);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        //System.Console.WriteLine(e);
+                        return Environment.NewLine + "Failed to create H264 VideoWriter with MSMF backend.";
+                    }
+                }
+                else
+                {
+                    return Environment.NewLine + "MSMF backend not found.";
+                }
+            }
+            return String.Empty;
+        }
+
+        private static String GetVideoWriterInfo()
+        {
+            if (Emgu.Util.Platform.OperationSystem == Platform.OS.Windows)
+            {
+
+                try
+                {
+                    
+                    using (VideoWriter writer = new VideoWriter(
+                        "tmp.avi",
+                        0,
+                        VideoWriter.Fourcc('H', '2', '6', '3'),
+                        30,
+                        new Size(704, 576),
+                        new Tuple<VideoWriter.WriterProperty, int>[]
+                        {
+                                new Tuple<VideoWriter.WriterProperty, int>(VideoWriter.WriterProperty.IsColor, 1),
+                                new Tuple<VideoWriter.WriterProperty, int>(VideoWriter.WriterProperty.HwAcceleration, (int) VideoAccelerationType.Any)
+                        }))
+                    {
+
+                        VideoAccelerationType hwAcceleration =
+                            (VideoAccelerationType)writer.Get(VideoWriter.WriterProperty.HwAcceleration);
+                        return String.Format("{0}Trying to create H263 video writer with default backend...{0}H263 VideoWriter successfully created with default backend: {1} (hw acceleration: {2})", System.Environment.NewLine, writer.BackendName, hwAcceleration);
+                    }
+                }
+                catch (Exception e)
+                {
+                    //System.Console.WriteLine(e);
+                    return Environment.NewLine + "Failed to create H263 VideoWriter with default backend.";
+                }
+
+            }
+            return String.Empty;
+        }
+
+        private static String GetVideoCaptureInfo()
+        {
+            if (Emgu.Util.Platform.OperationSystem == Platform.OS.Windows)
+            {
+
+                String captureText = String.Empty;
+                try
+                {
+                    using (VideoCapture cap = new VideoCapture(0, VideoCapture.API.Any,
+                        new Tuple<CapProp, int>(CapProp.HwAcceleration, (int)VideoAccelerationType.Any)))
+                    {
+                        if (cap.IsOpened)
+                        {
+
+                            VideoAccelerationType hwAcceleration = (VideoAccelerationType)cap.Get(CapProp.HwAcceleration);
+                            captureText +=
+                                String.Format(
+                                    "{0}VideoCapture device successfully opened with backend: {1} (hw acceleration: {2})",
+                                    System.Environment.NewLine, cap.BackendName, hwAcceleration);
+                        }
+                        else
+                        {
+                            captureText +=
+                                String.Format(
+                                    "{0}VideoCapture device failed to opened.",
+                                    System.Environment.NewLine);
+                        }
+                    }
+                }
+                catch (Emgu.CV.Util.CvException e)
+                {
+                    //System.Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>");
+                    captureText += String.Format("{0}No capture device found.", System.Environment.NewLine);
+
+                }
+                return captureText;
+
+            }
+            return String.Empty;
+        }
+
         private static String GetCaptureInfo()
         {
             String captureText = String.Format("Capture Backends (VideoCapture from device): {0}{1}", System.Environment.NewLine, GetBackendInfo(CvInvoke.Backends));
 
-	    /*
-            //We don't want to create VideoCapture on Mac OS unless we have requested camera permission
-            if (Emgu.Util.Platform.OperationSystem != Platform.OS.MacOS)
-            {
-	        try {
-                  using (VideoCapture cap = new VideoCapture(0, VideoCapture.API.Any,
-                      new Tuple<CapProp, int>(CapProp.HwAcceleration, (int)VideoAccelerationType.Any)))
-                  {
-                      if (cap.IsOpened)
+            /*
+                //We don't want to create VideoCapture on Mac OS unless we have requested camera permission
+                if (Emgu.Util.Platform.OperationSystem != Platform.OS.MacOS)
+                {
+                try {
+                      using (VideoCapture cap = new VideoCapture(0, VideoCapture.API.Any,
+                          new Tuple<CapProp, int>(CapProp.HwAcceleration, (int)VideoAccelerationType.Any)))
                       {
-                          String backendName = cap.BackendName;
-                          VideoAccelerationType hwAcceleration = (VideoAccelerationType)cap.Get(CapProp.HwAcceleration);
-                          captureText +=
-                              String.Format(
-                                  "{0}VideoCapture device successfully opened with default backend: {1} (hw acceleration: {2})",
-                                  System.Environment.NewLine, backendName, hwAcceleration);
-                      } else
-                      {
-                          captureText +=
-                              String.Format(
-                                  "{0}VideoCapture device failed to opened with default backend: {1}",
-                                  System.Environment.NewLine, cap.BackendName);
+                          if (cap.IsOpened)
+                          {
+                              String backendName = cap.BackendName;
+                              VideoAccelerationType hwAcceleration = (VideoAccelerationType)cap.Get(CapProp.HwAcceleration);
+                              captureText +=
+                                  String.Format(
+                                      "{0}VideoCapture device successfully opened with default backend: {1} (hw acceleration: {2})",
+                                      System.Environment.NewLine, backendName, hwAcceleration);
+                          } else
+                          {
+                              captureText +=
+                                  String.Format(
+                                      "{0}VideoCapture device failed to opened with default backend: {1}",
+                                      System.Environment.NewLine, cap.BackendName);
+                          }
                       }
-                  }
-		} catch (Emgu.CV.Util.CvException e)
-		{
-		        //System.Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>");
-			captureText += String.Format("{0}No capture device found.", System.Environment.NewLine);
-		}
-            }*/
-	    
+            } catch (Emgu.CV.Util.CvException e)
+            {
+                    //System.Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>");
+                captureText += String.Format("{0}No capture device found.", System.Environment.NewLine);
+            }
+                }*/
+
             captureText += String.Format("{0}{0}Stream Backends (VideoCapture from file/Stream): {0}{1}", System.Environment.NewLine, GetBackendInfo(CvInvoke.StreamBackends));
 
             captureText += String.Format("{0}{0}VideoWriter backends: {0}{1}{0}", Environment.NewLine,
                 GetBackendInfo(CvInvoke.WriterBackends));
 
             captureText += GetVideoWriterFFMPEGInfo();
+            captureText += GetVideoWriterMSMFInfo();
             //captureText += GetVideoWriterIntelMfxInfo();
-
+            captureText += GetVideoWriterInfo();
+            captureText += Environment.NewLine + Environment.NewLine;
+            captureText += GetVideoCaptureInfo();
             return captureText;
         }
 
