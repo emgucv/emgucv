@@ -63,7 +63,7 @@ namespace Emgu.CV
         /// <param name="fps">frame rate per second</param>
         /// <param name="size">the size of the frame</param>
         /// <param name="isColor">true if this is a color video, false otherwise</param>
-        /// <param name="apiPreference">Allows to specify API backends to use.</param>
+        /// <param name="apiPreference">Allows to specify API backends to use. Use 0 if you don't have any preference.</param>
         public VideoWriter(String fileName, int apiPreference, int compressionCode, double fps, System.Drawing.Size size, bool isColor)
         {
             using (CvString s = new CvString(fileName))
@@ -96,9 +96,9 @@ namespace Emgu.CV
         /// On windows use -1 to open a codec selection dialog.
         /// On Linux, use VideoWriter.Fourcc('I', 'Y', 'U', 'V') for default codec for the specific file name.
         /// </param>
-        /// <param name="fps">frame rate per second</param>
-        /// <param name="size">the size of the frame</param>
-        /// <param name="apiPreference">Allows to specify API backends to use.</param>
+        /// <param name="fps">Frame rate per second</param>
+        /// <param name="size">The size of the frame</param>
+        /// <param name="apiPreference">Allows to specify API backends to use. Use 0 if you don't have any specific preference.</param>
         /// <param name="writerProperties">Optional writer properties. e.g. new Tuple&lt;VideoWriter.WriterProperty&gt;(VideoWriter.WriterProperty.HwAcceleration, (int) VideoAccelerationType.Any)</param>
         public VideoWriter(String fileName, int apiPreference, int compressionCode, double fps, System.Drawing.Size size, params Tuple<WriterProperty, int>[] writerProperties)
         {
@@ -172,6 +172,24 @@ namespace Emgu.CV
         public double Get(WriterProperty prop)
         {
             return CvInvoke.cveVideoWriterGet(_ptr, prop);
+        }
+
+        /// <summary>
+        /// The name of the backend used by this VideoWriter
+        /// </summary>
+        public String BackendName
+        {
+            get
+            {
+                if (_ptr == IntPtr.Zero)
+                    return String.Empty;
+
+                using (CvString s = new CvString())
+                {
+                    CvInvoke.cveVideoWriterGetBackendName(Ptr, s);
+                    return s.ToString();
+                }
+            }
         }
 
         /// <summary>
@@ -288,6 +306,9 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern double cveVideoWriterGet(IntPtr writer, VideoWriter.WriterProperty propId);
 
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveVideoWriterGetBackendName(IntPtr writer, IntPtr backendName);
 
     }
 }

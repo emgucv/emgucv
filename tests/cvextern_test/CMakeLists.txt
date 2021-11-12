@@ -7,20 +7,20 @@
 project(cvextern_test)
 
 SET(OPENCV_MODULES_DIR "${OPENCV_SUBFOLDER}/modules")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/core/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/imgproc/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/video/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/ml/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/calib3d/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/objdetect/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/features2d/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/hal/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/flann/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/highgui/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/imgcodecs/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/videoio/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/photo/include")
-INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/dnn/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/core/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/imgproc/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/video/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/ml/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/calib3d/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/objdetect/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/features2d/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/hal/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/flann/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/highgui/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/imgcodecs/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/videoio/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/photo/include")
+#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/dnn/include")
 
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include/opencv")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../Emgu.CV.Extern/")
@@ -109,8 +109,30 @@ set_target_properties(${the_target} PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}"
 	)
 
+FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAME_CANDIDATES})
+  IF (HAVE_opencv_${CVEXTERN_OPTIONAL_DEP})
+    IF ( (DEFINED opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR) AND (EXISTS ${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include) )
+      INCLUDE_DIRECTORIES("${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
+      MESSAGE(STATUS "Include directory for cvextern:  ${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
+    ELSEIF (EXISTS "${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
+      INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
+      MESSAGE(STATUS "Include directory for cvextern:  ${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
+    ELSEIF (EXISTS "${OPENCV_EXTRA_MODULES_PATH}/${CVEXTERN_OPTIONAL_DEP}/include")
+      INCLUDE_DIRECTORIES("${OPENCV_EXTRA_MODULES_PATH}/${CVEXTERN_OPTIONAL_DEP}/include")
+      MESSAGE(STATUS "Include directory for cvextern:  ${OPENCV_EXTRA_MODULES_PATH}/${CVEXTERN_OPTIONAL_DEP}/include")
+    ENDIF()
+  ENDIF()
+ENDFOREACH()
+
+FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES}) 
+  #  INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
+  MESSAGE(STATUS "CVEXTERN_TEST dependency added:  opencv_${CVEXTERN_OPTIONAL_DEP}")
+  ADD_DEPENDENCIES(${the_target} opencv_${CVEXTERN_OPTIONAL_DEP})
+  target_link_libraries(${the_target} opencv_${CVEXTERN_OPTIONAL_DEP})
+ENDFOREACH()
+
 ADD_DEPENDENCIES(${the_target} 
-  cvextern opencv_core opencv_calib3d opencv_features2d opencv_highgui opencv_imgproc opencv_ml opencv_objdetect 
+  cvextern 
 #  ${ZLIB_LIBRARY} 
 #  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY}
 )
@@ -127,7 +149,8 @@ ENDIF()
 
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
-  cvextern opencv_core opencv_calib3d opencv_features2d opencv_highgui opencv_imgproc opencv_ml opencv_objdetect 
+  cvextern 
+  #opencv_core opencv_calib3d opencv_features2d opencv_highgui opencv_imgproc opencv_ml opencv_objdetect 
 #  ${ZLIB_LIBRARY} 
 #  ${TIFF_LIBRARY} 
 #  ${GEOTIFF_LIBRARY}
