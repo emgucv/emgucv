@@ -9,13 +9,16 @@ on:
 jobs:
   build:
 
-    runs-on: macos-latest
+    runs-on: macos-11
     
     # one day time out
     timeout-minutes: 1440
 
     steps:
     - uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.x'
     - name: Check out submodules
       run: git submodule update --init --recursive
     - name: Build Emgu CV native binary
