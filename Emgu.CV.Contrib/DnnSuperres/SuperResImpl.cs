@@ -13,70 +13,117 @@ using System.Diagnostics;
 
 namespace Emgu.CV.DnnSuperres
 {
-    internal static partial class DnnSuperresInvoke
+    /// <summary>
+    /// A class to upscale images via convolutional neural networks. The following four models are implemented:
+    /// "edsr", "espcn", "fsrcnn", "lapsrn"
+    /// </summary>
+    public class DnnSuperResImpl : UnmanagedObject
     {
-        public class DnnSuperResImpl : UnmanagedObject
+        /// <summary>
+        /// Empty constructor.
+        /// </summary>
+        public DnnSuperResImpl()
         {
-            public DnnSuperResImpl()
-            {
-                _ptr = DnnSuperresInvoke.cveDnnSuperResImplCreate();
-            }
+            _ptr = DnnSuperresInvoke.cveDnnSuperResImplCreate();
+        }
 
-            public void ReadModel(String path)
-            {
-                using (CvString csPath = new CvString(path))
-                    DnnSuperresInvoke.cveDnnSuperResImplReadModel1(_ptr, csPath);
-            }
+        /// <summary>
+        /// Constructor which immediately sets the desired model.
+        /// </summary>
+        /// <param name="algorithm">String containing one of the desired models: "edsr", "espcn", "fsrcnn", "lapsrn"</param>
+        /// <param name="scale">Integer specifying the upscale factor</param>
+        public DnnSuperResImpl(String algorithm, int scale)
+        {
+            using (CvString csAlgorithm = new CvString(algorithm))
+                _ptr = DnnSuperresInvoke.cveDnnSuperResImplCreate2(csAlgorithm, scale);
+        }
 
-            public void ReadModel(String weight, String definition)
+        /// <summary>
+        /// Read the model from the given path.
+        /// </summary>
+        /// <param name="path">Path to the model file.</param>
+        public void ReadModel(String path)
+        {
+            using (CvString csPath = new CvString(path))
+                DnnSuperresInvoke.cveDnnSuperResImplReadModel1(_ptr, csPath);
+        }
+
+        /// <summary>
+        /// Read the model from the given path.
+        /// </summary>
+        /// <param name="weight">Path to the model weights file.</param>
+        /// <param name="definition">Path to the model definition file.</param>
+        public void ReadModel(String weight, String definition)
+        {
+            using (CvString csWeight = new CvString(weight))
+            using (CvString csDefinition = new CvString(definition))
             {
-                using (CvString csWeight = new CvString(weight))
-                using (CvString csDefinition = new CvString(definition))
+                DnnSuperresInvoke.cveDnnSuperResImplReadModel2(_ptr, csWeight, csDefinition);
+            }
+        }
+
+        /// <summary>
+        /// Set desired model.
+        /// </summary>
+        /// <param name="algorithm">String containing one of the desired models: "edsr", "espcn", "fsrcnn", "lapsrn"</param>
+        /// <param name="scale">Integer specifying the upscale factor</param>
+        public void SetModel(String algorithm, int scale)
+        {
+            using (CvString csAlgorithm = new CvString(algorithm))
+                DnnSuperresInvoke.cveDnnSuperResImplSetModel(_ptr, csAlgorithm, scale);
+        }
+
+        /// <summary>
+        /// Upsample via neural network.
+        /// </summary>
+        /// <param name="img">Image to upscale</param>
+        /// <param name="result">Destination upscaled image</param>
+        public void Upsample(IInputArray img, IOutputArray result)
+        {
+            using (InputArray iaImg = img.GetInputArray())
+            using (OutputArray oaResult = result.GetOutputArray())
+            {
+                DnnSuperresInvoke.cveDnnSuperResImplUpsample(_ptr, iaImg, oaResult);
+            }
+        }
+
+        /// <summary>
+        /// Get the scale factor of the model.
+        /// </summary>
+        public int Scale
+        {
+            get { return DnnSuperresInvoke.cveDnnSuperResImplGetScale(_ptr); }
+        }
+
+        /// <summary>
+        /// Get the name of the algorithm.
+        /// </summary>
+        public String Algorithm
+        {
+            get
+            {
+                using (CvString csAlgorithm = new CvString())
                 {
-                    DnnSuperresInvoke.cveDnnSuperResImplReadModel2(_ptr, csWeight, csDefinition);
-                }
-            }
-
-            public void SetModel(String algorithm, int scale)
-            {
-                using (CvString csAlgorithm = new CvString(algorithm))
-                    DnnSuperresInvoke.cveDnnSuperResImplSetModel(_ptr, csAlgorithm, scale);
-            }
-
-            public void Upsample(IInputArray img, IOutputArray result)
-            {
-                using (InputArray iaImg = img.GetInputArray())
-                using (OutputArray oaResult = result.GetOutputArray())
-                {
-                    DnnSuperresInvoke.cveDnnSuperResImplUpsample(_ptr, iaImg, oaResult);
-                }
-            }
-
-            public int Scale
-            {
-                get { return DnnSuperresInvoke.cveDnnSuperResImplGetScale(_ptr); }
-            }
-
-            public String Algorithm
-            {
-                get
-                {
-                    using (CvString csAlgorithm = new CvString())
-                    {
-                        DnnSuperresInvoke.cveDnnSuperResImplGetAlgorithm(_ptr, csAlgorithm);
-                        return csAlgorithm.ToString();
-                    }
-                }
-            }
-
-            protected override void DisposeObject()
-            {
-                if (_ptr != IntPtr.Zero)
-                {
-                    DnnSuperresInvoke.cveDnnSuperResImplRelease(ref _ptr);
+                    DnnSuperresInvoke.cveDnnSuperResImplGetAlgorithm(_ptr, csAlgorithm);
+                    return csAlgorithm.ToString();
                 }
             }
         }
+
+        /// <summary>
+        /// Release this memory associated with this Dnn super resolution model.
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            if (_ptr != IntPtr.Zero)
+            {
+                DnnSuperresInvoke.cveDnnSuperResImplRelease(ref _ptr);
+            }
+        }
+    }
+
+    internal static partial class DnnSuperresInvoke
+    {
 
         static DnnSuperresInvoke()
         {
@@ -85,6 +132,9 @@ namespace Emgu.CV.DnnSuperres
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveDnnSuperResImplCreate();
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveDnnSuperResImplCreate2(IntPtr algorithm, int scale);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnSuperResImplSetModel(IntPtr dnnSuperRes, IntPtr algorithm, int scale);
