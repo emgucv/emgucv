@@ -30,6 +30,7 @@ namespace cv
 #endif
 
 CVAPI(cv::dnn_superres::DnnSuperResImpl*) cveDnnSuperResImplCreate();
+CVAPI(cv::dnn_superres::DnnSuperResImpl*) cveDnnSuperResImplCreate2(cv::String* algo, int scale);
 CVAPI(void) cveDnnSuperResImplSetModel(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes, const cv::String* algo, int scale);
 CVAPI(void) cveDnnSuperResImplReadModel1(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes, const cv::String* path);
 CVAPI(void) cveDnnSuperResImplReadModel2(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes, const cv::String* weights, cv::String* definition);
