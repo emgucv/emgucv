@@ -35,7 +35,7 @@ namespace Emgu.CV.OCR
             using (CvString csOutputBase = new CvString(outputBase))
             using (CvString csDataDir = new CvString(dataDir))
             {
-                _ptr = OcrInvoke.TessPDFRendererCreate(csOutputBase, csDataDir, textOnly, ref _tessResultRendererPtr);
+                _ptr = OcrInvoke.cveTessPDFRendererCreate(csOutputBase, csDataDir, textOnly, ref _tessResultRendererPtr);
             }
         }
 
@@ -45,7 +45,7 @@ namespace Emgu.CV.OCR
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                OcrInvoke.TessPDFRendererRelease(ref _ptr);
+                OcrInvoke.cveTessPDFRendererRelease(ref _ptr);
             _tessResultRendererPtr = IntPtr.Zero;
         }
 
@@ -64,14 +64,14 @@ namespace Emgu.CV.OCR
     public static partial class OcrInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr TessPDFRendererCreate(
-            IntPtr outputbase, 
-            IntPtr datadir, 
+        internal static extern IntPtr cveTessPDFRendererCreate(
+            IntPtr outputbase,
+            IntPtr datadir,
             [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool textonly, 
+            bool textonly,
             ref IntPtr resultRenderer);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void TessPDFRendererRelease(ref IntPtr renderer);
+        internal static extern void cveTessPDFRendererRelease(ref IntPtr renderer);
     }
 }

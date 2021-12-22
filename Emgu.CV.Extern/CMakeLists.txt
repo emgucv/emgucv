@@ -3122,6 +3122,7 @@ SET(LEPT_ROOT_DIR "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/leptonica/lepton
     IF(TESSERACT_FOUND)
     ELSE()
       SET(TESSERACT_INCLUDE_DIRS 
+        "${TESSERACT_OCR_ROOT_DIR}/include" 
         "${TESSERACT_OCR_ROOT_DIR}/src/ccutil" 
         "${TESSERACT_OCR_ROOT_DIR}/src/api" 
         "${TESSERACT_OCR_ROOT_DIR}/src/ccmain" 

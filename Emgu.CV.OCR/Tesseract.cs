@@ -31,7 +31,7 @@ namespace Emgu.CV.OCR
         {
             get
             {
-                IntPtr ptr = OcrInvoke.TesseractGetVersion();
+                IntPtr ptr = OcrInvoke.cveTesseractGetVersion();
                 if (ptr == IntPtr.Zero)
                     return String.Empty;
                 else
@@ -76,7 +76,7 @@ namespace Emgu.CV.OCR
                 lg = new Emgu.CV.OCR.LocaleGuard(Emgu.CV.OCR.LocaleGuard.LocaleCategory.All, "C");
             try
             {
-                _ptr = OcrInvoke.TessBaseAPICreate();
+                _ptr = OcrInvoke.cveTessBaseAPICreate();
             }
             finally
             {
@@ -96,7 +96,7 @@ namespace Emgu.CV.OCR
         /// <returns>0 if no device found. sizeof(cl_device_id) if device is found.</returns>
         public int GetOpenCLDevice(ref IntPtr device)
         {
-            return OcrInvoke.TessBaseAPIGetOpenCLDevice(_ptr, ref device);
+            return OcrInvoke.cveTessBaseAPIGetOpenCLDevice(_ptr, ref device);
         }
 
         /*
@@ -191,7 +191,7 @@ namespace Emgu.CV.OCR
         /// <returns>0 if the word is invalid, non-zero if valid</returns>
         public int IsValidWord(String word)
         {
-            return OcrInvoke.TessBaseAPIIsValidWord(_ptr, word);
+            return OcrInvoke.cveTessBaseAPIIsValidWord(_ptr, word);
         }
 
         /// <summary>
@@ -202,8 +202,8 @@ namespace Emgu.CV.OCR
         /// </value>
         public PageSegMode PageSegMode
         {
-            get { return OcrInvoke.TessBaseAPIGetPageSegMode(_ptr); }
-            set { OcrInvoke.TessBaseAPISetPageSegMode(_ptr, value); }
+            get { return OcrInvoke.cveTessBaseAPIGetPageSegMode(_ptr); }
+            set { OcrInvoke.cveTessBaseAPISetPageSegMode(_ptr, value); }
         }
 
         /// <summary>
@@ -280,7 +280,7 @@ namespace Emgu.CV.OCR
             using (CvString csDataPath = new CvString(dataPath))
             using (CvString csLanguage = new CvString(language))
             {
-                int initResult = OcrInvoke.TessBaseAPIInit(_ptr, csDataPath, csLanguage, mode);
+                int initResult = OcrInvoke.cveTessBaseAPIInit(_ptr, csDataPath, csLanguage, mode);
                 if (initResult != 0)
                 {
                     if (dataPath.Equals(String.Empty))
@@ -298,7 +298,7 @@ namespace Emgu.CV.OCR
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                OcrInvoke.TessBaseAPIRelease(ref _ptr);
+                OcrInvoke.cveTessBaseAPIRelease(ref _ptr);
         }
 
         /// <summary>
@@ -308,7 +308,7 @@ namespace Emgu.CV.OCR
         public void SetImage(IInputArray image)
         {
             using (InputArray iaImage = image.GetInputArray())
-                OcrInvoke.TessBaseAPISetImage(_ptr, iaImage);
+                OcrInvoke.cveTessBaseAPISetImage(_ptr, iaImage);
         }
 
         /// <summary>
@@ -317,7 +317,7 @@ namespace Emgu.CV.OCR
         /// <param name="image">The image where detection took place</param>
         public void SetImage(Pix image)
         {
-            OcrInvoke.TessBaseAPISetImagePix(_ptr, image);
+            OcrInvoke.cveTessBaseAPISetImagePix(_ptr, image);
         }
 
         /// <summary>
@@ -327,7 +327,7 @@ namespace Emgu.CV.OCR
         /// <returns>Returns 0 on success.</returns>
         public int Recognize()
         {
-            return OcrInvoke.TessBaseAPIRecognize(_ptr);
+            return OcrInvoke.cveTessBaseAPIRecognize(_ptr);
         }
 
         /// <summary>
@@ -337,7 +337,7 @@ namespace Emgu.CV.OCR
         /// <param name="value">The value to be set</param>
         public void SetVariable(String variableName, String value)
         {
-            if (!OcrInvoke.TessBaseAPISetVariable(_ptr, variableName, value))
+            if (!OcrInvoke.cveTessBaseAPISetVariable(_ptr, variableName, value))
             {
                 throw new System.ArgumentException(String.Format("Unable to set {0} to {1}", variableName, value));
             }
@@ -351,7 +351,7 @@ namespace Emgu.CV.OCR
         {
             using (Util.VectorOfByte bytes = new Util.VectorOfByte())
             {
-                OcrInvoke.TessBaseAPIGetUTF8Text(_ptr, bytes);
+                OcrInvoke.cveTessBaseAPIGetUTF8Text(_ptr, bytes);
                 return UtfByteVectorToString(bytes);
             }
         }
@@ -365,7 +365,7 @@ namespace Emgu.CV.OCR
         {
             using (Util.VectorOfByte bytes = new Util.VectorOfByte())
             {
-                OcrInvoke.TessBaseAPIGetTSVText(_ptr, pageNumber, bytes);
+                OcrInvoke.cveTessBaseAPIGetTSVText(_ptr, pageNumber, bytes);
                 return UtfByteVectorToString(bytes);
             }
         }
@@ -379,7 +379,7 @@ namespace Emgu.CV.OCR
         {
             using (Util.VectorOfByte bytes = new Util.VectorOfByte())
             {
-                OcrInvoke.TessBaseAPIGetBoxText(_ptr, pageNumber, bytes);
+                OcrInvoke.cveTessBaseAPIGetBoxText(_ptr, pageNumber, bytes);
                 return UtfByteVectorToString(bytes);
             }
         }
@@ -393,7 +393,7 @@ namespace Emgu.CV.OCR
         {
             using (Util.VectorOfByte bytes = new Util.VectorOfByte())
             {
-                OcrInvoke.TessBaseAPIGetUNLVText(_ptr, bytes);
+                OcrInvoke.cveTessBaseAPIGetUNLVText(_ptr, bytes);
                 return UtfByteVectorToString(bytes);
             }
         }
@@ -407,7 +407,7 @@ namespace Emgu.CV.OCR
         {
             using (Util.VectorOfByte bytes = new Util.VectorOfByte())
             {
-                OcrInvoke.TessBaseAPIGetOsdText(_ptr, pageNumber, bytes);
+                OcrInvoke.cveTessBaseAPIGetOsdText(_ptr, pageNumber, bytes);
                 return UtfByteVectorToString(bytes);
             }
         }
@@ -421,7 +421,7 @@ namespace Emgu.CV.OCR
         {
             using (Util.VectorOfByte bytes = new Util.VectorOfByte())
             {
-                OcrInvoke.TessBaseAPIGetHOCRText(_ptr, pageNumber, bytes);
+                OcrInvoke.cveTessBaseAPIGetHOCRText(_ptr, pageNumber, bytes);
                 return UtfByteVectorToString(bytes);
             }
         }
@@ -441,7 +441,7 @@ namespace Emgu.CV.OCR
             using (VectorOfByte textSeq = new VectorOfByte())
             using (VectorOfTesseractResult results = new VectorOfTesseractResult())
             {
-                OcrInvoke.TessBaseAPIExtractResult(_ptr, textSeq, results);
+                OcrInvoke.cveTessBaseAPIExtractResult(_ptr, textSeq, results);
 
                 byte[] bytes = textSeq.ToArray();
                 TesseractResult[] trs = results.ToArray();
@@ -454,8 +454,8 @@ namespace Emgu.CV.OCR
                     res[i].Text = _utf8.GetString(bytes, idx, tr.Length).Replace("\n", Environment.NewLine);
 
                     idx += tr.Length;
-                    res[i].Cost = tr.Cost;
-                    if (tr.Cost == 0)
+                    res[i].Cost = tr.Confident;
+                    if (tr.Confident == 0)
                         res[i].Region = Rectangle.Empty;
                     else
                         res[i].Region = tr.Region;
@@ -504,7 +504,7 @@ namespace Emgu.CV.OCR
             using (CvString csFileName = new CvString(filename))
             using (CvString csRetryConfig = new CvString(retryConfig))
             {
-                return OcrInvoke.TessBaseAPIProcessPage(
+                return OcrInvoke.cveTessBaseAPIProcessPage(
                     _ptr,
                     pix,
                     pageIndex,
@@ -522,7 +522,7 @@ namespace Emgu.CV.OCR
         /// <returns>Page iterator</returns>
         public PageIterator AnalyseLayout(bool mergeSimilarWords = false)
         {
-            return new PageIterator(OcrInvoke.TessBaseAPIAnalyseLayout(_ptr, mergeSimilarWords));
+            return new PageIterator(OcrInvoke.cveTessBaseAPIAnalyseLayout(_ptr, mergeSimilarWords));
         }
 
         /// <summary>
@@ -530,7 +530,7 @@ namespace Emgu.CV.OCR
         /// </summary>
         public OcrEngineMode Oem
         {
-            get { return OcrInvoke.TessBaseAPIGetOem(_ptr); }
+            get { return OcrInvoke.cveTessBaseAPIGetOem(_ptr); }
         }
     }
 }

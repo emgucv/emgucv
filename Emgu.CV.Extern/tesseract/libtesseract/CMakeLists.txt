@@ -5,6 +5,7 @@
 #cmake_minimum_required(VERSION 2.8)
 SET(TESSERACT_DIR "tesseract-ocr.git")
 SET(TESSERACT_SRC_DIR "${TESSERACT_DIR}/src")
+SET(TESSERACT_INCLUDE_DIR "${TESSERACT_DIR}/include")
 SET(LEPTONICA_DIR "${LEPT_ROOT_DIR}/src")
 
 # Get version with components from VERSION file.
@@ -45,9 +46,9 @@ ADD_SUBDIRECTORY(leptonica)
 MACRO(SET_TESSERACT_PROJECT_PROPERTY PROJ_NAME)
   set_target_properties(${PROJECT_NAME} PROPERTIES 
 	FOLDER "tesseract"
-    C_STANDARD 11
+    C_STANDARD 17
     C_STANDARD_REQUIRED ON
-    CXX_STANDARD 11
+    CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON)
 
   IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
@@ -71,8 +72,8 @@ SET(PACKAGE_VERSION ${VERSION_PLAIN})
 #MESSAGE(STATUS "tesseract version source file: ${PROJECT_SOURCE_DIR}/${TESSERACT_SRC_DIR}/api/tess_version.h.in")
 #MESSAGE(STATUS "tesseract version output file: ${PROJECT_SOURCE_DIR}/${TESSERACT_SRC_DIR}/api/tess_version.h")
 configure_file(
-    ${PROJECT_SOURCE_DIR}/${TESSERACT_SRC_DIR}/api/tess_version.h.in
-    ${PROJECT_SOURCE_DIR}/${TESSERACT_SRC_DIR}/api/tess_version.h @ONLY)
+    ${PROJECT_SOURCE_DIR}/${TESSERACT_INCLUDE_DIR}/tesseract/version.h.in
+    ${PROJECT_SOURCE_DIR}/${TESSERACT_INCLUDE_DIR}/tesseract/version.h @ONLY)
 SET_SOURCE_FILES_PROPERTIES(${PROJECT_SOURCE_DIR}/${TESSERACT_SRC_DIR}/ccutil/tessdatamanager.cpp  PROPERTIES COMPILE_DEFINITIONS PACKAGE_VERSION="${PACKAGE_VERSION}")
 #add_definitions(-DPACKAGE_VERSION="${PACKAGE_VERSION}")	
 IF(MSVC)
@@ -98,6 +99,8 @@ IF(ANDROID)
   LIST(APPEND tesseract_ccutil_srcs "${CMAKE_CURRENT_SOURCE_DIR}/glob/android/glob.c")
   include_directories("${CMAKE_CURRENT_SOURCE_DIR}/glob/android")
 ENDIF()
+
+include_directories("${PROJECT_SOURCE_DIR}/${TESSERACT_INCLUDE_DIR}/")
 
 source_group("Src" FILES ${tesseract_ccutil_srcs})
 source_group("Include" FILES ${tesseract_ccutil_hdrs})

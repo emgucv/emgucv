@@ -4,9 +4,10 @@
 //
 //----------------------------------------------------------------------------
 
+
 #include "tesseract_c.h"
 
-const char* TesseractGetVersion()
+const char* cveTesseractGetVersion()
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 #ifdef _WIN32 
@@ -19,7 +20,7 @@ const char* TesseractGetVersion()
 #endif
 }
 
-EmguTesseract* TessBaseAPICreate()
+EmguTesseract* cveTessBaseAPICreate()
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	EmguTesseract* ocr = new EmguTesseract();
@@ -29,7 +30,7 @@ EmguTesseract* TessBaseAPICreate()
 #endif
 }
 
-int TessBaseAPIInit(EmguTesseract* ocr, cv::String* dataPath, cv::String* language, int mode)
+int cveTessBaseAPIInit(EmguTesseract* ocr, cv::String* dataPath, cv::String* language, int mode)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	return ocr->Init(dataPath->c_str(), language->c_str(), (tesseract::OcrEngineMode) mode);
@@ -38,16 +39,17 @@ int TessBaseAPIInit(EmguTesseract* ocr, cv::String* dataPath, cv::String* langua
 #endif
 }
 
-void TessBaseAPIRelease(EmguTesseract** ocr)
+void cveTessBaseAPIRelease(EmguTesseract** ocr)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	delete *ocr;
+	*ocr = 0;
 #else
 	throw_no_tesseract();
 #endif
 }
 
-int TessBaseAPIRecognize(EmguTesseract* ocr)
+int cveTessBaseAPIRecognize(EmguTesseract* ocr)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	return ocr->Recognize(NULL);
@@ -56,7 +58,7 @@ int TessBaseAPIRecognize(EmguTesseract* ocr)
 #endif
 }
 
-void TessBaseAPISetImage(EmguTesseract* ocr, cv::_InputArray* mat)
+void cveTessBaseAPISetImage(EmguTesseract* ocr, cv::_InputArray* mat)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	cv::Mat m = mat->getMat();
@@ -66,7 +68,7 @@ void TessBaseAPISetImage(EmguTesseract* ocr, cv::_InputArray* mat)
 #endif
 }
 
-void TessBaseAPISetImagePix(EmguTesseract* ocr, Pix* pix)
+void cveTessBaseAPISetImagePix(EmguTesseract* ocr, Pix* pix)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	ocr->SetImage(pix);
@@ -75,7 +77,7 @@ void TessBaseAPISetImagePix(EmguTesseract* ocr, Pix* pix)
 #endif
 }
 
-void TessBaseAPIGetUTF8Text(EmguTesseract* ocr, std::vector<unsigned char>* vectorOfByte)
+void cveTessBaseAPIGetUTF8Text(EmguTesseract* ocr, std::vector<unsigned char>* vectorOfByte)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	char* result = ocr->GetUTF8Text();
@@ -89,7 +91,7 @@ void TessBaseAPIGetUTF8Text(EmguTesseract* ocr, std::vector<unsigned char>* vect
 #endif
 }
 
-void TessBaseAPIGetHOCRText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte)
+void cveTessBaseAPIGetHOCRText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	char* result = ocr->GetHOCRText(pageNumber);
@@ -103,7 +105,7 @@ void TessBaseAPIGetHOCRText(EmguTesseract* ocr, int pageNumber, std::vector<unsi
 #endif
 }
 
-void TessBaseAPIGetTSVText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte)
+void cveTessBaseAPIGetTSVText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	char* result = ocr->GetTSVText(pageNumber);
@@ -116,7 +118,7 @@ void TessBaseAPIGetTSVText(EmguTesseract* ocr, int pageNumber, std::vector<unsig
 	throw_no_tesseract();
 #endif
 }
-void TessBaseAPIGetBoxText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte)
+void cveTessBaseAPIGetBoxText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	char* result = ocr->GetBoxText(pageNumber);
@@ -129,7 +131,7 @@ void TessBaseAPIGetBoxText(EmguTesseract* ocr, int pageNumber, std::vector<unsig
 	throw_no_tesseract();
 #endif
 }
-void TessBaseAPIGetUNLVText(EmguTesseract* ocr, std::vector<unsigned char>* vectorOfByte)
+void cveTessBaseAPIGetUNLVText(EmguTesseract* ocr, std::vector<unsigned char>* vectorOfByte)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	char* result = ocr->GetUNLVText();
@@ -142,7 +144,7 @@ void TessBaseAPIGetUNLVText(EmguTesseract* ocr, std::vector<unsigned char>* vect
 	throw_no_tesseract();
 #endif
 }
-void TessBaseAPIGetOsdText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte)
+void cveTessBaseAPIGetOsdText(EmguTesseract* ocr, int pageNumber, std::vector<unsigned char>* vectorOfByte)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	char* result = ocr->GetOsdText(pageNumber);
@@ -156,59 +158,43 @@ void TessBaseAPIGetOsdText(EmguTesseract* ocr, int pageNumber, std::vector<unsig
 #endif
 }
 
-void TessBaseAPIExtractResult(EmguTesseract* ocr, std::vector<unsigned char>* charSeq, std::vector<TesseractResult>* resultSeq)
+void cveTessBaseAPIExtractResult(EmguTesseract* ocr, std::vector<char>* charSeq, std::vector<TesseractResult>* resultSeq)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	if (ocr == NULL)
 		return;
 
-	char* text;
-	int* lengths;
-	float* costs;
-	int* x0, *y0, *x1, *y1;
-	int n = ocr->TesseractExtractResult(&text,
-		&lengths,
-		&costs,
-		&x0,
-		&y0,
-		&x1,
-		&y1);
-	int totalTextLength = 0;
+	tesseract::ResultIterator* results = ocr->GetIterator();
+	if (!results)
+		return;
+	
+	results->Begin();
 
-	int height = ocr->GetImageHeight();
-
-	for (int i = 0; i < n; i++)
+	int x0, y0, x1, y1;
+	do
 	{
-		totalTextLength += lengths[i];
 		TesseractResult tr;
-		tr.length = lengths[i];
-		tr.cost = costs[i];
-
-		tr.region.x = x0[i];
-		tr.region.y = height - y1[i];
-		tr.region.width = x1[i] - x0[i];
-		tr.region.height = y1[i] - y0[i];
+		tr.confident = results->Confidence(tesseract::RIL_WORD);
+		results->BoundingBox(tesseract::RIL_WORD, &x0, &y0, &x1, &y1);
+		tr.region.x = x0;
+		//tr.region.y = height - y1;
+		tr.region.y = y0;
+		tr.region.width = x1 - x0;
+		tr.region.height = y1 - y0;
+		char* t = results->GetUTF8Text(tesseract::RIL_WORD);
+		tr.length = strlen(t);
+		for (int i = 0; i < tr.length; i++)
+			charSeq->push_back(*(t + i));
+		delete[] t;
 		resultSeq->push_back(tr);
-	}
-
-	charSeq->resize(totalTextLength);
-	if (n > 0)
-	{
-		memcpy(&(*charSeq)[0], text, totalTextLength);
-	}
-
-	delete[] text;
-	delete[] lengths;
-	delete[] x0;
-	delete[] y0;
-	delete[] x1;
-	delete[] y1;
+	} while (results->Next(tesseract::RIL_WORD));
+	delete results;
 #else
 	throw_no_tesseract();
 #endif
 }
 
-bool TessBaseAPIProcessPage(
+bool cveTessBaseAPIProcessPage(
 	EmguTesseract* ocr,
 	Pix* pix,
 	int pageIndex,
@@ -224,7 +210,7 @@ bool TessBaseAPIProcessPage(
 #endif
 }
 
-bool TessBaseAPISetVariable(EmguTesseract* ocr, const char* varName, const char* value)
+bool cveTessBaseAPISetVariable(EmguTesseract* ocr, const char* varName, const char* value)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	return ocr->SetVariable(varName, value);
@@ -233,7 +219,7 @@ bool TessBaseAPISetVariable(EmguTesseract* ocr, const char* varName, const char*
 #endif
 }
 
-void TessBaseAPISetPageSegMode(EmguTesseract* ocr, tesseract::PageSegMode mode)
+void cveTessBaseAPISetPageSegMode(EmguTesseract* ocr, tesseract::PageSegMode mode)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	ocr->SetPageSegMode(mode);
@@ -242,7 +228,7 @@ void TessBaseAPISetPageSegMode(EmguTesseract* ocr, tesseract::PageSegMode mode)
 #endif
 }
 
-tesseract::PageSegMode TessBaseAPIGetPageSegMode(EmguTesseract* ocr)
+tesseract::PageSegMode cveTessBaseAPIGetPageSegMode(EmguTesseract* ocr)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	return ocr->GetPageSegMode();
@@ -251,7 +237,7 @@ tesseract::PageSegMode TessBaseAPIGetPageSegMode(EmguTesseract* ocr)
 #endif
 }
 
-int TessBaseAPIGetOpenCLDevice(EmguTesseract* ocr, void **device)
+int cveTessBaseAPIGetOpenCLDevice(EmguTesseract* ocr, void **device)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	return static_cast<int>(ocr->getOpenCLDevice(device));
@@ -260,7 +246,7 @@ int TessBaseAPIGetOpenCLDevice(EmguTesseract* ocr, void **device)
 #endif
 }
 
-tesseract::PageIterator* TessBaseAPIAnalyseLayout(EmguTesseract* ocr, bool mergeSimilarWords)
+tesseract::PageIterator* cveTessBaseAPIAnalyseLayout(EmguTesseract* ocr, bool mergeSimilarWords)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	return ocr->AnalyseLayout(mergeSimilarWords);
@@ -269,7 +255,7 @@ tesseract::PageIterator* TessBaseAPIAnalyseLayout(EmguTesseract* ocr, bool merge
 #endif
 }
 
-void TessPageIteratorGetOrientation(tesseract::PageIterator* iterator, tesseract::Orientation* orientation, tesseract::WritingDirection* writingDirection, tesseract::TextlineOrder* order, float* deskewAngle)
+void cveTessPageIteratorGetOrientation(tesseract::PageIterator* iterator, tesseract::Orientation* orientation, tesseract::WritingDirection* writingDirection, tesseract::TextlineOrder* order, float* deskewAngle)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	iterator->Orientation(orientation, writingDirection, order, deskewAngle);
@@ -278,7 +264,7 @@ void TessPageIteratorGetOrientation(tesseract::PageIterator* iterator, tesseract
 #endif
 }
 
-bool TessPageIteratorGetBaseLine(
+bool cveTessPageIteratorGetBaseLine(
 	tesseract::PageIterator* iterator,
 	tesseract::PageIteratorLevel level,
 	int* x1, int* y1, int* x2, int* y2)
@@ -290,7 +276,7 @@ bool TessPageIteratorGetBaseLine(
 #endif
 }
 
-void TessPageIteratorRelease(tesseract::PageIterator** iterator)
+void cveTessPageIteratorRelease(tesseract::PageIterator** iterator)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	delete *iterator;
@@ -300,7 +286,7 @@ void TessPageIteratorRelease(tesseract::PageIterator** iterator)
 #endif
 }
 
-int TessBaseAPIIsValidWord(EmguTesseract* ocr, char* word)
+int cveTessBaseAPIIsValidWord(EmguTesseract* ocr, char* word)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	return ocr->IsValidWord(word);
@@ -309,7 +295,7 @@ int TessBaseAPIIsValidWord(EmguTesseract* ocr, char* word)
 #endif
 }
 
-int TessBaseAPIGetOem(EmguTesseract* ocr)
+int cveTessBaseAPIGetOem(EmguTesseract* ocr)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	return ocr->oem();
@@ -318,7 +304,7 @@ int TessBaseAPIGetOem(EmguTesseract* ocr)
 #endif
 }
 
-tesseract::TessPDFRenderer* TessPDFRendererCreate(cv::String* outputbase, cv::String* datadir, bool textonly, tesseract::TessResultRenderer** resultRenderer)
+tesseract::TessPDFRenderer* cveTessPDFRendererCreate(cv::String* outputbase, cv::String* datadir, bool textonly, tesseract::TessResultRenderer** resultRenderer)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	tesseract::TessPDFRenderer* renderer = new tesseract::TessPDFRenderer(outputbase->c_str(), datadir->c_str(), textonly);
@@ -328,7 +314,7 @@ tesseract::TessPDFRenderer* TessPDFRendererCreate(cv::String* outputbase, cv::St
 	throw_no_tesseract();
 #endif
 }
-void TessPDFRendererRelease(tesseract::TessPDFRenderer** renderer)
+void cveTessPDFRendererRelease(tesseract::TessPDFRenderer** renderer)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	delete *renderer;
@@ -338,7 +324,7 @@ void TessPDFRendererRelease(tesseract::TessPDFRenderer** renderer)
 #endif
 }
 
-Pix* leptCreatePixFromMat(cv::Mat* m)
+Pix* cveLeptCreatePixFromMat(cv::Mat* m)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	const unsigned char* imagedata = m->data;
@@ -404,7 +390,7 @@ Pix* leptCreatePixFromMat(cv::Mat* m)
 #endif
 }
 
-void leptPixDestroy(Pix** pix)
+void cveLeptPixDestroy(Pix** pix)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	pixDestroy(pix);
@@ -414,7 +400,7 @@ void leptPixDestroy(Pix** pix)
 #endif
 }
 
-char* stdSetlocale(int category, char* locale)
+char* cveStdSetlocale(int category, char* locale)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
 	return std::setlocale(category, locale);

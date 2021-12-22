@@ -27,7 +27,7 @@ namespace Emgu.CV.OCR
         /// <param name="mat">The Mat to create the Pix object from</param>
         public Pix(Mat mat)
         {
-            _ptr = OcrInvoke.leptCreatePixFromMat(mat);
+            _ptr = OcrInvoke.cveLeptCreatePixFromMat(mat);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Emgu.CV.OCR
         {
             if (_ptr != IntPtr.Zero)
             {
-                OcrInvoke.leptPixDestroy(ref _ptr);
+                OcrInvoke.cveLeptPixDestroy(ref _ptr);
             }
         }
     }
@@ -45,9 +45,9 @@ namespace Emgu.CV.OCR
     public static partial class OcrInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr leptCreatePixFromMat(IntPtr m);
+        internal static extern IntPtr cveLeptCreatePixFromMat(IntPtr m);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void leptPixDestroy(ref IntPtr pix);
+        internal static extern void cveLeptPixDestroy(ref IntPtr pix);
     }
 }

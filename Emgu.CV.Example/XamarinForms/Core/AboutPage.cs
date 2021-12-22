@@ -70,6 +70,17 @@ namespace Emgu.CV.XamarinForms
 
             parallelText = String.Join("", parallelBackendText.ToArray());
 
+            String tesseractText;
+            String tesseractVersion = Emgu.CV.OCR.Tesseract.VersionString;
+            if (tesseractVersion.Length == 0)
+            {
+                tesseractText = "Not Built";
+            }
+            else
+            {
+                tesseractText = String.Format("Version: {0}", tesseractVersion);
+            }
+
             Content =
                   new WebView()
                   {
@@ -111,6 +122,8 @@ textarea { width: 100%; margin: 0; padding: 0; border - width: 0; }
 " + (haveVideoio ? GetBackendInfo(CvInvoke.StreamBackends) : "Videoio backend not supported.") + @"
 <H4> VideoWriter Backends: </H4>
 " + (haveVideoio ? GetBackendInfo(CvInvoke.WriterBackends) : "Videoio backend not supported.") + @"
+<H4> Tesseract OCR: </H4>
+" + tesseractText + @"
 <H4> Build Info </H4>
 <textarea rows=""30"">"
                         + CvInvoke.BuildInformation + @"

@@ -27,9 +27,9 @@ namespace Emgu.CV.OCR
         /// </summary>
         public int Length;
         /// <summary>
-        /// The cost
+        /// The confident
         /// </summary>
-        public float Cost;
+        public float Confident;
         /// <summary>
         /// The region
         /// </summary>

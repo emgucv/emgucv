@@ -28,50 +28,50 @@ namespace Emgu.CV.OCR
 
         #region Tesseract
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr TessBaseAPICreate();
+        internal static extern IntPtr cveTessBaseAPICreate();
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int TessBaseAPIInit(
+        internal static extern int cveTessBaseAPIInit(
             IntPtr ocr,
             IntPtr dataPath,
             IntPtr language,
             OcrEngineMode mode);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void TessBaseAPIRelease(ref IntPtr ocr);
+        internal static extern void cveTessBaseAPIRelease(ref IntPtr ocr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void TessBaseAPISetImage(IntPtr ocr, IntPtr image);
+        internal static extern void cveTessBaseAPISetImage(IntPtr ocr, IntPtr image);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void TessBaseAPISetImagePix(IntPtr ocr, IntPtr pix);
+        internal static extern void cveTessBaseAPISetImagePix(IntPtr ocr, IntPtr pix);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void TessBaseAPIGetUTF8Text(
+        internal static extern void cveTessBaseAPIGetUTF8Text(
            IntPtr ocr,
            IntPtr text);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void TessBaseAPIGetHOCRText(IntPtr ocr, int pageNumber, IntPtr vectorOfByte);
+        internal static extern void cveTessBaseAPIGetHOCRText(IntPtr ocr, int pageNumber, IntPtr vectorOfByte);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void TessBaseAPIGetTSVText(IntPtr ocr, int pageNumber, IntPtr vectorOfByte);
+        internal static extern void cveTessBaseAPIGetTSVText(IntPtr ocr, int pageNumber, IntPtr vectorOfByte);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void TessBaseAPIGetBoxText(IntPtr ocr, int pageNumber, IntPtr vectorOfByte);
+        internal static extern void cveTessBaseAPIGetBoxText(IntPtr ocr, int pageNumber, IntPtr vectorOfByte);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void TessBaseAPIGetUNLVText(IntPtr ocr, IntPtr vectorOfByte);
+        internal static extern void cveTessBaseAPIGetUNLVText(IntPtr ocr, IntPtr vectorOfByte);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void TessBaseAPIGetOsdText(IntPtr ocr, int pageNumber, IntPtr vectorOfByte);
+        internal static extern void cveTessBaseAPIGetOsdText(IntPtr ocr, int pageNumber, IntPtr vectorOfByte);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void TessBaseAPIExtractResult(IntPtr ocr, IntPtr charSeq, IntPtr resultSeq);
+        internal static extern void cveTessBaseAPIExtractResult(IntPtr ocr, IntPtr charSeq, IntPtr resultSeq);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal static extern bool TessBaseAPIProcessPage(
+        internal static extern bool cveTessBaseAPIProcessPage(
             IntPtr ocr,
             IntPtr pix,
             int pageIndex,
@@ -82,7 +82,7 @@ namespace Emgu.CV.OCR
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal static extern bool TessBaseAPISetVariable(
+        internal static extern bool cveTessBaseAPISetVariable(
             IntPtr ocr,
             [MarshalAs(CvInvoke.StringMarshalType)]
             String varName,
@@ -90,49 +90,49 @@ namespace Emgu.CV.OCR
             String value);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr TesseractGetVersion();
+        internal static extern IntPtr cveTesseractGetVersion();
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void TessBaseAPISetPageSegMode(IntPtr ocr, PageSegMode mode);
+        internal static extern void cveTessBaseAPISetPageSegMode(IntPtr ocr, PageSegMode mode);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern PageSegMode TessBaseAPIGetPageSegMode(IntPtr ocr);
+        internal static extern PageSegMode cveTessBaseAPIGetPageSegMode(IntPtr ocr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int TessBaseAPIGetOpenCLDevice(IntPtr ocr, ref IntPtr device);
+        internal static extern int cveTessBaseAPIGetOpenCLDevice(IntPtr ocr, ref IntPtr device);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr TessBaseAPIAnalyseLayout(
+        internal static extern IntPtr cveTessBaseAPIAnalyseLayout(
             IntPtr ocr,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool mergeSimilarWords);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int TessBaseAPIIsValidWord(
+        internal static extern int cveTessBaseAPIIsValidWord(
             IntPtr ocr,
             [MarshalAs(CvInvoke.StringMarshalType)]
             String word);
         #endregion
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void TessPageIteratorRelease(ref IntPtr iterator);
+        internal static extern void cveTessPageIteratorRelease(ref IntPtr iterator);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void TessPageIteratorGetOrientation(IntPtr iterator, ref PageOrientation orientation, ref WritingDirection writingDirection, ref TextlineOrder order, ref float deskewAngle);
+        internal static extern void cveTessPageIteratorGetOrientation(IntPtr iterator, ref PageOrientation orientation, ref WritingDirection writingDirection, ref TextlineOrder order, ref float deskewAngle);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal static extern bool TessPageIteratorGetBaseLine(
+        internal static extern bool cveTessPageIteratorGetBaseLine(
            IntPtr iterator,
            PageIteratorLevel level,
            ref int x1, ref int y1, ref int x2, ref int y2);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern OcrEngineMode TessBaseAPIGetOem(IntPtr ocr);
+        internal static extern OcrEngineMode cveTessBaseAPIGetOem(IntPtr ocr);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int TessBaseAPIRecognize(IntPtr ocr);
+        internal static extern int cveTessBaseAPIRecognize(IntPtr ocr);
 
     }
 }

@@ -152,7 +152,7 @@
     <Content Include="..\Core\box_in_scene.png">
       <Link>box_in_scene.png</Link>
     </Content>
-	<Content Include="..\Core\qrcode_barcode.png">
+    <Content Include="..\Core\qrcode_barcode.png">
       <Link>qrcode_barcode.png</Link>
     </Content>
     <Content Include="..\Core\pedestrian.png">
@@ -191,6 +191,8 @@
     <ProjectReference Include="..\..\..\Emgu.CV.Platform\iOS\Emgu.CV.Platform.IOS.csproj">
       <Project>{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}</Project>
       <Name>Emgu.CV.Platform.IOS</Name>
+      <IsAppExtension>false</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj">
       <Project>{79214dcd-3f36-4c50-97f4-11af21f60711}</Project>

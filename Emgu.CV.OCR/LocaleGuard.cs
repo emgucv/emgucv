@@ -54,7 +54,7 @@ namespace Emgu.CV.OCR
         private LocaleCategory _category;
         private String _locale;
         private String _oldLocale;
-        
+
         /// <summary>
         /// Create a locale guard to set the locale to specific value. Will revert locale back to previous value when the object is disposed.
         /// </summary>
@@ -93,13 +93,13 @@ namespace Emgu.CV.OCR
             IntPtr oldLocalePtr;
             if (locale == null)
             {
-                oldLocalePtr = stdSetlocale(category, IntPtr.Zero);
+                oldLocalePtr = cveStdSetlocale(category, IntPtr.Zero);
                 return oldLocalePtr == IntPtr.Zero ? null : Marshal.PtrToStringAnsi(oldLocalePtr);
             }
             IntPtr localePtr = Marshal.StringToHGlobalAnsi(locale);
             try
             {
-                oldLocalePtr = stdSetlocale(category, localePtr);
+                oldLocalePtr = cveStdSetlocale(category, localePtr);
             }
             finally
             {
@@ -109,7 +109,7 @@ namespace Emgu.CV.OCR
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr stdSetlocale(
+        private static extern IntPtr cveStdSetlocale(
             LocaleGuard.LocaleCategory category,
             IntPtr locale);
     }
