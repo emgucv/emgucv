@@ -1,6 +1,8 @@
 # --------------------------------------------------------
 #  Copyright (C) 2004-2021 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
+#SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}../../../opencv/cmake")
+#include(OpenCVCompilerOptimizations)
 
 #cmake_minimum_required(VERSION 2.8)
 SET(TESSERACT_DIR "tesseract-ocr.git")
@@ -108,7 +110,8 @@ source_group("Include" FILES ${tesseract_ccutil_hdrs})
 IF(MSVC)
   #include_directories("${TESSERACT_SRC_DIR}/vs2010/include")
   include_directories("${TESSERACT_SRC_DIR}/api/")
-  add_definitions(-D__MSW32__ -W0 -DWINDLLNAME="\\"tesseract\\"")
+  #add_definitions(-D__MSW32__ -W0 -DWINDLLNAME="\\"tesseract\\"")
+  add_definitions(-D__MSW32__ -W0)
 ENDIF()
 
 add_library(${PROJECT_NAME} STATIC ${tesseract_ccutil_srcs} ${tesseract_ccutil_hdrs})
@@ -280,10 +283,32 @@ ENDIF()
 
 #arch
 PROJECT(tesseract_arch)
+
+MESSAGE(STATUS "CPU_BASELINE: ${CPU_BASELINE}")
+MESSAGE(STATUS "CPU_BASELINE_FINAL: ${CPU_BASELINE_FINAL}")
+#ocv_check_compiler_optimization("AVX")
+#MESSAGE(STATUS "CPU_AVX_FLAGS_ON: ${CPU_AVX_FLAGS_ON}")
+#MESSAGE(STATUS "CPU_AVX_ENABLED_DEFAULT: ${CPU_AVX_ENABLED_DEFAULT}")
+
 set(AVX_OPT OFF)
+IF ("AVX" IN_LIST CPU_BASELINE_FINAL)
+  SET(AVX_OPT ON)
+  MESSAGE(STATUS "TESSERACT with AVX: ON")
+ELSE()
+  MESSAGE(STATUS "TESSERACT with AVX: OFF")
+ENDIF()
+
 set(AVX2_OPT OFF)
 set(FMA_OPT OFF)
+
 set(SSE41_OPT OFF)
+IF ("SSE4_1" IN_LIST CPU_BASELINE_FINAL)
+  SET(SSE41_OPT ON)
+  MESSAGE(STATUS "TESSERACT with SSE4_1: ON")
+ELSE()
+  MESSAGE(STATUS "TESSERACT with SSE4_1: OFF")
+ENDIF()
+
 SET(tesseract_arch_srcs "${TESSERACT_SRC_DIR}/arch/dotproduct.cpp" "${TESSERACT_SRC_DIR}/arch/intsimdmatrix.cpp" "${TESSERACT_SRC_DIR}/arch/simddetect.cpp")
 if(AVX_OPT)
    list(APPEND tesseract_arch_srcs ${TESSERACT_SRC_DIR}/arch/dotproductavx.cpp)
@@ -299,7 +324,7 @@ if(FMA_OPT)
 endif(FMA_OPT)
 if(SSE41_OPT)
    list(APPEND tesseract_arch_srcs ${TESSERACT_SRC_DIR}/arch/dotproductsse.cpp ${TESSERACT_SRC_DIR}/arch/intsimdmatrixsse.cpp)
-   set_source_files_properties(${TESSERACT_SRC_DIR}/arch/dotproductsse.cpp ${TESSERACT_SRC_DIR}/arch/intsimdmatrixsse.cpp PROPERTIES COMPILE_FLAGS "-DSSE4_1 -msse4.1")
+   set_source_files_properties(${TESSERACT_SRC_DIR}/arch/dotproductsse.cpp ${TESSERACT_SRC_DIR}/arch/intsimdmatrixsse.cpp PROPERTIES COMPILE_FLAGS "-D__SSE4_1__ -msse4.1")
 endif(SSE41_OPT)
 file(GLOB tesseract_arch_hdrs "${TESSERACT_SRC_DIR}/arch/*.h")
 source_group("Src" FILES ${tesseract_arch_srcs})
