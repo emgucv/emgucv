@@ -821,3 +821,55 @@ void cveEdgeDrawingRelease(cv::Ptr<cv::ximgproc::EdgeDrawing>** sharedPtr)
 	throw_no_ximgproc();
 #endif	
 }
+
+cv::ximgproc::ScanSegment* cveScanSegmentCreate(
+	int imageWidth,
+	int imageHeight,
+	int numSuperpixels,
+	int slices,
+	bool mergeSmall,
+	cv::Algorithm** algorithm,
+	cv::Ptr< cv::ximgproc::ScanSegment >** sharedPtr)
+{
+#ifdef HAVE_OPENCV_XIMGPROC
+	cv::Ptr<cv::ximgproc::ScanSegment> ptr = cv::ximgproc::createScanSegment(imageWidth, imageHeight, numSuperpixels, slices, mergeSmall);
+	*sharedPtr = new cv::Ptr<cv::ximgproc::ScanSegment>(ptr);
+	*algorithm = (*sharedPtr)->dynamicCast<cv::Algorithm>();
+	return (*sharedPtr)->get();
+#else
+	throw_no_ximgproc();
+#endif
+}
+void cveScanSegmentIterate(cv::ximgproc::ScanSegment* scanSegment, cv::_InputArray* img)
+{
+#ifdef HAVE_OPENCV_XIMGPROC
+	scanSegment->iterate(*img);
+#else
+	throw_no_ximgproc();
+#endif
+}
+void cveScanSegmentGetLabels(cv::ximgproc::ScanSegment* scanSegment, cv::_OutputArray* labelsOut)
+{
+#ifdef HAVE_OPENCV_XIMGPROC
+	scanSegment->getLabels(*labelsOut);
+#else
+	throw_no_ximgproc();
+#endif
+}
+void cveScanSegmentGetLabelContourMask(cv::ximgproc::ScanSegment* scanSegment, cv::_OutputArray* image, bool thickLine)
+{
+#ifdef HAVE_OPENCV_XIMGPROC
+	scanSegment->getLabelContourMask(*image, thickLine);
+#else
+	throw_no_ximgproc();
+#endif
+}
+void cveScanSegmentRelease(cv::Ptr<cv::ximgproc::ScanSegment>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_XIMGPROC
+	delete* sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_ximgproc();
+#endif	
+}

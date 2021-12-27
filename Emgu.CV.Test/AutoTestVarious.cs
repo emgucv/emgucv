@@ -4400,6 +4400,23 @@ namespace Emgu.CV.Test
             }
         }
 
+        [Test]
+        public void TestScanSegment()
+        {
+            using (Mat image = EmguAssert.LoadMat("lena.jpg"))
+            using (ScanSegment ss = new ScanSegment(image.Width, image.Height, 1))
+            using (Mat contours = new Mat())
+            using (Mat contoursBgr = new Mat())
+            {
+                ss.Iterate(image);
+                ss.GetLabelContourMask(contours);
+                CvInvoke.CvtColor(contours, contoursBgr, ColorConversion.Gray2Bgr);
+                CvInvoke.BitwiseOr(image, contoursBgr, image);
+                //Emgu.CV.UI.ImageViewer.Show(image);
+            }
+        }
+
+
 #if VS_TEST
         [Ignore]
 #else

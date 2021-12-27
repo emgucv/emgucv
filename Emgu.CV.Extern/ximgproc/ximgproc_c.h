@@ -190,4 +190,17 @@ CVAPI(void) cveEdgeDrawingGetGradientImage(cv::ximgproc::EdgeDrawing* edgeDrawin
 CVAPI(void) cveEdgeDrawingDetectLines(cv::ximgproc::EdgeDrawing* edgeDrawing, cv::_OutputArray* lines);
 CVAPI(void) cveEdgeDrawingDetectEllipses(cv::ximgproc::EdgeDrawing* edgeDrawing, cv::_OutputArray* ellipses);
 CVAPI(void) cveEdgeDrawingRelease(cv::Ptr<cv::ximgproc::EdgeDrawing>** sharedPtr);
+
+CVAPI(cv::ximgproc::ScanSegment*) cveScanSegmentCreate(
+	int imageWidth, 
+	int imageHeight, 
+	int numSuperpixels, 
+	int slices, 
+	bool mergeSmall,
+	cv::Algorithm** algorithm,
+	cv::Ptr< cv::ximgproc::ScanSegment > ** sharedPtr);
+CVAPI(void) cveScanSegmentIterate(cv::ximgproc::ScanSegment* scanSegment, cv::_InputArray* img);
+CVAPI(void) cveScanSegmentGetLabels(cv::ximgproc::ScanSegment* scanSegment, cv::_OutputArray* labelsOut);
+CVAPI(void) cveScanSegmentGetLabelContourMask(cv::ximgproc::ScanSegment* scanSegment, cv::_OutputArray* image, bool thickLine);
+CVAPI(void) cveScanSegmentRelease(cv::Ptr<cv::ximgproc::ScanSegment>** sharedPtr);
 #endif
