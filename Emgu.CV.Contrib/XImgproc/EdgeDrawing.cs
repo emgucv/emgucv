@@ -45,6 +45,7 @@ namespace Emgu.CV.XImgproc
             {
                 XImgprocInvoke.cveEdgeDrawingRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
+                _algorithm = IntPtr.Zero;
             }
         }
 

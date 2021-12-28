@@ -29,7 +29,14 @@ namespace Emgu.CV.XImgproc
             get { return _algorithm; }
         }
 
-
+        /// <summary>
+        /// Initializes a ScanSegment object.
+        /// </summary>
+        /// <param name="imageWidth">Image width.</param>
+        /// <param name="imageHeight">Image height.</param>
+        /// <param name="numSuperpixels">Desired number of superpixels. Note that the actual number may be smaller due to restrictions (depending on the image size). Use NumberOfSuperpixels to get the actual number.</param>
+        /// <param name="slices">Number of processing threads for parallelisation. Setting -1 uses the maximum number of threads. In practice, four threads is enough for smaller images and eight threads for larger ones.</param>
+        /// <param name="mergeSmall">Merge small segments to give the desired number of superpixels. Processing is much faster without merging, but many small segments will be left in the image.</param>
         public ScanSegment(
             int imageWidth,
             int imageHeight,
@@ -85,6 +92,7 @@ namespace Emgu.CV.XImgproc
             if (_sharedPtr != IntPtr.Zero)
             {
                 XImgprocInvoke.cveScanSegmentRelease(ref _sharedPtr);
+                _algorithm = IntPtr.Zero;
                 _ptr = IntPtr.Zero;
             }
         }

@@ -99,6 +99,7 @@ namespace Emgu.CV.XImgproc
             {
                 XImgprocInvoke.cveEdgeBoxesRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
+                _algorithm = IntPtr.Zero;
             }
         }
     }

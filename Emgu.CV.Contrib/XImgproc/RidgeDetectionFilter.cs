@@ -88,6 +88,7 @@ namespace Emgu.CV.XImgproc
             {
                 XImgprocInvoke.cveRidgeDetectionFilterRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
+                _algorithm = IntPtr.Zero;
             }
         }
     }

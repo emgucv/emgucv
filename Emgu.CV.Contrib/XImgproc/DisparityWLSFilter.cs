@@ -73,6 +73,8 @@ namespace Emgu.CV.XImgproc
             {
                 XImgprocInvoke.cveDisparityWLSFilterRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
+                _algorithm = IntPtr.Zero;
+                _disparityFilterPtr = IntPtr.Zero;
             }
         }
     }
