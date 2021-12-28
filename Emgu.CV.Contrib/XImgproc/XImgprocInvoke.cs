@@ -380,5 +380,49 @@ namespace Emgu.CV.XImgproc
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveBrightEdges(IntPtr original, IntPtr edgeview, int contrast, int shortrange, int longrange);
+
+        /// <summary>
+        /// This function calculates the Radon Transform of a given image in any range.
+        /// See https://engineering.purdue.edu/~malcolm/pct/CTI_Ch03.pdf for detail.
+        /// If the input type is CV_8U, the output will be CV_32S.
+        /// If the input type is CV_32F or CV_64F, the output will be CV_64F
+        /// The output size will be num_of_integral x src_diagonal_length.
+        /// If crop is selected, the input image will be crop into square then circle,
+        /// and output size will be num_of_integral x min_edge.
+        /// </summary>
+        /// <param name="src">The source (input) image.</param>
+        /// <param name="dst">The destination image, result of transformation.</param>
+        /// <param name="theta">Angle resolution of the transform in degrees.</param>
+        /// <param name="startAngle">Start angle of the transform in degrees.</param>
+        /// <param name="endAngle">End angle of the transform in degrees.</param>
+        /// <param name="crop">If true, crop the source image into a circle.</param>
+        /// <param name="norm">Normalize the output Mat to grayscale and convert type to CV_8U</param>
+        public static void RadonTransform(
+            IInputArray src,
+            IOutputArray dst,
+            double theta = 1,
+            double startAngle = 0,
+            double endAngle = 180,
+            bool crop = false,
+            bool norm = false)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+            {
+                cveRadonTransform(iaSrc, oaDst, theta, startAngle, endAngle, crop, norm);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveRadonTransform(
+            IntPtr src,
+            IntPtr dst,
+            double theta,
+            double startAngle,
+            double endAngle,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool crop,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool norm);
     }
 }

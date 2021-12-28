@@ -203,4 +203,13 @@ CVAPI(void) cveScanSegmentIterate(cv::ximgproc::ScanSegment* scanSegment, cv::_I
 CVAPI(void) cveScanSegmentGetLabels(cv::ximgproc::ScanSegment* scanSegment, cv::_OutputArray* labelsOut);
 CVAPI(void) cveScanSegmentGetLabelContourMask(cv::ximgproc::ScanSegment* scanSegment, cv::_OutputArray* image, bool thickLine);
 CVAPI(void) cveScanSegmentRelease(cv::Ptr<cv::ximgproc::ScanSegment>** sharedPtr);
+
+CVAPI(void) cveRadonTransform(
+	cv::_InputArray* src,
+	cv::_OutputArray* dst,
+	double theta,
+	double startAngle,
+	double endAngle,
+	bool crop,
+	bool norm);
 #endif

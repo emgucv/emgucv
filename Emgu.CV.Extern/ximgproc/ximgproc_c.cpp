@@ -873,3 +873,19 @@ void cveScanSegmentRelease(cv::Ptr<cv::ximgproc::ScanSegment>** sharedPtr)
 	throw_no_ximgproc();
 #endif	
 }
+
+void cveRadonTransform(
+	cv::_InputArray* src,
+	cv::_OutputArray* dst,
+	double theta,
+	double startAngle,
+	double endAngle,
+	bool crop,
+	bool norm)
+{
+#ifdef HAVE_OPENCV_XIMGPROC
+	cv::ximgproc::RadonTransform(*src, *dst, theta, startAngle, endAngle, crop, norm);
+#else
+	throw_no_ximgproc();
+#endif	
+}
