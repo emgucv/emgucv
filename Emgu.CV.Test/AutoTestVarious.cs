@@ -4404,10 +4404,12 @@ namespace Emgu.CV.Test
         public void TestScanSegment()
         {
             using (Mat image = EmguAssert.LoadMat("lena.jpg"))
+            //using (Mat imageLab = new Mat())
             using (ScanSegment ss = new ScanSegment(image.Width, image.Height, 1))
             using (Mat contours = new Mat())
             using (Mat contoursBgr = new Mat())
             {
+                //CvInvoke.CvtColor(image, imageLab, ColorConversion.Bgr2Lab);
                 ss.Iterate(image);
                 ss.GetLabelContourMask(contours);
                 CvInvoke.CvtColor(contours, contoursBgr, ColorConversion.Gray2Bgr);
