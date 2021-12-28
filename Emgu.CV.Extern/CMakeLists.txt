@@ -2872,6 +2872,33 @@ ENDIF()
 
 ############################### structed_light code gen END ##############################
 
+############################### ximgproc code gen START ##############################
+IF (NOT HAVE_opencv_ximgproc)
+  SET(HAVE_opencv_ximgproc FALSE)
+ENDIF()
+  CREATE_OCV_CLASS_PROPERTY( 
+    "ximgproc/scan_segment_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XImgproc/ScanSegment.g.cs"
+    "cv::ximgproc::ScanSegment" 
+    "ScanSegment" 
+    "NumberOfSuperpixels" 
+    "int" 
+    "propR"
+    "NumberOfSuperpixels" 
+    "int"
+    "Returns the actual superpixel segmentation from the last image processed using iterate. Returns zero if no image has been processed."
+    "Emgu.CV.XImgproc"
+    "XImgprocInvoke"
+    "ScanSegment"
+	""
+	"#include \"ximgproc_c.h\""
+	""
+	""
+	${HAVE_opencv_structured_light})
+
+############################### structed_light code gen END ##############################
+
+
 ############################### OPENMP START ##############################
 IF(WITH_OPENMP)
   FIND_PACKAGE( OpenMP REQUIRED)
