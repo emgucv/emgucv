@@ -221,37 +221,72 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Rgb2Lab = 45,
         ///<summary>
-        ///Convert BayerBG color to BGR color
+        ///Convert Bayer BG color to BGR color
         ///</summary>
         BayerBg2Bgr = 46,
         ///<summary>
-        ///Convert BayerGB color to BGR color
+        ///Convert Bayer GB color to BGR color
         ///</summary>
         BayerGb2Bgr = 47,
         ///<summary>
-        ///Convert BayerRG color to BGR color
+        ///Convert Bayer RG color to BGR color
         ///</summary>
         BayerRg2Bgr = 48,
         ///<summary>
-        ///Convert BayerGR color to BGR color
+        ///Convert Bayer GR color to BGR color
         ///</summary>
         BayerGr2Bgr = 49,
         /// <summary>
-        /// Convert BayerBG color to BGR color
+        /// Convert Bayer BG color to BGR color
         /// </summary>
         BayerBg2Rgb = BayerRg2Bgr,
         /// <summary>
-        /// Convert BayerRG color to BGR color
+        /// Convert Bayer RG color to BGR color
         /// </summary>
         BayerGb2Rgb = BayerGr2Bgr,
         /// <summary>
-        /// Convert BayerRG color to RGB color
+        /// Convert Bayer RG color to RGB color
         /// </summary>
         BayerRg2Rgb = BayerBg2Bgr,
         /// <summary>
-        /// Convert BayerGR color to RGB color
+        /// Convert Bayer GR color to RGB color
         /// </summary>
         BayerGr2Rgb = BayerGb2Bgr,
+
+        /// <summary>
+        /// Convert Bayer RGGB color to BGR color
+        /// </summary>
+        BayerRggb2Bgr = BayerBg2Bgr,
+        /// <summary>
+        /// Convert Bayer GRBG color to BGR color
+        /// </summary>
+        BayerGrbg2Bgr = BayerGb2Bgr,
+        /// <summary>
+        /// Convert Bayer BGGR color to BGR color
+        /// </summary>
+        BayerBggr2Bgr = BayerRg2Bgr,
+        /// <summary>
+        /// Convert Bayer GBRG color to BGR color
+        /// </summary>
+        BayerGbrg2Bgr = BayerGr2Bgr,
+
+        /// <summary>
+        /// Convert Bayer RGGB color to RGB color
+        /// </summary>
+        BayerRggb2Rgb = BayerBggr2Bgr,
+        /// <summary>
+        /// Convert Bayer GRBG color to RGB color
+        /// </summary>
+        BayerGrbg2Rgb = BayerGbrg2Bgr,
+        /// <summary>
+        /// Convert Bayer BGGR color to RGB color
+        /// </summary>
+        BayerBggr2Rgb = BayerRggb2Bgr,
+        /// <summary>
+        /// Convert Bayer GBRG color to RGB color
+        /// </summary>
+        BayerGbrg2Rgb = BayerGrbg2Bgr,
+
         ///<summary>
         ///Convert BGR color to Luv color
         ///</summary>
@@ -332,6 +367,40 @@ namespace Emgu.CV.CvEnum
         /// Convert BayerGR pattern to RGB color using VNG
         /// </summary>
         BayerGr2RgbVng = BayerGb2BgrVng,
+
+        /// <summary>
+        /// Convert Bayer RGGB pattern to BGR color using VNG
+        /// </summary>
+        BayerRggb2BgrVng = BayerBg2BgrVng,
+        /// <summary>
+        /// Convert Bayer GRBG pattern to BGR color using VNG
+        /// </summary>
+        BayerGrbg2BgrVng = BayerGb2BgrVng,
+        /// <summary>
+        /// Convert Bayer BGGR pattern to BGR color using VNG
+        /// </summary>
+        BayerBggr2BgrVng = BayerRg2BgrVng,
+        /// <summary>
+        /// Convert Bayer GBRG pattern to BGR color using VNG
+        /// </summary>
+        BayerGbrg2BgrVng = BayerGr2BgrVng,
+
+        /// <summary>
+        /// Convert Bayer RGGB pattern to RGB color using VNG
+        /// </summary>
+        BayerRggb2RgbVng = BayerBggr2BgrVng,
+        /// <summary>
+        /// Convert Bayer GRBG pattern to RGB color using VNG
+        /// </summary>
+        BayerGrbg2RgbVng = BayerGbrg2BgrVng,
+        /// <summary>
+        /// Convert Bayer BGGR pattern to RGB color using VNG
+        /// </summary>
+        BayerBggr2RgbVng = BayerRggb2BgrVng,
+        /// <summary>
+        /// Convert Bayer GBRG pattern to RGB color using VNG
+        /// </summary>
+        BayerGbrg2RgbVng = BayerGrbg2BgrVng,
 
         /// <summary>
         /// Convert BGR to HSV
@@ -434,6 +503,24 @@ namespace Emgu.CV.CvEnum
         /// Convert BayerGR to GRAY
         /// </summary>
         BayerGr2Gray = 89,
+
+        /// <summary>
+        /// Convert Bayer RGGB to GRAY
+        /// </summary>
+        BayerRggb2Gray = BayerBg2Gray,
+        /// <summary>
+        /// Convert Bayer GRBG to GRAY
+        /// </summary>
+        BayerGrbg2Gray = BayerGb2Gray,
+        /// <summary>
+        /// Convert Bayer BGGR to GRAY
+        /// </summary>
+        BayerBggr2Gray = BayerRg2Gray,
+        /// <summary>
+        /// Convert Bayer GBRG to GRAY
+        /// </summary>
+        BayerGbrg2Gray = BayerGr2Gray,
+
         /// <summary>
         /// Convert YUV420i to RGB
         /// </summary>
@@ -813,9 +900,111 @@ namespace Emgu.CV.CvEnum
         BayerGr2RgbEa = BayerGb2BgrEa,
 
         /// <summary>
+        /// Convert Bayer RGGB to BGR (Edge-Aware Demosaicing)
+        /// </summary>
+        BayerRggb2BgrEa = BayerBg2BgrEa,
+        /// <summary>
+        /// Convert Bayer GRBG to BGR (Edge-Aware Demosaicing)
+        /// </summary>
+        BayerGrbg2BgrEa = BayerGb2BgrEa,
+        /// <summary>
+        /// Convert Bayer BGGR to BGR (Edge-Aware Demosaicing)
+        /// </summary>
+        BayerBggr2BgrEa = BayerRg2BgrEa,
+        /// <summary>
+        /// Convert Bayer GBRG to BGR (Edge-Aware Demosaicing)
+        /// </summary>
+        BayerGbrg2BgrEa = BayerGr2BgrEa,
+
+        /// <summary>
+        /// Convert Bayer RGGB to RGB (Edge-Aware Demosaicing)
+        /// </summary>
+        BayerRggb2RgbEa = BayerBggr2BgrEa,
+        /// <summary>
+        /// Convert Bayer GRBG to RGB (Edge-Aware Demosaicing)
+        /// </summary>
+        BayerGrbg2RgbEa = BayerGbrg2BgrEa,
+        /// <summary>
+        /// Convert Bayer BGGR to RGB (Edge-Aware Demosaicing)
+        /// </summary>
+        BayerBggr2RgbEa = BayerRggb2BgrEa,
+        /// <summary>
+        /// Convert Bayer GBRG to RGB (Edge-Aware Demosaicing)
+        /// </summary>
+        BayerGbrg2RgbEa = BayerGrbg2BgrEa,
+
+        /// <summary>
+        /// Convert Bayer BG to BGRA 
+        /// </summary>
+        BayerBg2Bgra = 139,
+        /// <summary>
+        /// Convert Bayer GB to BGRA 
+        /// </summary>
+        BayerGb2Bgra = 140,
+        /// <summary>
+        /// Convert Bayer RG to BGRA 
+        /// </summary>
+        BayerRg2Bgra = 141,
+        /// <summary>
+        /// Convert Bayer GR to BGRA 
+        /// </summary>
+        BayerGr2Bgra = 142,
+
+        /// <summary>
+        /// Convert Bayer RGGB to BGRA 
+        /// </summary>
+        BayerRggb2Bgra = BayerBg2Bgra,
+        /// <summary>
+        /// Convert Bayer GRBG to BGRA 
+        /// </summary>
+        BayerGrbg2Bgra = BayerGb2Bgra,
+        /// <summary>
+        /// Convert Bayer BGGR to BGRA 
+        /// </summary>
+        BayerBggr2Bgra = BayerRg2Bgra,
+        /// <summary>
+        /// Convert Bayer GBRG to BGRA 
+        /// </summary>
+        BayerGbrg2Bgra = BayerGr2Bgra,
+
+        /// <summary>
+        /// Convert Bayer RGGB to BGRA 
+        /// </summary>
+        BayerRggb2Rgba = BayerBggr2Bgra,
+        /// <summary>
+        /// Convert Bayer GRBG to BGRA 
+        /// </summary>
+        BayerGrbg2Rgba = BayerGbrg2Bgra,
+        /// <summary>
+        /// Convert Bayer BGGR to BGRA 
+        /// </summary>
+        BayerBggr2Rgba = BayerRggb2Bgra,
+        /// <summary>
+        /// Convert Bayer GBRG to BGRA 
+        /// </summary>
+        BayerGbrg2Rgba = BayerGrbg2Bgra,
+
+        /// <summary>
+        /// Convert Bayer BG to RGBA 
+        /// </summary>
+        BayerBg2Rgba = BayerRg2Bgra,
+        /// <summary>
+        /// Convert Bayer GB to RGBA
+        /// </summary>
+        BayerGb2Rgba = BayerGr2Bgra,
+        /// <summary>
+        /// Convert Bayer RG to RGBA
+        /// </summary>
+        BayerRg2Rgba = BayerBg2Bgra,
+        /// <summary>
+        /// Convert Bayer Gr to RGBA
+        /// </summary>
+        BayerGr2Rgba = BayerGb2Bgra,
+
+        /// <summary>
         /// The max number, do not use
         /// </summary>
-        ColorcvtMax = 139
+        ColorCvtMax = 143
     }
 
 }
