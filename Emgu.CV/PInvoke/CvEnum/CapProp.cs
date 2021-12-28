@@ -229,17 +229,83 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         OrientationAuto = 49,
         /// <summary>
-        /// (**open-only**) Hardware acceleration type (see #VideoAccelerationType). Setting supported only via `params` parameter in cv::VideoCapture constructor / .open() method. Default value is backend-specific.
+        /// (open-only) Hardware acceleration type (see #VideoAccelerationType). Setting supported only via `params` parameter in cv::VideoCapture constructor / .open() method. Default value is backend-specific.
         /// </summary>
         HwAcceleration = 50,
         /// <summary>
-        /// (**open-only**) Hardware device index (select GPU if multiple available)
+        /// (open-only) Hardware device index (select GPU if multiple available)
         /// </summary>
         HwDevice = 51,
         /// <summary>
-        /// (**open-only**) If non-zero, create new OpenCL context and bind it to current thread. The OpenCL context created with Video Acceleration context attached it (if not attached yet) for optimized GPU data copy between HW accelerated decoder and cv::UMat.
+        /// (open-only) If non-zero, create new OpenCL context and bind it to current thread. The OpenCL context created with Video Acceleration context attached it (if not attached yet) for optimized GPU data copy between HW accelerated decoder and cv::UMat.
         /// </summary>
-        HwAccelerationUseOpencl = 52, 
+        HwAccelerationUseOpencl = 52,
+
+        /// <summary>
+        /// (open-only) Timeout in milliseconds for opening a video capture (applicable for FFmpeg back-end only)
+        /// </summary>
+        OpenTimeoutMsec = 53,
+        /// <summary>
+        /// (open-only) Timeout in milliseconds for reading from a video capture (applicable for FFmpeg back-end only)
+        /// </summary>
+        ReadTimeoutMsec = 54,
+        /// <summary>
+        /// (read-only) Time in microseconds since Jan 1 1970 when stream was opened. Applicable for FFmpeg backend only. Useful for RTSP and other live streams
+        /// </summary>
+        StreamOpenTimeUsec = 55,
+        /// <summary>
+        /// (read-only) Number of video channels
+        /// </summary>
+        VideoTotalChannels = 56,
+        /// <summary>
+        /// (open-only) Specify video stream, 0-based index. Use -1 to disable video stream from file or IP cameras. Default value is 0.
+        /// </summary>
+        VideoStream = 57,
+        /// <summary>
+        /// (open-only) Specify stream in multi-language media files, -1 - disable audio processing or microphone. Default value is -1.
+        /// </summary>
+        AudioStream = 58,
+        /// <summary>
+        /// (read-only) Audio position is measured in samples. Accurate audio sample timestamp of previous grabbed fragment. See AudioSamplesPerSecond and AudioShiftNsec.
+        /// </summary>
+        AudioPos = 59,
+        /// <summary>
+        /// (read only) Contains the time difference between the start of the audio stream and the video stream in nanoseconds. Positive value means that audio is started after the first video frame. Negative value means that audio is started before the first video frame.
+        /// </summary>
+        AudioShiftNsec = 60,
+        /// <summary>
+        /// (open, read) Alternative definition to bits-per-sample, but with clear handling of 32F / 32S
+        /// </summary>
+        AudioDataDepth = 61,
+        /// <summary>
+        /// (open, read) determined from file/codec input. If not specified, then selected audio sample rate is 44100
+        /// </summary>
+        AudioSamplesPerSecond = 62,
+        /// <summary>
+        /// (read-only) Index of the first audio channel for .retrieve() calls. That audio channel number continues enumeration after video channels.
+        /// </summary>
+        AudioBaseIndex = 63,
+        /// <summary>
+        /// (read-only) Number of audio channels in the selected audio stream (mono, stereo, etc)
+        /// </summary>
+        AudioTotalChannels = 64,
+        /// <summary>
+        /// (read-only) Number of audio streams.
+        /// </summary>
+        AudioTotalStreams = 65,
+        /// <summary>
+        /// (open, read) Enables audio synchronization.
+        /// </summary>
+        AudioSynchronize = 66,
+        /// <summary>
+        /// FFmpeg back-end only - Indicates whether the Last Raw Frame (LRF), output from VideoCapture::read() when VideoCapture is initialized with VideoCapture::open(CAP_FFMPEG, {CAP_PROP_FORMAT, -1}) or VideoCapture::set(CAP_PROP_FORMAT,-1) is called before the first call to VideoCapture::read(), contains encoded data for a key frame.
+        /// </summary>
+        LrfHasKeyFrame = 67,
+        /// <summary>
+        /// Positive index indicates that returning extra data is supported by the video back end.  This can be retrieved as cap.retrieve(data, &lt;returned index&gt;).  E.g. When reading from a h264 encoded RTSP stream, the FFmpeg backend could return the SPS and/or PPS if available (if sent in reply to a DESCRIBE request), from calls to cap.retrieve(data, &lt;returned index&gt;).
+        /// </summary>
+        CodecExtradataIndex = 68, 
+
 
         /// <summary>
         /// property for highgui class CvCapture_Android only
