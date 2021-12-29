@@ -69,11 +69,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StringTable.resx</DependentUpon>
     </Compile>
+    <!--
     <Compile Include="$(MSBuildThisFileDirectory)Properties\StringTable.zh-CN.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>StringTable.zh-CN.resx</DependentUpon>
     </Compile>
+	-->
     <Compile Include="$(MSBuildThisFileDirectory)ImagePropertyDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,10 +88,6 @@
       <DependentUpon>HistogramViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)HistogramViewer.zh-CN.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>HistogramViewer.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)ImageBox.resx">
       <DependentUpon>ImageBox.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -98,33 +96,17 @@
       <DependentUpon>ImageProperty.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ImageProperty.zh-CN.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ImageProperty.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)ImageViewer.resx">
       <DependentUpon>ImageViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ImageViewer.zh-CN.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ImageViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MatrixBox.resx">
       <DependentUpon>MatrixBox.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MatrixBox.zh-CN.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MatrixBox.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)MatrixViewer.resx">
       <DependentUpon>MatrixViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MatrixViewer.zh-CN.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MatrixViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)OperationsView.resx">
       <DependentUpon>OperationsView.cs</DependentUpon>
@@ -138,10 +120,6 @@
       <DependentUpon>ParameterInputDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)ParameterInputDialog.zh-CN.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ParameterInputDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Properties\StringTable.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
@@ -150,6 +128,31 @@
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)ImagePropertyDialog.resx">
       <DependentUpon>ImagePropertyDialog.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <!--
+	<EmbeddedResource Include="$(MSBuildThisFileDirectory)HistogramViewer.zh-CN.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>HistogramViewer.cs</DependentUpon>
+    </EmbeddedResource>
+	<EmbeddedResource Include="$(MSBuildThisFileDirectory)ImageProperty.zh-CN.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ImageProperty.cs</DependentUpon>
+    </EmbeddedResource>
+	<EmbeddedResource Include="$(MSBuildThisFileDirectory)ImageViewer.zh-CN.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ImageViewer.cs</DependentUpon>
+    </EmbeddedResource>
+	<EmbeddedResource Include="$(MSBuildThisFileDirectory)MatrixBox.zh-CN.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MatrixBox.cs</DependentUpon>
+    </EmbeddedResource>
+	<EmbeddedResource Include="$(MSBuildThisFileDirectory)MatrixViewer.zh-CN.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>MatrixViewer.cs</DependentUpon>
+    </EmbeddedResource>
+	<EmbeddedResource Include="$(MSBuildThisFileDirectory)ParameterInputDialog.zh-CN.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>ParameterInputDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)Properties\StringTable.zh-CN.resx">
       <SubType>Designer</SubType>
@@ -160,5 +163,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>ImagePropertyDialog.cs</DependentUpon>
     </EmbeddedResource>
-	  </ItemGroup>
+	-->
+  </ItemGroup>
 </Project>
