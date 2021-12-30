@@ -7,21 +7,6 @@
 project(cvextern_test)
 
 SET(OPENCV_MODULES_DIR "${OPENCV_SUBFOLDER}/modules")
-#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/core/include")
-#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/imgproc/include")
-#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/video/include")
-#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/ml/include")
-#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/calib3d/include")
-#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/objdetect/include")
-#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/features2d/include")
-#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/hal/include")
-#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/flann/include")
-#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/highgui/include")
-#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/imgcodecs/include")
-#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/videoio/include")
-#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/photo/include")
-#INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/dnn/include")
-
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include/opencv")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../Emgu.CV.Extern/")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../")
@@ -155,6 +140,10 @@ target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS}
 #  ${TIFF_LIBRARY} 
 #  ${GEOTIFF_LIBRARY}
 )
+
+IF(IS_RASPBIAN)
+  target_link_libraries(${the_target} atomic)
+ENDIF()
 
 IF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
   set_target_properties(${the_target} PROPERTIES SUFFIX ".html")
