@@ -58,6 +58,10 @@ MACRO(SET_TESSERACT_PROJECT_PROPERTY PROJ_NAME)
   ENDIF()  
 ENDMACRO()
 
+IF(ANDROID)
+  include_directories("${CPUFEATURES_ROOT}")
+ENDIF()
+
 #ccutil
 PROJECT(tesseract_ccutil)
 # Get version with components from VERSION file.
