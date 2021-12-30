@@ -28,6 +28,7 @@ namespace cv {
 		class RidgeDetectionFilter {};
 		class EdgeBoxes {};
 		class EdgeDrawing {};
+		class ScanSegment {};
 		namespace  segmentation {
 			class GraphSegmentation {};
 				class SelectiveSearchSegmentation {};

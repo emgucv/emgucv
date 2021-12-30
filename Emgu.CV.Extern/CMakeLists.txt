@@ -3727,10 +3727,11 @@ if(WITH_JPEG AND BUILD_JPEG)
 endif()
 
 # Add the required libraries for linking:
-target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
-  ${ZLIB_LIBRARY} 
+target_link_libraries(${the_target} 
+  ${OPENCV_LINKER_LIBS} 
+  ${ZLIB_LIBRARY})
   #  xtiff 
-  ${CVBLOB_LIBRARY})
+  #${CVBLOB_LIBRARY})
 
 set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
