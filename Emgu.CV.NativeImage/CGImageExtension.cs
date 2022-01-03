@@ -94,6 +94,13 @@ namespace Emgu.CV
             }
         }
 
+        /// <summary>
+        /// Convert a CGImage to a IOutputArray
+        /// </summary>
+        /// <param name="cgImage">The source CGImage</param>
+        /// <param name="mat">The destination array</param>
+        /// <param name="modes">The color format for the destination array</param>
+        /// <exception cref="NotImplementedException">Exception will be thrown if the ImreadModes is not supported.</exception>
         public static void ToArray(this CGImage cgImage, IOutputArray mat, ImreadModes modes = ImreadModes.AnyColor)
         {
             Size sz = new Size((int)cgImage.Width, (int)cgImage.Height);
@@ -141,18 +148,17 @@ namespace Emgu.CV
                         CvInvoke.CvtColor(tmp, mat, ColorConversion.Rgba2Gray);
                     }
                 }
-                else if (modes == ImreadModes.ReducedColor4 
-                         || modes == ImreadModes.ReducedColor8 
-                         || modes == ImreadModes.ReducedGrayscale4 
-                         || modes == ImreadModes.ReducedGrayscale8 
+                else if (modes == ImreadModes.ReducedColor4
+                         || modes == ImreadModes.ReducedColor8
+                         || modes == ImreadModes.ReducedGrayscale4
+                         || modes == ImreadModes.ReducedGrayscale8
                          || modes == ImreadModes.LoadGdal)
                 {
-                    throw new NotImplementedException(String.Format("Conversion from PNG using mode {0} is not supported", modes));
+                    throw new NotImplementedException(String.Format("Conversion from CGImage using mode {0} is not supported", modes));
                 }
                 else
                 {
-                    throw new Exception(String.Format("ImreadModes of {0} is not implemented.", modes.ToString()));
-                    //CvInvoke.CvtColor(m, mat, ColorConversion.Rgba2Bgr);
+                    throw new NotImplementedException(String.Format("ImreadModes of {0} is not implemented.", modes.ToString()));
                 }
             }
         }
@@ -174,7 +180,7 @@ namespace Emgu.CV
             using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
             using (CGBitmapContext context = new CGBitmapContext(
                 bgraByte.DataPointer,
-                bgraByte.Width, 
+                bgraByte.Width,
                 bgraByte.Height,
                 8,
                 bgraByte.Width * 4,
