@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-#  Copyright (C) 2004-2021 by EMGU Corporation. All rights reserved.
+#  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
 IF ((TARGET Emgu.CV.Platform.NetStandard) AND (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64))

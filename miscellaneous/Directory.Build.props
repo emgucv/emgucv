@@ -2,9 +2,9 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
   <PropertyGroup>
     <ProjectSummary>A cross platform .Net wrapper for the OpenCV image-processing library. Allows OpenCV functions to be called from .NET compatible languages. The wrapper can run on Windows, Android, iOS, Mac OS and Linux.</ProjectSummary>
-	<CopyrightText>2021 Emgu Corporation, All Rights Reserved,</CopyrightText>
+	<CopyrightText>$([System.DateTime]::Now.ToString(yyyy)) Emgu Corporation, All Rights Reserved,</CopyrightText>
     <FeedbackEMailAddress>support%40emgu.com</FeedbackEMailAddress>
-    <HeaderText>http://www.emgu.com</HeaderText>
+    <HeaderText>https://www.emgu.com</HeaderText>
     <FooterText>For questions and discussions please visit https://github.com/emgucv/emgucv/issues</FooterText>
 	<NamingMethod>MemberName</NamingMethod>
     <Language>en-US</Language>

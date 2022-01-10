@@ -1,6 +1,6 @@
 #if !(UNITY_IPHONE || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR || UNITY_WEBGL)
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2021 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
 #if NONEFREE
