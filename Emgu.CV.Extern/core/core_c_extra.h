@@ -85,7 +85,7 @@ CVAPI(void) cveAdd(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArra
 CVAPI(void) cveSubtract(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::_InputArray* mask, int dtype);
 CVAPI(void) cveDivide(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, double scale, int dtype);
 CVAPI(void) cveMultiply(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, double scale, int dtype);
-CVAPI(void) cveCountNonZero(cv::_InputArray* src);
+CVAPI(int) cveCountNonZero(cv::_InputArray* src);
 CVAPI(void) cveFindNonZero(cv::_InputArray* src, cv::_OutputArray* idx);
 CVAPI(void) cveMin(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst);
 CVAPI(void) cveMax(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst);
@@ -126,10 +126,10 @@ CVAPI(void) cvePolarToCart(cv::_InputArray* magnitude, cv::_InputArray* angle, c
 CVAPI(void) cveSetIdentity(cv::_InputOutputArray* mtx, CvScalar* scalar);
 CVAPI(int) cveSolveCubic(cv::_InputArray* coeffs, cv::_OutputArray* roots);
 CVAPI(double) cveSolvePoly(cv::_InputArray* coeffs, cv::_OutputArray* roots, int maxIters);
-CVAPI(void) cveSolve(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int flags);
+CVAPI(bool) cveSolve(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int flags);
 CVAPI(void) cveSort(cv::_InputArray* src, cv::_OutputArray* dst, int flags);
 CVAPI(void) cveSortIdx(cv::_InputArray* src, cv::_OutputArray* dst, int flags);
-CVAPI(void) cveInvert(cv::_InputArray* src, cv::_OutputArray* dst, int flags);
+CVAPI(double) cveInvert(cv::_InputArray* src, cv::_OutputArray* dst, int flags);
 
 CVAPI(void) cveDft(cv::_InputArray* src, cv::_OutputArray* dst, int flags, int nonzeroRows);
 CVAPI(void) cveDct(cv::_InputArray* src, cv::_OutputArray* dst, int flags);
@@ -138,7 +138,7 @@ CVAPI(int) cveGetOptimalDFTSize(int vecsize);
 
 CVAPI(void) cveTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* m);
 
-CVAPI(void) cveMahalanobis(cv::_InputArray* v1, cv::_InputArray* v2, cv::_InputArray* icovar);
+CVAPI(double) cveMahalanobis(cv::_InputArray* v1, cv::_InputArray* v2, cv::_InputArray* icovar);
 CVAPI(void) cveCalcCovarMatrix(cv::_InputArray* samples, cv::_OutputArray* covar, cv::_InputOutputArray* mean, int flags, int ctype);
 CVAPI(void) cveNormalize(cv::_InputArray* src, cv::_InputOutputArray* dst, double alpha, double beta, int normType, int dType, cv::_InputArray* mask);
 

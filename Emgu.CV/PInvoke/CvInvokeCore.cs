@@ -848,7 +848,7 @@ namespace Emgu.CV
         /// <param name="dst">The result</param>
         /// <param name="method">The method for solving the equation</param>
         /// <returns>0 if src1 is a singular and CV_LU method is used</returns>
-        public static int Solve(
+        public static bool Solve(
             IInputArray src1,
             IInputArray src2,
             IOutputArray dst,
@@ -861,7 +861,8 @@ namespace Emgu.CV
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern int cveSolve(
+        [return:MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveSolve(
             IntPtr src1,
             IntPtr src2,
             IntPtr dst,

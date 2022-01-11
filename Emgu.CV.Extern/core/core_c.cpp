@@ -269,9 +269,9 @@ void cveMultiply(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray*
 {
 	cv::multiply(*src1, *src2, *dst, scale, dtype);
 }
-void cveCountNonZero(cv::_InputArray* src)
+int cveCountNonZero(cv::_InputArray* src)
 {
-	cv::countNonZero(*src);
+	return cv::countNonZero(*src);
 }
 void cveFindNonZero(cv::_InputArray* src, cv::_OutputArray* idx)
 {
@@ -436,9 +436,9 @@ double cveSolvePoly(cv::_InputArray* coeffs, cv::_OutputArray* roots, int maxIte
 {
 	return cv::solvePoly(*coeffs, *roots, maxIters);
 }
-void cveSolve(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int flags)
+bool cveSolve(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int flags)
 {
-	cv::solve(*src1, *src2, *dst, flags);
+	return cv::solve(*src1, *src2, *dst, flags);
 }
 void cveSort(cv::_InputArray* src, cv::_OutputArray* dst, int flags)
 {
@@ -448,9 +448,9 @@ void cveSortIdx(cv::_InputArray* src, cv::_OutputArray* dst, int flags)
 {
 	cv::sortIdx(*src, *dst, flags);
 }
-void cveInvert(cv::_InputArray* src, cv::_OutputArray* dst, int flags)
+double cveInvert(cv::_InputArray* src, cv::_OutputArray* dst, int flags)
 {
-	cv::invert(*src, *dst, flags);
+	return cv::invert(*src, *dst, flags);
 }
 
 void cveDft(cv::_InputArray* src, cv::_OutputArray* dst, int flags, int nonzeroRows)
@@ -476,9 +476,9 @@ void cveTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* 
 	cv::transform(*src, *dst, *m);
 }
 
-void cveMahalanobis(cv::_InputArray* v1, cv::_InputArray* v2, cv::_InputArray* icovar)
+double cveMahalanobis(cv::_InputArray* v1, cv::_InputArray* v2, cv::_InputArray* icovar)
 {
-	cv::Mahalanobis(*v1, *v2, *icovar);
+	return cv::Mahalanobis(*v1, *v2, *icovar);
 }
 
 void cveCalcCovarMatrix(cv::_InputArray* samples, cv::_OutputArray* covar, cv::_InputOutputArray* mean, int flags, int ctype)
