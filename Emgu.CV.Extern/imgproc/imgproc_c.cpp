@@ -289,9 +289,9 @@ void cveInvertAffineTransform(cv::_InputArray* m, cv::_OutputArray* im)
 	cv::invertAffineTransform(*m, *im);
 }
 
-void cveEMD(cv::_InputArray* signature1, cv::_InputArray* signature2, int distType, cv::_InputArray* cost, float* lowerBound, cv::_OutputArray* flow)
+float cveEMD(cv::_InputArray* signature1, cv::_InputArray* signature2, int distType, cv::_InputArray* cost, float* lowerBound, cv::_OutputArray* flow)
 {
-	cv::EMD(
+	return cv::EMD(
 		*signature1, 
 		*signature2, 
 		distType, 
