@@ -34,7 +34,7 @@ namespace Emgu.CV
             double alpha);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveFisheyeUndistorPoints(
+        internal static extern void cveFisheyeUndistortPoints(
             IntPtr distorted, 
             IntPtr undistorted, 
             IntPtr K, 
@@ -44,18 +44,18 @@ namespace Emgu.CV
 
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveFisheyeInitUndistorRectifyMap(
+        internal static extern void cveFisheyeInitUndistortRectifyMap(
             IntPtr K, 
             IntPtr D, 
             IntPtr R, 
             IntPtr P, 
             ref Size size,
-            DepthType m1Type, 
+            int m1Type, 
             IntPtr map1, 
             IntPtr map2);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveFisheyeUndistorImage(
+        internal static extern void cveFisheyeUndistortImage(
             IntPtr distorted, 
             IntPtr undistored, 
             IntPtr K, 
@@ -64,7 +64,7 @@ namespace Emgu.CV
             ref Size newSize);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveFisheyeEstimateNewCameraMatrixForUndistorRectify(
+        internal static extern void cveFisheyeEstimateNewCameraMatrixForUndistortRectify(
            IntPtr K, 
            IntPtr D,
            ref Size imageSize, 
@@ -211,7 +211,7 @@ namespace Emgu.CV
         /// <param name="D">Input vector of distortion coefficients (k1,k2,k3,k4).</param>
         /// <param name="R">Rectification transformation in the object space: 3x3 1-channel, or vector: 3x1/1x3 1-channel or 1x1 3-channel</param>
         /// <param name="P">New camera matrix (3x3) or new projection matrix (3x4)</param>
-        public static void UndistorPoints(IInputArray distorted, IOutputArray undistorted, IInputArray K, IInputArray D,
+        public static void UndistortPoints(IInputArray distorted, IOutputArray undistorted, IInputArray K, IInputArray D,
            IInputArray R = null, IInputArray P = null)
         {
             using (InputArray iaDistorted = distorted.GetInputArray())
@@ -221,7 +221,7 @@ namespace Emgu.CV
             using (InputArray iaR = R == null ? InputArray.GetEmpty() : R.GetInputArray())
             using (InputArray iaP = P == null ? InputArray.GetEmpty() : P.GetInputArray())
             {
-                CvInvoke.cveFisheyeUndistorPoints(iaDistorted, oaUndistorted, iaK, iaD, iaR, iaP);
+                CvInvoke.cveFisheyeUndistortPoints(iaDistorted, oaUndistorted, iaK, iaD, iaR, iaP);
             }
         }
 
@@ -233,11 +233,20 @@ namespace Emgu.CV
         /// <param name="R">Rectification transformation in the object space: 3x3 1-channel, or vector: 3x1/1x3 1-channel or 1x1 3-channel</param>
         /// <param name="P">New camera matrix (3x3) or new projection matrix (3x4)</param>
         /// <param name="size">Undistorted image size.</param>
-        /// <param name="m1Type">Type of the first output map that can be CV_32FC1 or CV_16SC2 . See convertMaps() for details.</param>
+        /// <param name="depthType">Depth type of the first output map. (The combination with <paramref name="channels"/> can be one of CV_32FC1 or CV_16SC2)</param>
+        /// <param name="channels">Number of channels of the first output map. (The combination with <paramref name="depthType"/> can be one of CV_32FC1 or CV_16SC2)</param>
         /// <param name="map1">The first output map.</param>
         /// <param name="map2">The second output map.</param>
-        public static void InitUndistorRectifyMap(IInputArray K, IInputArray D, IInputArray R, IInputArray P, Size size,
-           DepthType m1Type, IOutputArray map1, IOutputArray map2)
+        public static void InitUndistortRectifyMap(
+            IInputArray K, 
+            IInputArray D, 
+            IInputArray R, 
+            IInputArray P, 
+            Size size,
+            CvEnum.DepthType depthType,
+            int channels,
+            IOutputArray map1, 
+            IOutputArray map2)
         {
             using (InputArray iaK = K.GetInputArray())
             using (InputArray iaD = D.GetInputArray())
@@ -246,7 +255,15 @@ namespace Emgu.CV
             using (OutputArray oaMap1 = map1.GetOutputArray())
             using (OutputArray oaMap2 = map2.GetOutputArray())
             {
-                CvInvoke.cveFisheyeInitUndistorRectifyMap(iaK, iaD, iaR, iaP, ref size, m1Type, oaMap1, oaMap2);
+                CvInvoke.cveFisheyeInitUndistortRectifyMap(
+                    iaK, 
+                    iaD, 
+                    iaR, 
+                    iaP, 
+                    ref size, 
+                    CvInvoke.MakeType(depthType, channels), 
+                    oaMap1, 
+                    oaMap2);
             }
         }
 
@@ -259,7 +276,7 @@ namespace Emgu.CV
         /// <param name="D">Input vector of distortion coefficients (k1,k2,k3,k4).</param>
         /// <param name="Knew">Camera matrix of the distorted image. By default, it is the identity matrix but you may additionally scale and shift the result by using a different matrix.</param>
         /// <param name="newSize">The function transforms an image to compensate radial and tangential lens distortion.</param>
-        public static void UndistorImage(IInputArray distorted, IOutputArray undistored, IInputArray K, IInputArray D,
+        public static void UndistortImage(IInputArray distorted, IOutputArray undistored, IInputArray K, IInputArray D,
            IInputArray Knew = null, Size newSize = new Size())
         {
             using (InputArray iaDistorted = distorted.GetInputArray())
@@ -268,7 +285,7 @@ namespace Emgu.CV
             using (InputArray iaD = D.GetInputArray())
             using (InputArray iaKnew = Knew == null ? InputArray.GetEmpty() : Knew.GetInputArray())
             {
-                CvInvoke.cveFisheyeUndistorImage(iaDistorted, oaUndistorted, iaK, iaD, iaKnew, ref newSize);
+                CvInvoke.cveFisheyeUndistortImage(iaDistorted, oaUndistorted, iaK, iaD, iaKnew, ref newSize);
             }
         }
 
@@ -283,7 +300,7 @@ namespace Emgu.CV
         /// <param name="balance">Sets the new focal length in range between the min focal length and the max focal length. Balance is in range of [0, 1]</param>
         /// <param name="newSize">the new size</param>
         /// <param name="fovScale">Divisor for new focal length.</param>
-        public static void EstimateNewCameraMatrixForUndistorRectify(
+        public static void EstimateNewCameraMatrixForUndistortRectify(
             IInputArray K,
             IInputArray D,
             Size imageSize,
@@ -298,7 +315,7 @@ namespace Emgu.CV
             using (InputArray iaR = R.GetInputArray())
             using (OutputArray oaP = P.GetOutputArray())
             {
-                CvInvoke.cveFisheyeEstimateNewCameraMatrixForUndistorRectify(iaK, iaD, ref imageSize, iaR, oaP, balance,
+                CvInvoke.cveFisheyeEstimateNewCameraMatrixForUndistortRectify(iaK, iaD, ref imageSize, iaR, oaP, balance,
                    ref newSize, fovScale);
             }
         }
@@ -345,7 +362,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Performs camera calibaration.
+        /// Performs camera calibration.
         /// </summary>
         /// <param name="objectPoints">vector of vectors of calibration pattern points in the calibration pattern coordinate space.</param>
         /// <param name="imagePoints">vector of vectors of the projections of calibration pattern points. imagePoints.size() and objectPoints.size() and imagePoints[i].size() must be equal to objectPoints[i].size() for each i.</param>

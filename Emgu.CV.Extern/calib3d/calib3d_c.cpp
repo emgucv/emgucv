@@ -447,7 +447,7 @@ void cveFisheyeDistortPoints(cv::_InputArray* undistored, cv::_OutputArray* dist
 	cv::fisheye::distortPoints(*undistored, *distorted, *K, *D, alpha);
 }
 
-void cveFisheyeUndistorPoints(cv::_InputArray* distorted, cv::_OutputArray* undistorted, cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* R, cv::_InputArray* P)
+void cveFisheyeUndistortPoints(cv::_InputArray* distorted, cv::_OutputArray* undistorted, cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* R, cv::_InputArray* P)
 {
 	cv::fisheye::undistortPoints(
 		*distorted, 
@@ -458,12 +458,28 @@ void cveFisheyeUndistorPoints(cv::_InputArray* distorted, cv::_OutputArray* undi
 		P ? *P : static_cast<cv::InputArray>(cv::noArray()));
 }
 
-void cveFisheyeInitUndistorRectifyMap(cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* R, cv::_InputArray* P, CvSize* size, int m1Type, cv::_OutputArray* map1, cv::_OutputArray* map2)
+void cveFisheyeInitUndistortRectifyMap(
+	cv::_InputArray* K, 
+	cv::_InputArray* D, 
+	cv::_InputArray* R, 
+	cv::_InputArray* P, 
+	CvSize* size, 
+	int m1Type, 
+	cv::_OutputArray* map1, 
+	cv::_OutputArray* map2)
 {
-	cv::fisheye::initUndistortRectifyMap(*K, *D, *R, *P, *size, m1Type, *map1, *map2);
+	cv::fisheye::initUndistortRectifyMap(
+		*K, 
+		*D, 
+		*R, 
+		*P, 
+		*size, 
+		m1Type, 
+		*map1, 
+		map2 ? *map2 : static_cast<cv::OutputArray>(cv::noArray()));
 }
 
-void cveFisheyeUndistorImage(cv::_InputArray* distorted, cv::_OutputArray* undistored, cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* Knew, CvSize* newSize)
+void cveFisheyeUndistortImage(cv::_InputArray* distorted, cv::_OutputArray* undistored, cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* Knew, CvSize* newSize)
 {
 	cv::fisheye::undistortImage(
 		*distorted, 
@@ -474,7 +490,7 @@ void cveFisheyeUndistorImage(cv::_InputArray* distorted, cv::_OutputArray* undis
 		*newSize);
 }
 
-void cveFisheyeEstimateNewCameraMatrixForUndistorRectify(cv::_InputArray* K, cv::_InputArray* D, CvSize* imageSize, cv::_InputArray* R, cv::_OutputArray* P, double balance, CvSize* newSize, double fovScale)
+void cveFisheyeEstimateNewCameraMatrixForUndistortRectify(cv::_InputArray* K, cv::_InputArray* D, CvSize* imageSize, cv::_InputArray* R, cv::_OutputArray* P, double balance, CvSize* newSize, double fovScale)
 {
 	cv::fisheye::estimateNewCameraMatrixForUndistortRectify(*K, *D, *imageSize, *R, *P, balance, *newSize, fovScale);
 }
