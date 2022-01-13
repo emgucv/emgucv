@@ -88,7 +88,8 @@ namespace Emgu.CV
         /// <param name="distCoeffs">The vector of distortion coefficients, 4x1, 1x4, 5x1 or 1x5</param>
         /// <param name="R">The rectification transformation in object space (3x3 matrix). R1 or R2, computed by cvStereoRectify can be passed here. If the parameter is IntPtr.Zero, the identity matrix is used</param>
         /// <param name="newCameraMatrix">The new camera matrix A'=[fx' 0 cx'; 0 fy' cy'; 0 0 1]</param>
-        /// <param name="depthType">Depth type of the first output map that can be CV_32FC1 or CV_16SC2 .</param>
+        /// <param name="depthType">Depth type of the first output map. (The combination with <paramref name="channels"/> can be one of CV_32FC1, CV_32FC2 or CV_16SC2)</param>
+        /// <param name="channels">Number of channels of the first output map. (The combination with <paramref name="depthType"/> can be one of CV_32FC1, CV_32FC2 or CV_16SC2)</param>
         /// <param name="map1">The first output map.</param>
         /// <param name="map2">The second output map.</param>
         /// <param name="size">Undistorted image size.</param>
@@ -99,10 +100,10 @@ namespace Emgu.CV
            IInputArray newCameraMatrix,
            Size size,
            CvEnum.DepthType depthType,
+           int channels,
            IOutputArray map1,
-           IOutputArray map2 = null)
+           IOutputArray map2)
         {
-            int channels = map2 == null ? 2 : 1;
             using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
             using (InputArray iaDistCoeffs = distCoeffs.GetInputArray())
             using (InputArray iaR = R == null ? InputArray.GetEmpty() : R.GetInputArray())
