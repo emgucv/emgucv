@@ -139,6 +139,7 @@ CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" "${CMAKE_CURRENT_
 CREATE_VECTOR_CS("VideoCapture" "cv::VideoCapture" "VideoCapture" "object_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"videoio_c_extra.h\"" "" "defined(HAVE_OPENCV_VIDEOIO)")
 CREATE_VECTOR_CS("VectorOfMat" "std::vector< cv::Mat >" "VectorOfMat" "object_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
 
+CREATE_VECTOR_CS("LinemodMatch" "cv::linemod::Match" "Emgu.CV.Linemod.Match" "object_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"rgbd_c.h\"" "" "defined(HAVE_OPENCV_RGBD)")
 
 MACRO(WRITE_IF_DIFFERENT fname content)
   IF (EXISTS "${fname}")
@@ -2895,6 +2896,36 @@ ENDIF()
 	""
 	""
 	${HAVE_opencv_structured_light})
+
+############################### structed_light code gen END ##############################
+
+############################### rgbd code gen START ##############################
+IF (NOT HAVE_opencv_rgbd)
+  SET(HAVE_opencv_rgbd FALSE)
+ENDIF()
+  CREATE_OCV_CLASS_PROPERTY( 
+    "rgbd/match_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Rgbd/Match.g.cs"
+    "cv::linemod::Match" 
+    "Match" 
+    "x;y;similarity;template_id;class_id" 
+    "int;int;float;int;cv::String" 
+    "element;element;element;element;element"
+    "X;Y;Similarity;TemplateId;class_id" 
+    "int;int;float;int;String"
+    "X position;
+    Y position;
+    Similarity;
+    TemplateId;
+    Class Id"
+    "Emgu.CV.Linemod"
+    "LinemodInvoke"
+    "Match"
+	""
+	"#include \"rgbd_c.h\""
+	""
+	""
+	${HAVE_opencv_rgbd})
 
 ############################### structed_light code gen END ##############################
 

@@ -103,3 +103,98 @@ void cveRgbdNormalsApply(
 	throw_no_rgbd();
 #endif	
 }
+
+cv::linemod::Detector* cveLinemodLineDetectorCreate(cv::Ptr<cv::linemod::Detector>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_RGBD
+	cv::Ptr<cv::linemod::Detector> detector = cv::linemod::getDefaultLINE();
+	*sharedPtr = new cv::Ptr<cv::linemod::Detector>(detector);
+	return (*sharedPtr)->get();
+#else
+	throw_no_rgbd();
+#endif	
+}
+
+cv::linemod::Detector* cveLinemodLinemodDetectorCreate(cv::Ptr<cv::linemod::Detector>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_RGBD
+	cv::Ptr<cv::linemod::Detector> detector = cv::linemod::getDefaultLINEMOD();
+	*sharedPtr = new cv::Ptr<cv::linemod::Detector>(detector);
+	return (*sharedPtr)->get();
+#else
+	throw_no_rgbd();
+#endif	
+}
+
+void cveLinemodDetectorRead(cv::linemod::Detector* detector, cv::FileNode* fn)
+{
+#ifdef HAVE_OPENCV_RGBD
+	detector->read(*fn);
+#else
+	throw_no_rgbd();
+#endif	
+}
+
+void cveLinemodDetectorWrite(cv::linemod::Detector* detector, cv::FileStorage* fs)
+{
+#ifdef HAVE_OPENCV_RGBD
+	detector->write(*fs);
+#else
+	throw_no_rgbd();
+#endif	
+}
+
+int cveLinemodDetectorAddTemplate(
+	cv::linemod::Detector* detector,
+	std::vector< cv::Mat >* sources,
+	cv::String* classId,
+	cv::Mat* objectMask,
+	CvRect* boundingBox)
+{
+#ifdef HAVE_OPENCV_RGBD
+	cv::Rect r;
+	int result = detector->addTemplate(*sources, *classId, *objectMask, &r);
+	if (boundingBox)
+	{
+		boundingBox->x = r.x;
+		boundingBox->y = r.y;
+		boundingBox->width = r.width;
+		boundingBox->height = r.height;
+	}
+	return result;
+#else
+	throw_no_rgbd();
+#endif	
+
+}
+
+void cveLinemodDetectorRelease(cv::Ptr<cv::linemod::Detector>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_RGBD
+	delete* sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_rgbd();
+#endif	
+
+}
+
+cv::linemod::Match* cveLinemodMatchCreate()
+{
+#ifdef HAVE_OPENCV_RGBD
+	return new cv::linemod::Match();
+#else
+	throw_no_rgbd();
+#endif	
+
+}
+void cveLinemodMatchRelease(cv::linemod::Match** match)
+{
+#ifdef HAVE_OPENCV_RGBD
+	delete* match;
+	*match = 0;
+#else
+	throw_no_rgbd();
+#endif	
+
+}

@@ -57,4 +57,20 @@ CVAPI(void) cveRgbdNormalsApply(
 	cv::rgbd::RgbdNormals* rgbdNormals,
 	cv::_InputArray* points,
 	cv::_OutputArray* normals);
+
+
+CVAPI(cv::linemod::Detector*) cveLinemodLineDetectorCreate(cv::Ptr<cv::linemod::Detector>** sharedPtr);
+CVAPI(cv::linemod::Detector*) cveLinemodLinemodDetectorCreate(cv::Ptr<cv::linemod::Detector>** sharedPtr);
+CVAPI(void) cveLinemodDetectorRead(cv::linemod::Detector* detector, cv::FileNode* fn);
+CVAPI(void) cveLinemodDetectorWrite(cv::linemod::Detector* detector, cv::FileStorage* fs);
+CVAPI(int) cveLinemodDetectorAddTemplate(
+	cv::linemod::Detector* detector, 
+	std::vector< cv::Mat >* sources, 
+	cv::String* classId,
+	cv::Mat* objectMask, 
+	CvRect* boundingBox);
+CVAPI(void) cveLinemodDetectorRelease(cv::Ptr<cv::linemod::Detector>** sharedPtr);
+
+CVAPI(cv::linemod::Match*) cveLinemodMatchCreate();
+CVAPI(void) cveLinemodMatchRelease(cv::linemod::Match** match);
 #endif
