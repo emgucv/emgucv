@@ -168,6 +168,24 @@ int cveLinemodDetectorAddTemplate(
 
 }
 
+void cveLinemodDetectorMatch(
+	cv::linemod::Detector* detector,
+	std::vector< cv::Mat >* sources,
+	float threshold,
+	std::vector< cv::linemod::Match >* matches,
+	std::vector< cv::String >* classIds,
+	cv::_OutputArray* quantizedImages,
+	std::vector< cv::Mat >* masks)
+{
+	detector->match(
+		*sources,
+		threshold,
+		*matches,
+		classIds ? *classIds : std::vector< cv::String >(),
+		quantizedImages ? *quantizedImages : static_cast<cv::OutputArray>(cv::noArray()),
+		masks ? *masks : std::vector< cv::Mat >());
+}
+
 void cveLinemodDetectorRelease(cv::Ptr<cv::linemod::Detector>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_RGBD
