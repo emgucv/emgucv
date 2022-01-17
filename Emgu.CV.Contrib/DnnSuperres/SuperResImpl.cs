@@ -122,6 +122,9 @@ namespace Emgu.CV.DnnSuperres
         }
     }
 
+    /// <summary>
+    /// Provide interfaces to the Open CV Dnn Supper Resolution functions
+    /// </summary>
     internal static partial class DnnSuperresInvoke
     {
 

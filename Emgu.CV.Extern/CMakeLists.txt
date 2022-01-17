@@ -2951,6 +2951,26 @@ ENDIF()
 	""
 	${HAVE_opencv_rgbd})
 
+  CREATE_OCV_CLASS_PROPERTY( 
+    "rgbd/modality_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Rgbd/Modality.g.cs"
+    "cv::linemod::Modality" 
+    "Modality" 
+    "name" 
+    "cv::String" 
+    "val"
+    "Name" 
+    "String"
+    "The name of modality"
+    "Emgu.CV.Linemod"
+    "LinemodInvoke"
+    "Modality"
+	""
+	"#include \"rgbd_c.h\""
+	""
+	""
+	${HAVE_opencv_rgbd})
+
 ############################### structed_light code gen END ##############################
 
 

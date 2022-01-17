@@ -16,7 +16,9 @@ using Emgu.Util;
 
 namespace Emgu.CV.Linemod
 {
-
+    /// <summary>
+    /// Represents a successful template match.
+    /// </summary>
     public partial class Match : UnmanagedObject
     {
         private readonly bool _needDispose;
@@ -27,6 +29,9 @@ namespace Emgu.CV.Linemod
             _needDispose = needDispose;
         }
 
+        /// <summary>
+        /// Create an empty template match result.
+        /// </summary>
         public Match()
         {
             _ptr = LinemodInvoke.cveLinemodMatchCreate();

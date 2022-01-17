@@ -170,11 +170,15 @@ int cveLinemodDetectorAddTemplate(
 
 void cveLinemodDetectorGetClassIds(cv::linemod::Detector* detector, std::vector< cv::String >* classIds)
 {
+#ifdef HAVE_OPENCV_RGBD
 	std::vector< cv::String > ids = detector->classIds();
 	for (std::vector< cv::String >::iterator it = ids.begin(); it != ids.end(); ++it)
 	{
 		classIds->push_back(*it);
 	}
+#else
+	throw_no_rgbd();
+#endif	
 }
 
 void cveLinemodDetectorMatch(
@@ -186,6 +190,7 @@ void cveLinemodDetectorMatch(
 	cv::_OutputArray* quantizedImages,
 	std::vector< cv::Mat >* masks)
 {
+#ifdef HAVE_OPENCV_RGBD
 	detector->match(
 		*sources,
 		threshold,
@@ -193,6 +198,33 @@ void cveLinemodDetectorMatch(
 		classIds ? *classIds : std::vector< cv::String >(),
 		quantizedImages ? *quantizedImages : static_cast<cv::OutputArray>(cv::noArray()),
 		masks ? *masks : std::vector< cv::Mat >());
+#else
+	throw_no_rgbd();
+#endif	
+}
+
+int cveLinemodDetectorGetT(cv::linemod::Detector* detector, int pyramidLevel)
+{
+#ifdef HAVE_OPENCV_RGBD
+	return detector->getT(pyramidLevel);
+#else
+	throw_no_rgbd();
+#endif	
+}
+
+void cveLinemodDetectorGetModalities(cv::linemod::Detector* detector, std::vector< void* >* vectorOfPtrs)
+{
+#ifdef HAVE_OPENCV_RGBD
+	vectorOfPtrs->clear();
+	const std::vector< cv::Ptr< cv::linemod::Modality > > modalities = detector->getModalities();
+	for (auto it = modalities.begin(); it != modalities.end(); ++it)
+	{
+		cv::linemod::Modality* p = it->get();
+		vectorOfPtrs->push_back(p);
+	}
+#else
+	throw_no_rgbd();
+#endif	
 }
 
 void cveLinemodDetectorRelease(cv::Ptr<cv::linemod::Detector>** sharedPtr)

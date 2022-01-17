@@ -16,7 +16,9 @@ using Emgu.Util;
 
 namespace Emgu.CV.Linemod
 {
-
+    /// <summary>
+    /// Object detector using the LINE template matching algorithm with any set of modalities.
+    /// </summary>
     public abstract partial class Detector : SharedPtrObject
     {
         /// <summary>
@@ -62,6 +64,15 @@ namespace Emgu.CV.Linemod
             }
         }
 
+        /// <summary>
+        /// Detect objects by template matching. Matches globally at the lowest pyramid level, then refines locally stepping up the pyramid.
+        /// </summary>
+        /// <param name="sources">Source images, one for each modality.</param>
+        /// <param name="threshold">Similarity threshold, a percentage between 0 and 100.</param>
+        /// <param name="matches">Template matches, sorted by similarity score.</param>
+        /// <param name="classIds">If non-empty, only search for the desired object classes.</param>
+        /// <param name="quantizedImages">Optionally return vector&lt;Mat&gt; of quantized images.</param>
+        /// <param name="masks">The masks for consideration during matching. The masks should be CV_8UC1 where 255 represents a valid pixel. If non-empty, the vector must be the same size as sources. Each element must be empty or the same size as its corresponding source.</param>
         public void Match(
             VectorOfMat sources,
             float threshold,
@@ -101,6 +112,41 @@ namespace Emgu.CV.Linemod
         }
 
         /// <summary>
+        /// Get sampling step T at <paramref name="pyramidLevel"/>.
+        /// </summary>
+        /// <param name="pyramidLevel">The pyramid level</param>
+        /// <returns>Sampling step T</returns>
+        public int GetT(int pyramidLevel)
+        {
+            return LinemodInvoke.cveLinemodDetectorGetT(_ptr, pyramidLevel);
+        }
+
+        /// <summary>
+        /// Get the modalities used by this detector. You are not permitted to add/remove modalities, but you may cast them to tweak parameters.
+        /// </summary>
+        public Modality[] Modalities
+        {
+            get
+            {
+                if (_ptr == IntPtr.Zero)
+                    return null;
+                using (VectorOfIntPtr vp = new VectorOfIntPtr())
+                {
+                    LinemodInvoke.cveLinemodDetectorGetModalities(_ptr, vp);
+                    IntPtr[] vpArr = vp.ToArray();
+                    Modality[] results = new Modality[vpArr.Length];
+                    for (int i = 0; i < vpArr.Length; i++)
+                    {
+                        results[i] = new Modality(vpArr[i], false);
+                    }
+
+                    return results;
+                }
+            }
+
+        }
+
+        /// <summary>
         /// Release the unmanaged memory associated with this object
         /// </summary>
         protected override void DisposeObject()
@@ -113,8 +159,14 @@ namespace Emgu.CV.Linemod
         }
     }
 
+    /// <summary>
+    /// Detector using LINE algorithm with color gradients.
+    /// </summary>
     public class LineDetector : Detector
     {
+        /// <summary>
+        /// Create a detector using LINE algorithm with color gradients. Default parameter settings suitable for VGA images.
+        /// </summary>
         public LineDetector()
         {
             _ptr = LinemodInvoke.cveLinemodLineDetectorCreate(ref _sharedPtr);
@@ -122,8 +174,14 @@ namespace Emgu.CV.Linemod
 
     }
 
+    /// <summary>
+    /// Detector using LINE-MOD algorithm with color gradients and depth normals.
+    /// </summary>
     public class LinemodDetector : Detector
     {
+        /// <summary>
+        /// Create a detector using LINE-MOD algorithm with color gradients and depth normals. Default parameter settings suitable for VGA images.
+        /// </summary>
         public LinemodDetector()
         {
             _ptr = LinemodInvoke.cveLinemodLinemodDetectorCreate(ref _sharedPtr);
@@ -169,5 +227,10 @@ namespace Emgu.CV.Linemod
             IntPtr quantizedImages,
             IntPtr masks);
 
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveLinemodDetectorGetT(IntPtr detector, int pyramidLevel);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveLinemodDetectorGetModalities(IntPtr detector, IntPtr vectorOfPtrs);
     }
 }

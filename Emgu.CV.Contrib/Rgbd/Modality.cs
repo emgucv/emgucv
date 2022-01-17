@@ -16,8 +16,10 @@ using Emgu.Util;
 
 namespace Emgu.CV.Linemod
 {
-
-    public abstract partial class Modality : SharedPtrObject
+    /// <summary>
+    /// Interface for modalities that plug into the LINE template matching representation.
+    /// </summary>
+    public partial class Modality : SharedPtrObject
     {
         private bool _needDispose;
 
@@ -27,6 +29,10 @@ namespace Emgu.CV.Linemod
             _needDispose = needDispose;
         }
 
+        /// <summary>
+        /// Create modality by name.
+        /// </summary>
+        /// <param name="modalityType">The following modality types are supported: "ColorGradient", "DepthNormal"</param>
         public Modality(String modalityType)
 		{
             using (CvString csModalityType = new CvString(modalityType))
@@ -47,7 +53,9 @@ namespace Emgu.CV.Linemod
         }
     }
 
-
+    /// <summary>
+    /// Provide interfaces to the Open CV Linemod functions
+    /// </summary>
     public static partial class LinemodInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

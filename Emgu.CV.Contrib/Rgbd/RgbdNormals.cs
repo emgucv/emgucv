@@ -110,7 +110,10 @@ namespace Emgu.CV.Rgbd
             }
         }
     }
-    
+
+    /// <summary>
+    /// Provide interfaces to the Open CV Rgbd functions
+    /// </summary>
     public static partial class RgbdInvoke
     {
 

@@ -78,6 +78,11 @@ CVAPI(void) cveLinemodDetectorMatch(
 	std::vector< cv::String >* classIds,
 	cv::_OutputArray* quantizedImages,
 	std::vector< cv::Mat >* masks);
+
+CVAPI(int) cveLinemodDetectorGetT(cv::linemod::Detector* detector, int pyramidLevel);
+
+CVAPI(void) cveLinemodDetectorGetModalities(cv::linemod::Detector* detector, std::vector< void* >* vectorOfPtrs);
+
 CVAPI(void) cveLinemodDetectorRelease(cv::Ptr<cv::linemod::Detector>** sharedPtr);
 
 CVAPI(cv::linemod::Match*) cveLinemodMatchCreate();
