@@ -17,19 +17,34 @@ using Emgu.Util;
 namespace Emgu.CV.Linemod
 {
 
-    public abstract class Detector : SharedPtrObject
+    public abstract partial class Detector : SharedPtrObject
     {
-
+        /// <summary>
+        /// Read the detector from file node
+        /// </summary>
+        /// <param name="fn">The file node to read the detector from</param>
         public void Read(FileNode fn)
         {
             LinemodInvoke.cveLinemodDetectorRead(_ptr, fn);
         }
 
+        /// <summary>
+        /// Write the detector to file storage
+        /// </summary>
+        /// <param name="fs">The file storage to write the detector into.</param>
         public void Write(FileStorage fs)
         {
             LinemodInvoke.cveLinemodDetectorWrite(_ptr, fs);
         }
 
+        /// <summary>
+        /// Add new object template.
+        /// </summary>
+        /// <param name="sources">Source images, one for each modality.</param>
+        /// <param name="classId">Object class ID.</param>
+        /// <param name="objectMask">Mask separating object from background.</param>
+        /// <param name="boundingBox">Return bounding box of the extracted features.</param>
+        /// <returns>Template ID, or -1 if failed to extract a valid template.</returns>
         public int AddTemplate(
             VectorOfMat sources,
             String classId,
@@ -67,6 +82,21 @@ namespace Emgu.CV.Linemod
                     oaQuantizedImages,
                     masks
                     );
+            }
+        }
+
+        /// <summary>
+        /// Get class ids
+        /// </summary>
+        public String[] ClassIds
+        {
+            get
+            {
+                using (VectorOfCvString vcs = new VectorOfCvString())
+                {
+                    LinemodInvoke.cveLinemodDetectorGetClassIds(_ptr, vcs);
+                    return vcs.ToArray();
+                }
             }
         }
 
@@ -117,6 +147,9 @@ namespace Emgu.CV.Linemod
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveLinemodDetectorWrite(IntPtr detector, IntPtr fs);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveLinemodDetectorGetClassIds(IntPtr detector, IntPtr classIds);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern int cveLinemodDetectorAddTemplate(

@@ -168,6 +168,15 @@ int cveLinemodDetectorAddTemplate(
 
 }
 
+void cveLinemodDetectorGetClassIds(cv::linemod::Detector* detector, std::vector< cv::String >* classIds)
+{
+	std::vector< cv::String > ids = detector->classIds();
+	for (std::vector< cv::String >::iterator it = ids.begin(); it != ids.end(); ++it)
+	{
+		classIds->push_back(*it);
+	}
+}
+
 void cveLinemodDetectorMatch(
 	cv::linemod::Detector* detector,
 	std::vector< cv::Mat >* sources,

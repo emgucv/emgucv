@@ -69,7 +69,7 @@ CVAPI(int) cveLinemodDetectorAddTemplate(
 	cv::String* classId,
 	cv::Mat* objectMask, 
 	CvRect* boundingBox);
-
+CVAPI(void) cveLinemodDetectorGetClassIds(cv::linemod::Detector* detector, std::vector< cv::String >* classIds);
 CVAPI(void) cveLinemodDetectorMatch(
 	cv::linemod::Detector* detector, 
 	std::vector< cv::Mat >* sources, 

@@ -113,6 +113,8 @@ CREATE_VECTOR_CS("KeyLine" "cv::line_descriptor::KeyLine" "MKeyLine" "struct_not
 
 CREATE_VECTOR_CS("ColorPoint" "ColorPoint" "ColorPoint" "struct" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"videoio_c_extra.h\"" "" "defined(HAVE_OPENCV_VIDEOIO)")
 
+CREATE_VECTOR_CS("IntPtr" "void*" "IntPtr" "struct_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
+
 IF(EMGU_CV_WITH_TESSERACT)
   SET(EMGU_CV_WITH_TESSERACT_FLAG "1")
 ELSE()
@@ -139,7 +141,7 @@ CREATE_VECTOR_CS("GpuMat" "cv::cuda::GpuMat" "GpuMat" "object" "${CMAKE_CURRENT_
 CREATE_VECTOR_CS("VideoCapture" "cv::VideoCapture" "VideoCapture" "object_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"videoio_c_extra.h\"" "" "defined(HAVE_OPENCV_VIDEOIO)")
 CREATE_VECTOR_CS("VectorOfMat" "std::vector< cv::Mat >" "VectorOfMat" "object_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
 
-CREATE_VECTOR_CS("LinemodMatch" "cv::linemod::Match" "Emgu.CV.Linemod.Match" "object_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"rgbd_c.h\"" "" "defined(HAVE_OPENCV_RGBD)")
+CREATE_VECTOR_CS("LinemodMatch" "cv::linemod::Match" "Emgu.CV.Linemod.Match" "object_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Rgbd" Emgu.CV.Linemod "" "#include \"rgbd_c.h\"" "" "defined(HAVE_OPENCV_RGBD)")
 
 MACRO(WRITE_IF_DIFFERENT fname content)
   IF (EXISTS "${fname}")
@@ -2921,6 +2923,28 @@ ENDIF()
     "Emgu.CV.Linemod"
     "LinemodInvoke"
     "Match"
+	""
+	"#include \"rgbd_c.h\""
+	""
+	""
+	${HAVE_opencv_rgbd})
+
+  CREATE_OCV_CLASS_PROPERTY( 
+    "rgbd/detector_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Rgbd/Detector.g.cs"
+    "cv::linemod::Detector" 
+    "Detector" 
+    "pyramidLevels;numTemplates;numClasses" 
+    "int;int;int" 
+    "val;val;val"
+    "PyramidLevels;NumTemplates;NumClasses" 
+    "int;int;int"
+    "Get number of pyramid levels used by this detector.;
+    Get number of templates.;
+    Get number of classes."
+    "Emgu.CV.Linemod"
+    "LinemodInvoke"
+    "Detector"
 	""
 	"#include \"rgbd_c.h\""
 	""
