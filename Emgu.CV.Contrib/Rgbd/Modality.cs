@@ -1,0 +1,62 @@
+//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.       
+//----------------------------------------------------------------------------
+
+using System;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Runtime.InteropServices;
+using Emgu.CV;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Structure;
+using Emgu.CV.Util;
+using Emgu.Util;
+
+
+namespace Emgu.CV.Linemod
+{
+
+    public abstract partial class Modality : SharedPtrObject
+    {
+        private bool _needDispose;
+
+        internal Modality(IntPtr ptr, bool needDispose)
+        {
+            _ptr = ptr;
+            _needDispose = needDispose;
+        }
+
+        public Modality(String modalityType)
+		{
+            using (CvString csModalityType = new CvString(modalityType))
+                _ptr = LinemodInvoke.cveLinemodModalityCreate(csModalityType, ref _sharedPtr);
+		}
+
+        /// <summary>
+        /// Release the unmanaged memory associated with this object
+        /// </summary>
+        protected override void DisposeObject()
+        {
+            if (_needDispose && _sharedPtr != IntPtr.Zero)
+            {
+                LinemodInvoke.cveLinemodDetectorRelease(ref _sharedPtr);
+            }
+            _sharedPtr = IntPtr.Zero;
+            _ptr = IntPtr.Zero;
+        }
+    }
+
+
+    public static partial class LinemodInvoke
+    {
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveLinemodModalityCreate(IntPtr modalityType, ref IntPtr sharedPtr);
+
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveLinemodModalityRelease(ref IntPtr sharedPtr);
+
+
+    }
+}

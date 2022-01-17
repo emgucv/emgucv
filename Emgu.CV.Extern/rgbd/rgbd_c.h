@@ -82,4 +82,8 @@ CVAPI(void) cveLinemodDetectorRelease(cv::Ptr<cv::linemod::Detector>** sharedPtr
 
 CVAPI(cv::linemod::Match*) cveLinemodMatchCreate();
 CVAPI(void) cveLinemodMatchRelease(cv::linemod::Match** match);
+
+CVAPI(cv::linemod::Modality*) cveLinemodModalityCreate(cv::String* modalityType, cv::Ptr<cv::linemod::Modality>** sharedPtr);
+CVAPI(void) cveLinemodModalityRelease(cv::Ptr<cv::linemod::Modality>** sharedPtr);
+
 #endif
