@@ -1454,6 +1454,13 @@ void cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value)
 	value->push_back(0);
 #endif
 
+	key->push_back("HAVE_OPENCV_RGBD");
+#ifdef HAVE_OPENCV_RGBD
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
 	key->push_back("HAVE_EMGUCV_TESSERACT");
 #ifdef HAVE_EMGUCV_TESSERACT
 	value->push_back(1);
