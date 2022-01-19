@@ -1097,6 +1097,13 @@ void cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value)
 	key->clear();
 	value->clear();
 
+	key->push_back("HAVE_OPENCV_GAPI");
+#ifdef HAVE_OPENCV_GAPI
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
 	key->push_back("HAVE_OPENCV_ALPHAMAT");
 #ifdef HAVE_OPENCV_ALPHAMAT
 	value->push_back(1);
