@@ -26,12 +26,35 @@ namespace Emgu.CV.XamarinForms
     class OnYuvImageAvailableListener : Java.Lang.Object, ImageReader.IOnImageAvailableListener
     {
         private byte[] _data = null;
-        private Mat _bgrMat = new Mat();
+        private Mat _bgrMat = null;
         private Mat _rotatedMat = new Mat();
 
         //private YUV420Converter _yuv420Converter;
         //private Bitmap[] _bitmapSrcBuffer = new Bitmap[2];
         //private int _bitmapBufferIdx = 0;
+
+        private GComputation _gComputation = null;
+        public OnYuvImageAvailableListener()
+        {
+            var openCVConfigDict = CvInvoke.ConfigDict;
+            bool haveGapi = (openCVConfigDict["HAVE_OPENCV_GAPI"] != 0);
+
+            if (haveGapi)
+            {
+                using (GMat inYuvMat = new GMat())
+                using (GMat rgbMat = GapiInvoke.I4202BGR(inYuvMat))
+                    //The following two step will rotate the image 90 degrees
+                using (GMat transposeMat = GapiInvoke.Transpose(rgbMat))
+                using (GMat rotatedMat = GapiInvoke.Flip(transposeMat, FlipType.Horizontal))
+                {
+                    _gComputation = new GComputation(inYuvMat, rotatedMat);
+                }
+            }
+            else
+            {
+                _bgrMat = new Mat();
+            }
+        }
 
         public EventHandler<Mat> OnImageProcessed;
 
@@ -72,13 +95,18 @@ namespace Emgu.CV.XamarinForms
                        handle.AddrOfPinnedObject(),
                        image.Width))
             {
-                //CvInvoke.CvtColor(m, _bgrMat, ColorConversion.Yuv2BgrYv12);
-                CvInvoke.CvtColor(m, _bgrMat, ColorConversion.Yuv2RgbYv12);
-                //CvInvoke.CvtColor(m, _bgrMat, ColorConversion.Yuv2RgbNv12);
+                if (_gComputation != null)
+                {
+                    _gComputation.Apply(m, _rotatedMat);
+                }
+                else
+                {
+                    CvInvoke.CvtColor(m, _bgrMat, ColorConversion.Yuv2RgbYv12);
+                    //Rotate 90 degree by transpose and flip
+                    CvInvoke.Transpose(_bgrMat, _rotatedMat);
+                    CvInvoke.Flip(_rotatedMat, _rotatedMat, FlipType.Horizontal);
+                }
 
-                //Rotate 90 degree by transpose and flip
-                CvInvoke.Transpose(_bgrMat, _rotatedMat);
-                CvInvoke.Flip(_rotatedMat, _rotatedMat, FlipType.Horizontal);
             }
             handle.Free();
 
