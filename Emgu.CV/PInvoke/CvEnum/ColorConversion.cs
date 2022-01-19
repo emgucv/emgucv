@@ -236,6 +236,7 @@ namespace Emgu.CV.CvEnum
         ///Convert Bayer GR color to BGR color
         ///</summary>
         BayerGr2Bgr = 49,
+
         /// <summary>
         /// Convert Bayer BG color to BGR color
         /// </summary>
@@ -252,7 +253,7 @@ namespace Emgu.CV.CvEnum
         /// Convert Bayer GR color to RGB color
         /// </summary>
         BayerGr2Rgb = BayerGb2Bgr,
-
+        
         /// <summary>
         /// Convert Bayer RGGB color to BGR color
         /// </summary>
@@ -524,35 +525,53 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Convert YUV420i to RGB
         /// </summary>
-        Yuv420I2Rgb = 90,
+        Yuv2RgbNv12 = 90,
         /// <summary>
         /// Convert YUV420i to BGR
         /// </summary>
-        Yuv420I2Bgr = 91,
+        Yuv2BgrNv12 = 91,
+        /// <summary>
+        /// Convert YUV NV21 to RGB
+        /// </summary>
+        Yuv2RgbNv21 = 92,
+        /// <summary>
+        /// Convert YUV NV21 to BGR
+        /// </summary>
+        Yuv2BgrNv21 = 93,
         /// <summary>
         /// Convert YUV420sp to RGB
         /// </summary>
-        Yuv420Sp2Rgb = 92,
+        Yuv420sp2Rgb = Yuv2RgbNv21,
         /// <summary>
-        /// Convert YUV320sp to BGR
+        /// Convert YUV420sp to BGR
         /// </summary>
-        Yuv420Sp2Bgr = 93,
+        Yuv420sp2Bgr = Yuv2BgrNv21,
+
+
         /// <summary>
-        /// Convert YUV320i to RGBA
+        /// Convert YUV NV12 to RGBA
         /// </summary>
-        Yuv420I2Rgba = 94,
+        Yuv2RgbaNv12 = 94,
         /// <summary>
-        /// Convert YUV420i to BGRA
+        /// Convert YUV NV12 to BGRA
         /// </summary>
-        Yuv420I2Bgra = 95,
+        Yuv2BgraNv12 = 95,
         /// <summary>
-        /// Convert YUV420sp to RGBA
+        /// Convert YUV NV21 to RGBA
         /// </summary>
-        Yuv420Sp2Rgba = 96,
+        Yuv2RgbaNv21 = 96,
         /// <summary>
-        /// Convert YUV420sp to BGRA
+        /// Convert YUV NV12 to BGRA
         /// </summary>
-        Yuv420Sp2Bgra = 97,
+        Yuv2BgraNv21 = 97,
+        /// <summary>
+        /// Convert Yuv420sp to RGBA
+        /// </summary>
+        Yuv420sp2Rgba = Yuv2RgbaNv21,
+        /// <summary>
+        /// Convert Yuv420sp to BGRA
+        /// </summary>
+        Yuv420sp2Bgra = Yuv2BgraNv21,
 
         /// <summary>
         /// Convert YUV (YV12) to RGB
