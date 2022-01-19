@@ -18,8 +18,10 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 
+/*
 namespace Emgu.CV.XamarinForms
 {
+    
     public class YUV420Converter : Emgu.Util.DisposableObject
     {
         private RenderScript rs;
@@ -106,5 +108,5 @@ namespace Emgu.CV.XamarinForms
         }
     }
 }
-
+*/
 #endif

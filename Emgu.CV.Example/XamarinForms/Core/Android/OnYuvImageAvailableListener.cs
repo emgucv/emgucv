@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 using Android.App;
@@ -28,9 +29,9 @@ namespace Emgu.CV.XamarinForms
         private Mat _bgrMat = new Mat();
         private Mat _rotatedMat = new Mat();
 
-        private YUV420Converter _yuv420Converter;
-        private Bitmap[] _bitmapSrcBuffer = new Bitmap[2];
-        private int _bitmapBufferIdx = 0;
+        //private YUV420Converter _yuv420Converter;
+        //private Bitmap[] _bitmapSrcBuffer = new Bitmap[2];
+        //private int _bitmapBufferIdx = 0;
 
         public EventHandler<Mat> OnImageProcessed;
 
@@ -52,6 +53,7 @@ namespace Emgu.CV.XamarinForms
             {
                 _data = new byte[totalLength];
             }
+            
             int offset = 0;
             for (int i = 0; i < planes.Length; i++)
             {
@@ -62,6 +64,25 @@ namespace Emgu.CV.XamarinForms
                 offset += length;
             }
 
+            GCHandle handle = GCHandle.Alloc(_data, GCHandleType.Pinned);
+            using (Mat m = new Mat(
+                       new System.Drawing.Size(image.Width, image.Height + image.Height / 2), 
+                       DepthType.Cv8U,
+                       1, 
+                       handle.AddrOfPinnedObject(),
+                       image.Width))
+            {
+                //CvInvoke.CvtColor(m, _bgrMat, ColorConversion.Yuv2BgrYv12);
+                CvInvoke.CvtColor(m, _bgrMat, ColorConversion.Yuv2RgbYv12);
+                //CvInvoke.CvtColor(m, _bgrMat, ColorConversion.Yuv2RgbNv12);
+
+                //Rotate 90 degree by transpose and flip
+                CvInvoke.Transpose(_bgrMat, _rotatedMat);
+                CvInvoke.Flip(_rotatedMat, _rotatedMat, FlipType.Horizontal);
+            }
+            handle.Free();
+
+            /*
             if (_yuv420Converter == null)
                 _yuv420Converter = new YUV420Converter(Android.App.Application.Context);
 
@@ -85,14 +106,14 @@ namespace Emgu.CV.XamarinForms
 
                 //apply a simple invert filter
                 //CvInvoke.BitwiseNot(_rotatedMat, _rotatedMat);
-            }
+            }*/
 
             if (OnImageProcessed != null)
             {
                 OnImageProcessed(reader, _rotatedMat);
             }
 
-            _bitmapBufferIdx = (_bitmapBufferIdx + 1) % _bitmapSrcBuffer.Length;
+            //_bitmapBufferIdx = (_bitmapBufferIdx + 1) % _bitmapSrcBuffer.Length;
 
 
             image.Close();
