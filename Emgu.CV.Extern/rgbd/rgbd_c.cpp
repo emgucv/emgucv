@@ -7,9 +7,9 @@
 #include "rgbd_c.h"
 
 cv::rgbd::Odometry* cveOdometryCreate(
-    cv::String* odometryType,
-    cv::Algorithm** algorithm,
-    cv::Ptr<cv::rgbd::Odometry>** sharedPtr
+	cv::String* odometryType,
+	cv::Algorithm** algorithm,
+	cv::Ptr<cv::rgbd::Odometry>** sharedPtr
 )
 {
 #ifdef HAVE_OPENCV_RGBD
@@ -72,9 +72,9 @@ cv::rgbd::RgbdNormals* cveRgbdNormalsCreate(
 	cv::Ptr<cv::rgbd::RgbdNormals> odometry = cv::rgbd::RgbdNormals::create(
 		rows,
 		cols,
-		depth, 
-		*K, 
-		window_size, 
+		depth,
+		*K,
+		window_size,
 		method);
 	*sharedPtr = new cv::Ptr<cv::rgbd::RgbdNormals>(odometry);
 	*algorithm = dynamic_cast<cv::Algorithm*>((*sharedPtr)->get());
@@ -252,6 +252,26 @@ void cveLinemodMatchRelease(cv::linemod::Match** match)
 #ifdef HAVE_OPENCV_RGBD
 	delete* match;
 	*match = 0;
+#else
+	throw_no_rgbd();
+#endif	
+
+}
+
+cv::linemod::Modality* cveLinemodModalityCreate(cv::String* modalityType, cv::Ptr<cv::linemod::Modality>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_RGBD
+	//TODO: Implement this.
+#else
+	throw_no_rgbd();
+#endif	
+
+}
+void cveLinemodModalityRelease(cv::Ptr<cv::linemod::Modality>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_RGBD
+	delete* sharedPtr;
+	*sharedPtr = 0;
 #else
 	throw_no_rgbd();
 #endif	

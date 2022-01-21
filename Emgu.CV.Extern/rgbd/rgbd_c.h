@@ -21,6 +21,13 @@ namespace cv
 		class Odometry {};
 		class RgbdNormals {};
 	}
+
+	namespace linemod
+	{
+		class Detector {};
+		class Modality {};
+		struct Match {};
+	}
 }
 
 #endif
