@@ -261,7 +261,9 @@ void cveLinemodMatchRelease(cv::linemod::Match** match)
 cv::linemod::Modality* cveLinemodModalityCreate(cv::String* modalityType, cv::Ptr<cv::linemod::Modality>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_RGBD
-	//TODO: Implement this.
+	cv::Ptr<cv::linemod::Modality> modality = cv::linemod::Modality::create(*modalityType);
+	*sharedPtr = new cv::Ptr<cv::linemod::Modality>(modality);
+	return (*sharedPtr)->get();
 #else
 	throw_no_rgbd();
 #endif	
