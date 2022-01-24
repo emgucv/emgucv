@@ -264,7 +264,7 @@ int main()
 	cout << "Size of CvSize (expected " << sizeof(int) * 2 << "): " << sizeof(CvSize) << std::endl;
 	cout << "Size of CvPoint2D32f (expected " << sizeof(float) * 2 << "): " << sizeof(CvPoint2D32f) << std::endl;
 	cout << "Size of CvRect (expected " << sizeof(int) * 4 << "): " << sizeof(CvRect) << std::endl;
-	cout << "Size of IplImage (expected 144):" << sizeof(IplImage) << std::endl;
+	cout << "Size of IplImage: " << sizeof(IplImage) << std::endl;
 	cout << "Size of CvScalar (expected " << sizeof(double) * 4 << "): " << sizeof(CvScalar) << std::endl;
 
 	Test_vectorOfPoint_to_mat();
