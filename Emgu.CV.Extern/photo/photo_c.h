@@ -40,7 +40,7 @@ CVAPI(void) cveFastNlMeansDenoising(cv::_InputArray* src, cv::_OutputArray* dst,
 
 CVAPI(void) cveFastNlMeansDenoisingColored(cv::_InputArray* src, cv::_OutputArray* dst, float h, float hColor, int templateWindowSize, int searchWindowSize);
 
-CVAPI(void) cudaNonLocalMeans(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, float h, int searchWindow, int blockSize, int borderMode, cv::cuda::Stream* stream);
+//CVAPI(void) cudaNonLocalMeans(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, float h, int searchWindow, int blockSize, int borderMode, cv::cuda::Stream* stream);
 
 CVAPI(void) cveEdgePreservingFilter(cv::_InputArray* src, cv::_OutputArray* dst, int flags, float sigmaS, float sigmaR);
 
@@ -105,4 +105,31 @@ CVAPI(void) cveAlignExposuresProcess(cv::AlignExposures* alignExposures, cv::_In
 
 CVAPI(cv::AlignMTB*) cveAlignMTBCreate(int maxBits, int excludeRange, bool cut, cv::AlignExposures** alignExposures, cv::Ptr<cv::AlignMTB>** sharedPtr);
 CVAPI(void) cveAlignMTBRelease(cv::AlignMTB** alignExposures, cv::Ptr<cv::AlignMTB>** sharedPtr);
+
+//cuda photo module
+CVAPI(void) cudaNonLocalMeans(
+	cv::_InputArray* src, 
+	cv::_OutputArray* dst,
+	float h,
+	int searchWindow,
+	int blockSize,
+	int borderMode,
+	cv::cuda::Stream* stream);
+
+CVAPI(void) cudaFastNlMeansDenoising(
+	cv::_InputArray* src, 
+	cv::_OutputArray* dst,
+	float h,
+	int searchWindow,
+	int blockSize,
+	cv::cuda::Stream* stream);
+
+CVAPI(void) cudaFastNlMeansDenoisingColored(
+	cv::_InputArray* src, 
+	cv::_OutputArray* dst,
+	float hLuminance, 
+	float photoRender,
+	int searchWindow,
+	int blockSize,
+	cv::cuda::Stream* stream);
 #endif

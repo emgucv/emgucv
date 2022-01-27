@@ -32,6 +32,7 @@ void cveFastNlMeansDenoisingColored(cv::_InputArray* src, cv::_OutputArray* dst,
 #endif
 }
 
+/*
 void cudaNonLocalMeans(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, float h, int searchWindow, int blockSize, int borderMode, cv::cuda::Stream* stream)
 {
 #ifdef HAVE_OPENCV_PHOTO
@@ -40,6 +41,7 @@ void cudaNonLocalMeans(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, float
 	throw_no_photo();
 #endif
 }
+*/
 
 void cveEdgePreservingFilter(cv::_InputArray* src, cv::_OutputArray* dst, int flags, float sigmaS, float sigmaR)
 {
@@ -391,6 +393,54 @@ void cveAlignMTBRelease(cv::AlignMTB** alignExposures, cv::Ptr<cv::AlignMTB>** s
 	delete *sharedPtr;
 	*alignExposures = 0;
 	*sharedPtr = 0;
+#else
+	throw_no_photo();
+#endif
+}
+
+//cuda photo module
+void cudaNonLocalMeans(
+	cv::_InputArray* src,
+	cv::_OutputArray* dst,
+	float h,
+	int searchWindow,
+	int blockSize,
+	int borderMode,
+	cv::cuda::Stream* stream)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	cv::cuda::nonLocalMeans(*src, *dst, h, searchWindow, blockSize, borderMode, stream ? *stream : cv::cuda::Stream::Null());
+#else
+	throw_no_photo();
+#endif
+}
+
+void cudaFastNlMeansDenoising(
+	cv::_InputArray* src,
+	cv::_OutputArray* dst,
+	float h,
+	int searchWindow,
+	int blockSize,
+	cv::cuda::Stream* stream)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	cv::cuda::fastNlMeansDenoising(*src, *dst, h, searchWindow, blockSize, stream ? *stream : cv::cuda::Stream::Null());
+#else
+	throw_no_photo();
+#endif
+}
+
+void cudaFastNlMeansDenoisingColored(
+	cv::_InputArray* src,
+	cv::_OutputArray* dst,
+	float hLuminance,
+	float photoRender,
+	int searchWindow,
+	int blockSize,
+	cv::cuda::Stream* stream)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	cv::cuda::fastNlMeansDenoisingColored(*src, *dst, hLuminance, photoRender, searchWindow, blockSize, stream ? *stream : cv::cuda::Stream::Null());
 #else
 	throw_no_photo();
 #endif

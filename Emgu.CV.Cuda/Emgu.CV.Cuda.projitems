@@ -8,8 +8,8 @@
   <PropertyGroup Label="Configuration">
     <Import_RootNamespace>Emgu.CV.Cuda</Import_RootNamespace>
   </PropertyGroup>
- <ItemGroup>
-     <Compile Include="$(MSBuildThisFileDirectory)*.cs" />
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Bgsegm\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Filters\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Imgproc\*.cs" />
@@ -17,8 +17,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Features2d\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stereo\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Objdetect\*.cs" />
-	<!-- Excluding the CUDA codec module, it is only compatible with cuda 6.5 and older -->
-	<Compile Include="$(MSBuildThisFileDirectory)Codec\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Legacy\*.cs" />
+    <!-- Excluding the CUDA codec module, it is only compatible with cuda 6.5 and older -->
+    <Compile Include="$(MSBuildThisFileDirectory)Codec\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Legacy\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Photo\*.cs" />
   </ItemGroup>
 </Project>
