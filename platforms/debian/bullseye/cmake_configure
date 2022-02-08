@@ -4,7 +4,9 @@ cd "$(dirname "$0")"
 
 mkdir -p build
 
+CURRENT_FOLDER=$PWD
 INSTALL_FOLDER=$PWD/build/install
+TOP_FOLDER=$PWD/../../../
 
 BUILD_TYPE=full
 if [[ $# -gt 0 ]]; then
@@ -15,16 +17,15 @@ fi
 
 EMGUCV_CMAKE_SHARED_OPTIONS=( -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DCMAKE_CXX_STANDARD:String="11" )
 
-cd ../..
+cd $TOP_FOLDER
 
 cd eigen
 mkdir -p build
 cd build
 cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} ..
 cmake --build . --config Release --parallel 1 --target install
-cd ../..
 
-
+cd $TOP_FOLDER
 if [ "$BUILD_TYPE" == "core" ]; then
     echo "Performing core build"
     EMGU_CV_TESSERACT_OPTION=( -DEMGU_CV_WITH_TESSERACT:BOOL=FALSE )
@@ -53,12 +54,11 @@ else
     VTK_OPTION=( -DVTK_DIR:String="$PWD" )
     cd ../..
     
-    CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules
+    CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=$TOP_FOLDER/opencv_contrib/modules
 fi
 
 
-cd platforms/raspberry_pi_os
-cd build
+cd $CURRENT_FOLDER
 cmake\
       ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} \
       -DBUILD_TESTS:BOOL=FALSE \
@@ -75,16 +75,16 @@ cmake\
       ${EMGU_CV_TESSERACT_OPTION[@]} \
       $TESSERACT_OPTION \
       -DWITH_EIGEN:BOOL=TRUE \
-      -DEigen3_DIR:String="$PWD/../../../eigen/build" \
+      -DEigen3_DIR:String="$TOP_FOLDER/eigen/build" \
       -DBUILD_TIFF:BOOL=TRUE \
       -DBUILD_PNG:BOOL=TRUE \
       -DBUILD_JPEG:BOOL=TRUE \
       -DBUILD_OPENEXR:BOOL=TRUE \
       -DBUILD_opencv_python2:BOOL=FALSE \
       -DBUILD_opencv_python3:BOOL=FALSE \
-      ../../..
+      $TOP_FOLDER
 
-C_INCLUDE_PATH=$PWD/../../../eigen/:$INSTALL_FOLDER/include/vtk-8.2 CPLUS_INCLUDE_PATH=$PWD/../../../eigen/:$INSTALL_FOLDER/include/vtk-8.2 cmake --build . --config Release --parallel 1 --target package
+C_INCLUDE_PATH=$TOP_FOLDER/eigen/:$INSTALL_FOLDER/include/vtk-8.2 CPLUS_INCLUDE_PATH=$TOP_FOLDER/eigen/:$INSTALL_FOLDER/include/vtk-8.2 cmake --build . --config Release --parallel 1 --target package
 #make
 cd ..
 
