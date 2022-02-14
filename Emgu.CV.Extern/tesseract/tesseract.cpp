@@ -169,25 +169,33 @@ void cveTessBaseAPIExtractResult(EmguTesseract* ocr, std::vector<char>* charSeq,
 		return;
 	
 	results->Begin();
-
+	
 	int x0, y0, x1, y1;
-	do
-	{
-		TesseractResult tr;
-		tr.confident = results->Confidence(tesseract::RIL_WORD);
-		results->BoundingBox(tesseract::RIL_WORD, &x0, &y0, &x1, &y1);
-		tr.region.x = x0;
-		//tr.region.y = height - y1;
-		tr.region.y = y0;
-		tr.region.width = x1 - x0;
-		tr.region.height = y1 - y0;
-		char* t = results->GetUTF8Text(tesseract::RIL_WORD);
-		tr.length = strlen(t);
-		for (int i = 0; i < tr.length; i++)
-			charSeq->push_back(*(t + i));
-		delete[] t;
-		resultSeq->push_back(tr);
-	} while (results->Next(tesseract::RIL_WORD));
+
+	do {
+		if (results->Empty(tesseract::RIL_PARA)) {
+			continue;
+		}
+		do
+		{
+			TesseractResult tr;
+			tr.confident = results->Confidence(tesseract::RIL_WORD);
+			results->BoundingBox(tesseract::RIL_WORD, &x0, &y0, &x1, &y1);
+			tr.region.x = x0;
+			//tr.region.y = height - y1;
+			tr.region.y = y0;
+			tr.region.width = x1 - x0;
+			tr.region.height = y1 - y0;
+			char* t = results->GetUTF8Text(tesseract::RIL_WORD);
+			tr.length = strlen(t);
+			for (int i = 0; i < tr.length; i++)
+				charSeq->push_back(*(t + i));
+			delete[] t;
+			resultSeq->push_back(tr);
+		} while (results->Next(tesseract::RIL_WORD));
+	} while (results->Next(tesseract::RIL_PARA));
+
+
 	delete results;
 #else
 	throw_no_tesseract();
