@@ -152,7 +152,7 @@ namespace Emgu.CV.Models
 #else
             await 
 #endif
-                InitTesseract("eng", OcrEngineMode.TesseractOnly, onDownloadProgressChanged);
+                InitTesseract("eng", OcrEngineMode.TesseractLstmCombined, onDownloadProgressChanged);
         }
 
     }
