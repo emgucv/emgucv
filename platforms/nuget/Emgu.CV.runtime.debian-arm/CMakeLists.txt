@@ -2,9 +2,9 @@
 #  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(IS_RASPBIAN OR HAVE_LINUX_ARM)
+IF(HAVE_LINUX_ARM)
 
-  PROJECT(Emgu.CV.runtime.linux-arm.nuget)
+  PROJECT(Emgu.CV.runtime.debian-arm.nuget)
 
   get_filename_component(NUGET_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
 
@@ -17,7 +17,7 @@ IF(IS_RASPBIAN OR HAVE_LINUX_ARM)
 	) 
 
   IF (EMGU_NUGET_SIGN_FOUND)
-    EMGU_SIGN_NUGET(${PROJECT_NAME} "${NUGET_OUTPUT_DIR}/${EMGUCV_RASPBERRY_PI_NUGET_ID}.${CPACK_PACKAGE_VERSION}.nupkg")
+    EMGU_SIGN_NUGET(${PROJECT_NAME} "${NUGET_OUTPUT_DIR}/${EMGUCV_DEBIAN_ARM_NUGET_ID}.${CPACK_PACKAGE_VERSION}.nupkg")
   ENDIF()
 
   ADD_DEPENDENCIES(${PROJECT_NAME} cvextern)
