@@ -45,11 +45,11 @@ namespace Emgu.CV.Ccm
         public enum CcmType
         {
             /// <summary>
-            /// The CCM with the shape 3×3 performs linear transformation on color values.
+            /// The CCM with the shape 3x3 performs linear transformation on color values.
             /// </summary>
             Ccm3x3,
             /// <summary>
-            /// The CCM with the shape 4×3 performs affine transformation.
+            /// The CCM with the shape 4x3 performs affine transformation.
             /// </summary>
             Ccm4x3
         }

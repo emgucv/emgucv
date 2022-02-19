@@ -26,7 +26,6 @@ namespace Emgu.CV.Mcc
         /// <param name="cchecker">The checker which will be drawn by this object.</param>
         /// <param name="color">The color by with which the squares of the checker will be drawn</param>
         /// <param name="thickness">The thickness with which the squares will be drawn</param>
-
         public CCheckerDraw(CChecker cchecker, MCvScalar color, int thickness = 2)
         {
             _ptr = MccInvoke.cveCCheckerDrawCreate(cchecker, ref color, thickness, ref _sharedPtr);
@@ -35,7 +34,7 @@ namespace Emgu.CV.Mcc
         /// <summary>
         /// Draws the checker to the given image.
         /// </summary>
-        /// <param name="img">mage in color space BGR</param>
+        /// <param name="img">image in color space BGR</param>
         public void Draw(IInputOutputArray img)
         {
             using (InputOutputArray ioaImg = img.GetInputOutputArray())
