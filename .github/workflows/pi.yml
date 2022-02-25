@@ -1,4 +1,4 @@
-name: Raspberry Pi build
+name: Debian ARM build
 
 on:
   push:
@@ -18,13 +18,13 @@ jobs:
     - uses: actions/checkout@v2
     - name: Check out submodules
       run: git submodule update --init --recursive
-    - name: Build Emgu CV native binary
+    - name: Build Emgu CV form debian ARM
       run: ./cmake_configure
-      working-directory: ${{ github.workspace }}/platforms/raspberry_pi_os
-    - name: Build Emgu CV package binary
-      run: make package
-      working-directory: ${{ github.workspace }}/platforms/raspberry_pi_os/build/
+      working-directory: ${{ github.workspace }}/platforms/debian/bullseye
+    #- name: Build Emgu CV package binary
+    #  run: make package
+    #  working-directory: ${{ github.workspace }}/platforms/raspberry_pi_os/build/
     - uses: actions/upload-artifact@v2
       with:
-        name: emgucv-raspberry-pi-zip-package
-        path: ${{ github.workspace }}/platforms/raspberry_pi_os/build/*.zip
+        name: emgucv-debian-arm-zip-package
+        path: ${{ github.workspace }}/platforms/debian/bullseye/build/*.zip
