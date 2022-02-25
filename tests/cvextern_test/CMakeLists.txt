@@ -98,13 +98,13 @@ FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAME_CANDIDATES})
   IF (HAVE_opencv_${CVEXTERN_OPTIONAL_DEP})
     IF ( (DEFINED opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR) AND (EXISTS ${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include) )
       INCLUDE_DIRECTORIES("${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
-      MESSAGE(STATUS "Include directory for cvextern:  ${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
+      MESSAGE(STATUS "Include directory for cvextern_test:  ${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
     ELSEIF (EXISTS "${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
       INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
-      MESSAGE(STATUS "Include directory for cvextern:  ${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
+      MESSAGE(STATUS "Include directory for cvextern_test:  ${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
     ELSEIF (EXISTS "${OPENCV_EXTRA_MODULES_PATH}/${CVEXTERN_OPTIONAL_DEP}/include")
       INCLUDE_DIRECTORIES("${OPENCV_EXTRA_MODULES_PATH}/${CVEXTERN_OPTIONAL_DEP}/include")
-      MESSAGE(STATUS "Include directory for cvextern:  ${OPENCV_EXTRA_MODULES_PATH}/${CVEXTERN_OPTIONAL_DEP}/include")
+      MESSAGE(STATUS "Include directory for cvextern_test:  ${OPENCV_EXTRA_MODULES_PATH}/${CVEXTERN_OPTIONAL_DEP}/include")
     ENDIF()
   ENDIF()
 ENDFOREACH()
@@ -116,11 +116,9 @@ FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES})
   target_link_libraries(${the_target} opencv_${CVEXTERN_OPTIONAL_DEP})
 ENDFOREACH()
 
-ADD_DEPENDENCIES(${the_target} 
-  cvextern 
-#  ${ZLIB_LIBRARY} 
-#  ${TIFF_LIBRARY} ${GEOTIFF_LIBRARY}
-)
+#ADD_DEPENDENCIES(${the_target} 
+#  cvextern 
+#)
 
 IF(EMGU_ENABLE_SSE)
   ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
@@ -134,16 +132,33 @@ ENDIF()
 
 # Add the required libraries for linking:
 target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
-  cvextern 
+  #cvextern 
   #opencv_core opencv_calib3d opencv_features2d opencv_highgui opencv_imgproc opencv_ml opencv_objdetect 
 #  ${ZLIB_LIBRARY} 
 #  ${TIFF_LIBRARY} 
 #  ${GEOTIFF_LIBRARY}
 )
 
-IF(IS_RASPBIAN)
+IF(IS_DEBIAN_ARM_BUILD)
   target_link_libraries(${the_target} atomic)
 ENDIF()
+
+#IF(IS_DEBIAN_ARM64_BUILD)
+#  MESSAGE(STATUS "----------------------------- DISABLE NEON on arm64 debian build ---------------------------")
+#  ADD_DEFINITIONS(-DPNG_ARM_NEON_OPT=0)
+#ENDIF()
+
+if(WITH_PNG AND BUILD_PNG)
+  target_link_libraries(${the_target} libpng)
+endif()
+
+if(WITH_TIFF AND BUILD_TIFF)
+  target_link_libraries(${the_target} libtiff)
+endif()
+
+if(WITH_JPEG AND BUILD_JPEG)
+  target_link_libraries(${the_target} libjpeg-turbo)
+  endif()
 
 IF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
   set_target_properties(${the_target} PROPERTIES SUFFIX ".html")

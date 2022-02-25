@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/bin/bash -v
 
 cd "$(dirname "$0")"
-
-mkdir -p build
 
 CURRENT_FOLDER=$PWD
 INSTALL_FOLDER=$PWD/build/install
 TOP_FOLDER=$PWD/../../../
+
+mkdir -p $INSTALL_FOLDER
 
 BUILD_TYPE=full
 if [[ $# -gt 0 ]]; then
@@ -59,6 +59,7 @@ fi
 
 
 cd $CURRENT_FOLDER
+cd build
 cmake\
       ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} \
       -DBUILD_TESTS:BOOL=FALSE \
@@ -83,6 +84,14 @@ cmake\
       -DBUILD_opencv_python2:BOOL=FALSE \
       -DBUILD_opencv_python3:BOOL=FALSE \
       $TOP_FOLDER
+
+#      -DCMAKE_CXX_FLAGS="-DPNG_ARM_NEON_OPT=0 " \
+#      -DCMAKE_C_FLAGS="-DPNG_ARM_NEON_OPT=0 " \
+#      -DCMAKE_CXX_FLAGS_DEBUG="-DPNG_ARM_NEON_OPT=0 " \
+#      -DCMAKE_C_FLAGS_DEBUG="-DPNG_ARM_NEON_OPT=0 " \
+#      -DCMAKE_CXX_FLAGS_RELEASE="-DPNG_ARM_NEON_OPT=0 " \
+#      -DCMAKE_C_FLAGS_RELEASE="-DPNG_ARM_NEON_OPT=0 " \
+
 
 C_INCLUDE_PATH=$TOP_FOLDER/eigen/:$INSTALL_FOLDER/include/vtk-8.2 CPLUS_INCLUDE_PATH=$TOP_FOLDER/eigen/:$INSTALL_FOLDER/include/vtk-8.2 cmake --build . --config Release --parallel 1 --target package
 #make
