@@ -563,7 +563,8 @@ namespace Emgu.Util
                 handler = LoadLibraryExWindows(dllname, 0);
             }
 
-            if (handler == IntPtr.Zero)
+            // LoadPackagedLibrary() is supported from Windows 8 (6.2) onwards
+            if (handler == IntPtr.Zero && Environment.OSVersion.Version >= new Version(6, 2))
             {
                 //Also try loadPackagedLibrary
                 IntPtr packagedLibraryHandler = LoadPackagedLibrary(dllname, 0);
