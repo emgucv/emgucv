@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31717.71
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32126.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Test.NetFramework", "..\..\Emgu.CV.Test\Emgu.CV.Test.NetFramework.csproj", "{68EE22E9-3C65-4DFE-9BD9-37A1DE925A4D}"
 EndProject
@@ -42,8 +42,8 @@ Global
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
 		..\..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.projitems*{90e78bbf-c7fe-4d8e-ade1-75448e866fdb}*SharedItemsImports = 4
+		..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.projitems*{98073c87-70af-4485-8c64-8c499d28c03b}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{98073c87-70af-4485-8c64-8c499d28c03b}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\Raspbian\Emgu.CV.Runtime.Raspbian.projitems*{98073c87-70af-4485-8c64-8c499d28c03b}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{98073c87-70af-4485-8c64-8c499d28c03b}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{98073c87-70af-4485-8c64-8c499d28c03b}*SharedItemsImports = 5
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
