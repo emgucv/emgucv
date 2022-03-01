@@ -149,6 +149,25 @@ void cveFaceRecognizerPredict(cv::face::FaceRecognizer* recognizer, cv::_InputAr
 #endif
 }
 
+void cveFaceRecognizerSetLabelInfo(cv::face::FaceRecognizer* recognizer, int label, cv::String* strInfo)
+{
+#ifdef HAVE_OPENCV_FACE
+	recognizer->setLabelInfo(label, *strInfo);
+#else
+	throw_no_face();
+#endif	
+}
+void cveFaceRecognizerGetLabelInfo(cv::face::FaceRecognizer* recognizer, int label, cv::String* strInfo)
+{
+#ifdef HAVE_OPENCV_FACE
+	cv::String str = recognizer->getLabelInfo(label);
+	*strInfo = str;
+#else
+	throw_no_face();
+#endif		
+}
+
+
 cv::face::BIF* cveBIFCreate(int numBands, int numRotations, cv::Ptr<cv::face::BIF>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_FACE
