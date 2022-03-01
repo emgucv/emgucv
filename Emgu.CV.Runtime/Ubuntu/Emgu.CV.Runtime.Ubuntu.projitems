@@ -9,27 +9,31 @@
     <Import_RootNamespace>Emgu.CV</Import_RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
-    <EmguCVUbuntuBinaryDir>$(MSBuildThisFileDirectory)..\..\libs</EmguCVUbuntuBinaryDir>
+    <EmguCVUbuntuBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</EmguCVUbuntuBinaryDir>
     <EmguCVUbuntuDir>$(MSBuildThisFileDirectory)</EmguCVUbuntuDir>
+	<EmguCVUbuntuX86NativeRuntimeFolder>runtimes\ubuntu-x86\native</EmguCVUbuntuX86NativeRuntimeFolder>
+	<EmguCVUbuntuX64NativeRuntimeFolder>runtimes\ubuntu-x64\native</EmguCVUbuntuX64NativeRuntimeFolder>
   </PropertyGroup>
   <PropertyGroup>
     <EmguCVUbuntuLinkTarget>Ubuntu</EmguCVUbuntuLinkTarget>
     <EmguCVUbuntuBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguCVUbuntuBuildX64>
-    <EmguCVUbuntuNativeFileX64>$(EmguCVUbuntuBinaryDir)\x64\libcvextern.so</EmguCVUbuntuNativeFileX64>
-    <EmguCVUbuntuErrorMessage Condition="'$(EmguCVUbuntuBuildX64)'=='True' AND !Exists('$(EmguCVUbuntuNativeFileX64)')">This package do not contain necessary binary for $(EmguCVUbuntuLinkTarget). Ubuntu x64 is targeted, but file $(EmguCVUbuntuNativeFileX64) is missing. PInvoke may fail on Ubuntu x64 platforms</EmguCVUbuntuErrorMessage>
-    <EmguCVUbuntuDeployMessage Condition="'$(EmguCVUbuntuBuildX64)'=='True' AND Exists('$(EmguCVUbuntuNativeFileX64)')">$(EmguCVUbuntuDeployMessage)ubuntu_x64 </EmguCVUbuntuDeployMessage>
+    <EmguCVUbuntuNativeFileX64>$(EmguCVUbuntuBinaryDir)\$(EmguCVUbuntuX64NativeRuntimeFolder)\libcvextern.so</EmguCVUbuntuNativeFileX64>
+    <EmguCVUbuntuErrorMessage Condition="'$(EmguCVUbuntuBuildX64)'=='True' AND !Exists('$(EmguCVUbuntuNativeFileX64)')">This package do not contain necessary binary for $(EmguCVUbuntuLinkTarget). Ubuntu x64 is targeted, but file $(EmguCVUbuntuNativeFileX64) is missing. PInvoke may fail on Ubuntu x64 platform</EmguCVUbuntuErrorMessage>    <EmguCVUbuntuDeployMessage Condition="'$(EmguCVUbuntuBuildX64)'=='True' AND Exists('$(EmguCVUbuntuNativeFileX64)')">$(EmguCVUbuntuDeployMessage)ubuntu_x64 </EmguCVUbuntuDeployMessage>
+	<EmguCVUbuntuBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguCVUbuntuBuildX86>
+    <EmguCVUbuntuNativeFileX86>$(EmguCVUbuntuBinaryDir)\$(EmguCVUbuntuX86NativeRuntimeFolder)\libcvextern.so</EmguCVUbuntuNativeFileX86>
+    <EmguCVUbuntuErrorMessage Condition="'$(EmguCVUbuntuBuildX86)'=='True' AND !Exists('$(EmguCVUbuntuNativeFileX86)')">This package do not contain necessary binary for $(EmguCVUbuntuLinkTarget). Ubuntu x86 is targeted, but file $(EmguCVUbuntuNativeFileX86) is missing. PInvoke may fail on Ubuntu x86 platform</EmguCVUbuntuErrorMessage>    <EmguCVUbuntuDeployMessage Condition="'$(EmguCVUbuntuBuildX64)'=='True' AND Exists('$(EmguCVUbuntuNativeFileX64)')">$(EmguCVUbuntuDeployMessage)ubuntu_x64 </EmguCVUbuntuDeployMessage>
   </PropertyGroup>
   <ItemGroup Condition="'$(EmguCVUbuntuBuildX64)'=='True' AND Exists('$(EmguCVUbuntuNativeFileX64)')">
-    <Content Include="$(EmguCVUbuntuBinaryDir)\x64\*.so">
+    <Content Include="$(EmguCVUbuntuBinaryDir)\$(EmguCVUbuntuX64NativeRuntimeFolder)\*.so">
       <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-	<!--
-	<Content Include="$(EmguCVUbuntuBinaryDir)\x64\*.so.*">
+  </ItemGroup>
+  <ItemGroup Condition="'$(EmguCVUbuntuBuildX86)'=='True' AND Exists('$(EmguCVUbuntuNativeFileX86)')">
+    <Content Include="$(EmguCVUbuntuBinaryDir)\$(EmguCVUbuntuX86NativeRuntimeFolder)\*.so">
       <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-	-->
   </ItemGroup>
   <Target Name="EmguCVUbuntuPackageBuildImports" BeforeTargets="PrepareForBuild">
     <Warning Text="'$(EmguCVUbuntuErrorMessage)'" Condition="'$(EmguCVUbuntuErrorMessage)'!=''" />

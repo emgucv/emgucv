@@ -372,17 +372,17 @@ ELSEIF(APPLE AND NOT IOS)
     SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/macos/x64")
   ENDIF()
 ELSEIF("${EMGUCV_ARCH}" STREQUAL "ubuntu_x64")
-  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/x64")
+  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/runtimes/ubuntu-x64/native")
 ELSEIF("${EMGUCV_ARCH}" STREQUAL "ubuntu_x86")
-  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/x86")
+  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/runtimes/ubuntu-x86/native")
 ELSEIF("${EMGUCV_ARCH}" STREQUAL "ubuntu_arm64")
-  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/arm64")
+  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/runtimes/ubuntu-arm64/native")
 ELSEIF("${EMGUCV_ARCH}" STREQUAL "ubuntu_arm")
-  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/arm")
+  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/runtimes/ubuntu-arm/native")
 ELSEIF("${EMGUCV_ARCH}" STREQUAL "debian_arm")
-  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/arm")
+  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/runtimes/linux-arm/native")
   ELSEIF("${EMGUCV_ARCH}" STREQUAL "debian_arm64")
-  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/arm64")
+  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/runtimes/linux-arm64/native")
 ELSEIF("${EMGUCV_ARCH}" STREQUAL "arm64")
   IF(IPHONEOS)
     SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/iphoneos_arm64")
@@ -570,42 +570,42 @@ IF( ("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore") AND (CMAKE_SYSTEM_VERSION M
   SET(IS_WINSTORE_10_X86_BUILD ON)
   MESSAGE(STATUS "IS_WINSTORE_10_X86_BUILD: ${IS_WINSTORE_10_X86_BUILD}")
 ENDIF()
-CHECK_BINARY_EXIST("libs/UWP/x86" "*.dll" HAVE_WINSTORE_10_X86 ${IS_WINSTORE_10_X86_BUILD})
+CHECK_BINARY_EXIST("libs/runtimes/win10-x86/native" "*.dll" HAVE_WINSTORE_10_X86 ${IS_WINSTORE_10_X86_BUILD})
 
 SET(IS_WINSTORE_10_X64_BUILD OFF)
 IF( ("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore") AND (CMAKE_SYSTEM_VERSION MATCHES 10.0) AND ("${EMGUCV_ARCH}" STREQUAL "win64") )
   SET(IS_WINSTORE_10_X64_BUILD ON)
   MESSAGE(STATUS "IS_WINSTORE_10_X64_BUILD: ${IS_WINSTORE_10_X64_BUILD}")
 ENDIF()
-CHECK_BINARY_EXIST("libs/UWP/x64" "*.dll" HAVE_WINSTORE_10_X64 ${IS_WINSTORE_10_X64_BUILD})
+CHECK_BINARY_EXIST("libs/runtimes/win10-x64/native" "*.dll" HAVE_WINSTORE_10_X64 ${IS_WINSTORE_10_X64_BUILD})
 
 SET(IS_WINSTORE_10_ARM_BUILD OFF)
 IF(("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore") AND (CMAKE_SYSTEM_VERSION MATCHES 10.0) AND ("${EMGUCV_ARCH}" STREQUAL "arm"))
   SET(IS_WINSTORE_10_ARM_BUILD ON)
   MESSAGE(STATUS "IS_WINSTORE_10_ARM_BUILD: ${IS_WINSTORE_10_ARM_BUILD}")
 ENDIF()
-CHECK_BINARY_EXIST("libs/UWP/arm" "*.dll" HAVE_WINSTORE_10_ARM ${IS_WINSTORE_10_ARM_BUILD})
+CHECK_BINARY_EXIST("libs/runtimes/win10-arm/native" "*.dll" HAVE_WINSTORE_10_ARM ${IS_WINSTORE_10_ARM_BUILD})
 
 SET(IS_WINSTORE_10_ARM64_BUILD OFF)
 IF(("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore") AND (CMAKE_SYSTEM_VERSION MATCHES 10.0) AND ("${EMGUCV_ARCH}" STREQUAL "arm64"))
   SET(IS_WINSTORE_10_ARM64_BUILD ON)
   MESSAGE(STATUS "IS_WINSTORE_10_ARM64_BUILD: ${IS_WINSTORE_10_ARM64_BUILD}")
 ENDIF()
-CHECK_BINARY_EXIST("libs/UWP/arm64" "*.dll" HAVE_WINSTORE_10_ARM64 ${IS_WINSTORE_10_ARM64_BUILD})
+CHECK_BINARY_EXIST("libs/runtimes/win10-arm64/native" "*.dll" HAVE_WINSTORE_10_ARM64 ${IS_WINSTORE_10_ARM64_BUILD})
 
 SET(IS_WINDESKTOP_X86_BUILD OFF)
 IF (WIN32 AND ("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows") AND ("${EMGUCV_ARCH}" STREQUAL "win32") AND (NOT ANDROID)) 
   SET (IS_WINDESKTOP_X86_BUILD ON)
   MESSAGE(STATUS "IS_WINDESKTOP_X86_BUILD: ${IS_WINDESKTOP_X86_BUILD}")
 ENDIF()
-CHECK_BINARY_EXIST("libs/x86" "*.dll" HAVE_WINDESKTOP_X86 ${IS_WINDESKTOP_X86_BUILD})
+CHECK_BINARY_EXIST("libs/runtimes/win-x86/native" "*.dll" HAVE_WINDESKTOP_X86 ${IS_WINDESKTOP_X86_BUILD})
 
 SET (IS_WINDESKTOP_X64_BUILD OFF)
 IF (WIN32 AND ("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows") AND ("${EMGUCV_ARCH}" STREQUAL "win64") AND (NOT ANDROID)) 
   SET (IS_WINDESKTOP_X64_BUILD ON)
   MESSAGE(STATUS "IS_WINDESKTOP_X64_BUILD: ${IS_WINDESKTOP_X64_BUILD}")
 ENDIF()
-CHECK_BINARY_EXIST("libs/x64" "*.dll" HAVE_WINDESKTOP_X64 ${IS_WINDESKTOP_X64_BUILD})
+CHECK_BINARY_EXIST("libs/runtimes/win-x64/native" "*.dll" HAVE_WINDESKTOP_X64 ${IS_WINDESKTOP_X64_BUILD})
 
 SET(IS_DEBIAN_ARM_BUILD OFF)
 SET(IS_DEBIAN_ARM64_BUILD OFF)
@@ -625,8 +625,8 @@ IF(IS_DEBIAN_ARM_BUILD OR IS_DEBIAN_ARM64_BUILD)
 ENDIF()
 
 
-CHECK_BINARY_EXIST("libs/arm" "*.so" HAVE_LINUX_ARM ${IS_DEBIAN_ARM_BUILD})
-CHECK_BINARY_EXIST("libs/arm64" "*.so" HAVE_LINUX_ARM64 ${IS_DEBIAN_ARM64_BUILD})
+CHECK_BINARY_EXIST("libs/runtimes/linux-arm/native" "*.so" HAVE_LINUX_ARM ${IS_DEBIAN_ARM_BUILD})
+CHECK_BINARY_EXIST("libs/runtimes/linux-arm64/native" "*.so" HAVE_LINUX_ARM64 ${IS_DEBIAN_ARM64_BUILD})
 
 IF(IS_DEBIAN_ARM_BUILD)
   SET(NUGET_NATIVE_PLATFORM_ID_DEBIAN "linux-${NUGET_NATIVE_PLATFORM_ID_ARCH}")
@@ -641,14 +641,14 @@ IF (("${TARGET_ARCH_NAME}" STREQUAL "ubuntu_x86"))
   SET(IS_UBUNTU_X86_BUILD ON)
   MESSAGE(STATUS "IS_UBUNTU_X86_BUILD: ${IS_UBUNTU_X86_BUILD}")
 ENDIF()
-CHECK_BINARY_EXIST("libs/x86" "*.so" HAVE_LINUX_X86 ${IS_UBUNTU_X86_BUILD})
+CHECK_BINARY_EXIST("libs/runtimes/ubuntu-x86/native" "*.so" HAVE_UBUNTU_X86 ${IS_UBUNTU_X86_BUILD})
 
 SET(IS_UBUNTU_X64_BUILD OFF)
 IF (("${TARGET_ARCH_NAME}" STREQUAL "ubuntu_x64"))
   SET(IS_UBUNTU_X64_BUILD ON)
   MESSAGE(STATUS "IS_UBUNTU_X64_BUILD: ${IS_UBUNTU_X64_BUILD}")
 ENDIF()
-CHECK_BINARY_EXIST("libs/x64" "*.so" HAVE_LINUX_X64 ${IS_UBUNTU_X64_BUILD})
+CHECK_BINARY_EXIST("libs/runtimes/ubuntu-x64/native" "*.so" HAVE_UBUNTU_X64 ${IS_UBUNTU_X64_BUILD})
 
 #SET(IS_UBUNTU_ARM64_BUILD OFF)
 #IF (("${TARGET_ARCH_NAME}" STREQUAL "ubuntu_arm64"))
@@ -659,10 +659,11 @@ CHECK_BINARY_EXIST("libs/x64" "*.so" HAVE_LINUX_X64 ${IS_UBUNTU_X64_BUILD})
 
 IF ( IS_UBUNTU )
   #MESSAGE(STATUS "TARGET_ARCH_64: ${TARGET_ARCH_64}")
-  SET(NUGET_NATIVE_PLATFORM_ID_UBUNTU "${LSB_RELEASE_ID_SHORT}.${LSB_RELEASE_RELEASE_SHORT}-${NUGET_NATIVE_PLATFORM_ID_ARCH}")
+  #SET(NUGET_NATIVE_PLATFORM_ID_UBUNTU "${LSB_RELEASE_ID_SHORT}.${LSB_RELEASE_RELEASE_SHORT}-${NUGET_NATIVE_PLATFORM_ID_ARCH}")
+  SET(NUGET_NATIVE_PLATFORM_ID_UBUNTU "${LSB_RELEASE_ID_SHORT}-${NUGET_NATIVE_PLATFORM_ID_ARCH}")
   MESSAGE(STATUS "NUGET_NATIVE_PLATFORM_ID_UBUNTU: ${NUGET_NATIVE_PLATFORM_ID_UBUNTU}")
 ELSE()
-  SET(UBUNTU_DEFAULT_PLATFORM_ID "ubuntu.20.04")
+  SET(UBUNTU_DEFAULT_PLATFORM_ID "ubuntu")
   IF (HAVE_LINUX_X86)
     SET(NUGET_NATIVE_PLATFORM_ID_UBUNTU "${UBUNTU_DEFAULT_PLATFORM_ID}-x86")
   ENDIF()
@@ -1085,7 +1086,7 @@ IF(HAVE_LINUX_ARM64)
   SET(EMGUCV_DEBIAN_ARM64_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.debian-arm64")
 ENDIF()
 
-IF(HAVE_LINUX_X64 OR HAVE_LINUX_X86)
+IF(HAVE_UBUNTU_X64 OR HAVE_UBUNTU_X86)
   SET(EMGUCV_UBUNTU_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.${NUGET_NATIVE_PLATFORM_ID_UBUNTU}")
 ENDIF()
 
@@ -1124,29 +1125,29 @@ ENDIF()
 
 SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "")
 IF(HAVE_WINDESKTOP_X86)
-	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x86\\*.dll\" exclude=\"..\\..\\..\\libs\\x86\\cu*.dll;..\\..\\..\\libs\\x86\\npp*.dll;..\\..\\..\\libs\\x86\\concrt*.dll;..\\..\\..\\libs\\x86\\msvcp*.dll;..\\..\\..\\libs\\x86\\vcruntime*.dll;..\\..\\..\\libs\\x86\\vccorlib*.dll\" target=\"runtimes\\win-x86\\native\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\cu*.dll;..\\..\\..\\libs\\runtimes\\win-x86\\native\\npp*.dll;..\\..\\..\\libs\\runtimes\\win-x86\\native\\concrt*.dll;..\\..\\..\\libs\\runtimes\\win-x86\\native\\msvcp*.dll;..\\..\\..\\libs\\runtimes\\win-x86\\native\\vcruntime*.dll;..\\..\\..\\libs\\runtimes\\win-x86\\native\\vccorlib*.dll\" target=\"runtimes\\win-x86\\native\" />")
 	SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_TITLE "MSVC x86 runtime for windows")
 	SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST} 
-	<file src=\"..\\..\\..\\libs\\x86\\concrt*.dll\" target=\"runtimes\\win-x86\\native\" /> 
-	<file src=\"..\\..\\..\\libs\\x86\\msvcp*.dll\" target=\"runtimes\\win-x86\\native\" /> 
-	<file src=\"..\\..\\..\\libs\\x86\\vcruntime*.dll\" target=\"runtimes\\win-x86\\native\" />     
-	<file src=\"..\\..\\..\\libs\\x86\\vccorlib*.dll\" target=\"runtimes\\win-x86\\native\" />     
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\concrt*.dll\" target=\"runtimes\\win-x86\\native\" /> 
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\msvcp*.dll\" target=\"runtimes\\win-x86\\native\" /> 
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\vcruntime*.dll\" target=\"runtimes\\win-x86\\native\" />     
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\vccorlib*.dll\" target=\"runtimes\\win-x86\\native\" />     
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 IF(HAVE_WINDESKTOP_X64)
-	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cu*.dll;..\\..\\..\\libs\\x64\\npp*.dll;..\\..\\..\\libs\\x64\\concrt*.dll;..\\..\\..\\libs\\x64\\msvcp*.dll;..\\..\\..\\libs\\x64\\vcruntime*.dll;..\\..\\..\\libs\\x64\\vccorlib*.dll\" target=\"runtimes\\win-x64\\native\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cu*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\npp*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\concrt*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\msvcp*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\vcruntime*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\vccorlib*.dll\" target=\"runtimes\\win-x64\\native\" />")
 	#Also added configuration files from OpenVino
-	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.xml\" target=\"runtimes\\win-x64\\native\" />")
-	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.json\" target=\"runtimes\\win-x64\\native\" />")
-	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.elf\" target=\"runtimes\\win-x64\\native\" />")
-	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.mvcmd\" target=\"runtimes\\win-x64\\native\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\*.xml\" target=\"runtimes\\win-x64\\native\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\*.json\" target=\"runtimes\\win-x64\\native\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\*.elf\" target=\"runtimes\\win-x64\\native\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\*.mvcmd\" target=\"runtimes\\win-x64\\native\" />")
 	SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_TITLE "MSVC x64 runtime for windows")
 	SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X64_NUGET_FILE_LIST} 
-	<file src=\"..\\..\\..\\libs\\x64\\concrt*.dll\" target=\"runtimes\\win-x64\\native\" /> 
-	<file src=\"..\\..\\..\\libs\\x64\\msvcp*.dll\" target=\"runtimes\\win-x64\\native\" /> 
-	<file src=\"..\\..\\..\\libs\\x64\\vcruntime*.dll\" target=\"runtimes\\win-x64\\native\" />     
-	<file src=\"..\\..\\..\\libs\\x64\\vccorlib*.dll\" target=\"runtimes\\win-x64\\native\" />     
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\concrt*.dll\" target=\"runtimes\\win-x64\\native\" /> 
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\msvcp*.dll\" target=\"runtimes\\win-x64\\native\" /> 
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\vcruntime*.dll\" target=\"runtimes\\win-x64\\native\" />     
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\vccorlib*.dll\" target=\"runtimes\\win-x64\\native\" />     
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
@@ -1175,16 +1176,16 @@ ENDIF()
 
 SET(EMGUCV_UWP_NUGET_FILE_LIST "")
 IF(HAVE_WINSTORE_10_X86)
-	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\x86\\*.dll\" target=\"runtimes\\win10-x86\\native\" />")
+	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win10-x86\\native\\*.dll\" target=\"runtimes\\win10-x86\\native\" />")
 ENDIF()
 IF(HAVE_WINSTORE_10_X64)
-	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\x64\\*.dll\" target=\"runtimes\\win10-x64\\native\" />")
+	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win10-x64\\native\\*.dll\" target=\"runtimes\\win10-x64\\native\" />")
 ENDIF()
 IF(HAVE_WINSTORE_10_ARM)
-	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\arm\\*.dll\" target=\"runtimes\\win10-arm\\native\" />")
+	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win10-arm\\native\\*.dll\" target=\"runtimes\\win10-arm\\native\" />")
 ENDIF()
 IF(HAVE_WINSTORE_10_ARM64)
-	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\UWP\\arm64\\*.dll\" target=\"runtimes\\win10-arm64\\native\" />")
+	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win10-arm64\\native\\*.dll\" target=\"runtimes\\win10-arm64\\native\" />")
 ENDIF()
 IF(HAVE_WINSTORE_10)
     SET(EMGUCV_UWP_NUGET_DEPENDENCY "
@@ -1204,28 +1205,28 @@ SET(EMGUCV_DEBIAN_NUGET_DEPENDENCY "    <dependencies>
       </dependencies>")
 IF(HAVE_LINUX_ARM)
 	SET(EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST} 
-      <file src=\"..\\..\\..\\libs\\arm\\*.so\" target=\"runtimes\\linux-arm\\native\" />")
+      <file src=\"..\\..\\..\\libs\\runtimes\\linux-arm\\native\\*.so\" target=\"runtimes\\linux-arm\\native\" />")
 	SET(EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST} 
       <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
       <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 IF(HAVE_LINUX_ARM64)
 	SET(EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST} 
-      <file src=\"..\\..\\..\\libs\\arm64\\*.so\" target=\"runtimes\\linux-arm64\\native\" />")
+      <file src=\"..\\..\\..\\libs\\runtimes\\linux-arm64\\native\\*.so\" target=\"runtimes\\linux-arm64\\native\" />")
 	SET(EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST} 
       <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
       <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 
 SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "")
-IF(HAVE_LINUX_X64)
-  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x64\\*.so\" target=\"runtimes\\${NUGET_NATIVE_PLATFORM_ID_UBUNTU}\\native\" />")
+IF(HAVE_UBUNTU_X64)
+  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x64\\native\\*.so\" target=\"runtimes\\ubuntu-x64\\native\" />")
 ENDIF()
-IF(HAVE_LINUX_X86)
-  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\x86\\*.so\" target=\"runtimes\\${NUGET_NATIVE_PLATFORM_ID_UBUNTU}\\native\" />")
+IF(HAVE_UBUNTU_X86)
+  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x86\\native\\*.so\" target=\"runtimes\\ubuntu-x86\\native\" />")
 ENDIF()
-IF(HAVE_LINUX_ARM64)
-  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\arm64\\*.so\" target=\"runtimes\\linux-arm64\\native\" />")
+IF(HAVE_UBUNTU_ARM64)
+  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-arm64\\native\\*.so\" target=\"runtimes\\ubuntu-arm64\\native\" />")
 ENDIF()
 IF(HAVE_LINUX_X64 OR HAVE_LINUX_X86 OR HAVE_LINUX_ARM64)
     SET(EMGUCV_UBUNTU_NUGET_DEPENDENCY "
@@ -1436,23 +1437,23 @@ IF(WITH_CUDA)
 		#file(DOWNLOAD ${CUDA_EULA_URL} "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows.cuda.cufft/EULA.pdf")
 		#file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cudnn")
 		SET(EMGU_CUDA_RT_NUGET_FILE_LIST "${EMGU_CUDA_RT_NUGET_FILE_LIST} 
-		<file src=\"..\\..\\..\\libs\\x64\\cu*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cufft*.dll;..\\..\\..\\libs\\x64\\cudnn*.dll;..\\..\\..\\libs\\x64\\cublas*.dll\" target=\"runtimes\\win-x64\\native\" /> 
+		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cu*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cufft*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cublas*.dll\" target=\"runtimes\\win-x64\\native\" /> 
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
 		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
 		SET(EMGU_CUDA_NPP_NUGET_FILE_LIST "${EMGU_CUDA_NPP_NUGET_FILE_LIST} 
-		<file src=\"..\\..\\..\\libs\\x64\\npp*.dll\" target=\"runtimes\\win-x64\\native\" />
+		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\npp*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
 		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
 		SET(EMGU_CUDA_BLAS_NUGET_FILE_LIST "${EMGU_CUDA_BLAS_NUGET_FILE_LIST} 
-		<file src=\"..\\..\\..\\libs\\x64\\cublas*.dll\" target=\"runtimes\\win-x64\\native\" />
+		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cublas*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
 		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
 		SET(EMGU_CUFFT_NUGET_FILE_LIST "${EMGU_CUFFT_NUGET_FILE_LIST} 
-		<file src=\"..\\..\\..\\libs\\x64\\cufft*.dll\" target=\"runtimes\\win-x64\\native\" />
+		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cufft*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
 		SET(EMGU_CUDNN_NUGET_FILE_LIST "${EMGU_CUDNN_NUGET_FILE_LIST} 
-		<file src=\"..\\..\\..\\libs\\x64\\cudnn*.dll\" exclude=\"..\\..\\..\\libs\\x64\\cudnn_ops_*.dll;..\\..\\..\\libs\\x64\\cudnn_cnn_*.dll;..\\..\\..\\libs\\x64\\cudnn_adv_*.dll\" target=\"runtimes\\win-x64\\native\" />
+		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_ops_*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_cnn_*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_adv_*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
 		SET(EMGU_CUDNN_NUGET_DEPENDENCY "
@@ -1460,11 +1461,11 @@ IF(WITH_CUDA)
 		  <dependency id=\"${EMGU_CUDART_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />
 		</dependencies>")
 		SET(EMGU_CUDNN_CNN_INFER_NUGET_FILE_LIST "${EMGU_CUDNN_CNN_INFER_NUGET_FILE_LIST} 
-		<file src=\"..\\..\\..\\libs\\x64\\cudnn_cnn_infer*.dll\" target=\"runtimes\\win-x64\\native\" />
+		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_cnn_infer*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
 		SET(EMGU_CUDNN_CNN_TRAIN_NUGET_FILE_LIST "${EMGU_CUDNN_CNN_TRAIN_NUGET_FILE_LIST} 
-		<file src=\"..\\..\\..\\libs\\x64\\cudnn_cnn_train*.dll\" target=\"runtimes\\win-x64\\native\" />
+		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_cnn_train*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
 		SET(EMGU_CUDNN_CNN_INFER_NUGET_DEPENDENCY "
@@ -1476,7 +1477,7 @@ IF(WITH_CUDA)
 		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
 		</dependencies>")
 		SET(EMGU_CUDNN_OPS_NUGET_FILE_LIST "${EMGU_CUDNN_OPS_NUGET_FILE_LIST} 
-		<file src=\"..\\..\\..\\libs\\x64\\cudnn_ops_*.dll\" target=\"runtimes\\win-x64\\native\" />
+		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_ops_*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
 		SET(EMGU_CUDNN_OPS_NUGET_DEPENDENCY "
@@ -1484,7 +1485,7 @@ IF(WITH_CUDA)
 		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
 		</dependencies>")
 		SET(EMGU_CUDNN_ADV_NUGET_FILE_LIST "${EMGU_CUDNN_ADV_NUGET_FILE_LIST} 
-		<file src=\"..\\..\\..\\libs\\x64\\cudnn_adv_*.dll\" target=\"runtimes\\win-x64\\native\" />
+		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_adv_*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
 		SET(EMGU_CUDNN_ADV_NUGET_DEPENDENCY "
@@ -1990,11 +1991,11 @@ ELSEIF (WIN32)
 	  #MESSAGE(STATUS "DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_SUBFOLDER: ${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_SUBFOLDER}")
       ENDIF()
     ELSE()
-      FILE(GLOB UNMANAGED_DLL_32BIT "${CMAKE_CURRENT_SOURCE_DIR}/libs/x86/*.dll")	
+      FILE(GLOB UNMANAGED_DLL_32BIT "${CMAKE_CURRENT_SOURCE_DIR}/libs/runtimes/win-x86/native/*.dll")	
       LIST(LENGTH UNMANAGED_DLL_32BIT UNMANAGED_DLL_32BIT_LENGTH)
       IF(UNMANAGED_DLL_32BIT_LENGTH GREATER 0)
 	    SET(HAS_WINDESKTOP_X86_NATIVE_BINARY ON)
-	    SET(DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_SUBFOLDER "x86\\\\")
+	    SET(DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_SUBFOLDER "runtimes\\\\win-x86\\\\native\\\\")
       ENDIF()
     ENDIF()
 	
@@ -2029,11 +2030,11 @@ ELSEIF (WIN32)
 	  #MESSAGE(STATUS "DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_SUBFOLDER: ${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_SUBFOLDER}")
       ENDIF()
     ELSE()
-      FILE(GLOB UNMANAGED_DLL_64BIT "${CMAKE_CURRENT_SOURCE_DIR}/libs/x64/*.dll")	
+      FILE(GLOB UNMANAGED_DLL_64BIT "${CMAKE_CURRENT_SOURCE_DIR}/libs/runtimes/win-x64/native/*.dll")	
       LIST(LENGTH UNMANAGED_DLL_64BIT UNMANAGED_DLL_64BIT_LENGTH)
       IF(UNMANAGED_DLL_64BIT_LENGTH GREATER 0)
 	    SET(HAS_WINDESKTOP_X64_NATIVE_BINARY ON)
-	    SET(DEBUGGER_VISUALIZER_UNMANAGED_X64_FILES_SUBFOLDER "x64\\\\")
+	    SET(DEBUGGER_VISUALIZER_UNMANAGED_X64_FILES_SUBFOLDER "runtimes\\\\win-x64\\\\native\\\\")
       ENDIF()
     ENDIF()
     
@@ -2105,8 +2106,8 @@ ELSEIF (WIN32)
 	  FOREACH (file ${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES})
 	    SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
 	      "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
-	  CopyFiles /SILENT '\\\$INSTDIR\\\\libs\\\\x86\\\\${file}.dll' '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_DEPLOY_SUBFOLDER}'
-	  ;MessageBox MB_OK 'copying \\\$INSTDIR\\\\libs\\\\x86\\\\${file}.dll to $${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_DEPLOY_SUBFOLDER}'
+	  CopyFiles /SILENT '\\\$INSTDIR\\\\libs\\\\runtimes\\\\win-x86\\\\native\\\\${file}.dll' '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_DEPLOY_SUBFOLDER}'
+	  ;MessageBox MB_OK 'copying \\\$INSTDIR\\\\libs\\\\runtimes\\\\win-x86\\\\native\\\\${file}.dll to $${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_DEPLOY_SUBFOLDER}'
 	  ")
 	  #MESSAGE(STATUS " --- Adding libs\\x86\\${file}.dll to debuger visualizer folder '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X86_FILES_SUBFOLDER}' for ${vs_description}")
 	  ENDFOREACH()
@@ -2122,8 +2123,8 @@ ELSEIF (WIN32)
 	  FOREACH (file ${DEBUGGER_VISUALIZER_UNMANAGED_X64_FILES})
 	    SET(INSTALL_DEBUGER_VISUALIZER_COMMAND
 	      "${INSTALL_DEBUGER_VISUALIZER_COMMAND}
-	  CopyFiles /SILENT '\\\$INSTDIR\\\\libs\\\\x64\\\\${file}.dll' '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X64_FILES_DEPLOY_SUBFOLDER}'
-	  ;MessageBox MB_OK 'copying \\\$INSTDIR\\\\libs\\\\x64\\\\${file}.dll to $${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X64_FILES_DEPLOY_SUBFOLDER}'
+	  CopyFiles /SILENT '\\\$INSTDIR\\\\libs\\\\runtimes\\\\win-x64\\\\native\\\\${file}.dll' '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X64_FILES_DEPLOY_SUBFOLDER}'
+	  ;MessageBox MB_OK 'copying \\\$INSTDIR\\\\libs\\\\runtimes\\\\win-x64\\\\native\\\\${file}.dll to $${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X64_FILES_DEPLOY_SUBFOLDER}'
 	  ")
 	  #MESSAGE(STATUS " --- Adding libs\\x64\\${file}.dll to debuger visualizer folder '$${vs_version}_INSTALL_FOLDER${DEBUGGER_VISUALIZER_UNMANAGED_X64_FILES_SUBFOLDER}' for ${vs_description}")
 	  ENDFOREACH()
@@ -2531,7 +2532,7 @@ ELSEIF (WIN32)
   # ----------------------------------------------------------------------------
   #  Add menu link for web sites
   # ----------------------------------------------------------------------------
-  LIST(APPEND CPACK_NSIS_MENU_LINKS "http://www.emgu.com" "Emgu CV wiki")
+  LIST(APPEND CPACK_NSIS_MENU_LINKS "https://www.emgu.com" "Emgu CV wiki")
   LIST(APPEND CPACK_NSIS_MENU_LINKS "https://github.com/emgucv/emgucv/discussions" "Discussions")
   LIST(APPEND CPACK_NSIS_MENU_LINKS "https://github.com/emgucv/emgucv/issues" "Issues Tracking")
   
