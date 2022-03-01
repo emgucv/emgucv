@@ -9,7 +9,7 @@
     <Import_RootNamespace>Emgu.CV</Import_RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
-    <EmguCVWindowsBinaryDir>$(MSBuildThisFileDirectory)..\..\libs</EmguCVWindowsBinaryDir>
+    <EmguCVWindowsBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</EmguCVWindowsBinaryDir>
     <EmguCVWindowsDir>$(MSBuildThisFileDirectory)</EmguCVWindowsDir>
   </PropertyGroup>
   <PropertyGroup>
