@@ -207,6 +207,11 @@ CVAPI(void) cveDetailTransverseMercatorWarperRelease(cv::detail::TransverseMerca
 CVAPI(cv::TransverseMercatorWarper*) cveTransverseMercatorWarperCreate(cv::WarperCreator** warperCreator);
 CVAPI(void) cveTransverseMercatorWarperRelease(cv::TransverseMercatorWarper** warperCreator);
 
+CVAPI(void) cveBlenderPrepare(cv::detail::Blender* blender, std::vector< cv::Point >* corners, const std::vector< cv::Size >* sizes);
+CVAPI(void) cveBlenderPrepare2(cv::detail::Blender* blender, CvRect* dstRoi);
+CVAPI(void) cveBlenderFeed(cv::detail::Blender* blender, cv::_InputArray* img, cv::_InputArray* mask, CvPoint* tl);
+CVAPI(void) cveBlenderBlend(cv::detail::Blender* blender, cv::_InputOutputArray* dst, cv::_InputOutputArray* dstMask);
+
 CVAPI(cv::detail::FeatherBlender*) cveFeatherBlenderCreate(float sharpness, cv::detail::Blender** blender);
 CVAPI(void) cveFeatherBlenderRelease(cv::detail::FeatherBlender** blender);
 

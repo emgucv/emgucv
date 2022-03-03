@@ -38,76 +38,71 @@ namespace Emgu.CV.Stitching
             if (_blenderPtr != IntPtr.Zero)
                 _blenderPtr = IntPtr.Zero;
         }
-    }
 
-
-    /// <summary>
-    /// Simple blender which mixes images at its borders.
-    /// </summary>
-    public class FeatherBlender : Blender
-    {
         /// <summary>
-        /// Create a simple blender which mixes images at its borders
+        /// Prepares the blender for blending.
         /// </summary>
-        /// <param name="sharpness">Sharpness</param>
-        public FeatherBlender(float sharpness = 0.02f)
+        /// <param name="corners">Source images top-left corners</param>
+        /// <param name="sizes">Source image sizes</param>
+        public void Prepare(Point[] corners, Size[] sizes)
         {
-            _ptr = StitchingInvoke.cveFeatherBlenderCreate(sharpness, ref _blenderPtr);
+            using (VectorOfPoint vpCorners = new VectorOfPoint(corners))
+            using (VectorOfSize vsSizes = new VectorOfSize(sizes))
+            {
+                StitchingInvoke.cveBlenderPrepare(_blenderPtr, vpCorners, vsSizes);
+            }
         }
 
         /// <summary>
-        /// Release all the unmanaged memory associated with this blender
+        /// Prepares the blender for blending.
         /// </summary>
-        protected override void DisposeObject()
+        /// <param name="dstRoi">Destination roi</param>
+        public void Prepare(Rectangle dstRoi)
         {
-            base.DisposeObject();
-            if (_ptr != IntPtr.Zero)
+            StitchingInvoke.cveBlenderPrepare2(_blenderPtr, ref dstRoi);
+        }
+
+        /// <summary>
+        /// Processes the image.
+        /// </summary>
+        /// <param name="img">Source image</param>
+        /// <param name="mask">Source image mask</param>
+        /// <param name="tl">Source image top-left corners</param>
+        public void Feed(IInputArray img, IInputArray mask, Point tl)
+        {
+            using (InputArray iaImg = img.GetInputArray())
+            using (InputArray iaMask = mask.GetInputArray())
             {
-                StitchingInvoke.cveFeatherBlenderRelease(ref _ptr);
+                StitchingInvoke.cveBlenderFeed(_blenderPtr, iaImg, iaMask, ref tl);
+            }
+        }
+
+        /// <summary>
+        /// Blends and returns the final pano.
+        /// </summary>
+        /// <param name="dst">Final pano</param>
+        /// <param name="dstMask">Final pano mask</param>
+        public void Blend(IInputOutputArray dst, IInputOutputArray dstMask)
+        {
+            using (InputOutputArray ioaDst = dst.GetInputOutputArray())
+            using (InputOutputArray ioaDstMask = dstMask.GetInputOutputArray())
+            {
+                StitchingInvoke.cveBlenderBlend(_blenderPtr, ioaDst, ioaDstMask);
             }
         }
     }
 
-    /// <summary>
-    /// Blender which uses multi-band blending algorithm
-    /// </summary>
-    public class MultiBandBlender : Blender
-    {
-        /// <summary>
-        /// Create a multiBandBlender
-        /// </summary>
-        /// <param name="tryGpu">If true, will try to use GPU</param>
-        /// <param name="numBands">Number of bands</param>
-        /// <param name="weightType">The weight type</param>
-        public MultiBandBlender(bool tryGpu = true, int numBands = 5, CvEnum.DepthType weightType = CvEnum.DepthType.Cv32F)
-        {
-            _ptr = StitchingInvoke.cveMultiBandBlenderCreate(tryGpu ? 1 : 0, numBands, weightType, ref _blenderPtr);
-        }
-
-        /// <summary>
-        /// Release all unmanaged resources associated with this blender
-        /// </summary>
-        protected override void DisposeObject()
-        {
-            if (_ptr != IntPtr.Zero)
-            {
-                StitchingInvoke.cveMultiBandBlenderRelease(ref _ptr);
-            }
-            base.DisposeObject();
-        }
-    }
 
     public static partial class StitchingInvoke
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveFeatherBlenderCreate(float sharpness, ref IntPtr blender);
+        internal static extern void cveBlenderPrepare(IntPtr blender, IntPtr corners, IntPtr sizes);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveFeatherBlenderRelease(ref IntPtr blender);
-
+        internal static extern void cveBlenderPrepare2(IntPtr blender, ref Rectangle dstRoi);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveMultiBandBlenderCreate(int tryGpu, int numBands, CvEnum.DepthType weightType, ref IntPtr blender);
+        internal static extern void cveBlenderFeed(IntPtr blender, IntPtr img, IntPtr mask, ref Point tl);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveMultiBandBlenderRelease(ref IntPtr blender);
+        internal static extern void cveBlenderBlend(IntPtr blender, IntPtr dst, IntPtr dstMask);
     }
 }
