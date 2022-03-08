@@ -83,35 +83,60 @@ namespace Emgu.CV
             {
                 List<String> subfolderOptions = new List<string>();
 
-                if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows 
-                    || Platform.OperationSystem == Emgu.Util.Platform.OS.Linux
-                    || Platform.OperationSystem == Platform.OS.MacOS)
+                if (Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS)
                 {
-                    if (Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS)
-                        subfolderOptions.Add(Path.Combine("runtimes", "osx", "native"));
-                    
-                    //var fd = RuntimeInformation.FrameworkDescription;
-                    if (RuntimeInformation.ProcessArchitecture == Architecture.X86)
+                    subfolderOptions.Add(Path.Combine("runtimes", "osx", "native"));
+                }
+                else if (Platform.OperationSystem == Emgu.Util.Platform.OS.Linux)
+                {
+                    switch (RuntimeInformation.ProcessArchitecture)
                     {
-                        if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
-                            subfolderOptions.Add(Path.Combine("runtimes", "win-x86", "native"));
-                        subfolderOptions.Add("x86");
-                    }
-                    else if (RuntimeInformation.ProcessArchitecture == Architecture.X64)
-                    {
-                        if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
-                            subfolderOptions.Add(Path.Combine("runtimes", "win-x64", "native"));
-                        subfolderOptions.Add("x64");
-                    }
-                    else if (RuntimeInformation.ProcessArchitecture == Architecture.Arm)
-                    {
-                        subfolderOptions.Add("arm");
-                    }
-                    else if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
-                    {
-                        subfolderOptions.Add("arm64");
+                        case Architecture.X86:
+                            subfolderOptions.Add(Path.Combine("runtimes", "linux-x86", "native"));
+                            subfolderOptions.Add(Path.Combine("runtimes", "ubuntu-x86", "native"));
+                            subfolderOptions.Add("x86");
+                            break;
+                        case Architecture.X64:
+                            subfolderOptions.Add(Path.Combine("runtimes", "linux-x64", "native"));
+                            subfolderOptions.Add(Path.Combine("runtimes", "ubuntu-x64", "native"));
+                            subfolderOptions.Add("x64");
+                            break;
+                        case Architecture.Arm:
+                            subfolderOptions.Add(Path.Combine("runtimes", "linux-arm", "native"));
+                            subfolderOptions.Add(Path.Combine("runtimes", "ubuntu-arm", "native"));
+                            subfolderOptions.Add("arm");
+                            break;
+                        case Architecture.Arm64:
+                            subfolderOptions.Add(Path.Combine("runtimes", "linux-arm64", "native"));
+                            subfolderOptions.Add(Path.Combine("runtimes", "ubuntu-arm64", "native"));
+                            subfolderOptions.Add("arm64");
+                            break;
                     }
                 }
+                else if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
+                {
+                    switch (RuntimeInformation.ProcessArchitecture)
+                    {
+                        case Architecture.X86:
+                            subfolderOptions.Add(Path.Combine("runtimes", "win-x86", "native"));
+                            subfolderOptions.Add("x86");
+                            break;
+                        case Architecture.X64:
+                            subfolderOptions.Add(Path.Combine("runtimes", "win-x64", "native"));
+                            subfolderOptions.Add("x64");
+                            break;
+                        case Architecture.Arm:
+                            subfolderOptions.Add(Path.Combine("runtimes", "win-arm", "native"));
+                            subfolderOptions.Add("arm");
+                            break;
+                        case Architecture.Arm64:
+                            subfolderOptions.Add(Path.Combine("runtimes", "win-arm64", "native"));
+                            subfolderOptions.Add("arm64");
+                            break;
+                    }
+                    
+                }
+
 
                 String subfolder = String.Empty;
                 
