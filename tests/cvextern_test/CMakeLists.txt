@@ -4,6 +4,8 @@
 #  CMake file for cvextern_test. See root CMakeLists.txt
 # --------------------------------------------------------
 
+IF(NOT IS_DEBIAN_ARM_BUILD) 
+
 project(cvextern_test)
 
 SET(OPENCV_MODULES_DIR "${OPENCV_SUBFOLDER}/modules")
@@ -139,9 +141,13 @@ target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS}
 #  ${GEOTIFF_LIBRARY}
 )
 
-IF(IS_DEBIAN_ARM_BUILD)
-  target_link_libraries(${the_target} atomic)
-ENDIF()
+#IF(IS_DEBIAN_ARM_BUILD)
+#  MESSAGE(STATUS "----------------------------- Linking with atomic on arm debian build ---------------------------")
+#  #target_link_libraries(${the_target} atomic)
+#  target_link_libraries(${the_target} -latomic)
+#  target_link_options(${the_target} PRIVATE -latomic)
+#  SET(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} -latomic)
+#ENDIF()
 
 #IF(IS_DEBIAN_ARM64_BUILD)
 #  MESSAGE(STATUS "----------------------------- DISABLE NEON on arm64 debian build ---------------------------")
@@ -172,3 +178,5 @@ INSTALL(TARGETS ${the_target}
     RUNTIME DESTINATION bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main
     LIBRARY DESTINATION lib${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main
     ARCHIVE DESTINATION lib${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT main)
+
+ENDIF()

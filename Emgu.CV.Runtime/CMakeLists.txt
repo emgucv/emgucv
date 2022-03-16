@@ -56,12 +56,12 @@
 	
   INSTALL(
     DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}/Raspbian
+    ${CMAKE_CURRENT_SOURCE_DIR}/Debian
     DESTINATION Emgu.CV.Runtime
     COMPONENT emgucv_source
     FILES_MATCHING 
-	PATTERN "Emgu.CV.Runtime.Raspbian.shproj"
-	PATTERN "Emgu.CV.Runtime.Raspbian.projitems"
+	PATTERN "Emgu.CV.Runtime.Debian.shproj"
+	PATTERN "Emgu.CV.Runtime.Debian.projitems"
     PATTERN ".svn" EXCLUDE
     PATTERN "obj" EXCLUDE
     PATTERN "CMakeFiles" EXCLUDE

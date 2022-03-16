@@ -666,6 +666,40 @@ void cveTransverseMercatorWarperRelease(cv::TransverseMercatorWarper** warperCre
 #endif	
 }
 
+void cveBlenderPrepare(cv::detail::Blender* blender, std::vector< cv::Point >* corners, const std::vector< cv::Size >* sizes)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	blender->prepare(*corners, *sizes);
+#else
+	throw_no_stitching();
+#endif		
+}
+void cveBlenderPrepare2(cv::detail::Blender* blender, CvRect* dstRoi)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	blender->prepare(*dstRoi);
+#else
+	throw_no_stitching();
+#endif	
+}
+void cveBlenderFeed(cv::detail::Blender* blender, cv::_InputArray* img, cv::_InputArray* mask, CvPoint* tl)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	blender->feed(*img, *mask, *tl);
+#else
+	throw_no_stitching();
+#endif	
+}
+void cveBlenderBlend(cv::detail::Blender* blender, cv::_InputOutputArray* dst, cv::_InputOutputArray* dstMask)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	blender->blend(*dst, *dstMask);
+#else
+	throw_no_stitching();
+#endif	
+}
+
+
 cv::detail::FeatherBlender* cveFeatherBlenderCreate(float sharpness, cv::detail::Blender** blender)
 {
 #ifdef HAVE_OPENCV_STITCHING
