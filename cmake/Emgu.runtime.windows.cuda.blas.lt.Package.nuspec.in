@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>${EMGU_CUDA_BLAS_LT_NUGET_ID}</id>
+	<title>${EMGU_CUDA_BLAS_LT_NUGET_TITLE}</title>
+    <version>${EMGU_CUDA_BLAS_VERSION}</version>
+    <authors>${CPACK_PACKAGE_VENDOR}</authors>
+    <owners>${CPACK_PACKAGE_VENDOR}</owners>
+    <license type="file">CUDA_EULA.txt</license>
+    <projectUrl>${NUGET_EMGU_URL}</projectUrl>
+	<icon>icon.png</icon>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	<summary>This package provides the native BLAS LT component for CUDA.</summary>
+    <description>This package provides the native BLAS LT component for CUDA.</description>
+    <releaseNotes>This is the ${EMGU_CUDA_VERSION} release of CUDA. </releaseNotes>
+	<dependencies>
+		${EMGU_CUDA_BLAS_LT_NUGET_DEPENDENCY}
+    </dependencies>
+    <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
+    <tags>emgu cuda</tags>
+  </metadata>
+  <files>
+    ${EMGU_CUDA_BLAS_LT_NUGET_FILE_LIST}
+  </files>
+</package>

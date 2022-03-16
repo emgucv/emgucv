@@ -36,7 +36,8 @@ IF ((TARGET Emgu.CV.Platform.NetStandard) AND (HAVE_WINDESKTOP_X86 OR HAVE_WINDE
 	  Emgu.runtime.windows.cuda.dnn.cnn.train.nuget 
 	  Emgu.runtime.windows.cuda.dnn.ops.nuget 
 	  Emgu.runtime.windows.cuda.dnn.adv.nuget 
-	  Emgu.runtime.windows.cuda.blas.nuget 
+	  Emgu.runtime.windows.cuda.blas.nuget
+      Emgu.runtime.windows.cuda.blas.lt.nuget	  
 	  Emgu.runtime.windows.cuda.npp.nuget)
   ENDIF()
 
