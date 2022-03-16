@@ -1299,5 +1299,61 @@ namespace Emgu.CV.Test
                 }
             }
         }
+
+        [Test]
+        public void TestPerformanceConvlution()
+        {
+            
+            Mat ImageMat1 = EmguAssert.LoadMat("lena.jpg", ImreadModes.Grayscale);
+            ImageMat1.ConvertTo(ImageMat1, DepthType.Cv32F);
+            GpuMat ImageGpuMa1 = new Emgu.CV.Cuda.GpuMat<Gray>();
+            ImageGpuMa1.Upload(ImageMat1);
+            filter2d(ImageMat1);
+            cuda_convolve(ImageGpuMa1);
+        }
+        public Mat filter2d(Mat imgMat1)
+        {
+            //image dimensions are (w=784,h=565)
+            Size s1 = new Size(imgMat1.Cols, imgMat1.Rows);
+            Mat dst = new Mat(s1, DepthType.Cv32F, 1);
+            Point o = new Point(-1, -1);
+            Mat kernel = (Mat.Ones(3, 3, DepthType.Cv32F, 1)) / 9;
+            int iteration = 1000;//p is iteration for running each function
+
+            CvInvoke.Filter2D(imgMat1, dst, kernel, o);
+
+            Stopwatch stopwatch3 = new Stopwatch();
+            stopwatch3.Start();
+            for (int i = 0; i < iteration; i++)
+            {
+                CvInvoke.Filter2D(imgMat1, dst, kernel, o);
+            }
+            stopwatch3.Stop();
+            Console.WriteLine("Elapsed Time is {0} ms", stopwatch3.ElapsedMilliseconds);
+
+            return imgMat1;
+        }
+        public GpuMat cuda_convolve(GpuMat imgGPUMat1)
+        {
+            //image dimensions are (w=784,h=565)
+            Mat kernel = (Mat.Ones(3, 3, DepthType.Cv32F, 1)) / 9;
+            GpuMat gKernel = new GpuMat();
+            gKernel.Upload(kernel);
+            GpuMat imgGPUMat3 = new GpuMat();
+            CudaConvolution l = new CudaConvolution(imgGPUMat1.Size);
+            int iteration = 1000;//p is iteration for running each function
+            l.Convolve(imgGPUMat1, kernel, imgGPUMat3, false);
+
+            Stopwatch stopwatch3 = new Stopwatch();
+            stopwatch3.Start();
+            for (int i = 0; i < iteration; i++)
+            {
+                l.Convolve(imgGPUMat1, kernel, imgGPUMat3, false);
+            }
+            stopwatch3.Stop();
+            Console.WriteLine("Elapsed Time is {0} ms", stopwatch3.ElapsedMilliseconds);
+
+            return imgGPUMat3;
+        }
     }
 }
