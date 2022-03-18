@@ -11,7 +11,8 @@ jobs:
   analyze:
     name: Analyze
     runs-on: [ self-hosted, windows-2019 ]
-    timeout-minutes: 180
+    # one day time out
+    timeout-minutes: 1440
     steps:
       - name: Add Visual Studio MSBuild to PATH
         id: msbuild_path
