@@ -8,20 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="..\XamarinForms\Core\dog416.png" Link="dog416.png">
+    <None Remove="dog416.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="dog416.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Emgu.TF.Models" Version="2.8.0.1407" />
-    <PackageReference Include="Emgu.TF.Protobuf" Version="2.8.0.1407" />
-    <PackageReference Include="Emgu.TF.runtime.windows" Version="2.8.0.1407" />
+    <PackageReference Include="Emgu.TF.Lite.Models" Version="2.8.0.1405" />
+    <PackageReference Include="Emgu.TF.Lite.runtime.windows" Version="2.8.0.1405" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Emgu.CV.Platform\DotNet\Core\Emgu.CV.Platform.NetCore.csproj" />
-    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.Netstandard.csproj" />
+    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
   </ItemGroup>
 
   <Import Project="..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems" Label="Shared" />

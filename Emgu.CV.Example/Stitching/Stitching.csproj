@@ -157,9 +157,9 @@
       <Project>{90e78bbf-c7fe-4d8e-ade1-75448e866fdb}</Project>
       <Name>Emgu.CV.Platform.NetFramework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.Netstandard.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
       <Project>{f8ccdef7-e79a-4fd5-8c0e-9290059c7dd6}</Project>
-      <Name>Emgu.CV.Platform.Netstandard</Name>
+      <Name>Emgu.CV.Platform.NetStandard</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

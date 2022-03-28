@@ -36,11 +36,66 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       COMPONENT emgucv_example_source
       )
   ENDIF()
+  
+  #Windows only demos
   IF (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
+    add_subdirectory(CameraCapture)
+    add_subdirectory(MotionDetection)
+    add_subdirectory(VideoSurveillance)
+    add_subdirectory(Webservice_Host)
+    add_subdirectory(Webservice_Client)
+    add_subdirectory(OCR)
+    add_subdirectory(Aruco)
     INSTALL(
       DIRECTORY
-      "${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/WPF.NetCore/"
-      DESTINATION Emgu.CV.Example/XamarinForms/WPF.NetCore/
+      "${CMAKE_CURRENT_SOURCE_DIR}/WPF.NetCore/"
+      DESTINATION Emgu.CV.Example/WPF.NetCore/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.config"
+      PATTERN "*.shproj"
+      PATTERN "*.Xamarin"
+      PATTERN "*.projitems"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN ".git" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "Release" EXCLUDE  
+      )
+	INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/TF.Interop/"
+      DESTINATION Emgu.CV.Example/TF.Interop/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.config"
+      PATTERN "*.shproj"
+      PATTERN "*.Xamarin"
+      PATTERN "*.projitems"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN ".git" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "Release" EXCLUDE  
+      )
+	INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/TF.Lite.Interop/"
+      DESTINATION Emgu.CV.Example/TF.Lite.Interop/
       COMPONENT emgucv_example_source
       FILES_MATCHING 
       PATTERN "*.cs"
@@ -285,25 +340,6 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       DESTINATION "opencv/data/haarcascades"
       COMPONENT emgucv_example_source
       )
-  ENDIF()
-
-  IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
-#    SET(EMGU_CV_REFERENCE 
-#      -r:System.Xml.dll 
-#      -r:System.Drawing.dll 
-#      -r:System.Data.dll 
-#      -r:System.Windows.Forms.dll
-#	  -r:System.ServiceModel.dll
-#      -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.World.dll" 
-#      -r:"${LIBRARY_OUTPUT_PATH}/Emgu.CV.UI.dll")
-    
-    add_subdirectory(CameraCapture)
-    add_subdirectory(MotionDetection)
-    add_subdirectory(VideoSurveillance)
-    add_subdirectory(Webservice_Host)
-    add_subdirectory(Webservice_Client)
-    add_subdirectory(OCR)
-    add_subdirectory(Aruco)
   ENDIF()
   
   IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_MACOS OR HAVE_LINUX_ARM OR HAVE_LINUX_X64 OR HAVE_LINUX_X86)
