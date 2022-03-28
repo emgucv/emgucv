@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Emgu.TF.Models" Version="2.6.0.1294" />
-    <PackageReference Include="Emgu.TF.Protobuf" Version="2.6.0.1294" />
-    <PackageReference Include="Emgu.TF.runtime.windows" Version="2.6.0.1294" />
+    <PackageReference Include="Emgu.TF.Models" Version="2.8.0.1407" />
+    <PackageReference Include="Emgu.TF.Protobuf" Version="2.8.0.1407" />
+    <PackageReference Include="Emgu.TF.runtime.windows" Version="2.8.0.1407" />
   </ItemGroup>
 
   <ItemGroup>
