@@ -19,6 +19,8 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
       BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Engu.CV.Models.NetStandard.csproj" "${EXTRA_MSBUILD_FLAGS}" ALL)
     ELSEIF (DOTNET_FOUND)
       BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Models.NetStandard" "${EXTRA_BUILD_FLAGS}" ALL)
+    ELSE()
+      MESSAGE(FATAL_ERROR "dotnet command not found, unable to build Emgu.CV.Models.NetStandard project")
     ENDIF()
     
     IF (EMGU_SIGN_FOUND)
