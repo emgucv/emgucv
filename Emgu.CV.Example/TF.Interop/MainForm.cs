@@ -298,6 +298,25 @@ namespace TFInterop
                 //stop the camera if we are in a recording session.
                 cameraButton_Click(this, null);
             }
+
+            if (_inceptionGraph != null)
+            {
+                _inceptionGraph.Dispose();
+                _inceptionGraph = null;
+            }
+
+            if (_imageTensor != null)
+            {
+                _imageTensor.Dispose();
+                _imageTensor = null;
+            }
+
+            if (_renderMat != null)
+            {
+                _renderMat.Dispose();
+                _renderMat = null;
+            }
+
         }
     }
 }
