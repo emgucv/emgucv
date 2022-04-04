@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Emgu.TF.Lite.Models" Version="2.8.0.1405" />
-    <PackageReference Include="Emgu.TF.Lite.runtime.windows" Version="2.8.0.1405" />
+    <PackageReference Include="Emgu.TF.Lite.Models" Version="2.8.0.1418" />
+    <PackageReference Include="Emgu.TF.Lite.runtime.windows" Version="2.8.0.1418" />
   </ItemGroup>
 
   <ItemGroup>
