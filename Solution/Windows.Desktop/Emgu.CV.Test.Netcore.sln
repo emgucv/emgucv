@@ -20,7 +20,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Windows", "
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Mac", "..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.shproj", "{74DB1213-249E-44DC-B193-BC5CEC981D3C}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Raspbian", "..\..\Emgu.CV.Runtime\Raspbian\Emgu.CV.Runtime.Raspbian.shproj", "{47CF52B9-AB6D-4BF6-A791-1AC4D2CCD140}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Debian", "..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.shproj", "{47CF52B9-AB6D-4BF6-A791-1AC4D2CCD140}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Ubuntu", "..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.shproj", "{86A21342-2DA9-4841-B1BD-B323AC5B81FD}"
 EndProject
@@ -35,7 +35,7 @@ Global
 		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{0bfad282-50c1-449c-b01c-62fd23bbdbe5}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
-		..\..\Emgu.CV.Runtime\Raspbian\Emgu.CV.Runtime.Raspbian.projitems*{47cf52b9-ab6d-4bf6-a791-1ac4d2ccd140}*SharedItemsImports = 13
+		..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.projitems*{47cf52b9-ab6d-4bf6-a791-1ac4d2ccd140}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{739ad468-29f3-48f6-8547-b1d8274d4c5a}*SharedItemsImports = 5
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{739ad468-29f3-48f6-8547-b1d8274d4c5a}*SharedItemsImports = 5
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{739ad468-29f3-48f6-8547-b1d8274d4c5a}*SharedItemsImports = 5
