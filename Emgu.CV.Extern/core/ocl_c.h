@@ -64,7 +64,7 @@ CVAPI(void*) oclDeviceGetPtr(cv::ocl::Device* device);
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::ocl::Context*) oclContextCreate();
-CVAPI(const cv::ocl::Context*) oclContextGetDefault(bool initialize);
+CVAPI(cv::ocl::Context*) oclContextGetDefault();
 CVAPI(void) oclContextRelease(cv::ocl::Context** context);
 CVAPI(const cv::ocl::Program*) oclContextGetProg(
     cv::ocl::Context* context,

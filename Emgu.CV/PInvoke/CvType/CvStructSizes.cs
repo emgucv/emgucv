@@ -42,9 +42,9 @@ namespace Emgu.CV.Structure
       /// </summary>
       public int CvRect;
       /// <summary>
-      /// The size of CvBox2D
+      /// The size of cv::RotatedRect
       /// </summary>
-      public int CvBox2D;
+      public int CvRotatedRect;
       /// <summary>
       /// The size of CvMat
       /// </summary>

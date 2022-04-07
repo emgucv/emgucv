@@ -5,32 +5,18 @@
 //----------------------------------------------------------------------------
 
 #pragma once
-#ifndef EMGU_CALIB3D_C_H
-#define EMGU_CALIB3D_C_H
+#ifndef EMGU_CALIB_C_H
+#define EMGU_CALIB_C_H
 
 #include "opencv2/core/core_c.h"
-#include "opencv2/calib3d/calib3d.hpp"
+#include "opencv2/calib.hpp"
+#include "opencv2/calib3d.hpp"
 
 CVAPI(int)  cveEstimateAffine3D(
    cv::_InputArray* src, cv::_InputArray* dst,
    cv::_OutputArray* out, cv::_OutputArray* inliers,
    double ransacThreshold, double confidence);
 
-//StereoSGBM
-CVAPI(cv::StereoSGBM*) cveStereoSGBMCreate(
-  int minDisparity, int numDisparities, int blockSize,
-  int P1, int P2, int disp12MaxDiff,
-  int preFilterCap, int uniquenessRatio,
-  int speckleWindowSize, int speckleRange,
-  int mode, cv::StereoMatcher** stereoMatcher, cv::Ptr<cv::StereoSGBM>** sharedPtr);
-CVAPI(void) cveStereoSGBMRelease(cv::Ptr<cv::StereoSGBM>** sharedPtr);
-
-//StereoBM
-CVAPI(cv::StereoMatcher*) cveStereoBMCreate(int mode, int numberOfDisparities, cv::Ptr<cv::StereoMatcher>** sharedPtr);
-
-//StereoMatcher
-CVAPI(void) cveStereoMatcherCompute(cv::StereoMatcher*  disparitySolver, cv::_InputArray* left, cv::_InputArray* right, cv::_OutputArray* disparity);
-CVAPI(void) cveStereoMatcherRelease(cv::Ptr<cv::StereoMatcher>** sharedPtr);
 
 //2D Tracker
 CVAPI(bool) getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, std::vector< std::vector< cv::DMatch > >* matches, cv::Mat* mask, double randsacThreshold, cv::Mat* homography);
@@ -61,17 +47,6 @@ CVAPI(bool) cveFindChessboardCorners(cv::_InputArray* image, CvSize* patternSize
 
 CVAPI(bool) cveFind4QuadCornerSubpix(cv::_InputArray* image, cv::_InputOutputArray* corners, CvSize* regionSize);
 
-CVAPI(bool) cveStereoRectifyUncalibrated(cv::_InputArray* points1, cv::_InputArray* points2, cv::_InputArray* f, CvSize* imgSize, cv::_OutputArray* h1, cv::_OutputArray* h2, double threshold);
-
-CVAPI(void) cveStereoRectify(
-   cv::_InputArray* cameraMatrix1, cv::_InputArray* distCoeffs1,
-   cv::_InputArray* cameraMatrix2, cv::_InputArray* distCoeffs2,
-   CvSize* imageSize, cv::_InputArray* r, cv::_InputArray* t,
-   cv::_OutputArray* r1, cv::_OutputArray* r2,
-   cv::_OutputArray* p1, cv::_OutputArray* p2,
-   cv::_OutputArray* q, int flags,
-   double alpha, CvSize* newImageSize,
-   CvRect* validPixROI1, CvRect* validPixROI2);
 
 CVAPI(void) cveRodrigues(cv::_InputArray* src, cv::_OutputArray* dst, cv::_OutputArray* jacobian);
 
@@ -86,7 +61,16 @@ CVAPI(void) cveConvertPointsToHomogeneous(cv::_InputArray* src, cv::_OutputArray
 CVAPI(void) cveConvertPointsFromHomogeneous(cv::_InputArray* src, cv::_OutputArray* dst);
 
 
-CVAPI(void) cveFindEssentialMat(cv::_InputArray* points1, cv::_InputArray* points2, cv::_InputArray* cameraMatrix, int method, double prob, double threshold, cv::_OutputArray* mask, cv::Mat* essentialMat);
+CVAPI(void) cveFindEssentialMat(
+	cv::_InputArray* points1, 
+	cv::_InputArray* points2, 
+	cv::_InputArray* cameraMatrix, 
+	int method, 
+	double prob, 
+	double threshold,
+	int maxIter,
+	cv::_OutputArray* mask, 
+	cv::Mat* essentialMat);
 CVAPI(void) cveFindFundamentalMat(cv::_InputArray* points1, cv::_InputArray* points2, cv::_OutputArray* dst, int method, double param1, double param2, cv::_OutputArray* mask);
 CVAPI(void) cveFindHomography(cv::_InputArray* srcPoints, cv::_InputArray* dstPoints, cv::_OutputArray* dst, int method, double ransacReprojThreshold, cv::_OutputArray* mask);
 

@@ -14,7 +14,7 @@ using Emgu.CV.Util;
 using Emgu.Util;
 
 
-namespace Emgu.CV.Rgbd
+namespace Emgu.CV
 {
     /// <summary>
     /// Object that can compute the normals in an image. It is an object as it can cache data for speed efficiency
@@ -60,7 +60,7 @@ namespace Emgu.CV.Rgbd
             Method method = Method.Fals)
         {
             using (InputArray iaK = k.GetInputArray())
-                _ptr = RgbdInvoke.cveRgbdNormalsCreate(
+                _ptr = CvInvoke.cveRgbdNormalsCreate(
                     rows,
                     cols,
                     depth,
@@ -91,7 +91,7 @@ namespace Emgu.CV.Rgbd
         {
             using (InputArray iaPoints = points.GetInputArray())
             using (OutputArray oaNormals = normals.GetOutputArray())
-                RgbdInvoke.cveRgbdNormalsApply(
+                CvInvoke.cveRgbdNormalsApply(
                     _ptr,
                     iaPoints,
                     oaNormals);
@@ -104,7 +104,7 @@ namespace Emgu.CV.Rgbd
         {
             if (_sharedPtr != IntPtr.Zero)
             {
-                RgbdInvoke.cveRgbdNormalsRelease(ref _sharedPtr);
+                CvInvoke.cveRgbdNormalsRelease(ref _sharedPtr);
                 _algorithmPtr = IntPtr.Zero;
                 _ptr = IntPtr.Zero;
             }
@@ -112,9 +112,9 @@ namespace Emgu.CV.Rgbd
     }
 
     /// <summary>
-    /// Provide interfaces to the Open CV Rgbd functions
+    /// Provide interfaces to the Open CV functions
     /// </summary>
-    public static partial class RgbdInvoke
+    public static partial class CvInvoke
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

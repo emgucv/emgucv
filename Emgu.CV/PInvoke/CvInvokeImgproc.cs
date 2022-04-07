@@ -477,6 +477,7 @@ namespace Emgu.CV
 
         #region Computational Geometry
 
+        /*
         /// <summary>
         /// Finds minimum area rectangle that contains both input rectangles inside
         /// </summary>
@@ -491,6 +492,7 @@ namespace Emgu.CV
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveMaxRect(ref Rectangle rect1, ref Rectangle rect2, ref Rectangle result);
+        */
 
         /// <summary>
         /// Fits line to 2D or 3D point set 

@@ -105,17 +105,17 @@ CVAPI(bool) cveIsContourConvex(cv::_InputArray* contour);
 CVAPI(float) cveIntersectConvexConvex(cv::_InputArray* p1, cv::_InputArray* p2,	cv::_OutputArray* p12, bool handleNested);
 CVAPI(void) cveBoundingRectangle(cv::_InputArray* points, CvRect* boundingRect);
 CVAPI(double) cveArcLength(cv::_InputArray* curve, bool closed);
-CVAPI(void) cveMinAreaRect(cv::_InputArray* points, CvBox2D* box);
-CVAPI(void) cveBoxPoints(CvBox2D* box, cv::_OutputArray* points);
+CVAPI(void) cveMinAreaRect(cv::_InputArray* points, cv::RotatedRect* box);
+CVAPI(void) cveBoxPoints(cv::RotatedRect* box, cv::_OutputArray* points);
 CVAPI(double) cveMinEnclosingTriangle(cv::_InputArray* points, cv::_OutputArray* triangle);
 CVAPI(void) cveMinEnclosingCircle(cv::_InputArray* points, CvPoint2D32f* center, float* radius);
 CVAPI(double) cveMatchShapes(cv::_InputArray* contour1, cv::_InputArray* contour2, int method, double parameter);
-CVAPI(void) cveFitEllipse(cv::_InputArray* points, CvBox2D* box);
-CVAPI(void) cveFitEllipseAMS(cv::_InputArray* points, CvBox2D* box);
-CVAPI(void) cveFitEllipseDirect(cv::_InputArray* points, CvBox2D* box);
+CVAPI(void) cveFitEllipse(cv::_InputArray* points, cv::RotatedRect* box);
+CVAPI(void) cveFitEllipseAMS(cv::_InputArray* points, cv::RotatedRect* box);
+CVAPI(void) cveFitEllipseDirect(cv::_InputArray* points, cv::RotatedRect* box);
 
 CVAPI(void) cveFitLine(cv::_InputArray* points, cv::_OutputArray* line, int distType, double param, double reps, double aeps);
-CVAPI(int) cveRotatedRectangleIntersection(CvBox2D* rect1, CvBox2D* rect2, cv::_OutputArray* intersectingRegion);
+CVAPI(int) cveRotatedRectangleIntersection(cv::RotatedRect* rect1, cv::RotatedRect* rect2, cv::_OutputArray* intersectingRegion);
 CVAPI(void) cveDrawContours(
    cv::_InputOutputArray* image, cv::_InputArray* contours, int contourIdx, 
    CvScalar* color, int thickness, int lineType, cv::_InputArray* hierarchy, 
@@ -212,9 +212,9 @@ CVAPI(void) cveHuMoments2(cv::Moments* moments, double* hu);
 CVAPI(double) cveGetSpatialMoment(CvMoments* moments, int xOrder, int yOrder);
 CVAPI(double) cveGetCentralMoment(CvMoments* moments, int xOrder, int yOrder);
 CVAPI(double) cveGetNormalizedCentralMoment(CvMoments* moments, int xOrder, int yOrder);
-*/
-CVAPI(void) cveMaxRect(CvRect* rect1, CvRect* rect2, CvRect* result);
 
+CVAPI(void) cveMaxRect(CvRect* rect1, CvRect* rect2, CvRect* result);
+*/
 CVAPI(int) cveConnectedComponents(cv::_InputArray* image, cv::_OutputArray* labels, int connectivity, int ltype, int ccltype);
 CVAPI(int) cveConnectedComponentsWithStats(cv::_InputArray* image, cv::_OutputArray* labels, cv::_OutputArray* stats, cv::_OutputArray* centroids, int connectivity, int ltype, int ccltype);
 

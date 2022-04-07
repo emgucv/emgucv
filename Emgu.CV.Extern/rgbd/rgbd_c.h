@@ -32,40 +32,6 @@ namespace cv
 
 #endif
 
-
-CVAPI(cv::rgbd::Odometry*) cveOdometryCreate(
-    cv::String* odometryType,
-    cv::Algorithm** algorithm, 
-    cv::Ptr<cv::rgbd::Odometry>** sharedPtr
-);
-CVAPI(void) cveOdometryRelease(cv::Ptr<cv::rgbd::Odometry>** sharedPtr);
-CVAPI(bool) cveOdometryCompute(
-	cv::rgbd::Odometry* odometry,
-	cv::Mat* srcImage,
-	cv::Mat* srcDepth, 
-	cv::Mat* srcMask, 
-	cv::Mat* dstImage,
-	cv::Mat* dstDepth,
-	cv::Mat* dstMask,
-	cv::_OutputArray* rt,
-	cv::Mat* initRt);
-
-CVAPI(cv::rgbd::RgbdNormals*) cveRgbdNormalsCreate(
-	int rows,
-	int cols,
-	int depth,
-	cv::_InputArray* K,
-	int window_size,
-	int method,
-	cv::Algorithm** algorithm,
-	cv::Ptr<cv::rgbd::RgbdNormals>** sharedPtr);
-CVAPI(void) cveRgbdNormalsRelease(cv::Ptr<cv::rgbd::RgbdNormals>** sharedPtr);
-CVAPI(void) cveRgbdNormalsApply(
-	cv::rgbd::RgbdNormals* rgbdNormals,
-	cv::_InputArray* points,
-	cv::_OutputArray* normals);
-
-
 CVAPI(cv::linemod::Detector*) cveLinemodLineDetectorCreate(cv::Ptr<cv::linemod::Detector>** sharedPtr);
 CVAPI(cv::linemod::Detector*) cveLinemodLinemodDetectorCreate(cv::Ptr<cv::linemod::Detector>** sharedPtr);
 CVAPI(void) cveLinemodDetectorRead(cv::linemod::Detector* detector, cv::FileNode* fn);

@@ -15,10 +15,9 @@
 #include "emgu_c.h"
 #include "opencv2/core/affine.hpp"
 #include "opencv2/core/utils/logger.hpp"
-#include "opencv2/core/utils/logger.hpp"
 #include "registry_parallel.hpp"
 
-CVAPI(CvErrorCallback) cveRedirectError(CvErrorCallback error_handler, void* userdata, void** prev_userdata);
+CVAPI(cv::ErrorCallback) cveRedirectError(cv::ErrorCallback error_handler, void* userdata, void** prev_userdata);
 CVAPI(int) cveGetErrMode();
 CVAPI(int) cveSetErrMode(int mode);
 CVAPI(int) cveGetErrStatus();
@@ -270,7 +269,7 @@ CVAPI(IplImage*) cveGetImage(CvArr* arr, IplImage* imageHeader);
 
 CVAPI(int) cveCheckArr(CvArr* arr, int flags, double minVal, double maxVal);
 CVAPI(CvMat*) cveReshape(CvArr* arr, CvMat* header, int newCn, int newRows);
-CVAPI(CvMat*) cveGetDiag(CvArr* arr, CvMat* submat, int diag);
+//CVAPI(CvMat*) cveGetDiag(CvArr* arr, CvMat* submat, int diag);
 CVAPI(void) cveConvertScale(CvArr* arr, CvArr* dst, double scale, double shift);
 
 CVAPI(void) cveReleaseImage(IplImage** image);

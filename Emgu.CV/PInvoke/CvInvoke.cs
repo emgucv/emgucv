@@ -551,7 +551,7 @@ namespace Emgu.CV
 
             CvStructSizes sizes = CvInvoke.GetCvStructSizes();
 
-            sane &= (sizes.CvBox2D == Toolbox.SizeOf<RotatedRect>());
+            sane &= (sizes.CvRotatedRect == Toolbox.SizeOf<RotatedRect>());
             sane &= (sizes.CvMat == Toolbox.SizeOf<MCvMat>());
             sane &= (sizes.CvMatND == Toolbox.SizeOf<MCvMatND>());
             sane &= (sizes.CvPoint == Toolbox.SizeOf<System.Drawing.Point>());

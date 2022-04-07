@@ -204,7 +204,7 @@ void cveCalcOpticalFlowPyrLK(cv::_InputArray* prevImg, cv::_InputArray* nextImg,
 #endif
 }
 
-void cveCamShift(cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria, CvBox2D* result)
+void cveCamShift(cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria, cv::RotatedRect* result)
 {
 #ifdef HAVE_OPENCV_VIDEO
 	cv::Rect rect = *window;

@@ -33,7 +33,9 @@ cp ../Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr.git/LICENSE Assets/Emg
 cp ../Emgu.Util/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.Util/
 
 cp ../Emgu.CV/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
-cp -r ../Emgu.CV/Calib3d Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
+cp -r ../Emgu.CV/3d Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
+cp -r ../Emgu.CV/Calib Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
+cp -r ../Emgu.CV/Stereo Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Color Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Core Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Gapi Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
@@ -107,10 +109,11 @@ mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XObjdetect
 cp -r ../Emgu.CV.Contrib/XObjdetect/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XObjdetect
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XPhoto
 cp -r ../Emgu.CV.Contrib/XPhoto/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XPhoto
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XStereo
+cp -r ../Emgu.CV.Contrib/XPhoto/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XStereo
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Quality
 cp -r ../Emgu.CV.Contrib/Quality/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Quality
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Stereo
-cp -r ../Emgu.CV.Contrib/Stereo/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Stereo
+
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/SurfaceMatching
 cp -r ../Emgu.CV.Contrib/SurfaceMatching/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/SurfaceMatching
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DnnSuperres

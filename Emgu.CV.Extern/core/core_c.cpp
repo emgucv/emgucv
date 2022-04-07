@@ -6,9 +6,9 @@
 
 #include "core_c_extra.h"
 
-CvErrorCallback cveRedirectError(CvErrorCallback error_handler, void* userdata, void** prev_userdata)
+cv::ErrorCallback cveRedirectError(cv::ErrorCallback error_handler, void* userdata, void** prev_userdata)
 {
-	return cvRedirectError(error_handler, userdata, prev_userdata);
+	return cv::redirectError(error_handler, userdata, prev_userdata);
 }
 
 int cveGetErrMode()
@@ -962,10 +962,14 @@ CvMat* cveReshape(CvArr* arr, CvMat* header, int newCn, int newRows)
 {
 	return cvReshape(arr, header, newCn, newRows);
 }
+
+/*
 CvMat* cveGetDiag(CvArr* arr, CvMat* submat, int diag)
 {
 	return cvGetDiag(arr, submat, diag);
 }
+*/
+
 void cveConvertScale(CvArr* arr, CvArr* dst, double scale, double shift)
 {
 	cvConvertScale(arr, dst, scale, shift);

@@ -30,19 +30,19 @@
     <Compile Include="$(MSBuildThisFileDirectory)DnnModern\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ImgHash\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PhaseUnwrapping\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Quality\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Stereo\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)SurfaceMatching\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)DnnSuperres\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)IntensityTransform\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Rapid\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Mcc\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Hdf\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)DepthAI\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)WechatQrcode\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Barcode\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)StructuredLight\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Rgbd\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Reg\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Quality\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)XStereo\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)SurfaceMatching\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DnnSuperres\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IntensityTransform\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rapid\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mcc\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Hdf\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DepthAI\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)WechatQrcode\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Barcode\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StructuredLight\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Rgbd\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Reg\*.cs" />
   </ItemGroup>
 </Project>

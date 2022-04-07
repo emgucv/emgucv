@@ -12,7 +12,7 @@ using Emgu.CV.Util;
 using Emgu.Util;
 using System.Drawing;
 
-namespace Emgu.CV.Stereo
+namespace Emgu.CV.XStereo
 {
     /// <summary>
     /// Class containing the methods needed for Quasi Dense Stereo computation.

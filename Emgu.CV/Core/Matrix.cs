@@ -411,6 +411,7 @@ namespace Emgu.CV
             return subMat;
         }
 
+        /*
         /// <summary>
         /// Return the specific diagonal elements of this matrix
         /// </summary>
@@ -432,7 +433,7 @@ namespace Emgu.CV
         public Matrix<TDepth> GetDiag()
         {
             return GetDiag(0);
-        }
+        }*/
         #endregion
 
         #region Removing rows or columns

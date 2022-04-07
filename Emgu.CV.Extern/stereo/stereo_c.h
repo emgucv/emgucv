@@ -14,23 +14,42 @@
 #include "opencv2/stereo.hpp"
 #else
 static inline CV_NORETURN void throw_no_stereo() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without stereo support"); }
+/*
 namespace cv {
 	namespace stereo {
 		class QuasiDenseStereo {};
 		struct PropagationParameters {};
 	}
 }
+*/
 #endif
 
-CVAPI(cv::stereo::QuasiDenseStereo*) cveQuasiDenseStereoCreate(
-	CvSize* monoImgSize, 
-	cv::String* paramFilepath,
-	cv::Ptr<cv::stereo::QuasiDenseStereo>** sharedPtr);
+//StereoSGBM
+CVAPI(cv::StereoSGBM*) cveStereoSGBMCreate(
+	int minDisparity, int numDisparities, int blockSize,
+	int P1, int P2, int disp12MaxDiff,
+	int preFilterCap, int uniquenessRatio,
+	int speckleWindowSize, int speckleRange,
+	int mode, cv::StereoMatcher** stereoMatcher, cv::Ptr<cv::StereoSGBM>** sharedPtr);
+CVAPI(void) cveStereoSGBMRelease(cv::Ptr<cv::StereoSGBM>** sharedPtr);
 
-CVAPI(void) cveQuasiDenseStereoRelease(cv::Ptr<cv::stereo::QuasiDenseStereo>** sharedPtr);
+//StereoBM
+CVAPI(cv::StereoMatcher*) cveStereoBMCreate(int mode, int numberOfDisparities, cv::Ptr<cv::StereoMatcher>** sharedPtr);
 
-CVAPI(void) cveQuasiDenseStereoProcess(cv::stereo::QuasiDenseStereo* stereo, cv::Mat* imgLeft, cv::Mat* imgRight);
+//StereoMatcher
+CVAPI(void) cveStereoMatcherCompute(cv::StereoMatcher* disparitySolver, cv::_InputArray* left, cv::_InputArray* right, cv::_OutputArray* disparity);
+CVAPI(void) cveStereoMatcherRelease(cv::Ptr<cv::StereoMatcher>** sharedPtr);
 
-CVAPI(void) cveQuasiDenseStereoGetDisparity(cv::stereo::QuasiDenseStereo* stereo, cv::Mat* disparity);
+CVAPI(bool) cveStereoRectifyUncalibrated(cv::_InputArray* points1, cv::_InputArray* points2, cv::_InputArray* f, CvSize* imgSize, cv::_OutputArray* h1, cv::_OutputArray* h2, double threshold);
+
+CVAPI(void) cveStereoRectify(
+	cv::_InputArray* cameraMatrix1, cv::_InputArray* distCoeffs1,
+	cv::_InputArray* cameraMatrix2, cv::_InputArray* distCoeffs2,
+	CvSize* imageSize, cv::_InputArray* r, cv::_InputArray* t,
+	cv::_OutputArray* r1, cv::_OutputArray* r2,
+	cv::_OutputArray* p1, cv::_OutputArray* p2,
+	cv::_OutputArray* q, int flags,
+	double alpha, CvSize* newImageSize,
+	CvRect* validPixROI1, CvRect* validPixROI2);
 
 #endif

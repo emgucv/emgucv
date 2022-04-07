@@ -15,7 +15,7 @@ void cveGetCvStructSizes(emgu::cvStructSizes* sizes)
    sizes->CvSize2D32f = sizeof(CvSize2D32f);
    sizes->CvScalar = sizeof(CvScalar);
    sizes->CvRect = sizeof(CvRect);
-   sizes->CvBox2D = sizeof(CvBox2D);
+   sizes->CvRotatedRect = sizeof(cv::RotatedRect);
    sizes->CvMat = sizeof(CvMat);
    sizes->CvMatND = sizeof(CvMatND);
    sizes->CvTermCriteria = sizeof(CvTermCriteria);

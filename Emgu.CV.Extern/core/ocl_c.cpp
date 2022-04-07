@@ -102,9 +102,9 @@ cv::ocl::Context* oclContextCreate()
 {
 	return new cv::ocl::Context();
 }
-const cv::ocl::Context* oclContextGetDefault(bool initialize)
+cv::ocl::Context* oclContextGetDefault()
 {
-	return &cv::ocl::Context::getDefault(initialize);
+	return &cv::ocl::Context::getDefault();
 }
 void oclContextRelease(cv::ocl::Context** context)
 {

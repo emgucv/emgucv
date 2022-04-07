@@ -2820,13 +2820,13 @@ ENDIF()
 	${HAVE_opencv_dnn})
 ############################### dnn code gen END ##############################
 
-############################### stereo code gen START ##############################
-IF (NOT HAVE_opencv_stereo)
-  SET(HAVE_opencv_stereo FALSE)
+############################### xstereo code gen START ##############################
+IF (NOT HAVE_opencv_xstereo)
+  SET(HAVE_opencv_xstereo FALSE)
 ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
-    "stereo/quasi_dense_stereo_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Stereo/QuasiDenseStereo.g.cs"
+    "xstereo/quasi_dense_stereo_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/XStereo/QuasiDenseStereo.g.cs"
     "cv::stereo::QuasiDenseStereo" 
     "QuasiDenseStereo" 
     "Param" 
@@ -2835,16 +2835,16 @@ ENDIF()
     "Param" 
     "QuasiDenseStereo.PropagationParameters"
     "Parameters for the QuasiDenseStereo class"
-    "Emgu.CV.Stereo"
-    "StereoInvoke"
+    "Emgu.CV.XStereo"
+    "XStereoInvoke"
     "QuasiDenseStereo"
 	""
-	"#include \"stereo_c.h\""
+	"#include \"xstereo_c.h\""
 	""
 	""
-	${HAVE_opencv_stereo})
+	${HAVE_opencv_xstereo})
 
-############################### stereo code gen END ##############################
+############################### xstereo code gen END ##############################
 
 ############################### structed_light code gen START ##############################
 IF (NOT HAVE_opencv_structured_light)

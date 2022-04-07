@@ -365,14 +365,14 @@ double cveArcLength(cv::_InputArray* curve, bool closed)
 {
 	return cv::arcLength(*curve, closed);
 }
-void cveMinAreaRect(cv::_InputArray* points, CvBox2D* box)
+void cveMinAreaRect(cv::_InputArray* points, cv::RotatedRect* box)
 {
 	cv::RotatedRect rr = cv::minAreaRect(*points);
 	box->center = cvPoint2D32f(rr.center.x, rr.center.y);
 	box->size = cvSize2D32f(rr.size.width, rr.size.height);
 	box->angle = rr.angle;
 }
-void cveBoxPoints(CvBox2D* box, cv::_OutputArray* points)
+void cveBoxPoints(cv::RotatedRect* box, cv::_OutputArray* points)
 {
 	cv::boxPoints(*box, *points);
 }
@@ -392,21 +392,21 @@ double cveMatchShapes(cv::_InputArray* contour1, cv::_InputArray* contour2, int 
 {
 	return cv::matchShapes(*contour1, *contour2, method, parameter);
 }
-void cveFitEllipse(cv::_InputArray* points, CvBox2D* box)
+void cveFitEllipse(cv::_InputArray* points, cv::RotatedRect* box)
 {
 	cv::RotatedRect rect = cv::fitEllipse(*points);
 	box->center = cvPoint2D32f(rect.center.x, rect.center.y);
 	box->size = cvSize2D32f(rect.size.width, rect.size.height);
 	box->angle = rect.angle;
 }
-void cveFitEllipseAMS(cv::_InputArray* points, CvBox2D* box)
+void cveFitEllipseAMS(cv::_InputArray* points, cv::RotatedRect* box)
 {
 	cv::RotatedRect rect = cv::fitEllipseAMS(*points);
 	box->center = cvPoint2D32f(rect.center.x, rect.center.y);
 	box->size = cvSize2D32f(rect.size.width, rect.size.height);
 	box->angle = rect.angle;
 }
-void cveFitEllipseDirect(cv::_InputArray* points, CvBox2D* box)
+void cveFitEllipseDirect(cv::_InputArray* points, cv::RotatedRect* box)
 {
 	cv::RotatedRect rect = cv::fitEllipseDirect(*points);
 	box->center = cvPoint2D32f(rect.center.x, rect.center.y);
@@ -418,7 +418,7 @@ void cveFitLine(cv::_InputArray* points, cv::_OutputArray* line, int distType, d
 {
 	cv::fitLine(*points, *line, distType, param, reps, aeps);
 }
-int cveRotatedRectangleIntersection(CvBox2D* rect1, CvBox2D* rect2, cv::_OutputArray* intersectingRegion)
+int cveRotatedRectangleIntersection(cv::RotatedRect* rect1, cv::RotatedRect* rect2, cv::_OutputArray* intersectingRegion)
 {
 	cv::RotatedRect r1 = *rect1;
 	cv::RotatedRect r2 = *rect2;
@@ -684,11 +684,11 @@ double cveGetNormalizedCentralMoment(CvMoments* moments, int xOrder, int yOrder)
 {
    return cvGetNormalizedCentralMoment(moments, xOrder, yOrder);
 }
-*/
+
 void cveMaxRect(CvRect* rect1, CvRect* rect2, CvRect* result)
 {
 	*result = cvMaxRect(rect1, rect2);
-}
+}*/
 
 int cveConnectedComponents(cv::_InputArray* image, cv::_OutputArray* labels, int connectivity, int ltype, int ccltype)
 {

@@ -1547,6 +1547,7 @@ namespace Emgu.CV
 
         #endregion
 
+        /*
         /// <summary>
         /// returns the header, corresponding to a specified diagonal of the input array
         /// </summary>
@@ -1556,6 +1557,7 @@ namespace Emgu.CV
         /// <returns>Pointer to the resulting sub-array header</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetDiag")]
         public static extern IntPtr cvGetDiag(IntPtr arr, IntPtr submat, int diag);
+        */
 
         /// <summary>
         /// Returns number of rows (CvSize::height) and number of columns (CvSize::width) of the input matrix or image. In case of image the size of ROI is returned.

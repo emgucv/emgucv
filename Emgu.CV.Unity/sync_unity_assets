@@ -4,7 +4,9 @@ cd "$(dirname "$0")"
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.Util/*.cs ../Emgu.Util/
 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/*.cs ../Emgu.CV/
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Calib3d/*.cs ../Emgu.CV/Calib3d
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/3d/*.cs ../Emgu.CV/3d
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Calib/*.cs ../Emgu.CV/Calib
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Stereo/*.cs ../Emgu.CV/Stereo
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Color/*.cs ../Emgu.CV/Color 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Core/*.cs ../Emgu.CV/Core 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Gapi/*.cs ../Emgu.CV/Gapi 
@@ -57,7 +59,7 @@ cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Plot/*.cs ../Emgu.CV.Contrib
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Quality/*.cs ../Emgu.CV.Contrib/Quality  
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rapid/*.cs ../Emgu.CV.Contrib/Rapid
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Saliency/*.cs ../Emgu.CV.Contrib/Saliency  
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Stereo/*.cs ../Emgu.CV.Contrib/Stereo  
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XStereo/*.cs ../Emgu.CV.Contrib/XStereo  
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/SurfaceMatching/*.cs ../Emgu.CV.Contrib/SurfaceMatching 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Text/*.cs ../Emgu.CV.Contrib/Text 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Tracking/*.cs ../Emgu.CV.Contrib/Tracking  

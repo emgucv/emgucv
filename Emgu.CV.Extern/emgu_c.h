@@ -33,7 +33,7 @@ namespace emgu
       int CvSize2D32f;
       int CvScalar;
       int CvRect;
-      int CvBox2D;
+      int CvRotatedRect;
       int CvMat;
       int CvMatND;
       //int CvHistogram;

@@ -35,11 +35,13 @@
     <Compile Include="$(MSBuildThisFileDirectory)Dnn\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Objdetect\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Imgproc\*.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Calib3d\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Calib\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)3d\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Stereo\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\CvType\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\Windows.Store\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\System.Drawing\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\CvEnum\*.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)Gapi\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Gapi\*.cs" />
   </ItemGroup>
 </Project>
