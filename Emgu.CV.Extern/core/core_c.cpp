@@ -1136,12 +1136,20 @@ void cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value)
 	value->push_back(0);
 #endif
 
-	key->push_back("HAVE_OPENCV_CALIB3D");
-#ifdef HAVE_OPENCV_CALIB3D
+	key->push_back("HAVE_OPENCV_CALIB");
+#ifdef HAVE_OPENCV_CALIB
 	value->push_back(1);
 #else
 	value->push_back(0);
 #endif
+
+	key->push_back("HAVE_OPENCV_3D");
+#ifdef HAVE_OPENCV_3D
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
 
 	key->push_back("HAVE_OPENCV_CORE");
 #ifdef HAVE_OPENCV_CORE
@@ -1348,6 +1356,13 @@ void cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value)
 
 	key->push_back("HAVE_OPENCV_STEREO");
 #ifdef HAVE_OPENCV_STEREO
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
+	key->push_back("HAVE_OPENCV_XSTEREO");
+#ifdef HAVE_OPENCV_XSTEREO
 	value->push_back(1);
 #else
 	value->push_back(0);

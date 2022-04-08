@@ -31,7 +31,20 @@ namespace cv
 	class Stitcher {};
 	class Feature2D {};
 	class WarperCreator {};
-	
+	class PlaneWarper {};
+	class CylindricalWarper {};
+	class SphericalWarper {};
+	class FisheyeWarper {};
+	class StereographicWarper {};
+	class CompressedRectilinearWarper {};
+	class PaniniWarper {};
+	class MercatorWarper {};
+	class PaniniPortraitWarper {};
+	class PlaneWarperGpu {};
+	class TransverseMercatorWarper {};
+	class CylindricalWarperGpu {};
+	class SphericalWarperGpu {};
+
 	namespace detail
 	{
 		class Blender {};

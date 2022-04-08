@@ -9,8 +9,19 @@
 #define EMGU_CALIB_C_H
 
 #include "opencv2/core/core_c.h"
+
+#ifdef HAVE_OPENCV_CALIB
 #include "opencv2/calib.hpp"
 #include "opencv2/calib3d.hpp"
+
+#else
+static inline CV_NORETURN void throw_no_calib() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without calib support"); }
+
+namespace cv {
+	class Feature2D {};
+}
+
+#endif
 
 CVAPI(int)  cveEstimateAffine3D(
    cv::_InputArray* src, cv::_InputArray* dst,

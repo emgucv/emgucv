@@ -8,10 +8,11 @@
 #ifndef EMGU_XFEATURES2D_C_H
 #define EMGU_XFEATURES2D_C_H
 
-#include "opencv2/imgproc/imgproc.hpp"
+
 #include "vectors_c.h"
 
 #ifdef HAVE_OPENCV_XFEATURES2D
+#include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/xfeatures2d.hpp"
 #else
 static inline CV_NORETURN void throw_no_xfeatures2d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xfeatures2d support"); }
@@ -34,6 +35,8 @@ namespace cv {
 		class HarrisLaplaceFeatureDetector {};
 
 	}
+
+	class Feature2D {};
 }
 #endif
 

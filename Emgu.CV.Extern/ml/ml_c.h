@@ -9,7 +9,35 @@
 #define EMGU_ML_C_H
 
 #include "opencv2/core/core_c.h"
+#ifdef HAVE_OPENCV_ML
 #include "opencv2/ml/ml.hpp"
+#else
+static inline CV_NORETURN void throw_no_ml() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without ml support"); }
+
+namespace cv {
+	namespace ml
+	{
+		class StatModel {};
+		class TrainData {};
+		class NormalBayesClassifier {};
+		class KNearest {};
+		class EM {};
+		class SVM {};
+		class ParamGrid {};
+		class ANN_MLP {};
+		class DTrees {};
+		class RTrees {};
+		class Boost {};
+		class LogisticRegression {};
+		class SVMSGD {};
+	}
+}
+
+#endif
+
+
+
+
 
 //StatModel
 

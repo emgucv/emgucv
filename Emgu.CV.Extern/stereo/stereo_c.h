@@ -14,14 +14,12 @@
 #include "opencv2/stereo.hpp"
 #else
 static inline CV_NORETURN void throw_no_stereo() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without stereo support"); }
-/*
+
 namespace cv {
-	namespace stereo {
-		class QuasiDenseStereo {};
-		struct PropagationParameters {};
-	}
+	class StereoSGBM {};
+	class StereoMatcher {};
 }
-*/
+
 #endif
 
 //StereoSGBM
@@ -30,7 +28,9 @@ CVAPI(cv::StereoSGBM*) cveStereoSGBMCreate(
 	int P1, int P2, int disp12MaxDiff,
 	int preFilterCap, int uniquenessRatio,
 	int speckleWindowSize, int speckleRange,
-	int mode, cv::StereoMatcher** stereoMatcher, cv::Ptr<cv::StereoSGBM>** sharedPtr);
+	int mode, 
+	cv::StereoMatcher** stereoMatcher, 
+	cv::Ptr<cv::StereoSGBM>** sharedPtr);
 CVAPI(void) cveStereoSGBMRelease(cv::Ptr<cv::StereoSGBM>** sharedPtr);
 
 //StereoBM
