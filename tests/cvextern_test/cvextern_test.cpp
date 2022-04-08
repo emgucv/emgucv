@@ -9,8 +9,14 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/imgproc/types_c.h"
 #include "opencv2/highgui/highgui.hpp"
+
+#ifdef HAVE_OPENCV_PHOTO
 #include "opencv2/photo/photo.hpp"
+#endif
+
+#ifdef HAVE_OPENCV_DNN
 #include "opencv2/dnn/dnn.hpp"
+#endif
 //#include "opencv2/gpu/gpu.hpp"
 
 #ifdef _MSC_VER
@@ -210,6 +216,7 @@ void Test_MatchTemplate()
 	cout << "Template matched expected: " << offset.x << "," << offset.y << "; computed: " << minLoc.x << "," << minLoc.y << /*"; maxLoc: " << maxLoc.x << "," <<maxLoc.y <<*/ std::endl;
 }
 
+#ifdef HAVE_OPENCV_PHOTO
 void Test_SeamlessClone(int size)
 {
 	//cv::Mat source = cv::imread("C:\\work\\sourceforge\\emgucv\\libs\\x64\\lena.jpg");
@@ -234,7 +241,9 @@ void Test_SeamlessClone(int size)
 		cout << "Seamless clone time: " << meter.getTimeMilli() << " milliseconds. " << std::endl;
 	}
 }
+#endif
 
+#ifdef HAVE_OPENCV_DNN
 void Test_InferenceEngine()
 {
 	std::vector<std::pair<cv::dnn::Backend, cv::dnn::Target>> backends = cv::dnn::getAvailableBackends();
@@ -245,6 +254,7 @@ void Test_InferenceEngine()
 		cout << "Backend: " << b << "; Target: " << t << std::endl;
 	}
 }
+#endif
 
 int main()
 {
@@ -271,13 +281,17 @@ int main()
 #ifdef _MSC_VER
 	Test_quaternions_performance();
 
+#ifdef HAVE_OPENCV_PHOTO
 	Test_SeamlessClone(3840);
+#endif
 
 #ifdef HAVE_OPENCV_VIDEOIO
 	Test_MSMF_VideoWriter();
 #endif
 
+#ifdef HAVE_OPENCV_DNN
 	Test_InferenceEngine();
+#endif
 
 	cin >> tmp; //wait for input only if compiling with visual C++ 
 #endif

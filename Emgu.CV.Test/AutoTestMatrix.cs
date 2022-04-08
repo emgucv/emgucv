@@ -175,11 +175,12 @@ namespace Emgu.CV.Test
         public void TestGetDiagColRow()
         {
             Matrix<double> m = new Matrix<double>(new double[,] { { 1, 2 }, { 3, 4 } });
+            /*
             Matrix<double> diag = m.GetDiag();
             EmguAssert.IsTrue(diag[0, 0] == 1);
             EmguAssert.IsTrue(diag[1, 0] == 4);
             EmguAssert.IsTrue(diag.Sum == m.Trace.V0);
-
+            */
             Matrix<double> col1 = m.GetCol(1);
             EmguAssert.IsTrue(col1[0, 0] == 2);
             EmguAssert.IsTrue(col1[1, 0] == 4);
@@ -333,12 +334,12 @@ namespace Emgu.CV.Test
             {
                 EmguAssert.AreEqual(mat[i, 2], thirdCol[i, 0]);
             }
-
+            /*
             Matrix<float> diagonal = mat.GetDiag();
             for (int i = 0; i < Math.Min(mat.Rows, mat.Cols); i++)
             {
                 EmguAssert.AreEqual(diagonal[i, 0], mat[i, i]);
-            }
+            }*/
         }
 
         [Test]

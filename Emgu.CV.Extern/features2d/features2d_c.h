@@ -8,9 +8,45 @@
 #ifndef EMGU_FEATURES2D_C_H
 #define EMGU_FEATURES2D_C_H
 
+#include "opencv2/core/core_c.h"
 #include "opencv2/imgproc/imgproc.hpp"
+
+
+#ifdef HAVE_OPENCV_FEATURES2D
 #include "opencv2/features2d/features2d.hpp"
-//#include "opencv2/legacy/compat.hpp"
+#else
+static inline CV_NORETURN void throw_no_features2d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without features2d support"); }
+
+namespace cv {
+	class ORB {};
+	class Feature2D {};
+	class BRISK {};
+	class FastFeatureDetector {};
+	class GFTTDetector {};
+	class MSER {};
+	class SimpleBlobDetector
+	{
+	public:
+		class Params {};
+	};
+	class DescriptorMatcher {};
+	class BFMatcher {};
+	class FlannBasedMatcher {};
+	class BOWKMeansTrainer {};
+	class BOWImgDescriptorExtractor {};
+	class KAZE {};
+	class AKAZE {};
+	class AgastFeatureDetector {};
+	class SIFT {};
+		
+	namespace flann
+	{
+		class IndexParams {};
+		class SearchParams {};
+	}
+}
+#endif
+
 #include "vectors_c.h"
 
 //ORB
@@ -67,25 +103,25 @@ CVAPI(void) drawKeypoints(
 
 // Draws matches of keypoints from two images on output image.
 CVAPI(void) drawMatchedFeatures1(
-	cv::_InputArray* img1, 
+	cv::_InputArray* img1,
 	const std::vector<cv::KeyPoint>* keypoints1,
-	cv::_InputArray* img2, 
+	cv::_InputArray* img2,
 	const std::vector<cv::KeyPoint>* keypoints2,
 	std::vector< cv::DMatch >* matches,
 	cv::_InputOutputArray* outImg,
-	const CvScalar* matchColor, 
+	const CvScalar* matchColor,
 	const CvScalar* singlePointColor,
 	std::vector< unsigned char >* matchesMask,
 	int flags);
 
 CVAPI(void) drawMatchedFeatures2(
-	cv::_InputArray* img1, 
+	cv::_InputArray* img1,
 	const std::vector<cv::KeyPoint>* keypoints1,
-	cv::_InputArray* img2, 
+	cv::_InputArray* img2,
 	const std::vector<cv::KeyPoint>* keypoints2,
 	std::vector< std::vector< cv::DMatch > >* matches,
 	cv::_InputOutputArray* outImg,
-	const CvScalar* matchColor, 
+	const CvScalar* matchColor,
 	const CvScalar* singlePointColor,
 	std::vector< std::vector< unsigned char > >* matchesMask,
 	int flags);

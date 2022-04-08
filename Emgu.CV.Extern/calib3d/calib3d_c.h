@@ -9,7 +9,19 @@
 #define EMGU_CALIB3D_C_H
 
 #include "opencv2/core/core_c.h"
+
+#ifdef HAVE_OPENCV_CALIB3D
 #include "opencv2/calib3d/calib3d.hpp"
+#else
+static inline CV_NORETURN void throw_no_calib3d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without calib3d support"); }
+
+namespace cv {
+	class Feature2D {};
+	class StereoSGBM {};
+	class StereoMatcher {};
+}
+
+#endif
 
 CVAPI(int)  cveEstimateAffine3D(
    cv::_InputArray* src, cv::_InputArray* dst,
