@@ -70,7 +70,8 @@ namespace Emgu.CV.XamarinForms
             bool haveBarcode = (openCVConfigDict["HAVE_OPENCV_BARCODE"] != 0);
             bool haveObjdetect = (openCVConfigDict["HAVE_OPENCV_OBJDETECT"] != 0);
             bool haveTesseract = (openCVConfigDict["HAVE_EMGUCV_TESSERACT"] != 0);
-            
+            bool haveFeatures2D = (openCVConfigDict["HAVE_OPENCV_FEATURES2D"] != 0);
+
 
             if (haveTesseract)
             {
@@ -370,6 +371,7 @@ namespace Emgu.CV.XamarinForms
             yoloButton.IsVisible = haveDNN;
             sceneTextDetectionButton.IsVisible = haveDNN && haveFreetype;
             licensePlateRecognitionButton.IsVisible = hasInferenceEngine;
+            featureDetectionButton.IsVisible = haveFeatures2D;
 
         }
 

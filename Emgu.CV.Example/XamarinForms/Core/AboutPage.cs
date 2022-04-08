@@ -71,14 +71,23 @@ namespace Emgu.CV.XamarinForms
             parallelText = String.Join("", parallelBackendText.ToArray());
 
             String tesseractText;
-            String tesseractVersion = Emgu.CV.OCR.Tesseract.VersionString;
-            if (tesseractVersion.Length == 0)
+            String tesseractVersion = String.Empty;
+            bool haveTesseract = (openCVConfigDict["HAVE_EMGUCV_TESSERACT"] != 0);
+
+            if (haveTesseract)
             {
-                tesseractText = "Not Built";
+                tesseractVersion = Emgu.CV.OCR.Tesseract.VersionString;
+                if (tesseractVersion.Length == 0)
+                    haveTesseract = false;
+            }
+            
+            if (haveTesseract)
+            {
+                tesseractText = String.Format("Version: {0}", tesseractVersion);
             }
             else
             {
-                tesseractText = String.Format("Version: {0}", tesseractVersion);
+                tesseractText = "Not Built";
             }
 
             Content =
