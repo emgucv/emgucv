@@ -91,16 +91,18 @@ namespace ${NAMESPACE_CS}
          }
       }
 	  
+	  
 	  /// <summary>
-      /// The pointer to memory address at the end of the vector. In case of an empty vector, IntPtr.Zero will be returned.
+      /// The size of memory in bytes, that is needed to hold all the items in this vector
       /// </summary>
-      public override IntPtr EndAddress
+      public override long Length
       {
          get
          {
-            return VectorOf${VECTOR_NAME}GetEndAddress(_ptr);
+            return VectorOf${VECTOR_NAME}GetMemorySize(_ptr);
          }
       }
+	  
 
       /// <summary>
       /// Clear the vector
@@ -284,7 +286,7 @@ namespace ${NAMESPACE_CS}
       internal static extern IntPtr VectorOf${VECTOR_NAME}GetStartAddress(IntPtr v);
 	  
 	  [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-      internal static extern IntPtr VectorOf${VECTOR_NAME}GetEndAddress(IntPtr v);
+      internal static extern long VectorOf${VECTOR_NAME}GetMemorySize(IntPtr v);
 	  
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void VectorOf${VECTOR_NAME}Push(IntPtr v, IntPtr value);

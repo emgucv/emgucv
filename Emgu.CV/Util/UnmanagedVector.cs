@@ -36,15 +36,16 @@ namespace Emgu.CV.Util
             get;
         }
 
+        /*
         /// <summary>
         /// The pointer to memory address at the end of the vector. In case of an empty vector, IntPtr.Zero will be returned.
         /// </summary>
-        public abstract IntPtr EndAddress
+        public abstract int EndAddress
         {
             get;
         }
 
-        /*
+        
         /// <summary>
         /// The size of the item in this Vector, counted as size in bytes.
         /// </summary>
@@ -99,7 +100,7 @@ namespace Emgu.CV.Util
         /// <inheritdoc/>
         public override long Length
         {
-            get { return EndAddress.ToInt64() - StartAddress.ToInt64(); }
+            get;
         }
 
         /// <inheritdoc/>

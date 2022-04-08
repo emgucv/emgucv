@@ -66,10 +66,10 @@ ${VECTOR_ELEMENT}* VectorOf${VECTOR_NAME}GetStartAddress(std::vector< ${VECTOR_E
    return v->empty() ? NULL : &(*v)[0];
 }
 
-void* VectorOf${VECTOR_NAME}GetEndAddress(std::vector< ${VECTOR_ELEMENT} >* v)
+int64_t VectorOf${VECTOR_NAME}GetMemorySize(std::vector< ${VECTOR_ELEMENT} >* v)
 {
-   if (v->empty()) return NULL;
-   return (void*) &(*v)[v->size()];
+   if (v->empty()) return 0;
+   return (int64_t) (v->size() * sizeof(${VECTOR_ELEMENT}));
 }
 
 void VectorOf${VECTOR_NAME}GetItem(std::vector<  ${VECTOR_ELEMENT} >* vec, int index,  ${VECTOR_ELEMENT} * element)
