@@ -24,6 +24,7 @@ namespace Emgu.CV
         /// <summary>
         /// Creates a CSRT tracker
         /// </summary>
+        /// <param name="psr_threshold">psr_threshold</param>
         /// <param name="useHog">Use hog</param>
         /// <param name="useColorNames">Use color names</param>
         /// <param name="useGray">Use Gray</param>
@@ -51,6 +52,7 @@ namespace Emgu.CV
         /// <param name="scaleLr">Scale Lr</param>
         /// <param name="scaleStep">Scale step</param>
         public TrackerCSRT(             
+            float psr_threshold = 2,
             bool useHog = true,
             bool useColorNames = true,
             bool useGray = true,
@@ -81,6 +83,7 @@ namespace Emgu.CV
         {
             using (CvString csWindowFunction = new CvString(windowFunction))
                 _ptr = TrackingInvoke.cveTrackerCSRTCreate(
+                    psr_threshold,
                     useHog,
                     useColorNames,
                     useGray,
@@ -126,6 +129,7 @@ namespace Emgu.CV
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveTrackerCSRTCreate(
+            float psr_threshold,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool useHog,
             [MarshalAs(CvInvoke.BoolMarshalType)]
