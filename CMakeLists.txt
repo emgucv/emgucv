@@ -1425,10 +1425,12 @@ IF(WITH_CUDA)
 	
 	
 	SET(EMGU_CUDART_VERSION "${EMGU_CUDA_VERSION}")
+	SET(EMGU_CUDA_NUGET_DEPENDENCY_STR "${EMGU_CUDA_VERSION}")
 	SET(EMGU_CUFFT_VERSION "${EMGU_CUDA_VERSION}")
 	SET(EMGU_CUFFT_NUGET_TITLE "Native x64 FFT component for CUDA")
     #SET(EMGU_CUDNN_VERSION "${CUDNN_MAJOR_VERSION}.${CUDNN_MINOR_VERSION}.${CUDNN_PATCH_VERSION}")
 	SET(EMGU_CUDNN_VERSION "${CUDNN_VERSION}")
+	SET(EMGU_CUDNN_NUGET_DEPENDENCY_STR "${EMGU_CUDNN_VERSION}")
 	SET(EMGU_CUDNN_NUGET_TITLE "Native x64 DNN component for CUDA")
 	SET(EMGU_CUDNN_CNN_INFER_NUGET_TITLE "Native x64 CNN inference component for CUDA DNN")
 	SET(EMGU_CUDNN_CNN_TRAIN_NUGET_TITLE "Native x64 CNN training component for CUDA DNN")
@@ -1470,10 +1472,7 @@ IF(WITH_CUDA)
 		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_ops_*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_cnn_*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_adv_*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
-		#SET(EMGU_CUDNN_NUGET_DEPENDENCY "
-		#<dependencies>
-		#  <dependency id=\"${EMGU_CUDART_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />
-		#</dependencies>")
+
 		SET(EMGU_CUDNN_CNN_INFER_NUGET_FILE_LIST "${EMGU_CUDNN_CNN_INFER_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_cnn_infer*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
@@ -1484,11 +1483,11 @@ IF(WITH_CUDA)
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
 		SET(EMGU_CUDNN_CNN_INFER_NUGET_DEPENDENCY "
 		<dependencies>
-		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
+		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
 		</dependencies>")
 		SET(EMGU_CUDNN_CNN_TRAIN_NUGET_DEPENDENCY "
 		<dependencies>
-		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
+		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
 		</dependencies>")
 		SET(EMGU_CUDNN_OPS_NUGET_FILE_LIST "${EMGU_CUDNN_OPS_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_ops_*.dll\" target=\"runtimes\\win-x64\\native\" />
@@ -1496,7 +1495,7 @@ IF(WITH_CUDA)
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
 		SET(EMGU_CUDNN_OPS_NUGET_DEPENDENCY "
 		<dependencies>
-		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
+		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
 		</dependencies>")
 		SET(EMGU_CUDNN_ADV_NUGET_FILE_LIST "${EMGU_CUDNN_ADV_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_adv_*.dll\" target=\"runtimes\\win-x64\\native\" />
@@ -1504,27 +1503,27 @@ IF(WITH_CUDA)
 		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
 		SET(EMGU_CUDNN_ADV_NUGET_DEPENDENCY "
 		<dependencies>
-		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
+		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
 		</dependencies>")
 		SET(EMGU_CUDNN_NUGET_DEPENDENCY "
 		<dependencies>
-		  <dependency id=\"${EMGU_CUDART_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />
+		  <dependency id=\"${EMGU_CUDART_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />
 		  <dependency id=\"${EMGU_ZLIBWAPI_ID}\" version=\"${EMGU_ZLIBWAPI_VERSION}\" />
 		</dependencies>")
 		SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
-		  <dependency id=\"${EMGU_CUDART_NUGET_ID}\" version=\"[${EMGU_CUDART_VERSION}]\" />
-		  <dependency id=\"${EMGU_CUDA_BLAS_LT_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />
-		  <dependency id=\"${EMGU_CUDA_BLAS_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />
-		  <dependency id=\"${EMGU_NPP_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />
-		  <dependency id=\"${EMGU_CUFFT_NUGET_ID}\" version=\"[${EMGU_CUDA_VERSION}]\" />
-		  <dependency id=\"${EMGU_CUDNN_ADV_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
-		  <dependency id=\"${EMGU_CUDNN_CNN_INFER_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
-		  <dependency id=\"${EMGU_CUDNN_CNN_TRAIN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
-		  <dependency id=\"${EMGU_CUDNN_OPS_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />
+		  <dependency id=\"${EMGU_CUDART_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_CUDA_BLAS_LT_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_CUDA_BLAS_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_NPP_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_CUFFT_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_CUDNN_ADV_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_CUDNN_CNN_INFER_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_CUDNN_CNN_TRAIN_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_CUDNN_OPS_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
 		  <dependency id=\"${EMGU_ZLIBWAPI_ID}\" version=\"${EMGU_ZLIBWAPI_VERSION}\" />
 		  ")
 		IF (WITH_CUDNN)
-		  SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}<dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"[${EMGU_CUDNN_VERSION}]\" />")
+		  SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}<dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />")
 	    ENDIF()
 	ENDIF()
 	
