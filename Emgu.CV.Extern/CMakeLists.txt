@@ -2835,7 +2835,7 @@ ENDIF()
     "Param" 
     "QuasiDenseStereo.PropagationParameters"
     "Parameters for the QuasiDenseStereo class"
-    "Emgu.CV.XStereo"
+    "Emgu.CV.Stereo"
     "XStereoInvoke"
     "QuasiDenseStereo"
 	""
