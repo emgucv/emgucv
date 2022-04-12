@@ -12,7 +12,7 @@ using Emgu.CV.Util;
 using Emgu.Util;
 using System.Drawing;
 
-namespace Emgu.CV.XStereo
+namespace Emgu.CV.Stereo
 {
     /// <summary>
     /// Class containing the methods needed for Quasi Dense Stereo computation.
@@ -27,7 +27,7 @@ namespace Emgu.CV.XStereo
         public QuasiDenseStereo(Size monoImgSize, String paramFilepath = "")
         {
             using (CvString csParamFilePath = new CvString(paramFilepath))
-                _ptr = StereoInvoke.cveQuasiDenseStereoCreate(
+                _ptr = XStereoInvoke.cveQuasiDenseStereoCreate(
                     ref monoImgSize,
                     csParamFilePath,
                     ref _sharedPtr);
@@ -40,7 +40,7 @@ namespace Emgu.CV.XStereo
         {
             if (_sharedPtr != IntPtr.Zero)
             {
-                StereoInvoke.cveQuasiDenseStereoRelease(ref _sharedPtr);
+                XStereoInvoke.cveQuasiDenseStereoRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
             }
         }
@@ -54,7 +54,7 @@ namespace Emgu.CV.XStereo
         /// <remarks>If input images are in color, the method assumes that are BGR and converts them to grayscale.</remarks>
         public void Process(Mat imgLeft, Mat imgRight)
         {
-            StereoInvoke.cveQuasiDenseStereoProcess(_ptr, imgLeft, imgRight);
+            XStereoInvoke.cveQuasiDenseStereoProcess(_ptr, imgLeft, imgRight);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Emgu.CV.XStereo
         public Mat GetDisparity()
         {
             Mat disparity = new Mat();
-            StereoInvoke.cveQuasiDenseStereoGetDisparity(_ptr, disparity);
+            XStereoInvoke.cveQuasiDenseStereoGetDisparity(_ptr, disparity);
             return disparity;
         }
 
@@ -153,9 +153,9 @@ namespace Emgu.CV.XStereo
     /// <summary>
     /// Class that contains entry points for the Stereo module.
     /// </summary>
-    public static partial class StereoInvoke
+    public static partial class XStereoInvoke
     {
-        static StereoInvoke()
+        static XStereoInvoke()
         {
             CvInvoke.Init();
         }
