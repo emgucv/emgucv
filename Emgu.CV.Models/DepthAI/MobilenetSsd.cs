@@ -129,6 +129,9 @@ namespace Emgu.CV.Models.DepthAI
 
         }
 
+        /// <summary>
+        /// Get the model configuration for mobilenet SSD for depth AI module.
+        /// </summary>
         public Config ModelConfig
         {
             get

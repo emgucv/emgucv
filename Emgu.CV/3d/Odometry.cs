@@ -49,6 +49,13 @@ namespace Emgu.CV
             _ptr = CvInvoke.cveOdometryCreate((int)odometryType);
         }
 
+        /// <summary>
+        /// Prepare frame for odometry calculation
+        /// </summary>
+        /// <param name="srcFrame">Src frame, original image.</param>
+        /// <param name="dstFrame">Dst frame, rotated image.</param>
+        /// <param name="rt">Rigid transformation, which will be calculated, in form: { R_11 R_12 R_13 t_1 R_21 R_22 R_23 t_2 R_31 R_32 R_33 t_3 0 0 0 1 }</param>
+        /// <returns>True if successful.</returns>
         public bool Compute(
             IInputArray srcFrame,
             IInputArray dstFrame,
@@ -64,6 +71,15 @@ namespace Emgu.CV
                     oaRt);
         }
 
+        /// <summary>
+        /// Prepare frame for odometry calculation
+        /// </summary>
+        /// <param name="srcDepthFrame">Src depth, original.</param>
+        /// <param name="srcRGBFrame">Src frame, original image.</param>
+        /// <param name="dstDepthFrame">Dst depth, rotated.</param>
+        /// <param name="dstRGBFrame">Dst frame, rotated image.</param>
+        /// <param name="rt">Rigid transformation, which will be calculated, in form: { R_11 R_12 R_13 t_1 R_21 R_22 R_23 t_2 R_31 R_32 R_33 t_3 0 0 0 1 }</param>
+        /// <returns>True if successful.</returns>
         public bool Compute(
             IInputArray srcDepthFrame,
             IInputArray srcRGBFrame,
