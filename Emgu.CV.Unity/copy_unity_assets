@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -v
 cd "$(dirname "$0")"
 
 cd Assets
@@ -45,6 +45,8 @@ cp -r ../Emgu.CV/Features2D Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Flann Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Geodetic Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Imgproc Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
+cp -r ../Emgu.CV/Imgcodec Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
+cp -r ../Emgu.CV/HighGUI Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Ml Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Objdetect Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Ocl Assets/Emgu.CV/Assets/Scripts/Emgu.CV/

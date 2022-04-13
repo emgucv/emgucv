@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -v
 cd "$(dirname "$0")"
 
 convert ../opencv/samples/data/lena.jpg Assets/Emgu.CV/Demo/Resources/lena.png
