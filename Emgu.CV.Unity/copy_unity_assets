@@ -112,7 +112,7 @@ cp -r ../Emgu.CV.Contrib/XObjdetect/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.C
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XPhoto
 cp -r ../Emgu.CV.Contrib/XPhoto/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XPhoto
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XStereo
-cp -r ../Emgu.CV.Contrib/XPhoto/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XStereo
+cp -r ../Emgu.CV.Contrib/XStereo/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XStereo
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Quality
 cp -r ../Emgu.CV.Contrib/Quality/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Quality
 
