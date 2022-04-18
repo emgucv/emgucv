@@ -191,23 +191,23 @@ void cveEqualizeHist(cv::_InputArray* src, cv::_OutputArray* dst)
 
 void cveAccumulate(cv::_InputArray* src, cv::_InputOutputArray* dst, cv::_InputArray* mask)
 {
-	cv::accumulate(*src, *dst, mask ? *mask : (cv::InputArray) cv::noArray());
+	cv::accumulate(*src, *dst, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
 void cveAccumulateSquare(cv::_InputArray* src, cv::_InputOutputArray* dst, cv::_InputArray* mask)
 {
-	cv::accumulateSquare(*src, *dst, mask ? *mask : (cv::InputArray) cv::noArray());
+	cv::accumulateSquare(*src, *dst, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
 void cveAccumulateProduct(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputOutputArray* dst, cv::_InputArray* mask)
 {
-	cv::accumulateProduct(*src1, *src2, *dst, mask ? *mask : (cv::InputArray) cv::noArray());
+	cv::accumulateProduct(*src1, *src2, *dst, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
 void cveAccumulateWeighted(cv::_InputArray* src, cv::_InputOutputArray* dst, double alpha, cv::_InputArray* mask)
 {
-	cv::accumulateWeighted(*src, *dst, alpha, mask ? *mask : (cv::InputArray) cv::noArray());
+	cv::accumulateWeighted(*src, *dst, alpha, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
 void cvePhaseCorrelate(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputArray* window, double* response, CvPoint2D64f* result)
 {
-	cv::Point2d pt = cv::phaseCorrelate(*src1, *src2, window ? *window : (cv::InputArray) cv::noArray(), response);
+	cv::Point2d pt = cv::phaseCorrelate(*src1, *src2, window ? *window : static_cast<cv::InputArray>(cv::noArray()), response);
 	result->x = pt.x; result->y = pt.y;
 }
 void cveCreateHanningWindow(cv::_OutputArray* dst, CvSize* winSize, int type)
@@ -259,7 +259,7 @@ void cveHoughLinesP(cv::_InputArray* image, cv::_OutputArray* lines, double rho,
 
 void cveMatchTemplate(cv::_InputArray* image, cv::_InputArray* templ, cv::_OutputArray* result, int method, cv::_InputArray* mask)
 {
-	cv::matchTemplate(*image, *templ, *result, method, mask ? *mask : (cv::InputArray) cv::noArray());
+	cv::matchTemplate(*image, *templ, *result, method, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
 void cveCornerSubPix(cv::_InputArray* image, cv::_InputOutputArray* corners, CvSize* winSize, CvSize* zeroZone, CvTermCriteria* criteria)
 {
@@ -268,7 +268,13 @@ void cveCornerSubPix(cv::_InputArray* image, cv::_InputOutputArray* corners, CvS
 
 void cveConvertMaps(cv::_InputArray* map1, cv::_InputArray* map2, cv::_OutputArray* dstmap1, cv::_OutputArray* dstmap2, int dstmap1Type, bool nninterpolation)
 {
-	cv::convertMaps(*map1, map2 ? *map2 : (cv::InputArray) cv::noArray(), *dstmap1, dstmap2 ? *dstmap2 : (cv::OutputArray) cv::noArray(), dstmap1Type, nninterpolation);
+	cv::convertMaps(
+		*map1, 
+		map2 ? *map2 : static_cast<cv::InputArray>(cv::noArray()), 
+		*dstmap1, 
+		dstmap2 ? *dstmap2 : static_cast<cv::OutputArray>(cv::noArray()), 
+		dstmap1Type, 
+		nninterpolation);
 }
 
 
@@ -332,7 +338,7 @@ void cveGetRotationMatrix2D(CvPoint2D32f* center, double angle, double scale, cv
 
 void cveFindContours(cv::_InputOutputArray* image, cv::_OutputArray* contours, cv::_OutputArray* hierarchy, int mode, int method, CvPoint* offset)
 {
-	cv::findContours(*image, *contours, hierarchy ? *hierarchy : (cv::OutputArray) cv::noArray(), mode, method, *offset);
+	cv::findContours(*image, *contours, hierarchy ? *hierarchy : static_cast<cv::OutputArray>(cv::noArray()), mode, method, *offset);
 }
 
 double cvePointPolygonTest(cv::_InputArray* contour, CvPoint2D32f* pt, bool measureDist)

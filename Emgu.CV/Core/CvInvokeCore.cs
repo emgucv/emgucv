@@ -3435,5 +3435,96 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern CvEnum.SolveLPResult cveSolveLP(IntPtr functionMatrix, IntPtr constraintMatrix, IntPtr zMatrix);
         #endregion
+
+        /// <summary>
+        /// Finds the global minimum and maximum in an array
+        /// </summary>
+        /// <param name="src">Input single-channel array.</param>
+        /// <param name="minVal">The returned minimum value</param>
+        /// <param name="maxVal">The returned maximum value</param>
+        /// <param name="minIdx">The returned minimum location</param>
+        /// <param name="maxIdx">The returned maximum location</param>
+        /// <param name="mask">The extremums are searched across the whole array if mask is IntPtr.Zert. Otherwise, search is performed in the specified array region.</param>
+        public static void MinMaxIdx(IInputArray src, out double minVal, out double maxVal, int[] minIdx, int[] maxIdx,
+            IInputArray mask = null)
+        {
+            GCHandle minHandle = GCHandle.Alloc(minIdx, GCHandleType.Pinned);
+            GCHandle maxHandle = GCHandle.Alloc(maxIdx, GCHandleType.Pinned);
+            minVal = 0;
+            maxVal = 0;
+            using (InputArray iaSrc = src.GetInputArray())
+            using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+                cveMinMaxIdx(iaSrc, ref minVal, ref maxVal, minHandle.AddrOfPinnedObject(), maxHandle.AddrOfPinnedObject(),
+                    iaMask);
+            minHandle.Free();
+            maxHandle.Free();
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveMinMaxIdx(IntPtr src, ref double minVal, ref double maxVal, IntPtr minIdx,
+            IntPtr maxIdx, IntPtr mask);
+
+        /// <summary>
+        /// Converts NaN's to the given number
+        /// </summary>
+        /// <param name="a">The array where NaN needs to be converted</param>
+        /// <param name="val">The value to convert to</param>
+        public static void PatchNaNs(IInputOutputArray a, double val = 0)
+        {
+            using (InputOutputArray ioaA = a.GetInputOutputArray())
+                cvePatchNaNs(ioaA, val);
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cvePatchNaNs(IntPtr a, double val);
+
+        /// <summary>
+        /// Check that every array element is neither NaN nor +- inf. The functions also check that each value
+        /// is between minVal and maxVal. in the case of multi-channel arrays each channel is processed
+        /// independently. If some values are out of range, position of the first outlier is stored in pos, 
+        /// and then the functions either return false (when quiet=true) or throw an exception.
+        /// </summary>
+        /// <param name="arr">The array to check</param>
+        /// <param name="quiet">The flag indicating whether the functions quietly return false when the array elements are
+        /// out of range, or they throw an exception</param>
+        /// <param name="pos">This will be filled with the position of the first outlier</param>
+        /// <param name="minVal">The inclusive lower boundary of valid values range</param>
+        /// <param name="maxVal">The exclusive upper boundary of valid values range</param>
+        /// <returns>If quiet, return true if all values are in range</returns>
+        public static bool CheckRange(
+            IInputArray arr,
+            bool quiet,
+            ref Point pos,
+            double minVal,
+            double maxVal)
+        {
+            using (InputArray iaArr = arr.GetInputArray())
+                return cveCheckRange(iaArr, quiet, ref pos, minVal, maxVal);
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveCheckRange(
+            IntPtr arr,
+            [MarshalAs(CvInvoke.BoolMarshalType)] bool quiet,
+            ref Point pos,
+            double minVal,
+            double maxVal);
+
+        /// <summary>
+        /// Calculate square root of each source array element. in the case of multichannel
+        /// arrays each channel is processed independently. The function accuracy is approximately
+        /// the same as of the built-in std::sqrt.
+        /// </summary>
+        /// <param name="src">The source floating-point array</param>
+        /// <param name="dst">The destination array; will have the same size and the same type as src</param>
+        public static void Sqrt(IInputArray src, IOutputArray dst)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveSqrt(iaSrc, oaDst);
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveSqrt(IntPtr src, IntPtr dst);
     }
 }

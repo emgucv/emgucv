@@ -9,6 +9,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Util;
 using System.Drawing;
+using Emgu.CV.Features2D;
 
 namespace Emgu.CV
 {
@@ -755,6 +756,48 @@ namespace Emgu.CV
             IntPtr sharpness,
             ref MCvScalar result);
 
+        /// <summary>
+        /// Finds centers in the grid of circles
+        /// </summary>
+        /// <param name="image">Source chessboard view</param>
+        /// <param name="patternSize">The number of inner circle per chessboard row and column</param>
+        /// <param name="flags">Various operation flags</param>
+        /// <param name="featureDetector">The feature detector. Use a SimpleBlobDetector for default</param>
+        /// <returns>The center of circles detected if the chess board pattern is found, otherwise null is returned</returns>
+        public static PointF[] FindCirclesGrid(Image<Gray, Byte> image, Size patternSize, CvEnum.CalibCgType flags, Feature2D featureDetector)
+        {
+            using (Util.VectorOfPointF vec = new Util.VectorOfPointF())
+            {
+                bool patternFound =
+                   FindCirclesGrid(
+                      image,
+                      patternSize,
+                      vec,
+                      flags,
+                      featureDetector
+                      );
+                return patternFound ? vec.ToArray() : null;
+            }
+        }
+
+        /// <summary>
+        /// Finds centers in the grid of circles
+        /// </summary>
+        /// <param name="image">Source chessboard view</param>
+        /// <param name="patternSize">The number of inner circle per chessboard row and column</param>
+        /// <param name="flags">Various operation flags</param>
+        /// <param name="featureDetector">The feature detector. Use a SimpleBlobDetector for default</param>
+        /// <param name="centers">output array of detected centers.</param>
+        /// <returns>True if grid found.</returns>
+        public static bool FindCirclesGrid(IInputArray image, Size patternSize, IOutputArray centers, CvEnum.CalibCgType flags, Feature2D featureDetector)
+        {
+            using (InputArray iaImage = image.GetInputArray())
+            using (OutputArray oaCenters = centers.GetOutputArray())
+                return cveFindCirclesGrid(iaImage, ref patternSize, oaCenters, flags, featureDetector.Feature2DPtr);
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveFindCirclesGrid(IntPtr image, ref Size patternSize, IntPtr centers, CvEnum.CalibCgType flags, IntPtr blobDetector);
 
     }
 }
