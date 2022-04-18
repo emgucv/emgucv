@@ -158,69 +158,6 @@ namespace Emgu.CV
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cvePatchNaNs(IntPtr a, double val);
-        /// <summary>
-        /// Computes an optimal affine transformation between two 3D point sets.
-        /// </summary>
-        /// <param name="src">First input 3D point set.</param>
-        /// <param name="dst">Second input 3D point set.</param>
-        /// <param name="estimate">Output 3D affine transformation matrix.</param>
-        /// <param name="inliers">Output vector indicating which points are inliers.</param>
-        /// <param name="ransacThreshold">Maximum reprojection error in the RANSAC algorithm to consider a point as an inlier.</param>
-        /// <param name="confidence">Confidence level, between 0 and 1, for the estimated transformation. Anything between 0.95 and 0.99 is usually good enough. Values too close to 1 can slow down the estimation significantly. Values lower than 0.8-0.9 can result in an incorrectly estimated transformation.</param>
-        /// <returns>The result</returns>
-        public static int EstimateAffine3D(MCvPoint3D32f[] src, MCvPoint3D32f[] dst, out Matrix<double> estimate,
-           out Byte[] inliers, double ransacThreshold, double confidence)
-        {
-            GCHandle srcHandle = GCHandle.Alloc(src, GCHandleType.Pinned);
-            GCHandle dstHandle = GCHandle.Alloc(dst, GCHandleType.Pinned);
-            int result;
-
-            estimate = new Matrix<double>(3, 4);
-
-            int sizeOfPoint3D32f = Toolbox.SizeOf<MCvPoint3D64f>();
-
-            using (
-               Matrix<float> srcMat = new Matrix<float>(1, src.Length, 3, srcHandle.AddrOfPinnedObject(),
-                  sizeOfPoint3D32f * src.Length))
-            using (
-               Matrix<float> dstMat = new Matrix<float>(1, dst.Length, 3, dstHandle.AddrOfPinnedObject(),
-                  sizeOfPoint3D32f * dst.Length))
-            using (Util.VectorOfByte vectorOfByte = new Util.VectorOfByte())
-            {
-                result = EstimateAffine3D(srcMat, dstMat, estimate, vectorOfByte, ransacThreshold, confidence);
-                inliers = vectorOfByte.ToArray();
-            }
-
-            srcHandle.Free();
-            dstHandle.Free();
-
-            return result;
-        }
-
-        /// <summary>
-        /// Computes an optimal affine transformation between two 3D point sets.
-        /// </summary>
-        /// <param name="src"> First input 3D point set.</param>
-        /// <param name="dst">Second input 3D point set.</param>
-        /// <param name="affineEstimate">Output 3D affine transformation matrix 3 x 4</param>
-        /// <param name="inliers"> Output vector indicating which points are inliers.</param>
-        /// <param name="ransacThreshold">Maximum reprojection error in the RANSAC algorithm to consider a point as an inlier.</param>
-        /// <param name="confidence">Confidence level, between 0 and 1, for the estimated transformation. Anything between 0.95 and 0.99 is usually good enough. Values too close to 1 can slow down the estimation significantly. Values lower than 0.8-0.9 can result in an incorrectly estimated transformation.</param>
-        /// <returns>the result</returns>
-        public static int EstimateAffine3D(IInputArray src, IInputArray dst, IOutputArray affineEstimate,
-           IOutputArray inliers, double ransacThreshold = 3, double confidence = 0.99)
-        {
-            using (InputArray iaSrc = src.GetInputArray())
-            using (InputArray iaDst = dst.GetInputArray())
-            using (OutputArray oaAffineEstimate = affineEstimate.GetOutputArray())
-            using (OutputArray oaInliners = inliers.GetOutputArray())
-                return cveEstimateAffine3D(iaSrc, iaDst, oaAffineEstimate, oaInliners, ransacThreshold, confidence);
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int cveEstimateAffine3D(IntPtr src, IntPtr dst, IntPtr affineEstimate, IntPtr inliers,
-           double ransacThreshold, double confidence);
-
 
         /// <summary>
         /// Finds the global minimum and maximum in an array
