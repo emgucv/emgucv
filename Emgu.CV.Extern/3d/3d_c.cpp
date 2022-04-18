@@ -116,3 +116,22 @@ void cveDecomposeEssentialMat(cv::_InputArray* e, cv::_OutputArray* r1, cv::_Out
 	throw_no_3d();
 #endif	
 }
+
+int cveDecomposeHomographyMat(
+	cv::_InputArray* h,
+	cv::_InputArray* k,
+	cv::_OutputArray* rotations,
+	cv::_OutputArray* translations,
+	cv::_OutputArray* normals)
+{
+#ifdef HAVE_OPENCV_3D
+	cv::decomposeHomographyMat(
+		*h,
+		*k,
+		*rotations,
+		*translations,
+		*normals);
+#else
+	throw_no_3d();
+#endif	
+}

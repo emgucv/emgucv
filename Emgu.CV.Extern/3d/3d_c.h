@@ -47,4 +47,11 @@ CVAPI(void) cveRgbdNormalsApply(
 
 CVAPI(void) cveDecomposeEssentialMat(cv::_InputArray* e, cv::_OutputArray* r1, cv::_OutputArray* r2, cv::_OutputArray* t);
 
+CVAPI(int) cveDecomposeHomographyMat(
+	cv::_InputArray* h,
+	cv::_InputArray* k,
+	cv::_OutputArray* rotations,
+	cv::_OutputArray* translations,
+	cv::_OutputArray* normals);
+
 #endif

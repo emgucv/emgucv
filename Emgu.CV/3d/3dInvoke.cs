@@ -40,5 +40,38 @@ namespace Emgu.CV
             IntPtr r2, 
             IntPtr t);
 
+        /// <summary>
+        /// Decompose a homography matrix to rotation(s), translation(s) and plane normal(s).
+        /// </summary>
+        /// <param name="h">The input homography matrix between two images.</param>
+        /// <param name="k">The input camera intrinsic matrix.</param>
+        /// <param name="rotations">Array of rotation matrices.</param>
+        /// <param name="translations">Array of translation matrices.</param>
+        /// <param name="normals">Array of plane normal matrices.</param>
+        /// <returns>Number of solutions</returns>
+        public static int DecomposeHomographyMat(
+            IInputArray h,
+            IInputArray k,
+            IOutputArrayOfArrays rotations,
+            IOutputArrayOfArrays translations,
+            IOutputArrayOfArrays normals)
+        {
+            using (InputArray iaH = h.GetInputArray())
+            using (InputArray iaK = k.GetInputArray())
+            using (OutputArray oaRotations = rotations.GetOutputArray())
+            using (OutputArray oaTranslations = translations.GetOutputArray())
+            using (OutputArray oaNormals = normals.GetOutputArray())
+            {
+                return cveDecomposeHomographyMat(iaH, iaK, oaRotations, oaTranslations, oaNormals);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveDecomposeHomographyMat(
+            IntPtr h,
+            IntPtr k,
+            IntPtr rotations,
+            IntPtr translations,
+            IntPtr normals);
     }
 }
