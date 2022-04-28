@@ -603,10 +603,23 @@ namespace Emgu.Util
             }
             else
             {
-                IntPtr handler = Dlopen(dllname, 0x00102); // 0x00002 == RTLD_NOW, 0x00100 = RTL_GLOBAL
-                if (handler == IntPtr.Zero)
+                IntPtr handler;
+                try
                 {
-                    System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen to load {0} (RTLD_NOW | RTL_GLOBAL)", dllname));
+                    handler = Dlopen(dllname, 0x00102); // 0x00002 == RTLD_NOW, 0x00100 = RTL_GLOBAL
+                    if (handler == IntPtr.Zero)
+                    {
+                        System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen to load {0}", dllname));
+                    }
+                }
+                catch
+                {
+                    System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen from libdl.so to load {0}, will try using libdl.so.2 instead", dllname));
+                    handler = Dlopen2(dllname, 0x00102); // 0x00002 == RTLD_NOW, 0x00100 = RTL_GLOBAL
+                    if (handler == IntPtr.Zero)
+                    {
+                        System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen from libdl.so.2 to load {0}", dllname));
+                    }
                 }
 
                 return handler;
@@ -645,6 +658,12 @@ namespace Emgu.Util
             [MarshalAs(UnmanagedType.LPStr)]
             String dllname, int mode);
 
+        [DllImport("libdl.so.2", EntryPoint = "dlopen")]
+        private static extern IntPtr Dlopen2(
+            [MarshalAs(UnmanagedType.LPStr)]
+            String dllname, int mode);
+
+
         /*
         /// <summary>
         /// Decrements the reference count of the loaded dynamic-link library (DLL). When the reference count reaches zero, the module is unmapped from the address space of the calling process and the handle is no longer valid
@@ -655,7 +674,7 @@ namespace Emgu.Util
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool FreeLibrary(IntPtr handle);
         */
-        
+
         /// <summary>
         /// Set the directory to the search path used to locate DLLs for the application
         /// </summary>
