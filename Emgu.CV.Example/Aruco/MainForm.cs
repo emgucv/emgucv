@@ -52,10 +52,10 @@ namespace Aruco
         private bool _captureInProgress;
         private bool _useThisFrame = false;
 
-        int markersX = 4;
-        int markersY = 4;
-        int markersLength = 80;
-        int markersSeparation = 30;
+        int _markersX = 4;
+        int _markersY = 4;
+        int _markersLength = 80;
+        int _markersSeparation = 30;
 
         private Dictionary _dict;
 
@@ -77,7 +77,7 @@ namespace Aruco
             {
                 if (_gridBoard == null)
                 {
-                    _gridBoard = new GridBoard(markersX, markersY, markersLength, markersSeparation, ArucoDictionary);
+                    _gridBoard = new GridBoard(_markersX, _markersY, _markersLength, _markersSeparation, ArucoDictionary);
                 }
                 return _gridBoard;
             }
@@ -87,9 +87,9 @@ namespace Aruco
         {
             Size imageSize = new Size();
 
-            int margins = markersSeparation;
-            imageSize.Width = markersX * (markersLength + markersSeparation) - markersSeparation + 2 * margins;
-            imageSize.Height = markersY * (markersLength + markersSeparation) - markersSeparation + 2 * margins;
+            int margins = _markersSeparation;
+            imageSize.Width = _markersX * (_markersLength + _markersSeparation) - _markersSeparation + 2 * margins;
+            imageSize.Height = _markersY * (_markersLength + _markersSeparation) - _markersSeparation + 2 * margins;
             int borderBits = 1;
 
             Mat boardImage = new Mat();
@@ -168,7 +168,7 @@ namespace Aruco
 
                         if (!_cameraMatrix.IsEmpty && !_distCoeffs.IsEmpty)
                         {
-                            ArucoInvoke.EstimatePoseSingleMarkers(corners, markersLength, _cameraMatrix, _distCoeffs, rvecs, tvecs);
+                            ArucoInvoke.EstimatePoseSingleMarkers(corners, _markersLength, _cameraMatrix, _distCoeffs, rvecs, tvecs);
                             for (int i = 0; i < ids.Size; i++)
                             {
                                 using (Mat rvecMat = rvecs.Row(i))
@@ -182,10 +182,10 @@ namespace Aruco
                                     tvecMat.CopyTo(values);
                                     tvec.Push(values);
 
-
+                                    /*
                                     ArucoInvoke.DrawAxis(_frameCopy, _cameraMatrix, _distCoeffs, rvec, tvec,
                                        markersLength * 0.5f);
-
+                                    */
                                 }
                             }
                         }
