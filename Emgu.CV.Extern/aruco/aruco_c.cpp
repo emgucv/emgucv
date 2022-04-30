@@ -59,6 +59,7 @@ void cveArucoDrawMarker(cv::aruco::Dictionary* dictionary, int id, int sidePixel
 #endif
 }
 
+/*
 void cveArucoDrawAxis(cv::_InputOutputArray* image, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* rvec, cv::_InputArray* tvec, float length)
 {
 #ifdef HAVE_OPENCV_ARUCO
@@ -66,7 +67,7 @@ void cveArucoDrawAxis(cv::_InputOutputArray* image, cv::_InputArray* cameraMatri
 #else
 	throw_no_aruco();
 #endif
-}
+}*/
 
 void cveArucoDetectMarkers(
    cv::_InputArray* image, cv::aruco::Dictionary* dictionary, cv::_OutputArray* corners,
@@ -119,11 +120,10 @@ void cveArucoGridBoardDraw(cv::aruco::GridBoard* gridBoard, CvSize* outSize, cv:
 #endif
 }
 
-void cveArucoGridBoardRelease(cv::aruco::GridBoard** gridBoard, cv::Ptr<cv::aruco::GridBoard>** sharedPtr)
+void cveArucoGridBoardRelease(cv::Ptr<cv::aruco::GridBoard>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_ARUCO
    delete *sharedPtr;
-   *gridBoard = 0;
    *sharedPtr = 0;
 #else
 	throw_no_aruco();
@@ -154,11 +154,10 @@ void cveCharucoBoardDraw(cv::aruco::CharucoBoard* charucoBoard, CvSize* outSize,
 #endif
 }
 
-void cveCharucoBoardRelease(cv::aruco::CharucoBoard** charucoBoard, cv::Ptr<cv::aruco::CharucoBoard>** sharedPtr)
+void cveCharucoBoardRelease(cv::Ptr<cv::aruco::CharucoBoard>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_ARUCO
    delete *sharedPtr;
-   *charucoBoard = 0;
    *sharedPtr = 0;
 #else
 	throw_no_aruco();

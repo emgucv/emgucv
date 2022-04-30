@@ -43,9 +43,9 @@
             this.printArucoBoardButton.Name = "printArucoBoardButton";
             this.printArucoBoardButton.Size = new System.Drawing.Size(165, 42);
             this.printArucoBoardButton.TabIndex = 0;
-            this.printArucoBoardButton.Text = "Print Aruco Board";
+            this.printArucoBoardButton.Text = "Print Charuco Board";
             this.printArucoBoardButton.UseVisualStyleBackColor = true;
-            this.printArucoBoardButton.Click += new System.EventHandler(this.printArucoBoardButton_Click);
+            this.printArucoBoardButton.Click += new System.EventHandler(this.printCharucoBoardButton_Click);
             // 
             // cameraButton
             // 
@@ -85,7 +85,7 @@
             this.messageLabel.TabIndex = 4;
             this.messageLabel.Text = "label1";
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -95,8 +95,8 @@
             this.Controls.Add(this.cameraImageBox);
             this.Controls.Add(this.cameraButton);
             this.Controls.Add(this.printArucoBoardButton);
-            this.Name = "Form1";
-            this.Text = "Aruco demo";
+            this.Name = "MainForm";
+            this.Text = "Charuco demo";
             ((System.ComponentModel.ISupportInitialize)(this.cameraImageBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

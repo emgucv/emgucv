@@ -52,8 +52,8 @@ namespace Aruco
         private bool _captureInProgress;
         private bool _useThisFrame = false;
 
-        int _markersX = 4;
-        int _markersY = 4;
+        int _markersX = 7;
+        int _markersY = 7;
         int _markersLength = 80;
         int _markersSeparation = 30;
 
@@ -64,26 +64,26 @@ namespace Aruco
             get
             {
                 if (_dict == null)
-                    _dict = new Dictionary(Dictionary.PredefinedDictionaryName.Dict4X4_100);
+                    _dict = new Dictionary(Dictionary.PredefinedDictionaryName.Dict7X7_100);
                 return _dict;
             }
 
         }
 
-        private GridBoard _gridBoard;
-        private GridBoard ArucoBoard
+        private CharucoBoard _charucoBoard;
+        private CharucoBoard Board
         {
             get
             {
-                if (_gridBoard == null)
+                if (_charucoBoard == null)
                 {
-                    _gridBoard = new GridBoard(_markersX, _markersY, _markersLength, _markersSeparation, ArucoDictionary);
+                    _charucoBoard = new CharucoBoard(_markersX, _markersY, _markersLength, _markersSeparation, ArucoDictionary);
                 }
-                return _gridBoard;
+                return _charucoBoard;
             }
         }
 
-        private void printArucoBoardButton_Click(object sender, EventArgs e)
+        private void printCharucoBoardButton_Click(object sender, EventArgs e)
         {
             Size imageSize = new Size();
 
@@ -93,7 +93,7 @@ namespace Aruco
             int borderBits = 1;
 
             Mat boardImage = new Mat();
-            ArucoBoard.Draw(imageSize, boardImage, margins, borderBits);
+            Board.Draw(imageSize, boardImage, margins, borderBits);
             bmIm = boardImage.ToBitmap();
             PrintImage();
 
@@ -134,9 +134,14 @@ namespace Aruco
         Mat rvecs = new Mat();
         Mat tvecs = new Mat();
 
-        private VectorOfInt _allIds = new VectorOfInt();
-        private VectorOfVectorOfPointF _allCorners = new VectorOfVectorOfPointF();
+        private VectorOfVectorOfInt _allIds = new VectorOfVectorOfInt();
+        private VectorOfVectorOfVectorOfPointF _allCorners = new VectorOfVectorOfVectorOfPointF();
+
+        private VectorOfVectorOfPointF _allCornersConcatenated = new VectorOfVectorOfPointF();
+        private VectorOfInt _allIdsConcatenated = new VectorOfInt();
         private VectorOfInt _markerCounterPerFrame = new VectorOfInt();
+        private List<Mat> _allImgs = new List<Mat>();
+
         private Size _imageSize = Size.Empty;
 
         private DetectorParameters _detectorParameters;
@@ -155,45 +160,46 @@ namespace Aruco
                 {
                     //DetectorParameters p = DetectorParameters.GetDefault();
                     ArucoInvoke.DetectMarkers(_frameCopy, ArucoDictionary, corners, ids, _detectorParameters, rejected);
-                    
+
                     if (ids.Size > 0)
                     {
-                        ArucoInvoke.RefineDetectedMarkers(_frameCopy, ArucoBoard, corners, ids, rejected, null, null, 10, 3, true, null, _detectorParameters);
+                        ArucoInvoke.RefineDetectedMarkers(_frameCopy, Board, corners, ids, rejected, null, null, 10, 3, true, null, _detectorParameters);
                         //cameraButton.Text = "Calibrate camera";
-                        this.Invoke((Action)delegate
-                       {
-                           useThisFrameButton.Enabled = true;
-                       });
-                        ArucoInvoke.DrawDetectedMarkers(_frameCopy, corners, ids, new MCvScalar(0, 255, 0));
 
-                        if (!_cameraMatrix.IsEmpty && !_distCoeffs.IsEmpty)
+                        using (Mat currentCharucoCorners = new Mat())
+                        using (Mat currentCharucoIds = new Mat())
                         {
-                            ArucoInvoke.EstimatePoseSingleMarkers(corners, _markersLength, _cameraMatrix, _distCoeffs, rvecs, tvecs);
-                            for (int i = 0; i < ids.Size; i++)
-                            {
-                                using (Mat rvecMat = rvecs.Row(i))
-                                using (Mat tvecMat = tvecs.Row(i))
-                                using (VectorOfDouble rvec = new VectorOfDouble())
-                                using (VectorOfDouble tvec = new VectorOfDouble())
-                                {
-                                    double[] values = new double[3];
-                                    rvecMat.CopyTo(values);
-                                    rvec.Push(values);
-                                    tvecMat.CopyTo(values);
-                                    tvec.Push(values);
+                            ArucoInvoke.InterpolateCornersCharuco(
+                                corners,
+                                ids,
+                                _frameCopy,
+                                _charucoBoard,
+                                currentCharucoCorners,
+                                currentCharucoIds);
 
-                                    /*
-                                    ArucoInvoke.DrawAxis(_frameCopy, _cameraMatrix, _distCoeffs, rvec, tvec,
-                                       markersLength * 0.5f);
-                                    */
-                                }
+                            ArucoInvoke.DrawDetectedMarkers(_frameCopy, corners, ids, new MCvScalar(0, 255, 0));
+                            if (!currentCharucoCorners.IsEmpty)
+                            {
+                                ArucoInvoke.DrawDetectedCornersCharuco(_frameCopy, currentCharucoCorners, currentCharucoIds, new MCvScalar(255, 0, 0));
                             }
                         }
 
+                        this.Invoke((Action)delegate
+                           {
+                               useThisFrameButton.Enabled = true;
+                           });
+
                         if (_useThisFrame)
                         {
+                            Mat m = new Mat();
+                            _frame.CopyTo(m);
+                            _allImgs.Add(_frame);
+
                             _allCorners.Push(corners);
                             _allIds.Push(ids);
+
+                            _allCornersConcatenated.Push(corners);
+                            _allIdsConcatenated.Push(ids);
                             _markerCounterPerFrame.Push(new int[] { corners.Size });
                             _imageSize = _frame.Size;
                             UpdateMessage(String.Format("Using {0} points", _markerCounterPerFrame.ToArray().Sum()));
@@ -238,20 +244,83 @@ namespace Aruco
                     int totalPoints = _markerCounterPerFrame.ToArray().Sum();
                     if (totalPoints > 0)
                     {
-                        double repError = ArucoInvoke.CalibrateCameraAruco(_allCorners, _allIds, _markerCounterPerFrame, ArucoBoard, _imageSize,
-                           _cameraMatrix, _distCoeffs, null, null, CalibType.Default, new MCvTermCriteria(30, double.Epsilon));
+                        // calibrate camera using aruco markers
+                        double arucoRepErr = ArucoInvoke.CalibrateCameraAruco(
+                            _allCornersConcatenated,
+                            _allIdsConcatenated,
+                            _markerCounterPerFrame,
+                            Board,
+                            _imageSize,
+                            _cameraMatrix,
+                            _distCoeffs,
+                            null,
+                            null,
+                            CalibType.Default,
+                            new MCvTermCriteria(30, double.Epsilon));
+                        int nFrames = _allCorners.Size;
+                        using (VectorOfMat allCharucoCorners = new VectorOfMat())
+                        using (VectorOfMat allCharucoIds = new VectorOfMat())
+                        {
+                            for (int i = 0; i < nFrames; i++)
+                            {
+                                using (Mat currentCharucoCorners = new Mat())
+                                using (Mat currentCharucoIds = new Mat())
+                                using (VectorOfVectorOfPointF currentCorners = _allCorners[i])
+                                using (VectorOfInt currentIds = _allIds[i])
 
-                        UpdateMessage(String.Format("Camera calibration completed with reprojection error: {0}", repError));
+                                {
+                                    ArucoInvoke.InterpolateCornersCharuco(
+                                        currentCorners,
+                                        currentIds,
+                                        _allImgs[i],
+                                        Board,
+                                        currentCharucoCorners,
+                                        currentCharucoIds,
+                                        _cameraMatrix,
+                                        _distCoeffs
+                                    );
+                                    allCharucoCorners.Push(currentCharucoCorners);
+                                    allCharucoIds.Push(currentCharucoIds);
+                                }
+                            }
+
+                            // calibrate camera using charuco
+                            double repError =
+                                ArucoInvoke.CalibrateCameraCharuco(
+                                    allCharucoCorners,
+                                    allCharucoIds,
+                                    Board,
+                                    _imageSize,
+                                    _cameraMatrix,
+                                    _distCoeffs,
+                                    null,
+                                    null,
+                                    CalibType.Default,
+                                    new MCvTermCriteria(30, double.Epsilon));
+
+                            UpdateMessage(String.Format("Camera calibration completed. Aruco reprojection error: {0}; Charuco reprojection error {1}", arucoRepErr, repError));
+                        }
+
                         _allCorners.Clear();
                         _allIds.Clear();
                         _markerCounterPerFrame.Clear();
+                        _allIdsConcatenated.Clear();
+                        _allCornersConcatenated.Clear();
+
+                        foreach (var img in _allImgs)
+                            img.Dispose();
+                        
+                        _allImgs.Clear();
+
                         _imageSize = Size.Empty;
 
                     }
 
                     //stop the capture
                     cameraButton.Text = "Start Capture";
-                    _capture.Pause();
+                    _capture.Stop();
+                    //_capture.Dispose();
+                    //_capture.Pause();
 
                 }
                 else

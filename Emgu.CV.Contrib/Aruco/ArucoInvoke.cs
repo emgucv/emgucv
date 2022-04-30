@@ -348,7 +348,7 @@ namespace Emgu.CV.Aruco
             using (OutputArray oaPerViewErrors = perViewErrors == null ? OutputArray.GetEmpty() : perViewErrors.GetOutputArray())
             {
                 return cveArucoCalibrateCameraCharuco(
-                    iaCharucoCorners, iaCharucoIds, board.BoardPtr, ref imageSize,
+                    iaCharucoCorners, iaCharucoIds, board.Ptr, ref imageSize,
                    ioaCameraMatrix, ioaDistCoeffs, oaRvecs, oaTvecs,
                    oaStdDeviationsIntrinsics, oaStdDeviationsExtrinsics, oaPerViewErrors,
                    flags, ref criteria);

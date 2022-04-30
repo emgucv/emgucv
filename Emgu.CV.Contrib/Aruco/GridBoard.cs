@@ -16,12 +16,12 @@ using System.Drawing;
 namespace Emgu.CV.Aruco
 {
     /// <summary>
-    /// Planar board with grid arrangement of markers More common type of board. All markers are placed in the same plane in a grid arrangment.
+    /// Planar board with grid arrangement of markers More common type of board. All markers are placed in the same plane in a grid arrangement.
     /// </summary>
-    public class GridBoard : UnmanagedObject, IBoard
+    public class GridBoard : SharedPtrObject, IBoard
     {
         private IntPtr _boardPtr;
-        private IntPtr _sharedPtr;
+        
         /// <summary>
         /// Create a GridBoard object.
         /// </summary>
@@ -55,8 +55,11 @@ namespace Emgu.CV.Aruco
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                ArucoInvoke.cveArucoGridBoardRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+            {
+                ArucoInvoke.cveArucoGridBoardRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
 
             _boardPtr = IntPtr.Zero;
         }
@@ -75,7 +78,7 @@ namespace Emgu.CV.Aruco
            IntPtr dictionary, int firstMarker, ref IntPtr boardPtr, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveArucoGridBoardRelease(ref IntPtr gridBoard, ref IntPtr sharedPtr);
+        internal static extern void cveArucoGridBoardRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveArucoGridBoardDraw(IntPtr gridBoard, ref Size outSize, IntPtr img, int marginSize, int borderBits);

@@ -77,13 +77,13 @@ CVAPI(cv::aruco::GridBoard*) cveArucoGridBoardCreate(
 
 CVAPI(void) cveArucoGridBoardDraw(cv::aruco::GridBoard* gridBoard, CvSize* outSize, cv::_OutputArray* img, int marginSize, int borderBits);
 
-CVAPI(void) cveArucoGridBoardRelease(cv::aruco::GridBoard** gridBoard, cv::Ptr<cv::aruco::GridBoard>** sharedPtr);
+CVAPI(void) cveArucoGridBoardRelease(cv::Ptr<cv::aruco::GridBoard>** sharedPtr);
 
 CVAPI(cv::aruco::CharucoBoard*) cveCharucoBoardCreate(
    int squaresX, int squaresY, float squareLength, float markerLength,
    cv::aruco::Dictionary* dictionary, cv::aruco::Board** boardPtr, cv::Ptr<cv::aruco::CharucoBoard>** sharedPtr);
 CVAPI(void) cveCharucoBoardDraw(cv::aruco::CharucoBoard* charucoBoard, CvSize* outSize, cv::_OutputArray* img, int marginSize, int borderBits);
-CVAPI(void) cveCharucoBoardRelease(cv::aruco::CharucoBoard** charucoBoard, cv::Ptr<cv::aruco::CharucoBoard>** sharedPtr);
+CVAPI(void) cveCharucoBoardRelease(cv::Ptr<cv::aruco::CharucoBoard>** sharedPtr);
 
 CVAPI(void) cveArucoRefineDetectedMarkers(
    cv::_InputArray* image, cv::aruco::Board* board, cv::_InputOutputArray* detectedCorners,

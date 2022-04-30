@@ -21,10 +21,9 @@ namespace Emgu.CV.Aruco
     /// both, ArUco markers versatility and chessboard corner precision, which is important for
     /// calibration and pose estimation.
     /// </summary>
-    public class CharucoBoard : UnmanagedObject, IBoard
+    public class CharucoBoard : SharedPtrObject, IBoard
     {
         private IntPtr _boardPtr;
-        private IntPtr _sharedPtr;
 
         /// <summary>
         /// ChArUco board
@@ -47,12 +46,12 @@ namespace Emgu.CV.Aruco
         /// </summary>
         /// <param name="outSize">size of the output image in pixels.</param>
         /// <param name="img">output image with the board. The size of this image will be outSize and the board will be on the center, keeping the board proportions.</param>
-        /// <param name="margindSize">minimum margins (in pixels) of the board in the output image</param>
+        /// <param name="marginSize">minimum margins (in pixels) of the board in the output image</param>
         /// <param name="borderBits">width of the marker borders.</param>
-        public void Draw(Size outSize, IOutputArray img, int margindSize = 0, int borderBits = 1)
+        public void Draw(Size outSize, IOutputArray img, int marginSize = 0, int borderBits = 1)
         {
             using (OutputArray oaImg = img.GetOutputArray())
-                ArucoInvoke.cveCharucoBoardDraw(_ptr, ref outSize, oaImg, margindSize, borderBits);
+                ArucoInvoke.cveCharucoBoardDraw(_ptr, ref outSize, oaImg, marginSize, borderBits);
         }
 
         /// <summary>
@@ -60,8 +59,11 @@ namespace Emgu.CV.Aruco
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
-                ArucoInvoke.cveCharucoBoardRelease(ref _ptr, ref _sharedPtr);
+            if (_sharedPtr != IntPtr.Zero)
+            {
+                ArucoInvoke.cveCharucoBoardRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
 
             _boardPtr = IntPtr.Zero;
         }
@@ -84,6 +86,6 @@ namespace Emgu.CV.Aruco
         internal static extern void cveCharucoBoardDraw(IntPtr charucoBoard, ref Size outSize, IntPtr img, int marginSize, int borderBits);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveCharucoBoardRelease(ref IntPtr charucoBoard, ref IntPtr sharedPtr);
+        internal static extern void cveCharucoBoardRelease(ref IntPtr sharedPtr);
     }
 }
