@@ -12,6 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\..\Emgu.CV.NativeImage\BitmapSourceExtension.cs" Link="BitmapSourceExtension.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="..\Core\box.png" Link="box.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -62,6 +66,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj" />
+    <ProjectReference Include="..\..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj" />
     <ProjectReference Include="..\..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
   </ItemGroup>
 

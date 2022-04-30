@@ -56,6 +56,12 @@ namespace Emgu.CV.XamarinForms
         {
             get { return _messageLabel; }
         }
+		
+		private Editor _logEditor = new Editor();
+        public Editor LogEditor
+        {
+            get { return _logEditor; }
+        }
 
         private Image _displayImage = new Image();
 
@@ -82,14 +88,27 @@ namespace Emgu.CV.XamarinForms
        public Windows.UI.Xaml.Controls.Image ImageView { get; set; }
 #endif
 
-        public ButtonTextImagePage()
+        private Button[] _additionalButtons;
+
+        public Button[] AdditionalButtons
         {
+            get
+            {
+                return _additionalButtons;
+            }
+        }
+
+
+        public ButtonTextImagePage(Button[] additionalButtons=null)
+        {
+            var horizontalLayoutOptions = LayoutOptions.Center;
+
             TopButton.Text = "Click me";
             TopButton.IsEnabled = true;
-            TopButton.HorizontalOptions = LayoutOptions.Center;
+            TopButton.HorizontalOptions = horizontalLayoutOptions;
 
             MessageLabel.Text = "";
-            MessageLabel.HorizontalOptions = LayoutOptions.Center;
+            MessageLabel.HorizontalOptions = horizontalLayoutOptions;
 
 
             //DisplayImage.HeightRequest = 100;
@@ -101,6 +120,17 @@ namespace Emgu.CV.XamarinForms
             Picker.IsVisible = false;
 
             _mainLayout.Children.Add(TopButton);
+            if (additionalButtons != null)
+            {
+                foreach (Button button in additionalButtons)
+                {
+                    button.HorizontalOptions = horizontalLayoutOptions;
+                    _mainLayout.Children.Add(button);
+                }
+            }
+
+            _additionalButtons = additionalButtons;
+
             _mainLayout.Children.Add(MessageLabel);
 
 
@@ -113,20 +143,30 @@ namespace Emgu.CV.XamarinForms
             NSImageView.ImageScaling = NSImageScale.None;
             _mainLayout.Children.Add(NSImageView.ToView());
 #elif __IOS__
-         UIImageView = new UIImageView ();
-         UIImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
-         _mainLayout.Children.Add (UIImageView.ToView ());
+            UIImageView = new UIImageView ();
+            UIImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+            _mainLayout.Children.Add (UIImageView.ToView ());
 #elif __ANDROID__
             ImageView = new ImageView(Android.App.Application.Context);
             _mainLayout.Children.Add(ImageView.ToView());
 #elif NETFX_CORE
-         this.ImageView = new Windows.UI.Xaml.Controls.Image();
-         _mainLayout.Children.Add(this.ImageView.ToView());
-         //this.ImageView.Stretch = Windows.UI.Xaml.Media.Stretch.Uniform;
-         this.ImageView.Stretch = Windows.UI.Xaml.Media.Stretch.None;
+            this.ImageView = new Windows.UI.Xaml.Controls.Image();
+            _mainLayout.Children.Add(this.ImageView.ToView());
+            //this.ImageView.Stretch = Windows.UI.Xaml.Media.Stretch.Uniform;
+            this.ImageView.Stretch = Windows.UI.Xaml.Media.Stretch.None;
 #endif
             _mainLayout.Children.Add(DisplayImage);
+
             //_mainLayout.Children.Add(MessageLabel);
+			
+			LogEditor.Text = "";
+            LogEditor.HorizontalOptions = LayoutOptions.Center;
+            LogEditor.VerticalOptions = LayoutOptions.Center;
+            LogEditor.FontSize = LogEditor.FontSize / 2;
+			_mainLayout.Children.Add(LogEditor);
+			
+			SetLog(null);
+			
             _mainLayout.Padding = new Thickness(10, 10, 10, 10);
 
             Content = new Xamarin.Forms.ScrollView()
@@ -406,6 +446,50 @@ namespace Emgu.CV.XamarinForms
                     label.LineBreakMode = LineBreakMode.WordWrap;
                  //label.WidthRequest = this.Width;
              }
+            );
+        }
+
+        private String _log = String.Empty;
+
+        public void ClearLog()
+        {
+            SetLog(String.Empty);
+        }
+
+        public void SetLog(String log)
+        {
+            _log = log;
+            RenderLog(_log);
+        }
+
+        public void AppendLog(String log)
+        {
+            if (!String.IsNullOrEmpty(_log))
+                _log = log + _log;
+            RenderLog(_log);
+        }
+
+        private void RenderLog(String log)
+        {
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(
+                () =>
+                {
+                    if (String.IsNullOrEmpty(log))
+                    {
+                        this.LogEditor.IsVisible = false;
+                    }
+                    else
+                    {
+                        this.LogEditor.IsVisible = true;
+                    }
+
+                    this.LogEditor.Text = log;
+                    this.LogEditor.WidthRequest = this.Width;
+                    this.LogEditor.HeightRequest = 120;
+
+                    //this.LogLabel.LineBreakMode = LineBreakMode.WordWrap;
+                    this.LogEditor.Focus();
+                }
             );
         }
 

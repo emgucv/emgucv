@@ -71,7 +71,22 @@ namespace Emgu.CV.XamarinForms
             bool haveObjdetect = (openCVConfigDict["HAVE_OPENCV_OBJDETECT"] != 0);
             bool haveTesseract = (openCVConfigDict["HAVE_EMGUCV_TESSERACT"] != 0);
             bool haveFeatures2D = (openCVConfigDict["HAVE_OPENCV_FEATURES2D"] != 0);
+            bool haveAruco = (openCVConfigDict["HAVE_OPENCV_ARUCO"] != 0);
 
+            if (haveAruco)
+            {
+#if !(__MACOS__ || __ANDROID__ || __IOS__ || NETFX_CORE)
+                Button arucoButton = new Button();
+                arucoButton.Text = "Charuco Camera Calibration";
+                buttonList.Add(arucoButton);
+                arucoButton.Clicked += (sender, args) =>
+                {
+                    CameraCalibrationPage cameraCalibrationPage = new CameraCalibrationPage();
+                    
+                    MainPage.Navigation.PushAsync(cameraCalibrationPage);
+                };
+#endif
+            }
 
             if (haveTesseract)
             {

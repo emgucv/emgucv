@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Android\RefCountedAutoCloseable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Android\YUV420Converter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)App.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)CameraCalibrationPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FreetypePage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DrawSubdivision.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DrawMatches.cs" />
