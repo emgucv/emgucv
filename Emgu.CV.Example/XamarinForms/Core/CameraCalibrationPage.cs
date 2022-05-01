@@ -69,21 +69,17 @@ namespace Emgu.CV.XamarinForms
                 await model.Init(null, null);
                 model.GetCharucoBoard(boardImage);
 
-                System.Windows.Controls.PrintDialog printDialog = new System.Windows.Controls.PrintDialog();
-                if (printDialog.ShowDialog() == true)
+                var image = boardImage.ToBitmapSource();
+
+                var vis = new System.Windows.Media.DrawingVisual();
+                var dc = vis.RenderOpen();
+                dc.DrawImage(image, new System.Windows.Rect { Width = image.Width, Height = image.Height });
+                dc.Close();
+
+                var pdialog = new System.Windows.Controls.PrintDialog();
+                if (pdialog.ShowDialog() == true)
                 {
-                    var image = boardImage.ToBitmapSource();
-
-                    var vis = new System.Windows.Media.DrawingVisual();
-                    var dc = vis.RenderOpen();
-                    dc.DrawImage(image, new System.Windows.Rect { Width = image.Width, Height = image.Height });
-                    dc.Close();
-
-                    var pdialog = new System.Windows.Controls.PrintDialog();
-                    if (pdialog.ShowDialog() == true)
-                    {
-                        pdialog.PrintVisual(vis, "Charuco Board");
-                    }
+                    pdialog.PrintVisual(vis, "Charuco Board");
                 }
             }
 #endif
