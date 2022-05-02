@@ -364,7 +364,7 @@ cv::Tracker* cveTrackerCreate(cv::String* trackerType)
    tracker.addref();
    return tracker.get();
 }*/
-void cveTrackerInit(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox)
+void cveTrackerInit(cv::Tracker* tracker, cv::_InputArray* image, CvRect* boundingBox)
 {
 #ifdef HAVE_OPENCV_VIDEO
 	return tracker->init(*image, *boundingBox);
@@ -372,7 +372,7 @@ void cveTrackerInit(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox)
 	throw_no_video();
 #endif
 }
-bool cveTrackerUpdate(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox)
+bool cveTrackerUpdate(cv::Tracker* tracker, cv::_InputArray* image, CvRect* boundingBox)
 {
 #ifdef HAVE_OPENCV_VIDEO
 	cv::Rect box;
