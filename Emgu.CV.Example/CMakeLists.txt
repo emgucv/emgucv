@@ -41,11 +41,10 @@ IF(EMGU_CV_EXAMPLE_BUILD)
   IF (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
     add_subdirectory(CameraCapture)
     add_subdirectory(MotionDetection)
-    add_subdirectory(VideoSurveillance)
     add_subdirectory(Webservice_Host)
     add_subdirectory(Webservice_Client)
     add_subdirectory(OCR)
-    add_subdirectory(Aruco)
+    
     INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/WPF.NetCore/"
