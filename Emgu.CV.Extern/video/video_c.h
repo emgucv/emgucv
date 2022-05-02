@@ -121,8 +121,8 @@ CVAPI(cv::VariationalRefinement*) cveVariationalRefinementCreate(cv::DenseOptica
 CVAPI(void) cveVariationalRefinementRelease(cv::VariationalRefinement** flow, cv::Ptr<cv::VariationalRefinement>** sharedPtr);
 
 //CVAPI(cv::Tracker*) cveTrackerCreate(cv::String* trackerType);
-CVAPI(void) cveTrackerInit(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox);
-CVAPI(bool) cveTrackerUpdate(cv::Tracker* tracker, cv::Mat* image, CvRect* boundingBox);
+CVAPI(void) cveTrackerInit(cv::Tracker* tracker, cv::_InputArray* image, CvRect* boundingBox);
+CVAPI(bool) cveTrackerUpdate(cv::Tracker* tracker, cv::_InputArray* image, CvRect* boundingBox);
 //CVAPI(void) cveTrackerRelease(cv::Tracker** tracker);
 
 CVAPI(cv::TrackerMIL*) cveTrackerMILCreate(

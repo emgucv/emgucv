@@ -29,9 +29,10 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="image">The initial frame</param>
         /// <param name="boundingBox">The initial bounding box</param>
-        public void Init(Mat image, Rectangle boundingBox)
+        public void Init(IInputArray image, Rectangle boundingBox)
         {
-            CvInvoke.cveTrackerInit(_trackerPtr, image, ref boundingBox);
+            using (InputArray iaImage = image.GetInputArray())
+                CvInvoke.cveTrackerInit(_trackerPtr, iaImage, ref boundingBox);
         }
 
         /// <summary>
@@ -40,10 +41,11 @@ namespace Emgu.CV
         /// <param name="image">The current frame</param>
         /// <param name="boundingBox">The bounding box that represent the new target location, if true was returned, not modified otherwise</param>
         /// <returns>True means that target was located and false means that tracker cannot locate target in current frame. Note, that latter does not imply that tracker has failed, maybe target is indeed missing from the frame (say, out of sight)</returns>
-        public bool Update(Mat image, out Rectangle boundingBox)
+        public bool Update(IInputArray image, out Rectangle boundingBox)
         {
             boundingBox = new Rectangle();
-            return CvInvoke.cveTrackerUpdate(_trackerPtr, image, ref boundingBox);
+            using (InputArray iaImage = image.GetInputArray())
+                return CvInvoke.cveTrackerUpdate(_trackerPtr, iaImage, ref boundingBox);
         }
 
 

@@ -12,19 +12,20 @@ using Emgu.CV.Util;
 
 namespace Emgu.CV.XamarinForms
 {
-    public class TrackedObject : TrackerKCF
-    {
-        public TrackedObject(int id) :
-            base()
-        {
-            Id = id;
-        }
-
-        public int Id { get; set; }
-    }
 
     public class VideoSurveillanceModel : IProcessAndRenderModel
     {
+        public class TrackedObject : TrackerKCF
+        {
+            public TrackedObject(int id) :
+                base()
+            {
+                Id = id;
+            }
+
+            public int Id { get; set; }
+        }
+
         private int _idCounter = 0;
 
         List<TrackedObject> _trackers = new List<TrackedObject>();
@@ -41,6 +42,8 @@ namespace Emgu.CV.XamarinForms
                 _fgDetectorDisposable.Dispose();
             }
 
+            if (_fgDetector != null)
+                _fgDetector = null;
         }
 
         public void Clear()
@@ -58,9 +61,7 @@ namespace Emgu.CV.XamarinForms
 
         public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
-
             using (InputArray iaImageIn = imageIn.GetInputArray())
-            using (Mat matImgIn = iaImageIn.GetMat())
             using (Mat smoothedFrame = new Mat())
             using (Mat frameCopy = new Mat())
             using (Mat foregroundMask = new Mat())
@@ -83,7 +84,7 @@ namespace Emgu.CV.XamarinForms
                 foreach (TrackedObject t in _trackers)
                 {
                     Rectangle boundingBox;
-                    bool success = t.Update(matImgIn, out boundingBox);
+                    bool success = t.Update(imageIn, out boundingBox);
                     if (success)
                     {
                         boundingBoxesTracked.Add(boundingBox);
@@ -142,7 +143,7 @@ namespace Emgu.CV.XamarinForms
                     TrackedObject t = new TrackedObject(_idCounter);
                     boundingBoxesTracked.Add(r);
                     idsTracked.Add(_idCounter);
-                    t.Init(matImgIn, r);
+                    t.Init(imageIn, r);
                     _trackers.Add(t);
                     _idCounter++;
                 }
