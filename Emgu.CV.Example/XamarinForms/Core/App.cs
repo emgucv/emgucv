@@ -71,6 +71,9 @@ namespace Emgu.CV.XamarinForms
             bool haveObjdetect = (openCVConfigDict["HAVE_OPENCV_OBJDETECT"] != 0);
             bool haveTesseract = (openCVConfigDict["HAVE_EMGUCV_TESSERACT"] != 0);
             bool haveFeatures2D = (openCVConfigDict["HAVE_OPENCV_FEATURES2D"] != 0);
+            bool haveVideo = (openCVConfigDict["HAVE_OPENCV_VIDEO"] != 0);
+            
+            bool haveCamera = true;
 
 
             if (haveTesseract)
@@ -88,6 +91,24 @@ namespace Emgu.CV.XamarinForms
                         "");
                     ocrPage.HasCameraOption = false;
                     MainPage.Navigation.PushAsync(ocrPage);
+                };
+            }
+
+            if (haveVideo && haveCamera)
+            {
+                Button videoSurveillanceButton = new Button();
+                videoSurveillanceButton.Text = "Video Surveillance";
+                buttonList.Add(videoSurveillanceButton);
+
+                videoSurveillanceButton.Clicked += (sender, args) =>
+                {
+                    ProcessAndRenderPage videoPage = new ProcessAndRenderPage(
+                        new VideoSurveillanceModel(),
+                        "Open Camera",
+                        null,
+                        "");
+                    videoPage.HasCameraOption = true;
+                    MainPage.Navigation.PushAsync(videoPage);
                 };
             }
 
