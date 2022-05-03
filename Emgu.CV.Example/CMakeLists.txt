@@ -40,7 +40,6 @@ IF(EMGU_CV_EXAMPLE_BUILD)
   #Windows only demos
   IF (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
     add_subdirectory(CameraCapture)
-    add_subdirectory(MotionDetection)
     add_subdirectory(Webservice_Host)
     add_subdirectory(Webservice_Client)
     add_subdirectory(OCR)

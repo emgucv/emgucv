@@ -72,9 +72,27 @@ namespace Emgu.CV.XamarinForms
             bool haveTesseract = (openCVConfigDict["HAVE_EMGUCV_TESSERACT"] != 0);
             bool haveFeatures2D = (openCVConfigDict["HAVE_OPENCV_FEATURES2D"] != 0);
             bool haveVideo = (openCVConfigDict["HAVE_OPENCV_VIDEO"] != 0);
-            
+            bool haveOptFlow = (openCVConfigDict["HAVE_OPENCV_OPTFLOW"] != 0);
+
             bool haveCamera = true;
 
+            if (haveOptFlow && haveCamera)
+            {
+#if !(__MACOS__ || __ANDROID__ || __IOS__ || NETFX_CORE)
+                Button motionDetectionButton = new Button();
+                motionDetectionButton.Text = "Motion Detection";
+                buttonList.Add(motionDetectionButton);
+                motionDetectionButton.Clicked += (sender, args) =>
+                {
+                    ProcessAndRenderPage motionDetectionPage = new ProcessAndRenderPage(
+                        new MotionDetectionModel(),
+                        "Open Camera",
+                        null,
+                        "This demo use MotionHistory for motion detection. The 3 images shown once it is up and running: 1. original image; 2. Foreground image; 3. Motion history");
+                    MainPage.Navigation.PushAsync(motionDetectionPage);
+                };
+#endif
+            }
 
             if (haveTesseract)
             {
