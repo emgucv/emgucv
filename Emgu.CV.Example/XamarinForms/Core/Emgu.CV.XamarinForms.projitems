@@ -23,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DrawMatches.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ButtonTextImagePage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HelloWorldPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MotionDetectionModel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PlanarSubdivisionPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FeatureMatchingPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ProcessAndRenderPage.cs" />

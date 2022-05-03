@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Drawing;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Util;
 using Emgu.Util;
@@ -106,6 +107,21 @@ namespace Emgu.CV
 
             CvInvoke.SegmentMotion(_mhi, segMask, boundingRects, ts.TotalSeconds, _maxTimeDelta);
         }
+
+        /// <summary>
+        /// Get a sequence of motion component
+        /// </summary>
+        /// <param name="segMask">The output mask of motion components</param>
+        /// <returns>The bounding rectangles of the motion components</returns>
+        public Rectangle[] GetMotionComponents(IOutputArray segMask)
+        {
+            using (VectorOfRect boundingRects = new VectorOfRect())
+            {
+                GetMotionComponents(segMask, boundingRects);
+                return boundingRects.ToArray();
+            }
+        }
+
 
         /// <summary>
         /// Given a rectangle area of the motion, output the angle of the motion and the number of pixels that are considered to be motion pixel 

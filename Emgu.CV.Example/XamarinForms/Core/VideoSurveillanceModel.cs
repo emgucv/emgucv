@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Emgu.CV.CvEnum;
 using Emgu.CV.Models;
+using Emgu.CV.Structure;
+using Emgu.CV.Util;
+using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Net;
 using System.Threading.Tasks;
-using Emgu.CV.CvEnum;
-using Emgu.CV.Structure;
-using Emgu.CV.Util;
 
 
 namespace Emgu.CV.XamarinForms
@@ -35,15 +34,16 @@ namespace Emgu.CV.XamarinForms
         public void Dispose()
         {
             Clear();
-
-            IDisposable _fgDetectorDisposable = _fgDetector as IDisposable;
-            if (_fgDetectorDisposable != null)
-            {
-                _fgDetectorDisposable.Dispose();
-            }
-
+            
             if (_fgDetector != null)
+            {
+                IDisposable _fgDetectorDisposable = _fgDetector as IDisposable;
+                if (_fgDetectorDisposable != null)
+                {
+                    _fgDetectorDisposable.Dispose();
+                }
                 _fgDetector = null;
+            }
         }
 
         public void Clear()
