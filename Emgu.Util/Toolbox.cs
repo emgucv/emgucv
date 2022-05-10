@@ -466,7 +466,7 @@ namespace Emgu.Util
         /// </summary>
         /// <typeparam name="T">The interface</typeparam>
         /// <returns>The types that implement the specific interface</returns>
-        public static Type[] GetIntefaceImplementationFromAssembly<T>()
+        public static Type[] GetInterfaceImplementationFromAssembly<T>()
         {
             System.Reflection.Assembly[] assemblies = LoadAllDependentAssemblies();
             List<Type> types = new List<Type>();
@@ -683,7 +683,46 @@ namespace Emgu.Util
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetDllDirectory(String path);
-        
+
+
+        /// <summary>
+        /// Get the search path used to locate DLLs for the application
+        /// </summary>
+        /// <returns>
+        /// If the function succeeds, the return value is the search path used to locate DLLs for the application
+        /// If the function fails, the return value is null.To get extended error information, call GetLastError.
+        /// </returns>
+        public static String GetDllDirectory()
+        {
+            int maxSize = 2048;
+            
+            IntPtr buffer = Marshal.AllocHGlobal(maxSize);
+            try
+            {
+                bool success = GetDllDirectory((uint) maxSize, buffer);
+                if (!success)
+                    return null;
+                return Marshal.PtrToStringUni(buffer);
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Failed to call into GetDllDirectory:" + Environment.NewLine + e.StackTrace);
+                return null;
+            }
+            finally 
+            {
+                Marshal.FreeHGlobal(buffer);
+            }
+            
+        }
+        /// <summary>
+        /// Set the directory to the search path used to locate DLLs for the application
+        /// </summary>
+        /// <param name="path">The directory to be searched for DLLs</param>
+        /// <returns>True if success</returns>
+        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool GetDllDirectory(uint nBufferLength, IntPtr lpBuffer);
 
         /// <summary>
         /// Adds a directory to the search path used to locate DLLs for the application
