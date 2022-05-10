@@ -715,11 +715,7 @@ namespace Emgu.Util
             }
             
         }
-        /// <summary>
-        /// Set the directory to the search path used to locate DLLs for the application
-        /// </summary>
-        /// <param name="path">The directory to be searched for DLLs</param>
-        /// <returns>True if success</returns>
+        
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool GetDllDirectory(uint nBufferLength, IntPtr lpBuffer);
