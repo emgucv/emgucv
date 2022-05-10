@@ -20,7 +20,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Tiff\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Ocl\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Util\*.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Cvb\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Color\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Photo\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Viz\*.cs" />
