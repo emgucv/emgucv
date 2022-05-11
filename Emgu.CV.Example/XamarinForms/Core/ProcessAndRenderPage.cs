@@ -47,7 +47,7 @@ using Point = System.Drawing.Point;
 namespace Emgu.CV.XamarinForms
 {
 
-   public class ProcessAndRenderPage
+    public class ProcessAndRenderPage
 #if __ANDROID__ && __USE_ANDROID_CAMERA2__
         : AndroidCameraPage
 #else
@@ -60,12 +60,20 @@ namespace Emgu.CV.XamarinForms
         private String _defaultButtonText;
         private IProcessAndRenderModel _model;
 
-        private String _StopCameraButtonText = "Stop Camera";
+        protected String _StopCameraButtonText = "Stop Camera";
         private String _deaultImage;
 
 #if __ANDROID__ && __USE_ANDROID_CAMERA2__
         private bool _isBusy = false;
 #endif
+
+        public IProcessAndRenderModel Model
+        {
+            get
+            {
+                return _model;
+            }
+        }
 
         public bool InitVideoCapture()
         {
@@ -105,20 +113,29 @@ namespace Emgu.CV.XamarinForms
             return false;
         }
 
-        public ProcessAndRenderPage( 
-            IProcessAndRenderModel model, 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="defaultButtonText"></param>
+        /// <param name="defaultImage">The default image file name to use for processing. If set to null, it will use realtime camera stream instead.</param>
+        /// <param name="defaultLabelText"></param>
+        /// <param name="additionalButtons"></param>
+        public ProcessAndRenderPage(
+            IProcessAndRenderModel model,
             String defaultButtonText,
             String defaultImage,
-            String defaultLabelText = null
+            String defaultLabelText = null,
+            Xamarin.Forms.Button[] additionalButtons = null
             )
-            : base()
+            : base(additionalButtons)
         {
 #if __IOS__
          AllowAvCaptureSession = true;
          HasCameraOption = true;
          outputRecorder.BufferReceived += OutputRecorder_BufferReceived;
 #else
-         HasCameraOption = InitVideoCapture();
+            HasCameraOption = InitVideoCapture();
 #endif
             _deaultImage = defaultImage;
             _defaultButtonText = defaultButtonText;
@@ -200,22 +217,19 @@ namespace Emgu.CV.XamarinForms
             if (_mat == null)
                 _mat = new Mat();
             _capture.Retrieve(_mat);
-            
+
             if (_renderMat == null)
                 _renderMat = new Mat();
 
-            using (InputArray iaImage = _mat.GetInputArray())
-            {
-                iaImage.CopyTo(_renderMat);
-            }
-
-            String msg = _model.ProcessAndRender(_mat, _renderMat);
+            _mat.CopyTo(_renderMat);
             
+            String msg = _model.ProcessAndRender(_mat, _renderMat);
+
             SetImage(_renderMat);
             SetMessage(msg);
         }
 
-        private async void OnButtonClicked(Object sender, EventArgs args)
+        protected virtual async void OnButtonClicked(Object sender, EventArgs args)
         {
             var button = GetButton();
 
@@ -225,13 +239,13 @@ namespace Emgu.CV.XamarinForms
                 StopCapture();
                 AndroidImageView.Visibility = ViewStates.Invisible;
 #elif __IOS__
-            this.StopCaptureSession ();
+                this.StopCaptureSession ();
 #else
                 _capture.Stop();
                 _capture.Dispose();
                 _capture = null;
 #endif
-            button.Text = _defaultButtonText;
+                button.Text = _defaultButtonText;
                 Picker.IsEnabled = true;
                 return;
             }
@@ -240,10 +254,19 @@ namespace Emgu.CV.XamarinForms
                 Picker.IsEnabled = false;
             }
 
-            Mat[] images = await LoadImages(new string[] { _deaultImage });
+            Mat[] images;
+            if (_deaultImage == null)
+            {
+                //Force to use Camera
+                images = new Mat[0];
+            }
+            else
+            {
+                images = await LoadImages(new string[] { _deaultImage });
 
-            if (images == null || (images.Length > 0 && images[0] == null))
-                return;
+                if (images == null || (images.Length > 0 && images[0] == null))
+                    return;
+            }
 
             SetMessage("Please wait...");
             SetImage(null);
@@ -291,7 +314,7 @@ namespace Emgu.CV.XamarinForms
                     }
                 });
 #elif __IOS__
-            CheckVideoPermissionAndStart ();
+                CheckVideoPermissionAndStart ();
 #else
                 //Handle video
                 if (_capture == null)
@@ -303,17 +326,20 @@ namespace Emgu.CV.XamarinForms
                     _capture.Start();
 
 #endif
-            button.Text = _StopCameraButtonText;
-         } else
+                button.Text = _StopCameraButtonText;
+            }
+            else
             {
                 if (_renderMat == null)
                     _renderMat = new Mat();
+                images[0].CopyTo(_renderMat);
+                /*
                 using (InputArray iaImage = images[0].GetInputArray())
                 {
                     iaImage.CopyTo(_renderMat);
-                }
+                }*/
                 String message = _model.ProcessAndRender(images[0], _renderMat);
-                
+
                 SetImage(_renderMat);
                 SetMessage(message);
                 Picker.IsEnabled = true;
@@ -346,6 +372,6 @@ namespace Emgu.CV.XamarinForms
                 msg = String.Format("{0} downloaded", ByteToSizeStr(e.BytesReceived));
             SetMessage(msg);
         }
-        
+
     }
 }
