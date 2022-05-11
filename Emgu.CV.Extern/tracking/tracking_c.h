@@ -58,6 +58,7 @@ CVAPI(cv::TrackerKCF*) cveTrackerKCFCreate(
 CVAPI(void) cveTrackerKCFRelease(cv::TrackerKCF** tracker, cv::Ptr<cv::TrackerKCF>** sharedPtr);
 
 CVAPI(cv::TrackerCSRT*) cveTrackerCSRTCreate(
+	float psr_threshold,
 	bool use_hog,
 	bool use_color_names,
 	bool use_gray,

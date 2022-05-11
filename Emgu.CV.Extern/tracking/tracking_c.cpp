@@ -62,6 +62,7 @@ void cveTrackerKCFRelease(cv::TrackerKCF** tracker, cv::Ptr<cv::TrackerKCF>** sh
 
 
 cv::TrackerCSRT* cveTrackerCSRTCreate(
+	float psr_threshold,
 	bool use_hog,
 	bool use_color_names,
 	bool use_gray,
@@ -93,6 +94,7 @@ cv::TrackerCSRT* cveTrackerCSRTCreate(
 {
 #ifdef HAVE_OPENCV_TRACKING
 	cv::TrackerCSRT::Params p;
+	p.psr_threshold = psr_threshold;
 	p.use_hog = use_hog;
 	p.use_color_names = use_color_names;
 	p.use_gray = use_gray;
