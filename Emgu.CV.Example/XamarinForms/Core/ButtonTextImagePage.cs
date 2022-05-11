@@ -88,9 +88,9 @@ namespace Emgu.CV.XamarinForms
        public Windows.UI.Xaml.Controls.Image ImageView { get; set; }
 #endif
 
-        private Button[] _additionalButtons;
+        private Xamarin.Forms.Button[] _additionalButtons;
 
-        public Button[] AdditionalButtons
+        public Xamarin.Forms.Button[] AdditionalButtons
         {
             get
             {
@@ -99,7 +99,7 @@ namespace Emgu.CV.XamarinForms
         }
 
 
-        public ButtonTextImagePage(Button[] additionalButtons=null)
+        public ButtonTextImagePage(Xamarin.Forms.Button[] additionalButtons=null)
         {
             var horizontalLayoutOptions = LayoutOptions.Center;
 
@@ -122,7 +122,7 @@ namespace Emgu.CV.XamarinForms
             _mainLayout.Children.Add(TopButton);
             if (additionalButtons != null)
             {
-                foreach (Button button in additionalButtons)
+                foreach (Xamarin.Forms.Button button in additionalButtons)
                 {
                     button.HorizontalOptions = horizontalLayoutOptions;
                     _mainLayout.Children.Add(button);

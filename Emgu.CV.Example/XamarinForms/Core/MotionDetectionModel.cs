@@ -51,6 +51,8 @@ namespace Emgu.CV.XamarinForms
             {
                 _forgroundDetector = new BackgroundSubtractorMOG2();
             }
+
+            await Task.Delay(1);
         }
 
         private static void DrawMotion(IInputOutputArray image, Rectangle motionRegion, double angle, Bgr color)

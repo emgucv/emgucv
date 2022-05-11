@@ -27,7 +27,7 @@ namespace Emgu.CV.XamarinForms
                 "Perform Camera Calibration",
                 null,
                 null,
-                new Button[] { new Button(), new Button(), new Button()}
+                new Xamarin.Forms.Button[] { new Xamarin.Forms.Button(), new Xamarin.Forms.Button(), new Xamarin.Forms.Button()}
             )
         {
             _model = (CharucoCameraCalibrationModel) base.Model;

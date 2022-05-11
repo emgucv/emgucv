@@ -126,7 +126,7 @@ namespace Emgu.CV.XamarinForms
             String defaultButtonText,
             String defaultImage,
             String defaultLabelText = null,
-            Button[] additionalButtons = null
+            Xamarin.Forms.Button[] additionalButtons = null
             )
             : base(additionalButtons)
         {

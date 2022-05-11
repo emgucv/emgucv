@@ -27,8 +27,8 @@ namespace Emgu.CV.XamarinForms
             get { return _imageView; }
         }
 
-        public AndroidCameraPage()
-            : base()
+        public AndroidCameraPage(Xamarin.Forms.Button[] additionalButtons=null)
+            : base(additionalButtons)
         {
             _imageView = new ImageView(Android.App.Application.Context);
             Xamarin.Forms.View xView = _imageView.ToView();
