@@ -11,10 +11,14 @@
 
 #include "vectors_c.h"
 
+
 #ifdef HAVE_OPENCV_XFEATURES2D
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/xfeatures2d.hpp"
 #else
+
+#include "features2d_c.h"
+
 static inline CV_NORETURN void throw_no_xfeatures2d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xfeatures2d support"); }
 namespace cv {
 
@@ -36,7 +40,7 @@ namespace cv {
 
 	}
 
-	class Feature2D {};
+//	class Feature2D {};
 }
 #endif
 
