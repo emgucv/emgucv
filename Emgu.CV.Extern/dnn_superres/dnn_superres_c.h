@@ -38,5 +38,7 @@ CVAPI(void) cveDnnSuperResImplUpsample(cv::dnn_superres::DnnSuperResImpl* dnnSup
 CVAPI(int) cveDnnSuperResImplGetScale(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes);
 CVAPI(void) cveDnnSuperResImplGetAlgorithm(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes, cv::String* algorithm);
 CVAPI(void) cveDnnSuperResImplRelease(cv::dnn_superres::DnnSuperResImpl** dnnSuperRes);
+CVAPI(void) cveDnnSuperResImplSetPreferableBackend(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes, int backendId);
+CVAPI(void) cveDnnSuperResImplSetPreferableTarget(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes, int targetId);
 
 #endif

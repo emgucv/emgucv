@@ -82,3 +82,21 @@ void cveDnnSuperResImplRelease(cv::dnn_superres::DnnSuperResImpl** dnnSuperRes)
 	throw_no_dnn_superres();
 #endif
 }
+
+
+void cveDnnSuperResImplSetPreferableBackend(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes, int backendId)
+{
+#ifdef HAVE_OPENCV_DNN_SUPERRES
+	dnnSuperRes->setPreferableBackend(backendId);
+#else
+	throw_no_dnn_superres();
+#endif
+}
+void cveDnnSuperResImplSetPreferableTarget(cv::dnn_superres::DnnSuperResImpl* dnnSuperRes, int targetId)
+{
+#ifdef HAVE_OPENCV_DNN_SUPERRES
+	dnnSuperRes->setPreferableTarget(targetId);
+#else
+	throw_no_dnn_superres();
+#endif
+}
