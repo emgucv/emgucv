@@ -1178,5 +1178,67 @@ namespace Emgu.CV
             bool centerPrincipalPoint,
             IntPtr newCameraMatrix);
 
+        public static void LoadPointCloud(String filename, IOutputArray verticies, IOutputArray normals = null)
+        {
+            using (CvString csFileName = new CvString(filename))
+            using (OutputArray oaVerticies = verticies.GetOutputArray())
+            using (OutputArray oaNormals = normals == null ? OutputArray.GetEmpty() : normals.GetOutputArray())
+            {
+                cveLoadPointCloud(csFileName, oaVerticies, oaNormals);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveLoadPointCloud(IntPtr filename, IntPtr vertices, IntPtr normals);
+
+        public static void SavePointCloud(String filename, IInputArray verticies, IInputArray normals = null)
+        {
+            using (CvString csFileName = new CvString(filename))
+            using (InputArray iaVerticies = verticies.GetInputArray())
+            using (InputArray iaNormals = normals == null ? InputArray.GetEmpty() : normals.GetInputArray())
+            {
+                cveSavePointCloud(csFileName, iaVerticies, iaNormals);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveSavePointCloud(IntPtr filename, IntPtr vertices, IntPtr normals);
+
+
+        public static void LoadMesh(
+            String filename, 
+            IOutputArray vertices, 
+            IOutputArray normals,
+            IOutputArray indices)
+        {
+            using (CvString csFilename = new CvString(filename))
+            using (OutputArray oaVertices = vertices.GetOutputArray())
+            using (OutputArray oaNormals = normals.GetOutputArray())
+            using (OutputArray oaIndices = indices.GetOutputArray())
+            {
+                cveLoadMesh(csFilename, oaVertices, oaNormals, oaIndices);
+            }
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveLoadMesh(IntPtr filename, IntPtr vertices, IntPtr normals, IntPtr indices);
+
+        public static void SaveMesh(
+            String filename,
+            IInputArray vertices,
+            IInputArray normals,
+            IInputArray indices)
+        {
+            using (CvString csFilename = new CvString(filename))
+            using (InputArray iaVertices = vertices.GetInputArray())
+            using (InputArray iaNormals = normals.GetInputArray())
+            using (InputArray iaIndices = indices.GetInputArray())
+            {
+                cveSaveMesh(csFilename, iaVertices, iaNormals, iaIndices);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveSaveMesh(IntPtr filename, IntPtr vertices, IntPtr normals, IntPtr indices);
+
     }
 }

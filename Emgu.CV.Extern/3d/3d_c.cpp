@@ -567,7 +567,7 @@ void cveGetOptimalNewCameraMatrix(
 	bool centerPrincipalPoint,
 	cv::Mat* newCameraMatrix)
 {
-#ifdef HAVE_OPENCV_CALIB
+#ifdef HAVE_OPENCV_3D
 	cv::Rect r;
 	cv::Mat m = cv::getOptimalNewCameraMatrix(
 		*cameraMatrix,
@@ -586,6 +586,67 @@ void cveGetOptimalNewCameraMatrix(
 	}
 	cv::swap(m, *newCameraMatrix);
 #else
-	throw_no_calib();
+	throw_no_3d();
+#endif
+}
+
+cv::Octree* cveOctreeCreate()
+{
+#ifdef HAVE_OPENCV_3D
+	return new cv::Octree();
+#else
+	throw_no_3d();
+#endif
+}
+
+bool cveOctreeCreate2(cv::Octree* octree, std::vector< cv::Point3f >* pointCloud, int maxDepth)
+{
+#ifdef HAVE_OPENCV_3D
+	return octree->create(*pointCloud, maxDepth);
+#else
+	throw_no_3d();
+#endif
+}
+
+void cveOctreeRelease(cv::Octree** octree)
+{
+#ifdef HAVE_OPENCV_3D
+	delete* octree;
+	*octree = 0;
+#else
+	throw_no_3d();
+#endif
+}
+
+void cveLoadPointCloud(cv::String* filename, cv::_OutputArray* vertices, cv::_OutputArray* normals)
+{
+#ifdef HAVE_OPENCV_3D
+	cv::loadPointCloud(*filename, *vertices, normals ? *normals : static_cast<cv::OutputArray>(cv::noArray()));
+#else
+	throw_no_3d();
+#endif
+}
+void cveSavePointCloud(cv::String* filename, cv::_InputArray* vertices, cv::_InputArray* normals)
+{
+#ifdef HAVE_OPENCV_3D
+	cv::savePointCloud(*filename, *vertices, normals ? *normals : static_cast<cv::InputArray>(cv::noArray()));
+#else
+	throw_no_3d();
+#endif
+}
+void cveLoadMesh(cv::String* filename, cv::_OutputArray* vertices, cv::_OutputArray* normals, cv::_OutputArray* indices)
+{
+#ifdef HAVE_OPENCV_3D
+	cv::loadMesh(*filename, *vertices, *normals, indices? *indices : static_cast<cv::OutputArray>(cv::noArray()));
+#else
+	throw_no_3d();
+#endif
+}
+void cveSaveMesh(cv::String* filename, cv::_InputArray* vertices, cv::_InputArray* normals, cv::_InputArray* indices)
+{
+#ifdef HAVE_OPENCV_3D
+	cv::saveMesh(*filename, *vertices, *normals, indices ? *indices : static_cast<cv::InputArray>(cv::noArray()));
+#else
+	throw_no_3d();
 #endif
 }

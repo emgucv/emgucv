@@ -180,4 +180,15 @@ CVAPI(void) cveGetOptimalNewCameraMatrix(
 	CvRect* validPixROI,
 	bool centerPrincipalPoint,
 	cv::Mat* newCameraMatrix);
+
+
+CVAPI(cv::Octree*) cveOctreeCreate();
+CVAPI(bool) cveOctreeCreate2(cv::Octree*  octree, std::vector< cv::Point3f >* pointCloud, int maxDepth);
+CVAPI(void) cveOctreeRelease(cv::Octree** octree);
+
+CVAPI(void) cveLoadPointCloud(cv::String* filename, cv::_OutputArray* vertices, cv::_OutputArray* normals);
+CVAPI(void) cveSavePointCloud(cv::String* filename, cv::_InputArray* vertices, cv::_InputArray* normals);
+CVAPI(void) cveLoadMesh(cv::String* filename, cv::_OutputArray* vertices, cv::_OutputArray* normals, cv::_OutputArray* indices);
+CVAPI(void) cveSaveMesh(cv::String* filename, cv::_InputArray* vertices, cv::_InputArray* normals, cv::_InputArray* indices);
+
 #endif
