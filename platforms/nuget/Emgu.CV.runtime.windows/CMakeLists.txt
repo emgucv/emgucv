@@ -2,7 +2,10 @@
 #  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF ((TARGET Emgu.CV.Platform.NetStandard) AND (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64))
+IF ( (TARGET Emgu.CV.Platform.NetStandard)
+  AND (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64) 
+  AND (NOT ("${EMGU_WINDOWS_MSVCRT_VERSION}" STREQUAL "")) )
+  
   PROJECT(Emgu.CV.runtime.windows.nuget)
 
   get_filename_component(NUGET_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
