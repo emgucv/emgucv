@@ -88,6 +88,24 @@ namespace Emgu.CV.DnnSuperres
         }
 
         /// <summary>
+        /// Set computation backend.
+        /// </summary>
+        /// <param name="backendId">The computation backend.</param>
+        public void SetPreferableBackend(Emgu.CV.Dnn.Backend backendId)
+        {
+            DnnSuperresInvoke.cveDnnSuperResImplSetPreferableBackend(_ptr, backendId);
+        }
+
+        /// <summary>
+        /// Set computation target.
+        /// </summary>
+        /// <param name="targetId">The computation target.</param>
+        public void SetPreferableTarget(Emgu.CV.Dnn.Target targetId)
+        {
+            DnnSuperresInvoke.cveDnnSuperResImplSetPreferableTarget(_ptr, targetId);
+        }
+
+        /// <summary>
         /// Get the scale factor of the model.
         /// </summary>
         public int Scale
@@ -159,5 +177,11 @@ namespace Emgu.CV.DnnSuperres
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnSuperResImplGetAlgorithm(IntPtr dnnSuperRes, IntPtr algorithm);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnSuperResImplSetPreferableBackend(IntPtr dnnSuperRes, Emgu.CV.Dnn.Backend backendId);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnSuperResImplSetPreferableTarget(IntPtr dnnSuperRes, Emgu.CV.Dnn.Target targetId);
     }
 }
