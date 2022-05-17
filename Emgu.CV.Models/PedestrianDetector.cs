@@ -124,6 +124,8 @@ namespace Emgu.CV.Models
                     new Size(8, 8));
                 _hogCuda.SetSVMDetector(_hogCuda.GetDefaultPeopleDetector());
             }
+
+            await Task.Delay(1);
 #endif
         }
 
