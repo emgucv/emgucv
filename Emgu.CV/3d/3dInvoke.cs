@@ -13,6 +13,9 @@ using System.Drawing;
 
 namespace Emgu.CV
 {
+    /// <summary>
+    /// Provide interfaces to the Open CV functions
+    /// </summary>
     public static partial class CvInvoke
     {
         /// <summary>

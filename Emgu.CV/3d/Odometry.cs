@@ -115,7 +115,7 @@ namespace Emgu.CV
     }
 
     /// <summary>
-    /// Entry points for the cv::rgb functions
+    /// Provide interfaces to the Open CV functions
     /// </summary>
     public static partial class CvInvoke
     {
