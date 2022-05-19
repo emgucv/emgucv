@@ -3995,7 +3995,7 @@ ELSEIF (APPLE)
       COMMENT "Linking target for all architectures and ouputing to ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib")
     INSTALL(FILES
       ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libusb-1.0.0.dylib
-      DESTINATION "libs/macos/"
+      DESTINATION "libs/runtimes/osx/native/"
       COMPONENT emgucv_binary)
     add_custom_command(TARGET ${the_target}
       POST_BUILD
@@ -4011,7 +4011,7 @@ ELSEIF (APPLE)
 
   INSTALL(FILES
     ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../libcvextern.dylib
-    DESTINATION "libs/macos/"
+    DESTINATION "libs/runtimes/osx/native/"
     COMPONENT emgucv_binary)
 
   #INSTALL(FILES ${the_target} 
