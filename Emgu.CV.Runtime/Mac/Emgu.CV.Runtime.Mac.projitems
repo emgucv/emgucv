@@ -9,7 +9,7 @@
     <Import_RootNamespace>Emgu.CV</Import_RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
-    <EmguCVMacBinaryDir>..\..\libs\macos</EmguCVMacBinaryDir>
+    <EmguCVMacBinaryDir>..\..\libs\runtimes\osx\native</EmguCVMacBinaryDir>
   </PropertyGroup>
   <PropertyGroup>
     <EmguCVMacLinkTarget>Xamarin.Mac</EmguCVMacLinkTarget>
