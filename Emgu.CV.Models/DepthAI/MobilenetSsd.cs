@@ -10,7 +10,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Emgu.CV.DepthAI;
+using Emgu.CV.Dai;
 using Emgu.CV.Dnn;
 using Emgu.Util;
 using System.IO;
@@ -19,7 +19,7 @@ using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-
+/*
 namespace Emgu.CV.Models.DepthAI
 {
     /// <summary>
@@ -177,3 +177,4 @@ namespace Emgu.CV.Models.DepthAI
 
     }
 }
+*/

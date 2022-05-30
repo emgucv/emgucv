@@ -5,51 +5,27 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
-using Emgu.CV.DepthAI;
+using Emgu.CV.Dai;
 using Emgu.CV.ML;
-using Emgu.CV.Models.DepthAI;
+//using Emgu.CV.Models.DepthAI;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Newtonsoft.Json;
 
 
 namespace DepthAI
-{ 
+{
 
     class Program
     {
         private static bool _is_running = true;
         private static Mat _render = new Mat();
 
-        private static NNetPacket.Detection[] _mostRecentDetections;
-
-        private static void DrawDetection(NNetPacket.Detection detection, Mat image, String[] labels = null)
-        {
-            float xMin = detection.XMin * image.Width;
-            float xMax = detection.XMax * image.Width;
-            float yMin = detection.YMin * image.Height;
-            float yMax = detection.YMax * image.Height;
-            
-            RectangleF rectangleF = new RectangleF(xMin, yMin, xMax - xMin, yMax - yMin);
-            Rectangle rectangle = Rectangle.Round(rectangleF);
-            CvInvoke.Rectangle(image, rectangle, new MCvScalar(0, 0, 255), 2 );
-
-            String text; 
-            if (labels == null)
-            {
-                text = detection.Label.ToString();
-            } else
-            {
-                text = labels[detection.Label];
-            }
-            CvInvoke.PutText(image, text, rectangle.Location, Emgu.CV.CvEnum.FontFace.HersheySimplex, 1.0, new MCvScalar(0, 0, 255));
-
-        }
-
+        /*
         private static void onDownloadProgressChanged(long? totalBytesToReceive, long bytesReceived, double? progressPercentage)
         {
             if (totalBytesToReceive == null)
@@ -57,12 +33,13 @@ namespace DepthAI
             else
                 System.Console.WriteLine(String.Format("{0} of {1} bytes downloaded ({2}%)", bytesReceived, totalBytesToReceive, progressPercentage));
         }
+        */
 
         static async Task Main(string[] args)
         {
             CvInvoke.Init();
 
-            if (!DepthAIInvoke.HaveDepthAI)
+            if (!DaiInvoke.HaveDepthAI)
             {
                 Console.WriteLine("The native binary is built without Depth AI support.");
                 return;
@@ -72,75 +49,46 @@ namespace DepthAI
 
             CvInvoke.NamedWindow(win1); //Create the window using the specific name
 
-            
-            MobilenetSsd mobilenet = new MobilenetSsd();
-
-            //This download the models and return the default configuration
-            await mobilenet.Init(onDownloadProgressChanged);
-            Config config = mobilenet.ModelConfig;
-            String[] labels = mobilenet.Labels;
-
-            using (Emgu.CV.DepthAI.Device d = new Device(""))
+            using (Emgu.CV.Dai.Pipeline pipeline = new Pipeline())
+            using (Emgu.CV.Dai.ColorCamera colorCamera = pipeline.CreateColorCamera())
+            using (Emgu.CV.Dai.XLinkOut xLinkOut = pipeline.CreateXLinkOut())
             {
-                //String[] availableStreams = d.GetAvailableStreams();
-                using (CNNHostPipeline pipeline = d.CreatePipeline(JsonConvert.SerializeObject(config)))
+                xLinkOut.StreamName = "preview";
+                colorCamera.Interleaved = true;
+                using (NodeOutput cameraPreview = colorCamera.GetPreview())
+                using (Emgu.CV.Dai.NodeInput xLinkOutInput = xLinkOut.GetInput())
                 {
-                    if (pipeline.Ptr == IntPtr.Zero)
-                    {
-                        Console.WriteLine("Failed to create device pipeline.");
-                        return;
-                    }
-                    while (_is_running)
-                    {
-                        using (NNetAndDataPackets packets = pipeline.GetAvailableNNetAndDataPackets(false))
-                        {
-                            HostDataPacket[] dataPackets = packets.HostDataPackets;
-                            NNetPacket[] nnetPackets = packets.NNetPackets;
+                    cameraPreview.Link(xLinkOutInput);
 
-                            for (int i = 0; i < dataPackets.Length; i++)
+                    using (Emgu.CV.Dai.Device device = new Device(pipeline, true))
+                    using (DataOutputQueue preview = device.GetDataOutputQueue("preview"))
+                    {
+
+                        while (_is_running)
+                        {
+                            using (ImgFrame imgFrame = preview.GetImgFrame())
+                            using (Mat m = new Mat(
+                                      (int)imgFrame.Height,
+                                      (int)imgFrame.Width,
+                                      DepthType.Cv8U,
+                                      3,
+                                      imgFrame.GetDataPtr(),
+                                      (int)imgFrame.Width * 3))
                             {
-                                if (dataPackets[i].GetPreviewOut(_render))
-                                {
-                                    using (FrameMetadata fmeta = dataPackets[i].GetFrameMetadata())
-                                    {
-                                        if (i < nnetPackets.Length)
-                                        {
-                                            NNetPacket nnetPacket = nnetPackets[i];
-                                            using (FrameMetadata meta = nnetPacket.GetFrameMetadata())
-                                            {
-                                                _mostRecentDetections = nnetPacket.Detections;
-                                            }
-                                        }
-
-                                        if (_mostRecentDetections != null)
-                                        {
-                                            for (int j = 0; j < _mostRecentDetections.Length; j++)
-                                            {
-                                                DrawDetection(_mostRecentDetections[j], _render, labels);
-                                            }
-                                        }
-
-                                        CvInvoke.Imshow(win1, _render); //Show the image
-                                    }
-                                }
-                                else
-                                {
-                                    //failed to get preview image
-                                }
-                                
+                                CvInvoke.Imshow("preview", m);
                             }
-                        }
 
-                        if (CvInvoke.WaitKey(1) > 0) //Press any key to stop
-                        {
-                            _is_running = false;
+                            if (CvInvoke.WaitKey(1) > 0) //Press any key to stop
+                            {
+                                _is_running = false;
+                            }
                         }
                     }
                 }
             }
-            
+
             CvInvoke.DestroyAllWindows(); //Destroy all windows if key is pressed
-            
+
         }
     }
 }
