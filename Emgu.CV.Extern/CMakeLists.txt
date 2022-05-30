@@ -3032,48 +3032,107 @@ ENDFOREACH()
 
 ############################### DEPTHAI START ##############################
 
-
   CREATE_OCV_CLASS_PROPERTY( 
-    "depthai/device_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/DepthAI/Device.g.cs"
-    "Device" 
-    "Device" 
-    "is_usb3;is_eeprom_loaded;is_rgb_connected;is_left_connected;is_right_connected" 
-    "bool;bool;bool;bool;bool" 
-    "val;val;val;val;val"
-    "IsUsb3;IsEepromLoaded;IsRgbConnected;IsLeftConnected;IsRightConnected" 
-    "bool;bool;bool;bool;bool"
-    "True if the connection is USB3;
-     True if eeprom is loaded;
-     True if rgb connected;
-     True if left connected;
-     True if right connected"
-    "Emgu.CV.DepthAI"
-    "DepthAIInvoke"
-    "Device"
+    "depthai/color_camera_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/DepthAI/ColorCamera.g.cs"
+    "dai::node::ColorCamera" 
+    "ColorCamera" 
+    "Interleaved" 
+    "bool"
+    "prop"
+    "Interleaved" 
+    "bool"
+    "True if the image pixels are interleaved"
+    "Emgu.CV.Dai"
+    "DaiInvoke"
+    "ColorCamera"
 	""
     "#include \"depthai_c.h\""
 	""
 	"" 
 	${EMGU_CV_WITH_DEPTHAI})
 
-      CREATE_OCV_CLASS_PROPERTY( 
-    "depthai/hostDataPacket_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/DepthAI/HostDataPacket.g.cs"
-    "HostDataPacket" 
-    "HostDataPacket" 
-    "stream_name;size;Data;elem_size" 
-    "cv::String;int;const unsigned char*;int" 
-    "elementR;val;propR;elementR"
-    "StreamName;Size;Data;ElemSize" 
-    "String;int;IntPtr;int"
-    "Stream Name;
-    Size;
-    Pointer to the native data;
-    Element size"
-    "Emgu.CV.DepthAI"
-    "DepthAIInvoke"
-    "HostDataPacket"
+  CREATE_OCV_CLASS_PROPERTY( 
+    "depthai/mono_camera_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/DepthAI/MonoCamera.g.cs"
+    "dai::node::MonoCamera" 
+    "MonoCamera" 
+    "Fps" 
+    "float"
+    "prop"
+    "Fps" 
+    "float"
+    "The rate at which camera should produce frames"
+    "Emgu.CV.Dai"
+    "DaiInvoke"
+    "MonoCamera"
+	""
+    "#include \"depthai_c.h\""
+	""
+	"" 
+	${EMGU_CV_WITH_DEPTHAI})
+
+  CREATE_OCV_CLASS_PROPERTY( 
+    "depthai/img_frame_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/DepthAI/ImgFrame.g.cs"
+    "dai::ImgFrame" 
+    "ImgFrame" 
+    "Width;Height;InstanceNum;Category;SequenceNum" 
+    "uint32_t;uint32_t;uint32_t;uint32_t;int64_t"
+    "prop;prop;prop;prop;prop"
+    "Width;Height;InstanceNum;Category;SequenceNum" 
+    "UInt32;UInt32;UInt32;UInt32;Int64"
+    "Image width;
+    Image height;
+    Instance number;
+    Image category;
+    Image sequence number"
+    "Emgu.CV.Dai"
+    "DaiInvoke"
+    "ImgFrame"
+	""
+    "#include \"depthai_c.h\""
+	""
+	"" 
+	${EMGU_CV_WITH_DEPTHAI})
+
+  CREATE_OCV_CLASS_PROPERTY( 
+    "depthai/xlinkout_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/DepthAI/XLinkOut.g.cs"
+    "dai::node::XLinkOut" 
+    "XLinkOut" 
+    "StreamName;FpsLimit;MetadataOnly" 
+    "cv::String;float;bool"
+    "prop;prop;prop"
+    "StreamName;FpsLimit;MetadataOnly" 
+    "String;float;bool"
+    "The Stream Name;
+    A message sending limit. It's approximated from specified rate;
+    Specify whether to transfer only messages attributes and not buffer data"
+    "Emgu.CV.Dai"
+    "DaiInvoke"
+    "XLinkOut"
+	""
+    "#include \"depthai_c.h\""
+	""
+	"" 
+	${EMGU_CV_WITH_DEPTHAI})
+
+  CREATE_OCV_CLASS_PROPERTY( 
+    "depthai/data_output_queue_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/DepthAI/DataOutputQueue.g.cs"
+    "dai::DataOutputQueue" 
+    "DataOutputQueue" 
+    "Blocking;MaxSize" 
+    "bool;uint32_t"
+    "prop;prop"
+    "Blocking;MaxSize" 
+    "bool;UInt32"
+    "Specifies if block or overwrite the oldest message in the queue;
+    Specifies maximum number of messages in the queue"
+    "Emgu.CV.Dai"
+    "DaiInvoke"
+    "DataOutputQueue"
 	""
     "#include \"depthai_c.h\""
 	""
@@ -3081,34 +3140,26 @@ ENDFOREACH()
 	${EMGU_CV_WITH_DEPTHAI})
 
     CREATE_OCV_CLASS_PROPERTY( 
-    "depthai/FrameMetadata_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/DepthAI/FrameMetadata.g.cs"
-    "FrameMetadata" 
-    "FrameMetadata" 
-    "CameraName;SequenceNum;InstanceNum;Category;Stride;FrameBytesPP;FrameHeight;FrameWidth;FrameType;Timestamp;isValid" 
-    "cv::String;int;int;int;unsigned int;unsigned int;unsigned int;unsigned int;int;double;bool" 
-    "propR;propR;propR;propR;propR;propR;propR;propR;propR;propR;val"
-    "CameraName;SequenceNum;InstanceNum;Category;Stride;FrameBytesPP;FrameHeight;FrameWidth;FrameType;Timestamp;IsValid" 
-    "String;int;int;int;UInt32;UInt32;UInt32;UInt32;int;double;bool"
-    "Camera Name; 
-    Sequence Number;
-    Instance Number;
-    Category;
-    Stride;
-    FrameBytesPP;
-    FrameHeight;
-    FrameWidth;
-    FrameType;
-    Timestamp;
-    True if the value is valid"
-    "Emgu.CV.DepthAI"
-    "DepthAIInvoke"
-    "FrameMetadata"
+    "depthai/neural_network_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/DepthAI/NeuralNetwork.g.cs"
+    "dai::node::NeuralNetwork" 
+    "NeuralNetwork" 
+    "NumInferenceThreads" 
+    "int"
+    "prop"
+    "NumInferenceThreads" 
+    "int"
+    "How many inference threads will be used to run the network, Zero means AUTO"
+    "Emgu.CV.Dai"
+    "DaiInvoke"
+    "NeuralNetwork"
 	""
     "#include \"depthai_c.h\""
 	""
 	"" 
 	${EMGU_CV_WITH_DEPTHAI})
+
+
 	
 file(GLOB_RECURSE depthai_srcs "${PROJECT_SOURCE_DIR}/depthai/*.cpp")
 file(GLOB_RECURSE depthai_hdrs "${PROJECT_SOURCE_DIR}/depthai/*.h*")

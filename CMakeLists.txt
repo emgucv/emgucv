@@ -18,23 +18,31 @@ ELSE()
   SET(EMGU_CV_WITH_DEPTHAI OFF CACHE BOOL "Build support for OAK-1 and OAK-D")
 ENDIF()
 
-IF(EMGU_CV_WITH_DEPTHAI)
-  # Set defaults
-  set(HUNTER_CONFIGURATION_TYPES "Release" CACHE STRING "Hunter dependencies list of build configurations")
-  
-  include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/HunterGate.cmake")
-  
-  HunterGate(
-    URL "https://github.com/cpp-pm/hunter/archive/v0.24.0.tar.gz"
-    SHA1 "a3d7f4372b1dcd52faa6ff4a3bd5358e1d0e5efd"
-    FILEPATH ${CMAKE_CURRENT_LIST_DIR}/Emgu.CV.Extern/depthai-core/cmake/Hunter/config.cmake # Add depthai-core config (hunter limitation)
-  )
+#IF(EMGU_CV_WITH_DEPTHAI)
+#  # Set defaults
+#  set(HUNTER_CONFIGURATION_TYPES "Release" CACHE STRING "Hunter dependencies list of build configurations")
+#  
+#  include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/HunterGate.cmake")
+#  
+#  HunterGate(
+#    URL "https://github.com/cpp-pm/hunter/archive/v0.24.0.tar.gz"
+#    SHA1 "a3d7f4372b1dcd52faa6ff4a3bd5358e1d0e5efd"
+#    FILEPATH ${CMAKE_CURRENT_LIST_DIR}/Emgu.CV.Extern/depthai-core/cmake/Hunter/config.cmake # Add depthai-core config (hunter limitation)
+#  )
+#
+#  # Move binary dir if windows, to shorten the path
+#  if(WIN32)
+#    set(HUNTER_BINARY_DIR "${HUNTER_GATE_ROOT}/_bin" CACHE STRING "Hunter binary directory")
+#  endif()
+#  #MESSAGE(STATUS: "CMAKE_MODULE_PATH --- ${CMAKE_MODULE_PATH}")
+#ENDIF()
 
-  # Move binary dir if windows, to shorten the path
-  if(WIN32)
-    set(HUNTER_BINARY_DIR "${HUNTER_GATE_ROOT}/_bin" CACHE STRING "Hunter binary directory")
-  endif()
-  #MESSAGE(STATUS: "CMAKE_MODULE_PATH --- ${CMAKE_MODULE_PATH}")
+IF(EMGU_CV_WITH_DEPTHAI)
+  # Always build depthai-core as a static library
+  SET(BUILD_SHARED_LIBS_CACHE ${BUILD_SHARED_LIBS})
+  SET(BUILD_SHARED_LIBS OFF)
+  add_subdirectory(Emgu.CV.Extern/depthai-core EXCLUDE_FROM_ALL)
+  SET(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_CACHE})
 ENDIF()
 
 
@@ -49,14 +57,6 @@ if(POLICY CMP0069)
   SET(CMAKE_POLICY_DEFAULT_CMP0069 NEW)
 endif()
 
-
-IF(EMGU_CV_WITH_DEPTHAI)
-  # Always build depthai-core as a static library
-  SET(BUILD_SHARED_LIBS_CACHE ${BUILD_SHARED_LIBS})
-  SET(BUILD_SHARED_LIBS OFF)
-  add_subdirectory(Emgu.CV.Extern/depthai-core EXCLUDE_FROM_ALL)
-  SET(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_CACHE})
-ENDIF()
 
 #IF(ANDROID)
 #include(CheckIPOSupported)
