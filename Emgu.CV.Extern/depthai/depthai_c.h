@@ -36,11 +36,15 @@ namespace dai
 	class Node {};
 	class DataOutputQueue {};
 	class ImgFrame {};
+	class Device {};
 
 	namespace node
 	{
 		class ColorCamera {};
+		class MonoCamera {};
 		class XLinkOut {};
+		class NeuralNetwork {};
+		class StereoDepth {};
 	}
 }
 #endif
@@ -103,43 +107,5 @@ CVAPI(void) daiStereoDepthRelease(std::shared_ptr<dai::node::StereoDepth>** ster
 CVAPI(void*) daiStereoDepthGetLeft(dai::node::StereoDepth* stereoDepth);
 CVAPI(void*) daiStereoDepthGetRight(dai::node::StereoDepth* stereoDepth);
 
-/*
-class NNetAndDataPackets
-{
-public:
-	std::list< std::shared_ptr< NNetPacket > > _nnetPackets;
-	std::list< std::shared_ptr< HostDataPacket > > _hostDataPackets;
 
-	NNetAndDataPackets(std::tuple< std::list< std::shared_ptr< NNetPacket > >, std::list< std::shared_ptr< HostDataPacket > > > packets)
-	{
-		_nnetPackets = std::get<0>(packets);
-		_hostDataPackets = std::get<1>(packets);
-	}
-};
-*/
-
-//CVAPI(void) depthaiDeviceGetAvailableStreams(dai::Device* usb_device, std::vector< cv::String >* availableStreams);
-
-/*
-CVAPI(CNNHostPipeline*) depthaiDeviceCreatePipeline(dai::Device* usb_device, cv::String* config_json_str, std::shared_ptr<CNNHostPipeline>** hostedPipelinePtr);
-CVAPI(void) depthaiCNNHostPipelineRelease(std::shared_ptr<CNNHostPipeline>** hostedPipelinePtr);
-
-CVAPI(NNetAndDataPackets*) depthaiCNNHostPipelineGetAvailableNNetAndDataPackets(CNNHostPipeline* cnnHostPipeline, bool blocking);
-CVAPI(int) depthaiNNetAndDataPacketsGetNNetCount(NNetAndDataPackets* nnetAndDataPackets);
-CVAPI(void) depthaiNNetAndDataPacketsGetNNetArr(NNetAndDataPackets* nnetAndDataPackets, NNetPacket** packetArr);
-CVAPI(int) depthaiNNetAndDataPacketsGetHostDataPacketCount(NNetAndDataPackets* nnetAndDataPackets);
-CVAPI(void) depthaiNNetAndDataPacketsGetHostDataPacketArr(NNetAndDataPackets* nnetAndDataPackets, HostDataPacket** packetArr);
-CVAPI(void) depthaiNNetAndDataPacketsRelease(NNetAndDataPackets** nnetAndDataPackets);
-
-
-CVAPI(void) depthaiHostDataPacketGetDimensions(HostDataPacket* packet, std::vector< int >* dimensions);
-CVAPI(bool) depthaiHostDataPacketGetMetadata(HostDataPacket* packet, FrameMetadata* metadata);
-
-CVAPI(int) depthaiNNetPacketGetDetectedObjectsCount(NNetPacket* packet);
-CVAPI(void) depthaiNNetPacketGetDetectedObjects(NNetPacket* packet, dai::Detection* detections);
-CVAPI(bool) depthaiNNetPacketGetMetadata(NNetPacket* packet, FrameMetadata* metadata);
-
-CVAPI(FrameMetadata*) depthaiFrameMetadataCreate();
-CVAPI(void) depthaiFrameMetadataRelease(FrameMetadata** metadata);
-*/
 #endif
