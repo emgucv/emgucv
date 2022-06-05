@@ -23,13 +23,17 @@ if [[ $# -lt 2 ]]; then
     TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
     echo "Building with contrib module"
 else
-    if [ "$2" != "core" ]; then
+    if [ "$2" == "core" ]; then
+      TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE 
+      echo "Building without contrib module"
+    elif [ "$2" == "mini" ]; then
+      TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE
+      CV_MODULE_OPTION=-DBUILD_opencv_3d:BOOL=FALSE\ -DBUILD_opencv_calib:BOOL=FALSE\ -DBUILD_opencv_dnn:BOOL=FALSE\ -DBUILD_opencv_ml:BOOL=FALSE\ -DBUILD_opencv_photo:BOOL=FALSE\ -DBUILD_opencv_features2d:BOOL=FALSE\ -DBUILD_opencv_gapi:BOOL=FALSE\ -DBUILD_opencv_flann:BOOL=FALSE\ -DBUILD_opencv_video:BOOL=FALSE 
+      echo "Building without contrib module"	
+    else
       CV_CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules
       TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
       echo "Building with contrib module"
-    else
-      TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE 
-      echo "Building without contrib module"
     fi
 fi
 
@@ -41,7 +45,7 @@ cmake --build . --config Release --parallel --target install
 cd ../..
 
 if [ "$CV_CONTRIB_OPTION" != "" ]; then
-	cd 3rdParty
+    cd 3rdParty
     cd freetype2
     mkdir -p build
     cd build
@@ -102,6 +106,7 @@ $CV_PNG_OPTION \
 -DBUILD_opencv_apps:BOOL=OFF \
 -DWITH_CUDA:BOOL=OFF \
 $CV_CONTRIB_OPTION \
+$CV_MODULE_OPTION \
 $TESSERACT_OPTION \
 -DBUILD_SHARED_LIBS:BOOL=OFF \
 $VTK_OPTION \
