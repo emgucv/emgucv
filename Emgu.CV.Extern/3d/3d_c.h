@@ -9,7 +9,23 @@
 #define EMGU_3D_C_H
 
 #include "opencv2/core/core_c.h"
+
+#ifdef HAVE_OPENCV_3D
 #include "opencv2/3d.hpp"
+#else
+
+namespace cv
+{
+	class Odometry {};
+	class OdometryType {};
+
+	class RgbdNormals {};
+	class Octree {};
+}
+
+static inline CV_NORETURN void throw_no_3d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without 3d support"); }
+
+#endif
 
 CVAPI(void) cveRodrigues(cv::_InputArray* src, cv::_OutputArray* dst, cv::_OutputArray* jacobian);
 
