@@ -3,8 +3,8 @@
 # --------------------------------------------------------
 
 IF (TARGET Emgu.CV.Platform.NetStandard)
-
-  IF (DOTNET_FOUND)
+  IF (DOTNET_FOUND AND (NOT ANDROID) AND (NOT IOS))
+    #DO NOT build Emgu.CV.Bitmap for Android or IOS
     PROJECT(Emgu.CV.Bitmap)
       SET(EXTRA_MSBUILD_FLAGS "")
       IF(WIN32)
