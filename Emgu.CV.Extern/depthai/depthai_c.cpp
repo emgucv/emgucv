@@ -388,6 +388,30 @@ void* daiNeuralNetworkGetInput(dai::node::NeuralNetwork* neuralNetwork)
 #endif	
 }
 
+dai::node::StereoDepth* daiPipelineCreateStereoDepth(dai::Pipeline* pipeline, std::shared_ptr<dai::node::StereoDepth>** stereoDepthSharedPtr, dai::Node** nodePtr) 
+{
+#ifdef HAVE_DEPTHAI
+	std::shared_ptr<dai::node::StereoDepth> ptr = pipeline->create<dai::node::StereoDepth>();
+	*stereoDepthSharedPtr = new std::shared_ptr<dai::node::StereoDepth>(ptr);
+	dai::node::StereoDepth* stereoDepthPtr = (*stereoDepthSharedPtr)->get();
+	*nodePtr = static_cast<dai::Node*>(stereoDepthPtr);
+	return stereoDepthPtr;
+#else
+	throw_no_depthai();
+#endif
+}
+
+void daiStereoDepthRelease(std::shared_ptr<dai::node::StereoDepth>** stereoDepthSharedPtr)
+{
+#ifdef HAVE_DEPTHAI
+	delete* stereoDepthSharedPtr;
+	*stereoDepthSharedPtr = 0;
+#else
+	throw_no_depthai();
+#endif
+}
+
+
 void* daiStereoDepthGetLeft(dai::node::StereoDepth* stereoDepth)
 {
 #ifdef HAVE_DEPTHAI
