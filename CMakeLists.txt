@@ -1907,8 +1907,8 @@ IF(HAVE_MACOS)
   IF (NOT IS_MACOS_BUILD)
     INSTALL(
       FILES
-      "libs/macos/libcvextern.dylib"
-      DESTINATION "libs/macos"
+      "libs/runtimes/osx/native/libcvextern.dylib"
+      DESTINATION "libs/runtimes/osx/native"
       COMPONENT emgucv_binary
       )
   ENDIF()
