@@ -17,6 +17,8 @@ mkdir -p libs/iOS
 
 if [[ "$2" == "core" ]]; then
     CV_CONTRIB_OPTION=core
+elif [[ "$2" == "mini" ]]; then
+    CV_CONTRIB_OPTION=mini
 else
     CV_CONTRIB_OPTION=full
 fi
@@ -56,7 +58,6 @@ mkdir -p platforms/ios/simulator_x86_64
 cd platforms/ios/simulator_x86_64
 #skip the first two parameter    
 ../configure_xcode.sh $CV_CONTRIB_OPTION simulator x86_64 -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE ${@:3}
-
 ./xcodebuild_wrapper WARNING_CFLAGS=-Wno-implicit-function-declaration -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
 
 cd ../../..
