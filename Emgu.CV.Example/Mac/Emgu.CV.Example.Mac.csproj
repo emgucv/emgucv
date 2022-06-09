@@ -116,8 +116,6 @@
     <Compile Include="..\XamarinForms\Core\DrawMatches.cs">
       <Link>DrawMatches.cs</Link>
     </Compile>
-    <Compile Include="..\..\Emgu.CV.NativeImage\CGImageExtension.cs" />
-    <Compile Include="..\..\Emgu.CV.NativeImage\NSImageExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="Main.storyboard" />
@@ -155,7 +153,9 @@
       <Project>{A593599A-8B00-45F6-B161-5AB794DED450}</Project>
       <Name>Emgu.CV.Models.NetStandard</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.Platform\Mac\Emgu.CV.Platform.Mac.csproj">
+      <Name>Emgu.CV.Platform.Mac</Name>
+    </ProjectReference>
   </ItemGroup>
-  <Import Project="..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems')" />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
 </Project>
