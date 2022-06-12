@@ -2901,7 +2901,36 @@ ENDIF()
 	""
 	${HAVE_opencv_structured_light})
 
-############################### structed_light code gen END ##############################
+############################### ximgproc code gen END ##############################
+
+############################### sureface matching code gen START ##############################
+IF (NOT HAVE_opencv_surface_matching)
+  SET(HAVE_opencv_surface_matching FALSE)
+ENDIF()
+  CREATE_OCV_CLASS_PROPERTY( 
+    "surface_marching/pose3d_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/SurfaceMatching/Pose3D.g.cs"
+    "cv::ppf_match_3d::Pose3D" 
+    "Pose3D" 
+    "alpha;residual;angle;modelIndex;numVotes" 
+    "double;double;double;int;int" 
+    "element;element;element;element;element"
+    "Alpha;Residual;Angle;ModelIndex;NumVotes" 
+    "double;double;double;int;int"
+    "Alpha value;Residual value;Angle value;Model Index;Number of Votes"
+    "Emgu.CV.PpfMatch3d"
+    "PpfMatch3dInvoke"
+    "Pose3D"
+	""
+	"#include \"surface_matching_c.h\""
+	""
+	""
+	${HAVE_opencv_surface_matching})
+
+    CREATE_VECTOR_CS("Pose3D" "std::vector< cv::ppf_match_3d::Pose3D >" "Pose3D" "object_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/SurfaceMatching" Emgu.CV.PpfMatch3d "" "#include \"surface_matching_c.h\"" "" "defined(HAVE_OPENCV_SURFACE_MATCHING)")
+
+############################### sureface matching code gen END ##############################
+
 
 ############################### rgbd code gen START ##############################
 IF (NOT HAVE_opencv_rgbd)

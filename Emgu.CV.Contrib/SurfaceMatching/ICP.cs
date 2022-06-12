@@ -43,14 +43,14 @@ namespace Emgu.CV.PpfMatch3d
         /// Constructor to a very efficient and robust variant of the iterative closest point (ICP) algorithm.
         /// </summary>
         /// <param name="iterations">number of iterations</param>
-        /// <param name="tolerence">Controls the accuracy of registration at each iteration of ICP.</param>
+        /// <param name="tolerance">Controls the accuracy of registration at each iteration of ICP.</param>
         /// <param name="rejectionScale">Robust outlier rejection is applied for robustness. This value actually corresponds to the standard deviation coefficient. Points with rejectionScale * sigma are ignored during registration.</param>
         /// <param name="numLevels">Number of pyramid levels to proceed. Deep pyramids increase speed but decrease accuracy. Too coarse pyramids might have computational overhead on top of the inaccurate registrtaion. This parameter should be chosen to optimize a balance. Typical values range from 4 to 10.</param>
         /// <param name="sampleType">Currently this parameter is ignored and only uniform sampling is applied. </param>
         /// <param name="numMaxCorr">Currently this parameter is ignored and only PickyICP is applied. Leave it as 1.</param>
         public ICP(
 			int iterations, 
-			float tolerence = 0.05f, 
+			float tolerance = 0.05f, 
 			float rejectionScale = 2.5f, 
 			int numLevels = 6,
             SamplingType sampleType = SamplingType.Uniform, 
@@ -58,7 +58,7 @@ namespace Emgu.CV.PpfMatch3d
         {
             _ptr = PpfMatch3dInvoke.cveICPCreate(
                 iterations,
-                tolerence,
+                tolerance,
                 rejectionScale,
                 numLevels,
                 sampleType,
@@ -86,6 +86,18 @@ namespace Emgu.CV.PpfMatch3d
 		{
 			return PpfMatch3dInvoke.cveICPRegisterModelToScene(_ptr, srcPC, dstPC, ref residual, pose);
         }
+
+        /// <summary>
+        /// Perform registration with multiple initial poses.
+        /// </summary>
+        /// <param name="srcPC">The input point cloud for the model. Expected to have the normals (Nx6). Currently, CV_32F is the only supported data type.</param>
+        /// <param name="dstPC">The input point cloud for the scene. Currently, CV_32F is the only supported data type.</param>
+        /// <param name="poses">Input poses to start with but also list output of poses.</param>
+        /// <returns>On successful termination, the function returns 0.</returns>
+        public int RegisterModelToScene(Mat srcPC, Mat dstPC, VectorOfPose3D poses)
+        {
+            return PpfMatch3dInvoke.cveICPRegisterModelToScene2(_ptr, srcPC, dstPC, poses);
+        }
     }
 
     /// <summary>
@@ -101,7 +113,7 @@ namespace Emgu.CV.PpfMatch3d
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveICPCreate(
 			int iterations, 
-			float tolerence, 
+			float tolerance, 
 			float rejectionScale, 
 			int numLevels, 
 			ICP.SamplingType sampleType, 
@@ -112,6 +124,8 @@ namespace Emgu.CV.PpfMatch3d
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern int cveICPRegisterModelToScene(IntPtr icp, IntPtr srcPC, IntPtr dstPC, ref double residual, IntPtr pose);
-        
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveICPRegisterModelToScene2(IntPtr icp, IntPtr srcPC, IntPtr dstPC, IntPtr poses);
     }
 }
