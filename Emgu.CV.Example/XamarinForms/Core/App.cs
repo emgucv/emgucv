@@ -162,19 +162,22 @@ namespace Emgu.CV.XamarinForms
                     MainPage.Navigation.PushAsync(faceAndEyeDetectorPage);
                 };
 
-                Button faceDetectionYNButton = new Button();
-                faceDetectionYNButton.Text = "FaceDetection Yunet";
-                buttonList.Add(faceDetectionYNButton);
-
-                faceDetectionYNButton.Clicked += (sender, args) =>
+                if (haveDNN)
                 {
-                    ProcessAndRenderPage faceDetectionYNPage = new ProcessAndRenderPage(
-                        new FaceDetectorYNModel(),
-                        "Face detection Yunet",
-                        "lena.jpg",
-                        "Face detection (Yunet)");
-                    MainPage.Navigation.PushAsync(faceDetectionYNPage);
-                };
+                    Button faceDetectionYNButton = new Button();
+                    faceDetectionYNButton.Text = "FaceDetection Yunet";
+                    buttonList.Add(faceDetectionYNButton);
+
+                    faceDetectionYNButton.Clicked += (sender, args) =>
+                    {
+                        ProcessAndRenderPage faceDetectionYNPage = new ProcessAndRenderPage(
+                            new FaceDetectorYNModel(),
+                            "Face detection Yunet",
+                            "lena.jpg",
+                            "Face detection (Yunet)");
+                        MainPage.Navigation.PushAsync(faceDetectionYNPage);
+                    };
+                }
 
                 Button pedestrianDetectionButton = new Button();
                 pedestrianDetectionButton.Text = "Pedestrian Detection";
