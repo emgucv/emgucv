@@ -74,7 +74,8 @@ namespace Emgu.CV.Models
         /// Detect faces on the image
         /// </summary>
         /// <param name="image">The image.</param>
-        public FaceDetectorYNResult[] Detect(IInputArray image)
+        /// <param name="detectionResult">The detection result</param>
+        public void Detect(IInputArray image, Mat detectionResult)
         {
             using (InputArray iaImage = image.GetInputArray())
             {
@@ -98,24 +99,41 @@ namespace Emgu.CV.Models
                         Dnn.Target.Cpu);
                 }
 
-                using (Mat detectionResult = new Mat())
-                {
-                    List<FaceDetectorYNResult> faces = new List<FaceDetectorYNResult>();
-                    _faceDetectionModel.Detect(image, detectionResult);
-                    float[,] results = detectionResult.GetData() as float[,];
-                    if (results == null)
-                        return new FaceDetectorYNResult[0];
-
-                    int count = results.GetLength(0);
-                    for (int i = 0; i < count; i++)
-                    {
-                        FaceDetectorYNResult face = new FaceDetectorYNResult(results, i);
-                        faces.Add(face);
-                    }
-
-                    return faces.ToArray();
-                }
+                _faceDetectionModel.Detect(image, detectionResult);
+                
             }
+        }
+
+
+        /// <summary>
+        /// Detect faces on the image
+        /// </summary>
+        /// <param name="image">The image.</param>
+        public FaceDetectorYNResult[] Detect(IInputArray image)
+        {
+            using (Mat detectionResult = new Mat())
+            {
+                Detect(image, detectionResult);
+                return ConvertMatToFaceDetectorYNResult(detectionResult);
+            }
+        }
+
+        public static FaceDetectorYNResult[] ConvertMatToFaceDetectorYNResult(Mat rawResult)
+        {
+            List<FaceDetectorYNResult> faces = new List<FaceDetectorYNResult>();
+
+            float[,] results = rawResult.GetData() as float[,];
+            if (results == null)
+                return new FaceDetectorYNResult[0];
+
+            int count = results.GetLength(0);
+            for (int i = 0; i < count; i++)
+            {
+                FaceDetectorYNResult face = new FaceDetectorYNResult(results, i);
+                faces.Add(face);
+            }
+
+            return faces.ToArray();
         }
 
         public struct FaceDetectorYNResult
@@ -152,6 +170,9 @@ namespace Emgu.CV.Models
             Clear();
         }
 
+        /// <summary>
+        /// Clear the model. 
+        /// </summary>
         public void Clear()
         {
             if (_faceDetectionModel != null)
@@ -170,7 +191,7 @@ namespace Emgu.CV.Models
                 iaImageIn.CopyTo(imageOut);
                 foreach (FaceDetectorYNResult face in faces)
                 {
-                    Rectangle r= Rectangle.Round(face.Region);
+                    Rectangle r = Rectangle.Round(face.Region);
                     CvInvoke.Rectangle(imageOut, r, new MCvScalar(255, 255, 255, 255), 2);
                     CvInvoke.Circle(imageOut, Point.Round(face.LeftEye), 3, new MCvScalar(255, 0, 0), -1);
                     CvInvoke.Circle(imageOut, Point.Round(face.RightEye), 3, new MCvScalar(255, 0, 0), -1);
