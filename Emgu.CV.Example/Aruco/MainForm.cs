@@ -183,8 +183,7 @@ namespace Aruco
                                     tvec.Push(values);
 
 
-                                    ArucoInvoke.DrawAxis(_frameCopy, _cameraMatrix, _distCoeffs, rvec, tvec,
-                                       markersLength * 0.5f);
+                                    //ArucoInvoke.DrawAxis(_frameCopy, _cameraMatrix, _distCoeffs, rvec, tvec, markersLength * 0.5f);
 
                                 }
                             }

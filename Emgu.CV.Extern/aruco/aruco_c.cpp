@@ -59,6 +59,7 @@ void cveArucoDrawMarker(cv::aruco::Dictionary* dictionary, int id, int sidePixel
 #endif
 }
 
+/*
 void cveArucoDrawAxis(cv::_InputOutputArray* image, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* rvec, cv::_InputArray* tvec, float length)
 {
 #ifdef HAVE_OPENCV_ARUCO
@@ -67,6 +68,7 @@ void cveArucoDrawAxis(cv::_InputOutputArray* image, cv::_InputArray* cameraMatri
 	throw_no_aruco();
 #endif
 }
+*/
 
 void cveArucoDetectMarkers(
    cv::_InputArray* image, cv::aruco::Dictionary* dictionary, cv::_OutputArray* corners,
