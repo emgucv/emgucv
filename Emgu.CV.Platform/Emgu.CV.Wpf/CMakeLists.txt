@@ -5,13 +5,13 @@
 IF (TARGET Emgu.CV.Platform.NetStandard)
   IF (DOTNET_FOUND AND WIN32)
     # Only build Emgu.CV.BitmapSource for Windows
-    PROJECT(Emgu.CV.BitmapSource)
+    PROJECT(Emgu.CV.Wpf)
       SET(EXTRA_MSBUILD_FLAGS "")
       IF(WIN32)
         SET(EXTRA_MSBUILD_FLAGS "/p:Platform=\"Any CPU\"")
       ENDIF()
 
-    BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/Windows.Desktop/Emgu.CV.sln" "Emgu.CV.Wpf" "${EXTRA_MSBUILD_FLAGS}" ALL)
+    BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/Windows.Desktop/Emgu.CV.Example.sln" "Emgu.CV.Wpf" "${EXTRA_MSBUILD_FLAGS}" ALL)
     IF (EMGU_SIGN_FOUND)
       EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.dll)
     ENDIF()
@@ -34,7 +34,7 @@ IF (TARGET Emgu.CV.Platform.NetStandard)
       DESTINATION Emgu.CV.Platform
       COMPONENT emgucv_source
       FILES_MATCHING 
-      PATTERN "Emgu.CV.Bitmap.csproj"
+      PATTERN "Emgu.CV.Wpf.csproj"
 	  PATTERN "*.cs"
       PATTERN ".svn" EXCLUDE
       PATTERN "obj" EXCLUDE

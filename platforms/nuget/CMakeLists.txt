@@ -17,6 +17,7 @@ ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.dnn.adv")
 
 ADD_SUBDIRECTORY("Emgu.CV")
 ADD_SUBDIRECTORY("Emgu.CV.Bitmap")
+ADD_SUBDIRECTORY("Emgu.CV.Wpf")
 ADD_SUBDIRECTORY("Emgu.CV.Models")
 ADD_SUBDIRECTORY("Emgu.CV.UI")
 
