@@ -8,11 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Emgu.CV.NativeImage\BitmapSourceExtension.cs" Link="BitmapSourceExtension.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj" />
+    <ProjectReference Include="..\..\Emgu.CV.Platform\Emgu.CV.Wpf\Emgu.CV.Wpf.csproj" />
     <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
   </ItemGroup>
 
