@@ -1046,6 +1046,7 @@ ENDIF()
 
 SET(EMGUCV_NUGET_ID "Emgu.CV")
 SET(EMGUCV_BITMAP_NUGET_ID "Emgu.CV.Bitmap")
+SET(EMGUCV_WPF_NUGET_ID "Emgu.CV.Wpf")
 SET(EMGUCV_MODELS_NUGET_ID "Emgu.CV.Models")
 SET(EMGUCV_UI_NUGET_ID "Emgu.CV.UI")
 SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime${EMGUCV_RUNTIME_EXTRA_TAG}.windows")
@@ -1283,6 +1284,27 @@ SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "
 	<dependencies>
 ${EMGUCV_BITMAP_NUGET_DEPENDENCY}
     </dependencies>")
+	
+SET(EMGUCV_WPF_NUGET_TITLE "WPF extension for Emgu CV")
+SET(EMGUCV_WPF_NUGET_SUMMARY "This package add extension method to convert BitmapSource to and from Emgu objects (e.g. Mat)")
+SET(EMGUCV_WPF_NUGET_FILE_LIST "")
+SET(EMGUCV_WPF_NUGET_DEPENDENCY "")
+SET(EMGUCV_WPF_NUGET_FILE_LIST "${EMGUCV_WPF_NUGET_FILE_LIST} 
+    <file src=\"..\\..\\..\\libs\\Emgu.CV.Wpf.dll\" target=\"lib\\netcoreapp3.1\" />
+    <file src=\"..\\..\\..\\libs\\Emgu.CV.Wpf.xml\" target=\"lib\\netcoreapp3.1\" />
+    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+	<file src=\"README.md\" target=\"docs\\\" />")
+SET(EMGUCV_WPF_NUGET_DEPENDENCY "${EMGUCV_WPF_NUGET_DEPENDENCY} 
+      <group targetFramework=\".NETCoreApp3.1\">
+        <frameworkReference name=\"Microsoft.WindowsDesktop.App.WPF\" />
+        <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+      </group>")
+SET(EMGUCV_WPF_NUGET_DEPENDENCY "
+	<dependencies>
+${EMGUCV_WPF_NUGET_DEPENDENCY}
+    </dependencies>")	
+	
 
 SET(EMGUCV_MODELS_NUGET_TITLE "Experimental component to help download, initialize and execute image processing/AI models.")
 SET(EMGUCV_MODELS_NUGET_SUMMARY "Experimental component to help download, initialize and execute image processing/AI models. This is under active development and API may change from time to time.")
@@ -1699,6 +1721,10 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Package.README.md.in ${
 #generate nuget config file for Emgu.CV.Bitmap
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Bitmap.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.Bitmap/Package.nuspec)
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Bitmap.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.Bitmap/README.md)
+
+#generate nuget config file for Emgu.CV.Wpf
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Wpf.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.Wpf/Package.nuspec)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Wpf.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.Wpf/README.md)
 
 #generate nuget config file for Emgu.CV.Models
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Models.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.Models/Package.nuspec)
