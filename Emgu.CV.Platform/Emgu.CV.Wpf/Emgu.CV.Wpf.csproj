@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\emgucv_5.0\Emgu.CV.NativeImage\BitmapSourceExtension.cs" Link="BitmapSourceExtension.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj" />
+    <ProjectReference Include="..\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
+  </ItemGroup>
+
+</Project>
