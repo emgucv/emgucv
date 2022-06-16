@@ -864,3 +864,12 @@ void cveDecomposeProjectionMatrix(
 	throw_no_calib3d();
 #endif
 }
+
+void cveDecomposeEssentialMat(cv::_InputArray* e, cv::_OutputArray* r1, cv::_OutputArray* r2, cv::_OutputArray* t)
+{
+#ifdef HAVE_OPENCV_CALIB3D
+	cv::decomposeEssentialMat(*e, *r1, *r2, *t);
+#else
+	throw_no_calib3d();
+#endif	
+}

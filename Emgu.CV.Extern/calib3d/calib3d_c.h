@@ -247,4 +247,7 @@ CVAPI(void) cveDecomposeProjectionMatrix(
 	cv::_OutputArray* rotMatrixY,
 	cv::_OutputArray* rotMatrixZ,
 	cv::_OutputArray* eulerAngles);
+
+CVAPI(void) cveDecomposeEssentialMat(cv::_InputArray* e, cv::_OutputArray* r1, cv::_OutputArray* r2, cv::_OutputArray* t);
+
 #endif
