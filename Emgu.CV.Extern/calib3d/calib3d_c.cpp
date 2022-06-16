@@ -882,7 +882,7 @@ int cveDecomposeHomographyMat(
 	cv::_OutputArray* normals)
 {
 #ifdef HAVE_OPENCV_CALIB3D
-	cv::decomposeHomographyMat(
+	return cv::decomposeHomographyMat(
 		*h,
 		*k,
 		*rotations,
