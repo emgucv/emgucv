@@ -34,7 +34,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <Compile Include="..\..\..\emgucv_5.0\Emgu.CV.NativeImage\BitmapSourceExtension.cs" Link="BitmapSourceExtension.cs" />
+    <Compile Include="..\..\Emgu.CV.NativeImage\BitmapSourceExtension.cs" Link="BitmapSourceExtension.cs" />
   </ItemGroup>
 
   <ItemGroup>
