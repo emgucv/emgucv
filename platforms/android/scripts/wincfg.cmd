@@ -49,6 +49,7 @@ IF EXIST "%ANDROID_NDK_PARENT_DIR%\android-ndk-r21" SET ANDROID_NDK=%ANDROID_NDK
 
 IF EXIST "%programfiles(x86)%\Android\android-sdk\ndk-bundle" SET ANDROID_NDK=%programfiles(x86)%\Android\android-sdk\ndk-bundle
 IF EXIST "%ANDROID_SDK%\ndk-bundle" SET ANDROID_NDK=%ANDROID_SDK%\ndk-bundle
+IF EXIST "%ANDROID_SDK%\ndk\24.0.8215888" SET ANDROID_NDK=%ANDROID_SDK%\ndk\24.0.8215888
 
 
 REM SET MAKE_EXE
