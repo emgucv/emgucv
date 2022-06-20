@@ -209,7 +209,7 @@ SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 -DEMGU_CV_WITH_DEPTHAI:BOOL=FALSE ^
 -DCMAKE_FIND_ROOT_PATH:STRING=%INSTALL_FOLDER:\=/% ^
 -DEigen3_DIR:STRING=%EIGEN_DIR:\=/% ^
-%EMGU_CV_CMAKE_EXTRA_FLAGS% ^ 
+%EMGU_CV_CMAKE_EXTRA_FLAGS% ^
 -DANDROID_LD=deprecated
 
 REM For reason on adding "-DANDROID_LD=deprecated" flag, see https://github.com/android/ndk/issues/1426
