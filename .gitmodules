@@ -42,3 +42,6 @@
 	path = 3rdParty/freetype2
 	url = https://gitlab.freedesktop.org/freetype/freetype.git
 	ignore = dirty
+[submodule "3rdParty/openvino"]
+	path = 3rdParty/openvino
+	url = https://github.com/openvinotoolkit/openvino.git
