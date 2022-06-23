@@ -15,10 +15,30 @@
     <EmguCVMacLinkTarget>Xamarin.Mac</EmguCVMacLinkTarget>
     <EmguCVMacNativeFile>$(EmguCVMacBinaryDir)\libcvextern.dylib</EmguCVMacNativeFile>
     <EmguCVMacErrorMessage Condition="!Exists('$(MSBuildThisFileDirectory)$(EmguCVMacNativeFile)')">This package do not contain necessary binary for $(EmguCVMacLinkTarget). Missing $(MSBuildThisFileDirectory)$(EmguCVMacNativeFile). PInvoke may fail on Mac OS.</EmguCVMacErrorMessage>
-    <EmguCVMacDeployMessage Condition="Exists('$(MSBuildThisFileDirectory)$(EmguCVMacNativeFile)')">$(EmguCVMacDeployMessage)MacOS x64 </EmguCVMacDeployMessage>
+    <EmguCVMacDeployMessage Condition="Exists('$(MSBuildThisFileDirectory)$(EmguCVMacNativeFile)')">$(EmguCVMacDeployMessage)MacOS </EmguCVMacDeployMessage>
   </PropertyGroup>
   <ItemGroup Condition="Exists('$(MSBuildThisFileDirectory)$(EmguCVMacNativeFile)')">
     <Content Include="$(MSBuildThisFileDirectory)$(EmguCVMacBinaryDir)\*.dylib">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)$(EmguCVMacBinaryDir)\*.so">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)$(EmguCVMacBinaryDir)\*.json">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)$(EmguCVMacBinaryDir)\*.xml">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)$(EmguCVMacBinaryDir)\*.elf">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(MSBuildThisFileDirectory)$(EmguCVMacBinaryDir)\*.mvcmd">
       <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
