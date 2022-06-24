@@ -57,7 +57,7 @@ if [ "$CV_CONTRIB_OPTION" != "" ]; then
     cmake --build . --config Release --parallel --target install
     cd ../..
 
-    if [ "$2"=="openvino" ]; then
+    if [ "$2" == "openvino" ]; then
 	cd openvino
 	mkdir -p $BUILD_FOLDER
 	cd $BUILD_FOLDER

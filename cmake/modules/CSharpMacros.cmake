@@ -152,17 +152,17 @@ MACRO(BUILD_CSPROJ target csproj_file extra_flags)
   #      TARGET ${target}
   #      COMMAND ${CMAKE_VS_DEVENV_COMMAND} /Build ${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}
   #      COMMENT "Building ${target} with ${CMAKE_VS_DEVENV_COMMAND}")
-  IF(MSBUILD_EXECUTABLE)
+  IF (DOTNET_EXECUTABLE)
+    ADD_CUSTOM_COMMAND (
+      TARGET ${target}
+      COMMAND ${MAC_FRESH_SHELL_PREFIX} "${DOTNET_EXECUTABLE}" build -c ${DEFAULT_CS_CONFIG} "${csproj_file}"
+      COMMENT "Building ${target} with ${DOTNET_EXECUTABLE}")
+  ELSEIF(MSBUILD_EXECUTABLE)
     #MESSAGE(STATUS "Adding custom command: ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}")
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
       COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}
       COMMENT "Building ${target} with ${MSBUILD_EXECUTABLE}")
-  ELSEIF (DOTNET_EXECUTABLE)
-    ADD_CUSTOM_COMMAND (
-      TARGET ${target}
-      COMMAND ${MAC_FRESH_SHELL_PREFIX} "${DOTNET_EXECUTABLE}" build -c ${DEFAULT_CS_CONFIG} "${csproj_file}"
-      COMMENT "Building ${target} with ${DOTNET_EXECUTABLE}")
   ELSE()
     MESSAGE(FATAL_ERROR "Neither Visual Studio, msbuild nor dotnot is found!")
   ENDIF()
