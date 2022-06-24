@@ -61,12 +61,14 @@
     <EnableCodeSigning>false</EnableCodeSigning>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ARM' ">
+      <OutputPath>bin\Debug</OutputPath>
     <UseSGen>false</UseSGen>
     <EnableCodeSigning>false</EnableCodeSigning>
     <LinkMode>None</LinkMode>
     <AOTMode>None</AOTMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|ARM' ">
+      <OutputPath>bin\Release</OutputPath>
     <UseSGen>false</UseSGen>
     <EnableCodeSigning>false</EnableCodeSigning>
     <LinkMode>None</LinkMode>
