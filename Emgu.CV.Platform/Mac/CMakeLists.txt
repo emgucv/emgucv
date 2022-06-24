@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND APPLE AND HAVE_MACOS)
+IF((EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD) AND APPLE AND HAVE_MACOS AND (NOT ("${CMAKE_HOST_SYSTEM_PROCESSOR}" STREQUAL "arm64")))
   
     PROJECT(Emgu.CV.Platform.Mac)
     
