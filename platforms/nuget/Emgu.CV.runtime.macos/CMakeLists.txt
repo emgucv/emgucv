@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(HAVE_MACOS)
+IF((TARGET Emgu.CV.Platform.Mac) AND HAVE_MACOS)
 
   PROJECT(Emgu.CV.runtime.macos.nuget)
 
@@ -17,6 +17,7 @@ IF(HAVE_MACOS)
 	) 
 
   ADD_DEPENDENCIES(${PROJECT_NAME} cvextern)
+  ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.Mac)
 
   IF (EMGU_NUGET_SIGN_FOUND)
     EMGU_SIGN_NUGET(${PROJECT_NAME} "${NUGET_OUTPUT_DIR}/${EMGUCV_MACOS_NUGET_ID}.${CPACK_PACKAGE_VERSION}.nupkg")
