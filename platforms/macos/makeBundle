@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-cd ../../platforms/macos/build
-make cvextern
+cd ../../platforms/macos
 
-cd ..
 rm -rf cvextern.bundle
 
 mkdir -p cvextern.bundle/Contents/MacOS
