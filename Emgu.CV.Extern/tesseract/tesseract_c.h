@@ -95,6 +95,8 @@ CVAPI(EmguTesseract*) cveTessBaseAPICreate();
 
 CVAPI(int) cveTessBaseAPIInit(EmguTesseract* ocr, cv::String* dataPath, cv::String* language, int mode);
 
+CVAPI(int) cveTessBaseAPIInitRaw(EmguTesseract* ocr, char* dataRaw, int size, cv::String* language, int mode);
+
 CVAPI(void) cveTessBaseAPIRelease(EmguTesseract** ocr);
 
 CVAPI(int) cveTessBaseAPIRecognize(EmguTesseract* ocr);

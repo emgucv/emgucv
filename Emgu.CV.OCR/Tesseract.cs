@@ -293,6 +293,52 @@ namespace Emgu.CV.OCR
         }
 
         /// <summary>
+        /// Initialize the OCR engine using the raw .traineddata and language name.
+        /// </summary>
+        /// <param name="rawTrainedData">
+        /// The raw trained data. e.g. for english, the rawTrainedData is the contents of eng.traineddata file.
+        /// </param>
+        /// <param name="language">
+        /// The language is (usually) an ISO 639-3 string or NULL will default to eng.
+        /// It is entirely safe (and eventually will be efficient too) to call
+        /// Init multiple times on the same instance to change language, or just
+        /// to reset the classifier.
+        /// The language may be a string of the form [~]%lt;lang&gt;[+[~]&lt;lang&gt;]* indicating
+        /// that multiple languages are to be loaded. Eg hin+eng will load Hindi and
+        /// English. Languages may specify internally that they want to be loaded
+        /// with one or more other languages, so the ~ sign is available to override
+        /// that. Eg if hin were set to load eng by default, then hin+~eng would force
+        /// loading only hin. The number of loaded languages is limited only by
+        /// memory, with the caveat that loading additional languages will impact
+        /// both speed and accuracy, as there is more work to do to decide on the
+        /// applicable language, and there is more chance of hallucinating incorrect
+        /// words.
+        /// </param>
+        /// <param name="mode">OCR engine mode</param>
+        public void Init(byte[] rawTrainedData, String language, OcrEngineMode mode)
+        {
+            var handle = GCHandle.Alloc(rawTrainedData, GCHandleType.Pinned);
+            try
+            {
+                using (CvString csLanguage = new CvString(language))
+                {
+                    int initResult = OcrInvoke.cveTessBaseAPIInitRaw(_ptr, handle.AddrOfPinnedObject(), rawTrainedData.Length, csLanguage, mode);
+                    if (initResult != 0)
+                    {
+                        throw new ArgumentException(
+                            String.Format(
+                                "Unable to create ocr model using OcrEngineMode '{0}'.",
+                                mode));
+                    }
+                }
+            }
+            finally
+            {
+                handle.Free();
+            }   
+        }        
+
+        /// <summary>
         /// Release the unmanaged resource associated with this class
         /// </summary>
         protected override void DisposeObject()
