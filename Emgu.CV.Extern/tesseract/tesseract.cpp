@@ -416,3 +416,8 @@ char* cveStdSetlocale(int category, char* locale)
 	throw_no_tesseract();
 #endif
 }
+
+void cveTessBaseAPIGetDatapath(EmguTesseract* ocr, cv::String* datapath)
+{
+	*datapath = ocr->GetDatapath();
+}

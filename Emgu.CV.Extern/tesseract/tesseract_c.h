@@ -153,4 +153,7 @@ CVAPI(Pix*) cveLeptCreatePixFromMat(cv::Mat* m);
 CVAPI(void) cveLeptPixDestroy(Pix** pix);
 
 CVAPI(char*) cveStdSetlocale(int category, char* locale);
+
+CVAPI(void) cveTessBaseAPIGetDatapath(EmguTesseract* ocr, cv::String* datapath);
+
 #endif

@@ -356,6 +356,8 @@ namespace Emgu.CV.OCR
             }
         }
 
+        
+
         /// <summary>
         /// Make a TSV-formatted string from the internal data structures.
         /// </summary>
@@ -461,6 +463,21 @@ namespace Emgu.CV.OCR
                         res[i].Region = tr.Region;
                 }
                 return res;
+            }
+        }
+
+        /// <summary>
+        /// Get the current location of tessdata.
+        /// </summary>
+        public String Datapath
+        {
+            get
+            {
+                using (CvString datapath = new CvString())
+                {
+                    OcrInvoke.cveTessBaseAPIGetDatapath(_ptr, datapath);
+                    return datapath.ToString();
+                }
             }
         }
 
