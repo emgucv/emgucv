@@ -39,6 +39,15 @@ int cveTessBaseAPIInit(EmguTesseract* ocr, cv::String* dataPath, cv::String* lan
 #endif
 }
 
+int cveTessBaseAPIInitRaw(EmguTesseract* ocr, char* dataRaw, int size, cv::String* language, int mode)
+{
+#ifdef HAVE_EMGUCV_TESSERACT
+	return ocr->Init(dataRaw, size, language->c_str(), (tesseract::OcrEngineMode)mode, nullptr, 0, nullptr, nullptr, false, nullptr);
+#else
+	throw_no_tesseract();
+#endif	
+}
+
 void cveTessBaseAPIRelease(EmguTesseract** ocr)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
@@ -419,5 +428,10 @@ char* cveStdSetlocale(int category, char* locale)
 
 void cveTessBaseAPIGetDatapath(EmguTesseract* ocr, cv::String* datapath)
 {
-	*datapath = ocr->GetDatapath();
+#ifdef HAVE_EMGUCV_TESSERACT
+	if (ocr->tesseract())
+		*datapath = ocr->GetDatapath();
+#else
+	throw_no_tesseract();
+#endif
 }

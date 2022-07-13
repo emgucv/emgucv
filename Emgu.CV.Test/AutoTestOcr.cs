@@ -75,11 +75,17 @@ namespace Emgu.CV.Test
                     String s3 = ocr.GetTSVText();
                     String s4 = ocr.GetUNLVText();
 
-                    using (PDFRenderer pdfRenderer = new PDFRenderer("abc.pdf", "./", false))
+                    bool success;
+                    using (PDFRenderer pdfRenderer = new PDFRenderer("abc", Tesseract.DefaultTesseractDirectory, true))
                     using (Pix imgPix = new Pix(img.Mat))
                     {
-                        //bool success = ocr.ProcessPage(imgPix, 1, "img", null, 100000, pdfRenderer);
-                        //EmguAssert.IsTrue(success, "failed to export pdf");
+                        success = ocr.ProcessPage(imgPix, 1, "img", null, 100000, pdfRenderer);
+                        EmguAssert.IsTrue(success, "failed to export pdf");                        
+                    }
+                    if (success)
+                    {
+                        FileInfo fi1 = new FileInfo("abc.pdf");
+                        
                     }
 
                 }
@@ -160,6 +166,19 @@ namespace Emgu.CV.Test
             TesseractDownloadLangFile(Tesseract.DefaultTesseractDirectory, "osd"); //script orientation detection
 
             return new Tesseract(Tesseract.DefaultTesseractDirectory, lang, OcrEngineMode.TesseractLstmCombined);
+        }
+
+        [Test]
+        public void TestTesseractUnicodePath()
+        {
+            String filePath = Path.Combine(Tesseract.DefaultTesseractDirectory, "데이터") + Path.DirectorySeparatorChar;
+            TesseractDownloadLangFile(filePath, "eng");
+            var rawData = File.ReadAllBytes(Path.Combine(filePath, "eng.traineddata"));
+
+            using (Tesseract ocr = new Tesseract())
+            {
+                ocr.Init(rawData, "eng", OcrEngineMode.TesseractLstmCombined);
+            }
         }
 
         [Test]

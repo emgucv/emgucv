@@ -38,6 +38,14 @@ namespace Emgu.CV.OCR
             OcrEngineMode mode);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveTessBaseAPIInitRaw(
+            IntPtr ocr,
+            IntPtr rawData,
+            int dataSize,
+            IntPtr language,
+            OcrEngineMode mode);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTessBaseAPIRelease(ref IntPtr ocr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
