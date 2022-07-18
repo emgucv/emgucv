@@ -15,6 +15,7 @@ using System.Xml.Linq;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
+using Emgu.CV.Quality;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
@@ -86,6 +87,22 @@ namespace Emgu.CV.Test
 
             EmguAssert.IsTrue(m1.Equals(m2));
 
+        }
+
+        [TestAttribute]
+        public void TestMatMultiply()
+        {
+            Mat m1 = new Mat(640, 320, DepthType.Cv8U, 3);
+            m1.SetTo(new MCvScalar(100, 100, 100));
+            Mat m2 = new Mat();
+            using (ScalarArray sa = new ScalarArray(new MCvScalar(.5, 0.5, 0.5)))
+            {
+                CvInvoke.Multiply(m1, sa, m2);
+                MCvScalar mean = new MCvScalar();
+                MCvScalar std = new MCvScalar();
+                CvInvoke.MeanStdDev(m2, ref mean, ref std);
+            }
+            
         }
 
         [TestAttribute]
@@ -196,6 +213,19 @@ namespace Emgu.CV.Test
                     vvm.Push(vm);
                 }
             }
+        }
+
+        [TestAttribute]
+        public void TestQuality()
+        {
+            Mat m1 = EmguAssert.LoadMat("lena.jpg");
+            Mat m2 = new Mat();
+            CvInvoke.GaussianBlur(m1, m2, new Size(5, 5), 3);
+            using (Emgu.CV.Quality.QualityMSE q = new QualityMSE(m1))
+            {
+                MCvScalar quality = q.Compute(m2);
+            }
+
         }
 
 #if !NETFX_CORE
