@@ -27,7 +27,7 @@ cd eigen
 mkdir -p build
 cd build
 cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} ..
-cmake --build . --config Release --parallel --target install
+cmake --build . --config Release --target install --parallel
 cd ../..
 
 
@@ -36,37 +36,38 @@ if [ "$BUILD_TYPE" == "core" ]; then
     TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE
     VTK_OPTION=
     CONTRIB_OPTION=
+    FREETYPE_OPTION=-DEMGU_CV_WITH_FREETYPE:BOOL=FALSE
 else
     echo "Performing a full build"
     TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
-
+    FREETYPE_OPTION=-DEMGU_CV_WITH_FREETYPE:BOOL=TRUE
     cd 3rdParty
     cd freetype2
     mkdir -p build
     cd build
     cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} ..
-    cmake --build . --config Release --parallel --target install
+    cmake --build . --config Release --target install --parallel
     cd ../../..
     
     cd harfbuzz
     mkdir -p build
     cd build
     cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} ..
-    cmake --build . --config Release --parallel --target install
+    cmake --build . --config Release --target install --parallel
     cd ../..
     
     cd hdf5
     mkdir -p build
     cd build
     cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTING:BOOL=FALSE -DHDF5_BUILD_EXAMPLES:BOOL=FALSE -DHDF5_BUILD_TOOLS:BOOL=FALSE -DHDF5_BUILD_UTILS:BOOL=FALSE ..
-    cmake --build . --config Release --parallel --target install
+    cmake --build . --config Release --target install --parallel
     cd ../..
     
     cd vtk
     mkdir -p build
     cd build
     cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DVTK_MODULE_ENABLE_VTK_RenderingFreeType:STRING="NO" -DVTK_MODULE_ENABLE_VTK_png:STRING="NO" ..
-    cmake --build . --config Release --parallel --target install
+    cmake --build . --config Release --target install --parallel
     VTK_OPTION=-DVTK_DIR:String="$INSTALL_FOLDER"
     cd ../..
 
@@ -81,6 +82,7 @@ cd build
 cmake \
       ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} \
       $TESSERACT_OPTION \
+      $FREETYPE_OPTION \
       ${CUDA_OPTIONS[@]} \
       -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=TRUE \
       -DBUILD_TESTS:BOOL=FALSE \
