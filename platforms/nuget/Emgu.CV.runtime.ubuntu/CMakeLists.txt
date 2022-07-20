@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF((HAVE_LINUX_X64 OR HAVE_LINUX_X86) AND (NOT IS_DEBIAN))
+IF(HAVE_UBUNTU_X64 OR HAVE_UBUNTU_X86)
   PROJECT(Emgu.CV.runtime.ubuntu.nuget)
 
   get_filename_component(NUGET_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
