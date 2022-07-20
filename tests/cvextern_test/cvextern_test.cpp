@@ -259,6 +259,9 @@ void Test_InferenceEngine()
 int main()
 {
 	char tmp;
+
+	cout << cv::getBuildInformation() << std::endl;
+
 	//Test_CvPoint2D32f();
 	Test_2D_cross_product();
 	Test_3D_cross_product();
