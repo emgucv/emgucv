@@ -26,7 +26,7 @@ jobs:
       working-directory: ./platforms/macos/
     - name: Build Emgu CV package (unsigned)
       run: make package
-      working-directory: ./platforms/macos/build/
+      working-directory: ./platforms/macos/build_x86_64/
     - uses: actions/upload-artifact@v2
       with:
         name: emgucv-macos-zip-package
