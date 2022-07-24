@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
+IF(HAVE_ANDROID_ALL_ARCH)
 
   PROJECT(Emgu.CV.runtime.android.nuget)
 
