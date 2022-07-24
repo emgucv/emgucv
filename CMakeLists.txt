@@ -1083,7 +1083,7 @@ IF(HAVE_MACOS)
   SET(EMGUCV_MACOS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime${EMGUCV_RUNTIME_EXTRA_TAG}.macos")
 ENDIF()
 
-IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
+IF(HAVE_ANDROID_ALL_ARCH)
   SET(EMGUCV_ANDROID_NUGET_ID "${EMGUCV_NUGET_ID}.runtime${EMGUCV_RUNTIME_EXTRA_TAG}.android")
 ENDIF()
 
@@ -1622,7 +1622,7 @@ SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "	<dependencies>
 #      <frameworkAssembly assemblyName=\"System.Drawing\" targetFramework=\".NETFramework4.6.1\" />
 #    </frameworkAssemblies>")
 
-IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
+IF(HAVE_ANDROID_ALL_ARCH)
   SET(EMGUCV_ANDROID_NUGET_TITLE "Emgu CV for Android Native Runtime")	
   SET(EMGUCV_ANDROID_NUGET_FILE_LIST " 
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Android.dll\" target=\"lib\\MonoAndroid50\" />
@@ -1709,7 +1709,7 @@ SET(EMGUCV_NUGET_SUMMARY "Emgu CV is a cross platform .Net wrapper to the OpenCV
 IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} Commercial Release")
 	SET(EMGUCV_NUGET_SUMMARY "${EMGUCV_NUGET_SUMMARY} This is the commercial release.")
-	IF(HAVE_ANDROID_ALL_ARCH AND WIN32)
+	IF(HAVE_ANDROID_ALL_ARCH)
 	  SET(EMGUCV_ANDROID_NUGET_TITLE "${EMGUCV_ANDROID_NUGET_TITLE} Commercial Release")	
 	ENDIF()	
 	IF(HAVE_WINSTORE_10)
