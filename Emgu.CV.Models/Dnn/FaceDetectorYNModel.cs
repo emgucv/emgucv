@@ -118,6 +118,11 @@ namespace Emgu.CV.Models
             }
         }
 
+        /// <summary>
+        /// Convert the raw result in Mat format into more readable result
+        /// </summary>
+        /// <param name="rawResult">The raw result in Mat format</param>
+        /// <returns>The array of FaceDetectorYNResult</returns>
         public static FaceDetectorYNResult[] ConvertMatToFaceDetectorYNResult(Mat rawResult)
         {
             List<FaceDetectorYNResult> faces = new List<FaceDetectorYNResult>();
@@ -136,6 +141,9 @@ namespace Emgu.CV.Models
             return faces.ToArray();
         }
 
+        /// <summary>
+        /// Results from FaceDetectorYN
+        /// </summary>
         public struct FaceDetectorYNResult
         {
             internal FaceDetectorYNResult(float[,] data, int row)
@@ -148,16 +156,34 @@ namespace Emgu.CV.Models
                 LeftMouthCorner = new PointF(data[row, 12], data[row, 13]);
             }
 
+            /// <summary>
+            /// The facial region
+            /// </summary>
             public RectangleF Region;
 
+            /// <summary>
+            /// The right eye center            
+            /// </summary>
             public PointF RightEye;
 
+            /// <summary>
+            /// The left eye center             
+            /// </summary>
             public PointF LeftEye;
 
+            /// <summary>
+            /// The nose tip
+            /// </summary>
             public PointF NoseTip;
 
+            /// <summary>
+            /// The right mouth corner
+            /// </summary>
             public PointF RightMouthCorner;
 
+            /// <summary>
+            /// The left mouth corner
+            /// </summary>
             public PointF LeftMouthCorner;
 
         }
@@ -182,6 +208,7 @@ namespace Emgu.CV.Models
             }
         }
 
+        /// <inheritdoc />
         public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
             FaceDetectorYNResult[] faces = Detect(imageIn);
