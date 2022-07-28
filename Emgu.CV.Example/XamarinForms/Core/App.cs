@@ -76,7 +76,12 @@ namespace Emgu.CV.XamarinForms
 
             bool haveCamera = true;
 
-            if (haveOptFlow && haveCamera)
+            if (Xamarin.Forms.Device.RuntimePlatform == Xamarin.Forms.Device.UWP)
+            {
+                haveCamera = false;
+            }
+
+                if (haveOptFlow && haveCamera)
             {
 #if !(__MACOS__ || __ANDROID__ || __IOS__ || NETFX_CORE)
                 Button motionDetectionButton = new Button();
