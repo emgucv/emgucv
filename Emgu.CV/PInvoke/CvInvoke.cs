@@ -386,6 +386,10 @@ namespace Emgu.CV
                             {
                                 libraryLoaded = false;
                                 System.Diagnostics.Trace.WriteLine(String.Format("Failed to load {0}: {1}", module, e.Message));
+                                if (e.InnerException != null && e.InnerException.Message != null)
+                                {
+                                    System.Diagnostics.Trace.WriteLine(String.Format("InnerException {0}", e.InnerException.Message));
+                                }
                             }
                         }
                         return libraryLoaded;
