@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29806.167
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.Util", "..\..\Emgu.Util\Emgu.Util.shproj", "{98561642-5EC3-4244-BAF9-6876D9BA5527}"
 EndProject
@@ -25,23 +25,11 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Models.Shared", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models.NetStandard", "..\..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj", "{CA227646-EF16-49D4-9398-6410931D080C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDemoApp", "..\..\Emgu.CV.Example\MAUI\MauiDemoApp\MauiDemoApp.csproj", "{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.Maui.Android", "..\..\Emgu.CV.Platform\Emgu.CV.Platform.Maui.Android\Emgu.CV.Platform.Maui.Android.csproj", "{BA546848-FFBD-4420-B42C-C850EF9E1EB1}"
+EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{04e2a4f0-b178-4c96-b792-91db114896b2}*SharedItemsImports = 5
-		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{04e2a4f0-b178-4c96-b792-91db114896b2}*SharedItemsImports = 5
-		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{04e2a4f0-b178-4c96-b792-91db114896b2}*SharedItemsImports = 5
-		..\..\Emgu.CV\Emgu.CV.projitems*{04e2a4f0-b178-4c96-b792-91db114896b2}*SharedItemsImports = 5
-		..\..\Emgu.Util\Emgu.Util.projitems*{04e2a4f0-b178-4c96-b792-91db114896b2}*SharedItemsImports = 5
-		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{0bfad282-50c1-449c-b01c-62fd23bbdbe5}*SharedItemsImports = 13
-		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
-		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
-		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{590bdc36-c47d-45b4-a24a-f907df9922f5}*SharedItemsImports = 4
-		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
-		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
-		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
-		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{ca227646-ef16-49d4-9398-6410931d080c}*SharedItemsImports = 5
-		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
@@ -105,11 +93,57 @@ Global
 		{CA227646-EF16-49D4-9398-6410931D080C}.Release|x64.Build.0 = Release|x64
 		{CA227646-EF16-49D4-9398-6410931D080C}.Release|x86.ActiveCfg = Release|Any CPU
 		{CA227646-EF16-49D4-9398-6410931D080C}.Release|x86.Build.0 = Release|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Debug|x64.Build.0 = Debug|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Debug|x64.Deploy.0 = Debug|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Debug|x86.Build.0 = Debug|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Debug|x86.Deploy.0 = Debug|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Release|x64.ActiveCfg = Release|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Release|x64.Build.0 = Release|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Release|x64.Deploy.0 = Release|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Release|x86.ActiveCfg = Release|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Release|x86.Build.0 = Release|Any CPU
+		{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}.Release|x86.Deploy.0 = Release|Any CPU
+		{BA546848-FFBD-4420-B42C-C850EF9E1EB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA546848-FFBD-4420-B42C-C850EF9E1EB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA546848-FFBD-4420-B42C-C850EF9E1EB1}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BA546848-FFBD-4420-B42C-C850EF9E1EB1}.Debug|x64.Build.0 = Debug|Any CPU
+		{BA546848-FFBD-4420-B42C-C850EF9E1EB1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BA546848-FFBD-4420-B42C-C850EF9E1EB1}.Debug|x86.Build.0 = Debug|Any CPU
+		{BA546848-FFBD-4420-B42C-C850EF9E1EB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA546848-FFBD-4420-B42C-C850EF9E1EB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA546848-FFBD-4420-B42C-C850EF9E1EB1}.Release|x64.ActiveCfg = Release|Any CPU
+		{BA546848-FFBD-4420-B42C-C850EF9E1EB1}.Release|x64.Build.0 = Release|Any CPU
+		{BA546848-FFBD-4420-B42C-C850EF9E1EB1}.Release|x86.ActiveCfg = Release|Any CPU
+		{BA546848-FFBD-4420-B42C-C850EF9E1EB1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {73902439-7867-43F9-91D7-B666B4210E57}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{04e2a4f0-b178-4c96-b792-91db114896b2}*SharedItemsImports = 5
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{04e2a4f0-b178-4c96-b792-91db114896b2}*SharedItemsImports = 5
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{04e2a4f0-b178-4c96-b792-91db114896b2}*SharedItemsImports = 5
+		..\..\Emgu.CV\Emgu.CV.projitems*{04e2a4f0-b178-4c96-b792-91db114896b2}*SharedItemsImports = 5
+		..\..\Emgu.Util\Emgu.Util.projitems*{04e2a4f0-b178-4c96-b792-91db114896b2}*SharedItemsImports = 5
+		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{0bfad282-50c1-449c-b01c-62fd23bbdbe5}*SharedItemsImports = 13
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
+		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
+		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{590bdc36-c47d-45b4-a24a-f907df9922f5}*SharedItemsImports = 4
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
+		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{ca227646-ef16-49d4-9398-6410931d080c}*SharedItemsImports = 5
+		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
