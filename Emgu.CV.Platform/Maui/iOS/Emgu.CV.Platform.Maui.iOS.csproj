@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0-ios</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>true</ImplicitUsings>
+    <IsBindingProject>true</IsBindingProject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\Emgu.CV.NativeImage\CGImageExtension.cs" Link="CGImageExtension.cs" />
+    <Compile Include="..\..\..\Emgu.CV.NativeImage\UIImageExtension.cs" Link="UIImageExtension.cs" />
+    <Compile Include="..\..\iOS\CvInvokeIOS.cs" Link="CvInvokeIOS.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
+    <ObjcBindingCoreSource Include="StructsAndEnums.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj" />
+  </ItemGroup>
+  
+    <ItemGroup>
+    <NativeReference Include="$(MSBuildThisFileDirectory)..\..\..\libs\iOS\libcvextern_iphoneos.a">
+      <Kind>Static</Kind>
+      <SmartLink>True</SmartLink>
+      <ForceLoad>True</ForceLoad>
+      <IsCxx>True</IsCxx>
+      <LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
+      <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
+    </NativeReference>
+    <NativeReference Include="$(MSBuildThisFileDirectory)..\..\..\libs\iOS\libcvextern_simulator.a">
+      <Kind>Static</Kind>
+      <SmartLink>True</SmartLink>
+      <ForceLoad>True</ForceLoad>
+      <IsCxx>True</IsCxx>
+      <LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
+      <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
+    </NativeReference>
+  </ItemGroup>
+</Project>

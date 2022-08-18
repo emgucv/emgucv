@@ -17,7 +17,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Cuda", "..\..\Emgu.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.NetStandard", "..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj", "{08E9D990-23E1-4B84-8921-813A876B62D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Platform.Android", "..\..\Emgu.CV.Platform\Android\Emgu.CV.Platform.Android.csproj", "{5F102C71-65C3-4D77-AE48-29C1E75F82BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Platform.Xamarin.Android", "..\..\Emgu.CV.Platform\Xamarin\Android\Emgu.CV.Platform.Xamarin.Android.csproj", "{5F102C71-65C3-4D77-AE48-29C1E75F82BE}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

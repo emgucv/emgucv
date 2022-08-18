@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>${EMGUCV_XAMARIN_ANDROID_NUGET_ID}</id>
+	<title>${EMGUCV_XAMARIN_ANDROID_NUGET_TITLE}</title>
+    <version>${CPACK_PACKAGE_VERSION}</version>
+    <authors>${CPACK_PACKAGE_VENDOR}</authors>
+    <owners>${CPACK_PACKAGE_VENDOR}</owners>
+    <license type="file">${EMGUCV_LICENSE_FILE}</license>
+    <projectUrl>${NUGET_EMGU_URL}</projectUrl>
+	<repository type="git" url="https://github.com/emgucv/emgucv" />
+	<icon>icon.png</icon>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+	<summary>Android runtime package of Emgu CV for Xamarin</summary>
+    <description>This package contains the native Android runtime of Emgu CV for Xamarin</description>
+    <releaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. For online documentation please visit
+${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html    	        
+    </releaseNotes>
+	<readme>docs\README.md</readme>
+	${EMGUCV_XAMARIN_ANDROID_NUGET_DEPENDENCY}
+    <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
+    <tags>opencv emgu emgucv ai image android xamarin</tags>
+  </metadata>
+  <files>
+  ${EMGUCV_XAMARIN_ANDROID_NUGET_FILE_LIST}
+  </files>
+</package>

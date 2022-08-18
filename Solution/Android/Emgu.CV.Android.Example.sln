@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.XamarinForms.Droid"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.Netstandard", "..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.Netstandard.csproj", "{04E2A4F0-B178-4C96-B792-91DB114896B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Platform.Android", "..\..\Emgu.CV.Platform\Android\Emgu.CV.Platform.Android.csproj", "{5F102C71-65C3-4D77-AE48-29C1E75F82BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Platform.Xamarin.Android", "..\..\Emgu.CV.Platform\Xamarin\Android\Emgu.CV.Platform.Xamarin.Android.csproj", "{5F102C71-65C3-4D77-AE48-29C1E75F82BE}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Models.Shared", "..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.shproj", "{0BFAD282-50C1-449C-B01C-62FD23BBDBE5}"
 EndProject
@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models.NetStandard"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDemoApp", "..\..\Emgu.CV.Example\MAUI\MauiDemoApp\MauiDemoApp.csproj", "{D467775B-2A4A-4B5D-A6AB-8C2920A36F8F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.Maui.Android", "..\..\Emgu.CV.Platform\Emgu.CV.Platform.Maui.Android\Emgu.CV.Platform.Maui.Android.csproj", "{BA546848-FFBD-4420-B42C-C850EF9E1EB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.Maui.Android", "..\..\Emgu.CV.Platform\Maui\Android\Emgu.CV.Platform.Maui.Android.csproj", "{BA546848-FFBD-4420-B42C-C850EF9E1EB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

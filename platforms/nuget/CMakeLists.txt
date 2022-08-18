@@ -21,12 +21,16 @@ ADD_SUBDIRECTORY("Emgu.CV.Wpf")
 ADD_SUBDIRECTORY("Emgu.CV.Models")
 ADD_SUBDIRECTORY("Emgu.CV.UI")
 
-ADD_SUBDIRECTORY("Emgu.CV.runtime.android")
 ADD_SUBDIRECTORY("Emgu.CV.runtime.windows")
-ADD_SUBDIRECTORY("Emgu.CV.runtime.macos")
 ADD_SUBDIRECTORY("Emgu.CV.runtime.uwp")
 
-ADD_SUBDIRECTORY("Emgu.CV.runtime.ios")
+ADD_SUBDIRECTORY("Emgu.CV.runtime.xamarin.macos")
+ADD_SUBDIRECTORY("Emgu.CV.runtime.xamarin.ios")
+ADD_SUBDIRECTORY("Emgu.CV.runtime.xamarin.android")
+
+ADD_SUBDIRECTORY("Emgu.CV.runtime.maui.macos")
+ADD_SUBDIRECTORY("Emgu.CV.runtime.maui.ios")
+#ADD_SUBDIRECTORY("Emgu.CV.runtime.maui.android")
 
 #IF (HAVE_LINUX_ARM)
 add_subdirectory("Emgu.CV.runtime.debian-arm")

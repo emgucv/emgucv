@@ -265,7 +265,7 @@
       <Version>1.7.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
-      <Version>5.0.0.2401</Version>
+      <Version>5.0.0.2515</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -278,7 +278,7 @@
       <Project>{ca227646-ef16-49d4-9398-6410931d080c}</Project>
       <Name>Emgu.CV.Models.NetStandard</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Emgu.CV.Platform\Android\Emgu.CV.Platform.Android.csproj">
+    <ProjectReference Include="..\..\..\Emgu.CV.Platform\Xamarin\Android\Emgu.CV.Platform.Xamarin.Android.csproj">
       <Project>{5f102c71-65c3-4d77-ae48-29c1e75f82be}</Project>
       <Name>Emgu.CV.Platform.Android</Name>
     </ProjectReference>

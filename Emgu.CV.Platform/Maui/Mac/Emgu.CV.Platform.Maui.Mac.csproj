@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0-maccatalyst</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>true</ImplicitUsings>
+    <IsBindingProject>true</IsBindingProject>
+	<AssemblyName>Emgu.CV.Platform.Maui.Mac</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
+    <ObjcBindingCoreSource Include="StructsAndEnums.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\..\Emgu.CV.NativeImage\CGImageExtension.cs">
+      <Link>CGImageExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\Emgu.CV.NativeImage\NSImageExtension.cs">
+      <Link>NSImageExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+  
+    <ItemGroup>
+    <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
+      <Project>{AFA9D3CF-62EB-47A8-BC3D-BC9006D495F9}</Project>
+      <Name>Emgu.CV.Platform.NetStandard</Name>
+    </ProjectReference>
+  </ItemGroup>
+    <ItemGroup>
+      <NativeReference Include="..\..\..\libs\runtimes\osx\native\libcvextern.dylib">
+        <Kind>Dynamic</Kind>
+        <SmartLink>False</SmartLink>
+      </NativeReference>
+    </ItemGroup>
+  <Target Name="DeployBinary" AfterTargets="AfterBuild">
+    <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\..\..\libs" Importance="high" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\..\..\libs" ContinueOnError="true" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="..\..\..\libs" ContinueOnError="true" />
+  </Target>
+</Project>
