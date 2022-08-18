@@ -72,7 +72,7 @@
 	-->
 
 	<ItemGroup>
-	  <Compile Include="..\..\..\..\emgucv_5.0\Emgu.CV.Example\XamarinForms\Core\DrawSubdivision.cs" Link="DrawSubdivision.cs" />
+	  <Compile Include="..\..\..\Emgu.CV.Example\XamarinForms\Core\DrawSubdivision.cs" Link="DrawSubdivision.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -80,7 +80,7 @@
 	  <ProjectReference Include="..\..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
 	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="..\..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj" />
 	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="..\..\..\Emgu.CV.Platform\Emgu.CV.Wpf\Emgu.CV.Wpf.csproj" />
-	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="..\..\..\Emgu.CV.Platform\Emgu.CV.Platform.Maui.Android\Emgu.CV.Platform.Maui.Android.csproj" />
+	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="..\..\..\Emgu.CV.Platform\Maui\Android\Emgu.CV.Platform.Maui.Android.csproj" />
 	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'" Include="..\..\..\Emgu.CV.Platform\Emgu.CV.Platform.Maui.iOS\Emgu.CV.Platform.Maui.iOS.csproj" />
 	</ItemGroup>
 	

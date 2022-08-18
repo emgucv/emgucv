@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{AC8F9090-5444-490B-B7A7-D3726228C00A}</ProjectGuid>
+    <ProjectTypeGuids>{810C163F-4746-4721-8B8E-88A3673A62EA};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Emgu.CV.Platform.Xamarin.Mac</RootNamespace>
+    <AssemblyName>Emgu.CV.Platform.Xamarin.Mac</AssemblyName>
+    <MacResourcePrefix>Resources</MacResourcePrefix>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <CreatePackage>false</CreatePackage>
+    <EnablePackageSigning>false</EnablePackageSigning>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <UseSGen>false</UseSGen>
+    <HttpClientHandler></HttpClientHandler>
+    <LinkMode>None</LinkMode>
+    <AOTMode>None</AOTMode>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DefineConstants></DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <EnableCodeSigning>false</EnableCodeSigning>
+    <CreatePackage>false</CreatePackage>
+    <EnablePackageSigning>false</EnablePackageSigning>
+    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+    <UseSGen>false</UseSGen>
+    <HttpClientHandler></HttpClientHandler>
+    <LinkMode>None</LinkMode>
+    <AOTMode>None</AOTMode>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Xamarin.Mac" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ObjcBindingCoreSource Include="StructsAndEnums.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="..\..\..\Emgu.CV.NativeImage\CGImageExtension.cs">
+      <Link>CGImageExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\Emgu.CV.NativeImage\NSImageExtension.cs">
+      <Link>NSImageExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+    <ItemGroup>
+    <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
+      <Project>{AFA9D3CF-62EB-47A8-BC3D-BC9006D495F9}</Project>
+      <Name>Emgu.CV.Platform.NetStandard</Name>
+    </ProjectReference>
+  </ItemGroup>
+    <ItemGroup>
+      <NativeReference Include="..\..\..\libs\runtimes\osx\native\libcvextern.dylib">
+        <Kind>Dynamic</Kind>
+        <SmartLink>False</SmartLink>
+      </NativeReference>
+    </ItemGroup>
+  <Target Name="DeployBinary" AfterTargets="AfterBuild">
+    <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\..\..\libs" Importance="high" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\..\..\libs" ContinueOnError="true" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="..\..\..\libs" ContinueOnError="true" />
+  </Target>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.ObjcBinding.CSharp.targets" />
+</Project>

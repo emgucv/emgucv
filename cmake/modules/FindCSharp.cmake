@@ -159,9 +159,9 @@ MESSAGE(STATUS "MSBUILD_EXECUTABLE_160 : ${MSBUILD_EXECUTABLE_160}")
 FIND_PROGRAM (CSC_EXECUTABLE_170 
 NAMES csc 
 PATHS
-#"$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Community/Msbuild/Current/Bin/Roslyn"
-#"$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Enterprise/Msbuild/Current/Bin/Roslyn"
-#"$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/BuildTools/Msbuild/Current/Bin/Roslyn"
+"$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Community/Msbuild/Current/Bin/Roslyn"
+"$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Enterprise/Msbuild/Current/Bin/Roslyn"
+"$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/BuildTools/Msbuild/Current/Bin/Roslyn"
 "$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Preview/Msbuild/Current/Bin/Roslyn"
 CMAKE_FIND_ROOT_PATH_BOTH
 )
@@ -170,9 +170,9 @@ MESSAGE(STATUS "CSC_EXECUTABLE_170: ${CSC_EXECUTABLE_170}")
 FIND_PROGRAM (MSBUILD_EXECUTABLE_170 
 NAMES msbuild 
 PATHS
-#"$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Community/Msbuild/Current/Bin"
-#"$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Enterprise/Msbuild/Current/Bin"
-#"$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/BuildTools/Msbuild/Current/Bin"
+"$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Community/Msbuild/Current/Bin"
+"$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Enterprise/Msbuild/Current/Bin"
+"$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/BuildTools/Msbuild/Current/Bin"
 "$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Preview/Msbuild/Current/Bin"
 CMAKE_FIND_ROOT_PATH_BOTH
 )
@@ -230,6 +230,13 @@ IF(CSC_EXECUTABLE_160 AND (NOT ${CSC_FOUND}))
   ENDIF()  
 ENDIF()
 
+IF(CSC_EXECUTABLE_170 AND (NOT ${CSC_FOUND}))
+  SET (CSC_EXECUTABLE ${CSC_EXECUTABLE_170})
+  IF (CSC_PREFERRED_VERSION MATCHES "17.0")
+	SET(CSC_FOUND TRUE)
+  ENDIF()  
+ENDIF()
+
 IF(MSBUILD_EXECUTABLE_20)
   SET (MSBUILD_EXECUTABLE ${MSBUILD_EXECUTABLE_20})
 ENDIF()
@@ -258,6 +265,10 @@ IF(MSBUILD_EXECUTABLE_160)
   SET (MSBUILD_EXECUTABLE ${MSBUILD_EXECUTABLE_160})
 ENDIF()
 
+
+IF(MSBUILD_EXECUTABLE_170)
+  SET (MSBUILD_EXECUTABLE ${MSBUILD_EXECUTABLE_170})
+ENDIF()
 
 #IF(CSC_EXECUTABLE_40 AND CSC_PREFERRED_VERSION MATCHES "4.0")
 #SET (MSBUILD_EXECUTABLE ${MSBUILD_EXECUTABLE_40})
@@ -346,6 +357,7 @@ CMAKE_FIND_ROOT_PATH_BOTH
 FIND_PROGRAM(DOTNET_EXECUTABLE
 NAMES dotnet
 PATHS
+"$ENV{${PROGRAM_FILES_X64_ENV_STR}}/dotnet"
 /usr/local/share/dotnet/
 CMAKE_FIND_ROOT_PATH_BOTH
 )
