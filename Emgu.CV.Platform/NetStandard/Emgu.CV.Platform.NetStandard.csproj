@@ -6,7 +6,7 @@
     <RootNamespace>Emgu.CV</RootNamespace>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>AnyCPU;x64;ARM</Platforms>
     <Configurations>Release;Debug</Configurations>
   </PropertyGroup>
 
