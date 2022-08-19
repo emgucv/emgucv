@@ -1,6 +1,8 @@
 REM POSSIBLE OPTIONS: 
 REM %1%: "x86", "x86_64", "arm64-v8a" or "armeabi-v7a"
-REM %2%: "core", if set to "core", will not build the contrib module
+REM %2%: "core", will not build the contrib module
+REM %2%: "mini", only the absolute minimum modules will get build
+REM %2%: anything else, we will build all modules.
 REM %3%: optional android-toolchain
 
 pushd %~p0
@@ -143,6 +145,7 @@ IF "%2"=="mini" GOTO CORE_BUILD_EMGU
 
 :FULL_BUILD_EMGU
 cd 3rdParty
+
 cd freetype2
 IF NOT EXIST "%BUILD_DIR%" mkdir "%BUILD_DIR%"
 cd "%BUILD_DIR%"
@@ -150,7 +153,18 @@ cd "%BUILD_DIR%"
 "%CMAKE%" --build . --config Release --parallel --target install
 cd .. 
 cd ..
-cd ..
+
+REM cd openvino
+REM IF NOT EXIST "%BUILD_DIR%" mkdir "%BUILD_DIR%"
+REM cd "%BUILD_DIR%"
+REM "%CMAKE%" %CMAKE_CONF_FLAGS% -DCMAKE_FIND_ROOT_PATH:STRING=%INSTALL_FOLDER:\=/% -DHB_HAVE_FREETYPE:BOOL=TRUE ..
+REM "%CMAKE%" --build . --config Release --parallel --target install
+REM SET OPENVINO_INSTALL_DIR=%INSTALL_FOLDER:\=/%/runtime/cmake
+REM SET OPENVINO_CMAKE_CONFIG_FLAGS=^
+REM -DWITH_OPENVINO:BOOL=TRUE ^
+REM -DOpenVINO_DIR:STRING=%OPENVINO_INSTALL_DIR% ^
+REM -DENABLE_CXX11:BOOL=TRUE
+REM cd ..
 
 
 cd harfbuzz
@@ -210,8 +224,9 @@ SET CMAKE_CONF_FLAGS=%CMAKE_CONF_FLAGS% ^
 -DCMAKE_FIND_ROOT_PATH:STRING=%INSTALL_FOLDER:\=/% ^
 -DEigen3_DIR:STRING=%EIGEN_DIR:\=/% ^
 %EMGU_CV_CMAKE_EXTRA_FLAGS% ^
--DANDROID_LD=deprecated
+%OPENVINO_CMAKE_CONFIG_FLAGS% 
 
+REM -DANDROID_LD=deprecated
 REM For reason on adding "-DANDROID_LD=deprecated" flag, see https://github.com/android/ndk/issues/1426
 
 REM -DENABLE_LTO:BOOL=ON ^
