@@ -8,7 +8,7 @@
   <ItemGroup>
     <Compile Include="..\..\..\Emgu.CV.NativeImage\CGImageExtension.cs" Link="CGImageExtension.cs" />
     <Compile Include="..\..\..\Emgu.CV.NativeImage\UIImageExtension.cs" Link="UIImageExtension.cs" />
-    <Compile Include="..\..\iOS\CvInvokeIOS.cs" Link="CvInvokeIOS.cs" />
+    <Compile Include="..\..\Xamarin\iOS\CvInvokeIOS.cs" Link="CvInvokeIOS.cs" />
   </ItemGroup>
 
   <ItemGroup>

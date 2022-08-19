@@ -10,6 +10,8 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using PointF = System.Drawing.PointF;
+using Point = System.Drawing.Point;
 
 namespace PlanarSubdivisionExample
 {

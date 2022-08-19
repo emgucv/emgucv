@@ -19,15 +19,10 @@
     <Compile Include="..\..\..\Emgu.CV.NativeImage\NSImageExtension.cs">
       <Link>NSImageExtension.cs</Link>
     </Compile>
-    <Compile Include="..\..\..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
-    </Compile>
   </ItemGroup>
   
     <ItemGroup>
     <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
-      <Project>{AFA9D3CF-62EB-47A8-BC3D-BC9006D495F9}</Project>
-      <Name>Emgu.CV.Platform.NetStandard</Name>
     </ProjectReference>
   </ItemGroup>
     <ItemGroup>
