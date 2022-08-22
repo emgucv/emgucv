@@ -28,5 +28,9 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleDisplayName</key>
+	<string>Emgu CV Maui Demo</string>
 </dict>
 </plist>

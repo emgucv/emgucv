@@ -4,6 +4,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <IsBindingProject>true</IsBindingProject>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\..\Emgu.CV.NativeImage\CGImageExtension.cs" Link="CGImageExtension.cs" />

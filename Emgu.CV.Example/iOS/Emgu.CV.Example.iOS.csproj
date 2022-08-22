@@ -157,7 +157,7 @@
       <Project>{6d718341-c245-45bd-b866-d35902fd0db1}</Project>
       <Name>Emgu.CV.Models.IOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Platform\iOS\Emgu.CV.Platform.IOS.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.Platform\Xamarin\iOS\Emgu.CV.Platform.Xamarin.IOS.csproj">
       <Project>{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}</Project>
       <Name>Emgu.CV.Platform.IOS</Name>
       <IsAppExtension>false</IsAppExtension>

@@ -14,7 +14,10 @@ using System.Threading.Tasks;
 
 #if __ANDROID__
 using Android.Widget;
-#elif __IOS__
+#elif __MACCATALYST__
+using AppKit;
+using CoreGraphics;
+#elif __IOS__ 
 using UIKit;
 using CoreGraphics;
 #elif WINDOWS
@@ -26,17 +29,16 @@ namespace MauiDemoApp
    
     public class CvImageView : Image
     {
-#if __MACOS__
-        public NSImageView NSImageView { get; set; }
+#if __MACCATALYST__
+        //public AppKit.NSImageView ImageView { get; set; }
 #elif __IOS__
-        public UIImageView UIImageView { get; set; }
+        public UIImageView ImageView { get; set; }
 #elif __ANDROID__
         public ImageView ImageView { get; set; }
 #elif WINDOWS
         public Microsoft.UI.Xaml.Controls.Image ImageView { get; set; }
 #endif
 
-        
 
         private VectorOfByte _imageStream = new VectorOfByte();
         private static Mutex _imageStreamMutex = new Mutex();
@@ -55,6 +57,11 @@ namespace MauiDemoApp
 
 #if __ANDROID__
             this.ImageView = platformView as ImageView;
+#elif __MACCATALYST__
+            //this.ImageView = platformView as NSImageView;
+            System.Console.WriteLine(platformView.ToString());
+#elif __IOS__
+            this.ImageView = platformView as UIImageView;
 #elif WINDOWS
             this.ImageView = platformView as Microsoft.UI.Xaml.Controls.Image;
 #endif
@@ -65,24 +72,50 @@ namespace MauiDemoApp
         public virtual void SetImage(IInputArray image)
         {
             _inputArray = image;
-#if __IOS__
-         UIImage uiimage;
-         if (image == null)
-            uiimage = null;
-         else
-            uiimage = image.ToUIImage ();
-         Device.BeginInvokeOnMainThread (
-            () => {
-               UIImage oldImage = UIImageView.Image;
-               UIImageView.Image = uiimage;
-               if (oldImage != null)
-                  oldImage.Dispose ();
-               if ((uiimage != null) && (UIImageView.Frame.Size != uiimage.Size))
-                  UIImageView.Frame = new CGRect (CGPoint.Empty, uiimage.Size);
-               UIImageView.Hidden = false;
-               this.IsVisible = false;
-            });
 
+#if __MACCATALYST__
+/*
+            if (this.ImageView != null)
+            { 
+                NSImage nsimage;
+                if (image == null)
+                    nsimage = null;
+                else
+                    nsimage = image.ToNSImage();
+                this.Dispatcher.Dispatch(
+                    () => {
+
+                        NSImage oldImage = ImageView.Image;
+                        ImageView.Image = nsimage;
+                        if (oldImage != null)
+                            oldImage.Dispose();
+                        if ((nsimage != null) && (ImageView.Frame.Size != nsimage.Size))
+                            ImageView.Frame = new CGRect(CGPoint.Empty, nsimage.Size);
+                        ImageView.Hidden = false;
+                        
+                    }); 
+            }
+*/
+#elif __IOS__
+            if (this.ImageView != null)
+            {
+                 UIImage uiimage;
+                 if (image == null)
+                    uiimage = null;
+                 else
+                {
+                    uiimage = image.ToUIImage ();
+                }
+                 this.Dispatcher.Dispatch(
+                    () => {
+                       UIImage oldImage = ImageView.Image;
+                       ImageView.Image = uiimage;
+                       if (oldImage != null)
+                          oldImage.Dispose ();
+                       if ((uiimage != null) && (ImageView.Frame.Size != uiimage.Size))
+                          ImageView.Frame = new CGRect (CGPoint.Empty, uiimage.Size);
+                    });
+            }
 #elif __ANDROID__
 
             if (this.ImageView != null)
@@ -103,25 +136,7 @@ namespace MauiDemoApp
 
                     });
             }
-#elif __MACOS__
-            
-            NSImage nsimage;
-            if (image == null)
-                nsimage = null;
-            else
-                nsimage = image.ToNSImage();
-            Device.BeginInvokeOnMainThread(
-               () => {
 
-                   NSImage oldImage = NSImageView.Image;
-                   NSImageView.Image = nsimage;
-                   if (oldImage != null)
-                       oldImage.Dispose();
-                   if ((nsimage != null) && (NSImageView.Frame.Size != nsimage.Size))
-                       NSImageView.Frame = new CGRect(CGPoint.Empty, nsimage.Size);
-                   NSImageView.Hidden = false;
-                   DisplayImage.IsVisible = false;
-               });
 #elif WINDOWS
             if (this.ImageView != null)
             {
@@ -202,8 +217,7 @@ namespace MauiDemoApp
                 });
             //}
 #endif
-            //Microsoft.UI.Xamal.Media.Imaging
-            //this.DisplayImage.
+
         }
     }
 }

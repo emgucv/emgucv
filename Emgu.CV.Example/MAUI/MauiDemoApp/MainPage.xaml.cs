@@ -104,7 +104,7 @@ namespace MauiDemoApp
             /*
             if (haveOptFlow && haveCamera)
             {
-#if !(__MACOS__ || __ANDROID__ || __IOS__ || NETFX_CORE)
+#if !(__MACCATALYST__ || __ANDROID__ || __IOS__ || NETFX_CORE)
                 Button motionDetectionButton = new Button();
                 motionDetectionButton.Text = "Motion Detection";
                 buttonList.Add(motionDetectionButton);
