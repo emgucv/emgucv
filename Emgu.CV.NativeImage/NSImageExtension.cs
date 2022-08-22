@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if __MACOS__
+#if __MACOS__ || __MACCATALYST__
 using System;
 using System.Drawing;
 using Emgu.CV;
@@ -18,19 +18,7 @@ namespace Emgu.CV
     /// </summary>
     public static class NSImageExtension
     {
-        /// <summary>
-        /// Creating an Image from the NSImage
-        /// </summary>
-        public static Image<TColor, TDepth> ToImage<TColor, TDepth>(this NSImage nsImage)
-           where TColor : struct, IColor
-           where TDepth : new()
-            //: this( (int) uiImage.Size.Width, (int) uiImage.Size.Height)
-        {
-            using (CGImage cgImage = nsImage.CGImage)
-            {
-                return cgImage.ToImage<TColor, TDepth>();
-            }
-        }
+
 
         /// <summary>
         /// Convert this Image object to NSImage
@@ -42,6 +30,63 @@ namespace Emgu.CV
             using (CGImage cgImage = image.ToCGImage())
             {
                 return new NSImage(cgImage, new CGSize(cgImage.Width, cgImage.Height));
+            }
+        }
+
+
+
+
+        /// <summary>
+        /// Converts to NSImage.
+        /// </summary>
+        /// <returns>The NSImage.</returns>
+        public static NSImage ToNSImage(this UMat umat)
+        {
+            using (CGImage cgImage = umat.ToCGImage())
+            {
+                return new NSImage(cgImage, new CGSize(cgImage.Width, cgImage.Height));
+            }
+        }
+
+
+
+        /// <summary>
+        /// Converts to NSImage.
+        /// </summary>
+        /// <returns>The NSImage.</returns>
+        public static NSImage ToNSImage(this Mat mat)
+        {
+            using (CGImage cgImage = mat.ToCGImage())
+            {
+                return new NSImage(cgImage, new CGSize(cgImage.Width, cgImage.Height));
+            }
+        }
+
+        /// <summary>
+        /// Converts to NSImage.
+        /// </summary>
+        /// <returns>The NSImage.</returns>
+        public static NSImage ToNSImage(this IInputArray inputArray)
+        {
+            using (InputArray array = inputArray.GetInputArray())
+            using (Mat m = array.GetMat())
+            {
+                return m.ToNSImage();
+            }
+        }
+
+#if __MACOS__
+        /// <summary>
+        /// Creating an Image from the NSImage
+        /// </summary>
+        public static Image<TColor, TDepth> ToImage<TColor, TDepth>(this NSImage nsImage)
+            where TColor : struct, IColor
+            where TDepth : new()
+            //: this( (int) uiImage.Size.Width, (int) uiImage.Size.Height)
+        {
+            using (CGImage cgImage = nsImage.CGImage)
+            {
+                return cgImage.ToImage<TColor, TDepth>();
             }
         }
 
@@ -59,19 +104,6 @@ namespace Emgu.CV
                 return cgImage.ToUMat(mode);
             }
         }
-
-        /// <summary>
-        /// Converts to NSImage.
-        /// </summary>
-        /// <returns>The NSImage.</returns>
-        public static NSImage ToNSImage(this UMat umat)
-        {
-            using (CGImage cgImage = umat.ToCGImage())
-            {
-                return new NSImage(cgImage, new CGSize(cgImage.Width, cgImage.Height));
-            }
-        }
-
         /// <summary>
         /// Convert a NSImage to a IOutputArray
         /// </summary>
@@ -99,31 +131,7 @@ namespace Emgu.CV
                 return cgImage.ToMat(mode);
             }
         }
-
-        /// <summary>
-        /// Converts to NSImage.
-        /// </summary>
-        /// <returns>The NSImage.</returns>
-        public static NSImage ToNSImage(this Mat mat)
-        {
-            using (CGImage cgImage = mat.ToCGImage())
-            {
-                return new NSImage(cgImage, new CGSize(cgImage.Width, cgImage.Height));
-            }
-        }
-
-        /// <summary>
-        /// Converts to NSImage.
-        /// </summary>
-        /// <returns>The NSImage.</returns>
-        public static NSImage ToNSImage(this IInputArray inputArray)
-        {
-            using (InputArray array = inputArray.GetInputArray())
-            using (Mat m = array.GetMat())
-            {
-                return m.ToNSImage();
-            }
-        }
+#endif
 
     }
 }

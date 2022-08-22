@@ -81,7 +81,7 @@ namespace Emgu.CV
                      CGImageAlphaInfo.PremultipliedLast))
 
                 {
-                    CGImage cgImage = context.ToImage();
+                    CGImage cgImage = context.ToImage() ?? throw new InvalidOperationException();
                     return cgImage;
                 }
             }
@@ -186,7 +186,7 @@ namespace Emgu.CV
                 bgraByte.Width * 4,
                 cspace,
                 CGImageAlphaInfo.PremultipliedLast))
-                return context.ToImage();
+                return context.ToImage() ?? throw new InvalidOperationException();
         }
 
         /// <summary>

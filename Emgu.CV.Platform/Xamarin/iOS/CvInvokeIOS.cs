@@ -91,9 +91,9 @@ namespace Emgu.CV
             }
             finally
             {
-                String funcNameStr = Marshal.PtrToStringAnsi(funcName);
-                String errMsgStr = Marshal.PtrToStringAnsi(errMsg);
-                String fileNameStr = Marshal.PtrToStringAnsi(fileName);
+                String funcNameStr = Marshal.PtrToStringAnsi(funcName) ?? throw new InvalidOperationException();
+                String errMsgStr = Marshal.PtrToStringAnsi(errMsg) ?? throw new InvalidOperationException();
+                String fileNameStr = Marshal.PtrToStringAnsi(fileName) ?? throw new InvalidOperationException();
                 throw new CvException(status, funcNameStr, errMsgStr, fileNameStr, line);
             }
         }

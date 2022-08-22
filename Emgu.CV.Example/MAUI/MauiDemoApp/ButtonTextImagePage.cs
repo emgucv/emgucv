@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 
 using Microsoft.Maui.Controls.PlatformConfiguration;
 
-#if __MACOS__
+#if __MACCATALYST__
 using AppKit;
 using CoreGraphics;
 #elif __IOS__
@@ -157,7 +157,7 @@ namespace MauiDemoApp
             //DisplayImage.BackgroundColor = Color.Aqua;
             //_mainLayout.BackgroundColor = Color.Blue;
 
-#if __MACOS__
+#if __MACCATALYST__
             //NSImageView = new NSImageView();
             //NSImageView.ImageScaling = NSImageScale.None;
             //_mainLayout.Children.Add(NSImageView.ToView());
@@ -287,7 +287,7 @@ namespace MauiDemoApp
                     if (Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.WinUI)
                     {
 
-#if !(__MACOS__ || __ANDROID__ || __IOS__ || NETFX_CORE)
+#if !(__MACCATALYST__ || __ANDROID__ || __IOS__ || NETFX_CORE)
                         Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
                         dialog.Multiselect = false;
                         dialog.Title = "Select an Image File";

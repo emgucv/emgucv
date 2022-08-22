@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if __IOS__
+//#if __IOS__
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -30,7 +30,7 @@ namespace Emgu.CV
            where TDepth : new()
             //: this( (int) uiImage.Size.Width, (int) uiImage.Size.Height)
         {
-            using (CGImage cgImage = uiImage.CGImage)
+            using (CGImage cgImage = uiImage.CGImage ?? throw new InvalidOperationException())
             {
                 return cgImage.ToImage<TColor, TDepth>();
             }
@@ -57,7 +57,7 @@ namespace Emgu.CV
         public static UMat ToUMat(this UIImage uiImage, ImreadModes mode = ImreadModes.AnyColor)
         {
             //UMat umat = new UMat ();
-            using (CGImage cgImage = uiImage.CGImage)
+            using (CGImage cgImage = uiImage.CGImage ?? throw new InvalidOperationException())
             {
                 //ConvertCGImageToArray (cgImage, this, mode);
                 return cgImage.ToUMat(mode);
@@ -83,7 +83,7 @@ namespace Emgu.CV
         /// <param name="uiImage">The UIImage.</param>
         public static Mat ToMat(this UIImage uiImage, ImreadModes mode = ImreadModes.AnyColor)
         {
-            using (CGImage cgImage = uiImage.CGImage)
+            using (CGImage cgImage = uiImage.CGImage ?? throw new InvalidOperationException())
             {
                 return cgImage.ToMat(mode);
             }
@@ -97,7 +97,8 @@ namespace Emgu.CV
       /// <param name="outputArray">The output array</param>
       public static void ToArray (this UIImage uiImage, IOutputArray outputArray, ImreadModes mode = ImreadModes.AnyColor)
       {
-         using (CGImage cgImage = uiImage.CGImage) {
+         using (CGImage cgImage = uiImage.CGImage ?? throw new InvalidOperationException()) 
+         {
             cgImage.ToArray (outputArray, mode);
          }
       }
@@ -158,9 +159,9 @@ namespace Emgu.CV
             try
             {
                 //try again to load with UIImage
-                using (UIImage tmp = UIImage.FromFile(fileName))
+                using (UIImage tmp = UIImage.FromFile(fileName) ?? throw new InvalidOperationException())
                 {
-                    tmp.CGImage.ToArray(mat, loadType);
+                    (tmp.CGImage ?? throw new InvalidOperationException()).ToArray(mat, loadType);
                 }
 
                 return true;
@@ -199,4 +200,4 @@ namespace Emgu.CV
     }*/
 }
 
-#endif
+//#endif
