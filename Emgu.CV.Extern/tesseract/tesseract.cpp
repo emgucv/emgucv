@@ -341,6 +341,33 @@ void cveTessPDFRendererRelease(tesseract::TessPDFRenderer** renderer)
 #endif
 }
 
+bool cveTessResultRendererBeginDocument(tesseract::TessResultRenderer* resultRenderer, cv::String* title)
+{
+#ifdef HAVE_EMGUCV_TESSERACT
+	return resultRenderer->BeginDocument(title->c_str());
+#else
+	throw_no_tesseract();
+#endif
+}
+
+bool cveTessResultRendererAddImage(tesseract::TessResultRenderer* resultRenderer, EmguTesseract* api)
+{
+#ifdef HAVE_EMGUCV_TESSERACT
+	return resultRenderer->AddImage(api);
+#else
+	throw_no_tesseract();
+#endif	
+}
+
+bool cveTessResultRendererEndDocument(tesseract::TessResultRenderer* resultRenderer)
+{
+#ifdef HAVE_EMGUCV_TESSERACT
+	return resultRenderer->EndDocument();
+#else
+	throw_no_tesseract();
+#endif	
+}
+
 Pix* cveLeptCreatePixFromMat(cv::Mat* m)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
