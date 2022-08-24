@@ -73,5 +73,47 @@ namespace Emgu.CV.OCR
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTessPDFRendererRelease(ref IntPtr renderer);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool cveTessResultRendererBeginDocument(IntPtr resultRenderer, IntPtr title);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool cveTessResultRendererAddImage(IntPtr resultRenderer, IntPtr api);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool cveTessResultRendererEndDocument(IntPtr resultRenderer);
+
+        /// <summary>
+        /// Starts a new document with the given title.
+        /// This clears the contents of the output data.
+        /// </summary>
+        /// <param name="renderer">The renderer</param>
+        /// <param name="title">The title</param>
+        /// <returns>True if successful</returns>
+        public static bool BeginDocument(this ITessResultRenderer renderer, String title)
+        {
+            using (CvString csTitle = new CvString(title))
+            {
+                return cveTessResultRendererBeginDocument(renderer.TessResultRendererPtr, csTitle);
+            }
+        }
+
+        public static bool AddImage(this ITessResultRenderer renderer, Tesseract api)
+        {
+            return cveTessResultRendererAddImage(renderer.TessResultRendererPtr, api.Ptr);
+        }
+
+        /// <summary>
+        /// Finishes the document and finalizes the output data. Invalid if BeginDocument not yet called.
+        /// </summary>
+        /// <param name="renderer">The renderer</param>
+        /// <returns>True if successful</returns>
+        public static bool EndDocument(this ITessResultRenderer renderer)
+        {
+            return cveTessResultRendererEndDocument(renderer.TessResultRendererPtr);
+        }
     }
 }

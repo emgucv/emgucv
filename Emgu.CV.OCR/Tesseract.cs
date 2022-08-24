@@ -231,7 +231,18 @@ namespace Emgu.CV.OCR
         /// <returns>the url to download the tessdata file for the specific language</returns>
         public static String GetLangFileUrl(string lang)
         {
-            return String.Format("https://github.com/tesseract-ocr/tessdata/blob/4.1.0/{0}.traineddata?raw=true", lang);
+            return String.Format("{0}/{1}.traineddata?raw=true", TessdataUrl, lang);
+        }
+
+        /// <summary>
+        /// Get the url to download the tessdata files
+        /// </summary>
+        private static String TessdataUrl
+        {
+            get
+            {
+                return "https://github.com/tesseract-ocr/tessdata/blob/4.1.0";
+            }
         }
 
         /// <summary>

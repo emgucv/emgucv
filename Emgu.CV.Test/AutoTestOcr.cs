@@ -11,6 +11,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.OCR;
 using Emgu.CV.Structure;
 using Orientation = Emgu.CV.OCR.Orientation;
+//using static System.Net.WebRequestMethods;
 #if VS_TEST
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
@@ -34,61 +35,56 @@ namespace Emgu.CV.Test
         public void TestOCREngGrayText()
         {
             using (Tesseract ocr = GetTesseract())
-            using (Image<Gray, Byte> img = new Image<Gray, byte>(480, 200))
+            using (Mat img = new Mat(new Size(480, 200), DepthType.Cv8U, 1))
             {
 
                 ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,");
                 IntPtr oclDevice = new IntPtr();
                 int deviceId = ocr.GetOpenCLDevice(ref oclDevice);
 
+                img.SetTo(new MCvScalar(0, 0, 0));
                 String message = "Hello, World";
                 CvInvoke.PutText(img, message, new Point(50, 100), CvEnum.FontFace.HersheySimplex, 1.0, new MCvScalar(255));
 
-                //
-                //ocr.Recognize(img);
-                using (Image<Gray, Byte> rotatedImg = img.Rotate(10, new Gray(), false))
+                ocr.PageSegMode = PageSegMode.AutoOsd;
+                ocr.SetImage(img);
+                ocr.Recognize();
+                using (PageIterator pi = ocr.AnalyseLayout())
                 {
-
-                    ocr.PageSegMode = PageSegMode.AutoOsd;
-                    ocr.SetImage(rotatedImg);
-                    ocr.Recognize();
-                    using (PageIterator pi = ocr.AnalyseLayout())
-                    {
-                        Orientation or = pi.Orientation;
-                        LineSegment2D? baseLine = pi.GetBaseLine(PageIteratorLevel.Textline);
-                        if (baseLine.HasValue)
-                        {
-                            CvInvoke.Line(rotatedImg, baseLine.Value.P1, baseLine.Value.P2, new MCvScalar(255));
-                            //Emgu.CV.UI.ImageViewer.Show(rotatedImg);       
-                        }
-                    }
+                    Orientation or = pi.Orientation;
+                    LineSegment2D? baseLine = pi.GetBaseLine(PageIteratorLevel.Textline);
+                    //if (baseLine.HasValue)
+                    //{
+                    //CvInvoke.Line(img, baseLine.Value.P1, baseLine.Value.P2, new MCvScalar(255));
+                    //}
+                }
 
 
-                    String messageOcr = ocr.GetUTF8Text().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text
-                    //EmguAssert.AreEqual(message, messageOcr,
-                    //   String.Format("'{0}' is not equal to '{1}'", message, messageOcr));
+                String messageOcr = ocr.GetUTF8Text().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text
+                                                                           //EmguAssert.AreEqual(message, messageOcr,
+                                                                           //   String.Format("'{0}' is not equal to '{1}'", message, messageOcr));
 
-                    Tesseract.Character[] results = ocr.GetCharacters();
+                Tesseract.Character[] results = ocr.GetCharacters();
 
-                    String s1 = ocr.GetBoxText();
-                    //String s2 = ocr.GetOsdText();
-                    String s3 = ocr.GetTSVText();
-                    String s4 = ocr.GetUNLVText();
+                String s1 = ocr.GetBoxText();
+                //String s2 = ocr.GetOsdText();
+                String s3 = ocr.GetTSVText();
+                String s4 = ocr.GetUNLVText();
 
-                    bool success;
-                    using (PDFRenderer pdfRenderer = new PDFRenderer("abc", Tesseract.DefaultTesseractDirectory, true))
-                    using (Pix imgPix = new Pix(img.Mat))
-                    {
-                        success = ocr.ProcessPage(imgPix, 1, "img", null, 100000, pdfRenderer);
-                        EmguAssert.IsTrue(success, "failed to export pdf");                        
-                    }
-                    if (success)
-                    {
-                        FileInfo fi1 = new FileInfo("abc.pdf");
-                        
-                    }
+                bool success = true;
+                using (PDFRenderer pdfRenderer = new PDFRenderer("abc", Tesseract.DefaultTesseractDirectory, false))
+                {
+                    success &= pdfRenderer.BeginDocument("testing");
+                    success &= pdfRenderer.AddImage(ocr);
+                    success &= pdfRenderer.EndDocument();
+                    EmguAssert.IsTrue(success, "failed to export pdf");
+                }
+                if (success)
+                {
+                    FileInfo fi1 = new FileInfo("abc.pdf");
 
                 }
+
             }
         }
 
@@ -160,11 +156,33 @@ namespace Emgu.CV.Test
             }
         }
 
+        private static void TesseractDownloadPDFFontFile(String folder, String file)
+        {
+            
+            String folderName = folder;
+            if (!System.IO.Directory.Exists(folderName))
+            {
+                System.IO.Directory.CreateDirectory(folderName);
+            }
+            String dest = System.IO.Path.Combine(folderName, file);
+            if ((!System.IO.File.Exists(dest)) || (new System.IO.FileInfo(dest).Length == 0))
+            {
+                String source = "https://github.com/tesseract-ocr/tessconfigs/blob/3decf1c8252ba6dbeef0bf908f4b0aab7f18d113/pdf.ttf?raw=true";
+
+                using (System.Net.WebClient webclient = new System.Net.WebClient())
+                {
+                    Console.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
+                    webclient.DownloadFile(source, dest);
+                    Console.WriteLine(String.Format("Download completed"));
+                }
+            }
+        }
+
         private static Tesseract GetTesseract(String lang = "eng")
         {
             TesseractDownloadLangFile(Tesseract.DefaultTesseractDirectory, lang);
             TesseractDownloadLangFile(Tesseract.DefaultTesseractDirectory, "osd"); //script orientation detection
-
+            TesseractDownloadPDFFontFile(Tesseract.DefaultTesseractDirectory, "pdf.tff");
             return new Tesseract(Tesseract.DefaultTesseractDirectory, lang, OcrEngineMode.TesseractLstmCombined);
         }
 
@@ -173,7 +191,7 @@ namespace Emgu.CV.Test
         {
             String filePath = Path.Combine(Tesseract.DefaultTesseractDirectory, "데이터") + Path.DirectorySeparatorChar;
             TesseractDownloadLangFile(filePath, "eng");
-            var rawData = File.ReadAllBytes(Path.Combine(filePath, "eng.traineddata"));
+            var rawData = System.IO.File.ReadAllBytes(Path.Combine(filePath, "eng.traineddata"));
 
             using (Tesseract ocr = new Tesseract())
             {
