@@ -50,11 +50,11 @@ namespace Emgu.CV.Models
         /// <returns>Async task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(
-            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
+            FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
             Object initOptions = null)
 #else
         public async Task Init(
-            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
+            FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
             Object initOptions = null)
 #endif
         {
@@ -70,9 +70,9 @@ namespace Emgu.CV.Models
         }
 
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-        private IEnumerator InitFreetype(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private IEnumerator InitFreetype(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
-        private async Task InitFreetype(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private async Task InitFreetype(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #endif
         {
             if (_freetype == null)
@@ -87,9 +87,9 @@ namespace Emgu.CV.Models
         }
 
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-        private IEnumerator InitTextDetector(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private IEnumerator InitTextDetector(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
-        private async Task InitTextDetector(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private async Task InitTextDetector(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #endif
         {
             if (_textDetector == null)
@@ -130,9 +130,9 @@ namespace Emgu.CV.Models
         }
 
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-        private IEnumerator InitTextRecognizer(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private IEnumerator InitTextRecognizer(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
-        private async Task InitTextRecognizer(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private async Task InitTextRecognizer(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #endif
         {
             if (_ocr == null)

@@ -40,9 +40,9 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <returns>Async task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-        public IEnumerator Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        public IEnumerator Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
-        public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        public async Task Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #endif
         {
 

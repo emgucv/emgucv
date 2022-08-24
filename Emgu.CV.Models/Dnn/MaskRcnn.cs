@@ -55,11 +55,11 @@ namespace Emgu.CV.Models
         /// <returns>Asyn task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(
-            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
+            FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
             Object initOptions = null)
 #else
         public async Task Init(
-            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
+            FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
             Object initOptions = null)
 #endif
         {

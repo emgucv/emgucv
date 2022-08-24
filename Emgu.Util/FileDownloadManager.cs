@@ -8,7 +8,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Diagnostics;
+using System.Net;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
 using UnityEngine;
@@ -28,10 +30,12 @@ namespace Emgu.Util
         {
         }
 
+        public delegate void DownloadProgressChangedEventHandler(long? totalBytesToReceive, long bytesReceived, double? progressPercentage);
+
         /// <summary>
         /// This event will be fired when the download progress is changed
         /// </summary>
-        public event System.Net.DownloadProgressChangedEventHandler OnDownloadProgressChanged;
+        public event DownloadProgressChangedEventHandler OnDownloadProgressChanged;
 
         private List<DownloadableFile> _files = new List<DownloadableFile>();
         
@@ -146,15 +150,15 @@ namespace Emgu.Util
         private static async Task Download(
             DownloadableFile[] files,
             int retry = 1,
-            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+            DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
             await DownloadHelperMultiple(files, retry, onDownloadProgressChanged);
         }
 
         private static async Task DownloadHelperMultiple(
             DownloadableFile[] downloadableFiles,
-            int retry = 1, 
-            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+            int retry = 1,
+            DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
             if (downloadableFiles == null || downloadableFiles.Length == 0)
             {
@@ -174,10 +178,91 @@ namespace Emgu.Util
             }
         }
 
+        #region source code from https://stackoverflow.com/questions/20661652/progress-bar-with-httpclient with modification
+        public class HttpClientWithProgress : IDisposable
+        {
+            //private string _downloadUrl;
+            //private string _destinationFilePath;
+
+            private HttpClient _httpClient;
+
+            
+
+            public event DownloadProgressChangedEventHandler DownloadProgressChanged;
+
+            public async Task DownloadFileTaskAsync(string downloadUrl, string destinationFilePath)
+            {
+
+                _httpClient = new HttpClient { Timeout = TimeSpan.FromDays(1) };
+
+                using (var response = await _httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead))
+                    await DownloadFileFromHttpResponseMessage(response, destinationFilePath);
+            }
+
+            private async Task DownloadFileFromHttpResponseMessage(HttpResponseMessage response, string destinationFilePath)
+            {
+                response.EnsureSuccessStatusCode();
+
+                var totalBytes = response.Content.Headers.ContentLength;
+
+                using (var contentStream = await response.Content.ReadAsStreamAsync())
+                    await ProcessContentStream(totalBytes, contentStream, destinationFilePath);
+            }
+
+            private async Task ProcessContentStream(long? totalDownloadSize, Stream contentStream, String destinationFilePath)
+            {
+                var totalBytesRead = 0L;
+                var readCount = 0L;
+                var buffer = new byte[8192];
+                var isMoreToRead = true;
+
+                using (var fileStream = new FileStream(destinationFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true))
+                {
+                    do
+                    {
+                        var bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length);
+                        if (bytesRead == 0)
+                        {
+                            isMoreToRead = false;
+                            TriggerProgressChanged(totalDownloadSize, totalBytesRead);
+                            continue;
+                        }
+
+                        await fileStream.WriteAsync(buffer, 0, bytesRead);
+
+                        totalBytesRead += bytesRead;
+                        readCount += 1;
+
+                        if (readCount % 100 == 0)
+                            TriggerProgressChanged(totalDownloadSize, totalBytesRead);
+                    }
+                    while (isMoreToRead);
+                }
+            }
+
+            private void TriggerProgressChanged(long? totalDownloadSize, long totalBytesRead)
+            {
+                if (DownloadProgressChanged == null)
+                    return;
+
+                double? progressPercentage = null;
+                if (totalDownloadSize.HasValue)
+                    progressPercentage = Math.Round((double)totalBytesRead / totalDownloadSize.Value * 100, 2);
+
+                DownloadProgressChanged(totalDownloadSize, totalBytesRead, progressPercentage);
+            }
+
+            public void Dispose()
+            {
+                _httpClient?.Dispose();
+            }
+        }
+        #endregion
+
         private static async Task DownloadHelper(
             DownloadableFile downloadableFile,
             int retry = 1, 
-            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null
+            DownloadProgressChangedEventHandler onDownloadProgressChanged = null
             )
         {
             if (downloadableFile.Url == null)
@@ -191,8 +276,8 @@ namespace Emgu.Util
                 {
                     //Download the file
                     Trace.WriteLine("downloading file from:" + downloadableFile.Url + " to: " + downloadableFile.LocalFile);
-                    System.Net.WebClient downloadClient = new System.Net.WebClient();
-                    
+
+                    HttpClientWithProgress downloadClient = new HttpClientWithProgress();
                     if (onDownloadProgressChanged != null)
                         downloadClient.DownloadProgressChanged += onDownloadProgressChanged;
                     
@@ -201,7 +286,7 @@ namespace Emgu.Util
                     {
                         fi.Directory.Create();
                     }
-                    await downloadClient.DownloadFileTaskAsync(new Uri(downloadableFile.Url), downloadableFile.LocalFile);
+                    await downloadClient.DownloadFileTaskAsync(downloadableFile.Url, downloadableFile.LocalFile);
                     
                 }
                 catch (Exception e)
