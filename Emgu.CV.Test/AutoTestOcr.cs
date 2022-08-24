@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using Emgu.CV.CvEnum;
 using Emgu.CV.OCR;
 using Emgu.CV.Structure;
@@ -32,9 +33,9 @@ namespace Emgu.CV.Test
     public class AutoTestOcr
     {
         [Test]
-        public void TestOCREngGrayText()
+        public async Task TestOCREngGrayText()
         {
-            using (Tesseract ocr = GetTesseract())
+            using (Tesseract ocr = await GetTesseract())
             using (Mat img = new Mat(new Size(480, 200), DepthType.Cv8U, 1))
             {
 
@@ -89,9 +90,9 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void TestOCRBgrText()
+        public async Task TestOCRBgrText()
         {
-            using (Tesseract ocr = GetTesseract())
+            using (Tesseract ocr = await GetTesseract())
             using (Image<Bgr, Byte> img = new Image<Bgr, byte>(480, 200))
             {
                 ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,");
@@ -115,11 +116,11 @@ namespace Emgu.CV.Test
         [Ignore("Ignore for now, seems to crash unit test.")]
 #endif
         [Test]
-        public void TestOCREngBlankPage()
+        public async Task TestOCREngBlankPage()
         {
             Version version = Tesseract.Version;
             int i = version.Major;
-            using (Tesseract ocr = GetTesseract())
+            using (Tesseract ocr = await GetTesseract())
             using (Mat img = new Mat(new Size(1024, 960), DepthType.Cv8U, 3))
             {
                 ocr.SetImage(img);
@@ -135,8 +136,7 @@ namespace Emgu.CV.Test
 
         private static void TesseractDownloadLangFile(String folder, String lang)
         {
-            //String subfolderName = "tessdata";
-            //String folderName = System.IO.Path.Combine(folder, subfolderName);
+            
             String folderName = folder;
             if (!System.IO.Directory.Exists(folderName))
             {
@@ -156,9 +156,9 @@ namespace Emgu.CV.Test
             }
         }
 
-        private static void TesseractDownloadPDFFontFile(String folder, String file)
+        private static async Task TesseractDownloadPDFFontFile(String folder, String file)
         {
-            
+
             String folderName = folder;
             if (!System.IO.Directory.Exists(folderName))
             {
@@ -169,20 +169,25 @@ namespace Emgu.CV.Test
             {
                 String source = "https://github.com/tesseract-ocr/tessconfigs/blob/3decf1c8252ba6dbeef0bf908f4b0aab7f18d113/pdf.ttf?raw=true";
 
-                using (System.Net.WebClient webclient = new System.Net.WebClient())
+                using (System.Net.Http.HttpClient client = new System.Net.Http.HttpClient())
                 {
                     Console.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
-                    webclient.DownloadFile(source, dest);
+                    using (Stream stream = await client.GetStreamAsync(source))
+                    using (Stream outStream = File.OpenWrite(dest))
+                    {
+                        stream.CopyTo(outStream);
+                    }
+
                     Console.WriteLine(String.Format("Download completed"));
                 }
             }
         }
 
-        private static Tesseract GetTesseract(String lang = "eng")
+        private static async Task<Tesseract> GetTesseract(String lang = "eng")
         {
             TesseractDownloadLangFile(Tesseract.DefaultTesseractDirectory, lang);
             TesseractDownloadLangFile(Tesseract.DefaultTesseractDirectory, "osd"); //script orientation detection
-            TesseractDownloadPDFFontFile(Tesseract.DefaultTesseractDirectory, "pdf.tff");
+            await TesseractDownloadPDFFontFile(Tesseract.DefaultTesseractDirectory, "pdf.tff");
             return new Tesseract(Tesseract.DefaultTesseractDirectory, lang, OcrEngineMode.TesseractLstmCombined);
         }
 
@@ -200,9 +205,9 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void TestOCREngConstructor()
+        public async Task TestOCREngConstructor()
         {
-            using (Tesseract ocr = GetTesseract())
+            using (Tesseract ocr = await GetTesseract())
             {
                 int isValid1 = ocr.IsValidWord("1123");
                 int isValid2 = ocr.IsValidWord("hello");

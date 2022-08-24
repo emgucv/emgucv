@@ -78,9 +78,9 @@ namespace Emgu.CV.Models
         /// <param name="initOptions">Initialization options</param>
         /// <returns>Async task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-        public IEnumerator Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged, Object initOptions)
+        public IEnumerator Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged, Object initOptions)
 #else
-        public async Task Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged, Object initOptions)
+        public async Task Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged, Object initOptions)
 #endif
         {
             if (_models != null)

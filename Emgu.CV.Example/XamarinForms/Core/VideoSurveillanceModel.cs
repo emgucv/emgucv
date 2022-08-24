@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Net;
 using System.Threading.Tasks;
+using Emgu.Util;
 
 
 namespace Emgu.CV.XamarinForms
@@ -53,7 +54,7 @@ namespace Emgu.CV.XamarinForms
             _idCounter = 0;
         }
 
-        public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged, object initOptions)
+        public async Task Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged, object initOptions)
         {
             _fgDetector = new BackgroundSubtractorMOG2();
             await Task.Delay(1);

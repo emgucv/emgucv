@@ -50,12 +50,12 @@ namespace DepthAI
 
         }
 
-        private static void onDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
+        private static void onDownloadProgressChanged(long? totalBytesToReceive, long bytesReceived, double? progressPercentage)
         {
-            if (e.TotalBytesToReceive <= 0)
-                System.Console.WriteLine(String.Format("{0} bytes downloaded", e.BytesReceived, e.ProgressPercentage));
+            if (totalBytesToReceive == null)
+                System.Console.WriteLine(String.Format("{0} bytes downloaded", bytesReceived));
             else
-                System.Console.WriteLine(String.Format("{0} of {1} bytes downloaded ({2}%)", e.BytesReceived, e.TotalBytesToReceive, e.ProgressPercentage));
+                System.Console.WriteLine(String.Format("{0} of {1} bytes downloaded ({2}%)", bytesReceived, totalBytesToReceive, progressPercentage));
         }
 
         static async Task Main(string[] args)

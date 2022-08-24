@@ -66,12 +66,12 @@ namespace Emgu.CV.Test
     [TestFixture]
     public class AutoTestModels
     {
-        private static void DownloadManager_OnDownloadProgressChanged(object sender, System.Net.DownloadProgressChangedEventArgs e)
+        private static void DownloadManager_OnDownloadProgressChanged(long? totalBytesToReceive, long bytesReceived, double? progressPercentage)
         {
-            if (e.TotalBytesToReceive <= 0)
-                Trace.WriteLine(String.Format("{0} bytes downloaded.", e.BytesReceived));
+            if (totalBytesToReceive != null) 
+                Trace.WriteLine(String.Format("{0} bytes downloaded.", bytesReceived));
             else
-                Trace.WriteLine(String.Format("{0} of {1} bytes downloaded ({2}%)", e.BytesReceived, e.TotalBytesToReceive, e.ProgressPercentage));
+                Trace.WriteLine(String.Format("{0} of {1} bytes downloaded ({2}%)", bytesReceived, totalBytesToReceive, progressPercentage));
         }
         
 #if !TEST_MODELS

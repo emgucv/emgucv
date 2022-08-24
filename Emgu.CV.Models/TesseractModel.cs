@@ -36,7 +36,7 @@ namespace Emgu.CV.Models
 #else
         private async Task 
 #endif
-            InitTesseract(String lang, OcrEngineMode mode, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+            InitTesseract(String lang, OcrEngineMode mode, FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
             if (_ocr == null)
             {
@@ -145,7 +145,7 @@ namespace Emgu.CV.Models
 #else
         public async Task 
 #endif
-            Init(System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
+            Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
         {
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
             yield return

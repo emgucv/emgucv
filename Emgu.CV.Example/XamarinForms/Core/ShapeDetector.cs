@@ -210,7 +210,7 @@ namespace Emgu.CV.Models
 
         }
 
-        public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
+        public async Task Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
         {
             //do nothing, no need to initialize
             await Task.Delay(0);

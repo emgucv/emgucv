@@ -145,6 +145,7 @@ namespace Emgu.CV.OCR
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTessBaseAPIGetDatapath(IntPtr ocr, IntPtr datapath);
 
+
     }
 }
 

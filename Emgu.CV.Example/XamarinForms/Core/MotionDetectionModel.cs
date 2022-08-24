@@ -7,6 +7,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Models;
 using Emgu.CV.Structure;
 using System.Drawing;
+using Emgu.Util;
 
 namespace Emgu.CV.XamarinForms
 {
@@ -40,7 +41,7 @@ namespace Emgu.CV.XamarinForms
             }
         }
 
-        public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged, object initOptions)
+        public async Task Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged, object initOptions)
         {
             _motionHistory = new MotionHistory(
                 1.0, //in second, the duration of motion history you wants to keep

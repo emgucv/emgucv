@@ -89,9 +89,9 @@ namespace Emgu.CV.Models
         private Net _ocr = null;
 
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-        private IEnumerator InitOCR(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private IEnumerator InitOCR(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
-        private async Task InitOCR(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private async Task InitOCR(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #endif
         {
             if (_ocr == null)
@@ -148,9 +148,9 @@ namespace Emgu.CV.Models
         }
 
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-        private IEnumerator InitVehicleAttributesRecognizer(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private IEnumerator InitVehicleAttributesRecognizer(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
-        private async Task InitVehicleAttributesRecognizer(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private async Task InitVehicleAttributesRecognizer(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #endif
         {
             if (_vehicleAttrRecognizerModel == null)
@@ -188,9 +188,9 @@ namespace Emgu.CV.Models
         }
 
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-        private IEnumerator InitLicensePlateDetector(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private IEnumerator InitLicensePlateDetector(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
-        private async Task InitLicensePlateDetector(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private async Task InitLicensePlateDetector(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #endif
         {
             if (_vehicleLicensePlateDetectionModel == null)
@@ -255,11 +255,11 @@ namespace Emgu.CV.Models
         /// <returns>Async task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(
-            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
+            FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
             Object initOptions = null)
 #else
         public async Task Init(
-            System.Net.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, 
+            FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, 
             Object initOptions = null)
 #endif
         {

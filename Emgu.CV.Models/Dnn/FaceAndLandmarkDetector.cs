@@ -55,9 +55,9 @@ namespace Emgu.CV.Models
         }
 
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-        private IEnumerator InitFaceDetector(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private IEnumerator InitFaceDetector(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
-        private async Task InitFaceDetector(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private async Task InitFaceDetector(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #endif
         {
             if (_faceDetector == null)
@@ -72,9 +72,9 @@ namespace Emgu.CV.Models
         }
 
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-        private IEnumerator InitFacemark(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private IEnumerator InitFacemark(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
-        private async Task InitFacemark(DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        private async Task InitFacemark(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #endif
         {
             if (_facemarkDetector == null)
@@ -100,7 +100,7 @@ namespace Emgu.CV.Models
         public async Task
 #endif
             Init(
-            DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
+                FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null,
             Object initOptions = null)
         {
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
