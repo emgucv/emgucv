@@ -27,9 +27,13 @@
     </ProjectReference>
   </ItemGroup>
     <ItemGroup>
-      <NativeReference Include="..\..\..\libs\runtimes\osx\native\libcvextern.dylib">
-        <Kind>Dynamic</Kind>
-        <SmartLink>False</SmartLink>
+      <NativeReference Include="..\..\..\libs\iOS\libcvextern_catalyst_x86_64.a">
+        <Kind>Static</Kind>
+        <SmartLink>True</SmartLink>
+	<ForceLoad>True</ForceLoad>
+	<IsCxx>True</IsCxx>
+	<LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
+        <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
       </NativeReference>
     </ItemGroup>
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
