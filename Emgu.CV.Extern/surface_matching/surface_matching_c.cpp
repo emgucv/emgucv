@@ -36,6 +36,7 @@ int cveICPRegisterModelToScene(cv::ppf_match_3d::ICP* icp, cv::Mat* srcPC, cv::M
 #endif
 }
 
+
 int cveICPRegisterModelToScene2(cv::ppf_match_3d::ICP* icp, cv::Mat* srcPC, cv::Mat* dstPC, std::vector< cv::ppf_match_3d::Pose3D >* poses)
 {
 #ifdef HAVE_OPENCV_SURFACE_MATCHING
@@ -133,6 +134,70 @@ void cvePose3DSetQ(cv::ppf_match_3d::Pose3D* pose3d, CvScalar* q)
 	quat[2] = q->val[2];
 	quat[2] = q->val[2];
 	pose3d->q = quat;
+#else
+	throw_no_surface_matching();
+#endif
+}
+
+cv::ppf_match_3d::PPF3DDetector* cvePPF3DDetectorCreate(double relativeSamplingStep, double relativeDistanceStep, double numAngles)
+{
+#ifdef HAVE_OPENCV_SURFACE_MATCHING
+	return new cv::ppf_match_3d::PPF3DDetector(relativeSamplingStep, relativeDistanceStep, numAngles);
+#else
+	throw_no_surface_matching();
+#endif
+}
+void cvePPF3DDetectorTrainModel(cv::ppf_match_3d::PPF3DDetector* detector, cv::Mat* model)
+{
+#ifdef HAVE_OPENCV_SURFACE_MATCHING
+	detector->trainModel(*model);
+#else
+	throw_no_surface_matching();
+#endif
+}
+
+void cvePPF3DDetectorMatch(cv::ppf_match_3d::PPF3DDetector* detector, cv::Mat* scene, std::vector< cv::ppf_match_3d::Pose3D >* results, double relativeSceneSampleStep, double relativeSceneDistance)
+{
+#ifdef HAVE_OPENCV_SURFACE_MATCHING
+	std::vector< cv::ppf_match_3d::Pose3DPtr > rawResult;
+	detector->match(*scene, rawResult, relativeSceneSampleStep, relativeSceneDistance);
+
+	results->clear();
+	for (std::vector< cv::ppf_match_3d::Pose3DPtr >::iterator iter = rawResult.begin(); iter != rawResult.end(); ++iter)
+	{
+		cv::ppf_match_3d::Pose3DPtr ptr = *iter;
+		results->push_back(*ptr);
+	}
+#else
+	throw_no_surface_matching();
+#endif
+}
+
+void cvePPF3DDetectorRelease(cv::ppf_match_3d::PPF3DDetector** detector)
+{
+#ifdef HAVE_OPENCV_SURFACE_MATCHING
+	delete* detector;
+	*detector = 0;
+#else
+	throw_no_surface_matching();
+#endif
+}
+
+void cveLoadPLYSimple(cv::String* fileName, int withNormals, cv::_OutputArray* result)
+{
+#ifdef HAVE_OPENCV_SURFACE_MATCHING
+	cv::Mat m = cv::ppf_match_3d::loadPLYSimple(fileName->c_str(), withNormals);
+	m.copyTo(*result);
+#else
+	throw_no_surface_matching();
+#endif
+}
+
+void cveTransformPCPose(cv::Mat* pc, cv::Mat* pose, cv::_OutputArray* result)
+{
+#ifdef HAVE_OPENCV_SURFACE_MATCHING
+	cv::Mat m = cv::ppf_match_3d::transformPCPose(*pc, *pose);
+	m.copyTo(*result);
 #else
 	throw_no_surface_matching();
 #endif
