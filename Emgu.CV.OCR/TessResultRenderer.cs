@@ -101,6 +101,12 @@ namespace Emgu.CV.OCR
             }
         }
 
+        /// <summary>
+        /// Adds the recognized text from the source image to the current document. Invalid if BeginDocument not yet called.
+        /// </summary>
+        /// <param name="renderer">The result rendered</param>
+        /// <param name="api">The Tesseract obj</param>
+        /// <returns>True if successful</returns>
         public static bool AddImage(this ITessResultRenderer renderer, Tesseract api)
         {
             return cveTessResultRendererAddImage(renderer.TessResultRendererPtr, api.Ptr);
