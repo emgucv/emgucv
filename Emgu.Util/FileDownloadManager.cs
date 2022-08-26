@@ -30,6 +30,12 @@ namespace Emgu.Util
         {
         }
 
+        /// <summary>
+        /// The call back when download progress has been changed.
+        /// </summary>
+        /// <param name="totalBytesToReceive">The total number of bytes to receive. If null, it is unknown.</param>
+        /// <param name="bytesReceived">The total number of bytes currently received.</param>
+        /// <param name="progressPercentage">The progress percentage. If null, it is unknown.</param>
         public delegate void DownloadProgressChangedEventHandler(long? totalBytesToReceive, long bytesReceived, double? progressPercentage);
 
         /// <summary>
@@ -178,24 +184,34 @@ namespace Emgu.Util
             }
         }
 
-        #region source code from https://stackoverflow.com/questions/20661652/progress-bar-with-httpclient with modification
-        public class HttpClientWithProgress : IDisposable
+        /// <summary>
+        /// An http client with progress based on source code from https://stackoverflow.com/questions/20661652/progress-bar-with-httpclient with modification
+        /// </summary>
+        public class HttpClientWithProgress : HttpClient
         {
             //private string _downloadUrl;
             //private string _destinationFilePath;
 
-            private HttpClient _httpClient;
+            //private HttpClient _httpClient;
 
             
-
+            /// <summary>
+            /// Handle download download progress change.
+            /// </summary>
             public event DownloadProgressChangedEventHandler DownloadProgressChanged;
 
+            /// <summary>
+            /// Download file asynchronously
+            /// </summary>
+            /// <param name="downloadUrl">The download url</param>
+            /// <param name="destinationFilePath">The destination file path</param>
+            /// <returns>The task</returns>
             public async Task DownloadFileTaskAsync(string downloadUrl, string destinationFilePath)
             {
 
-                _httpClient = new HttpClient { Timeout = TimeSpan.FromDays(1) };
+                //_httpClient = new HttpClient { Timeout = TimeSpan.FromDays(1) };
 
-                using (var response = await _httpClient.GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead))
+                using (var response = await GetAsync(downloadUrl, HttpCompletionOption.ResponseHeadersRead))
                     await DownloadFileFromHttpResponseMessage(response, destinationFilePath);
             }
 
@@ -252,12 +268,7 @@ namespace Emgu.Util
                 DownloadProgressChanged(totalDownloadSize, totalBytesRead, progressPercentage);
             }
 
-            public void Dispose()
-            {
-                _httpClient?.Dispose();
-            }
         }
-        #endregion
 
         private static async Task DownloadHelper(
             DownloadableFile downloadableFile,
