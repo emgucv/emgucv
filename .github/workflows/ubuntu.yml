@@ -15,9 +15,11 @@ jobs:
     timeout-minutes: 1440
     
     steps:
-    - uses: actions/checkout@v2
-    - name: Check out submodules
-      run: git submodule update --init --recursive
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+    #- name: Check out submodules
+    #  run: git submodule update --init --recursive
     - name: Build Emgu CV native binary
       run: ./cmake_configure
       working-directory: ${{ github.workspace }}/platforms/ubuntu/20.04
