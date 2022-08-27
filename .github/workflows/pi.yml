@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 1440
     
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Check out submodules
       run: git submodule update --init --recursive
     - name: Build Emgu CV form debian ARM
