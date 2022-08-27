@@ -23,11 +23,12 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          submodules: true
 
-      - name: Checkout submodules
-        id: checkout_submodules
-        run: |
-          git submodule update --init --recursive
+      #- name: Checkout submodules
+      #  id: checkout_submodules
+      #  run: |
+      #    git submodule update --init --recursive
 
       - name: Build native binary
         id: build_native_binary
@@ -37,7 +38,7 @@ jobs:
 
       - name: Initialize CodeQL
         id: init_codeql
-        uses: github/codeql-action/init@v1
+        uses: github/codeql-action/init@v2
         with:
           languages: csharp
 
@@ -53,6 +54,6 @@ jobs:
 
       - name: Perform CodeQL Analysis
         id: analyze_codeql
-        uses: github/codeql-action/analyze@v1
+        uses: github/codeql-action/analyze@v2
 
 # Built with ❤ by [Pipeline Foundation](https://pipeline.foundation)
