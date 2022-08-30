@@ -21,8 +21,8 @@ jobs:
     - uses: actions/setup-dotnet@v2
       with:
         dotnet-version: '6.0.x'
-    #- name: Check out submodules
-    #  run: git submodule update --init --recursive
+    - name: Install dotnet workload 
+      run: dotnet workload install maui maccatalyst
     - name: Build Emgu CV native binary
       run: ./configure_x86_64
       working-directory: ./platforms/macos/
