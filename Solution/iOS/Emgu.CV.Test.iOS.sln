@@ -15,7 +15,15 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Cuda", "..\..\Emgu.
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.OCR", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.shproj", "{7BC723CB-1678-415F-A65F-4027F8758A6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.World.IOS", "..\..\Emgu.CV.World\Emgu.CV.World.IOS.csproj", "{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.NetStandard.IOS", "..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj", "{79214DCD-3F36-4C50-97F4-11AF21F60711}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Platform.XamarinForms.IOS", "..\..\Emgu.CV.Platform\Xamarin\iOS\Emgu.CV.Platform.Xamarin.IOS.csproj", "{0EE2B36C-F7CD-49FA-A270-D7D988CFF6E5}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Models.Shared", "..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.shproj", "{0BFAD282-50C1-449C-B01C-62FD23BBDBE5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models.IOS", "..\..\Emgu.CV.Models\Emgu.CV.Models.IOS\Emgu.CV.Models.IOS.csproj", "{6D718341-C245-45BD-B866-D35902FD0DB1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.Maui.iOS", "..\..\Emgu.CV.Platform\Maui\iOS\Emgu.CV.Platform.Maui.iOS.csproj", "{D36F4240-B176-4F1A-BA83-303AFF323F6A}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
