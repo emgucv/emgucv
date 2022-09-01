@@ -10,7 +10,7 @@ OPENVINO_OPTION=-DWITH_OPENVINO:BOOL=FALSE
 
 if [ "$1" == "all" ]; then 
   BUILD_ARCH=-DMACOSX_DEPLOYMENT_TARGET=11.0
-  OSX_SYSROOT_OPTION=-DCMAKE_OSX_SYSROOT:STRING="/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/" 
+  OSX_SYSROOT_OPTION=-DCMAKE_OSX_SYSROOT:STRING="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/" 
   CV_OPTIMIZATION=-DCV_DISABLE_OPTIMIZATION:BOOL=ON
   CV_PNG_OPTION=-DWITH_PNG:BOOL=FALSE 
   echo "Building for default architecture"
