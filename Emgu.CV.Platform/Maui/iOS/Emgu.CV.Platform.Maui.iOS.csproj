@@ -18,7 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj" />
+    <ProjectReference Include="..\..\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj">
+      <ReferenceSourceTarget>ProjectReference</ReferenceSourceTarget>
+    </ProjectReference>
   </ItemGroup>
   
     <ItemGroup>
