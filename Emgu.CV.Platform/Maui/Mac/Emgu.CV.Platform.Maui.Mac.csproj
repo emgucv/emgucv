@@ -24,6 +24,7 @@
   
     <ItemGroup>
     <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
+      <ReferenceSourceTarget>ProjectReference</ReferenceSourceTarget>
     </ProjectReference>
   </ItemGroup>
     <ItemGroup>

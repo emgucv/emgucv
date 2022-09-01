@@ -1177,11 +1177,18 @@ ENDIF()
 SET(EMGUCV_XAMARIN_MACOS_NUGET_FILE_LIST "")
 SET(EMGUCV_MAUI_MACOS_NUGET_FILE_LIST "")
 IF(HAVE_MACOS)
-  SET(EMGUCV_MACOS_NUGET_DEPENDENCY "
+  SET(EMGUCV_XAMARIN_MACOS_NUGET_DEPENDENCY "
     <dependencies>
       <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
     </dependencies>")
-	
+
+  SET(EMGUCV_MAUI_MACOS_NUGET_DEPENDENCY "
+    <dependencies>
+      <group targetFramework=\"net6.0-maccatalyst\">
+        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+      </group>
+    </dependencies>")
+
   SET(EMGUCV_XAMARIN_MACOS_NUGET_FILE_LIST "${EMGUCV_XAMARIN_MACOS_NUGET_FILE_LIST}   
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Xamarin.Mac.dll\" target=\"lib\\Xamarin.Mac\" />
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Xamarin.Mac.xml\" target=\"lib\\Xamarin.Mac\" />
