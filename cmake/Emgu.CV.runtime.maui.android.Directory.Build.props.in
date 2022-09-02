@@ -30,17 +30,17 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
     <ItemGroup>
       <None Include="..\..\..\LICENSE.txt">
         <Pack>True</Pack>
-        <PackagePath>\</PackagePath>
+        <PackagePath></PackagePath>
       </None>
       <None Include="..\..\..\miscellaneous\nuget_icon.png">
         <Pack>True</Pack>
-        <PackagePath>\</PackagePath>
+        <PackagePath></PackagePath>
       </None>
     </ItemGroup>
     <ItemGroup>
       <None Include="docs\README.md">
         <Pack>True</Pack>
-        <PackagePath>\docs\</PackagePath>
+        <PackagePath>docs\</PackagePath>
       </None>
     </ItemGroup>
 
