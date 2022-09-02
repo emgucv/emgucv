@@ -130,7 +130,8 @@ namespace MauiDemoApp
                     () =>
                     {
                         this.ImageView.SetImageBitmap(bitmap);
-
+                        this.ImageView.SetScaleType(ImageView.ScaleType.FitStart);
+                        
                         if (bitmap != null)
                             bitmap.Dispose();
 

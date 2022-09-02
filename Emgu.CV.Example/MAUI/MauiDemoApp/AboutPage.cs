@@ -35,7 +35,7 @@ namespace MauiDemoApp
             if (CudaInvoke.HasCuda)
             {
                 cudaTxt = String.Format("{0}{1}<textarea rows=\"5\">{2}</textarea>{1}",
-                    cudaTxt, 
+                    cudaTxt,
                     lineBreak,
                     CudaInvoke.GetCudaDevicesSummary());
             }
@@ -82,7 +82,7 @@ namespace MauiDemoApp
                 if (tesseractVersion.Length == 0)
                     haveTesseract = false;
             }
-            
+
             if (haveTesseract)
             {
                 tesseractText = String.Format("Version: {0}", tesseractVersion);
@@ -93,58 +93,63 @@ namespace MauiDemoApp
             }
 
             Content =
-                  new WebView()
-                  {
-                      WidthRequest = 1000,
-                      HeightRequest = 1000,
-                      Source = new HtmlWebViewSource()
-                      {
-                          Html =
-                        @"<html>
-<head>
-<style>body { background-color: #EEEEEE; }</style>
-<style type=""text/css"">
-textarea { width: 100%; margin: 0; padding: 0; border - width: 0; }
-</style>
-</head>
-<body>
-<H2> Emgu CV Examples </H2>
-<a href=http://www.emgu.com>Visit our website</a> <br/><br/>
-<a href=mailto:support@emgu.com>Email Support</a> <br/><br/>
-<H4> OpenCL Info </H4>
-" + openclTxt + @"
-<H4> Cuda Info </H4>
-" + cudaTxt + @"
-<H4> OS: </H4>
-" + osDescription + @"
-<H4> OS Architecture: </H4>
-" + RuntimeInformation.OSArchitecture + @"
-<H4> Framework Description: </H4>
-" + RuntimeInformation.FrameworkDescription + @"
-<H4> Process Architecture: </H4>
-" + RuntimeInformation.ProcessArchitecture + @"
-<H4> Available Parallel Backends: </H4>
-" + parallelText + @"
-<H4> Dnn Backends: </H4>
-" + dnnText + @"
-<H4> Capture Backends (VideoCapture from device): </H4>
-" + (haveVideoio ? GetBackendInfo(CvInvoke.Backends) : "Videoio backend not supported.") + @"
-<H4> Stream Backends (VideoCapture from file/Stream): </H4>
-" + (haveVideoio ? GetBackendInfo(CvInvoke.StreamBackends) : "Videoio backend not supported.") + @"
-<H4> VideoWriter Backends: </H4>
-" + (haveVideoio ? GetBackendInfo(CvInvoke.WriterBackends) : "Videoio backend not supported.") + @"
-<H4> Tesseract OCR: </H4>
-" + tesseractText + @"
-<H4> Build Info </H4>
-<textarea rows=""30"">"
-                        + CvInvoke.BuildInformation + @"
-</textarea>
-</body>
-</html>"
-                      }
+                new Microsoft.Maui.Controls.ScrollView()
+                {
+                    Content =
+                        new WebView()
+                        {
+                            //WidthRequest = 1000,
+                            //HeightRequest = 1000,
+                            MinimumWidthRequest = 100,
+                            MinimumHeightRequest = 100,
+                            Source = new HtmlWebViewSource()
+                            {
+                                Html =
+                                    @"<html>
+            <head>
+            <style>body { background-color: #EEEEEE; }</style>
+            <style type=""text/css"">
+            textarea { width: 100%; margin: 0; padding: 0; border - width: 0; }
+            </style>
+            </head>
+            <body>
+            <H2> Emgu CV Examples </H2>
+            <a href=http://www.emgu.com>Visit our website</a> <br/><br/>
+            <a href=mailto:support@emgu.com>Email Support</a> <br/><br/>
+            <H4> OpenCL Info </H4>
+            " + openclTxt + @"
+            <H4> Cuda Info </H4>
+            " + cudaTxt + @"
+            <H4> OS: </H4>
+            " + osDescription + @"
+            <H4> OS Architecture: </H4>
+            " + RuntimeInformation.OSArchitecture + @"
+            <H4> Framework Description: </H4>
+            " + RuntimeInformation.FrameworkDescription + @"
+            <H4> Process Architecture: </H4>
+            " + RuntimeInformation.ProcessArchitecture + @"
+            <H4> Available Parallel Backends: </H4>
+            " + parallelText + @"
+            <H4> Dnn Backends: </H4>
+            " + dnnText + @"
+            <H4> Capture Backends (VideoCapture from device): </H4>
+            " + (haveVideoio ? GetBackendInfo(CvInvoke.Backends) : "Videoio backend not supported.") + @"
+            <H4> Stream Backends (VideoCapture from file/Stream): </H4>
+            " + (haveVideoio ? GetBackendInfo(CvInvoke.StreamBackends) : "Videoio backend not supported.") + @"
+            <H4> VideoWriter Backends: </H4>
+            " + (haveVideoio ? GetBackendInfo(CvInvoke.WriterBackends) : "Videoio backend not supported.") + @"
+            <H4> Tesseract OCR: </H4>
+            " + tesseractText + @"
+            <H4> Build Info </H4>
+            <textarea rows=""30"">"
+                                    + CvInvoke.BuildInformation + @"
+            </textarea>
+            </body>
+            </html>"
+                            }
 
-
-                  };
+                        }
+                };
             Content.BackgroundColor = Color.FromRgb(1.0, 0.0, 0.0);
         }
 
