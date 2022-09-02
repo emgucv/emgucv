@@ -21,12 +21,6 @@
       <Link>NSImageExtension.cs</Link>
     </Compile>
   </ItemGroup>
-  
-    <ItemGroup>
-    <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
-      <ReferenceSourceTarget>ProjectReference</ReferenceSourceTarget>
-    </ProjectReference>
-  </ItemGroup>
     <ItemGroup>
       <NativeReference Include="..\..\..\libs\iOS\libcvextern_catalyst_x86_64.a">
         <Kind>Static</Kind>
@@ -36,6 +30,9 @@
 	<LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
         <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
       </NativeReference>
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\..\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj" />
     </ItemGroup>
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\..\..\libs" Importance="high" />
