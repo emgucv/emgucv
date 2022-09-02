@@ -1182,12 +1182,12 @@ IF(HAVE_MACOS)
       <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
     </dependencies>")
 
-  SET(EMGUCV_MAUI_MACOS_NUGET_DEPENDENCY "
-    <dependencies>
-      <group targetFramework=\"net6.0-maccatalyst\">
-        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-      </group>
-    </dependencies>")
+  #SET(EMGUCV_MAUI_MACOS_NUGET_DEPENDENCY "
+  #  <dependencies>
+  #    <group targetFramework=\"net6.0-maccatalyst\">
+  #      <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+  #    </group>
+  #  </dependencies>")
 
   SET(EMGUCV_XAMARIN_MACOS_NUGET_FILE_LIST "${EMGUCV_XAMARIN_MACOS_NUGET_FILE_LIST}   
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Xamarin.Mac.dll\" target=\"lib\\Xamarin.Mac\" />
@@ -1196,13 +1196,16 @@ IF(HAVE_MACOS)
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 	
-  SET(EMGUCV_MAUI_MACOS_NUGET_FILE_LIST "${EMGUCV_MAUI_MACOS_NUGET_FILE_LIST}   
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.Mac.dll\" target=\"lib\\net6.0-maccatalyst\" />
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.Mac.xml\" target=\"lib\\net6.0-maccatalyst\" />
-    <file src=\"..\\_._\" target=\"lib\\netstandard2.0\" />
-    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+  #SET(EMGUCV_MAUI_MACOS_NUGET_FILE_LIST "${EMGUCV_MAUI_MACOS_NUGET_FILE_LIST}   
+  #  <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.Mac.dll\" target=\"lib\\net6.0-maccatalyst\" />
+  #  <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.Mac.xml\" target=\"lib\\net6.0-maccatalyst\" />
+  #  <file src=\"..\\_._\" target=\"lib\\netstandard2.0\" />
+  #  <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+  #  <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
+
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/Mac/Directory.Build.props)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/Mac/docs/README.md)
 
 SET(EMGUCV_UWP_NUGET_FILE_LIST "")
 IF(HAVE_WINSTORE_10_X86)
@@ -1671,19 +1674,19 @@ IF(HAVE_ANDROID_ALL_ARCH)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.xamarin.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.xamarin.android/README.md)
   
   SET(EMGUCV_MAUI_ANDROID_NUGET_TITLE "Emgu CV for MAUI Android Native Runtime")	
-  SET(EMGUCV_MAUI_ANDROID_NUGET_FILE_LIST " 
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.Android.dll\" target=\"lib\\net6.0-android\" />
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.Android.xml\" target=\"lib\\net6.0-android\" />")
-    SET(EMGUCV_MAUI_ANDROID_NUGET_FILE_LIST "${EMGUCV_MAUI_ANDROID_NUGET_FILE_LIST}
-    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-    <file src=\"README.md\" target=\"docs\\\" />")
-    SET(EMGUCV_MAUI_ANDROID_NUGET_DEPENDENCY "
-    <dependencies>
-      <group targetFramework=\"net6.0-android\">
-        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-      </group>
-    </dependencies>")
+  #SET(EMGUCV_MAUI_ANDROID_NUGET_FILE_LIST " 
+    #<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.Android.dll\" target=\"lib\\net6.0-android\" />
+    #<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.Android.xml\" target=\"lib\\net6.0-android\" />")
+    #SET(EMGUCV_MAUI_ANDROID_NUGET_FILE_LIST "${EMGUCV_MAUI_ANDROID_NUGET_FILE_LIST}
+    #<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+	#<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+    #<file src=\"README.md\" target=\"docs\\\" />")
+    #SET(EMGUCV_MAUI_ANDROID_NUGET_DEPENDENCY "
+    #<dependencies>
+    #  <group targetFramework=\"net6.0-android\">
+    #    <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+    #  </group>
+    #</dependencies>")
   #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui.android/Package.nuspec)
   #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui.android/README.md)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/Android/Directory.Build.props)
@@ -1728,7 +1731,7 @@ ENDIF()
 
 IF(HAVE_MACOS)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.xamarin.macos.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.xamarin.macos/Package.nuspec)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui.macos/Package.nuspec)
+  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui.macos/Package.nuspec)
 ENDIF()
 
 IF(HAVE_WINSTORE_10)
