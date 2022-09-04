@@ -43,3 +43,4 @@ add_subdirectory("Emgu.CV.runtime.ubuntu")
 
 ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.x86")
 ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.x64")
+ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.arm64")
