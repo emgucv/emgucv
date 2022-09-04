@@ -351,13 +351,13 @@ ELSEIF(WIN32)
     IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore" AND (CMAKE_SYSTEM_VERSION MATCHES 10.0))
 	  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/runtimes/win10-arm64/native")
     ELSE()
-	  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/arm64")
+	  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/runtimes/win-arm64/native")
     ENDIF()
   ELSEIF("${EMGUCV_ARCH}" STREQUAL "arm")
     IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore" AND (CMAKE_SYSTEM_VERSION MATCHES 10.0))
 	  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/runtimes/win10-arm/native")
     ELSE()
-	  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/arm")
+	  SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/runtimes/win-arm/native")
     ENDIF()
   ELSE()
     IF("${CMAKE_SYSTEM_NAME}" STREQUAL "WindowsStore" AND (CMAKE_SYSTEM_VERSION MATCHES 10.0))
@@ -1070,6 +1070,7 @@ SET(EMGUCV_UI_NUGET_ID "Emgu.CV.UI")
 SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime${EMGUCV_RUNTIME_EXTRA_TAG}.windows")
 SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_ID "Emgu.runtime.windows.msvc.rt.x86")
 SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_ID "Emgu.runtime.windows.msvc.rt.x64")
+SET(EMGU_WINDOWS_MSVCRT_ARM64_NUGET_ID "Emgu.runtime.windows.msvc.rt.arm64")
 SET(EMGU_ZLIBWAPI_ID "Emgu.runtime.windows.zlibwapi.x64")
 SET(EMGU_ZLIBWAPI_VERSION "1.2.3")
 
@@ -1167,7 +1168,18 @@ IF(HAVE_WINDESKTOP_X64)
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 	<file src=\"zlib_license.txt\" target=\"\" />")
 ENDIF()
-IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
+IF(HAVE_WINDESKTOP_ARM64)
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\cu*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\npp*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\concrt*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\msvcp*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vcruntime*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vccorlib*.dll\" target=\"runtimes\\win-arm64\\native\" />")
+	SET(EMGU_WINDOWS_MSVCRT_ARM64_NUGET_TITLE "MSVC arm64 runtime for windows")
+	SET(EMGU_WINDOWS_MSVCRT_ARM64_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_ARM64_NUGET_FILE_LIST} 
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\concrt*.dll\" target=\"runtimes\\win-arm64\\native\" /> 
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\msvcp*.dll\" target=\"runtimes\\win-arm64\\native\" /> 
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vcruntime*.dll\" target=\"runtimes\\win-arm64\\native\" />     
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vccorlib*.dll\" target=\"runtimes\\win-arm64\\native\" />     
+	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+ENDIF()
+IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_ARM64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
@@ -1379,7 +1391,7 @@ ${EMGUCV_MODELS_NUGET_DEPENDENCY}
     </dependencies>")
 
 
-IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86)
+IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X86)
   #SET(EMGU_WINDOWS_MSVCRT_VERSION ${MSVC_TOOLSET_VERSION})
   IF(MSVC)
     SET(EMGU_WINDOWS_MSVCRT_VERSION ${CMAKE_CXX_COMPILER_VERSION})
@@ -1445,8 +1457,11 @@ ENDIF()
 IF(HAVE_WINDESKTOP_X64)
  SET(EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH} x64")
 ENDIF()
+IF(HAVE_WINDESKTOP_ARM64)
+ SET(EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH} arm64")
+ENDIF()
 STRING(STRIP "${EMGUCV_NUGET_TITLE_ARCH}" EMGUCV_NUGET_TITLE_ARCH)
-STRING(REPLACE "x86 x64" "" EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH}")
+STRING(REPLACE "x86 x64 arm64" "" EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH}")
 
 SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />")
 #SET(EMGUCV_WINDOWS_NETCORE_NUGET_DEPENDENCY "<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />")
@@ -1641,6 +1656,12 @@ IF(HAVE_WINDESKTOP_X64)
 	  ")		
 ENDIF()
 
+IF(HAVE_WINDESKTOP_ARM64)
+  SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
+	  <dependency id=\"${EMGU_WINDOWS_MSVCRT_ARM64_NUGET_ID}\" version=\"${EMGU_WINDOWS_MSVCRT_VERSION}\" />
+	  ")		
+ENDIF()
+
 SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "	<dependencies>
 		${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
     </dependencies>")
@@ -1741,15 +1762,17 @@ ENDIF()
 
 IF(HAVE_WINDESKTOP_X86)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}/Package.nuspec)
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}.targets)
 ENDIF()
 
 IF(HAVE_WINDESKTOP_X64)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}/Package.nuspec)
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}/${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}.targets)
 ENDIF()
 
-IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
+IF(HAVE_WINDESKTOP_ARM64)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_ARM64_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_ARM64_NUGET_ID}/Package.nuspec)  
+ENDIF()
+
+IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_ARM64)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/Package.nuspec)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/README.md)
   
@@ -2493,7 +2516,7 @@ ELSEIF (WIN32)
   ENDIF()
   
   #WIN32 and not NETFX_CORE solution files
-  IF (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
+  IF (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_ARM64)
     INSTALL(
       DIRECTORY
       ${CMAKE_CURRENT_SOURCE_DIR}/Solution
