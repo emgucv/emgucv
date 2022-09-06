@@ -4007,6 +4007,8 @@ ELSEIF (IOS)
       WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
       COMMENT "Linking multiple arch into a single file for iOS device")
   ENDIF()
+
+  IF(IPHONESIMULATOR OR IPHONEOS)
   INSTALL(FILES
     "${IPHONEOS_STATIC_LIB_FILE}"
     DESTINATION "libs/iOS/"
@@ -4015,6 +4017,7 @@ ELSEIF (IOS)
     "${IPHONESIMULATOR_STATIC_LIB_FILE}"
     DESTINATION "libs/iOS/"
     COMPONENT emgucv_binary)
+  ENDIF()
 ELSEIF (ANDROID)
 add_custom_command(TARGET ${the_target}
     POST_BUILD
