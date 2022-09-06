@@ -1292,12 +1292,28 @@ IF (HAVE_IOS)
   SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\xamarinios10\" />
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\xamarinios10\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\net6.0-maccatalyst15.4\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\net6.0-maccatalyst15.4\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\net6.0-ios15.4\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\net6.0-ios15.4\" />
 	")
   SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
       <group targetFramework=\"Xamarin.iOS1.0\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
+      </group>
+	  <group targetFramework=\"net6.0-maccatalyst15.4\">
+        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
+		<dependency id=\"System.Runtime.InteropServices.NFloat.Internal\" version=\"6.0.1\" exclude=\"Build,Analyzers\" />
+      </group>
+	  <group targetFramework=\"net6.0-ios15.4\">
+        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
+		<dependency id=\"System.Runtime.InteropServices.NFloat.Internal\" version=\"6.0.1\" exclude=\"Build,Analyzers\" />
       </group>")
 ENDIF()
 
@@ -1364,9 +1380,24 @@ SET(EMGUCV_MODELS_NUGET_DEPENDENCY "")
 IF (HAVE_IOS)
   SET(EMGUCV_MODELS_NUGET_FILE_LIST "${EMGUCV_MODELS_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\xamarinios10\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\xamarinios10\" />")
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\xamarinios10\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\net6.0-maccatalyst15.4\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\net6.0-maccatalyst15.4\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\net6.0-ios15.4\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\net6.0-ios15.4\" />
+	")
   SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY}
       <group targetFramework=\"Xamarin.iOS1.0\">
+        <dependency id=\"System.Drawing.Common\" version=\"6.0.0\" exclude=\"Build,Analyzers\" />
+		<dependency id=\"Newtonsoft.Json\" version=\"13.0.1\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+      </group>
+	  <group targetFramework=\"net6.0-maccatalyst15.4\">
+        <dependency id=\"System.Drawing.Common\" version=\"6.0.0\" exclude=\"Build,Analyzers\" />
+		<dependency id=\"Newtonsoft.Json\" version=\"13.0.1\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+      </group>
+	  <group targetFramework=\"net6.0-ios15.4\">
         <dependency id=\"System.Drawing.Common\" version=\"6.0.0\" exclude=\"Build,Analyzers\" />
 		<dependency id=\"Newtonsoft.Json\" version=\"13.0.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
