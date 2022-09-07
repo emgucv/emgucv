@@ -6,10 +6,10 @@ IF(HAVE_IOS)
 
   INSTALL(
       DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-      DESTINATION Emgu.CV.Platform/Maui
+      DESTINATION Emgu.CV.Platform/Maui/iOS
       COMPONENT emgucv_source
       FILES_MATCHING 
-      PATTERN "Emgu.CV.Platform.Maui.IOS.csproj"
+      PATTERN "Emgu.CV.Platform.Maui.iOS.csproj"
 	  PATTERN "*.cs"
       PATTERN ".svn" EXCLUDE
       PATTERN "obj" EXCLUDE
@@ -19,7 +19,7 @@ IF(HAVE_IOS)
 	  
 #  IF (DOTNET_FOUND)
   IF (APPLE)
-    PROJECT(Emgu.CV.Platform.Maui.IOS)
+    PROJECT(Emgu.CV.Platform.Maui.iOS)
     BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.csproj" "" ALL)
     #DOTNET_MSBUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../../Solution/iOS/Emgu.CV.iOS.Maui.sln" "${PROJECT_NAME}" "${EXTRA_BUILD_FLAGS}" ALL)
 
