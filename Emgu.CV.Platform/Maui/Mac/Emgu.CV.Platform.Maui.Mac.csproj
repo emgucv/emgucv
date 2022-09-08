@@ -17,6 +17,9 @@
     <Compile Include="..\..\..\Emgu.CV.NativeImage\CGImageExtension.cs">
       <Link>CGImageExtension.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\Emgu.CV.NativeImage\UIImageExtension.cs">
+      <Link>UIImageExtension.cs</Link>
+    </Compile>
     <Compile Include="..\..\..\Emgu.CV.NativeImage\NSImageExtension.cs">
       <Link>NSImageExtension.cs</Link>
     </Compile>

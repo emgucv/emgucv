@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using Android.Widget;
 #elif __MACCATALYST__
 using AppKit;
+using UIKit;
 using CoreGraphics;
 #elif __IOS__ 
 using UIKit;
@@ -30,7 +31,7 @@ namespace MauiDemoApp
     public class CvImageView : Image
     {
 #if __MACCATALYST__
-        //public AppKit.NSImageView ImageView { get; set; }
+        public UIImageView ImageView { get; set; }
 #elif __IOS__
         public UIImageView ImageView { get; set; }
 #elif __ANDROID__
@@ -58,8 +59,7 @@ namespace MauiDemoApp
 #if __ANDROID__
             this.ImageView = platformView as ImageView;
 #elif __MACCATALYST__
-            //this.ImageView = platformView as NSImageView;
-            System.Console.WriteLine(platformView.ToString());
+            this.ImageView = platformView as UIImageView;
 #elif __IOS__
             this.ImageView = platformView as UIImageView;
 #elif WINDOWS
@@ -74,28 +74,26 @@ namespace MauiDemoApp
             _inputArray = image;
 
 #if __MACCATALYST__
-/*
             if (this.ImageView != null)
-            { 
-                NSImage nsimage;
-                if (image == null)
-                    nsimage = null;
-                else
-                    nsimage = image.ToNSImage();
-                this.Dispatcher.Dispatch(
+            {
+                 UIImage uiimage;
+                 if (image == null)
+                    uiimage = null;
+                 else
+                {
+                    uiimage = image.ToUIImage ();
+                }
+                 this.Dispatcher.Dispatch(
                     () => {
-
-                        NSImage oldImage = ImageView.Image;
-                        ImageView.Image = nsimage;
-                        if (oldImage != null)
-                            oldImage.Dispose();
-                        if ((nsimage != null) && (ImageView.Frame.Size != nsimage.Size))
-                            ImageView.Frame = new CGRect(CGPoint.Empty, nsimage.Size);
-                        ImageView.Hidden = false;
-                        
-                    }); 
+                       UIImage oldImage = ImageView.Image;
+                       ImageView.Image = uiimage;
+                       if (oldImage != null)
+                          oldImage.Dispose ();
+                       if ((uiimage != null) && (ImageView.Frame.Size != uiimage.Size))
+                          ImageView.Frame = new CGRect (CGPoint.Empty, uiimage.Size);
+                    });
             }
-*/
+
 #elif __IOS__
             if (this.ImageView != null)
             {
