@@ -2049,7 +2049,8 @@ IF(HAVE_IOS)
   INSTALL(
     FILES
     "Solution/iOS/Emgu.CV.iOS.Example.sln"
-    "Solution/iOS/Emgu.CV.iOS.sln"
+    "Solution/iOS/Emgu.CV.iOS.Xamarin.sln"
+    "Solution/iOS/Emgu.CV.iOS.Maui.sln"
     DESTINATION "Solution/iOS"
     COMPONENT emgucv_example_source
     )

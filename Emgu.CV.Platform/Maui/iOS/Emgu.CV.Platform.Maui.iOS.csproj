@@ -5,6 +5,21 @@
     <ImplicitUsings>true</ImplicitUsings>
     <IsBindingProject>true</IsBindingProject>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <NoBindingEmbedding>false</NoBindingEmbedding>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OpenCVBinaryDir>$(MSBuildThisFileDirectory)..\..\..\libs</OpenCVBinaryDir>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\net6.0-ios\Emgu.CV.Platform.Maui.iOS.xml</DocumentationFile>
+    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
+    <PlatformTarget>anycpu</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\..\Emgu.CV.NativeImage\CGImageExtension.cs" Link="CGImageExtension.cs" />
@@ -24,6 +39,16 @@
   </ItemGroup>
   
     <ItemGroup>
+    <!--
+    <NativeReference Include="$(MSBuildThisFileDirectory)..\..\..\libs\iOS\libcvextern_fat.a">
+      <Kind>Static</Kind>
+      <SmartLink>True</SmartLink>
+      <ForceLoad>True</ForceLoad>
+      <IsCxx>True</IsCxx>
+      <LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
+      <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
+    </NativeReference>
+    -->
     <NativeReference Include="$(MSBuildThisFileDirectory)..\..\..\libs\iOS\libcvextern_iphoneos.a">
       <Kind>Static</Kind>
       <SmartLink>True</SmartLink>
@@ -41,4 +66,9 @@
       <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
     </NativeReference>
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Message Text="Copying $(OutputPath)$(AssemblyName).dll and $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)" Importance="high" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(OpenCVBinaryDir)" ContinueOnError="true" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="$(OpenCVBinaryDir)" ContinueOnError="true" />
+  </Target>
 </Project>
