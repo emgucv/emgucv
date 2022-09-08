@@ -59,13 +59,11 @@ cd platforms/ios/simulator_x86_64
 #skip the first two parameter    
 ../configure_xcode.sh $CV_CONTRIB_OPTION simulator x86_64 -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE ${@:3}
 ./xcodebuild_wrapper WARNING_CFLAGS=-Wno-implicit-function-declaration -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
-
 cd ../../..
 
-cd Emgu.CV.Platform/iOS
-#compile Emgu.CV.World.iOS.dll
+cd Emgu.CV.Platform/Xamarin/iOS
 msbuild /p:Configuration=Release
-cd ../../platforms/ios/simulator_x86_64
+cd ../../../platforms/ios/simulator_x86_64
 #build the package this time
 ./xcodebuild_wrapper WARNING_CFLAGS=-Wno-implicit-function-declaration -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target package build
 
