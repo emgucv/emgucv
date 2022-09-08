@@ -2908,7 +2908,7 @@ IF (NOT HAVE_opencv_surface_matching)
   SET(HAVE_opencv_surface_matching FALSE)
 ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
-    "surface_marching/pose3d_property" 
+    "surface_matching/pose3d_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/SurfaceMatching/Pose3D.g.cs"
     "cv::ppf_match_3d::Pose3D" 
     "Pose3D" 
@@ -2927,7 +2927,16 @@ ENDIF()
 	""
 	${HAVE_opencv_surface_matching})
 
-    CREATE_VECTOR_CS("Pose3D" "std::vector< cv::ppf_match_3d::Pose3D >" "Pose3D" "object_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/SurfaceMatching" Emgu.CV.PpfMatch3d "" "#include \"surface_matching_c.h\"" "" "defined(HAVE_OPENCV_SURFACE_MATCHING)")
+    CREATE_VECTOR_CS(
+        "Pose3D" 
+        "std::vector< cv::ppf_match_3d::Pose3D >" 
+        "Pose3D" "object_not_array" 
+        "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/SurfaceMatching" 
+        "Emgu.CV.PpfMatch3d"
+        "" 
+        "#include \"surface_matching_c.h\"" 
+        "" 
+        "defined(HAVE_OPENCV_SURFACE_MATCHING)")
 
 ############################### sureface matching code gen END ##############################
 
