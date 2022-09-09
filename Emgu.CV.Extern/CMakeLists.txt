@@ -4071,15 +4071,32 @@ ELSEIF (IOS)
   ENDIF()
 
   IF(IPHONESIMULATOR OR IPHONEOS)
-  INSTALL(FILES
-    "${IPHONEOS_STATIC_LIB_FILE}"
-    DESTINATION "libs/iOS/"
-    COMPONENT emgucv_binary)
-  INSTALL(FILES
-    "${IPHONESIMULATOR_STATIC_LIB_FILE}"
-    DESTINATION "libs/iOS/"
-    COMPONENT emgucv_binary)
+    INSTALL(FILES
+      "${IPHONEOS_STATIC_LIB_FILE}"
+      DESTINATION "libs/iOS/"
+      COMPONENT emgucv_binary)
+    INSTALL(FILES
+      "${IPHONESIMULATOR_STATIC_LIB_FILE}"
+      DESTINATION "libs/iOS/"
+      COMPONENT emgucv_binary)
+  ELSEIF(MAC_CATALYST)
+    INSTALL(FILES
+      "${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst_${IOS_ARCH}.a"
+      DESTINATION "libs/iOS/"
+      COMPONENT emgucv_binary)
+    IF(("${IOS_ARCH}" STREQUAL "x86_64") AND (EXISTS "${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst_arm64.a"))
+      INSTALL(FILES
+	"${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst_arm64.a"
+	DESTINATION "libs/iOS/"
+	COMPONENT emgucv_binary)
+    ELSEIF(("${IOS_ARCH}" STREQUAL "arm64") AND (EXISTS "${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst_x86_64.a"))
+      INSTALL(FILES
+	"${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst_x86_64.a"
+	DESTINATION "libs/iOS/"
+	COMPONENT emgucv_binary)
+    ENDIF()
   ENDIF()
+
 ELSEIF (ANDROID)
 add_custom_command(TARGET ${the_target}
     POST_BUILD

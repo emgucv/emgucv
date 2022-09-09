@@ -28,7 +28,7 @@ JOB_COUNT=1
 mkdir -p platforms/ios/catalyst_$1     
 cd platforms/ios/catalyst_$1
 ../configure_xcode.sh $CV_CONTRIB_OPTION catalyst $1 -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD="c++17" -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY="libc++"  ${@:3}
-cmake --build . --config Release --target install
+cmake --build . --config Release --target package
 cd ../../..
     
 
