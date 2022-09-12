@@ -1765,21 +1765,23 @@ IF(HAVE_IOS AND WIN32)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.xamarin.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.xamarin.ios/README.md)
   
   SET(EMGUCV_MAUI_IOS_NUGET_TITLE "Emgu CV for MAUI iOS Native Runtime")	
-  SET(EMGUCV_MAUI_IOS_NUGET_FILE_LIST " 
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.IOS.dll\" target=\"lib\\net6.0-ios\" />
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.IOS.XML\" target=\"lib\\net6.0-ios\" />")
-    SET(EMGUCV_XAMARIN_IOS_NUGET_FILE_LIST "${EMGUCV_XAMARIN_IOS_NUGET_FILE_LIST} 
-    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-	<file src=\"README.md\" target=\"docs\\\" />")
-    SET(EMGUCV_XAMARIN_IOS_NUGET_DEPENDENCY "
-    <dependencies>
-      <group targetFramework=\"net6.0-ios\">
-        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-      </group>
-    </dependencies>")
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui.ios/Package.nuspec)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui.ios/README.md)  
+  #SET(EMGUCV_MAUI_IOS_NUGET_FILE_LIST " 
+    #<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.IOS.dll\" target=\"lib\\net6.0-ios\" />
+    #<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.IOS.XML\" target=\"lib\\net6.0-ios\" />")
+    #SET(EMGUCV_XAMARIN_IOS_NUGET_FILE_LIST "${EMGUCV_XAMARIN_IOS_NUGET_FILE_LIST} 
+    #<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+    #<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+	#<file src=\"README.md\" target=\"docs\\\" />")
+    #SET(EMGUCV_XAMARIN_IOS_NUGET_DEPENDENCY "
+    #<dependencies>
+    #  <group targetFramework=\"net6.0-ios\">
+    #    <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+    #  </group>
+    #</dependencies>")
+  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui.ios/Package.nuspec)
+  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui.ios/README.md)  
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/iOS/Directory.Build.props)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/iOS/docs/README.md)  
 ENDIF()
 
 IF(HAVE_MACOS)
