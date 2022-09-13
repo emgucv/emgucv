@@ -8,7 +8,7 @@
     <NoBindingEmbedding>false</NoBindingEmbedding>
   </PropertyGroup>
   <PropertyGroup>
-    <OpenCVBinaryDir>$(MSBuildThisFileDirectory)..\..\..\libs</OpenCVBinaryDir>
+    <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\libs))</OpenCVBinaryDir>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <WarningLevel>4</WarningLevel>
@@ -25,9 +25,9 @@
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\Emgu.CV.NativeImage\CGImageExtension.cs" Link="CGImageExtension.cs" />
-    <Compile Include="..\..\..\Emgu.CV.NativeImage\UIImageExtension.cs" Link="UIImageExtension.cs" />
-    <Compile Include="..\..\Xamarin\iOS\CvInvokeIOS.cs" Link="CvInvokeIOS.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\CGImageExtension.cs" Link="CGImageExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\UIImageExtension.cs" Link="UIImageExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\Xamarin\iOS\CvInvokeIOS.cs" Link="CvInvokeIOS.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,13 +36,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj">
+    <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj">
       <ReferenceSourceTarget>ProjectReference</ReferenceSourceTarget>
     </ProjectReference>
   </ItemGroup>
   
     <ItemGroup>
-    <NativeReference Include="$(MSBuildThisFileDirectory)..\..\..\libs\iOS\libcvextern_iphoneos.a">
+    <NativeReference Include="$(OpenCVBinaryDir)\iOS\libcvextern_iphoneos.a">
       <Kind>Static</Kind>
       <SmartLink>True</SmartLink>
       <ForceLoad>True</ForceLoad>
@@ -50,7 +50,7 @@
       <LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
       <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
     </NativeReference>
-    <NativeReference Include="$(MSBuildThisFileDirectory)..\..\..\libs\iOS\libcvextern_simulator.a">
+    <NativeReference Include="$(OpenCVBinaryDir)\iOS\libcvextern_simulator.a">
       <Kind>Static</Kind>
       <SmartLink>True</SmartLink>
       <ForceLoad>True</ForceLoad>
