@@ -153,8 +153,8 @@
       <Project>{A593599A-8B00-45F6-B161-5AB794DED450}</Project>
       <Name>Emgu.CV.Models.NetStandard</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Platform\Mac\Emgu.CV.Platform.Mac.csproj">
-      <Name>Emgu.CV.Platform.Mac</Name>
+    <ProjectReference Include="..\..\Emgu.CV.Platform\Xamarin\Mac\Emgu.CV.Platform.Mac.csproj">
+      <Name>Emgu.CV.Platform.Xamarin.Mac</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Mac\Xamarin.Mac.CSharp.targets" />
