@@ -1726,22 +1726,38 @@ IF(HAVE_ANDROID_ALL_ARCH)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.xamarin.android.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.xamarin.android/Package.nuspec)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.xamarin.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.xamarin.android/README.md)
   
-  SET(EMGUCV_MAUI_ANDROID_NUGET_TITLE "Emgu CV for MAUI Android Native Runtime")	
-  #SET(EMGUCV_MAUI_ANDROID_NUGET_FILE_LIST " 
-    #<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.Android.dll\" target=\"lib\\net6.0-android\" />
-    #<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.Android.xml\" target=\"lib\\net6.0-android\" />")
-    #SET(EMGUCV_MAUI_ANDROID_NUGET_FILE_LIST "${EMGUCV_MAUI_ANDROID_NUGET_FILE_LIST}
-    #<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-	#<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-    #<file src=\"README.md\" target=\"docs\\\" />")
-    #SET(EMGUCV_MAUI_ANDROID_NUGET_DEPENDENCY "
-    #<dependencies>
-    #  <group targetFramework=\"net6.0-android\">
-    #    <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-    #  </group>
-    #</dependencies>")
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui.android/Package.nuspec)
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui.android/README.md)
+  SET(EMGUCV_MAUI_ANDROID_NUGET_TITLE "Emgu CV for MAUI Android Native Runtime")
+  
+  # Sign and copy the binary
+  SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">")
+  IF(EMGU_SIGN_FOUND AND WIN32)
+    file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
+	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
+    SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY}
+    <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
+	<MakeDir Directories=\"$(OutputPath)\\signed\"/>
+    <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
+	")
+  ENDIF()
+  SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY}
+    <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\" Importance=\"high\" />
+    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
+    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
+  </Target>")    
+  
+  # Sign the nuget package
+  SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET "")
+  IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+    file(TO_NATIVE_PATH ${EMGU_NUGET_SIGN_EXECUTABLE} EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH)
+	file(TO_NATIVE_PATH ${NUGET_EXECUTABLE} NUGET_EXECUTABLE_NATIVE_PATH)
+  	SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET "${EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET}
+  <Target Name=\"PostProcessNuget\" AfterTargets=\"Pack\">
+    <Message Text=\"Signing $(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" Importance=\"high\" />
+    <MakeDir Directories=\"$(PackageOutputPath)\\signed\"/>
+    <Exec Command='${EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH} \"$(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" \"$(PackageOutputPath)\\signed\" \"${NUGET_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(PackageOutputPath)\" />
+  </Target>
+	")
+  ENDIF()
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/Android/Directory.Build.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/Android/docs/README.md)
 ENDIF()

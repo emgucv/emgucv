@@ -20,7 +20,7 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
 	<RepositoryUrl>https://github.com/emgucv/emgucv</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 	<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageOutputPath>..\..\..\platforms\nuget</PackageOutputPath>
+    <PackageOutputPath>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\platforms\nuget))</PackageOutputPath>
 	<PackageTags>opencv;emgu;emgucv;ai;image;android;maui</PackageTags>
     <PackageProjectUrl>${NUGET_EMGU_URL}</PackageProjectUrl>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
@@ -43,5 +43,6 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
         <PackagePath>docs\</PackagePath>
       </None>
     </ItemGroup>
-
+  ${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY}
+  ${EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET}
 </Project>
