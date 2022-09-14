@@ -287,9 +287,6 @@ ELSE()
   ENDIF()
 ENDIF()
 
-
-
-
 IF(WIN32 AND CV_ICC)
   #  SET(CV_ICC_ADDITIONAL_FLAGS_RELEASE "/O3 /QaxCORE-AVX2,AVX,SSE4.1,SSE3 /Qparallel /Qopt-report:1 /Qopt-report-phase:vec /Qopt-report-phase:par /Qopt-report-file:stderr /Qipo /Qunroll-aggressive")
   SET(CV_ICC_ADDITIONAL_FLAGS_RELEASE "/O3 /QaxCORE-AVX2,AVX,SSE4.1,SSE3 /Qparallel /Qopt-report:1 /Qopt-report-phase:vec /Qopt-report-phase:par /Qipo /Qrestrict /Ot")
@@ -445,7 +442,24 @@ ENDMACRO()
 
 #MESSAGE(STATUS "CMAKE_SYSTEM_NAME: ${CMAKE_SYSTEM_NAME}")
 SET(IS_IOS_BUILD OFF)
-IF(IOS AND (NOT MAC_CATALYST))
+SET(IS_MAC_CATALYST_BUILD OFF)
+SET(IS_MAC_CATALYST_ARM64_BUILD OFF)
+SET(IS_MAC_CATALYST_X86_64_BUILD OFF)  
+
+IF(MAC_CATALYST)
+  SET(IS_MAC_CATALYST_BUILD ON)
+  MESSAGE(STATUS "IS_MAC_CATALYST_BUILD: ${IS_MAC_CATALYST_BUILD}")
+
+  IF (IS_MAC_CATALYST_BUILD AND ("${EMGUCV_ARCH}" STREQUAL "arm64"))
+    SET(IS_MAC_CATALYST_ARM64_BUILD ON)
+	MESSAGE(STATUS "IS_MAC_CATALYST_ARM64_BUILD: ${IS_MAC_CATALYST_ARM64_BUILD}")
+  ENDIF()
+
+  IF (IS_MAC_CATALYST_BUILD AND ("${EMGUCV_ARCH}" STREQUAL "x86_64"))
+    SET(IS_MAC_CATALYST_X86_64_BUILD ON)
+	MESSAGE(STATUS "IS_MAC_CATALYST_X86_64_BUILD: ${IS_MAC_CATALYST_X86_64_BUILD}")
+  ENDIF()
+ELSEIF(IOS)
   SET(IS_IOS_BUILD ON)
   MESSAGE(STATUS "IS_IOS_BUILD: ${IS_IOS_BUILD}")
   
@@ -489,6 +503,16 @@ CHECK_BINARY_EXIST("libs/iOS" "libcvextern_iphoneos.a" HAVE_IOS_DEVICE ${IS_IOS_
 CHECK_BINARY_EXIST("libs/iOS" "libcvextern_simulator.a" HAVE_IOS_SIMULATOR ${IS_IOS_BUILD})
 IF (HAVE_IOS_DEVICE OR HAVE_IOS_SIMULATOR)
   SET(HAVE_IOS ON)
+ELSE()
+  SET(HAVE_IOS OFF)
+ENDIF()
+
+CHECK_BINARY_EXIST("libs/iOS" "libcvextern_catalyst_arm64.a" HAVE_MAC_CATALYST_ARM64 ${IS_MAC_CATALYST_ARM64_BUILD})
+CHECK_BINARY_EXIST("libs/iOS" "libcvextern_catalyst_x86_64.a" HAVE_MAC_CATALYST_X86_64 ${IS_MAC_CATALYST_X86_64_BUILD})
+IF (HAVE_MAC_CATALYST_ARM64 OR HAVE_MAC_CATALYST_X86_64)
+  SET(HAVE_MAC_CATALYST ON)
+ELSE()
+  SET(HAVE_MAC_CATALYST OFF)
 ENDIF()
 
 #IF(NOT HAVE_IOS)
@@ -2078,6 +2102,7 @@ IF(HAVE_MACOS)
   INSTALL(
     FILES
     "Solution/Mac/Emgu.CV.Mac.Example.sln"
+	"Solution/Mac/Emgu.CV.Mac.Xamarin.sln"
     DESTINATION "Solution/Mac"
     COMPONENT emgucv_example_source
     )
@@ -2086,6 +2111,31 @@ IF(HAVE_MACOS)
       FILES
       "libs/runtimes/osx/native/libcvextern.dylib"
       DESTINATION "libs/runtimes/osx/native"
+      COMPONENT emgucv_binary
+      )
+  ENDIF()
+ENDIF()
+
+IF(HAVE_MAC_CATALYST)
+  INSTALL(
+    FILES
+    "Solution/Mac/Emgu.CV.Mac.Maui.sln"
+    DESTINATION "Solution/Mac"
+    COMPONENT emgucv_example_source
+    )
+  IF (HAVE_MAC_CATALYST_ARM64)
+    INSTALL(
+      FILES
+      "libs/iOS/libcvextern_catalyst_arm64.a"
+      DESTINATION "libs/iOS"
+      COMPONENT emgucv_binary
+      )
+  ENDIF()
+  IF (HAVE_MAC_CATALYST_X86_64)
+    INSTALL(
+      FILES
+      "libs/iOS/libcvextern_catalyst_x86_64.a"
+      DESTINATION "libs/iOS"
       COMPONENT emgucv_binary
       )
   ENDIF()
