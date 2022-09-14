@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
     <PropertyGroup>
-    <OpenCVBinaryDir>$(MSBuildThisFileDirectory)..\..\..\libs</OpenCVBinaryDir>
+    <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\libs))</OpenCVBinaryDir>
   </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -107,9 +107,5 @@
     <ItemGroup>
       <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.Netstandard.csproj" />
     </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\..\..\libs" Importance="high" />
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\..\..\libs" ContinueOnError="true" />
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="..\..\..\libs" ContinueOnError="true" />
-  </Target>
+
 </Project>
