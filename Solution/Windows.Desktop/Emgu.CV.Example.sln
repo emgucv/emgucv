@@ -71,6 +71,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Wpf", "..\..\Emgu.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MauiDemoApp", "..\..\Emgu.CV.Example\MAUI\MauiDemoApp\MauiDemoApp.csproj", "{F337AC02-85A8-4A71-B01D-264C45A897E5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.NetStandard.IOS", "..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj", "{073CC224-00F5-4C4C-B673-7B75C5E0013D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models.IOS", "..\..\Emgu.CV.Models\Emgu.CV.Models.IOS\Emgu.CV.Models.IOS.csproj", "{7C8FBA9F-2FAD-4B23-8C1C-D9D618AD630F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -351,6 +355,30 @@ Global
 		{F337AC02-85A8-4A71-B01D-264C45A897E5}.Release|x86.ActiveCfg = Release|Any CPU
 		{F337AC02-85A8-4A71-B01D-264C45A897E5}.Release|x86.Build.0 = Release|Any CPU
 		{F337AC02-85A8-4A71-B01D-264C45A897E5}.Release|x86.Deploy.0 = Release|Any CPU
+		{073CC224-00F5-4C4C-B673-7B75C5E0013D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{073CC224-00F5-4C4C-B673-7B75C5E0013D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{073CC224-00F5-4C4C-B673-7B75C5E0013D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{073CC224-00F5-4C4C-B673-7B75C5E0013D}.Debug|x64.Build.0 = Debug|Any CPU
+		{073CC224-00F5-4C4C-B673-7B75C5E0013D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{073CC224-00F5-4C4C-B673-7B75C5E0013D}.Debug|x86.Build.0 = Debug|Any CPU
+		{073CC224-00F5-4C4C-B673-7B75C5E0013D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{073CC224-00F5-4C4C-B673-7B75C5E0013D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{073CC224-00F5-4C4C-B673-7B75C5E0013D}.Release|x64.ActiveCfg = Release|Any CPU
+		{073CC224-00F5-4C4C-B673-7B75C5E0013D}.Release|x64.Build.0 = Release|Any CPU
+		{073CC224-00F5-4C4C-B673-7B75C5E0013D}.Release|x86.ActiveCfg = Release|Any CPU
+		{073CC224-00F5-4C4C-B673-7B75C5E0013D}.Release|x86.Build.0 = Release|Any CPU
+		{7C8FBA9F-2FAD-4B23-8C1C-D9D618AD630F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C8FBA9F-2FAD-4B23-8C1C-D9D618AD630F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C8FBA9F-2FAD-4B23-8C1C-D9D618AD630F}.Debug|x64.ActiveCfg = Debug|x64
+		{7C8FBA9F-2FAD-4B23-8C1C-D9D618AD630F}.Debug|x64.Build.0 = Debug|x64
+		{7C8FBA9F-2FAD-4B23-8C1C-D9D618AD630F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7C8FBA9F-2FAD-4B23-8C1C-D9D618AD630F}.Debug|x86.Build.0 = Debug|Any CPU
+		{7C8FBA9F-2FAD-4B23-8C1C-D9D618AD630F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C8FBA9F-2FAD-4B23-8C1C-D9D618AD630F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C8FBA9F-2FAD-4B23-8C1C-D9D618AD630F}.Release|x64.ActiveCfg = Release|x64
+		{7C8FBA9F-2FAD-4B23-8C1C-D9D618AD630F}.Release|x64.Build.0 = Release|x64
+		{7C8FBA9F-2FAD-4B23-8C1C-D9D618AD630F}.Release|x86.ActiveCfg = Release|Any CPU
+		{7C8FBA9F-2FAD-4B23-8C1C-D9D618AD630F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -359,6 +387,11 @@ Global
 		SolutionGuid = {6B57A48C-F629-4E0A-B65C-15DE911FCB7D}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{073cc224-00f5-4c4c-b673-7b75c5e0013d}*SharedItemsImports = 5
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{073cc224-00f5-4c4c-b673-7b75c5e0013d}*SharedItemsImports = 5
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{073cc224-00f5-4c4c-b673-7b75c5e0013d}*SharedItemsImports = 5
+		..\..\Emgu.CV\Emgu.CV.projitems*{073cc224-00f5-4c4c-b673-7b75c5e0013d}*SharedItemsImports = 5
+		..\..\Emgu.Util\Emgu.Util.projitems*{073cc224-00f5-4c4c-b673-7b75c5e0013d}*SharedItemsImports = 5
 		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{0bfad282-50c1-449c-b01c-62fd23bbdbe5}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
@@ -376,6 +409,7 @@ Global
 		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{74db1213-249e-44dc-b193-bc5cec981d3c}*SharedItemsImports = 13
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
+		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{7c8fba9f-2fad-4b23-8c1c-d9d618ad630f}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{86a21342-2da9-4841-b1bd-b323ac5b81fd}*SharedItemsImports = 13
 		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{8792cf43-c2c4-4f39-8a12-99b2b8c86c91}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{8792cf43-c2c4-4f39-8a12-99b2b8c86c91}*SharedItemsImports = 5

@@ -76,8 +76,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' And $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'" Include="..\..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj" />
-	  <ProjectReference Condition="!($([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' And $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst')" Include="..\..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
+	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' Or $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'" Include="..\..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj" />
+	  <ProjectReference Condition="!($([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' Or $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst')" Include="..\..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
 	  
 	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' Or $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'" Include="..\..\..\Emgu.CV.Models\Emgu.CV.Models.IOS\Emgu.CV.Models.IOS.csproj" />
 	  <ProjectReference Condition="!($([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' Or $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst')" Include="..\..\..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj" />
