@@ -26,17 +26,17 @@ fi
 JOB_COUNT=1
 
 if [ \( "$1" != "simulator_arm64" \) -a \( "$1" != "simulator_x86_64" \) ]; then    
-    mkdir -p platforms/ios/iphoneos_armv7s     
-    cd platforms/ios/iphoneos_armv7s
-    ../configure_xcode.sh $CV_CONTRIB_OPTION device armv7s ${@:3}
-    ./xcodebuild_wrapper -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
-    cd ../../..
+#    mkdir -p platforms/ios/iphoneos_armv7s     
+#    cd platforms/ios/iphoneos_armv7s
+#    ../configure_xcode.sh $CV_CONTRIB_OPTION device armv7s ${@:3}
+#    ./xcodebuild_wrapper -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
+#    cd ../../..
     
-    mkdir -p platforms/ios/iphoneos_armv7
-    cd platforms/ios/iphoneos_armv7
-    ../configure_xcode.sh $CV_CONTRIB_OPTION device armv7 ${@:3}
-    ./xcodebuild_wrapper -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
-    cd ../../..
+#    mkdir -p platforms/ios/iphoneos_armv7
+#    cd platforms/ios/iphoneos_armv7
+#    ../configure_xcode.sh $CV_CONTRIB_OPTION device armv7 ${@:3}
+#    ./xcodebuild_wrapper -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
+#    cd ../../..
 
     mkdir -p platforms/ios/iphoneos_arm64
     cd platforms/ios/iphoneos_arm64
