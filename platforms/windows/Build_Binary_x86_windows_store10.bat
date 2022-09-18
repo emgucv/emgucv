@@ -1,1 +1,1 @@
-call Build_Binary_x86.bat 32 nogpu WindowsStore10
+call Build_Binary_x86.bat x86 nogpu WindowsStore10

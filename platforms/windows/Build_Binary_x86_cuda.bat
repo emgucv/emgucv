@@ -1,1 +1,1 @@
-call Build_Binary_x86.bat 32 gpu no-intel
+call Build_Binary_x86.bat x86 gpu no-intel

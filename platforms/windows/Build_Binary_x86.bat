@@ -1,7 +1,7 @@
 REM @echo off
 
 REM POSSIBLE OPTIONS: 
-REM %1%: "64", "32", "ARM", "ARM64"
+REM %1%: "x86_64", "x86", "ARM", "ARM64"
 REM %2%: "gpu", build with CUDA
 REM %2%: "core", build only the core components
 REM %2%: "mini", build only the minimum components (fewer components than "core" option above)
@@ -19,36 +19,36 @@ REM %7%: "build", if set to "build", the script will also build the target
 REM %8%: "nuget", this flag indicates if we should build the nuget package
 REM %9%: Use this field for the CUDA_ARCH_BIN_OPTION if you want to specify it manually. e.g. "6.1"
 
-SET BUILD_FOLDER=build
+SET BUILD_FOLDER=build_%1%
 SET BUILD_TOOLS_FOLDER=C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools
 
-IF "%1%"=="32" GOTO ENV_x86
-IF "%1%"=="64" GOTO ENV_x64
+IF "%1%"=="x86" GOTO ENV_x86
+IF "%1%"=="x86_64" GOTO ENV_x64
 IF "%1%"=="ARM" GOTO ENV_ARM
 IF "%1%"=="ARM64" GOTO ENV_ARM64
 
 GOTO ENV_END
 
 :ENV_x86
-SET BUILD_FOLDER=%BUILD_FOLDER%_x86
-ECHO "BUILDING 32bit solution in %BUILD_FOLDER%"
+REM SET BUILD_FOLDER=%BUILD_FOLDER%_x86
+ECHO "BUILDING x86 solution in %BUILD_FOLDER%"
 IF EXIST "%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvars32.bat" SET ENV_SETUP_SCRIPT=%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvars32.bat
 GOTO ENV_END
 
 :ENV_x64
-SET BUILD_FOLDER=%BUILD_FOLDER%_x64
-ECHO "BUILDING 64bit solution in %BUILD_FOLDER%" 
+REM SET BUILD_FOLDER=%BUILD_FOLDER%_x64
+ECHO "BUILDING x86_64 solution in %BUILD_FOLDER%" 
 IF EXIST "%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvars64.bat" SET ENV_SETUP_SCRIPT=%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvars64.bat
 GOTO ENV_END
 
 :ENV_ARM
-SET BUILD_FOLDER=%BUILD_FOLDER%_ARM
+REM SET BUILD_FOLDER=%BUILD_FOLDER%_ARM
 ECHO "BUILDING ARM solution in %BUILD_FOLDER%"
 IF EXIST "%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvarsamd64_arm.bat" SET ENV_SETUP_SCRIPT=%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvarsamd64_arm.bat
 GOTO ENV_END
 
 :ENV_ARM64
-SET BUILD_FOLDER=%BUILD_FOLDER%_ARM64
+REM SET BUILD_FOLDER=%BUILD_FOLDER%_ARM64
 ECHO "BUILDING ARM64 solution in %BUILD_FOLDER%"
 IF EXIST "%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvarsamd64_arm64.bat" SET ENV_SETUP_SCRIPT=%BUILD_TOOLS_FOLDER%\vc\Auxiliary\Build\vcvarsamd64_arm64.bat
 
@@ -72,13 +72,13 @@ IF "%3%"=="WindowsStore81" SET NETFX_CORE="TRUE"
 IF "%3%"=="WindowsStore10" SET NETFX_CORE="TRUE"
 
 SET OS_MODE=
-IF "%1%"=="64" SET OS_MODE= Win64
+IF "%1%"=="x86_64" SET OS_MODE= Win64
 IF "%1%"=="ARM" SET OS_MODE= ARM
 IF "%1%"=="ARM64" SET OS_MODE= ARM64
 
 SET BUILD_ARCH=
-IF "%1%"=="64" SET BUILD_ARCH=-A x64
-IF "%1%"=="32" SET BUILD_ARCH=-A Win32
+IF "%1%"=="x86_64" SET BUILD_ARCH=-A x64
+IF "%1%"=="x86" SET BUILD_ARCH=-A Win32
 IF "%1%"=="ARM" SET BUILD_ARCH=-A ARM
 IF "%1%"=="ARM64" SET BUILD_ARCH=-A ARM64
 
