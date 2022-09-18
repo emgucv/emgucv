@@ -1,1 +1,1 @@
-CALL "Build_Binary_x86.bat" 32 nogpu intel
+CALL "Build_Binary_x86.bat" x86 nogpu intel
