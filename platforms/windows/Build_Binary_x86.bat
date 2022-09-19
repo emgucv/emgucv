@@ -1,7 +1,7 @@
 REM @echo off
 
 REM POSSIBLE OPTIONS: 
-REM %1%: "x86_64", "x86", "ARM", "ARM64"
+REM %1%: "x86_64", "x86", "arm", "arm64"
 REM %2%: "gpu", build with CUDA
 REM %2%: "core", build only the core components
 REM %2%: "mini", build only the minimum components (fewer components than "core" option above)
@@ -24,8 +24,8 @@ SET BUILD_TOOLS_FOLDER=C:\Program Files (x86)\Microsoft Visual Studio\2019\Build
 
 IF "%1%"=="x86" GOTO ENV_x86
 IF "%1%"=="x86_64" GOTO ENV_x64
-IF "%1%"=="ARM" GOTO ENV_ARM
-IF "%1%"=="ARM64" GOTO ENV_ARM64
+IF "%1%"=="arm" GOTO ENV_ARM
+IF "%1%"=="arm64" GOTO ENV_ARM64
 
 GOTO ENV_END
 
@@ -73,14 +73,14 @@ IF "%3%"=="WindowsStore10" SET NETFX_CORE="TRUE"
 
 SET OS_MODE=
 IF "%1%"=="x86_64" SET OS_MODE= Win64
-IF "%1%"=="ARM" SET OS_MODE= ARM
-IF "%1%"=="ARM64" SET OS_MODE= ARM64
+IF "%1%"=="arm" SET OS_MODE= ARM
+IF "%1%"=="arm64" SET OS_MODE= ARM64
 
 SET BUILD_ARCH=
 IF "%1%"=="x86_64" SET BUILD_ARCH=-A x64
 IF "%1%"=="x86" SET BUILD_ARCH=-A Win32
-IF "%1%"=="ARM" SET BUILD_ARCH=-A ARM
-IF "%1%"=="ARM64" SET BUILD_ARCH=-A ARM64
+IF "%1%"=="arm" SET BUILD_ARCH=-A ARM
+IF "%1%"=="arm64" SET BUILD_ARCH=-A ARM64
 
 SET PROGRAMFILES_DIR_X86=%programfiles(x86)%
 if NOT EXIST "%PROGRAMFILES_DIR_X86%" SET PROGRAMFILES_DIR_X86=%programfiles%
@@ -227,8 +227,8 @@ IF "%2%"=="core" GOTO CONFIG_CORE
 cd ..
 
 REM Don't build freetype or HDF for ARM. 
-IF "%1%"=="ARM" GOTO END_BUILD_HDF
-IF "%1%"=="ARM64" GOTO END_BUILD_HDF
+IF "%1%"=="arm" GOTO END_BUILD_HDF
+IF "%1%"=="arm64" GOTO END_BUILD_HDF
 
 :BUILD_FREETYPE
 cd 3rdParty
@@ -284,8 +284,8 @@ SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% -DEMGU_CV_WITH_TESSE
 
 REM echo %NETFX_CORE%
 IF %NETFX_CORE%=="TRUE" GOTO END_BUILD_VTK
-IF "%1%"=="ARM" GOTO END_BUILD_VTK
-IF "%1%"=="ARM64" GOTO END_BUILD_VTK
+IF "%1%"=="arm" GOTO END_BUILD_VTK
+IF "%1%"=="arm64" GOTO END_BUILD_VTK
 
 :BUILD_VTK
 cd ..
@@ -344,8 +344,8 @@ SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% ^
 
 :END_PERFORMANCE_TEST
 
-IF "%1%"=="ARM" GOTO WITH_ARM
-IF "%1%"=="ARM64" GOTO WITH_ARM
+IF "%1%"=="arm" GOTO WITH_ARM
+IF "%1%"=="arm64" GOTO WITH_ARM
 GOTO END_WITH_ARM
 
 :WITHOUT_ARM
