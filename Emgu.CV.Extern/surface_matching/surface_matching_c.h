@@ -21,6 +21,7 @@ namespace cv {
 	namespace ppf_match_3d {
 		class ICP {};
 		class Pose3D {};
+		class PPF3DDetector {};
 	}
 }
 
