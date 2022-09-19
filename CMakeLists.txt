@@ -1079,7 +1079,7 @@ CHECK_LICENSE_TYPE()
 # ----------------------------------------------------------------------------
 
 IF( "${OPENCV_EXTRA_MODULES_PATH}" STREQUAL "" )
-  SET(EMGUCV_RUNTIME_EXTRA_TAG ".micro")
+  SET(EMGUCV_RUNTIME_EXTRA_TAG ".mini")
 ELSE()
   SET(EMGUCV_RUNTIME_EXTRA_TAG "")
 ENDIF()
