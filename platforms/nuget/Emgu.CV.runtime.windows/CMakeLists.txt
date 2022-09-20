@@ -3,7 +3,7 @@
 # --------------------------------------------------------
 
 IF ( (TARGET Emgu.CV.Platform.NetStandard)
-  AND (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64) 
+  AND (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_ARM64) 
   AND (NOT ("${EMGU_WINDOWS_MSVCRT_VERSION}" STREQUAL "")) )
   
   PROJECT(Emgu.CV.runtime.windows.nuget)
@@ -50,6 +50,10 @@ IF ( (TARGET Emgu.CV.Platform.NetStandard)
 
   IF (TARGET Emgu.runtime.windows.msvc.rt.x86.nuget)
   	ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.runtime.windows.msvc.rt.x86.nuget)
+  ENDIF()
+
+  IF (TARGET Emgu.runtime.windows.msvc.rt.arm64.nuget)
+  	ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.runtime.windows.msvc.rt.arm64.nuget)
   ENDIF()
 
   IF (TARGET Emgu.CV.Platform.NetFramework)
