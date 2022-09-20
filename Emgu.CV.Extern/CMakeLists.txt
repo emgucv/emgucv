@@ -4019,6 +4019,12 @@ IF (WIN32)
   IF (EMGU_SIGN_FOUND)
     EMGU_SIGN_BINARY(${the_target} ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/cvextern.dll)
   ENDIF()
+  add_custom_command(TARGET ${the_target}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/version_string.inc
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+    COMMENT "Copying build information from ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/version_string.inc")
+  
 ELSEIF (IOS)
   SET(IOS_RELEASE_FOLDER "")
   IF (IPHONESIMULATOR)
