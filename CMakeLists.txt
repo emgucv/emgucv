@@ -1159,6 +1159,7 @@ ENDIF()
 SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "")
 IF(HAVE_WINDESKTOP_X86)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\cu*.dll;..\\..\\..\\libs\\runtimes\\win-x86\\native\\npp*.dll;..\\..\\..\\libs\\runtimes\\win-x86\\native\\concrt*.dll;..\\..\\..\\libs\\runtimes\\win-x86\\native\\msvcp*.dll;..\\..\\..\\libs\\runtimes\\win-x86\\native\\vcruntime*.dll;..\\..\\..\\libs\\runtimes\\win-x86\\native\\vccorlib*.dll\" target=\"runtimes\\win-x86\\native\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\version_string.inc\" target=\"docs\\build_info_x86.inc\" />")
 	SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_TITLE "MSVC x86 runtime for windows")
 	SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST} 
 	<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\concrt*.dll\" target=\"runtimes\\win-x86\\native\" /> 
@@ -1175,6 +1176,7 @@ IF(HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\*.json\" target=\"runtimes\\win-x64\\native\" />")
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\*.elf\" target=\"runtimes\\win-x64\\native\" />")
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\*.mvcmd\" target=\"runtimes\\win-x64\\native\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\version_string.inc\" target=\"docs\\build_info_x64.inc\" />")
 	SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_TITLE "MSVC x64 runtime for windows")
 	SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X64_NUGET_FILE_LIST} 
 	<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\concrt*.dll\" target=\"runtimes\\win-x64\\native\" /> 
@@ -1190,13 +1192,15 @@ IF(HAVE_WINDESKTOP_X64)
 	<file src=\"zlib_license.txt\" target=\"\" />")
 ENDIF()
 IF(HAVE_WINDESKTOP_ARM64)
-	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\cu*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\npp*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\concrt*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\msvcp*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vcruntime*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vccorlib*.dll\" target=\"runtimes\\win-arm64\\native\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} 
+	   <file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\cu*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\npp*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\concrt*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\msvcp*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vcruntime*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vccorlib*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\opencv_videoio_ffmpeg*.dll\" target=\"runtimes\\win-arm64\\native\" />
+	   <file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\version_string.inc\" target=\"docs\\build_info_arm64.inc\" />")
 	SET(EMGU_WINDOWS_MSVCRT_ARM64_NUGET_TITLE "MSVC arm64 runtime for windows")
 	SET(EMGU_WINDOWS_MSVCRT_ARM64_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_ARM64_NUGET_FILE_LIST} 
-	<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\concrt*.dll\" target=\"runtimes\\win-arm64\\native\" /> 
-	<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\msvcp*.dll\" target=\"runtimes\\win-arm64\\native\" /> 
-	<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vcruntime*.dll\" target=\"runtimes\\win-arm64\\native\" />     
-	<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vccorlib*.dll\" target=\"runtimes\\win-arm64\\native\" />     
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\concrt*.dll\" target=\"runtimes\\win-arm64\\native\" />
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\msvcp*.dll\" target=\"runtimes\\win-arm64\\native\" />
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vcruntime*.dll\" target=\"runtimes\\win-arm64\\native\" />
+	<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vccorlib*.dll\" target=\"runtimes\\win-arm64\\native\" />
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
