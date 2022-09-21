@@ -43,5 +43,17 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
         <PackagePath>docs\</PackagePath>
       </None>
     </ItemGroup>
+	<ItemGroup Condition="Exists('..\..\..\libs\iOS\iphoneos_arm64_version_string.inc')">
+	  <None Include="..\..\..\libs\iOS\catalyst_arm64_version_string.inc">
+        <Pack>True</Pack>
+        <PackagePath>docs\</PackagePath>
+      </None>
+	</ItemGroup>
+	<ItemGroup Condition="Exists('..\..\..\libs\iOS\simulator_x86_64_version_string.inc')">
+	  <None Include="..\..\..\libs\iOS\catalyst_x86_64_version_string.inc">
+        <Pack>True</Pack>
+        <PackagePath>docs\</PackagePath>
+      </None>
+	</ItemGroup>
 
 </Project>
