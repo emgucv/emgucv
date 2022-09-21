@@ -29,6 +29,7 @@ namespace Emgu.CV.Cuda
         /// <summary>
         /// Create a new Cuda Stream
         /// </summary>
+        /// <param name="flag">The cuda flags argument that determine the behaviors of the stream</param>
         public Stream(int flag)
         {
             _ptr = CudaInvoke.streamCreateWithFlag(flag);

@@ -130,6 +130,7 @@ namespace Emgu.CV
         /// <summary>
         /// Both detects and decodes barcode
         /// </summary>
+        /// <param name="image">grayscale or color (BGR) image containing barcode.</param>
         /// <returns>The barcode found. If nothing is found, an empty array is returned.</returns>
         public Barcode[] DetectAndDecode(IInputArray image)
         {

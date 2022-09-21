@@ -373,6 +373,7 @@ namespace Emgu.CV
         /// <param name="tvecs">Output vector of translation vectors estimated for each pattern view.</param>
         /// <param name="flags">Different flags</param>
         /// <param name="criteria">Termination criteria for the iterative optimization algorithm.</param>
+        /// <returns>The calibration error</returns>
         public static double Calibrate(IInputArray objectPoints, IInputArray imagePoints, Size imageSize,
            IInputOutputArray K, IInputOutputArray D, IOutputArray rvecs, IOutputArray tvecs, CalibrationFlag flags,
            MCvTermCriteria criteria)
@@ -412,6 +413,7 @@ namespace Emgu.CV
         /// <param name="T">Output translation vector between the coordinate systems of the cameras.</param>
         /// <param name="flags">Fish eye calibration flags</param>
         /// <param name="criteria">Termination criteria for the iterative optimization algorithm.</param>
+        /// <returns>The calibration error</returns>
         public static double StereoCalibrate(IInputArray objectPoints, IInputArray imagePoints1,
            IInputArray imagePoints2, IInputOutputArray K1, IInputOutputArray D1, IInputOutputArray K2,
            IInputOutputArray D2, Size imageSize, IOutputArray R, IOutputArray T, CalibrationFlag flags, MCvTermCriteria criteria)
