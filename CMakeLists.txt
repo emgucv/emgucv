@@ -1169,6 +1169,12 @@ IF(HAVE_WINDESKTOP_X86)
 	<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\vccorlib*.dll\" target=\"runtimes\\win-x86\\native\" />     
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+	INSTALL(
+      FILES
+      "libs/runtimes/win-x86/native/version_string.inc"
+      DESTINATION "libs/runtimes/win-x86/native/"
+      COMPONENT emgucv_binary
+      )
 ENDIF()
 IF(HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cu*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\npp*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\concrt*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\msvcp*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\vcruntime*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\vccorlib*.dll\" target=\"runtimes\\win-x64\\native\" />")
@@ -1191,6 +1197,12 @@ IF(HAVE_WINDESKTOP_X64)
 	<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\zlibwapi.dll\" target=\"runtimes\\win-x64\\native\" /> 
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 	<file src=\"zlib_license.txt\" target=\"\" />")
+    INSTALL(
+      FILES
+      "libs/runtimes/win-x64/native/version_string.inc"
+      DESTINATION "libs/runtimes/win-x64/native/"
+      COMPONENT emgucv_binary
+      )
 ENDIF()
 IF(HAVE_WINDESKTOP_ARM64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} 
@@ -1204,6 +1216,12 @@ IF(HAVE_WINDESKTOP_ARM64)
 	<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vccorlib*.dll\" target=\"runtimes\\win-arm64\\native\" />
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+	INSTALL(
+      FILES
+      "libs/runtimes/win-arm64/native/version_string.inc"
+      DESTINATION "libs/runtimes/win-arm64/native/"
+      COMPONENT emgucv_binary
+      )
 ENDIF()
 IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_ARM64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} 

@@ -4024,7 +4024,10 @@ IF (WIN32)
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/version_string.inc
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
     COMMENT "Copying build information from ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/version_string.inc")
-  
+  #INSTALL(FILES
+  #    "${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/version_string.inc"
+  #    DESTINATION "libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/"
+  #    COMPONENT emgucv_binary)
 ELSEIF (IOS)
   SET(IOS_RELEASE_FOLDER "")
   IF (IPHONESIMULATOR)
