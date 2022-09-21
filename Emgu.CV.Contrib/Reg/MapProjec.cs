@@ -26,7 +26,7 @@ namespace Emgu.CV.Reg
         /// <summary>
         /// Create a transformation that consists on a projective transformation
         /// </summary>
-        /// <param name="projTr"></param>
+        /// <param name="projTr">Projective transformation</param>
         public MapProjec(IInputArray projTr)
         {
             using (InputArray iaProjTr = projTr.GetInputArray())

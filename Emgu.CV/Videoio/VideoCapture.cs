@@ -600,16 +600,18 @@ namespace Emgu.CV
         /// Same to cv::VideoCapture &gt;gt; cv::Mat function
         /// </summary>
         /// <param name="mat">The Mat to be written to. If no more frame is available, the resulting Mat will be empty.</param>
+        /// <returns>False if no frames has been grabbed</returns>
         public bool Read(Mat mat)
         {
             CvInvoke.cveVideoCaptureReadToMat(_ptr, mat);
             return !mat.IsEmpty;
         }
-        
+
         /// <summary>
         /// Same to cv::VideoCapture &gt;gt; cv::UMat function
         /// </summary>
         /// <param name="umat">The UMat to be written to. If no more frame is available, the resulting UMat will be empty.</param>
+        /// <returns>False if no frames has been grabbed</returns>
         public bool Read(UMat umat)
         {
             CvInvoke.cveVideoCaptureReadToUMat(_ptr, umat);

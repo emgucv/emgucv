@@ -42,7 +42,7 @@ namespace Emgu.CV
       /// Updates the predicted state from the measurement.
       /// </summary>
       /// <param name="measurement">The measured system parameters</param>
-      /// <returns></returns>
+      /// <returns>The updated predicted state</returns>
       public Mat Correct(Mat measurement)
       {
          return new Mat(CvInvoke.cveKalmanFilterCorrect(_ptr, measurement), false);

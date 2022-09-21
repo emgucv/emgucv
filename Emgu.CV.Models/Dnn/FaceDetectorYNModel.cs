@@ -108,7 +108,8 @@ namespace Emgu.CV.Models
         /// <summary>
         /// Detect faces on the image
         /// </summary>
-        /// <param name="image">The image.</param>
+        /// <param name="image">The image</param>
+        /// <returns>The array of FaceDetectorYNResult</returns>
         public FaceDetectorYNResult[] Detect(IInputArray image)
         {
             using (Mat detectionResult = new Mat())
