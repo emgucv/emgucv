@@ -43,6 +43,30 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
         <PackagePath>docs\</PackagePath>
       </None>
     </ItemGroup>
+	<ItemGroup Condition="Exists('..\..\..\libs\android\arm64-v8a\arm64-v8a_version_string.inc')">
+	  <None Include="..\..\..\libs\android\arm64-v8a\arm64-v8a_version_string.inc">
+        <Pack>True</Pack>
+        <PackagePath>docs\</PackagePath>
+      </None>
+	</ItemGroup>
+	<ItemGroup Condition="Exists('..\..\..\libs\android\arm64-v8a\armeabi-v7a_version_string.inc')">
+	  <None Include="..\..\..\libs\android\arm64-v8a\armeabi-v7a_version_string.inc">
+        <Pack>True</Pack>
+        <PackagePath>docs\</PackagePath>
+      </None>
+	</ItemGroup>
+	<ItemGroup Condition="Exists('..\..\..\libs\android\x86\x86_version_string.inc')">
+	  <None Include="..\..\..\libs\android\x86\x86_version_string.inc">
+        <Pack>True</Pack>
+        <PackagePath>docs\</PackagePath>
+      </None>
+	</ItemGroup>
+	<ItemGroup Condition="Exists('..\..\..\libs\android\x86_64\x86_64_version_string.inc')">
+	  <None Include="..\..\..\libs\android\x86_64\x86_64_version_string.inc">
+        <Pack>True</Pack>
+        <PackagePath>docs\</PackagePath>
+      </None>
+	</ItemGroup>
   ${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY}
   ${EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET}
 </Project>
