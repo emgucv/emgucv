@@ -13,9 +13,9 @@
 #include "emgu_c.h"
 #include "mat_c.h"
 
-CVAPI(cv::UMat*) cveUMatCreate(cv::UMatUsageFlags flags);
+CVAPI(cv::UMat*) cveUMatCreate(int flags);
 //CVAPI(void) cveUMatUseCustomAllocator(cv::UMat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr, cv::MatAllocator** matAllocator, cv::MatAllocator** oclAllocator);
-CVAPI(void) cveUMatCreateData(cv::UMat* mat, int row, int cols, int type, cv::UMatUsageFlags flags);
+CVAPI(void) cveUMatCreateData(cv::UMat* mat, int row, int cols, int type, int flags);
 CVAPI(cv::UMat*) cveUMatCreateFromRect(cv::UMat* mat, CvRect* roi);
 CVAPI(cv::UMat*) cveUMatCreateFromRange(cv::UMat* mat, cv::Range* rowRange, cv::Range* colRange);
 CVAPI(void) cveUMatRelease(cv::UMat** mat);

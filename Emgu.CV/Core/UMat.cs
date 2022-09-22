@@ -124,8 +124,8 @@ namespace Emgu.CV
         /// <summary>
         /// Create an empty cv::UMat
         /// </summary>
-        public UMat()
-           : this(UMatInvoke.cveUMatCreate(), true)
+        public UMat(Usage usage = Usage.Default)
+           : this(UMatInvoke.cveUMatCreate(usage), true)
         {
         }
 
@@ -1083,7 +1083,8 @@ namespace Emgu.CV
         internal static extern IntPtr cveInputOutputArrayFromUMat(IntPtr mat);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveUMatCreate();
+        internal static extern IntPtr cveUMatCreate(UMat.Usage usageFlag);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveUMatRelease(ref IntPtr mat);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
