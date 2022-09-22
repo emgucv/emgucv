@@ -4161,6 +4161,28 @@ ELSEIF (APPLE)
     ENDIF()
   ENDIF()
 
+	add_custom_command(TARGET ${the_target}
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+      COMMENT "Copying build information from ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc")
+    INSTALL(FILES
+		"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc"
+		DESTINATION "libs/runtimes/osx/native"
+		COMPONENT emgucv_binary)
+		
+    IF(("${EMGUCV_ARCH}" STREQUAL "x86_64") AND (EXISTS "${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../arm64_version_string.inc"))
+      INSTALL(FILES
+		"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../arm64_version_string.inc"
+		DESTINATION "libs/runtimes/osx/native"
+		COMPONENT emgucv_binary)
+    ELSEIF(("${EMGUCV_ARCH}" STREQUAL "arm64") AND (EXISTS "${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../x86_64_version_string.inc"))
+      INSTALL(FILES
+		"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../x86_64_version_string.inc"
+		DESTINATION "libs/runtimes/osx/native"
+		COMPONENT emgucv_binary)
+    ENDIF()
+
   SET(CVEXTERN_AND_DEPENDENCY_DLLS ${CVEXTERN_DEPENDENCY_DLLS} "libcvextern.dylib")
   
 
