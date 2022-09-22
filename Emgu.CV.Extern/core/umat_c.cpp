@@ -6,9 +6,9 @@
 
 #include "umat_c.h"
 
-cv::UMat* cveUMatCreate(cv::UMatUsageFlags usage)
+cv::UMat* cveUMatCreate(int usage)
 {
-   return new cv::UMat(usage);
+   return new cv::UMat(static_cast<cv::UMatUsageFlags>(usage));
 }
 /*
 void cveUMatUseCustomAllocator(cv::UMat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr, cv::MatAllocator** matAllocator, cv::MatAllocator** oclAllocator)
@@ -25,9 +25,9 @@ void cveUMatUseCustomAllocator(cv::UMat* mat, MatAllocateCallback allocator, Mat
       mat->allocator = *oclAllocator;
    }
 }*/
-void cveUMatCreateData(cv::UMat* mat, int row, int cols, int type, cv::UMatUsageFlags flags)
+void cveUMatCreateData(cv::UMat* mat, int row, int cols, int type, int flags)
 {
-   mat->create(row, cols, type, flags);
+   mat->create(row, cols, type, static_cast<cv::UMatUsageFlags>(flags));
 }
 cv::UMat* cveUMatCreateFromRect(cv::UMat* mat, CvRect* roi)
 {
