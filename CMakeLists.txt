@@ -1337,12 +1337,12 @@ SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
 
 IF (HAVE_IOS)
   SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\xamarinios10\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\xamarinios10\" />
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\net6.0-maccatalyst15.4\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\net6.0-maccatalyst15.4\" />
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\net6.0-ios15.4\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\net6.0-ios15.4\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\xamarinios10\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\xamarinios10\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\net6.0-maccatalyst15.4\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\net6.0-maccatalyst15.4\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\net6.0-ios15.4\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\net6.0-ios15.4\" />
 	")
   SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
       <group targetFramework=\"Xamarin.iOS1.0\">
@@ -1365,8 +1365,8 @@ IF (HAVE_IOS)
 ENDIF()
 
 SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.dll\" target=\"lib\\netstandard2.0\" />
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetStandard.xml\" target=\"lib\\netstandard2.0\" />
+    <file src=\"..\\..\\..\\libs\\Emgu.CV.dll\" target=\"lib\\netstandard2.0\" />
+    <file src=\"..\\..\\..\\libs\\Emgu.CV.xml\" target=\"lib\\netstandard2.0\" />
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
 	<file src=\"README.md\" target=\"docs\\\" />")
