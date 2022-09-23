@@ -18,13 +18,13 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
     #ENDIF()
     
     IF (EMGU_SIGN_FOUND)
-      EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/iOS/Emgu.CV.Platform.NetStandard.dll)
+      EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/iOS/Emgu.CV.dll)
     ENDIF()
     
     INSTALL(
       FILES 
-      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/iOS/Emgu.CV.Platform.NetStandard.xml
-      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/iOS/Emgu.CV.Platform.NetStandard.dll 
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/iOS/Emgu.CV.xml
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/iOS/Emgu.CV.dll 
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}/iOS
       COMPONENT emgucv_binary)	  
 
