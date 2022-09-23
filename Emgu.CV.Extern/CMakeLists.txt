@@ -3961,6 +3961,12 @@ ELSE()
     ARCHIVE DESTINATION libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER} COMPONENT libs)
 ENDIF()
 
+
+SET(OPENCV_BUILD_INFO_VERSION_STRING ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc)
+IF(BUILD_opencv_world)
+  SET(OPENCV_BUILD_INFO_VERSION_STRING ${CMAKE_BINARY_DIR}/opencv/modules/world/version_string.inc)
+ENDIF()
+
 #add_subdirectory(gpu)
 IF (WIN32)
   IF (EMGU_SIGN_FOUND)
@@ -3968,9 +3974,9 @@ IF (WIN32)
   ENDIF()
   add_custom_command(TARGET ${the_target}
     POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/version_string.inc
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/version_string.inc
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-    COMMENT "Copying build information from ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/version_string.inc")
+    COMMENT "Copying build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/version_string.inc")
   #INSTALL(FILES
   #    "${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/version_string.inc"
   #    DESTINATION "libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/"
@@ -3982,9 +3988,9 @@ ELSEIF (IOS)
     SET(IOS_RELEASE_FILENAME "libcvextern_simulator_${IOS_ARCH}.a")
 	add_custom_command(TARGET ${the_target}
       POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc ${CMAKE_SOURCE_DIR}/libs/iOS/simulator_${IOS_ARCH}_version_string.inc
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs/iOS/simulator_${IOS_ARCH}_version_string.inc
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-      COMMENT "Copying build information from ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc to ${CMAKE_SOURCE_DIR}/libs/iOS/simulator_${IOS_ARCH}_version_string.inc")
+      COMMENT "Copying build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs/iOS/simulator_${IOS_ARCH}_version_string.inc")
 	INSTALL(FILES
 	  "${CMAKE_SOURCE_DIR}/libs/iOS/simulator_${IOS_ARCH}_version_string.inc"
 	  DESTINATION "libs/iOS/"
@@ -3994,9 +4000,9 @@ ELSEIF (IOS)
     SET(IOS_RELEASE_FILENAME "libcvextern_iphoneos_${IOS_ARCH}.a")
 	add_custom_command(TARGET ${the_target}
       POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc ${CMAKE_SOURCE_DIR}/libs/iOS/iphoneos_${IOS_ARCH}_version_string.inc
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs/iOS/iphoneos_${IOS_ARCH}_version_string.inc
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-      COMMENT "Copying build information from ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc to ${CMAKE_SOURCE_DIR}/libs/iOS/iphoneos_${IOS_ARCH}_version_string.inc")
+      COMMENT "Copying build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs/iOS/iphoneos_${IOS_ARCH}_version_string.inc")
 	INSTALL(FILES
 	  "${CMAKE_SOURCE_DIR}/libs/iOS/iphoneos_${IOS_ARCH}_version_string.inc"
 	  DESTINATION "libs/iOS/"
@@ -4006,9 +4012,9 @@ ELSEIF (IOS)
     SET(IOS_RELEASE_FILENAME "libcvextern_catalyst_${IOS_ARCH}.a")
     add_custom_command(TARGET ${the_target}
       POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc ${CMAKE_SOURCE_DIR}/libs/iOS/catalyst_${IOS_ARCH}_version_string.inc
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs/iOS/catalyst_${IOS_ARCH}_version_string.inc
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-      COMMENT "Copying build information from ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc to ${CMAKE_SOURCE_DIR}/libs/iOS/catalyst_${IOS_ARCH}_version_string.inc")
+      COMMENT "Copying build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs/iOS/catalyst_${IOS_ARCH}_version_string.inc")
 	INSTALL(FILES
 	  "${CMAKE_SOURCE_DIR}/libs/iOS/catalyst_${IOS_ARCH}_version_string.inc"
 	  DESTINATION "libs/iOS/"
@@ -4103,9 +4109,9 @@ ELSEIF (ANDROID)
       COMMENT "Stripping libcvextern.so from ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}")
 	add_custom_command(TARGET ${the_target}
       POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${ANDROID_ABI}_version_string.inc
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${ANDROID_ABI}_version_string.inc
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-      COMMENT "Copying build information from ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${ANDROID_ABI}_version_string.inc")
+      COMMENT "Copying build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${ANDROID_ABI}_version_string.inc")
 	INSTALL(FILES
 		"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${ANDROID_ABI}_version_string.inc"
 		DESTINATION "libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}"
@@ -4122,9 +4128,9 @@ ELSEIF (IS_UBUNTU OR IS_DEBIAN)
   
   add_custom_command(TARGET ${the_target}
       POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${EMGUCV_ARCH}_version_string.inc
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${EMGUCV_ARCH}_version_string.inc
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-      COMMENT "Copying build information from ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${EMGUCV_ARCH}_version_string.inc")
+      COMMENT "Copying build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${EMGUCV_ARCH}_version_string.inc")
 	  
   INSTALL(FILES
 		"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${EMGUCV_ARCH}_version_string.inc"
@@ -4183,9 +4189,9 @@ ELSEIF (APPLE)
 
 	add_custom_command(TARGET ${the_target}
       POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-      COMMENT "Copying build information from ${CMAKE_BINARY_DIR}/opencv/modules/core/version_string.inc to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc")
+      COMMENT "Copying build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc")
     INSTALL(FILES
 		"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc"
 		DESTINATION "libs/runtimes/osx/native"
