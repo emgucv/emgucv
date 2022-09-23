@@ -18,13 +18,13 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
     #ENDIF()
 
     IF (EMGU_SIGN_FOUND)
-      EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.dll)
+      EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.dll)
     ENDIF()
 
     INSTALL(
       FILES 
-      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.xml
-      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.dll 
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.xml
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.dll 
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
       COMPONENT emgucv_binary)	  
 
