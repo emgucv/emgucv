@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 	<AssemblyName>Emgu.CV.Bitmap</AssemblyName>
+	<TargetName>$(AssemblyName)</TargetName>
 	<SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
