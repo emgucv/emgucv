@@ -12,21 +12,15 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.OCR", "..\..\Emgu.C
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Contrib", "..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.shproj", "{11E54A7E-778D-466C-A176-71E150976AC1}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Mac", "..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.shproj", "{74DB1213-249E-44DC-B193-BC5CEC981D3C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.NetStandard", "..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj", "{AFA9D3CF-62EB-47A8-BC3D-BC9006D495F9}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Windows", "..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.shproj", "{ADC3C8E5-EBCD-4D3C-B3A4-20CFE0E42FC1}"
-EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Ubuntu", "..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.shproj", "{86A21342-2DA9-4841-B1BD-B323AC5B81FD}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Models.Shared", "..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.shproj", "{0BFAD282-50C1-449C-B01C-62FD23BBDBE5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models.NetStandard", "..\..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj", "{A593599A-8B00-45F6-B161-5AB794DED450}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Debian", "..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.shproj", "{47CF52B9-AB6D-4BF6-A791-1AC4D2CCD140}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.Maui.Mac", "..\..\Emgu.CV.Platform\Maui\Mac\Emgu.CV.Platform.Maui.Mac.csproj", "{A322E4DF-2246-4265-ADD7-27132F293D1C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.NetStandard.IOS", "..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj", "{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -116,6 +110,30 @@ Global
 		{A322E4DF-2246-4265-ADD7-27132F293D1C}.Release|x64.Build.0 = Release|Any CPU
 		{A322E4DF-2246-4265-ADD7-27132F293D1C}.Release|x86.ActiveCfg = Release|Any CPU
 		{A322E4DF-2246-4265-ADD7-27132F293D1C}.Release|x86.Build.0 = Release|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|ARM.Build.0 = Debug|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|x64.Build.0 = Debug|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|x86.Build.0 = Debug|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|ARM.ActiveCfg = Release|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|ARM.Build.0 = Release|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|iPhone.Build.0 = Release|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|x64.ActiveCfg = Release|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|x64.Build.0 = Release|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|x86.ActiveCfg = Release|Any CPU
+		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -127,34 +145,19 @@ Global
 		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{0bfad282-50c1-449c-b01c-62fd23bbdbe5}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
-		..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.projitems*{38ecfb71-a9a2-4136-868c-843c152f3328}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{38ecfb71-a9a2-4136-868c-843c152f3328}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{38ecfb71-a9a2-4136-868c-843c152f3328}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{38ecfb71-a9a2-4136-868c-843c152f3328}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.projitems*{47cf52b9-ab6d-4bf6-a791-1ac4d2ccd140}*SharedItemsImports = 13
-		..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.projitems*{614fff97-16e5-4a4c-8b81-6e144437b6cc}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{614fff97-16e5-4a4c-8b81-6e144437b6cc}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{614fff97-16e5-4a4c-8b81-6e144437b6cc}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{614fff97-16e5-4a4c-8b81-6e144437b6cc}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{74db1213-249e-44dc-b193-bc5cec981d3c}*SharedItemsImports = 13
-		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{78fc6bf5-d9da-44fd-9431-ed7e501fede1}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{78fc6bf5-d9da-44fd-9431-ed7e501fede1}*SharedItemsImports = 5
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{1dfa400b-5acb-4838-945b-9f6c36d8f4ef}*SharedItemsImports = 5
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{1dfa400b-5acb-4838-945b-9f6c36d8f4ef}*SharedItemsImports = 5
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{1dfa400b-5acb-4838-945b-9f6c36d8f4ef}*SharedItemsImports = 5
+		..\..\Emgu.CV\Emgu.CV.projitems*{1dfa400b-5acb-4838-945b-9f6c36d8f4ef}*SharedItemsImports = 5
+		..\..\Emgu.Util\Emgu.Util.projitems*{1dfa400b-5acb-4838-945b-9f6c36d8f4ef}*SharedItemsImports = 5
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
-		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{86a21342-2da9-4841-b1bd-b323ac5b81fd}*SharedItemsImports = 13
-		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{96567eea-17c0-4e56-acde-3ef6213e6af3}*SharedItemsImports = 4
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
 		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{a593599a-8b00-45f6-b161-5ab794ded450}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{adc3c8e5-ebcd-4d3c-b3a4-20cfe0e42fc1}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{afa9d3cf-62eb-47a8-bc3d-bc9006d495f9}*SharedItemsImports = 5
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{afa9d3cf-62eb-47a8-bc3d-bc9006d495f9}*SharedItemsImports = 5
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{afa9d3cf-62eb-47a8-bc3d-bc9006d495f9}*SharedItemsImports = 5
 		..\..\Emgu.CV\Emgu.CV.projitems*{afa9d3cf-62eb-47a8-bc3d-bc9006d495f9}*SharedItemsImports = 5
 		..\..\Emgu.Util\Emgu.Util.projitems*{afa9d3cf-62eb-47a8-bc3d-bc9006d495f9}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.projitems*{cc22443d-f1d9-48b1-bddd-b32c5423cab2}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{cc22443d-f1d9-48b1-bddd-b32c5423cab2}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{cc22443d-f1d9-48b1-bddd-b32c5423cab2}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{cc22443d-f1d9-48b1-bddd-b32c5423cab2}*SharedItemsImports = 5
-		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
