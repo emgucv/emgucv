@@ -116,7 +116,7 @@ namespace Emgu.CV.Models
         /// <param name="initOptions">A string, not used right now.</param>
         /// <returns>Async task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-        public IEnumerator Init(FileDownloadManager.DownloadProgressChangedEventHandleronDownloadProgressChanged = null, Object initOptions = null)
+        public IEnumerator Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
 #else
         public async Task Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
 #endif
