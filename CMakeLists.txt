@@ -1932,11 +1932,11 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Package.README.md.in ${
   </Target>")    
   
   # Sign the nuget package
-  SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET "")
+  SET(EMGUCV_BITMAP_POST_PROCESS_NUGET "")
   IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
     file(TO_NATIVE_PATH ${EMGU_NUGET_SIGN_EXECUTABLE} EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH)
 	file(TO_NATIVE_PATH ${NUGET_EXECUTABLE} NUGET_EXECUTABLE_NATIVE_PATH)
-  	SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET "${EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET}
+  	SET(EMGUCV_BITMAP_POST_PROCESS_NUGET "${EMGUCV_BITMAP_POST_PROCESS_NUGET}
   <Target Name=\"PostProcessNuget\" AfterTargets=\"Pack\">
     <Message Text=\"Signing $(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" Importance=\"high\" />
     <MakeDir Directories=\"$(PackageOutputPath)\\signed\"/>
