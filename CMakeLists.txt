@@ -1335,14 +1335,14 @@ SET(EMGUCV_NUGET_FILE_LIST "")
 SET(EMGUCV_NUGET_DEPENDENCY "")
 SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
 
-
+ 
   SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\xamarinios10\" />
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\xamarinios10\" />
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\net6.0-maccatalyst15.4\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\net6.0-maccatalyst15.4\" />
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\net6.0-ios15.4\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\net6.0-ios15.4\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\net6.0-maccatalyst13.2\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\net6.0-maccatalyst13.2\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\net6.0-ios11.0\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\net6.0-ios11.0\" />
 	")
   SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
       <group targetFramework=\"Xamarin.iOS1.0\">
@@ -1350,13 +1350,13 @@ SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
       </group>
-	  <group targetFramework=\"net6.0-maccatalyst15.4\">
+	  <group targetFramework=\"net6.0-maccatalyst13.2\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
 		<dependency id=\"System.Runtime.InteropServices.NFloat.Internal\" version=\"6.0.1\" exclude=\"Build,Analyzers\" />
       </group>
-	  <group targetFramework=\"net6.0-ios15.4\">
+	  <group targetFramework=\"net6.0-ios11.0\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
