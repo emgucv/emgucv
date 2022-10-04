@@ -2,9 +2,9 @@
 #  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(HAVE_IOS AND WIN32)
+IF(HAVE_IOS)
 
-PROJECT(Emgu.CV.runtime.xamarin.ios.nuget)
+  PROJECT(Emgu.CV.runtime.xamarin.ios.nuget)
 
   get_filename_component(NUGET_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
 
@@ -15,9 +15,16 @@ PROJECT(Emgu.CV.runtime.xamarin.ios.nuget)
 	"${NUGET_OUTPUT_DIR}" #output_dir 
 	"${CMAKE_CURRENT_SOURCE_DIR}" #working_dir
 	) 
+	
+  ADD_DEPENDENCIES(${PROJECT_NAME} cvextern)
 
-  #ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.Xamarin.IOS Emgu.CV.nuget)
-  ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.nuget)
+  IF(TARGET Emgu.CV.Platform.Xamarin.IOS)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.Xamarin.IOS)
+  ENDIF()
+  
+  IF (TARGET Emgu.CV.nuget)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.nuget)
+  ENDIF()
   
   IF (EMGU_NUGET_SIGN_FOUND)
     EMGU_SIGN_NUGET(${PROJECT_NAME} "${NUGET_OUTPUT_DIR}/${EMGUCV_XAMARIN_IOS_NUGET_ID}.${CPACK_PACKAGE_VERSION}.nupkg")
