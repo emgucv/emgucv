@@ -7,12 +7,15 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using Emgu.CV.CvEnum;
 using Emgu.CV.OCR;
 using Emgu.CV.Structure;
 using Orientation = Emgu.CV.OCR.Orientation;
 //using static System.Net.WebRequestMethods;
+
+
 #if VS_TEST
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
@@ -22,7 +25,6 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
 using TestFixture = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
 #else
-using System.IO;
 using NUnit.Framework;
 #endif
 
@@ -110,11 +112,6 @@ namespace Emgu.CV.Test
             }
         }
 
-#if VS_TEST
-        [Ignore]
-#else
-        [Ignore("Ignore for now, seems to crash unit test.")]
-#endif
         [Test]
         public async Task TestOCREngBlankPage()
         {
