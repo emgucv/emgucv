@@ -4098,11 +4098,12 @@ ELSEIF (IOS)
     
   SET(IPHONEOS_STATIC_LIB_FILE ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_iphoneos.a)
   SET(IPHONESIMULATOR_STATIC_LIB_FILE ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_simulator.a)
-  
+  SET(IPHONE_UNIVERSAL_STATIC_LIB_FILE ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_universal.a)
+  SET(LIPO_INPUT_FILES)
   IF (IPHONESIMULATOR)
+    LIST(APPEND LIPO_INPUT_FILES ${IPHONESIMULATOR_STATIC_LIB_FILE})
     IF (EXISTS ${IPHONEOS_STATIC_LIB_FILE})
-    ELSE()
-      FILE(WRITE ${IPHONEOS_STATIC_LIB_FILE} "")
+      LIST(APPEND LIPO_INPUT_FILES ${IPHONEOS_STATIC_LIB_FILE})
     ENDIF()
     add_custom_command(TARGET ${the_target}
       POST_BUILD
@@ -4110,18 +4111,39 @@ ELSEIF (IOS)
       WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
       COMMENT "Linking multiple arch into a single file for iOS simulator") 
   ELSEIF(IPHONEOS)
+    LIST(APPEND LIPO_INPUT_FILES ${IPHONEOS_STATIC_LIB_FILE})
     IF (EXISTS ${IPHONESIMULATOR_STATIC_LIB_FILE})
-    ELSE()
-      FILE(WRITE ${IPHONESIMULATOR_STATIC_LIB_FILE} "")
+      LIST(APPEND LIPO_INPUT_FILES ${IPHONESIMULATOR_STATIC_LIB_FILE} "")
     ENDIF()
     add_custom_command(TARGET ${the_target}
       POST_BUILD
       COMMAND lipo -create -output ${IPHONEOS_STATIC_LIB_FILE} ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_iphoneos_*.a
       WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
       COMMENT "Linking multiple arch into a single file for iOS device")
- 
   ENDIF()
-
+  LIST(LENGTH LIPO_INPUT_FILES LIPO_INPUT_FILES_LENGTH)
+  IF (LIPO_INPUT_FILES_LENGTH EQUAL 1)
+    add_custom_command(TARGET ${the_target}
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy ${LIPO_INPUT_FILES} ${IPHONE_UNIVERSAL_STATIC_LIB_FILE} 
+      WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+      COMMENT "Linking simulator and iphoneos static library into a universal file for iOS")
+   INSTALL(FILES
+      "${IPHONE_UNIVERSAL_STATIC_LIB_FILE}"
+      DESTINATION "libs/iOS/"
+      COMPONENT emgucv_binary)    
+  ELSEIF (LIPO_INPUT_FILES_LENGTH GREATER 1)
+    add_custom_command(TARGET ${the_target}
+      POST_BUILD
+      COMMAND lipo -create -output ${IPHONE_UNIVERSAL_STATIC_LIB_FILE} ${LIPO_INPUT_FILES}
+      WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+      COMMENT "Linking multiple arch into a single file for iOS device")
+   INSTALL(FILES
+      "${IPHONE_UNIVERSAL_STATIC_LIB_FILE}"
+      DESTINATION "libs/iOS/"
+      COMPONENT emgucv_binary)
+  ENDIF()
+  
   IF(IPHONESIMULATOR OR IPHONEOS)
     INSTALL(FILES
       "${IPHONEOS_STATIC_LIB_FILE}"
@@ -4142,7 +4164,7 @@ ELSEIF (IOS)
 		  "${CMAKE_SOURCE_DIR}/libs/iOS/simulator_x86_64_version_string.inc"
 		  DESTINATION "libs/iOS/"
 		  COMPONENT emgucv_binary)
-	ENDIF()	
+	ENDIF()
   ELSEIF(MAC_CATALYST)
     INSTALL(FILES
       "${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst_${IOS_ARCH}.a"

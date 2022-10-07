@@ -99,7 +99,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="$(OpenCVBinaryDir)\iOS\libcvextern_iphoneos.a">
+    <NativeReference Condition="Exists('$(OpenCVBinaryDir)\iOS\libcvextrern_iphoneos.a')" Include="$(OpenCVBinaryDir)\iOS\libcvextern_iphoneos.a">
       <Kind>Static</Kind>
       <SmartLink>True</SmartLink>
       <ForceLoad>True</ForceLoad>
@@ -107,7 +107,7 @@
       <LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
       <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
     </NativeReference>
-    <NativeReference Include="$(OpenCVBinaryDir)\iOS\libcvextern_simulator.a">
+    <NativeReference Condition="Exists('$(OpenCVBinaryDir)\iOS\libcvextern_simulator.a')" Include="$(OpenCVBinaryDir)\iOS\libcvextern_simulator.a">
       <Kind>Static</Kind>
       <SmartLink>True</SmartLink>
       <ForceLoad>True</ForceLoad>
