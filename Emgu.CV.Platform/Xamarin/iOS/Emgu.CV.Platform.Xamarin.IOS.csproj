@@ -71,9 +71,12 @@
   </ItemGroup>
   <PropertyGroup>
     <EmguCVLinkTarget>Xamarin iOS Native Binding Library</EmguCVLinkTarget>
-    <EmguCVNativeFile>$(OpenCVBinaryDir)\iOS\libcvextern_iphoneos.a</EmguCVNativeFile>
-    <EmguCVErrorMessage Condition="!Exists('$(EmguCVNativeFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVNativeFile) </EmguCVErrorMessage>
-    <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeFile)')">$(EmguCVDeployMessage)ios </EmguCVDeployMessage>
+    <EmguCVNativeIPhoneOSFile>$(OpenCVBinaryDir)\iOS\libcvextern_iphoneos.a</EmguCVNativeIPhoneOSFile>
+	<EmguCVNativeIOSSimulartorFile>$(OpenCVBinaryDir)\iOS\libcvextern_simulator.a</EmguCVNativeIOSSimulartorFile>
+    <EmguCVXamarinIOSErrorMessage Condition="!Exists('$(EmguCVNativeIPhoneOSFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVNativeIPhoneOSFile) </EmguCVXamarinIOSErrorMessage>
+    <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeIPhoneOSFile)')">$(EmguCVDeployMessage)ios_device </EmguCVDeployMessage>
+	<EmguCVXamarinIOSErrorMessage Condition="!Exists('$(EmguCVNativeIOSSimulartorFile)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for iOS Commercial License is required. Missing $(EmguCVNativeIOSSimulartorFile) </EmguCVXamarinIOSErrorMessage>
+    <EmguCVDeployMessage Condition="Exists('$(EmguCVNativeIOSSimulartorFile)')">$(EmguCVDeployMessage)ios_simulator </EmguCVDeployMessage>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -99,7 +102,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Condition="Exists('$(OpenCVBinaryDir)\iOS\libcvextrern_iphoneos.a')" Include="$(OpenCVBinaryDir)\iOS\libcvextern_iphoneos.a">
+    <NativeReference Condition="Exists('$(EmguCVNativeIPhoneOSFile)')" Include="$(EmguCVNativeIPhoneOSFile)">
       <Kind>Static</Kind>
       <SmartLink>True</SmartLink>
       <ForceLoad>True</ForceLoad>
@@ -107,7 +110,7 @@
       <LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
       <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
     </NativeReference>
-    <NativeReference Condition="Exists('$(OpenCVBinaryDir)\iOS\libcvextern_simulator.a')" Include="$(OpenCVBinaryDir)\iOS\libcvextern_simulator.a">
+    <NativeReference Condition="Exists('$(EmguCVNativeIOSSimulartorFile)')" Include="$(EmguCVNativeIOSSimulartorFile)">
       <Kind>Static</Kind>
       <SmartLink>True</SmartLink>
       <ForceLoad>True</ForceLoad>
@@ -125,5 +128,8 @@
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll and $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)" Importance="high" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(OpenCVBinaryDir)" ContinueOnError="true" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="$(OpenCVBinaryDir)" ContinueOnError="true" />
+  </Target>
+  <Target Name="EmguCVXamarinIOSPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Warning Text="'$(EmguCVXamarinIOSErrorMessage)'" Condition="'$(EmguCVXamarinIOSErrorMessage)'!=''" />
   </Target>
 </Project>
