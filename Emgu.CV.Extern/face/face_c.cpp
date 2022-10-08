@@ -367,16 +367,30 @@ void cveDrawFacemarks(cv::_InputOutputArray* image, cv::_InputArray* points, CvS
 #endif
 }
 
-cv::face::MACE* cveMaceCreate(int imgSize, cv::Ptr<cv::face::MACE>** sharedPtr)
+cv::face::MACE* cveMaceCreate(int imgSize, cv::Ptr<cv::face::MACE>** sharedPtr, cv::Algorithm** algorithm)
 {
 #ifdef HAVE_OPENCV_FACE
 	cv::Ptr<cv::face::MACE> mace = cv::face::MACE::create(imgSize);
 	*sharedPtr = new cv::Ptr<cv::face::MACE>(mace);
+	*algorithm = dynamic_cast<cv::Algorithm*>(mace.get());
 	return (*sharedPtr)->get();
 #else
 	throw_no_face();
 #endif
 }
+
+cv::face::MACE* cveMaceCreate2(cv::String* fileName, cv::String* objName, cv::Ptr<cv::face::MACE>** sharedPtr, cv::Algorithm** algorithm)
+{
+#ifdef HAVE_OPENCV_FACE
+	cv::Ptr<cv::face::MACE> mace = cv::face::MACE::load(*fileName, *objName);
+	*sharedPtr = new cv::Ptr<cv::face::MACE>(mace);
+	*algorithm = dynamic_cast<cv::Algorithm*>(mace.get());
+	return (*sharedPtr)->get();
+#else
+	throw_no_face();
+#endif	
+}
+
 void cveMaceSalt(cv::face::MACE* mace, cv::String* passphrase)
 {
 #ifdef HAVE_OPENCV_FACE

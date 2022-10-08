@@ -16,15 +16,36 @@ namespace Emgu.CV.Face
     /// <summary>
     /// Minimum Average Correlation Energy Filter useful for authentication with (cancellable) biometrical features. (does not need many positives to train (10-50), and no negatives at all, also robust to noise/salting)
     /// </summary>
-    public class MACE : SharedPtrObject
+    public class MACE : SharedPtrObject, IAlgorithm
     {
+        private IntPtr _algorithmPtr;
+
+        /// <summary>
+        /// Pointer to the unmanaged Algorithm object
+        /// </summary>
+        public IntPtr AlgorithmPtr { get { return _algorithmPtr; } }
+
         /// <summary>
         /// Create a new MACE object
         /// </summary>
         /// <param name="imgSize">images will get resized to this (should be an even number)</param>
         public MACE(int imgSize)
         {
-            _ptr = FaceInvoke.cveMaceCreate(imgSize, ref _sharedPtr);
+            _ptr = FaceInvoke.cveMaceCreate(imgSize, ref _sharedPtr, ref _algorithmPtr);
+        }
+
+        /// <summary>
+        /// Read MACE from storage
+        /// </summary>
+        /// <param name="fileName">Build a new MACE instance from a pre-serialized FileStorage</param>
+        /// <param name="objName">Optional top-level node in the FileStorage</param>
+        public MACE(String fileName, String objName = "")
+        {
+            using(CvString csFileName = new CvString(fileName))
+            using (CvString csObjName = new CvString(objName))
+            {
+                _ptr = FaceInvoke.cveMaceCreate2(csFileName, csObjName, ref _sharedPtr, ref _algorithmPtr);
+            }
         }
 
         /// <summary>
@@ -79,7 +100,10 @@ namespace Emgu.CV.Face
     public static partial class FaceInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr  cveMaceCreate(int imgSize, ref IntPtr sharedPtr);
+        internal static extern IntPtr cveMaceCreate(int imgSize, ref IntPtr sharedPtr, ref IntPtr algorithmPtr);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveMaceCreate2(IntPtr fileName, IntPtr objName, ref IntPtr sharedPtr, ref IntPtr algorithmPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveMaceSalt(IntPtr mace, IntPtr passphrase);
