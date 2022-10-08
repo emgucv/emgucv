@@ -50,30 +50,29 @@
   </PropertyGroup>
     <PropertyGroup>
 	
-
     <EmguCVLinkTarget>MAUI Android Library</EmguCVLinkTarget>
     <!-- 
 		<EmguCVNativeArmeabi>$(OpenCVBinaryDir)\android\armeabi\libcvextern.so</EmguCVNativeArmeabi>
         <EmguCVBuildAndroidArmeabi Condition="$(AndroidSupportedAbis.Contains('armeabi%3')) OR $(AndroidSupportedAbis.Contains('armeabi,')) OR $(AndroidSupportedAbis.Contains('armeabi;')) OR $(AndroidSupportedAbis.EndsWith('armeabi')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU') OR ('$(Platform)'=='armeabi')">True</EmguCVBuildAndroidArmeabi>
-        <EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidArmeabi)'=='True' AND !Exists('$(EmguCVNativeArmeabi)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Armeabi is targeted, but file $(EmguCVNativeArmeabi) is missing.</EmguCVErrorMessage>
-        <EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidArmeabi)'=='True' AND Exists('$(EmguCVNativeArmeabi)')">$(EmguCVDeployMessage)armeabi </EmguCVDeployMessage>
+        <EmguCVMauiAndroidErrorMessage Condition="'$(EmguCVBuildAndroidArmeabi)'=='True' AND !Exists('$(EmguCVNativeArmeabi)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Armeabi is targeted, but file $(EmguCVNativeArmeabi) is missing.</EmguCVMauiAndroidErrorMessage>
+        <EmguCVMauiAndroidDeployMessage Condition="'$(EmguCVBuildAndroidArmeabi)'=='True' AND Exists('$(EmguCVNativeArmeabi)')">$(EmguCVMauiAndroidDeployMessage)armeabi </EmguCVMauiAndroidDeployMessage>
 		-->
     <EmguCVNativeArmeabiv7a>$(OpenCVBinaryDir)\android\armeabi-v7a\libcvextern.so</EmguCVNativeArmeabiv7a>
     <EmguCVBuildAndroidArmeabiv7a Condition="$(AndroidSupportedAbis.Contains('armeabi-v7a%3')) OR $(AndroidSupportedAbis.Contains('armeabi-v7a,')) OR $(AndroidSupportedAbis.Contains('armeabi-v7a;')) OR $(AndroidSupportedAbis.EndsWith('armeabi-v7a')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU') OR ('$(Platform)'=='armeabi-v7a')">True</EmguCVBuildAndroidArmeabiv7a>
-    <EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidArmeabiv7a)'=='True' AND !Exists('$(EmguCVNativeArmeabiv7a)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Armeabi-v7a is targeted, but file $(EmguCVNativeArmeabiv7a) is missing.</EmguCVErrorMessage>
-    <EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidArmeabiv7a)'=='True' AND Exists('$(EmguCVNativeArmeabiv7a)')">$(EmguCVDeployMessage)armeabi-v7a </EmguCVDeployMessage>
+    <EmguCVMauiAndroidErrorMessage Condition="'$(EmguCVBuildAndroidArmeabiv7a)'=='True' AND !Exists('$(EmguCVNativeArmeabiv7a)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Armeabi-v7a is targeted, but file $(EmguCVNativeArmeabiv7a) is missing.</EmguCVMauiAndroidErrorMessage>
+    <EmguCVMauiAndroidDeployMessage Condition="'$(EmguCVBuildAndroidArmeabiv7a)'=='True' AND Exists('$(EmguCVNativeArmeabiv7a)')">$(EmguCVMauiAndroidDeployMessage)armeabi-v7a </EmguCVMauiAndroidDeployMessage>
     <EmguCVNativeArm64v8a>$(OpenCVBinaryDir)\android\arm64-v8a\libcvextern.so</EmguCVNativeArm64v8a>
     <EmguCVBuildAndroidArm64v8a Condition="$(AndroidSupportedAbis.Contains('arm64-v8a%3')) OR $(AndroidSupportedAbis.Contains('arm64-v8a,')) OR $(AndroidSupportedAbis.EndsWith('arm64-v8a;')) OR $(AndroidSupportedAbis.EndsWith('arm64-v8a')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU')  OR ('$(Platform)'=='arm64-v8a')">True</EmguCVBuildAndroidArm64v8a>
-    <EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidArm64v8a)'=='True' AND !Exists('$(EmguCVNativeArm64v8a)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Arm64-v8a is targeted, but file $(EmguCVNativeArm64v8a) is missing.</EmguCVErrorMessage>
-    <EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidArm64v8a)'=='True' AND Exists('$(EmguCVNativeArm64v8a)')">$(EmguCVDeployMessage)arm64-v8a </EmguCVDeployMessage>
+    <EmguCVMauiAndroidErrorMessage Condition="'$(EmguCVBuildAndroidArm64v8a)'=='True' AND !Exists('$(EmguCVNativeArm64v8a)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. Arm64-v8a is targeted, but file $(EmguCVNativeArm64v8a) is missing.</EmguCVMauiAndroidErrorMessage>
+    <EmguCVMauiAndroidDeployMessage Condition="'$(EmguCVBuildAndroidArm64v8a)'=='True' AND Exists('$(EmguCVNativeArm64v8a)')">$(EmguCVMauiAndroidDeployMessage)arm64-v8a </EmguCVMauiAndroidDeployMessage>
     <EmguCVNativex86>$(OpenCVBinaryDir)\android\x86\libcvextern.so</EmguCVNativex86>
     <EmguCVBuildAndroidx86 Condition="$(AndroidSupportedAbis.Contains('x86%3')) OR $(AndroidSupportedAbis.Contains('x86,')) OR $(AndroidSupportedAbis.Contains('x86;')) OR $(AndroidSupportedAbis.EndsWith('x86')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU') OR ('$(Platform)'=='x86')">True</EmguCVBuildAndroidx86>
-    <EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidx86)'=='True' AND !Exists('$(EmguCVNativex86)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. x86 is targeted, but file $(EmguCVNativex86) is missing.</EmguCVErrorMessage>
-    <EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidx86)'=='True' AND Exists('$(EmguCVNativex86)')">$(EmguCVDeployMessage)x86 </EmguCVDeployMessage>
+    <EmguCVMauiAndroidErrorMessage Condition="'$(EmguCVBuildAndroidx86)'=='True' AND !Exists('$(EmguCVNativex86)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. x86 is targeted, but file $(EmguCVNativex86) is missing.</EmguCVMauiAndroidErrorMessage>
+    <EmguCVMauiAndroidDeployMessage Condition="'$(EmguCVBuildAndroidx86)'=='True' AND Exists('$(EmguCVNativex86)')">$(EmguCVMauiAndroidDeployMessage)x86 </EmguCVMauiAndroidDeployMessage>
     <EmguCVNativex8664>$(OpenCVBinaryDir)\android\x86_64\libcvextern.so</EmguCVNativex8664>
     <EmguCVBuildAndroidx8664 Condition="$(AndroidSupportedAbis.Contains('x86_64%3')) OR $(AndroidSupportedAbis.Contains('x86_64,')) OR $(AndroidSupportedAbis.Contains('x86_64;')) OR $(AndroidSupportedAbis.EndsWith('x86_64')) OR ('$(AndroidSupportedAbis)'=='' AND '$(Platform)'=='AnyCPU') OR ('$(Platform)'=='x86_64')">True</EmguCVBuildAndroidx8664>
-    <EmguCVErrorMessage Condition="'$(EmguCVBuildAndroidx8664)'=='True' AND !Exists('$(EmguCVNativex8664)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. x86_64 is targeted, but file $(EmguCVNativex8664) is missing.</EmguCVErrorMessage>
-    <EmguCVDeployMessage Condition="'$(EmguCVBuildAndroidx8664)'=='True' AND Exists('$(EmguCVNativex8664)')">$(EmguCVDeployMessage)x86_64 </EmguCVDeployMessage>
+    <EmguCVMauiAndroidErrorMessage Condition="'$(EmguCVBuildAndroidx8664)'=='True' AND !Exists('$(EmguCVNativex8664)')">This package do not contain necessary binary for $(EmguCVLinkTarget). Emgu CV for Android Commercial License is required. x86_64 is targeted, but file $(EmguCVNativex8664) is missing.</EmguCVMauiAndroidErrorMessage>
+    <EmguCVMauiAndroidDeployMessage Condition="'$(EmguCVBuildAndroidx8664)'=='True' AND Exists('$(EmguCVNativex8664)')">$(EmguCVMauiAndroidDeployMessage)x86_64 </EmguCVMauiAndroidDeployMessage>
     <PackageTags>a;b;c</PackageTags>
     <PackageProjectUrl>proj_url</PackageProjectUrl>
   </PropertyGroup>
@@ -107,5 +106,9 @@
     <ItemGroup>
       <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.Netstandard.csproj" />
     </ItemGroup>
-
+  <Target Name="EmguCVMauiAndroidPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Warning Text="'$(EmguCVMauiAndroidErrorMessage)'" Condition="'$(EmguCVMauiAndroidErrorMessage)'!=''" />
+    <Message Text="Emgu CV MAUI Android Compiling with $(EmguCVMauiAndroidDeployMessage)binary" Condition="'$(EmguCVMauiAndroidDeployMessage)'!=''" Importance="High" />
+    <Message Text="Native binary is NOT deployed by the project." Condition="'$(EmguCVMauiAndroidDeployMessage)'==''" Importance="High" />
+  </Target>
 </Project>

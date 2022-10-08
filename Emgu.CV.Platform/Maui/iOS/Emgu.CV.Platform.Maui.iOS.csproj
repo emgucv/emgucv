@@ -8,7 +8,10 @@
     <NoBindingEmbedding>false</NoBindingEmbedding>
   </PropertyGroup>
   <PropertyGroup>
+    <EmguCVIOSLinkTarget>MAUI IOS Library</EmguCVIOSLinkTarget>
     <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\libs))</OpenCVBinaryDir>
+    <EmguCVNativeIOSBinary>$(OpenCVBinaryDir)\iOS\libcvextern_universal.a</EmguCVNativeIOSBinary>    
+    <EmguCVMauiIOSErrorMessage Condition="!Exists('$(EmguCVNativeIOSBinary)')">This package do not contain necessary binary for $(EmguCVIOSLinkTarget). Emgu CV for iOS Commercial License is required. iOS is targeted, but file $(EmguCVNativeIOSBinary) is missing.</EmguCVMauiIOSErrorMessage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <WarningLevel>4</WarningLevel>
@@ -42,7 +45,7 @@
   </ItemGroup>
   
     <ItemGroup>
-    <NativeReference Condition="!Exists('$(OpenCVBinaryDir)\iOS\libcvextern_universal.a')" Include="$(OpenCVBinaryDir)\iOS\libcvextern_universal.a">
+    <NativeReference Condition="Exists('$(EmguCVNativeIOSBinary)')" Include="$(EmguCVNativeIOSBinary)">
       <Kind>Static</Kind>
       <SmartLink>True</SmartLink>
       <ForceLoad>True</ForceLoad>
@@ -65,5 +68,9 @@
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll and $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)" Importance="high" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(OpenCVBinaryDir)" ContinueOnError="true" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="$(OpenCVBinaryDir)" ContinueOnError="true" />
+  </Target>
+  
+  <Target Name="EmguCVMauiIOSPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Warning Text="'$(EmguCVMauiIOSErrorMessage)'" Condition="'$(EmguCVMauiIOSErrorMessage)'!=''" />
   </Target>
 </Project>
