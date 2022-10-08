@@ -3905,7 +3905,12 @@ target_link_libraries(${the_target}
   #  xtiff 
   #${CVBLOB_LIBRARY})
 
-set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
+#IF (APPLE)
+#	set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
+#ELSE()
+#	set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
+#ENDIF()
+
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${the_target} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
