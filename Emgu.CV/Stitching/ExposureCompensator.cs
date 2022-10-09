@@ -13,7 +13,7 @@ using Emgu.Util;
 namespace Emgu.CV.Stitching
 {
     /// <summary>
-    /// 
+    /// Base class for all exposure compensators.
     /// </summary>
     public abstract class ExposureCompensator : UnmanagedObject
     {

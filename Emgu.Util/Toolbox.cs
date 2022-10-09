@@ -408,7 +408,7 @@ namespace Emgu.Util
         /// <summary>
         /// Load all the assemblies.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>All the assemblies loaded.</returns>
         public static System.Reflection.Assembly[] LoadAllDependentAssemblies()
         {
             try
