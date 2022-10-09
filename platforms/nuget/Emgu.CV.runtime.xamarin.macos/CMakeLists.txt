@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(HAVE_MACOS)
+IF(HAVE_MACOS AND (NOT APPLE OR (TARGET Emgu.CV.Platform.Xamarin.Mac)))
 
   PROJECT(Emgu.CV.runtime.xamarin.macos.nuget)
 
@@ -32,6 +32,6 @@ IF(HAVE_MACOS)
   
   if(ENABLE_SOLUTION_FOLDERS)
     set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "nuget")
-  endif() 
-
+  endif()
+  
 ENDIF()

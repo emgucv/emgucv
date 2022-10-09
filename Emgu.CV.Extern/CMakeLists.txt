@@ -3906,7 +3906,7 @@ target_link_libraries(${the_target}
   #${CVBLOB_LIBRARY})
 
 #IF (APPLE)
-#	set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
+	set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 17)
 #ELSE()
 #	set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
 #ENDIF()
