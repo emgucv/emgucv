@@ -155,7 +155,7 @@ namespace Emgu.CV.Shape
         /// <param name="transformer">The shape transformer</param>
         /// <param name="input">Contour (set of points) to apply the transformation.</param>
         /// <param name="output">Output contour.</param>
-        /// <returns></returns>
+        /// <returns>The cost of the transformation.</returns>
         public static float ApplyTransformation(
             this IShapeTransformer transformer,
             IInputArray input,
