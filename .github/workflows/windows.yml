@@ -22,22 +22,22 @@ jobs:
     #- name: Check out submodules
     #  run: git submodule update --init --recursive
     - name: Build Emgu CV 32-bit native binary
-      run: .\Build_Binary_x86.bat 32 nogpu vc no-openni no-doc no-package build
+      run: .\Build_Binary_x86.bat x86 nogpu vc no-openni no-doc no-package build
       working-directory: ${{ github.workspace }}\platforms\windows\
     - name: Clean up the 32-bit build
       run: .\git-clean.bat --keep_binary
       working-directory: ${{ github.workspace }}\miscellaneous
     - name: Build Emgu CV 64-bit native binary
-      run: .\Build_Binary_x86.bat 64 nogpu vc no-openni no-doc package build nuget
+      run: .\Build_Binary_x86.bat x86_64 nogpu vc no-openni no-doc package build nuget
       working-directory: ${{ github.workspace }}\platforms\windows\
     - uses: actions/upload-artifact@v2
       with:
         name: emgucv-windows-nsis-build-log
-        path: ${{ github.workspace }}\build_x64\_CPack_Packages\win64\NSIS\*.log
+        path: ${{ github.workspace }}\build_x86_64\_CPack_Packages\win64\NSIS\*.log
     - uses: actions/upload-artifact@v2
       with:
         name: emgucv-windows-zip-package
-        path: ${{ github.workspace }}\build_x64\*.zip
+        path: ${{ github.workspace }}\build_x86_64\*.zip
     - name: Run a test program
       run: dotnet run
       working-directory: ${{ github.workspace }}\Emgu.CV.Example\BuildInfo.NetCore.Console\   
