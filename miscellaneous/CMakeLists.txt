@@ -20,6 +20,7 @@ ADD_CUSTOM_TARGET(
    COMMAND "${MSBUILD_EXECUTABLE}" /p:Configuration=${DEFAULT_CS_CONFIG} ${EXTRA_MSBUILD_FLAGS} "${CMAKE_CURRENT_SOURCE_DIR}/../Solution/Windows.Desktop/Emgu.CV.sln"
    COMMAND "${MSBUILD_EXECUTABLE}" /p:Configuration=${DEFAULT_CS_CONFIG} ${EXTRA_MSBUILD_FLAGS} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj"
    COMMAND "${MSBUILD_EXECUTABLE}" /p:Configuration=${DEFAULT_CS_CONFIG} ${EXTRA_MSBUILD_FLAGS} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj" /property:PresentationStyle=OpenXml /property:HelpFileFormat=OpenXml
+   COMMAND "${CMAKE_COMMAND}" -E tar "cfv" "${CMAKE_CURRENT_SOURCE_DIR}/../Help.zip" --format=zip "${CMAKE_CURRENT_SOURCE_DIR}/../Help"
    SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj
 )
 ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetFramework Emgu.CV.Platform.NetCore)
