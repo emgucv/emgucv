@@ -93,6 +93,7 @@ namespace Emgu.CV.Face
             {
                 FaceInvoke.cveMaceRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
+                _algorithmPtr = IntPtr.Zero;
             }
         }
     }
