@@ -15,7 +15,7 @@
 		<ApplicationTitle>BuildInfo</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.buildinfo</ApplicationId>
+		<ApplicationId>com.emgu.cv.buildinfo</ApplicationId>
 		<ApplicationIdGuid>1fd9f6ae-e362-4cad-8084-a84a5a03640c</ApplicationIdGuid>
 
 		<!-- Versions -->
@@ -49,24 +49,24 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-windows10.0.19041.0'">
-	  <PackageReference Include="Emgu.CV.runtime.windows" Version="4.6.0.5078" />
+	  <PackageReference Include="Emgu.CV.runtime.windows" Version="4.6.0.5111" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-android'">
 	  <PackageReference Include="Emgu.CV.runtime.maui.android">
-	    <Version>4.6.0.5078</Version>
+	    <Version>4.6.0.5111</Version>
 	  </PackageReference>
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-ios'">
 	  <PackageReference Include="Emgu.CV.runtime.maui.ios">
-	    <Version>4.6.0.5078</Version>
+	    <Version>4.6.0.5111</Version>
 	  </PackageReference>
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-maccatalyst'">
 	  <PackageReference Include="Emgu.CV.runtime.maui.macos">
-	    <Version>4.6.0.5078</Version>
+	    <Version>4.6.0.5111</Version>
 	  </PackageReference>
 	</ItemGroup>
 
