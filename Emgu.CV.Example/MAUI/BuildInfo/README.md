@@ -19,7 +19,10 @@ To restore the nuget package, in the terminal run this command:
 To build the Mac OS MAUI App and run it, use this command:
 >>> dotnet build -t:Run -f net6.0-maccatalyst
 
-To build the iOS MAUI app and run it, use this command:
+To build the iOS MAUI app and run it on a simulator, use this command:
 >>> dotnet build -t:Run -f net6.0-ios
+
+To build the iOS MAUI app for iOS device, use this command:
+>>> dotnet publish -f net6.0-ios -c Release -r ios-arm64
 
 For Windows and Android MAUI build, you can use Visual Studio on windows.
