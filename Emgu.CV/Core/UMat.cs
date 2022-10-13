@@ -124,6 +124,7 @@ namespace Emgu.CV
         /// <summary>
         /// Create an empty cv::UMat
         /// </summary>
+        /// <param name="usage">Allocation Usage</param>
         public UMat(Usage usage = Usage.Default)
            : this(UMatInvoke.cveUMatCreate(usage), true)
         {
