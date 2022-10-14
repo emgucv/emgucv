@@ -12,6 +12,9 @@ using Emgu.CV.CvEnum;
 
 namespace Emgu.CV
 {
+    /// <summary>
+    /// Extension methods to convert Emgu CV objects to / from BitmapSource
+    /// </summary>
     public static class BitmapSourceExtension
     {
         /// <summary>
