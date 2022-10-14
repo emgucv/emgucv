@@ -38,13 +38,27 @@ namespace Emgu.Util
             }
             else if (Emgu.Util.Toolbox.FindAssembly("Mono.Android.dll") != null)
             {
+                //Xamarin Android
                 _os = OS.Android;
                 _runtime = Clr.Mono;
             }
-            else if (Emgu.Util.Toolbox.FindAssembly("Xamarin.iOS.dll") != null)
+            else if (Emgu.Util.Toolbox.FindAssembly("Microsoft.Android.dll") != null)
             {
+                //MAUI Android
+                _os = OS.Android;
+                _runtime = Clr.DotNet;
+            }
+            else if (Emgu.Util.Toolbox.FindAssembly("Xamarin.iOS.dll") != null)
+            {   
+                //Xamarin iOS
                 _os = OS.IOS;
                 _runtime = Clr.Mono;
+            }
+            else if (Emgu.Util.Toolbox.FindAssembly("Microsoft.iOS.dll") != null)
+            {
+                //MAUI iOS
+                _os = OS.IOS;
+                _runtime = Clr.DotNet;
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
