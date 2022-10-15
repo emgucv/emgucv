@@ -13,7 +13,7 @@
 #ifdef HAVE_OPENCV_CALIB3D
 #include "opencv2/calib3d/calib3d.hpp"
 #else
-static inline CV_NORETURN void throw_no_calib3d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without calib3d support"); }
+static inline CV_NORETURN void throw_no_calib3d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without calib3d support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv {
 	class Feature2D {};

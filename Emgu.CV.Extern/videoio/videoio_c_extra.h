@@ -24,7 +24,7 @@
 #endif
 
 #else
-static inline CV_NORETURN void throw_no_videoio() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Videoio support"); }
+static inline CV_NORETURN void throw_no_videoio() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Videoio support. To use this module, please switch to the full Emgu CV runtime."); }
 class CvCapture
 {	
 };

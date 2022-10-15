@@ -19,7 +19,7 @@
 
 #else
 
-static inline CV_NORETURN void throw_no_bioinspired() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Bioinspired support"); }
+static inline CV_NORETURN void throw_no_bioinspired() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Bioinspired support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv
 {

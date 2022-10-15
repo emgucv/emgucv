@@ -19,7 +19,7 @@
 #include "emgu_c.h"
 
 #else
-static inline CV_NORETURN void throw_no_cudacodec() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Codec support"); }
+static inline CV_NORETURN void throw_no_cudacodec() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Codec support. To use this module, please switch to the Emgu CV runtime with CUDA support."); }
 
 
 namespace cv

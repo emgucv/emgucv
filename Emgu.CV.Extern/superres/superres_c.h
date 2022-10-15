@@ -15,7 +15,7 @@
 #include "opencv2/superres.hpp"
 #else
 
-static inline CV_NORETURN void throw_no_superres() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Superres support"); }
+static inline CV_NORETURN void throw_no_superres() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Superres support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv
 {

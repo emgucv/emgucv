@@ -13,7 +13,7 @@
 #include "opencv2/objdetect/objdetect.hpp"
 //#include "opencv2/objdetect/objdetect_c.h"
 #else
-static inline CV_NORETURN void throw_no_objdetect() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without objdetect support"); }
+static inline CV_NORETURN void throw_no_objdetect() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without objdetect support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv
 {
     class HOGDescriptor {};

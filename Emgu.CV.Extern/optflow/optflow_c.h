@@ -13,7 +13,7 @@
 #ifdef HAVE_OPENCV_OPTFLOW
 #include "opencv2/optflow.hpp"
 #else
-static inline CV_NORETURN void throw_no_optflow() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without optflow."); }
+static inline CV_NORETURN void throw_no_optflow() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without optflow support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv {
 class DenseOpticalFlow{};
 class SparseOpticalFlow{};

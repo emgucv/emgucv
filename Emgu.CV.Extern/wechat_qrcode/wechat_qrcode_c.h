@@ -12,7 +12,7 @@
 #ifdef HAVE_OPENCV_WECHAT_QRCODE
 #include "opencv2/wechat_qrcode.hpp"
 #else
-static inline CV_NORETURN void throw_no_wechat_qrcode() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without wechat qrcode support"); }
+static inline CV_NORETURN void throw_no_wechat_qrcode() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without wechat qrcode support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv
 {

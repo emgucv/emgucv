@@ -15,7 +15,7 @@
 #ifdef HAVE_OPENCV_FEATURES2D
 #include "opencv2/features2d/features2d.hpp"
 #else
-static inline CV_NORETURN void throw_no_features2d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without features2d support"); }
+static inline CV_NORETURN void throw_no_features2d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without features2d support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv {
 	class ORB {};

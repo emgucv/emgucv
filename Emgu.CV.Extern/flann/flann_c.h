@@ -13,7 +13,7 @@
 #ifdef HAVE_OPENCV_FLANN
 #include "opencv2/flann/flann.hpp"
 #else
-static inline CV_NORETURN void throw_no_flann() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without flann support"); }
+static inline CV_NORETURN void throw_no_flann() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without flann support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv {
 	namespace flann
