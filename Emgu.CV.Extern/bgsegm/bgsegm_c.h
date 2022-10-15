@@ -12,7 +12,7 @@
 #ifdef HAVE_OPENCV_BGSEGM
 #include "opencv2/bgsegm.hpp"
 #else
-static inline CV_NORETURN void throw_no_bgsegm() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without bgsegm module support"); }
+static inline CV_NORETURN void throw_no_bgsegm() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without bgsegm module support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv {
 	class BackgroundSubtractor {};
 	namespace bgsegm {

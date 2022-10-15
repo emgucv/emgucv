@@ -12,7 +12,7 @@
 #ifdef HAVE_OPENCV_XIMGPROC
 #include "opencv2/ximgproc.hpp"
 #else
-static inline CV_NORETURN void throw_no_ximgproc() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without ximgproc support"); }
+static inline CV_NORETURN void throw_no_ximgproc() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without ximgproc support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv {
 	namespace ximgproc {
 		class DTFilter {};

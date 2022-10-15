@@ -16,7 +16,7 @@
 #include "opencv2/gapi/imgproc.hpp"
 #include "opencv2/gapi/stereo.hpp"
 #else
-static inline CV_NORETURN void throw_no_gapi() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without gapi support"); }
+static inline CV_NORETURN void throw_no_gapi() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without gapi support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv {
 	class GMat {};
 	class GScalar {};

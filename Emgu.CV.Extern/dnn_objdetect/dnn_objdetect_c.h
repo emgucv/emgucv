@@ -15,7 +15,7 @@
 #include "opencv2/core_detect.hpp"
 #else
 
-static inline CV_NORETURN void throw_no_dnn_objdetect() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Dnn Objdetect support"); }
+static inline CV_NORETURN void throw_no_dnn_objdetect() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Dnn Objdetect support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv
 {

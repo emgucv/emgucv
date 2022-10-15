@@ -12,7 +12,7 @@
 #ifdef HAVE_OPENCV_RGBD
 #include "opencv2/rgbd.hpp"
 #else
-static inline CV_NORETURN void throw_no_rgbd() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without rgbd support"); }
+static inline CV_NORETURN void throw_no_rgbd() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without rgbd support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv
 {

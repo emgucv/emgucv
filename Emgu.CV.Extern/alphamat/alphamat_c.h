@@ -17,7 +17,7 @@
 
 #else
 
-static inline CV_NORETURN void throw_no_alphamat() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Alphamat support"); }
+static inline CV_NORETURN void throw_no_alphamat() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Alphamat support. To use this module, please switch to the full Emgu CV runtime."); }
 #endif
 
 CVAPI(void) cveAlphamatInfoFlow(cv::_InputArray* image, cv::_InputArray* tmap, cv::_OutputArray* result);

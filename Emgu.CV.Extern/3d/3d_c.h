@@ -23,7 +23,7 @@ namespace cv
 	class Octree {};
 }
 
-static inline CV_NORETURN void throw_no_3d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without 3d support"); }
+static inline CV_NORETURN void throw_no_3d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without 3d support. To use this module, please switch to the full Emgu CV runtime."); }
 
 #endif
 

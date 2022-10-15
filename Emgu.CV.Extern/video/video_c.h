@@ -13,7 +13,7 @@
 #ifdef HAVE_OPENCV_VIDEO
 #include "opencv2/video/video.hpp"
 #else
-static inline CV_NORETURN void throw_no_video() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without video support"); }
+static inline CV_NORETURN void throw_no_video() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without video support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv {
 	class Tracker {};
 	class TrackerMIL {};

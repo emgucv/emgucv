@@ -13,7 +13,7 @@
 #ifdef HAVE_OPENCV_XSTEREO
 #include "opencv2/xstereo.hpp"
 #else
-static inline CV_NORETURN void throw_no_xstereo() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xstereo support"); }
+static inline CV_NORETURN void throw_no_xstereo() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xstereo support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv {
 	namespace stereo {
 		class QuasiDenseStereo {};

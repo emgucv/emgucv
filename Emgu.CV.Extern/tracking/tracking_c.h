@@ -22,7 +22,7 @@ namespace cv {
 #include "opencv2/tracking/tracking.hpp"
 #include "opencv2/tracking/tracking_legacy.hpp"
 #else
-static inline CV_NORETURN void throw_no_tracking() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without tracking support"); }
+static inline CV_NORETURN void throw_no_tracking() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without tracking support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv {
 	class TrackerCSRT {};
 	class TrackerKCF {};

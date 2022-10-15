@@ -13,7 +13,7 @@
 #ifdef HAVE_OPENCV_STEREO
 #include "opencv2/stereo.hpp"
 #else
-static inline CV_NORETURN void throw_no_stereo() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without stereo support"); }
+static inline CV_NORETURN void throw_no_stereo() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without stereo support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv {
 	class StereoSGBM {};

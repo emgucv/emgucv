@@ -13,7 +13,7 @@
 #ifdef HAVE_OPENCV_XFEATURES2D
 #include "opencv2/xfeatures2d.hpp"
 #else
-static inline CV_NORETURN void throw_no_xfeatures2d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xfeatures2d support"); }
+static inline CV_NORETURN void throw_no_xfeatures2d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xfeatures2d support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv {
 	class Feature2D {};
 	namespace xfeatures2d {

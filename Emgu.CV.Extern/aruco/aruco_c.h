@@ -18,7 +18,7 @@
 
 #else
 
-static inline CV_NORETURN void throw_no_aruco() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Aruco support"); }
+static inline CV_NORETURN void throw_no_aruco() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Aruco support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv
 {

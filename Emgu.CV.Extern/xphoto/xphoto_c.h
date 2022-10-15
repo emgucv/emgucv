@@ -12,7 +12,7 @@
 #ifdef HAVE_OPENCV_XPHOTO
 #include "opencv2/xphoto.hpp"
 #else
-static inline CV_NORETURN void throw_no_xphoto() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xphoto module support"); }
+static inline CV_NORETURN void throw_no_xphoto() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xphoto module support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv {
 	class Tonemap {};
 	namespace xphoto {

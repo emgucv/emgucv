@@ -13,7 +13,7 @@
 #include "opencv2/img_hash.hpp"
 #else
 
-static inline CV_NORETURN void throw_no_img_hash() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without img hash support"); }
+static inline CV_NORETURN void throw_no_img_hash() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without img hash support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv
 {

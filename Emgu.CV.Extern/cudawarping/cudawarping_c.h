@@ -18,7 +18,7 @@
 #include "opencv2/core/types_c.h"
 #include "emgu_c.h"
 #else
-static inline CV_NORETURN void throw_no_cudawarping() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Warping support"); }
+static inline CV_NORETURN void throw_no_cudawarping() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Warping support. To use this module, please switch to the Emgu CV runtime with CUDA support."); }
 #endif
 
 CVAPI(void) cudaPyrDown(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream);

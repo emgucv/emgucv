@@ -13,7 +13,7 @@
 #ifdef HAVE_OPENCV_XOBJDETECT
 #include "opencv2/xobjdetect.hpp"
 #else
-static inline CV_NORETURN void throw_no_xobjdetect() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xobjdetect support"); }
+static inline CV_NORETURN void throw_no_xobjdetect() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xobjdetect support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv {
 	namespace xobjdetect {
 		class WBDetector {};

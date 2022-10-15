@@ -15,7 +15,7 @@
 #ifdef HAVE_OPENCV_SALIENCY
 #include "opencv2/saliency.hpp"
 #else
-static inline CV_NORETURN void throw_no_saliency() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Saliency support"); }
+static inline CV_NORETURN void throw_no_saliency() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Saliency support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv
 {
 	namespace saliency
