@@ -24,7 +24,7 @@ namespace cv
 #endif
 
 #else
-static inline CV_NORETURN void throw_no_stitching() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without stitching support"); }
+static inline CV_NORETURN void throw_no_stitching() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without stitching support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv
 {

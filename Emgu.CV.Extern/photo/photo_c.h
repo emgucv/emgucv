@@ -13,7 +13,7 @@
 #include "opencv2/photo/photo.hpp"
 #include "opencv2/photo/cuda.hpp"
 #else
-static inline CV_NORETURN void throw_no_photo() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without photo support"); }
+static inline CV_NORETURN void throw_no_photo() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without photo support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv
 {

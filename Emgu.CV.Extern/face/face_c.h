@@ -14,7 +14,7 @@
 #include "opencv2/face/bif.hpp"
 #include "opencv2/face.hpp"
 #else
-static inline CV_NORETURN void throw_no_face() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without face support"); }
+static inline CV_NORETURN void throw_no_face() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without face support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv {
 	namespace face {
 		class FaceRecognizer {};

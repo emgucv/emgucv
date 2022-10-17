@@ -15,7 +15,7 @@
 #include "opencv2/surface_matching/ppf_helpers.hpp"
 
 #else
-static inline CV_NORETURN void throw_no_surface_matching() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without surface matching support"); }
+static inline CV_NORETURN void throw_no_surface_matching() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without surface matching support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv {
 	namespace ppf_match_3d {

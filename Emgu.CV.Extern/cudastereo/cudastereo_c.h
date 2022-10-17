@@ -17,7 +17,7 @@
 #include "opencv2/core/types_c.h"
 #include "emgu_c.h"
 #else
-static inline CV_NORETURN void throw_no_cudastereo() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Stereo support"); }
+static inline CV_NORETURN void throw_no_cudastereo() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Stereo support. To use this module, please switch to the Emgu CV runtime with CUDA support."); }
 
 namespace cv
 {

@@ -19,7 +19,7 @@
 
 #include "features2d_c.h"
 
-static inline CV_NORETURN void throw_no_xfeatures2d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xfeatures2d support"); }
+static inline CV_NORETURN void throw_no_xfeatures2d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xfeatures2d support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv {
 
 	namespace xfeatures2d {

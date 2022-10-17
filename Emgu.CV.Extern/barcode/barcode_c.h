@@ -12,7 +12,7 @@
 #ifdef HAVE_OPENCV_BARCODE
 #include "opencv2/barcode.hpp"
 #else
-static inline CV_NORETURN void throw_no_barcode() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without barcode support"); }
+static inline CV_NORETURN void throw_no_barcode() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without barcode support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv
 {

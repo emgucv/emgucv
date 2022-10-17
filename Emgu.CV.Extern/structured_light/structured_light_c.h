@@ -12,7 +12,7 @@
 #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
 #include "opencv2/structured_light.hpp"
 #else
-static inline CV_NORETURN void throw_no_structured_light() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without structure light support"); }
+static inline CV_NORETURN void throw_no_structured_light() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without structure light support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv {
     namespace structured_light {
         class StructuredLightPattern {};

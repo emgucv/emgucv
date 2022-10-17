@@ -13,7 +13,7 @@
 #ifdef HAVE_OPENCV_SHAPE
 #include "opencv2/shape/shape.hpp"
 #else
-static inline CV_NORETURN void throw_no_shape() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without shape support"); }
+static inline CV_NORETURN void throw_no_shape() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without shape support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv {
 	class HistogramCostExtractor {};
 	class ShapeTransformer {};

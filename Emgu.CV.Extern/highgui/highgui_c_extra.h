@@ -14,7 +14,7 @@
 #include "opencv2/highgui/highgui_c.h"
 #include "opencv2/highgui/highgui.hpp"
 #else
-static inline CV_NORETURN void throw_no_highgui() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without highgui support"); }
+static inline CV_NORETURN void throw_no_highgui() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without highgui support. To use this module, please switch to the full Emgu CV runtime."); }
 #endif
 
 
