@@ -3,7 +3,7 @@
 # --------------------------------------------------------
 
 IF(HAVE_MAC_CATALYST)
-  PROJECT(Emgu.CV.Platform.Maui.Mac)
+
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}
@@ -18,19 +18,25 @@ IF(HAVE_MAC_CATALYST)
     PATTERN "CMakeFiles" EXCLUDE
     )
 	
-  BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.csproj" "${EXTRA_MSBUILD_FLAGS}" ALL)
+  IF(APPLE)	
+    PROJECT(Emgu.CV.Platform.Maui.Mac)
+	
+    BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.csproj" "${EXTRA_MSBUILD_FLAGS}" ALL)
         
-  if(ENABLE_SOLUTION_FOLDERS)
-    set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
-  endif()
+    if(ENABLE_SOLUTION_FOLDERS)
+      set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
+    endif()
     
-  ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.Platform.NetStandard.IOS)
-  
-  INSTALL(
-    FILES 
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/${PROJECT_NAME}.xml
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/${PROJECT_NAME}.dll 
-    DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
-    COMPONENT emgucv_binary)
+    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.Platform.NetStandard.IOS)
+    ENDIF()
+ENDIF()
+
+IF (HAVE_MAUI_MAC)
+    INSTALL(
+      FILES 
+      ${LIBRARY_OUTPUT_PATH}/Emgu.CV.Platform.Maui.Mac.xml
+      ${LIBRARY_OUTPUT_PATH}/Emgu.CV.Platform.Maui.Mac.dll 
+      DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
+      COMPONENT emgucv_binary)
 ENDIF()
 
