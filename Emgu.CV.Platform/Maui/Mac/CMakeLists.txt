@@ -34,7 +34,7 @@ ENDIF()
 IF (HAVE_MAUI_MAC)
     INSTALL(
       FILES 
-      ${${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/Emgu.CV.Platform.Maui.Mac.xml
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/Emgu.CV.Platform.Maui.Mac.xml
       ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/Emgu.CV.Platform.Maui.Mac.dll 
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
       COMPONENT emgucv_binary)
