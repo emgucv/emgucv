@@ -38,8 +38,8 @@ ENDIF()
 IF (HAVE_XAMARIN_MAC)
     INSTALL(
       FILES 
-      ${LIBRARY_OUTPUT_PATH}/Emgu.CV.Platform.Xamarin.Mac.xml
-      ${LIBRARY_OUTPUT_PATH}/Emgu.CV.Platform.Xamarin.Mac.dll 
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/Emgu.CV.Platform.Xamarin.Mac.xml
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/Emgu.CV.Platform.Xamarin.Mac.dll 
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
       COMPONENT emgucv_binary)
 ENDIF()
