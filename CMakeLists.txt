@@ -870,8 +870,10 @@ IF(WITH_INF_ENGINE OR WITH_OPENVINO)
   SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-dldt")
 ENDIF()
 
+SET(IS_PRO_BUILD FALSE)
 IF("${CPACK_PACKAGE_NAME}" STREQUAL "${PACKAGE_NAME}-ios-android-macos-windows-ipp-dldt")
   SET(CPACK_PACKAGE_NAME "${PACKAGE_NAME}-pro")
+  SET(IS_PRO_BUILD TRUE)
 ENDIF()
 
 
@@ -2198,6 +2200,16 @@ IF(HAVE_MAC_CATALYST)
       COMPONENT emgucv_binary
       )
   ENDIF()
+ENDIF()
+
+IF(IS_PRO_BUILD)
+  INSTALL(
+    FILES
+    "Solution/CrossPlatform/Emgu.CV.CrossPlatform.sln"
+	"Solution/CrossPlatform/Emgu.CV.sln"
+    DESTINATION "Solution/CrossPlatform"
+    COMPONENT emgucv_example_source
+    )
 ENDIF()
 
 INSTALL(
