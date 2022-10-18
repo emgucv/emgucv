@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32929.386
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV", "..\..\Emgu.CV\Emgu.CV.shproj", "{12D024EE-D0A5-4BBC-B7C0-7B18CF1AB262}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.Util", "..\..\Emgu.Util\Emgu.Util.shproj", "{98561642-5EC3-4244-BAF9-6876D9BA5527}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.NetStandard", "..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj", "{197CBC87-00B5-4018-BD75-BF9BB7DCFE2E}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Ubuntu", "..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.shproj", "{86A21342-2DA9-4841-B1BD-B323AC5B81FD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildInfo.NetCore.Console", "..\..\Emgu.CV.Example\BuildInfo.NetCore.Console\BuildInfo.NetCore.Console.csproj", "{CE034903-1A13-487D-88BB-DCA51B94359F}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{197cbc87-00b5-4018-bd75-bf9bb7dcfe2e}*SharedItemsImports = 5
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{197cbc87-00b5-4018-bd75-bf9bb7dcfe2e}*SharedItemsImports = 5
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{197cbc87-00b5-4018-bd75-bf9bb7dcfe2e}*SharedItemsImports = 5
+		..\..\Emgu.CV\Emgu.CV.projitems*{197cbc87-00b5-4018-bd75-bf9bb7dcfe2e}*SharedItemsImports = 5
+		..\..\Emgu.Util\Emgu.Util.projitems*{197cbc87-00b5-4018-bd75-bf9bb7dcfe2e}*SharedItemsImports = 5
+		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{86a21342-2da9-4841-b1bd-b323ac5b81fd}*SharedItemsImports = 13
+		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+		..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.projitems*{ce034903-1a13-487d-88bb-dca51b94359f}*SharedItemsImports = 5
+		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{ce034903-1a13-487d-88bb-dca51b94359f}*SharedItemsImports = 5
+		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{ce034903-1a13-487d-88bb-dca51b94359f}*SharedItemsImports = 5
+		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{ce034903-1a13-487d-88bb-dca51b94359f}*SharedItemsImports = 5
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{197CBC87-00B5-4018-BD75-BF9BB7DCFE2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{197CBC87-00B5-4018-BD75-BF9BB7DCFE2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{197CBC87-00B5-4018-BD75-BF9BB7DCFE2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{197CBC87-00B5-4018-BD75-BF9BB7DCFE2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE034903-1A13-487D-88BB-DCA51B94359F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE034903-1A13-487D-88BB-DCA51B94359F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE034903-1A13-487D-88BB-DCA51B94359F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE034903-1A13-487D-88BB-DCA51B94359F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BEF46B3C-2D11-40C3-AAEF-8EDD16057123}
+	EndGlobalSection
+EndGlobal
