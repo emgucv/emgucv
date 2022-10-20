@@ -7,7 +7,7 @@ IF(HAVE_MAC_CATALYST)
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}
-    DESTINATION Emgu.CV.Platform/Maui/Mac
+    DESTINATION Emgu.CV.Platform/Maui
     COMPONENT emgucv_source
     FILES_MATCHING 
     PATTERN "*.cs"

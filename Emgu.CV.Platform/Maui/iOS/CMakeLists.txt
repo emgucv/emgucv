@@ -6,7 +6,7 @@ IF(HAVE_IOS)
 
   INSTALL(
       DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-      DESTINATION Emgu.CV.Platform/Maui/iOS
+      DESTINATION Emgu.CV.Platform/Maui
       COMPONENT emgucv_source
       FILES_MATCHING 
       PATTERN "Emgu.CV.Platform.Maui.iOS.csproj"
