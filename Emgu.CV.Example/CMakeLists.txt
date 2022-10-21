@@ -50,6 +50,9 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 	  PATTERN "*.svg"
       PATTERN "*.dll"
       PATTERN "*.json"
+	  PATTERN "*.manifest"
+	  PATTERN "*.appxmanifest"
+	  PATTERN "*.plist"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
       PATTERN "Release" EXCLUDE  
