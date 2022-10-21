@@ -3,7 +3,7 @@
 # --------------------------------------------------------
 
 IF(EMGU_CV_EXAMPLE_BUILD)
-  #XamarinForms.Core 
+   
   IF (HAVE_ANDROID OR HAVE_IOS OR HAVE_MACOS OR HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINSTORE_10) 
     INSTALL(
       DIRECTORY
@@ -30,6 +30,31 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "Release" EXCLUDE  
       )
     INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/MAUI/MauiDemoApp/"
+      DESTINATION Emgu.CV.Example/MAUI/MauiDemoApp/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.config"
+      PATTERN "*.shproj"
+      PATTERN "*.Xamarin"
+      PATTERN "*.projitems"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+	  PATTERN "*.jpg"
+	  PATTERN "*.svg"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN ".git" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "Release" EXCLUDE  
+      )	  
+    INSTALL(
       FILES
       "${OPENCV_EXTRA_SUBFOLDER}/testdata/dnn/mask_rcnn_inception_v2_coco_2018_01_28.pbtxt"
       DESTINATION "opencv_extra/testdata/dnn/"
@@ -43,7 +68,29 @@ IF(EMGU_CV_EXAMPLE_BUILD)
     add_subdirectory(Webservice_Host)
     add_subdirectory(Webservice_Client)
     add_subdirectory(OCR)
-    
+    INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/CameraCapture/"
+      DESTINATION Emgu.CV.Example/CameraCapture/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.config"
+      PATTERN "*.shproj"
+      PATTERN "*.Xamarin"
+      PATTERN "*.projitems"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN ".git" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "Release" EXCLUDE  
+      )
     INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/WPF.NetCore/"
@@ -94,6 +141,76 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/TF.Lite.Interop/"
       DESTINATION Emgu.CV.Example/TF.Lite.Interop/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.config"
+      PATTERN "*.shproj"
+      PATTERN "*.Xamarin"
+      PATTERN "*.projitems"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN ".git" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "Release" EXCLUDE  
+      )
+	INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/XamarinForms/WPF/"
+      DESTINATION Emgu.CV.Example/XamarinForms/WPF/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "Properties/*"
+      PATTERN "*.csproj"
+      PATTERN "*.appxmanifest"
+      PATTERN "*.xaml"
+      PATTERN "*.json"
+      PATTERN "*.pfx"
+	  PATTERN "*.config"
+      PATTERN "Assets/*.png"  
+      PATTERN ".git" EXCLUDE
+      PATTERN "obj" EXCLUDE
+      PATTERN "CMake*" EXCLUDE
+      PATTERN "Release" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "RelWithDebInfo" EXCLUDE
+      PATTERN "*.dir" EXCLUDE
+      PATTERN "bin" EXCLUDE
+      )   
+    INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/OCR/"
+      DESTINATION Emgu.CV.Example/OCR/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.config"
+      PATTERN "*.shproj"
+      PATTERN "*.Xamarin"
+      PATTERN "*.projitems"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN ".git" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "Release" EXCLUDE  
+      )
+	INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/Stitching/"
+      DESTINATION Emgu.CV.Example/Stitching/
       COMPONENT emgucv_example_source
       FILES_MATCHING 
       PATTERN "*.cs"
@@ -344,6 +461,52 @@ IF(EMGU_CV_EXAMPLE_BUILD)
     add_subdirectory(HelloWorld)
 	add_subdirectory(BuildInfo.NetCore.Console)
 	add_subdirectory(DynamicImage.Asp.NetCore)
+	INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld/"
+      DESTINATION Emgu.CV.Example/HelloWorld/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.config"
+      PATTERN "*.shproj"
+      PATTERN "*.json"
+      PATTERN "*.projitems"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+	  PATTERN "*.jpg"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN "bin" EXCLUDE
+      PATTERN "obj" EXCLUDE
+      )	
+	INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/BuildInfo.NetCore.Console/"
+      DESTINATION Emgu.CV.Example/BuildInfo.NetCore.Console/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.config"
+      PATTERN "*.shproj"
+      PATTERN "*.json"
+      PATTERN "*.projitems"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+	  PATTERN "*.jpg"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN "bin" EXCLUDE
+      PATTERN "obj" EXCLUDE
+      )	
     INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/DynamicImage.Asp.NetCore/"

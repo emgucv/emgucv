@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(HAVE_MAC_CATALYST)
+IF(HAVE_MAUI_MAC)
 
   INSTALL(
     DIRECTORY

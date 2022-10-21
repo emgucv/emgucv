@@ -7,7 +7,7 @@ IF (HAVE_MACOS)
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}
-    DESTINATION Emgu.CV.Platform
+    DESTINATION Emgu.CV.Platform/Xamarin
     COMPONENT emgucv_source
     FILES_MATCHING 
     PATTERN "*.cs"
