@@ -2733,48 +2733,49 @@ ELSEIF (WIN32)
     # ----------------------------------------------------------------------------
     #  The example files
     # ----------------------------------------------------------------------------
-    INSTALL(
-      DIRECTORY
-      ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example
-      DESTINATION .
-      COMPONENT emgucv_example_source
-      FILES_MATCHING 
-      PATTERN "*.cs"
-      PATTERN "*.csproj"
-      PATTERN "*.resx"
-      PATTERN "*.h"
-      PATTERN "*.cpp"
-      PATTERN "*.resX"
-      PATTERN "*.ico"
-      PATTERN "*.rc"
-      PATTERN "CPlusPlus/*.vcproj"
-      PATTERN "CPlusPlus/*.vcxproj"
-      PATTERN "*.vb"
-      PATTERN "*.vbproj"
-      PATTERN "*.aspx" 
-      PATTERN "*.dll"
-      PATTERN "*.txt"
-      PATTERN "*.xml"
-      PATTERN "*.xaml"
-      PATTERN "*.jpg"
-      PATTERN "*.png"  
-      PATTERN "*.settings"
-      PATTERN "*.config"
-      PATTERN "tessdata/*"
-      PATTERN ".git" EXCLUDE
-      PATTERN "obj" EXCLUDE
-      PATTERN "CMake*" EXCLUDE
-      PATTERN "Release" EXCLUDE
-      PATTERN "Debug" EXCLUDE
-      PATTERN "RelWithDebInfo" EXCLUDE
-      PATTERN "*.dir" EXCLUDE
-      PATTERN "Android" EXCLUDE
-      PATTERN "iOS" EXCLUDE
-      PATTERN "Mac" EXCLUDE
-      PATTERN "WindowsStore" EXCLUDE
-      PATTERN "WindowsPhoneApp" EXCLUDE
-      PATTERN "WindowsStoreCameraApp" EXCLUDE
-      )
+    # INSTALL(
+      # DIRECTORY
+      # ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example
+      # DESTINATION .
+      # COMPONENT emgucv_example_source
+      # FILES_MATCHING 
+      # PATTERN "*.cs"
+      # PATTERN "*.csproj"
+      # PATTERN "*.resx"
+      # PATTERN "*.h"
+      # PATTERN "*.cpp"
+      # PATTERN "*.resX"
+      # PATTERN "*.ico"
+      # PATTERN "*.rc"
+      # PATTERN "CPlusPlus/*.vcproj"
+      # PATTERN "CPlusPlus/*.vcxproj"
+      # PATTERN "*.vb"
+      # PATTERN "*.vbproj"
+      # PATTERN "*.aspx" 
+      # PATTERN "*.dll"
+      # PATTERN "*.txt"
+      # PATTERN "*.xml"
+      # PATTERN "*.xaml"
+      # PATTERN "*.jpg"
+      # PATTERN "*.png"
+	  # PATTERN "*.svg"
+      # PATTERN "*.settings"
+      # PATTERN "*.config"
+      # PATTERN "tessdata/*"
+      # PATTERN ".git" EXCLUDE
+      # PATTERN "obj" EXCLUDE
+      # PATTERN "CMake*" EXCLUDE
+      # PATTERN "Release" EXCLUDE
+      # PATTERN "Debug" EXCLUDE
+      # PATTERN "RelWithDebInfo" EXCLUDE
+      # PATTERN "*.dir" EXCLUDE
+      # PATTERN "Android" EXCLUDE
+      # PATTERN "iOS" EXCLUDE
+      # PATTERN "Mac" EXCLUDE
+      # PATTERN "WindowsStore" EXCLUDE
+      # PATTERN "WindowsPhoneApp" EXCLUDE
+      # PATTERN "WindowsStoreCameraApp" EXCLUDE
+      # )
   ENDIF()
   
   INSTALL(
