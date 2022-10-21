@@ -53,6 +53,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 	  PATTERN "*.manifest"
 	  PATTERN "*.appxmanifest"
 	  PATTERN "*.plist"
+	  PATTERN "*.ttf"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
       PATTERN "Release" EXCLUDE  
