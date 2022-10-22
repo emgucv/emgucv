@@ -680,7 +680,7 @@ namespace Emgu.Util
         /// </summary>
         /// <param name="path">The directory to be searched for DLLs</param>
         /// <returns>True if success</returns>
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [DllImport("Kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetDllDirectory(String path);
 
@@ -716,7 +716,7 @@ namespace Emgu.Util
             
         }
         
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [DllImport("Kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool GetDllDirectory(uint nBufferLength, IntPtr lpBuffer);
 
@@ -725,7 +725,7 @@ namespace Emgu.Util
         /// </summary>
         /// <param name="path">The directory to be searched for DLLs</param>
         /// <returns>True if success</returns>
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        [DllImport("Kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool AddDllDirectory(String path);
 
