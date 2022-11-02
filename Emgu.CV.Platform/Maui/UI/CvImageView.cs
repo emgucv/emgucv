@@ -25,7 +25,7 @@ using CoreGraphics;
 using Visibility = Microsoft.UI.Xaml.Visibility;
 #endif
 
-namespace MauiDemoApp
+namespace Emgu.CV.Platform.Maui.UI
 {
    
     public class CvImageView : Image
@@ -118,11 +118,7 @@ namespace MauiDemoApp
 
             if (this.ImageView != null)
             {
-                Android.Graphics.Bitmap bitmap;
-                if (image == null)
-                    bitmap = null;
-                else
-                    bitmap = image.ToBitmap();
+                var bitmap = image?.ToBitmap();
 
                 this.Dispatcher.Dispatch(
                     () =>
