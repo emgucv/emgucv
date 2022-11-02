@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-#if NETFX_CORE
+
 using System;
 using System.Drawing;
 using System.IO;
@@ -190,4 +190,3 @@ namespace Emgu.CV
     }
 }
 
-#endif

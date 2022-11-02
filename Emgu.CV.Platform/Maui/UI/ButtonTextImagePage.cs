@@ -20,6 +20,8 @@ using System.Runtime.InteropServices;
 
 using Microsoft.Maui.Controls.PlatformConfiguration;
 
+using Emgu.CV.Platform.Maui.UI;
+
 #if __MACCATALYST__
 using AppKit;
 using CoreGraphics;
@@ -410,83 +412,5 @@ namespace MauiDemoApp
 
     }
 
-#if WINDOWS
-    public static class WriteableBitmapExtension
-    {
-        /*
-        public static void ToArray(this Microsoft.UI.Xaml.Media.Imaging.WriteableBitmap writeableBitmap, IOutputArray outputArray)
-        {
-            byte[] data = new byte[writeableBitmap.PixelWidth * writeableBitmap.PixelHeight * 4];
-            writeableBitmap.PixelBuffer.CopyTo(data);
 
-            GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            try
-            {
-                using (Mat image = new Mat(
-                    new System.Drawing.Size(writeableBitmap.PixelWidth, writeableBitmap.PixelHeight),
-                    DepthType.Cv8U,
-                    4,
-                    dataHandle.AddrOfPinnedObject(),
-                    writeableBitmap.PixelWidth * 4
-                    ))
-                {
-                    CvInvoke.CvtColor(image, outputArray, ColorConversion.Bgra2Bgr);
-                }
-            }
-            finally
-            {
-                dataHandle.Free();
-            }
-        }*/
-
-
-        public static Microsoft.UI.Xaml.Media.Imaging.WriteableBitmap ToWritableBitmap(this IInputArray array)
-        {
-            using (InputArray ia = array.GetInputArray())
-            {
-                System.Drawing.Size size = ia.GetSize();
-                Microsoft.UI.Xaml.Media.Imaging.WriteableBitmap bmp = new Microsoft.UI.Xaml.Media.Imaging.WriteableBitmap(size.Width, size.Height);
-                byte[] buffer = new byte[bmp.PixelWidth * bmp.PixelHeight * 4];
-                GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
-
-                using (Mat resultImage = new Mat(
-                    new System.Drawing.Size(bmp.PixelWidth, bmp.PixelHeight),
-                    DepthType.Cv8U,
-                    4,
-                    handle.AddrOfPinnedObject(),
-                    bmp.PixelWidth * 4))
-                {
-                    int channels = ia.GetChannels();
-                    switch (channels)
-                    {
-                        case 1:
-                            CvInvoke.CvtColor(array, resultImage, ColorConversion.Gray2Bgra);
-                            break;
-                        case 3:
-                            CvInvoke.CvtColor(array, resultImage, ColorConversion.Bgr2Bgra);
-                            break;
-                        case 4:
-                            using (Mat m = ia.GetMat())
-                                m.CopyTo(resultImage);
-                            break;
-                        default:
-                            throw new NotImplementedException(String.Format(
-                                "Conversion from {0} channel IInputArray to WritableBitmap is not supported",
-                                channels));
-                    }
-                }
-                handle.Free();
-                using (Stream resultStream = System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeBufferExtensions.AsStream(bmp.PixelBuffer)) 
-                //using (Stream resultStream = bmp.PixelBuffer.AsStream())
-                {
-                    resultStream.Write(buffer, 0, buffer.Length);
-                }
-
-                return bmp;
-            }
-        }
-
-
-    }
-#endif
 }
