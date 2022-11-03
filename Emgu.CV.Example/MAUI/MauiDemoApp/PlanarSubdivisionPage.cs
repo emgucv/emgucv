@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Emgu.CV.Platform.Maui.UI;
 using PlanarSubdivisionExample;
 
 namespace MauiDemoApp

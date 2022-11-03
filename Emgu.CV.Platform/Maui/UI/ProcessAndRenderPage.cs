@@ -44,7 +44,7 @@ using Emgu.Util;
 using Environment = System.Environment;
 using Point = System.Drawing.Point;
 
-namespace MauiDemoApp
+namespace Emgu.CV.Platform.Maui.UI
 {
 
     public class ProcessAndRenderPage

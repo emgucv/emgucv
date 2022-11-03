@@ -20,8 +20,6 @@ using System.Runtime.InteropServices;
 
 using Microsoft.Maui.Controls.PlatformConfiguration;
 
-using Emgu.CV.Platform.Maui.UI;
-
 #if __MACCATALYST__
 using AppKit;
 using CoreGraphics;
@@ -39,7 +37,7 @@ using Visibility = Microsoft.UI.Xaml.Visibility;
 using Microsoft.UI.Xaml.Media.Imaging;
 #endif
 
-namespace MauiDemoApp
+namespace Emgu.CV.Platform.Maui.UI
 {
 
     public class ButtonTextImagePage

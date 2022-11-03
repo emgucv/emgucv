@@ -22,6 +22,7 @@ using Android.Preferences;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
+using Emgu.CV.Platform.Maui.UI;
 using Emgu.CV.Structure;
 using Emgu.Util;
 using FeatureMatchingExample;
