@@ -13,6 +13,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Dnn;
 using Emgu.CV.Freetype;
 using Emgu.CV.Models;
+using Emgu.CV.Platform.Maui.UI;
 using Emgu.Util;
 
 using Size = System.Drawing.Size;

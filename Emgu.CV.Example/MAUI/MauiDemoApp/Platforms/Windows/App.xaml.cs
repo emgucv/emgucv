@@ -18,7 +18,7 @@ namespace MauiDemoApp.WinUI
         public App()
         {
             this.InitializeComponent();
-            CvInvoke.Init();
+            //CvInvoke.Init();
         }
 
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();

@@ -7,6 +7,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Dnn;
 using Emgu.CV.Models;
 using System.Net;
+using Emgu.CV.Platform.Maui.UI;
 
 namespace MauiDemoApp
 {
@@ -20,6 +21,8 @@ namespace MauiDemoApp
 
 #if __ANDROID__
             CvInvokeAndroid.Init();
+#elif __WINDOWS__
+            CvInvoke.Init();
 #endif
 
 

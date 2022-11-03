@@ -9,6 +9,7 @@ using Emgu.CV;
 using System.Drawing;
 using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
+using Emgu.CV.Platform.Maui.UI;
 
 namespace MauiDemoApp
 {
