@@ -698,7 +698,7 @@ Public License instead of this License.  But first, please read
 ========================================================================
 Section 3 (Commercial license):
 
-Version 4
+Version 4 rev.2 
 
 THIS DOCUMENT IS A LEGAL AGREEMENT (the "License Agreement") BETWEEN EMGU Corporation ("We," "Us") AND YOU OR THE ORGANIZATION ON WHOSE BEHALF YOU ARE UNDERTAKING THE LICENSE DESCRIBED BELOW ("You") IN RELATION TO THE EMGU CV SOFTWARE (THE "Software"), IN BOTH SOURCE AND OBJECT CODE FORM, AND/OR ALL RELATED MATERIALS. BY DOWNLOADING, INSTALLING, COPYING OR OTHERWISE USING THE SOFTWARE, YOU ACCEPT THE FOLLOWING TERMS AND CONDITIONS. IF YOU DO NOT AGREE WITH ANY OF THE TERMS OR CONDITIONS OF THIS LICENSE AGREEMENT, DO NOT PROCEED WITH THE DOWNLOADING, COPYING, INSTALLATION OR ANY OTHER USE OF THE SOFTWARE OR ANY PORTION THEREOF. THE SOFTWARE IS PROTECTED BY UNITED STATES COPYRIGHT LAWS AND INTERNATIONAL COPYRIGHT LAWS, AS WELL AS OTHER INTELLECTUAL PROPERTY LAWS AND TREATIES. THE SOFTWARE IS LICENSED, NOT SOLD.
 
@@ -728,7 +728,7 @@ Subject to the payment of the fee required for a Commercial Developer License an
 (i) for up to one hundred (100) developers within Your organization to install and use the Software on any workstations used exclusively by such developers and 
 (ii) for You to install and use the Software in unlimited clients, solely in connection with distribution of the Software in accordance with sections 3 and 4 below. This license is not sub-licensable except as explicitly set forth herein.
 
-License a), b) or c) only cover the usage on the source and binary part implemented by Emgu Corporation, and do not cover any non-Emgu implemented library. Usage of Open CV binary is covered by BSD license, usage of ZedGraph is covered by LGPL license, Tesseract OCR is covered by Apache 2.0 license. Some algorithms implemented by OpenCV, such as SIFT, SURF and haar-cascade are patented in the U.S. It is your responsibility to check whether the algorithms you used are patented in your country and contact the patent owner if you want to use them in your commercial software. Open CV also use FFmpeg, which is under its own license. If you use video encoder and decoder in Open CV, it is likely that you are using FFmpeg components. Legal information regarding FFmpeg can be found at http://www.ffmpeg.org/legal.html. It is your responsibility to obey the license terms of the above 3rd party libraries.
+License a), b) or c) only cover the usage on the source and binary part implemented by Emgu Corporation, and do not cover any non-Emgu implemented library. Open CV 4.5.0 and newer releases are covered by Apache 2.0 license, Open CV 4.4.0 and prior releases are covered by BSD license, Tesseract OCR is covered by Apache 2.0 license. Some algorithms implemented by OpenCV, such as SURF and haar-cascade are patented in the U.S. It is your responsibility to check whether the algorithms you used are patented in your country and contact the patent owner if you want to use them in your commercial software. Open CV also use FFmpeg, which is under its own license. If you use video encoder and decoder in Open CV, it is likely that you are using FFmpeg components. Legal information regarding FFmpeg can be found at http://www.ffmpeg.org/legal.html. It is your responsibility to obey the license terms of the above 3rd party libraries.
 
 2. PERMITTED USES, SOURCE CODE, MODIFICATIONS
 
