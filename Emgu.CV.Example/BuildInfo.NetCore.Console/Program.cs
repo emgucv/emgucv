@@ -132,13 +132,12 @@ namespace BuildInfo.NetCore.Console
                     }
                     catch (Exception e)
                     {
-                        //System.Console.WriteLine(e);
-                        return Environment.NewLine + "Failed to create H263 VideoWriter with FFMPEG backend.";
+                        return $"{Environment.NewLine}Failed to create H263 VideoWriter with FFMPEG backend: {e.Message}";
                     }
                 }
                 else
                 {
-                    return Environment.NewLine + "FFMPEG backend not found.";
+                    return $"{Environment.NewLine}FFMPEG backend not found.";
                 }
             }
 
@@ -186,8 +185,7 @@ namespace BuildInfo.NetCore.Console
                     }
                     catch (Exception e)
                     {
-                        //System.Console.WriteLine(e);
-                        return Environment.NewLine + "Failed to create VideoWriter with Intel MFX backend.";
+                        return $"{Environment.NewLine}Failed to create VideoWriter with Intel MFX backend: {e.Message}";
                     }
                 }
                 else
@@ -240,13 +238,12 @@ namespace BuildInfo.NetCore.Console
                     }
                     catch (Exception e)
                     {
-                        //System.Console.WriteLine(e);
-                        return Environment.NewLine + "Failed to create H264 VideoWriter with MSMF backend.";
+                        return $"{Environment.NewLine}Failed to create H264 VideoWriter with MSMF backend: {e.Message}";
                     }
                 }
                 else
                 {
-                    return Environment.NewLine + "MSMF backend not found.";
+                    return $"{Environment.NewLine}MSMF backend not found.";
                 }
             }
             return String.Empty;
@@ -280,8 +277,7 @@ namespace BuildInfo.NetCore.Console
                 }
                 catch (Exception e)
                 {
-                    //System.Console.WriteLine(e);
-                    return Environment.NewLine + "Failed to create H263 VideoWriter with default backend.";
+                    return $"{Environment.NewLine}Failed to create H263 VideoWriter with default backend: {e.Message}";
                 }
 
             }
@@ -304,24 +300,18 @@ namespace BuildInfo.NetCore.Console
 
                             VideoAccelerationType hwAcceleration = (VideoAccelerationType)cap.Get(CapProp.HwAcceleration);
                             captureText +=
-                                String.Format(
-                                    "{0}VideoCapture device successfully opened with backend: {1} (hw acceleration: {2})",
-                                    System.Environment.NewLine, cap.BackendName, hwAcceleration);
+                                $"{System.Environment.NewLine}VideoCapture device successfully opened with backend: {cap.BackendName} (hw acceleration: {hwAcceleration})";
                         }
                         else
                         {
                             captureText +=
-                                String.Format(
-                                    "{0}VideoCapture device failed to opened.",
-                                    System.Environment.NewLine);
+                                $"{System.Environment.NewLine}VideoCapture device failed to opened.";
                         }
                     }
                 }
                 catch (Emgu.CV.Util.CvException e)
                 {
-                    //System.Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>");
-                    captureText += String.Format("{0}No capture device found.", System.Environment.NewLine);
-
+                    captureText += $"{System.Environment.NewLine}No capture device found: {e.ErrorMessage}";
                 }
                 return captureText;
 
@@ -331,7 +321,8 @@ namespace BuildInfo.NetCore.Console
 
         private static String GetCaptureInfo()
         {
-            String captureText = String.Format("Capture Backends (VideoCapture from device): {0}{1}", System.Environment.NewLine, GetBackendInfo(CvInvoke.Backends));
+            String captureText =
+                $"Capture Backends (VideoCapture from device):{System.Environment.NewLine}{GetBackendInfo(CvInvoke.Backends)}";
 
             /*
                 //We don't want to create VideoCapture on Mac OS unless we have requested camera permission
@@ -364,10 +355,11 @@ namespace BuildInfo.NetCore.Console
             }
                 }*/
 
-            captureText += String.Format("{0}{0}Stream Backends (VideoCapture from file/Stream): {0}{1}", System.Environment.NewLine, GetBackendInfo(CvInvoke.StreamBackends));
+            captureText +=
+                $"{System.Environment.NewLine}{System.Environment.NewLine}Stream Backends (VideoCapture from file/Stream): {System.Environment.NewLine}{GetBackendInfo(CvInvoke.StreamBackends)}";
 
-            captureText += String.Format("{0}{0}VideoWriter backends: {0}{1}{0}", Environment.NewLine,
-                GetBackendInfo(CvInvoke.WriterBackends));
+            captureText +=
+                $"{Environment.NewLine}{Environment.NewLine}VideoWriter backends: {Environment.NewLine}{GetBackendInfo(CvInvoke.WriterBackends)}{Environment.NewLine}";
 
             captureText += GetVideoWriterFFMPEGInfo();
             captureText += GetVideoWriterMSMFInfo();
@@ -382,15 +374,15 @@ namespace BuildInfo.NetCore.Console
         {
             StringBuilder runtimeStringBuilder = new StringBuilder();
             runtimeStringBuilder.Append(
-                String.Format("Runtime info: {0}", System.Environment.NewLine));
+                $"Runtime info: {System.Environment.NewLine}");
             runtimeStringBuilder.Append(
-                String.Format("OS Architecture: {0}{1}", RuntimeInformation.OSArchitecture, System.Environment.NewLine));
+                $"OS Architecture: {RuntimeInformation.OSArchitecture}{System.Environment.NewLine}");
             runtimeStringBuilder.Append(
-                String.Format("Framework Description: {0}{1}", RuntimeInformation.FrameworkDescription, System.Environment.NewLine));
+                $"Framework Description: {RuntimeInformation.FrameworkDescription}{System.Environment.NewLine}");
             runtimeStringBuilder.Append(
-                String.Format("Process Architecture: {0}{1}", RuntimeInformation.ProcessArchitecture, System.Environment.NewLine));
+                $"Process Architecture: {RuntimeInformation.ProcessArchitecture}{System.Environment.NewLine}");
             runtimeStringBuilder.Append(
-                String.Format("OS Description: {0}{1}", RuntimeInformation.OSDescription, System.Environment.NewLine));
+                $"OS Description: {RuntimeInformation.OSDescription}{System.Environment.NewLine}");
             return runtimeStringBuilder.ToString();
         }
 
