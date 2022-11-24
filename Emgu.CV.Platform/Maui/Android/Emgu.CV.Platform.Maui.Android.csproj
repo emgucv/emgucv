@@ -104,7 +104,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)\..\..\Android\*.cs" />
   </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.Netstandard.csproj" />
+      <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
     </ItemGroup>
   <Target Name="EmguCVMauiAndroidPackageBuildImports" BeforeTargets="PrepareForBuild">
     <Warning Text="'$(EmguCVMauiAndroidErrorMessage)'" Condition="'$(EmguCVMauiAndroidErrorMessage)'!=''" />
