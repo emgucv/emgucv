@@ -139,7 +139,7 @@
       <Version>1.0.0.10</Version>
     </PackageReference> -->
     <PackageReference Include="Xamarin.Build.Download">
-      <Version>0.11.2</Version>
+      <Version>0.11.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Essentials">
       <Version>1.7.3</Version>
