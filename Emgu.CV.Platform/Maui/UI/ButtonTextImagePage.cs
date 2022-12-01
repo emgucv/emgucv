@@ -309,12 +309,20 @@ namespace Emgu.CV.Platform.Maui.UI
                 }
                 else if (action.Equals("Photo from Camera"))
                 {
-                    var takePhotoResult = await MediaPicker.CapturePhotoAsync();
+                    PermissionStatus status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+                    if (status == PermissionStatus.Denied)
+                    {
+                        this.SetMessage("Please grant permission to use camera");
+                    }
+                    else
+                    {
+                        var takePhotoResult = await MediaPicker.CapturePhotoAsync();
 
-                    if (takePhotoResult == null) //canceled
-                        return null;
-                    using (Stream stream = await takePhotoResult.OpenReadAsync())
-                        mats[i] = await ReadStream(stream);
+                        if (takePhotoResult == null) //canceled
+                            return null;
+                        using (Stream stream = await takePhotoResult.OpenReadAsync())
+                            mats[i] = await ReadStream(stream);
+                    }
                 }
                 else if (action.Equals("Camera"))
                 {

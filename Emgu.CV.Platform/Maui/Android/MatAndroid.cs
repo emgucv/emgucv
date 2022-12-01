@@ -280,9 +280,9 @@ namespace Emgu.CV
                         case ".png":
                             bmp.Compress(Android.Graphics.Bitmap.CompressFormat.Png, 90, fs);
                             break;
-                        case ".webp":
-                            bmp.Compress(Android.Graphics.Bitmap.CompressFormat.Webp, 90, fs);
-                            break;
+                        //case ".webp":
+                        //    bmp.Compress(Android.Graphics.Bitmap.CompressFormat.Webp, 90, fs);
+                        //    break;
                         default:
                             throw new NotImplementedException(String.Format("Saving to {0} format is not supported",
                                 extension));
