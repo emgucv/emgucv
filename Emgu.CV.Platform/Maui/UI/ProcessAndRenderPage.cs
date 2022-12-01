@@ -237,7 +237,7 @@ namespace Emgu.CV.Platform.Maui.UI
             {
 #if __ANDROID__ && __USE_ANDROID_CAMERA2__
                 StopCapture();
-                AndroidImageView.Visibility = ViewStates.Invisible;
+                //AndroidImageView.Visibility = ViewStates.Invisible;
 #elif __IOS__
                 this.StopCaptureSession ();
 #else
