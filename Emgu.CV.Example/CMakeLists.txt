@@ -234,6 +234,119 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "Debug" EXCLUDE
       PATTERN "Release" EXCLUDE  
       )
+	INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/Aruco/"
+      DESTINATION Emgu.CV.Example/Aruco/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.config"
+      PATTERN "*.shproj"
+      PATTERN "*.Xamarin"
+      PATTERN "*.projitems"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN ".git" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "Release" EXCLUDE  
+      )
+	INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/Webservice_Client/"
+      DESTINATION Emgu.CV.Example/Webservice_Client/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.config"
+      PATTERN "*.shproj"
+      PATTERN "*.Xamarin"
+      PATTERN "*.projitems"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN ".git" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "Release" EXCLUDE  
+      )
+	INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/Webservice_Host/"
+      DESTINATION Emgu.CV.Example/Webservice_Host/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.config"
+      PATTERN "*.shproj"
+      PATTERN "*.Xamarin"
+      PATTERN "*.projitems"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN ".git" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "Release" EXCLUDE  
+      )
+	INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/DepthAI/"
+      DESTINATION Emgu.CV.Example/DepthAI/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.csproj"
+      PATTERN "*.config"
+      PATTERN "*.shproj"
+      PATTERN "*.Xamarin"
+      PATTERN "*.projitems"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN ".git" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "Release" EXCLUDE  
+      )
+	INSTALL(
+      DIRECTORY
+      "${CMAKE_CURRENT_SOURCE_DIR}/FaceDetectionVB/"
+      DESTINATION Emgu.CV.Example/FaceDetectionVB/
+      COMPONENT emgucv_example_source
+      FILES_MATCHING 
+      PATTERN "*.cs"
+      PATTERN "*.config"
+      PATTERN "*.vbproj"
+      PATTERN "*.projitems"
+      PATTERN "*.axml"
+      PATTERN "*.xaml"
+      PATTERN "*.xml"
+      PATTERN "*.txt"
+      PATTERN "*.png"
+      PATTERN "*.dll"
+      PATTERN "*.json"
+      PATTERN ".git" EXCLUDE
+      PATTERN "Debug" EXCLUDE
+      PATTERN "Release" EXCLUDE  
+      )
   ENDIF()
   IF(HAVE_ANDROID)
     INSTALL(
