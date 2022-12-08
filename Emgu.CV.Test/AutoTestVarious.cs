@@ -1880,7 +1880,7 @@ namespace Emgu.CV.Test
                  SURFFeature sf2 = (SURFFeature) o;
               }
            }
-        }*/
+        }
 
 #if !NETFX_CORE
         [Test]
@@ -1931,6 +1931,7 @@ namespace Emgu.CV.Test
             }
         }
 #endif
+        */
 
         [Test]
         public void TestVectorOfMat()

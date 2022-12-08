@@ -74,6 +74,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
 #if !NETFX_CORE
       [TestAttribute]
       public void TestRuntimeSerialize()
@@ -99,5 +100,6 @@ namespace Emgu.CV.Test
          }
       }
 #endif
+      */
    }
 }
