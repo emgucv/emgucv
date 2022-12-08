@@ -209,6 +209,7 @@ namespace Emgu.CV.Test
             }
         }
 
+        /*
 #if !NETFX_CORE
         [Test]
         public void TestRuntimeSerialize1()
@@ -289,6 +290,7 @@ namespace Emgu.CV.Test
             handle.Free();
         }
 #endif
+        */
 
 #if !WINDOWS_PHONE_APP //bad garbage collector in Windows phone results in failed test?
         [Test]

@@ -436,6 +436,7 @@ namespace Emgu.CV.Test
             //Emgu.CV.UI.ImageViewer.Show(imgPng);
         }
 
+        /*
         [TestAttribute]
         public void TestRuntimeSerialize()
         {
@@ -483,7 +484,9 @@ namespace Emgu.CV.Test
                 }
             }
         }
+        */
 #endif
+
         /*
         [TestAttribute]
         public void TestSampleLine()

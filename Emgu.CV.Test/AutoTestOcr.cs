@@ -166,6 +166,14 @@ namespace Emgu.CV.Test
             {
                 String source = "https://github.com/tesseract-ocr/tessconfigs/blob/3decf1c8252ba6dbeef0bf908f4b0aab7f18d113/pdf.ttf?raw=true";
 
+                using (System.Net.WebClient webclient = new System.Net.WebClient())
+                {
+                    Console.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
+                    webclient.DownloadFile(source, dest);
+                    Console.WriteLine(String.Format("Download completed"));
+                }
+
+                /*
                 using (System.Net.Http.HttpClient client = new System.Net.Http.HttpClient())
                 {
                     Console.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
@@ -176,7 +184,7 @@ namespace Emgu.CV.Test
                     }
 
                     Console.WriteLine(String.Format("Download completed"));
-                }
+                }*/
             }
         }
 

@@ -15,7 +15,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -350,7 +350,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Drawing.Common">
-      <Version>6.0.0</Version>
+      <Version>7.0.0</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems" Label="Shared" />
