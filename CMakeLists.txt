@@ -1088,8 +1088,10 @@ CHECK_LICENSE_TYPE()
 
 IF( "${OPENCV_EXTRA_MODULES_PATH}" STREQUAL "" )
   SET(EMGUCV_RUNTIME_EXTRA_TAG ".mini")
+  SET(EMGUCV_MINI_RELEASE_NOTE "This is the mini release that only contains the minimum amount of Open CV modules. For full release that contains all Open CV modules, use a release that is not labeled 'mini'."
 ELSE()
   SET(EMGUCV_RUNTIME_EXTRA_TAG "")
+  SET(EMGUCV_MINI_RELEASE_NOTE "")
 ENDIF()
 
 SET(EMGUCV_NUGET_ID "Emgu.CV")
