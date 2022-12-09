@@ -2,6 +2,8 @@
 
 This package is part of the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. 
 
+${EMGUCV_MINI_RELEASE_NOTE}
+
 For online documentation please visit
 <${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html>
 
@@ -10,15 +12,20 @@ Release note can be found at
 
 ## How to Use
 
-Please make sure to call CvInvokeIOS.Init() before making any other calls to Emgu CV library on iOS. You can add the function call in the AppDelegate.cs file, under the FinishedLaunching function:
+Please make sure to call CvInvokeIOS.Init() before making any other calls to Emgu CV library on iOS. You can add the function call in the MainPage.xaml.cs file, under the constructor:
 
 ```csharp
-    [Export("application:didFinishLaunchingWithOptions:")]
-    public bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
-    {
-        // Override point for customization after application launch.
-        Emgu.CV.CvInvokeIOS.Init();
+        public MainPage()
+        {
+            InitializeComponent();
 
-        return true;
-    }
+#if __ANDROID__
+            CvInvokeAndroid.Init();
+#elif __IOS__
+            CvInvokeIOS.Init();
+#elif __WINDOWS__
+            CvInvoke.Init();
+			...
+		}
+#endif
 ```
