@@ -91,6 +91,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.png"
       PATTERN "*.dll"
       PATTERN "*.json"
+	  PATTERN "*.resx"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
       PATTERN "Release" EXCLUDE  
