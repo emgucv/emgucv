@@ -21,6 +21,8 @@ namespace MauiDemoApp
 
 #if __ANDROID__
             CvInvokeAndroid.Init();
+#elif __IOS__
+            CvInvokeIOS.Init();
 #elif __WINDOWS__
             CvInvoke.Init();
 #endif
