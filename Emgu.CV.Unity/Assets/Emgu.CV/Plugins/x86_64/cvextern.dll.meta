@@ -12,7 +12,7 @@ PluginImporter:
   validateReferences: 1
   platformData:
   - first:
-      '': Any
+      : Any
     second:
       enabled: 0
       settings:
@@ -31,14 +31,14 @@ PluginImporter:
         Exclude iOS: 1
         Exclude tvOS: 1
   - first:
-      '': Editor
+      : Editor
     second:
       enabled: 1
       settings:
         CPU: x86_64
         OS: Windows
   - first:
-      '': WP8
+      : WP8
     second:
       enabled: 0
       settings:

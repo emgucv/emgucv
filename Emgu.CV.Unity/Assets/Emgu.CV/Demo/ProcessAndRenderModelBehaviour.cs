@@ -19,90 +19,96 @@ using System.Runtime.InteropServices;
 using Emgu.CV.Models;
 using Emgu.CV.OCR;
 
-public abstract class ProcessAndRenderModelBehaviour : MonoBehaviour
+namespace Emgu.CV.Demo
 {
-
-    protected IProcessAndRenderModel _model;
-
-    private static String ByteToSizeStr(long byteCount)
+    public abstract class ProcessAndRenderModelBehaviour : MonoBehaviour
     {
-        if (byteCount < 1024)
+
+        protected IProcessAndRenderModel _model;
+
+        private static String ByteToSizeStr(long byteCount)
         {
-            return String.Format("{0} B", byteCount);
+            if (byteCount < 1024)
+            {
+                return String.Format("{0} B", byteCount);
+            }
+            else if (byteCount < 1024 * 1024)
+            {
+                return String.Format("{0} KB", byteCount / 1024);
+            }
+            else
+            {
+                return String.Format("{0} MB", byteCount / (1024 * 1024));
+            }
         }
-        else if (byteCount < 1024 * 1024)
+
+        protected void DownloadManager_OnDownloadProgressChanged(long? totalBytesToReceive, long bytesReceived,
+            double? progressPercentage)
         {
-            return String.Format("{0} KB", byteCount / 1024);
+            String msg;
+            if (totalBytesToReceive.HasValue && (totalBytesToReceive > 0))
+                msg = String.Format("{0} of {1} downloaded ({2}%)", ByteToSizeStr(bytesReceived),
+                    ByteToSizeStr(totalBytesToReceive.Value), progressPercentage);
+            else
+                msg = String.Format("{0} downloaded", ByteToSizeStr(bytesReceived));
+            updateTextureWithString(msg);
         }
-        else
+
+        protected void updateTextureWithString(String text)
         {
-            return String.Format("{0} MB", byteCount / (1024 * 1024));
-        }
-    }
+            Mat img = new Mat(new Size(640, 240), DepthType.Cv8U, 3);
+            CvInvoke.PutText(img, text, new System.Drawing.Point(10, 60), Emgu.CV.CvEnum.FontFace.HersheyDuplex,
+                1.0, new MCvScalar(0, 255, 0));
 
-    protected void DownloadManager_OnDownloadProgressChanged(long? totalBytesToReceive, long bytesReceived, double? progressPercentage)
-    {
-        String msg;
-        if (totalBytesToReceive.HasValue && (totalBytesToReceive > 0))
-            msg = String.Format("{0} of {1} downloaded ({2}%)", ByteToSizeStr(bytesReceived), ByteToSizeStr(totalBytesToReceive.Value), progressPercentage);
-        else
-            msg = String.Format("{0} downloaded", ByteToSizeStr(bytesReceived));
-        updateTextureWithString(msg);
-    }
-
-    protected void updateTextureWithString(String text)
-    {
-        Mat img = new Mat(new Size(640, 240), DepthType.Cv8U, 3);
-        CvInvoke.PutText(img, text, new System.Drawing.Point(10, 60), Emgu.CV.CvEnum.FontFace.HersheyDuplex,
-            1.0, new MCvScalar(0, 255, 0));
-
-        Texture2D texture = img.ToTexture2D();
-
-        RenderTexture(texture);
-        ResizeTexture(texture);
-    }
-
-    protected void RenderTexture(Texture2D texture)
-    {
-        Image image = this.GetComponent<Image>();
-        image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-    }
-
-    protected void ResizeTexture(Texture2D texture)
-    {
-        Image image = this.GetComponent<Image>();
-        var transform = image.rectTransform;
-        transform.sizeDelta = new Vector2(texture.width, texture.height);
-        transform.position = new Vector3(-texture.width / 2, -texture.height / 2);
-        transform.anchoredPosition = new Vector2(0, 0);
-    }
-
-    public abstract Mat GetInputMat();
-
-    protected IEnumerator Workflow()
-    {
-        yield return _model.Init(DownloadManager_OnDownloadProgressChanged, null);
-        Debug.Log("Model loaded.");
-        yield return ApplyModel();
-    }
-
-    private IEnumerator ApplyModel()
-    {
-        using (Mat img = GetInputMat())
-        using (Mat imgOut = new Mat())
-        {
-            img.CopyTo(imgOut);
-            String outMessage = _model.ProcessAndRender(img, imgOut);
-
-            Debug.Log(outMessage);
-
-            Texture2D texture = imgOut.ToTexture2D();
+            Texture2D texture = img.ToTexture2D();
 
             RenderTexture(texture);
             ResizeTexture(texture);
-            yield return null;
         }
+
+        protected void RenderTexture(Texture2D texture)
+        {
+            Image image = this.GetComponent<Image>();
+            image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height),
+                new Vector2(0.5f, 0.5f));
+        }
+
+        protected void ResizeTexture(Texture2D texture)
+        {
+            Image image = this.GetComponent<Image>();
+            var transform = image.rectTransform;
+            transform.sizeDelta = new Vector2(texture.width, texture.height);
+            transform.position = new Vector3(-texture.width / 2, -texture.height / 2);
+            transform.anchoredPosition = new Vector2(0, 0);
+        }
+
+        public abstract Mat GetInputMat();
+
+        protected IEnumerator Workflow()
+        {
+            yield return _model.Init(DownloadManager_OnDownloadProgressChanged, null);
+            Debug.Log("Model loaded.");
+            yield return ApplyModel();
+        }
+
+        private IEnumerator ApplyModel()
+        {
+            using (Mat img = GetInputMat())
+            using (Mat imgOut = new Mat())
+            {
+                img.CopyTo(imgOut);
+                String outMessage = _model.ProcessAndRender(img, imgOut);
+
+                Debug.Log(outMessage);
+
+                Texture2D texture = imgOut.ToTexture2D();
+
+                RenderTexture(texture);
+                ResizeTexture(texture);
+                yield return null;
+            }
+        }
+
     }
 
 }
-

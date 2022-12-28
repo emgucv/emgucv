@@ -17,33 +17,35 @@ using System.Runtime.InteropServices;
 using UnityEngine.UI;
 using Emgu.CV.Models;
 
-
-public class FaceDetection : ProcessAndRenderModelBehaviour
+namespace Emgu.CV.Demo
 {
-    // Use this for initialization
-    void Start()
+    public class FaceDetection : ProcessAndRenderModelBehaviour
     {
-        _model = new FaceAndLandmarkDetector();
-        StartCoroutine(Workflow());
+        // Use this for initialization
+        void Start()
+        {
+            _model = new FaceAndLandmarkDetector();
+            StartCoroutine(Workflow());
+        }
+
+        /// <summary>
+        /// Get the input image
+        /// </summary>
+        /// <returns>The input image</returns>
+        public override Mat GetInputMat()
+        {
+            Texture2D lenaTexture = Resources.Load<Texture2D>("lena");
+            Mat imgBgr = new Mat();
+            lenaTexture.ToOutputArray(imgBgr);
+
+            return imgBgr;
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+
     }
-
-    /// <summary>
-    /// Get the input image
-    /// </summary>
-    /// <returns>The input image</returns>
-    public override Mat GetInputMat()
-    {
-        Texture2D lenaTexture = Resources.Load<Texture2D>("lena");
-        Mat imgBgr = new Mat();
-        lenaTexture.ToOutputArray(imgBgr);
-
-        return imgBgr;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
 }
