@@ -93,7 +93,7 @@ namespace Aruco
             int borderBits = 1;
 
             Mat boardImage = new Mat();
-            ArucoBoard.Draw(imageSize, boardImage, margins, borderBits);
+            ArucoBoard.GenerateImage(imageSize, boardImage, margins, borderBits);
             bmIm = boardImage.ToBitmap();
             PrintImage();
 

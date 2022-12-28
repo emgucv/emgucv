@@ -48,6 +48,8 @@ namespace Emgu.CV.Aruco
             _ptr = ArucoInvoke.cveArucoGridBoardCreate(markersX, markersY, markerLength, markerSeparation, dictionary, firstMarker, ref _boardPtr, ref _sharedPtr);
         }
 
+
+        /*
         /// <summary>
         /// Draw a GridBoard.
         /// </summary>
@@ -60,6 +62,7 @@ namespace Emgu.CV.Aruco
             using (OutputArray oaImg = img.GetOutputArray())
                 ArucoInvoke.cveArucoGridBoardDraw(_ptr, ref outSize, oaImg, marginSize, borderBits);
         }
+        */
 
         /// <summary>
         /// Release the unmanaged resource associated with this GridBoard
@@ -105,6 +108,7 @@ namespace Emgu.CV.Aruco
             _ptr = ArucoInvoke.cveCharucoBoardCreate(squaresX, squaresY, squareLength, markerLength, dictionary, ref _boardPtr, ref _sharedPtr);
         }
 
+        /*
         /// <summary>
         /// Draw a ChArUco board
         /// </summary>
@@ -116,7 +120,7 @@ namespace Emgu.CV.Aruco
         {
             using (OutputArray oaImg = img.GetOutputArray())
                 ArucoInvoke.cveCharucoBoardDraw(_ptr, ref outSize, oaImg, margindSize, borderBits);
-        }
+        }*/
 
         /// <summary>
         /// Release the unmanaged resource associated with this ChArUco board
@@ -145,8 +149,8 @@ namespace Emgu.CV.Aruco
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveArucoGridBoardRelease(ref IntPtr gridBoard, ref IntPtr sharedPtr);
 
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveArucoGridBoardDraw(IntPtr gridBoard, ref Size outSize, IntPtr img, int marginSize, int borderBits);
+        //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        //internal static extern void cveArucoGridBoardDraw(IntPtr gridBoard, ref Size outSize, IntPtr img, int marginSize, int borderBits);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -154,8 +158,8 @@ namespace Emgu.CV.Aruco
            int squaresX, int squaresY, float squareLength, float markerLength,
            IntPtr dictionary, ref IntPtr boardPtr, ref IntPtr sharedPtr);
 
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveCharucoBoardDraw(IntPtr charucoBoard, ref Size outSize, IntPtr img, int marginSize, int borderBits);
+        //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        //internal static extern void cveCharucoBoardDraw(IntPtr charucoBoard, ref Size outSize, IntPtr img, int marginSize, int borderBits);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveCharucoBoardRelease(ref IntPtr charucoBoard, ref IntPtr sharedPtr);
