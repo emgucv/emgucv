@@ -4,15 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MenuManagerScript : MonoBehaviour {
-
-    public void LoadScene(String name)
+namespace Emgu.CV.Demo
+{
+    public class MenuManagerScript : MonoBehaviour
     {
-        SceneManager.LoadScene(name);
-    }
 
-    public void LoadScene(int index)
-    {
-        SceneManager.LoadScene(index);
+        public void LoadScene(String name)
+        {
+            SceneManager.LoadScene(name);
+        }
+
+        public void LoadScene(int index)
+        {
+            SceneManager.LoadScene(index);
+        }
     }
 }

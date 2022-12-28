@@ -16,57 +16,64 @@ using Emgu.CV.Util;
 using System.Runtime.InteropServices;
 using Emgu.CV.Ocl;
 
-public class HelloTexture : MonoBehaviour
+namespace Emgu.CV.Demo
 {
-
-    // Use this for initialization
-    void Start()
+    public class HelloTexture : MonoBehaviour
     {
-        Mat img = new Mat(new Size(640, 240), DepthType.Cv8U, 3);
-        img.SetTo(new MCvScalar());
-        String openclStr = "None";
-        if (CvInvoke.HaveOpenCL)
+
+        // Use this for initialization
+        void Start()
         {
-            //StringBuilder builder = new StringBuilder();
-            using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformsInfo())
+            Mat img = new Mat(new Size(640, 240), DepthType.Cv8U, 3);
+            img.SetTo(new MCvScalar());
+            String openclStr = "None";
+            if (CvInvoke.HaveOpenCL)
             {
-                if (oclPlatformInfos.Size > 0)
+                //StringBuilder builder = new StringBuilder();
+                using (VectorOfOclPlatformInfo oclPlatformInfos = OclInvoke.GetPlatformsInfo())
                 {
-                    PlatformInfo platformInfo = oclPlatformInfos[0];
-                    openclStr = platformInfo.ToString();
+                    if (oclPlatformInfos.Size > 0)
+                    {
+                        PlatformInfo platformInfo = oclPlatformInfos[0];
+                        openclStr = platformInfo.ToString();
+                    }
                 }
             }
+
+            CvInvoke.PutText(img, String.Format("Emgu CV for Unity {0}", Emgu.Util.Platform.OperationSystem),
+                new System.Drawing.Point(10, 60), Emgu.CV.CvEnum.FontFace.HersheyDuplex,
+                1.0, new MCvScalar(0, 255, 0));
+
+            CvInvoke.PutText(img, String.Format("OpenCL: {0}", openclStr), new System.Drawing.Point(10, 120),
+                Emgu.CV.CvEnum.FontFace.HersheyDuplex,
+                1.0, new MCvScalar(0, 0, 255));
+
+            Texture2D texture = img.ToTexture2D();
+
+            RenderTexture(texture);
+            ResizeTexture(texture);
         }
 
-        CvInvoke.PutText(img, String.Format("Emgu CV for Unity {0}", Emgu.Util.Platform.OperationSystem), new System.Drawing.Point(10, 60), Emgu.CV.CvEnum.FontFace.HersheyDuplex,
-                         1.0, new MCvScalar(0, 255, 0));
+        private void RenderTexture(Texture2D texture)
+        {
+            Image image = this.GetComponent<Image>();
+            image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height),
+                new Vector2(0.5f, 0.5f));
+        }
 
-        CvInvoke.PutText(img, String.Format("OpenCL: {0}", openclStr), new System.Drawing.Point(10, 120), Emgu.CV.CvEnum.FontFace.HersheyDuplex,
-                         1.0, new MCvScalar(0, 0, 255));
+        private void ResizeTexture(Texture2D texture)
+        {
+            Image image = this.GetComponent<Image>();
+            var transform = image.rectTransform;
+            transform.sizeDelta = new Vector2(texture.width, texture.height);
+            transform.position = new Vector3(-texture.width / 2, -texture.height / 2);
+            transform.anchoredPosition = new Vector2(0, 0);
+        }
 
-        Texture2D texture = img.ToTexture2D();
+        // Update is called once per frame
+        void Update()
+        {
 
-        RenderTexture(texture);
-        ResizeTexture(texture);
-    }
-    private void RenderTexture(Texture2D texture)
-    {
-        Image image = this.GetComponent<Image>();
-        image.sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
-    }
-
-    private void ResizeTexture(Texture2D texture)
-    {
-        Image image = this.GetComponent<Image>();
-        var transform = image.rectTransform;
-        transform.sizeDelta = new Vector2(texture.width, texture.height);
-        transform.position = new Vector3(-texture.width / 2, -texture.height / 2);
-        transform.anchoredPosition = new Vector2(0, 0);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        }
     }
 }
