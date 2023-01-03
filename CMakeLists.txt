@@ -243,16 +243,13 @@ ENDIF()
 #  Autodetect if we are in a GIT repository
 # ----------------------------------------------------------------------------
 FIND_PROGRAM(GIT_PATH git)
-FIND_PROGRAM(WC_PATH wc PATHS "c:/cygwin64/bin" "c:/cygwin/bin")
-MARK_AS_ADVANCED(force GIT_PATH WC_PATH)
-IF(GIT_PATH AND WC_PATH)
+MARK_AS_ADVANCED(force GIT_PATH)
+IF(GIT_PATH)
   MESSAGE(STATUS "Extracting Emgu CV git version, please wait...")
   EXECUTE_PROCESS(
     WORKING_DIRECTORY  ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMAND ${GIT_PATH} log --oneline 
-    COMMAND ${WC_PATH} -l
+    COMMAND ${GIT_PATH} rev-list HEAD --count
     OUTPUT_VARIABLE GITVERSION_RESULT)
-  #MESSAGE(STATUS "COMMAND: ${GIT_PATH} log --oneline | ${WC_PATH} -l")
   STRING(REGEX REPLACE "^([0123456789]+).*" "\\1" EMGUCV_GITVERSION "${GITVERSION_RESULT}")
   STRING(STRIP "${EMGUCV_GITVERSION}" EMGUCV_GITVERSION)
   IF(EMGUCV_GITVERSION MATCHES "^$" OR EMGUCV_GITVERSION MATCHES "^-")
@@ -261,7 +258,7 @@ IF(GIT_PATH AND WC_PATH)
   ENDIF()
   MESSAGE(STATUS "Emgu CV GIT VERSION: ${EMGUCV_GITVERSION}")
 ELSE()
-  # We don't have git or wc:
+  # We don't have git:
   SET(EMGUCV_GITVERSION "0")
 ENDIF()
 
