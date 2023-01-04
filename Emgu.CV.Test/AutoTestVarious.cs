@@ -3940,7 +3940,7 @@ namespace Emgu.CV.Test
             Aruco.Dictionary dictionary = new Dictionary(Dictionary.PredefinedDictionaryName.Dict4X4_100);
             Aruco.GridBoard board = new GridBoard(markersX, markersY, markersLength, markersSeparation, dictionary);
             Mat boardImage = new Mat();
-            board.Draw(imageSize, boardImage, margins, borderBits);
+            board.GenerateImage(imageSize, boardImage, margins, borderBits);
             CvInvoke.Imwrite("board.png", boardImage);
         }
 
