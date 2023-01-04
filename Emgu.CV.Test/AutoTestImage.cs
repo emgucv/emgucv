@@ -587,21 +587,21 @@ namespace Emgu.CV.Test
                     image.Draw(obj, new Gray(0.0), 1);
             }
             TestOpenCL(delegate
-                     {
-                      //using (HaarCascade cascade = new HaarCascade("eye_12.xml"))
-                      using (UMat um = image.ToUMat())
-                         using (CascadeClassifier cascade = new CascadeClassifier(EmguAssert.GetFile("haarcascade_eye.xml")))
-                      //using (HaarCascade cascade = new HaarCascade("haarcascade_frontalface_alt2.xml"))
-                      {
-                             Stopwatch watch = Stopwatch.StartNew();
-                             Rectangle[] objects = cascade.DetectMultiScale(um, 1.05, 0, new Size(10, 10), Size.Empty);
-                             watch.Stop();
-                             Trace.WriteLine(String.Format("Objects detected in {0} milliseconds (UseOpenCL: {1})", watch.ElapsedMilliseconds, CvInvoke.UseOpenCL));
-                             foreach (Rectangle obj in objects)
-                                 image.Draw(obj, new Gray(0.0), 1);
+                {
+                    //using (HaarCascade cascade = new HaarCascade("eye_12.xml"))
+                    using (UMat um = image.ToUMat())
+                    using (CascadeClassifier cascade = new CascadeClassifier(EmguAssert.GetFile("haarcascade_eye.xml")))
+                    //using (HaarCascade cascade = new HaarCascade("haarcascade_frontalface_alt2.xml"))
+                    {
+                         Stopwatch watch = Stopwatch.StartNew();
+                         Rectangle[] objects = cascade.DetectMultiScale(um, 1.05, 0, new Size(10, 10), Size.Empty);
+                         watch.Stop();
+                         Trace.WriteLine(String.Format("Objects detected in {0} milliseconds (UseOpenCL: {1})", watch.ElapsedMilliseconds, CvInvoke.UseOpenCL));
+                         foreach (Rectangle obj in objects)
+                             image.Draw(obj, new Gray(0.0), 1);
 
-                         }
-                     });
+                    }
+                });
         }
 
         /*
