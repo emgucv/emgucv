@@ -45,3 +45,4 @@
 [submodule "3rdParty/openvino"]
 	path = 3rdParty/openvino
 	url = https://github.com/openvinotoolkit/openvino.git
+	ignore = dirty
