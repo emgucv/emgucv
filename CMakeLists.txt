@@ -242,13 +242,12 @@ ENDIF()
 # ----------------------------------------------------------------------------
 #  Autodetect if we are in a GIT repository
 # ----------------------------------------------------------------------------
-FIND_PROGRAM(GIT_PATH git)
-MARK_AS_ADVANCED(force GIT_PATH)
-IF(GIT_PATH)
+
+IF(GIT_EXECUTABLE)
   MESSAGE(STATUS "Extracting Emgu CV git version, please wait...")
   EXECUTE_PROCESS(
     WORKING_DIRECTORY  ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMAND ${GIT_PATH} rev-list HEAD --count
+    COMMAND ${GIT_EXECUTABLE} rev-list HEAD --count
     OUTPUT_VARIABLE GITVERSION_RESULT)
   STRING(REGEX REPLACE "^([0123456789]+).*" "\\1" EMGUCV_GITVERSION "${GITVERSION_RESULT}")
   STRING(STRIP "${EMGUCV_GITVERSION}" EMGUCV_GITVERSION)
