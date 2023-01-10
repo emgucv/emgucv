@@ -19,39 +19,57 @@ namespace Emgu.CV.Cuda
     /// </summary>
     public class CudaVideoWriter : SharedPtrObject
     {
+
         /// <summary>
-        /// Surface format
+        /// Color format
         /// </summary>
-        public enum SurfaceFormat
+        public enum ColorFormat
         {
             /// <summary>
-            /// UYVY
+            /// Undefined
             /// </summary>
-            UYVY = 0,
+            Undefined = 0,
             /// <summary>
-            /// YUY2
+            /// OpenCV color format, can be used with both VideoReader and VideoWriter.
             /// </summary>
-            YUY2,
+            Bgra = 1,
             /// <summary>
-            /// YV12
+            /// OpenCV color format, can be used with both VideoReader and VideoWriter.
             /// </summary>
-            YV12,
+            Bgr = 2,
             /// <summary>
-            /// NV12
+            /// OpenCV color format, can be used with both VideoReader and VideoWriter.
             /// </summary>
-            NV12,
+            Gray = 3,
             /// <summary>
-            /// IYUV
+            /// Nvidia color format - equivalent to YUV - Semi-Planar YUV [Y plane followed by interleaved UV plane], can be used with both VideoReader and VideoWriter.
             /// </summary>
-            IYUV,
+            NvNv12 = 4,
             /// <summary>
-            /// BGR
+            /// OpenCV color format, can only be used with VideoWriter.
             /// </summary>
-            BGR,
+            Rgb = 5,
             /// <summary>
-            /// GRAY
+            /// OpenCV color format, can only be used with VideoWriter.
             /// </summary>
-            GRAY = BGR
+            Rgba = 6,
+            /// <summary>
+            /// Nvidia Buffer Format - Planar YUV [Y plane followed by V and U planes], use with VideoReader, can only be used with VideoWriter.
+            /// </summary>
+            NvYv12 = 8,
+            /// <summary>
+            /// Nvidia Buffer Format - Planar YUV [Y plane followed by U and V planes], use with VideoReader, can only be used with VideoWriter.
+            /// </summary>
+            NvIyuv = 9,
+            /// <summary>
+            /// Nvidia Buffer Format - Planar YUV [Y plane followed by U and V planes], use with VideoReader, can only be used with VideoWriter.
+            /// </summary>
+            NvYuv444 = 10,
+            /// <summary>
+            /// Nvidia Buffer Format - 8 bit Packed A8Y8U8V8. This is a word-ordered format where a pixel is represented by a 32-bit word with V in the lowest 8 bits, U in the next 8 bits, Y in the 8 bits after that and A in the highest 8 bits, can only be used with VideoWriter.
+            /// </summary>
+            NvAyuv = 11, 
+
         }
 
         /// <summary>
@@ -59,13 +77,15 @@ namespace Emgu.CV.Cuda
         /// </summary>
         /// <param name="fileName">Name of the output video file. Only AVI file format is supported.</param>
         /// <param name="frameSize">Size of the input video frames.</param>
+        /// <param name="codec">Video codec</param>
         /// <param name="fps">Framerate of the created video stream.</param>
         /// <param name="format">Surface format of input frames. BGR or gray frames will be converted to YV12 format before encoding, frames with other formats will be used as is.</param>
-        public CudaVideoWriter(String fileName, Size frameSize, double fps, SurfaceFormat format = SurfaceFormat.BGR)
+        /// <param name="stream">Use a Stream to call the function asynchronously (non-blocking) or null to call the function synchronously (blocking).</param>
+        public CudaVideoWriter(String fileName, Size frameSize, CudaCodec codec, double fps, ColorFormat format = ColorFormat.Bgr, Stream stream = null)
         {
             using (CvString s = new CvString(fileName))
             {
-                _ptr = CudaInvoke.cudaVideoWriterCreate(s, ref frameSize, fps, format, ref _sharedPtr);
+                _ptr = CudaInvoke.cudaVideoWriterCreate(s, ref frameSize, codec, fps, format, stream, ref _sharedPtr);
             }
         }
 
@@ -76,7 +96,7 @@ namespace Emgu.CV.Cuda
         {
             if (IntPtr.Zero != _sharedPtr)
             {
-                CudaInvoke.cudaVideoWriterRelease(ref _sharedPtr);
+                CudaInvoke.cudaVideoWriterDelete(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
             }
         }
@@ -85,11 +105,18 @@ namespace Emgu.CV.Cuda
         /// The method write the specified image to video file. The image must have the same size and the same surface format as has been specified when opening the video writer.
         /// </summary>
         /// <param name="frame">The written frame.</param>
-        /// <param name="lastFrame">Indicates that it is end of stream. The parameter can be ignored.</param>
-        public void Write(IInputArray frame, bool lastFrame = false)
+        public void Write(IInputArray frame)
         {
             using (InputArray iaFrame = frame.GetInputArray())
-                CudaInvoke.cudaVideoWriterWrite(_ptr, iaFrame, lastFrame);
+                CudaInvoke.cudaVideoWriterWrite(_ptr, iaFrame);
+        }
+
+        /// <summary>
+        /// Waits until the encoding process has finished
+        /// </summary>
+        public void Release()
+        {
+            CudaInvoke.cudaVideoReaderRelease(ref _ptr);
         }
     }
 
@@ -99,18 +126,22 @@ namespace Emgu.CV.Cuda
         internal static extern IntPtr cudaVideoWriterCreate(
             IntPtr fileName,
             ref Size frameSize,
+            CudaCodec codec,
             double fps,
-            CudaVideoWriter.SurfaceFormat format,
+            CudaVideoWriter.ColorFormat format,
+            IntPtr stream,
             ref IntPtr sharedPtr);
+
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cudaVideoWriterRelease(ref IntPtr writer);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cudaVideoWriterDelete(ref IntPtr writer);
+
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cudaVideoWriterWrite(
             IntPtr writer,
-            IntPtr frame,
-            [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool lastFrame);
+            IntPtr frame);
     }
 }
