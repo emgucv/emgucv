@@ -47,13 +47,21 @@ namespace cv
 
 //----------------------------------------------------------------------------
 //
-//  CudaVideoWritter
+//  CudaVideoWriter
 //
 //----------------------------------------------------------------------------
 
-CVAPI(cv::cudacodec::VideoWriter*) cudaVideoWriterCreate(cv::String* fileName, CvSize* frameSize, double fps, cv::cudacodec::SurfaceFormat format, cv::Ptr<cv::cudacodec::VideoWriter>** sharedPtr);
+CVAPI(cv::cudacodec::VideoWriter*) cudaVideoWriterCreate(
+	cv::String* fileName, 
+	CvSize* frameSize, 
+	cv::cudacodec::Codec codec, 
+	double fps, 
+	cv::cudacodec::ColorFormat colorFormat, 
+	cv::cuda::Stream* stream, 
+	cv::Ptr<cv::cudacodec::VideoWriter>** sharedPtr);
+CVAPI(void) cudaVideoWriterDelete(cv::Ptr<cv::cudacodec::VideoWriter>** writer);
 CVAPI(void) cudaVideoWriterRelease(cv::Ptr<cv::cudacodec::VideoWriter>** writer);
-CVAPI(void) cudaVideoWriterWrite(cv::cudacodec::VideoWriter* writer, cv::_InputArray* frame, bool lastFrame);
+CVAPI(void) cudaVideoWriterWrite(cv::cudacodec::VideoWriter* writer, cv::_InputArray* frame);
 
 //----------------------------------------------------------------------------
 //

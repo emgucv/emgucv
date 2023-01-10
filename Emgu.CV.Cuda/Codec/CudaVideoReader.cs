@@ -19,80 +19,6 @@ namespace Emgu.CV.Cuda
     /// </summary>
     public class CudaVideoReader : SharedPtrObject
     {
-        /// <summary>
-        /// Video codecs supported by VideoReader
-        /// </summary>
-        public enum Codec
-        {
-            /// <summary>
-            /// MPEG1
-            /// </summary>
-            MPEG1 = 0,
-            /// <summary>
-            /// MPEG2
-            /// </summary>
-            MPEG2,
-            /// <summary>
-            /// MPEG4
-            /// </summary>
-            MPEG4,
-            /// <summary>
-            /// VC1
-            /// </summary>
-            VC1,
-            /// <summary>
-            /// H264
-            /// </summary>
-            H264,
-            /// <summary>
-            /// JPEG
-            /// </summary>
-            JPEG,
-            /// <summary>
-            /// H264_SVC
-            /// </summary>
-            H264_SVC,
-            /// <summary>
-            /// H264_MVC
-            /// </summary>
-            H264_MVC,
-            /// <summary>
-            /// HEVC
-            /// </summary>
-            HEVC,
-            /// <summary>
-            /// VP8
-            /// </summary>
-            VP8,
-            /// <summary>
-            /// VP9
-            /// </summary>
-            VP9,
-            /// <summary>
-            /// Number of codecs
-            /// </summary>
-            NumCodecs,
-            /// <summary>
-            /// Y,U,V (4:2:0)
-            /// </summary>
-            Uncompressed_YUV420 = (('I' << 24) | ('Y' << 16) | ('U' << 8) | ('V')),
-            /// <summary>
-            /// Y,V,U (4:2:0)
-            /// </summary>
-            Uncompressed_YV12 = (('Y' << 24) | ('V' << 16) | ('1' << 8) | ('2')),
-            /// <summary>
-            /// Y,UV  (4:2:0)
-            /// </summary>
-            Uncompressed_NV12 = (('N' << 24) | ('V' << 16) | ('1' << 8) | ('2')),
-            /// <summary>
-            /// YUYV/YUY2 (4:2:2)
-            /// </summary>
-            Uncompressed_YUYV = (('Y' << 24) | ('U' << 16) | ('Y' << 8) | ('V')),
-            /// <summary>
-            /// UYVY (4:2:2)
-            /// </summary>
-            Uncompressed_UYVY = (('U' << 24) | ('Y' << 16) | ('V' << 8) | ('Y'))
-        }
 
         /// <summary>
         /// Chroma formats supported by VideoReader.
@@ -122,6 +48,25 @@ namespace Emgu.CV.Cuda
         }
 
         /// <summary>
+        /// Deinterlacing mode used by decoder.
+        /// </summary>
+        public enum DeinterlaceMode
+        {
+            /// <summary>
+            /// Weave both fields (no deinterlacing). For progressive content and for content that doesn't need deinterlacing.
+            /// </summary>
+            Weave = 0,
+            /// <summary>
+            /// Drop one field.
+            /// </summary>
+            Bob = 1,
+            /// <summary>
+            /// Adaptive deinterlacing needs more video memory than other deinterlacing modes.
+            /// </summary>
+            Adaptive = 2
+        }
+
+        /// <summary>
         /// Struct providing information about video file format.
         /// </summary>
         public struct FormatInfo
@@ -129,19 +74,88 @@ namespace Emgu.CV.Cuda
             /// <summary>
             /// The Codec
             /// </summary>
-            public Codec Codec;
+            public CudaCodec Codec;
+
             /// <summary>
             /// The chroma format
             /// </summary>
             public ChromaFormat ChromaFormat;
+
             /// <summary>
-            /// The Width
+            /// Number of bit depth - 8
+            /// </summary>
+            public int NBitDepthMinus8;
+
+            /// <summary>
+            /// Coded sequence width in pixels
+            /// </summary>
+            public int UlWidth;
+
+            /// <summary>
+            /// Coded sequence height in pixels
+            /// </summary>
+            public int UlHeight;
+
+            /// <summary>
+            /// Width of the decoded frame returned by nextFrame(frame).
             /// </summary>
             public int Width;
+
             /// <summary>
-            /// The Height
+            /// Height of the decoded frame returned by nextFrame(frame).
             /// </summary>
             public int Height;
+
+            /// <summary>
+            /// Max coded sequence width in pixels
+            /// </summary>
+            public int UlMaxWidth;
+
+            /// <summary>
+            /// Max coded sequence height in pixels
+            /// </summary>
+            public int UlMaxHeight;
+
+            /// <summary>
+            /// ROI inside the decoded frame returned by nextFrame(frame), containing the useable video frame.
+            /// </summary>
+            public Rectangle DisplayArea;
+
+            /// <summary>
+            /// True if the format is valid
+            /// </summary>
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            public bool Valid;
+
+            /// <summary>
+            /// Frames per second
+            /// </summary>
+            public double Fps;
+
+            /// <summary>
+            /// Maximum number of internal decode surfaces.
+            /// </summary>
+            public int UlNumDecodeSurfaces;
+
+            /// <summary>
+            /// De-interlace mode
+            /// </summary>
+            public DeinterlaceMode DeinterlaceMode;
+
+            /// <summary>
+            /// Post-processed size of the output frame.
+            /// </summary>
+            public Size TargetSz;
+
+            /// <summary>
+            /// Region of interest decoded from video source.
+            /// </summary>
+            public Rectangle SrcRoi;
+
+            /// <summary>
+            /// Region of interest in the output frame containing the decoded frame.
+            /// </summary>
+            public Rectangle TargetRoi;
         }
 
         /// <summary>
