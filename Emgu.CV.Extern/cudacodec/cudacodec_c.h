@@ -33,12 +33,16 @@ namespace cv
 		class VideoReader
 		{
 		};
-		
-		enum SurfaceFormat
+
+		enum Codec
 		{
 		};
 
-		enum FormatInfo
+		enum ColorFormat
+		{
+		};
+
+		struct FormatInfo
 		{
 		};
 	}
