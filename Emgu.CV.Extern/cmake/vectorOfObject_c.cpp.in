@@ -149,6 +149,11 @@ void* VectorOf${VECTOR_NAME}GetStartAddress(void* v)
    throw_no_vector();
 }
 
+int64_t VectorOf${VECTOR_NAME}GetMemorySize(void* v)
+{
+   throw_no_vector();
+}
+
 void VectorOf${VECTOR_NAME}GetItemPtr(void* vec, int index,  void** element)
 {
    throw_no_vector();
