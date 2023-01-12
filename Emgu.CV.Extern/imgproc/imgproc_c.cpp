@@ -452,6 +452,10 @@ void cveBlur(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* kSize, CvPoint
 {
 	cv::blur(*src, *dst, *kSize, *anchor, borderType);
 }
+void cveStackBlur(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* ksize)
+{
+	cv::stackBlur(*src, *dst, *ksize);
+}
 void cveMedianBlur(cv::_InputArray* src, cv::_OutputArray* dst, int ksize)
 {
 	cv::medianBlur(*src, *dst, ksize);

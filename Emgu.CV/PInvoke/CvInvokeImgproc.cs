@@ -41,7 +41,8 @@ namespace Emgu.CV
         /// <param name="patch">Extracted rectangle</param>
         /// <param name="patchType">Depth of the extracted pixels. By default, they have the same depth as <paramref name="image"/>.</param>
         /// <param name="center">Floating point coordinates of the extracted rectangle center within the source image. The center must be inside the image.</param>
-        public static void GetRectSubPix(IInputArray image, Size patchSize, PointF center, IOutputArray patch, DepthType patchType = DepthType.Default)
+        public static void GetRectSubPix(IInputArray image, Size patchSize, PointF center, IOutputArray patch,
+            DepthType patchType = DepthType.Default)
         {
             using (InputArray iaSrc = image.GetInputArray())
             using (OutputArray oaPatch = patch.GetOutputArray())
@@ -49,8 +50,10 @@ namespace Emgu.CV
                 cveGetRectSubPix(iaSrc, ref patchSize, ref center, oaPatch, patchType);
             }
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveGetRectSubPix(IntPtr image, ref Size patchSize, ref PointF center, IntPtr patch, DepthType patchType);
+        private static extern void cveGetRectSubPix(IntPtr image, ref Size patchSize, ref PointF center, IntPtr patch,
+            DepthType patchType);
 
         /// <summary>
         /// Resizes the image src down to or up to the specified size
@@ -61,14 +64,17 @@ namespace Emgu.CV
         /// <param name="fx">Scale factor along the horizontal axis</param>
         /// <param name="fy">Scale factor along the vertical axis;</param>
         /// <param name="interpolation">Interpolation method</param>
-        public static void Resize(IInputArray src, IOutputArray dst, Size dsize, double fx = 0, double fy = 0, CvEnum.Inter interpolation = CvEnum.Inter.Linear)
+        public static void Resize(IInputArray src, IOutputArray dst, Size dsize, double fx = 0, double fy = 0,
+            CvEnum.Inter interpolation = CvEnum.Inter.Linear)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveResize(iaSrc, oaDst, ref dsize, fx, fy, interpolation);
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveResize(IntPtr src, IntPtr dst, ref Size dsize, double fx, double fy, CvEnum.Inter interpolation);
+        private static extern void cveResize(IntPtr src, IntPtr dst, ref Size dsize, double fx, double fy,
+            CvEnum.Inter interpolation);
 
         /// <summary>
         /// Resize an image such that it fits in a given frame, keeping the aspect ratio.
@@ -78,7 +84,8 @@ namespace Emgu.CV
         /// <param name="frameSize">The size of the frame</param>
         /// <param name="interpolationMethod">The interpolation method</param>
         /// <param name="scaleDownOnly">If true, it will not try to scale up the image to fit the frame</param>
-        public static void ResizeForFrame(IInputArray src, IOutputArray dst, Size frameSize, Inter interpolationMethod = Inter.Linear, bool scaleDownOnly = true)
+        public static void ResizeForFrame(IInputArray src, IOutputArray dst, Size frameSize,
+            Inter interpolationMethod = Inter.Linear, bool scaleDownOnly = true)
         {
             using (InputArray iaImage = src.GetInputArray())
             {
@@ -87,14 +94,16 @@ namespace Emgu.CV
                 {
                     iaImage.CopyTo(dst);
                 }
+
                 Size newSize = ComputeScalePreservingSize(iaImage.GetSize(), frameSize);
                 CvInvoke.Resize(src, dst, newSize, 0, 0, interpolationMethod);
             }
         }
+
         private static Size ComputeScalePreservingSize(Size current, Size max)
         {
-            double scale = Math.Min((double)max.Width / current.Width, (double)max.Height / current.Height);
-            return new Size((int)(current.Width * scale), (int)(current.Height * scale));
+            double scale = Math.Min((double) max.Width / current.Width, (double) max.Height / current.Height);
+            return new Size((int) (current.Width * scale), (int) (current.Height * scale));
         }
 
         /// <summary>
@@ -108,23 +117,26 @@ namespace Emgu.CV
         /// <param name="warpMethod">Warp method</param>
         /// <param name="borderMode">Pixel extrapolation method</param>
         /// <param name="borderValue">A value used to fill outliers</param>
-        public static void WarpAffine(IInputArray src, IOutputArray dst, IInputArray mapMatrix, Size dsize, CvEnum.Inter interMethod = CvEnum.Inter.Linear, CvEnum.Warp warpMethod = CvEnum.Warp.Default, CvEnum.BorderType borderMode = CvEnum.BorderType.Constant, MCvScalar borderValue = new MCvScalar())
+        public static void WarpAffine(IInputArray src, IOutputArray dst, IInputArray mapMatrix, Size dsize,
+            CvEnum.Inter interMethod = CvEnum.Inter.Linear, CvEnum.Warp warpMethod = CvEnum.Warp.Default,
+            CvEnum.BorderType borderMode = CvEnum.BorderType.Constant, MCvScalar borderValue = new MCvScalar())
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMapMatrix = mapMatrix.GetInputArray())
-                cveWarpAffine(iaSrc, oaDst, iaMapMatrix, ref dsize, (int)interMethod | (int)warpMethod, borderMode, ref borderValue);
+                cveWarpAffine(iaSrc, oaDst, iaMapMatrix, ref dsize, (int) interMethod | (int) warpMethod, borderMode,
+                    ref borderValue);
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveWarpAffine(
-           IntPtr src,
-           IntPtr dst,
-           IntPtr mapMatrix,
-           ref Size dsize,
-           int flags,
-           CvEnum.BorderType borderMode,
-           ref MCvScalar fillval);
+            IntPtr src,
+            IntPtr dst,
+            IntPtr mapMatrix,
+            ref Size dsize,
+            int flags,
+            CvEnum.BorderType borderMode,
+            ref MCvScalar fillval);
 
 
         /// <summary>
@@ -140,8 +152,12 @@ namespace Emgu.CV
             Debug.Assert(src.Length >= 3, "The source should contain at least 3 points");
             Debug.Assert(dest.Length >= 3, "The destination should contain at least 3 points");
 
-            using (VectorOfPointF ptSrc = src.Length == 3 ? new VectorOfPointF(src) : new VectorOfPointF(new PointF[] { src[0], src[1], src[2] }))
-            using (VectorOfPointF ptDest = dest.Length == 3 ? new VectorOfPointF(dest) : new VectorOfPointF(new PointF[] { dest[0], dest[1], dest[2] }))
+            using (VectorOfPointF ptSrc = src.Length == 3
+                       ? new VectorOfPointF(src)
+                       : new VectorOfPointF(new PointF[] {src[0], src[1], src[2]}))
+            using (VectorOfPointF ptDest = dest.Length == 3
+                       ? new VectorOfPointF(dest)
+                       : new VectorOfPointF(new PointF[] {dest[0], dest[1], dest[2]}))
                 return CvInvoke.GetAffineTransform(ptSrc, ptDest);
         }
 
@@ -154,8 +170,8 @@ namespace Emgu.CV
         /// <param name="dst">Pointer to an array of PointF, Coordinates of the 3 corresponding triangle vertices in the destination image</param>
         /// <returns>The destination 2x3 matrix</returns>
         public static Mat GetAffineTransform(
-           IInputArray src,
-           IOutputArray dst)
+            IInputArray src,
+            IOutputArray dst)
         {
             Mat affine = new Mat();
             using (InputArray iaSrc = src.GetInputArray())
@@ -166,9 +182,9 @@ namespace Emgu.CV
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveGetAffineTransform(
-           IntPtr src,
-           IntPtr dst,
-           IntPtr result);
+            IntPtr src,
+            IntPtr dst,
+            IntPtr result);
 
         /*
         /// <summary>
@@ -199,6 +215,7 @@ namespace Emgu.CV
             using (OutputArray oaMapMatrix = mapMatrix.GetOutputArray())
                 cveGetRotationMatrix2D(ref center, angle, scale, oaMapMatrix);
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveGetRotationMatrix2D(
             ref PointF center,
@@ -219,29 +236,31 @@ namespace Emgu.CV
         /// <param name="borderMode">Pixel extrapolation method</param>
         /// <param name="borderValue">value used in case of a constant border</param>
         public static void WarpPerspective(
-           IInputArray src,
-           IOutputArray dst,
-           IInputArray mapMatrix,
-           Size dsize,
-           CvEnum.Inter interpolationType = CvEnum.Inter.Linear,
-           CvEnum.Warp warpType = CvEnum.Warp.Default,
-           CvEnum.BorderType borderMode = CvEnum.BorderType.Constant,
-           MCvScalar borderValue = new MCvScalar())
+            IInputArray src,
+            IOutputArray dst,
+            IInputArray mapMatrix,
+            Size dsize,
+            CvEnum.Inter interpolationType = CvEnum.Inter.Linear,
+            CvEnum.Warp warpType = CvEnum.Warp.Default,
+            CvEnum.BorderType borderMode = CvEnum.BorderType.Constant,
+            MCvScalar borderValue = new MCvScalar())
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMapMatrix = mapMatrix.GetInputArray())
-                cveWarpPerspective(iaSrc, oaDst, iaMapMatrix, ref dsize, (int)interpolationType | (int)warpType, borderMode, ref borderValue);
+                cveWarpPerspective(iaSrc, oaDst, iaMapMatrix, ref dsize, (int) interpolationType | (int) warpType,
+                    borderMode, ref borderValue);
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveWarpPerspective(
-           IntPtr src,
-           IntPtr dst,
-           IntPtr m,
-           ref Size dsize,
-           int flags,
-           CvEnum.BorderType borderMode,
-           ref MCvScalar fillval);
+            IntPtr src,
+            IntPtr dst,
+            IntPtr m,
+            ref Size dsize,
+            int flags,
+            CvEnum.BorderType borderMode,
+            ref MCvScalar fillval);
 
         /*
         /// <summary>
@@ -303,9 +322,9 @@ namespace Emgu.CV
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveGetPerspectiveTransform(
-           IntPtr src,
-           IntPtr dst,
-           IntPtr mapMatrix);
+            IntPtr src,
+            IntPtr dst,
+            IntPtr mapMatrix);
 
         /// <summary>
         /// Applies a generic geometrical transformation to an image.
@@ -318,11 +337,11 @@ namespace Emgu.CV
         /// <param name="borderMode">Pixel extrapolation method </param>
         /// <param name="borderValue">A value used to fill outliers</param>
         public static void Remap(
-           IInputArray src, IOutputArray dst,
-           IInputArray map1, IInputArray map2,
-           CvEnum.Inter interpolation,
-           CvEnum.BorderType borderMode = CvEnum.BorderType.Constant,
-           MCvScalar borderValue = new MCvScalar())
+            IInputArray src, IOutputArray dst,
+            IInputArray map1, IInputArray map2,
+            CvEnum.Inter interpolation,
+            CvEnum.BorderType borderMode = CvEnum.BorderType.Constant,
+            MCvScalar borderValue = new MCvScalar())
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
@@ -332,7 +351,8 @@ namespace Emgu.CV
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveRemap(IntPtr src, IntPtr dst, IntPtr map1, IntPtr map2, CvEnum.Inter interpolation, CvEnum.BorderType borderMode, ref MCvScalar borderValue);
+        private static extern void cveRemap(IntPtr src, IntPtr dst, IntPtr map1, IntPtr map2,
+            CvEnum.Inter interpolation, CvEnum.BorderType borderMode, ref MCvScalar borderValue);
 
         /// <summary>
         /// Inverts an affine transformation
@@ -345,6 +365,7 @@ namespace Emgu.CV
             using (OutputArray oaIm = im.GetOutputArray())
                 cveInvertAffineTransform(iaM, oaIm);
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveInvertAffineTransform(IntPtr m, IntPtr im);
 
@@ -360,25 +381,25 @@ namespace Emgu.CV
         /// <param name="interpolationType">Interpolation method</param>
         /// <param name="warpType">warp method</param>
         public static void LogPolar(
-           IInputArray src,
-           IOutputArray dst,
-           PointF center,
-           double M,
-           CvEnum.Inter interpolationType = CvEnum.Inter.Linear,
-           CvEnum.Warp warpType = CvEnum.Warp.FillOutliers)
+            IInputArray src,
+            IOutputArray dst,
+            PointF center,
+            double M,
+            CvEnum.Inter interpolationType = CvEnum.Inter.Linear,
+            CvEnum.Warp warpType = CvEnum.Warp.FillOutliers)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
-                cveLogPolar(iaSrc, oaDst, ref center, M, (int)interpolationType | (int)warpType);
+                cveLogPolar(iaSrc, oaDst, ref center, M, (int) interpolationType | (int) warpType);
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveLogPolar(
-           IntPtr src,
-           IntPtr dst,
-           ref PointF center,
-           double M,
-           int flags);
+            IntPtr src,
+            IntPtr dst,
+            ref PointF center,
+            double M,
+            int flags);
 
         /// <summary>
         /// The function emulates the human "foveal" vision and can be used for fast scale and rotation-invariant template matching, for object tracking etc.
@@ -390,24 +411,25 @@ namespace Emgu.CV
         /// <param name="interpolationType">Interpolation method</param>
         /// <param name="warpType">Warp method</param>
         public static void LinearPolar(
-           IInputArray src,
-           IOutputArray dst,
-           PointF center,
-           double maxRadius,
-           CvEnum.Inter interpolationType = CvEnum.Inter.Linear,
-           CvEnum.Warp warpType = CvEnum.Warp.FillOutliers)
+            IInputArray src,
+            IOutputArray dst,
+            PointF center,
+            double maxRadius,
+            CvEnum.Inter interpolationType = CvEnum.Inter.Linear,
+            CvEnum.Warp warpType = CvEnum.Warp.FillOutliers)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
-                cveLinearPolar(iaSrc, oaDst, ref center, maxRadius, (int)interpolationType | (int)warpType);
+                cveLinearPolar(iaSrc, oaDst, ref center, maxRadius, (int) interpolationType | (int) warpType);
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveLinearPolar(
-           IntPtr src,
-           IntPtr dst,
-           ref PointF center,
-           double maxRadius,
-           int flags);
+            IntPtr src,
+            IntPtr dst,
+            ref PointF center,
+            double maxRadius,
+            int flags);
 
         #endregion
 
@@ -417,13 +439,15 @@ namespace Emgu.CV
         /// <param name="src">The source image.</param>
         /// <param name="dst">The destination image, should have 2x smaller width and height than the source.</param>
         /// <param name="borderType">Border type</param>
-        public static void PyrDown(IInputArray src, IOutputArray dst, CvEnum.BorderType borderType = CvEnum.BorderType.Default)
+        public static void PyrDown(IInputArray src, IOutputArray dst,
+            CvEnum.BorderType borderType = CvEnum.BorderType.Default)
         {
             Size s = Size.Empty;
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cvePyrDown(iaSrc, oaDst, ref s, borderType);
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cvePyrDown(IntPtr src, IntPtr dst, ref Size size, CvEnum.BorderType borderType);
 
@@ -433,13 +457,15 @@ namespace Emgu.CV
         /// <param name="src">The source image.</param>
         /// <param name="dst">The destination image, should have 2x smaller width and height than the source.</param>
         /// <param name="borderType">Border type</param>
-        public static void PyrUp(IInputArray src, IOutputArray dst, CvEnum.BorderType borderType = CvEnum.BorderType.Default)
+        public static void PyrUp(IInputArray src, IOutputArray dst,
+            CvEnum.BorderType borderType = CvEnum.BorderType.Default)
         {
             Size s = Size.Empty;
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cvePyrUp(iaSrc, oaDst, ref s, borderType);
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cvePyrUp(IntPtr src, IntPtr dst, ref Size size, CvEnum.BorderType borderType);
 
@@ -450,7 +476,8 @@ namespace Emgu.CV
         /// <param name="dst">Destination vector of maxlevel+1 images of the same type as src. dst[0] will be the same as src. dst[1] is the next pyramid layer, a smoothed and down-sized src, and so on.</param>
         /// <param name="maxlevel">0-based index of the last (the smallest) pyramid layer. It must be non-negative.</param>
         /// <param name="borderType">Pixel extrapolation method</param>
-        public static void BuildPyramid(IInputArray src, IOutputArrayOfArrays dst, int maxlevel, CvEnum.BorderType borderType = CvEnum.BorderType.Default)
+        public static void BuildPyramid(IInputArray src, IOutputArrayOfArrays dst, int maxlevel,
+            CvEnum.BorderType borderType = CvEnum.BorderType.Default)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
@@ -472,6 +499,7 @@ namespace Emgu.CV
             using (InputOutputArray ioaMarkers = markers.GetInputOutputArray())
                 cveWatershed(iaImage, ioaMarkers);
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveWatershed(IntPtr image, IntPtr markers);
 
@@ -489,6 +517,7 @@ namespace Emgu.CV
             cveMaxRect(ref rect1, ref rect2, ref rect);
             return rect;
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveMaxRect(ref Rectangle rect1, ref Rectangle rect2, ref Rectangle result);
 
@@ -549,8 +578,10 @@ namespace Emgu.CV
 
             }
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveFitLine(IntPtr points, IntPtr line, CvEnum.DistType distType, double param, double reps, double aeps);
+        private static extern void cveFitLine(IntPtr points, IntPtr line, CvEnum.DistType distType, double param,
+            double reps, double aeps);
 
         /// <summary>
         /// Finds out if there is any intersection between two rotated rectangles.
@@ -559,13 +590,16 @@ namespace Emgu.CV
         /// <param name="rect2">Second rectangle</param>
         /// <param name="intersectingRegion">The output array of the verticies of the intersecting region. It returns at most 8 vertices. Stored as VectorOfPointF or Mat as Mx1 of type CV_32FC2.</param>
         /// <returns>The intersect type</returns>
-        public static CvEnum.RectIntersectType RotatedRectangleIntersection(RotatedRect rect1, RotatedRect rect2, IOutputArray intersectingRegion)
+        public static CvEnum.RectIntersectType RotatedRectangleIntersection(RotatedRect rect1, RotatedRect rect2,
+            IOutputArray intersectingRegion)
         {
             using (OutputArray oaIntersectingRegion = intersectingRegion.GetOutputArray())
                 return cveRotatedRectangleIntersection(ref rect1, ref rect2, oaIntersectingRegion);
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern CvEnum.RectIntersectType cveRotatedRectangleIntersection(ref RotatedRect rect1, ref RotatedRect rect2, IntPtr intersectingRegion);
+        private static extern CvEnum.RectIntersectType cveRotatedRectangleIntersection(ref RotatedRect rect1,
+            ref RotatedRect rect2, IntPtr intersectingRegion);
 
         /// <summary>
         /// Calculates vertices of the input 2d box.
@@ -581,6 +615,7 @@ namespace Emgu.CV
             {
                 cveBoxPoints(ref box, oaVp);
             }
+
             handle.Free();
             return pts;
         }
@@ -595,10 +630,11 @@ namespace Emgu.CV
             using (OutputArray oaPoints = points.GetOutputArray())
                 cveBoxPoints(ref box, oaPoints);
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveBoxPoints(
-           ref RotatedRect box,
-           IntPtr pt);
+            ref RotatedRect box,
+            IntPtr pt);
 
         /// <summary>
         /// Fits an ellipse around a set of 2D points.
@@ -612,6 +648,7 @@ namespace Emgu.CV
                 cveFitEllipse(iaPoints, ref ellipse);
             return ellipse;
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveFitEllipse(IntPtr points, ref RotatedRect ellipse);
 
@@ -627,6 +664,7 @@ namespace Emgu.CV
                 cveFitEllipseAMS(iaPoints, ref ellipse);
             return ellipse;
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveFitEllipseAMS(IntPtr points, ref RotatedRect ellipse);
 
@@ -642,6 +680,7 @@ namespace Emgu.CV
                 cveFitEllipseDirect(iaPoints, ref ellipse);
             return ellipse;
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveFitEllipseDirect(IntPtr points, ref RotatedRect ellipse);
 
@@ -669,27 +708,28 @@ namespace Emgu.CV
         /// <param name="hull">Output convex hull. It is either an integer vector of indices or vector of points. In the first case, the hull elements are 0-based indices of the convex hull points in the original array (since the set of convex hull points is a subset of the original point set). In the second case, hull elements are the convex hull points themselves.</param>
         /// <param name="clockwise">Orientation flag. If it is true, the output convex hull is oriented clockwise. Otherwise, it is oriented counter-clockwise. The assumed coordinate system has its X axis pointing to the right, and its Y axis pointing upwards.</param>
         /// <param name="returnPoints">Operation flag. In case of a matrix, when the flag is true, the function returns convex hull points. Otherwise, it returns indices of the convex hull points. When the output array is std::vector, the flag is ignored, and the output depends on the type of the vector</param>
-        public static void ConvexHull(IInputArray points, IOutputArray hull, bool clockwise = false, bool returnPoints = true)
+        public static void ConvexHull(IInputArray points, IOutputArray hull, bool clockwise = false,
+            bool returnPoints = true)
         {
             using (InputArray iaPoints = points.GetInputArray())
             using (OutputArray oaHull = hull.GetOutputArray())
                 cveConvexHull(iaPoints, oaHull, clockwise, returnPoints);
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveConvexHull(
-           IntPtr points,
-           IntPtr hull,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool clockwise,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool returnPoints);
+            IntPtr points,
+            IntPtr hull,
+            [MarshalAs(CvInvoke.BoolMarshalType)] bool clockwise,
+            [MarshalAs(CvInvoke.BoolMarshalType)] bool returnPoints);
 
         #endregion
 
         /// <summary>
         /// The default morphology value.
         /// </summary>
-        public static MCvScalar MorphologyDefaultBorderValue = new MCvScalar(double.MaxValue, double.MaxValue, double.MaxValue, double.MaxValue);
+        public static MCvScalar MorphologyDefaultBorderValue =
+            new MCvScalar(double.MaxValue, double.MaxValue, double.MaxValue, double.MaxValue);
 
         //public static Point MorphologyDefaultAnchor = new Point(-1, -1);
         /// <summary>
@@ -704,15 +744,18 @@ namespace Emgu.CV
         /// <param name="borderType">Pixel extrapolation method</param>
         /// <param name="borderValue">Border value in case of a constant border, use Constant for default</param>
         /// <param name="anchor">Position of the anchor within the element; default value (-1, -1) means that the anchor is at the element center.</param>
-        public static void Erode(IInputArray src, IOutputArray dst, IInputArray element, Point anchor, int iterations, CvEnum.BorderType borderType, MCvScalar borderValue)
+        public static void Erode(IInputArray src, IOutputArray dst, IInputArray element, Point anchor, int iterations,
+            CvEnum.BorderType borderType, MCvScalar borderValue)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaElement = element == null ? InputArray.GetEmpty() : element.GetInputArray())
                 cveErode(iaSrc, oaDst, iaElement, ref anchor, iterations, borderType, ref borderValue);
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveErode(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations, CvEnum.BorderType borderType, ref MCvScalar borderValue);
+        private static extern void cveErode(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations,
+            CvEnum.BorderType borderType, ref MCvScalar borderValue);
 
         /// <summary>
         /// Dilates the source image using the specified structuring element that determines the shape of a pixel neighborhood over which the maximum is taken
@@ -725,15 +768,18 @@ namespace Emgu.CV
         /// <param name="borderType">Pixel extrapolation method</param>
         /// <param name="borderValue">Border value in case of a constant border </param>
         /// <param name="anchor">Position of the anchor within the element; default value (-1, -1) means that the anchor is at the element center.</param>
-        public static void Dilate(IInputArray src, IOutputArray dst, IInputArray element, Point anchor, int iterations, CvEnum.BorderType borderType, MCvScalar borderValue)
+        public static void Dilate(IInputArray src, IOutputArray dst, IInputArray element, Point anchor, int iterations,
+            CvEnum.BorderType borderType, MCvScalar borderValue)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaElement = element == null ? InputArray.GetEmpty() : element.GetInputArray())
                 cveDilate(iaSrc, oaDst, iaElement, ref anchor, iterations, borderType, ref borderValue);
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveDilate(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations, CvEnum.BorderType borderType, ref MCvScalar borderValue);
+        private static extern void cveDilate(IntPtr src, IntPtr dst, IntPtr kernel, ref Point anchor, int iterations,
+            CvEnum.BorderType borderType, ref MCvScalar borderValue);
 
         /// <summary>
         /// Blurs an image using a Gaussian filter.
@@ -745,14 +791,16 @@ namespace Emgu.CV
         /// <param name="sigmaY">Gaussian kernel standard deviation in Y direction; if sigmaY is zero, it is set to be equal to sigmaX, if both sigmas are zeros, they are computed from ksize.width and ksize.height , respectively (see getGaussianKernel() for details); to fully control the result regardless of possible future modifications of all this semantics, it is recommended to specify all of ksize, sigmaX, and sigmaY.</param>
         /// <param name="borderType">Pixel extrapolation method</param>
         public static void GaussianBlur(IInputArray src, IOutputArray dst, Size ksize, double sigmaX, double sigmaY = 0,
-           CvEnum.BorderType borderType = BorderType.Default)
+            CvEnum.BorderType borderType = BorderType.Default)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveGaussianBlur(iaSrc, oaDst, ref ksize, sigmaX, sigmaY, borderType);
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveGaussianBlur(IntPtr src, IntPtr dst, ref Size ksize, double sigmaX, double sigmaY, CvEnum.BorderType borderType);
+        private static extern void cveGaussianBlur(IntPtr src, IntPtr dst, ref Size ksize, double sigmaX, double sigmaY,
+            CvEnum.BorderType borderType);
 
         /// <summary>
         /// Blurs an image using the normalized box filter.
@@ -763,14 +811,37 @@ namespace Emgu.CV
         /// <param name="anchor">Anchor point; default value Point(-1,-1) means that the anchor is at the kernel center.</param>
         /// <param name="borderType">Border mode used to extrapolate pixels outside of the image.</param>
         public static void Blur(IInputArray src, IOutputArray dst, Size ksize, Point anchor,
-           CvEnum.BorderType borderType = BorderType.Default)
+            CvEnum.BorderType borderType = BorderType.Default)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveBlur(iaSrc, oaDst, ref ksize, ref anchor, borderType);
         }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveBlur(IntPtr src, IntPtr dst, ref Size kSize, ref Point anchor, CvEnum.BorderType borderType);
+        private static extern void cveBlur(IntPtr src, IntPtr dst, ref Size kSize, ref Point anchor,
+            CvEnum.BorderType borderType);
+
+        /// <summary>
+        /// The function applies and stackBlur to an image.
+        /// stackBlur can generate similar results as Gaussian blur, and the time consumption does not increase with the increase of kernel size.
+        /// It creates a kind of moving stack of colors whilst scanning through the image.Thereby it just has to add one new block of color to the right side
+        /// of the stack and remove the leftmost color.The remaining colors on the topmost layer of the stack are either added on or reduced by one,
+        /// depending on if they are on the right or on the left side of the stack.The only supported borderType is BORDER_REPLICATE.
+        /// Original paper was proposed by Mario Klingemann, which can be found http://underdestruction.com/2004/02/25/stackblur-2004.
+        /// </summary>
+        /// <param name="src">Input image. The number of channels can be arbitrary, but the depth should be one of CV_8U, CV_16U, CV_16S or CV_32F.</param>
+        /// <param name="dst">Output image of the same size and type as src.</param>
+        /// <param name="ksize">Stack-blurring kernel size. The ksize.width and ksize.height can differ but they both must be positive and odd.</param>
+        public static void StackBlur(IInputArray src, IOutputArray dst, Size ksize)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveStackBlur(iaSrc, oaDst, ref ksize);
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveStackBlur(IntPtr src, IntPtr dst, ref Size ksize);
 
         /// <summary>
         /// Blurs an image using the median filter.
