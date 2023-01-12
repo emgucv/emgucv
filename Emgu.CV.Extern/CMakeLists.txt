@@ -2701,14 +2701,15 @@ ENDIF()
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Dnn/Net.g.cs"
     "cv::dnn::Net" 
     "Net" 
-    "PreferableBackend;PreferableTarget;enableFusion;empty;HalideScheduler" 
-    "int;int;bool;bool;cv::String" 
-    "propW;propW;act1;val;propW"
-    "PreferableBackend;PreferableTarget;EnableFusion;Empty;HalideScheduler" 
-    "Backend;Target;bool;bool;String"
+    "PreferableBackend;PreferableTarget;enableFusion;enableWinograd;empty;HalideScheduler" 
+    "int;int;bool;bool;bool;cv::String" 
+    "propW;propW;act1;act1;val;propW"
+    "PreferableBackend;PreferableTarget;EnableFusion;EnableWinograd;Empty;HalideScheduler" 
+    "Backend;Target;bool;bool;bool;String"
     "Ask network to use specific computation backend where it supported.;
 	Ask network to make computations on specific target device.;
 	Enables or disables layer fusion in the network.;
+    Enables or disables the Winograd compute branch. The Winograd compute branch can speed up 3x3 Convolution at a small loss of accuracy.;
 	Returns true if there are no layers in the network.;
 	Schedule layers that support Halide backend. Then compile them for specific target. For layers that not represented in scheduling file or if no manual scheduling used at all, automatic scheduling will be applied."
     "Emgu.CV.Dnn"
