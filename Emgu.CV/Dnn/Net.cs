@@ -122,7 +122,7 @@ namespace Emgu.CV.Dnn
         {
             using (CvString csLayerName = new CvString(layerName))
             {
-                return DnnInvoke.cveDnnGetLayerId(_ptr, csLayerName);
+                return DnnInvoke.cveDnnNetGetLayerId(_ptr, csLayerName);
             }
         }
 
@@ -136,7 +136,7 @@ namespace Emgu.CV.Dnn
             IntPtr sharedPtr = IntPtr.Zero;
             IntPtr ptr;
             using (CvString csLayerName = new CvString(layerName))
-                ptr = DnnInvoke.cveDnnGetLayerByName(_ptr, csLayerName, ref sharedPtr);
+                ptr = DnnInvoke.cveDnnNetGetLayerByName(_ptr, csLayerName, ref sharedPtr);
             return new Layer(sharedPtr, ptr);
         }
 
@@ -148,7 +148,7 @@ namespace Emgu.CV.Dnn
         public Layer GetLayer(int layerId)
         {
             IntPtr sharedPtr = IntPtr.Zero;
-            IntPtr ptr = DnnInvoke.cveDnnGetLayerById(_ptr, layerId, ref sharedPtr);
+            IntPtr ptr = DnnInvoke.cveDnnNetGetLayerById(_ptr, layerId, ref sharedPtr);
             return new Layer(sharedPtr, ptr);
         }
 
@@ -207,6 +207,23 @@ namespace Emgu.CV.Dnn
         {
             using (CvString p = new CvString(path))
                 DnnInvoke.cveDnnNetDumpToFile(_ptr, p);
+        }
+
+        /// <summary>
+        /// Connects output of the first layer to input of the second layer.
+        /// </summary>
+        /// <param name="outPin">Descriptor of the first layer output.</param>
+        /// <param name="inPin">Descriptor of the second layer input.</param>
+        /// <remarks>Descriptors have the following template &lt;layer_name&gt;[.input_number]:
+        /// The first part of the template layer_name is string name of the added layer. If this part is empty then the network input pseudo layer will be used;
+        /// the second optional part of the template input_number is either number of the layer input, either label one. If this part is omitted then the first layer input will be used.</remarks>
+        public void Connect(String outPin, String inPin)
+        {
+            using (CvString csOutPin = new CvString(outPin))
+            using (CvString csInPin = new CvString(inPin))
+            {
+                DnnInvoke.cveDnnNetConnect(_ptr, csOutPin, csInPin);
+            }
         }
 
         /// <summary>
@@ -270,13 +287,13 @@ namespace Emgu.CV.Dnn
         internal static extern IntPtr cveDnnNetGetLayerNames(IntPtr net);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int cveDnnGetLayerId(IntPtr net, IntPtr layer);
+        internal static extern int cveDnnNetGetLayerId(IntPtr net, IntPtr layer);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveDnnGetLayerByName(IntPtr net, IntPtr layerName, ref IntPtr sharedPtr);
+        internal static extern IntPtr cveDnnNetGetLayerByName(IntPtr net, IntPtr layerName, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveDnnGetLayerById(IntPtr net, int layerId, ref IntPtr sharedPtr);
+        internal static extern IntPtr cveDnnNetGetLayerById(IntPtr net, int layerId, ref IntPtr sharedPtr);
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -291,5 +308,8 @@ namespace Emgu.CV.Dnn
         internal static extern void cveDnnNetDump(IntPtr net, IntPtr dnnString);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnNetDumpToFile(IntPtr net, IntPtr path);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnNetConnect(IntPtr net, IntPtr outPin, IntPtr inPin);
     }
 }

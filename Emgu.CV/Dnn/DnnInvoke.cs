@@ -319,6 +319,50 @@ namespace Emgu.CV.Dnn
         private static extern IntPtr cveReadNetFromTensorflow2(IntPtr bufferModel, int lenModel, IntPtr bufferConfig, int lenConfig);
 
         /// <summary>
+        /// Reads a network model stored in Torch7 framework's format.
+        /// </summary>
+        /// <param name="model">Path to the file, dumped from Torch by using torch.save() function.</param>
+        /// <param name="isBinary">Specifies whether the network was serialized in ascii mode or binary.</param>
+        /// <param name="evaluate">Specifies testing phase of network. If true, it's similar to evaluate() method in Torch.</param>
+        /// <returns>Net object.</returns>
+        public static Net ReadNetFromTorch(String model, bool isBinary=true, bool evaluate=true)
+        {
+            using (CvString modelStr = new CvString(model))
+            {
+                return new Net(cveReadNetFromTorch(modelStr, isBinary, evaluate));
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveReadNetFromTorch(
+            IntPtr model,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool isBinary,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool evaluate);
+
+
+        /// <summary>
+        /// Loads blob which was serialized as torch.Tensor object of Torch7 framework.
+        /// </summary>
+        /// <param name="fileName">The file name</param>
+        /// <param name="isBinary">Specifies whether the blob was serialized in ascii mode or binary.</param>
+        /// <returns>The tensor</returns>
+        public static Mat ReadTorchBlob(String fileName, bool isBinary=true)
+        {
+            Mat tensor = new Mat();
+            using (CvString csFileName = new CvString(fileName))
+            {
+                cveReadTorchBlob(csFileName, isBinary, tensor);
+            }
+            return tensor;
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveReadTorchBlob(IntPtr filename, bool isBinary, IntPtr tensor);
+
+
+
+        /// <summary>
         /// Reads a network model ONNX.
         /// </summary>
         /// <param name="onnxFile">Path to the .onnx file with text description of the network architecture.</param>
@@ -568,7 +612,7 @@ namespace Emgu.CV.Dnn
                 using (VectorOfInt viBackends = new VectorOfInt())
                 using (VectorOfInt viTargets = new VectorOfInt())
                 {
-                    cveDNNGetAvailableBackends(viBackends, viTargets);
+                    cveDnnGetAvailableBackends(viBackends, viTargets);
                     int[] backendArr = viBackends.ToArray();
                     int[] targetArr = viTargets.ToArray();
 
@@ -584,7 +628,7 @@ namespace Emgu.CV.Dnn
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveDNNGetAvailableBackends(IntPtr backends, IntPtr targets);
+        private static extern void cveDnnGetAvailableBackends(IntPtr backends, IntPtr targets);
 
         /// <summary>
         /// Enables detailed logging of the DNN model loading with CV DNN API. Diagnostic mode provides detailed logging of the model loading stage to explore
@@ -595,11 +639,11 @@ namespace Emgu.CV.Dnn
         /// expected application crash.</remarks>
         public static void EnableModelDiagnostics(bool isDiagnosticsMode)
         {
-            cveDNNEnableModelDiagnostics(isDiagnosticsMode);
+            cveDnnEnableModelDiagnostics(isDiagnosticsMode);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveDNNEnableModelDiagnostics(
+        private static extern void cveDnnEnableModelDiagnostics(
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool isDiagnosticsMode);
     }
