@@ -585,5 +585,22 @@ namespace Emgu.CV.Dnn
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveDNNGetAvailableBackends(IntPtr backends, IntPtr targets);
+
+        /// <summary>
+        /// Enables detailed logging of the DNN model loading with CV DNN API. Diagnostic mode provides detailed logging of the model loading stage to explore
+        /// potential problems(ex.: not implemented layer type).
+        /// </summary>
+        /// <param name="isDiagnosticsMode">Indicates whether diagnostic mode should be set.</param>
+        /// <remarks>In diagnostic mode series of assertions will be skipped, it can lead to the
+        /// expected application crash.</remarks>
+        public static void EnableModelDiagnostics(bool isDiagnosticsMode)
+        {
+            cveDNNEnableModelDiagnostics(isDiagnosticsMode);
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveDNNEnableModelDiagnostics(
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool isDiagnosticsMode);
     }
 }

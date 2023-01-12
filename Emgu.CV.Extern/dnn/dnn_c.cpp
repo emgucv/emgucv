@@ -393,6 +393,15 @@ void cveDNNGetAvailableBackends(std::vector<int>* backends, std::vector<int>* ta
 #endif
 }
 
+void cveDNNEnableModelDiagnostics(bool isDiagnosticsMode)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::enableModelDiagnostics(isDiagnosticsMode);
+#else
+	throw_no_dnn();
+#endif
+}
+
 cv::dnn::TextDetectionModel_DB* cveDnnTextDetectionModelDbCreate1(cv::String* model, cv::String* config, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel)
 {
 #ifdef HAVE_OPENCV_DNN
