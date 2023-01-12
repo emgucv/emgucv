@@ -420,11 +420,10 @@ cv::TrackerMIL* cveTrackerMILCreate(
 	throw_no_video();
 #endif
 }
-void cveTrackerMILRelease(cv::TrackerMIL** tracker, cv::Ptr<cv::TrackerMIL>** sharedPtr)
+void cveTrackerMILRelease(cv::Ptr<cv::TrackerMIL>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_VIDEO
 	delete* sharedPtr;
-	*tracker = 0;
 	*sharedPtr = 0;
 #else
 	throw_no_video();
@@ -442,11 +441,10 @@ cv::TrackerGOTURN* cveTrackerGOTURNCreate(cv::Tracker** tracker, cv::Ptr<cv::Tra
 	throw_no_video();
 #endif
 }
-void cveTrackerGOTURNRelease(cv::TrackerGOTURN** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr)
+void cveTrackerGOTURNRelease(cv::Ptr<cv::TrackerGOTURN>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_VIDEO
 	delete* sharedPtr;
-	*tracker = 0;
 	*sharedPtr = 0;
 #else
 	throw_no_video();
@@ -480,13 +478,45 @@ cv::TrackerDaSiamRPN* cveTrackerDaSiamRPNCreate(
 }
 
 
-void cveTrackerDaSiamRPNRelease(cv::TrackerDaSiamRPN** tracker, cv::Ptr<cv::TrackerDaSiamRPN>** sharedPtr)
+void cveTrackerDaSiamRPNRelease(cv::Ptr<cv::TrackerDaSiamRPN>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_VIDEO
 	delete* sharedPtr;
-	*tracker = 0;
 	*sharedPtr = 0;
 #else
 	throw_no_video();
 #endif	
+}
+
+cv::TrackerNano* cveTrackerNanoCreate(
+	cv::String* backbone,
+	cv::String* neckhead,
+	int backend,
+	int target,
+	cv::Tracker** tracker,
+	cv::Ptr< cv::TrackerNano >** sharedPtr)
+{
+#ifdef HAVE_OPENCV_VIDEO
+	cv::TrackerNano::Params p;
+	p.backbone = *backbone;
+	p.neckhead = *neckhead;
+	p.backend = backend;
+	p.target = target;
+
+	cv::Ptr<cv::TrackerNano> ptr = cv::TrackerNano::create(p);
+	*sharedPtr = new cv::Ptr<cv::TrackerNano>(ptr);
+	*tracker = dynamic_cast<cv::Tracker*>(ptr.get());
+	return ptr.get();
+#else
+	throw_no_video();
+#endif	
+}
+void cveTrackerNanoRelease(cv::Ptr< cv::TrackerNano >** sharedPtr)
+{
+#ifdef HAVE_OPENCV_VIDEO
+	delete* sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_video();
+#endif		
 }

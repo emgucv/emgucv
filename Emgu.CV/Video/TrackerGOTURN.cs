@@ -36,7 +36,11 @@ namespace Emgu.CV
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                CvInvoke.cveTrackerGOTURNRelease(ref _ptr, ref _sharedPtr);
+            {
+                CvInvoke.cveTrackerGOTURNRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
+            }
+
             base.DisposeObject();
         }
     }
@@ -51,7 +55,7 @@ namespace Emgu.CV
         internal static extern IntPtr cveTrackerGOTURNCreate(ref IntPtr tracker, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveTrackerGOTURNRelease(ref IntPtr tracker, ref IntPtr sharedPtr);
+        internal static extern void cveTrackerGOTURNRelease(ref IntPtr sharedPtr);
 
     }
 }
