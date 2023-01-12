@@ -57,6 +57,9 @@ CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow2(const char *bufferModel, int lenM
 CVAPI(cv::dnn::Net*) cveReadNetFromONNX(cv::String* onnxFile);
 CVAPI(void) cveReadTensorFromONNX(cv::String* path, cv::Mat* tensor);
 
+CVAPI(cv::dnn::Net*) cveReadNetFromTorch(cv::String* model, bool isBinary, bool evaluate);
+CVAPI(void) cveReadTorchBlob(cv::String* filename, bool isBinary, cv::Mat* tensor);
+
 CVAPI(cv::dnn::Net*) cveReadNet(cv::String* model, cv::String* config, cv::String* framework);
 CVAPI(cv::dnn::Net*) cveReadNetFromModelOptimizer(cv::String* xml, cv::String* bin);
 
@@ -74,10 +77,12 @@ CVAPI(int64) cveDnnNetGetPerfProfile(cv::dnn::Net* net, std::vector<double>* tim
 CVAPI(void) cveDnnNetDump(cv::dnn::Net* net, cv::String* string);
 CVAPI(void) cveDnnNetDumpToFile(cv::dnn::Net* net, cv::String* path);
 CVAPI(std::vector<cv::String>*) cveDnnNetGetLayerNames(cv::dnn::Net* net);
+CVAPI(void) cveDnnNetConnect(cv::dnn::Net* net, cv::String* outPin, cv::String* inPin);
 
-CVAPI(int) cveDnnGetLayerId(cv::dnn::Net* net, cv::String* layer);
-CVAPI(cv::dnn::Layer*) cveDnnGetLayerByName(cv::dnn::Net* net, cv::String* layerName, cv::Ptr<cv::dnn::Layer>** sharedPtr);
-CVAPI(cv::dnn::Layer*) cveDnnGetLayerById(cv::dnn::Net* net, int layerId, cv::Ptr<cv::dnn::Layer>** sharedPtr);
+CVAPI(int) cveDnnNetGetLayerId(cv::dnn::Net* net, cv::String* layer);
+CVAPI(cv::dnn::Layer*) cveDnnNetGetLayerByName(cv::dnn::Net* net, cv::String* layerName, cv::Ptr<cv::dnn::Layer>** sharedPtr);
+CVAPI(cv::dnn::Layer*) cveDnnNetGetLayerById(cv::dnn::Net* net, int layerId, cv::Ptr<cv::dnn::Layer>** sharedPtr);
+
 CVAPI(void) cveDnnLayerRelease(cv::Ptr<cv::dnn::Layer>** layer);
 CVAPI(std::vector<cv::Mat>*) cveDnnLayerGetBlobs(cv::dnn::Layer* layer);
 
@@ -137,8 +142,8 @@ CVAPI(void) cveDnnSoftNMSBoxes(
 	float sigma,
 	int method);
 
-CVAPI(void) cveDNNGetAvailableBackends(std::vector<int>* backends, std::vector<int>* targets);
-CVAPI(void) cveDNNEnableModelDiagnostics(bool isDiagnosticsMode);
+CVAPI(void) cveDnnGetAvailableBackends(std::vector<int>* backends, std::vector<int>* targets);
+CVAPI(void) cveDnnEnableModelDiagnostics(bool isDiagnosticsMode);
 
 CVAPI(cv::dnn::TextDetectionModel_DB*) cveDnnTextDetectionModelDbCreate1(cv::String* model, cv::String* config, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel);
 CVAPI(cv::dnn::TextDetectionModel_DB*) cveDnnTextDetectionModelDbCreate2(cv::dnn::Net* network, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel);

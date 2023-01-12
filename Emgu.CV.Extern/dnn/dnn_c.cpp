@@ -62,6 +62,26 @@ cv::dnn::Net* cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, c
 #endif
 }
 
+cv::dnn::Net* cveReadNetFromTorch(cv::String* model, bool isBinary, bool evaluate)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::Net net = cv::dnn::readNetFromTorch(*model, isBinary, evaluate);
+	return new cv::dnn::Net(net);
+#else
+	throw_no_dnn();
+#endif	
+}
+void cveReadTorchBlob(cv::String* filename, bool isBinary, cv::Mat* tensor)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::Mat t = cv::dnn::readTorchBlob(*filename, isBinary);
+	cv::swap(t, *tensor);
+#else
+	throw_no_dnn();
+#endif
+}
+
+
 cv::dnn::Net* cveReadNetFromONNX(cv::String* onnxFile)
 {
 #ifdef HAVE_OPENCV_DNN
@@ -164,7 +184,16 @@ std::vector<cv::String>* cveDnnNetGetLayerNames(cv::dnn::Net* net)
 #endif
 }
 
-int cveDnnGetLayerId(cv::dnn::Net* net, cv::String* layer)
+void cveDnnNetConnect(cv::dnn::Net* net, cv::String* outPin, cv::String* inPin)
+{
+#ifdef HAVE_OPENCV_DNN
+	net->connect(*outPin, *inPin);
+#else
+	throw_no_dnn();
+#endif	
+}
+
+int cveDnnNetGetLayerId(cv::dnn::Net* net, cv::String* layer)
 {
 #ifdef HAVE_OPENCV_DNN
 	return net->getLayerId(*layer);
@@ -172,7 +201,7 @@ int cveDnnGetLayerId(cv::dnn::Net* net, cv::String* layer)
 	throw_no_dnn();
 #endif
 }
-cv::dnn::Layer* cveDnnGetLayerByName(cv::dnn::Net* net, cv::String* layerName, cv::Ptr<cv::dnn::Layer>** sharedPtr)
+cv::dnn::Layer* cveDnnNetGetLayerByName(cv::dnn::Net* net, cv::String* layerName, cv::Ptr<cv::dnn::Layer>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_DNN
 	cv::Ptr<cv::dnn::Layer> layerPtr = net->getLayer(*layerName);
@@ -182,7 +211,7 @@ cv::dnn::Layer* cveDnnGetLayerByName(cv::dnn::Net* net, cv::String* layerName, c
 	throw_no_dnn();
 #endif
 }
-cv::dnn::Layer* cveDnnGetLayerById(cv::dnn::Net* net, int layerId, cv::Ptr<cv::dnn::Layer>** sharedPtr)
+cv::dnn::Layer* cveDnnNetGetLayerById(cv::dnn::Net* net, int layerId, cv::Ptr<cv::dnn::Layer>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_DNN
 	cv::Ptr<cv::dnn::Layer> layerPtr = net->getLayer(layerId);
@@ -192,6 +221,7 @@ cv::dnn::Layer* cveDnnGetLayerById(cv::dnn::Net* net, int layerId, cv::Ptr<cv::d
 	throw_no_dnn();
 #endif
 }
+
 void cveDnnLayerRelease(cv::Ptr<cv::dnn::Layer>** layer)
 {
 #ifdef HAVE_OPENCV_DNN
@@ -377,7 +407,7 @@ void cveDnnSoftNMSBoxes(
 #endif	
 }
 
-void cveDNNGetAvailableBackends(std::vector<int>* backends, std::vector<int>* targets)
+void cveDnnGetAvailableBackends(std::vector<int>* backends, std::vector<int>* targets)
 {
 #ifdef HAVE_OPENCV_DNN
 	backends->clear();
@@ -393,7 +423,7 @@ void cveDNNGetAvailableBackends(std::vector<int>* backends, std::vector<int>* ta
 #endif
 }
 
-void cveDNNEnableModelDiagnostics(bool isDiagnosticsMode)
+void cveDnnEnableModelDiagnostics(bool isDiagnosticsMode)
 {
 #ifdef HAVE_OPENCV_DNN
 	cv::dnn::enableModelDiagnostics(isDiagnosticsMode);
