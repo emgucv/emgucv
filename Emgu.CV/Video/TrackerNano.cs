@@ -16,34 +16,31 @@ using Emgu.CV.Dnn;
 namespace Emgu.CV
 {
     /// <summary>
-    /// TrackerDaSiamRPN
+    /// The Nano tracker is a super lightweight dnn-based general object tracking.
+    /// Nano tracker is much faster and extremely lightweight due to special model structure, the whole model size is about 1.9 MB. Nano tracker needs two models: one for feature extraction (backbone) and the another for localization (neckhead).
     /// </summary>
-    public partial class TrackerDaSiamRPN : Tracker
+    public partial class TrackerNano : Tracker
     {
         private IntPtr _sharedPtr;
 
         /// <summary>
-        /// Create a new TrackerDaSiamRPN
+        /// Create a Nano tracker
         /// </summary>
-        /// <param name="model">The model file</param>
-        /// <param name="kernelCls1">The kernelCls1 file</param>
-        /// <param name="kernelR1">The kernelR1 file</param>
+        /// <param name="backbone">Path to the model for feature extraction. Model download link: https://github.com/HonglinChu/SiamTrackers/tree/master/NanoTrack/models/nanotrackv2</param>
+        /// <param name="neckhead">Path to the model for localization. Model download link: https://github.com/HonglinChu/SiamTrackers/tree/master/NanoTrack/models/nanotrackv2</param>
         /// <param name="backend">The preferred DNN backend</param>
         /// <param name="target">The preferred DNN target</param>
-        public TrackerDaSiamRPN(
-            String model = "dasiamrpn_model.onnx",
-            String kernelCls1 = "dasiamrpn_kernel_cls1.onnx",
-            String kernelR1 = "dasiamrpn_kernel_r1.onnx",
+        public TrackerNano(
+            String backbone,
+            String neckhead,
             Dnn.Backend backend = Dnn.Backend.Default,
             Dnn.Target target = Target.Cpu)
         {
-            using (CvString csModel = new CvString(model))
-            using (CvString csKernelCls1 = new CvString(kernelCls1))
-            using (CvString csKernelR1 = new CvString(kernelR1))
-                _ptr = CvInvoke.cveTrackerDaSiamRPNCreate(
-                    csModel,
-                    csKernelCls1,
-                    csKernelR1,
+            using (CvString csBackbone = new CvString(backbone))
+            using (CvString csNeckhead = new CvString(neckhead))
+                _ptr = CvInvoke.cveTrackerNanoCreate(
+                    csBackbone,
+                    csNeckhead,
                     backend,
                     target,
                     ref _trackerPtr,
@@ -57,7 +54,7 @@ namespace Emgu.CV
         {
             if (IntPtr.Zero != _ptr)
             {
-                CvInvoke.cveTrackerDaSiamRPNRelease(ref _sharedPtr);
+                CvInvoke.cveTrackerNanoRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
             }
 
@@ -68,16 +65,15 @@ namespace Emgu.CV
     public static partial class CvInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveTrackerDaSiamRPNCreate(
-            IntPtr model,
-            IntPtr kernel_cls1,
-            IntPtr kernel_r1,
+        internal static extern IntPtr cveTrackerNanoCreate(
+            IntPtr backbone,
+            IntPtr neckhead,
             Dnn.Backend backend,
             Dnn.Target target,
             ref IntPtr tracker,
             ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveTrackerDaSiamRPNRelease(ref IntPtr sharedPtr);
+        internal static extern void cveTrackerNanoRelease(ref IntPtr sharedPtr);
     }
 }

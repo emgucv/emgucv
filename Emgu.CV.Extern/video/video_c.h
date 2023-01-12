@@ -135,10 +135,10 @@ CVAPI(cv::TrackerMIL*) cveTrackerMILCreate(
 	int featureSetNumFeatures,
 	cv::Tracker** tracker,
 	cv::Ptr<cv::TrackerMIL>** sharedPtr);
-CVAPI(void) cveTrackerMILRelease(cv::TrackerMIL** tracker, cv::Ptr<cv::TrackerMIL>** sharedPtr);
+CVAPI(void) cveTrackerMILRelease(cv::Ptr<cv::TrackerMIL>** sharedPtr);
 
 CVAPI(cv::TrackerGOTURN*) cveTrackerGOTURNCreate(cv::Tracker** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr);
-CVAPI(void) cveTrackerGOTURNRelease(cv::TrackerGOTURN** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr);
+CVAPI(void) cveTrackerGOTURNRelease(cv::Ptr<cv::TrackerGOTURN>** sharedPtr);
 
 CVAPI(cv::TrackerDaSiamRPN*) cveTrackerDaSiamRPNCreate(
 	cv::String* model,
@@ -148,6 +148,16 @@ CVAPI(cv::TrackerDaSiamRPN*) cveTrackerDaSiamRPNCreate(
 	int target,
 	cv::Tracker** tracker,
 	cv::Ptr< cv::TrackerDaSiamRPN >** sharedPtr);
-CVAPI(void) cveTrackerDaSiamRPNRelease(cv::TrackerDaSiamRPN** tracker, cv::Ptr< cv::TrackerDaSiamRPN >** sharedPtr);
+CVAPI(void) cveTrackerDaSiamRPNRelease(cv::Ptr< cv::TrackerDaSiamRPN >** sharedPtr);
+
+
+CVAPI(cv::TrackerNano*) cveTrackerNanoCreate(
+	cv::String* backbone,
+	cv::String* neckhead,
+	int backend,
+	int target,
+	cv::Tracker** tracker,
+	cv::Ptr< cv::TrackerNano >** sharedPtr);
+CVAPI(void) cveTrackerNanoRelease(cv::Ptr< cv::TrackerNano >** sharedPtr);
 
 #endif
