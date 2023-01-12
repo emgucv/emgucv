@@ -45,6 +45,18 @@ namespace Emgu.CV.Dnn
         /// </summary>
 		Cuda,
         /// <summary>
+        /// Webnn
+        /// </summary>
+        Webnn,
+        /// <summary>
+        /// Timvx
+        /// </summary>
+        Timvx,
+        /// <summary>
+        /// CANN
+        /// </summary>
+        Cann,
+        /// <summary>
         /// Inference Engine NGraph
         /// </summary>
         InferenceEngineNgraph = 1000000,
