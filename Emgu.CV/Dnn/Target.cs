@@ -53,6 +53,10 @@ namespace Emgu.CV.Dnn
         /// <summary>
         /// HDDL
         /// </summary>
-        HDDL
+        HDDL,
+        /// <summary>
+        /// NPU
+        /// </summary>
+        Npu
     }
 }
