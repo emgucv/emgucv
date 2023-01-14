@@ -6,16 +6,16 @@ IF (TARGET Emgu.CV.Platform.NetStandard)
   IF (DOTNET_FOUND AND (NOT ANDROID) AND (NOT APPLE))
     #DO NOT build Emgu.CV.Bitmap for Android or APPLE
     PROJECT(Emgu.CV.Bitmap)
-      SET(EXTRA_MSBUILD_FLAGS "")
+      SET(EXTRA_BUILD_FLAGS "")
       IF(WIN32)
-        SET(EXTRA_MSBUILD_FLAGS "/p:Platform=\"Any CPU\"")
+        SET(EXTRA_BUILD_FLAGS "/p:Platform=\"Any CPU\"")
       ENDIF()
 
     #BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Bitmap" "${EXTRA_MSBUILD_FLAGS}" ALL)
     #IF (EMGU_SIGN_FOUND)
     #  EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.dll)
     #ENDIF()
-	BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Bitmap.csproj" "" ALL)
+	BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Bitmap.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
 
     INSTALL(
       FILES 

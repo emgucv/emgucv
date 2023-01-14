@@ -2,8 +2,8 @@
 #  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(HAVE_ANDROID)
-  PROJECT(Emgu.CV.Platform.Maui.Android)
+IF(HAVE_ANDROID AND HAVE_MAUI_IOS AND HAVE_MAUI_MAC)
+  PROJECT(Emgu.CV.Platform.Maui.UI)
   INSTALL(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DESTINATION Emgu.CV.Platform/Maui
@@ -16,7 +16,7 @@ IF(HAVE_ANDROID)
     PATTERN "CMakeFiles" EXCLUDE
     PATTERN "${PROJECT_NAME}.dir" EXCLUDE
     )
-  SET(EXTRA_BUILD_FLAGS "/p:Platform=\"Any CPU\"")
+  SET(EXTRA_BUILD_FLAGS "/p:Platform=\"Any CPU\" /p:PublishReadyToRun=false")
   
   BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
   
@@ -30,5 +30,5 @@ IF(HAVE_ANDROID)
     ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/${PROJECT_NAME}.dll 
     DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
     COMPONENT emgucv_binary)
-ENDIF()
 
+ENDIF()
