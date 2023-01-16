@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2022 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(HAVE_IOS AND WIN32)
+IF(HAVE_MAUI)
 
 PROJECT(Emgu.CV.runtime.maui.nuget)
 

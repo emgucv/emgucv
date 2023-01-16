@@ -17,7 +17,11 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
-
+	
+    <PropertyGroup>
+        <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\libs))</OpenCVBinaryDir>
+    </PropertyGroup>
+	
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
 	  <DefineConstants>$(DefineConstants)TRACE;__USE_ANDROID_CAMERA2__</DefineConstants>
 	</PropertyGroup>
@@ -72,9 +76,4 @@
 		<PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
 		<PackageReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />
 	</ItemGroup>
-	<Target Name="DeployBinary" AfterTargets="AfterBuild">
-		<Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\..\..\libs\$(TargetFramework)" Importance="high" />
-		<Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(MSBuildThisFileDirectory)..\..\..\libs\$(TargetFramework)" ContinueOnError="true" />
-		<Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="$(MSBuildThisFileDirectory)..\..\..\libs\$(TargetFramework)" ContinueOnError="true" />
-	</Target>
 </Project>
