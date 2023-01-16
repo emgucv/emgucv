@@ -28,6 +28,8 @@ PROJECT(Emgu.CV.runtime.maui.nuget)
     ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.Maui.Android)
   ENDIF()
   
+  ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.Maui.UI)
+
   ADD_DEPENDENCIES(${PROJECT_NAME} cvextern)
   
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.nuget)

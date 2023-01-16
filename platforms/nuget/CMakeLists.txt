@@ -31,6 +31,7 @@ ADD_SUBDIRECTORY("Emgu.CV.runtime.xamarin.android")
 #ADD_SUBDIRECTORY("Emgu.CV.runtime.maui.macos")
 #ADD_SUBDIRECTORY("Emgu.CV.runtime.maui.ios")
 #ADD_SUBDIRECTORY("Emgu.CV.runtime.maui.android")
+ADD_SUBDIRECTORY("Emgu.CV.runtime.maui")
 
 #IF (HAVE_LINUX_ARM)
 add_subdirectory("Emgu.CV.runtime.debian-arm")
