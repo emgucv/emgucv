@@ -623,6 +623,11 @@ IF (WIN32 AND ("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows") AND ("${EMGUCV_ARCH}" 
 ENDIF()
 CHECK_BINARY_EXIST("libs/runtimes/win-arm64/native" "*.dll" HAVE_WINDESKTOP_ARM64 ${IS_WINDESKTOP_ARM64_BUILD})
 
+SET(HAVE_WINDESKTOP OFF)
+IF (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_ARM64)
+  SET(HAVE_WINDESKTOP ON)
+ENDIF()
+
 SET(IS_DEBIAN_ARM_BUILD OFF)
 SET(IS_DEBIAN_ARM64_BUILD OFF)
 IF (IS_DEBIAN) 
@@ -692,6 +697,12 @@ ELSE()
 ENDIF()
 STRING(TOLOWER "${NUGET_NATIVE_PLATFORM_ID_UBUNTU}" NUGET_NATIVE_PLATFORM_ID_UBUNTU)
 
+
+SET(HAVE_MAUI OFF)
+IF(HAVE_IOS AND HAVE_MAC_CATALYST AND HAVE_ANDROID AND HAVE_WINDESKTOP)
+  SET (HAVE_MAUI ON)
+  MESSAGE(STATUS "HAVE_MAUI: ${HAVE_MAUI}")
+ENDIF()
 
   SET(WINDESKTOP_LABEL "")
   IF(HAVE_WINDESKTOP_X86)
@@ -1858,6 +1869,28 @@ ENDIF()
 IF(HAVE_MACOS)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.xamarin.macos.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.xamarin.macos/Package.nuspec)
   #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui.macos/Package.nuspec)
+ENDIF()
+
+IF(HAVE_MAUI)
+  
+  # Sign and copy the binary
+  SET(EMGUCV_MAUI_POST_PROCESS_BINARY "<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">")
+  IF(EMGU_SIGN_FOUND AND WIN32)
+    file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
+	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
+    SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY}
+    <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
+	<MakeDir Directories=\"$(OutputPath)\\signed\"/>
+    <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
+	")
+  ENDIF()
+  SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY}
+    <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\\$(TargetFramework)\" Importance=\"high\" />
+    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\\$(TargetFramework)\" ContinueOnError=\"true\" />
+    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\\$(TargetFramework)\" ContinueOnError=\"true\" />
+  </Target>")    
+  
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.Maui.UI.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/UI/Directory.Build.props)
 ENDIF()
 
 IF(HAVE_WINSTORE_10)
