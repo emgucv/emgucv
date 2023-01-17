@@ -19,6 +19,7 @@ namespace cv {
 	class TrackerMIL {};
 	class TrackerGOTURN {};
 	class TrackerDaSiamRPN {};
+	class TrackerNano {};
 	class BackgroundSubtractorMOG2 {};
 	class BackgroundSubtractor {};
 	class BackgroundSubtractorKNN {};
