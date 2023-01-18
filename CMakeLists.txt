@@ -1848,6 +1848,12 @@ IF(HAVE_IOS)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.xamarin.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.xamarin.ios/README.md)
   
   SET(EMGUCV_MAUI_IOS_NUGET_TITLE "Emgu CV for MAUI iOS Native Runtime")	
+  SET(EMGUCV_MAUI_IOS_POST_PROCESS_BINARY "${EMGUCV_MAUI_IOS_POST_PROCESS_BINARY}
+  <Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">
+    <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\" Importance=\"high\" />
+    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
+    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
+  </Target>")  
   #SET(EMGUCV_MAUI_IOS_NUGET_FILE_LIST " 
     #<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.IOS.dll\" target=\"lib\\net6.0-ios\" />
     #<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.IOS.XML\" target=\"lib\\net6.0-ios\" />")
