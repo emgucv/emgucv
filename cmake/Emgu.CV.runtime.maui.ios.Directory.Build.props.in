@@ -55,5 +55,5 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
         <PackagePath>docs\</PackagePath>
       </None>
 	</ItemGroup>
-	
+  ${EMGUCV_MAUI_IOS_POST_PROCESS_BINARY}
 </Project>
