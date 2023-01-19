@@ -19,7 +19,7 @@ IF(HAVE_IOS)
 	  
   IF (APPLE)
     PROJECT(Emgu.CV.Platform.Xamarin.IOS)
-       
+    SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")   
     MSBUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../../Solution/iOS/Emgu.CV.iOS.Xamarin.sln" "${PROJECT_NAME}" "${EXTRA_BUILD_FLAGS}" ALL)
 
     ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.Platform.NetStandard.IOS)  

@@ -22,7 +22,7 @@ IF (HAVE_MACOS)
   
     PROJECT(Emgu.CV.Platform.Xamarin.Mac)
     
-    #SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
+    SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
     MSBUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../../Solution/Mac/Emgu.CV.Mac.Xamarin.sln" "Emgu.CV.Platform.Xamarin.Mac" "${EXTRA_BUILD_FLAGS}" ALL)	
         
     if(ENABLE_SOLUTION_FOLDERS)

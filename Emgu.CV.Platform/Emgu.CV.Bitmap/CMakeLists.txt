@@ -8,7 +8,7 @@ IF (TARGET Emgu.CV.Platform.NetStandard)
     PROJECT(Emgu.CV.Bitmap)
       SET(EXTRA_BUILD_FLAGS "")
       IF(WIN32)
-        SET(EXTRA_BUILD_FLAGS "/p:Platform=\"Any CPU\"")
+        SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
       ENDIF()
 
     #BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Bitmap" "${EXTRA_MSBUILD_FLAGS}" ALL)
