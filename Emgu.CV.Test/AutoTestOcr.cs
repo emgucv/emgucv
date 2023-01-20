@@ -120,6 +120,7 @@ namespace Emgu.CV.Test
             using (Tesseract ocr = await GetTesseract())
             using (Mat img = new Mat(new Size(1024, 960), DepthType.Cv8U, 3))
             {
+                img.SetTo(new MCvScalar()); //Set to a black image
                 ocr.SetImage(img);
                 bool success = ocr.Recognize() == 0;
                 if (success)

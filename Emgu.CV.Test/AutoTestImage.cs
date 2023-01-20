@@ -646,11 +646,14 @@ namespace Emgu.CV.Test
             Image<Gray, Single> img4 = new Image<Gray, float>("stuff.jpg");
             Image<Bgr, Single> img5 = new Image<Bgr, float>("stuff.jpg");
 
-            Bitmap bmp = new Bitmap("stuff.jpg");
-            Image<Bgr, Single> img6 = bmp.ToImage<Bgr, float>();
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Bitmap bmp = new Bitmap("stuff.jpg");
+                Image<Bgr, Single> img6 = bmp.ToImage<Bgr, float>();
 
-            Image<Hsv, Single> img7 = new Image<Hsv, float>("stuff.jpg");
-            Image<Hsv, Byte> img8 = new Image<Hsv, byte>("stuff.jpg");
+                Image<Hsv, Single> img7 = new Image<Hsv, float>("stuff.jpg");
+                Image<Hsv, Byte> img8 = new Image<Hsv, byte>("stuff.jpg");
+            }
 
         }
 #endif
