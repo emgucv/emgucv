@@ -31,10 +31,22 @@ namespace Emgu.CV.Aruco
         /// <param name="markerSeparation">separation between two markers (same unit than markerLenght)</param>
         /// <param name="dictionary">dictionary of markers indicating the type of markers. The first markersX*markersY markers in the dictionary are used.</param>
         /// <param name="firstMarker">	id of first marker in dictionary to use on board.</param>
-        public GridBoard(int markersX, int markersY, float markerLength, float markerSeparation,
-         Dictionary dictionary, int firstMarker = 0)
+        public GridBoard(
+            int markersX, 
+            int markersY, 
+            float markerLength, 
+            float markerSeparation,
+            Dictionary dictionary, 
+            IInputArray ids = null)
         {
-            _ptr = ArucoInvoke.cveArucoGridBoardCreate(markersX, markersY, markerLength, markerSeparation, dictionary, firstMarker, ref _boardPtr, ref _sharedPtr);
+            using (InputArray iaIds = (ids == null) ? InputArray.GetEmpty() : ids.GetInputArray())
+            {
+                _ptr = ArucoInvoke.cveArucoGridBoardCreate(
+                    markersX, markersY, 
+                    markerLength, markerSeparation,
+                    dictionary, iaIds, 
+                    ref _boardPtr, ref _sharedPtr);
+            }
         }
 
         /// <summary>
@@ -75,7 +87,7 @@ namespace Emgu.CV.Aruco
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveArucoGridBoardCreate(
            int markersX, int markersY, float markerLength, float markerSeparation,
-           IntPtr dictionary, int firstMarker, ref IntPtr boardPtr, ref IntPtr sharedPtr);
+           IntPtr dictionary, IntPtr ids, ref IntPtr boardPtr, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveArucoGridBoardRelease(ref IntPtr sharedPtr);
