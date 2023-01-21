@@ -24,11 +24,13 @@ IF(HAVE_ANDROID AND HAVE_MAUI_IOS AND HAVE_MAUI_MAC)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
   endif() 
   ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.Platform.NetStandard)
-  INSTALL(
-    FILES 
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/${PROJECT_NAME}.xml
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/${PROJECT_NAME}.dll 
-    DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
-    COMPONENT emgucv_binary)
+  FOREACH (PLATFORMFORM_FOLDER IN ITEMS net7.0-android net7.0-ios net7.0-maccatalyst net7.0-windows10.0.22621.0)
+    INSTALL(
+      FILES 
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/${PLATFORMFORM_FOLDER}/${PROJECT_NAME}.xml
+      ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/${PLATFORMFORM_FOLDER}/${PROJECT_NAME}.dll 
+      DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}/${PLATFORMFORM_FOLDER}
+      COMPONENT emgucv_binary)
+  ENDFOREACH ()
 
 ENDIF()
