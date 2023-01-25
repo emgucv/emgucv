@@ -10,7 +10,10 @@ using Emgu.CV.Structure;
 
 namespace Emgu.CV.VideoStab
 {
-    internal static partial class VideoStabInvoke
+    /// <summary>
+    /// Entry points to the Open CV VideoStab module
+    /// </summary>
+    public static partial class VideoStabInvoke
     {
         static VideoStabInvoke()
         {
