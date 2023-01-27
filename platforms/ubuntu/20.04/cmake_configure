@@ -65,7 +65,7 @@ else
     cd vtk
     mkdir -p build
     cd build
-    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DVTK_MODULE_ENABLE_VTK_RenderingFreeType:STRING="NO" -DVTK_MODULE_ENABLE_VTK_png:STRING="NO" ..
+    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE ..
     cmake --build . --config Release --parallel --target install
     VTK_OPTION=-DVTK_DIR:String="$INSTALL_FOLDER"
     cd ../..
@@ -108,7 +108,7 @@ cmake \
 #      -DWITH_TBB:BOOL=TRUE \
 #      -DWITH_CUDA:BOOL=FALSE \
     
-C_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-8.2 CPLUS_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-8.2 make
+C_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-9.2 CPLUS_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-9.2 make
 
 #if [ "$1" == "cuda" ]; then
 #    cp -rf bin/x64/*.so ../../../../libs/x64

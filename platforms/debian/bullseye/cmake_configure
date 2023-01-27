@@ -57,7 +57,7 @@ else
     cd vtk
     mkdir -p build
     cd build
-    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DVTK_MODULE_ENABLE_VTK_RenderingFreeType:STRING="NO" -DVTK_MODULE_ENABLE_VTK_png:STRING="NO" ..
+    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE ..
     cmake --build . --config Release --parallel 1 --target install
     VTK_OPTION=( -DVTK_DIR:String="$PWD" )
     cd ../..
@@ -101,7 +101,7 @@ cmake\
 #      -DCMAKE_C_FLAGS_RELEASE="-DPNG_ARM_NEON_OPT=0 " \
 
 
-C_INCLUDE_PATH=$TOP_FOLDER/eigen/:$INSTALL_FOLDER/include/vtk-8.2 CPLUS_INCLUDE_PATH=$TOP_FOLDER/eigen/:$INSTALL_FOLDER/include/vtk-8.2 cmake --build . --config Release --parallel 1 --target package
+C_INCLUDE_PATH=$TOP_FOLDER/eigen/:$INSTALL_FOLDER/include/vtk-9.2 CPLUS_INCLUDE_PATH=$TOP_FOLDER/eigen/:$INSTALL_FOLDER/include/vtk-9.2 cmake --build . --config Release --parallel 1 --target package
 #make
 cd ..
 
