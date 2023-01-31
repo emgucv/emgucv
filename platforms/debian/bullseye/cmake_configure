@@ -32,13 +32,13 @@ if [ "$BUILD_TYPE" == "mini" ]; then
     echo "Performing mini build"
     EMGU_CV_TESSERACT_OPTION=( -DEMGU_CV_WITH_TESSERACT:BOOL=FALSE )
     TESSERACT_OPTION=-DWITH_TESSERACT:BOOL=FALSE
-    VTK_OPTION=( )
+    VTK_OPTION=( -DWITH_VTK:BOOL=FALSE )
     CONTRIB_OPTION=( -DBUILD_opencv_3d:BOOL=FALSE -DBUILD_opencv_calib:BOOL=FALSE -DBUILD_opencv_dnn:BOOL=FALSE -DBUILD_opencv_ml:BOOL=FALSE -DBUILD_opencv_photo:BOOL=FALSE -DBUILD_opencv_features2d:BOOL=FALSE -DBUILD_opencv_gapi:BOOL=FALSE -DBUILD_opencv_flann:BOOL=FALSE -DBUILD_opencv_video:BOOL=FALSE )
 elif [ "$BUILD_TYPE" == "core" ]; then
     echo "Performing core build"
     EMGU_CV_TESSERACT_OPTION=( -DEMGU_CV_WITH_TESSERACT:BOOL=FALSE )
     TESSERACT_OPTION=-DWITH_TESSERACT:BOOL=FALSE
-    VTK_OPTION=( )
+    VTK_OPTION=( -DWITH_VTK:BOOL=FALSE )
     CONTRIB_OPTION=( )
 else
     echo "Performing full build"
@@ -54,14 +54,14 @@ else
     cmake --build . --config Release --parallel 1 --target install
     cd ../..
     
-    cd vtk
-    mkdir -p build
-    cd build
-    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE ..
-    cmake --build . --config Release --parallel 1 --target install
-    VTK_OPTION=( -DVTK_DIR:String="$PWD" )
-    cd ../..
-    
+    #    cd vtk
+    #    mkdir -p build
+    #    cd build
+    #    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DCMAKE_EXE_LINKER_FLAGS="-latomic" ..
+    #    cmake --build . --config Release --parallel 1 --target install
+    #    VTK_OPTION=( -DVTK_DIR:String="$PWD" )
+    #    cd ../..
+    VTK_OPTION=( -DWITH_VTK:BOOL=TRUE )
     CONTRIB_OPTION=( -DOPENCV_EXTRA_MODULES_PATH=$TOP_FOLDER/opencv_contrib/modules )
 fi
 
