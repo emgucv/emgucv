@@ -571,8 +571,8 @@ void cveAlgorithmWrite(cv::Algorithm* algorithm, cv::FileStorage* storage)
 
 void cveAlgorithmWrite2(cv::Algorithm* algorithm, cv::FileStorage* storage, cv::String* name)
 {
-	cv::Ptr<cv::FileStorage> storagePtr(storage, [](cv::FileStorage*) {});
-	algorithm->write(storagePtr, *name);
+	//cv::Ptr<cv::FileStorage> storagePtr(storage, [](cv::FileStorage*) {});
+	algorithm->write(*storage, *name);
 }
 
 void cveAlgorithmSave(cv::Algorithm* algorithm, cv::String* filename)
