@@ -98,19 +98,14 @@ void cveArucoEstimatePoseSingleMarkers(cv::_InputArray* corners, float markerLen
 
 cv::aruco::GridBoard* cveArucoGridBoardCreate(
    int markersX, int markersY, float markerLength, float markerSeparation,
-   cv::aruco::Dictionary* dictionary, cv::_InputArray* ids, cv::aruco::Board** boardPtr, cv::Ptr<cv::aruco::GridBoard>** sharedPtr)
+   cv::aruco::Dictionary* dictionary, int firstMarker, cv::aruco::Board** boardPtr, cv::Ptr<cv::aruco::GridBoard>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_ARUCO
-
-	cv::aruco::GridBoard* ptr = new cv::aruco::GridBoard(
-		cv::Size(markersX, markersY), 
-		markerLength, 
-		markerSeparation, 
-		*dictionary,
-		ids ? *ids : static_cast<cv::InputArray>(cv::noArray()));
-	*boardPtr = dynamic_cast<cv::aruco::Board*>(ptr);
-	*sharedPtr = new cv::Ptr<cv::aruco::GridBoard>(ptr, [](cv::aruco::GridBoard* b) { delete b; });
-	return ptr;
+	cv::Ptr<cv::aruco::Dictionary> dictPtr(dictionary, [](cv::aruco::Dictionary*) {});
+	cv::Ptr<cv::aruco::GridBoard> ptr = cv::aruco::GridBoard::create(markersX, markersY, markerLength, markerSeparation, dictPtr, firstMarker);
+	*boardPtr = dynamic_cast<cv::aruco::Board*>(ptr.get());
+	*sharedPtr = new cv::Ptr<cv::aruco::GridBoard>(ptr);
+	return ptr.get();
 #else
 	throw_no_aruco();
 #endif

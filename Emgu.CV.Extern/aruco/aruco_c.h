@@ -73,7 +73,7 @@ CVAPI(void) cveArucoEstimatePoseSingleMarkers(cv::_InputArray* corners, float ma
 
 CVAPI(cv::aruco::GridBoard*) cveArucoGridBoardCreate(
 	int markersX, int markersY, float markerLength, float markerSeparation,
-	cv::aruco::Dictionary* dictionary, cv::_InputArray* ids, cv::aruco::Board** boardPtr, cv::Ptr<cv::aruco::GridBoard>** sharedPtr);
+	cv::aruco::Dictionary* dictionary, int firstMarker, cv::aruco::Board** boardPtr, cv::Ptr<cv::aruco::GridBoard>** sharedPtr);
 
 CVAPI(void) cveArucoGridBoardDraw(cv::aruco::GridBoard* gridBoard, CvSize* outSize, cv::_OutputArray* img, int marginSize, int borderBits);
 
