@@ -27,7 +27,10 @@ using Visibility = Microsoft.UI.Xaml.Visibility;
 
 namespace Emgu.CV.Platform.Maui.UI
 {
-   
+
+    /// <summary>
+    /// View that holds an Emgu CV IInputArray
+    /// </summary>
     public class CvImageView : Image
     {
 #if __MACCATALYST__
@@ -40,12 +43,14 @@ namespace Emgu.CV.Platform.Maui.UI
         public Microsoft.UI.Xaml.Controls.Image ImageView { get; set; }
 #endif
 
-
         private VectorOfByte _imageStream = new VectorOfByte();
         private static Mutex _imageStreamMutex = new Mutex();
 
         private IInputArray _inputArray;
 
+        /// <summary>
+        /// Create an image viewer for Emgu CV image.
+        /// </summary>
         public CvImageView()
             : base()
         {
@@ -69,6 +74,10 @@ namespace Emgu.CV.Platform.Maui.UI
 
         }
 
+        /// <summary>
+        /// Set the image to be rendered
+        /// </summary>
+        /// <param name="image">The image to be rendered</param>
         public virtual void SetImage(IInputArray image)
         {
             _inputArray = image;
@@ -97,22 +106,23 @@ namespace Emgu.CV.Platform.Maui.UI
 #elif __IOS__
             if (this.ImageView != null)
             {
-                 UIImage uiimage;
-                 if (image == null)
+                UIImage uiimage;
+                if (image == null)
                     uiimage = null;
-                 else
+                else
                 {
-                    uiimage = image.ToUIImage ();
+                    uiimage = image.ToUIImage();
                 }
-                 this.Dispatcher.Dispatch(
-                    () => {
+                this.Dispatcher.Dispatch(
+                   () =>
+                   {
                        UIImage oldImage = ImageView.Image;
                        ImageView.Image = uiimage;
                        if (oldImage != null)
-                          oldImage.Dispose ();
+                           oldImage.Dispose();
                        if ((uiimage != null) && (ImageView.Frame.Size != uiimage.Size))
-                          ImageView.Frame = new CGRect (CGPoint.Empty, uiimage.Size);
-                    });
+                           ImageView.Frame = new CGRect(CGPoint.Empty, uiimage.Size);
+                   });
             }
 #elif __ANDROID__
 
