@@ -6,7 +6,6 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Dnn;
 using Emgu.CV.Models;
-using System.Net;
 using Emgu.CV.Platform.Maui.UI;
 
 namespace MauiDemoApp
@@ -19,14 +18,7 @@ namespace MauiDemoApp
         {
             InitializeComponent();
 
-#if __ANDROID__
-            CvInvokeAndroid.Init();
-#elif __IOS__
-            CvInvokeIOS.Init();
-#elif __WINDOWS__
-            CvInvoke.Init();
-#endif
-
+            Emgu.CV.Platform.Maui.MauiInvoke.Init();
 
             String aboutIcon = null;
 

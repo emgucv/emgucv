@@ -28,7 +28,6 @@ using Android.Preferences;
 #if __IOS__
 using UIKit;
 using CoreGraphics;
-//using Xamarin.Forms.Platform.iOS;
 #endif
 
 using Emgu.CV;
@@ -39,14 +38,14 @@ using Emgu.CV.Models;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
-//using Xamarin.Forms;
-//using Color = Xamarin.Forms.Color;
 using Environment = System.Environment;
 using Point = System.Drawing.Point;
 
 namespace Emgu.CV.Platform.Maui.UI
 {
-
+    /// <summary>
+    /// Generic page that can take a IProcessAndRenderModel and apply it to images / camera stream
+    /// </summary>
     public class ProcessAndRenderPage
 #if __ANDROID__ && __USE_ANDROID_CAMERA2__
         : AndroidCameraPage
@@ -114,13 +113,13 @@ namespace Emgu.CV.Platform.Maui.UI
         }
 
         /// <summary>
-        /// 
+        /// Create a Generic page that can take a IProcessAndRenderModel and apply it to images / camera stream
         /// </summary>
-        /// <param name="model"></param>
-        /// <param name="defaultButtonText"></param>
+        /// <param name="model">The IProcessAndRenderModel</param>
+        /// <param name="defaultButtonText">The text to be displayed on the button</param>
         /// <param name="defaultImage">The default image file name to use for processing. If set to null, it will use realtime camera stream instead.</param>
-        /// <param name="defaultLabelText"></param>
-        /// <param name="additionalButtons"></param>
+        /// <param name="defaultLabelText">The text to be displayed on the label</param>
+        /// <param name="additionalButtons">Additional buttons to be added to the page if needed</param>
         public ProcessAndRenderPage(
             IProcessAndRenderModel model,
             String defaultButtonText,
@@ -131,9 +130,9 @@ namespace Emgu.CV.Platform.Maui.UI
             : base(additionalButtons)
         {
 #if __IOS__
-         AllowAvCaptureSession = true;
-         HasCameraOption = true;
-         outputRecorder.BufferReceived += OutputRecorder_BufferReceived;
+            AllowAvCaptureSession = true;
+            HasCameraOption = true;
+            outputRecorder.BufferReceived += OutputRecorder_BufferReceived;
 #else
             HasCameraOption = InitVideoCapture();
 #endif
@@ -153,58 +152,44 @@ namespace Emgu.CV.Platform.Maui.UI
         }
 
 #if __IOS__
-     
-      //private int _counter = 0;
-      private void OutputRecorder_BufferReceived (object sender, OutputRecorder.BufferReceivedEventArgs e)
-      {
-         if (_mat == null)
-            _mat = new Mat ();
-         try {
-            //_counter++;
 
-            var sampleBuffer = e.Buffer;
-            using (CoreVideo.CVPixelBuffer pixelBuffer = sampleBuffer.GetImageBuffer () as CoreVideo.CVPixelBuffer) {
-               // Lock the base address
-               pixelBuffer.Lock (CoreVideo.CVPixelBufferLock.ReadOnly);
-               using (CoreImage.CIImage ciImage = new CoreImage.CIImage (pixelBuffer))
-               using (UIImage uiImage = new UIImage(ciImage))
-               using (UIImage uiImage2 = uiImage.Scale (uiImage.Size)) //Scaling make a copy of the above UIImage (back by ci image) into a new UIImage (back by cg image)
-               using (CGImage cgimage = uiImage2.CGImage)
-               {
-                  cgimage.ToArray (_mat, ImreadModes.Color);
-
-
-               }
-               pixelBuffer.Unlock (CoreVideo.CVPixelBufferLock.ReadOnly);
+        //private int _counter = 0;
+        private void OutputRecorder_BufferReceived(object sender, OutputRecorder.BufferReceivedEventArgs e)
+        {
+            if (_mat == null)
+                _mat = new Mat();
+            try
+            {
+                //_counter++;
+                var sampleBuffer = e.Buffer;
+                using (CoreVideo.CVPixelBuffer pixelBuffer = sampleBuffer.GetImageBuffer() as CoreVideo.CVPixelBuffer)
+                {
+                    // Lock the base address
+                    pixelBuffer.Lock(CoreVideo.CVPixelBufferLock.ReadOnly);
+                    using (CoreImage.CIImage ciImage = new CoreImage.CIImage(pixelBuffer))
+                    {
+                        ciImage.ToArray(_mat, ImreadModes.Color);
+                    }
+                    pixelBuffer.Unlock(CoreVideo.CVPixelBufferLock.ReadOnly);
+                }
             }
-            /*
-            using (UIImage image = e.Buffer.ToUIImage ())
-            using (CGImage cgimage = image.CGImage)
-               {
-               if (cgimage == null) {
-                  SetMessage ("Empty image received");
-                  return;
-               }
-               cgimage.ToArray (_mat, ImreadModes.Color);
-            }*/
-            
+            catch (Exception ex)
+            {
+                Console.WriteLine(e);
+                SetMessage(ex.Message);
+            }
 
-         } catch (Exception ex) {
-            Console.WriteLine (e);
-            SetMessage (ex.Message);
-         }
+            if (_renderMat == null)
+                _renderMat = new Mat();
 
-         if (_renderMat == null)
-            _renderMat = new Mat ();
-
-         using (InputArray iaImage = _mat.GetInputArray())
+            using (InputArray iaImage = _mat.GetInputArray())
                 iaImage.CopyTo(_renderMat);
-            
-         String msg = _model.ProcessAndRender (_mat, _renderMat);
 
-         SetImage (_renderMat);
-         SetMessage (msg);
-      }
+            String msg = _model.ProcessAndRender(_mat, _renderMat);
+
+            SetImage(_renderMat);
+            SetMessage(msg);
+        }
 #endif
 
         private void Picker_SelectedIndexChanged(object sender, EventArgs e)
@@ -222,7 +207,7 @@ namespace Emgu.CV.Platform.Maui.UI
                 _renderMat = new Mat();
 
             _mat.CopyTo(_renderMat);
-            
+
             String msg = _model.ProcessAndRender(_mat, _renderMat);
 
             SetImage(_renderMat);
@@ -239,7 +224,7 @@ namespace Emgu.CV.Platform.Maui.UI
                 StopCapture();
                 //AndroidImageView.Visibility = ViewStates.Invisible;
 #elif __IOS__
-                this.StopCaptureSession ();
+                this.StopCaptureSession();
 #else
                 _capture.Stop();
                 _capture.Dispose();
@@ -314,7 +299,7 @@ namespace Emgu.CV.Platform.Maui.UI
                     }
                 });
 #elif __IOS__
-                CheckVideoPermissionAndStart ();
+                CheckVideoPermissionAndStart();
 #else
                 //Handle video
                 if (_capture == null)
