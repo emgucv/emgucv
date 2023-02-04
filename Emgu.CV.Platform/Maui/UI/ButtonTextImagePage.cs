@@ -43,6 +43,8 @@ namespace Emgu.CV.Platform.Maui.UI
     public class ButtonTextImagePage
 #if __IOS__
         : Emgu.Util.AvCaptureSessionPage
+#elif __ANDROID__
+        : AndroidCameraPage
 #else
         : ContentPage
 #endif
@@ -80,6 +82,58 @@ namespace Emgu.CV.Platform.Maui.UI
             //set { _displayImage = value; }
         }
 
+#if __ANDROID__
+        private Bitmap[] _renderBuffer = new Bitmap[2];
+        private int _renderBufferIdx = 0;
+
+        public virtual void SetImage(IInputArray image)
+        {
+            if (image == null)
+            {
+                this.Dispatcher.Dispatch(
+                    () =>
+                    {
+                        DisplayImage.ImageView.SetImageBitmap(null);
+                    });
+                return;
+            }
+
+            int bufferIdx = _renderBufferIdx;
+            Bitmap buffer;
+            _renderBufferIdx = (_renderBufferIdx + 1) % _renderBuffer.Length;
+
+            using (InputArray iaImage = image.GetInputArray())
+            using (Mat mat = iaImage.GetMat())
+            {
+                if (_renderBuffer[bufferIdx] == null)
+                {
+                    buffer = mat.ToBitmap();
+                    _renderBuffer[bufferIdx] = buffer;
+                }
+                else
+                {
+                    var size = iaImage.GetSize();
+                    buffer = _renderBuffer[bufferIdx];
+                    if (buffer.Width != size.Width || buffer.Height != size.Height)
+                    {
+                        buffer.Dispose();
+                        _renderBuffer[bufferIdx] = mat.ToBitmap();
+                    }
+                    else
+                    {
+                        mat.ToBitmap(buffer);
+                    }
+                }
+            }
+
+            this.Dispatcher.Dispatch(
+                () =>
+                {
+                    DisplayImage.ImageView.SetImageBitmap(buffer);
+                });
+        }
+#else
+
         public virtual void SetImage(IInputArray image)
         {
             this.DisplayImage.SetImage(image);
@@ -97,6 +151,7 @@ namespace Emgu.CV.Platform.Maui.UI
                 }
             }
         }
+#endif
 
         private StackLayout _mainLayout = new StackLayout();
 
@@ -116,7 +171,6 @@ namespace Emgu.CV.Platform.Maui.UI
                 return _additionalButtons;
             }
         }
-
 
         public ButtonTextImagePage(Microsoft.Maui.Controls.Button[] additionalButtons=null)
         {
@@ -175,7 +229,6 @@ namespace Emgu.CV.Platform.Maui.UI
             //this.ImageView.Stretch = Windows.UI.Xaml.Media.Stretch.None;
 #endif
 
-            
             _mainLayout.Children.Add(DisplayImage);
             DisplayImage.BackgroundColor = 
                 Microsoft.Maui.Graphics.Color.FromRgb(1.0, 0.0, 0.0);
@@ -197,8 +250,6 @@ namespace Emgu.CV.Platform.Maui.UI
                 Content = _mainLayout
             };
         }
-
-
 
         public bool HasCameraOption { get; set; }
 
