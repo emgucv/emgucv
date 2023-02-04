@@ -47,11 +47,7 @@ namespace Emgu.CV.Platform.Maui.UI
     /// Generic page that can take a IProcessAndRenderModel and apply it to images / camera stream
     /// </summary>
     public class ProcessAndRenderPage
-#if __ANDROID__ && __USE_ANDROID_CAMERA2__
-        : AndroidCameraPage
-#else
         : ButtonTextImagePage
-#endif
     {
         private VideoCapture _capture = null;
         private Mat _mat;
@@ -62,8 +58,28 @@ namespace Emgu.CV.Platform.Maui.UI
         protected String _StopCameraButtonText = "Stop Camera";
         private String _deaultImage;
 
-#if __ANDROID__ && __USE_ANDROID_CAMERA2__
-        private bool _isBusy = false;
+#if __ANDROID__
+        public enum AndroidCameraBackend
+        {
+            AndroidCamera2,
+            OpenCV
+        }
+
+        private AndroidCameraBackend _androidCameraBackend = AndroidCameraBackend.AndroidCamera2;
+
+        public AndroidCameraBackend CameraBackend
+        {
+            get
+            {
+                return _androidCameraBackend;
+            }
+            set
+            {
+                _androidCameraBackend = value;
+            }
+        }
+
+        private bool _isAndroidCamera2Busy = false;
 #endif
 
         public IProcessAndRenderModel Model
@@ -83,9 +99,11 @@ namespace Emgu.CV.Platform.Maui.UI
                 || Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.MacCatalyst
                 || Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.WinUI))
             {
-#if __ANDROID__ && __USE_ANDROID_CAMERA2__
-                return true;
-#else
+#if __ANDROID__ 
+                if (_androidCameraBackend == AndroidCameraBackend.AndroidCamera2)
+                    return true;
+#endif
+
                 if (CvInvoke.Backends.Length > 0)
                 {
                     if (Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.Android)
@@ -107,7 +125,7 @@ namespace Emgu.CV.Platform.Maui.UI
                         _capture = null;
                     }
                 }
-#endif
+
             }
             return false;
         }
@@ -220,9 +238,15 @@ namespace Emgu.CV.Platform.Maui.UI
 
             if (button.Text.Equals(_StopCameraButtonText))
             {
-#if __ANDROID__ && __USE_ANDROID_CAMERA2__
-                StopCapture();
-                //AndroidImageView.Visibility = ViewStates.Invisible;
+#if __ANDROID__ 
+                if (_androidCameraBackend == AndroidCameraBackend.AndroidCamera2)
+                    StopCapture();
+                else
+                {
+                    _capture.Stop();
+                    _capture.Dispose();
+                    _capture = null;
+                }
 #elif __IOS__
                 this.StopCaptureSession();
 #else
@@ -267,37 +291,49 @@ namespace Emgu.CV.Platform.Maui.UI
             if (images.Length == 0)
             {
 #if __ANDROID__ && __USE_ANDROID_CAMERA2__
-               
-                StartCapture(async delegate (Object captureSender, Mat m)
+                if (_androidCameraBackend == AndroidCameraBackend.AndroidCamera2)
                 {
-                    //Skip the frame if busy, 
-                    //Otherwise too many frames arriving and will eventually saturated the memory.
-                    if (!_isBusy)
+                    StartCapture(async delegate (Object captureSender, Mat m)
                     {
-                        _isBusy = true;
-                        try
+                        //Skip the frame if busy, 
+                        //Otherwise too many frames arriving and will eventually saturated the memory.
+                        if (!_isAndroidCamera2Busy)
                         {
-                            String message = String.Empty;
-                            await Task.Run(() => 
+                            _isAndroidCamera2Busy = true;
+                            try
                             {
-                                if (_renderMat == null)
-                                    _renderMat = new Mat();
-                                using (InputArray iaImage = m.GetInputArray())
+                                String message = String.Empty;
+                                await Task.Run(() =>
                                 {
-                                    iaImage.CopyTo(_renderMat);
-                                }
-                                message = _model.ProcessAndRender(m, _renderMat);
-                            });
-                            SetImage(_renderMat);
-                            SetMessage(message);
+                                    if (_renderMat == null)
+                                        _renderMat = new Mat();
+                                    using (InputArray iaImage = m.GetInputArray())
+                                    {
+                                        iaImage.CopyTo(_renderMat);
+                                    }
+                                    message = _model.ProcessAndRender(m, _renderMat);
+                                });
+                                SetImage(_renderMat);
+                                SetMessage(message);
 
+                            }
+                            finally
+                            {
+                                _isAndroidCamera2Busy = false;
+                            }
                         }
-                        finally
-                        {
-                            _isBusy = false;
-                        }
+                    });
+                } else
+                {
+                    //Handle video
+                    if (_capture == null)
+                    {
+                        InitVideoCapture();
                     }
-                });
+
+                    if (_capture != null)
+                        _capture.Start();
+                }
 #elif __IOS__
                 CheckVideoPermissionAndStart();
 #else
