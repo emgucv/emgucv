@@ -27,6 +27,7 @@
       <Link>NSImageExtension.cs</Link>
     </Compile>
 	<Compile Include="$(MSBuildThisFileDirectory)..\..\Xamarin\iOS\CvInvokeIOS.cs" Link="CvInvokeIOS.cs" />
+	<Compile Include="..\..\..\Emgu.CV.NativeImage\CIImageExtension.cs" Link="CIImageExtension.cs" />
   </ItemGroup>
     <ItemGroup Condition="Exists('$(EmguCVCatalystNativeFileX64)')">
       <NativeReference Include="$(EmguCVCatalystNativeFileX64)">
