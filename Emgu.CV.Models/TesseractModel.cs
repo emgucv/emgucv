@@ -26,10 +26,23 @@ namespace Emgu.CV.Models
     /// </summary>
     public class TesseractModel : DisposableObject, IProcessAndRenderModel
     {
-        private String _modelFolderName = "tessdata";
         private Tesseract _ocr;
+
         private String _lang;
         private OcrEngineMode _mode;
+        private String _modelFolderName;
+
+        /// <summary>
+        /// Create a tesseract model with the specific language & mode
+        /// </summary>
+        /// <param name="lang">The language model</param>
+        /// <param name="mode">The ocr engine mode</param>
+        public TesseractModel(String lang = "eng", OcrEngineMode mode = OcrEngineMode.TesseractLstmCombined, String modelFolderName = "tessdata")
+        {
+            _lang = lang;
+            _mode = mode;
+            _modelFolderName = modelFolderName;
+        }
 
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         private IEnumerator
@@ -54,8 +67,8 @@ namespace Emgu.CV.Models
 
                 if (manager.AllFilesDownloaded)
                 {
-                    _lang = lang;
-                    _mode = mode;
+                    //_lang = lang;
+                    //_mode = mode;
                     FileInfo fi = new FileInfo(manager.Files[0].LocalFile);
                     _ocr = new Tesseract(fi.DirectoryName, _lang, _mode);
                 }
@@ -152,7 +165,7 @@ namespace Emgu.CV.Models
 #else
             await 
 #endif
-                InitTesseract("eng", OcrEngineMode.TesseractLstmCombined, onDownloadProgressChanged);
+                InitTesseract(_lang, _mode, onDownloadProgressChanged);
         }
 
     }
