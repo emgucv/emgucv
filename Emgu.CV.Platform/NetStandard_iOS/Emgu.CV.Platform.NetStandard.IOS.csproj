@@ -8,19 +8,23 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
     <Platforms>AnyCPU</Platforms>
-    <Description>This is the .NetStandard dll that targets iOS platforms.</Description>
+    <Description>This is the Emgu CV .Net standard dll that targets iOS platforms.</Description>
     <Configurations>Release;Debug</Configurations>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</OpenCVBinaryDir>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>..\..\libs\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(OpenCVBinaryDir)\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <DefineConstants>TRACE;__IOS__</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>..\..\libs\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(OpenCVBinaryDir)\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <DefineConstants>TRACE;__IOS__</DefineConstants>
