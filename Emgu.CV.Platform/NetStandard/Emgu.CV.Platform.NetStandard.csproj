@@ -10,41 +10,45 @@
     <Platforms>AnyCPU;x64;ARM</Platforms>
     <Configurations>Release;Debug</Configurations>
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</OpenCVBinaryDir>
+  </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>$(MSBuildThisFileDirectory)..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutputPath>$(MSBuildThisFileDirectory)..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
-    <OutputPath>$(MSBuildThisFileDirectory)..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>$(MSBuildThisFileDirectory)..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
 	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <DefineConstants>TRACE;NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutputPath>$(MSBuildThisFileDirectory)..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <DefineConstants>TRACE;NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
-    <OutputPath>$(MSBuildThisFileDirectory)..\..\libs\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+    <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <DefineConstants>TRACE;NETSTANDARD</DefineConstants>
