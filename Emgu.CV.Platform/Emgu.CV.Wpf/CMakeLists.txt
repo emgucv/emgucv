@@ -4,14 +4,14 @@
 
 IF (TARGET Emgu.CV.Platform.NetStandard)
   IF (DOTNET_FOUND AND WIN32)
-    # Only build Emgu.CV.BitmapSource for Windows
+    # Only build Emgu.CV.Wpf for Windows
     PROJECT(Emgu.CV.Wpf)
-      SET(EXTRA_MSBUILD_FLAGS "")
-      IF(WIN32)
-        SET(EXTRA_MSBUILD_FLAGS "/p:Platform=\"Any CPU\"")
-      ENDIF()
+      SET(EXTRA_BUILD_FLAGS "")
+      #IF(WIN32)
+      #  SET(EXTRA_BUILD_FLAGS "/p:Platform=\"Any CPU\"")
+      #ENDIF()
 
-    BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/Windows.Desktop/Emgu.CV.Example.sln" "Emgu.CV.Wpf" "${EXTRA_MSBUILD_FLAGS}" ALL)
+    BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Wpf.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
     IF (EMGU_SIGN_FOUND)
       EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.dll)
     ENDIF()
@@ -26,7 +26,7 @@ IF (TARGET Emgu.CV.Platform.NetStandard)
     if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
     endif()
-    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard Emgu.CV.Bitmap)
   ENDIF()
   
   INSTALL(
