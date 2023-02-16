@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<Project>
+  ${EMGUCV_IOS_POST_PROCESS_BINARY}
+</Project>
