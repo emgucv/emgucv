@@ -33,7 +33,7 @@ namespace Emgu.CV.Models
         private String _modelFolderName;
 
         /// <summary>
-        /// Create a tesseract model with the specific language & mode
+        /// Create a tesseract model with the specific language and mode.
         /// </summary>
         /// <param name="lang">The language model</param>
         /// <param name="mode">The ocr engine mode</param>
