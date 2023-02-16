@@ -24,9 +24,9 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
     MESSAGE(FATAL_ERROR "dotnet command not found, unable to build Emgu.CV.Models.NetStandard project")
   ENDIF()
   
-  IF (EMGU_SIGN_FOUND)
-    EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.Models.dll)
-  ENDIF()
+  #IF (EMGU_SIGN_FOUND)
+  #  EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.Models.dll)
+  #ENDIF()
   
   INSTALL(
     FILES 
