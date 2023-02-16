@@ -513,7 +513,7 @@ namespace Emgu.CV.OCR
                     res[i].Text = _utf8.GetString(bytes, idx, tr.Length).Replace("\n", Environment.NewLine);
 
                     idx += tr.Length;
-                    res[i].Cost = tr.Confident;
+                    res[i].Confident = tr.Confident;
                     if (tr.Confident == 0)
                         res[i].Region = Rectangle.Empty;
                     else
@@ -548,9 +548,9 @@ namespace Emgu.CV.OCR
             /// </summary>
             public String Text;
             /// <summary>
-            /// The cost. The lower it is, the more confident is the result
+            /// The cost. The higher it is, the more confident is the result
             /// </summary>
-            public float Cost;
+            public float Confident;
             /// <summary>
             /// The region where the character is detected.
             /// </summary>
