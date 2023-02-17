@@ -37,6 +37,7 @@ namespace Emgu.CV.Models
         /// </summary>
         /// <param name="lang">The language model</param>
         /// <param name="mode">The ocr engine mode</param>
+		/// <param name="modelFolderName">The subfolder to store the tesseract model data. It is appended to the data download folder.</param>
         public TesseractModel(String lang = "eng", OcrEngineMode mode = OcrEngineMode.TesseractLstmCombined, String modelFolderName = "tessdata")
         {
             _lang = lang;
