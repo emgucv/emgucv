@@ -2,7 +2,6 @@
 <Project>
  <PropertyGroup>
     <PackageId>${EMGUCV_MAUI_MACOS_NUGET_ID}</PackageId>
-	
 	<title>${EMGUCV_MAUI_MACOS_NUGET_TITLE}</title>
     <version>${CPACK_PACKAGE_VERSION}</version>
     <authors>${CPACK_PACKAGE_VENDOR}</authors>
