@@ -207,7 +207,8 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
   IF (DOTNET_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
 	TARGET ${target}
-	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild -t:restore /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
+	#COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild -t:restore /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
+	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} restore ${solution_file}
 	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}
 	COMMENT "Building ${target} with command: ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}")
   ELSEIF(MSBUILD_EXECUTABLE)
