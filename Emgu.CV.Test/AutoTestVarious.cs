@@ -1414,6 +1414,47 @@ namespace Emgu.CV.Test
             }
         }
 
+
+        [Test]
+        public async Task TestMACE()
+        {
+            using (MACE mace = new MACE(64))
+            using (FaceDetectorYNModel detector = new FaceDetectorYNModel())
+            {
+                await detector.Init();
+                using (VectorOfMat trainingFaces = new VectorOfMat())
+                {
+                    using (Mat img1 = EmguAssert.LoadMat("lena.jpg"))
+                    {
+                        foreach (var face in detector.Detect(img1))
+                        {
+                            using (Mat faceRegion = new Mat(img1, Rectangle.Round(face.Region)))
+                            {
+                                trainingFaces.Push(faceRegion);
+                                using (Mat blurredFace1 = new Mat())
+                                {
+                                    CvInvoke.GaussianBlur(faceRegion, blurredFace1, new Size(3, 3), 1);
+                                    trainingFaces.Push(blurredFace1);
+                                }
+                            }
+                        }
+                    }
+
+
+                    mace.Train(trainingFaces);
+
+                    using (Mat trainingImg1 = trainingFaces[0])
+                    {
+                        EmguAssert.IsTrue(mace.Same(trainingImg1));
+
+                    }
+
+                    String filePath = Path.Combine(Path.GetTempPath(), "mace.xml");
+                    mace.Save(filePath);
+                }
+            }
+        }
+
         [Test]
         public void TestFaceRecognizer()
         {
