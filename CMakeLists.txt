@@ -2063,9 +2063,9 @@ ENDIF()
     <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
   </Target>")
   SET(EMGUCV_IOS_POST_PROCESS_BINARY "${EMGUCV_IOS_POST_PROCESS_BINARY}
-    <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\\iOS\" Importance=\"high\" />
-    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\\iOS\" ContinueOnError=\"true\" />
-    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\\iOS\" ContinueOnError=\"true\" />
+    <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $([System.IO.Path]::Combine($(OpenCVBinaryDir),'iOS'))\" Importance=\"high\" />
+    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$([System.IO.Path]::Combine($(OpenCVBinaryDir),'iOS'))\" ContinueOnError=\"true\" />
+    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$([System.IO.Path]::Combine($(OpenCVBinaryDir),'iOS'))\" ContinueOnError=\"true\" />
   </Target>")  
 
 
