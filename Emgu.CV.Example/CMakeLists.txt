@@ -219,6 +219,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       COMPONENT emgucv_example_source
       FILES_MATCHING 
       PATTERN "*.cs"
+	  PATTERN "*.resx"
       PATTERN "*.csproj"
       PATTERN "*.config"
       PATTERN "*.shproj"
