@@ -609,20 +609,29 @@ namespace Emgu.CV.Dnn
         {
             get
             {
-                using (VectorOfInt viBackends = new VectorOfInt())
-                using (VectorOfInt viTargets = new VectorOfInt())
+                if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.Android)
                 {
-                    cveDnnGetAvailableBackends(viBackends, viTargets);
-                    int[] backendArr = viBackends.ToArray();
-                    int[] targetArr = viTargets.ToArray();
-
-                    BackendTargetPair[] availableBackends = new BackendTargetPair[backendArr.Length];
-                    for (int i = 0; i < backendArr.Length; i++)
+                    //TODO: removed this once Open CV Android's cveDnnGetAvailableBackends is fixed.
+                    return new BackendTargetPair[] {new BackendTargetPair(Backend.OpenCV, Target.Cpu)};
+                }
+                else
+                {
+                    using (VectorOfInt viBackends = new VectorOfInt())
+                    using (VectorOfInt viTargets = new VectorOfInt())
                     {
-                        availableBackends[i] = new BackendTargetPair((Backend) backendArr[i], (Target) targetArr[i]);
-                    }
+                        cveDnnGetAvailableBackends(viBackends, viTargets);
+                        int[] backendArr = viBackends.ToArray();
+                        int[] targetArr = viTargets.ToArray();
 
-                    return availableBackends;
+                        BackendTargetPair[] availableBackends = new BackendTargetPair[backendArr.Length];
+                        for (int i = 0; i < backendArr.Length; i++)
+                        {
+                            availableBackends[i] =
+                                new BackendTargetPair((Backend) backendArr[i], (Target) targetArr[i]);
+                        }
+
+                        return availableBackends;
+                    }
                 }
             }
         }
