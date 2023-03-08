@@ -43,6 +43,23 @@ namespace Emgu.CV.Models
         private FreetypeNotoSansCJK _freetype = null;
 
         /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                if (_textDetector == null)
+                    return false;
+                if (_ocr == null)
+                    return false;
+                if (_freetype == null)
+                    return false;
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Download and initialize the vehicle detector, the license plate detector and OCR.
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>

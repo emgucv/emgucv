@@ -54,6 +54,14 @@ namespace Emgu.CV.XamarinForms
             _idCounter = 0;
         }
 
+        public bool Initialized
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public async Task Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged, object initOptions)
         {
             _fgDetector = new BackgroundSubtractorMOG2();

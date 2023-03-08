@@ -45,7 +45,17 @@ namespace Emgu.CV.Models
         }
 
         private Net _maskRcnnDetector = null;
-        //private Model _maskRcnnModel = null;
+
+        /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                return _maskRcnnDetector != null;
+            }
+        }
 
         /// <summary>
         /// Download and initialize the Mask Rcnn model

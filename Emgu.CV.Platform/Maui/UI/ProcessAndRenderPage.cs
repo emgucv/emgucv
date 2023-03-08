@@ -23,6 +23,7 @@ using Android.Widget;
 using Android.OS;
 using Android.Graphics;
 using Android.Preferences;
+//using String=System.String;
 #endif
 
 #if __IOS__
@@ -179,6 +180,7 @@ namespace Emgu.CV.Platform.Maui.UI
             try
             {
                 //_counter++;
+                #region read image into _mat
                 var sampleBuffer = e.Buffer;
                 using (CoreVideo.CVPixelBuffer pixelBuffer = sampleBuffer.GetImageBuffer() as CoreVideo.CVPixelBuffer)
                 {
@@ -190,23 +192,25 @@ namespace Emgu.CV.Platform.Maui.UI
                     }
                     pixelBuffer.Unlock(CoreVideo.CVPixelBufferLock.ReadOnly);
                 }
+                #endregion
+
+                if (_renderMat == null)
+                    _renderMat = new Mat();
+
+                using (InputArray iaImage = _mat.GetInputArray())
+                    iaImage.CopyTo(_renderMat);
+
+                String msg = _model.ProcessAndRender(_mat, _renderMat);
+                SetImage(_renderMat);
+                SetMessage(msg);
+
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine(e);
-                SetMessage(ex.Message);
+                Console.WriteLine(exception);
+                SetImage(null);
+                SetMessage(exception.Message);
             }
-
-            if (_renderMat == null)
-                _renderMat = new Mat();
-
-            using (InputArray iaImage = _mat.GetInputArray())
-                iaImage.CopyTo(_renderMat);
-
-            String msg = _model.ProcessAndRender(_mat, _renderMat);
-
-            SetImage(_renderMat);
-            SetMessage(msg);
         }
 #endif
 
@@ -226,10 +230,19 @@ namespace Emgu.CV.Platform.Maui.UI
 
             _mat.CopyTo(_renderMat);
 
-            String msg = _model.ProcessAndRender(_mat, _renderMat);
+            try
+            {
+                String msg = _model.ProcessAndRender(_mat, _renderMat);
+                SetImage(_renderMat);
+                SetMessage(msg);
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                SetImage(null);
+                SetMessage(exception.Message);
+            }
 
-            SetImage(_renderMat);
-            SetMessage(msg);
         }
 
         protected virtual async void OnButtonClicked(Object sender, EventArgs args)
@@ -288,6 +301,15 @@ namespace Emgu.CV.Platform.Maui.UI
                 await _model.Init(DownloadManager_OnDownloadProgressChanged, p.Items[p.SelectedIndex].ToString());
             }
 
+            if (!_model.Initialized)
+            {
+                String failMsg = "Failed to initialize model";
+                Console.WriteLine(failMsg);
+                SetImage(null);
+                SetMessage(failMsg);
+                return;
+            }
+
             if (images.Length == 0)
             {
 #if __ANDROID__ && __USE_ANDROID_CAMERA2__
@@ -311,7 +333,16 @@ namespace Emgu.CV.Platform.Maui.UI
                                     {
                                         iaImage.CopyTo(_renderMat);
                                     }
-                                    message = _model.ProcessAndRender(m, _renderMat);
+                                    try
+                                    {
+                                        message = _model.ProcessAndRender(m, _renderMat);
+                                    }
+                                    catch (Exception exception)
+                                    {
+                                        _renderMat.SetTo(new MCvScalar());
+                                        Console.WriteLine(exception);
+                                        message = exception.Message;
+                                    }
                                 });
                                 SetImage(_renderMat);
                                 SetMessage(message);
@@ -354,19 +385,23 @@ namespace Emgu.CV.Platform.Maui.UI
                 if (_renderMat == null)
                     _renderMat = new Mat();
                 images[0].CopyTo(_renderMat);
-                /*
-                using (InputArray iaImage = images[0].GetInputArray())
-                {
-                    iaImage.CopyTo(_renderMat);
-                }*/
-                String message = _model.ProcessAndRender(images[0], _renderMat);
 
-                SetImage(_renderMat);
-                SetMessage(message);
-                Picker.IsEnabled = true;
+                try
+                {
+                    String message = _model.ProcessAndRender(images[0], _renderMat);
+
+                    SetImage(_renderMat);
+                    SetMessage(message);
+                    Picker.IsEnabled = true;
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception);
+                    SetImage(null);
+                    SetMessage(exception.Message);
+                }
             }
         }
-
 
         private static String ByteToSizeStr(long byteCount)
         {

@@ -75,6 +75,17 @@ namespace Emgu.CV.Models
             }
         }
 
+        /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                return !(_faceCascadeClassifier == null || _eyeCascadeClassifier == null);
+            }
+        }
+
 
         /// <summary>
         /// Download and initialize the face and eye cascade classifier detection model

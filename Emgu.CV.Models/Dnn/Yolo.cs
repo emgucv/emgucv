@@ -61,6 +61,21 @@ namespace Emgu.CV.Models
         }
 
         /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                if (_yoloDetectionModel == null)
+                    return false;
+                if (_labels == null)
+                    return false;
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Download and initialize the yolo model
         /// </summary>
         /// <param name="version">The model version</param>
@@ -162,12 +177,24 @@ namespace Emgu.CV.Models
 
                 if (manager.AllFilesDownloaded)
                 {
-                    _yoloDetectionModel = new DetectionModel(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
-                    _yoloDetectionModel.SetInputSize(new Size(416, 416));
-                    _yoloDetectionModel.SetInputScale(0.00392);
-                    _yoloDetectionModel.SetInputMean(new MCvScalar());
+                    try
+                    {
+                        _yoloDetectionModel =
+                            new DetectionModel(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
+                        _yoloDetectionModel.SetInputSize(new Size(416, 416));
+                        _yoloDetectionModel.SetInputScale(0.00392);
+                        _yoloDetectionModel.SetInputMean(new MCvScalar());
 
-                    _labels = File.ReadAllLines(manager.Files[2].LocalFile);
+                        _labels = File.ReadAllLines(manager.Files[2].LocalFile);
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine( String.Format("Failed to initialize model: {0}", ex.Message));
+                    }
+                }
+                else
+                {
+                    Trace.WriteLine("Failed to download model.");
                 }
             }
         }
@@ -182,7 +209,7 @@ namespace Emgu.CV.Models
         /// <returns>The detected objects</returns>
         public DetectedObject[] Detect(IInputArray image, double confThreshold = 0.5, double nmsThreshold = 0.5)
         {
-            if (_yoloDetectionModel == null)
+            if (!Initialized)
             {
                 throw new Exception("Please initialize the model first");
             }
@@ -200,6 +227,8 @@ namespace Emgu.CV.Models
                 _yoloDetectionModel.Dispose();
                 _yoloDetectionModel = null;
             }
+
+            _labels = null;
         }
 
         /// <summary>

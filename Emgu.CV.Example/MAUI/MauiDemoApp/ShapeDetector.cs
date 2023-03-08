@@ -215,6 +215,17 @@ namespace Emgu.CV.Models
 
         }
 
+        /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         public async Task Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
         {
             //do nothing, no need to initialize

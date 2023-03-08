@@ -88,6 +88,23 @@ namespace Emgu.CV.Models
         private Model _vehicleAttrRecognizerModel = null;
         private Net _ocr = null;
 
+        /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                if (_vehicleLicensePlateDetectionModel == null)
+                    return false;
+                if (_ocr == null)
+                    return false;
+                if (_vehicleAttrRecognizerModel == null)
+                    return false;
+                return true;
+            }
+        }
+
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         private IEnumerator InitOCR(Dnn.Backend preferredBackend, Dnn.Target preferredTarget, FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
