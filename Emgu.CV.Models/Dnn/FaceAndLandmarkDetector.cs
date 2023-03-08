@@ -54,6 +54,21 @@ namespace Emgu.CV.Models
             Clear();
         }
 
+        /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                if (_faceDetector == null)
+                    return false;
+                if (_facemarkDetector == null)
+                    return false;
+                return true;
+            }
+        }
+
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         private IEnumerator InitFaceDetector(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else

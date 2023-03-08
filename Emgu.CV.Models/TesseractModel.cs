@@ -33,6 +33,25 @@ namespace Emgu.CV.Models
         private String _modelFolderName;
 
         /// <summary>
+        /// Get the ocr model
+        /// </summary>
+        public Tesseract Model
+        {
+            get { return _ocr; }
+        }
+
+        /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                return _ocr != null;
+            }
+        }
+
+        /// <summary>
         /// Create a tesseract model with the specific language and mode.
         /// </summary>
         /// <param name="lang">The language model</param>

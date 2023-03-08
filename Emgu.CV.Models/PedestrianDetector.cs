@@ -98,6 +98,26 @@ namespace Emgu.CV.Models
         }
 
         /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                if (_hog == null)
+                    return false;
+
+                if (CudaInvoke.HasCuda)
+                {
+                    if (_hogCuda == null)
+                        return false;
+                }
+
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Initialize the pedestrian detection model
         /// </summary>
         /// <param name="onDownloadProgressChanged">Call back method during download</param>

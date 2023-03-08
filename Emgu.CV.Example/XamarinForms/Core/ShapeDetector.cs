@@ -33,6 +33,14 @@ namespace Emgu.CV.Models
 
         }
 
+        public bool Initialized
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         protected override void DisposeObject()
         {
             if (_gray != null)

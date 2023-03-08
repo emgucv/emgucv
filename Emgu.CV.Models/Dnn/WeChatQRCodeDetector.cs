@@ -31,6 +31,18 @@ namespace Emgu.CV.Models
 
         private WeChatQRCode _weChatQRCodeDetectionModel = null;
 
+
+        /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                return _weChatQRCodeDetectionModel != null;
+            }
+        }
+
         /// <summary>
         /// Download and initialize the WeChatQRCode model
         /// </summary>

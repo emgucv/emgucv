@@ -34,6 +34,17 @@ namespace Emgu.CV.Models
         private String _downloadedFile = null;
 
         /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                return _faceDetectionModel != null;
+            }
+        }
+
+        /// <summary>
         /// Download and initialize the face detection model
         /// </summary>
         /// <param name="onDownloadProgressChanged">Call back method during download</param>

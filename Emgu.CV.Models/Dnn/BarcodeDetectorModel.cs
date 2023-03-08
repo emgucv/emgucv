@@ -32,6 +32,17 @@ namespace Emgu.CV.Models
         private BarcodeDetector _barcodeDetector = null;
 
         /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                return _barcodeDetector != null;
+            }
+        }
+
+        /// <summary>
         /// Download and initialize the BarcodeDetector model
         /// </summary>
         /// <param name="onDownloadProgressChanged">Call back method during download</param>

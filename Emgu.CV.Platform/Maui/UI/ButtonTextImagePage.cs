@@ -134,6 +134,10 @@ namespace Emgu.CV.Platform.Maui.UI
         }
 #else
 
+        /// <summary>
+        /// Set the image to be displayed
+        /// </summary>
+        /// <param name="image">The image to be displayed</param>
         public virtual void SetImage(IInputArray image)
         {
             this.DisplayImage.SetImage(image);
@@ -155,15 +159,19 @@ namespace Emgu.CV.Platform.Maui.UI
 
         private StackLayout _mainLayout = new StackLayout();
 
+        /// <summary>
+        /// Get the main layout
+        /// </summary>
         public StackLayout MainLayout
         {
             get { return _mainLayout; }
         }
 
-
-
         private Microsoft.Maui.Controls.Button[] _additionalButtons;
 
+        /// <summary>
+        /// Get the list of additional buttons
+        /// </summary>
         public Microsoft.Maui.Controls.Button[] AdditionalButtons
         {
             get
@@ -211,24 +219,6 @@ namespace Emgu.CV.Platform.Maui.UI
             //DisplayImage.BackgroundColor = Color.Aqua;
             //_mainLayout.BackgroundColor = Color.Blue;
 
-#if __MACCATALYST__
-            //NSImageView = new NSImageView();
-            //NSImageView.ImageScaling = NSImageScale.None;
-            //_mainLayout.Children.Add(NSImageView.ToView());
-#elif __IOS__
-            //UIImageView = new UIImageView ();
-            //UIImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
-            //_mainLayout.Children.Add (UIImageView.ToView ());
-#elif __ANDROID__
-            //ImageView = new ImageView(Android.App.Application.Context);
-            //_mainLayout.Children.Add(this.ImageView.ToView());
-#elif WINDOWS
-            //this.ImageView = new Microsoft.UI.Xaml.Controls.Image();
-            //_mainLayout.Children.Add(this.ImageView.ToView());
-            //this.ImageView.Stretch = Windows.UI.Xaml.Media.Stretch.Uniform;
-            //this.ImageView.Stretch = Windows.UI.Xaml.Media.Stretch.None;
-#endif
-
             _mainLayout.Children.Add(DisplayImage);
             DisplayImage.BackgroundColor = 
                 Microsoft.Maui.Graphics.Color.FromRgb(1.0, 0.0, 0.0);
@@ -253,6 +243,12 @@ namespace Emgu.CV.Platform.Maui.UI
 
         public bool HasCameraOption { get; set; }
 
+        /// <summary>
+        /// Load the images and return them asynchronously
+        /// </summary>
+        /// <param name="imageNames">The name of the images</param>
+        /// <param name="labels">The labels of the images</param>
+        /// <returns>The images loaded</returns>
         public virtual async Task<Mat[]> LoadImages(String[] imageNames, String[] labels = null)
         {
             Mat[] mats = new Mat[imageNames.Length];
@@ -396,13 +392,20 @@ namespace Emgu.CV.Platform.Maui.UI
             }
         }
 
-
+        /// <summary>
+        /// Get the message label UI
+        /// </summary>
+        /// <returns>The message label ui</returns>
         public Label GetLabel()
         {
             //return null;
             return this.MessageLabel;
         }
 
+        /// <summary>
+        /// Set the message to be displayed
+        /// </summary>
+        /// <param name="message">The message to be displayed</param>
         public void SetMessage(String message)
         {
             this.Dispatcher.Dispatch(
@@ -419,17 +422,28 @@ namespace Emgu.CV.Platform.Maui.UI
 
         private String _log = String.Empty;
 
+        /// <summary>
+        /// Clear the log
+        /// </summary>
         public void ClearLog()
         {
             SetLog(String.Empty);
         }
 
+        /// <summary>
+        /// Set the log
+        /// </summary>
+        /// <param name="log">The log</param>
         public void SetLog(String log)
         {
             _log = log;
             RenderLog(_log);
         }
 
+        /// <summary>
+        /// Append text to the log
+        /// </summary>
+        /// <param name="log">The text to be append to the log</param>
         public void AppendLog(String log)
         {
             if (!String.IsNullOrEmpty(_log))
@@ -437,6 +451,10 @@ namespace Emgu.CV.Platform.Maui.UI
             RenderLog(_log);
         }
 
+        /// <summary>
+        /// Render the log
+        /// </summary>
+        /// <param name="log">The log to be rendered</param>
         private void RenderLog(String log)
         {
             this.Dispatcher.Dispatch(
@@ -461,6 +479,10 @@ namespace Emgu.CV.Platform.Maui.UI
             );
         }
 
+        /// <summary>
+        /// Get the main button
+        /// </summary>
+        /// <returns>The main button</returns>
         public Microsoft.Maui.Controls.Button GetButton()
         {
             //return null;

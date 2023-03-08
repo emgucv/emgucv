@@ -59,6 +59,21 @@ namespace Emgu.CV.Models
             _idCounter = 0;
         }
 
+        /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                if (_fgDetector == null)
+                    return false;
+                if (_trackers == null)
+                    return false;
+                return true;
+            }
+        }
+
         public async Task Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged, object initOptions)
         {
             _fgDetector = new BackgroundSubtractorMOG2();

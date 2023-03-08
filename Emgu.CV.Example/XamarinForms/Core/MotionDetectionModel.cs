@@ -19,6 +19,7 @@ namespace Emgu.CV.XamarinForms
         private Mat _segMask = new Mat();
         private Mat _forgroundMask = new Mat();
 
+
         public void Dispose()
         {
             Clear();
@@ -38,6 +39,18 @@ namespace Emgu.CV.XamarinForms
                 }
 
                 _forgroundDetector = null;
+            }
+        }
+
+        public bool Initialized
+        {
+            get
+            {
+                if (_forgroundDetector == null)
+                    return false;
+                if (_motionHistory == null)
+                    return false;
+                return true;
             }
         }
 

@@ -72,6 +72,25 @@ namespace Emgu.CV.Models
         }
 
         /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                if (_models == null)
+                    return false;
+                
+                foreach (var model in _models)
+                {
+                    if (model.Initialized == false)
+                        return false;
+                }
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Download and initialize the model
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>

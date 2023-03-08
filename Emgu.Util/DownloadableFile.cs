@@ -92,6 +92,14 @@ namespace Emgu.Util
                                 if (hashStr != _sha256Hash)
                                 {
                                     Trace.WriteLine(String.Format("{0}: expecting SHA256 of \"{1}\", got \"{2}\"", localFile, _sha256Hash, hashStr));
+                                    Trace.WriteLine(String.Format("File {0} contains {1} bytes.", localFile, fileStream.Length));
+                                    if (fileStream.Length < 1024)
+                                    {
+                                        using (StreamReader sr = new StreamReader(fileStream))
+                                        {
+                                            Trace.WriteLine( String.Format("=====FILE CONTENT====={0}{1}{0}=================", Environment.NewLine, sr.ReadToEnd()));
+                                        }
+                                    }
                                     return false;
                                 }
                             }

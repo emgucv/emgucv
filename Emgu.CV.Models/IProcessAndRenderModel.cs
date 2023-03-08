@@ -31,6 +31,11 @@ namespace Emgu.CV.Models
         void Clear();
 
         /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        bool Initialized { get; }
+
+        /// <summary>
         /// Download and initialize the model
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
