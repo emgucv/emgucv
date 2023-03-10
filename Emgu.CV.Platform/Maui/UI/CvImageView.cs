@@ -33,6 +33,9 @@ namespace Emgu.CV.Platform.Maui.UI
     /// </summary>
     public class CvImageView : Image
     {
+        /// <summary>
+        /// Get the native ImageView
+        /// </summary>
 #if __MACCATALYST__
         public UIImageView ImageView { get; set; }
 #elif __IOS__

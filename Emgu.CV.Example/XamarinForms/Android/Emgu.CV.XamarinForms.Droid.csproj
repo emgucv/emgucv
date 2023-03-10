@@ -127,22 +127,22 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.2</Version>
+      <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="Plugin.CurrentActivity">
       <Version>2.1.0.4</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.AndroidX.MediaRouter">
+    <!-- <PackageReference Include="Xamarin.AndroidX.MediaRouter">
       <Version>1.2.5</Version>
     </PackageReference>
-    <!-- <PackageReference Include="Xamarin.AndroidX.Palette">
+    <PackageReference Include="Xamarin.AndroidX.Palette">
       <Version>1.0.0.10</Version>
     </PackageReference> -->
     <PackageReference Include="Xamarin.Build.Download">
       <Version>0.11.4</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Essentials">
-      <Version>1.7.4</Version>
+      <Version>1.7.5</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
       <Version>5.0.0.2545</Version>

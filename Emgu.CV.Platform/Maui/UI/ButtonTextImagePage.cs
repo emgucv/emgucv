@@ -39,7 +39,9 @@ using Microsoft.UI.Xaml.Media.Imaging;
 
 namespace Emgu.CV.Platform.Maui.UI
 {
-
+    /// <summary>
+    /// A simple page with a button, message text and an image
+    /// </summary>
     public class ButtonTextImagePage
 #if __IOS__
         : Emgu.Util.AvCaptureSessionPage
@@ -51,24 +53,38 @@ namespace Emgu.CV.Platform.Maui.UI
     {
         private Picker _picker = new Picker();
 
+        /// <summary>
+        /// Get the file picker
+        /// </summary>
         public Picker Picker
         {
             get { return _picker; }
         }
 
         private Microsoft.Maui.Controls.Button _topButton = new Microsoft.Maui.Controls.Button();
+
+        /// <summary>
+        /// Get the button at the top
+        /// </summary>
         public Microsoft.Maui.Controls.Button TopButton
         {
             get { return _topButton; }
         }
 
         private Label _messageLabel = new Label();
+
+        /// <summary>
+        /// Get the message label
+        /// </summary>
         public Label MessageLabel
         {
             get { return _messageLabel; }
         }
 		
 		private Editor _logEditor = new Editor();
+        /// <summary>
+        /// The log message editor
+        /// </summary>
         public Editor LogEditor
         {
             get { return _logEditor; }
@@ -76,6 +92,9 @@ namespace Emgu.CV.Platform.Maui.UI
 
         private CvImageView _displayImage = new CvImageView();
 
+        /// <summary>
+        /// Get the displayed image
+        /// </summary>
         public CvImageView DisplayImage
         {
             get { return _displayImage; }
@@ -86,6 +105,10 @@ namespace Emgu.CV.Platform.Maui.UI
         private Bitmap[] _renderBuffer = new Bitmap[2];
         private int _renderBufferIdx = 0;
 
+        /// <summary>
+        /// Set the image to be displayed
+        /// </summary>
+        /// <param name="image">The image to be displayed</param>
         public virtual void SetImage(IInputArray image)
         {
             if (image == null)
@@ -180,6 +203,10 @@ namespace Emgu.CV.Platform.Maui.UI
             }
         }
 
+        /// <summary>
+        /// Create a simple page with a button, message label and image.
+        /// </summary>
+        /// <param name="additionalButtons">Additional buttons added below the standard button.</param>
         public ButtonTextImagePage(Microsoft.Maui.Controls.Button[] additionalButtons=null)
         {
             var horizontalLayoutOptions = LayoutOptions.Center;
@@ -241,6 +268,9 @@ namespace Emgu.CV.Platform.Maui.UI
             };
         }
 
+        /// <summary>
+        /// A flag that indicates if the file picker allow getting image from camera
+        /// </summary>
         public bool HasCameraOption { get; set; }
 
         /// <summary>
