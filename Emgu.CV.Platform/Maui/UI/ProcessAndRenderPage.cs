@@ -83,6 +83,9 @@ namespace Emgu.CV.Platform.Maui.UI
         private bool _isAndroidCamera2Busy = false;
 #endif
 
+        /// <summary>
+        /// Get the model associated with this page
+        /// </summary>
         public IProcessAndRenderModel Model
         {
             get
@@ -91,6 +94,10 @@ namespace Emgu.CV.Platform.Maui.UI
             }
         }
 
+        /// <summary>
+        /// Initialize video capture
+        /// </summary>
+        /// <returns>True if video capture initialized</returns>
         public bool InitVideoCapture()
         {
             var openCVConfigDict = CvInvoke.ConfigDict;
@@ -245,6 +252,11 @@ namespace Emgu.CV.Platform.Maui.UI
 
         }
 
+        /// <summary>
+        /// Function to call when the button is clicked
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="args">Additional arguments</param>
         protected virtual async void OnButtonClicked(Object sender, EventArgs args)
         {
             var button = GetButton();
@@ -419,6 +431,12 @@ namespace Emgu.CV.Platform.Maui.UI
             }
         }
 
+        /// <summary>
+        /// Function to call when the model download progress has been changed
+        /// </summary>
+        /// <param name="totalBytesToReceive">The total number of bytes to be received</param>
+        /// <param name="bytesReceived">The bytes received so far</param>
+        /// <param name="progressPercentage">The download progress percentage</param>
         protected void DownloadManager_OnDownloadProgressChanged(long? totalBytesToReceive, long bytesReceived, double? progressPercentage)
         {
             String msg;

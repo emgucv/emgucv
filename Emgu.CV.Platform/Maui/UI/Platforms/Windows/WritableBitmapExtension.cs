@@ -10,7 +10,9 @@ using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.Platform.Maui.UI
 {
-
+    /// <summary>
+    /// Extension methods for WritableBitmap
+    /// </summary>
     public static class WriteableBitmapExtension
     {
         /*
@@ -39,7 +41,12 @@ namespace Emgu.CV.Platform.Maui.UI
             }
         }*/
 
-
+        /// <summary>
+        /// Convert an InputArray to WritableBitmap
+        /// </summary>
+        /// <param name="array">The InputArray to be converted to WritableBitmap</param>
+        /// <returns>The writable bitmap</returns>
+        /// <exception cref="NotImplementedException">Exception will be thrown if the specific input array cannot be converted to WritableBitmap</exception>
         public static Microsoft.UI.Xaml.Media.Imaging.WriteableBitmap ToWritableBitmap(this IInputArray array)
         {
             using (InputArray ia = array.GetInputArray())
