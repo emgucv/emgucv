@@ -106,13 +106,13 @@ namespace Emgu.CV.Models
             {
                 if (_hog == null)
                     return false;
-
+#if !(UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL)
                 if (CudaInvoke.HasCuda)
                 {
                     if (_hogCuda == null)
                         return false;
                 }
-
+#endif
                 return true;
             }
         }
