@@ -348,7 +348,7 @@ namespace Emgu.CV.Aruco
             using (OutputArray oaPerViewErrors = perViewErrors == null ? OutputArray.GetEmpty() : perViewErrors.GetOutputArray())
             {
                 return cveArucoCalibrateCameraCharuco(
-                    iaCharucoCorners, iaCharucoIds, board.Ptr, ref imageSize,
+                    iaCharucoCorners, iaCharucoIds, board.BoardPtr, ref imageSize,
                    ioaCameraMatrix, ioaDistCoeffs, oaRvecs, oaTvecs,
                    oaStdDeviationsIntrinsics, oaStdDeviationsExtrinsics, oaPerViewErrors,
                    flags, ref criteria);
@@ -656,6 +656,30 @@ namespace Emgu.CV.Aruco
             IntPtr img,
             int marginSize,
             int borderBits);
+
+        /// <summary>
+        /// Draw a planar board.
+        /// </summary>
+        /// <param name="board">Layout of the board that will be drawn. The board should be planar, z coordinate is ignored</param>
+        /// <param name="outSize">Size of the output image in pixels.</param>
+        /// <param name="img">Output image with the board. The size of this image will be outSize and the board will be on the center, keeping the board proportions.</param>
+        /// <param name="marginSize">Minimum margins (in pixels) of the board in the output image</param>
+        /// <param name="borderBits">Width of the marker borders.</param>
+        public static void GenerateImage(
+            this IBoard board,
+            Size outSize,
+            IOutputArray img,
+            int marginSize = 0,
+            int borderBits = 1)
+        {
+            using (OutputArray oaImg = img.GetOutputArray())
+            {
+                cveArucoBoardGenerateImage(board.BoardPtr, ref outSize, oaImg, marginSize, borderBits);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveArucoBoardGenerateImage(IntPtr board, ref Size outSize, IntPtr img, int marginSize, int borderBits);
 
         /// <summary>
         /// Pose estimation for a board of markers.

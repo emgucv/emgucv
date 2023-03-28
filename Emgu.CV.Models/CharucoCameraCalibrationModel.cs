@@ -13,14 +13,12 @@ using Emgu.CV.Aruco;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using Emgu.Util;
 
 namespace Emgu.CV.Models
 {
     public class CharucoCameraCalibrationModel : Emgu.CV.Models.IProcessAndRenderModel
     {
-
-        //private Mat _frame = new Mat();
-        //private Mat _frameCopy = new Mat();
 
         private Mat _cameraMatrix = new Mat();
         private Mat _distCoeffs = new Mat();
@@ -62,11 +60,17 @@ namespace Emgu.CV.Models
             }
         }
 
+        /// <summary>
+        /// Release the memory associated with this model
+        /// </summary>
         public void Dispose()
         {
             Clear();
         }
 
+        /// <summary>
+        /// Clear and reset the model. Required Init function to be called again before calling ProcessAndRender.
+        /// </summary>
         public void Clear()
         {
             if (_dict != null)
@@ -97,6 +101,7 @@ namespace Emgu.CV.Models
             _frameUsable = false;
         }
 
+
         public void GetCharucoBoard(IOutputArray boardImage)
         {
             Size imageSize = new Size();
@@ -105,22 +110,54 @@ namespace Emgu.CV.Models
             imageSize.Width = _markersX * (_markersLength + _markersSeparation) - _markersSeparation + 2 * margins;
             imageSize.Height = _markersY * (_markersLength + _markersSeparation) - _markersSeparation + 2 * margins;
             int borderBits = 1;
-
-            Board.Draw(imageSize, boardImage, margins, borderBits);
+            Board.GenerateImage(imageSize, boardImage, margins, borderBits);
         }
 
-        public async Task Init(DownloadProgressChangedEventHandler onDownloadProgressChanged, object initOptions)
+        /// <summary>
+        /// Return true if the model is initialized
+        /// </summary>
+        public bool Initialized
+        {
+            get
+            {
+                if (_dict == null)
+                    return false;
+                if (_charucoBoard == null)
+                    return false;
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// Initialize the CharucoCameraCalibrationModel
+        /// </summary>
+        /// <param name="onDownloadProgressChanged">Call back method during download</param>
+        /// <param name="initOptions">Initialization options. None supported at the moment, any value passed will be ignored.</param>
+        /// <returns>Asyn task</returns>
+
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
+        public IEnumerator Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
+#else
+        public async Task Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, object initOptions = null)
+#endif
         {
             Clear();
 
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
+            yield return null;
+#else
             _dict = new Dictionary(Dictionary.PredefinedDictionaryName.Dict7X7_100);
             _charucoBoard = new CharucoBoard(_markersX, _markersY, _markersLength, _markersSeparation, ArucoDictionary);
             _detectorParameters = DetectorParameters.GetDefault();
             await Task.Delay(1);
+#endif
         }
 
         private bool _frameUsable = false;
 
+        /// <summary>
+        /// Return true if the current frame is usable
+        /// </summary>
         public bool FrameUsable {
             get
             {
@@ -146,6 +183,7 @@ namespace Emgu.CV.Models
 
         public bool UseOneFrame { get; set; }
 
+        
         public String CalibrateCamera()
         {
             int totalPoints = _markerCounterPerFrame.ToArray().Sum();
@@ -208,7 +246,6 @@ namespace Emgu.CV.Models
 
                 return String.Format("Camera calibration completed. Aruco reprojection error: {0}; Charuco reprojection error {1}", arucoRepErr, repError);
             }
-
         }
 
         public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)

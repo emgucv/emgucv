@@ -143,7 +143,27 @@ namespace Emgu.CV.Aruco
             /// <summary>
             /// standard ArUco Library Markers. 1024 markers, 5x5 bits, 0 minimum distance
             /// </summary>
-            DictArucoOriginal
+            DictArucoOriginal,
+
+            /// <summary>
+            /// 4x4 bits, minimum hamming distance between any two codes = 5, 30 codes
+            /// </summary>
+            DictAprilTag16h5,
+
+            /// <summary>
+            /// 5x5 bits, minimum hamming distance between any two codes = 9, 35 codes
+            /// </summary>
+            DictAprilTag25h9,
+
+            /// <summary>
+            /// 6x6 bits, minimum hamming distance between any two codes = 10, 2320 codes
+            /// </summary>
+            DictAprilTag36h10,
+
+            /// <summary>
+            /// 6x6 bits, minimum hamming distance between any two codes = 11, 587 codes
+            /// </summary>
+            DictAprilTag36h11,
         }
 
         /// <summary>

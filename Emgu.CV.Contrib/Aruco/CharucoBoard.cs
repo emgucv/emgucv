@@ -21,9 +21,10 @@ namespace Emgu.CV.Aruco
     /// both, ArUco markers versatility and chessboard corner precision, which is important for
     /// calibration and pose estimation.
     /// </summary>
-    public class CharucoBoard : SharedPtrObject, IBoard
+    public class CharucoBoard : UnmanagedObject, IBoard
     {
         private IntPtr _boardPtr;
+        private IntPtr _sharedPtr;
 
         /// <summary>
         /// ChArUco board
@@ -42,28 +43,12 @@ namespace Emgu.CV.Aruco
         }
 
         /// <summary>
-        /// Draw a ChArUco board
-        /// </summary>
-        /// <param name="outSize">size of the output image in pixels.</param>
-        /// <param name="img">output image with the board. The size of this image will be outSize and the board will be on the center, keeping the board proportions.</param>
-        /// <param name="marginSize">minimum margins (in pixels) of the board in the output image</param>
-        /// <param name="borderBits">width of the marker borders.</param>
-        public void Draw(Size outSize, IOutputArray img, int marginSize = 0, int borderBits = 1)
-        {
-            using (OutputArray oaImg = img.GetOutputArray())
-                ArucoInvoke.cveCharucoBoardDraw(_ptr, ref outSize, oaImg, marginSize, borderBits);
-        }
-
-        /// <summary>
         /// Release the unmanaged resource associated with this ChArUco board
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_sharedPtr != IntPtr.Zero)
-            {
-                ArucoInvoke.cveCharucoBoardRelease(ref _sharedPtr);
-                _ptr = IntPtr.Zero;
-            }
+            if (_ptr != IntPtr.Zero)
+                ArucoInvoke.cveCharucoBoardRelease(ref _ptr, ref _sharedPtr);
 
             _boardPtr = IntPtr.Zero;
         }
@@ -83,9 +68,6 @@ namespace Emgu.CV.Aruco
            IntPtr dictionary, ref IntPtr boardPtr, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveCharucoBoardDraw(IntPtr charucoBoard, ref Size outSize, IntPtr img, int marginSize, int borderBits);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveCharucoBoardRelease(ref IntPtr sharedPtr);
+        internal static extern void cveCharucoBoardRelease(ref IntPtr charucoBoard, ref IntPtr sharedPtr);
     }
 }
