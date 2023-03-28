@@ -163,20 +163,24 @@ namespace Emgu.CV.Platform.Maui.UI
         /// <param name="image">The image to be displayed</param>
         public virtual void SetImage(IInputArray image)
         {
-            this.DisplayImage.SetImage(image);
-            if (image == null)
-                this.DisplayImage.IsVisible = false;
-            else
-            {
-                this.DisplayImage.IsVisible = true;
-
-                using (InputArray iaImage = image.GetInputArray())
+            this.Dispatcher.Dispatch(
+                () =>
                 {
-                    System.Drawing.Size size = iaImage.GetSize();
-                    this.DisplayImage.WidthRequest = Math.Min(this.Width, size.Width);
-                    this.DisplayImage.HeightRequest = size.Height;
-                }
-            }
+                    this.DisplayImage.SetImage(image);
+                    if (image == null)
+                        this.DisplayImage.IsVisible = false;
+                    else
+                    {
+                        this.DisplayImage.IsVisible = true;
+
+                        using (InputArray iaImage = image.GetInputArray())
+                        {
+                            System.Drawing.Size size = iaImage.GetSize();
+                            this.DisplayImage.WidthRequest = Math.Min(this.Width, size.Width);
+                            this.DisplayImage.HeightRequest = size.Height;
+                        }
+                    }
+                });
         }
 #endif
 
@@ -271,7 +275,36 @@ namespace Emgu.CV.Platform.Maui.UI
         /// <summary>
         /// A flag that indicates if the file picker allow getting image from camera
         /// </summary>
-        public bool HasCameraOption { get; set; }
+        private bool? _hasCameraOption = null;
+
+        /// <summary>
+        /// Get the default camera option
+        /// </summary>
+        /// <returns>A flag that indicates if the file picker allow getting image from camera, will be used by HasCameraOption getter if no value is set.</returns>
+        protected virtual bool GetDefaultCameraOption()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// A flag that indicates if the file picker allow getting image from camera
+        /// </summary>
+        public bool HasCameraOption
+        {
+            get
+            {
+                if (_hasCameraOption == null)
+                {
+                    _hasCameraOption = GetDefaultCameraOption();
+                }
+                    
+                return _hasCameraOption.Value;
+            }
+            set
+            {
+                _hasCameraOption = value;
+            }
+        }
 
         /// <summary>
         /// Load the images and return them asynchronously
@@ -311,11 +344,15 @@ namespace Emgu.CV.Platform.Maui.UI
                 if (captureSupported)
                     options.Add("Photo from Camera");
 
+                SetMessage("Checking if camera option is available, please wait...");
+                //Run it once in case it need to check if camera is available, which could take a long time to run
+                await Task.Run(() => { bool cameraOption = this.HasCameraOption; });
+                SetMessage(null);
+
                 if (this.HasCameraOption)
                 {
                     if (Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.Android
-                        || Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.iOS
-                        || Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.WinUI)
+                        || Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.iOS)
                     {
                         if (captureSupported)
                             options.Add("Camera");
@@ -329,7 +366,7 @@ namespace Emgu.CV.Platform.Maui.UI
                             options.Add("Camera");
                     }
                 }
-
+                
 
                 if (options.Count == 1)
                 {
