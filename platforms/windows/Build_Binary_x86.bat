@@ -13,6 +13,7 @@ REM %3%: "vs2015", force to build with vs_2015, it may no longer work as of 2020
 REM %3%: "commercial", use to enable optimization with targeting 32-bit architecture
 REM %4%: "nonfree", build the nonfree module
 REM %4%: "openni", build the openni module
+REM %4%: "depthai", build the openni module
 REM %5%: "doc", this flag indicates if we should build the documentation
 REM %6%: "package", this flag indicates if we should build the ".zip" and ".exe" package
 REM %7%: "build", if set to "build", the script will also build the target
@@ -376,6 +377,12 @@ IF NOT "%4%"=="nonfree" GOTO END_OF_NONFREE
 SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% ^
 -DOPENCV_ENABLE_NONFREE:BOOL=TRUE 
 :END_OF_NONFREE
+
+IF NOT "%4%"=="depthai" GOTO END_OF_DEPTHAI
+:WITH_DEPTHAI
+SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% ^
+-DEMGU_CV_WITH_DEPTHAI:BOOL=TRUE 
+:END_OF_DEPTHAI
 
 
 IF "%5%"=="doc" ^
