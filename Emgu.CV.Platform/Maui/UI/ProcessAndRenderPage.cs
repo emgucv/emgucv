@@ -138,6 +138,14 @@ namespace Emgu.CV.Platform.Maui.UI
             return false;
         }
 
+        protected override bool GetDefaultCameraOption()
+        {
+            if (Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.iOS)
+                return true;
+            else
+                return InitVideoCapture();
+        }
+
         /// <summary>
         /// Create a Generic page that can take a IProcessAndRenderModel and apply it to images / camera stream
         /// </summary>
@@ -157,10 +165,7 @@ namespace Emgu.CV.Platform.Maui.UI
         {
 #if __IOS__
             AllowAvCaptureSession = true;
-            HasCameraOption = true;
             outputRecorder.BufferReceived += OutputRecorder_BufferReceived;
-#else
-            HasCameraOption = InitVideoCapture();
 #endif
             _deaultImage = defaultImage;
             _defaultButtonText = defaultButtonText;
@@ -248,6 +253,9 @@ namespace Emgu.CV.Platform.Maui.UI
                 Console.WriteLine(exception);
                 SetImage(null);
                 SetMessage(exception.Message);
+#if DEBUG
+                throw;
+#endif
             }
 
         }
@@ -263,7 +271,7 @@ namespace Emgu.CV.Platform.Maui.UI
 
             if (button.Text.Equals(_StopCameraButtonText))
             {
-#if __ANDROID__ 
+#if __ANDROID__
                 if (_androidCameraBackend == AndroidCameraBackend.AndroidCamera2)
                     StopCapture();
                 else
@@ -302,7 +310,7 @@ namespace Emgu.CV.Platform.Maui.UI
                     return;
             }
 
-            SetMessage("Please wait...");
+            SetMessage("Please wait while we initialize the model...");
             SetImage(null);
 
             Picker p = this.Picker;
@@ -321,10 +329,14 @@ namespace Emgu.CV.Platform.Maui.UI
                 SetMessage(failMsg);
                 return;
             }
+            else
+            {
+                SetMessage("Model initialized");
+            }
 
             if (images.Length == 0)
             {
-#if __ANDROID__ 
+#if __ANDROID__
                 if (_androidCameraBackend == AndroidCameraBackend.AndroidCamera2)
                 {
                     StartCapture(async delegate (Object captureSender, Mat m)
@@ -383,7 +395,10 @@ namespace Emgu.CV.Platform.Maui.UI
                 //Handle video
                 if (_capture == null)
                 {
-                    InitVideoCapture();
+                    SetMessage("Initializing camera, please wait...");
+                    await Task.Run(() => { this.InitVideoCapture(); });
+                    SetMessage("Camera initialized.");
+                    
                 }
 
                 if (_capture != null)
@@ -411,6 +426,10 @@ namespace Emgu.CV.Platform.Maui.UI
                     Console.WriteLine(exception);
                     SetImage(null);
                     SetMessage(exception.Message);
+
+#if DEBUG
+                    throw;
+#endif
                 }
             }
         }
