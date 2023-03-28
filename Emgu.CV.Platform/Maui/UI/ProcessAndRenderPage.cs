@@ -324,7 +324,7 @@ namespace Emgu.CV.Platform.Maui.UI
 
             if (images.Length == 0)
             {
-#if __ANDROID__ && __USE_ANDROID_CAMERA2__
+#if __ANDROID__ 
                 if (_androidCameraBackend == AndroidCameraBackend.AndroidCamera2)
                 {
                     StartCapture(async delegate (Object captureSender, Mat m)
