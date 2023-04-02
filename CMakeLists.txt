@@ -94,8 +94,9 @@ ENDIF()
 #  endif()	
 #ENDIF()
 
-IF (EMGU_CV_WITH_FREETYPE)
-	
+IF(IS_UBUNTU)
+  #USE system freetype, do nothing here.
+ELSEIF (EMGU_CV_WITH_FREETYPE)
 #	ExternalProject_Add(
 #		harfbuzz
 #		GIT_REPOSITORY https://github.com/harfbuzz/harfbuzz.git
