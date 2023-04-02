@@ -139,7 +139,6 @@ REM IF "%2%"=="gpu" GOTO SET_BUILD_TYPE
 
 REM For windows phone or store 81 build we should use VS2015
 IF "%3%"=="WindowsPhone81" GOTO SET_BUILD_TYPE
-IF "%3%"=="WindowsPhone81" GOTO SET_BUILD_TYPE
 
 REM Only check for VS2017 if there are no other suitable Visual Studio installation
 REM We may default to VS2017 once CUDA 9 supports VS2017

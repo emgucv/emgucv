@@ -80,8 +80,8 @@ namespace Emgu.CV.Platform.Maui.UI
         {
             get { return _messageLabel; }
         }
-		
-		private Editor _logEditor = new Editor();
+
+        private Editor _logEditor = new Editor();
         /// <summary>
         /// The log message editor
         /// </summary>
@@ -211,7 +211,7 @@ namespace Emgu.CV.Platform.Maui.UI
         /// Create a simple page with a button, message label and image.
         /// </summary>
         /// <param name="additionalButtons">Additional buttons added below the standard button.</param>
-        public ButtonTextImagePage(Microsoft.Maui.Controls.Button[] additionalButtons=null)
+        public ButtonTextImagePage(Microsoft.Maui.Controls.Button[] additionalButtons = null)
         {
             var horizontalLayoutOptions = LayoutOptions.Center;
 
@@ -251,19 +251,19 @@ namespace Emgu.CV.Platform.Maui.UI
             //_mainLayout.BackgroundColor = Color.Blue;
 
             _mainLayout.Children.Add(DisplayImage);
-            DisplayImage.BackgroundColor = 
+            DisplayImage.BackgroundColor =
                 Microsoft.Maui.Graphics.Color.FromRgb(1.0, 0.0, 0.0);
 
             //_mainLayout.Children.Add(MessageLabel);
-			
-			LogEditor.Text = "";
+
+            LogEditor.Text = "";
             LogEditor.HorizontalOptions = LayoutOptions.Center;
             LogEditor.VerticalOptions = LayoutOptions.Center;
             LogEditor.FontSize = LogEditor.FontSize / 2;
-			_mainLayout.Children.Add(LogEditor);
-			
-			SetLog(null);
-			
+            _mainLayout.Children.Add(LogEditor);
+
+            SetLog(null);
+
             _mainLayout.Padding = new Thickness(10, 10, 10, 10);
 
             this.Content = new Microsoft.Maui.Controls.ScrollView()
@@ -297,7 +297,7 @@ namespace Emgu.CV.Platform.Maui.UI
                 {
                     _hasCameraOption = GetDefaultCameraOption();
                 }
-                    
+
                 return _hasCameraOption.Value;
             }
             set
@@ -366,7 +366,7 @@ namespace Emgu.CV.Platform.Maui.UI
                             options.Add("Camera");
                     }
                 }
-                
+
 
                 if (options.Count == 1)
                 {
@@ -386,13 +386,13 @@ namespace Emgu.CV.Platform.Maui.UI
                 {
 
                     using (Stream stream = await FileSystem.OpenAppPackageFileAsync(imageNames[i]))
-                        using(MemoryStream ms = new MemoryStream())
-                        {
+                    using (MemoryStream ms = new MemoryStream())
+                    {
                         stream.CopyTo(ms);
                         Mat m = new Mat();
                         CvInvoke.Imdecode(ms.ToArray(), ImreadModes.Color, m);
                         mats[i] = m;
-                        }
+                    }
 
                 }
                 else if (action.Equals("Photo Library"))
@@ -482,8 +482,8 @@ namespace Emgu.CV.Platform.Maui.UI
                     label.Text = message;
 
                     label.LineBreakMode = LineBreakMode.WordWrap;
-                 //label.WidthRequest = this.Width;
-             }
+                    //label.WidthRequest = this.Width;
+                }
             );
         }
 

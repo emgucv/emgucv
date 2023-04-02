@@ -398,7 +398,7 @@ namespace Emgu.CV.Platform.Maui.UI
                     SetMessage("Initializing camera, please wait...");
                     await Task.Run(() => { this.InitVideoCapture(); });
                     SetMessage("Camera initialized.");
-                    
+
                 }
 
                 if (_capture != null)
