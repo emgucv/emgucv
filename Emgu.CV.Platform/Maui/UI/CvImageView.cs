@@ -148,22 +148,23 @@ namespace Emgu.CV.Platform.Maui.UI
 #elif WINDOWS
             if (this.ImageView != null)
             {
-            this.Dispatcher.Dispatch(
-                () => {
-               if (image == null)
-               {
-                  this.ImageView.Source = null;
-                  this.ImageView.Visibility = Visibility.Collapsed;
-               }
-               else
-               {
+                this.Dispatcher.Dispatch(
+                    () =>
+                    {
+                        if (image == null)
+                        {
+                            this.ImageView.Source = null;
+                            this.ImageView.Visibility = Visibility.Collapsed;
+                        }
+                        else
+                        {
 
-                  this.ImageView.Source = image.ToWritableBitmap();
-                  //this.ImageView.Source = image.ToBitmapSource();
-                  this.ImageView.Visibility = Visibility.Visible;
+                            this.ImageView.Source = image.ToWritableBitmap();
+                            //this.ImageView.Source = image.ToBitmapSource();
+                            this.ImageView.Visibility = Visibility.Visible;
 
-               }
-            });
+                        }
+                    });
             }
 #else
             if (image == null)
