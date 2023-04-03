@@ -78,7 +78,7 @@ else
     #VTK_OPTION=-DVTK_DIR:String="$INSTALL_FOLDER"
     #cd ../..
 
-    CONTRIB_OPTION=( -DWITH_VTK:BOOL=TRUE -DOPENCV_EXTRA_MODULES_PATH=../../../../opencv_contrib/modules )
+    CONTRIB_OPTION=( -DWITH_VTK:BOOL=TRUE -DWITH_GSTREAMER:BOOL=TRUE -DOPENCV_EXTRA_MODULES_PATH=../../../../opencv_contrib/modules )
 fi
 
 #cd platforms/ubuntu/20.04
