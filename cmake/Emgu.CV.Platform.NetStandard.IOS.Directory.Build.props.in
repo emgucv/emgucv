@@ -1,4 +1,7 @@
 <?xml version="1.0"?>
 <Project>
+  <PropertyGroup>
+    <version>${CPACK_PACKAGE_VERSION}</version>
+  </PropertyGroup>
   ${EMGUCV_IOS_POST_PROCESS_BINARY}
 </Project>
