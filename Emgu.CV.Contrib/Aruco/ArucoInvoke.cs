@@ -26,6 +26,7 @@ namespace Emgu.CV.Aruco
             CvInvoke.Init();
         }
 
+        /*
         /// <summary>
         /// Draw a canonical marker image.
         /// </summary>
@@ -46,7 +47,7 @@ namespace Emgu.CV.Aruco
             int sidePixels, 
             IntPtr img, 
             int borderBits);
-
+        */
 
         /// <summary>
         /// Performs marker detection in the input image. Only markers included in the specific dictionary are searched. For each detected marker, it returns the 2D position of its corner in the image and its corresponding identifier. Note that this function does not perform pose estimation.
