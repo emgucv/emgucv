@@ -22,6 +22,8 @@ else
 fi
 
 BUILD_VTK=false
+BUILD_FREETYPE=false
+FREETYPE_OPTION=-DEMGU_CV_WITH_FREETYPE:BOOL=FALSE
 
 if [[ $# -lt 2 ]]; then
     CV_CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules
@@ -40,6 +42,11 @@ else
       TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
       echo "Building with vtk"
       BUILD_VTK=true
+	elif [ "$2" == "freetype" ]; then
+	  CV_CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules
+      FREETYPE_OPTION=-DEMGU_CV_WITH_FREETYPE:BOOL=TRUE
+      echo "Building with freetype"
+      BUILD_FREETYPE=true
     else
       CV_CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules
       TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
@@ -54,15 +61,19 @@ cmake $BUILD_ARCH $OSX_SYSROOT_OPTION -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAK
 cmake --build . --config Release --target install --parallel
 cd ../..
 
+
+
 if [ "$CV_CONTRIB_OPTION" != "" ]; then
     cd 3rdParty
     
+	if [ BUILD_FREETYPE ]; then  
     cd freetype2
     mkdir -p $BUILD_FOLDER
     cd $BUILD_FOLDER
     cmake $BUILD_ARCH $OSX_SYSROOT_OPTION -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" ../
     cmake --build . --config Release --target install --parallel
     cd ../..
+	fi
 
     if [ "$2" == "openvino" ]; then
 	cd openvino
@@ -77,12 +88,14 @@ if [ "$CV_CONTRIB_OPTION" != "" ]; then
     
     cd ..
 
+    if [ BUILD_FREETYPE ]; then  
     cd harfbuzz
     mkdir -p $BUILD_FOLDER
     cd $BUILD_FOLDER
     cmake $BUILD_ARCH $OSX_SYSROOT_OPTION -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DHB_HAVE_FREETYPE:BOOL=TRUE -DHB_BUILD_TESTS:BOOL=FALSE ..
     cmake --build . --config Release --target install --parallel 
     cd ../..
+	fi
 
     cd hdf5
     mkdir -p $BUILD_FOLDER
@@ -104,7 +117,6 @@ if [ "$CV_CONTRIB_OPTION" != "" ]; then
 	cd ../..
     fi
 else
-    FREETYPE_OPTION=-DEMGU_CV_WITH_FREETYPE:BOOL=FALSE
     VTK_OPTION=  
 fi
 
