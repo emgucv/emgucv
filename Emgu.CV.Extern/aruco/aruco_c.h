@@ -61,7 +61,6 @@ CVAPI(cv::aruco::Dictionary*) cveArucoExtendDictionary(
 	cv::Ptr<cv::aruco::Dictionary>* baseDictionary,
 	int randomSeed,
 	cv::Ptr<cv::aruco::Dictionary>** sharedPtr);
-//CVAPI(cv::aruco::Dictionary*) cveArucoDictionaryCreate2(int nMarkers, int markerSize, cv::Ptr<cv::aruco::Dictionary>* baseDictionary, cv::Ptr<cv::aruco::Dictionary>** sharedPtr);
 CVAPI(void) cveArucoDictionaryRelease(cv::aruco::Dictionary** dict, cv::Ptr<cv::aruco::Dictionary>** sharedPtr);
 
 //CVAPI(void) cveArucoDrawMarker(cv::aruco::Dictionary* dictionary, int id, int sidePixels, cv::_OutputArray* img, int borderBits);

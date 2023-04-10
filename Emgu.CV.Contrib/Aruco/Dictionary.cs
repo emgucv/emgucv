@@ -33,26 +33,12 @@ namespace Emgu.CV.Aruco
         }
 
         /// <summary>
-        /// Generates a new customizable marker dictionary.
+        /// Generates a new marker dictionary.
         /// </summary>
-        /// <param name="nMarkers">number of markers in the dictionary</param>
-        /// <param name="markerSize">number of bits per dimension of each markers</param>
-        public Dictionary(int nMarkers, int markerSize)
+        public Dictionary()
         {
             //_predefined = false;
-            _ptr = ArucoInvoke.cveArucoDictionaryCreate1(nMarkers, markerSize, ref _sharedPtr);
-        }
-
-        /// <summary>
-        /// Generates a new customizable marker dictionary.
-        /// </summary>
-        /// <param name="nMarkers">number of markers in the dictionary</param>
-        /// <param name="markerSize">number of bits per dimension of each markers</param>
-        /// <param name="baseDictionary">Include the markers in this dictionary at the beginning (optional)</param>
-        public Dictionary(int nMarkers, int markerSize, Dictionary baseDictionary)
-        {
-            //_predefined = false;
-            _ptr = ArucoInvoke.cveArucoDictionaryCreate2(nMarkers, markerSize, baseDictionary._sharedPtr, ref _sharedPtr);
+            _ptr = ArucoInvoke.cveArucoDictionaryCreate(ref _sharedPtr);
         }
 
         /// <summary>
@@ -182,10 +168,7 @@ namespace Emgu.CV.Aruco
         internal static extern IntPtr cveArucoGetPredefinedDictionary(Dictionary.PredefinedDictionaryName name, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveArucoDictionaryCreate1(int nMarkers, int markerSize, ref IntPtr sharedPtr);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveArucoDictionaryCreate2(int nMarkers, int markerSize, IntPtr baseDictionary, ref IntPtr sharedPtr);
+        internal static extern IntPtr cveArucoDictionaryCreate(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveArucoDictionaryRelease(ref IntPtr dict, ref IntPtr sharedPtr);

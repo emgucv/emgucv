@@ -29,6 +29,7 @@ cv::aruco::Dictionary* cveArucoDictionaryCreate(cv::Ptr<cv::aruco::Dictionary>**
 	throw_no_aruco();
 #endif
 }
+
 cv::aruco::Dictionary* cveArucoExtendDictionary(
 	int nMarkers, 
 	int markerSize, 
