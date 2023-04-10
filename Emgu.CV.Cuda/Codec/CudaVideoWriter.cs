@@ -116,7 +116,7 @@ namespace Emgu.CV.Cuda
         /// </summary>
         public void Release()
         {
-            CudaInvoke.cudaVideoReaderRelease(ref _ptr);
+            CudaInvoke.cudaVideoWriterRelease(_ptr);
         }
     }
 
@@ -134,7 +134,7 @@ namespace Emgu.CV.Cuda
 
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cudaVideoWriterRelease(ref IntPtr writer);
+        internal static extern void cudaVideoWriterRelease(IntPtr writer);
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cudaVideoWriterDelete(ref IntPtr writer);
