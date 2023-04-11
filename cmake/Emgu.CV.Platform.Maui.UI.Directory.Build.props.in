@@ -1,4 +1,6 @@
 <?xml version="1.0"?>
 <Project>
+  <!-- https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory?view=vs-2022 -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
   ${EMGUCV_MAUI_POST_PROCESS_BINARY}
 </Project>
