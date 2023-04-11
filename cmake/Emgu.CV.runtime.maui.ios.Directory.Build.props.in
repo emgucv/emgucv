@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <Project>
- <PropertyGroup>
+  <!-- https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory?view=vs-2022 -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
     <PackageId>${EMGUCV_MAUI_IOS_NUGET_ID}</PackageId>
 	
 	<title>${EMGUCV_MAUI_IOS_NUGET_TITLE}</title>
@@ -25,7 +28,7 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
     <PackageProjectUrl>${NUGET_EMGU_URL}</PackageProjectUrl>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     
- </PropertyGroup>
+  </PropertyGroup>
  
     <ItemGroup>
       <None Include="..\..\..\LICENSE.txt">
