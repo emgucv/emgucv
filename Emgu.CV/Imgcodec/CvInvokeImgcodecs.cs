@@ -133,11 +133,18 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Saves the image to the specified file. The image format is chosen depending on the filename extension, see cvLoadImage. Only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function. If the format, depth or channel order is different, use cvCvtScale and cvCvtColor to convert it before saving, or use universal cvSave to save the image to XML or YAML format
+        /// Saves the image to the specified file. The function imwrite saves the image to the specified file. The image format is chosen based on the filename extension (see cv::imread for the list of extensions).
         /// </summary>
         /// <param name="filename">The name of the file to be saved to</param>
         /// <param name="image">The image to be saved</param>
         /// <param name="parameters">The parameters</param>
+        /// <remarks>In general, only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function, with these exceptions:
+        /// 16-bit unsigned(CV_16U) images can be saved in the case of PNG, JPEG 2000, and TIFF formats
+        /// 32-bit float (CV_32F) images can be saved in PFM, TIFF, OpenEXR, and Radiance HDR formats; 3-channel(CV_32FC3) TIFF images will be saved using the LogLuv high dynamic range encoding(4 bytes per pixel)
+        /// PNG images with an alpha channel can be saved using this function.To do this, create 8-bit (or 16-bit) 4-channel image BGRA, where the alpha channel goes last. Fully transparent pixels should have alpha set to 0, fully opaque pixels should have alpha set to 255 / 65535(see the code sample below).
+        /// Multiple images(vector of Mat) can be saved in TIFF format(see the code sample below).
+        /// If the image format is not supported, the image will be converted to 8 - bit unsigned(CV_8U) and saved that way.
+        /// If the format, depth or channel order is different, use Mat::convertTo and cv::cvtColor to convert it before saving. Or, use the universal FileStorage I / O functions to save the image to XML or YAML format.</remarks>
         /// <returns>true if success</returns>
         public static bool Imwrite(String filename, IInputArray image, params KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
         {
