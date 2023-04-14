@@ -64,7 +64,7 @@ CVAPI(cv::cudacodec::VideoWriter*) cudaVideoWriterCreate(
 	cv::cuda::Stream* stream, 
 	cv::Ptr<cv::cudacodec::VideoWriter>** sharedPtr);
 CVAPI(void) cudaVideoWriterDelete(cv::Ptr<cv::cudacodec::VideoWriter>** writer);
-CVAPI(void) cudaVideoWriterRelease(cv::Ptr<cv::cudacodec::VideoWriter>* writer);
+CVAPI(void) cudaVideoWriterRelease(cv::cudacodec::VideoWriter* writer);
 CVAPI(void) cudaVideoWriterWrite(cv::cudacodec::VideoWriter* writer, cv::_InputArray* frame);
 
 //----------------------------------------------------------------------------
