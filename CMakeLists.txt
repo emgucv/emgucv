@@ -1210,7 +1210,7 @@ IF(HAVE_WINDESKTOP_X86)
       )
 ENDIF()
 IF(HAVE_WINDESKTOP_X64)
-	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cu*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\npp*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\concrt*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\msvcp*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\vcruntime*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\vccorlib*.dll\" target=\"runtimes\\win-x64\\native\" />")
+	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cu*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\npp*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\concrt*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\msvcp*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\vcruntime*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\vccorlib*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\zlibwapi.dll\" target=\"runtimes\\win-x64\\native\" />")
 	#Also added configuration files from OpenVino
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\*.xml\" target=\"runtimes\\win-x64\\native\" />")
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\*.json\" target=\"runtimes\\win-x64\\native\" />")
