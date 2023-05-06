@@ -13,6 +13,7 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.Util;
 
@@ -62,6 +63,26 @@ namespace Emgu.CV.Test
                         EmguAssert.IsTrue(data2[i, j] == data[i, j]);
             }
 
+            using (Mat m = new Mat(
+                       data.GetLength(0),
+                       data.GetLength(1),
+                       DepthType.Cv32F,
+                       1,
+                       dataHandle.AddrOfPinnedObject(),
+                       data.GetLength(1) * Marshal.SizeOf<float>()
+                   ))
+            using (Mat m3 = new Mat(m, new Rectangle(1, 1, m.Width-1, m.Height-1)))
+            {
+                float[,] data2 = m.GetData(true) as float[,];
+                for (int i = 0; i < data2.GetLength(0); i++)
+                    for (int j = 0; j < data2.GetLength(1); j++)
+                        EmguAssert.IsTrue(data2[i, j] == data[i, j]);
+
+                float[,] data3 = m3.GetData(true) as float[,];
+                for (int i = 0; i < data3.GetLength(0); i++)
+                    for (int j = 0; j < data3.GetLength(1); j++)
+                        EmguAssert.IsTrue(data3[i, j] == data[i + 1, j + 1]);
+            }
             dataHandle.Free();
         }
 

@@ -412,7 +412,16 @@ namespace Emgu.CV
             }
 
             GCHandle handle = GCHandle.Alloc(array, GCHandleType.Pinned);
-            CvInvoke.cveMemcpy(handle.AddrOfPinnedObject(), DataPointer, byteSize);
+            using (Mat dst = new Mat(
+                       this.Size, 
+                       this.Depth, 
+                       this.NumberOfChannels, 
+                       handle.AddrOfPinnedObject(),
+                       byteSize / Height))
+            {
+                this.CopyTo(dst);
+            }
+
             handle.Free();
             return array;
         }
