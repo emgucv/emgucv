@@ -18,11 +18,11 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Forward = 0,
         /// <summary>
-        /// Do inverse 1D or 2D transform. The result is not scaled. CV_DXT_FORWARD and CV_DXT_INVERSE are mutually exclusive, of course
+        /// Do inverse 1D or 2D transform. The result is not scaled. Forward and Inverse are mutually exclusive, of course
         /// </summary>
         Inverse = 1,
         /// <summary>
-        /// Scale the result: divide it by the number of array elements. Usually, it is combined with CV_DXT_INVERSE, and one may use a shortcut 
+        /// Scale the result: divide it by the number of array elements. Usually, it is combined with Inverse, and one may use a shortcut 
         /// </summary>
         Scale = 2,
         /// <summary>

@@ -13,6 +13,7 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using Emgu.CV;
+using Emgu.CV.Cuda;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
@@ -1001,77 +1002,92 @@ namespace Emgu.CV.Test
         public void TestMatrixDFT()
         {
             //The matrix to be transformed.
-            Matrix<float> matB = new Matrix<float>(
-               new float[,] {
-            {1.0f / 16.0f, 1.0f / 16.0f, 1.0f / 16.0f},
-            {1.0f / 16.0f, 8.0f / 16.0f, 1.0f / 16.0f},
-            {1.0f / 16.0f, 1.0f / 16.0f, 1.0f / 16.0f}});
+            Mat matB = new Mat(new Size(3, 3), DepthType.Cv32F, 1);
+            matB.SetTo(new float[]
+            {
+                1.0f / 16.0f, 1.0f / 16.0f, 1.0f / 16.0f,
+                1.0f / 16.0f, 8.0f / 16.0f, 1.0f / 16.0f,
+                1.0f / 16.0f, 1.0f / 16.0f, 1.0f / 16.0f
+            });
 
-            Matrix<float> matBDft = new Matrix<float>(
-               CvInvoke.GetOptimalDFTSize(matB.Rows),
-               CvInvoke.GetOptimalDFTSize(matB.Cols));
-            CvInvoke.CopyMakeBorder(matB, matBDft, 0, matBDft.Height - matB.Height, 0, matBDft.Width - matB.Width, Emgu.CV.CvEnum.BorderType.Constant, new MCvScalar());
-            Matrix<float> dftIn = new Matrix<float>(matBDft.Rows, matBDft.Cols, 2);
-            Matrix<float> matBDftBlank = matBDft.CopyBlank();
-            using (Util.VectorOfMat mv = new Util.VectorOfMat(new Mat[] { matBDft.Mat, matBDftBlank.Mat }))
+            int rows = CvInvoke.GetOptimalDFTSize(matB.Rows);
+            int cols = CvInvoke.GetOptimalDFTSize(matB.Cols);
+            Mat matBDft = new Mat(new Size(cols, rows), DepthType.Cv32F, 1);
+
+            CvInvoke.CopyMakeBorder(matB, matBDft, 0, rows - matB.Height, 0, cols - matB.Width, Emgu.CV.CvEnum.BorderType.Constant, new MCvScalar());
+            Mat dftIn = new Mat();
+            Mat matBDftBlank = new Mat(matBDft.Size, DepthType.Cv32F, 1);
+            matBDftBlank.SetTo(new MCvScalar(0.0));
+            using (Util.VectorOfMat mv = new Util.VectorOfMat( matBDft, matBDftBlank))
                 CvInvoke.Merge(mv, dftIn);
 
-            Matrix<float> dftOut = new Matrix<float>(dftIn.Rows, dftIn.Cols, 2);
+            Mat dftOut = new Mat();
             //perform the Fourior Transform
             CvInvoke.Dft(dftIn, dftOut, Emgu.CV.CvEnum.DxtType.Forward, matB.Rows);
 
             //The real part of the Fourior Transform
-            Matrix<float> outReal = new Matrix<float>(matBDft.Size);
+            Mat outReal = new Mat();
+            CvInvoke.ExtractChannel(dftOut, outReal, 0);
             //The imaginary part of the Fourior Transform
-            Matrix<float> outIm = new Matrix<float>(matBDft.Size);
-            using (Util.VectorOfMat vm = new Util.VectorOfMat())
-            {
-                vm.Push(outReal.Mat);
-                vm.Push(outIm.Mat);
-                CvInvoke.Split(dftOut, vm);
-            }
+            Mat outIm = new Mat();
+            CvInvoke.ExtractChannel(dftOut, outIm, 1);
+          
         }
 
         [TestAttribute]
         public void TestImageDFT()
         {
-            Image<Gray, float> matA = EmguAssert.LoadImage<Gray, float>("stuff.jpg");
+            Mat imageA = EmguAssert.LoadMat("stuff.jpg", ImreadModes.Grayscale);
+            Mat matA = new Mat();
+            imageA.ConvertTo(matA, DepthType.Cv32F);
 
-            //The matrix to be convolved with matA, a bluring filter
-            Matrix<float> matB = new Matrix<float>(
-               new float[,] {
-            {1.0f / 16.0f, 1.0f / 16.0f, 1.0f / 16.0f},
-            {1.0f / 16.0f, 8.0f / 16.0f, 1.0f / 16.0f},
-            {1.0f / 16.0f, 1.0f / 16.0f, 1.0f / 16.0f}});
+            //The matrix to be convolved with matA, a blurring filter
+            Mat matB = new Mat(new Size(3, 3), DepthType.Cv32F, 1);
+            matB.SetTo(new float[]
+            {
+                1.0f / 16.0f, 1.0f / 16.0f, 1.0f / 16.0f,
+                1.0f / 16.0f, 8.0f / 16.0f, 1.0f / 16.0f,
+                1.0f / 16.0f, 1.0f / 16.0f, 1.0f / 16.0f
+            });
 
-            Image<Gray, float> convolvedImage = new Image<Gray, float>(new Size(matA.Width + matB.Width - 1, matA.Height + matB.Height - 1));
-
-            Matrix<float> dftA = new Matrix<float>(
-               CvInvoke.GetOptimalDFTSize(convolvedImage.Rows),
-               CvInvoke.GetOptimalDFTSize(convolvedImage.Cols));
-            matA.CopyTo(dftA.GetSubRect(matA.ROI));
-
+            int dftRows = CvInvoke.GetOptimalDFTSize(matA.Height + matB.Height - 1);
+            int dftCols = CvInvoke.GetOptimalDFTSize(matA.Width + matB.Width - 1);
+            Mat dftA = new Mat(new Size(dftCols, dftRows), DepthType.Cv32F, 1);
+            CvInvoke.CopyMakeBorder(matA, dftA, 0, dftRows - matA.Rows, 0, dftCols - matA.Cols, BorderType.Constant, new MCvScalar(0) );
             CvInvoke.Dft(dftA, dftA, Emgu.CV.CvEnum.DxtType.Forward, matA.Rows);
 
-            Matrix<float> dftB = new Matrix<float>(dftA.Size);
-            matB.CopyTo(dftB.GetSubRect(new Rectangle(Point.Empty, matB.Size)));
+            Mat dftB = new Mat(dftA.Size, DepthType.Cv32F, 1);
+            CvInvoke.CopyMakeBorder(matB, dftB, 0, dftRows - matB.Rows, 0, dftCols - matB.Cols, BorderType.Constant, new MCvScalar(0));
             CvInvoke.Dft(dftB, dftB, Emgu.CV.CvEnum.DxtType.Forward, matB.Rows);
 
-            CvInvoke.MulSpectrums(dftA, dftB, dftA, Emgu.CV.CvEnum.MulSpectrumsType.Default, false);
-            CvInvoke.Dft(dftA, dftA, Emgu.CV.CvEnum.DxtType.Inverse, convolvedImage.Rows);
-            dftA.GetSubRect(new Rectangle(Point.Empty, convolvedImage.Size)).CopyTo(convolvedImage);
+            using (Mat dftConvolvedImage = new Mat())
+            {
+                CvInvoke.MulSpectrums(dftA, dftB, dftConvolvedImage, Emgu.CV.CvEnum.MulSpectrumsType.Default, false);
+                CvInvoke.Dft(dftConvolvedImage, dftA, Emgu.CV.CvEnum.DxtType.InvScale, dftRows);
+            }
+
+            Mat convolvedImage = new Mat();
+            using (Mat tmp = new Mat(dftA, new Rectangle(Point.Empty, matA.Size)))
+            {
+                tmp.ConvertTo(convolvedImage, DepthType.Cv8U);
+
+                //CvInvoke.Imshow("hello", convolvedImage);
+                //CvInvoke.WaitKey();
+            }
         }
 
         [TestAttribute]
         public void TestImageDFT2()
         {
-            Image<Gray, float> image = EmguAssert.LoadImage<Gray, float>("stuff.jpg");
+            Mat image = EmguAssert.LoadMat("stuff.jpg", ImreadModes.Grayscale);
+            Mat mat = new Mat();
+            image.ConvertTo(mat, DepthType.Cv32F);
 
-            Mat complexImage = new Mat(image.Size, DepthType.Cv32F, 2);
+            Mat complexImage = new Mat(mat.Size, DepthType.Cv32F, 2);
             complexImage.SetTo(new MCvScalar(0, 0));
-            CvInvoke.InsertChannel(image, complexImage, 0);
+            CvInvoke.InsertChannel(mat, complexImage, 0);
 
-            Matrix<float> dft = new Matrix<float>(image.Rows, image.Cols, 2);
+            Mat dft = new Mat();
 
             CvInvoke.Dft(complexImage, dft, Emgu.CV.CvEnum.DxtType.Forward, 0);
         }
@@ -1080,11 +1096,14 @@ namespace Emgu.CV.Test
         [TestAttribute]
         public void TestImageDFTUmat()
         {
-            Image<Gray, float> image = EmguAssert.LoadImage<Gray, float>("stuff.jpg");
+            //Image<Gray, float> image = EmguAssert.LoadImage<Gray, float>("stuff.jpg");
+            Mat image = EmguAssert.LoadMat("stuff.jpg", ImreadModes.Grayscale);
+            Mat mat = new Mat();
+            image.ConvertTo(mat, DepthType.Cv32F);
 
-            UMat complexImage = new UMat(image.Size, DepthType.Cv32F, 2);
+            UMat complexImage = new UMat(mat.Size, DepthType.Cv32F, 2);
             complexImage.SetTo(new MCvScalar(0, 0));
-            CvInvoke.InsertChannel(image, complexImage, 0);
+            CvInvoke.InsertChannel(mat, complexImage, 0);
 
             UMat dft = new UMat();
 
