@@ -17,6 +17,7 @@ using Emgu.CV.Cuda;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
+using Emgu.CV.Superres;
 
 #if !(__IOS__ || NETFX_CORE || __ANDROID__ || NETCOREAPP)
 using Emgu.CV.UI;
@@ -1079,24 +1080,31 @@ namespace Emgu.CV.Test
         [TestAttribute]
         public void TestImageDFT2()
         {
-            Mat image = EmguAssert.LoadMat("stuff.jpg", ImreadModes.Grayscale);
-            Mat mat = new Mat();
-            image.ConvertTo(mat, DepthType.Cv32F);
+            Mat image = EmguAssert.LoadMat("lena.jpg", ImreadModes.Grayscale);
+            Mat matF = new Mat();
+            image.ConvertTo(matF, DepthType.Cv32F);
 
-            Mat complexImage = new Mat(mat.Size, DepthType.Cv32F, 2);
+            Mat complexImage = new Mat(matF.Size, DepthType.Cv32F, 2);
             complexImage.SetTo(new MCvScalar(0, 0));
-            CvInvoke.InsertChannel(mat, complexImage, 0);
+            CvInvoke.InsertChannel(matF, complexImage, 0);
 
             Mat dft = new Mat();
 
             CvInvoke.Dft(complexImage, dft, Emgu.CV.CvEnum.DxtType.Forward, 0);
+            CvInvoke.Dft(dft, complexImage, Emgu.CV.CvEnum.DxtType.InvScale, 0);
+
+            CvInvoke.ExtractChannel(complexImage, matF, 0);
+            Mat result = new Mat();
+            matF.ConvertTo(result, DepthType.Cv8U);
+
+            //CvInvoke.Imshow("result", result);
+            //CvInvoke.WaitKey();
         }
 
 
         [TestAttribute]
         public void TestImageDFTUmat()
         {
-            //Image<Gray, float> image = EmguAssert.LoadImage<Gray, float>("stuff.jpg");
             Mat image = EmguAssert.LoadMat("stuff.jpg", ImreadModes.Grayscale);
             Mat mat = new Mat();
             image.ConvertTo(mat, DepthType.Cv32F);
@@ -1835,6 +1843,58 @@ namespace Emgu.CV.Test
             Image<Rgb, Byte> img2 = new Image<Rgb, byte>(EmguAssert.GetFile("out.png"));
             Assert.IsTrue(img.Equals(img2));
 #endif
+        }
+
+        [TestAttribute]
+        public static void TestSuperres()
+        {
+            Superres.SuperResolution.OpticalFlowType flowType;
+            if (CudaInvoke.HasCuda)
+            {
+                flowType = SuperResolution.OpticalFlowType.Btvl1Gpu;
+                Trace.WriteLine("Using GPU for SupperResolution.");
+            }
+            else
+            {
+                flowType = SuperResolution.OpticalFlowType.Btvl;
+                Trace.WriteLine("Using CPU for SupperResolution.");
+            }
+
+            using (Superres.FrameSource frameSource = new Superres.FrameSource("car.avi", false))
+            using (Superres.SuperResolution sr = new Superres.SuperResolution(flowType, frameSource))
+            {
+                Stopwatch watch = new Stopwatch();
+                int counter = 0;
+
+                while (true)
+                {
+                    watch.Reset();
+                    watch.Start();
+                    Mat frame = new Mat();
+                    sr.NextFrame(frame);
+
+                    watch.Stop();
+                    if (watch.ElapsedMilliseconds < 200)
+                    {
+                        Thread.Sleep(200 - (int) watch.ElapsedMilliseconds);
+                    }
+
+                    if (!frame.IsEmpty)
+                    {
+                        Trace.WriteLine(String.Format("Frame {0}: {1} milliseconds.", counter++,
+                            watch.ElapsedMilliseconds));
+                    }
+                    else
+                    {
+                        Trace.WriteLine(String.Format("{0} frames processed", counter));
+                        break;
+                    }
+
+                    // For unit testing, let's not process too many frames.
+                    if (counter >2)
+                        break;
+                }
+            }
         }
 
         [TestAttribute]
