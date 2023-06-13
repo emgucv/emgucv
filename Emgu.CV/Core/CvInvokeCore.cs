@@ -920,8 +920,8 @@ namespace Emgu.CV
         public static void Dft(
             IInputArray src,
             IOutputArray dst,
-            CvEnum.DxtType flags,
-            int nonzeroRows)
+            CvEnum.DxtType flags=CvEnum.DxtType.Forward,
+            int nonzeroRows=0)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
