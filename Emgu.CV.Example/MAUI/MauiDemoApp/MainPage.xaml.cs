@@ -59,6 +59,9 @@ namespace MauiDemoApp
             Button licensePlateRecognitionButton = new Button();
             licensePlateRecognitionButton.Text = "License Plate Recognition (DNN Module)";
 
+            Button superresButton = new Button();
+            superresButton.Text = "Super resolution (DNN Module)";
+
             List<View> buttonList = new List<View>()
             {
                 helloWorldButton,
@@ -69,7 +72,8 @@ namespace MauiDemoApp
                 maskRcnnButton,
                 stopSignDetectionButton,
                 yoloButton,
-                licensePlateRecognitionButton
+                licensePlateRecognitionButton,
+                superresButton
             };
 
             var openCVConfigDict = CvInvoke.ConfigDict;
@@ -231,12 +235,30 @@ namespace MauiDemoApp
                 this.Navigation.PushAsync(yoloPage);
             };
 
-
+            superresButton.Clicked += (sender, args) =>
+            {
+                ProcessAndRenderPage superresPage = new ProcessAndRenderPage(
+                    new Superres(),
+                    "Super resolution",
+                    "dog416.png",
+                    "");
+                Picker p = superresPage.Picker;
+                p.Title = "Super resolution version";
+                p.IsVisible = true;
+                p.Items.Add("EdsrX2");
+                p.Items.Add("EdsrX3");
+                p.Items.Add("EdsrX4");
+                p.Items.Add("EspcnX2");
+                p.Items.Add("EspcnX3");
+                p.Items.Add("EspcnX4");
+                this.Navigation.PushAsync(superresPage);
+            };
 
             maskRcnnButton.IsVisible = haveDNN;
             //faceLandmarkDetectionButton.IsVisible = haveDNN;
             stopSignDetectionButton.IsVisible = haveDNN;
             yoloButton.IsVisible = haveDNN;
+            superresButton.IsVisible = haveDNN;
             sceneTextDetectionButton.IsVisible = haveDNN && haveFreetype;
             licensePlateRecognitionButton.IsVisible = hasInferenceEngine;
             featureDetectionButton.IsVisible = haveFeatures2D;

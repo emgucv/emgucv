@@ -104,5 +104,20 @@ namespace Emgu.CV.Test
 
         }
 
+#if !TEST_MODELS
+        [Ignore("Ignore from test run by default.")]
+#endif
+        [Test]
+        public async Task TestDnnSuperres()
+        {
+            using (Mat m = EmguAssert.LoadMat("pedestrian"))
+            using (Emgu.CV.Models.Superres detector = new Models.Superres())
+            {
+                await detector.Init(Models.Superres.SuperresVersion.EdsrX2, DownloadManager_OnDownloadProgressChanged);
+                String text = detector.ProcessAndRender(m, m);
+            }
+
+        }
+
     }
 }
