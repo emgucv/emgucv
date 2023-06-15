@@ -414,7 +414,7 @@ namespace Emgu.CV.Platform.Maui.UI
                     else
                     */
                     {
-                        var fileResult = await FilePicker.PickAsync(PickOptions.Images);
+                        FileResult fileResult = await FilePicker.PickAsync(PickOptions.Images);
                         if (fileResult == null) //canceled
                             return null;
                         using (Stream s = await fileResult.OpenReadAsync())
