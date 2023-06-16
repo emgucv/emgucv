@@ -243,10 +243,10 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       COMPONENT emgucv_example_source
       FILES_MATCHING 
       PATTERN "*.cs"
+	  PATTERN "*.resx"
       PATTERN "*.csproj"
       PATTERN "*.config"
       PATTERN "*.shproj"
-      PATTERN "*.Xamarin"
       PATTERN "*.projitems"
       PATTERN "*.axml"
       PATTERN "*.xaml"
@@ -334,7 +334,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       DESTINATION Emgu.CV.Example/FaceDetectionVB/
       COMPONENT emgucv_example_source
       FILES_MATCHING 
-      PATTERN "*.cs"
+      PATTERN "*.vb"
       PATTERN "*.config"
       PATTERN "*.vbproj"
       PATTERN "*.projitems"
@@ -342,7 +342,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.xaml"
       PATTERN "*.xml"
       PATTERN "*.txt"
-      PATTERN "*.png"
+      PATTERN "*.jpg"
       PATTERN "*.dll"
       PATTERN "*.json"
       PATTERN ".git" EXCLUDE
