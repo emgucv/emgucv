@@ -251,6 +251,14 @@ namespace MauiDemoApp
                 p.Items.Add("EspcnX2");
                 p.Items.Add("EspcnX3");
                 p.Items.Add("EspcnX4");
+                p.Items.Add("FsrcnnX2");
+                p.Items.Add("FsrcnnX3");
+                p.Items.Add("FsrcnnX4");
+                p.Items.Add("LapsrnX2");
+                p.Items.Add("LapsrnX4");
+                p.Items.Add("LapsrnX8");
+
+
                 this.Navigation.PushAsync(superresPage);
             };
 
