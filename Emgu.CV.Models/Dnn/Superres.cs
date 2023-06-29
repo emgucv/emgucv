@@ -61,6 +61,32 @@ namespace Emgu.CV.Models
             /// Superres Espcn x4
             /// </summary>
             EspcnX4,
+            /// <summary>
+            /// Superres Fsrcnn x2
+            /// </summary>
+            FsrcnnX2,
+            /// <summary>
+            /// Superres Fsrcnn x3
+            /// </summary>
+            FsrcnnX3,
+            /// <summary>
+            /// Superres Fsrcnn x4
+            /// </summary>
+            FsrcnnX4,
+            /// <summary>
+            /// Superres Lapsrn x2
+            /// </summary>
+            LapsrnX2,
+            /// <summary>
+            /// Superres Lapsrn x4
+            /// </summary>
+            LapsrnX4,
+            /// <summary>
+            /// Superres Lapsrn x8
+            /// </summary>
+            LapsrnX8
+
+
         }
 
         /// <summary>
@@ -151,7 +177,60 @@ namespace Emgu.CV.Models
                     algorithm = "espcn";
                     scale = 4;
                 }
-
+                else if (version == SuperresVersion.FsrcnnX2)
+                {
+                    manager.AddFile(
+                        "https://github.com/Saafke/FSRCNN_Tensorflow/raw/master/models/FSRCNN_x2.pb",
+                        _modelFolderName,
+                        null);
+                    algorithm = "fsrcnn";
+                    scale = 2;
+                }
+                else if (version == SuperresVersion.FsrcnnX3)
+                {
+                    manager.AddFile(
+                        "https://github.com/Saafke/FSRCNN_Tensorflow/raw/master/models/FSRCNN_x3.pb",
+                        _modelFolderName,
+                        null);
+                    algorithm = "fsrcnn";
+                    scale = 3;
+                }
+                else if (version == SuperresVersion.FsrcnnX4)
+                {
+                    manager.AddFile(
+                        "https://github.com/Saafke/FSRCNN_Tensorflow/raw/master/models/FSRCNN_x4.pb",
+                        _modelFolderName,
+                        null);
+                    algorithm = "fsrcnn";
+                    scale = 4;
+                }
+                else if (version == SuperresVersion.LapsrnX2)
+                {
+                    manager.AddFile(
+                        "https://github.com/fannymonori/TF-LapSRN/raw/master/export/LapSRN_x2.pb",
+                        _modelFolderName,
+                        null);
+                    algorithm = "lapsrn";
+                    scale = 2;
+                }
+                else if (version == SuperresVersion.LapsrnX4)
+                {
+                    manager.AddFile(
+                        "https://github.com/fannymonori/TF-LapSRN/raw/master/export/LapSRN_x4.pb",
+                        _modelFolderName,
+                        null);
+                    algorithm = "lapsrn";
+                    scale = 4;
+                }
+                else if (version == SuperresVersion.LapsrnX8)
+                {
+                    manager.AddFile(
+                        "https://github.com/fannymonori/TF-LapSRN/raw/master/export/LapSRN_x8.pb",
+                        _modelFolderName,
+                        null);
+                    algorithm = "lapsrn";
+                    scale = 8;
+                }
 
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
@@ -249,6 +328,18 @@ namespace Emgu.CV.Models
                     v = SuperresVersion.EspcnX3;
                 else if (versionStr.Equals("EspcnX4"))
                     v = SuperresVersion.EspcnX4;
+                else if (versionStr.Equals("FsrcnnX2"))
+                    v = SuperresVersion.FsrcnnX2;
+                else if (versionStr.Equals("FsrcnnX3"))
+                    v = SuperresVersion.FsrcnnX3;
+                else if (versionStr.Equals("FsrcnnX4"))
+                    v = SuperresVersion.FsrcnnX4;
+                else if (versionStr.Equals("LapsrnX2"))
+                    v = SuperresVersion.LapsrnX2;
+                else if (versionStr.Equals("LapsrnX4"))
+                    v = SuperresVersion.LapsrnX4;
+                else if (versionStr.Equals("LapsrnX8"))
+                    v = SuperresVersion.LapsrnX8;
             }
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
             yield return Init(v, onDownloadProgressChanged);
