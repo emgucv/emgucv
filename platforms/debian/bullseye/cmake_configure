@@ -91,6 +91,7 @@ cmake\
       -DBUILD_OPENEXR:BOOL=TRUE \
       -DBUILD_opencv_python2:BOOL=FALSE \
       -DBUILD_opencv_python3:BOOL=FALSE \
+      -DBUILD_opencv_java:BOOL=FALSE \
       $TOP_FOLDER
 
 #      -DCMAKE_CXX_FLAGS="-DPNG_ARM_NEON_OPT=0 " \
