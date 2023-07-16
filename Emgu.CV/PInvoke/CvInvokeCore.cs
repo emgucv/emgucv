@@ -1674,8 +1674,8 @@ namespace Emgu.CV
             int shift = 0)
         {
             Size axes = new Size();
-            axes.Width = (int)Math.Round(box.Size.Height * 0.5);
-            axes.Height = (int)Math.Round(box.Size.Width * 0.5);
+            axes.Width = (int)Math.Round(box.Size.Width * 0.5);
+            axes.Height = (int)Math.Round(box.Size.Height * 0.5);
 
             Ellipse(img, Point.Round(box.Center), axes, box.Angle, 0, 360, color, thickness, lineType, shift);
         }
