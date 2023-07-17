@@ -4,6 +4,7 @@
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
@@ -1648,12 +1649,12 @@ namespace Emgu.CV
             CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
         {
             using (InputOutputArray ioaImg = img.GetInputOutputArray())
-                cveEllipse(ioaImg, ref center, ref axes, angle, startAngle, endAngle, ref color, thickness, lineType,
+                cveEllipse1(ioaImg, ref center, ref axes, angle, startAngle, endAngle, ref color, thickness, lineType,
                     shift);
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveEllipse(IntPtr img, ref Point center, ref Size axes,
+        private static extern void cveEllipse1(IntPtr img, ref Point center, ref Size axes,
             double angle, double startAngle, double endAngle,
             ref MCvScalar color, int thickness, CvEnum.LineType lineType, int shift);
 
@@ -1662,25 +1663,28 @@ namespace Emgu.CV
         /// Draws a simple or thick elliptic arc or fills an ellipse sector. The arc is clipped by ROI rectangle. A piecewise-linear approximation is used for antialiased arcs and thick arcs. All the angles are given in degrees.
         /// </summary>
         /// <param name="img">Image</param>
-        /// <param name="box">The box the define the ellipse area</param>
+        /// <param name="box">Alternative ellipse representation via RotatedRect. This means that the function draws an ellipse inscribed in the rotated rectangle.</param>
         /// <param name="color">Ellipse color</param>
-        /// <param name="thickness">Thickness of the ellipse arc</param>
+        /// <param name="thickness">Thickness of the ellipse arc outline, if positive. Otherwise, this indicates that a filled ellipse sector is to be drawn.</param>
         /// <param name="lineType">Type of the ellipse boundary</param>
-        /// <param name="shift">Number of fractional bits in the center coordinates and axes' values</param>
         public static void Ellipse(
             IInputOutputArray img,
             RotatedRect box,
             MCvScalar color,
             int thickness = 1,
-            CvEnum.LineType lineType = CvEnum.LineType.EightConnected,
-            int shift = 0)
+            CvEnum.LineType lineType = CvEnum.LineType.EightConnected)
         {
-            Size axes = new Size();
-            axes.Width = (int)Math.Round(box.Size.Height * 0.5);
-            axes.Height = (int)Math.Round(box.Size.Width * 0.5);
-
-            Ellipse(img, Point.Round(box.Center), axes, box.Angle, 0, 360, color, thickness, lineType, shift);
+            using (InputOutputArray ioaImg = img.GetInputOutputArray())
+                cveEllipse2(ioaImg, ref box, ref color, thickness, lineType);
         }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveEllipse2(
+            IntPtr img, 
+            ref RotatedRect box,            
+            ref MCvScalar color, 
+            int thickness, 
+            CvEnum.LineType lineType);
 
         /// <summary>
         /// Draws a marker on a predefined position in an image.

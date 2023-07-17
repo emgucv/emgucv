@@ -1819,7 +1819,7 @@ namespace Emgu.CV.Test
             foreach (PointF p in pts)
                 CvInvoke.Circle(img, Point.Round(p), 2, new MCvScalar(0, 255, 0), 1);
             RotatedRect rect = fittedEllipse.RotatedRect;
-            rect.Angle += 90; //the detected ellipse was off by 90 degree
+            //rect.Angle += 90; //the detected ellipse was off by 90 degree
             CvInvoke.Ellipse(img, rect, new MCvScalar(0, 0, 255), 2);
             #endregion
 
