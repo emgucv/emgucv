@@ -182,9 +182,24 @@ CVAPI(void) cvePolylines(cv::_InputOutputArray* img, cv::_InputArray* pts,
                    bool isClosed, const CvScalar* color,
                    int thickness, int lineType, int shift );
 
-CVAPI(void) cveEllipse(cv::_InputOutputArray* img, CvPoint* center, CvSize* axes,
-              double angle, double startAngle, double endAngle,
-              const CvScalar* color, int thickness, int lineType, int shift );
+CVAPI(void) cveEllipse1(
+	cv::_InputOutputArray* img, 
+	CvPoint* center, 
+	CvSize* axes,
+	double angle, 
+	double startAngle, 
+	double endAngle,
+	const CvScalar* color, 
+	int thickness, 
+	int lineType, 
+	int shift);
+
+CVAPI(void) cveEllipse2(
+	cv::_InputOutputArray* img,
+	cv::RotatedRect* box,
+	CvScalar* color,
+	int thickness,
+	int lineType);
 
 CVAPI(void) cveDrawMarker(
 	cv::_InputOutputArray* img, 

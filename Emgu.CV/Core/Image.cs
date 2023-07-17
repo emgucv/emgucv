@@ -727,10 +727,9 @@ namespace Emgu.CV
         /// <param name="color"> The color of the ellipse </param>
         /// <param name="thickness"> If thickness is less than 1, the ellipse is filled up </param>
         /// <param name="lineType">Line type</param>
-        /// <param name="shift">Number of fractional bits in the center coordinates and radius value</param>
-        public void Draw(Ellipse ellipse, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected, int shift = 0)
+        public void Draw(Ellipse ellipse, TColor color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected)
         {
-            CvInvoke.Ellipse(this, ellipse.RotatedRect, color.MCvScalar, thickness, lineType, shift);
+            CvInvoke.Ellipse(this, ellipse.RotatedRect, color.MCvScalar, thickness, lineType);
         }
 
         /// <summary>

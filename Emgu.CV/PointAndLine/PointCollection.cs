@@ -115,7 +115,7 @@ namespace Emgu.CV
          using (VectorOfPointF vp = new VectorOfPointF(points))
          {
             Ellipse e = new Ellipse(CvInvoke.FitEllipse(vp));
-
+            /*
             //The angle returned by cvFitEllipse2 has the wrong sign.
             //Returned angle is clock wise rotation, what we need for the definition of MCvBox is the counter clockwise rotation.
             //For this, we needs to change the sign of the angle
@@ -123,7 +123,7 @@ namespace Emgu.CV
             b.Angle = -b.Angle;
             if (b.Angle < 0) b.Angle += 360;
             e.RotatedRect = b;
-
+            */
             return e;
          }
       }
