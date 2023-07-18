@@ -703,6 +703,7 @@ SET(HAVE_MAUI OFF)
 IF(HAVE_IOS AND HAVE_MAC_CATALYST AND HAVE_ANDROID AND HAVE_WINDESKTOP)
   SET (HAVE_MAUI ON)
   MESSAGE(STATUS "HAVE_MAUI: ${HAVE_MAUI}")
+  SET(EMGUCV_MAUI_DOTNET_VERSION "net7.0")
 ENDIF()
 
   SET(WINDESKTOP_LABEL "")
@@ -1271,13 +1272,6 @@ IF(HAVE_MACOS)
       <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
     </dependencies>")
 
-  #SET(EMGUCV_MAUI_MACOS_NUGET_DEPENDENCY "
-  #  <dependencies>
-  #    <group targetFramework=\"net6.0-maccatalyst\">
-  #      <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-  #    </group>
-  #  </dependencies>")
-
   SET(EMGUCV_XAMARIN_MACOS_NUGET_FILE_LIST "${EMGUCV_XAMARIN_MACOS_NUGET_FILE_LIST}   
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Xamarin.Mac.dll\" target=\"lib\\Xamarin.Mac\" />
     <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Xamarin.Mac.xml\" target=\"lib\\Xamarin.Mac\" />
@@ -1285,12 +1279,6 @@ IF(HAVE_MACOS)
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 	
-  #SET(EMGUCV_MAUI_MACOS_NUGET_FILE_LIST "${EMGUCV_MAUI_MACOS_NUGET_FILE_LIST}   
-  #  <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.Mac.dll\" target=\"lib\\net6.0-maccatalyst\" />
-  #  <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.Mac.xml\" target=\"lib\\net6.0-maccatalyst\" />
-  #  <file src=\"..\\_._\" target=\"lib\\netstandard2.0\" />
-  #  <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-  #  <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
 ENDIF()
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/Mac/Directory.Build.props)
@@ -1365,14 +1353,13 @@ SET(EMGUCV_NUGET_FILE_LIST "")
 SET(EMGUCV_NUGET_DEPENDENCY "")
 SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
 
- 
   SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\xamarinios10\" />
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\xamarinios10\" />
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\net6.0-maccatalyst13.2\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\net6.0-maccatalyst13.2\" />
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\net6.0-ios11.0\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\net6.0-ios11.0\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst13.2\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst13.2\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-ios11.0\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-ios11.0\" />
 	")
   SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
       <group targetFramework=\"Xamarin.iOS1.0\">
@@ -1380,13 +1367,13 @@ SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
       </group>
-	  <group targetFramework=\"net6.0-maccatalyst13.2\">
+	  <group targetFramework=\"${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst13.2\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
 		<dependency id=\"System.Runtime.InteropServices.NFloat.Internal\" version=\"6.0.1\" exclude=\"Build,Analyzers\" />
       </group>
-	  <group targetFramework=\"net6.0-ios11.0\">
+	  <group targetFramework=\"${EMGUCV_MAUI_DOTNET_VERSION}-ios11.0\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
@@ -1458,10 +1445,10 @@ IF (HAVE_IOS)
   SET(EMGUCV_MODELS_NUGET_FILE_LIST "${EMGUCV_MODELS_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\xamarinios10\" />
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\xamarinios10\" />
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\net6.0-maccatalyst15.4\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\net6.0-maccatalyst15.4\" />
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\net6.0-ios15.4\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\net6.0-ios15.4\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst15.4\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst15.4\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-ios15.4\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-ios15.4\" />
 	")
   SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY}
       <group targetFramework=\"Xamarin.iOS1.0\">
@@ -1469,12 +1456,12 @@ IF (HAVE_IOS)
 		<dependency id=\"Newtonsoft.Json\" version=\"13.0.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </group>
-	  <group targetFramework=\"net6.0-maccatalyst15.4\">
+	  <group targetFramework=\"${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst15.4\">
         <dependency id=\"System.Drawing.Common\" version=\"6.0.0\" exclude=\"Build,Analyzers\" />
 		<dependency id=\"Newtonsoft.Json\" version=\"13.0.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </group>
-	  <group targetFramework=\"net6.0-ios15.4\">
+	  <group targetFramework=\"${EMGUCV_MAUI_DOTNET_VERSION}-ios15.4\">
         <dependency id=\"System.Drawing.Common\" version=\"6.0.0\" exclude=\"Build,Analyzers\" />
 		<dependency id=\"Newtonsoft.Json\" version=\"13.0.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
@@ -1881,21 +1868,6 @@ IF(HAVE_IOS)
     <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
     <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
   </Target>")  
-  #SET(EMGUCV_MAUI_IOS_NUGET_FILE_LIST " 
-    #<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.IOS.dll\" target=\"lib\\net6.0-ios\" />
-    #<file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Maui.IOS.XML\" target=\"lib\\net6.0-ios\" />")
-    #SET(EMGUCV_XAMARIN_IOS_NUGET_FILE_LIST "${EMGUCV_XAMARIN_IOS_NUGET_FILE_LIST} 
-    #<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    #<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-	#<file src=\"README.md\" target=\"docs\\\" />")
-    #SET(EMGUCV_XAMARIN_IOS_NUGET_DEPENDENCY "
-    #<dependencies>
-    #  <group targetFramework=\"net6.0-ios\">
-    #    <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-    #  </group>
-    #</dependencies>")
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui.ios/Package.nuspec)
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui.ios/README.md)  
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/iOS/Directory.Build.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/iOS/docs/README.md)  
 ENDIF()
@@ -1909,7 +1881,7 @@ ENDIF()
 IF(HAVE_MAUI)
   SET(EMGUCV_MAUI_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.maui${EMGUCV_RUNTIME_EXTRA_TAG}")
   SET(EMGUCV_MAUI_NUGET_TITLE "Emgu CV for MAUI Native Runtime")
-  SET(EMGUCV_MAUI_DOTNET_VERSION "net6.0")
+  
   SET(EMGUCV_MAUI_ANDROID_SRC_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-android")
   SET(EMGUCV_MAUI_IOS_SRC_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-ios")
   SET(EMGUCV_MAUI_MACOS_SRC_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst")
