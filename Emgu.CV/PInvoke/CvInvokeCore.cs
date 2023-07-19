@@ -409,6 +409,21 @@ namespace Emgu.CV
         private static extern void cveMax(IntPtr src1, IntPtr src2, IntPtr dst);
 
         /// <summary>
+        /// Checks for the presence of at least one non-zero array element.
+        /// </summary>
+        /// <param name="arr">Single-channel array.</param>
+        /// <returns>Whether there are non-zero elements in src</returns>
+        public static bool HasNonZero(IInputArray arr)
+        {
+            using (InputArray iaArr = arr.GetInputArray())
+                return cveHasNonZero(iaArr);
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveHasNonZero(IntPtr arr);
+
+        /// <summary>
         /// Returns the number of non-zero elements in arr:
         /// result = sumI arr(I)!=0
         /// In case of IplImage both ROI and COI are supported.

@@ -85,6 +85,7 @@ CVAPI(void) cveAdd(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArra
 CVAPI(void) cveSubtract(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::_InputArray* mask, int dtype);
 CVAPI(void) cveDivide(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, double scale, int dtype);
 CVAPI(void) cveMultiply(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, double scale, int dtype);
+CVAPI(bool) cveHasNonZero(cv::_InputArray* src);
 CVAPI(int) cveCountNonZero(cv::_InputArray* src);
 CVAPI(void) cveFindNonZero(cv::_InputArray* src, cv::_OutputArray* idx);
 CVAPI(void) cveMin(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst);
