@@ -269,6 +269,10 @@ void cveMultiply(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray*
 {
 	cv::multiply(*src1, *src2, *dst, scale, dtype);
 }
+bool cveHasNonZero(cv::_InputArray* src)
+{
+	return cv::hasNonZero(*src);
+}
 int cveCountNonZero(cv::_InputArray* src)
 {
 	return cv::countNonZero(*src);
