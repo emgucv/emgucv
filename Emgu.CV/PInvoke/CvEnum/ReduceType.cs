@@ -26,7 +26,12 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// The output is the minimum (column/row-wise) of all the matrix rows/columns
         /// </summary>
-        ReduceMin = 3
+        ReduceMin = 3,
+        /// <summary>
+        /// the output is the sum of all squared rows/columns of the matrix.
+        /// </summary>
+        ReduceSum2 = 4
+
     }
 
 }
