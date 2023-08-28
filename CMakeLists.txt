@@ -705,7 +705,19 @@ IF(HAVE_IOS AND HAVE_MAC_CATALYST AND HAVE_ANDROID AND HAVE_WINDESKTOP)
   MESSAGE(STATUS "HAVE_MAUI: ${HAVE_MAUI}")
 ENDIF()
 
+#IF (HAVE_MAUI)
 SET(EMGUCV_MAUI_DOTNET_VERSION "net7.0")
+
+SET(EMGUCV_MAUI_ANDROID_SRC_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-android")
+SET(EMGUCV_MAUI_IOS_SRC_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-ios")
+SET(EMGUCV_MAUI_MACOS_SRC_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst")
+SET(EMGUCV_MAUI_WINDOWS_SRC_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-windows10.0.19041.0")
+
+SET(EMGUCV_MAUI_ANDROID_DST_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-android33.0")
+SET(EMGUCV_MAUI_IOS_DST_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-ios16.1")
+SET(EMGUCV_MAUI_MACOS_DST_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst16.1")
+SET(EMGUCV_MAUI_WINDOWS_DST_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-windows10.0.19041.0")
+#ENDIF()
 
   SET(WINDESKTOP_LABEL "")
   IF(HAVE_WINDESKTOP_X86)
@@ -1357,10 +1369,10 @@ SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
   SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\xamarinios10\" />
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\xamarinios10\" />
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst13.2\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst13.2\" />
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-ios11.0\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-ios11.0\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
 	")
   SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
       <group targetFramework=\"Xamarin.iOS1.0\">
@@ -1368,13 +1380,13 @@ SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
       </group>
-	  <group targetFramework=\"${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst13.2\">
+	  <group targetFramework=\"${EMGUCV_MAUI_MACOS_DST_FOLDER}\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
 		<dependency id=\"System.Runtime.InteropServices.NFloat.Internal\" version=\"6.0.1\" exclude=\"Build,Analyzers\" />
       </group>
-	  <group targetFramework=\"${EMGUCV_MAUI_DOTNET_VERSION}-ios11.0\">
+	  <group targetFramework=\"${EMGUCV_MAUI_IOS_DST_FOLDER}\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
@@ -1446,10 +1458,10 @@ IF (HAVE_IOS)
   SET(EMGUCV_MODELS_NUGET_FILE_LIST "${EMGUCV_MODELS_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\xamarinios10\" />
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\xamarinios10\" />
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst15.4\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst15.4\" />
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-ios15.4\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\${EMGUCV_MAUI_DOTNET_VERSION}-ios15.4\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
+	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
+    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
 	")
   SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY}
       <group targetFramework=\"Xamarin.iOS1.0\">
@@ -1457,12 +1469,12 @@ IF (HAVE_IOS)
 		<dependency id=\"Newtonsoft.Json\" version=\"13.0.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </group>
-	  <group targetFramework=\"${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst15.4\">
+	  <group targetFramework=\"${EMGUCV_MAUI_MACOS_DST_FOLDER}\">
         <dependency id=\"System.Drawing.Common\" version=\"6.0.0\" exclude=\"Build,Analyzers\" />
 		<dependency id=\"Newtonsoft.Json\" version=\"13.0.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </group>
-	  <group targetFramework=\"${EMGUCV_MAUI_DOTNET_VERSION}-ios15.4\">
+	  <group targetFramework=\"${EMGUCV_MAUI_IOS_DST_FOLDER}\">
         <dependency id=\"System.Drawing.Common\" version=\"6.0.0\" exclude=\"Build,Analyzers\" />
 		<dependency id=\"Newtonsoft.Json\" version=\"13.0.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
@@ -1883,14 +1895,6 @@ IF(HAVE_MAUI)
   SET(EMGUCV_MAUI_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.maui${EMGUCV_RUNTIME_EXTRA_TAG}")
   SET(EMGUCV_MAUI_NUGET_TITLE "Emgu CV for MAUI Native Runtime")
   
-  SET(EMGUCV_MAUI_ANDROID_SRC_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-android")
-  SET(EMGUCV_MAUI_IOS_SRC_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-ios")
-  SET(EMGUCV_MAUI_MACOS_SRC_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst")
-  SET(EMGUCV_MAUI_WINDOWS_SRC_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-windows10.0.19041.0")
-  SET(EMGUCV_MAUI_ANDROID_DST_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-android33.0")
-  SET(EMGUCV_MAUI_IOS_DST_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-ios16.1")
-  SET(EMGUCV_MAUI_MACOS_DST_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-maccatalyst16.1")
-  SET(EMGUCV_MAUI_WINDOWS_DST_FOLDER "${EMGUCV_MAUI_DOTNET_VERSION}-windows10.0.19041.0")
   SET(EMGUCV_MAUI_NUGET_FILE_LIST "	
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 	
