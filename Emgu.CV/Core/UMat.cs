@@ -12,6 +12,11 @@ using Emgu.CV.Util;
 using Emgu.CV.CvEnum;
 using Emgu.Util;
 
+#if !(UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR)
+using System.Text.Json;
+using System.Text.Json.Serialization;
+#endif
+
 namespace Emgu.CV
 {
     /// <summary>
@@ -20,8 +25,45 @@ namespace Emgu.CV
     /// </summary>
     [Serializable]
     [DebuggerTypeProxy(typeof(UMat.DebuggerProxy))]
+#if !(UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR)
+    [JsonConverter(typeof(UMat.UMatJsonConverter))]
+#endif
     public partial class UMat : UnmanagedObject, IEquatable<UMat>, IInputOutputArray, ISerializable
     {
+#if !(UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR)
+        /// <summary>
+        /// Class used for Json Serialized the Mat class
+        /// </summary>
+        internal class UMatJsonConverter : JsonConverter<UMat>
+        {
+            /// <inheritdoc/>
+            public override UMat Read(
+                ref Utf8JsonReader reader,
+                Type typeToConvert,
+                JsonSerializerOptions options)
+            {
+                using (Mat m = Mat.MatJsonConverter.ReadMat(ref reader))
+                {
+                    UMat result = new UMat();
+                    m.CopyTo(result);
+                    return result;
+                }
+            }
+
+            /// <inheritdoc/>
+            public override void Write(
+                Utf8JsonWriter writer,
+                UMat umat,
+                JsonSerializerOptions options)
+            {
+                using (Mat m = umat.GetMat(AccessType.Read))
+                {
+                    Mat.MatJsonConverter.WriteMat(writer, m);
+                }
+            }
+        }
+#endif
+
         #region Implement ISerializable interface
         /// <summary>
         /// Constructor used to deserialize runtime serialized object

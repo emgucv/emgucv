@@ -9,6 +9,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
@@ -226,6 +227,19 @@ namespace Emgu.CV.Test
                 MCvScalar quality = q.Compute(m2);
             }
 
+        }
+
+        [Test]
+        public void TestJsonSerializeAndDeserialize()
+        {
+            using (Mat mat = new Mat(new Size(50, 60), DepthType.Cv8U, 3))
+            {
+                String jsonString = JsonSerializer.Serialize(mat);
+
+                using (Mat mat2 = JsonSerializer.Deserialize<Mat>(jsonString))
+                    EmguAssert.IsTrue(mat.Equals(mat2));
+
+            }
         }
 
         /*
