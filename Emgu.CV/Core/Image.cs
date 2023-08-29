@@ -96,6 +96,16 @@ namespace Emgu.CV
             _ptr = ptr;
         }
 
+        /// <summary>
+        /// Create an Image by copying data from a Mat. 
+        /// </summary>
+        /// <param name="mat">The Mat to copy pixel data from</param>
+        public Image(Mat mat)
+        {
+            if (Mat.IsEmpty)
+                throw new NullReferenceException("The input Mat is empty.");
+            LoadImageFromMat(mat);
+        }
 
         /// <summary>
         /// Read image from a file
