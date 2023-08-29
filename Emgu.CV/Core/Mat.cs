@@ -519,14 +519,28 @@ namespace Emgu.CV
             }
 
             GCHandle handle = GCHandle.Alloc(array, GCHandleType.Pinned);
-            using (Mat dst = new Mat(
-                       this.Size, 
-                       this.Depth, 
-                       this.NumberOfChannels, 
-                       handle.AddrOfPinnedObject(),
-                       byteSize / Height))
+            if (this.Width > 0 && this.Height > 0 && this.Dims <= 3)
             {
-                this.CopyTo(dst);
+                // Typical Mat holding image data
+                using (Mat dst = new Mat(
+                           this.Size,
+                           this.Depth,
+                           this.NumberOfChannels,
+                           handle.AddrOfPinnedObject(),
+                           byteSize / Height))
+                {
+                    this.CopyTo(dst);
+                }
+            }
+            else if (this.IsContinuous)
+            {
+                // Special Mat that hold none-image data.
+                // e.g. inference results from DNN
+                CvInvoke.cveMemcpy(handle.AddrOfPinnedObject(), DataPointer, byteSize);
+            }
+            else
+            {
+                throw new Exception("Data is not continues");
             }
 
             handle.Free();
