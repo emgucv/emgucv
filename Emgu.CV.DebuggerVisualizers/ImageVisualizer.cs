@@ -39,7 +39,22 @@ namespace Emgu.CV.DebuggerVisualizers
     {
         protected override void Show(IDialogVisualizerService windowService, IVisualizerObjectProvider objectProvider)
         {
-            IInputArray image = objectProvider.GetObject() as IInputArray;
+            IInputArray image;
+            if (objectProvider is IVisualizerObjectProvider3)
+            {
+                IVisualizerObjectProvider3 objectProvider3 = objectProvider as IVisualizerObjectProvider3;
+                image = objectProvider3.GetObject<IInputArray>();
+            }
+            else if (objectProvider is IVisualizerObjectProvider2)
+            {
+                IVisualizerObjectProvider2 objectProvider2 = objectProvider as IVisualizerObjectProvider2;
+                var deserializableObject = objectProvider2.GetDeserializableObject();
+                image = deserializableObject.ToObject<IInputArray>();
+            }
+            else
+            {
+                image = objectProvider.GetObject() as IInputArray;
+            }
             if (image != null)
             {
                 using (ImageViewer viewer = new ImageViewer())

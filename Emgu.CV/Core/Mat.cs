@@ -13,16 +13,122 @@ using Emgu.CV.Util;
 using Emgu.Util;
 using System.IO;
 
+#if !(UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR)
+using System.Text.Json;
+using System.Text.Json.Serialization;
+#endif
+
 namespace Emgu.CV
 {
+
     /// <summary>
     /// The equivalent of cv::Mat
     /// </summary>
     [Serializable]
     [DebuggerTypeProxy(typeof(Mat.DebuggerProxy))]
+#if !(UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR)
+    [JsonConverter(typeof(Mat.MatJsonConverter))]
+#endif
     public partial class Mat : UnmanagedObject, IEquatable<Mat>, IInputOutputArray, ISerializable
     {
-#region Implement ISerializable interface
+#if !(UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR)
+        /// <summary>
+        /// Class used for Json Serialized the Mat class
+        /// </summary>
+        internal class MatJsonConverter : JsonConverter<Mat>
+        {
+            public static Mat ReadMat(ref Utf8JsonReader reader)
+            {
+                if (reader.TokenType != JsonTokenType.StartObject)
+                {
+                    throw new JsonException();
+                }
+
+                int rows = -1;
+                int cols = -1;
+                int numberOfChannels = -1;
+                CvEnum.DepthType depthType = DepthType.Default;
+                byte[] bytes = null;
+                while (reader.Read())
+                {
+                    if (reader.TokenType == JsonTokenType.EndObject)
+                    {
+                        if (rows <= 0)
+                            throw new JsonException("Invalid number of rows");
+                        if (cols <= 0)
+                            throw new JsonException("Invalid number of columns");
+                        if (numberOfChannels <= 0)
+                            throw new JsonException("Invalid number of Channels");
+                        if (depthType == DepthType.Default)
+                            throw new JsonException("Invalid DepthType");
+                        if (bytes == null)
+                            throw new JsonException("Invalid bytes");
+                        Mat m = new Mat(rows, cols, depthType, numberOfChannels);
+                        m.Bytes = bytes;
+                        return m;
+                    }
+
+                    if (reader.TokenType == JsonTokenType.PropertyName)
+                    {
+                        var propertyName = reader.GetString();
+                        reader.Read();
+                        switch (propertyName)
+                        {
+                            case "Rows":
+                                rows = reader.GetInt32();
+                                break;
+                            case "Cols":
+                                cols = reader.GetInt32();
+                                break;
+                            case "DepthType":
+                                depthType = (CvEnum.DepthType)reader.GetInt32();
+                                break;
+                            case "NumberOfChannels":
+                                numberOfChannels = reader.GetInt32();
+                                break;
+                            case "Bytes":
+                                bytes = reader.GetBytesFromBase64();
+                                break;
+                        }
+                    }
+                }
+
+                throw new JsonException();
+            }
+
+            /// <inheritdoc/>
+            public override Mat Read(
+                ref Utf8JsonReader reader,
+                Type typeToConvert,
+                JsonSerializerOptions options)
+            {
+                return ReadMat(ref reader);
+            }
+
+            public static void WriteMat(Utf8JsonWriter writer, Mat mat)
+            {
+                writer.WriteStartObject();
+                writer.WriteNumber("Rows", mat.Rows);
+                writer.WriteNumber("Cols", mat.Cols);
+                writer.WriteNumber("DepthType", (int)mat.Depth);
+                writer.WriteNumber("NumberOfChannels", (int)mat.NumberOfChannels);
+
+                writer.WriteBase64String("Bytes", mat.Bytes);
+                writer.WriteEndObject();
+            }
+
+            /// <inheritdoc/>
+            public override void Write(
+                Utf8JsonWriter writer,
+                Mat mat,
+                JsonSerializerOptions options)
+            {
+                WriteMat(writer, mat);
+            }
+        }
+#endif
+
+        #region Implement ISerializable interface
         /// <summary>
         /// Constructor used to deserialize runtime serialized object
         /// </summary>
@@ -349,6 +455,7 @@ namespace Emgu.CV
         /// <summary>
         /// Pointer to the beginning of the raw data
         /// </summary>
+        [JsonIgnore]
         public IntPtr DataPointer
         {
             get

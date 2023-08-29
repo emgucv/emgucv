@@ -16,8 +16,9 @@ using Emgu.Util;
 using System.IO;
 using System.Linq;
 using System.Net;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+
+//using Newtonsoft.Json;
+//using Newtonsoft.Json.Linq;
 
 /*
 namespace Emgu.CV.Models.DepthAI
