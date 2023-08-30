@@ -109,6 +109,9 @@ CVAPI(cv::QRCodeDetector*) cveQRCodeDetectorCreate(cv::GraphicalCodeDetector** g
 CVAPI(void) cveQRCodeDetectorRelease(cv::QRCodeDetector** detector);
 CVAPI(void) cveQRCodeDetectorDecodeCurved(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightCode);
 
+CVAPI(cv::QRCodeDetectorAruco*) cveQRCodeDetectorArucoCreate(cv::GraphicalCodeDetector** graphicalCodeDetector);
+CVAPI(void) cveQRCodeDetectorArucoRelease(cv::QRCodeDetectorAruco** detector);
+
 CVAPI(cv::barcode::BarcodeDetector*) cveBarcodeDetectorCreate(
     cv::String* prototxtPath,
     cv::String* modelPath,
