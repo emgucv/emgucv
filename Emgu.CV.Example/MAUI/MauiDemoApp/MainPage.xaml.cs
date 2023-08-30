@@ -407,13 +407,21 @@ namespace MauiDemoApp
 
                 buttonList.Add(viz3dButton);
 
-                viz3dButton.Clicked += (sender, args) =>
+                viz3dButton.Clicked += async (sender, args) =>
                 {
-                    using (Mat left = CvInvoke.Imread("imL.png", ImreadModes.Color))
-                    using (Mat right = CvInvoke.Imread("imR.png", ImreadModes.Color))
+                    using (Mat left = new Mat())
+                    using (Stream streamL = await FileSystem.OpenAppPackageFileAsync("imL.png"))
+                    using (MemoryStream msL = new MemoryStream())
+                    using (Mat right = new Mat())
+                    using (Stream streamR = await FileSystem.OpenAppPackageFileAsync("imR.png"))
+                    using (MemoryStream msR = new MemoryStream())
                     using (Mat points = new Mat())
                     using (Mat colors = new Mat())
                     {
+                        streamL.CopyTo(msL);
+                        CvInvoke.Imdecode(msL.ToArray(), ImreadModes.Color, left);
+                        streamR.CopyTo(msR);
+                        CvInvoke.Imdecode(msR.ToArray(), ImreadModes.Color, right);
                         Simple3DReconstruct.GetPointAndColor(left, right, points, colors);
                         Viz3d v = Simple3DReconstruct.GetViz3d(points, colors);
                         v.Spin();
