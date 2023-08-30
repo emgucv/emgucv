@@ -23,7 +23,7 @@ namespace Emgu.CV
         /// </summary>
         public HOGDescriptor()
         {
-            _ptr = CvInvoke.cveHOGDescriptorCreateDefault();
+            _ptr = ObjdetectInvoke.cveHOGDescriptorCreateDefault();
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Emgu.CV
            double L2HysThreshold = 0.2,
            bool gammaCorrection = true)
         {
-            _ptr = CvInvoke.cveHOGDescriptorCreate(
+            _ptr = ObjdetectInvoke.cveHOGDescriptorCreate(
                ref winSize,
                ref blockSize,
                ref blockStride,
@@ -71,7 +71,7 @@ namespace Emgu.CV
         {
             using (Util.VectorOfFloat desc = new VectorOfFloat())
             {
-                CvInvoke.cveHOGDescriptorPeopleDetectorCreate(desc);
+                ObjdetectInvoke.cveHOGDescriptorPeopleDetectorCreate(desc);
                 return desc.ToArray();
             }
         }
@@ -84,7 +84,7 @@ namespace Emgu.CV
         {
             using (VectorOfFloat vec = new VectorOfFloat(detector))
             {
-                CvInvoke.cveHOGSetSVMDetector(_ptr, vec);
+                ObjdetectInvoke.cveHOGSetSVMDetector(_ptr, vec);
             }
         }
 
@@ -112,7 +112,7 @@ namespace Emgu.CV
             using (Util.VectorOfDouble vd = new VectorOfDouble())
             using (InputArray iaImage = image.GetInputArray())
             {
-                CvInvoke.cveHOGDescriptorDetectMultiScale(_ptr, iaImage, vr, vd, hitThreshold, ref winStride, ref padding, scale,
+                ObjdetectInvoke.cveHOGDescriptorDetectMultiScale(_ptr, iaImage, vr, vd, hitThreshold, ref winStride, ref padding, scale,
                    finalThreshold, useMeanshiftGrouping);
                 Rectangle[] location = vr.ToArray();
                 double[] weight = vd.ToArray();
@@ -144,13 +144,13 @@ namespace Emgu.CV
             {
                 if (locations == null)
                 {
-                    CvInvoke.cveHOGDescriptorCompute(_ptr, iaImage, desc, ref winStride, ref padding, IntPtr.Zero);
+                    ObjdetectInvoke.cveHOGDescriptorCompute(_ptr, iaImage, desc, ref winStride, ref padding, IntPtr.Zero);
                 }
                 else
                 {
                     using (VectorOfPoint vp = new VectorOfPoint(locations))
                     {
-                        CvInvoke.cveHOGDescriptorCompute(_ptr, iaImage, desc, ref winStride, ref padding, vp);
+                        ObjdetectInvoke.cveHOGDescriptorCompute(_ptr, iaImage, desc, ref winStride, ref padding, vp);
                     }
                 }
                 return desc.ToArray();
@@ -163,7 +163,7 @@ namespace Emgu.CV
         protected override void DisposeObject()
         {
             if (!IntPtr.Zero.Equals(_ptr))
-                CvInvoke.cveHOGDescriptorRelease(ref _ptr);
+                ObjdetectInvoke.cveHOGDescriptorRelease(ref _ptr);
         }
 
         /// <summary>
@@ -171,11 +171,11 @@ namespace Emgu.CV
         /// </summary>
         public uint DescriptorSize
         {
-            get { return CvInvoke.cveHOGDescriptorGetDescriptorSize(_ptr); }
+            get { return ObjdetectInvoke.cveHOGDescriptorGetDescriptorSize(_ptr); }
         }
     }
 
-    public static partial class CvInvoke
+    public static partial class ObjdetectInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveHOGDescriptorPeopleDetectorCreate(IntPtr seq);

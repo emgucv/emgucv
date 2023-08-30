@@ -168,44 +168,56 @@ namespace Emgu.CV.Models
         /// <returns>The messages that we want to display.</returns>
         public String ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
-            using (VectorOfMat points = new VectorOfMat())
+            using (Mat image2 = new Mat())
             {
-                Stopwatch watch = Stopwatch.StartNew();
-                var barcodesFound = _barcodeDetector.DetectAndDecode(imageIn);
-                watch.Stop();
+                CvInvoke.HConcat(imageIn, imageIn, image2);
 
-                for (int i = 0; i < barcodesFound.Length; i++)
+                //using (VectorOfMat points = new VectorOfMat())
+                //using (VectorOfVectorOfPointF points = new VectorOfVectorOfPointF())
+                //using (Mat points = new Mat())
+                using (VectorOfPointF points = new VectorOfPointF())
                 {
-                    Point[] contour = Array.ConvertAll(barcodesFound[i].Points, Point.Round);
+                    Stopwatch watch = Stopwatch.StartNew();
+                    //_barcodeDetector.DetectAndDecodeMulti(imageIn, )
+                    //var barcodesFound = _barcodeDetector.DetectAndDecode(imageIn);
+                    var barcodesFound = _barcodeDetector.DetectAndDecodeMulti(image2, points);
+                    watch.Stop();
 
-                    using (VectorOfVectorOfPoint vpp = new VectorOfVectorOfPoint(new Point[][] { contour }))
+                    
+                    for (int i = 0; i < barcodesFound.Length; i++)
                     {
-                        CvInvoke.DrawContours(imageOut, vpp, -1, RenderColor);
+                        Point[] contour = Array.ConvertAll(barcodesFound[i].Points, Point.Round);
+
+                        using (VectorOfVectorOfPoint vpp = new VectorOfVectorOfPoint(new Point[][] { contour }))
+                        {
+                            CvInvoke.DrawContours(imageOut, vpp, -1, RenderColor);
+                        }
+
+                        CvInvoke.PutText(
+                            imageOut,
+                            barcodesFound[i].DecodedInfo,
+                            Point.Round( barcodesFound[i].Points[0]),
+                            FontFace.HersheySimplex,
+                            1.0,
+                            RenderColor
+                            );
                     }
 
-                    CvInvoke.PutText(
-                        imageOut, 
-                        barcodesFound[i].DecodedInfo, 
-                        Point.Round( barcodesFound[i].Points[0]),
-                        FontFace.HersheySimplex,
-                        1.0,
-                        RenderColor
-                        );
+
+                    if (barcodesFound.Length == 0)
+                    {
+                        return String.Format("No barcodes found (in {0} milliseconds)", watch.ElapsedMilliseconds);
+                    }
+
+                    string[] barcodesTexts = Array.ConvertAll(barcodesFound,
+                        delegate(GraphicalCode input) { return input.DecodedInfo; });
+                    //String allBarcodeText = ;
+                    return String.Format(
+                        "Barcodes found (in {1} milliseconds): {0}",
+                        String.Join(";", barcodesTexts),
+                        watch.ElapsedMilliseconds);
+
                 }
-
-
-                if (barcodesFound.Length == 0)
-                {
-                    return String.Format("No barcodes found (in {0} milliseconds)", watch.ElapsedMilliseconds);
-                } 
-
-                String[] barcodesTexts = Array.ConvertAll(barcodesFound,
-                    delegate(BarcodeDetector.Barcode input) { return input.DecodedInfo; });
-                String allBarcodeText = String.Join(";", barcodesTexts);
-                return String.Format(
-                    "Barcodes found (in {1} milliseconds): {0}", 
-                    allBarcodeText, 
-                    watch.ElapsedMilliseconds);
             }
         }
     }

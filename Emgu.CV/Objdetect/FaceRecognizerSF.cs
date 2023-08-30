@@ -49,7 +49,7 @@ namespace Emgu.CV
             using (CvString csModel = new CvString(model))
             using (CvString csConfig = new CvString(config))
             {
-                _ptr = CvInvoke.cveFaceRecognizerSFCreate(
+                _ptr = ObjdetectInvoke.cveFaceRecognizerSFCreate(
                     csModel,
                     csConfig,
                     backendId,
@@ -74,7 +74,7 @@ namespace Emgu.CV
             using (InputArray iaFaceBox = faceBox.GetInputArray())
             using (OutputArray oaAlignedImg = alignedImg.GetOutputArray())
             {
-                CvInvoke.cveFaceRecognizerSFAlignCrop(_ptr, iaSrcImg, iaFaceBox, oaAlignedImg);
+                ObjdetectInvoke.cveFaceRecognizerSFAlignCrop(_ptr, iaSrcImg, iaFaceBox, oaAlignedImg);
             }
         }
 
@@ -88,7 +88,7 @@ namespace Emgu.CV
             using (InputArray iaAlignedImg = alignedImg.GetInputArray())
             using (OutputArray oaFaceFeature = faceFeature.GetOutputArray())
             {
-                CvInvoke.cveFaceRecognizerSFFeature(_ptr, iaAlignedImg, oaFaceFeature);
+                ObjdetectInvoke.cveFaceRecognizerSFFeature(_ptr, iaAlignedImg, oaFaceFeature);
             }
         }
 
@@ -107,7 +107,7 @@ namespace Emgu.CV
             using (InputArray iaFaceFeature1 = faceFeature1.GetInputArray())
             using (InputArray iaFaceFeature2 = faceFeature2.GetInputArray())
             {
-                return CvInvoke.cveFaceRecognizerSFMatch(
+                return ObjdetectInvoke.cveFaceRecognizerSFMatch(
                     _ptr,
                     iaFaceFeature1,
                     iaFaceFeature2,
@@ -124,14 +124,14 @@ namespace Emgu.CV
         {
             if (!IntPtr.Zero.Equals(_sharedPtr))
             {
-                CvInvoke.cveFaceRecognizerSFRelease(ref _sharedPtr);
+                ObjdetectInvoke.cveFaceRecognizerSFRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
             }
         }
 
     }
 
-    public static partial class CvInvoke
+    public static partial class ObjdetectInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveFaceRecognizerSFCreate(

@@ -43,7 +43,7 @@ namespace Emgu.CV
             using (CvString csModel = new CvString(model))
             using (CvString csConfig = new CvString(config))
             {
-                _ptr = CvInvoke.cveFaceDetectorYNCreate(
+                _ptr = ObjdetectInvoke.cveFaceDetectorYNCreate(
                     csModel,
                     csConfig,
                     ref inputSize,
@@ -67,7 +67,7 @@ namespace Emgu.CV
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaFaces = faces.GetOutputArray())
-                return CvInvoke.cveFaceDetectorYNDetect(_ptr, iaImage, oaFaces);
+                return ObjdetectInvoke.cveFaceDetectorYNDetect(_ptr, iaImage, oaFaces);
         }
 
         /// <summary>
@@ -77,14 +77,14 @@ namespace Emgu.CV
         {
             if (!IntPtr.Zero.Equals(_sharedPtr))
             {
-                CvInvoke.cveFaceDetectorYNRelease(ref _sharedPtr);
+                ObjdetectInvoke.cveFaceDetectorYNRelease(ref _sharedPtr);
                 _ptr = IntPtr.Zero;
             }
         }
 
     }
 
-    public static partial class CvInvoke
+    public static partial class ObjdetectInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveFaceDetectorYNCreate(

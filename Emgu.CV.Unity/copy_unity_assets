@@ -125,8 +125,8 @@ mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Hdf
 cp -r ../Emgu.CV.Contrib/Hdf/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Hdf
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/WechatQrcode
 cp -r ../Emgu.CV.Contrib/WechatQrcode/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/WechatQrcode
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Barcode
-cp -r ../Emgu.CV.Contrib/Barcode/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Barcode
+#mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Barcode
+#cp -r ../Emgu.CV.Contrib/Barcode/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Barcode
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/StructuredLight
 cp -r ../Emgu.CV.Contrib/StructuredLight/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/StructuredLight
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rgbd

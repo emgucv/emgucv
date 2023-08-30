@@ -105,18 +105,32 @@ CVAPI(void) cveGroupRectangles3(std::vector<cv::Rect>* rectList, int groupThresh
 CVAPI(void) cveGroupRectangles4(std::vector<cv::Rect>* rectList, std::vector<int>* rejectLevels, std::vector<double>* levelWeights, int groupThreshold, double eps);
 CVAPI(void) cveGroupRectanglesMeanshift(std::vector<cv::Rect>* rectList, std::vector<double>* foundWeights,	std::vector<double>* foundScales, double detectThreshold, CvSize* winDetSize);
 
-CVAPI(cv::QRCodeDetector*) cveQRCodeDetectorCreate();
+CVAPI(cv::QRCodeDetector*) cveQRCodeDetectorCreate(cv::GraphicalCodeDetector** graphicalCodeDetector);
 CVAPI(void) cveQRCodeDetectorRelease(cv::QRCodeDetector** detector);
-CVAPI(bool) cveQRCodeDetectorDetect(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_OutputArray* points);
-CVAPI(bool) cveQRCodeDetectorDetectMulti(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_OutputArray* points);
-CVAPI(void) cveQRCodeDetectorDecode(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightQrcode);
-CVAPI(void) cveQRCodeDetectorDecodeCurved(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightQrcode);
-CVAPI(bool) cveQRCodeDetectorDecodeMulti(
-    cv::QRCodeDetector* detector,
+CVAPI(void) cveQRCodeDetectorDecodeCurved(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightCode);
+
+CVAPI(cv::barcode::BarcodeDetector*) cveBarcodeDetectorCreate(
+    cv::String* prototxtPath,
+    cv::String* modelPath,
+    cv::GraphicalCodeDetector** graphicalCodeDetector);
+CVAPI(void) cveBarcodeDetectorRelease(cv::barcode::BarcodeDetector** detector);
+
+CVAPI(bool) cveGraphicalCodeDetectorDetect(cv::GraphicalCodeDetector* detector, cv::_InputArray* img, cv::_OutputArray* points);
+CVAPI(bool) cveGraphicalCodeDetectorDetectMulti(cv::GraphicalCodeDetector* detector, cv::_InputArray* img, cv::_OutputArray* points);
+CVAPI(void) cveGraphicalCodeDetectorDecode(cv::GraphicalCodeDetector* detector, cv::_InputArray* img, cv::_InputArray* points, cv::_OutputArray* straightCode, cv::String* output);
+CVAPI(bool) cveGraphicalCodeDetectorDecodeMulti(
+    cv::GraphicalCodeDetector* detector,
     cv::_InputArray* img,
     cv::_InputArray* points,
     std::vector< std::string >* decodedInfo,
-    cv::_OutputArray* straightQrcode);
+    cv::_OutputArray* straightCode);
+CVAPI(bool) cveGraphicalCodeDetectorDetectAndDecodeMulti(
+    cv::GraphicalCodeDetector* detector,
+    cv::_InputArray* img,
+    std::vector< std::string >* decodedInfo,
+    cv::_OutputArray* points,
+    cv::_OutputArray* straightCode);
+
 
 CVAPI(cv::FaceDetectorYN*) cveFaceDetectorYNCreate(
     cv::String* model,
