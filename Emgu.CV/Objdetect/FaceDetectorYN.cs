@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+using Emgu.CV.Dnn;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
@@ -33,11 +34,11 @@ namespace Emgu.CV
             String model,
             String config,
             Size inputSize,
-            float scoreThreshold,
-            float nmsThreshold,
-            int topK,
-            Emgu.CV.Dnn.Backend backendId,
-            Emgu.CV.Dnn.Target targetId)
+            float scoreThreshold = 0.9f,
+            float nmsThreshold = 0.3f,
+            int topK = 5000,
+            Emgu.CV.Dnn.Backend backendId = Dnn.Backend.Default,
+            Emgu.CV.Dnn.Target targetId = Target.Cpu)
         {
             using (CvString csModel = new CvString(model))
             using (CvString csConfig = new CvString(config))
