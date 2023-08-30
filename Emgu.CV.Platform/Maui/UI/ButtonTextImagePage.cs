@@ -384,7 +384,6 @@ namespace Emgu.CV.Platform.Maui.UI
 
                 if (action.Equals("Default"))
                 {
-
                     using (Stream stream = await FileSystem.OpenAppPackageFileAsync(imageNames[i]))
                     using (MemoryStream ms = new MemoryStream())
                     {

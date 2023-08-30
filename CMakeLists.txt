@@ -973,7 +973,6 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   hdf
   gapi
   wechat_qrcode
-  barcode
   structured_light
   rgbd
   reg
