@@ -36,6 +36,26 @@ void cveQRCodeDetectorDecodeCurved(cv::QRCodeDetector* detector, cv::_InputArray
 #endif
 }
 
+cv::QRCodeDetectorAruco* cveQRCodeDetectorArucoCreate(cv::GraphicalCodeDetector** graphicalCodeDetector)
+{
+#ifdef HAVE_OPENCV_OBJDETECT
+	cv::QRCodeDetectorAruco* result = new cv::QRCodeDetectorAruco();
+	*graphicalCodeDetector = static_cast<cv::GraphicalCodeDetector*>(result);
+	return result;
+#else 
+	throw_no_objdetect();
+#endif
+}
+void cveQRCodeDetectorArucoRelease(cv::QRCodeDetectorAruco** detector)
+{
+#ifdef HAVE_OPENCV_OBJDETECT
+	delete* detector;
+	*detector = 0;
+#else 
+	throw_no_objdetect();
+#endif
+}
+
 cv::barcode::BarcodeDetector* cveBarcodeDetectorCreate(
 	cv::String* prototxtPath,
 	cv::String* modelPath,
