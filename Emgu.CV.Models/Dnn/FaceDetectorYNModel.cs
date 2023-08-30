@@ -40,7 +40,8 @@ namespace Emgu.CV.Models
         {
             get
             {
-                return _faceDetectionModel != null;
+                //return _faceDetectionModel != null;
+                return _downloadedFile != null;
             }
         }
 
@@ -102,12 +103,7 @@ namespace Emgu.CV.Models
                     _faceDetectionModel = new FaceDetectorYN(
                         _downloadedFile,
                         "",
-                        iaImage.GetSize(),
-                        0.6f,
-                        0.3f,
-                        5000,
-                        Dnn.Backend.Default,
-                        Dnn.Target.Cpu);
+                        iaImage.GetSize());
                 }
 
                 _faceDetectionModel.Detect(image, detectionResult);
