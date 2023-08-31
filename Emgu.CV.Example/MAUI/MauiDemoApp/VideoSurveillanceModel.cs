@@ -14,12 +14,24 @@ using System.Threading.Tasks;
 using Emgu.Util;
 using Size = System.Drawing.Size;
 using Point = System.Drawing.Point;
+using System.Diagnostics;
 
 namespace Emgu.CV.Models
 {
 
-    public class VideoSurveillanceModel : IProcessAndRenderModel
+    public class VideoSurveillanceModel : DisposableObject, IProcessAndRenderModel
     {
+        /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Overwrite;
+            }
+        }
+
         public class TrackedObject : TrackerKCF
         {
             public TrackedObject(int id) :
@@ -33,29 +45,71 @@ namespace Emgu.CV.Models
 
         private int _idCounter = 0;
 
-        List<TrackedObject> _trackers = new List<TrackedObject>();
+        private List<TrackedObject> _trackers = new List<TrackedObject>();
 
         private static IBackgroundSubtractor _fgDetector;
 
         public void Dispose()
         {
             Clear();
-            
+        }
+
+        protected override void DisposeObject()
+        {
+            //Dispose();
+        }
+
+
+        public void Clear()
+        {
             if (_fgDetector != null)
             {
+                _fgDetector.Clear();
+
                 IDisposable _fgDetectorDisposable = _fgDetector as IDisposable;
                 if (_fgDetectorDisposable != null)
                 {
                     _fgDetectorDisposable.Dispose();
                 }
+
                 _fgDetector = null;
             }
-        }
 
-        public void Clear()
-        {
-            _fgDetector.Clear();
-            _trackers.Clear();
+            if (_trackers != null)
+            {
+                _trackers.Clear();
+            }
+
+            if (_smoothedFrame != null)
+            {
+                _smoothedFrame.Dispose();
+                _smoothedFrame = null;
+            }
+
+            if (_frameCopy != null)
+            {
+                _frameCopy.Dispose();
+                _frameCopy = null;
+            }
+
+            if (_canny != null)
+            {
+                _canny.Dispose();
+                _canny = null;
+            }
+
+            if (_foregroundMask != null)
+            {
+                _foregroundMask.Dispose();
+                _foregroundMask = null;
+            }
+
+            if (_foregroundMaskBgr != null)
+            {
+                _foregroundMaskBgr.Dispose();
+                _foregroundMaskBgr = null;
+            }
+
             _idCounter = 0;
         }
 
@@ -74,6 +128,12 @@ namespace Emgu.CV.Models
             }
         }
 
+        private Mat _smoothedFrame = null;
+        private Mat _frameCopy = null;
+        private Mat _canny = null;
+        private Mat _foregroundMask = null;
+        private Mat _foregroundMaskBgr = null;
+
         public async Task Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged, object initOptions)
         {
             _fgDetector = new BackgroundSubtractorMOG2();
@@ -82,19 +142,41 @@ namespace Emgu.CV.Models
 
         public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
-            using (InputArray iaImageIn = imageIn.GetInputArray())
-            using (Mat smoothedFrame = new Mat())
-            using (Mat frameCopy = new Mat())
-            using (Mat foregroundMask = new Mat())
-            using (Mat foregroundMaskBgr = new Mat())
+            Stopwatch watch = Stopwatch.StartNew();
+            if (_smoothedFrame == null)
             {
-                iaImageIn.CopyTo(frameCopy);
+                _smoothedFrame = new Mat();
+            }
+
+            if (_frameCopy == null)
+            {
+                _frameCopy = new Mat();
+            }
+
+            if (_canny == null)
+            {
+                _canny = new Mat();
+            }
+
+            if (_foregroundMask == null)
+            {
+                _foregroundMask = new Mat();
+            }
+
+            if (_foregroundMaskBgr == null)
+            {
+                _foregroundMaskBgr = new Mat();
+            }
+
+            using (InputArray iaImageIn = imageIn.GetInputArray())
+            {
+                iaImageIn.CopyTo(_frameCopy);
                 ;
-                CvInvoke.GaussianBlur(imageIn, smoothedFrame, new Size(3, 3), 1); //filter out noises
+                CvInvoke.GaussianBlur(imageIn, _smoothedFrame, new Size(3, 3), 1); //filter out noises
 
                 #region use the BG/FG detector to find the foreground mask
-                _fgDetector.Apply(smoothedFrame, foregroundMask);
-                CvInvoke.CvtColor(foregroundMask, foregroundMaskBgr, ColorConversion.Gray2Bgr);
+                _fgDetector.Apply(_smoothedFrame, _foregroundMask);
+                CvInvoke.CvtColor(_foregroundMask, _foregroundMaskBgr, ColorConversion.Gray2Bgr);
 
                 #endregion
 
@@ -124,11 +206,11 @@ namespace Emgu.CV.Models
 
                 List<Rectangle> newObjects = new List<Rectangle>();
                 int minAreaThreshold = 100;
-                using (Mat canny = new Mat())
+                //using (Mat canny = new Mat())
                 using (VectorOfVectorOfPoint contours = new VectorOfVectorOfPoint())
                 {
-                    CvInvoke.Canny(foregroundMask, canny, 180, 100);
-                    CvInvoke.FindContours(canny, contours, null, RetrType.External,
+                    CvInvoke.Canny(_foregroundMask, _canny, 180, 100);
+                    CvInvoke.FindContours(_canny, contours, null, RetrType.External,
                         ChainApproxMethod.ChainApproxSimple);
                     int count = contours.Size;
                     for (int i = 0; i < count; i++)
@@ -172,16 +254,18 @@ namespace Emgu.CV.Models
                 for (int i = 0; i < boundingBoxesTracked.Count; i++)
                 {
                     Rectangle boundingBox = boundingBoxesTracked[i];
-                    CvInvoke.Rectangle(frameCopy, boundingBox, new MCvScalar(255.0, 255.0, 255.0), 2);
-                    CvInvoke.PutText(frameCopy, idsTracked[i].ToString(), new Point(boundingBox.X, boundingBox.Y),
+                    CvInvoke.Rectangle(_frameCopy, boundingBox, new MCvScalar(255.0, 255.0, 255.0), 2);
+                    CvInvoke.PutText(_frameCopy, idsTracked[i].ToString(), new Point(boundingBox.X, boundingBox.Y),
                         FontFace.HersheyPlain,
                         1.0, new MCvScalar(255.0, 255.0, 255.0));
                 }
 
-                CvInvoke.HConcat(frameCopy, foregroundMaskBgr, imageOut);
-            }
+                //foregroundMaskBgr.CopyTo(imageOut);
+                CvInvoke.HConcat(_frameCopy, _foregroundMaskBgr, imageOut);
 
-            return String.Empty;
+            }
+            watch.Stop();
+            return String.Format("Frame processed in {0} milliseconds", watch.ElapsedMilliseconds);
         }
     }
 }

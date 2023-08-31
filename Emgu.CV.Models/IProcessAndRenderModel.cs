@@ -21,10 +21,31 @@ using Emgu.Util;
 namespace Emgu.CV.Models
 {
     /// <summary>
+    /// Render type for ProcessAndRenderModel
+    /// </summary>
+    public enum RenderType
+    {
+        /// <summary>
+        /// It will draw on top of the imageOut
+        /// </summary>
+        Update,
+
+        /// <summary>
+        /// It will replace all the content in the imageOut
+        /// </summary>
+        Overwrite
+    }
+
+    /// <summary>
     /// Process and render model
     /// </summary>
     public interface IProcessAndRenderModel : IDisposable
     {
+        /// <summary>
+        /// Specify how the rendering work. e.g. if the model render over the existing output image, or replace entirely the output image.
+        /// </summary>
+        RenderType RenderMethod { get; }
+
         /// <summary>
         /// Clear and reset the model. Required Init function to be called again before calling ProcessAndRender.
         /// </summary>
@@ -46,6 +67,7 @@ namespace Emgu.CV.Models
 #else
         Task Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged, Object initOptions);
 #endif
+
 
         /// <summary>
         /// Process the input image and render into the output image

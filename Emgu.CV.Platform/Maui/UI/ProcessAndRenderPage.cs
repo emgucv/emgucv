@@ -53,6 +53,7 @@ namespace Emgu.CV.Platform.Maui.UI
         private VideoCapture _capture = null;
         private Mat _mat;
         private Mat _renderMat;
+        private Mat _buffer;
         private String _defaultButtonText;
         private IProcessAndRenderModel _model;
 
@@ -67,6 +68,7 @@ namespace Emgu.CV.Platform.Maui.UI
         }
 
         private AndroidCameraBackend _androidCameraBackend = AndroidCameraBackend.AndroidCamera2;
+        //private AndroidCameraBackend _androidCameraBackend = AndroidCameraBackend.OpenCV;
 
         public AndroidCameraBackend CameraBackend
         {
@@ -231,22 +233,33 @@ namespace Emgu.CV.Platform.Maui.UI
             _model.Clear();
         }
 
-        private void _capture_ImageGrabbed(object sender, EventArgs e)
+        private bool ProcessFrame(IInputArray m)
         {
-            if (_mat == null)
-                _mat = new Mat();
-            _capture.Retrieve(_mat);
-
             if (_renderMat == null)
                 _renderMat = new Mat();
 
-            _mat.CopyTo(_renderMat);
-
             try
             {
-                String msg = _model.ProcessAndRender(_mat, _renderMat);
+                String msg;
+                if (_model.RenderMethod == RenderType.Update)
+                {
+                    if (_buffer == null)
+                        _buffer = new Mat();
+                    using (InputArray iaM = m.GetInputArray())
+                    {
+                        iaM.CopyTo(_buffer);
+                        msg = _model.ProcessAndRender(m, _buffer);
+                        _buffer.CopyTo(_renderMat);
+                    }
+                }
+                else
+                {
+                    msg = _model.ProcessAndRender(m, _renderMat);
+                }
+
                 SetImage(_renderMat);
                 SetMessage(msg);
+                return true;
             }
             catch (Exception exception)
             {
@@ -255,8 +268,20 @@ namespace Emgu.CV.Platform.Maui.UI
                 SetMessage(exception.Message);
 #if DEBUG
                 throw;
+#else
+                return false;
 #endif
+
             }
+        }
+
+        private void _capture_ImageGrabbed(object sender, EventArgs e)
+        {
+            if (_mat == null)
+                _mat = new Mat();
+            _capture.Retrieve(_mat);
+
+            ProcessFrame(_mat);
 
         }
 
@@ -287,6 +312,7 @@ namespace Emgu.CV.Platform.Maui.UI
                 _capture.Dispose();
                 _capture = null;
 #endif
+
                 button.Text = _defaultButtonText;
                 Picker.IsEnabled = true;
                 return;
@@ -348,29 +374,13 @@ namespace Emgu.CV.Platform.Maui.UI
                             _isAndroidCamera2Busy = true;
                             try
                             {
-                                String message = String.Empty;
-                                await Task.Run(() =>
-                                {
-                                    if (_renderMat == null)
-                                        _renderMat = new Mat();
-                                    using (InputArray iaImage = m.GetInputArray())
+                                //This run on the main thread, using the async pattern with the ProcessFrame is required,
+                                //otherwise it will freeze up the main thread/app.
+                                await Task.Run(
+                                    () =>
                                     {
-                                        iaImage.CopyTo(_renderMat);
-                                    }
-                                    try
-                                    {
-                                        message = _model.ProcessAndRender(m, _renderMat);
-                                    }
-                                    catch (Exception exception)
-                                    {
-                                        _renderMat.SetTo(new MCvScalar());
-                                        Console.WriteLine(exception);
-                                        message = exception.Message;
-                                    }
-                                });
-                                SetImage(_renderMat);
-                                SetMessage(message);
-
+                                        ProcessFrame(m); 
+                                    });
                             }
                             finally
                             {
@@ -409,6 +419,9 @@ namespace Emgu.CV.Platform.Maui.UI
             }
             else
             {
+                ProcessFrame(images[0]);
+                Picker.IsEnabled = true;
+                /*
                 if (_renderMat == null)
                     _renderMat = new Mat();
                 images[0].CopyTo(_renderMat);
@@ -430,7 +443,7 @@ namespace Emgu.CV.Platform.Maui.UI
 #if DEBUG
                     throw;
 #endif
-                }
+                }*/
             }
         }
 

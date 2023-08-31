@@ -32,6 +32,17 @@ namespace Emgu.CV.Models
         private DnnSuperResImpl _superresModel = null;
 
         /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Overwrite;
+            }
+        }
+
+        /// <summary>
         /// The Superres model version
         /// </summary>
         public enum SuperresVersion

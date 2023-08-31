@@ -26,6 +26,17 @@ namespace Emgu.CV.Models
     /// </summary>
     public class TesseractModel : DisposableObject, IProcessAndRenderModel
     {
+        /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Update;
+            }
+        }
+
         private Tesseract _ocr;
 
         private String _lang;

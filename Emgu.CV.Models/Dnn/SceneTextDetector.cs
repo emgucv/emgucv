@@ -26,6 +26,17 @@ namespace Emgu.CV.Models
     public class SceneTextDetector : DisposableObject, IProcessAndRenderModel
     {
         /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Update;
+            }
+        }
+
+        /// <summary>
         /// Create a new SceneTextDetector
         /// </summary>
         /// <param name="modelFolderName">The subfolder name where the model will be saved to.</param>

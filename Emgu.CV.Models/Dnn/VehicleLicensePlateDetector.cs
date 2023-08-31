@@ -25,6 +25,17 @@ namespace Emgu.CV.Models
     public class VehicleLicensePlateDetector : DisposableObject, IProcessAndRenderModel
     {
         /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Update;
+            }
+        }
+
+        /// <summary>
         /// License plate
         /// </summary>
         public struct LicensePlate

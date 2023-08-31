@@ -17,6 +17,7 @@ namespace Emgu.CV.Platform.Maui.UI
     {
         private AndroidCameraManager _cameraManager;
 
+        private EventHandler<Mat> _onImageCapturedHandler = null;
 
         public void StartCapture(EventHandler<Mat> matHandler, int preferredPreviewImageSize = -1)
         {
@@ -25,12 +26,13 @@ namespace Emgu.CV.Platform.Maui.UI
                 if (preferredPreviewImageSize <= 0)
                 {
                     //prefer preview image that is slightly smaller than the screen resolution
-                    preferredPreviewImageSize = (int) Math.Round(this.Width * this.Height) / 2;
+                    //preferredPreviewImageSize = (int) Math.Round(this.Width * this.Height) / 2;
                     preferredPreviewImageSize = Math.Max(preferredPreviewImageSize, 480 * 600);
                 }
 
                 _cameraManager = new AndroidCameraManager( preferredPreviewImageSize );
-                _cameraManager.OnImageCaptured += matHandler;
+                _onImageCapturedHandler = matHandler;
+                _cameraManager.OnImageCaptured += _onImageCapturedHandler;
                 _cameraManager.StartBackgroundThread();
             }
             _cameraManager.CreateCaptureSession();
@@ -41,6 +43,7 @@ namespace Emgu.CV.Platform.Maui.UI
             if (_cameraManager != null)
             {
                 _cameraManager.CloseCamera();
+                _cameraManager.OnImageCaptured -= _onImageCapturedHandler;
                 _cameraManager.StopBackgroundThread();
                 _cameraManager = null;
             }

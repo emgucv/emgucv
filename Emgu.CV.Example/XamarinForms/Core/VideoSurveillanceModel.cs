@@ -15,6 +15,17 @@ namespace Emgu.CV.XamarinForms
 
     public class VideoSurveillanceModel : IProcessAndRenderModel
     {
+
+        /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Update;
+            }
+        }
         public class TrackedObject : TrackerKCF
         {
             public TrackedObject(int id) :

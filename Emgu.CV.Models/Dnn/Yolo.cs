@@ -26,6 +26,17 @@ namespace Emgu.CV.Models
     /// </summary>
     public class Yolo : DisposableObject, IProcessAndRenderModel
     {
+        /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Update;
+            }
+        }
+
         private String _modelFolderName = "yolo";
 
         private DetectionModel _yoloDetectionModel = null;

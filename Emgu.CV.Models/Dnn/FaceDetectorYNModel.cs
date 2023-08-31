@@ -34,6 +34,17 @@ namespace Emgu.CV.Models
         private String _downloadedFile = null;
 
         /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Update;
+            }
+        }
+
+        /// <summary>
         /// Return true if the model is initialized
         /// </summary>
         public bool Initialized

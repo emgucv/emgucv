@@ -22,6 +22,17 @@ namespace Emgu.CV.Models
 {
     public class ShapeDetector : DisposableObject, IProcessAndRenderModel
     {
+        /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Overwrite;
+            }
+        }
+
         private Mat _gray = new Mat();
         private Mat _cannyEdges = new Mat();
 
