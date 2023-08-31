@@ -25,6 +25,17 @@ namespace Emgu.CV.Models
     /// </summary>
     public class PedestrianDetector : DisposableObject, IProcessAndRenderModel
     {
+        /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Update;
+            }
+        }
+
 #if !(UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL)
         private CudaHOG _hogCuda;
 #endif

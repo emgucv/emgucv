@@ -50,8 +50,12 @@ namespace Emgu.CV.Platform.Maui.UI
         public static Microsoft.UI.Xaml.Media.Imaging.WriteableBitmap ToWritableBitmap(this IInputArray array)
         {
             using (InputArray ia = array.GetInputArray())
-            {
+            { 
                 System.Drawing.Size size = ia.GetSize();
+
+                int channels = ia.GetChannels();
+                //size.Width = size.Width / channels;
+
                 Microsoft.UI.Xaml.Media.Imaging.WriteableBitmap bmp = new Microsoft.UI.Xaml.Media.Imaging.WriteableBitmap(size.Width, size.Height);
                 byte[] buffer = new byte[bmp.PixelWidth * bmp.PixelHeight * 4];
                 GCHandle handle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
@@ -63,7 +67,7 @@ namespace Emgu.CV.Platform.Maui.UI
                     handle.AddrOfPinnedObject(),
                     bmp.PixelWidth * 4))
                 {
-                    int channels = ia.GetChannels();
+                    //int channels = ia.GetChannels();
                     switch (channels)
                     {
                         case 1:

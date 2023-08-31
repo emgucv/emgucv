@@ -27,6 +27,18 @@ namespace Emgu.CV.Models
 {
     public class ShapeDetector : DisposableObject, IProcessAndRenderModel
     {
+
+        /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Overwrite;
+            }
+        }
+
         private Mat _gray = new Mat();
         private Mat _cannyEdges = new Mat();
 
@@ -34,11 +46,6 @@ namespace Emgu.CV.Models
         /// Clear and reset the model. Required Init function to be called again before calling ProcessAndRender.
         /// </summary>
         public void Clear()
-        {
-
-        }
-
-        protected override void DisposeObject()
         {
             if (_gray != null)
             {
@@ -51,6 +58,11 @@ namespace Emgu.CV.Models
                 _cannyEdges.Dispose();
                 _cannyEdges = null;
             }
+        }
+
+        protected override void DisposeObject()
+        {
+            Clear();
         }
 
         public string ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)

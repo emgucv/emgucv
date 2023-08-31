@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 #if __ANDROID__
+using Android.Graphics;
 using Android.Widget;
 #elif __MACCATALYST__
 using AppKit;
@@ -44,6 +45,11 @@ namespace Emgu.CV.Platform.Maui.UI
         public ImageView ImageView { get; set; }
 #elif WINDOWS
         public Microsoft.UI.Xaml.Controls.Image ImageView { get; set; }
+#endif
+
+#if __ANDROID__
+        private Bitmap[] _renderBuffer = new Bitmap[2];
+        private int _renderBufferIdx = 0;
 #endif
 
         private VectorOfByte _imageStream = new VectorOfByte();
@@ -131,6 +137,51 @@ namespace Emgu.CV.Platform.Maui.UI
 
             if (this.ImageView != null)
             {
+                if (image == null)
+                {
+                    this.Dispatcher.Dispatch(
+                        () =>
+                        {
+                            ImageView?.SetImageBitmap(null);
+                        });
+                    return;
+                }
+
+                int bufferIdx = _renderBufferIdx;
+                Bitmap buffer;
+                _renderBufferIdx = (_renderBufferIdx + 1) % _renderBuffer.Length;
+
+                using (InputArray iaImage = image.GetInputArray())
+                using (Mat mat = iaImage.GetMat())
+                {
+                    if (_renderBuffer[bufferIdx] == null)
+                    {
+                        buffer = mat.ToBitmap();
+                        _renderBuffer[bufferIdx] = buffer;
+                    }
+                    else
+                    {
+                        var size = iaImage.GetSize();
+                        buffer = _renderBuffer[bufferIdx];
+                        if (buffer.Width != size.Width || buffer.Height != size.Height)
+                        {
+                            buffer.Dispose();
+                            buffer = mat.ToBitmap();
+                            _renderBuffer[bufferIdx] = buffer;
+                        }
+                        else
+                        {
+                            mat.ToBitmap(buffer);
+                        }
+                    }
+                }
+
+                this.Dispatcher.Dispatch(
+                    () =>
+                    {
+                        ImageView?.SetImageBitmap(buffer);
+                    });
+                /*
                 var bitmap = image?.ToBitmap();
 
                 this.Dispatcher.Dispatch(
@@ -142,7 +193,7 @@ namespace Emgu.CV.Platform.Maui.UI
                         if (bitmap != null)
                             bitmap.Dispose();
 
-                    });
+                    });*/
             }
 
 #elif WINDOWS
@@ -158,11 +209,11 @@ namespace Emgu.CV.Platform.Maui.UI
                         }
                         else
                         {
-
-                            this.ImageView.Source = image.ToWritableBitmap();
-                            //this.ImageView.Source = image.ToBitmapSource();
+                            var bmp = image?.ToWritableBitmap();
+                            this.ImageView.Source = bmp;
                             this.ImageView.Visibility = Visibility.Visible;
-
+                            this.WidthRequest = Math.Min(this.Width, bmp.PixelWidth);
+                            this.HeightRequest = bmp.PixelHeight;
                         }
                     });
             }

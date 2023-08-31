@@ -101,88 +101,16 @@ namespace Emgu.CV.Platform.Maui.UI
             //set { _displayImage = value; }
         }
 
-#if __ANDROID__
-        private Bitmap[] _renderBuffer = new Bitmap[2];
-        private int _renderBufferIdx = 0;
-
         /// <summary>
         /// Set the image to be displayed
         /// </summary>
         /// <param name="image">The image to be displayed</param>
         public virtual void SetImage(IInputArray image)
         {
-            if (image == null)
-            {
-                this.Dispatcher.Dispatch(
-                    () =>
-                    {
-                        DisplayImage.ImageView.SetImageBitmap(null);
-                    });
-                return;
-            }
-
-            int bufferIdx = _renderBufferIdx;
-            Bitmap buffer;
-            _renderBufferIdx = (_renderBufferIdx + 1) % _renderBuffer.Length;
-
-            using (InputArray iaImage = image.GetInputArray())
-            using (Mat mat = iaImage.GetMat())
-            {
-                if (_renderBuffer[bufferIdx] == null)
-                {
-                    buffer = mat.ToBitmap();
-                    _renderBuffer[bufferIdx] = buffer;
-                }
-                else
-                {
-                    var size = iaImage.GetSize();
-                    buffer = _renderBuffer[bufferIdx];
-                    if (buffer.Width != size.Width || buffer.Height != size.Height)
-                    {
-                        buffer.Dispose();
-                        _renderBuffer[bufferIdx] = mat.ToBitmap();
-                    }
-                    else
-                    {
-                        mat.ToBitmap(buffer);
-                    }
-                }
-            }
-
-            this.Dispatcher.Dispatch(
-                () =>
-                {
-                    DisplayImage.ImageView.SetImageBitmap(buffer);
-                });
+            //No need to dispatch here, ImageView will handle the proper dispatch
+            this.DisplayImage.SetImage(image);
         }
-#else
 
-        /// <summary>
-        /// Set the image to be displayed
-        /// </summary>
-        /// <param name="image">The image to be displayed</param>
-        public virtual void SetImage(IInputArray image)
-        {
-            this.Dispatcher.Dispatch(
-                () =>
-                {
-                    this.DisplayImage.SetImage(image);
-                    if (image == null)
-                        this.DisplayImage.IsVisible = false;
-                    else
-                    {
-                        this.DisplayImage.IsVisible = true;
-
-                        using (InputArray iaImage = image.GetInputArray())
-                        {
-                            System.Drawing.Size size = iaImage.GetSize();
-                            this.DisplayImage.WidthRequest = Math.Min(this.Width, size.Width);
-                            this.DisplayImage.HeightRequest = size.Height;
-                        }
-                    }
-                });
-        }
-#endif
 
         private StackLayout _mainLayout = new StackLayout();
 

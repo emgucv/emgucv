@@ -25,6 +25,17 @@ namespace Emgu.CV.Models
         private CascadeClassifier _eyeCascadeClassifier = null;
 
         /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Update;
+            }
+        }
+
+        /// <summary>
         /// Detect faces and eyes region from the input image
         /// </summary>
         /// <param name="image">The input image.</param>

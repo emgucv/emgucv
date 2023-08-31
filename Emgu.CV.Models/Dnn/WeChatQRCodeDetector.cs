@@ -27,6 +27,17 @@ namespace Emgu.CV.Models
     /// </summary>
     public class WeChatQRCodeDetector : DisposableObject, IProcessAndRenderModel
     {
+        /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Update;
+            }
+        }
+
         private String _modelFolderName = "wechat";
 
         private WeChatQRCode _weChatQRCodeDetectionModel = null;

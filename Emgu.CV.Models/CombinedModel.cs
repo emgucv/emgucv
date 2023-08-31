@@ -25,6 +25,19 @@ namespace Emgu.CV.Models
     /// </summary>
     public class CombinedModel : DisposableObject, IProcessAndRenderModel
     {
+        private RenderType _renderType;
+
+        /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return _renderType;
+            }
+        }
+
         private IProcessAndRenderModel[] _models;
         private bool _disposeChildren = false;
 
@@ -34,7 +47,13 @@ namespace Emgu.CV.Models
         /// <param name="models">The models to be combined.</param>
         public CombinedModel(params IProcessAndRenderModel[] models)
         {
+            for (int i = 1; i < _models.Length; i++)
+            {
+                if (models[i].RenderMethod == RenderType.Overwrite)
+                    throw new ArgumentException("Only the first model can be a 'RenderOver' model");
+            }
             _models = models;
+            _renderType = models[0].RenderMethod;
         }
 
         /// <summary>

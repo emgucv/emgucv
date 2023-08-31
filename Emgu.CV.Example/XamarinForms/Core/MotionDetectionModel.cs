@@ -13,6 +13,17 @@ namespace Emgu.CV.XamarinForms
 {
     public class MotionDetectionModel : IProcessAndRenderModel
     {
+        /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Overwrite;
+            }
+        }
+
         private MotionHistory _motionHistory;
         private IBackgroundSubtractor _forgroundDetector;
 

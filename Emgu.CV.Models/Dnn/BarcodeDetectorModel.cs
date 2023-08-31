@@ -81,13 +81,13 @@ namespace Emgu.CV.Models
                 if (manager.AllFilesDownloaded)
                 {
                     _barcodeDetector = new BarcodeDetector(
-                        manager.Files[0].LocalFile, 
+                        manager.Files[0].LocalFile,
                         manager.Files[1].LocalFile
                         );
                 }
             }
         }
-        
+
         /// <summary>
         /// Clear and reset the model. Required Init function to be called again before calling ProcessAndRender.
         /// </summary>
@@ -131,9 +131,9 @@ namespace Emgu.CV.Models
 
         private static Point[] MatToPoints(Mat m)
         {
-            PointF[] points = new PointF[ m.Width * m.Height / 2 ];
+            PointF[] points = new PointF[m.Width * m.Height / 2];
             GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-            Emgu.CV.Util.CvToolbox.Memcpy( handle.AddrOfPinnedObject(), m.DataPointer,points.Length * Marshal.SizeOf<PointF>());
+            Emgu.CV.Util.CvToolbox.Memcpy(handle.AddrOfPinnedObject(), m.DataPointer, points.Length * Marshal.SizeOf<PointF>());
             handle.Free();
             return Array.ConvertAll(points, Point.Round);
         }
@@ -156,6 +156,17 @@ namespace Emgu.CV.Models
         }
 
         /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Update;
+            }
+        }
+
+        /// <summary>
         /// Process the input image and render into the output image
         /// </summary>
         /// <param name="imageIn">The input image</param>
@@ -168,56 +179,49 @@ namespace Emgu.CV.Models
         /// <returns>The messages that we want to display.</returns>
         public String ProcessAndRender(IInputArray imageIn, IInputOutputArray imageOut)
         {
-            using (Mat image2 = new Mat())
+            //using (VectorOfMat points = new VectorOfMat())
+            //using (VectorOfVectorOfPointF points = new VectorOfVectorOfPointF())
+            //using (Mat points = new Mat())
+            using (VectorOfPointF points = new VectorOfPointF())
             {
-                CvInvoke.HConcat(imageIn, imageIn, image2);
+                Stopwatch watch = Stopwatch.StartNew();
+                var barcodesFound = _barcodeDetector.DetectAndDecodeMulti(imageIn, points);
+                watch.Stop();
 
-                //using (VectorOfMat points = new VectorOfMat())
-                //using (VectorOfVectorOfPointF points = new VectorOfVectorOfPointF())
-                //using (Mat points = new Mat())
-                using (VectorOfPointF points = new VectorOfPointF())
+
+                for (int i = 0; i < barcodesFound.Length; i++)
                 {
-                    Stopwatch watch = Stopwatch.StartNew();
-                    //_barcodeDetector.DetectAndDecodeMulti(imageIn, )
-                    //var barcodesFound = _barcodeDetector.DetectAndDecode(imageIn);
-                    var barcodesFound = _barcodeDetector.DetectAndDecodeMulti(image2, points);
-                    watch.Stop();
+                    Point[] contour = Array.ConvertAll(barcodesFound[i].Points, Point.Round);
 
-                    
-                    for (int i = 0; i < barcodesFound.Length; i++)
+                    using (VectorOfVectorOfPoint vpp = new VectorOfVectorOfPoint(new Point[][] { contour }))
                     {
-                        Point[] contour = Array.ConvertAll(barcodesFound[i].Points, Point.Round);
-
-                        using (VectorOfVectorOfPoint vpp = new VectorOfVectorOfPoint(new Point[][] { contour }))
-                        {
-                            CvInvoke.DrawContours(imageOut, vpp, -1, RenderColor);
-                        }
-
-                        CvInvoke.PutText(
-                            imageOut,
-                            barcodesFound[i].DecodedInfo,
-                            Point.Round( barcodesFound[i].Points[0]),
-                            FontFace.HersheySimplex,
-                            1.0,
-                            RenderColor
-                            );
+                        CvInvoke.DrawContours(imageOut, vpp, -1, RenderColor);
                     }
 
-
-                    if (barcodesFound.Length == 0)
-                    {
-                        return String.Format("No barcodes found (in {0} milliseconds)", watch.ElapsedMilliseconds);
-                    }
-
-                    string[] barcodesTexts = Array.ConvertAll(barcodesFound,
-                        delegate(GraphicalCode input) { return input.DecodedInfo; });
-                    //String allBarcodeText = ;
-                    return String.Format(
-                        "Barcodes found (in {1} milliseconds): {0}",
-                        String.Join(";", barcodesTexts),
-                        watch.ElapsedMilliseconds);
-
+                    CvInvoke.PutText(
+                        imageOut,
+                        barcodesFound[i].DecodedInfo,
+                        Point.Round(barcodesFound[i].Points[0]),
+                        FontFace.HersheySimplex,
+                        1.0,
+                        RenderColor
+                        );
                 }
+
+
+                if (barcodesFound.Length == 0)
+                {
+                    return String.Format("No barcodes found (in {0} milliseconds)", watch.ElapsedMilliseconds);
+                }
+
+                string[] barcodesTexts = Array.ConvertAll(barcodesFound,
+                    delegate (GraphicalCode input) { return input.DecodedInfo; });
+                //String allBarcodeText = ;
+                return String.Format(
+                    "Barcodes found (in {1} milliseconds): {0}",
+                    String.Join(";", barcodesTexts),
+                    watch.ElapsedMilliseconds);
+
             }
         }
     }

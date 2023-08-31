@@ -34,6 +34,17 @@ namespace Emgu.CV.Models
         private String[] _objectsOfInterest = null;
 
         /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Update;
+            }
+        }
+
+        /// <summary>
         /// Get or Set the list of object of interest.
         /// If null, all detected objects will be returned during the detection.
         /// Otherwise, only those objects with a label included in the list will be returned.

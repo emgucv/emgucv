@@ -30,6 +30,17 @@ namespace Emgu.CV.Models
         private FaceDetector _faceDetector = null;
         private FacemarkDetector _facemarkDetector = null;
 
+        /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Update;
+            }
+        }
+
         ///<inheritdoc/>
         public void Clear()
         {
