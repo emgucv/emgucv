@@ -455,7 +455,6 @@ namespace Emgu.CV
         /// <summary>
         /// Pointer to the beginning of the raw data
         /// </summary>
-        [JsonIgnore]
         public IntPtr DataPointer
         {
             get
