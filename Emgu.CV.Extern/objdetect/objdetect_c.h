@@ -18,9 +18,16 @@ namespace cv
 {
     class HOGDescriptor {};
     class CascadeClassifier {};
+    class GraphicalCodeDetector {};
     class QRCodeDetector {};
+    class QRCodeDetectorAruco {};
     class FaceDetectorYN {};
     class FaceRecognizerSF {};
+
+    namespace barcode
+    {
+        class BarcodeDetector {};
+    }
 }
 #endif
 #include "vectors_c.h"
