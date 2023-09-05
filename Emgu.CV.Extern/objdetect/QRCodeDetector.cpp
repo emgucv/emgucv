@@ -78,7 +78,7 @@ void cveBarcodeDetectorRelease(cv::barcode::BarcodeDetector** detector)
 	delete* detector;
 	detector = 0;
 #else
-	throw_no_objdetect()();
+	throw_no_objdetect();
 #endif
 }
 
