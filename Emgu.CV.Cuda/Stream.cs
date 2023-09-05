@@ -16,7 +16,7 @@ namespace Emgu.CV.Cuda
     /// Passed to each function that supports async kernel execution.
     /// Reference counting is enabled
     /// </summary>
-    public class Stream : UnmanagedObject
+    public partial class Stream : UnmanagedObject
     {
         /// <summary>
         /// Create a new Cuda Stream

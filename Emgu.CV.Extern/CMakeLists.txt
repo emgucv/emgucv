@@ -1322,6 +1322,27 @@ ENDMACRO()
 	${HAVE_opencv_core})
 
   CREATE_OCV_CLASS_PROPERTY( 
+    "core/stream_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.CUDA/Stream.g.cs"
+    "cv::cuda::Stream" 
+    "Stream" 
+    "cudaPtr" 
+    "void*" 
+    "val"
+    "CudaPtr" 
+    "IntPtr"
+    "Get pointer to CUDA stream"
+    "Emgu.CV.Cuda"
+    "CudaInvoke"
+    "Stream"
+	""
+    "#include \"opencv2/core/cuda.hpp\"
+	#include \"opencv2/core/types_c.h\""
+	""
+	""
+	${HAVE_opencv_core})
+
+  CREATE_OCV_CLASS_PROPERTY( 
     "core/file_node_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Core/FileNode.g.cs"
     "cv::FileNode" 
