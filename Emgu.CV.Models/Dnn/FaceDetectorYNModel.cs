@@ -73,9 +73,11 @@ namespace Emgu.CV.Models
                 FileDownloadManager manager = new FileDownloadManager();
 
                 manager.AddFile(
-                    "https://github.com/opencv/opencv_zoo/raw/master/models/face_detection_yunet/face_detection_yunet_2022mar.onnx",
+                    "https://github.com/opencv/opencv_zoo/raw/main/models/face_detection_yunet/face_detection_yunet_2023mar.onnx",
+                    //"https://github.com/opencv/opencv_zoo/raw/master/models/face_detection_yunet/face_detection_yunet_2023mar.onnx",
                     _modelFolderName,
-                    "50EF07F702A31741CA46A4C0D947773B64143B9362780237BF0D427D6C79BAB7");
+                    "8F2383E4DD3CFBB4553EA8718107FC0423210DC964F9F4280604804ED2552FA4");
+                    //"50EF07F702A31741CA46A4C0D947773B64143B9362780237BF0D427D6C79BAB7");
 
 
                 if (onDownloadProgressChanged != null)
