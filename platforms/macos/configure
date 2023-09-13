@@ -66,14 +66,14 @@ cd ../..
 if [ "$CV_CONTRIB_OPTION" != "" ]; then
     cd 3rdParty
     
-	if [ BUILD_FREETYPE ]; then  
-    cd freetype2
-    mkdir -p $BUILD_FOLDER
-    cd $BUILD_FOLDER
-    cmake $BUILD_ARCH $OSX_SYSROOT_OPTION -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" ../
-    cmake --build . --config Release --target install --parallel
-    cd ../..
-	fi
+    if [ "$BUILD_FREETYPE" = true ]; then  
+	cd freetype2
+	mkdir -p $BUILD_FOLDER
+	cd $BUILD_FOLDER
+	cmake $BUILD_ARCH $OSX_SYSROOT_OPTION -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" ../
+	cmake --build . --config Release --target install --parallel
+	cd ../..
+    fi
 
     if [ "$2" == "openvino" ]; then
 	cd openvino
@@ -88,15 +88,15 @@ if [ "$CV_CONTRIB_OPTION" != "" ]; then
     
     cd ..
 
-    if [ BUILD_FREETYPE ]; then  
-    cd harfbuzz
-    mkdir -p $BUILD_FOLDER
-    cd $BUILD_FOLDER
-    cmake $BUILD_ARCH $OSX_SYSROOT_OPTION -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DHB_HAVE_FREETYPE:BOOL=TRUE -DHB_BUILD_TESTS:BOOL=FALSE ..
-    cmake --build . --config Release --target install --parallel 
-    cd ../..
-	fi
-
+    if [ "$BUILD_FREETYPE" = true ]; then  
+	cd harfbuzz
+	mkdir -p $BUILD_FOLDER
+	cd $BUILD_FOLDER
+	cmake $BUILD_ARCH $OSX_SYSROOT_OPTION -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DHB_HAVE_FREETYPE:BOOL=TRUE -DHB_BUILD_TESTS:BOOL=FALSE ..
+	cmake --build . --config Release --target install --parallel 
+	cd ../..
+    fi
+    
     cd hdf5
     mkdir -p $BUILD_FOLDER
     cd $BUILD_FOLDER
@@ -104,7 +104,8 @@ if [ "$CV_CONTRIB_OPTION" != "" ]; then
     cmake --build . --config Release --target install --parallel 
     cd ../..
 
-    if [ BUILD_VTK ]; then  
+    #echo BUILD_VTK: $BUILD_VTK
+    if [ "$BUILD_VTK" = true ]; then  
 	cd vtk
 	mkdir -p $BUILD_FOLDER
 	cd $BUILD_FOLDER
