@@ -422,7 +422,7 @@ namespace BuildInfo.NetCore.Console
             }
             else
             {
-                depthAIText = "DNN module not available.";
+                depthAIText = "DepthAI module not available.";
             }
 
             return depthAIText;
