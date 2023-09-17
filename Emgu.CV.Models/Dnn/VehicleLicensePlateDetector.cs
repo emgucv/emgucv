@@ -92,7 +92,7 @@ namespace Emgu.CV.Models
             }
         }
 
-        private String _modelFolderName = "vehicle-license-plate-detection-barrier-0106-openvino-2021.2";
+        private String _modelFolderName = "vehicle-license-plate-detection-barrier-0106-openvino-2023.1";
 
         private DetectionModel _vehicleLicensePlateDetectionModel = null;
         
@@ -127,13 +127,13 @@ namespace Emgu.CV.Models
                 FileDownloadManager manager = new FileDownloadManager();
 
                 manager.AddFile(
-                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/license-plate-recognition-barrier-0001/FP32/license-plate-recognition-barrier-0001.xml",
+                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1/license-plate-recognition-barrier-0001/FP32/license-plate-recognition-barrier-0001.xml",
                     _modelFolderName,
-                    "B5B649B9566F5CF352554ACFFD44207F4AECEE1DA767F4B69F46060A102623FA");
+                    "35D77DE2F71AC340B5B065B67EB2B791550B4BC395F16AAC2E742496F35DD9D8");
                 manager.AddFile(
-                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/license-plate-recognition-barrier-0001/FP32/license-plate-recognition-barrier-0001.bin",
+                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1/license-plate-recognition-barrier-0001/FP32/license-plate-recognition-barrier-0001.bin",
                     _modelFolderName,
-                    "685934518A930CC55D023A53AC2D5E47BBE81B80828354D8318DE6DC3AD5CFBA");
+                    "055CEA6236129BEBBC64852C69FDAEFE07E074800251147DDE0005A824BCFEBA");
 
                 if (onDownloadProgressChanged != null)
                 {
@@ -185,6 +185,7 @@ namespace Emgu.CV.Models
             {
                 FileDownloadManager manager = new FileDownloadManager();
 
+                /*
                 manager.AddFile(
                     "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/vehicle-attributes-recognition-barrier-0042/FP32/vehicle-attributes-recognition-barrier-0042.xml",
                     _modelFolderName,
@@ -193,6 +194,15 @@ namespace Emgu.CV.Models
                     "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/vehicle-attributes-recognition-barrier-0042/FP32/vehicle-attributes-recognition-barrier-0042.bin",
                     _modelFolderName,
                     "492520E55F452223E767D54227D6EF6B60B0C1752DD7B9D747BE65D57B685A0E");
+                */
+                manager.AddFile(
+                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1/vehicle-attributes-recognition-barrier-0042/FP32/vehicle-attributes-recognition-barrier-0042.xml",
+                    _modelFolderName,
+                    "B669E6F98C66525F1849DB4D16DF8C92876164BB41D6420F84A8D3AE9B4DC699");
+                manager.AddFile(
+                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1/vehicle-attributes-recognition-barrier-0042/FP32/vehicle-attributes-recognition-barrier-0042.bin",
+                    _modelFolderName,
+                    "717BFD7413FFD5EE6D08C5E087CAA0A48CC69646BD68B7791C62C825399620B4");
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;
 
@@ -225,12 +235,25 @@ namespace Emgu.CV.Models
             {
                 FileDownloadManager manager = new FileDownloadManager();
 
+                /*
                 manager.AddFile(
-                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/vehicle-license-plate-detection-barrier-0106/FP32/vehicle-license-plate-detection-barrier-0106.xml",
-                    _modelFolderName);
+                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1/vehicle-license-plate-detection-barrier-0106/FP32/vehicle-license-plate-detection-barrier-0106.xml",
+                    _modelFolderName,
+                    "E305DEA89C08501B66774FDCD31EEE279C3531CBAB04127C62AEAC34682C0330");
                 manager.AddFile(
-                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2021.2/models_bin/3/vehicle-license-plate-detection-barrier-0106/FP32/vehicle-license-plate-detection-barrier-0106.bin",
-                    _modelFolderName);
+                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1/vehicle-license-plate-detection-barrier-0106/FP32/vehicle-license-plate-detection-barrier-0106.bin",
+                    _modelFolderName,
+                    "DEF0179E5896B732D54654C369F1C0D896A457D7D3A50627DD9020E45FD6D6EB");
+                */
+
+                manager.AddFile(
+                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1/vehicle-license-plate-detection-barrier-0106/FP32/vehicle-license-plate-detection-barrier-0106.xml",
+                    _modelFolderName,
+                    "45D82B40F48CE43E61188ED16A140C8A77C4340CF367FC18C491B1F1A1218DD7");
+                manager.AddFile(
+                    "https://storage.openvinotoolkit.org/repositories/open_model_zoo/2023.0/models_bin/1/vehicle-license-plate-detection-barrier-0106/FP32/vehicle-license-plate-detection-barrier-0106.bin",
+                    _modelFolderName,
+                    "F84139F97805D343273E840D47B81C89A7C96C6263226A5622670E66424FB2A1");
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;
 
