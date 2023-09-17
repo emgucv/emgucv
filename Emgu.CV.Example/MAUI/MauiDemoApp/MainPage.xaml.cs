@@ -20,7 +20,7 @@ namespace MauiDemoApp
 
             Emgu.CV.Platform.Maui.MauiInvoke.Init();
 #if DEBUG
-            CvInvoke.LogLevel = LogLevel.Debug;
+            CvInvoke.LogLevel = LogLevel.Verbose; //LogLevel.Debug;
 #endif
 
             String aboutIcon = null;

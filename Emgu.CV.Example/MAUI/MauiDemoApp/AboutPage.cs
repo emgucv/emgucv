@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.CV;
 using Emgu.CV.Cuda;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Dnn;
 using Emgu.CV.ML;
 //using Backend = Emgu.CV.Dnn.Backend;
@@ -19,6 +20,9 @@ namespace MauiDemoApp
     {
         public AboutPage()
         {
+#if DEBUG
+            CvInvoke.LogLevel = LogLevel.Verbose; //LogLevel.Debug;
+#endif
 
             String lineBreak = "<br/>";
 
