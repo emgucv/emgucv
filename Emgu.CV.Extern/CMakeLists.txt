@@ -278,7 +278,7 @@ namespace ${cs_namespace}
       SET(MARSHAL_RETURN "
      [return: MarshalAs(CvInvoke.BoolMarshalType)]")
     ENDIF()
-    
+  
     IF("${MARSHAL_TYPE}" STREQUAL "val")
       IF("${PROPERTY_TYPE}" STREQUAL "cv::String") #special handling for functions that returns strings
 	    IF(IS_DUMMY)
@@ -3937,6 +3937,10 @@ ENDIF()
 #  FIND_PACKAGE(CUDA)
 #  ADD_DEPENDENCIES(${the_target}  ${CUDA_LIBRARIES})
 #ENDIF()
+
+IF (TARGET opencv_dnn_openvino)
+  ADD_DEPENDENCIES(${the_target} opencv_dnn_openvino)
+ENDIF()
 
 IF(EMGU_CV_WITH_TESSERACT)
   IF(TESSERACT_FOUND)
