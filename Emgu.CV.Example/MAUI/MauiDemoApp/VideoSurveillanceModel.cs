@@ -49,16 +49,10 @@ namespace Emgu.CV.Models
 
         private static IBackgroundSubtractor _fgDetector;
 
-        public void Dispose()
+        protected override void DisposeObject()
         {
             Clear();
         }
-
-        protected override void DisposeObject()
-        {
-            //Dispose();
-        }
-
 
         public void Clear()
         {
