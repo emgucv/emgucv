@@ -102,7 +102,7 @@ namespace Emgu.CV
         /// <param name="mat">The Mat to copy pixel data from</param>
         public Image(Mat mat)
         {
-            if (Mat.IsEmpty)
+            if (mat.IsEmpty)
                 throw new NullReferenceException("The input Mat is empty.");
             LoadImageFromMat(mat);
         }
