@@ -101,6 +101,10 @@ namespace MauiDemoApp
                     (dnnBackend.Backend == Emgu.CV.Dnn.Backend.InferenceEngine
                      || dnnBackend.Backend == Emgu.CV.Dnn.Backend.InferenceEngineNgraph
                      || dnnBackend.Backend == Emgu.CV.Dnn.Backend.InferenceEngineNnBuilder2019));
+
+#if DEBUG
+                DnnInvoke.EnableModelDiagnostics(true);
+#endif
             }
 
             bool haveCamera = true;
@@ -154,23 +158,24 @@ namespace MauiDemoApp
             };
 
             
-            licensePlateRecognitionButton.Clicked += (sender, args) =>
-            {
-                ProcessAndRenderPage vehicleLicensePlateDetectorPage = new ProcessAndRenderPage(
-                    new VehicleLicensePlateDetector(),
-                    "Perform License Plate Recognition",
-                    "cars_license_plate.png",
-                    "This demo is based on the security barrier camera demo in the OpenVino model zoo. The models is trained with BIT-vehicle dataset. License plate is trained based on Chinese license plate that has white character on blue background. You will need to re-train your own model if you intend to use this in other countries.");
-                Picker p = vehicleLicensePlateDetectorPage.Picker;
-                p.IsVisible = true;
-                p.Title = "Preferred DNN backend & target";
+            //licensePlateRecognitionButton.Clicked += (sender, args) =>
+            //{
+            //    ProcessAndRenderPage vehicleLicensePlateDetectorPage = new ProcessAndRenderPage(
+            //        new VehicleLicensePlateDetector(),
+            //        "Perform License Plate Recognition",
+            //        "cars_license_plate.png",
+            //        "This demo is based on the security barrier camera demo in the OpenVino model zoo. The models is trained with BIT-vehicle dataset. License plate is trained based on Chinese license plate that has white character on blue background. You will need to re-train your own model if you intend to use this in other countries.");
+            //    Picker p = vehicleLicensePlateDetectorPage.Picker;
+            //    p.IsVisible = true;
+            //    p.Title = "Preferred DNN backend & target";
 
-                foreach (String option in GetDnnBackends(DnnBackendType.InferenceEngineOnly))
-                {
-                    p.Items.Add(option);
-                }
-                this.Navigation.PushAsync(vehicleLicensePlateDetectorPage);
-            };
+            //    foreach (String option in GetDnnBackends(DnnBackendType.InferenceEngineOnly))
+            //    {
+            //        p.Items.Add(option);
+            //    }
+
+            //    this.Navigation.PushAsync(vehicleLicensePlateDetectorPage);
+            //};
 
             maskRcnnButton.Clicked += (sender, args) =>
             {
@@ -271,7 +276,8 @@ namespace MauiDemoApp
             yoloButton.IsVisible = haveDNN;
             superresButton.IsVisible = haveDNN;
             sceneTextDetectionButton.IsVisible = haveDNN && haveFreetype;
-            licensePlateRecognitionButton.IsVisible = hasInferenceEngine;
+            //licensePlateRecognitionButton.IsVisible = hasInferenceEngine;
+            licensePlateRecognitionButton.IsVisible = false;
             featureDetectionButton.IsVisible = haveFeatures2D;
             
             
@@ -458,6 +464,7 @@ namespace MauiDemoApp
                 Content = buttonsLayout,
             };
         }
+
 
         private enum DnnBackendType
         {

@@ -356,23 +356,24 @@ namespace Emgu.CV.XamarinForms
                 MainPage.Navigation.PushAsync(new FeatureMatchingPage());
             };
 
-            licensePlateRecognitionButton.Clicked += (sender, args) =>
-            {
-                ProcessAndRenderPage vehicleLicensePlateDetectorPage = new ProcessAndRenderPage(
-                    new VehicleLicensePlateDetector(),
-                    "Perform License Plate Recognition",
-                    "cars_license_plate.png",
-                    "This demo is based on the security barrier camera demo in the OpenVino model zoo. The models is trained with BIT-vehicle dataset. License plate is trained based on Chinese license plate that has white character on blue background. You will need to re-train your own model if you intend to use this in other countries.");
-                Picker p = vehicleLicensePlateDetectorPage.Picker;
-                p.IsVisible = true;
-                p.Title = "Preferred DNN backend & target";
 
-                foreach (String option in GetDnnBackends(DnnBackendType.InferenceEngineOnly))
-                {
-                    p.Items.Add(option);
-                }
-                MainPage.Navigation.PushAsync(vehicleLicensePlateDetectorPage);
-            };
+            //licensePlateRecognitionButton.Clicked += (sender, args) =>
+            //{
+            //    ProcessAndRenderPage vehicleLicensePlateDetectorPage = new ProcessAndRenderPage(
+            //        new VehicleLicensePlateDetector(),
+            //        "Perform License Plate Recognition",
+            //        "cars_license_plate.png",
+            //        "This demo is based on the security barrier camera demo in the OpenVino model zoo. The models is trained with BIT-vehicle dataset. License plate is trained based on Chinese license plate that has white character on blue background. You will need to re-train your own model if you intend to use this in other countries.");
+            //    Picker p = vehicleLicensePlateDetectorPage.Picker;
+            //    p.IsVisible = true;
+            //    p.Title = "Preferred DNN backend & target";
+
+            //    foreach (String option in GetDnnBackends(DnnBackendType.InferenceEngineOnly))
+            //    {
+            //        p.Items.Add(option);
+            //    }
+            //    MainPage.Navigation.PushAsync(vehicleLicensePlateDetectorPage);
+            //};
 
             maskRcnnButton.Clicked += (sender, args) =>
             {
@@ -447,7 +448,8 @@ namespace Emgu.CV.XamarinForms
             stopSignDetectionButton.IsVisible = haveDNN;
             yoloButton.IsVisible = haveDNN;
             sceneTextDetectionButton.IsVisible = haveDNN && haveFreetype;
-            licensePlateRecognitionButton.IsVisible = hasInferenceEngine;
+            //licensePlateRecognitionButton.IsVisible = hasInferenceEngine;
+            licensePlateRecognitionButton.IsVisible = false;
             featureDetectionButton.IsVisible = haveFeatures2D;
 
         }
