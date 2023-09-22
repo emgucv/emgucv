@@ -62,6 +62,26 @@ cv::dnn::Net* cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, c
 #endif
 }
 
+cv::dnn::Net* cveReadNetFromTFLite(cv::String* model)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::Net net = cv::dnn::readNetFromTFLite(*model);
+	return new cv::dnn::Net(net);
+#else
+	throw_no_dnn();
+#endif	
+}
+cv::dnn::Net* cveReadNetFromTFLite2(const char* bufferModel, int lenModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::Net net = cv::dnn::readNetFromTFLite(bufferModel, lenModel);
+	return new cv::dnn::Net(net);
+#else
+	throw_no_dnn();
+#endif	
+}
+
+
 cv::dnn::Net* cveReadNetFromTorch(cv::String* model, bool isBinary, bool evaluate)
 {
 #ifdef HAVE_OPENCV_DNN
