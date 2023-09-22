@@ -293,7 +293,7 @@ namespace Emgu.CV.Dnn
         /// </summary>
         /// <param name="model">buffer containing the content of the pb file</param>
         /// <param name="config">buffer containing the content of the pbtxt file</param>
-        /// <returns>Net object.</returns>
+        /// <returns>Net object</returns>
         public static Net ReadNetFromTensorflow(byte[] model, byte[] config = null)
         {
             GCHandle modelHandle = GCHandle.Alloc(model, GCHandleType.Pinned);
@@ -317,6 +317,46 @@ namespace Emgu.CV.Dnn
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNetFromTensorflow2(IntPtr bufferModel, int lenModel, IntPtr bufferConfig, int lenConfig);
+
+        /// <summary>
+        /// Reads a network model stored in TFLite framework's format.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>Net object</returns>
+        public static Net ReadNetFromTFLite(String model)
+        {
+            using (CvString modelStr = new CvString(model))
+            {
+                return new Net(cveReadNetFromTFLite(modelStr));
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveReadNetFromTFLite(IntPtr model);
+
+        /// <summary>
+        /// Reads a network model stored in TFLite framework's format.
+        /// </summary>
+        /// <param name="model">buffer containing the content of the tflite file</param>
+        /// <returns>Net object</returns>
+        public static Net ReadNetFromTFLite(byte[] model)
+        {
+            GCHandle modelHandle = GCHandle.Alloc(model, GCHandleType.Pinned);
+
+            try
+            {
+                return new Net(cveReadNetFromTFLite2(
+                    modelHandle.AddrOfPinnedObject(),
+                    model.Length));
+            }
+            finally
+            {
+                modelHandle.Free();
+            }
+
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveReadNetFromTFLite2(IntPtr bufferModel, int lenModel);
+
 
         /// <summary>
         /// Reads a network model stored in Torch7 framework's format.
