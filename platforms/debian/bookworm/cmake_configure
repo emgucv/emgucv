@@ -1,0 +1,111 @@
+#!/bin/bash -v
+
+cd "$(dirname "$0")"
+
+CURRENT_FOLDER=$PWD
+INSTALL_FOLDER=$PWD/build/install
+TOP_FOLDER=$PWD/../../../
+
+mkdir -p $INSTALL_FOLDER
+
+BUILD_TYPE=full
+if [[ $# -gt 0 ]]; then
+    if [ "$1" == "core" ]; then
+        BUILD_TYPE=core
+    elif [ "$1" == "mini" ]; then
+        BUILD_TYPE=mini
+    fi
+fi
+
+EMGUCV_CMAKE_SHARED_OPTIONS=( -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=TRUE -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DCMAKE_CXX_STANDARD:String="11" )
+
+cd $TOP_FOLDER
+
+cd eigen
+mkdir -p build
+cd build
+cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} ..
+cmake --build . --config Release --parallel 1 --target install
+
+cd $TOP_FOLDER
+if [ "$BUILD_TYPE" == "mini" ]; then
+    echo "Performing mini build"
+    EMGU_CV_TESSERACT_OPTION=( -DEMGU_CV_WITH_TESSERACT:BOOL=FALSE )
+    TESSERACT_OPTION=-DWITH_TESSERACT:BOOL=FALSE
+    VTK_OPTION=( -DWITH_VTK:BOOL=FALSE )
+    CONTRIB_OPTION=( -DBUILD_opencv_3d:BOOL=FALSE -DBUILD_opencv_calib:BOOL=FALSE -DBUILD_opencv_dnn:BOOL=FALSE -DBUILD_opencv_ml:BOOL=FALSE -DBUILD_opencv_photo:BOOL=FALSE -DBUILD_opencv_features2d:BOOL=FALSE -DBUILD_opencv_gapi:BOOL=FALSE -DBUILD_opencv_flann:BOOL=FALSE -DBUILD_opencv_video:BOOL=FALSE )
+elif [ "$BUILD_TYPE" == "core" ]; then
+    echo "Performing core build"
+    EMGU_CV_TESSERACT_OPTION=( -DEMGU_CV_WITH_TESSERACT:BOOL=FALSE )
+    TESSERACT_OPTION=-DWITH_TESSERACT:BOOL=FALSE
+    VTK_OPTION=( -DWITH_VTK:BOOL=FALSE )
+    CONTRIB_OPTION=( )
+else
+    echo "Performing full build"
+    
+    #Do not use system tesseract, build tesseract from source code instead
+    EMGU_CV_TESSERACT_OPTION=( -DEMGU_CV_WITH_TESSERACT:BOOL=TRUE )
+    TESSERACT_OPTION=-DWITH_TESSERACT:BOOL=FALSE
+
+    cd hdf5
+    mkdir -p build
+    cd build
+    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_SHARED_LIBS:BOOL=FALSE -DBUILD_TESTING:BOOL=FALSE -DHDF5_BUILD_EXAMPLES:BOOL=FALSE -DHDF5_BUILD_TOOLS:BOOL=FALSE -DHDF5_BUILD_UTILS:BOOL=FALSE ..
+    cmake --build . --config Release --parallel 1 --target install
+    cd ../..
+    
+    #    cd vtk
+    #    mkdir -p build
+    #    cd build
+    #    cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE -DCMAKE_EXE_LINKER_FLAGS="-latomic" ..
+    #    cmake --build . --config Release --parallel 1 --target install
+    #    VTK_OPTION=( -DVTK_DIR:String="$PWD" )
+    #    cd ../..
+    VTK_OPTION=( -DWITH_VTK:BOOL=TRUE )
+    CONTRIB_OPTION=( -DOPENCV_EXTRA_MODULES_PATH=$TOP_FOLDER/opencv_contrib/modules )
+fi
+
+
+cd $CURRENT_FOLDER
+cd build
+cmake\
+      ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} \
+      -DBUILD_TESTS:BOOL=FALSE \
+      -DBUILD_PERF_TESTS:BOOL=FALSE \
+      -DBUILD_opencv_apps:BOOL=FALSE \
+      -DBUILD_DOCS:BOOL=FALSE \
+      -DWITH_CUDA:BOOL=FALSE \
+      -DWITH_IPP:BOOL=FALSE \
+      ${CONTRIB_OPTION[@]} \
+      -DBUILD_opencv_ts:BOOL=FALSE \
+      -DBUILD_WITH_DEBUG_INFO:BOOL=FALSE \
+      -DBUILD_SHARED_LIBS:BOOL=FALSE \
+      ${VTK_OPTION[@]} \
+      ${EMGU_CV_TESSERACT_OPTION[@]} \
+      $TESSERACT_OPTION \
+      -DWITH_EIGEN:BOOL=TRUE \
+      -DEigen3_DIR:String="$TOP_FOLDER/eigen/build" \
+      -DBUILD_TIFF:BOOL=TRUE \
+      -DBUILD_PNG:BOOL=TRUE \
+      -DBUILD_JPEG:BOOL=TRUE \
+      -DBUILD_OPENEXR:BOOL=TRUE \
+      -DBUILD_opencv_python2:BOOL=FALSE \
+      -DBUILD_opencv_python3:BOOL=FALSE \
+      -DBUILD_opencv_java:BOOL=FALSE \
+      $TOP_FOLDER
+
+#      -DCMAKE_CXX_FLAGS="-DPNG_ARM_NEON_OPT=0 " \
+#      -DCMAKE_C_FLAGS="-DPNG_ARM_NEON_OPT=0 " \
+#      -DCMAKE_CXX_FLAGS_DEBUG="-DPNG_ARM_NEON_OPT=0 " \
+#      -DCMAKE_C_FLAGS_DEBUG="-DPNG_ARM_NEON_OPT=0 " \
+#      -DCMAKE_CXX_FLAGS_RELEASE="-DPNG_ARM_NEON_OPT=0 " \
+#      -DCMAKE_C_FLAGS_RELEASE="-DPNG_ARM_NEON_OPT=0 " \
+
+
+C_INCLUDE_PATH=$TOP_FOLDER/eigen/:$INSTALL_FOLDER/include/vtk-9.2 CPLUS_INCLUDE_PATH=$TOP_FOLDER/eigen/:$INSTALL_FOLDER/include/vtk-9.2 cmake --build . --config Release --parallel 1 --target package
+#make
+cd ..
+
+#mkdir -p libs/arm
+#cp build/libcvextern.so libs/arm/libcvextern.so
+#cd ..
