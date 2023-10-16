@@ -87,7 +87,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Define an error callback that can be registered using cvRedirectError function
+        /// Define an error callback that can be registered using RedirectError function
         /// </summary>
         /// <param name="status">The numeric code for error status</param>
         /// <param name="funcName">The source file name where error is encountered</param>
@@ -183,6 +183,19 @@ namespace Emgu.CV
             IntPtr errorHandler,
             IntPtr userdata,
             IntPtr prevUserdata);
+
+        /// <summary>
+        /// When the break-on-error mode is set, the default error handler issues a hardware exception, which
+        /// can make debugging more convenient.
+        /// </summary>
+        /// <param name="flag">The flag</param>
+        /// <returns>The previous state</returns>
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveSetBreakOnError")]
+        [return:MarshalAs(CvInvoke.BoolMarshalType)]
+        public static extern bool SetBreakOnError(
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool flag
+            );
 
         /// <summary>
         /// Sets the specified error mode.

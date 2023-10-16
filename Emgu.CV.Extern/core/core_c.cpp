@@ -6,9 +6,14 @@
 
 #include "core_c_extra.h"
 
-CvErrorCallback cveRedirectError(CvErrorCallback error_handler, void* userdata, void** prev_userdata)
+bool cveSetBreakOnError(bool flag)
 {
-	return cvRedirectError(error_handler, userdata, prev_userdata);
+	return cv::setBreakOnError(flag);
+}
+
+cv::ErrorCallback cveRedirectError(cv::ErrorCallback errorHandler, void* userdata, void** prevUserdata)
+{
+	return cv::redirectError(errorHandler, userdata, prevUserdata);
 }
 
 int cveGetErrMode()
