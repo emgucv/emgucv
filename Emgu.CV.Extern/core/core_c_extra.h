@@ -17,7 +17,8 @@
 #include "opencv2/core/utils/logger.hpp"
 #include "registry_parallel.hpp"
 
-CVAPI(cv::ErrorCallback) cveRedirectError(cv::ErrorCallback error_handler, void* userdata, void** prev_userdata);
+CVAPI(bool) cveSetBreakOnError(bool flag);
+CVAPI(cv::ErrorCallback) cveRedirectError(cv::ErrorCallback errorHandler, void* userdata, void** prevUserdata);
 CVAPI(int) cveGetErrMode();
 CVAPI(int) cveSetErrMode(int mode);
 CVAPI(int) cveGetErrStatus();
