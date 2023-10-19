@@ -2360,7 +2360,7 @@ INSTALL(
   "${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs"
   "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
   "${CMAKE_CURRENT_SOURCE_DIR}/${LICENSE_FILE_NAME}"
-  "${CMAKE_CURRENT_SOURCE_DIR}/nuget.config"
+  #"${CMAKE_CURRENT_SOURCE_DIR}/nuget.config"
   "${CMAKE_CURRENT_SOURCE_DIR}/components.config"
   DESTINATION .
   COMPONENT emgucv_source
