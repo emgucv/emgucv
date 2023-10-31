@@ -346,7 +346,6 @@
     <Content Include="NotoSansCJK-Regular.ttc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Drawing.Common">
