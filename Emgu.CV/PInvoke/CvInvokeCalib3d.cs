@@ -923,7 +923,6 @@ namespace Emgu.CV
             IntPtr tvec,
             IntPtr reprojectionError);
 
-
         /// <summary>
         /// Estimates transformation between the 2 cameras making a stereo pair. If we have a stereo camera, where the relative position and orientatation of the 2 cameras is fixed, and if we computed poses of an object relative to the first camera and to the second camera, (R1, T1) and (R2, T2), respectively (that can be done with cvFindExtrinsicCameraParams2), obviously, those poses will relate to each other, i.e. given (R1, T1) it should be possible to compute (R2, T2) - we only need to know the position and orientation of the 2nd camera relative to the 1st camera. That's what the described function does. It computes (R, T) such that:
         /// R2=R*R1,
@@ -987,6 +986,94 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// Estimates transformation between the 2 cameras making a stereo pair. If we have a stereo camera, where the relative position and orientatation of the 2 cameras is fixed, and if we computed poses of an object relative to the first camera and to the second camera, (R1, T1) and (R2, T2), respectively (that can be done with cvFindExtrinsicCameraParams2), obviously, those poses will relate to each other, i.e. given (R1, T1) it should be possible to compute (R2, T2) - we only need to know the position and orientation of the 2nd camera relative to the 1st camera. That's what the described function does. It computes (R, T) such that:
+        /// R2=R*R1,
+        /// T2=R*T1 + T
+        /// </summary>
+        /// <param name="objectPoints">The 3D location of the object points. The first index is the index of image, second index is the index of the point</param>
+        /// <param name="imagePoints1">The 2D image location of the points for camera 1. The first index is the index of the image, second index is the index of the point</param>
+        /// <param name="imagePoints2">The 2D image location of the points for camera 2. The first index is the index of the image, second index is the index of the point</param>
+        /// <param name="cameraMatrix1">The input/output camera matrices [fxk 0 cxk; 0 fyk cyk; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS or CV_CALIB_FIX_ASPECT_RATIO are specified, some or all of the elements of the matrices must be initialized</param>
+        /// <param name="distCoeffs1">The input/output vectors of distortion coefficients for each camera, 4x1, 1x4, 5x1 or 1x5</param>
+        /// <param name="cameraMatrix2">The input/output camera matrices [fxk 0 cxk; 0 fyk cyk; 0 0 1]. If CV_CALIB_USE_INTRINSIC_GUESS or CV_CALIB_FIX_ASPECT_RATIO are specified, some or all of the elements of the matrices must be initialized</param>
+        /// <param name="distCoeffs2">The input/output vectors of distortion coefficients for each camera, 4x1, 1x4, 5x1 or 1x5</param>
+        /// <param name="imageSize">Size of the image, used only to initialize intrinsic camera matrix</param>
+        /// <param name="r">Output rotation matrix. Together with the translation vector T, this matrix brings points given in the first camera's coordinate system to points in the second camera's coordinate system. In more technical terms, the tuple of R and T performs a change of basis from the first camera's coordinate system to the second camera's coordinate system. Due to its duality, this tuple is equivalent to the position of the first camera with respect to the second camera coordinate system.</param>
+        /// <param name="t">Output translation vector, see description for "r".</param>
+        /// <param name="e">The optional output essential matrix</param>
+        /// <param name="f">The optional output fundamental matrix </param>
+        /// <param name="rvecs">Output vector of rotation vectors ( Rodrigues ) estimated for each pattern view in the coordinate system of the first camera of the stereo pair (e.g. std::vector &lt; cv::Mat &gt;). More in detail, each i-th rotation vector together with the corresponding i-th translation vector (see the next output parameter description) brings the calibration pattern from the object coordinate space (in which object points are specified) to the camera coordinate space of the first camera of the stereo pair. In more technical terms, the tuple of the i-th rotation and translation vector performs a change of basis from object coordinate space to camera coordinate space of the first camera of the stereo pair.</param>
+        /// <param name="tvecs">Output vector of translation vectors estimated for each pattern view, see parameter description of previous output parameter ( rvecs ).</param>
+        /// <param name="perViewErrors">Output vector of the RMS re-projection error estimated for each pattern view.</param>
+        /// <param name="termCrit">Termination criteria for the iterative optimization algorithm</param>
+        /// <param name="flags">The calibration flags</param>
+        /// <returns>The final value of the re-projection error.</returns>
+        public static double StereoCalibrate(
+            IInputArray objectPoints,
+            IInputArray imagePoints1,
+            IInputArray imagePoints2,
+            IInputOutputArray cameraMatrix1,
+            IInputOutputArray distCoeffs1,
+            IInputOutputArray cameraMatrix2,
+            IInputOutputArray distCoeffs2,
+            Size imageSize,
+            IInputOutputArray r,
+            IInputOutputArray t,
+            IOutputArray e,
+            IOutputArray f,
+            IOutputArrayOfArrays rvecs,
+            IOutputArrayOfArrays tvecs,
+            IOutputArray perViewErrors,
+            CvEnum.CalibType flags,
+            MCvTermCriteria termCrit)
+        {
+            using (InputArray iaObjectPoints = objectPoints.GetInputArray())
+            using (InputArray iaImagePoints1 = imagePoints1.GetInputArray())
+            using (InputArray iaImagePoints2 = imagePoints2.GetInputArray())
+            using (InputOutputArray ioaCameraMatrix1 = cameraMatrix1.GetInputOutputArray())
+            using (InputOutputArray ioaCameraMatrix2 = cameraMatrix2.GetInputOutputArray())
+            using (InputOutputArray ioaDistCoeffs1 = distCoeffs1.GetInputOutputArray())
+            using (InputOutputArray ioaDistCoeffs2 = distCoeffs2.GetInputOutputArray())
+            using (InputOutputArray ioaR = r.GetInputOutputArray())
+            using (InputOutputArray ioaT = t.GetInputOutputArray())
+            using (OutputArray oaE = e.GetOutputArray())
+            using (OutputArray oaF = f.GetOutputArray())
+            using (OutputArray oaRvecs = rvecs.GetOutputArray())
+            using (OutputArray oaTvecs = tvecs.GetOutputArray())
+            using (OutputArray oaPerViewErrors = perViewErrors.GetOutputArray())
+                return cveStereoCalibrate1(
+                    iaObjectPoints, 
+                    iaImagePoints1, iaImagePoints2,
+                    ioaCameraMatrix1, ioaDistCoeffs1,
+                    ioaCameraMatrix2, ioaDistCoeffs2,
+                    ref imageSize,
+                    ioaR, ioaT, oaE, oaF,
+                    oaRvecs, oaTvecs, oaPerViewErrors,
+                    flags, ref termCrit);
+        }
+
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern double cveStereoCalibrate1(
+            IntPtr objectPoints,
+            IntPtr imagePoints1,
+            IntPtr imagePoints2,
+            IntPtr cameraMatrix1,
+            IntPtr distCoeffs1,
+            IntPtr cameraMatrix2,
+            IntPtr distCoeffs2,
+            ref Size imageSize,
+            IntPtr r,
+            IntPtr t,
+            IntPtr e,
+            IntPtr f,
+            IntPtr rvecs,
+            IntPtr tvecs,
+            IntPtr perViewErrors,
+            CvEnum.CalibType flags,
+            ref MCvTermCriteria termCrit);
+
+        /// <summary>
         /// Estimates transformation between the 2 cameras making a stereo pair. If we have a stereo camera, where the relative position and orientatation of the 2 cameras is fixed, and if we computed poses of an object relative to the fist camera and to the second camera, (R1, T1) and (R2, T2), respectively (that can be done with cvFindExtrinsicCameraParams2), obviously, those poses will relate to each other, i.e. given (R1, T1) it should be possible to compute (R2, T2) - we only need to know the position and orientation of the 2nd camera relative to the 1st camera. That's what the described function does. It computes (R, T) such that:
         /// R2=R*R1,
         /// T2=R*T1 + T
@@ -1033,7 +1120,7 @@ namespace Emgu.CV
             using (OutputArray oaT = t.GetOutputArray())
             using (OutputArray oaE = e.GetOutputArray())
             using (OutputArray oaF = f.GetOutputArray())
-                return cveStereoCalibrate(
+                return cveStereoCalibrate2(
                    iaObjectPoints, iaImagePoints1, iaImagePoints2,
                    ioaCameraMatrix1, ioaDistCoeffs1,
                    ioaCameraMatrix2, ioaDistCoeffs2,
@@ -1043,7 +1130,7 @@ namespace Emgu.CV
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern double cveStereoCalibrate(
+        private static extern double cveStereoCalibrate2(
            IntPtr objectPoints,
            IntPtr imagePoints1,
            IntPtr imagePoints2,
