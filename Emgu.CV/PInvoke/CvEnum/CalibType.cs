@@ -88,6 +88,11 @@ namespace Emgu.CV.CvEnum
         UseQR = 0x100000,
 
         /// <summary>
+        /// Fix Tangent distance
+        /// </summary>
+        FixTangentDist = 0x200000,
+
+        /// <summary>
         /// Only for stereo: Fix intrinsic
         /// </summary>
         FixIntrinsic = 0x00100,
@@ -95,7 +100,6 @@ namespace Emgu.CV.CvEnum
         /// Only for stereo: Same focal length
         /// </summary>
         SameFocalLength = 0x00200,
-
 
         /// <summary>
         /// For stereo rectification: Zero disparity
@@ -105,6 +109,11 @@ namespace Emgu.CV.CvEnum
         /// For stereo rectification: use LU instead of SVD decomposition for solving. much faster but potentially less precise
         /// </summary>
         UseLU = (1 << 17),
+
+        /// <summary>
+        /// For stereoCalibrate
+        /// </summary>
+        UseExtrinsicGuess = (1 << 22)
 
     }
 }
