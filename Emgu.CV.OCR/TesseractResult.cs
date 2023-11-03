@@ -27,7 +27,8 @@ namespace Emgu.CV.OCR
         /// </summary>
         public int Length;
         /// <summary>
-        /// The confident
+        /// The mean confidence of the current object at the given level.
+        /// The number should be interpreted as a percent probability. (0.0f-100.0f)
         /// </summary>
         public float Confident;
         /// <summary>

@@ -492,10 +492,10 @@ namespace Emgu.CV.OCR
         }
 
         /// <summary>
-        /// Detect all the characters in the image.
+        /// Detect all the words in the image.
         /// </summary>
-        /// <returns>All the characters in the image</returns>
-        public Character[] GetCharacters()
+        /// <returns>All the words in the image</returns>
+        public Word[] GetWords()
         {
             using (VectorOfByte textSeq = new VectorOfByte())
             using (VectorOfTesseractResult results = new VectorOfTesseractResult())
@@ -505,7 +505,7 @@ namespace Emgu.CV.OCR
                 byte[] bytes = textSeq.ToArray();
                 TesseractResult[] trs = results.ToArray();
 
-                Character[] res = new Character[trs.Length];
+                Word[] res = new Word[trs.Length];
                 int idx = 0;
                 for (int i = 0; i < trs.Length; i++)
                 {
@@ -513,7 +513,7 @@ namespace Emgu.CV.OCR
                     res[i].Text = _utf8.GetString(bytes, idx, tr.Length).Replace("\n", Environment.NewLine);
 
                     idx += tr.Length;
-                    res[i].Cost = tr.Confident;
+                    res[i].Confident = tr.Confident;
                     res[i].Region = tr.Region;
                 }
                 return res;
@@ -536,18 +536,19 @@ namespace Emgu.CV.OCR
         }
 
         /// <summary>
-        /// This represent a character that is detected by the OCR engine
+        /// This represent a word that is detected by the OCR engine
         /// </summary>
-        public struct Character
+        public struct Word
         {
             /// <summary>
             /// The text
             /// </summary>
             public String Text;
             /// <summary>
-            /// The cost. The lower it is, the more confident is the result
+            /// The mean confidence of the current object at the given level.
+            /// The number should be interpreted as a percent probability. (0.0f-100.0f)
             /// </summary>
-            public float Cost;
+            public float Confident;
             /// <summary>
             /// The region where the character is detected.
             /// </summary>
