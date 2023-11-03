@@ -163,14 +163,14 @@ namespace Emgu.CV.Models
             String ocrResult = _ocr.GetUTF8Text();
             watch.Stop();
 
-            Tesseract.Character[] characters = _ocr.GetCharacters();
-            foreach (Tesseract.Character c in characters)
+            Tesseract.Word[] words = _ocr.GetWords();
+            foreach (Tesseract.Word w in words)
             {
-                CvInvoke.Rectangle(imageOut, c.Region, RenderColor);
+                CvInvoke.Rectangle(imageOut, w.Region, RenderColor);
             }
 
             return String.Format(
-                "tesseract version {2}; lang: {0}; mode: {1}{3}Text Detected:{3}{4}",
+                "Tesseract version {2}; lang: {0}; mode: {1}{3}Text Detected:{3}{4}",
                 _lang,
                 _mode.ToString(),
                 Emgu.CV.OCR.Tesseract.VersionString,
