@@ -514,10 +514,7 @@ namespace Emgu.CV.OCR
 
                     idx += tr.Length;
                     res[i].Cost = tr.Confident;
-                    if (tr.Confident == 0)
-                        res[i].Region = Rectangle.Empty;
-                    else
-                        res[i].Region = tr.Region;
+                    res[i].Region = tr.Region;
                 }
                 return res;
             }
