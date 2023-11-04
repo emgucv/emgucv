@@ -17,10 +17,10 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
-      with:
-        submodules: true
-    #- name: Check out submodules
-    #  run: git submodule update --init --recursive
+    #  with:
+    #    submodules: true
+    - name: Check out submodules
+      run: git submodule update --init --recursive
     - name: Build Emgu CV 32-bit native binary
       run: .\Build_Binary_x86.bat x86 nogpu vc no-openni no-doc no-package build
       working-directory: ${{ github.workspace }}\platforms\windows\
