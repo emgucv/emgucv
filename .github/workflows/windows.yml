@@ -17,8 +17,8 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
-    #  with:
-    #    submodules: true
+      with:
+        submodules: false
     - name: Check out submodules
       run: git submodule update --init --recursive
     - name: Build Emgu CV 32-bit native binary
