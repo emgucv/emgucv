@@ -64,10 +64,10 @@ namespace Emgu.CV.Test
 
 
                 String messageOcr = ocr.GetUTF8Text().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text
-                                                                           //EmguAssert.AreEqual(message, messageOcr,
-                                                                           //   String.Format("'{0}' is not equal to '{1}'", message, messageOcr));
+                EmguAssert.AreEqual(message, messageOcr,
+                   String.Format("'{0}' is not equal to '{1}'", message, messageOcr));
 
-                Tesseract.Character[] results = ocr.GetCharacters();
+                Tesseract.Word[] results = ocr.GetWords();
 
                 String s1 = ocr.GetBoxText();
                 //String s2 = ocr.GetOsdText();
@@ -108,7 +108,7 @@ namespace Emgu.CV.Test
                 String messageOcr = ocr.GetUTF8Text().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text
                 EmguAssert.AreEqual(message.Replace(" ", ""), messageOcr.Replace(" ", ""), String.Format("'{0}' is not equal to '{1}'", message, messageOcr));
 
-                Tesseract.Character[] results = ocr.GetCharacters();
+                Tesseract.Word[] results = ocr.GetWords();
             }
         }
 
@@ -125,7 +125,7 @@ namespace Emgu.CV.Test
                 bool success = ocr.Recognize() == 0;
                 if (success)
                 {
-                    Tesseract.Character[] results = ocr.GetCharacters();
+                    Tesseract.Word[] results = ocr.GetWords();
                     EmguAssert.IsTrue(results.Length == 0);
                 }
             }
