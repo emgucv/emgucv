@@ -22,11 +22,11 @@ jobs:
     #  run: git submodule update --init --recursive
     - name: Build Emgu CV form debian ARM
       run: ./cmake_configure
-      working-directory: ${{ github.workspace }}/platforms/debian/bullseye
+      working-directory: ${{ github.workspace }}/platforms/debian/bookworm
     #- name: Build Emgu CV package binary
     #  run: make package
     #  working-directory: ${{ github.workspace }}/platforms/raspberry_pi_os/build/
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: emgucv-debian-arm-zip-package
-        path: ${{ github.workspace }}/platforms/debian/bullseye/build/*.zip
+        path: ${{ github.workspace }}/platforms/debian/bookworm/build/*.zip
