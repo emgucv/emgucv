@@ -19,11 +19,12 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: true
+    #.net framework 4.8.x for debugger visualizer and 7.0.x for others    
     - uses: actions/setup-dotnet@v3
       with:
         dotnet-version: |
-            4.8.x #debugger visualizer
-            7.0.x #others
+            4.8.x 
+            7.0.x
     - name: Install dotnet workload 
       run: dotnet workload install maui maccatalyst
     #- name: Check out submodules
