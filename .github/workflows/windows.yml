@@ -19,6 +19,13 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: true
+    - uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: |
+        4.8.x # debugger visualizer
+        7.0.x # others
+    - name: Install dotnet workload 
+      run: dotnet workload install maui maccatalyst
     #- name: Check out submodules
     #  run: git submodule update --init --recursive
     - name: Build Emgu CV 32-bit native binary
