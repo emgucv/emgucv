@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: [self-hosted, linux, x64]
 
     # one day time out
     timeout-minutes: 1440
