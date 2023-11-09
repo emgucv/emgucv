@@ -13,11 +13,15 @@ namespace Emgu.CV.CvEnum
     public enum TermCritType
     {
         /// <summary>
-        /// Iteration
+        /// The maximum number of iterations or elements to compute
         /// </summary>
-        Iter = 1,
+        Count = 1,
         /// <summary>
-        /// Epsilon
+        /// The maximum number of iterations or elements to compute
+        /// </summary>
+        MaxIter = 1,
+        /// <summary>
+        /// The desired accuracy or change in parameters at whic the iterative algorithm stops.
         /// </summary>
         Eps = 2
     }
