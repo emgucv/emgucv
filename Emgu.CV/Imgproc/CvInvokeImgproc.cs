@@ -1602,6 +1602,48 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveCvtColor(IntPtr src, IntPtr dst, CvEnum.ColorConversion code, int dstCn);
 
+        /// <summary>
+        /// Converts an image from one color space to another where the source image is stored in two planes.
+        /// </summary>
+        /// <param name="src1">8-bit image (CV_8U) of the Y plane.</param>
+        /// <param name="src2">Image containing interleaved U/V plane.</param>
+        /// <param name="dst">Output image.</param>
+        /// <param name="code">Specifies the type of conversion. It can take any of the following values:
+        /// COLOR_YUV2BGR_NV12
+        /// COLOR_YUV2RGB_NV12
+        /// COLOR_YUV2BGRA_NV12
+        /// COLOR_YUV2RGBA_NV12
+        /// COLOR_YUV2BGR_NV21
+        /// COLOR_YUV2RGB_NV21
+        /// COLOR_YUV2BGRA_NV21
+        /// COLOR_YUV2RGBA_NV21
+        /// </param>
+        public static void CvtColorTwoPlane(IInputArray src1, IInputArray src2, IOutputArray dst, CvEnum.ColorConversion code)
+        {
+            using (InputArray iaSrc1 = src1.GetInputArray())
+            using (InputArray iaSrc2 = src2.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveCvtColorTwoPlane(iaSrc1, iaSrc2, oaDst, code);
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveCvtColorTwoPlane(IntPtr src1, IntPtr src2, IntPtr dst, CvEnum.ColorConversion code);
+
+        /// <summary>
+        /// main function for all demosaicing processes
+        /// </summary>
+        /// <param name="src">Input image: 8-bit unsigned or 16-bit unsigned</param>
+        /// <param name="dst">Output image of the same size and depth as src</param>
+        /// <param name="code">Color space conversion code</param>
+        /// <param name="dstCn">Number of channels in the destination image; if the parameter is 0, the number of the channels is derived automatically from src and code.</param>
+        public static void Demosaicing(IInputArray src, IOutputArray dst, CvEnum.ColorConversion code, int dstCn = 0)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveDemosaicing(iaSrc, oaDst, code, dstCn);
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveDemosaicing(IntPtr src, IntPtr dst, CvEnum.ColorConversion code, int dstCn);
 
         /// <summary>
         /// Finds circles in grayscale image using some modification of Hough transform
