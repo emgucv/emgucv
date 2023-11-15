@@ -137,6 +137,14 @@ void cveCvtColor(cv::_InputArray* src, cv::_OutputArray* dst, int code, int dstC
 {
 	cv::cvtColor(*src, *dst, code, dstCn);
 }
+void cveCvtColorTwoPlane(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int code)
+{
+	cv::cvtColorTwoPlane(*src1, *src2, *dst, code);
+}
+void cveDemosaicing(cv::_InputArray* src, cv::_OutputArray* dst, int code, int dstCn)
+{
+	cv::demosaicing(*src, *dst, code, dstCn);
+}
 void cveCopyMakeBorder(cv::_InputArray* src, cv::_OutputArray* dst, int top, int bottom, int left, int right, int borderType, CvScalar* value)
 {
 	cv::copyMakeBorder(*src, *dst, top, bottom, left, right, borderType, *value);
