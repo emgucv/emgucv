@@ -163,12 +163,22 @@ bool targetArchsHasEqualOrGreaterBin(int major, int minor)
 //
 //----------------------------------------------------------------------------
 
-cv::cuda::GpuMat* gpuMatCreateDefault() { return new cv::cuda::GpuMat(); }
+cv::cuda::GpuMat* gpuMatCreateDefault()
+{
+	return new cv::cuda::GpuMat();
+}
+
+cv::cuda::GpuMat* gpuMatCreateFromData(int rows, int cols, int type, void* data, int step)
+{
+	return new cv::cuda::GpuMat(rows, cols, type, data, step);
+}
 
 void gpuMatCreate(cv::cuda::GpuMat* m, int rows, int cols, int type)
 {
 	m->create(rows, cols, type);
 }
+
+
 
 cv::cuda::GpuMat* gpuMatCreateContinuous(int rows, int cols, int type)
 {
