@@ -82,6 +82,8 @@ CVAPI(bool) targetArchsHasEqualOrGreaterBin(int major, int minor);
 
 CVAPI(cv::cuda::GpuMat*) gpuMatCreateDefault();
 
+CVAPI(cv::cuda::GpuMat*) gpuMatCreateFromData(int rows, int cols, int type, void* data, int step);
+
 CVAPI(void) gpuMatCreate(cv::cuda::GpuMat* m, int rows, int cols, int type);
 
 CVAPI(cv::cuda::GpuMat*) gpuMatCreateContinuous(int rows, int cols, int type);

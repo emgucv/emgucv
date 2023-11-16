@@ -34,6 +34,20 @@ namespace Emgu.CV.Cuda
         }
 
         /// <summary>
+        /// Create a GpuMat pointing to user-allocated data
+        /// </summary>
+        /// <param name="rows">The number of rows (height)</param>
+        /// <param name="cols">The number of columns (width)</param>
+        /// <param name="channels">The number of channels</param>
+        /// <param name="depthType">The type of depth</param>
+        /// <param name="data">User allocated data</param>
+        /// <param name="step">Use 0 for auto matically calculated step. Or specify the data step here.</param>
+        public GpuMat(int rows, int cols, DepthType depthType, int channels, IntPtr data, int step=0)
+            : this(CudaInvoke.gpuMatCreateFromData(rows, cols, CvInvoke.MakeType(depthType, channels), data, step), true)
+        {
+        }
+
+        /// <summary>
         /// Create a GpuMat of the specified size
         /// </summary>
         /// <param name="rows">The number of rows (height)</param>
@@ -542,6 +556,11 @@ namespace Emgu.CV.Cuda
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr gpuMatCreateDefault();
 
+        /// <summary>
+        /// Create an new GpuMat pointing to user-allocated data
+        /// </summary>
+        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr gpuMatCreateFromData(int rows, int cols, int type, IntPtr data, int step);
 
         /// <summary>
         /// Convert a CvArr to a GpuMat
