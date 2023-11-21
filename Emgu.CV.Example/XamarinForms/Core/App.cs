@@ -67,7 +67,7 @@ namespace Emgu.CV.XamarinForms
             bool haveFreetype = (openCVConfigDict["HAVE_OPENCV_FREETYPE"] != 0);
             bool haveFace = (openCVConfigDict["HAVE_OPENCV_FACE"] != 0);
             bool haveWechatQRCode = (openCVConfigDict["HAVE_OPENCV_WECHAT_QRCODE"] != 0);
-            bool haveBarcode = (openCVConfigDict["HAVE_OPENCV_BARCODE"] != 0);
+            //bool haveBarcode = (openCVConfigDict["HAVE_OPENCV_BARCODE"] != 0);
             bool haveObjdetect = (openCVConfigDict["HAVE_OPENCV_OBJDETECT"] != 0);
             bool haveTesseract = (openCVConfigDict["HAVE_EMGUCV_TESSERACT"] != 0);
             bool haveFeatures2D = (openCVConfigDict["HAVE_OPENCV_FEATURES2D"] != 0);
@@ -216,7 +216,7 @@ namespace Emgu.CV.XamarinForms
                 };
             }
 
-            if (haveWechatQRCode && haveBarcode
+            if (haveWechatQRCode //&& haveBarcode
               //TODO: WeChatQRCode detector doesn't work on iOS, probably a bug in iOS
               //Will need to figure out why.
               && (Xamarin.Forms.Device.RuntimePlatform != Device.iOS) 

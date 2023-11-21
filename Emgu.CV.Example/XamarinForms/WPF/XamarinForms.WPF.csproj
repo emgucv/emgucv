@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <UseWPF>true</UseWPF>
 	<Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
@@ -57,7 +57,7 @@
   <ItemGroup>
     <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
     <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
-    <PackageReference Include="Xamarin.Forms.Platform.WPF" Version="5.0.0.2612" />
+    <PackageReference Include="Xamarin.Forms.Platform.WPF" Version="5.0.0.2622" />
   </ItemGroup>
 
   <Import Project="..\..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems" Label="Shared" />
