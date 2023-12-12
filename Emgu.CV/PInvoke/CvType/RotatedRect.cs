@@ -9,32 +9,31 @@ using System.Drawing;
 namespace Emgu.CV.Structure
 {
     /// <summary>
-    /// Managed structure equivalent to CvBox2D
+    /// The class represents rotated (i.e. not up-right) rectangles on a plane.
     /// </summary>
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public struct RotatedRect : IConvexPolygonF, IEquatable<RotatedRect>
     {
         /// <summary>
-        /// The center of the box
+        /// The rectangle mass center
         /// </summary>
         public PointF Center;
         /// <summary>
-        /// The size of the box
+        /// Width and height of the rectangle
         /// </summary>
         public SizeF Size;
         /// <summary>
-        /// The angle between the horizontal axis and the first side (i.e. width) in degrees
+        /// The rotation angle. When the angle is 0, 90, 180, 270 etc., the rectangle becomes an up-right rectangle.
         /// </summary>
-        /// <remarks>Possitive value means counter-clock wise rotation</remarks>
         public float Angle;
 
         /// <summary>
         /// Create a RotatedRect structure with the specific parameters
         /// </summary>
-        /// <param name="center">The center of the box</param>
-        /// <param name="size">The size of the box</param>
-        /// <param name="angle">The angle of the box in degrees. Possitive value means counter-clock wise rotation</param>
+        /// <param name="center">The rectangle mass center</param>
+        /// <param name="size">Width and height of the rectangle</param>
+        /// <param name="angle">The rotation angle. When the angle is 0, 90, 180, 270 etc., the rectangle becomes an up-right rectangle.</param>
         public RotatedRect(PointF center, SizeF size, float angle)
         {
             this.Center = center;
@@ -45,8 +44,8 @@ namespace Emgu.CV.Structure
         /// <summary>
         /// Shift the box by the specific amount
         /// </summary>
-        /// <param name="x">The x value to be offseted</param>
-        /// <param name="y">The y value to be offseted</param>
+        /// <param name="x">The x value to be offset</param>
+        /// <param name="y">The y value to be offset</param>
         public void Offset(int x, int y)
         {
             Center.X += x;
@@ -66,9 +65,9 @@ namespace Emgu.CV.Structure
 
         #region IConvexPolygonF Members
         /// <summary>
-        /// Get the 4 verticies of this Box.
+        /// Get the 4 vertices of this Box.
         /// </summary>
-        /// <returns>The vertives of this RotatedRect</returns>
+        /// <returns>The vertices of this RotatedRect</returns>
         public System.Drawing.PointF[] GetVertices()
         {
             return CvInvoke.BoxPoints(this);
