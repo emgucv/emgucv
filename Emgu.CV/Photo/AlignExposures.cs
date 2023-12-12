@@ -33,7 +33,7 @@ namespace Emgu.CV
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (InputArray iaTimes = times.GetInputArray())
-            using (InputArray iaResponse = times.GetInputArray())
+            using (InputArray iaResponse = response.GetInputArray())
             {
                 CvInvoke.cveAlignExposuresProcess(_alignExposuresPtr, iaSrc, dst, iaTimes, iaResponse);
             }
