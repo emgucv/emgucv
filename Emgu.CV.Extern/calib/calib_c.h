@@ -64,14 +64,40 @@ CVAPI(void) cveCalibrationMatrixValues(
    cv::_InputArray* cameraMatrix, CvSize* imageSize, double apertureWidth, double apertureHeight, 
    double* fovx, double* fovy, double* focalLength, CvPoint2D64f* principalPoint, double* aspectRatio);
 
-CVAPI(double) cveStereoCalibrate(
-   cv::_InputArray* objectPoints, cv::_InputArray* imagePoints1, cv::_InputArray* imagePoints2,
-   cv::_InputOutputArray* cameraMatrix1, cv::_InputOutputArray* distCoeffs1, cv::_InputOutputArray* cameraMatrix2, cv::_InputOutputArray* distCoeffs2,
-   CvSize* imageSize, cv::_OutputArray* r, cv::_OutputArray* t, cv::_OutputArray* e, cv::_OutputArray* f, int flags, CvTermCriteria* criteria);
+CVAPI(double) cveStereoCalibrate1(
+	cv::_InputArray* objectPoints,
+	cv::_InputArray* imagePoints1,
+	cv::_InputArray* imagePoints2,
+	cv::_InputOutputArray* cameraMatrix1,
+	cv::_InputOutputArray* distCoeffs1,
+	cv::_InputOutputArray* cameraMatrix2,
+	cv::_InputOutputArray* distCoeffs2,
+	CvSize* imageSize,
+	cv::_InputOutputArray* r,
+	cv::_InputOutputArray* t,
+	cv::_OutputArray* e,
+	cv::_OutputArray* f,
+	cv::_OutputArray* rvecs,
+	cv::_OutputArray* tvecs,
+	cv::_OutputArray* perViewErrors,
+	int flags,
+	CvTermCriteria* criteria);
 
-
-
-
+CVAPI(double) cveStereoCalibrate2(
+	cv::_InputArray* objectPoints,
+	cv::_InputArray* imagePoints1,
+	cv::_InputArray* imagePoints2,
+	cv::_InputOutputArray* cameraMatrix1,
+	cv::_InputOutputArray* distCoeffs1,
+	cv::_InputOutputArray* cameraMatrix2,
+	cv::_InputOutputArray* distCoeffs2,
+	CvSize* imageSize,
+	cv::_OutputArray* r,
+	cv::_OutputArray* t,
+	cv::_OutputArray* e,
+	cv::_OutputArray* f,
+	int flags,
+	CvTermCriteria* criteria);
 
 CVAPI(void) cveInitCameraMatrix2D(
 	cv::_InputArray* objectPoints,
