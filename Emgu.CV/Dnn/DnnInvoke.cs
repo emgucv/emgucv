@@ -357,7 +357,7 @@ namespace Emgu.CV.Dnn
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNetFromTFLite2(IntPtr bufferModel, int lenModel);
 
-
+        /*
         /// <summary>
         /// Reads a network model stored in Torch7 framework's format.
         /// </summary>
@@ -380,7 +380,7 @@ namespace Emgu.CV.Dnn
             bool isBinary,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool evaluate);
-
+        */
 
         /// <summary>
         /// Loads blob which was serialized as torch.Tensor object of Torch7 framework.

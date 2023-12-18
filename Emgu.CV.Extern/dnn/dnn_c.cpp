@@ -81,7 +81,7 @@ cv::dnn::Net* cveReadNetFromTFLite2(const char* bufferModel, int lenModel)
 #endif	
 }
 
-
+/*
 cv::dnn::Net* cveReadNetFromTorch(cv::String* model, bool isBinary, bool evaluate)
 {
 #ifdef HAVE_OPENCV_DNN
@@ -100,7 +100,7 @@ void cveReadTorchBlob(cv::String* filename, bool isBinary, cv::Mat* tensor)
 	throw_no_dnn();
 #endif
 }
-
+*/
 
 cv::dnn::Net* cveReadNetFromONNX(cv::String* onnxFile)
 {
