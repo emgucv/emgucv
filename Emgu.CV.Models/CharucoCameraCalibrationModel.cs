@@ -69,6 +69,17 @@ namespace Emgu.CV.Models
         }
 
         /// <summary>
+        /// The rendering method
+        /// </summary>
+        public RenderType RenderMethod
+        {
+            get
+            {
+                return RenderType.Overwrite;
+            }
+        }
+
+        /// <summary>
         /// Clear and reset the model. Required Init function to be called again before calling ProcessAndRender.
         /// </summary>
         public void Clear()
@@ -258,6 +269,7 @@ namespace Emgu.CV.Models
             {
                 imageInMat.CopyTo(imageOut);
                 //DetectorParameters p = DetectorParameters.GetDefault();
+
                 ArucoInvoke.DetectMarkers(imageIn, ArucoDictionary, corners, ids, _detectorParameters, rejected);
 
                 if (ids.Size > 0)
