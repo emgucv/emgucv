@@ -209,7 +209,7 @@ void Test_MatchTemplate()
 
 	cv::Mat result;
 
-	cv::matchTemplate(img, templ, result, CV_TM_SQDIFF_NORMED);
+	cv::matchTemplate(img, templ, result, cv::TemplateMatchModes::TM_SQDIFF_NORMED);
 	double minVal, maxVal;
 	cv::Point minLoc, maxLoc;
 	cv::minMaxLoc(result, &minVal, &maxVal, &minLoc, &maxLoc);
