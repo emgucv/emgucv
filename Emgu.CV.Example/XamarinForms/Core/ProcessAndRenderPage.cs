@@ -232,7 +232,7 @@ namespace Emgu.CV.XamarinForms
         protected virtual async void OnButtonClicked(Object sender, EventArgs args)
         {
             var button = GetButton();
-
+            Picker p = this.Picker;
             if (button.Text.Equals(_StopCameraButtonText))
             {
 #if __ANDROID__ && __USE_ANDROID_CAMERA2__
@@ -246,12 +246,12 @@ namespace Emgu.CV.XamarinForms
                 _capture = null;
 #endif
                 button.Text = _defaultButtonText;
-                Picker.IsEnabled = true;
+                p.IsEnabled = true;
                 return;
             }
             else
             {
-                Picker.IsEnabled = false;
+                p.IsEnabled = false;
             }
 
             Mat[] images;
@@ -271,12 +271,20 @@ namespace Emgu.CV.XamarinForms
             SetMessage("Please wait...");
             SetImage(null);
 
-            Picker p = this.Picker;
+            //Try to initialize the model
             if ((!p.IsVisible) || p.SelectedIndex < 0)
                 await _model.Init(DownloadManager_OnDownloadProgressChanged, null);
             else
             {
                 await _model.Init(DownloadManager_OnDownloadProgressChanged, p.Items[p.SelectedIndex].ToString());
+            }
+
+            if (!_model.Initialized)
+            {
+                SetMessage("Failed to initialize model");
+                button.Text = _defaultButtonText;
+                p.IsEnabled = true;
+                return;
             }
 
             if (images.Length == 0)
