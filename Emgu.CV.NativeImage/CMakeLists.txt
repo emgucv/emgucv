@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-#  Copyright (C) 2004-2023 by EMGU Corporation. All rights reserved.
+#  Copyright (C) 2004-2024 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
 INSTALL(
