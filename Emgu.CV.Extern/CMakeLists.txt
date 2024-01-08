@@ -3228,6 +3228,15 @@ source_group("Src_depthai" FILES ${depthai_srcs})
 source_group("Include_depthai" FILES ${depthai_hdrs})
 LIST(APPEND extern_srcs ${depthai_srcs})
 LIST(APPEND extern_hdrs ${depthai_hdrs})
+
+IF(WIN32 )
+  #MESSAGE(STATUS "++++++++++++++++++++  LIBUSB_BINARY_FILE_DIR: ${LIBUSB_BINARY_FILE_DIR}")
+  IF (EMGU_CV_WITH_DEPTHAI)
+    SET(LIBUSB_BINARY_FILE_DIR "${CMAKE_CURRENT_BINARY_DIR}/depthai-core/${CMAKE_BUILD_TYPE}")
+    LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${LIBUSB_BINARY_FILE_DIR}/libusb-1.0.dll")
+  ENDIF()
+ENDIF()
+
 ############################### DEPTHAI END ################################
 
 IF(WIN32 AND CV_ICC)
@@ -3275,7 +3284,7 @@ if (WITH_TBB AND TBB_ENV_INCLUDE AND TBB_ENV_LIB)
     
     #LIST(APPEND CVEXTERN_DEPENDENCY_DLL_NAMES tbb)
     LIST(APPEND CVEXTERN_DEPENDENCY_DLLS "${TBB_BINARY_FILE_DIR}/tbb.dll")
-    
+
   ENDIF()
 endif()
 
