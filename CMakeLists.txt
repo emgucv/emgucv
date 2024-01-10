@@ -1364,6 +1364,9 @@ SET(EMGUCV_NUGET_FILE_LIST "")
 SET(EMGUCV_NUGET_DEPENDENCY "")
 SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
 
+SET(NUGET_SYSTEM_DRAWING_COMMON_VERSION "8.0.1")
+SET(NUGET_SYSTEM_TEXT_JSON_VERSION "8.0.1")
+
   SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\xamarinios10\" />
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\xamarinios10\" />
@@ -1377,7 +1380,7 @@ SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-		<dependency id=\"System.Text.Json\" version=\"8.0.0\" exclude=\"Build,Analyzers\" />
+		<dependency id=\"System.Text.Json\" version=\"${NUGET_SYSTEM_TEXT_JSON_VERSION}\" exclude=\"Build,Analyzers\" />
       </group>
 	  <group targetFramework=\"${EMGUCV_MAUI_MACOS_DST_FOLDER}\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
@@ -1404,7 +1407,7 @@ SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY}
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-		<dependency id=\"System.Text.Json\" version=\"8.0.0\" exclude=\"Build,Analyzers\" />
+		<dependency id=\"System.Text.Json\" version=\"${NUGET_SYSTEM_TEXT_JSON_VERSION}\" exclude=\"Build,Analyzers\" />
       </group>")
 
 
@@ -1420,7 +1423,7 @@ SET(EMGUCV_BITMAP_NUGET_FILE_LIST "${EMGUCV_BITMAP_NUGET_FILE_LIST}
 	<file src=\"README.md\" target=\"docs\\\" />")
 SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "${EMGUCV_BITMAP_NUGET_DEPENDENCY} 
       <group targetFramework=\".NETStandard2.0\">
-        <dependency id=\"System.Drawing.Common\" version=\"8.0.0\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </group>")
 SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "
@@ -1465,15 +1468,15 @@ IF (HAVE_IOS)
 	")
   SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY}
       <group targetFramework=\"Xamarin.iOS1.0\">
-        <dependency id=\"System.Drawing.Common\" version=\"8.0.0\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </group>
 	  <group targetFramework=\"${EMGUCV_MAUI_MACOS_DST_FOLDER}\">
-        <dependency id=\"System.Drawing.Common\" version=\"8.0.0\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </group>
 	  <group targetFramework=\"${EMGUCV_MAUI_IOS_DST_FOLDER}\">
-        <dependency id=\"System.Drawing.Common\" version=\"8.0.0\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </group>")
 ENDIF()
@@ -1486,7 +1489,7 @@ SET(EMGUCV_MODELS_NUGET_FILE_LIST "${EMGUCV_MODELS_NUGET_FILE_LIST}
 	<file src=\"README.md\" target=\"docs\\\" />")
 SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY} 
       <group targetFramework=\".NETStandard2.0\">
-        <dependency id=\"System.Drawing.Common\" version=\"8.0.0\" exclude=\"Build,Analyzers\" />
+        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
       </group>")
 SET(EMGUCV_MODELS_NUGET_DEPENDENCY "
