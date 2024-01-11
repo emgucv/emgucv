@@ -47,7 +47,7 @@ namespace Emgu.CV.Models
         /// <param name="models">The models to be combined.</param>
         public CombinedModel(params IProcessAndRenderModel[] models)
         {
-            for (int i = 1; i < _models.Length; i++)
+            for (int i = 1; i < models.Length; i++)
             {
                 if (models[i].RenderMethod == RenderType.Overwrite)
                     throw new ArgumentException("Only the first model can be a 'RenderOver' model");
@@ -68,7 +68,7 @@ namespace Emgu.CV.Models
         }
 
         /// <summary>
-        /// If true, will dispose all the IProcessAndRenderModel passed in the constructor when this object is disposed. Otherwise it will not dispose the children when it is disposed.
+        /// If true, will dispose all the IProcessAndRenderModel passed in the constructor when this object is disposed. Otherwise, it will not dispose the children when it is disposed.
         /// </summary>
         public bool DisposeChildren
         {
