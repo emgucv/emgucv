@@ -54,7 +54,7 @@ namespace Emgu.CV.Dnn
         /// <param name="confidences">A set of corresponding confidences.</param>
         /// <param name="boxes">A set of bounding boxes.</param>
         /// <param name="confThreshold">A threshold used to filter boxes by confidences.</param>
-        /// <param name="nmsThreshold">A threshold used in non maximum suppression. The default value 0 means we will not perform non-maximum supression.</param>
+        /// <param name="nmsThreshold">A threshold used in non-maximum suppression. The default value 0 means we will not perform non-maximum suppression.</param>
         public void Detect(
             IInputArray frame,
             VectorOfInt classIds,
