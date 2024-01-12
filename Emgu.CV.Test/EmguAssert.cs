@@ -152,32 +152,56 @@ namespace Emgu.CV.Test
 #else
         public static void IsTrue(bool condition)
         {
+#if VS_TEST
+            Assert.IsTrue(condition);
+#else
             Assert.That(condition);
+#endif
         }
 
         public static void IsTrue(bool condition, String message)
         {
+#if VS_TEST
+            Assert.IsTrue(condition, message);
+#else
             Assert.That(condition, message);
+#endif
         }
 
         public static void AreEqual(object a, object b)
         {
+#if VS_TEST
+            Assert.AreEqual(a, b);
+#else
             Assert.That(a.Equals(b));
+#endif
         }
 
         public static void AreEqual(object a, object b, string message)
         {
+#if VS_TEST
+            Assert.AreEqual(a, b, message);
+#else
             Assert.That(a.Equals(b), message);
+#endif
         }
 
         public static void AreNotEqual(object a, object b, string message)
         {
+#if VS_TEST
+            Assert.AreNotEqual(a, b, message);
+#else
             Assert.That(a.Equals(b), Is.False, message);
+#endif
         }
 
         public static void IsFalse(bool condition)
         {
+#if VS_TEST
+            Assert.IsFalse(condition);
+#else
             Assert.That(condition, Is.False);
+#endif
         }
 
         public static void WriteLine(String message)
@@ -186,5 +210,5 @@ namespace Emgu.CV.Test
         }
 
 #endif
-    }
+        }
 }
