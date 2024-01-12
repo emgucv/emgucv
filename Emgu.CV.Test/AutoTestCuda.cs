@@ -101,7 +101,8 @@ namespace Emgu.CV.Test
             if (!CudaInvoke.HasCuda)
                 return;
             GpuMat<Byte> mat = new GpuMat<byte>(1200, 640, 1, true);
-            Assert.IsTrue(mat.IsContinuous);
+
+            Assert.That(mat.IsContinuous, Is.True);
         }
 
         [Test]
@@ -152,7 +153,7 @@ namespace Emgu.CV.Test
                     (double)watch2.ElapsedMilliseconds / repeat));
                 //Trace.WriteLine(String.Format("Total GPU processing time: {0}ms", (double)watch.ElapsedMilliseconds/repeat));
 
-                Assert.IsTrue(cpuImgSum.Equals(cpuImgSumFromGpu));
+                EmguAssert.IsTrue(cpuImgSum.Equals(cpuImgSumFromGpu));
             }
         }
 
@@ -173,7 +174,7 @@ namespace Emgu.CV.Test
                         {
                             Mat imgL = channels[i].ToMat();
                             Image<Gray, Byte> imgR = img1[i];
-                            Assert.IsTrue(imgL.Equals(imgR.Mat), "failed split GpuMat");
+                            EmguAssert.IsTrue(imgL.Equals(imgR.Mat), "failed split GpuMat");
                         }
 
                         using (GpuMat gpuImg2 = new GpuMat())
@@ -182,7 +183,7 @@ namespace Emgu.CV.Test
                             using (Image<Bgr, byte> img2 = new Image<Bgr, byte>(img1.Size))
                             {
                                 gpuImg2.Download(img2);
-                                Assert.IsTrue(img2.Equals(img1), "failed split and merge test");
+                                EmguAssert.IsTrue(img2.Equals(img1), "failed split and merge test");
                             }
                         }
 
@@ -210,7 +211,7 @@ namespace Emgu.CV.Test
                         CudaInvoke.Flip(cudaImage, cudaFlip, CvEnum.FlipType.Horizontal | CvEnum.FlipType.Vertical,
                             null);
                         cudaFlip.Download(img1);
-                        Assert.IsTrue(img1.Equals(img1Flip));
+                        EmguAssert.IsTrue(img1.Equals(img1Flip));
                     }
                 }
             }
@@ -243,7 +244,7 @@ namespace Emgu.CV.Test
                     cudaLinear.Apply(cudaImg, cudaConv, s);
                     laplacian.Apply(cudaImg, cudaLaplace, s);
                     s.WaitForCompletion();
-                    Assert.IsTrue(cudaLaplace.Equals(cudaConv));
+                    EmguAssert.IsTrue(cudaLaplace.Equals(cudaConv));
                 }
             }
         }
@@ -286,7 +287,7 @@ namespace Emgu.CV.Test
                 Image<Gray, Byte> diff = smallGpuImg.ToImage().AbsDiff(small);
                 //ImageViewer.Show(smallGpuImg.ToImage());
                 //ImageViewer.Show(small);
-                //Assert.IsTrue(smallGpuImg.ToImage().Equals(small));
+                //Assert.That(smallGpuImg.ToImage().Equals(small));
             }
         }
 
@@ -302,7 +303,7 @@ namespace Emgu.CV.Test
                 using (CudaImage<Gray, Byte> gImg2 = gImg1.Clone(null))
                 using (Image<Gray, Byte> img2 = gImg2.ToImage())
                 {
-                    Assert.IsTrue(img.Equals(img2));
+                    EmguAssert.IsTrue(img.Equals(img2));
                 }
             }
         }
@@ -321,9 +322,9 @@ namespace Emgu.CV.Test
                 CudaImage<Gray, Byte> gpuImgGray = gpuImg.Convert<Gray, Byte>();
                 CudaImage<Hsv, Byte> gpuImgHsv = gpuImg.Convert<Hsv, Byte>();
 
-                Assert.IsTrue(gpuImgGray.Equals(new CudaImage<Gray, Byte>(imgGray)));
-                Assert.IsTrue(gpuImgHsv.ToImage().Equals(imgHsv));
-                Assert.IsTrue(gpuImgHsv.Equals(new CudaImage<Hsv, Byte>(imgHsv)));
+                EmguAssert.IsTrue(gpuImgGray.Equals(new CudaImage<Gray, Byte>(imgGray)));
+                EmguAssert.IsTrue(gpuImgHsv.ToImage().Equals(imgHsv));
+                EmguAssert.IsTrue(gpuImgHsv.Equals(new CudaImage<Hsv, Byte>(imgHsv)));
             }
         }
 
@@ -335,7 +336,7 @@ namespace Emgu.CV.Test
                 Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 400);
                 CudaImage<Bgr, Byte> gpuMat = new CudaImage<Bgr, byte>(img);
                 CudaInvoke.BitwiseNot(gpuMat, gpuMat, null, null);
-                Assert.IsTrue(gpuMat.Equals(new CudaImage<Bgr, Byte>(img.Not())));
+                EmguAssert.IsTrue(gpuMat.Equals(new CudaImage<Bgr, Byte>(img.Not())));
             }
         }
 
@@ -359,7 +360,7 @@ namespace Emgu.CV.Test
 
                 Image<Bgr, Byte> diff = smallCudaImg.ToImage().AbsDiff(smallCpuImg);
                 //TODO: Check why they are not an exact match
-                //Assert.IsTrue(diff.CountNonzero()[0] == 0);
+                //EmguAssert.IsTrue(diff.CountNonzero()[0] == 0);
                 //ImageViewer.Show(smallGpuImg.ToImage());
                 //ImageViewer.Show(small);
             }
@@ -441,7 +442,7 @@ namespace Emgu.CV.Test
 
                     watch.Stop();
 
-                    Assert.AreEqual(1, rects.Length);
+                    Assert.That(rects.Length, Is.EqualTo(1));
 
                     foreach (Rectangle rect in rects)
                         image.Draw(rect, new Bgr(Color.Red), 1);
@@ -546,7 +547,7 @@ namespace Emgu.CV.Test
                 //syncrhonize with the GPU version
                 stream.WaitForCompletion();
 
-                Assert.IsTrue(cudaImage.ToMat().Equals(image.Mat));
+                EmguAssert.IsTrue(cudaImage.ToMat().Equals(image.Mat));
             }
 
         }

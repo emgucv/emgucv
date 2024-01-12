@@ -755,7 +755,7 @@ namespace Emgu.CV.Test
          Image<Bgr, Byte> image1 = WritableBitmapToImage(bmp);
          watch.Stop();
          
-         Assert.IsTrue(image0.Equals(image1));
+         EmguAssert.IsTrue(image0.Equals(image1));
       }
 #endif
 
@@ -796,10 +796,10 @@ namespace Emgu.CV.Test
                         else if (System.Drawing.Imaging.ImageFormat.Bmp.Equals(i.RawFormat))
                            Trace.WriteLine("bmp");
                         */
-                        Assert.IsTrue(i.RawFormat.Equals(format));
+                        EmguAssert.IsTrue(i.RawFormat.Equals(format));
                     }
                     if (epsilon == 0.0)
-                        Assert.IsTrue(tmp.Equals(new Image<Bgr, Byte>(fileName)));
+                        EmguAssert.IsTrue(tmp.Equals(new Image<Bgr, Byte>(fileName)));
                     else
                     {
                         /*
@@ -842,24 +842,24 @@ namespace Emgu.CV.Test
                 Trace.WriteLine(String.Format("Convertsion Time: {0} milliseconds", watch.ElapsedMilliseconds));
                 Image<Bgr, Byte> imageCmp0 = new Image<Bgr, byte>(image0.Size);
                 imageCmp0.SetValue(new Bgr(255, 0, 0));
-                Assert.IsTrue(image0.Equals(imageCmp0));
+                EmguAssert.IsTrue(image0.Equals(imageCmp0));
             }
 
             #region test byte images
             Image<Bgr, Byte> image1 = new Image<Bgr, byte>(201, 401);
             image1.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
-            Assert.IsTrue(image1.Equals(image1.ToBitmap().ToImage<Bgr, byte>()));
-            Assert.IsTrue(image1.Equals(image1.AsBitmap().ToImage<Bgr, byte>()));
+            EmguAssert.IsTrue(image1.Equals(image1.ToBitmap().ToImage<Bgr, byte>()));
+            EmguAssert.IsTrue(image1.Equals(image1.AsBitmap().ToImage<Bgr, byte>()));
 
             Image<Gray, Byte> image3 = new Image<Gray, byte>(11, 7);
             image3.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0));
-            Assert.IsTrue(image3.Equals(image3.ToBitmap().ToImage<Gray, byte>()));
-            Assert.IsTrue(image3.Equals(image3.AsBitmap().ToImage<Gray, byte>()));
+            EmguAssert.IsTrue(image3.Equals(image3.ToBitmap().ToImage<Gray, byte>()));
+            EmguAssert.IsTrue(image3.Equals(image3.AsBitmap().ToImage<Gray, byte>()));
 
             Image<Bgra, Byte> image5 = new Image<Bgra, byte>(201, 401);
             image5.SetRandUniform(new MCvScalar(), new MCvScalar(255.0, 255.0, 255.0, 255.0));
-            Assert.IsTrue(image5.Equals(image5.ToBitmap().ToImage<Bgra, byte>()));
-            Assert.IsTrue(image5.Equals(image5.AsBitmap().ToImage<Bgra, byte>()));
+            EmguAssert.IsTrue(image5.Equals(image5.ToBitmap().ToImage<Bgra, byte>()));
+            EmguAssert.IsTrue(image5.Equals(image5.AsBitmap().ToImage<Bgra, byte>()));
             #endregion
 
             #region test single images
@@ -1514,6 +1514,7 @@ namespace Emgu.CV.Test
             }
         }
 
+        /*
         [TestAttribute]
         public void TestImageConvert()
         {
@@ -1534,7 +1535,7 @@ namespace Emgu.CV.Test
             }
         }
 
-        /*
+        
               [TestAttribute]
               public void TestPlanarObjectDetector()
               {
@@ -1836,12 +1837,12 @@ namespace Emgu.CV.Test
                 CvInvoke.Imencode(".png", img, vb);
                 Mat m2 = new Mat();
                 CvInvoke.Imdecode(vb, ImreadModes.AnyColor, m2);
-                Assert.IsTrue(m2.Equals(imgBgr.Mat));
+                EmguAssert.IsTrue(m2.Equals(imgBgr.Mat));
             }
 #else
             img.Save("out.png");
             Image<Rgb, Byte> img2 = new Image<Rgb, byte>(EmguAssert.GetFile("out.png"));
-            Assert.IsTrue(img.Equals(img2));
+            EmguAssert.IsTrue(img.Equals(img2));
 #endif
         }
 

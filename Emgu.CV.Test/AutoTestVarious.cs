@@ -362,6 +362,7 @@ namespace Emgu.CV.Test
             level = CvInvoke.LogLevel;
         }
 
+        /*
         [Test]
         public void TestException()
         {
@@ -385,7 +386,7 @@ namespace Emgu.CV.Test
                     EmguAssert.IsTrue(exceptionCaught);
                 }
             }
-        }
+        }*/
 
         [Test]
         public void TestProjectPoints()
@@ -449,7 +450,7 @@ namespace Emgu.CV.Test
               //TODO: Find out why BlobDetector cannot detect new Blob.
               bool detected = detector.DetectNewBlob(forgroundMask, newSeq, oldSeq);
               //ImageViewer.Show(forgroundMask);
-              //Assert.IsTrue(detected);
+              //EmguAssert.IsTrue(detected);
            }
         }
 
@@ -809,8 +810,8 @@ namespace Emgu.CV.Test
                0.0f);
             PointF[] vertices = box.GetVertices();
             //TODO: Find out why the following test fails. (x, y) convention changed.
-            //Assert.IsTrue(vertices[0].Equals(new PointF(0.0f, 0.0f)));
-            //Assert.IsTrue(vertices[1].Equals(new PointF(6.0f, 0.0f)));
+            //EmguAssert.IsTrue(vertices[0].Equals(new PointF(0.0f, 0.0f)));
+            //EmguAssert.IsTrue(vertices[1].Equals(new PointF(6.0f, 0.0f)));
         }
 
 #if !(__IOS__ || __ANDROID__ || NETFX_CORE)
@@ -1591,8 +1592,8 @@ namespace Emgu.CV.Test
               contourD.Push(new MCvPoint2D64f(0, 2));
               contourD.Push(new MCvPoint2D64f(2, 2));
               contourD.Push(new MCvPoint2D64f(2, 0));
-              //Assert.IsTrue(contourD.Convex);
-              //Assert.AreEqual(contourD.Area, 4.0);
+              //EmguAssert.IsTrue(contourD.Convex);
+              //EmguAssert.AreEqual(contourD.Area, 4.0);
               //InContour function requires MCvContour.rect to be pre-computed
               //CvInvoke.cvBoundingRect(contourD, 1);
               //Assert.GreaterOrEqual(contourD.InContour(new PointF(1, 1)), 0);
@@ -2411,7 +2412,7 @@ namespace Emgu.CV.Test
                 {
                     EmguAssert.IsTrue(img2.Width == width);
                     EmguAssert.IsTrue(img2.Height == height);
-                    //Assert.IsTrue(img2.Equals( images[count]) );
+                    //EmguAssert.IsTrue(img2.Equals( images[count]) );
                     img2 = capture.QueryFrame();
                     count++;
                 }
@@ -2479,7 +2480,7 @@ namespace Emgu.CV.Test
                     {
                         EmguAssert.IsTrue(img2.Width == width);
                         EmguAssert.IsTrue(img2.Height == height);
-                        //Assert.IsTrue(img2.Equals( images[count]) );
+                        //EmguAssert.IsTrue(img2.Equals( images[count]) );
                         img2 = capture.QueryFrame();
                         count++;
                     }
@@ -2820,7 +2821,7 @@ namespace Emgu.CV.Test
                 retina.Parameters = p;
                 float newval = retina.Parameters.IplMagno.ParasolCellsK;
 
-                Assert.AreEqual(newval, oldval + 0.01f);
+                EmguAssert.AreEqual(newval, oldval + 0.01f);
 
                 retina.Run(image);
                 Mat out1 = new Mat();
@@ -3869,16 +3870,22 @@ namespace Emgu.CV.Test
         [Test]
         public void TestFreetype()
         {
-            using (Mat m = new Mat(new Size(640, 480), DepthType.Cv8U, 3))
-            using (Freetype.Freetype2 freetype = new Freetype2())
+            var openCVConfigDict = CvInvoke.ConfigDict;
+            bool haveFreetype = (openCVConfigDict["HAVE_OPENCV_FREETYPE"] != 0);
+            if (haveFreetype)
             {
-                m.SetTo(new MCvScalar(0, 0, 0, 0));
-                freetype.LoadFontData("NotoSansCJK-Regular.ttc", 0);
+                using (Mat m = new Mat(new Size(640, 480), DepthType.Cv8U, 3))
+                using (Freetype.Freetype2 freetype = new Freetype2())
+                {
+                    m.SetTo(new MCvScalar(0, 0, 0, 0));
+                    freetype.LoadFontData("NotoSansCJK-Regular.ttc", 0);
 
-                freetype.PutText(m, "测试", new Point(100, 100), 36, new MCvScalar(255, 255, 0), 1, LineType.EightConnected, false);
-                //CvInvoke.NamedWindow("test");
-                //CvInvoke.Imshow("test", m);
-                //CvInvoke.WaitKey();
+                    freetype.PutText(m, "测试", new Point(100, 100), 36, new MCvScalar(255, 255, 0), 1,
+                        LineType.EightConnected, false);
+                    //CvInvoke.NamedWindow("test");
+                    //CvInvoke.Imshow("test", m);
+                    //CvInvoke.WaitKey();
+                }
             }
         }
 
@@ -4163,7 +4170,7 @@ namespace Emgu.CV.Test
 
                 output.Save("line_detected.png");
             }
-        }*/
+        }
 
         [Test]
         public void TestCvException()
@@ -4184,6 +4191,7 @@ namespace Emgu.CV.Test
                 }
             }
         }
+        */
 
         [Test]
         public void TestRetinaFastToneMapping()

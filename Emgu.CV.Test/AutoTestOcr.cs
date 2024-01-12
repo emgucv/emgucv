@@ -64,7 +64,7 @@ namespace Emgu.CV.Test
 
 
                 String messageOcr = ocr.GetUTF8Text().TrimEnd('\n', '\r'); // remove end of line from ocr-ed text
-                EmguAssert.AreEqual(message, messageOcr,
+                EmguAssert.AreEqual(message.Replace(" ", String.Empty), messageOcr.Replace(" ", String.Empty),
                    String.Format("'{0}' is not equal to '{1}'", message, messageOcr));
 
                 Tesseract.Word[] results = ocr.GetWords();

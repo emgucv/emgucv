@@ -29,27 +29,27 @@ using NUnit.Framework;
 
 namespace Emgu.CV.Test
 {
-   public static class EmguAssert
-   {
-      #if NETFX_CORE
+    public static class EmguAssert
+    {
+#if NETFX_CORE
       public async static Task<string[]> ReadAllLinesAsync(String fileName)
       {
          StorageFile sf = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///" + fileName));
          var lines = await FileIO.ReadLinesAsync(sf);
          return lines.ToArray();
       }
-      #endif
+#endif
 
-      public static string[] ReadAllLines(String fileName)
-      {
-         string f = GetFile(fileName);
+        public static string[] ReadAllLines(String fileName)
+        {
+            string f = GetFile(fileName);
 #if NETFX_CORE
          var t = ReadAllLinesAsync(f);
          return t.Result;
 #else
-         return System.IO.File.ReadAllLines(f);
+            return System.IO.File.ReadAllLines(f);
 #endif
-      }
+        }
 
 #if __ANDROID__
       public static Image<TColor, TDepth> LoadImage<TColor, TDepth>(String name)
@@ -96,95 +96,95 @@ namespace Emgu.CV.Test
          return Task.Run(async () => await ReadFile(name, modes)).Result;
       }
 #else
-      public static String GetFile(String fileName)
-      {
-         return fileName;
-      }
+        public static String GetFile(String fileName)
+        {
+            return fileName;
+        }
 
-      public static Image<TColor, TDepth> LoadImage<TColor, TDepth>(String name)
-         where TColor : struct, IColor
-         where TDepth : new()
-      {
-         return new Image<TColor, TDepth>(name);
-      }
+        public static Image<TColor, TDepth> LoadImage<TColor, TDepth>(String name)
+           where TColor : struct, IColor
+           where TDepth : new()
+        {
+            return new Image<TColor, TDepth>(name);
+        }
 
-      public static Mat LoadMat(string name, ImreadModes modes = ImreadModes.AnyColor | ImreadModes.AnyDepth)
-      {
-         return CvInvoke.Imread(name, modes);
-      }
+        public static Mat LoadMat(string name, ImreadModes modes = ImreadModes.AnyColor | ImreadModes.AnyDepth)
+        {
+            return CvInvoke.Imread(name, modes);
+        }
 #endif
 
 #if __IOS__ || __ANDROID__
-      public static void IsTrue(bool condition)
-      {
-         Assert.True(condition);
-      }
+        public static void IsTrue(bool condition)
+        {
+            Assert.That(condition);
+        }
 
-      public static void IsTrue(bool condition, String message)
-      {
-         Assert.True(condition, message);
-      }
+        public static void IsTrue(bool condition, String message)
+        {
+            Assert.That(condition, message);
+        }
 
-      public static void AreEqual(object a, object b)
-      {
-         Assert.True(a.Equals(b));
-      }
+        public static void AreEqual(object a, object b)
+        {
+            Assert.That(a.Equals(b));
+        }
 
-      public static void AreEqual(object a, object b, string message)
-      {
-         Assert.True(a.Equals(b), message);
-      }
+        public static void AreEqual(object a, object b, string message)
+        {
+            Assert.That(a.Equals(b), message);
+        }
 
-      public static void AreNotEqual(object a, object b, string message)
-      {
-         Assert.False(a.Equals(b), message);
-      }
+        public static void AreNotEqual(object a, object b, string message)
+        {
+            Assert.That(a.Equals(b), Is.False, message);
+        }
 
-      public static void IsFalse(bool condition)
-      {
-         Assert.False(condition);
-      }
+        public static void IsFalse(bool condition)
+        {
+            Assert.That(condition, Is.False);
+        }
 
-      public static void WriteLine(String message)
-      {
-         Console.WriteLine(message);
-      }
+        public static void WriteLine(String message)
+        {
+            Console.WriteLine(message);
+        }
 #else
-      public static void IsTrue(bool condition)
-      {
-         Assert.IsTrue(condition);
-      }
+        public static void IsTrue(bool condition)
+        {
+            Assert.That(condition);
+        }
 
-      public static void IsTrue(bool condition, String message)
-      {
-         Assert.IsTrue(condition, message);
-      }
+        public static void IsTrue(bool condition, String message)
+        {
+            Assert.That(condition, message);
+        }
 
-      public static void AreEqual(object a, object b)
-      {
-         Assert.IsTrue(a.Equals(b));
-      }
+        public static void AreEqual(object a, object b)
+        {
+            Assert.That(a.Equals(b));
+        }
 
-      public static void AreEqual(object a, object b, string message)
-      {
-         Assert.IsTrue(a.Equals(b), message);
-      }
+        public static void AreEqual(object a, object b, string message)
+        {
+            Assert.That(a.Equals(b), message);
+        }
 
-      public static void AreNotEqual(object a, object b, string message)
-      {
-         Assert.IsFalse(a.Equals(b), message);
-      }
+        public static void AreNotEqual(object a, object b, string message)
+        {
+            Assert.That(a.Equals(b), Is.False, message);
+        }
 
-      public static void IsFalse(bool condition)
-      {
-         Assert.IsFalse(condition);
-      }
+        public static void IsFalse(bool condition)
+        {
+            Assert.That(condition, Is.False);
+        }
 
-      public static void WriteLine(String message)
-      {
-         Trace.WriteLine(message);
-      }
+        public static void WriteLine(String message)
+        {
+            Trace.WriteLine(message);
+        }
 
 #endif
-   }
+    }
 }
