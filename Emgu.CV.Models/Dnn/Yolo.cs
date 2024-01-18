@@ -37,7 +37,7 @@ namespace Emgu.CV.Models
             }
         }
 
-        private String _modelFolderName = "yolo";
+        private readonly String _modelFolderName = Path.Combine("emgu", "yolo");
 
         private DetectionModel _yoloDetectionModel = null;
 

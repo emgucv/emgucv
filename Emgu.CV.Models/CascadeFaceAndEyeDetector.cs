@@ -13,6 +13,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 using Emgu.Util;
+using System.IO;
 
 namespace Emgu.CV.Models
 {
@@ -23,7 +24,7 @@ namespace Emgu.CV.Models
     {
         private CascadeClassifier _faceCascadeClassifier = null;
         private CascadeClassifier _eyeCascadeClassifier = null;
-
+        private readonly String _modelFolderName = Path.Combine("emgu", "haarcascade");
         /// <summary>
         /// The rendering method
         /// </summary>
@@ -114,8 +115,8 @@ namespace Emgu.CV.Models
             {
                 FileDownloadManager downloadManager = new FileDownloadManager();
                 String url = "https://github.com/opencv/opencv/raw/4.2.0/data/haarcascades/";
-                downloadManager.AddFile(url + "/haarcascade_frontalface_default.xml", "haarcascade");
-                downloadManager.AddFile(url + "/haarcascade_eye.xml", "haarcascade");
+                downloadManager.AddFile(url + "/haarcascade_frontalface_default.xml", _modelFolderName);
+                downloadManager.AddFile(url + "/haarcascade_eye.xml", _modelFolderName);
 
                 downloadManager.OnDownloadProgressChanged += onDownloadProgressChanged;
 

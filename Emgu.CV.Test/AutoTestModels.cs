@@ -66,7 +66,7 @@ namespace Emgu.CV.Test
     [TestFixture]
     public class AutoTestModels
     {
-        private static void DownloadManager_OnDownloadProgressChanged(long? totalBytesToReceive, long bytesReceived, double? progressPercentage)
+        public static void DownloadManager_OnDownloadProgressChanged(long? totalBytesToReceive, long bytesReceived, double? progressPercentage)
         {
             if (totalBytesToReceive != null) 
                 Trace.WriteLine(String.Format("{0} bytes downloaded.", bytesReceived));
@@ -117,6 +117,23 @@ namespace Emgu.CV.Test
                 String text = detector.ProcessAndRender(m, m);
             }
 
+        }
+
+#if !TEST_MODELS
+        [Ignore("Ignore from test run by default.")]
+#endif
+        [Test]
+        public async Task TestDnnSSDFaceDetect()
+        {
+            using (Emgu.CV.Models.FaceAndLandmarkDetector detector = new Models.FaceAndLandmarkDetector())
+            using (Mat img = EmguAssert.LoadMat("lena.jpg"))
+            using (Mat result = new Mat())
+            {
+                detector.Init(AutoTestModels.DownloadManager_OnDownloadProgressChanged);
+                img.CopyTo(result);
+                detector.ProcessAndRender(img, result);
+                CvInvoke.Imwrite("rgb_ssd_facedetect.jpg", result);
+            }
         }
 
 #if !TEST_MODELS

@@ -27,7 +27,7 @@ namespace Emgu.CV.Models
     /// </summary>
     public class BarcodeDetectorModel : DisposableObject, IProcessAndRenderModel
     {
-        private String _modelFolderName = "wechat";
+        private readonly String _modelFolderName = Path.Combine("emgu", "wechat");
 
         private BarcodeDetector _barcodeDetector = null;
 

@@ -27,7 +27,7 @@ namespace Emgu.CV.Models
     /// </summary>
     public class Superres : DisposableObject, IProcessAndRenderModel
     {
-        private String _modelFolderName = "superres";
+        private readonly String _modelFolderName = Path.Combine("emgu", "superres");
 
         private DnnSuperResImpl _superresModel = null;
 

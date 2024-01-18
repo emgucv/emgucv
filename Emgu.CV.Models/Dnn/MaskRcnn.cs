@@ -25,7 +25,7 @@ namespace Emgu.CV.Models
     /// </summary>
     public class MaskRcnn : DisposableObject, IProcessAndRenderModel
     {
-        private String _modelFolderName = "mask_rcnn_inception_v2_coco_2018_01_28";
+        private readonly String _modelFolderName = Path.Combine("emgu", "mask_rcnn_inception_v2_coco_2018_01_28");
 
         private string[] _labels = null;
 

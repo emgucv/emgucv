@@ -27,7 +27,7 @@ namespace Emgu.CV.Models
     /// </summary>
     public class FaceDetectorYNModel : DisposableObject, IProcessAndRenderModel
     {
-        private String _modelFolderName = "face_detector_yn";
+        private readonly String _modelFolderName = Path.Combine("emgu", "face_detector_yn");
 
         private FaceDetectorYN _faceDetectionModel = null;
 
