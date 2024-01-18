@@ -42,6 +42,7 @@ namespace Emgu.CV.Models
         private String _lang;
         private OcrEngineMode _mode;
         private String _modelFolderName;
+        private String _tessDataDirectory;
 
         /// <summary>
         /// Get the ocr model
@@ -59,6 +60,18 @@ namespace Emgu.CV.Models
             get
             {
                 return _ocr != null;
+            }
+        }
+
+        /// <summary>
+        /// Return the directly where the Tesseract data is downloaded into.
+        /// If the model has not been completed downloaded. The folder is null.
+        /// </summary>
+        public String TessDataDirectory
+        {
+            get
+            {
+                return _tessDataDirectory; 
             }
         }
 
@@ -87,6 +100,7 @@ namespace Emgu.CV.Models
                 FileDownloadManager manager = new FileDownloadManager();
                 manager.AddFile(Emgu.CV.OCR.Tesseract.GetLangFileUrl(lang), _modelFolderName);
                 manager.AddFile(Emgu.CV.OCR.Tesseract.GetLangFileUrl("osd"), _modelFolderName); //script orientation detection
+                manager.AddFile("https://github.com/tesseract-ocr/tessconfigs/blob/3decf1c8252ba6dbeef0bf908f4b0aab7f18d113/pdf.ttf?raw=true", _modelFolderName); //PDF fonts for PDFRenderer
 
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
@@ -101,7 +115,11 @@ namespace Emgu.CV.Models
                     //_lang = lang;
                     //_mode = mode;
                     FileInfo fi = new FileInfo(manager.Files[0].LocalFile);
-                    _ocr = new Tesseract(fi.DirectoryName, _lang, _mode);
+                    _tessDataDirectory = fi.DirectoryName;
+                    var rawData = System.IO.File.ReadAllBytes(Path.Combine(_tessDataDirectory, String.Format("{0}.traineddata", _lang)));
+                    _ocr = new Tesseract();
+                    _ocr.Init(rawData, _lang, _mode);
+                    //_ocr = new Tesseract(_tessDataDirectory, _lang, _mode);
                 }
             }
         }
@@ -116,6 +134,8 @@ namespace Emgu.CV.Models
                 _ocr.Dispose();
                 _ocr = null;
             }
+
+            _tessDataDirectory = null;
         }
 
         /// <summary>
