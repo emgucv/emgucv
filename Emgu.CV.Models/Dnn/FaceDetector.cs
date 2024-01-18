@@ -26,7 +26,7 @@ namespace Emgu.CV.Models
     /// </summary>
     public class FaceDetector : DisposableObject
     {
-        private String _modelFolderName = "dnn_samples_face_detector_20170830";
+        private readonly String _modelFolderName = Path.Combine("emgu", "dnn_samples_face_detector_20170830");
         
         private DetectionModel _faceDetectionModel = null;
 

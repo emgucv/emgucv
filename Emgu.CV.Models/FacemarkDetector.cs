@@ -26,6 +26,7 @@ namespace Emgu.CV.Models
     public class FacemarkDetector : DisposableObject
     {
         private FacemarkLBF _facemark = null;
+        private readonly String _modelFolderName = Path.Combine("emgu", "facemark");
 
         /// <summary>
         /// Download and initialize the facial landmark detector
@@ -42,8 +43,8 @@ namespace Emgu.CV.Models
             {
                 FileDownloadManager manager = new FileDownloadManager();
                 manager.AddFile(
-                    "https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/lbfmodel.yaml", 
-                    "facemark",
+                    "https://raw.githubusercontent.com/kurnianggoro/GSOC2017/master/data/lbfmodel.yaml",
+                    _modelFolderName,
                     "70DD8B1657C42D1595D6BD13D97D932877B3BED54A95D3C4733A0F740D1FD66B");
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;

@@ -40,12 +40,13 @@ namespace Emgu.CV.Models
         /// Create a new SceneTextDetector
         /// </summary>
         /// <param name="modelFolderName">The subfolder name where the model will be saved to.</param>
-        public SceneTextDetector(String modelFolderName = "scene_text_detector")
+        public SceneTextDetector(String modelFolderName = null)
         {
-            _modelFolderName = modelFolderName;
+            if (modelFolderName != null)
+                _modelFolderName = modelFolderName;
         }
 
-        private String _modelFolderName;
+        private String _modelFolderName = Path.Combine("emgu", "scene_text_detector");
 
         private TextDetectionModel_DB _textDetector = null;
 

@@ -38,7 +38,7 @@ namespace Emgu.CV.Models
             }
         }
 
-        private String _modelFolderName = "wechat";
+        private readonly String _modelFolderName = Path.Combine("emgu", "wechat");
 
         private WeChatQRCode _weChatQRCodeDetectionModel = null;
 

@@ -45,7 +45,7 @@ namespace Emgu.CV.Test
             using (TesseractModel tm = new TesseractModel())
             using (Mat img = new Mat(new Size(480, 200), DepthType.Cv8U, 1))
             {
-                await tm.Init();
+                await tm.Init(AutoTestModels.DownloadManager_OnDownloadProgressChanged);
                 Tesseract ocr = tm.Model;
                 ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,");
                 IntPtr oclDevice = new IntPtr();
@@ -105,7 +105,7 @@ namespace Emgu.CV.Test
             using (TesseractModel ocr = new TesseractModel())
             using (Image<Bgr, Byte> img = new Image<Bgr, byte>(480, 200))
             {
-                await ocr.Init();
+                await ocr.Init(AutoTestModels.DownloadManager_OnDownloadProgressChanged);
                 Tesseract tesseract = ocr.Model;
                 tesseract.SetVariable("tessedit_char_whitelist", "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,");
 
@@ -133,7 +133,7 @@ namespace Emgu.CV.Test
             using (TesseractModel tm = new TesseractModel())
             using (Mat img = new Mat(new Size(1024, 960), DepthType.Cv8U, 3))
             {
-                await tm.Init();
+                await tm.Init(AutoTestModels.DownloadManager_OnDownloadProgressChanged);
                 Tesseract ocr = tm.Model;
                 img.SetTo(new MCvScalar()); //Set to a black image
                 ocr.SetImage(img);
@@ -155,7 +155,7 @@ namespace Emgu.CV.Test
         {
             using (TesseractModel tm = new TesseractModel(modelFolderName: Path.Combine("emgu", "데이터")))
             {
-                await tm.Init();
+                await tm.Init(AutoTestModels.DownloadManager_OnDownloadProgressChanged);
                 Tesseract ocr = tm.Model;
                 
             }
@@ -169,7 +169,7 @@ namespace Emgu.CV.Test
         {
             using (TesseractModel tm = new TesseractModel())
             {
-                await tm.Init();
+                await tm.Init(AutoTestModels.DownloadManager_OnDownloadProgressChanged);
                 Tesseract ocr = tm.Model;
                 int isValid1 = ocr.IsValidWord("1123");
                 int isValid2 = ocr.IsValidWord("hello");
