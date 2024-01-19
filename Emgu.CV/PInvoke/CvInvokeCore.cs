@@ -260,7 +260,7 @@ namespace Emgu.CV
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern IntPtr cveTempfile(IntPtr suffix);
+        private static extern IntPtr cveTempfile(IntPtr suffix);
 
         /// <summary>
         /// Get or Set the log level.
