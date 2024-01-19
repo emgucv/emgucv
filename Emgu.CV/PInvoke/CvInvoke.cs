@@ -493,6 +493,25 @@ namespace Emgu.CV
 
             }
 #endif
+
+            if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS)
+            {
+                //Need to set the correct Open CV temp path to avoid error
+                String opencv_temp_path =
+                    Environment.GetEnvironmentVariable("OPENCV_TEMP_PATH", EnvironmentVariableTarget.Process);
+
+                if (String.IsNullOrEmpty(opencv_temp_path))
+                {
+                    //If the path is not set, set it to system temp path
+                    Environment.SetEnvironmentVariable("OPENCV_TEMP_PATH", System.IO.Path.GetTempPath(), EnvironmentVariableTarget.Process);
+                    opencv_temp_path = Environment.GetEnvironmentVariable("OPENCV_TEMP_PATH", EnvironmentVariableTarget.Process);
+                }
+
+                //Create the opencv folder in the temp path
+                String opencv_temp_folder = Path.Combine(opencv_temp_path, "opencv");
+                if (!Directory.Exists(opencv_temp_folder))
+                    Directory.CreateDirectory(opencv_temp_folder);
+            }
         }
 
 #region CV MACROS
