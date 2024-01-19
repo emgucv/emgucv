@@ -66,8 +66,11 @@ CVAPI(void) cveCCheckerDetectorParametersRelease(cv::mcc::DetectorParameters** p
 
 
 
-CVAPI(cv::ccm::ColorCorrectionModel*) cveColorCorrectionModelCreate(cv::Mat* src, int constcolor);
+CVAPI(cv::ccm::ColorCorrectionModel*) cveColorCorrectionModelCreate1(cv::Mat* src, int constColor);
+CVAPI(cv::ccm::ColorCorrectionModel*) cveColorCorrectionModelCreate2(cv::Mat* src, cv::Mat* colors, int refCs);
+CVAPI(cv::ccm::ColorCorrectionModel*) cveColorCorrectionModelCreate3(cv::Mat* src, cv::Mat* colors, int refCs, cv::Mat* colored);
 CVAPI(void) cveColorCorrectionModelRelease(cv::ccm::ColorCorrectionModel** ccm);
 CVAPI(void) cveColorCorrectionModelRun(cv::ccm::ColorCorrectionModel* ccm);
 CVAPI(void) cveColorCorrectionModelGetCCM(cv::ccm::ColorCorrectionModel* ccm, cv::_OutputArray* result);
+CVAPI(void) cveColorCorrectionModelInfer(cv::ccm::ColorCorrectionModel* ccm, cv::Mat* img, cv::_OutputArray* result, bool islinear);
 #endif

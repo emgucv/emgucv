@@ -194,10 +194,28 @@ void cveCCheckerDetectorParametersRelease(cv::mcc::DetectorParameters** paramete
 }
 
 
-cv::ccm::ColorCorrectionModel* cveColorCorrectionModelCreate(cv::Mat* src, int constcolor)
+cv::ccm::ColorCorrectionModel* cveColorCorrectionModelCreate1(cv::Mat* src, int constColor)
 {
 #ifdef HAVE_OPENCV_MCC
-	return new cv::ccm::ColorCorrectionModel(*src, static_cast<cv::ccm::CONST_COLOR>(constcolor));
+	return new cv::ccm::ColorCorrectionModel(*src, static_cast<cv::ccm::CONST_COLOR>(constColor));
+#else
+	throw_no_mcc();
+#endif	
+}
+
+cv::ccm::ColorCorrectionModel* cveColorCorrectionModelCreate2(cv::Mat* src, cv::Mat* colors, int refCs)
+{
+#ifdef HAVE_OPENCV_MCC
+	return new cv::ccm::ColorCorrectionModel(*src, *colors, static_cast<cv::ccm::COLOR_SPACE>(refCs));
+#else
+	throw_no_mcc();
+#endif	
+}
+
+cv::ccm::ColorCorrectionModel* cveColorCorrectionModelCreate3(cv::Mat* src, cv::Mat* colors, int refCs, cv::Mat* colored)
+{
+#ifdef HAVE_OPENCV_MCC
+	return new cv::ccm::ColorCorrectionModel(*src, *colors, static_cast<cv::ccm::COLOR_SPACE>(refCs), *colored);
 #else
 	throw_no_mcc();
 #endif	
@@ -229,4 +247,14 @@ void cveColorCorrectionModelGetCCM(cv::ccm::ColorCorrectionModel* ccm, cv::_Outp
 #else
 	throw_no_mcc();
 #endif	
+}
+
+void cveColorCorrectionModelInfer(cv::ccm::ColorCorrectionModel* ccm, cv::Mat* img, cv::_OutputArray* result, bool islinear)
+{
+#ifdef HAVE_OPENCV_MCC
+	cv::Mat m = ccm->infer(*img, islinear);
+	m.copyTo(*result);
+#else
+	throw_no_mcc();
+#endif		
 }
