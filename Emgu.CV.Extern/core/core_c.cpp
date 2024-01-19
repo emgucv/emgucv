@@ -16,6 +16,16 @@ cv::ErrorCallback cveRedirectError(cv::ErrorCallback errorHandler, void* userdat
 	return cv::redirectError(errorHandler, userdata, prevUserdata);
 }
 
+cv::String* cveTempfile(cv::String* suffix)
+{
+	cv::String tempFile;
+	if (!suffix)
+		tempFile = cv::tempfile();
+	else
+		tempFile = cv::tempfile(suffix->c_str());
+	return new cv::String(tempFile);
+}
+
 int cveGetErrMode()
 {
 	return cvGetErrMode();
