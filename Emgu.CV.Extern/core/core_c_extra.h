@@ -19,6 +19,7 @@
 
 CVAPI(bool) cveSetBreakOnError(bool flag);
 CVAPI(cv::ErrorCallback) cveRedirectError(cv::ErrorCallback errorHandler, void* userdata, void** prevUserdata);
+CVAPI(cv::String*) cveTempfile(cv::String* suffix);
 CVAPI(int) cveGetErrMode();
 CVAPI(int) cveSetErrMode(int mode);
 CVAPI(int) cveGetErrStatus();

@@ -3334,6 +3334,12 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestTempFile()
+        {
+            String tempFileName = CvInvoke.TempFile(String.Empty);
+        }
+
+        [Test]
         public void TestHoughLine()
         {
             Mat img = EmguAssert.LoadMat("box.png");

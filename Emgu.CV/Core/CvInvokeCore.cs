@@ -244,6 +244,25 @@ namespace Emgu.CV
         #endregion
 
         /// <summary>
+        /// Get a temporary file name
+        /// </summary>
+        /// <param name="suffix">The suffix of the temporary file name</param>
+        /// <returns>A temporary file name</returns>
+        public static String TempFile(String suffix)
+        {
+            using (CvString csSuffix = new CvString(suffix))
+            {
+                using (CvString result = new CvString(cveTempfile(csSuffix), true))
+                {
+                    return result.ToString();
+                }
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        public static extern IntPtr cveTempfile(IntPtr suffix);
+
+        /// <summary>
         /// Get or Set the log level.
         /// </summary>
         public static CvEnum.LogLevel LogLevel
