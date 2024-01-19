@@ -1644,12 +1644,13 @@ ENDIF()
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Mcc/ColorCorrectionModel.g.cs"
     "cv::ccm::ColorCorrectionModel" 
     "ColorCorrectionModel" 
-    "CCM_TYPE;Loss;Distance;Linear;LinearGamma;LinearDegree;WeightCoeff;MaxCount" 
-    "cv::ccm::CCM_TYPE;double;cv::ccm::DISTANCE_TYPE;cv::ccm::LINEAR_TYPE;double;int;double;int" 
-    "propW;propR;propW;propW;propW;propW;propW;propW"
-    "CcmType;Loss;DistanceType;LinearType;LinearGamma;LinearDegree;WeightCoeff;MaxCount" 
-    "ColorCorrectionModel.CcmType;double;ColorCorrectionModel.DistanceType;ColorCorrectionModel.LinearType;double;int;double;int"
-    "Ccm type;
+    "COLOR_SPACE;CCM_TYPE;Loss;Distance;Linear;LinearGamma;LinearDegree;WeightCoeff;MaxCount" 
+    "cv::ccm:COLOR_SPACE;cv::ccm::CCM_TYPE;double;cv::ccm::DISTANCE_TYPE;cv::ccm::LINEAR_TYPE;double;int;double;int" 
+    "propW;propW;propR;propW;propW;propW;propW;propW;propW"
+    "ColorSpace;CcmType;Loss;DistanceType;LinearType;LinearGamma;LinearDegree;WeightCoeff;MaxCount" 
+    "ColorCorrectionModel.ColorSpace;ColorCorrectionModel.CcmType;double;ColorCorrectionModel.DistanceType;ColorCorrectionModel.LinearType;double;int;double;int"
+    "Color space;
+     Ccm type;
      Loss;
      The type of color distance;
      The method of linearization;
