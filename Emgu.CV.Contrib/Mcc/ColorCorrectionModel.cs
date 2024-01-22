@@ -124,6 +124,9 @@ namespace Emgu.CV.Ccm
             GrayLogPolyFit
         };
 
+        /// <summary>
+        /// The color space
+        /// </summary>
         public enum ColorSpace
         {
             /// <summary>

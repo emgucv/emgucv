@@ -14,6 +14,9 @@ using Emgu.Util;
 namespace Emgu.CV
 {
 
+    /// <summary>
+    /// Interface for the graphical code detector
+    /// </summary>
     public interface IGraphicalCodeDetector
     {
 
@@ -56,6 +59,7 @@ namespace Emgu.CV
         /// <summary>
         /// Detects graphical code in image and returns the quadrangle containing the code.
         /// </summary>
+        /// <param name="detector">The graphical code detector</param>
         /// <param name="img">Grayscale or color (BGR) image containing (or not) graphical code.</param>
         /// <param name="points">Output vector of vertices of the minimum-area quadrangle containing the code.</param>
         /// <returns>True if a graphical code is found.</returns>
@@ -69,6 +73,7 @@ namespace Emgu.CV
         /// <summary>
         /// Detects graphical codes in image and returns the vector of the quadrangles containing the codes.
         /// </summary>
+        /// <param name="detector">The graphical code detector</param>
         /// <param name="img">Grayscale or color (BGR) image containing (or not) graphical codes.</param>
         /// <param name="points">Output vector of vector of vertices of the minimum-area quadrangle containing the codes.</param>
         /// <returns>True if a QRCode is found.</returns>
@@ -82,6 +87,7 @@ namespace Emgu.CV
         /// <summary>
         /// Decodes graphical code in image once it's found by the detect() method.
         /// </summary>
+        /// <param name="detector">The graphical code detector</param>
         /// <param name="image">Grayscale or color (BGR) image containing graphical codes.</param>
         /// <param name="points">Quadrangle vertices found by detect() method (or some other algorithm).</param>
         /// <param name="straightCode">The optional output image containing binarized code, will be empty if not found.</param>
@@ -135,7 +141,6 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="detector">The graphical code detector</param>
         /// <param name="img">Grayscale or color (BGR) image containing graphical codes.</param>
-        /// <param name="points">Vector of Quadrangle vertices found by detect() method (or some other algorithm).</param>
         /// <param name="straightCode">The optional vector of images containing binarized codes</param>
         /// <returns>UTF8-encoded output vector of string or empty vector of string if the codes cannot be decoded</returns>
         public static GraphicalCode[] DetectAndDecodeMulti(

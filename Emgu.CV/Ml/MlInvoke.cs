@@ -12,7 +12,7 @@ using Emgu.CV.CvEnum;
 namespace Emgu.CV.ML
 {
     /// <summary>
-    /// This class contains functions to call into machine learning library
+    /// This class contains functions to call into machine learning module
     /// </summary>
     public partial class MlInvoke
     {
