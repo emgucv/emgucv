@@ -21,6 +21,10 @@ namespace Emgu.CV
     public class BarcodeDetector : UnmanagedObject, IGraphicalCodeDetector
     {
         private IntPtr _graphicalCodeDetectorPtr;
+
+        /// <summary>
+        /// Pointer to the graphical code detector
+        /// </summary>
         public IntPtr GraphicalCodeDetectorPtr
         {
             get { return _graphicalCodeDetectorPtr; }
@@ -92,7 +96,9 @@ namespace Emgu.CV
     }
 
 
-
+    /// <summary>
+    /// This class contains functions to call into object detect module
+    /// </summary>
     public static partial class ObjdetectInvoke
     {
 

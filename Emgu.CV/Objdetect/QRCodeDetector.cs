@@ -19,6 +19,10 @@ namespace Emgu.CV
     public partial class QRCodeDetector : UnmanagedObject, IGraphicalCodeDetector
     {
         private IntPtr _graphicalCodeDetectorPtr;
+
+        /// <summary>
+        /// Pointer to the graphical code detector
+        /// </summary>
         public IntPtr GraphicalCodeDetectorPtr
         {
             get { return _graphicalCodeDetectorPtr; }
