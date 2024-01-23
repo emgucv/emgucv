@@ -2821,6 +2821,10 @@ namespace Emgu.CV.Test
                 {
                     vm.Push(images);
                     stitcher.Stitch(vm, result);
+                    using (VectorOfCameraParams vcp = stitcher.Cameras())
+                    {
+                        int[] component = stitcher.Component();
+                    }
                 }
                 //Emgu.CV.UI.ImageViewer.Show(result);
             }

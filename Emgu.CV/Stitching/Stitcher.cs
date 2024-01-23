@@ -32,7 +32,7 @@ namespace Emgu.CV.Stitching
             /// </summary>
             ErrNeedMoreImgs = 1,
             /// <summary>
-            /// Error, homography estimateion failed.
+            /// Error, homography estimation failed.
             /// </summary>
             ErrHomographyEstFail = 2,
             /// <summary>
@@ -99,9 +99,9 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// These functions try to match the given images and to estimate rotations of each camera.
         /// </summary>
-        /// <param name="images">Input images.</param>
-        /// <param name="masks">Masks for each input image specifying where to look for keypoints (optional).</param>
-        /// <returns>Status code.</returns>
+        /// <param name="images">Input images</param>
+        /// <param name="masks">Masks for each input image specifying where to look for keypoints (optional)</param>
+        /// <returns>Status code</returns>
         public Stitcher.Status EstimateTransform(IInputArrayOfArrays images, IInputArrayOfArrays masks = null)
         {
             using (InputArray iaImages = images.GetInputArray())
@@ -114,8 +114,8 @@ namespace Emgu.CV.Stitching
         /// <summary>
         /// These functions try to match the given images and to estimate rotations of each camera.
         /// </summary>
-        /// <param name="pano">Final pano.</param>
-        /// <returns>Status code.</returns>
+        /// <param name="pano">Final pano</param>
+        /// <returns>Status code</returns>
         public Stitcher.Status ComposePanorama(IOutputArray pano)
         {
             using (OutputArray oaPano = pano.GetOutputArray())
@@ -128,8 +128,8 @@ namespace Emgu.CV.Stitching
         /// These functions try to compose the given images (or images stored internally from the other function calls) into the final pano under the assumption that the image transformations were estimated before.
         /// </summary>
         /// <param name="images">Input images</param>
-        /// <param name="pano">Final pano.</param>
-        /// <returns>Status code.</returns>
+        /// <param name="pano">Final pano</param>
+        /// <returns>Status code</returns>
         public Stitcher.Status ComposePanorama(IInputArrayOfArrays images, IOutputArray pano)
         {
             using (InputArray iaImages = images.GetInputArray())
@@ -269,7 +269,68 @@ namespace Emgu.CV.Stitching
         public CvEnum.Inter InterpolationFlags
         {
             get { return StitchingInvoke.cveStitcherGetInterpolationFlags(_ptr); }
-            set { StitchingInvoke.cveStitcherSetInterpolationFlags(_ptr, value);}
+            set { StitchingInvoke.cveStitcherSetInterpolationFlags(_ptr, value); }
+        }
+
+        /// <summary>
+        /// Get the camera parameters
+        /// </summary>
+        /// <returns>The camera parameters</returns>
+        public VectorOfCameraParams Cameras()
+        {
+            VectorOfCameraParams vcp = new VectorOfCameraParams();
+            StitchingInvoke.cveStitcherCameras(_ptr, vcp);
+            return vcp;
+        }
+
+        /// <summary>
+        /// Get the component
+        /// </summary>
+        /// <returns>The component</returns>
+        public int[] Component()
+        {
+            using (VectorOfInt vc = new VectorOfInt())
+            {
+                StitchingInvoke.cveStitcherComponent(_ptr, vc);
+                return vc.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Return the mask of the panorama. The mask is a 8U UMat with the values: 0xFF (white) for pixels filled by the input images, 0 (black) for unused pixels.It can be used as the mask for inpaint.
+        /// </summary>
+        /// <returns>The mask of the panorama</returns>
+        public UMat ResultMask()
+        {
+            UMat result = new UMat();
+            using (OutputArray oaResult = result.GetOutputArray())
+                StitchingInvoke.cveStitcherGetResultMask(_ptr, oaResult);
+            return result;
+        }
+
+        /// <summary>
+        /// These function restores camera rotation and camera intrinsics of each camera that can be got with Stitcher.Cameras() call
+        /// </summary>
+        /// <param name="images">Input images</param>
+        /// <param name="cameras">Estimated rotation of cameras for each of the input images</param>
+        /// <param name="component">Indices (0-based) of images constituting the final panorama (optional)</param>
+        /// <returns>Status code</returns>
+        public Stitcher.Status SetTransform(
+            IInputArrayOfArrays images,
+            VectorOfCameraParams cameras,
+            int[] component=null)
+        {
+            using (InputArray iaImages = images.GetInputArray())
+            {
+                if (component == null)
+                {
+                    return StitchingInvoke.cveStitcherSetTransform(_ptr, iaImages, cameras, IntPtr.Zero);
+                } else
+                    using (VectorOfInt viComponent = new VectorOfInt(component))
+                    {
+                        return StitchingInvoke.cveStitcherSetTransform(_ptr, iaImages, cameras, viComponent);
+                    }
+            }
         }
 
         /// <summary>
@@ -332,51 +393,77 @@ namespace Emgu.CV.Stitching
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveStitcherRelease(ref IntPtr sharedPtr);
 
-
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveStitcherSetWaveCorrection(
             IntPtr stitcher,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool flag);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveStitcherGetWaveCorrection(IntPtr stitcher);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveStitcherSetWaveCorrectionKind(IntPtr stitcher, Stitcher.WaveCorrectionType kind);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern Stitcher.WaveCorrectionType cveStitcherGetWaveCorrectionKind(IntPtr stitcher);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveStitcherSetPanoConfidenceThresh(IntPtr stitcher, double confThresh);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern double cveStitcherGetPanoConfidenceThresh(IntPtr stitcher);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveStitcherSetCompositingResol(IntPtr stitcher, double resolMpx);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern double cveStitcherGetCompositingResol(IntPtr stitcher);
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
 
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveStitcherSetSeamEstimationResol(IntPtr stitcher, double resolMpx);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern double cveStitcherGetSeamEstimationResol(IntPtr stitcher);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveStitcherSetRegistrationResol(IntPtr stitcher, double resolMpx);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern double cveStitcherGetRegistrationResol(IntPtr stitcher);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern CvEnum.Inter cveStitcherGetInterpolationFlags(IntPtr stitcher);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveStitcherSetInterpolationFlags(IntPtr stitcher, CvEnum.Inter interpFlags);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern Stitcher.Status cveStitcherEstimateTransform(IntPtr stitcher, IntPtr images, IntPtr masks);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern Stitcher.Status cveStitcherComposePanorama1(IntPtr stitcher, IntPtr pano);
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern Stitcher.Status cveStitcherComposePanorama2(IntPtr stitcher, IntPtr images, IntPtr pano);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveStitcherCameras(IntPtr stitcher, IntPtr cameraParams);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveStitcherComponent(IntPtr stitcher, IntPtr component);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern Stitcher.Status cveStitcherSetTransform(
+            IntPtr stitcher,
+            IntPtr images,
+            IntPtr cameras,
+            IntPtr component);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveStitcherGetResultMask(
+            IntPtr stitcher,
+            IntPtr resultMask);
     }
 }
