@@ -88,6 +88,7 @@ namespace cv
 		class PlaneWarperGpu {};
 		class CylindricalWarperGpu {};
 		class SphericalWarperGpu {};
+		class CameraParams {};
 	}
 }
 #endif

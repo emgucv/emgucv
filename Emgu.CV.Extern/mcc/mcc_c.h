@@ -28,6 +28,7 @@ namespace cv {
 		enum CCM_TYPE {};
 		enum DISTANCE_TYPE {};
 		enum LINEAR_TYPE {};
+		enum COLOR_SPACE {};
 	}
 }
 #endif
