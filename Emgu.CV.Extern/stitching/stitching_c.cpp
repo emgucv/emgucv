@@ -1342,3 +1342,32 @@ void cveSphericalWarperGpuRelease(cv::SphericalWarperGpu** warper)
 	throw_no_stitching();
 #endif	
 }
+
+
+cv::detail::CameraParams* cveCameraParamsCreate()
+{
+#ifdef HAVE_OPENCV_STITCHING
+	return new cv::detail::CameraParams();
+#else
+	throw_no_stitching();
+#endif	
+}
+void cveCameraParamsRelease(cv::detail::CameraParams** params)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	delete* params;
+	*params = 0;
+#else
+	throw_no_stitching();
+#endif	
+}
+
+void cveCameraParamsGetK(cv::detail::CameraParams* params, cv::_OutputArray* k)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	cv::Mat m = params->K();
+	m.copyTo(*k);
+#else
+	throw_no_stitching();
+#endif		
+}
