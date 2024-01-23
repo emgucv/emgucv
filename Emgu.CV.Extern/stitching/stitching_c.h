@@ -341,4 +341,8 @@ CVAPI(void) cveDetailSphericalWarperGpuRelease(cv::detail::SphericalWarperGpu** 
 CVAPI(cv::SphericalWarperGpu*) cveSphericalWarperGpuCreate(cv::WarperCreator** warperCreator);
 CVAPI(void) cveSphericalWarperGpuRelease(cv::SphericalWarperGpu** warper);
 
+
+CVAPI(cv::detail::CameraParams*) cveCameraParamsCreate();
+CVAPI(void) cveCameraParamsRelease(cv::detail::CameraParams** params);
+CVAPI(void) cveCameraParamsGetK(cv::detail::CameraParams* params, cv::_OutputArray* k);
 #endif

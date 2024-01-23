@@ -2228,6 +2228,41 @@ ENDIF()
 	""
 	${HAVE_opencv_stitching})  
 
+   CREATE_OCV_CLASS_PROPERTY( 
+    "stitching/camera_params_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Stitching/CameraParams.g.cs"
+    "cv::detail::CameraParams" 
+    "CameraParams" 
+    "focal;aspect;ppx;ppy;R" 
+    "double;double;double;double;cv::Mat" 
+    "element;element;element;element;element"
+    "Focal;Aspect;Ppx;Ppy;R" 
+    "double;double;double;double;Mat"
+    "The focal length;
+    The aspect ratio;
+    The principal point X;
+    The principal point Y;
+    The rotation Mat"
+    "Emgu.CV.Stitching"
+    "StitchingInvoke"
+    "CameraParams"
+	""
+    "#include \"stitching_c.h\""
+	""
+	""
+	${HAVE_opencv_stitching})  
+
+CREATE_VECTOR_CS(
+    "CameraParams" 
+    "cv::detail::CameraParams" 
+    "Emgu.CV.Stitching.CameraParams" 
+    "object_not_array" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" 
+    Emgu.CV.Stitching 
+    "" 
+    "#include \"stitching_c.h\"" 
+    "" 
+    "defined(HAVE_OPENCV_STITCHING)")
 ############################### stitching code gen END ################################
 
 ############################### video code gen START ##############################
