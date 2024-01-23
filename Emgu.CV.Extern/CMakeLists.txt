@@ -2231,16 +2231,17 @@ ENDIF()
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Stitching/CameraParams.g.cs"
     "cv::detail::CameraParams" 
     "CameraParams" 
-    "focal;aspect;ppx;ppy;R" 
-    "double;double;double;double;cv::Mat" 
-    "element;element;element;element;element"
-    "Focal;Aspect;Ppx;Ppy;R" 
-    "double;double;double;double;Mat"
+    "focal;aspect;ppx;ppy;R;t" 
+    "double;double;double;double;cv::Mat;cv::Mat" 
+    "element;element;element;element;element;element"
+    "Focal;Aspect;Ppx;Ppy;R;T" 
+    "double;double;double;double;Mat;Mat"
     "The focal length;
     The aspect ratio;
     The principal point X;
     The principal point Y;
-    The rotation Mat"
+    The rotation Mat;
+    The translation Mat"
     "Emgu.CV.Stitching"
     "StitchingInvoke"
     "CameraParams"

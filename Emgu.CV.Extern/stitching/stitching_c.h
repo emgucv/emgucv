@@ -136,6 +136,19 @@ CVAPI(int) cveStitcherEstimateTransform(cv::Stitcher* stitcher, cv::_InputArray*
 CVAPI(int) cveStitcherComposePanorama1(cv::Stitcher* stitcher, cv::_OutputArray* pano);
 CVAPI(int) cveStitcherComposePanorama2(cv::Stitcher* stitcher, cv::_InputArray* images, cv::_OutputArray* pano);
 
+CVAPI(void) cveStitcherCameras(cv::Stitcher* stitcher, std::vector< cv::detail::CameraParams >* cameraParams);
+CVAPI(void) cveStitcherComponent(cv::Stitcher* stitcher, std::vector< int >* component);
+
+CVAPI(int) cveStitcherSetTransform(
+	cv::Stitcher* stitcher,
+	cv::_InputArray* images,
+	const std::vector< cv::detail::CameraParams >* cameras,
+	const std::vector< int >* component);
+
+CVAPI(void) cveStitcherGetResultMask(
+	cv::Stitcher* stitcher,
+	cv::_OutputArray* resultMask);
+
 /*
 #ifdef OPENCV_ENABLE_NONFREE
 CVAPI(cv::detail::SurfFeaturesFinder*) cveSurfFeaturesFinderCreate(

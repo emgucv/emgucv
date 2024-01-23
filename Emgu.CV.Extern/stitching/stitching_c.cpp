@@ -258,6 +258,53 @@ int cveStitcherComposePanorama2(cv::Stitcher* stitcher, cv::_InputArray* images,
 #endif
 }
 
+void cveStitcherCameras(cv::Stitcher* stitcher, std::vector< cv::detail::CameraParams >* cameraParams)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	* cameraParams = stitcher->cameras();
+#else
+	throw_no_stitching();
+#endif	
+}
+
+void cveStitcherComponent(cv::Stitcher* stitcher, std::vector< int >* component)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	* component = stitcher->component();
+#else
+	throw_no_stitching();
+#endif		
+}
+
+int cveStitcherSetTransform(
+	cv::Stitcher* stitcher,
+	cv::_InputArray* images,
+	const std::vector< cv::detail::CameraParams >* cameras,
+	const std::vector< int >* component)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	if (component)
+		return stitcher->setTransform(*images, *cameras, *component);
+	else
+		return stitcher->setTransform(*images, *cameras);
+#else
+	throw_no_stitching();
+#endif			
+}
+
+void cveStitcherGetResultMask(
+	cv::Stitcher* stitcher,
+	cv::_OutputArray* resultMask)
+{
+#ifdef HAVE_OPENCV_STITCHING
+	cv::UMat m = stitcher->resultMask();
+	m.copyTo(*resultMask);
+#else
+	throw_no_stitching();
+#endif				
+}
+
+
 void cveRotationWarperBuildMaps(cv::detail::RotationWarper* warper, CvSize* srcSize, cv::_InputArray* K, cv::_InputArray* R, cv::_OutputArray* xmap, cv::_OutputArray* ymap, CvRect* boundingBox)
 {
 #ifdef HAVE_OPENCV_STITCHING
