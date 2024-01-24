@@ -120,5 +120,51 @@ namespace Emgu.CV.PpfMatch3d
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTransformPCPose(IntPtr pc, IntPtr pose, IntPtr result);
+    
+
+        /// <summary>
+        /// Sample a point cloud using uniform steps
+        /// </summary>
+        /// <param name="pc">Input point cloud (CV_32F family). Point clouds with 3 or 6 elements per row are expected. In the case where the normals are provided, they are also rotated to be compatible with the entire transformation</param>
+        /// <param name="xRange">X components (min and max) of the bounding box of the model</param>
+        /// <param name="yRange">Y components (min and max) of the bounding box of the model</param>
+        /// <param name="zRange">Z components (min and max) of the bounding box of the model</param>
+        /// <param name="sampleStepRelative">The point cloud is sampled such that all points have a certain minimum distance. This minimum distance is determined relatively using the parameter sampleStepRelative.</param>
+        /// <param name="weightByCenter">The contribution of the quantized data points can be weighted by the distance to the origin. This parameter enables/disables the use of weighting.</param>
+        /// <param name="result">Sampled point cloud</param>
+        public static void SamplePCByQuantization(Mat pc, float[] xRange, float[] yRange, float[] zRange, float sampleStepRelative, int weightByCenter, IOutputArray result)
+        {
+            using (OutputArray oaResult = result.GetOutputArray())
+            using (var vfXrange = new VectorOfFloat(xRange))
+            using (var vfYrange = new VectorOfFloat(yRange))
+            using (var vfZrange = new VectorOfFloat(zRange))
+            {
+                PpfMatch3dInvoke.cveSamplePCByQuantization(pc, vfXrange, vfYrange, vfZrange, sampleStepRelative, weightByCenter, oaResult);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveSamplePCByQuantization(IntPtr pc, IntPtr xRange, IntPtr yRange, IntPtr zRange, float sampleStepRelative,  int weightByCenter, IntPtr result);
+
+        /// <summary>
+        /// Compute the normals of an arbitrary point cloud 
+        /// computeNormalsPC3d uses a plane fitting approach to smoothly compute local normals. Normals are obtained through the eigenvector of the covariance matrix, corresponding to the smallest eigen value. If PCNormals is provided to be an Nx6 matrix, then no new allocation is made, instead the existing memory is overwritten.
+        /// </summary>
+        /// <param name="pc">Input point cloud (CV_32F family). Point clouds with 3 or 6 elements per row are expected. In the case where the normals are provided, they are also rotated to be compatible with the entire transformation</param>
+        /// <param name="pcNormals">Output point cloud</param>
+        /// <param name="numNeighbors">Number of neighbors to take into account in a local region</param>
+        /// <param name="flipViewpoint">Should normals be flipped to a viewing direction?</param>
+        /// <param name="viewpoint">viewpoint</param>
+        /// <returns>Returns 0 on success</returns>
+        public static int ComputeNormalsPC3d(Mat pc, Mat pcNormals, int numNeighbors, bool flipViewpoint, float[] viewpoint)
+        {
+            using (var vfViewpoint = new VectorOfFloat(viewpoint))
+            {
+                return PpfMatch3dInvoke.cveComputeNormalsPC3d(pc, pcNormals, numNeighbors, flipViewpoint, vfViewpoint);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveComputeNormalsPC3d(IntPtr pc, IntPtr pcNormals, int numNeighbors, bool flipViewpoint, IntPtr viewpoint);
     }
 }

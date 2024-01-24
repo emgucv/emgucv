@@ -202,3 +202,23 @@ void cveTransformPCPose(cv::Mat* pc, cv::Mat* pose, cv::_OutputArray* result)
 	throw_no_surface_matching();
 #endif
 }
+
+void cveSamplePCByQuantization(const cv::Mat* pc, cv::Vec2f* xRange, cv::Vec2f* yRange, cv::Vec2f* zRange, const float sampleStepRelative, const int weightByCenter, cv::_OutputArray* result)
+{
+#ifdef HAVE_OPENCV_SURFACE_MATCHING
+	cv::Mat m = cv::ppf_match_3d::samplePCByQuantization(*pc, *xRange, *yRange, *zRange, sampleStepRelative, weightByCenter);
+	m.copyTo(*result);
+#else
+	throw_no_surface_matching();
+#endif
+}
+
+int cveComputeNormalsPC3d(const cv::Mat* pc, cv::Mat* pcNormals, const int numNeighbors, const bool flipViewpoint, const cv::Vec3f* viewpoint)
+{
+#ifdef HAVE_OPENCV_SURFACE_MATCHING
+	const int result = cv::ppf_match_3d::computeNormalsPC3d(*pc, *pcNormals, numNeighbors, flipViewpoint, *viewpoint);
+	return result;
+#else
+	throw_no_surface_matching();
+#endif
+}
