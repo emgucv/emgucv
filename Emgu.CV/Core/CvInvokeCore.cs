@@ -1513,6 +1513,39 @@ namespace Emgu.CV
         private static extern void cveFlip(IntPtr src, IntPtr dst, CvEnum.FlipType flipMode);
 
         /// <summary>
+        /// Flips a n-dimensional at given axis
+        /// </summary>
+        /// <param name="src">Input array</param>
+        /// <param name="dst">Output array that has the same shape of src</param>
+        /// <param name="axis">Axis that performs a flip on. 0 &lt;= axis &lt; src.dims.</param>
+        public static void FlipND(IInputArray src, IOutputArray dst, int axis)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveFlipND(iaSrc, oaDst, axis);
+        }
+        
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveFlipND(IntPtr src, IntPtr dst, int axis);
+
+        /// <summary>
+        /// Broadcast the given Mat to the given shape.
+        /// </summary>
+        /// <param name="src">Input array</param>
+        /// <param name="shape">Target shape. Should be a list of CV_32S numbers. Note that negative values are not supported.</param>
+        /// <param name="dst">Output array that has the given shape</param>
+        public static void Broadcast(IInputArray src, IInputArray shape, IOutputArray dst)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (InputArray iaShape = shape.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveBroadcast(iaSrc, iaShape, oaDst);
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveBroadcast(IntPtr src, IntPtr shape, IntPtr dst);
+
+        /// <summary>
         /// Rotates a 2D array in multiples of 90 degrees.
         /// </summary>
         /// <param name="src">Input array.</param>

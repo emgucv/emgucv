@@ -100,6 +100,8 @@ CVAPI(void) cveSqrt(cv::_InputArray* src, cv::_OutputArray* dst);
 CVAPI(void) cveCompare(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int compop);
 
 CVAPI(void) cveFlip(cv::_InputArray* src, cv::_OutputArray* dst, int flipCode);
+CVAPI(void) cveFlipND(cv::_InputArray* src, cv::_OutputArray* dst, int axis);
+CVAPI(void) cveBroadcast(cv::_InputArray* src, cv::_InputArray* shape, cv::_OutputArray* dst);
 CVAPI(void) cveRotate(cv::_InputArray* src, cv::_OutputArray* dst, int rotateCode);
 CVAPI(void) cveTranspose(cv::_InputArray* src, cv::_OutputArray* dst);
 CVAPI(void) cveLUT(cv::_InputArray* src, cv::_InputArray* lut, cv::_OutputArray* dst);

@@ -327,6 +327,16 @@ void cveFlip(cv::_InputArray* src, cv::_OutputArray* dst, int flipCode)
 	cv::flip(*src, *dst, flipCode);
 }
 
+void cveFlipND(cv::_InputArray* src, cv::_OutputArray* dst, int axis)
+{
+	cv::flipND(*src, *dst, axis);
+}
+
+void cveBroadcast(cv::_InputArray* src, cv::_InputArray* shape, cv::_OutputArray* dst)
+{
+	cv::broadcast(*src, *shape, *dst);
+}
+
 void cveRotate(cv::_InputArray* src, cv::_OutputArray* dst, int rotateCode)
 {
 	cv::rotate(*src, *dst, rotateCode);
