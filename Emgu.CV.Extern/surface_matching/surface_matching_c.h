@@ -57,4 +57,6 @@ CVAPI(void) cvePPF3DDetectorRelease(cv::ppf_match_3d::PPF3DDetector** detector);
 
 CVAPI(void) cveLoadPLYSimple(cv::String* fileName, int withNormals, cv::_OutputArray* result);
 CVAPI(void) cveTransformPCPose(cv::Mat* pc, cv::Mat* pose, cv::_OutputArray* result);
+CVAPI(void) cveSamplePCByQuantization(const cv::Mat* pc, cv::Vec2f* xRange, cv::Vec2f* yRange, cv::Vec2f* zRange, const float sampleStepRelative, const int weightByCenter, cv::_OutputArray* result);
+CVAPI(int) cveComputeNormalsPC3d(const cv::Mat* pc, cv::Mat* pcNormals, const int numNeighbors, const bool flipViewpoint, const cv::Vec3f* viewpoint);
 #endif
