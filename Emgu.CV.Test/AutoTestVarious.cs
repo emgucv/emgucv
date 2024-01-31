@@ -1380,6 +1380,27 @@ namespace Emgu.CV.Test
         }
 
 
+        [Test]
+        public void TestFlannHierarchicalClusteringIndex()
+        {
+            float[][] features = new float[10][];
+            for (int i = 0; i < features.Length; i++)
+                features[i] = new float[] { (float)i };
+
+            Flann.HierarchicalClusteringIndexParams p = new HierarchicalClusteringIndexParams();
+            Flann.Index index = new Flann.Index(CvToolbox.GetMatrixFromArrays(features), p);
+
+            float[][] features2 = new float[1][];
+            features2[0] = new float[] { 5.0f };
+
+            Matrix<int> indices = new Matrix<int>(features2.Length, 1);
+            Matrix<float> distances = new Matrix<float>(features2.Length, 1);
+            index.KnnSearch(CvToolbox.GetMatrixFromArrays(features2), indices, distances, 1, 32);
+
+            EmguAssert.IsTrue(indices[0, 0] == 5);
+            EmguAssert.IsTrue(distances[0, 0] == 0.0);
+        }
+
         /*
         [Test]
         public void TestEigenObjectRecognizer()
