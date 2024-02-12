@@ -328,6 +328,9 @@ namespace Emgu.CV.Cuda
         /// <returns>True if the two GpuMat equals</returns>
         public bool Equals(GpuMat other)
         {
+            if (other == null)
+                return false;
+            
             if (this.IsEmpty)
             {
                 if (!other.IsEmpty)
