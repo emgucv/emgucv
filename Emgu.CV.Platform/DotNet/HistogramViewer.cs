@@ -8,66 +8,67 @@ using System.Windows.Forms;
 
 namespace Emgu.CV.UI
 {
-   /// <summary>
-   /// A view for histogram
-   /// </summary>
-   public partial class HistogramViewer : Form
-   {
-      /// <summary>
-      /// A histogram viewer
-      /// </summary>
-      public HistogramViewer()
-      {
-         InitializeComponent();
-      }
+    /// <summary>
+    /// A view for histogram
+    /// </summary>
+    public partial class HistogramViewer : Form
+    {
+        /// <summary>
+        /// A histogram viewer
+        /// </summary>
+        public HistogramViewer()
+        {
+            InitializeComponent();
+        }
 
-      /// <summary>
-      /// Display the histograms of the specific image
-      /// </summary>
-      /// <param name="image">The image to retrieve histogram from</param>
-      public static void Show(IInputArray image)
-      {
-         Show(image, 256);
-      }
+        /*
+        /// <summary>
+        /// Display the histograms of the specific image
+        /// </summary>
+        /// <param name="image">The image to retrieve histogram from</param>
+        public static void Show(IInputArray image)
+        {
+           Show(image, 256);
+        }*/
 
-      /// <summary>
-      /// Display the histograms of the specific image
-      /// </summary>
-      /// <param name="image">The image to retrieve histogram from</param>
-      /// <param name="numberOfBins">The number of bins in the histogram</param>
-      public static void Show(IInputArray image, int numberOfBins)
-      {
-         HistogramViewer viewer = new HistogramViewer();
-         viewer.HistogramCtrl.GenerateHistograms(image, numberOfBins);
-         viewer.HistogramCtrl.Refresh();
-         viewer.ShowDialog();
-      }
+        /// <summary>
+        /// Display the histograms of the specific image
+        /// </summary>
+        /// <param name="image">The image to retrieve histogram from</param>
+        /// <param name="numberOfBins">The number of bins in the histogram</param>
+        public static void Show(IInputArray image, int numberOfBins = 256)
+        {
+            HistogramViewer viewer = new HistogramViewer();
+            viewer.HistogramCtrl.GenerateHistograms(image, numberOfBins);
+            viewer.HistogramCtrl.Refresh();
+            viewer.ShowDialog();
+        }
 
-      /*
-      /// <summary>
-      /// Display the specific histogram
-      /// </summary>
-      /// <param name="hist">The 1 dimension histogram to be displayed</param>
-      /// <param name="title">The name of the histogram</param>
-      public static void Show(DenseHistogram hist, string title)
-      {
-         HistogramViewer viewer = new HistogramViewer();
-         if (hist.Dimension == 1)
-            viewer.HistogramCtrl.AddHistogram(title, Color.Black, hist);
-         
-         viewer.HistogramCtrl.Refresh();
-         viewer.Show();
-      }*/
+        /*
+        /// <summary>
+        /// Display the specific histogram
+        /// </summary>
+        /// <param name="hist">The 1 dimension histogram to be displayed</param>
+        /// <param name="title">The name of the histogram</param>
+        public static void Show(DenseHistogram hist, string title)
+        {
+           HistogramViewer viewer = new HistogramViewer();
+           if (hist.Dimension == 1)
+              viewer.HistogramCtrl.AddHistogram(title, Color.Black, hist);
 
-      /// <summary>
-      /// Get the histogram control of this viewer
-      /// </summary>
-      public HistogramBox HistogramCtrl
-      {
-         get
-         {
-            return histogramCtrl1;
-         }
-      }
-   }
+           viewer.HistogramCtrl.Refresh();
+           viewer.Show();
+        }*/
+
+        /// <summary>
+        /// Get the histogram control of this viewer
+        /// </summary>
+        public HistogramBox HistogramCtrl
+        {
+            get
+            {
+                return histogramCtrl1;
+            }
+        }
+    }
 }

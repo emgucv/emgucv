@@ -239,7 +239,7 @@ namespace Emgu.CV.Util
                    _lookupTable[srcColorType] : (_lookupTable[srcColorType] = new Dictionary<Type, Emgu.CV.CvEnum.ColorConversion>());
                 conversion = table.ContainsKey(destColorType) ?
                               table[destColorType] : (table[destColorType] = GetCode(srcColorType, destColorType));
-                ;
+                
             }
             return conversion;
         }

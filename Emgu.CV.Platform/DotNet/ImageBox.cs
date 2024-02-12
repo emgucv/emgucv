@@ -439,7 +439,7 @@ namespace Emgu.CV.UI
                 //This is necessary to handle delegate with a loop
                 //Cause me lots of headache before reading the article on
                 //http://decav.com/blogs/andre/archive/2007/11/18/wtf-quot-problems-quot-with-anonymous-delegates-linq-lambdas-and-quot-foreach-quot-or-quot-for-quot-loops.aspx
-                //I wishes MSFT handle this better
+                //We wish MSFT handle this better
                 MethodInfo methodInfoRef = mi;
 
                 operationMenuItem.Click += delegate
