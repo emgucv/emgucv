@@ -258,7 +258,7 @@ namespace Emgu.CV.XamarinForms
             if (_deaultImage == null)
             {
                 //Force to use Camera
-                images = new Mat[0];
+                images = Array.Empty<Mat>();
             }
             else
             {

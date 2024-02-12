@@ -476,7 +476,7 @@ namespace Emgu.CV.XamarinForms
             }
             else
             {
-                return new string[0];
+                return Array.Empty<string>();
             }
         }
         protected override void OnStart()

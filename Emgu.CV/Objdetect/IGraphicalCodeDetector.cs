@@ -131,7 +131,7 @@ namespace Emgu.CV
                     decodedInfo,
                     oaStraightCode);
                 if (!success)
-                    return new String[0];
+                    return Array.Empty<string>();
                 return decodedInfo.ToArray();
             }
         }
@@ -163,7 +163,7 @@ namespace Emgu.CV
                     oaPoints,
                     oaStraightCode);
                 if (!success)
-                    return new GraphicalCode[0];
+                    return Array.Empty<GraphicalCode>();
 
                 String[] labels = decodedInfo.ToArray();
                 PointF[] pts = points.ToArray();

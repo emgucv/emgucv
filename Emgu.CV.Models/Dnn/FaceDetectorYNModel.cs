@@ -150,7 +150,7 @@ namespace Emgu.CV.Models
 
             float[,] results = rawResult.GetData() as float[,];
             if (results == null)
-                return new FaceDetectorYNResult[0];
+                return Array.Empty<FaceDetectorYNResult>();
 
             int count = results.GetLength(0);
             for (int i = 0; i < count; i++)

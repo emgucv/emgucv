@@ -287,7 +287,7 @@ namespace Emgu.CV.XamarinForms
                 }
                 else if (action.Equals("Camera"))
                 {
-                    mats = new Mat[0];
+                    mats = Array.Empty<Mat>();
                 }
             }
 
