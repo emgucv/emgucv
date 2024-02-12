@@ -351,7 +351,7 @@ namespace Emgu.CV.Rapid
             using (InputArray iaCols = cols.GetInputArray())
             using (InputArray iaSrcLocations = srcLocations.GetInputArray())
             using (OutputArray oaPts2d = pts2d.GetOutputArray())
-            using (InputOutputArray ioaPts3d = pts3d.GetInputOutputArray())
+            using (InputOutputArray ioaPts3d = pts3d == null ? InputOutputArray.GetEmpty() : pts3d.GetInputOutputArray())
             using (InputArray iaMask = mask == null? InputArray.GetEmpty() : mask.GetInputArray())
             {
                 cveConvertCorrespondencies(iaCols, iaSrcLocations, oaPts2d, ioaPts3d, iaMask);

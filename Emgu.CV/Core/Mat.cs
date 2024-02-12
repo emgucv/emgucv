@@ -1210,6 +1210,8 @@ namespace Emgu.CV
         /// <returns>True if the two Mats are equal</returns>
         public bool Equals(Mat other)
         {
+            if (other == null)
+                return false;
             if (!(Size.Equals(other.Size) && NumberOfChannels == other.NumberOfChannels && Depth == other.Depth))
                 return false;
 
