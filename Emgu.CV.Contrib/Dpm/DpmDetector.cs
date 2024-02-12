@@ -28,7 +28,7 @@ namespace Emgu.CV.Dpm
             CvString[] cclasses;
             if (classes == null)
             {
-                cclasses = new CvString[0];
+                cclasses = Array.Empty<CvString>();
             }
             else
             {

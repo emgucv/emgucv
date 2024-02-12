@@ -81,7 +81,7 @@ namespace Emgu.CV
                 String[] codes = DetectAndDecode(img, pointsVec);
                 if (codes.Length == 0)
                 {
-                    return new QRCode[0];
+                    return Array.Empty<QRCode>();
                 }
                 Point[][] points = WeChatQRCode.VectorOfMatToPoints(pointsVec);
 

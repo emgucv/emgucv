@@ -121,8 +121,8 @@ namespace Emgu.CV.Models
                     classIds,
                     confidents,
                     regions,
-                    (float)confThreshold,
-                    (float)nmsThreshold);
+                    confThreshold,
+                    nmsThreshold);
                 var classIdArr = classIds.ToArray();
                 var confidentArr = confidents.ToArray();
                 var regionArr = regions.ToArray();

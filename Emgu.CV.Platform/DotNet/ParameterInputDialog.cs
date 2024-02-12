@@ -384,7 +384,7 @@ namespace Emgu.CV.UI
 
             //if the method requires no parameter, simply return an empty array
             if (parameterList.Count == 0)
-                return new object[0];
+                return Array.Empty<object>();
 
             #region Handle the cases where at least one parameter is required as input
             using (ParameterInputDialog dlg = new ParameterInputDialog(parameterList.ToArray(), defaultParameterValueList.ToArray()))
