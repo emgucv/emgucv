@@ -329,48 +329,50 @@ namespace Emgu.Util
 
         private static IEnumerable<T> JoinTwoInterpolatables<T>(IEnumerable<T> enum1, IEnumerable<T> enum2) where T : IInterpolatable<T>, new()
         {
-            IEnumerator<T> l1 = enum1.GetEnumerator();
-            IEnumerator<T> l2 = enum2.GetEnumerator();
-            if (!l1.MoveNext())
+            using (IEnumerator<T> l1 = enum1.GetEnumerator())
+            using (IEnumerator<T> l2 = enum2.GetEnumerator())
             {
-                while (l2.MoveNext())
-                    yield return l2.Current;
-                yield break;
-            }
-            else if (!l2.MoveNext())
-            {
-                while (l1.MoveNext())
-                    yield return l1.Current;
-                yield break;
-            }
-
-            T s1 = l1.Current;
-            T s2 = l2.Current;
-
-            while (true)
-            {
-                if (s1.InterpolationIndex < s2.InterpolationIndex)
+                if (!l1.MoveNext())
                 {
-                    yield return s1;
-                    if (l1.MoveNext())
-                        s1 = l1.Current;
-                    else
-                    {
-                        while (l2.MoveNext())
-                            yield return l2.Current;
-                        yield break;
-                    }
+                    while (l2.MoveNext())
+                        yield return l2.Current;
+                    yield break;
                 }
-                else
+                else if (!l2.MoveNext())
                 {
-                    yield return s2;
-                    if (l2.MoveNext())
-                        s2 = l2.Current;
+                    while (l1.MoveNext())
+                        yield return l1.Current;
+                    yield break;
+                }
+
+                T s1 = l1.Current;
+                T s2 = l2.Current;
+
+                while (true)
+                {
+                    if (s1.InterpolationIndex < s2.InterpolationIndex)
+                    {
+                        yield return s1;
+                        if (l1.MoveNext())
+                            s1 = l1.Current;
+                        else
+                        {
+                            while (l2.MoveNext())
+                                yield return l2.Current;
+                            yield break;
+                        }
+                    }
                     else
                     {
-                        while (l1.MoveNext())
-                            yield return l1.Current;
-                        yield break;
+                        yield return s2;
+                        if (l2.MoveNext())
+                            s2 = l2.Current;
+                        else
+                        {
+                            while (l1.MoveNext())
+                                yield return l1.Current;
+                            yield break;
+                        }
                     }
                 }
             }
