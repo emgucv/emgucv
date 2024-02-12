@@ -460,7 +460,7 @@ namespace Emgu.CV
             bool grabbed = CvInvoke.cveVideoCaptureGrab(Ptr);
 
             if (grabbed && ImageGrabbed != null)
-                ImageGrabbed(this, new EventArgs());
+                ImageGrabbed(this, EventArgs.Empty);
             return grabbed;
         }
         

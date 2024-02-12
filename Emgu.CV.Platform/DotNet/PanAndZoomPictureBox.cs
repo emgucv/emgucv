@@ -482,7 +482,7 @@ namespace Emgu.CV.UI
             Invalidate();
 
             if (OnZoomScaleChange != null)
-               OnZoomScaleChange(this, new EventArgs());
+               OnZoomScaleChange(this, EventArgs.Empty);
 
          }
       }

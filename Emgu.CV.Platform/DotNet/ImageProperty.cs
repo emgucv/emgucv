@@ -48,7 +48,7 @@ namespace Emgu.CV.UI
                 if (_imageBox != null)
                 {
                     //update control base on current functional mode
-                    HandleFunctionalModeChange(this, new EventArgs());
+                    HandleFunctionalModeChange(this, EventArgs.Empty);
 
                     //register event such that feature change in functional mode will also trigger an update to the control
                     _imageBox.OnFunctionalModeChanged += HandleFunctionalModeChange;
