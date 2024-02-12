@@ -476,7 +476,7 @@ namespace Emgu.CV.UI
             int h = (int)(horizontalScrollBar.Value + shiftX);
             int v = (int)(verticalScrollBar.Value + shiftY);
             SetScrollBarVisibilityAndMaxMin();
-            horizontalScrollBar.Value = Math.Min(Math.Max(horizontalScrollBar.Minimum, h), horizontalScrollBar.Maximum); ;
+            horizontalScrollBar.Value = Math.Min(Math.Max(horizontalScrollBar.Minimum, h), horizontalScrollBar.Maximum);
             verticalScrollBar.Value = Math.Min(Math.Max(verticalScrollBar.Minimum, v), verticalScrollBar.Maximum);
 
             Invalidate();

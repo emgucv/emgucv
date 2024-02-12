@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
@@ -63,9 +64,9 @@ namespace OCR
                 {
                     String source = Emgu.CV.OCR.Tesseract.GetLangFileUrl(lang);
                     
-                    Console.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
+                    Trace.WriteLine(String.Format("Downloading file from '{0}' to '{1}'", source, dest));
                     webclient.DownloadFile(source, dest);
-                    Console.WriteLine(String.Format("Download completed"));
+                    Trace.WriteLine("Download completed");
                 }
         }
 

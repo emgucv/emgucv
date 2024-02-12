@@ -88,7 +88,7 @@ namespace Emgu.CV.XamarinForms
             using (Mat foregroundMaskBgr = new Mat())
             {
                 iaImageIn.CopyTo(frameCopy);
-                ;
+                
                 CvInvoke.GaussianBlur(imageIn, smoothedFrame, new Size(3, 3), 1); //filter out noises
 
                 #region use the BG/FG detector to find the foreground mask

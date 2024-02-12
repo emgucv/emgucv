@@ -22,6 +22,8 @@ namespace PlanarSubdivisionExample
       /// </summary>
       /// <param name="maxValue">The points contains values between [0, maxValue)</param>
       /// <param name="pointCount">The total number of points to create</param>
+      /// <param name="delaunayTriangles">The output delaunay triangles</param>
+      /// <param name="voronoiFacets">The output voronoi facets</param>
       public static void CreateSubdivision(float maxValue, int pointCount, out Triangle2DF[] delaunayTriangles, out VoronoiFacet[] voronoiFacets)
       {
          #region create random points in the range of [0, maxValue]

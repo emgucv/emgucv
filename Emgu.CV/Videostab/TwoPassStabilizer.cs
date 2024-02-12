@@ -47,7 +47,7 @@ namespace Emgu.CV.VideoStab
             }
 
             _stabilizerBase = IntPtr.Zero;
-            //_captureFrameSource.Dispose();
+
             base.Dispose();
         }
     }

@@ -108,6 +108,9 @@ namespace Emgu.CV.XamarinForms
         /// <param name="right">The right image</param>
         /// <param name="outputDisparityMap">The left disparity map</param>
         /// <param name="points">The 3D point cloud within a [-0.5, 0.5] cube</param>
+        /// <param name="handleMissingValues">Indicates, whether the function should handle missing values (i.e. points where the disparity was not computed). 
+        /// If handleMissingValues=true, then pixels with the minimal disparity that corresponds to the outliers (see StereoMatcher::compute ) 
+        /// are transformed to 3D points with a very large Z value (currently set to 10000).</param>
         private static void Computer3DPointsFromStereoPair(IInputArray left, IInputArray right, Mat outputDisparityMap, Mat points, bool handleMissingValues = true)
         {
             System.Drawing.Size size;

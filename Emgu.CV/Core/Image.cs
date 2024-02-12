@@ -127,7 +127,7 @@ namespace Emgu.CV
             catch (TypeInitializationException e)
             {
                 //possibly Exception in CvInvoke's static constructor.
-                throw e;
+                throw;
             }
             catch (Exception e)
             {

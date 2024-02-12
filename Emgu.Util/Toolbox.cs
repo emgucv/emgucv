@@ -574,9 +574,7 @@ namespace Emgu.Util
                 {
                     int error = Marshal.GetLastWin32Error();
                     var ex = new System.ComponentModel.Win32Exception(error);
-                    System.Diagnostics.Debug.WriteLine(String.Format(
-                        "LoadPackagedLibrary {0} failed with error code {1}: {2}", dllname, (uint)error,
-                        ex.Message));
+                    System.Diagnostics.Debug.WriteLine("LoadPackagedLibrary {0} failed with error code {1}: {2}", dllname, (uint)error, ex.Message);
                 }
                 else
                 {

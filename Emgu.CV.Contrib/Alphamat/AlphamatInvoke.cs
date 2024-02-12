@@ -3,8 +3,6 @@
 //----------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
 using Emgu.Util;
