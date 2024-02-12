@@ -103,7 +103,7 @@ namespace Emgu.CV.UI
                 _functionalMode = value;
 
                 if (OnFunctionalModeChanged != null)
-                    OnFunctionalModeChanged(this, new EventArgs());
+                    OnFunctionalModeChanged(this, EventArgs.Empty);
             }
         }
 
