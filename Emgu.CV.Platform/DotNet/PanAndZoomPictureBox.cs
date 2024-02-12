@@ -149,7 +149,7 @@ namespace Emgu.CV.UI
       }
 
       private void OnMouseWheel(object sender, MouseEventArgs e)
-      {  //handle the mouse whell scroll (for zooming)
+      {  //handle the mouse wheel scroll (for zooming)
          double scale = 1.0;
          if (e.Delta > 0)
          {

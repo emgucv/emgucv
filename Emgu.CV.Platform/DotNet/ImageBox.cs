@@ -108,7 +108,7 @@ namespace Emgu.CV.UI
         }
 
         /// <summary>
-        /// The event which will be trigerred when functional mode is changed
+        /// The event which will be triggered when functional mode is changed
         /// </summary>
         public event EventHandler OnFunctionalModeChanged;
 
@@ -448,14 +448,14 @@ namespace Emgu.CV.UI
 
                         while (true)
                         {
-                        //Get the parameters for the method
-                        //this pop up an input dialog and ask for user input
-                        paramList = ParameterInputDialog.GetParams(methodInfoRef, paramList);
+                            //Get the parameters for the method
+                            //this pop up an input dialog and ask for user input
+                            paramList = ParameterInputDialog.GetParams(methodInfoRef, paramList);
 
                             if (paramList == null) break; //user click cancel on the input dialog
 
-                        //create an operation from the specific methodInfo and parameter list
-                        Operation operation = new Operation(methodInfoRef, paramList);
+                            //create an operation from the specific methodInfo and parameter list
+                            Operation operation = new Operation(methodInfoRef, paramList);
                             try
                             {
                                 PushOperation(operation);
@@ -465,9 +465,9 @@ namespace Emgu.CV.UI
                             {
                                 MessageBox.Show((expt.InnerException ?? expt).Message);
 
-                            //special case, then there is no parameter and the method throw an exception
-                            //break the loop
-                            if (methodInfoRef.GetParameters().Length == 0)
+                                //special case, then there is no parameter and the method throw an exception
+                                //break the loop
+                                if (methodInfoRef.GetParameters().Length == 0)
                                     break;
                             }
                         }
