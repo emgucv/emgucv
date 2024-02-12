@@ -520,7 +520,7 @@ namespace Emgu.CV.UI
                     if (this.InvokeRequired)
                     {
                         this.Invoke((Action)
-                           delegate ()
+                           delegate
                            {
                                using (InputArray ia = DisplayedImage.GetInputArray())
                                using (Mat mat = ia.GetMat())
