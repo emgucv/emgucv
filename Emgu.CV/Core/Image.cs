@@ -471,7 +471,7 @@ namespace Emgu.CV
         /// </summary> 
         /// <param name="mask">the mask for coping</param>
         /// <returns> A copy of the image</returns>
-        public Image<TColor, TDepth> Copy(Image<Gray, Byte> mask)
+        public Image<TColor, TDepth> Copy(Image<Gray, Byte> mask = null)
         {
             Image<TColor, TDepth> res = new Image<TColor, TDepth>(Size);
             Copy(res, mask);
@@ -521,12 +521,13 @@ namespace Emgu.CV
             }
         }
 
+        /*
         /// <summary> Make a copy of the image, if ROI is set, only copy the ROI</summary>
         /// <returns> A copy of the image</returns>
         public Image<TColor, TDepth> Copy()
         {
             return Copy(null);
-        }
+        }*/
 
         /// <summary> 
         /// Create an image of the same size
@@ -1442,12 +1443,15 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Compare two images, returns true if the each of the pixels are equal, false otherwise
+        /// Compare two images, returns true if each of the pixels are equal, false otherwise
         /// </summary>
         /// <param name="img2">The other image to compare with</param>
-        /// <returns>true if the each of the pixels for the two images are equal, false otherwise</returns>
+        /// <returns>true if each of the pixels for the two images are equal, false otherwise</returns>
         public bool Equals(Image<TColor, TDepth> img2)
         {
+            if (img2 == null)
+                return false;
+            
             //true if the references are equal
             if (Object.ReferenceEquals(this, img2)) return true;
 
@@ -1665,6 +1669,7 @@ namespace Emgu.CV
             return res;
         }
 
+        /*
         /// <summary> 
         /// Update Running Average. <i>this</i> = (1-alpha)*<i>this</i> + alpha*img
         /// </summary>
@@ -1673,7 +1678,7 @@ namespace Emgu.CV
         public void AccumulateWeighted(Image<TColor, TDepth> img, double alpha)
         {
             AccumulateWeighted(img, alpha, null);
-        }
+        }*/
 
         /// <summary> 
         /// Update Running Average. <i>this</i> = (1-alpha)*<i>this</i> + alpha*img, using the mask
@@ -1681,7 +1686,7 @@ namespace Emgu.CV
         /// <param name="img">Input image, 1- or 3-channel, Byte or Single (each channel of multi-channel image is processed independently). </param>
         /// <param name="alpha">The weight of <paramref name="img"/></param>
         /// <param name="mask">The mask for the running average</param>
-        public void AccumulateWeighted(Image<TColor, TDepth> img, double alpha, Image<Gray, Byte> mask)
+        public void AccumulateWeighted(Image<TColor, TDepth> img, double alpha, Image<Gray, Byte> mask=null)
         {
             CvInvoke.AccumulateWeighted(img, this, alpha, mask);
         }
@@ -1839,6 +1844,7 @@ namespace Emgu.CV
                 interpolationType);
         }
 
+        /*
         /// <summary>
         /// Rotate the image the specified angle cropping the result to the original size
         /// </summary>
@@ -1848,7 +1854,7 @@ namespace Emgu.CV
         public Image<TColor, TDepth> Rotate(double angle, TColor background)
         {
             return Rotate(angle, background, true);
-        }
+        }*/
 
         /// <summary>
         /// Transforms source image using the specified matrix
@@ -1932,7 +1938,7 @@ namespace Emgu.CV
         /// <param name="crop">If set to true the image is cropped to its original size, possibly losing corners information. If set to false the result image has different size than original and all rotation information is preserved</param>
         /// <returns>The rotated image</returns>
         [ExposableMethod(Exposable = true, Category = "Transform")]
-        public Image<TColor, TDepth> Rotate(double angle, TColor background, bool crop)
+        public Image<TColor, TDepth> Rotate(double angle, TColor background, bool crop=true)
         {
             Size size = Size;
             PointF center = new PointF(size.Width * 0.5f, size.Height * 0.5f);
@@ -3019,6 +3025,7 @@ namespace Emgu.CV
         #endregion
 
         #region Filters
+        /*
         /// <summary>
         /// Summation over a pixel param1 x param2 neighborhood with subsequent scaling by 1/(param1 x param2)
         /// </summary>
@@ -3028,7 +3035,7 @@ namespace Emgu.CV
         public Image<TColor, TDepth> SmoothBlur(int width, int height)
         {
             return SmoothBlur(width, height, true);
-        }
+        }*/
 
         /// <summary>
         /// Summation over a pixel param1 x param2 neighborhood. If scale is true, the result is subsequent scaled by 1/(param1 x param2)
@@ -3038,7 +3045,7 @@ namespace Emgu.CV
         /// <param name="scale">If true, the result is subsequent scaled by 1/(param1 x param2)</param>
         /// <returns>The result of blur</returns>
         [ExposableMethod(Exposable = true, Category = "Smoothing")]
-        public Image<TColor, TDepth> SmoothBlur(int width, int height, bool scale)
+        public Image<TColor, TDepth> SmoothBlur(int width, int height, bool scale=true)
         {
             Image<TColor, TDepth> res = CopyBlank();
             CvInvoke.BoxFilter(this, res, CvInvoke.GetDepthType(typeof(TDepth)), new Size(width, height), new Point(-1, -1), scale);

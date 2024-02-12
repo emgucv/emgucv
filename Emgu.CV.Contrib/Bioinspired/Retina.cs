@@ -22,7 +22,7 @@ namespace Emgu.CV.Bioinspired
     /// 3. low frequency luminance to be reduced (luminance range compression);
     /// 4. local logarithmic luminance compression allows details to be enhanced in low light conditions.
     /// USE : this model can be used basically for spatio-temporal video effects but also for :
-    ///     _using the getParvo method output matrix : texture analysiswith enhanced signal to noise ratio and enhanced details robust against input images luminance ranges
+    ///     _using the getParvo method output matrix : texture analysiswith enhanced signal-to-noise ratio and enhanced details robust against input images luminance ranges
     ///      _using the getMagno method output matrix : motion analysis also with the previously cited properties
     ///      
     /// For more information, reer to the following papers :
@@ -37,6 +37,7 @@ namespace Emgu.CV.Bioinspired
     /// </summary>
     public class Retina : SharedPtrObject
     {
+        /*
         /// <summary>
         /// Create a retina model
         /// </summary>
@@ -44,7 +45,7 @@ namespace Emgu.CV.Bioinspired
         public Retina(Size inputSize)
            : this(inputSize, true, ColorSamplingMethod.ColorBayer, false, 1.0, 10.0)
         {
-        }
+        }*/
 
         /// <summary>
         /// Create a retina model
@@ -55,7 +56,7 @@ namespace Emgu.CV.Bioinspired
         /// <param name="useRetinaLogSampling">Activate retina log sampling, if true, the 2 following parameters can be used</param>
         /// <param name="reductionFactor">Only useful if param useRetinaLogSampling=true, specifies the reduction factor of the output frame (as the center (fovea) is high resolution and corners can be underscaled, then a reduction of the output is allowed without precision leak</param>
         /// <param name="samplingStrength">Only useful if param useRetinaLogSampling=true, specifies the strength of the log scale that is applied</param>
-        public Retina(Size inputSize, bool colorMode, ColorSamplingMethod colorSamplingMethod, bool useRetinaLogSampling, double reductionFactor, double samplingStrength)
+        public Retina(Size inputSize, bool colorMode = true, ColorSamplingMethod colorSamplingMethod = ColorSamplingMethod.ColorBayer, bool useRetinaLogSampling = false, double reductionFactor = 1.0, double samplingStrength = 10.0)
         {
             _ptr = BioinspiredInvoke.cveRetinaCreate(ref inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength, ref _sharedPtr);
         }
