@@ -81,7 +81,7 @@ namespace Emgu.CV.XamarinForms
                 haveCamera = false;
             }
 
-                if (haveOptFlow && haveCamera)
+            if (haveOptFlow && haveCamera)
             {
 #if !(__MACOS__ || __ANDROID__ || __IOS__ || NETFX_CORE)
                 Button motionDetectionButton = new Button();
@@ -201,9 +201,9 @@ namespace Emgu.CV.XamarinForms
             }
 
             if (haveWechatQRCode //&& haveBarcode
-              //TODO: WeChatQRCode detector doesn't work on iOS, probably a bug in iOS
-              //Will need to figure out why.
-              && (Xamarin.Forms.Device.RuntimePlatform != Device.iOS) 
+                                 //TODO: WeChatQRCode detector doesn't work on iOS, probably a bug in iOS
+                                 //Will need to figure out why.
+              && (Xamarin.Forms.Device.RuntimePlatform != Device.iOS)
               )
             {
                 Button barcodeQrcodeDetectionButton = new Button();
@@ -323,7 +323,7 @@ namespace Emgu.CV.XamarinForms
                 MainPage.Navigation.PushAsync(new PlanarSubdivisionPage());
             };
 
-            
+
 
             shapeDetectionButton.Clicked += (sender, args) =>
             {
