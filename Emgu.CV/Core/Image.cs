@@ -840,7 +840,7 @@ namespace Emgu.CV
             return this.ForEachDuplicateChannel<LineSegment2D[]>(
             delegate (IInputArray img, int channel)
             {
-                return CvInvoke.HoughLinesP(this, rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
+                return CvInvoke.HoughLinesP(img, rhoResolution, thetaResolution, threshold, minLineWidth, gapBetweenLines);
             });
         }
 
