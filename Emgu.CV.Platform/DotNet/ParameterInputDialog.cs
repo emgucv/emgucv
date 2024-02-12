@@ -192,7 +192,7 @@ namespace Emgu.CV.UI
                 combo.Items.AddRange(options);
                 combo.SelectedIndex = Array.FindIndex<String>(options, p.SelectedType.ToString().Equals);
                 panel.GetParamFunction =
-                    delegate ()
+                    delegate
                     {
                         return
                        new GenericParameter(
@@ -228,7 +228,7 @@ namespace Emgu.CV.UI
                     combo.Items.AddRange(new String[] { "True", "False" });
                     combo.SelectedIndex = 0;
                     panel.GetParamFunction =
-                        delegate ()
+                        delegate
                         {
                             return combo.SelectedItem.ToString().Equals("True");
                         };
@@ -242,7 +242,7 @@ namespace Emgu.CV.UI
                     inputTextBox.Text = defaultValue == null ? "0" : defaultValue.ToString();
 
                     panel.GetParamFunction =
-                        delegate ()
+                        delegate
                         {
                             return Convert.ChangeType(inputTextBox.Text, paramType);
                         };
@@ -262,7 +262,7 @@ namespace Emgu.CV.UI
                         inputBoxes[i].Text = "0.0";
                     }
                     panel.GetParamFunction =
-                        delegate ()
+                        delegate
                         {
                             double[] values = new double[4];
                             for (int i = 0; i < inputBoxes.Length; i++)
@@ -287,7 +287,7 @@ namespace Emgu.CV.UI
                         inputBoxes[i].Text = "0.0";
                     }
                     panel.GetParamFunction =
-                        delegate ()
+                        delegate
                         {
                             float[] values = new float[inputBoxes.Length];
                             for (int i = 0; i < inputBoxes.Length; i++)
@@ -314,7 +314,7 @@ namespace Emgu.CV.UI
                         inputBoxes[i].Text = "0.0";
                     }
                     panel.GetParamFunction =
-                        delegate ()
+                        delegate
                         {
                             double[] values = new double[4];
                             for (int i = 0; i < inputBoxes.Length; i++)
