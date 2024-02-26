@@ -8,9 +8,18 @@
 # copyright (c) 2009 - 2012 Canming Huang support@emgu.com
 
 SET (IS_UBUNTU FALSE)
-#SET (IS_RASPBIAN FALSE)
+SET (IS_DEBIAN FALSE)
+SET (IS_REDHAT FALSE)
 
 IF (UNIX AND NOT APPLE)
+  IF(${CMAKE_VERSION} VERSION_GREATER "3.22")
+    cmake_host_system_information(RESULT DISTRO_ID QUERY DISTRIB_ID)
+    MESSAGE(STATUS ">>>>>>>>>>>>>>>>>>>>>>>> DISTRO_ID: ${DISTRO_ID} <<<<<<<<<<<<<<<<<<<<")
+    IF(DISTRO_ID STREQUAL "rhel")
+      SET(IS_REDHAT TRUE)
+      MESSAGE(STATUS ">>>>>>>>>>>>>>>>>>>>>>>> IS_REDHAT: ${IS_REDHAT} <<<<<<<<<<<<<<<<<<<<")
+    ENDIF()
+  ENDIF()
   find_program(LSB_RELEASE_EXEC lsb_release)
   IF(LSB_RELEASE_EXEC)
     execute_process(COMMAND ${LSB_RELEASE_EXEC} -is
@@ -46,4 +55,4 @@ ENDIF()
 
 MARK_AS_ADVANCED(IS_UBUNTU)
 MARK_AS_ADVANCED(IS_DEBIAN)
- 
+MARK_AS_ADVANCED(IS_REDHAT) 
