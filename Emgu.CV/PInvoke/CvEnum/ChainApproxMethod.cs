@@ -9,7 +9,7 @@ namespace Emgu.CV.CvEnum
     /// <summary>
     /// contour approximation method
     /// </summary>
-    public enum ChainApproxMethod : int
+    public enum ChainApproxMethod
     {
         /// <summary>
         /// output contours in the Freeman chain code. All other methods output polygons (sequences of vertices). 
