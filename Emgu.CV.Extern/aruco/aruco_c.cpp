@@ -6,6 +6,15 @@
 
 #include "aruco_c.h"
 
+void cveArucoDictionaryGenerateImageMarker(cv::aruco::Dictionary* dict, int id, int sizePixels, cv::_OutputArray* _img, int borderBits)
+{
+#ifdef HAVE_OPENCV_ARUCO
+	dict->generateImageMarker(id, sizePixels, *_img, borderBits);
+#else
+	throw_no_aruco();
+#endif
+}
+
 cv::aruco::Dictionary* cveArucoGetPredefinedDictionary(int name, cv::Ptr<cv::aruco::Dictionary>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_ARUCO

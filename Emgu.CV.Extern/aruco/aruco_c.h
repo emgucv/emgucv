@@ -53,6 +53,7 @@ namespace cv
 
 #endif
 
+CVAPI(void) cveArucoDictionaryGenerateImageMarker(cv::aruco::Dictionary* dict, int id, int sizePixels, cv::_OutputArray* _img, int borderBits);
 CVAPI(cv::aruco::Dictionary*) cveArucoGetPredefinedDictionary(int name, cv::Ptr<cv::aruco::Dictionary>** sharedPtr);
 CVAPI(cv::aruco::Dictionary*) cveArucoDictionaryCreate(cv::Ptr<cv::aruco::Dictionary>** sharedPtr);
 CVAPI(cv::aruco::Dictionary*) cveArucoExtendDictionary(
