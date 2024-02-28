@@ -682,6 +682,7 @@ namespace Emgu.CV.Aruco
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveArucoBoardGenerateImage(IntPtr board, ref Size outSize, IntPtr img, int marginSize, int borderBits);
 
+
         /// <summary>
         /// Pose estimation for a board of markers.
         /// </summary>

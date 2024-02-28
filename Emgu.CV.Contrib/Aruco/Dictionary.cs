@@ -11,6 +11,7 @@ using Emgu.CV.Text;
 using Emgu.CV.Util;
 using Emgu.Util;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Emgu.CV.Aruco
 {
@@ -153,6 +154,19 @@ namespace Emgu.CV.Aruco
         }
 
         /// <summary>
+        /// Generate a canonical marker image.
+        /// </summary>
+        /// <param name="id">Identifier of the marker that will be returned. It has to be a valid id in the specified dictionary.</param>
+        /// <param name="sizePixels">Size of the image in pixels</param>
+        /// <param name="img">A marker image in its canonical form (i.e. ready to be printed)</param>
+        /// <param name="borderBits">Width of the marker border.</param>
+        public void GenerateImageMarker(int id, int sizePixels, IOutputArray img, int borderBits = 1)
+        {
+            using (OutputArray oaImg = img.GetOutputArray())
+                ArucoInvoke.cveArucoDictionaryGenerateImageMarker(_ptr, id, sizePixels, oaImg, borderBits);
+        }
+
+        /// <summary>
         /// Release the unmanaged resource
         /// </summary>
         protected override void DisposeObject()
@@ -172,5 +186,9 @@ namespace Emgu.CV.Aruco
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveArucoDictionaryRelease(ref IntPtr dict, ref IntPtr sharedPtr);
+
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveArucoDictionaryGenerateImageMarker(IntPtr dict, int id, int sizePixels, IntPtr img, int borderBits);
     }
 }
