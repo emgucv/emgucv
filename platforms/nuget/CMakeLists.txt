@@ -44,6 +44,8 @@ add_subdirectory("Emgu.CV.runtime.debian-arm64")
 add_subdirectory("Emgu.CV.runtime.ubuntu")
 #ENDIF()
 
+add_subdirectory("Emgu.CV.runtime.rhel")
+
 ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.x86")
 ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.x64")
 ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.arm64")

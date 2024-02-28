@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>b48461c2-e244-48cb-80b0-192924f6a0f0</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Emgu.CV</Import_RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EmguCVRhelBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</EmguCVRhelBinaryDir>
+    <EmguCVRhelDir>$(MSBuildThisFileDirectory)</EmguCVRhelDir>
+	<EmguCVRhelX86NativeRuntimeFolder>runtimes\rhel-x86\native</EmguCVRhelX86NativeRuntimeFolder>
+	<EmguCVRhelX64NativeRuntimeFolder>runtimes\rhel-x64\native</EmguCVRhelX64NativeRuntimeFolder>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EmguCVRhelLinkTarget>Rhel</EmguCVRhelLinkTarget>
+    <EmguCVRhelBuildX64 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x64'">True</EmguCVRhelBuildX64>
+    <EmguCVRhelNativeFileX64>$(EmguCVRhelBinaryDir)\$(EmguCVRhelX64NativeRuntimeFolder)\libcvextern.so</EmguCVRhelNativeFileX64>
+    <EmguCVRhelErrorMessage Condition="'$(EmguCVRhelBuildX64)'=='True' AND !Exists('$(EmguCVRhelNativeFileX64)')">This package do not contain necessary binary for $(EmguCVRhelLinkTarget). Rhel x64 is targeted, but file $(EmguCVRhelNativeFileX64) is missing. PInvoke may fail on Rhel x64 platform</EmguCVRhelErrorMessage>    <EmguCVRhelDeployMessage Condition="'$(EmguCVRhelBuildX64)'=='True' AND Exists('$(EmguCVRhelNativeFileX64)')">$(EmguCVRhelDeployMessage)rhel_x64 </EmguCVRhelDeployMessage>
+	<EmguCVRhelBuildX86 Condition="'$(Platform)'=='AnyCPU' OR '$(Platform)'=='x86'">True</EmguCVRhelBuildX86>
+    <EmguCVRhelNativeFileX86>$(EmguCVRhelBinaryDir)\$(EmguCVRhelX86NativeRuntimeFolder)\libcvextern.so</EmguCVRhelNativeFileX86>
+    <EmguCVRhelErrorMessage Condition="'$(EmguCVRhelBuildX86)'=='True' AND !Exists('$(EmguCVRhelNativeFileX86)')">This package do not contain necessary binary for $(EmguCVRhelLinkTarget). Rhel x86 is targeted, but file $(EmguCVRhelNativeFileX86) is missing. PInvoke may fail on Rhel x86 platform</EmguCVRhelErrorMessage>    <EmguCVRhelDeployMessage Condition="'$(EmguCVRhelBuildX64)'=='True' AND Exists('$(EmguCVRhelNativeFileX64)')">$(EmguCVRhelDeployMessage)rhel_x64 </EmguCVRhelDeployMessage>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(EmguCVRhelBuildX64)'=='True' AND Exists('$(EmguCVRhelNativeFileX64)')">
+    <Content Include="$(EmguCVRhelBinaryDir)\$(EmguCVRhelX64NativeRuntimeFolder)\*.so">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup Condition="'$(EmguCVRhelBuildX86)'=='True' AND Exists('$(EmguCVRhelNativeFileX86)')">
+    <Content Include="$(EmguCVRhelBinaryDir)\$(EmguCVRhelX86NativeRuntimeFolder)\*.so">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Target Name="EmguCVRhelPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Warning Text="'$(EmguCVRhelErrorMessage)'" Condition="'$(EmguCVRhelErrorMessage)'!=''" />
+    <Message Text="Emgu CV Compiling with $(EmguCVRhelDeployMessage)binary" Condition="'$(EmguCVRhelDeployMessage)'!=''" Importance="High" />
+    <Message Text="Native binary is NOT deployed by the Emgu.CV.Runtime.RHEL shared project." Condition="'$(EmguCVRhelDeployMessage)'==''" Importance="High" />
+  </Target>
+</Project>
