@@ -146,11 +146,11 @@ namespace Emgu.CV.Models
                 } else if (version == YoloVersion.YoloV4)
                 {
                     manager.AddFile(
-                        "https://github.com/aj-ames/YOLOv4-OpenCV-CUDA-DNN/raw/dd58dba457fff98e483e0f67113e0be1f17f2120/models/yolov4.weights",
+                        "https://emgu-public.s3.amazonaws.com/yolov4/yolov4.weights",
                         _modelFolderName,
                         "8463FDE6EE7130A947A73104CE73C6FA88618A9D9ECD4A65D0B38F07E17EC4E4");
                     manager.AddFile(
-                        "https://github.com/aj-ames/YOLOv4-OpenCV-CUDA-DNN/raw/dd58dba457fff98e483e0f67113e0be1f17f2120/models/yolov4.cfg",
+                        "https://emgu-public.s3.amazonaws.com/yolov4/yolov4.cfg",
                         _modelFolderName,
                         "A15524EC710005ADD4EB672140CF15CBFE46DEA0561F1AEA90CB1140B466073E");
                     version4 = true;
@@ -158,11 +158,11 @@ namespace Emgu.CV.Models
                 else if (version == YoloVersion.YoloV4Tiny)
                 {
                     manager.AddFile(
-                        "https://github.com/aj-ames/YOLOv4-OpenCV-CUDA-DNN/raw/dd58dba457fff98e483e0f67113e0be1f17f2120/models/yolov4-tiny.weights",
+                        "https://emgu-public.s3.amazonaws.com/yolov4/yolov4-tiny.weights",
                         _modelFolderName,
                         "CF9FBFD0F6D4869B35762F56100F50ED05268084078805F0E7989EFE5BB8CA87");
                     manager.AddFile(
-                        "https://github.com/aj-ames/YOLOv4-OpenCV-CUDA-DNN/raw/dd58dba457fff98e483e0f67113e0be1f17f2120/models/yolov4-tiny.cfg",
+                        "https://emgu-public.s3.amazonaws.com/yolov4/yolov4-tiny.cfg",
                         _modelFolderName,
                         "6CBF5ECE15235F66112E0BEDEBB324F37199B31AEE385B7E18F0BBFB536B258E");
                     version4 = true;
