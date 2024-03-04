@@ -9,6 +9,7 @@
     <RootNamespace>Emgu.CV.XamarinForms.iOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>EmguCVXamarinFormsiOS</AssemblyName>
+	<LangVersion>8.0</LangVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <ProvisioningType>manual</ProvisioningType>

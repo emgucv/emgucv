@@ -1906,6 +1906,7 @@ Global
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{331f904e-e7e8-42e0-8c82-22539c35e8f3}*SharedItemsImports = 4
 		..\..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.projitems*{3bdf2a21-5732-444a-9b23-d5009e366376}*SharedItemsImports = 5
 		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{590bdc36-c47d-45b4-a24a-f907df9922f5}*SharedItemsImports = 4
+		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{595cda04-2ca2-41af-abce-6b055d9e0b3c}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{5f6b97f8-7ea6-4b5d-9a5d-f5581505c303}*SharedItemsImports = 4
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{7720a389-22fc-4143-907a-1c7a6cfd4221}*SharedItemsImports = 5
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7720a389-22fc-4143-907a-1c7a6cfd4221}*SharedItemsImports = 5
