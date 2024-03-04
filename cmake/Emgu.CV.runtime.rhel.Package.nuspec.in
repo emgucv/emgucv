@@ -18,7 +18,7 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
 	<readme>docs/README.md</readme>
 	${EMGUCV_RHEL_NUGET_DEPENDENCY}
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
-    <tags>opencv emgu emgucv vison ubuntu</tags>
+    <tags>opencv emgu emgucv vison rhel</tags>
   </metadata>
   <files>
   ${EMGUCV_RHEL_NUGET_FILE_LIST}
