@@ -377,6 +377,7 @@ Global
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.projitems*{1cf0c8b2-0fde-4e28-9c7c-ebe0f303f601}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{1cf0c8b2-0fde-4e28-9c7c-ebe0f303f601}*SharedItemsImports = 5
+		..\..\Emgu.CV.Runtime\RHEL\Emgu.CV.Runtime.RHEL.projitems*{1cf0c8b2-0fde-4e28-9c7c-ebe0f303f601}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{1cf0c8b2-0fde-4e28-9c7c-ebe0f303f601}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{1cf0c8b2-0fde-4e28-9c7c-ebe0f303f601}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{2704325e-939f-4de1-828f-dcaddd7093a3}*SharedItemsImports = 5
@@ -396,6 +397,7 @@ Global
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{89e9015f-decf-4774-95da-7f7d22b0a12f}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.projitems*{8cce876e-cb72-446e-9b8a-f346a8eb9caa}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{8cce876e-cb72-446e-9b8a-f346a8eb9caa}*SharedItemsImports = 5
+		..\..\Emgu.CV.Runtime\RHEL\Emgu.CV.Runtime.RHEL.projitems*{8cce876e-cb72-446e-9b8a-f346a8eb9caa}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{8cce876e-cb72-446e-9b8a-f346a8eb9caa}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{8cce876e-cb72-446e-9b8a-f346a8eb9caa}*SharedItemsImports = 5
 		..\..\Emgu.CV.Platform\DotNet\Emgu.CV.Platform.Net.projitems*{90e78bbf-c7fe-4d8e-ade1-75448e866fdb}*SharedItemsImports = 4

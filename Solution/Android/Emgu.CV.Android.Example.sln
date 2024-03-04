@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiDemoApp", "..\..\Emgu.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.Maui.Android", "..\..\Emgu.CV.Platform\Maui\Android\Emgu.CV.Platform.Maui.Android.csproj", "{BA546848-FFBD-4420-B42C-C850EF9E1EB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Platform.Maui.UI", "..\..\Emgu.CV.Platform\Maui\UI\Emgu.CV.Platform.Maui.UI.csproj", "{FBE53348-4346-4DA0-B7CF-8B90BB072441}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.Maui.UI", "..\..\Emgu.CV.Platform\Maui\UI\Emgu.CV.Platform.Maui.UI.csproj", "{FBE53348-4346-4DA0-B7CF-8B90BB072441}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -158,6 +158,7 @@ Global
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
 		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{ca227646-ef16-49d4-9398-6410931d080c}*SharedItemsImports = 5
+		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{d467775b-2a4a-4b5d-a6ab-8c2920a36f8f}*SharedItemsImports = 5
 		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{f2a5ce86-0b21-40d2-ad3f-bb2d1d716cfe}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

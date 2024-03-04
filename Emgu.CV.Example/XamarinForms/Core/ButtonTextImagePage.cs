@@ -272,7 +272,8 @@ namespace Emgu.CV.XamarinForms
                         var fileResult = await Xamarin.Essentials.FilePicker.PickAsync(Xamarin.Essentials.PickOptions.Images);
                         if (fileResult == null) //canceled
                             return null;
-                        await using (Stream s = await fileResult.OpenReadAsync())
+                        //await using (Stream s = await fileResult.OpenReadAsync())
+                        using (Stream s = await fileResult.OpenReadAsync())
                             mats[i] = await ReadStream(s);
                     }
                 }
@@ -282,7 +283,8 @@ namespace Emgu.CV.XamarinForms
 
                     if (takePhotoResult == null) //canceled
                         return null;
-                    await using (Stream stream = await takePhotoResult.OpenReadAsync())
+                    //await using (Stream stream = await takePhotoResult.OpenReadAsync())
+                    using (Stream stream = await takePhotoResult.OpenReadAsync())
                         mats[i] = await ReadStream(stream);
                 }
                 else if (action.Equals("Camera"))
