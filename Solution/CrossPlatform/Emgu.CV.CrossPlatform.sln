@@ -1897,6 +1897,7 @@ Global
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.projitems*{16d6d247-3d5a-4094-955d-f76e4071dbe8}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{16d6d247-3d5a-4094-955d-f76e4071dbe8}*SharedItemsImports = 5
+		..\..\Emgu.CV.Runtime\RHEL\Emgu.CV.Runtime.RHEL.projitems*{16d6d247-3d5a-4094-955d-f76e4071dbe8}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{16d6d247-3d5a-4094-955d-f76e4071dbe8}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{16d6d247-3d5a-4094-955d-f76e4071dbe8}*SharedItemsImports = 5
 		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{2a63a8ee-515f-4280-a178-fb58633ceda1}*SharedItemsImports = 4
@@ -1926,6 +1927,7 @@ Global
 		..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.projitems*{91878104-ee4c-475c-841e-54c725eb2865}*SharedItemsImports = 4
 		..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.projitems*{91df0b0f-90ad-42de-b217-24d19d2aaeac}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{91df0b0f-90ad-42de-b217-24d19d2aaeac}*SharedItemsImports = 5
+		..\..\Emgu.CV.Runtime\RHEL\Emgu.CV.Runtime.RHEL.projitems*{91df0b0f-90ad-42de-b217-24d19d2aaeac}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{91df0b0f-90ad-42de-b217-24d19d2aaeac}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{91df0b0f-90ad-42de-b217-24d19d2aaeac}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{978b8f58-57a8-49b6-b25b-60fd820e39c1}*SharedItemsImports = 5
