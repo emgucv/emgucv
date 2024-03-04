@@ -5,5 +5,6 @@
     <Authors>${CPACK_PACKAGE_VENDOR}</Authors>
     <Product>Emgu.CV</Product>
     <Copyright>${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}</Copyright>
+    <UseRidGraph>true</UseRidGraph>
  </PropertyGroup>
 </Project>
