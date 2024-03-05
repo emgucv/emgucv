@@ -1368,6 +1368,10 @@ SET(EMGUCV_DEBIAN_NUGET_DEPENDENCY "    <dependencies>
 IF(HAVE_LINUX_ARM)
 	SET(EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST} 
       <file src=\"..\\..\\..\\libs\\runtimes\\linux-arm\\native\\*.so\" target=\"runtimes\\linux-arm\\native\" />")
+	
+	SET(EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST} 
+	  <file src=\"..\\..\\..\\libs\\runtimes\\linux-arm\\native\\debian_arm_version_string.inc\" target=\"docs\\build_info_arm.inc\" />")
+	
 	SET(EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST} 
       <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
       <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
@@ -1375,6 +1379,10 @@ ENDIF()
 IF(HAVE_LINUX_ARM64)
 	SET(EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST} 
       <file src=\"..\\..\\..\\libs\\runtimes\\linux-arm64\\native\\*.so\" target=\"runtimes\\linux-arm64\\native\" />")
+	  
+	SET(EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST} 
+	  <file src=\"..\\..\\..\\libs\\runtimes\\linux-arm64\\native\\debian_arm64_version_string.inc\" target=\"docs\\build_info_arm64.inc\" />")  
+	  
 	SET(EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST} 
       <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
       <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
@@ -1397,8 +1405,11 @@ IF(HAVE_UBUNTU_X64 OR HAVE_UBUNTU_X86 OR HAVE_UBUNTU_ARM64)
     </dependencies>")
 	SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />	
     <file src=\"README.md\" target=\"docs\\\" />")
+	IF(HAVE_UBUNTU_X64)
+	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x64\\native\\ubuntu_x64_version_string.inc\" target=\"docs\\build_info_x64.inc\" /> ")
+	ENDIF()
 ENDIF()
 
 SET(EMGUCV_RHEL_NUGET_FILE_LIST "")
@@ -1420,6 +1431,9 @@ IF(HAVE_RHEL_X64 OR HAVE_RHEL_X86 OR HAVE_RHEL_ARM64)
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
     <file src=\"README.md\" target=\"docs\\\" />")
+	IF(HAVE_RHEL_X64)
+	  SET(EMGUCV_RHEL_NUGET_FILE_LIST "${EMGUCV_RHEL_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\rhel-x64\\native\\rhel_x64_version_string.inc\" target=\"docs\\build_info_x64.inc\" /> ")
+	ENDIF()
 ENDIF()
 
 
