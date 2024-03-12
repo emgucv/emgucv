@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0-ios;net6.0-maccatalyst;net6.0-android33.0</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net8.0-ios;net8.0-maccatalyst;net8.0-android</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
 		<OutputType>Exe</OutputType>
@@ -49,7 +49,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Emgu.CV.runtime.maui.mini" Version="4.7.0.5276" />
+	  <PackageReference Include="Emgu.CV.runtime.maui.mini" Version="4.8.1.5350" />
+	  <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.7" />
 	</ItemGroup>
 
 </Project>
