@@ -1,0 +1,1 @@
+docker run emgu/rhel_demo .
