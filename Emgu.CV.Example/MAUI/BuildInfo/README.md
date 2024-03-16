@@ -3,7 +3,7 @@ This is a basic MAUI project based on the dotnet MAUI template.
 When you click the button on the demo project, it should display the Emgu CV build information.
 
 To make sure you have dotnet MAUI workload installed, open the terminal and run this 
-> dotnet workload install maui
+> dotnet workload restore
 
 To restore the nuget package, in the terminal run this command:
 > dotnet restore
