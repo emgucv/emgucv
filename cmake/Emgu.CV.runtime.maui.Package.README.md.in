@@ -10,3 +10,15 @@ For online documentation please visit
 Release note can be found at
 <${NUGET_EMGU_URL}/wiki/index.php/Version_History#Emgu.CV-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}>
 
+## Setup
+
+Please make sure to call `Emgu.CV.Platform.Maui.MauiInvoke.Init()` before making any other calls to Emgu CV library in MAUI. You can put that in your MainPage.xaml.cs file:
+
+```csharp
+    public MainPage()
+    {
+        InitializeComponent();
+
+        Emgu.CV.Platform.Maui.MauiInvoke.Init(); // << Here
+    }
+```
