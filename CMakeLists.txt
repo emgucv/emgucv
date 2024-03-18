@@ -433,6 +433,9 @@ SET(IS_IOS_BUILD OFF)
 SET(IS_MAC_CATALYST_BUILD OFF)
 SET(IS_MAC_CATALYST_ARM64_BUILD OFF)
 SET(IS_MAC_CATALYST_X86_64_BUILD OFF)  
+SET(IS_MAC_BUILD OFF)
+SET(IS_MAC_ARM64_BUILD OFF)
+SET(IS_MAC_X86_64_BUILD OFF)
 
 IF(MAC_CATALYST)
   SET(IS_MAC_CATALYST_BUILD ON)
@@ -485,6 +488,18 @@ ELSEIF(IOS)
     MESSAGE(STATUS "IS_IOS_ARM64_BUILD: ${IS_IOS_ARM64_BUILD}")
   ENDIF()
   #CHECK_BINARY_EXIST("libs/iOS" "libcvextern_arm64.a" HAVE_IOS_ARM64 ${IS_IOS_ARM64_BUILD})
+ELSEIF(APPLE)
+  SET(IS_MAC_BUILD ON)
+  MESSAGE(STATUS "IS_MAC_BUILD: ${IS_MAC_BUILD}")
+
+  IF ("${EMGUCV_ARCH}" STREQUAL "arm64")
+    SET(IS_MAC_ARM64_BUILD ON)
+	MESSAGE(STATUS "IS_MAC_ARM64_BUILD: ${IS_MAC_ARM64_BUILD}")
+  ELSEIF ("${EMGUCV_ARCH}" STREQUAL "x86_64")
+    SET(IS_MAC_X86_64_BUILD ON)
+	MESSAGE(STATUS "IS_MAC_X86_64_BUILD: ${IS_MAC_X86_64_BUILD}")
+  ENDIF()
+
 ENDIF()
 
 CHECK_BINARY_EXIST("libs/iOS" "libcvextern_iphoneos.a" HAVE_IOS_DEVICE ${IS_IOS_BUILD})
@@ -1239,8 +1254,11 @@ ENDIF()
 
 SET(EMGUCV_MACOS_NUGET_FILE_LIST "")
 IF(HAVE_MACOS)
+  IF (IS_MACOS_BUILD)
+  ENDIF()
   SET(EMGUCV_MACOS_NUGET_FILE_LIST "${EMGUCV_MACOS_NUGET_FILE_LIST} 
-  <file src=\"..\\..\\..\\libs\\runtimes\\osx\\native\\*.*\"/>
+  <file src=\"..\\..\\..\\libs\\runtimes\\osx\\native\\*.dylib\" target=\"runtimes\\osx\\native\"/>
+  <file src=\"..\\..\\..\\libs\\runtimes\\osx\\native\\*.inc\" target=\"docs\\\" />
   <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
   <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
   <file src=\"docs\\README.md\" target=\"docs\\\" />")
