@@ -28,6 +28,8 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+		
+		<AcceptAndroidSDKLicenses>true</AcceptAndroidSDKLicenses>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -50,7 +52,11 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Emgu.CV.runtime.maui.mini" Version="4.8.1.5350" />
-	  <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.7" />
+	  <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.10" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.10" />
 	</ItemGroup>
 
 </Project>
