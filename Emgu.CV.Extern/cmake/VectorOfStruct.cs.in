@@ -130,6 +130,22 @@ namespace ${NAMESPACE_CS}
          return res;
       }
 
+#if UNSAFE_ALLOWED
+        /// <summary>
+        /// Returns a memory span that wraps the underlying memory buffer.
+        /// </summary>
+        /// <returns>A memory span that wraps the underlying memory buffer.</returns>
+        public Span<${VECTOR_ELEMENT_CS}> GetSpan()
+        {
+
+            unsafe
+            {
+                return new Span<${VECTOR_ELEMENT_CS}>(StartAddress.ToPointer(), Size);
+            }
+
+        }
+#endif
+
       /// <summary>
       /// Get the size of the vector
       /// </summary>
