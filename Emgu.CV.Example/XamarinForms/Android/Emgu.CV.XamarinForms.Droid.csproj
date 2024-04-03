@@ -22,6 +22,7 @@
     <JavaMaximumHeapSize />
     <JavaOptions />
     <TargetFrameworkVersion>v13.0</TargetFrameworkVersion>
+	<UseRidGraph>true</UseRidGraph>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>

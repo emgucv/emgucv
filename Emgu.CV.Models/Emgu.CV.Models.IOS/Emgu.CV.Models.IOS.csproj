@@ -1,62 +1,67 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Emgu.CV.Models</AssemblyName>
-    <TargetName>$(AssemblyName)</TargetName>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
-    <Configurations>Release;Debug</Configurations>
-    <Platforms>AnyCPU;x64</Platforms>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<AssemblyName>Emgu.CV.Models</AssemblyName>
+		<TargetName>$(AssemblyName)</TargetName>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
+		<Configurations>Release;Debug</Configurations>
+		<Platforms>AnyCPU;x64</Platforms>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</OpenCVBinaryDir>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</OpenCVBinaryDir>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>$(OpenCVBinaryDir)\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
-    <AssemblyName>Emgu.CV.Models</AssemblyName>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<OutputPath>$(OpenCVBinaryDir)\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+		<AssemblyName>Emgu.CV.Models</AssemblyName>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutputPath>$(OpenCVBinaryDir)\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
-    <AssemblyName>Emgu.CV.Models</AssemblyName>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+		<OutputPath>$(OpenCVBinaryDir)\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+		<AssemblyName>Emgu.CV.Models</AssemblyName>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>$(OpenCVBinaryDir)\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
-    <DefineConstants>TRACE;NETSTANDARD</DefineConstants>
-    <AssemblyName>Emgu.CV.Models</AssemblyName>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<OutputPath>$(OpenCVBinaryDir)\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+		<DefineConstants>TRACE;NETSTANDARD</DefineConstants>
+		<AssemblyName>Emgu.CV.Models</AssemblyName>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutputPath>$(OpenCVBinaryDir)\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
-    <DefineConstants>TRACE;NETSTANDARD</DefineConstants>
-    <AssemblyName>Emgu.CV.Models</AssemblyName>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+		<OutputPath>$(OpenCVBinaryDir)\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+		<DefineConstants>TRACE;NETSTANDARD</DefineConstants>
+		<AssemblyName>Emgu.CV.Models</AssemblyName>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="8.0.1" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj" />
-  </ItemGroup>
-  <!--
+	<PropertyGroup>
+		<DefineConstants>$(DefineConstants);UNSAFE_ALLOWED</DefineConstants>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.Drawing.Common" Version="8.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj" />
+	</ItemGroup>
+	<!--
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\..\libs\iOS" Importance="high" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(MSBuildThisFileDirectory)..\..\libs\iOS" ContinueOnError="true" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="$(MSBuildThisFileDirectory)..\..\libs\iOS" ContinueOnError="true" />
   </Target>
   -->
-  <Import Project="..\Emgu.CV.Models.Shared.projitems" Label="Shared" />
+	<Import Project="..\Emgu.CV.Models.Shared.projitems" Label="Shared" />
 </Project>
