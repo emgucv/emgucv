@@ -1,51 +1,56 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Emgu.CV</AssemblyName>
-    <TargetName>$(AssemblyName)</TargetName>
-    <RootNamespace>Emgu.CV</RootNamespace>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
-    <Platforms>AnyCPU</Platforms>
-    <Description>This is the Emgu CV .Net standard dll that targets iOS platforms.</Description>
-    <Configurations>Release;Debug</Configurations>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<AssemblyName>Emgu.CV</AssemblyName>
+		<TargetName>$(AssemblyName)</TargetName>
+		<RootNamespace>Emgu.CV</RootNamespace>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>..\..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
+		<Platforms>AnyCPU</Platforms>
+		<Description>This is the Emgu CV .Net standard dll that targets iOS platforms.</Description>
+		<Configurations>Release;Debug</Configurations>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</OpenCVBinaryDir>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</OpenCVBinaryDir>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>$(OpenCVBinaryDir)\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
-	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
-    <DefineConstants>TRACE;__IOS__</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup>
+		<DefineConstants>$(DefineConstants);UNSAFE_ALLOWED</DefineConstants>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>$(OpenCVBinaryDir)\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
-	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
-    <DefineConstants>TRACE;__IOS__</DefineConstants>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<OutputPath>$(OpenCVBinaryDir)\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+		<DefineConstants>$(DefineConstants);TRACE;__IOS__</DefineConstants>
+	</PropertyGroup>
 
-  <Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV\Emgu.CV.projitems')" />
-  <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" Condition="Exists('..\..\Emgu.Util\Emgu.Util.projitems')" />
-  <Import Project="..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems')" />
-  <Import Project="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems')" />
-  <Import Project="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems')" />
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<OutputPath>$(OpenCVBinaryDir)\Build\ios\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+		<DefineConstants>$(DefineConstants);TRACE;__IOS__</DefineConstants>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
-    <PackageReference Include="System.Text.Json" Version="8.0.1" />
-  </ItemGroup>
-  
-  <!-- The following two copy commands are used to get around a "dotnet build" bug where the resulting assembly use the project name instead of AssemblyName -->
-  <!-- should be removed once it is fixed in the "dotnet build" command -->
-  <!--
+	<Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV\Emgu.CV.projitems')" />
+	<Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" Condition="Exists('..\..\Emgu.Util\Emgu.Util.projitems')" />
+	<Import Project="..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems')" />
+	<Import Project="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems')" />
+	<Import Project="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems')" />
+
+	<ItemGroup>
+		<PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
+		<PackageReference Include="System.Runtime" Version="4.3.1" />
+		<PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
+		<PackageReference Include="System.Text.Json" Version="8.0.1" />
+	</ItemGroup>
+
+	<!-- The following two copy commands are used to get around a "dotnet build" bug where the resulting assembly use the project name instead of AssemblyName -->
+	<!-- should be removed once it is fixed in the "dotnet build" command -->
+	<!--
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
 
 	<Copy SourceFiles="$(OutputPath)$(AssemblyName).IOS.dll" DestinationFiles="$(OutputPath)$(AssemblyName).dll" ContinueOnError="true" Condition="Exists('$(OutputPath)$(AssemblyName).IOS.dll')" />

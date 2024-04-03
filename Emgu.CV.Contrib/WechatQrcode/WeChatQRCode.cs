@@ -134,11 +134,16 @@ namespace Emgu.CV
 
         private static Point[] MatToPoints(Mat m)
         {
+#if UNSAFE_ALLOWED
+            var points = m.GetSpan<PointF>(m.Width * m.Height / 2);
+            return Array.ConvertAll(points.ToArray(), Point.Round);
+#else
             PointF[] points = new PointF[m.Width * m.Height / 2];
             GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
             Emgu.CV.Util.CvToolbox.Memcpy(handle.AddrOfPinnedObject(), m.DataPointer, points.Length * Marshal.SizeOf<PointF>());
             handle.Free();
             return Array.ConvertAll(points, Point.Round);
+#endif
         }
 
         /// <summary>

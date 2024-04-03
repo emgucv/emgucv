@@ -129,15 +129,6 @@ namespace Emgu.CV.Models
 #endif
         }
 
-        private static Point[] MatToPoints(Mat m)
-        {
-            PointF[] points = new PointF[m.Width * m.Height / 2];
-            GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-            Emgu.CV.Util.CvToolbox.Memcpy(handle.AddrOfPinnedObject(), m.DataPointer, points.Length * Marshal.SizeOf<PointF>());
-            handle.Free();
-            return Array.ConvertAll(points, Point.Round);
-        }
-
         private MCvScalar _renderColor = new MCvScalar(255, 0, 0);
 
         /// <summary>

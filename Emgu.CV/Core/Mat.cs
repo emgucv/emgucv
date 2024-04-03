@@ -1268,7 +1268,27 @@ namespace Emgu.CV
             }
         }
 
-#region Operator overload
+#if UNSAFE_ALLOWED
+        /// <summary>
+        /// Returns a memory span that wraps the underlying memory buffer.
+        /// </summary>
+        /// <returns>A memory span that wraps the underlying memory buffer.</returns>
+        public Span<T> GetSpan<T>(int size) where T : struct
+        {
+            if (!IsContinuous)
+                throw new NotSupportedException(
+                    "To create a Span, the Mat's memory must be continuous. This Mat does not use continuous memory.");
+            
+            unsafe
+            {
+                return new Span<T>(this.DataPointer.ToPointer(), size);
+            }
+
+        }
+#endif
+
+
+        #region Operator overload
 
         /// <summary>
         /// Perform an element wise AND operation on the two mats
