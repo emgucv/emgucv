@@ -40,7 +40,7 @@ CVAPI(void) cveGetParallelBackends(std::vector< cv::String >* backendNames);
 
 
 CVAPI(cv::String*) cveStringCreate();
-CVAPI(cv::String*) cveStringCreateFromStr(const char* c);
+CVAPI(cv::String*) cveStringCreateFromStr(const char* c, int size);
 CVAPI(void) cveStringGetCStr(cv::String* string, const char** c, int* size);
 CVAPI(int) cveStringGetLength(cv::String* string);
 CVAPI(void) cveStringRelease(cv::String** string);
