@@ -503,7 +503,11 @@ namespace Emgu.CV.OCR
                 OcrInvoke.cveTessBaseAPIExtractResult(_ptr, textSeq, results);
 
                 byte[] bytes = textSeq.ToArray();
+#if UNSAFE_ALLOWED
+                var trs = results.GetSpan();
+#else
                 TesseractResult[] trs = results.ToArray();
+#endif
 
                 Word[] res = new Word[trs.Length];
                 int idx = 0;

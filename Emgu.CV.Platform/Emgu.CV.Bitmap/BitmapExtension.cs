@@ -813,8 +813,7 @@ namespace Emgu.CV
                 Bitmap result = new Bitmap(s.Width, s.Height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
                 System.Drawing.Imaging.BitmapData data = result.LockBits(new Rectangle(Point.Empty, result.Size),
                     System.Drawing.Imaging.ImageLockMode.WriteOnly, result.PixelFormat);
-                using (Image<TColor, TDepth> tmp = new Image<TColor, TDepth>(s.Width, s.Height, data.Stride, data.Scan0)
-                )
+                using (Image<TColor, TDepth> tmp = new Image<TColor, TDepth>(s.Width, s.Height, data.Stride, data.Scan0))
                 {
                     cudaImage.Download(tmp);
                 }

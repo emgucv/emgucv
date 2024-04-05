@@ -124,7 +124,11 @@ namespace Emgu.CV
 
                 CvInvoke.cveSubdiv2DGetVoronoiFacetList(_ptr, vi, facetVec, centerVec);
                 PointF[][] vertices = facetVec.ToArrayOfArray();
+#if UNSAFE_ALLOWED
+                var centers = centerVec.GetSpan();
+#else
                 PointF[] centers = centerVec.ToArray();
+#endif
 
                 VoronoiFacet[] facets = new VoronoiFacet[centers.Length];
                 for (int i = 0; i < facets.Length; i++)
