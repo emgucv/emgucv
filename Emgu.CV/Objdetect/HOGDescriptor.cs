@@ -114,8 +114,13 @@ namespace Emgu.CV
             {
                 ObjdetectInvoke.cveHOGDescriptorDetectMultiScale(_ptr, iaImage, vr, vd, hitThreshold, ref winStride, ref padding, scale,
                    finalThreshold, useMeanshiftGrouping);
+#if UNSAFE_ALLOWED
+                var location = vr.GetSpan();
+                var weight = vd.GetSpan();
+#else
                 Rectangle[] location = vr.ToArray();
                 double[] weight = vd.ToArray();
+#endif
                 MCvObjectDetection[] result = new MCvObjectDetection[location.Length];
                 for (int i = 0; i < result.Length; i++)
                 {

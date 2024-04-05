@@ -123,9 +123,16 @@ namespace Emgu.CV.Models
                     regions,
                     confThreshold,
                     nmsThreshold);
+#if UNSAFE_ALLOWED
+                var classIdArr = classIds.GetSpan();
+                var confidentArr = confidents.GetSpan();
+                var regionArr = regions.GetSpan();
+#else
                 var classIdArr = classIds.ToArray();
                 var confidentArr = confidents.ToArray();
                 var regionArr = regions.ToArray();
+
+#endif
                 List<DetectedObject> results = new List<DetectedObject>();
                 for (int i = 0; i < classIdArr.Length; i++)
                 {

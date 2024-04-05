@@ -232,7 +232,11 @@ namespace Emgu.CV.Models
                 _textDetector.Detect(image, vvp, confidents);
 
                 Point[][] detectionResults = vvp.ToArrayOfArray();
+#if UNSAFE_ALLOWED
+                var confidentResult = confidents.GetSpan();
+#else
                 float[] confidentResult = confidents.ToArray();
+#endif
                 List<DetectedObject> results = new List<DetectedObject>();
                 for (int i = 0; i < detectionResults.Length; i++)
                 {
