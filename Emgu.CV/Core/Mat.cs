@@ -1272,13 +1272,24 @@ namespace Emgu.CV
         /// <summary>
         /// Returns a memory span that wraps the underlying memory buffer.
         /// </summary>
+        /// <param name="size">The size of the Span. If it is less than or equals to 0, the full span is used.</param>
         /// <returns>A memory span that wraps the underlying memory buffer.</returns>
-        public Span<T> GetSpan<T>(int size) where T : struct
+        public Span<T> GetSpan<T>(int size = 0) where T : struct
         {
             if (!IsContinuous)
                 throw new NotSupportedException(
                     "To create a Span, the Mat's memory must be continuous. This Mat does not use continuous memory.");
             
+            int maxSize = this.Rows * this.Step / Marshal.SizeOf<T>();
+            if (size <= 0)
+            {
+                size = maxSize;
+            } else if (size > maxSize)
+            {
+                throw new NotSupportedException(
+                    String.Format("The maximum size allowed for this Mat is {0}", maxSize));
+            }
+
             unsafe
             {
                 return new Span<T>(this.DataPointer.ToPointer(), size);
