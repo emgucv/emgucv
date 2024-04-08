@@ -73,7 +73,7 @@ namespace ${NAMESPACE_CS}
       }
 
       /// <summary>
-      /// Create an standard vector of ${VECTOR_NAME} of the specific size
+      /// Create a standard vector of ${VECTOR_NAME} of the specific size
       /// </summary>
       /// <param name="size">The size of the vector</param>
       public VectorOf${VECTOR_NAME}(int size)
@@ -82,7 +82,7 @@ namespace ${NAMESPACE_CS}
       }
 	  
       /// <summary>
-      /// Create an standard vector of ${VECTOR_NAME} with the initial values
+      /// Create a standard vector of ${VECTOR_NAME} with the initial values
       /// </summary>
       /// <param name="values">The initial values</param>
       public VectorOf${VECTOR_NAME}(${VECTOR_ELEMENT_CS}[] values)
@@ -92,15 +92,15 @@ namespace ${NAMESPACE_CS}
       }
 	  
       /// <summary>
-      /// Push an array of value into the standard vector
+      /// Push an array of values into the standard vector
       /// </summary>
-      /// <param name="value">The value to be pushed to the vector</param>
-      public void Push(${VECTOR_ELEMENT_CS}[] value)
+      /// <param name="values">The values to be pushed to the vector</param>
+      public void Push(${VECTOR_ELEMENT_CS}[] values)
       {
-         if (value.Length > 0)
+         if (values.Length > 0)
          {
-            GCHandle handle = GCHandle.Alloc(value, GCHandleType.Pinned);
-            VectorOf${VECTOR_NAME}PushMulti(_ptr, handle.AddrOfPinnedObject(), value.Length);
+            GCHandle handle = GCHandle.Alloc(values, GCHandleType.Pinned);
+            VectorOf${VECTOR_NAME}PushMulti(_ptr, handle.AddrOfPinnedObject(), values.Length);
             handle.Free();
          }
       }
@@ -131,19 +131,45 @@ namespace ${NAMESPACE_CS}
       }
 
 #if UNSAFE_ALLOWED
-        /// <summary>
-        /// Returns a memory span that wraps the underlying memory buffer.
-        /// </summary>
-        /// <returns>A memory span that wraps the underlying memory buffer.</returns>
-        public Span<${VECTOR_ELEMENT_CS}> GetSpan()
-        {
+       /// <summary>
+       /// Create a standard vector of ${VECTOR_NAME} with the initial values
+       /// </summary>
+       /// <param name="values">The initial values</param>
+       public VectorOf${VECTOR_NAME}(Span<${VECTOR_ELEMENT_CS}> values)
+          :this()
+       {
+           Push(values);
+       }
 
-            unsafe
-            {
-                return new Span<${VECTOR_ELEMENT_CS}>(StartAddress.ToPointer(), Size);
-            }
-
-        }
+       /// <summary>
+       /// Push an array of values into the standard vector
+       /// </summary>
+       /// <param name="values">The value to be pushed to the vector</param>
+       public void Push(Span<${VECTOR_ELEMENT_CS}> values)
+       {
+          if (values.Length > 0)
+          {
+              unsafe
+              {
+                  fixed (${VECTOR_ELEMENT_CS}* ptr = values)
+                  {
+                      VectorOf${VECTOR_NAME}PushMulti(_ptr, (IntPtr)ptr, values.Length);
+                  }
+              }
+          }
+       }
+	   
+       /// <summary>
+       /// Returns a memory span that wraps the underlying memory buffer.
+       /// </summary>
+       /// <returns>A memory span that wraps the underlying memory buffer.</returns>
+       public Span<${VECTOR_ELEMENT_CS}> GetSpan()
+       {
+           unsafe
+           {
+               return new Span<${VECTOR_ELEMENT_CS}>(StartAddress.ToPointer(), Size);
+           }
+       }
 #endif
 
       /// <summary>
