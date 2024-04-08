@@ -435,6 +435,12 @@ namespace Emgu.CV.Test
             Mat imgPng = new Mat();
             data = GetBytesFromFile(EmguAssert.GetFile("pedestrian.png"));
             CvInvoke.Imdecode(data, ImreadModes.Color, imgPng);
+
+            Mat imgSpan = new Mat();
+            Span<Byte> span = data;
+            using (VectorOfByte vSpan = new VectorOfByte(span))
+                CvInvoke.Imdecode(vSpan, ImreadModes.Color, imgSpan);
+            EmguAssert.IsTrue(imgPng.Equals(imgSpan));
             //Emgu.CV.UI.ImageViewer.Show(imgPng);
         }
 
