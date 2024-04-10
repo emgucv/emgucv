@@ -363,6 +363,17 @@ namespace Emgu.CV.Platform.Maui.UI
             if (images.Length == 0)
             {
 #if __ANDROID__
+                PermissionStatus status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+                if (status != PermissionStatus.Granted)
+                {
+                    status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+                    if (status != PermissionStatus.Granted)
+                    {
+                        SetMessage("Failed to get camera permission.");
+                        return;
+                    }
+                }
+                
                 if (_androidCameraBackend == AndroidCameraBackend.AndroidCamera2)
                 {
                     StartCapture(async delegate (Object captureSender, Mat m)

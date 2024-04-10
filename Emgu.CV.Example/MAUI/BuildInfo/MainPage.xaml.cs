@@ -31,6 +31,14 @@ public partial class MainPage : ContentPage
     private async void OnFaceDetectClicked(object sender, EventArgs e)
     {
         PermissionStatus status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+        if (status != PermissionStatus.Granted)
+        {
+            status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            if (status != PermissionStatus.Granted)
+            {
+                return;
+            }
+        }
         
         ProcessAndRenderPage faceLandmarkDetectionPage = new ProcessAndRenderPage(
             new FaceAndLandmarkDetector(),
