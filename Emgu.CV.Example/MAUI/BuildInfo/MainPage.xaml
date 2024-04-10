@@ -30,10 +30,10 @@
                 HorizontalOptions="Center" />
 
             <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
+                x:Name="FaceDetectBtn"
+                Text="Run Face Detection"
+                SemanticProperties.Hint="Click to perform face detection"
+                Clicked="OnFaceDetectClicked"
                 HorizontalOptions="Center" />
 
         </VerticalStackLayout>
