@@ -91,11 +91,11 @@ namespace Emgu.CV.Face
         */
 
         /// <summary>
-        /// Trains a Facemark algorithm using the given dataset.
+        /// Detect facial landmarks from an image.
         /// </summary>
         /// <param name="facemark">The facemark object</param>
         /// <param name="image">Input image.</param>
-        /// <param name="faces">Represent region of interest of the detected faces. Each face is stored in cv::Rect container.</param>
+        /// <param name="faces">Output of the function which represent region of interest of the detected faces. Each face is stored in cv::Rect container.</param>
         /// <param name="landmarks">The detected landmark points for each faces.</param>
         /// <returns>True if successful</returns>
         public static bool Fit(this IFacemark facemark, IInputArray image, IInputArray faces, IInputOutputArray landmarks)
