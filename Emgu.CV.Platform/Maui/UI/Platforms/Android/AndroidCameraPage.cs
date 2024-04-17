@@ -19,7 +19,46 @@ namespace Emgu.CV.Platform.Maui.UI
 
         private EventHandler<Mat> _onImageCapturedHandler = null;
 
-        public void StartCapture(EventHandler<Mat> matHandler, int preferredPreviewImageSize = -1)
+
+        protected String _preferredCameraId = null;
+
+        public enum AndroidCameraBackend
+        {
+            AndroidCamera2,
+            OpenCV
+        }
+
+        private AndroidCameraBackend _androidCameraBackend = AndroidCameraBackend.AndroidCamera2;
+        //private AndroidCameraBackend _androidCameraBackend = AndroidCameraBackend.OpenCV;
+
+        public AndroidCameraBackend CameraBackend
+        {
+            get
+            {
+                return _androidCameraBackend;
+            }
+            set
+            {
+                _androidCameraBackend = value;
+            }
+        }
+
+        private bool _isAndroidCamera2Busy = false;
+
+        public bool IsAndroidCamera2Busy
+        {
+            get
+            {
+                return _isAndroidCamera2Busy;
+            }
+            set
+            {
+                _isAndroidCamera2Busy = value;
+            }
+        }
+
+
+        public void StartCapture(EventHandler<Mat> matHandler, int preferredPreviewImageSize = -1, String preferedCameraId = null)
         {
             if (_cameraManager == null)
             {
@@ -30,7 +69,7 @@ namespace Emgu.CV.Platform.Maui.UI
                     preferredPreviewImageSize = Math.Max(preferredPreviewImageSize, 480 * 600);
                 }
 
-                _cameraManager = new AndroidCameraManager( preferredPreviewImageSize );
+                _cameraManager = new AndroidCameraManager( preferredPreviewImageSize, preferedCameraId);
                 _onImageCapturedHandler = matHandler;
                 _cameraManager.OnImageCaptured += _onImageCapturedHandler;
                 _cameraManager.StartBackgroundThread();
