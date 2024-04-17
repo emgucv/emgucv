@@ -165,6 +165,12 @@ namespace ${NAMESPACE_CS}
        /// <returns>A memory span that wraps the underlying memory buffer.</returns>
        public Span<${VECTOR_ELEMENT_CS}> GetSpan()
        {
+	       if (_ptr == IntPtr.Zero)
+              return Span<${VECTOR_ELEMENT_CS}>.Empty;
+           IntPtr startAddress = StartAddress;
+           int size = Size;
+           if (startAddress == IntPtr.Zero || size == 0)
+              return Span<${VECTOR_ELEMENT_CS}>.Empty;
            unsafe
            {
                return new Span<${VECTOR_ELEMENT_CS}>(StartAddress.ToPointer(), Size);
