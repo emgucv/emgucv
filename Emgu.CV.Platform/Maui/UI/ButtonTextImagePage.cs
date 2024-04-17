@@ -234,6 +234,9 @@ namespace Emgu.CV.Platform.Maui.UI
             }
         }
 
+
+
+
         /// <summary>
         /// Load the images and return them asynchronously
         /// </summary>
@@ -279,8 +282,30 @@ namespace Emgu.CV.Platform.Maui.UI
 
                 if (this.HasCameraOption)
                 {
-                    if (Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.Android
-                        || Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.iOS)
+                    if (Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.Android)
+                    {
+                        if (captureSupported)
+                        {
+                            options.Add("Camera");
+                            /*
+#if __ANDROID__
+                            if (this.CameraBackend == AndroidCameraBackend.AndroidCamera2)
+                            {
+                                foreach (String cameraId in AndroidCameraManager.GetAvailableCameraIds())
+                                {
+                                    options.Add(String.Format("Camera {0}", cameraId));
+                                }
+                            }
+                            else
+                            {
+                                options.Add("Camera");
+                            }
+#else
+                            options.Add("Camera");
+#endif
+                            */
+                        }
+                    } else if (Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.iOS)
                     {
                         if (captureSupported)
                             options.Add("Camera");
@@ -368,6 +393,17 @@ namespace Emgu.CV.Platform.Maui.UI
                 else if (action.Equals("Camera"))
                 {
                     mats = new Mat[0];
+#if __ANDROID__ 
+                    String cameraIdCandidate = action.Replace("Camera ", "");
+                    if (AndroidCameraManager.GetAvailableCameraIds().Contains(cameraIdCandidate))
+                    {
+                        _preferredCameraId = cameraIdCandidate;
+                    }
+                    else
+                    {
+                        _preferredCameraId = null;
+                    }
+#endif
                 }
             }
 

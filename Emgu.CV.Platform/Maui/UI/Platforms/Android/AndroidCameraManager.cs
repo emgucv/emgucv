@@ -23,9 +23,11 @@ using Android.Views;
 using Android.Widget;
 
 using Paint = Android.Graphics.Paint;
+
+using Java.Security;
 using Java.Util.Concurrent;
 using Application = Android.App.Application;
-//using Xamarin.Forms.Platform.Android;
+
 using Camera = Android.Hardware.Camera;
 using Type = System.Type;
 
@@ -34,9 +36,16 @@ namespace Emgu.CV.Platform.Maui.UI
 {
     public class AndroidCameraManager
     {
+        public static String[] GetAvailableCameraIds()
+        {
+            CameraManager manager =
+                (CameraManager)Application.Context.GetSystemService(Context.CameraService);
+            return manager.GetCameraIdList();
+        }
+        
         public EventHandler<Mat> OnImageCaptured;
 
-        public AndroidCameraManager(int? preferredPreviewSize = null)
+        public AndroidCameraManager(int? preferredPreviewSize = null, String preferedCameraId = null)
         {
             if (!SetUpCameraOutputs(preferredPreviewSize))
                 return;
@@ -56,11 +65,26 @@ namespace Emgu.CV.Platform.Maui.UI
 
                 var list = manager.GetCameraIdList();
                 var cameraId = list[0];
+                if (preferedCameraId != null)
+                {
+                    if (list.Contains(preferedCameraId))
+                    {
+                        cameraId = preferedCameraId;
+                    }
+                    else
+                    {
+                        throw new InvalidParameterException(
+                            String.Format("Camera ID '{0}' is not one of the available camera ids.", preferedCameraId));
+                    }
+                }
+
                 backgroundHandler = _backgroundHandler;
 
                 // Attempt to open the camera. mStateCallback will be called on the background handler's
                 // thread when this succeeds or fails.
                 manager.OpenCamera(cameraId, _stateCallback, backgroundHandler);
+
+                _cameraId = cameraId;
             }
             catch (CameraAccessException e)
             {
@@ -135,7 +159,18 @@ namespace Emgu.CV.Platform.Maui.UI
         /// <summary>
         /// ID of the current {@link CameraDevice}.
         /// </summary>
-        string _cameraId;
+        private string _cameraId;
+
+        /// <summary>
+        /// Get the ID of the current {@link CameraDevice}.
+        /// </summary>
+        public String CurrentCameraId
+        {
+            get
+            {
+                return _cameraId;
+            }
+        }
 
         /// <summary>
         /// Return true if the given array contains the given integer.

@@ -60,30 +60,6 @@ namespace Emgu.CV.Platform.Maui.UI
         protected String _StopCameraButtonText = "Stop Camera";
         private String _deaultImage;
 
-#if __ANDROID__
-        public enum AndroidCameraBackend
-        {
-            AndroidCamera2,
-            OpenCV
-        }
-
-        private AndroidCameraBackend _androidCameraBackend = AndroidCameraBackend.AndroidCamera2;
-        //private AndroidCameraBackend _androidCameraBackend = AndroidCameraBackend.OpenCV;
-
-        public AndroidCameraBackend CameraBackend
-        {
-            get
-            {
-                return _androidCameraBackend;
-            }
-            set
-            {
-                _androidCameraBackend = value;
-            }
-        }
-
-        private bool _isAndroidCamera2Busy = false;
-#endif
 
         /// <summary>
         /// Get the model associated with this page
@@ -110,7 +86,7 @@ namespace Emgu.CV.Platform.Maui.UI
                 || Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.WinUI))
             {
 #if __ANDROID__ 
-                if (_androidCameraBackend == AndroidCameraBackend.AndroidCamera2)
+                if (CameraBackend == AndroidCameraBackend.AndroidCamera2)
                     return true;
 #endif
 
@@ -297,7 +273,7 @@ namespace Emgu.CV.Platform.Maui.UI
             if (button.Text.Equals(_StopCameraButtonText))
             {
 #if __ANDROID__
-                if (_androidCameraBackend == AndroidCameraBackend.AndroidCamera2)
+                if (CameraBackend == AndroidCameraBackend.AndroidCamera2)
                     StopCapture();
                 else
                 {
@@ -374,31 +350,35 @@ namespace Emgu.CV.Platform.Maui.UI
                     }
                 }
                 
-                if (_androidCameraBackend == AndroidCameraBackend.AndroidCamera2)
+                if (CameraBackend == AndroidCameraBackend.AndroidCamera2)
                 {
-                    StartCapture(async delegate (Object captureSender, Mat m)
-                    {
-                        //Skip the frame if busy, 
-                        //Otherwise too many frames arriving and will eventually saturated the memory.
-                        if (!_isAndroidCamera2Busy)
+                    StartCapture(
+                        async delegate (Object captureSender, Mat m)
                         {
-                            _isAndroidCamera2Busy = true;
-                            try
+                            //Skip the frame if busy, 
+                            //Otherwise too many frames arriving and will eventually saturated the memory.
+                            if (!IsAndroidCamera2Busy)
                             {
-                                //This run on the main thread, using the async pattern with the ProcessFrame is required,
-                                //otherwise it will freeze up the main thread/app.
-                                await Task.Run(
-                                    () =>
-                                    {
-                                        ProcessFrame(m); 
-                                    });
+                                IsAndroidCamera2Busy = true;
+                                try
+                                {
+                                    //This run on the main thread, using the async pattern with the ProcessFrame is required,
+                                    //otherwise it will freeze up the main thread/app.
+                                    await Task.Run(
+                                        () =>
+                                        {
+                                            ProcessFrame(m); 
+                                        });
+                                }
+                                finally
+                                {
+                                    IsAndroidCamera2Busy = false;
+                                }
                             }
-                            finally
-                            {
-                                _isAndroidCamera2Busy = false;
-                            }
-                        }
-                    });
+                        },
+                        -1,
+                        _preferredCameraId
+                        );
                 } else
                 {
                     //Handle video

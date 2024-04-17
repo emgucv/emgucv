@@ -41,10 +41,10 @@ namespace Emgu.CV.Platform.Maui.UI
                 using (GMat inYuvMat = new GMat())
                 using (GMat rgbMat = GapiInvoke.I4202BGR(inYuvMat))
                     //The following two step will rotate the image 90 degrees
-                using (GMat transposeMat = GapiInvoke.Transpose(rgbMat))
-                using (GMat rotatedMat = GapiInvoke.Flip(transposeMat, FlipType.Horizontal))
+                using (GMat tMat = GapiInvoke.Transpose(rgbMat))
+                using (GMat rMat = GapiInvoke.Flip(tMat, FlipType.Horizontal))
                 {
-                    _gComputation = new GComputation(inYuvMat, rotatedMat);
+                    _gComputation = new GComputation(inYuvMat, rMat);
                 }
             }
             else
