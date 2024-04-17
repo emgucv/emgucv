@@ -291,36 +291,40 @@ namespace Emgu.CV.XamarinForms
             {
 #if __ANDROID__ && __USE_ANDROID_CAMERA2__
                
-                StartCapture(async delegate (Object captureSender, Mat m)
-                {
-                    //Skip the frame if busy, 
-                    //Otherwise too many frames arriving and will eventually saturated the memory.
-                    if (!_isBusy)
+                StartCapture(
+                    async delegate (Object captureSender, Mat m)
                     {
-                        _isBusy = true;
-                        try
+                        //Skip the frame if busy, 
+                        //Otherwise too many frames arriving and will eventually saturated the memory.
+                        if (!_isBusy)
                         {
-                            String message = String.Empty;
-                            await Task.Run(() => 
+                            _isBusy = true;
+                            try
                             {
-                                if (_renderMat == null)
-                                    _renderMat = new Mat();
-                                using (InputArray iaImage = m.GetInputArray())
+                                String message = String.Empty;
+                                await Task.Run(() => 
                                 {
-                                    iaImage.CopyTo(_renderMat);
-                                }
-                                message = _model.ProcessAndRender(m, _renderMat);
-                            });
-                            SetImage(_renderMat);
-                            SetMessage(message);
+                                    if (_renderMat == null)
+                                        _renderMat = new Mat();
+                                    using (InputArray iaImage = m.GetInputArray())
+                                    {
+                                        iaImage.CopyTo(_renderMat);
+                                    }
+                                    message = _model.ProcessAndRender(m, _renderMat);
+                                });
+                                SetImage(_renderMat);
+                                SetMessage(message);
 
+                            }
+                            finally
+                            {
+                                _isBusy = false;
+                            }
                         }
-                        finally
-                        {
-                            _isBusy = false;
-                        }
-                    }
-                });
+                    },
+                    -1,
+                    this._preferredCameraId
+                    );
 #elif __IOS__
                 CheckVideoPermissionAndStart ();
 #else
