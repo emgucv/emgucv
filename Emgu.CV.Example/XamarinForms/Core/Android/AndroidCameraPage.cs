@@ -38,7 +38,7 @@ namespace Emgu.CV.XamarinForms
             
         }
 
-        public void StartCapture(EventHandler<Mat> matHandler, int preferredPreviewImageSize = -1)
+        public void StartCapture(EventHandler<Mat> matHandler, int preferredPreviewImageSize = -1, String preferedCameraId = null)
         {
             if (_cameraManager == null)
             {
@@ -49,7 +49,7 @@ namespace Emgu.CV.XamarinForms
                     preferredPreviewImageSize = Math.Max(preferredPreviewImageSize, 480 * 600);
                 }
 
-                _cameraManager = new AndroidCameraManager( preferredPreviewImageSize );
+                _cameraManager = new AndroidCameraManager( preferredPreviewImageSize, preferedCameraId );
                 _cameraManager.OnImageCaptured += matHandler;
                 _cameraManager.StartBackgroundThread();
             }

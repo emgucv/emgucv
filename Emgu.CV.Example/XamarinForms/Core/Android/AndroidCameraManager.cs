@@ -21,6 +21,7 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using Java.Security;
 using Paint = Android.Graphics.Paint;
 using Java.Util.Concurrent;
 using Xamarin.Forms.Platform.Android;
@@ -32,9 +33,16 @@ namespace Emgu.CV.XamarinForms
 {
     public class AndroidCameraManager
     {
+        public static String[] GetAvailableCameraIds()
+        {
+            CameraManager manager =
+                (CameraManager)Android.App.Application.Context.GetSystemService(Context.CameraService);
+            return manager.GetCameraIdList();
+        }
+        
         public EventHandler<Mat> OnImageCaptured;
 
-        public AndroidCameraManager(int? preferredPreviewSize = null)
+        public AndroidCameraManager(int? preferredPreviewSize = null, String preferedCameraId = null)
         {
             if (!SetUpCameraOutputs(preferredPreviewSize))
                 return;
@@ -54,11 +62,26 @@ namespace Emgu.CV.XamarinForms
 
                 var list = manager.GetCameraIdList();
                 var cameraId = list[0];
+                if (preferedCameraId != null)
+                {
+                    if (list.Contains(preferedCameraId))
+                    {
+                        cameraId = preferedCameraId;
+                    }
+                    else
+                    {
+                        throw new InvalidParameterException(
+                            String.Format("Camera ID '{0}' is not one of the available camera ids.", preferedCameraId));
+                    }
+                }
+                
                 backgroundHandler = _backgroundHandler;
 
                 // Attempt to open the camera. mStateCallback will be called on the background handler's
                 // thread when this succeeds or fails.
                 manager.OpenCamera(cameraId, _stateCallback, backgroundHandler);
+
+                _cameraId = cameraId;
             }
             catch (CameraAccessException e)
             {
@@ -133,7 +156,18 @@ namespace Emgu.CV.XamarinForms
         /// <summary>
         /// ID of the current {@link CameraDevice}.
         /// </summary>
-        string _cameraId;
+        private string _cameraId;
+
+        /// <summary>
+        /// Get the ID of the current {@link CameraDevice}.
+        /// </summary>
+        public String CurrentCameraId
+        {
+            get
+            {
+                return _cameraId;
+            }
+        }
 
         /// <summary>
         /// Return true if the given array contains the given integer.

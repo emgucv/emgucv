@@ -177,6 +177,10 @@ namespace Emgu.CV.XamarinForms
 
         public bool HasCameraOption { get; set; }
 
+#if __ANDROID__ && __USE_ANDROID_CAMERA2__
+        protected String _preferredCameraId = null;
+#endif
+
         public virtual async Task<Mat[]> LoadImages(String[] imageNames, String[] labels = null)
         {
             Mat[] mats = new Mat[imageNames.Length];
@@ -216,7 +220,16 @@ namespace Emgu.CV.XamarinForms
                         || Device.RuntimePlatform == Device.UWP)
                     {
                         if (captureSupported)
+                        {
+#if __ANDROID__ && __USE_ANDROID_CAMERA2__
+                            foreach (String cameraId in AndroidCameraManager.GetAvailableCameraIds())
+                            {
+                                options.Add(String.Format("Camera {0}", cameraId));
+                            }
+#else
                             options.Add("Camera");
+#endif
+                        }
                     }
                     else if (Device.RuntimePlatform == Device.WPF
                           || Device.RuntimePlatform == Device.macOS)
@@ -224,7 +237,9 @@ namespace Emgu.CV.XamarinForms
                         var openCVConfigDict = CvInvoke.ConfigDict;
                         bool haveVideoio = (openCVConfigDict["HAVE_OPENCV_VIDEOIO"] != 0);
                         if (haveVideoio)
+                        {
                             options.Add("Camera");
+                        }
                     }
                 }
 
@@ -287,9 +302,21 @@ namespace Emgu.CV.XamarinForms
                     using (Stream stream = await takePhotoResult.OpenReadAsync())
                         mats[i] = await ReadStream(stream);
                 }
-                else if (action.Equals("Camera"))
+                else if (action.StartsWith("Camera"))
                 {
                     mats = Array.Empty<Mat>();
+                    
+#if __ANDROID__ && __USE_ANDROID_CAMERA2__
+                    String cameraIdCandidate = action.Replace("Camera ", "");
+                    if (AndroidCameraManager.GetAvailableCameraIds().Contains(cameraIdCandidate))
+                    {
+                        _preferredCameraId = cameraIdCandidate;
+                    }
+                    else
+                    {
+                        _preferredCameraId = null;
+                    }
+#endif
                 }
             }
 
