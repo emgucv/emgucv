@@ -450,7 +450,8 @@ namespace Emgu.CV
 #if ( UNITY_WEBGL && ! UNITY_EDITOR )
             _libraryLoaded = true;
 #else
-            if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS)
+            if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS ||
+                Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacCatalyst)
             {
                 /*
                 Assembly assembly = Assembly.GetExecutingAssembly();
@@ -468,7 +469,7 @@ namespace Emgu.CV
                     };
                 */
 
-                //For iOS, library are static linked, assume correct loading by default.
+                //iOS or MacCatalyst libraries are static linked, assume correct loading by default.
                 _libraryLoaded = true;
                 return;
             }
