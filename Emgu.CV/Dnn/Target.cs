@@ -57,6 +57,10 @@ namespace Emgu.CV.Dnn
         /// <summary>
         /// NPU
         /// </summary>
-        Npu
+        Npu,
+        /// <summary>
+        /// Only the ARM platform is supported. Low precision computing, accelerate model inference.
+        /// </summary>
+        CpuFp16
     }
 }
