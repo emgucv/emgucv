@@ -25,6 +25,14 @@ public partial class MainPage : ContentPage
         bool haveDNN = (openCVConfigDict["HAVE_OPENCV_DNN"] != 0);
         FaceDetectBtn.IsVisible = haveDNN;
 
+	String aboutIcon = null;
+	ToolbarItem aboutItem = new ToolbarItem("About", aboutIcon,
+						() =>
+						{
+						    this.Navigation.PushAsync(new AboutPage());
+						}
+	);
+	this.ToolbarItems.Add(aboutItem);
     }
 
 
