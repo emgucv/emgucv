@@ -42,22 +42,28 @@ namespace Emgu.Util
                 _os = OS.Android;
                 _runtime = Clr.Mono;
             }
-            else if (Emgu.Util.Toolbox.FindAssembly("Microsoft.Android.dll") != null)
-            {
-                //MAUI Android
-                _os = OS.Android;
-                _runtime = Clr.DotNet;
-            }
             else if (Emgu.Util.Toolbox.FindAssembly("Xamarin.iOS.dll") != null)
             {   
                 //Xamarin iOS
                 _os = OS.IOS;
                 _runtime = Clr.Mono;
             }
+            else if (Emgu.Util.Toolbox.FindAssembly("Microsoft.Android.dll") != null)
+            {
+                //MAUI Android
+                _os = OS.Android;
+                _runtime = Clr.DotNet;
+            }
             else if (Emgu.Util.Toolbox.FindAssembly("Microsoft.iOS.dll") != null)
             {
                 //MAUI iOS
                 _os = OS.IOS;
+                _runtime = Clr.DotNet;
+            }
+            else if (Emgu.Util.Toolbox.FindAssembly("Microsoft.MacCatalyst.dll") != null)
+            {
+                //MAUI MacCatalyst
+                _os = OS.MacCatalyst;
                 _runtime = Clr.DotNet;
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
@@ -113,6 +119,10 @@ namespace Emgu.Util
             /// Mac OS
             /// </summary>
             MacOS,
+            /// <summary>
+            /// Mac Catalyst. IPad app running on Mac OS.
+            /// </summary>
+            MacCatalyst,
             /// <summary>
             /// iOS devices. iPhone, iPad, iPod Touch
             /// </summary>
