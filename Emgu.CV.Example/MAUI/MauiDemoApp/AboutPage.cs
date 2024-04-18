@@ -60,7 +60,7 @@ namespace MauiDemoApp
             }
             else
             {
-                dnnText = "DNN not available on this platform";
+                dnnText = "DNN is not available";
             }
 
             bool haveVideoio = (openCVConfigDict["HAVE_OPENCV_VIDEOIO"] != 0);
@@ -93,7 +93,7 @@ namespace MauiDemoApp
             }
             else
             {
-                tesseractText = "Not Built";
+                tesseractText = "Tesseract OCR is not available";
             }
 
             Content =
@@ -117,7 +117,7 @@ namespace MauiDemoApp
             </style>
             </head>
             <body>
-            <H2> Emgu CV Examples </H2>
+            <H2> Emgu CV for MAUI</H2>
             <a href=http://www.emgu.com>Visit our website</a> <br/><br/>
             <a href=mailto:support@emgu.com>Email Support</a> <br/><br/>
             <H4> OpenCL Info </H4>
@@ -126,12 +126,6 @@ namespace MauiDemoApp
             " + cudaTxt + @"
             <H4> OS: </H4>
             " + osDescription + @"
-            <H4> OS Architecture: </H4>
-            " + RuntimeInformation.OSArchitecture + @"
-            <H4> Framework Description: </H4>
-            " + RuntimeInformation.FrameworkDescription + @"
-            <H4> Process Architecture: </H4>
-            " + RuntimeInformation.ProcessArchitecture + @"
             <H4> Available Parallel Backends: </H4>
             " + parallelText + @"
             <H4> Dnn Backends: </H4>
@@ -148,6 +142,30 @@ namespace MauiDemoApp
             <textarea rows=""30"">"
                                     + CvInvoke.BuildInformation + @"
             </textarea>
+			<H4> RuntimeInformation.OSArchitecture: </H4>
+            " + RuntimeInformation.OSArchitecture + @"
+            <H4> RuntimeInformation.OSDescription: </H4>
+            " + RuntimeInformation.OSDescription + @"
+            <H4> RuntimeInformation.FrameworkDescription: </H4>
+            " + RuntimeInformation.FrameworkDescription + @"
+            <H4> RuntimeInformation.ProcessArchitecture: </H4>
+            " + RuntimeInformation.ProcessArchitecture + @"
+            <H4> RuntimeInformation.RuntimeIdentifier: </H4>
+            " + RuntimeInformation.RuntimeIdentifier + @"
+            <H4> Microsoft.Maui.Devices.DeviceInfo.Current.Model: </H4>
+            " + Microsoft.Maui.Devices.DeviceInfo.Current.Model + @"
+            <H4> Microsoft.Maui.Devices.DeviceInfo.Current.Manufacturer: </H4>
+            " + Microsoft.Maui.Devices.DeviceInfo.Current.Manufacturer + @"
+            <H4> Microsoft.Maui.Devices.DeviceInfo.Current.Name: </H4>
+            " + Microsoft.Maui.Devices.DeviceInfo.Current.Name + @"
+            <H4> Microsoft.Maui.Devices.DeviceInfo.Current.VersionString: </H4>
+            " + Microsoft.Maui.Devices.DeviceInfo.Current.VersionString + @"
+            <H4> Microsoft.Maui.Devices.DeviceInfo.Current.Idiom: </H4>
+            " + Microsoft.Maui.Devices.DeviceInfo.Current.Idiom + @"
+            <H4> Microsoft.Maui.Devices.DeviceInfo.Current.Platform: </H4>
+            " + Microsoft.Maui.Devices.DeviceInfo.Current.Platform+ @"
+            <H4> Microsoft.Maui.Devices.DeviceInfo.Current.DeviceType: </H4>
+            " + Microsoft.Maui.Devices.DeviceInfo.Current.DeviceType+ @"
             </body>
             </html>"
                             }
