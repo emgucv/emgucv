@@ -1,4 +1,4 @@
-This is a basic MAUI project based on the dotnet MAUI template. It should display the Emgu CV / Open CV build information.
+This is a MAUI demo project.
 
 To make sure you have dotnet MAUI workload installed, open the terminal and run this 
 > dotnet workload restore
