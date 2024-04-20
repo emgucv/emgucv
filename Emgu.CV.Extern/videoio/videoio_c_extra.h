@@ -69,7 +69,7 @@ CVAPI(void) OpenniGetColorPoints(
 CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromDevice(int device, int apiPreference, std::vector< int >* params);
 CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromFile(cv::String* fileName, int apiPreference, std::vector< int >* params);
 
-CVAPI(void) cveVideoCaptureRelease(cv::VideoCapture** capture);
+CVAPI(void) cveVideoCaptureRelease2(cv::VideoCapture** capture);
 CVAPI(bool) cveVideoCaptureSet(cv::VideoCapture* capture, int propId, double value);
 CVAPI(double) cveVideoCaptureGet(cv::VideoCapture* capture, int propId);
 CVAPI(bool) cveVideoCaptureGrab(cv::VideoCapture* capture);
