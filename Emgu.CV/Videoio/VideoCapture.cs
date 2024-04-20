@@ -413,7 +413,7 @@ namespace Emgu.CV
             if (_needDispose && _ptr != IntPtr.Zero)
             {
                 Stop();
-                CvInvoke.cveVideoCaptureRelease(ref _ptr);
+                CvInvoke.cveVideoCaptureRelease2(ref _ptr);
             }
 #endif
         }
@@ -779,7 +779,7 @@ namespace Emgu.CV
         internal static extern IntPtr cveVideoCaptureCreateFromFile(IntPtr filename, VideoCapture.API api, IntPtr captureProperties);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveVideoCaptureRelease(ref IntPtr capture);
+        internal static extern void cveVideoCaptureRelease2(ref IntPtr capture);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]

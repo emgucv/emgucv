@@ -84,7 +84,7 @@ cv::VideoCapture* cveVideoCaptureCreateFromFile(cv::String* fileName, int apiPre
 #endif
 }
 
-void cveVideoCaptureRelease(cv::VideoCapture** capture)
+void cveVideoCaptureRelease2(cv::VideoCapture** capture)
 {
 #ifdef HAVE_OPENCV_VIDEOIO
 	delete *capture;
