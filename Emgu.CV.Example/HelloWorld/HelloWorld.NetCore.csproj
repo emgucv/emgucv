@@ -14,7 +14,7 @@
 
   <Import Project="..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems" Label="Shared" />
   
-  <Import Project="..\..\Emgu.CV.Runtime\RHEL\Emgu.CV.Runtime.RHEL.projitems" Label="Shared" />
+  <!-- <Import Project="..\..\Emgu.CV.Runtime\RHEL\Emgu.CV.Runtime.RHEL.projitems" Label="Shared" /> -->
 
   <ItemGroup>
     <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
