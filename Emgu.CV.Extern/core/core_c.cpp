@@ -93,13 +93,7 @@ cv::String* cveStringCreate()
 }
 cv::String* cveStringCreateFromStr(const char* c, int size)
 {
-	//Add a null char at the end of the string
-	char* nullTerminatedStr = static_cast<char*>(malloc(size + 1));
-	memcpy(nullTerminatedStr, c, size);
-	nullTerminatedStr[size] = 0;
-	cv::String* result = new cv::String(c);
-	free(nullTerminatedStr);
-	return result;
+	return new cv::String(c, size);
 }
 void cveStringGetCStr(cv::String* string, const char** c, int* size)
 {
