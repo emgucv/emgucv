@@ -1,0 +1,129 @@
+#!/bin/bash -v
+
+cd "$(dirname "$0")"
+
+INSTALL_FOLDER=$PWD/build/install
+SCRIPT_FOLDER=$PWD
+
+CUDA_OPTIONS=( -DWITH_CUDA:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE )
+
+BUILD_TYPE=full
+if [[ $# -gt 0 ]]; then
+    if [ "$1" == "mini" ]; then
+    BUILD_TYPE=mini
+    elif [ "$1" == "core" ]; then
+    BUILD_TYPE=core
+    elif [ "$1" == "cuda" ]; then
+    #CUDA_OPTIONS=( -DWITH_CUDA:BOOL=TRUE -DCUDA_TOOLKIT_ROOT_DIR:STRING="/usr" )
+    CUDA_OPTIONS=( -DWITH_CUDA:BOOL=TRUE -DBUILD_SHARED_LIBS:BOOL=TRUE )
+    fi 
+fi
+
+
+EMGUCV_CMAKE_SHARED_OPTIONS=( -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=ON -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DCMAKE_CXX_STANDARD:String="17" )
+
+cd ../../..
+
+#cd eigen
+#mkdir -p build
+#cd build
+#cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} ..
+#cmake --build . --config Release --target install --parallel
+#cd ../..
+
+
+if [ "$BUILD_TYPE" == "mini" ]; then
+    echo "Performing a mini build"
+    TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE
+    VTK_OPTION=
+    CONTRIB_OPTION=( -DBUILD_opencv_3d:BOOL=FALSE -DBUILD_opencv_calib:BOOL=FALSE -DBUILD_opencv_dnn:BOOL=FALSE -DBUILD_opencv_ml:BOOL=FALSE -DBUILD_opencv_photo:BOOL=FALSE -DBUILD_opencv_features2d:BOOL=FALSE -DBUILD_opencv_gapi:BOOL=FALSE -DBUILD_opencv_flann:BOOL=FALSE -DBUILD_opencv_video:BOOL=FALSE )
+    FREETYPE_OPTION=-DEMGU_CV_WITH_FREETYPE:BOOL=FALSE
+elif [ "$BUILD_TYPE" == "core" ]; then
+    echo "Performing a core build"
+    TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE
+    VTK_OPTION=
+    CONTRIB_OPTION=( )
+    FREETYPE_OPTION=-DEMGU_CV_WITH_FREETYPE:BOOL=FALSE
+else
+    echo "Performing a full build"
+    TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
+    FREETYPE_OPTION=-DEMGU_CV_WITH_FREETYPE:BOOL=TRUE
+    #cd 3rdParty
+    #cd freetype2
+    #mkdir -p build
+    #cd build
+    #cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} ..
+    #cmake --build . --config Release --target install --parallel
+    #cd ../../..
+    
+    #cd harfbuzz
+    #mkdir -p build
+    #cd build
+    #cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} ..
+    #cmake --build . --config Release --target install --parallel
+    #cd ../..
+    
+    #cd hdf5
+    #mkdir -p build
+    #cd build
+    #cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_SHARED_LIBS:BOOL=OFF -DBUILD_TESTING:BOOL=FALSE -DHDF5_BUILD_EXAMPLES:BOOL=FALSE -DHDF5_BUILD_TOOLS:BOOL=FALSE -DHDF5_BUILD_UTILS:BOOL=FALSE ..
+    #cmake --build . --config Release --target install --parallel
+    #cd ../..
+    
+    #cd vtk
+    #mkdir -p build
+    #cd build
+    #cmake ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} -DBUILD_TESTING:BOOL=FALSE -DBUILD_SHARED_LIBS:BOOL=FALSE ..
+    #cmake --build . --config Release --target install --parallel
+    #VTK_OPTION=-DVTK_DIR:String="$INSTALL_FOLDER"
+    #cd ../..
+
+    CONTRIB_OPTION=( -DWITH_VTK:BOOL=TRUE -DWITH_GSTREAMER:BOOL=TRUE -DOPENCV_EXTRA_MODULES_PATH=../../../../opencv_contrib/modules )
+fi
+
+#cd platforms/ubuntu/20.04
+cd $SCRIPT_FOLDER
+
+mkdir -p build
+cd build
+cmake \
+      ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} \
+      $TESSERACT_OPTION \
+      $FREETYPE_OPTION \
+      ${CUDA_OPTIONS[@]} \
+      -DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=TRUE \
+      -DBUILD_TESTS:BOOL=FALSE \
+      -DBUILD_PNG:BOOL=TRUE \
+      -DBUILD_JPEG:BOOL=TRUE \
+      -DBUILD_WEBP:BOOL=TRUE \
+      -DBUILD_JASPER:BOOL=TRUE \
+      -DBUILD_JAVA:BOOL=FALSE \
+      -DBUILD_TIFF:BOOL=TRUE \
+      -DBUILD_OPENEXR:BOOL=TRUE \
+      -DBUILD_ZLIB:BOOL=TRUE \
+      -DBUILD_PERF_TESTS:BOOL=FALSE \
+      -DBUILD_opencv_apps:BOOL=FALSE \
+      -DBUILD_DOCS:BOOL=FALSE \
+      ${CONTRIB_OPTION[@]} \
+      -DBUILD_opencv_ts:BOOL=FALSE \
+      -DBUILD_opencv_java:BOOL=FALSE \
+      -DBUILD_opencv_python2:BOOL=FALSE \
+      -DBUILD_opencv_python3:BOOL=FALSE \
+      $VTK_OPTION \
+      -DWITH_EIGEN:BOOL=TRUE \
+      $PWD/../../../..
+      #-DEigen3_DIR:String="$INSTALL_FOLDER" \
+
+#      -DWITH_TBB:BOOL=TRUE \
+#      -DWITH_CUDA:BOOL=FALSE \
+    
+#C_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-9.2 CPLUS_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-9.2:$PWD/../../../../harfbuzz/src:$INSTALL_FOLDER/include/harfbuzz make
+make
+
+#if [ "$1" == "cuda" ]; then
+#    cp -rf bin/x64/*.so ../../../../libs/x64
+#    cp -rf bin/x64/*.so.* ../../../../libs/x64
+#fi
+
+cd ..
+
