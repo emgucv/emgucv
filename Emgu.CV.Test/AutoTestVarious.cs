@@ -4266,6 +4266,37 @@ namespace Emgu.CV.Test
             }
         }
 
+        [Test]
+        public void TestSpan()
+        {
+            using (Mat mat1 = new Mat(1000, 1000, DepthType.Cv8U, 3))
+            {
+                mat1.SetTo(new MCvScalar(1,1,1));
+                using (Mat mat2 = new Mat(mat1, new Rectangle(50, 50, 50, 50)))
+                using (Mat mat3 = new Mat(mat1, new Rectangle(500, 50, 500, 1)))
+                {
+
+                    EmguAssert.IsFalse(mat2.IsContinuous);
+                    EmguAssert.IsTrue(mat3.IsContinuous);
+                    var span1 = mat1.GetSpan<Byte>();
+                    int sum = 0;
+                    for (int i = 0; i < span1.Length; i++)
+                    {
+                        sum = sum + span1[i];
+                    }
+                    EmguAssert.IsTrue(sum == mat1.Width * mat1.Height * mat1.NumberOfChannels);
+
+                    var span3 = mat3.GetSpan<Byte>();
+                    sum = 0;
+                    for (int i = 0; i < span3.Length; i++)
+                    {
+                        sum = sum + span3[i];
+                    }
+                    EmguAssert.IsTrue(sum == mat3.Width * mat3.Height * mat1.NumberOfChannels);
+                }
+            }
+        }
+        
         /*
         [Test]
         public void TestCreateImageHeader()
