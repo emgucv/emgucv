@@ -1280,7 +1280,7 @@ namespace Emgu.CV
                 throw new NotSupportedException(
                     "To create a Span, the Mat's memory must be continuous. This Mat does not use continuous memory.");
             
-            int maxSize = this.Rows * this.Step / Marshal.SizeOf<T>();
+            int maxSize = this.Total.ToInt32() * this.ElementSize / Marshal.SizeOf<T>();
             if (size <= 0)
             {
                 size = maxSize;
