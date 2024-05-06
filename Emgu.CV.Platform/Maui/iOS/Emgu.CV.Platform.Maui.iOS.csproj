@@ -10,7 +10,7 @@
   <PropertyGroup>
     <EmguCVIOSLinkTarget>MAUI IOS Library</EmguCVIOSLinkTarget>
     <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\libs))</OpenCVBinaryDir>
-    <EmguCVNativeIOSBinary>$(OpenCVBinaryDir)\iOS\libcvextern_universal.a</EmguCVNativeIOSBinary>    
+    <EmguCVNativeIOSBinary>$(OpenCVBinaryDir)\iOS\libcvextern_ios.xcframework</EmguCVNativeIOSBinary>    
     <EmguCVMauiIOSErrorMessage Condition="!Exists('$(EmguCVNativeIOSBinary)')">This package do not contain necessary binary for $(EmguCVIOSLinkTarget). Emgu CV for iOS Commercial License is required. iOS is targeted, but file $(EmguCVNativeIOSBinary) is missing.</EmguCVMauiIOSErrorMessage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -47,7 +47,7 @@
   
     <ItemGroup>
     <NativeReference Condition="Exists('$(EmguCVNativeIOSBinary)')" Include="$(EmguCVNativeIOSBinary)">
-      <Kind>Static</Kind>
+      <Kind>Framework</Kind>
       <SmartLink>True</SmartLink>
       <ForceLoad>True</ForceLoad>
       <IsCxx>True</IsCxx>
