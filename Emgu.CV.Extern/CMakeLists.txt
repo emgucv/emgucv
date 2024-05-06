@@ -4224,6 +4224,18 @@ ELSEIF (IOS)
       COMMENT "Linking multiple arch into a single file for iOS device")
   ENDIF()
   LIST(LENGTH LIPO_INPUT_FILES LIPO_INPUT_FILES_LENGTH)
+  IF (LIPO_INPUT_FILES_LENGTH GREATER 0)
+      SET(CVEXTERN_CXFRAMEWORK_LIBRARIES)
+	  FOREACH(LIPO_INPUT_FILE ${LIPO_INPUT_FILES}) 
+		LIST(APPEND CVEXTERN_CXFRAMEWORK_LIBRARIES -library ${LIPO_INPUT_FILE})
+	  ENDFOREACH()
+      add_custom_command(TARGET ${the_target}
+      POST_BUILD
+      COMMAND rm -rf ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_ios.xcframework
+      COMMAND xcodebuild -create-xcframework ${CVEXTERN_CXFRAMEWORK_LIBRARIES} -output ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_ios.xcframework
+      WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/libs/iOS"
+      COMMENT "Creating xcframework for iOS")
+  ENDIF()  
   IF (LIPO_INPUT_FILES_LENGTH EQUAL 1)
     add_custom_command(TARGET ${the_target}
       POST_BUILD
