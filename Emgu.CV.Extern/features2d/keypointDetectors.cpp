@@ -183,7 +183,7 @@ void cveSimpleBlobDetectorParamsRelease(cv::SimpleBlobDetector::Params** params)
 }
 
 // Draw keypoints.
-void drawKeypoints(
+void cveDrawKeypoints(
 	cv::_InputArray* image,
 	const std::vector<cv::KeyPoint>* keypoints,
 	cv::_InputOutputArray* outImage,
@@ -198,7 +198,7 @@ void drawKeypoints(
 }
 
 // Draws matches of keypoints from two images on output image.
-void drawMatchedFeatures1(
+void cveDrawMatchedFeatures1(
 	cv::_InputArray* img1,
 	const std::vector<cv::KeyPoint>* keypoints1,
 	cv::_InputArray* img2,
@@ -232,7 +232,7 @@ void drawMatchedFeatures1(
 #endif
 }
 
-void drawMatchedFeatures2(
+void cveDrawMatchedFeatures2(
 	cv::_InputArray* img1,
 	const std::vector<cv::KeyPoint>* keypoints1,
 	cv::_InputArray* img2,
@@ -273,7 +273,7 @@ void drawMatchedFeatures2(
 #endif
 }
 
-void drawMatchedFeatures3(
+void cveDrawMatchedFeatures3(
 	cv::_InputArray* img1, const std::vector<cv::KeyPoint>* keypoints1,
 	cv::_InputArray* img2, const std::vector<cv::KeyPoint>* keypoints2,
 	std::vector< std::vector< cv::DMatch > >* matches,
@@ -497,7 +497,7 @@ void cveFlannBasedMatcherRelease(cv::FlannBasedMatcher** matcher)
 }
 
 //2D tracker
-int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, std::vector< std::vector< cv::DMatch > >* matches, cv::Mat* mask, double scaleIncrement, int rotationBins)
+int cveVoteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, std::vector< std::vector< cv::DMatch > >* matches, cv::Mat* mask, double scaleIncrement, int rotationBins)
 {
 #ifdef HAVE_OPENCV_FEATURES2D
 	CV_Assert(!modelKeyPoints->empty());
@@ -572,7 +572,7 @@ int voteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::ve
 }
 
 //Feature2D
-void CvFeature2DDetectAndCompute(cv::Feature2D* feature2D, cv::_InputArray* image, cv::_InputArray* mask, std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors, bool useProvidedKeyPoints)
+void cveFeature2DDetectAndCompute(cv::Feature2D* feature2D, cv::_InputArray* image, cv::_InputArray* mask, std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors, bool useProvidedKeyPoints)
 {
 #ifdef HAVE_OPENCV_FEATURES2D
 	feature2D->detectAndCompute(*image, mask ? *mask : (cv::InputArray) cv::noArray(), *keypoints, *descriptors, useProvidedKeyPoints);
@@ -580,7 +580,7 @@ void CvFeature2DDetectAndCompute(cv::Feature2D* feature2D, cv::_InputArray* imag
 	throw_no_features2d();
 #endif
 }
-void CvFeature2DDetect(cv::Feature2D* feature2D, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_InputArray* mask)
+void cveFeature2DDetect(cv::Feature2D* feature2D, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_InputArray* mask)
 {
 #ifdef HAVE_OPENCV_FEATURES2D
 	feature2D->detect(*image, *keypoints, mask ? *mask : (cv::InputArray) cv::noArray());
@@ -588,7 +588,7 @@ void CvFeature2DDetect(cv::Feature2D* feature2D, cv::_InputArray* image, std::ve
 	throw_no_features2d();
 #endif
 }
-void CvFeature2DCompute(cv::Feature2D* feature2D, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors)
+void cveFeature2DCompute(cv::Feature2D* feature2D, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors)
 {
 #ifdef HAVE_OPENCV_FEATURES2D
 	feature2D->compute(*image, *keypoints, *descriptors);
@@ -596,7 +596,7 @@ void CvFeature2DCompute(cv::Feature2D* feature2D, cv::_InputArray* image, std::v
 	throw_no_features2d();
 #endif
 }
-int CvFeature2DGetDescriptorSize(cv::Feature2D* feature2D)
+int cveFeature2DGetDescriptorSize(cv::Feature2D* feature2D)
 {
 #ifdef HAVE_OPENCV_FEATURES2D
 	return feature2D->descriptorSize();
@@ -604,7 +604,7 @@ int CvFeature2DGetDescriptorSize(cv::Feature2D* feature2D)
 	throw_no_features2d();
 #endif
 }
-cv::Algorithm* CvFeature2DGetAlgorithm(cv::Feature2D* feature2D)
+cv::Algorithm* cveFeature2DGetAlgorithm(cv::Feature2D* feature2D)
 {
 #ifdef HAVE_OPENCV_FEATURES2D
 	return dynamic_cast<cv::Algorithm*>(feature2D);

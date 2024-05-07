@@ -62,12 +62,12 @@ namespace emgu {
 };
 
 /* DataLogger */
-CVAPI(emgu::DataLogger*) DataLoggerCreate(int logLevel, int loggerId);
+CVAPI(emgu::DataLogger*) cveDataLoggerCreate(int logLevel, int loggerId);
 
-CVAPI(void) DataLoggerRelease(emgu::DataLogger** logger);
+CVAPI(void) cveDataLoggerRelease(emgu::DataLogger** logger);
 
-CVAPI(void) DataLoggerRegisterCallback(emgu::DataLogger* logger, emgu::DataCallback messageCallback );
+CVAPI(void) cveDataLoggerRegisterCallback(emgu::DataLogger* logger, emgu::DataCallback messageCallback );
 
-CVAPI(void) DataLoggerLog(emgu::DataLogger* logger, void* data, int logLevel);
+CVAPI(void) cveDataLoggerLog(emgu::DataLogger* logger, void* data, int logLevel);
 
 #endif

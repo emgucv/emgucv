@@ -28,8 +28,8 @@ namespace Emgu.CV.Util
                 DataLoggerHelper.TotalLoggerCount++;
             }
 
-            _ptr = CvInvoke.DataLoggerCreate(logLevel, _loggerId);
-            CvInvoke.DataLoggerRegisterCallback(_ptr, DataLoggerHelper.Handler);
+            _ptr = CvInvoke.cveDataLoggerCreate(logLevel, _loggerId);
+            CvInvoke.cveDataLoggerRegisterCallback(_ptr, DataLoggerHelper.Handler);
             DataLoggerHelper.OnDataReceived += this.HelperDataHandler;
         }
 
@@ -53,7 +53,7 @@ namespace Emgu.CV.Util
         /// <param name="logLevel">The logLevel. The Log function only logs when the <paramref name="logLevel"/> is greater or equals to the DataLogger's logLevel</param>
         public void Log(IntPtr data, int logLevel)
         {
-            CvInvoke.DataLoggerLog(_ptr, data, logLevel);
+            CvInvoke.cveDataLoggerLog(_ptr, data, logLevel);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Emgu.CV.Util
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                CvInvoke.DataLoggerRelease(ref _ptr);
+                CvInvoke.cveDataLoggerRelease(ref _ptr);
             DataLoggerHelper.OnDataReceived -= this.HelperDataHandler;
         }
     }

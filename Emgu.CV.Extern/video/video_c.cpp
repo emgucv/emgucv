@@ -265,7 +265,7 @@ double cveFindTransformECC(
 		*templateImage, *inputImage,
 		*warpMatrix, motionType,
 		*criteria,
-		inputMask ? *inputMask : (cv::InputArray) cv::noArray());
+		inputMask ? *inputMask : static_cast<cv::InputArray>(cv::noArray()));
 #else
 	throw_no_video();
 #endif

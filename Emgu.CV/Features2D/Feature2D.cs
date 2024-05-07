@@ -48,7 +48,7 @@ namespace Emgu.CV.Features2D
 
                 if (_feature2D == IntPtr.Zero)
                     return IntPtr.Zero;
-                return Features2DInvoke.CvFeature2DGetAlgorithm(_feature2D);
+                return Features2DInvoke.cveFeature2DGetAlgorithm(_feature2D);
             }
         }
 
@@ -65,7 +65,7 @@ namespace Emgu.CV.Features2D
             using (InputArray iaImage = image.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             using (OutputArray oaDescriptors = descriptors.GetOutputArray())
-                Features2DInvoke.CvFeature2DDetectAndCompute(_ptr, iaImage, iaMask, keyPoints, oaDescriptors, useProvidedKeyPoints);
+                Features2DInvoke.cveFeature2DDetectAndCompute(_ptr, iaImage, iaMask, keyPoints, oaDescriptors, useProvidedKeyPoints);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Emgu.CV.Features2D
         {
             using (InputArray iaImage = image.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-                Features2DInvoke.CvFeature2DDetect(_feature2D, iaImage, keypoints.Ptr, iaMask);
+                Features2DInvoke.cveFeature2DDetect(_feature2D, iaImage, keypoints.Ptr, iaMask);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Emgu.CV.Features2D
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaDescriptors = descriptors.GetOutputArray())
-                Features2DInvoke.CvFeature2DCompute(_feature2D, iaImage, keyPoints.Ptr, oaDescriptors);
+                Features2DInvoke.cveFeature2DCompute(_feature2D, iaImage, keyPoints.Ptr, oaDescriptors);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace Emgu.CV.Features2D
             {
                 if (_feature2D == IntPtr.Zero)
                     return 0;
-                return Features2DInvoke.CvFeature2DGetDescriptorSize(_feature2D);
+                return Features2DInvoke.cveFeature2DGetDescriptorSize(_feature2D);
             }
         }
     }
@@ -138,10 +138,10 @@ namespace Emgu.CV.Features2D
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr CvFeature2DGetAlgorithm(IntPtr detector);
+        internal static extern IntPtr cveFeature2DGetAlgorithm(IntPtr detector);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void CvFeature2DDetectAndCompute(
+        internal static extern void cveFeature2DDetectAndCompute(
             IntPtr feature2D,
             IntPtr image,
             IntPtr mask,
@@ -151,17 +151,17 @@ namespace Emgu.CV.Features2D
             bool useProvidedKeyPoints);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void CvFeature2DDetect(
+        internal static extern void cveFeature2DDetect(
            IntPtr detector,
            IntPtr image,
            IntPtr keypoints,
            IntPtr mask);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void CvFeature2DCompute(IntPtr extractor, IntPtr image, IntPtr keypoints, IntPtr descriptors);
+        internal static extern void cveFeature2DCompute(IntPtr extractor, IntPtr image, IntPtr keypoints, IntPtr descriptors);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int CvFeature2DGetDescriptorSize(IntPtr extractor);
+        internal static extern int cveFeature2DGetDescriptorSize(IntPtr extractor);
     }
 
 }
