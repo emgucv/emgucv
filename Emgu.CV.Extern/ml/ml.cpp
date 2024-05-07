@@ -7,7 +7,7 @@
 #include "ml_c.h"
 
 
-bool StatModelTrain(cv::ml::StatModel* model, cv::_InputArray* samples, int layout, cv::_InputArray* responses)
+bool cveStatModelTrain(cv::ml::StatModel* model, cv::_InputArray* samples, int layout, cv::_InputArray* responses)
 {
 #ifdef HAVE_OPENCV_ML
 	return model->train(*samples, layout, *responses);
@@ -15,7 +15,7 @@ bool StatModelTrain(cv::ml::StatModel* model, cv::_InputArray* samples, int layo
 	throw_no_ml();
 #endif
 }
-bool StatModelTrainWithData(cv::ml::StatModel* model, cv::ml::TrainData* data, int flags)
+bool cveStatModelTrainWithData(cv::ml::StatModel* model, cv::ml::TrainData* data, int flags)
 {
 #ifdef HAVE_OPENCV_ML
 	cv::Ptr<cv::ml::TrainData> p(data, [](cv::ml::TrainData*) {});
@@ -24,10 +24,10 @@ bool StatModelTrainWithData(cv::ml::StatModel* model, cv::ml::TrainData* data, i
 	throw_no_ml();
 #endif
 }
-float StatModelPredict(cv::ml::StatModel* model, cv::_InputArray* samples, cv::_OutputArray* results, int flags)
+float cveStatModelPredict(cv::ml::StatModel* model, cv::_InputArray* samples, cv::_OutputArray* results, int flags)
 {
 #ifdef HAVE_OPENCV_ML
-	return model->predict(*samples, results ? *results : (cv::OutputArray) cv::noArray(), flags);
+	return model->predict(*samples, results ? *results : static_cast<cv::OutputArray>(cv::noArray()), flags);
 #else
 	throw_no_ml();
 #endif

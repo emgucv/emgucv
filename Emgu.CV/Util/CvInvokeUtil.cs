@@ -13,18 +13,18 @@ namespace Emgu.CV
     public static partial class CvInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr DataLoggerCreate(int logLevel, int loggerId);
+        internal static extern IntPtr cveDataLoggerCreate(int logLevel, int loggerId);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void DataLoggerRelease(ref IntPtr logger);
+        internal static extern void cveDataLoggerRelease(ref IntPtr logger);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void DataLoggerRegisterCallback(
+        internal static extern void cveDataLoggerRegisterCallback(
            IntPtr logger,
            Util.DataLoggerHelper.DataCallback messageCallback);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void DataLoggerLog(
+        internal static extern void cveDataLoggerLog(
            IntPtr logger,
            IntPtr data,
            int logLevel);

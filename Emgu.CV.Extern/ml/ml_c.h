@@ -41,9 +41,9 @@ namespace cv {
 
 //StatModel
 
-CVAPI(bool) StatModelTrain(cv::ml::StatModel* model, cv::_InputArray* samples, int layout, cv::_InputArray* responses );
-CVAPI(bool) StatModelTrainWithData(cv::ml::StatModel* model, cv::ml::TrainData* data, int flags);
-CVAPI(float) StatModelPredict(cv::ml::StatModel* model, cv::_InputArray* samples, cv::_OutputArray* results, int flags); 
+CVAPI(bool) cveStatModelTrain(cv::ml::StatModel* model, cv::_InputArray* samples, int layout, cv::_InputArray* responses );
+CVAPI(bool) cveStatModelTrainWithData(cv::ml::StatModel* model, cv::ml::TrainData* data, int flags);
+CVAPI(float) cveStatModelPredict(cv::ml::StatModel* model, cv::_InputArray* samples, cv::_OutputArray* results, int flags); 
 
 CVAPI(cv::ml::TrainData*) cveTrainDataCreate(
 	cv::_InputArray* samples, int layout, cv::_InputArray* responses,

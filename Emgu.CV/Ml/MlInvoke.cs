@@ -25,14 +25,14 @@ namespace Emgu.CV.ML
         #region CvStatModel
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal static extern bool StatModelTrain(IntPtr model, IntPtr samples, DataLayoutType layout, IntPtr responses);
+        internal static extern bool cveStatModelTrain(IntPtr model, IntPtr samples, DataLayoutType layout, IntPtr responses);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal static extern bool StatModelTrainWithData(IntPtr model, IntPtr data, int flags);
+        internal static extern bool cveStatModelTrainWithData(IntPtr model, IntPtr data, int flags);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern float StatModelPredict(IntPtr model, IntPtr samples, IntPtr results, int flags);
+        internal static extern float cveStatModelPredict(IntPtr model, IntPtr samples, IntPtr results, int flags);
         #endregion
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -45,7 +45,7 @@ namespace Emgu.CV.ML
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveTrainDataRelease(ref IntPtr sharedPtr);
 
-        #region CvNormalBayesClassifier
+        #region NormalBayesClassifier
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveNormalBayesClassifierDefaultCreate(ref IntPtr statModel, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
@@ -102,7 +102,7 @@ namespace Emgu.CV.ML
         public static extern float CvNormalBayesClassifierPredict(IntPtr model, IntPtr samples, IntPtr results);*/
         #endregion
 
-        #region CvKNearest
+        #region KNearest
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveKNearestCreate(
            ref IntPtr statModel,
@@ -123,7 +123,7 @@ namespace Emgu.CV.ML
 
         #endregion
 
-        #region CvEM
+        #region EM
         /*
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveEmParamsCreate(int nclusters, MlEnum.EmCovarianMatrixType covMatType, ref MCvTermCriteria termcrit);
@@ -205,7 +205,7 @@ namespace Emgu.CV.ML
         #endregion
 
 
-        #region CvSVM
+        #region SVM
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveSVMDefaultCreate(ref IntPtr statModel, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
@@ -431,7 +431,7 @@ namespace Emgu.CV.ML
 
         #endregion
 
-        #region CvSVM
+        #region SVM
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveSVMSGDDefaultCreate(ref IntPtr statModel, ref IntPtr algorithm, ref IntPtr sharedPtr);
 
