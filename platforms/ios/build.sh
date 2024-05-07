@@ -52,7 +52,7 @@ if [ "$1" = "simulator_arm64" ]; then
     #skip the first two parameter
     ../configure_xcode.sh $CV_CONTRIB_OPTION simulator arm64 -DBUILD_IPP_IW:BOOL=FALSE -DWITH_IPP:BOOL=FALSE ${@:3}
     #./xcodebuild_wrapper -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
-    xcodebuild -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
+    xcodebuild ARCHS=arm64 ONLY_ACTIVE_ARCH=NO -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target ALL_BUILD build
     cd ../../..
 fi
 
