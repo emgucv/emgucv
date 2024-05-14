@@ -73,7 +73,7 @@ void cveStereoMatcherRelease(cv::Ptr<cv::StereoMatcher>** sharedPtr)
 }
 
 //2D tracker
-bool getHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, std::vector< std::vector< cv::DMatch > >* matches, cv::Mat* mask, double randsacThreshold, cv::Mat* homography)
+bool cveGetHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model, std::vector<cv::KeyPoint>* observed, std::vector< std::vector< cv::DMatch > >* matches, cv::Mat* mask, double randsacThreshold, cv::Mat* homography)
 {
 #ifdef HAVE_OPENCV_CALIB3D
 	//cv::Mat_<int> indMat = (cv::Mat_<int>) cv::cvarrToMat(indices);
