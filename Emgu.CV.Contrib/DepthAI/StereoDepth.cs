@@ -39,21 +39,39 @@ namespace Emgu.CV.Dai
             if (_sharedPtr != IntPtr.Zero)
             {
                 DaiInvoke.daiStereoDepthRelease(ref _sharedPtr);
-				_ptr = IntPtr.Zero;
+                _ptr = IntPtr.Zero;
                 _nodePtr = IntPtr.Zero;
             }
         }
 
+        /// <summary>
+        /// Gets the left NodeInput of the StereoDepth.
+        /// </summary>
+        /// <returns>
+        /// A NodeInput object representing the left input node of the StereoDepth.
+        /// </returns>
         public NodeInput GetLeft()
         {
             return new NodeInput(DaiInvoke.daiStereoDepthGetLeft(_ptr), false);
         }
 
+        /// <summary>
+        /// Gets the right NodeInput of the StereoDepth.
+        /// </summary>
+        /// <returns>
+        /// The right NodeInput of the StereoDepth.
+        /// </returns>
         public NodeInput GetRight()
         {
             return new NodeInput(DaiInvoke.daiStereoDepthGetRight(_ptr), false);
         }
 
+        /// <summary>
+        /// Gets the pointer to the underlying native node object in the StereoDepth class.
+        /// </summary>
+        /// <value>
+        /// The pointer to the native node object.
+        /// </value>
         public IntPtr NodePtr
         {
             get { return _nodePtr; }

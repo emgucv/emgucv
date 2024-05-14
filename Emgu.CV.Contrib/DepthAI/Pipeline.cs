@@ -21,7 +21,9 @@ namespace Emgu.CV.Dai
     /// </summary>
     public partial class Pipeline : UnmanagedObject
     {
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Pipeline"/> class.
+        /// </summary>
         public Pipeline()
         {
             _ptr = DaiInvoke.daiPipelineCreate();
@@ -39,6 +41,15 @@ namespace Emgu.CV.Dai
             }
         }
 
+        /// <summary>
+        /// Gets the OpenVINO version used in the DepthAI pipeline.
+        /// </summary>
+        /// <value>
+        /// The OpenVINO version.
+        /// </value>
+        /// <remarks>
+        /// This property represents the specific release of OpenVINO used in the DepthAI pipeline.
+        /// </remarks>
         public OpenVino.Version OpenVinoVersion
         {
             get
@@ -47,6 +58,12 @@ namespace Emgu.CV.Dai
             }
         }
 
+        /// <summary>
+        /// Creates a new instance of the ColorCamera class.
+        /// </summary>
+        /// <returns>
+        /// A new instance of the ColorCamera class.
+        /// </returns>
         public ColorCamera CreateColorCamera()
         {
             IntPtr colorCameraSharedPtr = IntPtr.Zero;
@@ -55,6 +72,12 @@ namespace Emgu.CV.Dai
             return new ColorCamera(colorCameraPtr, colorCameraSharedPtr, nodePtr);
         }
 
+        /// <summary>
+        /// Creates an instance of the MonoCamera class.
+        /// </summary>
+        /// <returns>
+        /// A new MonoCamera object.
+        /// </returns>
         public MonoCamera CreateMonoCamera()
         {
             IntPtr monoCameraSharedPtr = IntPtr.Zero;
@@ -63,6 +86,12 @@ namespace Emgu.CV.Dai
             return new MonoCamera(monoCameraPtr, monoCameraSharedPtr, nodePtr);
         }
 
+        /// <summary>
+        /// Creates an instance of the NeuralNetwork class.
+        /// </summary>
+        /// <returns>
+        /// A new instance of the NeuralNetwork class.
+        /// </returns>
         public NeuralNetwork CreateNeuralNetwork()
         {
             IntPtr neuralNetworkSharedPtr = IntPtr.Zero;
@@ -71,6 +100,12 @@ namespace Emgu.CV.Dai
             return new NeuralNetwork(neuralNetworkPtr, neuralNetworkSharedPtr, nodePtr);
         }
 
+        /// <summary>
+        /// Creates a StereoDepth object.
+        /// </summary>
+        /// <returns>
+        /// A new instance of the StereoDepth class.
+        /// </returns>
         public StereoDepth CreateStereoDepth()
         {
             IntPtr stereoDepthSharedPtr = IntPtr.Zero;
@@ -79,6 +114,12 @@ namespace Emgu.CV.Dai
             return new StereoDepth(stereoDepthPtr, stereoDepthSharedPtr, nodePtr);
         }
 
+        /// <summary>
+        /// Creates an instance of XLinkOut.
+        /// </summary>
+        /// <returns>
+        /// A new instance of the XLinkOut class.
+        /// </returns>
         public XLinkOut CreateXLinkOut()
         {
             IntPtr xLinkOutSharedPtr = IntPtr.Zero;
