@@ -22,11 +22,26 @@ namespace Emgu.CV.Dai
     /// </summary>
     public partial class MonoCamera : SharedPtrObject, INode
     {
+        /// <summary>
+        /// Enum representing the resolution of the MonoCamera sensor.
+        /// </summary>
         public enum SensorResolution
         {
-            The720P, 
-            The800P, 
-            The400P, 
+            /// <summary>
+            /// Represents a resolution of 720p.
+            /// </summary>
+            The720P,
+            /// <summary>
+            /// Represents a resolution of 800p.
+            /// </summary>
+            The800P,
+            /// <summary>
+            /// Represents a resolution of 400p.
+            /// </summary>
+            The400P,
+            /// <summary>
+            /// Represents a resolution of 480p.
+            /// </summary>
             The480P
         };
 
@@ -52,6 +67,12 @@ namespace Emgu.CV.Dai
             }
         }
 
+        /// <summary>
+        /// Gets the output of the MonoCamera.
+        /// </summary>
+        /// <returns>
+        /// A NodeOutput object representing the output of the MonoCamera.
+        /// </returns>
         public NodeOutput GetOutput()
         {
             return new NodeOutput(DaiInvoke.daiMonoCameraGetOutput(_ptr), false);
@@ -66,6 +87,15 @@ namespace Emgu.CV.Dai
             set { DaiInvoke.daiMonoCameraSetImageOrientation(_ptr, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the camera board socket for the DepthAI module.
+        /// </summary>
+        /// <value>
+        /// The camera board socket.
+        /// </value>
+        /// <remarks>
+        /// The DepthAI module uses this property to determine which camera to use for image processing tasks.
+        /// </remarks>
         public CameraBoardSocket BoardSocket
         {
             get
@@ -78,6 +108,15 @@ namespace Emgu.CV.Dai
             }
         }
 
+        /// <summary>
+        /// Gets or sets the resolution of the MonoCamera sensor.
+        /// </summary>
+        /// <value>
+        /// The resolution of the MonoCamera sensor.
+        /// </value>
+        /// <remarks>
+        /// The resolution is represented by the SensorResolution enum.
+        /// </remarks>
         public SensorResolution Resolution
         {
             get
@@ -90,6 +129,12 @@ namespace Emgu.CV.Dai
             }
         }
 
+        /// <summary>
+        /// Gets the pointer to the node of the MonoCamera.
+        /// </summary>
+        /// <value>
+        /// The pointer to the node.
+        /// </value>
         public IntPtr NodePtr
         {
             get { return _nodePtr; }

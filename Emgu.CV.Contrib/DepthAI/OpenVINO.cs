@@ -21,15 +21,39 @@ namespace Emgu.CV.Dai
     /// </summary>
     public partial class OpenVino
     {
+        /// <summary>
+        /// Specifies the version of OpenVINO used in the DepthAI pipeline.
+        /// </summary>
+        /// <remarks>
+        /// Each version corresponds to a specific release of OpenVINO.
+        /// </remarks>
         public enum Version
         {
-            VERSION_2020_3, 
-            VERSION_2020_4, 
-            VERSION_2021_1, 
-            VERSION_2021_2, 
-            VERSION_2021_3, 
-            VERSION_2021_4
-        };
+            /// <summary>
+            /// Represents OpenVINO version 2020.3.
+            /// </summary>
+            Version2020_3,
+            /// <summary>
+            /// Represents OpenVINO version 2020.4.
+            /// </summary>
+            Version2020_4,
+            /// <summary>
+            /// Represents OpenVINO version 2021.1.
+            /// </summary>
+            Version2021_1,
+            /// <summary>
+            /// Represents OpenVINO version 2021.2.
+            /// </summary>
+            Version2021_2,
+            /// <summary>
+            /// Represents OpenVINO version 2021.3.
+            /// </summary>
+            Version2021_3,
+            /// <summary>
+            /// Represents OpenVINO version 2021.4.
+            /// </summary>
+            Version2021_4
+        }
     }
 
 }

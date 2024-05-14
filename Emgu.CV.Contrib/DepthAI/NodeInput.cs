@@ -16,6 +16,9 @@ using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.Dai
 {
+    /// <summary>
+    /// Represents an input node in the DepthAI module.
+    /// </summary>
     public class NodeInput : UnmanagedObject
     {
         private bool _needDispose;
@@ -26,6 +29,12 @@ namespace Emgu.CV.Dai
             _needDispose = needDispose;
         }
 
+        /// <summary>
+        /// Gets the name of the input node in the DepthAI module.
+        /// </summary>
+        /// <value>
+        /// The name of the input node.
+        /// </value>
         public String Name
         {
             get
