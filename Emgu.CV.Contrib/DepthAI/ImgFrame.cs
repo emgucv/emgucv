@@ -28,6 +28,12 @@ namespace Emgu.CV.Dai
 			_sharedPtr = imgFrameSharedPtr;
         }
 
+        /// <summary>
+        /// Retrieves the data pointer of the image frame.
+        /// </summary>
+        /// <returns>
+        /// The IntPtr to the data of the image frame.
+        /// </returns>
         public IntPtr GetDataPtr()
         {
             return DaiInvoke.daiImgFrameGetData(_ptr);
