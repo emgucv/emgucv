@@ -511,7 +511,6 @@ IF (HAVE_IOS_DEVICE OR HAVE_IOS_SIMULATOR OR HAVE_IOS_UNIVERSAL)
 ELSE()
   SET(HAVE_IOS OFF)
 ENDIF()
-CHECK_BINARY_EXIST("libs" "Emgu.CV.Platform.Xamarin.IOS.dll" HAVE_XAMARIN_IOS ${HAVE_IOS})
 CHECK_BINARY_EXIST("libs" "Emgu.CV.Platform.Maui.iOS.dll" HAVE_MAUI_IOS ${HAVE_IOS})
 
 CHECK_BINARY_EXIST("libs/iOS" "libcvextern_catalyst_arm64.a" HAVE_MAC_CATALYST_ARM64 ${IS_MAC_CATALYST_ARM64_BUILD})
@@ -550,8 +549,6 @@ IF(APPLE AND (NOT IOS))
   MESSAGE(STATUS "IS_MACOS_BUILD: ${IS_MACOS_BUILD}")
 ENDIF()
 CHECK_BINARY_EXIST("libs/runtimes/osx/native" "lib*.dylib" HAVE_MACOS ${IS_MACOS_BUILD})
-CHECK_BINARY_EXIST("libs" "Emgu.CV.Platform.Xamarin.Mac.dll" HAVE_XAMARIN_MAC ${IS_MACOS_BUILD})
-
 
 SET(IS_ANDROID_ARM64_V8A_BUILD OFF)
 IF(ANDROID AND ("${ANDROID_ABI}" STREQUAL "arm64-v8a"))
@@ -1204,17 +1201,14 @@ IF(WITH_CUDA)
 ENDIF()
 
 IF(HAVE_MACOS)
-  SET(EMGUCV_XAMARIN_MACOS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.xamarin${EMGUCV_RUNTIME_EXTRA_TAG}.macos")
   SET(EMGUCV_MACOS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime${EMGUCV_RUNTIME_EXTRA_TAG}.macos")
 ENDIF()
 
 IF(HAVE_ANDROID)
-  SET(EMGUCV_XAMARIN_ANDROID_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.xamarin${EMGUCV_RUNTIME_EXTRA_TAG}.android")
   SET(EMGUCV_MAUI_ANDROID_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.maui${EMGUCV_RUNTIME_EXTRA_TAG}.android")
 ENDIF()
 
 IF(HAVE_IOS)
-  SET(EMGUCV_XAMARIN_IOS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.xamarin${EMGUCV_RUNTIME_EXTRA_TAG}.ios")
   SET(EMGUCV_MAUI_IOS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.maui${EMGUCV_RUNTIME_EXTRA_TAG}.ios")
 ENDIF()
 
@@ -1337,22 +1331,7 @@ IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_ARM64)
 	<file src=\"README.md\" target=\"docs\\\" />")
 ENDIF()
 
-SET(EMGUCV_XAMARIN_MACOS_NUGET_FILE_LIST "")
 SET(EMGUCV_MAUI_MACOS_NUGET_FILE_LIST "")
-IF(HAVE_MACOS)
-  SET(EMGUCV_XAMARIN_MACOS_NUGET_DEPENDENCY "
-    <dependencies>
-      <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-    </dependencies>")
-
-  SET(EMGUCV_XAMARIN_MACOS_NUGET_FILE_LIST "${EMGUCV_XAMARIN_MACOS_NUGET_FILE_LIST}   
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Xamarin.Mac.dll\" target=\"lib\\Xamarin.Mac\" />
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Xamarin.Mac.xml\" target=\"lib\\Xamarin.Mac\" />
-    <file src=\"..\\_._\" target=\"lib\\netstandard2.0\" />
-    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
-	
-ENDIF()
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/Mac/Directory.Build.props)
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/Mac/docs/README.md)
@@ -1479,20 +1458,12 @@ SET(NUGET_SYSTEM_TEXT_JSON_VERSION "${SYSTEM_TEXT_JSON_VERSION}")
 SET(NUGET_SYSTEM_DRAWING_COMMON_VERSION "${SYSTEM_DRAWING_COMMON_VERSION}")
 
   SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\xamarinios10\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\xamarinios10\" />
 	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
 	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
 	")
   SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
-      <group targetFramework=\"Xamarin.iOS1.0\">
-        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-		<dependency id=\"System.Text.Json\" version=\"${NUGET_SYSTEM_TEXT_JSON_VERSION}\" exclude=\"Build,Analyzers\" />
-      </group>
 	  <group targetFramework=\"${EMGUCV_MAUI_MACOS_DST_FOLDER}\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
         <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
@@ -1570,18 +1541,12 @@ SET(EMGUCV_MODELS_NUGET_DEPENDENCY "")
 
 IF (HAVE_IOS)
   SET(EMGUCV_MODELS_NUGET_FILE_LIST "${EMGUCV_MODELS_NUGET_FILE_LIST} 
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\xamarinios10\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\xamarinios10\" />
 	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
 	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
     <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
 	")
   SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY}
-      <group targetFramework=\"Xamarin.iOS1.0\">
-        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-      </group>
 	  <group targetFramework=\"${EMGUCV_MAUI_MACOS_DST_FOLDER}\">
         <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
         <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
@@ -1913,23 +1878,7 @@ SET(EMGUCV_MACOS_NUGET_DEPENDENCY "	<dependencies>
 #    </frameworkAssemblies>")
 
 IF(HAVE_ANDROID)
-  SET(EMGUCV_XAMARIN_ANDROID_NUGET_TITLE "Emgu CV for Xamarin Android Native Runtime")	
-  SET(EMGUCV_XAMARIN_ANDROID_NUGET_FILE_LIST " 
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Xamarin.Android.dll\" target=\"lib\\MonoAndroid50\" />
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Xamarin.Android.xml\" target=\"lib\\MonoAndroid50\" />")
-    SET(EMGUCV_XAMARIN_ANDROID_NUGET_FILE_LIST "${EMGUCV_XAMARIN_ANDROID_NUGET_FILE_LIST}
-    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-	<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-    <file src=\"README.md\" target=\"docs\\\" />")
-    SET(EMGUCV_XAMARIN_ANDROID_NUGET_DEPENDENCY "
-    <dependencies>
-      <group targetFramework=\"MonoAndroid5.0\">
-        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-      </group>
-    </dependencies>")
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.xamarin.android.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.xamarin.android/Package.nuspec)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.xamarin.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.xamarin.android/README.md)
-  
+
   SET(EMGUCV_MAUI_ANDROID_NUGET_TITLE "Emgu CV for MAUI Android Native Runtime")
   
   # Sign and copy the binary
@@ -1966,24 +1915,7 @@ IF(HAVE_ANDROID)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/Android/docs/README.md)
 ENDIF()
 
-IF(HAVE_IOS)
-  SET(EMGUCV_XAMARIN_IOS_NUGET_TITLE "Emgu CV for Xamarin iOS Native Runtime")	
-  SET(EMGUCV_XAMARIN_IOS_NUGET_FILE_LIST " 
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Xamarin.IOS.dll\" target=\"lib\\Xamarin.iOS10\" />
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.Xamarin.IOS.XML\" target=\"lib\\Xamarin.iOS10\" />")
-    SET(EMGUCV_XAMARIN_IOS_NUGET_FILE_LIST "${EMGUCV_XAMARIN_IOS_NUGET_FILE_LIST} 
-    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-	<file src=\"README.md\" target=\"docs\\\" />")
-    SET(EMGUCV_XAMARIN_IOS_NUGET_DEPENDENCY "
-    <dependencies>
-      <group targetFramework=\"Xamarin.iOS10\">
-        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-      </group>
-    </dependencies>")
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.xamarin.ios.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.xamarin.ios/Package.nuspec)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.xamarin.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.xamarin.ios/README.md)
-  
+IF(HAVE_IOS)  
   SET(EMGUCV_MAUI_IOS_NUGET_TITLE "Emgu CV for MAUI iOS Native Runtime")	
   SET(EMGUCV_MAUI_IOS_POST_PROCESS_BINARY "${EMGUCV_MAUI_IOS_POST_PROCESS_BINARY}
   <Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">
@@ -1996,7 +1928,6 @@ IF(HAVE_IOS)
 ENDIF()
 
 IF(HAVE_MACOS)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.xamarin.macos.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.xamarin.macos/Package.nuspec)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.macos.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/Package.nuspec)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.macos.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/docs/README.md)  
 ENDIF()
@@ -2135,7 +2066,6 @@ IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} Commercial Release")
 	SET(EMGUCV_NUGET_SUMMARY "${EMGUCV_NUGET_SUMMARY} This is the commercial release.")
 	IF(HAVE_ANDROID)
-	  SET(EMGUCV_XAMARIN_ANDROID_NUGET_TITLE "${EMGUCV_XAMARIN_ANDROID_NUGET_TITLE} Commercial Release for Xamarin")
       SET(EMGUCV_MAUI_ANDROID_NUGET_TITLE "${EMGUCV_MAUI_ANDROID_NUGET_TITLE} Commercial Release for MAUI")	  
 	ENDIF()	
 	IF(HAVE_WINSTORE_10)
@@ -2225,12 +2155,6 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Wpf.Package.README.md.i
 #generate nuget config file for Emgu.CV.Models
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Models.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.Models/Package.nuspec)
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Models.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.Models/README.md)
-
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/component.yaml.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/xamarin/emgucv_v3/component/component.yaml)
-
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Example.Android.AndroidManifest.xml.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/Android/Properties/AndroidManifest.xml @ONLY)
-
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/XamarinForms.Android.AndroidManifest.xml.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/XamarinForms/Android/Properties/AndroidManifest.xml @ONLY)
 
 # ----------------------------------------------------------------------------
 #  Generate readme file for Emgu CV project
@@ -2414,7 +2338,6 @@ IF(HAVE_IOS)
   INSTALL(
     FILES
     "Solution/iOS/Emgu.CV.iOS.Example.sln"
-    "Solution/iOS/Emgu.CV.iOS.Xamarin.sln"
     "Solution/iOS/Emgu.CV.iOS.Maui.sln"
     DESTINATION "Solution/iOS"
     COMPONENT emgucv_example_source
@@ -2425,7 +2348,6 @@ IF(HAVE_MACOS)
   INSTALL(
     FILES
     "Solution/Mac/Emgu.CV.Mac.Example.sln"
-	"Solution/Mac/Emgu.CV.Mac.Xamarin.sln"
     DESTINATION "Solution/Mac"
     COMPONENT emgucv_example_source
     )
