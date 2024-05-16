@@ -28,6 +28,12 @@ namespace Emgu.CV.Dai
 			_sharedPtr = dataOutputQueueSharedPtr;
         }
 
+        /// <summary>
+        /// Retrieves an image frame from the data output queue.
+        /// </summary>
+        /// <returns>
+        /// An instance of the <see cref="ImgFrame"/> class representing the retrieved image frame.
+        /// </returns>
         public ImgFrame GetImgFrame()
         {
             IntPtr imgFrameSharedPtr = IntPtr.Zero;

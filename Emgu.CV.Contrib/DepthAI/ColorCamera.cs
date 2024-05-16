@@ -44,6 +44,12 @@ namespace Emgu.CV.Dai
             }
         }
 
+        /// <summary>
+        /// Gets the preview output from the color camera.
+        /// </summary>
+        /// <returns>
+        /// A NodeOutput object representing the preview output of the color camera.
+        /// </returns>
         public NodeOutput GetPreview()
         {
             return new NodeOutput(DaiInvoke.daiColorCameraGetPreview(_ptr), false);
@@ -58,6 +64,12 @@ namespace Emgu.CV.Dai
             set { DaiInvoke.daiColorCameraSetImageOrientation(_ptr, value); }
         }
 
+        /// <summary>
+        /// Gets the pointer to the node associated with this ColorCamera instance.
+        /// </summary>
+        /// <value>
+        /// The pointer to the node.
+        /// </value>
         public IntPtr NodePtr
         {
             get { return _nodePtr; }

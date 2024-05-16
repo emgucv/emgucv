@@ -44,11 +44,21 @@ namespace Emgu.CV.Dai
             }
         }
 
+        /// <summary>
+        /// Retrieves the input node of the neural network.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="NodeInput"/> object representing the input node of the neural network.
+        /// </returns>
         public NodeInput GetInput()
         {
             return new NodeInput(DaiInvoke.daiNeuralNetworkGetInput(_ptr), false);
         }
 
+        /// <summary>
+        /// Sets the path to the blob file for the neural network.
+        /// </summary>
+        /// <param name="path">The string representing the path to the blob file.</param>
         public void SetBlobPath(String path)
         {
             using (CvString csPath = new CvString(path))
@@ -57,6 +67,12 @@ namespace Emgu.CV.Dai
             }
         }
 
+        /// <summary>
+        /// Gets the pointer to the underlying native node object in the neural network.
+        /// </summary>
+        /// <value>
+        /// The pointer to the native node object.
+        /// </value>
         public IntPtr NodePtr
         {
             get { return _nodePtr; }

@@ -29,7 +29,11 @@ namespace Emgu.CV.Dai
             _ptr = DaiInvoke.daiDeviceCreate(pipeline);
         }
 
-        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Device"/> class.
+        /// </summary>
+        /// <param name="pipeline">The pipeline to be used by the device.</param>
+        /// <param name="usb2Mode">If set to <c>true</c>, the device will operate in USB 2.0 mode.</param>
         public Device(Pipeline pipeline, bool usb2Mode)
         {
             _ptr = DaiInvoke.daiDeviceCreate2(pipeline, usb2Mode);
@@ -67,6 +71,11 @@ namespace Emgu.CV.Dai
             }
         }*/
 
+        /// <summary>
+        /// Retrieves the DataOutputQueue associated with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the DataOutputQueue to retrieve.</param>
+        /// <returns>A DataOutputQueue object associated with the specified name.</returns>
         public DataOutputQueue GetDataOutputQueue(String name)
         {
             using (CvString csName = new CvString(name))
@@ -77,6 +86,12 @@ namespace Emgu.CV.Dai
             }
         }
 
+        /// <summary>
+        /// Gets the names of the input queues associated with the device.
+        /// </summary>
+        /// <value>
+        /// An array of strings, where each string is the name of an input queue.
+        /// </value>
         public String[] InputQueueNames
         {
             get
@@ -89,6 +104,12 @@ namespace Emgu.CV.Dai
             }
         }
 
+        /// <summary>
+        /// Gets the names of the output queues available in the device.
+        /// </summary>
+        /// <value>
+        /// An array of strings, where each string is the name of an output queue.
+        /// </value>
         public String[] OutputQueueNames
         {
             get
