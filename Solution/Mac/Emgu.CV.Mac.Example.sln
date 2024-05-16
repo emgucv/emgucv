@@ -10,10 +10,6 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV", "..\..\Emgu.CV\Em
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Cuda", "..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.shproj", "{7B22BB32-C867-45A7-AC53-5BDA820DB91C}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.XamarinForms", "..\..\Emgu.CV.Example\XamarinForms\Core\Emgu.CV.XamarinForms.shproj", "{F2A5CE86-0B21-40D2-AD3F-BB2D1D716CFE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.XamarinForms.Mac", "..\..\Emgu.CV.Example\XamarinForms\Mac\Emgu.CV.XamarinForms.Mac.csproj", "{96567EEA-17C0-4E56-ACDE-3EF6213E6AF3}"
-EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.OCR", "..\..\Emgu.CV.OCR\Emgu.CV.OCR.shproj", "{7BC723CB-1678-415F-A65F-4027F8758A6F}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Contrib", "..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.shproj", "{11E54A7E-778D-466C-A176-71E150976AC1}"
@@ -39,8 +35,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models.NetStandard", "..\..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj", "{A593599A-8B00-45F6-B161-5AB794DED450}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Debian", "..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.shproj", "{47CF52B9-AB6D-4BF6-A791-1AC4D2CCD140}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Platform.Xamarin.Mac", "..\..\Emgu.CV.Platform\Xamarin\Mac\Emgu.CV.Platform.Xamarin.Mac.csproj", "{AC8F9090-5444-490B-B7A7-D3726228C00A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.Maui.Mac", "..\..\Emgu.CV.Platform\Maui\Mac\Emgu.CV.Platform.Maui.Mac.csproj", "{A322E4DF-2246-4265-ADD7-27132F293D1C}"
 EndProject
