@@ -2293,6 +2293,63 @@ namespace Emgu.CV
             IntPtr mask);
 
         /// <summary>
+        /// Finds indices of min elements along provided axis.
+        /// </summary>
+        /// <param name="src">Input single-channel array.</param>
+        /// <param name="dst">Output array of type CV_32SC1 with the same dimensionality as src, except for axis being reduced - it should be set to 1.</param>
+        /// <param name="axis">Axis to reduce along.</param>
+        /// <param name="lastIndex">Whether to get the index of first or last occurrence of min.</param>
+        public static void ReduceArgMin(
+            IInputArray src,
+            IOutputArray dst,
+            int axis,
+            bool lastIndex = false)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+            {
+                cveReduceArgMin(iaSrc, oaDst, axis, lastIndex);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveReduceArgMin(
+            IntPtr src, 
+            IntPtr dst, 
+            int axis,
+            [MarshalAs(BoolMarshalType)]
+            bool lastIndex);
+
+
+        /// <summary>
+        /// Finds indices of max elements along provided axis.
+        /// </summary>
+        /// <param name="src">Input single-channel array.</param>
+        /// <param name="dst">Output array of type CV_32SC1 with the same dimensionality as src, except for axis being reduced - it should be set to 1.</param>
+        /// <param name="axis">Axis to reduce along.</param>
+        /// <param name="lastIndex">Whether to get the index of first or last occurrence of max.</param>
+        public static void ReduceArgMax(
+            IInputArray src,
+            IOutputArray dst,
+            int axis,
+            bool lastIndex = false)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+            {
+                cveReduceArgMax(iaSrc, oaDst, axis, lastIndex);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveReduceArgMax(
+            IntPtr src,
+            IntPtr dst,
+            int axis,
+            [MarshalAs(BoolMarshalType)]
+            bool lastIndex);
+
+        /// <summary>
         /// Copies the source 2D array into interior of destination array and makes a border of the specified type around the copied area. The function is useful when one needs to emulate border type that is different from the one embedded into a specific algorithm implementation. For example, morphological functions, as well as most of other filtering functions in OpenCV, internally use replication border type, while the user may need zero border or a border, filled with 1's or 255's
         /// </summary>
         /// <param name="src">The source image</param>

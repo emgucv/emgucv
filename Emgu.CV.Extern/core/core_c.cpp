@@ -251,6 +251,16 @@ void cveMinMaxLoc(cv::_InputArray* src, double* minVal, double* maxVal, CvPoint*
 	maxLoc->x = maxPt.x; maxLoc->y = maxPt.y;
 }
 
+void cveReduceArgMin(cv::_InputArray* src, cv::_OutputArray* dst, int axis, bool lastIndex)
+{
+	cv::reduceArgMin(*src, *dst, axis, lastIndex);
+}
+
+void cveReduceArgMax(cv::_InputArray* src, cv::_OutputArray* dst, int axis, bool lastIndex)
+{
+	cv::reduceArgMax(*src, *dst, axis, lastIndex);
+}
+
 void cveBitwiseAnd(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, cv::_InputArray* mask)
 {
 	cv::bitwise_and(*src1, *src2, *dst, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
