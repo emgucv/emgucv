@@ -16,6 +16,9 @@ using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.Dai
 {
+    /// <summary>
+    /// Represents the output of a node in a pipeline. This class is derived from the <see cref="Emgu.Util.UnmanagedObject"/> class.
+    /// </summary>
     public class NodeOutput : UnmanagedObject
     {
         private bool _needDispose;
@@ -26,11 +29,21 @@ namespace Emgu.CV.Dai
             _needDispose = needDispose;
         }
 
+        /// <summary>
+        /// Links this NodeOutput to a NodeInput.
+        /// </summary>
+        /// <param name="input">The NodeInput to link this NodeOutput to.</param>
         public void Link(NodeInput input)
         {
             DaiInvoke.daiNodeOutputLink(_ptr, input);
         }
 
+        /// <summary>
+        /// Gets the name of the NodeOutput.
+        /// </summary>
+        /// <value>
+        /// The name of the NodeOutput.
+        /// </value>
         public String Name
         {
             get
@@ -43,6 +56,9 @@ namespace Emgu.CV.Dai
             }
         }
 
+        /// <summary>
+        /// Disposes the unmanaged resources used by the NodeOutput and optionally disposes the managed resources.
+        /// </summary>
         protected override void DisposeObject()
         {
             

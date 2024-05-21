@@ -23,8 +23,8 @@ namespace Emgu.CV.Dai
     {
         private bool _needDispose;
 
-        internal NodeInput(IntPtr ptr, bool needDispose=false)
-		{
+        internal NodeInput(IntPtr ptr, bool needDispose = false)
+        {
             _ptr = ptr;
             _needDispose = needDispose;
         }
@@ -47,9 +47,10 @@ namespace Emgu.CV.Dai
             }
         }
 
+        /// <inheritdoc/>
         protected override void DisposeObject()
         {
-            
+
         }
     }
 
