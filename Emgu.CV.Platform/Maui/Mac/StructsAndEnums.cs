@@ -1,4 +1,8 @@
-namespace Mac
+//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2024 by EMGU Corporation. All rights reserved.       
+//----------------------------------------------------------------------------
+
+namespace Emgu.CV.Platform.Maui.Mac
 {
 
 }

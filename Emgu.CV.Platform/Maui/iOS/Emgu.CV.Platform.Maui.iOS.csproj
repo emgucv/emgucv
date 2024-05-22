@@ -31,7 +31,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\CGImageExtension.cs" Link="CGImageExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\UIImageExtension.cs" Link="UIImageExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\CIImageExtension.cs" Link="CIImageExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)..\..\Xamarin\iOS\CvInvokeIOS.cs" Link="CvInvokeIOS.cs" />
+    
   </ItemGroup>
 
   <ItemGroup>

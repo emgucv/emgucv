@@ -15,7 +15,7 @@
 		<!-- <WindowsPackageType>None</WindowsPackageType> -->
 
 		<!-- Display name -->
-		<ApplicationTitle>MauiDemoApp</ApplicationTitle>
+		<ApplicationTitle>Emgu CV MAUI Demo</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.emgu.cv.maui.demo</ApplicationId>
@@ -139,11 +139,11 @@
 	<ItemGroup>
 	  <None Remove="Resources\Raw\pic3.png" />
 	</ItemGroup>
-	-->
 
 	<ItemGroup>
-	  <Compile Include="..\..\..\Emgu.CV.Example\XamarinForms\Core\DrawSubdivision.cs" Link="DrawSubdivision.cs" />
+	  <Compile Include="DrawSubdivision.cs"/>
 	</ItemGroup>
+		-->
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\Emgu.CV.Platform\Maui\UI\Emgu.CV.Platform.Maui.UI.csproj" />
