@@ -1,6 +1,11 @@
 #!/bin/bash -v
 
-sudo apt-get install build-essential libgtk-3-dev libgstreamer1.0-dev libavcodec-dev libswscale-dev libavformat-dev libdc1394-dev libv4l-dev cmake-curses-gui ocl-icd-dev freeglut3-dev libgeotiff-dev libusb-1.0-0-dev libvtk9-dev libfreetype-dev libharfbuzz-dev qtbase5-dev libeigen3-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgflags-dev libgoogle-glog-dev liblapacke-dev libva-dev 
+sudo apt-get install build-essential libgtk-3-dev libgstreamer1.0-dev \
+  libavcodec-dev libswscale-dev libavformat-dev libdc1394-dev libv4l-dev \
+  cmake-curses-gui ocl-icd-dev freeglut3-dev libgeotiff-dev libusb-1.0-0-dev \
+  libvtk9-dev libfreetype-dev libharfbuzz-dev qtbase5-dev libeigen3-dev \
+  libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgflags-dev \
+  libgoogle-glog-dev liblapacke-dev libva-dev dotnet-sdk-8.0
 
 #libatlas-base-dev 
 
