@@ -8,9 +8,16 @@ using Emgu.CV.CvEnum;
 
 namespace DynamicImage.Asp.NetCore.Controllers
 {
+    /// <summary>
+    /// Represents a controller that handles file-related HTTP requests in the DynamicImage.Asp.NetCore application.
+    /// </summary>
     [Route("api/[controller]")]
     public class FileController : Controller
     {
+        /// <summary>
+        /// Asynchronously gets an image with the current time displayed on it.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the action result for the HTTP GET operation.</returns>
         [HttpGet()]
         public async Task<IActionResult> Get()
         {
