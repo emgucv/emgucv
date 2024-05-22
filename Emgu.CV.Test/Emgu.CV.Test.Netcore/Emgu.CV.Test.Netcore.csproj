@@ -43,7 +43,7 @@
     <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Emgu.CV.Example\XamarinForms\Core\cars_license_plate.png" Link="cars_license_plate.png">
+    <Content Include="..\..\Emgu.CV.Example\MAUI\MauiDemoApp\Resources\Raw\cars_license_plate.png" Link="cars_license_plate.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\opencv\data\haarcascades\haarcascade_eye.xml">
