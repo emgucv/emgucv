@@ -56,10 +56,12 @@ namespace Emgu.CV.Platform.Maui.UI
         private Mat _buffer;
         private String _defaultButtonText;
         private IProcessAndRenderModel _model;
-
-        protected String _StopCameraButtonText = "Stop Camera";
         private String _deaultImage;
 
+        /// <summary>
+        /// The text displayed on the button that stops the camera.
+        /// </summary>
+        protected String _StopCameraButtonText = "Stop Camera";
 
         /// <summary>
         /// Get the model associated with this page
@@ -116,6 +118,12 @@ namespace Emgu.CV.Platform.Maui.UI
             return false;
         }
 
+        /// <summary>
+        /// Determines the default camera option based on the device platform.
+        /// </summary>
+        /// <returns>
+        /// Returns true if the device platform is iOS, otherwise it initializes video capture and returns the result of that operation.
+        /// </returns>
         protected override bool GetDefaultCameraOption()
         {
             if (Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.iOS)

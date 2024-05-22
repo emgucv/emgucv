@@ -14,8 +14,16 @@ using UIKit;
 
 namespace Emgu.Util
 {
+    /// <summary>
+    /// Provides extension methods for the CMSampleBuffer class.
+    /// </summary>
     public static class CMSampleBufferExtensions
     {
+        /// <summary>
+        /// Converts a CMSampleBuffer to a UIImage.
+        /// </summary>
+        /// <param name="sampleBuffer">The CMSampleBuffer to convert.</param>
+        /// <returns>A UIImage that represents the same data as the input CMSampleBuffer.</returns>
         public static UIImage ToUIImage(this CMSampleBuffer sampleBuffer)
         {
             UIImage image;
