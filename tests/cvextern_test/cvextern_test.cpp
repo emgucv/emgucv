@@ -6,6 +6,8 @@
 #include "opencv2/opencv_modules.hpp"
 
 #include "opencv2/core/core.hpp"
+#include "opencv2/core/cuda.hpp"
+#include "opencv2/core/utils/logger.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/imgproc/types_c.h"
 #include "opencv2/highgui/highgui.hpp"
@@ -260,6 +262,8 @@ int main()
 {
 	char tmp;
 
+	cv::utils::logging::setLogLevel(cv::utils::logging::LOG_LEVEL_VERBOSE);
+
 	cout << cv::getBuildInformation() << std::endl;
 
 	//Test_CvPoint2D32f();
@@ -279,6 +283,8 @@ int main()
 	cout << "Size of CvRect (expected " << sizeof(int) * 4 << "): " << sizeof(CvRect) << std::endl;
 	cout << "Size of IplImage: " << sizeof(IplImage) << std::endl;
 	cout << "Size of CvScalar (expected " << sizeof(double) * 4 << "): " << sizeof(CvScalar) << std::endl;
+
+	cout << std::endl << "CUDA Enabled device count: " << cv::cuda::getCudaEnabledDeviceCount() << std::endl;
 
 	Test_vectorOfPoint_to_mat();
 #ifdef _MSC_VER
