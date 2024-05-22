@@ -36,7 +36,11 @@ namespace Emgu.CV.Test
     public class AutoTestOcr
     {
 #if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
         [Ignore("Ignore from test run by default.")]
+#endif
 #endif
         [Test]
         public async Task TestOCREngGrayText()
@@ -97,7 +101,11 @@ namespace Emgu.CV.Test
         }
 
 #if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
         [Ignore("Ignore from test run by default.")]
+#endif
 #endif
         [Test]
         public async Task TestOCRBgrText()
@@ -123,7 +131,11 @@ namespace Emgu.CV.Test
         }
 
 #if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
         [Ignore("Ignore from test run by default.")]
+#endif
 #endif
         [Test]
         public async Task TestOCREngBlankPage()
@@ -148,7 +160,11 @@ namespace Emgu.CV.Test
 
 
 #if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
         [Ignore("Ignore from test run by default.")]
+#endif
 #endif
         [Test]
         public async Task TestTesseractUnicodePath()
@@ -162,7 +178,11 @@ namespace Emgu.CV.Test
         }
 
 #if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
         [Ignore("Ignore from test run by default.")]
+#endif
 #endif
         [Test]
         public async Task TestOCREngConstructor()
