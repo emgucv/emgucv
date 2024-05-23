@@ -3,7 +3,7 @@
 # --------------------------------------------------------
 
 ADD_SUBDIRECTORY(NetStandard)
-ADD_SUBDIRECTORY(NetStandard_iOS)
+#ADD_SUBDIRECTORY(NetStandard_iOS)
 ADD_SUBDIRECTORY(Emgu.CV.Bitmap)
 ADD_SUBDIRECTORY(Emgu.CV.Wpf)
 ADD_SUBDIRECTORY(DotNet)
