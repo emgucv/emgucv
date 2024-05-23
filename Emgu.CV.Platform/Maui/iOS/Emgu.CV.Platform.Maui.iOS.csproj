@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0-ios13.2</TargetFramework>
+    <TargetFramework>net8.0-ios</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <IsBindingProject>true</IsBindingProject>
@@ -38,12 +38,6 @@
     <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
     <ObjcBindingCoreSource Include="StructsAndEnums.cs" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj">
-      <ReferenceSourceTarget>ProjectReference</ReferenceSourceTarget>
-    </ProjectReference>
-  </ItemGroup>
   
     <ItemGroup>
     <NativeReference Condition="Exists('$(EmguCVNativeIOSBinary)')" Include="$(EmguCVNativeIOSBinary)">
@@ -65,6 +59,10 @@
     </NativeReference>
     -->
   </ItemGroup>
+  
+    <ItemGroup>
+      <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
+    </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll and $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)" Importance="high" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(OpenCVBinaryDir)" ContinueOnError="true" />

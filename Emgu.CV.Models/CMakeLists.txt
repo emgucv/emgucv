@@ -27,4 +27,4 @@ PROJECT(Emgu.CV.Models)
 ENDIF()
 
 ADD_SUBDIRECTORY(Emgu.CV.Models.NetStandard)
-ADD_SUBDIRECTORY(Emgu.CV.Models.IOS)
+#ADD_SUBDIRECTORY(Emgu.CV.Models.IOS)
