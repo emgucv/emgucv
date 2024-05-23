@@ -284,7 +284,13 @@ int main()
 	cout << "Size of IplImage: " << sizeof(IplImage) << std::endl;
 	cout << "Size of CvScalar (expected " << sizeof(double) * 4 << "): " << sizeof(CvScalar) << std::endl;
 
-	cout << std::endl << "CUDA Enabled device count: " << cv::cuda::getCudaEnabledDeviceCount() << std::endl;
+	int cudaDeviceCount = cv::cuda::getCudaEnabledDeviceCount();
+	cout << std::endl << "CUDA Enabled device count: " << cudaDeviceCount << std::endl;
+	for (int i = 0; i < cudaDeviceCount; ++i)
+	{
+		cv::cuda::printCudaDeviceInfo(i);
+		cout << std::endl;
+	}
 
 	Test_vectorOfPoint_to_mat();
 #ifdef _MSC_VER
