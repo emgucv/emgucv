@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <Project>
  <PropertyGroup>
-    <PackageId>${EMGUCV_BITMAP_NUGET_ID}</PackageId>
+    <PackageId>${EMGUCV_NUGET_ID}</PackageId>
 	
-	<title>${EMGUCV_BITMAP_NUGET_TITLE}</title>
+	<title>${EMGUCV_NUGET_TITLE}</title>
     <version>${CPACK_PACKAGE_VERSION}</version>
     <authors>${CPACK_PACKAGE_VENDOR}</authors>
     <owners>${CPACK_PACKAGE_VENDOR}</owners>
-	<summary>${EMGUCV_BITMAP_NUGET_SUMMARY}</summary>
-    <Description>${EMGUCV_BITMAP_NUGET_SUMMARY}</Description>
+	<summary>${EMGUCV_NUGET_SUMMARY}</summary>
+    <Description>Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library. Allowing OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython etc. </Description>
     <PackageReleaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. For online documentation please visit
 ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html    	        
 </PackageReleaseNotes>
@@ -43,6 +43,11 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
         <PackagePath>docs\</PackagePath>
       </None>
     </ItemGroup>
-  ${EMGUCV_BITMAP_POST_PROCESS_BINARY}
-  ${EMGUCV_BITMAP_POST_PROCESS_NUGET}
+	
+  <!-- https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory?view=vs-2022 -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+  ${EMGUCV_POST_PROCESS_BINARY}
+  
+<!--  ${EMGUCV_BITMAP_POST_PROCESS_BINARY} -->
+<!--  ${EMGUCV_BITMAP_POST_PROCESS_NUGET} -->
 </Project>
