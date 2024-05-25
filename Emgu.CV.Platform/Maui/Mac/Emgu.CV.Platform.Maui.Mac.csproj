@@ -36,7 +36,7 @@
 	<ForceLoad>True</ForceLoad>
 	<IsCxx>True</IsCxx>
 	<LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
-        <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
+        <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText </Frameworks>
       </NativeReference>
     </ItemGroup>
     <ItemGroup Condition="Exists('$(EmguCVCatalystNativeFileARM64)')">
@@ -46,7 +46,7 @@
 	<ForceLoad>True</ForceLoad>
 	<IsCxx>True</IsCxx>
 	<LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
-        <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
+        <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText </Frameworks>
       </NativeReference>
     </ItemGroup>
     <ItemGroup>
