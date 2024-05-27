@@ -10,8 +10,11 @@
   <PropertyGroup>
     <EmguCVIOSLinkTarget>MAUI IOS Library</EmguCVIOSLinkTarget>
     <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\libs))</OpenCVBinaryDir>
-    <EmguCVNativeIOSBinary>$(OpenCVBinaryDir)\iOS\libcvextern_ios.xcframework</EmguCVNativeIOSBinary>    
-    <EmguCVMauiIOSErrorMessage Condition="!Exists('$(EmguCVNativeIOSBinary)')">This package do not contain necessary binary for $(EmguCVIOSLinkTarget). Emgu CV for iOS Commercial License is required. iOS is targeted, but file $(EmguCVNativeIOSBinary) is missing.</EmguCVMauiIOSErrorMessage>
+    <EmguCVNativeIOSFramework>$(OpenCVBinaryDir)\iOS\libcvextern_ios.xcframework</EmguCVNativeIOSFramework> 
+    <EmguCVNativeIOSBinary>$(OpenCVBinaryDir)\iOS\libcvextern_universal.a</EmguCVNativeIOSBinary>
+    <EmguCVNativeIOSBinarySimulatorArm64>$(OpenCVBinaryDir)\iOS\libcvextern_simulator_arm64.a</EmguCVNativeIOSBinarySimulatorArm64>
+    <EmguCVMauiIOSErrorMessage Condition="!Exists('$(EmguCVNativeIOSBinarySimulatorArm64)') And !$(RuntimeIdentifier.Contains('iossimulator-arm64'))">This package do not contain necessary binary for $(EmguCVIOSLinkTarget). Emgu CV for iOS Commercial License is required. iOS is targeted, but file $(EmguCVNativeIOSBinarySimulatorArm64) is missing.</EmguCVMauiIOSErrorMessage>
+    <EmguCVMauiIOSErrorMessage Condition="!Exists('$(EmguCVNativeIOSBinary)') And $(RuntimeIdentifier.Contains('iossimulator-arm64'))">This package do not contain necessary binary for $(EmguCVIOSLinkTarget). Emgu CV for iOS Commercial License is required. iOS is targeted, but file $(EmguCVNativeIOSBinary) is missing.</EmguCVMauiIOSErrorMessage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <WarningLevel>4</WarningLevel>
@@ -40,8 +43,16 @@
   </ItemGroup>
   
     <ItemGroup>
-    <NativeReference Condition="Exists('$(EmguCVNativeIOSBinary)')" Include="$(EmguCVNativeIOSBinary)">
-      <Kind>Framework</Kind>
+    <NativeReference Condition="Exists('$(EmguCVNativeIOSBinary)') And (!$(RuntimeIdentifier.Contains('iossimulator-arm64')))" Include="$(EmguCVNativeIOSBinary)">
+      <Kind>Static</Kind>
+      <SmartLink>True</SmartLink>
+      <ForceLoad>True</ForceLoad>
+      <IsCxx>True</IsCxx>
+      <LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
+      <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
+    </NativeReference>
+    <NativeReference Condition="Exists('$(EmguCVNativeIOSBinarySimulatorArm64)') And $(RuntimeIdentifier.Contains('iossimulator-arm64'))" Include="$(EmguCVNativeIOSBinaryArm64)">
+      <Kind>Static</Kind>
       <SmartLink>True</SmartLink>
       <ForceLoad>True</ForceLoad>
       <IsCxx>True</IsCxx>
@@ -64,6 +75,8 @@
       <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
     </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Message Condition="$(RuntimeIdentifier.Contains('iossimulator-arm64'))" Text="Building for ios simulator arm64" Importance="high" />
+    <Message Condition="!$(RuntimeIdentifier.Contains('iossimulator-arm64'))" Text="Building for ios device arm64 + ios simulator x86_64" Importance="high" />
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll and $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)" Importance="high" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(OpenCVBinaryDir)" ContinueOnError="true" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="$(OpenCVBinaryDir)" ContinueOnError="true" />

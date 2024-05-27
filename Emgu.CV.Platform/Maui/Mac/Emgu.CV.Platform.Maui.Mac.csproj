@@ -9,7 +9,10 @@
     <EmguCVCatalystBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\libs\iOS))</EmguCVCatalystBinaryDir>
     <EmguCVCatalystNativeFileX64>$(EmguCVCatalystBinaryDir)\libcvextern_catalyst_x86_64.a</EmguCVCatalystNativeFileX64>
     <EmguCVCatalystNativeFileARM64>$(EmguCVCatalystBinaryDir)\libcvextern_catalyst_arm64.a</EmguCVCatalystNativeFileARM64>
-  </PropertyGroup>
+    <EmguCVLinkTarget>MAUI MacCatalyst Library</EmguCVLinkTarget>
+    <EmguCVMauiMacErrorMessage Condition="!Exists('$(EmguCVCatalystNativeFileX64)')">This package do not contains necessary binary for $(EmguCVLinkTarget). Emgu CV for MacOS Commercial license is required, Mac Catalyst x86_64 is targeted, but file $(EmguCVCatalystNativeFileX64) is missing.</EmguCVMauiMacErrorMessage>
+    <EmguCVMauiMacErrorMessage Condition="!Exists('$(EmguCVCatalystNativeFileARM64)')">This package do not contains necessary binary for $(EmguCVLinkTarget). Emgu CV for MacOS Commercial license is required, Mac Catalyst ARM64 is targeted, but file $(EmguCVCatalystNativeFileARM64) is missing.</EmguCVMauiMacErrorMessage>
+    </PropertyGroup>
 
   <ItemGroup>
     <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
@@ -53,6 +56,7 @@
       <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
     </ItemGroup>
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
+    <Warning Text="'$(EmguCVMauiMacErrorMessage)'" Condition="'$(EmguCVMauiMacErrorMessage)'!=''" />
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\..\..\libs" Importance="high" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="..\..\..\libs" ContinueOnError="true" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="..\..\..\libs" ContinueOnError="true" />
