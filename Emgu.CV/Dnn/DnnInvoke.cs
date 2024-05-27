@@ -418,6 +418,31 @@ namespace Emgu.CV.Dnn
         private static extern IntPtr cveReadNetFromONNX(IntPtr onnxFile);
 
         /// <summary>
+        /// Reads a network model from ONNX in-memory buffer.
+        /// </summary>
+        /// <param name="model">Memory address of the first byte of the buffer.</param>
+        /// <returns>Net object</returns>
+        public static Net ReadNetFromONNX(byte[] model)
+        {
+            GCHandle modelHandle = GCHandle.Alloc(model, GCHandleType.Pinned);
+            
+            try
+            {
+                return new Net(cveReadNetFromONNX2(
+                    modelHandle.AddrOfPinnedObject(),
+                    model.Length));
+            }
+            finally
+            {
+                modelHandle.Free();
+                
+            }
+
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveReadNetFromONNX2(IntPtr bufferModel, int lenModel);
+
+        /// <summary>
         /// Creates blob from .pb file.
         /// </summary>
         /// <param name="path">Path to the .pb file with input tensor.</param>
