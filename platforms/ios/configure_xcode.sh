@@ -18,14 +18,18 @@ INSTALL_FOLDER=$PWD/build/install
 
 if [ "$2" == "device" ]; then
     CV_TOOLCHAIN_OPTION=( -DCMAKE_TOOLCHAIN_FILE=$CURRENT_SCRIPT_DIR/cmake/Toolchains/Toolchain-iPhoneOS_Xcode.cmake )
+    CV_OPTIMIZATION_OPTION=
     INSTALL_FOLDER=$INSTALL_FOLDER/OpenCV_iPhoneOS_$3
     IPHONEOS_DEPLOYMENT_TARGET=13.2 
 elif [ "$2" == "catalyst" ]; then
     CV_TOOLCHAIN_OPTION=( -DAPPLE_FRAME_WORK:BOOL=TRUE -DCMAKE_TOOLCHAIN_FILE=$CURRENT_SCRIPT_DIR/cmake/Toolchains/Toolchain-Catalyst_Xcode.cmake )
+    CV_OPTIMIZATION_OPTION=
     INSTALL_FOLDER=$INSTALL_FOLDER/OpenCV_catalyst_$3
     IPHONEOS_DEPLOYMENT_TARGET=13.2
-else
+else #simulator
     CV_TOOLCHAIN_OPTION=( -DCMAKE_TOOLCHAIN_FILE=$CURRENT_SCRIPT_DIR/cmake/Toolchains/Toolchain-iPhoneSimulator_Xcode.cmake )
+    #disable optimization for ios simulator. It is causing compilation issue when NEON is enabled for Apple Arm64.
+    CV_OPTIMIZATION_OPTION=( -DCV_DISABLE_OPTIMIZATION:BOOL=TRUE )
     INSTALL_FOLDER=$INSTALL_FOLDER/OpenCV_iPhoneSimulator_$3
     IPHONEOS_DEPLOYMENT_TARGET=13.2
 fi
@@ -92,18 +96,19 @@ fi
 
 
 cmake \
--GXcode \
-${CV_TOOLCHAIN_OPTION[@]} \
-${CV_CONTRIB_OPTION[@]} \
-${INSTALL_PREFIX_OPTION[@]} \
-"${CMAKE_COMMON_OPTION[@]}" \
--DWITH_EIGEN:BOOL=ON \
--DEigen3_DIR:STRING="$EIGEN_DIR" \
--DBUILD_SHARED_LIBS:BOOL=FALSE \
--DBUILD_PERF_TESTS:BOOL=FALSE \
--DBUILD_TESTS:BOOL=FALSE \
--DBUILD_opencv_apps:BOOL=FALSE \
--DBUILD_opencv_java_bindings_generator:BOOL=FALSE \
--DBUILD_opencv_python_bindings_generator:BOOL=FALSE \
-${@:4} $CURRENT_SCRIPT_DIR/../.. 
+    -GXcode \
+    ${CV_TOOLCHAIN_OPTION[@]} \
+    ${CV_OPTIMIZATION_OPTION[@]} \
+    ${CV_CONTRIB_OPTION[@]} \
+    ${INSTALL_PREFIX_OPTION[@]} \
+    "${CMAKE_COMMON_OPTION[@]}" \
+    -DWITH_EIGEN:BOOL=ON \
+    -DEigen3_DIR:STRING="$EIGEN_DIR" \
+    -DBUILD_SHARED_LIBS:BOOL=FALSE \
+    -DBUILD_PERF_TESTS:BOOL=FALSE \
+    -DBUILD_TESTS:BOOL=FALSE \
+    -DBUILD_opencv_apps:BOOL=FALSE \
+    -DBUILD_opencv_java_bindings_generator:BOOL=FALSE \
+    -DBUILD_opencv_python_bindings_generator:BOOL=FALSE \
+    ${@:4} $CURRENT_SCRIPT_DIR/../.. 
 

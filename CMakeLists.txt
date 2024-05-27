@@ -752,7 +752,7 @@ STRING(TOLOWER "${NUGET_NATIVE_PLATFORM_ID_RHEL}" NUGET_NATIVE_PLATFORM_ID_RHEL)
 
 
 SET(HAVE_MAUI OFF)
-IF(HAVE_IOS AND HAVE_MAC_CATALYST AND HAVE_ANDROID AND HAVE_WINDESKTOP)
+IF(HAVE_IOS OR HAVE_MAC_CATALYST OR HAVE_ANDROID OR HAVE_WINDESKTOP)
   SET (HAVE_MAUI ON)
   MESSAGE(STATUS "HAVE_MAUI: ${HAVE_MAUI}")
 ENDIF()
@@ -1988,11 +1988,9 @@ IF(HAVE_MAUI)
     </dependencies>")
   # Sign and copy the binary
   SET(EMGUCV_MAUI_POST_PROCESS_BINARY "
-    <!--
-    <PropertyGroup>
-	  <OutputFullPath>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)$(OutputPath)))</OutputFullPath>
+        <PropertyGroup>
+	  <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)../../../libs))</OpenCVBinaryDir>
 	</PropertyGroup>
-	-->
 	<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">")
   IF(EMGU_SIGN_FOUND AND WIN32)
     file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
