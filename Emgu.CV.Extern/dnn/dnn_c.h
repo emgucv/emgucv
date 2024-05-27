@@ -58,6 +58,7 @@ CVAPI(cv::dnn::Net*) cveReadNetFromTFLite(cv::String* model);
 CVAPI(cv::dnn::Net*) cveReadNetFromTFLite2(const char* bufferModel, int lenModel);
 
 CVAPI(cv::dnn::Net*) cveReadNetFromONNX(cv::String* onnxFile);
+CVAPI(cv::dnn::Net*) cveReadNetFromONNX2(const char* bufferModel, int lenModel);
 CVAPI(void) cveReadTensorFromONNX(cv::String* path, cv::Mat* tensor);
 
 CVAPI(cv::dnn::Net*) cveReadNetFromTorch(cv::String* model, bool isBinary, bool evaluate);

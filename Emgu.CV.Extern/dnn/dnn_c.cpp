@@ -111,6 +111,16 @@ cv::dnn::Net* cveReadNetFromONNX(cv::String* onnxFile)
 	throw_no_dnn();
 #endif
 }
+cv::dnn::Net* cveReadNetFromONNX2(const char* bufferModel, int lenModel)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::Net net = cv::dnn::readNetFromONNX(bufferModel, lenModel);
+	return new cv::dnn::Net(net);
+#else
+	throw_no_dnn();
+#endif	
+}
+
 void cveReadTensorFromONNX(cv::String* path, cv::Mat* tensor)
 {
 #ifdef HAVE_OPENCV_DNN
