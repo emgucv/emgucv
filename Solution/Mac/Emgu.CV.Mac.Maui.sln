@@ -20,8 +20,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models.NetStandard"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.Maui.Mac", "..\..\Emgu.CV.Platform\Maui\Mac\Emgu.CV.Platform.Maui.Mac.csproj", "{A322E4DF-2246-4265-ADD7-27132F293D1C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Platform.NetStandard.IOS", "..\..\Emgu.CV.Platform\NetStandard_iOS\Emgu.CV.Platform.NetStandard.IOS.csproj", "{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,30 +108,6 @@ Global
 		{A322E4DF-2246-4265-ADD7-27132F293D1C}.Release|x64.Build.0 = Release|Any CPU
 		{A322E4DF-2246-4265-ADD7-27132F293D1C}.Release|x86.ActiveCfg = Release|Any CPU
 		{A322E4DF-2246-4265-ADD7-27132F293D1C}.Release|x86.Build.0 = Release|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|ARM.Build.0 = Debug|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|iPhone.ActiveCfg = Debug|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|iPhone.Build.0 = Debug|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|x64.Build.0 = Debug|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Debug|x86.Build.0 = Debug|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|ARM.ActiveCfg = Release|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|ARM.Build.0 = Release|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|iPhone.ActiveCfg = Release|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|iPhone.Build.0 = Release|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|x64.ActiveCfg = Release|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|x64.Build.0 = Release|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|x86.ActiveCfg = Release|Any CPU
-		{1DFA400B-5ACB-4838-945B-9F6C36D8F4EF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -145,11 +119,6 @@ Global
 		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{0bfad282-50c1-449c-b01c-62fd23bbdbe5}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
-		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{1dfa400b-5acb-4838-945b-9f6c36d8f4ef}*SharedItemsImports = 5
-		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{1dfa400b-5acb-4838-945b-9f6c36d8f4ef}*SharedItemsImports = 5
-		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{1dfa400b-5acb-4838-945b-9f6c36d8f4ef}*SharedItemsImports = 5
-		..\..\Emgu.CV\Emgu.CV.projitems*{1dfa400b-5acb-4838-945b-9f6c36d8f4ef}*SharedItemsImports = 5
-		..\..\Emgu.Util\Emgu.Util.projitems*{1dfa400b-5acb-4838-945b-9f6c36d8f4ef}*SharedItemsImports = 5
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
