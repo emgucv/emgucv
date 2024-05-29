@@ -101,9 +101,28 @@ namespace Emgu.CV.Test
 #endif
 #endif
         [Test]
+        public async Task TestYolo()
+        {
+            using (Mat m = EmguAssert.LoadMat("pedestrian.png"))
+            using (Emgu.CV.Models.Yolo detector = new Yolo())
+            {
+                await detector.Init(DownloadManager_OnDownloadProgressChanged, "YoloV8N");
+                String text = detector.ProcessAndRender(m, m);
+            }
+
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
         public async Task TestPedestrianDetector()
         {
-            using (Mat m = EmguAssert.LoadMat("pedestrian"))
+            using (Mat m = EmguAssert.LoadMat("pedestrian.png"))
             using (Emgu.CV.Models.PedestrianDetector detector = new PedestrianDetector())
             {
                 await detector.Init(DownloadManager_OnDownloadProgressChanged);
