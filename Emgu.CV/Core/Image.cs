@@ -124,7 +124,7 @@ namespace Emgu.CV
                     LoadImageFromMat(m);
                 }
             }
-            catch (TypeInitializationException e)
+            catch (TypeInitializationException)
             {
                 //possibly Exception in CvInvoke's static constructor.
                 throw;
