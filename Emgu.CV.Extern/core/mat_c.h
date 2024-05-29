@@ -42,6 +42,7 @@ CVAPI(void) cveMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* m
 CVAPI(cv::UMat*) cveMatGetUMat(cv::Mat* mat, int access, cv::UMatUsageFlags usageFlags);
 CVAPI(void) cveMatConvertTo( cv::Mat* mat, cv::_OutputArray* out, int rtype, double alpha, double beta );
 CVAPI(cv::Mat*) cveMatReshape(cv::Mat* mat, int cn, int rows);
+CVAPI(cv::Mat*) cveMatReshape2(cv::Mat* mat, int cn, int newndims, int* newsz);
 
 CVAPI(double) cveMatDot(cv::Mat* mat, cv::_InputArray* m);
 CVAPI(void) cveMatCross(cv::Mat* mat, cv::_InputArray* m, cv::Mat* result);
