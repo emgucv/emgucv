@@ -12,12 +12,14 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Dnn;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
+using Range = Emgu.CV.Structure.Range;
 
 namespace Emgu.CV.Models
 {
@@ -40,6 +42,7 @@ namespace Emgu.CV.Models
         private readonly String _modelFolderName = Path.Combine("emgu", "yolo");
 
         private DetectionModel _yoloDetectionModel = null;
+        private Net _yoloNet = null;
 
         private string[] _labels = null;
 
@@ -68,7 +71,13 @@ namespace Emgu.CV.Models
             /// <summary>
             /// Yolo v3 tiny
             /// </summary>
-            YoloV3Tiny
+            YoloV3Tiny,
+
+            /// <summary>
+            /// Represents the V8N version of the Yolo model.
+            /// </summary>
+            YoloV8N
+
         }
 
         /// <summary>
@@ -78,7 +87,7 @@ namespace Emgu.CV.Models
         {
             get
             {
-                if (_yoloDetectionModel == null)
+                if (_yoloDetectionModel == null && _yoloNet == null)
                     return false;
                 if (_labels == null)
                     return false;
@@ -102,12 +111,13 @@ namespace Emgu.CV.Models
             FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #endif
         {
-            if (_yoloDetectionModel == null)
+            if ((_yoloDetectionModel == null) && (_yoloNet == null))
             {
                 FileDownloadManager manager = new FileDownloadManager();
 
                 bool version3 = false;
                 bool version4 = false;
+                bool version8 = false;
                 if (version == YoloVersion.YoloV3Spp)
                 {
                     manager.AddFile(
@@ -167,15 +177,19 @@ namespace Emgu.CV.Models
                         "6CBF5ECE15235F66112E0BEDEBB324F37199B31AEE385B7E18F0BBFB536B258E");
                     version4 = true;
                 }
+                else if (version == YoloVersion.YoloV8N)
+                {
+                    manager.AddFile(
+                        "https://emgu-public.s3.amazonaws.com/yolov8/yolov8n.onnx",
+                        _modelFolderName,
+                        "F2F050909F184C2F12D78C4BAFAD57ABE7089C9F917511E23FE3D963117B6A40");
+                    version8 = true;
+                }
 
-                if (version3)
-                    manager.AddFile("https://github.com/pjreddie/darknet/raw/master/data/coco.names",
-                        _modelFolderName,
-                        "634A1132EB33F8091D60F2C346ABABE8B905AE08387037AED883953B7329AF84");
-                if (version4)
-                    manager.AddFile("https://github.com/aj-ames/YOLOv4-OpenCV-CUDA-DNN/raw/dd58dba457fff98e483e0f67113e0be1f17f2120/models/coco.names",
-                        _modelFolderName,
-                        "634A1132EB33F8091D60F2C346ABABE8B905AE08387037AED883953B7329AF84");
+                manager.AddFile("https://github.com/pjreddie/darknet/raw/master/data/coco.names",
+                    _modelFolderName,
+                    "634A1132EB33F8091D60F2C346ABABE8B905AE08387037AED883953B7329AF84");
+
 
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
@@ -190,13 +204,22 @@ namespace Emgu.CV.Models
                 {
                     try
                     {
-                        _yoloDetectionModel =
-                            new DetectionModel(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
-                        _yoloDetectionModel.SetInputSize(new Size(416, 416));
-                        _yoloDetectionModel.SetInputScale(0.00392);
-                        _yoloDetectionModel.SetInputMean(new MCvScalar());
+                        if (version3 || version4)
+                        {
+                            _yoloDetectionModel =
+                                new DetectionModel(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
+                            _yoloDetectionModel.SetInputSize(new Size(416, 416));
+                            _yoloDetectionModel.SetInputScale(0.00392);
+                            _yoloDetectionModel.SetInputMean(new MCvScalar());
 
-                        _labels = File.ReadAllLines(manager.Files[2].LocalFile);
+                            _labels = File.ReadAllLines(manager.Files[2].LocalFile);
+                        }
+                        else if (version8)
+                        {
+                            _yoloNet = DnnInvoke.ReadNetFromONNX(manager.Files[0].LocalFile);
+
+                            _labels = File.ReadAllLines(manager.Files[1].LocalFile);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -225,7 +248,83 @@ namespace Emgu.CV.Models
                 throw new Exception("Please initialize the model first");
             }
 
-            return _yoloDetectionModel.Detect(image, (float)confThreshold, (float)nmsThreshold, _labels);
+            if (_yoloDetectionModel != null)
+            {
+                return _yoloDetectionModel.Detect(image, (float) confThreshold, (float) nmsThreshold, _labels);
+            }
+            else
+            {
+                Size inputSize = new Size(640, 640);
+                using (InputArray iaImage = image.GetInputArray())
+                using (Mat blob = DnnInvoke.BlobFromImage(image, 1.0 / 255.0, inputSize, swapRB: true))
+                {
+                    _yoloNet.SetInput(blob);
+                    using (Mat output = _yoloNet.Forward())
+                    {
+                        Size imageSize = iaImage.GetSize();
+                        int[] dims = output.SizeOfDimension;
+                        using (Mat reshaped = output.Reshape(1, new int[] { dims[1], dims[2] }))
+                        using (Mat transposed = reshaped.T())
+                        {
+                            // Network produces output blob with a shape NxC where N is a number of
+                            // detected objects and C is a number of classes + 4 where the first 4
+                            // numbers are [center_x, center_y, width, height]
+
+                            List<Rectangle> bboxes = new List<Rectangle>();
+                            List<float> scores = new List<float>();
+                            List<int> classes = new List<int>();
+                            int rows = transposed.Rows;
+                            int cols = transposed.Cols;
+                            for (int i = 0; i < rows; i++)
+                            {
+                                using (Mat row = new Mat(transposed, new Range(i, i + 1), new Range(4, cols)))
+                                {
+                                    double min=0, max=0;
+                                    Point minLoc=new Point(), maxLoc = new Point();
+                                    CvInvoke.MinMaxLoc(row, ref min, ref max, ref minLoc,ref maxLoc );
+
+                                    if (max > confThreshold)
+                                    {
+                                        classes.Add(maxLoc.X);
+                                        scores.Add((float)max);
+
+                                        using (Mat rectData = new Mat(transposed, new Range(i, i + 1), new Range(0, 4)))
+                                        {
+                                            float[] data = rectData.GetData(jagged: false) as float[];
+                                            int centerX = (int) (data[0] / inputSize.Width * imageSize.Width);
+                                            int centerY = (int) (data[1] / inputSize.Height * imageSize.Height);
+                                            int width = (int) (data[2] /inputSize.Width * imageSize.Width);
+                                            int height = (int) (data[3] / inputSize.Height * imageSize.Height);
+                                            int left = centerX - width / 2;
+                                            int top = centerY - height / 2;
+                                            Rectangle rect = new Rectangle(left, top, width, height);
+
+                                            bboxes.Add(rect);
+                                        }
+                                    }
+                                }
+                            }
+
+                            int[] indexes = DnnInvoke.NMSBoxes(
+                                bboxes.ToArray(), 
+                                scores.ToArray(), 
+                                (float)confThreshold, 
+                                (float)nmsThreshold);
+                            List<DetectedObject> results = new List<DetectedObject>();
+                            for (int i = 0; i < indexes.Length; i++)
+                            {
+                                DetectedObject o = new DetectedObject();
+                                o.Region = bboxes[i];
+                                o.Confident = scores[i];
+                                o.ClassId = classes[i];
+                                o.Label = _labels[classes[i]];
+                                results.Add(o);
+                            }
+                            return results.ToArray();
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -237,6 +336,12 @@ namespace Emgu.CV.Models
             {
                 _yoloDetectionModel.Dispose();
                 _yoloDetectionModel = null;
+            }
+
+            if (_yoloNet != null)
+            {
+                _yoloNet.Dispose();
+                _yoloNet = null;
             }
 
             _labels = null;
@@ -255,7 +360,7 @@ namespace Emgu.CV.Models
         /// Download and initialize the yolo model
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
-        /// <param name="initOptions">A string, can be either "YoloV4", "YoloV4Tiny", "YoloV3", "YoloV3Spp", "YoloV3Tiny", specify the yolo model to use. Deafult to use "YoloV4". </param>
+        /// <param name="initOptions">A string, can be either "YoloV8N", "YoloV4", "YoloV4Tiny", "YoloV3", "YoloV3Spp", "YoloV3Tiny", specify the yolo model to use. Deafult to use "YoloV4". </param>
         /// <returns>Async task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
@@ -275,6 +380,10 @@ namespace Emgu.CV.Models
                     v = YoloVersion.YoloV3;
                 else if (versionStr.Equals("YoloV4Tiny"))
                     v = YoloVersion.YoloV4Tiny;
+                else if (versionStr.Equals("YoloV4"))
+                    v = YoloVersion.YoloV4;
+                else if (versionStr.Equals("YoloV8N"))
+                    v = YoloVersion.YoloV8N;
             }
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
             yield return Init(v, onDownloadProgressChanged);
@@ -302,7 +411,6 @@ namespace Emgu.CV.Models
 
             foreach (var detected in detectedObjects)
                 detected.Render(imageOut, new MCvScalar(0, 0, 255));
-
             return String.Format("Detected in {0} milliseconds.", watch.ElapsedMilliseconds);
         }
     }
