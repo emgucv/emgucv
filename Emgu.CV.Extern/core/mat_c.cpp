@@ -207,6 +207,14 @@ cv::Mat* cveMatReshape(cv::Mat* mat, int cn, int rows)
 	return result;
 }
 
+cv::Mat* cveMatReshape2(cv::Mat* mat, int cn, int newndims, int* newsz)
+{
+	cv::Mat* result = new cv::Mat();
+	cv::Mat m = mat->reshape(cn, newndims, newsz);
+	cv::swap(m, *result);
+	return result;
+}
+
 double cveMatDot(cv::Mat* mat, cv::_InputArray* m)
 {
 	return mat->dot(*m);

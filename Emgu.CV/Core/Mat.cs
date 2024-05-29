@@ -773,6 +773,28 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// Changes the shape and/or the number of channels of a matrix without copying the data.
+        /// </summary>
+        /// <param name="cn">New number of channels. If the parameter is 0, the number of channels remains the same.</param>
+        /// <param name="newDims">Array with new matrix size by all dimensions. If some sizes are zero, the original sizes in those dimensions are presumed.</param>
+        /// <returns>A new mat header that has different shape</returns>
+        public Mat Reshape(int cn, int[] newDims)
+        {
+            GCHandle handle = GCHandle.Alloc(newDims, GCHandleType.Pinned);
+            try
+            {
+                return new Mat(
+                    MatInvoke.cveMatReshape2(Ptr, cn, newDims.Length, handle.AddrOfPinnedObject()), 
+                    true, 
+                    false);
+            }
+            finally 
+            {
+                handle.Free();
+            }
+        }
+
+        /// <summary>
         /// Release all the unmanaged memory associated with this object.
         /// </summary>
         protected override void DisposeObject()
@@ -1748,6 +1770,9 @@ namespace Emgu.CV
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveMatReshape(IntPtr mat, int cn, int rows);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveMatReshape2(IntPtr mat, int cn, int newndims, IntPtr newsz);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveMatToIplImage(IntPtr mat);
