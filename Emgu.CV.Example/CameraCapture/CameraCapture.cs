@@ -49,7 +49,7 @@ namespace CameraCapture
             _cannyFrame = new Mat();
 
             _yolo = new Yolo();
-            _yolo.Init(Yolo.YoloVersion.YoloV8N);
+            
             _yoloFrame = new Mat();
         }
 
@@ -78,7 +78,7 @@ namespace CameraCapture
             }
         }
 
-        private void captureButtonClick(object sender, EventArgs e)
+        private async void captureButtonClick(object sender, EventArgs e)
         {
             if (_capture != null)
             {
@@ -90,6 +90,13 @@ namespace CameraCapture
                 else
                 {
                     //start the capture
+                    captureButton.Text = "Downloading model...";
+
+                    if (!_yolo.Initialized)
+                    {
+                        await _yolo.Init(Yolo.YoloVersion.YoloV10N);
+                    }
+
                     captureButton.Text = "Stop";
                     _capture.Start();
                 }

@@ -235,7 +235,12 @@ namespace MauiDemoApp
                 Picker p = yoloPage.Picker;
                 p.Title = "Yolo model version";
                 p.IsVisible = true;
-                p.Items.Add("YoloV8N");
+                p.Items.Add("YoloV10N");
+                p.Items.Add("YoloV10S");
+                p.Items.Add("YoloV10M");
+                p.Items.Add("YoloV10B");
+                p.Items.Add("YoloV10L");
+                p.Items.Add("YoloV10X");
                 p.Items.Add("YoloV4");
                 p.Items.Add("YoloV4Tiny");
                 p.Items.Add("YoloV3");
