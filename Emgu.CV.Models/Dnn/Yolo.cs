@@ -43,6 +43,7 @@ namespace Emgu.CV.Models
 
         private DetectionModel _yoloDetectionModel = null;
         private Net _yoloNet = null;
+        private YoloVersion _versionUsed = YoloVersion.YoloDefault;
 
         private string[] _labels = null;
 
@@ -50,7 +51,42 @@ namespace Emgu.CV.Models
         /// The Yolo model version
         /// </summary>
         public enum YoloVersion
-        {   
+        {
+            /// <summary>
+            /// Represents the nano version of the Yolo V10 model. 2.3M parameters, 6.7G FLOPS, 38.5% AP_val 
+            /// </summary>
+            YoloV10N,
+
+            /// <summary>
+            /// Represents the small version of the Yolo V10 model. 7.2M parameters, 21.6G FLOPS, 46.3% AP_val 
+            /// </summary>
+            YoloV10S,
+
+            /// <summary>
+            /// Represents the medium version of the Yolo V10 model. 15.4M parameters, 59.1G FLOPS, 51.1% AP_val 
+            /// </summary>
+            YoloV10M,
+
+            /// <summary>
+            /// Represents the big version of the Yolo V10 model. 19.1M parameters, 92.0G FLOPS, 52.5% AP_val 
+            /// </summary>
+            YoloV10B,
+
+            /// <summary>
+            /// Represents the large version of the Yolo V10 model. 24.4M parameters, 120.3G FLOPS, 53.2% AP_val 
+            /// </summary>
+            YoloV10L,
+
+            /// <summary>
+            /// Represents the V10X (extra large) version of the Yolo model. 29.5M parameters, 160.4G FLOPS, 54.4% AP_val 
+            /// </summary>
+            YoloV10X,
+
+            /// <summary>
+            /// Represents the V8N version of the Yolo model. 3.2M parameters, 8.7 FLOPS, 37.3% AP_val
+            /// </summary>
+            YoloV8N,
+            
             /// <summary>
             /// Yolo V4
             /// </summary>
@@ -71,13 +107,37 @@ namespace Emgu.CV.Models
             /// <summary>
             /// Yolo v3 tiny
             /// </summary>
-            YoloV3Tiny,
-
+            YoloV3Tiny, 
+            
             /// <summary>
-            /// Represents the V8N version of the Yolo model.
+            /// The default YoloVersion
             /// </summary>
-            YoloV8N
+            YoloDefault = YoloV10N
+        }
 
+        private static int GetMajorVersion(YoloVersion version)
+        {
+            switch (version)
+            {
+                case YoloVersion.YoloV3:
+                case YoloVersion.YoloV3Spp:
+                case YoloVersion.YoloV3Tiny:
+                    return 3;
+                case YoloVersion.YoloV4:
+                case YoloVersion.YoloV4Tiny:
+                    return 4;
+                case YoloVersion.YoloV8N:
+                    return 8;
+                case YoloVersion.YoloV10N:
+                case YoloVersion.YoloV10S:
+                case YoloVersion.YoloV10M:
+                case YoloVersion.YoloV10L:
+                case YoloVersion.YoloV10B:
+                case YoloVersion.YoloV10X:
+                    return 10;
+                default:
+                    return -1;
+            }
         }
 
         /// <summary>
@@ -107,7 +167,7 @@ namespace Emgu.CV.Models
             FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
         public async Task Init(
-            YoloVersion version = YoloVersion.YoloV4,
+            YoloVersion version = YoloVersion.YoloV10N,
             FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #endif
         {
@@ -115,9 +175,6 @@ namespace Emgu.CV.Models
             {
                 FileDownloadManager manager = new FileDownloadManager();
 
-                bool version3 = false;
-                bool version4 = false;
-                bool version8 = false;
                 if (version == YoloVersion.YoloV3Spp)
                 {
                     manager.AddFile(
@@ -128,7 +185,6 @@ namespace Emgu.CV.Models
                         "https://github.com/pjreddie/darknet/raw/master/cfg/yolov3-spp.cfg",
                         _modelFolderName,
                         "7A4EC2D7427340FB12059F2B0EF76D6FCFCAC132CC287CBBF0BE5E3ABAA856FD");
-                    version3 = true;
                 }
                 else if (version == YoloVersion.YoloV3)
                 {
@@ -140,7 +196,6 @@ namespace Emgu.CV.Models
                         "https://github.com/pjreddie/darknet/raw/master/cfg/yolov3.cfg",
                         _modelFolderName,
                         "22489EA38575DFA36C67A90048E8759576416A79D32DC11E15D2217777B9A953");
-                    version3 = true;
                 }
                 else if (version == YoloVersion.YoloV3Tiny)
                 {
@@ -152,7 +207,6 @@ namespace Emgu.CV.Models
                         "https://github.com/pjreddie/darknet/raw/master/cfg/yolov3-tiny.cfg",
                         _modelFolderName,
                         "84EB7A675EF87C906019FF5A6E0EFFE275D175ADB75100DCB47F0727917DC2C7");
-                    version3 = true;
                 } else if (version == YoloVersion.YoloV4)
                 {
                     manager.AddFile(
@@ -163,7 +217,6 @@ namespace Emgu.CV.Models
                         "https://emgu-public.s3.amazonaws.com/yolov4/yolov4.cfg",
                         _modelFolderName,
                         "A15524EC710005ADD4EB672140CF15CBFE46DEA0561F1AEA90CB1140B466073E");
-                    version4 = true;
                 }
                 else if (version == YoloVersion.YoloV4Tiny)
                 {
@@ -175,7 +228,6 @@ namespace Emgu.CV.Models
                         "https://emgu-public.s3.amazonaws.com/yolov4/yolov4-tiny.cfg",
                         _modelFolderName,
                         "6CBF5ECE15235F66112E0BEDEBB324F37199B31AEE385B7E18F0BBFB536B258E");
-                    version4 = true;
                 }
                 else if (version == YoloVersion.YoloV8N)
                 {
@@ -183,7 +235,47 @@ namespace Emgu.CV.Models
                         "https://emgu-public.s3.amazonaws.com/yolov8/yolov8n.onnx",
                         _modelFolderName,
                         "F2F050909F184C2F12D78C4BAFAD57ABE7089C9F917511E23FE3D963117B6A40");
-                    version8 = true;
+                } else if (version == YoloVersion.YoloV10N)
+                {
+                    manager.AddFile(
+                        "https://emgu-public.s3.amazonaws.com/yolov10/yolov10n_no_post_process.onnx",
+                        _modelFolderName,
+                        "B426F3C7C9795C2819F68B149ABEE83447FCBC9DF81E2020C5786A132DAF2D66");
+                }
+                else if (version == YoloVersion.YoloV10S)
+                {
+                    manager.AddFile(
+                        "https://emgu-public.s3.amazonaws.com/yolov10/yolov10s_no_post_process.onnx",
+                        _modelFolderName,
+                        "FE28B06648B1A80B18857D0EE5F0EBADF970406B20EE4CE4C43767C830D0AB3B");
+                }
+                else if (version == YoloVersion.YoloV10M)
+                {
+                    manager.AddFile(
+                        "https://emgu-public.s3.amazonaws.com/yolov10/yolov10m_no_post_process.onnx",
+                        _modelFolderName,
+                        "BB91F00BA3C9866794DC60F43CEE23EDC8C43D3E160E60B98BF3A50E22741CF9");
+                }
+                else if (version == YoloVersion.YoloV10L)
+                {
+                    manager.AddFile(
+                        "https://emgu-public.s3.amazonaws.com/yolov10/yolov10l_no_post_process.onnx",
+                        _modelFolderName,
+                        "44F000C37EA7761EA860B24366CC883862D8C93FE6D00391548894E32961DC84");
+                }
+                else if (version == YoloVersion.YoloV10B)
+                {
+                    manager.AddFile(
+                        "https://emgu-public.s3.amazonaws.com/yolov10/yolov10b_no_post_process.onnx",
+                        _modelFolderName,
+                        "74309F2B7B33DA4B38B80C77087CE6A42A89811C00EA409F32AF0F75914BAB03");
+                }
+                else if (version == YoloVersion.YoloV10X)
+                {
+                    manager.AddFile(
+                        "https://emgu-public.s3.amazonaws.com/yolov10/yolov10x_no_post_process.onnx",
+                        _modelFolderName,
+                        "2A70E726043BFBAD95DEEDA3026CE541A1143737133E15C296D278F0F41809E2");
                 }
 
                 manager.AddFile("https://github.com/pjreddie/darknet/raw/master/data/coco.names",
@@ -204,7 +296,8 @@ namespace Emgu.CV.Models
                 {
                     try
                     {
-                        if (version3 || version4)
+                        int majorVersion = GetMajorVersion(version);
+                        if (majorVersion == 3 || majorVersion == 4)
                         {
                             _yoloDetectionModel =
                                 new DetectionModel(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
@@ -214,12 +307,14 @@ namespace Emgu.CV.Models
 
                             _labels = File.ReadAllLines(manager.Files[2].LocalFile);
                         }
-                        else if (version8)
+                        else if (majorVersion == 8 || majorVersion == 10)
                         {
                             _yoloNet = DnnInvoke.ReadNetFromONNX(manager.Files[0].LocalFile);
 
                             _labels = File.ReadAllLines(manager.Files[1].LocalFile);
                         }
+
+                        _versionUsed = version;
                     }
                     catch (Exception ex)
                     {
@@ -291,20 +386,39 @@ namespace Emgu.CV.Models
                                         using (Mat rectData = new Mat(transposed, new Range(i, i + 1), new Range(0, 4)))
                                         {
                                             float[] data = rectData.GetData(jagged: false) as float[];
-                                            int centerX = (int) (data[0] / inputSize.Width * imageSize.Width);
-                                            int centerY = (int) (data[1] / inputSize.Height * imageSize.Height);
-                                            int width = (int) (data[2] /inputSize.Width * imageSize.Width);
-                                            int height = (int) (data[3] / inputSize.Height * imageSize.Height);
-                                            int left = centerX - width / 2;
-                                            int top = centerY - height / 2;
-                                            Rectangle rect = new Rectangle(left, top, width, height);
 
-                                            bboxes.Add(rect);
+                                            if (GetMajorVersion(_versionUsed) == 8)
+                                            {
+                                                int centerX = (int) (data[0] / inputSize.Width * imageSize.Width);
+                                                int centerY = (int) (data[1] / inputSize.Height * imageSize.Height);
+                                                int width = (int) (data[2] / inputSize.Width * imageSize.Width);
+                                                int height = (int) (data[3] / inputSize.Height * imageSize.Height);
+                                                int left = centerX - width / 2;
+                                                int top = centerY - height / 2;
+                                                Rectangle rect = new Rectangle(left, top, width, height);
+
+                                                bboxes.Add(rect);
+                                            }
+                                            else if (GetMajorVersion(_versionUsed) == 10)
+                                            {
+                                                int left = (int)(data[0] / inputSize.Width * imageSize.Width);
+                                                int top = (int)(data[1] / inputSize.Height * imageSize.Height);
+                                                int right = (int)(data[2] / inputSize.Width * imageSize.Width);
+                                                int bottom = (int)(data[3] / inputSize.Height * imageSize.Height);
+                                                Rectangle rect = new Rectangle(left, top, right - left, bottom - top);
+
+                                                bboxes.Add(rect);
+                                            }
                                         }
                                     }
                                 }
                             }
 
+                            if (bboxes.Count == 0)
+                            {
+                                return new DetectedObject[0];
+                            }
+                            
                             int[] indexes = DnnInvoke.NMSBoxes(
                                 bboxes.ToArray(), 
                                 scores.ToArray(), 
@@ -360,7 +474,7 @@ namespace Emgu.CV.Models
         /// Download and initialize the yolo model
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
-        /// <param name="initOptions">A string, can be either "YoloV8N", "YoloV4", "YoloV4Tiny", "YoloV3", "YoloV3Spp", "YoloV3Tiny", specify the yolo model to use. Deafult to use "YoloV4". </param>
+        /// <param name="initOptions">A string, can be either "YoloV10N","YoloV10X","YoloV8N", "YoloV4", "YoloV4Tiny", "YoloV3", "YoloV3Spp", "YoloV3Tiny", specify the yolo model to use. Deafult to use "YoloV4". </param>
         /// <returns>Async task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
@@ -384,6 +498,10 @@ namespace Emgu.CV.Models
                     v = YoloVersion.YoloV4;
                 else if (versionStr.Equals("YoloV8N"))
                     v = YoloVersion.YoloV8N;
+                else if (versionStr.Equals("YoloV10N"))
+                    v = YoloVersion.YoloV10N;
+                else if (versionStr.Equals("YoloV10X"))
+                    v = YoloVersion.YoloV10X;
             }
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
             yield return Init(v, onDownloadProgressChanged);
