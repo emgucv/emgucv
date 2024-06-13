@@ -48,6 +48,4 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
   ${EMGUCV_POST_PROCESS_BINARY}
   
-<!--  ${EMGUCV_BITMAP_POST_PROCESS_BINARY} -->
-<!--  ${EMGUCV_BITMAP_POST_PROCESS_NUGET} -->
 </Project>
