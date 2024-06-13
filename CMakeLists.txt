@@ -2074,7 +2074,7 @@ ENDIF()
 
 
 
-# Sign and copy the binary
+# Sign the binary
   SET(EMGUCV_POST_PROCESS_BINARY "<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">")
   IF(EMGU_SIGN_FOUND AND WIN32)
     file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
@@ -2083,21 +2083,20 @@ ENDIF()
     <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
 	<MakeDir Directories=\"$(OutputPath)\\signed\"/>
     <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-	")
+	</Target>")
   ENDIF()
-  SET(EMGUCV_IOS_POST_PROCESS_BINARY "${EMGUCV_POST_PROCESS_BINARY}")
+  #SET(EMGUCV_IOS_POST_PROCESS_BINARY "${EMGUCV_POST_PROCESS_BINARY}")
   
-  
-  SET(EMGUCV_POST_PROCESS_BINARY "${EMGUCV_POST_PROCESS_BINARY}
-    <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\" Importance=\"high\" />
-    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
-    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
-  </Target>")
-  SET(EMGUCV_IOS_POST_PROCESS_BINARY "${EMGUCV_IOS_POST_PROCESS_BINARY}
-    <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $([System.IO.Path]::Combine($(OpenCVBinaryDir),'iOS'))\" Importance=\"high\" />
-    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$([System.IO.Path]::Combine($(OpenCVBinaryDir),'iOS'))\" ContinueOnError=\"true\" />
-    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$([System.IO.Path]::Combine($(OpenCVBinaryDir),'iOS'))\" ContinueOnError=\"true\" />
-  </Target>")  
+  #SET(EMGUCV_POST_PROCESS_BINARY "${EMGUCV_POST_PROCESS_BINARY}
+  #  <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\" Importance=\"high\" />
+  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
+  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
+  #</Target>")
+  #SET(EMGUCV_IOS_POST_PROCESS_BINARY "${EMGUCV_IOS_POST_PROCESS_BINARY}
+  #  <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $([System.IO.Path]::Combine($(OpenCVBinaryDir),'iOS'))\" Importance=\"high\" />
+  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$([System.IO.Path]::Combine($(OpenCVBinaryDir),'iOS'))\" ContinueOnError=\"true\" />
+  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$([System.IO.Path]::Combine($(OpenCVBinaryDir),'iOS'))\" ContinueOnError=\"true\" />
+  #</Target>")  
 
 
 #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/NetStandard/Directory.Build.props)
