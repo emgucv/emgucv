@@ -77,7 +77,8 @@ namespace Emgu.CV.Test
       private static async Task<Mat> ReadFile(String fileName, ImreadModes modes = ImreadModes.AnyColor | ImreadModes.AnyDepth)
       {
          StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///" + fileName));
-         Mat m = await file.ToMat();
+         Mat m = new Mat();
+         await file.ToArray(m);
          return m;
       }
 
@@ -152,7 +153,7 @@ namespace Emgu.CV.Test
 #else
         public static void IsTrue(bool condition)
         {
-#if VS_TEST
+#if VS_TEST || NETFX_CORE
             Assert.IsTrue(condition);
 #else
             Assert.That(condition);
@@ -161,7 +162,7 @@ namespace Emgu.CV.Test
 
         public static void IsTrue(bool condition, String message)
         {
-#if VS_TEST
+#if VS_TEST || NETFX_CORE
             Assert.IsTrue(condition, message);
 #else
             Assert.That(condition, message);
@@ -170,7 +171,7 @@ namespace Emgu.CV.Test
 
         public static void AreEqual(object a, object b)
         {
-#if VS_TEST
+#if VS_TEST || NETFX_CORE
             Assert.AreEqual(a, b);
 #else
             Assert.That(a.Equals(b));
@@ -179,7 +180,7 @@ namespace Emgu.CV.Test
 
         public static void AreEqual(object a, object b, string message)
         {
-#if VS_TEST
+#if VS_TEST || NETFX_CORE
             Assert.AreEqual(a, b, message);
 #else
             Assert.That(a.Equals(b), message);
@@ -188,7 +189,7 @@ namespace Emgu.CV.Test
 
         public static void AreNotEqual(object a, object b, string message)
         {
-#if VS_TEST
+#if VS_TEST || NETFX_CORE
             Assert.AreNotEqual(a, b, message);
 #else
             Assert.That(a.Equals(b), Is.False, message);
@@ -197,7 +198,7 @@ namespace Emgu.CV.Test
 
         public static void IsFalse(bool condition)
         {
-#if VS_TEST
+#if VS_TEST || NETFX_CORE
             Assert.IsFalse(condition);
 #else
             Assert.That(condition, Is.False);
