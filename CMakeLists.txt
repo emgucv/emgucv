@@ -8,6 +8,8 @@
 #
 # --------------------------------------------------------
 
+CMAKE_MINIMUM_REQUIRED(VERSION 3.16)
+
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
 INCLUDE (CheckPlatform)
 
@@ -47,7 +49,7 @@ ENDIF()
 
 
 PROJECT(emgucv)
-CMAKE_MINIMUM_REQUIRED(VERSION 3.16)
+
 if(POLICY CMP0022)
   #cmake_policy(SET CMP0022 NEW)
   SET(CMAKE_POLICY_DEFAULT_CMP0022 NEW)
@@ -2075,15 +2077,16 @@ ENDIF()
 
 
 # Sign the binary
-  SET(EMGUCV_POST_PROCESS_BINARY "<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">")
+  SET(EMGUCV_POST_PROCESS_BINARY "")
   IF(EMGU_SIGN_FOUND AND WIN32)
     file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
 	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
     SET(EMGUCV_POST_PROCESS_BINARY "${EMGUCV_POST_PROCESS_BINARY}
-    <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-	<MakeDir Directories=\"$(OutputPath)\\signed\"/>
-    <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-	</Target>")
+    <Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">
+        <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
+        <MakeDir Directories=\"$(OutputPath)\\signed\"/>
+        <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
+    </Target>")
   ENDIF()
   #SET(EMGUCV_IOS_POST_PROCESS_BINARY "${EMGUCV_POST_PROCESS_BINARY}")
   
