@@ -5,20 +5,20 @@
 IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
   IF (DOTNET_FOUND)
     #IF(WIN32 AND (MSVC_VERSION GREATER 1900)) #need MSVC to be at least 2017
-    PROJECT(Emgu.CV.Platform.NetStandard)
+    PROJECT(Emgu.CV)
     #SET(EXTRA_MSBUILD_FLAGS "")
-    #IF(WIN32)
+    
     SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
+    
+    #IF (NOT (WIN32 OR APPLE))
+    #  #LINUX
+    #  SET(EXTRA_BUILD_FLAGS ${EXTRA_BUILD_FLAGS} "/p:TargetFrameworks=\"netstandard2.0\"")
     #ENDIF()
     
     #IF (APPLE AND NOT ${CMAKE_APPLE_SILICON_PROCESSOR})
       BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform.NetStandard.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
     #ELSE()
     #  BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Platform.NetStandard" "${EXTRA_MSBUILD_FLAGS}" ALL)
-    #ENDIF()
-
-    #IF (EMGU_SIGN_FOUND)
-    #  EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.dll)
     #ENDIF()
 
     INSTALL(

@@ -27,8 +27,8 @@ IF ( (TARGET Emgu.CV.Platform.NetStandard)
 
   ADD_DEPENDENCIES(${PROJECT_NAME} cvextern)
   
-  IF (TARGET Emgu.CV.nuget)
-    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.nuget)
+  IF (TARGET Emgu.CV)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV)
   ENDIF()
 
 ENDIF()

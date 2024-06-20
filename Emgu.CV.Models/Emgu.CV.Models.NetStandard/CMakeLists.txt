@@ -33,9 +33,11 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
     ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.Models.xml
     ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.Models.dll 
     DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
-    COMPONENT emgucv_binary)	  
-  
-  ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard)  
+    COMPONENT emgucv_binary)
+    
+  IF (TARGET Emgu.CV)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV)  
+  ENDIF()
   
   INSTALL(
     DIRECTORY
