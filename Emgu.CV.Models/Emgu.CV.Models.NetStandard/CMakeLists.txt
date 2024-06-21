@@ -5,7 +5,9 @@
 IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
   #IF (DOTNET_FOUND AND NOT (HAVE_IOS_ONLY))
   #IF(WIN32 AND (MSVC_VERSION GREATER 1900)) #need MSVC to be at least 2017
-  PROJECT(Emgu.CV.Models.NetStandard)
+  
+  PROJECT(Emgu.CV.Models)
+  
   #SET(EXTRA_MSBUILD_FLAGS "")
   #IF(WIN32)
   #  SET(EXTRA_BUILD_FLAGS "/p:Platform=\"Any CPU\"")
@@ -24,14 +26,9 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
     MESSAGE(FATAL_ERROR "dotnet command not found, unable to build Emgu.CV.Models.NetStandard project")
   ENDIF()
   
-  #IF (EMGU_SIGN_FOUND)
-  #  EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.Models.dll)
-  #ENDIF()
-  
   INSTALL(
-    FILES 
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.Models.xml
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/Emgu.CV.Models.dll 
+    DIRECTORY 
+    ${LIBRARY_OUTPUT_PATH}/Build/Emgu.CV.Models
     DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
     COMPONENT emgucv_binary)
     

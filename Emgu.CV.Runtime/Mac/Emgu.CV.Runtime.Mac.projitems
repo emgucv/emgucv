@@ -12,7 +12,7 @@
     <EmguCVMacBinaryDir>..\..\libs\runtimes\osx\native</EmguCVMacBinaryDir>
   </PropertyGroup>
   <PropertyGroup>
-    <EmguCVMacLinkTarget>Xamarin.Mac</EmguCVMacLinkTarget>
+    <EmguCVMacLinkTarget>Mac OS</EmguCVMacLinkTarget>
     <EmguCVMacNativeFile>$(EmguCVMacBinaryDir)\libcvextern.dylib</EmguCVMacNativeFile>
     <EmguCVMacErrorMessage Condition="!Exists('$(MSBuildThisFileDirectory)$(EmguCVMacNativeFile)')">This package do not contain necessary binary for $(EmguCVMacLinkTarget). Missing $(MSBuildThisFileDirectory)$(EmguCVMacNativeFile). PInvoke may fail on Mac OS.</EmguCVMacErrorMessage>
     <EmguCVMacDeployMessage Condition="Exists('$(MSBuildThisFileDirectory)$(EmguCVMacNativeFile)')">$(EmguCVMacDeployMessage)MacOS </EmguCVMacDeployMessage>
