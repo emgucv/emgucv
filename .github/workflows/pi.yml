@@ -26,7 +26,7 @@ jobs:
     #- name: Build Emgu CV package binary
     #  run: make package
     #  working-directory: ${{ github.workspace }}/platforms/raspberry_pi_os/build/
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: emgucv-debian-arm-zip-package
         path: ${{ github.workspace }}/platforms/debian/bookworm/build/*.zip

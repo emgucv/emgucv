@@ -30,7 +30,7 @@ jobs:
       with:
         name: emgucv-ubuntu-zip-package
         path: ${{ github.workspace }}/platforms/ubuntu/22.04/build/*.zip
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: emgucv-ubuntu-nuget-package
         path: ${{ github.workspace }}/platforms/nuget/*.nupkg 
