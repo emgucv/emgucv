@@ -3,7 +3,7 @@
 # --------------------------------------------------------
 
 ADD_SUBDIRECTORY(Core)
-ADD_SUBDIRECTORY(Framework)
+#ADD_SUBDIRECTORY(Framework)
 
 INSTALL(
   DIRECTORY

@@ -30,7 +30,6 @@ SET(GEOTIFF_ARCHIVE_TARGET geotiff_archive)
 
 ##############################################################################
 # CMake settings
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6.0)
 
 SET(CMAKE_COLOR_MAKEFILE ON)
 
