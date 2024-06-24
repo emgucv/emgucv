@@ -11,6 +11,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.16)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+SET(EMGU_CV_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 INCLUDE (CheckPlatform)
 
 #IF( (WIN32 AND (NOT NETFX_CORE)) OR IS_UBUNTU OR (APPLE AND ("${IOS_ARCH}" STREQUAL "")) )
@@ -1336,8 +1337,8 @@ ENDIF()
 
 SET(EMGUCV_MAUI_MACOS_NUGET_FILE_LIST "")
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/Mac/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/Mac/docs/README.md)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/Mac/Directory.Build.props)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/Mac/docs/README.md)
 
 SET(EMGUCV_UWP_NUGET_FILE_LIST "")
 IF(HAVE_WINSTORE_10_X86)
@@ -1447,12 +1448,12 @@ SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
 
 
 # find the System.Text.Json nuget pacakge version
-SET(EMGUCV_PLATFORM_NETSTANDARD_PROJECT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/Emgu.CV.NetStandard/Emgu.CV.csproj")
+SET(EMGUCV_PLATFORM_NETSTANDARD_PROJECT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/Emgu.CV.csproj")
 file(STRINGS "${EMGUCV_PLATFORM_NETSTANDARD_PROJECT_FILE}" EMGUCV_PLATFORM_NETSTANDARD_PROJECT_SYSTEM_TEXT_JSON REGEX "System.Text.Json" )
 string(REGEX REPLACE ".+Version=\"([0-9]+.[0-9]+.[0-9]+)\".*" "\\1" SYSTEM_TEXT_JSON_VERSION "${EMGUCV_PLATFORM_NETSTANDARD_PROJECT_SYSTEM_TEXT_JSON}")
 MESSAGE(STATUS "System.Text.Json = ${SYSTEM_TEXT_JSON_VERSION}")
 # find the System.Drawing.Common nuget package version
-SET(EMGUCV_MODELS_NETSTANDARD_PROJECT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models/Emgu.CV.Models.NetStandard/Emgu.CV.Models.NetStandard.csproj")
+SET(EMGUCV_MODELS_NETSTANDARD_PROJECT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models/NetStandard/Emgu.CV.Models.csproj")
 file(STRINGS "${EMGUCV_MODELS_NETSTANDARD_PROJECT_FILE}" EMGUCV_MODELS_NETSTANDARD_PROJECT_SYSTEM_DRAWING_COMMON REGEX "System.Drawing.Common" )
 string(REGEX REPLACE ".+Version=\"([0-9]+.[0-9]+.[0-9]+)\".*" "\\1" SYSTEM_DRAWING_COMMON_VERSION "${EMGUCV_MODELS_NETSTANDARD_PROJECT_SYSTEM_DRAWING_COMMON}")
 MESSAGE(STATUS "System.Drawing.Common = ${SYSTEM_DRAWING_COMMON_VERSION}")
@@ -1897,8 +1898,8 @@ IF(HAVE_ANDROID)
   </Target>
 	")
   ENDIF()
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/Android/Directory.Build.props)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/Android/docs/README.md)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/Android/Directory.Build.props)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/Android/docs/README.md)
 ENDIF()
 
 IF(HAVE_IOS)  
@@ -1909,8 +1910,8 @@ IF(HAVE_IOS)
     <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
     <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
   </Target>")  
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/iOS/Directory.Build.props)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/iOS/docs/README.md)  
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/iOS/Directory.Build.props)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/iOS/docs/README.md)  
 ENDIF()
 
 IF(HAVE_MACOS)
@@ -1991,7 +1992,7 @@ IF(HAVE_MAUI)
     <Copy SourceFiles=\"$(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\\$(TargetFramework)\" ContinueOnError=\"true\" />
   </Target>")    
   
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.Maui.UI.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Maui/UI/Directory.Build.props)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.Maui.UI.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/UI/Directory.Build.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui/README.md)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui/Package.nuspec)
 ENDIF()
@@ -2031,8 +2032,8 @@ IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_ARM64)
   	")
   ENDIF()
   
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.UI/Directory.Build.props)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.UI/docs/README.md)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/Directory.Build.props)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/docs/README.md)
 ENDIF()
 
 IF(HAVE_LINUX_ARM)
@@ -2085,12 +2086,12 @@ ENDIF()
   ENDIF()  
 
 #generate nuget config file for Emgu.CV 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/Emgu.CV.NetStandard/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/Emgu.CV.NetStandard/docs/README.md)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/Directory.Build.props)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/docs/README.md)
 
 #generate nuget config file for Emgu.CV.Models
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Models.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models/Emgu.CV.Models.NetStandard/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Models.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models/Emgu.CV.Models.NetStandard/docs/README.md)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Models.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models/NetStandard/Directory.Build.props)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Models.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models/NetStandard/docs/README.md)
 
 # Generate nuget config file for Emgu.CV.Bitmap
 # Sign and copy the binary
@@ -2289,7 +2290,7 @@ ADD_SUBDIRECTORY(Emgu.CV)
 ADD_SUBDIRECTORY(Emgu.CV.Bitmap)
 ADD_SUBDIRECTORY(Emgu.CV.Wpf)
 ADD_SUBDIRECTORY(Emgu.CV.WindowsUI)
-ADD_SUBDIRECTORY(Emgu.CV.Platform)
+ADD_SUBDIRECTORY(Emgu.CV.Maui)
 ADD_SUBDIRECTORY(Emgu.CV.Example)
 ADD_SUBDIRECTORY(Emgu.CV.Test)
 ADD_SUBDIRECTORY(Emgu.CV.Cuda)
@@ -3226,7 +3227,7 @@ ELSEIF (APPLE)
 ELSE() #LINUX
   SET(MONO_GACUTIL_EXEC "gacutil")
   #SET(LINUX_CONTROL_FILE_FOLDER "${CMAKE_CURRENT_SOURCE_DIR}/cmake/linux")
-  SET(EMGUCV_MANAGED_DLLS "Emgu.CV.Platform.NetStandard" "Emgu.CV.Platform.NetCore")
+  SET(EMGUCV_MANAGED_DLLS "Emgu.CV")
   
   #SET(CLIFILELIST_CONTENT "")
   #FOREACH(MANAGED_DLL ${EMGUCV_MANAGED_DLLS})

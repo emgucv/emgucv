@@ -2,12 +2,12 @@
 #  Copyright (C) 2004-2024 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-ADD_SUBDIRECTORY(Emgu.CV.UI)
+ADD_SUBDIRECTORY(Emgu.CV.WindowsUI)
 
 INSTALL(
   DIRECTORY
   ${CMAKE_CURRENT_SOURCE_DIR}
-  DESTINATION Emgu.CV.Platform
+  DESTINATION .
   COMPONENT emgucv_source
   FILES_MATCHING 
   PATTERN "*.cs"

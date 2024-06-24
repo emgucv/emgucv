@@ -60,7 +60,7 @@
 		<DefineConstants>$(DefineConstants);TRACE;NETSTANDARD</DefineConstants>
 	</PropertyGroup>
 
-	<Import Project="..\..\Emgu.CV\Emgu.CV.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV\Emgu.CV.projitems')" />
+	<Import Project="..\..\Emgu.CV\Emgu.CV.Shared.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV\Emgu.CV.Shared.projitems')" />
 	<Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" Condition="Exists('..\..\Emgu.Util\Emgu.Util.projitems')" />
 	<Import Project="..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems')" />
 	<Import Project="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems')" />

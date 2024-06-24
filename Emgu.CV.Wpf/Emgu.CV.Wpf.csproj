@@ -43,7 +43,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj" />
-    <ProjectReference Include="..\Emgu.CV\Emgu.CV.NetStandard\Emgu.CV.csproj" />
+    <ProjectReference Include="..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
   </ItemGroup>
 
 <!--

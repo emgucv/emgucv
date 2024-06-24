@@ -3,7 +3,10 @@
   <!-- https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory?view=vs-2022 -->
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
-  <PropertyGroup>
+  <PropertyGroup
+  
+    <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath(${EMGU_CV_SOURCE_DIR}))</EmguCVProjectRoot>
+	
     <PackageId>${EMGUCV_MAUI_MACOS_NUGET_ID}</PackageId>
 	<title>${EMGUCV_MAUI_MACOS_NUGET_TITLE}</title>
     <version>${CPACK_PACKAGE_VERSION}</version>
@@ -22,7 +25,7 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
 	<RepositoryUrl>https://github.com/emgucv/emgucv</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 	<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageOutputPath>..\..\..\platforms\nuget</PackageOutputPath>
+    <PackageOutputPath>$([System.IO.Path]::GetFullPath($(EmguCVProjectRoot)\platforms\nuget))</PackageOutputPath>
 	<PackageTags>opencv;emgu;emgucv;ai;image;macos;maui</PackageTags>
     <PackageProjectUrl>${NUGET_EMGU_URL}</PackageProjectUrl>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
@@ -30,11 +33,11 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
   </PropertyGroup>
  
     <ItemGroup>
-      <None Include="..\..\..\LICENSE.txt">
+      <None Include="$(EmguCVProjectRoot)\LICENSE.txt">
         <Pack>True</Pack>
         <PackagePath></PackagePath>
       </None>
-      <None Include="..\..\..\miscellaneous\nuget_icon.png">
+      <None Include="$(EmguCVProjectRoot)\miscellaneous\nuget_icon.png">
         <Pack>True</Pack>
         <PackagePath></PackagePath>
       </None>
@@ -45,14 +48,14 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
         <PackagePath>docs\</PackagePath>
       </None>
     </ItemGroup>
-	<ItemGroup Condition="Exists('..\..\..\libs\iOS\catalyst_arm64_version_string.inc')">
-	  <None Include="..\..\..\libs\iOS\catalyst_arm64_version_string.inc">
+	<ItemGroup Condition="Exists('$(EmguCVProjectRoot)\libs\iOS\catalyst_arm64_version_string.inc')">
+	  <None Include="$(EmguCVProjectRoot)\libs\iOS\catalyst_arm64_version_string.inc">
         <Pack>True</Pack>
         <PackagePath>docs\</PackagePath>
       </None>
 	</ItemGroup>
-	<ItemGroup Condition="Exists('..\..\..\libs\iOS\catalyst_x86_64_version_string.inc')">
-	  <None Include="..\..\..\libs\iOS\catalyst_x86_64_version_string.inc">
+	<ItemGroup Condition="Exists('$(EmguCVProjectRoot)\libs\iOS\catalyst_x86_64_version_string.inc')">
+	  <None Include="$(EmguCVProjectRoot)\libs\iOS\catalyst_x86_64_version_string.inc">
         <Pack>True</Pack>
         <PackagePath>docs\</PackagePath>
       </None>

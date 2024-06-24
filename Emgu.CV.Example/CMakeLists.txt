@@ -325,49 +325,48 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       )
   ENDIF()
   
-  IF(HAVE_IOS)
-    INSTALL(
-      DIRECTORY
-      "${CMAKE_CURRENT_SOURCE_DIR}/iOS/"
-      DESTINATION Emgu.CV.Example/iOS/
-      COMPONENT emgucv_example_source
-      FILES_MATCHING 
-      PATTERN "*.cs"
-      PATTERN "*.csproj"
-      PATTERN "*.axml"
-      PATTERN "*.xml"
-      PATTERN "*.txt"
-      PATTERN "*.png"
-      PATTERN "*.dll"
-      PATTERN "*.plist"
-      PATTERN ".git" EXCLUDE
-      PATTERN "bin" EXCLUDE
-      PATTERN "obj" EXCLUDE
-      )
-  ENDIF()
-  IF(HAVE_MACOS)
-    INSTALL(
-      DIRECTORY
-      "${CMAKE_CURRENT_SOURCE_DIR}/Mac/"
-      DESTINATION Emgu.CV.Example/Mac/
-      COMPONENT emgucv_example_source
-      FILES_MATCHING 
-      PATTERN "*.cs"
-      PATTERN "*.csproj"
-      PATTERN "*.axml"
-      PATTERN "*.xml"
-      PATTERN "*.txt"
-      PATTERN "*.png"
-      PATTERN "*.dll"
-      PATTERN "*.plist"
-      PATTERN "*.json"
-      PATTERN "*.storyboard"
-      PATTERN ".git" EXCLUDE
-      PATTERN "bin" EXCLUDE
-      PATTERN "obj" EXCLUDE
-      )
-
-  ENDIF()
+#  IF(HAVE_IOS)
+#    INSTALL(
+#      DIRECTORY
+#      "${CMAKE_CURRENT_SOURCE_DIR}/iOS/"
+#      DESTINATION Emgu.CV.Example/iOS/
+#      COMPONENT emgucv_example_source
+#      FILES_MATCHING 
+#      PATTERN "*.cs"
+#      PATTERN "*.csproj"
+#      PATTERN "*.axml"
+#      PATTERN "*.xml"
+#      PATTERN "*.txt"
+#      PATTERN "*.png"
+#      PATTERN "*.dll"
+#      PATTERN "*.plist"
+#      PATTERN ".git" EXCLUDE
+#      PATTERN "bin" EXCLUDE
+#      PATTERN "obj" EXCLUDE
+#      )
+#  ENDIF()
+#  IF(HAVE_MACOS)
+#    INSTALL(
+#      DIRECTORY
+#      "${CMAKE_CURRENT_SOURCE_DIR}/Mac/"
+#      DESTINATION Emgu.CV.Example/Mac/
+#      COMPONENT emgucv_example_source
+#      FILES_MATCHING 
+#      PATTERN "*.cs"
+#      PATTERN "*.csproj"
+#      PATTERN "*.axml"
+#      PATTERN "*.xml"
+#      PATTERN "*.txt"
+#      PATTERN "*.png"
+#      PATTERN "*.dll"
+#      PATTERN "*.plist"
+#      PATTERN "*.json"
+#      PATTERN "*.storyboard"
+#      PATTERN ".git" EXCLUDE
+#      PATTERN "bin" EXCLUDE
+#      PATTERN "obj" EXCLUDE
+#      )
+#  ENDIF()
   
   IF(HAVE_WINSTORE_10)
     INSTALL(
@@ -434,8 +433,8 @@ IF(EMGU_CV_EXAMPLE_BUILD)
   
   IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_MACOS OR HAVE_LINUX_ARM OR HAVE_LINUX_X64 OR HAVE_LINUX_X86)
     add_subdirectory(HelloWorld)
-	add_subdirectory(BuildInfo.NetCore.Console)
-	add_subdirectory(DynamicImage.Asp.NetCore)
+	add_subdirectory(BuildInfo.Console)
+	add_subdirectory(DynamicImage.Asp.Net)
 	INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld/"
@@ -461,8 +460,8 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       )	
 	INSTALL(
       DIRECTORY
-      "${CMAKE_CURRENT_SOURCE_DIR}/BuildInfo.NetCore.Console/"
-      DESTINATION Emgu.CV.Example/BuildInfo.NetCore.Console/
+      "${CMAKE_CURRENT_SOURCE_DIR}/BuildInfo.Console/"
+      DESTINATION Emgu.CV.Example/BuildInfo.Console/
       COMPONENT emgucv_example_source
       FILES_MATCHING 
       PATTERN "*.cs"
@@ -484,8 +483,8 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       )	
     INSTALL(
       DIRECTORY
-      "${CMAKE_CURRENT_SOURCE_DIR}/DynamicImage.Asp.NetCore/"
-      DESTINATION Emgu.CV.Example/DynamicImage.Asp.NetCore/
+      "${CMAKE_CURRENT_SOURCE_DIR}/DynamicImage.Asp.Net/"
+      DESTINATION Emgu.CV.Example/DynamicImage.Asp.Net/
       COMPONENT emgucv_example_source
       FILES_MATCHING 
       PATTERN "*.cs"

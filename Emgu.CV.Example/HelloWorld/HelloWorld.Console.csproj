@@ -13,11 +13,11 @@
   <Import Project="..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.projitems" Label="Shared" />
 
   <Import Project="..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems" Label="Shared" />
-  
-  <!-- <Import Project="..\..\Emgu.CV.Runtime\RHEL\Emgu.CV.Runtime.RHEL.projitems" Label="Shared" /> -->
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
+    <ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
   </ItemGroup>
+  
+  <!-- <Import Project="..\..\Emgu.CV.Runtime\RHEL\Emgu.CV.Runtime.RHEL.projitems" Label="Shared" /> -->
 
 </Project>
