@@ -2136,8 +2136,8 @@ IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
   </Target>
 	")
 ENDIF()
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Bitmap.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Emgu.CV.Bitmap/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Bitmap.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Emgu.CV.Bitmap/docs/README.md)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Bitmap.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Bitmap/Directory.Build.props)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Bitmap.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Bitmap/docs/README.md)
 
 
 #generate nuget config file for Emgu.CV.Wpf
@@ -2303,6 +2303,7 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CvInvokeEntryPoints.cs.in ${CMA
 # ----------------------------------------------------------------------------
 ADD_SUBDIRECTORY(Emgu.Util)
 ADD_SUBDIRECTORY(Emgu.CV)
+ADD_SUBDIRECTORY(Emgu.CV.Bitmap)
 ADD_SUBDIRECTORY(Emgu.CV.Platform)
 ADD_SUBDIRECTORY(Emgu.CV.Example)
 ADD_SUBDIRECTORY(Emgu.CV.Test)

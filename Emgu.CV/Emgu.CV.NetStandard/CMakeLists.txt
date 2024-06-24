@@ -32,10 +32,10 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
     INSTALL(
       DIRECTORY
       ${CMAKE_CURRENT_SOURCE_DIR}
-      DESTINATION Emgu.CV.Platform
+      DESTINATION Emgu.CV
       COMPONENT emgucv_source
       FILES_MATCHING 
-      PATTERN "Emgu.CV.Platform.NetStandard.csproj"
+      PATTERN "Emgu.CV.csproj"
       PATTERN ".svn" EXCLUDE
       PATTERN "obj" EXCLUDE
       PATTERN "CMakeFiles" EXCLUDE
