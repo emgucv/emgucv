@@ -4,11 +4,11 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
 	<SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup>
-    <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</OpenCVBinaryDir>
+    <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\libs))</OpenCVBinaryDir>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -38,7 +38,7 @@
   </PropertyGroup>
   
   <ItemGroup>
-    <Compile Include="..\..\Emgu.CV.NativeImage\BitmapSourceExtension.cs" Link="BitmapSourceExtension.cs" />
+    <Compile Include="..\Emgu.CV.NativeImage\BitmapSourceExtension.cs" Link="BitmapSourceExtension.cs" />
   </ItemGroup>
 
   <ItemGroup>

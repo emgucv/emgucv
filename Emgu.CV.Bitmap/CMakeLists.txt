@@ -2,7 +2,8 @@
 #  Copyright (C) 2004-2024 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF (TARGET Emgu.CV.Platform.NetStandard)
+IF (TARGET Emgu.CV)
+  #MESSAGE(STATUS "......................... ANDROID: ${ANDROID};APPLE: ${APPLE}")
   IF (DOTNET_FOUND AND (NOT ANDROID) AND (NOT APPLE))
     #DO NOT build Emgu.CV.Bitmap for Android or APPLE
     PROJECT(Emgu.CV.Bitmap)

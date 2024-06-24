@@ -1519,62 +1519,45 @@ ${EMGUCV_BITMAP_NUGET_DEPENDENCY}
 SET(EMGUCV_WPF_NUGET_TITLE "WPF extension for Emgu CV")
 SET(EMGUCV_WPF_NUGET_SUMMARY "This package add extension method to convert BitmapSource to and from Emgu objects (e.g. Mat)")
 SET(EMGUCV_WPF_NUGET_FILE_LIST "")
-#SET(EMGUCV_WPF_NUGET_DEPENDENCY "")
-#SET(EMGUCV_WPF_NUGET_FILE_LIST "${EMGUCV_WPF_NUGET_FILE_LIST} 
-#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Wpf.dll\" target=\"lib\\netcoreapp3.1\" />
-#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Wpf.xml\" target=\"lib\\netcoreapp3.1\" />
-#    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-#    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-#	<file src=\"README.md\" target=\"docs\\\" />")
-#SET(EMGUCV_WPF_NUGET_DEPENDENCY "${EMGUCV_WPF_NUGET_DEPENDENCY} 
-#      <group targetFramework=\".NETCoreApp3.1\">
-#        <frameworkReference name=\"Microsoft.WindowsDesktop.App.WPF\" />
-#        <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
- #     </group>")
-#SET(EMGUCV_WPF_NUGET_DEPENDENCY "
-#	<dependencies>
-#${EMGUCV_WPF_NUGET_DEPENDENCY}
-#    </dependencies>")	
 	
-
 SET(EMGUCV_MODELS_NUGET_TITLE "Experimental component to help download, initialize and execute image processing/AI models.")
 SET(EMGUCV_MODELS_NUGET_SUMMARY "Experimental component to help download, initialize and execute image processing/AI models. This is under active development and API may change from time to time.")
 SET(EMGUCV_MODELS_NUGET_FILE_LIST "")
 SET(EMGUCV_MODELS_NUGET_DEPENDENCY "")
 
-IF (HAVE_IOS)
-  SET(EMGUCV_MODELS_NUGET_FILE_LIST "${EMGUCV_MODELS_NUGET_FILE_LIST} 
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
-	")
-  SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY}
-	  <group targetFramework=\"${EMGUCV_MAUI_MACOS_DST_FOLDER}\">
-        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-      </group>
-	  <group targetFramework=\"${EMGUCV_MAUI_IOS_DST_FOLDER}\">
-        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-      </group>")
-ENDIF()
+#IF (HAVE_IOS)
+  #SET(EMGUCV_MODELS_NUGET_FILE_LIST "${EMGUCV_MODELS_NUGET_FILE_LIST} 
+#	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
+#    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
+#	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
+#    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
+#	")
+#  SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY}
+#	  <group targetFramework=\"${EMGUCV_MAUI_MACOS_DST_FOLDER}\">
+#        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
+#        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+#      </group>
+#	  <group targetFramework=\"${EMGUCV_MAUI_IOS_DST_FOLDER}\">
+#        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
+#        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+#      </group>")
+#ENDIF()
 
-SET(EMGUCV_MODELS_NUGET_FILE_LIST "${EMGUCV_MODELS_NUGET_FILE_LIST} 
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Models.dll\" target=\"lib\\netstandard2.0\" />
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Models.xml\" target=\"lib\\netstandard2.0\" />
-    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-	<file src=\"README.md\" target=\"docs\\\" />")
-SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY} 
-      <group targetFramework=\".NETStandard2.0\">
-        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-      </group>")
-SET(EMGUCV_MODELS_NUGET_DEPENDENCY "
-	<dependencies>
-${EMGUCV_MODELS_NUGET_DEPENDENCY}
-    </dependencies>")
+#SET(EMGUCV_MODELS_NUGET_FILE_LIST "${EMGUCV_MODELS_NUGET_FILE_LIST} 
+#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Models.dll\" target=\"lib\\netstandard2.0\" />
+#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Models.xml\" target=\"lib\\netstandard2.0\" />
+#    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+#    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+#	<file src=\"README.md\" target=\"docs\\\" />")
+#SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY} 
+#      <group targetFramework=\".NETStandard2.0\">
+#        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
+#        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+#      </group>")
+#SET(EMGUCV_MODELS_NUGET_DEPENDENCY "
+#	<dependencies>
+#${EMGUCV_MODELS_NUGET_DEPENDENCY}
+#    </dependencies>")
 
 
 IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_ARM64)
@@ -2048,8 +2031,8 @@ IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_ARM64)
   	")
   ENDIF()
   
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/DotNet/Core/Directory.Build.props)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/DotNet/Core/docs/README.md)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.UI/Directory.Build.props)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.UI/docs/README.md)
 ENDIF()
 
 IF(HAVE_LINUX_ARM)
@@ -2141,8 +2124,8 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Bitmap.Package.README.m
 
 
 #generate nuget config file for Emgu.CV.Wpf
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Wpf.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Emgu.CV.Wpf/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Wpf.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Emgu.CV.Wpf/docs/README.md)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Wpf.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Wpf/Directory.Build.props)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Wpf.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Wpf/docs/README.md)
 
 # Generate nuget config file for Emgu.CV.Wpf
 # Sign and copy the binary
@@ -2304,6 +2287,8 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/CvInvokeEntryPoints.cs.in ${CMA
 ADD_SUBDIRECTORY(Emgu.Util)
 ADD_SUBDIRECTORY(Emgu.CV)
 ADD_SUBDIRECTORY(Emgu.CV.Bitmap)
+ADD_SUBDIRECTORY(Emgu.CV.Wpf)
+ADD_SUBDIRECTORY(Emgu.CV.WindowsUI)
 ADD_SUBDIRECTORY(Emgu.CV.Platform)
 ADD_SUBDIRECTORY(Emgu.CV.Example)
 ADD_SUBDIRECTORY(Emgu.CV.Test)
