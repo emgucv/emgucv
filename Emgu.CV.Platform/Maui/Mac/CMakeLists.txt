@@ -27,7 +27,7 @@ IF(HAVE_MAUI_MAC)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
     endif()
 
-    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.Platform.NetStandard)
+    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV)
     ENDIF()
 ENDIF()
 

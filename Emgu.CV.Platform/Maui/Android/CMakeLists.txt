@@ -23,7 +23,7 @@ IF(HAVE_ANDROID)
   if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
   endif() 
-  ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.Platform.NetStandard)
+  ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV)
   INSTALL(
     FILES 
     ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/${PROJECT_NAME}.xml
