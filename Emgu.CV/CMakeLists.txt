@@ -3,9 +3,6 @@
 # --------------------------------------------------------
 
 IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
-
-#PROJECT(Emgu.CV)
-
   INSTALL(
 	  DIRECTORY
 	  ${CMAKE_CURRENT_SOURCE_DIR}
@@ -23,5 +20,6 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
 	  PATTERN "${PROJECT_NAME}.dir" EXCLUDE
 	  PATTERN "*Unity*" EXCLUDE
 	)
-
 ENDIF()
+
+ADD_SUBDIRECTORY(Emgu.CV.NetStandard)
