@@ -18,16 +18,21 @@ IF (TARGET Emgu.CV.Platform.NetStandard)
 	BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Bitmap.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
 
     INSTALL(
-      FILES 
-      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.xml
-      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.dll 
+      DIRECTORY 
+      ${LIBRARY_OUTPUT_PATH}/Build/Emgu.CV.Bitmap
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
-      COMPONENT emgucv_binary)
+      COMPONENT emgucv_binary)	
+    #INSTALL(
+    #  FILES 
+    #  ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.xml
+    #  ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.dll 
+    #  DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
+    #  COMPONENT emgucv_binary)
   
     if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
     endif()
-    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV)
   ENDIF()
   
   INSTALL(

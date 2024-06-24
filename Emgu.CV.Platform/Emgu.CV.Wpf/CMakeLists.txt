@@ -27,7 +27,7 @@ IF (TARGET Emgu.CV.Platform.NetStandard)
     if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
     endif()
-    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard Emgu.CV.Bitmap)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV Emgu.CV.Bitmap)
   ENDIF()
   
   INSTALL(
