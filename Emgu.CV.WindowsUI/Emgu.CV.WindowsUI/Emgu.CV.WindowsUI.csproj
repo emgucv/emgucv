@@ -5,8 +5,8 @@
 	<UseWindowsForms>true</UseWindowsForms>
     <SignAssembly>true</SignAssembly>
 	<AssemblyName>Emgu.CV.UI</AssemblyName>
-    <AssemblyOriginatorKeyFile>..\..\..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
-	<OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\libs))</OpenCVBinaryDir>
+    <AssemblyOriginatorKeyFile>..\..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
+	<OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</OpenCVBinaryDir>
 	<OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
 	<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
 	<GenerateResourceUsePreserializedResources Condition="'$(TargetFramework)' == 'net472'">true</GenerateResourceUsePreserializedResources>
@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj" />
-    <ProjectReference Include="..\..\..\Emgu.CV\Emgu.CV.NetStandard\Emgu.CV.csproj" />
+    <ProjectReference Include="..\..\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj" />
+    <ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
   </ItemGroup>
   
   <ItemGroup>
@@ -32,5 +32,5 @@
   </Target>
   -->
   
-  <Import Project="..\Emgu.CV.Platform.Net.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.WindowsUI.Shared.projitems" Label="Shared" />
 </Project>

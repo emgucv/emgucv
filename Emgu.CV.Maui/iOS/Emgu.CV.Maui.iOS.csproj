@@ -9,7 +9,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <EmguCVIOSLinkTarget>MAUI IOS Library</EmguCVIOSLinkTarget>
-    <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\libs))</OpenCVBinaryDir>
+    <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</OpenCVBinaryDir>
     <EmguCVNativeIOSFramework>$(OpenCVBinaryDir)\iOS\libcvextern_ios.xcframework</EmguCVNativeIOSFramework> 
     <EmguCVNativeIOSBinary>$(OpenCVBinaryDir)\iOS\libcvextern_universal.a</EmguCVNativeIOSBinary>
     <EmguCVNativeIOSBinarySimulatorArm64>$(OpenCVBinaryDir)\iOS\libcvextern_simulator_arm64.a</EmguCVNativeIOSBinarySimulatorArm64>
@@ -31,9 +31,9 @@
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\CGImageExtension.cs" Link="CGImageExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\UIImageExtension.cs" Link="UIImageExtension.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\CIImageExtension.cs" Link="CIImageExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\Emgu.CV.NativeImage\CGImageExtension.cs" Link="CGImageExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\Emgu.CV.NativeImage\UIImageExtension.cs" Link="UIImageExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\Emgu.CV.NativeImage\CIImageExtension.cs" Link="CIImageExtension.cs" />
     
   </ItemGroup>
 
@@ -72,7 +72,7 @@
   </ItemGroup>
   
     <ItemGroup>
-      <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
+      <ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
     </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Message Condition="$(RuntimeIdentifier.Contains('iossimulator-arm64'))" Text="Building for ios simulator arm64" Importance="high" />

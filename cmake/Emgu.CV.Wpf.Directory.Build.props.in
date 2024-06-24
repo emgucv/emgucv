@@ -28,11 +28,11 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
  </PropertyGroup>
  
     <ItemGroup>
-      <None Include="..\..\LICENSE.txt">
+      <None Include="..\LICENSE.txt">
         <Pack>True</Pack>
         <PackagePath></PackagePath>
       </None>
-      <None Include="..\..\miscellaneous\nuget_icon.png">
+      <None Include="..\miscellaneous\nuget_icon.png">
         <Pack>True</Pack>
         <PackagePath></PackagePath>
       </None>

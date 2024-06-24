@@ -152,17 +152,21 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj">
-      <Project>{d6b040c1-5859-4ceb-9d67-a16b0077bad0}</Project>
-      <Name>Emgu.CV.Models.NetStandard</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj">
-      <Project>{25a31a95-4056-4d29-89c2-4498f6991046}</Project>
+    <ProjectReference Include="..\..\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj">
+      <Project>{5cbecb52-24d4-4041-a867-06234f6ea31d}</Project>
       <Name>Emgu.CV.Bitmap</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
-      <Project>{f8ccdef7-e79a-4fd5-8c0e-9290059c7dd6}</Project>
-      <Name>Emgu.CV.Platform.NetStandard</Name>
+    <ProjectReference Include="..\..\Emgu.CV.Models\NetStandard\Emgu.CV.Models.csproj">
+      <Project>{d2cd55f9-3a62-4911-819f-27389117122d}</Project>
+      <Name>Emgu.CV.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.csproj">
+      <Project>{e3469cb8-15f3-4704-83e5-37d23f356d01}</Project>
+      <Name>Emgu.CV.WindowsUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj">
+      <Project>{2b29ed44-b158-4bf4-8d0c-284cf1602513}</Project>
+      <Name>Emgu.CV</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems" Label="Shared" />

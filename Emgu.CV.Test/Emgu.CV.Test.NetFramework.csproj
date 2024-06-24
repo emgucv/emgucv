@@ -90,7 +90,7 @@
     <Compile Include="AutoTestSanity.cs" />
     <Compile Include="AutoTestUMat.cs" />
     <Compile Include="AutoTestVarious.cs" />
-	<Compile Include="AutoTestModels.cs" />
+    <Compile Include="AutoTestModels.cs" />
     <Compile Include="Class1.cs" />
     <Compile Include="EmguAssert.cs" />
     <Compile Include="Face.cs" />
@@ -314,24 +314,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj">
-      <Project>{4673685a-632f-46dd-a0fe-0a5ba76e9cad}</Project>
-      <Name>Emgu.CV.Models.NetStandard</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.Platform\DotNet\Framework\Emgu.CV.Platform.NetFramework.csproj">
-      <Project>{90e78bbf-c7fe-4d8e-ade1-75448e866fdb}</Project>
-      <Name>Emgu.CV.Platform.NetFramework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.Platform\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj">
-      <Project>{adde3586-3eb3-4806-b1b2-f9537d4e220d}</Project>
-      <Name>Emgu.CV.Bitmap</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
-      <Project>{9d2543b4-7b83-42bb-9e5b-755a30ea8241}</Project>
-      <Name>Emgu.CV.Platform.NetStandard</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="..\opencv_extra\testdata\dnn\bvlc_googlenet.prototxt">
       <Link>bvlc_googlenet.prototxt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -352,6 +334,24 @@
     <PackageReference Include="System.Drawing.Common">
       <Version>8.0.1</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj">
+      <Project>{d47e984d-7868-4af1-b781-358d6db1fdbb}</Project>
+      <Name>Emgu.CV.Bitmap</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV.Models\NetStandard\Emgu.CV.Models.csproj">
+      <Project>{4bb94fba-fe6d-4ab3-80eb-cbd5ce105c9b}</Project>
+      <Name>Emgu.CV.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.csproj">
+      <Project>{0a44fa9b-c897-4245-9a31-f2d8227e5ab3}</Project>
+      <Name>Emgu.CV.WindowsUI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Emgu.CV\NetStandard\Emgu.CV.csproj">
+      <Project>{bfcebe01-080a-45bb-bf62-b4cae70fccfc}</Project>
+      <Name>Emgu.CV</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems" Label="Shared" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
     <PropertyGroup>
-    <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\libs))</OpenCVBinaryDir>
+    <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</OpenCVBinaryDir>
   </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -98,12 +98,14 @@
       <Link>lib\x86_64\libcvextern.so</Link>
     </EmbeddedNativeLibrary>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
+  </ItemGroup>
+  <!--
     <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)\..\..\Android\*.cs" />
   </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
-    </ItemGroup>
+  -->
   <Target Name="EmguCVMauiAndroidPackageBuildImports" BeforeTargets="PrepareForBuild">
     <Warning Text="'$(EmguCVMauiAndroidErrorMessage)'" Condition="'$(EmguCVMauiAndroidErrorMessage)'!=''" />
     <Message Text="Emgu CV MAUI Android Compiling with $(EmguCVMauiAndroidDeployMessage)binary" Condition="'$(EmguCVMauiAndroidDeployMessage)'!=''" Importance="High" />
