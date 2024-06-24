@@ -1448,7 +1448,7 @@ SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
 
 
 # find the System.Text.Json nuget pacakge version
-SET(EMGUCV_PLATFORM_NETSTANDARD_PROJECT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/NetStandard/Emgu.CV.Platform.NetStandard.csproj")
+SET(EMGUCV_PLATFORM_NETSTANDARD_PROJECT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/Emgu.CV.NetStandard/Emgu.CV.csproj")
 file(STRINGS "${EMGUCV_PLATFORM_NETSTANDARD_PROJECT_FILE}" EMGUCV_PLATFORM_NETSTANDARD_PROJECT_SYSTEM_TEXT_JSON REGEX "System.Text.Json" )
 string(REGEX REPLACE ".+Version=\"([0-9]+.[0-9]+.[0-9]+)\".*" "\\1" SYSTEM_TEXT_JSON_VERSION "${EMGUCV_PLATFORM_NETSTANDARD_PROJECT_SYSTEM_TEXT_JSON}")
 MESSAGE(STATUS "System.Text.Json = ${SYSTEM_TEXT_JSON_VERSION}")
@@ -2089,8 +2089,6 @@ IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 	ENDIF()
 ENDIF()
 
-
-
 # Sign the binary
   SET(EMGUCV_POST_PROCESS_BINARY "")
   IF(EMGU_SIGN_FOUND AND WIN32)
@@ -2102,31 +2100,11 @@ ENDIF()
         <MakeDir Directories=\"$(OutputPath)\\signed\"/>
         <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
     </Target>")
-  ENDIF()
-  #SET(EMGUCV_IOS_POST_PROCESS_BINARY "${EMGUCV_POST_PROCESS_BINARY}")
-  
-  #SET(EMGUCV_POST_PROCESS_BINARY "${EMGUCV_POST_PROCESS_BINARY}
-  #  <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\" Importance=\"high\" />
-  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
-  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
-  #</Target>")
-  #SET(EMGUCV_IOS_POST_PROCESS_BINARY "${EMGUCV_IOS_POST_PROCESS_BINARY}
-  #  <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $([System.IO.Path]::Combine($(OpenCVBinaryDir),'iOS'))\" Importance=\"high\" />
-  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$([System.IO.Path]::Combine($(OpenCVBinaryDir),'iOS'))\" ContinueOnError=\"true\" />
-  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$([System.IO.Path]::Combine($(OpenCVBinaryDir),'iOS'))\" ContinueOnError=\"true\" />
-  #</Target>")  
-
-
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/NetStandard/Directory.Build.props)
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.IOS.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/NetStandard_iOS/Directory.Build.props)
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.IOS.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models/Emgu.CV.Models.IOS/Directory.Build.props)
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/DotNet/Core/Directory.Build.props)
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/DotNet/Framework/Directory.Build.props)
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Emgu.CV.Wpf/Directory.Build.props)
+  ENDIF()  
 
 #generate nuget config file for Emgu.CV 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/NetStandard/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/NetStandard/docs/README.md)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/Emgu.CV.NetStandard/Directory.Build.props)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/Emgu.CV.NetStandard/docs/README.md)
 
 #generate nuget config file for Emgu.CV.Models
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Models.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models/Emgu.CV.Models.NetStandard/Directory.Build.props)
