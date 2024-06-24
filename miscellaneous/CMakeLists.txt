@@ -23,7 +23,7 @@ ADD_CUSTOM_TARGET(
    COMMAND "${CMAKE_COMMAND}" -E tar "cfv" "${CMAKE_CURRENT_SOURCE_DIR}/../Help.zip" --format=zip "${CMAKE_CURRENT_SOURCE_DIR}/../Help"
    SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.html.shfbproj
 )
-ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetFramework Emgu.CV.Platform.NetCore)
+ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.UI)
 
 INSTALL(
   FILES

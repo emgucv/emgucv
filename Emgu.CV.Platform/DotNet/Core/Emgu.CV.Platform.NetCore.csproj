@@ -1,13 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFrameworks>net5.0-windows;netcoreapp3.1;net472</TargetFrameworks>
 	<UseWindowsForms>true</UseWindowsForms>
     <SignAssembly>true</SignAssembly>
+	<AssemblyName>Emgu.CV.UI</AssemblyName>
     <AssemblyOriginatorKeyFile>..\..\..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
 	<OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\libs))</OpenCVBinaryDir>
 	<OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
 	<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+	<GenerateResourceUsePreserializedResources Condition="'$(TargetFramework)' == 'net472'">true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +21,9 @@
     <ProjectReference Include="..\..\NetStandard\Emgu.CV.Platform.NetStandard.csproj" />
   </ItemGroup>
   
+  <ItemGroup>
+    <PackageReference Condition="'$(TargetFramework)' == 'net472'" Include="System.Resources.Extensions" Version="5.0.0" />
+  </ItemGroup>
   <!--
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
     <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to ..\..\..\libs" Importance="high" />

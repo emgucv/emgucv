@@ -1519,22 +1519,22 @@ ${EMGUCV_BITMAP_NUGET_DEPENDENCY}
 SET(EMGUCV_WPF_NUGET_TITLE "WPF extension for Emgu CV")
 SET(EMGUCV_WPF_NUGET_SUMMARY "This package add extension method to convert BitmapSource to and from Emgu objects (e.g. Mat)")
 SET(EMGUCV_WPF_NUGET_FILE_LIST "")
-SET(EMGUCV_WPF_NUGET_DEPENDENCY "")
-SET(EMGUCV_WPF_NUGET_FILE_LIST "${EMGUCV_WPF_NUGET_FILE_LIST} 
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Wpf.dll\" target=\"lib\\netcoreapp3.1\" />
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Wpf.xml\" target=\"lib\\netcoreapp3.1\" />
-    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-	<file src=\"README.md\" target=\"docs\\\" />")
-SET(EMGUCV_WPF_NUGET_DEPENDENCY "${EMGUCV_WPF_NUGET_DEPENDENCY} 
-      <group targetFramework=\".NETCoreApp3.1\">
-        <frameworkReference name=\"Microsoft.WindowsDesktop.App.WPF\" />
-        <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-      </group>")
-SET(EMGUCV_WPF_NUGET_DEPENDENCY "
-	<dependencies>
-${EMGUCV_WPF_NUGET_DEPENDENCY}
-    </dependencies>")	
+#SET(EMGUCV_WPF_NUGET_DEPENDENCY "")
+#SET(EMGUCV_WPF_NUGET_FILE_LIST "${EMGUCV_WPF_NUGET_FILE_LIST} 
+#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Wpf.dll\" target=\"lib\\netcoreapp3.1\" />
+#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Wpf.xml\" target=\"lib\\netcoreapp3.1\" />
+#    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+#    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+#	<file src=\"README.md\" target=\"docs\\\" />")
+#SET(EMGUCV_WPF_NUGET_DEPENDENCY "${EMGUCV_WPF_NUGET_DEPENDENCY} 
+#      <group targetFramework=\".NETCoreApp3.1\">
+#        <frameworkReference name=\"Microsoft.WindowsDesktop.App.WPF\" />
+#        <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+ #     </group>")
+#SET(EMGUCV_WPF_NUGET_DEPENDENCY "
+#	<dependencies>
+#${EMGUCV_WPF_NUGET_DEPENDENCY}
+#    </dependencies>")	
 	
 
 SET(EMGUCV_MODELS_NUGET_TITLE "Experimental component to help download, initialize and execute image processing/AI models.")
@@ -2034,8 +2034,22 @@ IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_ARM64)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/Package.nuspec)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/README.md)
   
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.UI/Package.nuspec)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.UI/README.md)
+  # Generate nuget config file for Emgu.CV.UI
+  # Sign and copy the binary
+  SET(EMGUCV_UI_POST_PROCESS_BINARY "")
+  IF(EMGU_SIGN_FOUND AND WIN32)
+    file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
+    file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
+    SET(EMGUCV_UI_POST_PROCESS_BINARY "<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">
+      <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
+  	<MakeDir Directories=\"$(OutputPath)\\signed\"/>
+      <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
+  	</Target>
+  	")
+  ENDIF()
+  
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/DotNet/Core/Directory.Build.props)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/DotNet/Core/docs/README.md)
 ENDIF()
 
 IF(HAVE_LINUX_ARM)
@@ -2105,9 +2119,9 @@ ENDIF()
 #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/NetStandard/Directory.Build.props)
 #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.IOS.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/NetStandard_iOS/Directory.Build.props)
 #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.IOS.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models/Emgu.CV.Models.IOS/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/DotNet/Core/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/DotNet/Framework/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Emgu.CV.Wpf/Directory.Build.props)
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/DotNet/Core/Directory.Build.props)
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/DotNet/Framework/Directory.Build.props)
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.NetStandard.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/Emgu.CV.Wpf/Directory.Build.props)
 
 #generate nuget config file for Emgu.CV 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Platform/NetStandard/Directory.Build.props)
