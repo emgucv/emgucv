@@ -7,7 +7,7 @@ IF(HAVE_MAUI_MAC)
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}
-    DESTINATION Emgu.CV.Platform/Maui
+    DESTINATION Emgu.CV.Maui
     COMPONENT emgucv_source
     FILES_MATCHING 
     PATTERN "*.cs"
@@ -19,7 +19,7 @@ IF(HAVE_MAUI_MAC)
     )
 	
   IF(APPLE)	
-    PROJECT(Emgu.CV.Platform.Maui.Mac)
+    PROJECT(Emgu.CV.Maui.Mac)
 	SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
     BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
         
@@ -32,11 +32,10 @@ IF(HAVE_MAUI_MAC)
 ENDIF()
 
 IF (HAVE_MAUI_MAC)
-    INSTALL(
-      FILES 
-      ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/Emgu.CV.Platform.Maui.Mac.xml
-      ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/Emgu.CV.Platform.Maui.Mac.dll 
+  INSTALL(
+      DIRECTORY 
+      ${LIBRARY_OUTPUT_PATH}/Build/Emgu.CV.Maui.Mac
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
-      COMPONENT emgucv_binary)
+      COMPONENT emgucv_binary)	
 ENDIF()
 

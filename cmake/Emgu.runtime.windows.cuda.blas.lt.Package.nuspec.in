@@ -17,7 +17,7 @@
 		${EMGU_CUDA_BLAS_LT_NUGET_DEPENDENCY}
     </dependencies>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
-    <tags>emgu cuda</tags>
+    <tags>native emgu cuda</tags>
   </metadata>
   <files>
     ${EMGU_CUDA_BLAS_LT_NUGET_FILE_LIST}

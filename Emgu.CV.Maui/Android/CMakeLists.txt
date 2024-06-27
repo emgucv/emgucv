@@ -3,10 +3,10 @@
 # --------------------------------------------------------
 
 IF(HAVE_ANDROID)
-  PROJECT(Emgu.CV.Platform.Maui.Android)
+  PROJECT(Emgu.CV.Maui.Android)
   INSTALL(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DESTINATION Emgu.CV.Platform/Maui
+    DESTINATION Emgu.CV.Maui
     COMPONENT emgucv_source
     FILES_MATCHING 
 	PATTERN "*.cs"
@@ -23,12 +23,15 @@ IF(HAVE_ANDROID)
   if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
   endif() 
+  
   ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV)
-  INSTALL(
-    FILES 
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/${PROJECT_NAME}.xml
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/${PROJECT_NAME}.dll 
-    DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
-    COMPONENT emgucv_binary)
+  
 ENDIF()
 
+IF(HAVE_MAUI_ANDROID)
+  INSTALL(
+      DIRECTORY 
+      ${LIBRARY_OUTPUT_PATH}/Build/Emgu.CV.Maui.Android
+      DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
+      COMPONENT emgucv_binary)	  
+ENDIF()

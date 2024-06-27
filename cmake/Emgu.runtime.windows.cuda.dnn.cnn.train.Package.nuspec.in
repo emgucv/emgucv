@@ -15,7 +15,7 @@
     <releaseNotes>This DNN v${EMGU_CUDNN_VERSION} for CUDA v${EMGU_CUDA_VERSION}.</releaseNotes>
 	${EMGU_CUDNN_CNN_TRAIN_NUGET_DEPENDENCY}
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
-    <tags>emgu cuda dnn</tags>
+    <tags>native emgu cuda dnn</tags>
   </metadata>
   <files>
 	${EMGU_CUDNN_CNN_TRAIN_NUGET_FILE_LIST}

@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2024 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF (TARGET Emgu.CV.Platform.NetStandard)
+IF (TARGET Emgu.CV)
   IF (DOTNET_FOUND AND WIN32)
     # Only build Emgu.CV.Wpf for Windows
     PROJECT(Emgu.CV.Wpf)
@@ -18,11 +18,10 @@ IF (TARGET Emgu.CV.Platform.NetStandard)
     #ENDIF()
 
     INSTALL(
-      FILES 
-      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.xml
-      ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.dll 
+      DIRECTORY 
+      ${LIBRARY_OUTPUT_PATH}/Build/Emgu.CV.Wpf
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
-      COMPONENT emgucv_binary)
+      COMPONENT emgucv_binary)	  
   
     if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
@@ -32,7 +31,7 @@ IF (TARGET Emgu.CV.Platform.NetStandard)
   
   INSTALL(
       DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-      DESTINATION Emgu.CV.Platform
+      DESTINATION Emgu.CV.Maui
       COMPONENT emgucv_source
       FILES_MATCHING 
       PATTERN "Emgu.CV.Wpf.csproj"
