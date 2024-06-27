@@ -223,13 +223,13 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV.Models\Emgu.CV.Models.NetStandard\Emgu.CV.Models.NetStandard.csproj">
-      <Project>{93c04c16-bf55-4b71-a352-484a31d1a1cf}</Project>
-      <Name>Emgu.CV.Models.NetStandard</Name>
+    <ProjectReference Include="..\..\Emgu.CV.Models\NetStandard\Emgu.CV.Models.csproj">
+      <Project>{2ec9bbec-8789-4c24-98b7-5ce310efb5aa}</Project>
+      <Name>Emgu.CV.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.Platform\NetStandard\Emgu.CV.Platform.NetStandard.csproj">
-      <Project>{8f605445-cf27-4750-8000-f1ec72f8d516}</Project>
-      <Name>Emgu.CV.Platform.NetStandard</Name>
+    <ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj">
+      <Project>{989eb97c-62f8-435f-a2ac-fe3d228ccd1c}</Project>
+      <Name>Emgu.CV</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
