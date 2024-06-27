@@ -3,7 +3,7 @@
   <!-- https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory?view=vs-2022 -->
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
-  <PropertyGroup
+  <PropertyGroup>
   
     <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath(${EMGU_CV_SOURCE_DIR}))</EmguCVProjectRoot>
 	
@@ -26,7 +26,7 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
     <RepositoryType>git</RepositoryType>
 	<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageOutputPath>$([System.IO.Path]::GetFullPath($(EmguCVProjectRoot)\platforms\nuget))</PackageOutputPath>
-	<PackageTags>opencv;emgu;emgucv;ai;image;macos;maui</PackageTags>
+	<PackageTags>native;opencv;emgu;emgucv;ai;image;macos;maui</PackageTags>
     <PackageProjectUrl>${NUGET_EMGU_URL}</PackageProjectUrl>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     

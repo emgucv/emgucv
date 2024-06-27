@@ -18,7 +18,7 @@ ${NUGET_EMGU_URL}/wiki/files/emgucv/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKA
     </releaseNotes>
 	${EMGUCV_DEBIAN_NUGET_DEPENDENCY}
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
-    <tags>opencv emgu emgucv ai image debian raspberry pi</tags>
+    <tags>native opencv emgu emgucv ai image debian raspberry pi</tags>
   </metadata>
   <files>
   ${EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST}

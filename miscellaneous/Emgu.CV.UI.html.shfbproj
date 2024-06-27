@@ -31,11 +31,11 @@
     </BuildLogFile>
     <HelpFileFormat>HtmlHelp1, Website</HelpFileFormat>
     <CppCommentsFixup>False</CppCommentsFixup>
-    <FrameworkVersion>.NET Framework 4.6.2</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.7.2</FrameworkVersion>
     <HelpTitle>Emgu CV Library Documentation</HelpTitle>
     <PresentationStyle>VS2013</PresentationStyle>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\Emgu.CV.Platform\DotNet\Framework\Emgu.CV.Platform.NetFramework.csproj" />
+      <DocumentationSource sourceFile="..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.csproj" />
     </DocumentationSources>
     <PlugInConfigurations>
     </PlugInConfigurations>

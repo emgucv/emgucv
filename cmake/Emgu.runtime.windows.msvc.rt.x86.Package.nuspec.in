@@ -16,7 +16,7 @@
     <releaseNotes>This is the x86 MSVC runtime v${MSVC_TOOLSET_VERSION} built by ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV.   	        
     </releaseNotes>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
-    <tags>emgu</tags>
+    <tags>native emgu msvc</tags>
   </metadata>
   <files>
   ${EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST}
