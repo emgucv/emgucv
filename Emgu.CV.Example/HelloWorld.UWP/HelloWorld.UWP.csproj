@@ -163,6 +163,12 @@
       <Version>6.2.14</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj">
+      <Project>{04f3ae12-538f-4023-a652-c6d4ff738f97}</Project>
+      <Name>Emgu.CV</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\..\Emgu.CV.Runtime\UWP\Emgu.CV.Runtime.UWP.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
