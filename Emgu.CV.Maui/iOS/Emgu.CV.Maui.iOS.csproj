@@ -6,6 +6,7 @@
     <IsBindingProject>true</IsBindingProject>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <NoBindingEmbedding>false</NoBindingEmbedding>
+	<AssemblyName>Emgu.CV.runtime.maui.ios</AssemblyName>
   </PropertyGroup>
   <PropertyGroup>
     <EmguCVIOSLinkTarget>MAUI IOS Library</EmguCVIOSLinkTarget>

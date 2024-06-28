@@ -2,5 +2,58 @@
 <Project>
   <!-- https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory?view=vs-2022 -->
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+  
+    <PropertyGroup>
+    <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath(${EMGU_CV_SOURCE_DIR}))</EmguCVProjectRoot>
+	
+    <PackageId>${EMGUCV_MAUI_NUGET_ID}</PackageId>
+	
+	<title>${EMGUCV_MAUI_NUGET_TITLE}</title>
+    <version>${CPACK_PACKAGE_VERSION}</version>
+    <authors>${CPACK_PACKAGE_VENDOR}</authors>
+    <owners>${CPACK_PACKAGE_VENDOR}</owners>
+	<summary>Runtime package of Emgu CV for MAUI</summary>
+    <Description>This package contains the native runtime of Emgu CV for MAUI</Description>
+    <PackageReleaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. For online documentation please visit
+${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html    	        
+</PackageReleaseNotes>
+	
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	<PackageIcon>nuget_icon.png</PackageIcon>
+    <PackageReadmeFile>docs/README.md</PackageReadmeFile>
+	<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+	<RepositoryUrl>https://github.com/emgucv/emgucv</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+	<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageOutputPath>$([System.IO.Path]::GetFullPath($(EmguCVProjectRoot)\platforms\nuget))</PackageOutputPath>
+	<PackageTags>opencv;emgu;emgucv;ai;image;maui</PackageTags>
+    <PackageProjectUrl>${NUGET_EMGU_URL}</PackageProjectUrl>
+    <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
+    
+	<!-- Add local repository path to RestoreSources -->
+    <RestoreSources>$(RestoreSources);$(PackageOutputPath)</RestoreSources>
+	
+  </PropertyGroup>
+  
+  ${EMGUCV_MAUI_PACKAGE_REFERENCE}
+
+  
+     <ItemGroup>
+      <None Include="$(EmguCVProjectRoot)\LICENSE.txt">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+      </None>
+      <None Include="$(EmguCVProjectRoot)\miscellaneous\nuget_icon.png">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
+      </None>
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="docs\README.md">
+        <Pack>True</Pack>
+        <PackagePath>docs\</PackagePath>
+      </None>
+    </ItemGroup>
+	
   ${EMGUCV_MAUI_POST_PROCESS_BINARY}
 </Project>
