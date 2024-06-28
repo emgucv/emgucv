@@ -1879,11 +1879,12 @@ IF(HAVE_ANDROID)
     <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
 	")
   ENDIF()
-  SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY}
-    <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\" Importance=\"high\" />
-    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
-    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
-  </Target>")    
+  SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY} </Target>")    
+  #SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY}
+  #  <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\" Importance=\"high\" />
+  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
+  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
+  #</Target>")    
   
   # Sign the nuget package
   SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET "")
@@ -1904,12 +1905,13 @@ ENDIF()
 
 IF(HAVE_IOS)  
   SET(EMGUCV_MAUI_IOS_NUGET_TITLE "Emgu CV for MAUI iOS Native Runtime")	
-  SET(EMGUCV_MAUI_IOS_POST_PROCESS_BINARY "${EMGUCV_MAUI_IOS_POST_PROCESS_BINARY}
-  <Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">
-    <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\" Importance=\"high\" />
-    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
-    <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
-  </Target>")  
+  SET(EMGUCV_MAUI_IOS_POST_PROCESS_BINARY "${EMGUCV_MAUI_IOS_POST_PROCESS_BINARY}")
+  #SET(EMGUCV_MAUI_IOS_POST_PROCESS_BINARY "${EMGUCV_MAUI_IOS_POST_PROCESS_BINARY}
+  #<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">
+  #  <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\" Importance=\"high\" />
+  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
+  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
+  #</Target>")  
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/iOS/Directory.Build.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/iOS/docs/README.md)  
 ENDIF()
