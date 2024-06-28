@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2023 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF ( (TARGET Emgu.CV.Platform.NetStandard)
+IF ( (TARGET Emgu.CV)
   AND (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_ARM64) 
   AND (NOT ("${EMGU_WINDOWS_MSVCRT_VERSION}" STREQUAL "")) )
   
@@ -56,12 +56,12 @@ IF ( (TARGET Emgu.CV.Platform.NetStandard)
   	ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.runtime.windows.msvc.rt.arm64.nuget)
   ENDIF()
 
-  IF (TARGET Emgu.CV.Platform.NetFramework)
-    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetFramework)
-  ENDIF()
+#  IF (TARGET Emgu.CV.Platform.NetFramework)
+#    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetFramework)
+#  ENDIF()
 
-  IF (TARGET Emgu.CV.Platform.NetCore)
-    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetCore)
-  ENDIF()
+#  IF (TARGET Emgu.CV.Platform.NetCore)
+#    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetCore)
+#  ENDIF()
 
 ENDIF()
