@@ -1927,17 +1927,17 @@ IF(HAVE_MAUI)
   SET(EMGUCV_MAUI_NUGET_FILE_LIST "	
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 	
-	<file src=\"..\\..\\..\\libs\\${EMGUCV_MAUI_ANDROID_SRC_FOLDER}\\Emgu.CV.Platform.Maui.UI.dll\" target=\"lib\\${EMGUCV_MAUI_ANDROID_DST_FOLDER}\" />
-    <file src=\"..\\..\\..\\libs\\${EMGUCV_MAUI_ANDROID_SRC_FOLDER}\\Emgu.CV.Platform.Maui.UI.xml\" target=\"lib\\${EMGUCV_MAUI_ANDROID_DST_FOLDER}\" />
+	<file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_ANDROID_SRC_FOLDER}\\Emgu.CV.Maui.UI.dll\" target=\"lib\\${EMGUCV_MAUI_ANDROID_DST_FOLDER}\" />
+    <file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_ANDROID_SRC_FOLDER}\\Emgu.CV.Maui.UI.xml\" target=\"lib\\${EMGUCV_MAUI_ANDROID_DST_FOLDER}\" />
 	
-	<file src=\"..\\..\\..\\libs\\${EMGUCV_MAUI_IOS_SRC_FOLDER}\\Emgu.CV.Platform.Maui.UI.dll\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
-    <file src=\"..\\..\\..\\libs\\${EMGUCV_MAUI_IOS_SRC_FOLDER}\\Emgu.CV.Platform.Maui.UI.xml\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
+	<file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_IOS_SRC_FOLDER}\\Emgu.CV.Maui.UI.dll\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
+    <file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_IOS_SRC_FOLDER}\\Emgu.CV.Maui.UI.xml\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
 	
-	<file src=\"..\\..\\..\\libs\\${EMGUCV_MAUI_MACOS_SRC_FOLDER}\\Emgu.CV.Platform.Maui.UI.dll\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
-    <file src=\"..\\..\\..\\libs\\${EMGUCV_MAUI_MACOS_SRC_FOLDER}\\Emgu.CV.Platform.Maui.UI.xml\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
+	<file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_MACOS_SRC_FOLDER}\\Emgu.CV.Maui.UI.dll\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
+    <file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_MACOS_SRC_FOLDER}\\Emgu.CV.Maui.UI.xml\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
 	
-	<file src=\"..\\..\\..\\libs\\${EMGUCV_MAUI_WINDOWS_SRC_FOLDER}\\Emgu.CV.Platform.Maui.UI.dll\" target=\"lib\\${EMGUCV_MAUI_WINDOWS_DST_FOLDER}\" />
-    <file src=\"..\\..\\..\\libs\\${EMGUCV_MAUI_WINDOWS_SRC_FOLDER}\\Emgu.CV.Platform.Maui.UI.xml\" target=\"lib\\${EMGUCV_MAUI_WINDOWS_DST_FOLDER}\" />
+	<file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_WINDOWS_SRC_FOLDER}\\Emgu.CV.Maui.UI.dll\" target=\"lib\\${EMGUCV_MAUI_WINDOWS_DST_FOLDER}\" />
+    <file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_WINDOWS_SRC_FOLDER}\\Emgu.CV.Maui.UI.xml\" target=\"lib\\${EMGUCV_MAUI_WINDOWS_DST_FOLDER}\" />
 	
 	<file src=\"README.md\" target=\"docs\\\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
@@ -1982,18 +1982,18 @@ IF(HAVE_MAUI)
     file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
 	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
     SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY}
-    <Message Text=\"Signing $(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-	<MakeDir Directories=\"$(MSBuildThisFileDirectory)$(OutputPath)\\signed\"/>
-    <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).dll\" \"$(MSBuildThisFileDirectory)$(OutputPath)\\signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(MSBuildThisFileDirectory)$(OutputPath)\" />
+    <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
+	<MakeDir Directories=\"$(OutputPath)\\signed\"/>
+    <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)\\signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
 	")
   ENDIF()
-  SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY}
-    <Message Text=\"Copying $(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).dll, $(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\\$(TargetFramework)\" Importance=\"high\" />
-    <Copy SourceFiles=\"$(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\\$(TargetFramework)\" ContinueOnError=\"true\" />
-    <Copy SourceFiles=\"$(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\\$(TargetFramework)\" ContinueOnError=\"true\" />
-  </Target>")    
+  #SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY}
+  #  <Message Text=\"Copying $(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).dll, $(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\\$(TargetFramework)\" Importance=\"high\" />
+  #  <Copy SourceFiles=\"$(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\\$(TargetFramework)\" ContinueOnError=\"true\" />
+  #  <Copy SourceFiles=\"$(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\\$(TargetFramework)\" ContinueOnError=\"true\" />
+  #</Target>")    
   
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Platform.Maui.UI.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/UI/Directory.Build.props)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/UI/Directory.Build.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui/README.md)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui/Package.nuspec)
 ENDIF()

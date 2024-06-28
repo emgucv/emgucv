@@ -15,17 +15,18 @@
     <EmguCVNativeIOSBinarySimulatorArm64>$(OpenCVBinaryDir)\iOS\libcvextern_simulator_arm64.a</EmguCVNativeIOSBinarySimulatorArm64>
     <EmguCVMauiIOSErrorMessage Condition="!Exists('$(EmguCVNativeIOSBinarySimulatorArm64)') And !$(RuntimeIdentifier.Contains('iossimulator-arm64'))">This package do not contain necessary binary for $(EmguCVIOSLinkTarget). Emgu CV for iOS Commercial License is required. iOS is targeted, but file $(EmguCVNativeIOSBinarySimulatorArm64) is missing.</EmguCVMauiIOSErrorMessage>
     <EmguCVMauiIOSErrorMessage Condition="!Exists('$(EmguCVNativeIOSBinary)') And $(RuntimeIdentifier.Contains('iossimulator-arm64'))">This package do not contain necessary binary for $(EmguCVIOSLinkTarget). Emgu CV for iOS Commercial License is required. iOS is targeted, but file $(EmguCVNativeIOSBinary) is missing.</EmguCVMauiIOSErrorMessage>
+	<BaseOutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\</BaseOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <WarningLevel>4</WarningLevel>
-	<OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+	<!-- <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath> -->
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <PlatformTarget>anycpu</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-  	<OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
+  	<!-- <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath> -->
     <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
@@ -74,6 +75,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
     </ItemGroup>
+  <!--
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Message Condition="$(RuntimeIdentifier.Contains('iossimulator-arm64'))" Text="Building for ios simulator arm64" Importance="high" />
     <Message Condition="!$(RuntimeIdentifier.Contains('iossimulator-arm64'))" Text="Building for ios device arm64 + ios simulator x86_64" Importance="high" />
@@ -81,7 +83,7 @@
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(OpenCVBinaryDir)" ContinueOnError="true" />
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="$(OpenCVBinaryDir)" ContinueOnError="true" />
   </Target>
-  
+  -->
   <Target Name="EmguCVMauiIOSPackageBuildImports" BeforeTargets="PrepareForBuild">
     <Warning Text="'$(EmguCVMauiIOSErrorMessage)'" Condition="'$(EmguCVMauiIOSErrorMessage)'!=''" />
   </Target>
