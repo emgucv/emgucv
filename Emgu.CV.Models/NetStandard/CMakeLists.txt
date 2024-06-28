@@ -28,7 +28,7 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
   
   INSTALL(
     DIRECTORY 
-    ${LIBRARY_OUTPUT_PATH}/Build/Emgu.CV.Models
+    ${EMGU_CV_SOURCE_DIR}/libs/Build/Emgu.CV.Models
     DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
     COMPONENT emgucv_binary)
     

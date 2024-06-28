@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <Project>
- <PropertyGroup>
+  <!-- https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory?view=vs-2022 -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+  
+  <PropertyGroup>
+    <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath(${EMGU_CV_SOURCE_DIR}))</EmguCVProjectRoot>
+	<OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(EmguCVProjectRoot)\libs))</OpenCVBinaryDir>
+
     <PackageId>${EMGUCV_NUGET_ID}</PackageId>
 	
 	<title>${EMGUCV_NUGET_TITLE}</title>
@@ -25,7 +31,7 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
     <PackageProjectUrl>${NUGET_EMGU_URL}</PackageProjectUrl>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     
- </PropertyGroup>
+  </PropertyGroup>
  
     <ItemGroup>
       <None Include="..\..\LICENSE.txt">
@@ -44,8 +50,7 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
       </None>
     </ItemGroup>
 	
-  <!-- https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory?view=vs-2022 -->
-  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
   ${EMGUCV_POST_PROCESS_BINARY}
   
 </Project>
