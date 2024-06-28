@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net8.0-maccatalyst13.2</TargetFramework>
+    <TargetFramework>net8.0-maccatalyst</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <IsBindingProject>true</IsBindingProject>	
-    <AssemblyName>Emgu.CV.Platform.Maui.Mac</AssemblyName>
+    <AssemblyName>Emgu.CV.Maui.Mac</AssemblyName>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</OpenCVBinaryDir>
     <EmguCVCatalystBinaryDir>$(OpenCVBinaryDir)\iOS</EmguCVCatalystBinaryDir>
@@ -13,6 +13,7 @@
     <EmguCVLinkTarget>MAUI MacCatalyst Library</EmguCVLinkTarget>
     <EmguCVMauiMacErrorMessage Condition="!Exists('$(EmguCVCatalystNativeFileX64)')">This package do not contains necessary binary for $(EmguCVLinkTarget). Emgu CV for MacOS Commercial license is required, Mac Catalyst x86_64 is targeted, but file $(EmguCVCatalystNativeFileX64) is missing.</EmguCVMauiMacErrorMessage>
     <EmguCVMauiMacErrorMessage Condition="!Exists('$(EmguCVCatalystNativeFileARM64)')">This package do not contains necessary binary for $(EmguCVLinkTarget). Emgu CV for MacOS Commercial license is required, Mac Catalyst ARM64 is targeted, but file $(EmguCVCatalystNativeFileARM64) is missing.</EmguCVMauiMacErrorMessage>
+    <BaseOutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\</BaseOutputPath>
     </PropertyGroup>
 
   <ItemGroup>
