@@ -4,7 +4,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <IsBindingProject>true</IsBindingProject>	
-    <AssemblyName>Emgu.CV.Maui.Mac</AssemblyName>
+    <AssemblyName>Emgu.CV.runtime.maui.macos</AssemblyName>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
 	<OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</OpenCVBinaryDir>
     <EmguCVCatalystBinaryDir>$(OpenCVBinaryDir)\iOS</EmguCVCatalystBinaryDir>

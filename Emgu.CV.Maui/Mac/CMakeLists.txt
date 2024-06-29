@@ -19,9 +19,9 @@ IF(HAVE_MAUI_MAC)
     )
 	
   IF(APPLE)	
-    PROJECT(Emgu.CV.Maui.Mac)
+    PROJECT(Emgu.CV.runtime.maui.macos)
 	SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
-    BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
+    BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui.Mac.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
         
     if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
@@ -34,7 +34,7 @@ ENDIF()
 IF (HAVE_MAUI_MAC)
   INSTALL(
       DIRECTORY 
-      ${LIBRARY_OUTPUT_PATH}/Build/Emgu.CV.Maui.Mac
+      ${EMGU_CV_SOURCE_DIR}/libs/Build/Emgu.CV.runtime.maui.macos
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
       COMPONENT emgucv_binary)	
 ENDIF()
