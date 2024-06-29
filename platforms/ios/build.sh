@@ -68,11 +68,11 @@ if [ "$1" = "simulator_x86_64" ] || [ "$1" = "" ] || [ "$1" = "all" ]; then
 fi
 
 if [ "$1" = "simulator_x86_64" ] || [ "$1" = "" ] || [ "$1" = "all" ]; then
-    cd Emgu.CV.Platform/Maui/iOS
+    cd Emgu.CV.Maui/UI
     #msbuild /p:Configuration=Release
     dotnet restore
     dotnet build
-    cd ../../../platforms/ios/simulator_x86_64
+    cd ../../platforms/ios/simulator_x86_64
     #build the package this time
     #./xcodebuild_wrapper WARNING_CFLAGS=-Wno-implicit-function-declaration -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target package build
     xcodebuild WARNING_CFLAGS=-Wno-implicit-function-declaration -parallelizeTargets -jobs ${JOB_COUNT} -configuration Release -target package build
