@@ -38,7 +38,7 @@ IF (TARGET Emgu.CV)
   
   INSTALL(
       DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-      DESTINATION Emgu.CV.Platform
+      DESTINATION .
       COMPONENT emgucv_source
       FILES_MATCHING 
       PATTERN "Emgu.CV.Bitmap.csproj"
