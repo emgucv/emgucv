@@ -116,6 +116,11 @@ void cveCanny2(cv::_InputArray* dx, cv::_InputArray* dy, cv::_OutputArray* edges
 	cv::Canny(*dx, *dy, *edges, threshold1, threshold2, L2gradient);
 }
 
+void cveCornerEigenValsAndVecs(cv::_InputArray* src, cv::_OutputArray* dst, int blockSize, int ksize, int borderType)
+{
+	cv::cornerEigenValsAndVecs(*src, *dst, blockSize, ksize, borderType);
+}
+
 void cveCornerHarris(cv::_InputArray* src, cv::_OutputArray* dst, int blockSize, int ksize, double k, int borderType)
 {
 	cv::cornerHarris(*src, *dst, blockSize, ksize, k, borderType);
