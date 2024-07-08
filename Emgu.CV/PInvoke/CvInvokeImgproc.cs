@@ -1075,9 +1075,14 @@ namespace Emgu.CV
                 cveCanny(iaImage, oaEdges, threshold1, threshold2, apertureSize, l2Gradient);
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveCanny(IntPtr image, IntPtr edges, double threshold1, double threshold2, int apertureSize,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool l2Gradient);
+        private static extern void cveCanny(
+            IntPtr image, 
+            IntPtr edges, 
+            double threshold1, 
+            double threshold2, 
+            int apertureSize,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool l2Gradient);
 
         /// <summary>
         /// Finds the edges on the input <paramref name="dx"/>, <paramref name="dy"/> and marks them in the output image edges using the Canny algorithm. The smallest of threshold1 and threshold2 is used for edge linking, the largest - to find initial segments of strong edges.
@@ -1102,9 +1107,39 @@ namespace Emgu.CV
                 cveCanny2(iax, iay, oaEdges, threshold1, threshold2, l2Gradient);
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveCanny2(IntPtr dx, IntPtr dy, IntPtr edges, double threshold1, double threshold2,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool l2Gradient);
+        private static extern void cveCanny2(
+            IntPtr dx, 
+            IntPtr dy, 
+            IntPtr edges, 
+            double threshold1, 
+            double threshold2,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool l2Gradient);
+
+        /// <summary>
+        /// Calculates eigenvalues and eigenvectors of image blocks for corner detection.
+        /// </summary>
+        /// <param name="src">Input single-channel 8-bit or floating-point image.</param>
+        /// <param name="dst">Image to store the results. It has the same size as src and the type CV_32FC.</param>
+        /// <param name="blockSize">Neighborhood size</param>
+        /// <param name="kSize">Aperture parameter for the Sobel operator.</param>
+        /// <param name="borderType">Pixel extrapolation method.</param>
+        public static void CornerEigenValsAndVecs(
+            IInputArray src, 
+            IOutputArray dst, 
+            int blockSize, 
+            int kSize,
+            CvEnum.BorderType borderType = BorderType.Default)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+            {
+                cveCornerEigenValsAndVecs(iaSrc, oaDst, blockSize, kSize, borderType);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveCornerEigenValsAndVecs(IntPtr src, IntPtr dst, int blockSize, int kSize, CvEnum.BorderType borderType);
 
         /// <summary>
         /// The function tests whether the input contour is convex or not. The contour must be simple, that is, without self-intersections. Otherwise, the function output is undefined.
