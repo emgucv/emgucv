@@ -3,10 +3,10 @@
 # --------------------------------------------------------
 
 IF(HAVE_ANDROID AND HAVE_MAUI_IOS AND HAVE_MAUI_MAC)
-  PROJECT(Emgu.CV.Platform.Maui.UI)
+  PROJECT(Emgu.CV.Maui.UI)
   INSTALL(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DESTINATION Emgu.CV.Platform/Maui
+    DESTINATION Emgu.CV.Maui
     COMPONENT emgucv_source
     FILES_MATCHING 
 	PATTERN "*.cs"
@@ -23,14 +23,24 @@ IF(HAVE_ANDROID AND HAVE_MAUI_IOS AND HAVE_MAUI_MAC)
   if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
   endif() 
+  
   ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV)
-  FOREACH (PLATFORMFORM_FOLDER IN ITEMS ${EMGUCV_MAUI_ANDROID_SRC_FOLDER} ${EMGUCV_MAUI_IOS_SRC_FOLDER} ${EMGUCV_MAUI_MACOS_SRC_FOLDER} ${EMGUCV_MAUI_WINDOWS_SRC_FOLDER})
-    INSTALL(
-      FILES 
-      ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/${PLATFORMFORM_FOLDER}/${PROJECT_NAME}.xml
-      ${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/${PLATFORMFORM_FOLDER}/${PROJECT_NAME}.dll 
-      DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}/${PLATFORMFORM_FOLDER}
-      COMPONENT emgucv_binary)
-  ENDFOREACH ()
-
+  
+  IF (TARGET Emgu.CV.runtime.maui.ios)
+    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.runtime.maui.ios)
+  ENDIF()
+  
+  IF (TARGET Emgu.CV.runtime.maui.macos)
+    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.runtime.maui.macos)
+  ENDIF()
+  
+  IF (TARGET Emgu.CV.runtime.maui.android)
+    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.runtime.maui.android)
+  ENDIF()
+  
+  INSTALL(
+    DIRECTORY 
+    ${LIBRARY_OUTPUT_PATH}/Build/Emgu.CV.runtime.maui.android
+    DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
+    COMPONENT emgucv_binary)	  
 ENDIF()

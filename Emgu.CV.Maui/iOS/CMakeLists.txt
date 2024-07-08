@@ -18,9 +18,9 @@ IF(HAVE_IOS)
       )
 	  
   IF (APPLE)
-    PROJECT(Emgu.CV.Maui.iOS)
+    PROJECT(Emgu.CV.runtime.maui.ios)
 	SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
-    BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
+    BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui.iOS.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
 
     ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV)  
     if(ENABLE_SOLUTION_FOLDERS)
@@ -33,7 +33,7 @@ ENDIF()
 IF(HAVE_MAUI_IOS)
   INSTALL(
       DIRECTORY 
-      ${LIBRARY_OUTPUT_PATH}/Build/Emgu.CV.Maui.iOS
+      ${LIBRARY_OUTPUT_PATH}/Build/Emgu.CV.runtime.maui.ios
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
       COMPONENT emgucv_binary)	  
 ENDIF()
