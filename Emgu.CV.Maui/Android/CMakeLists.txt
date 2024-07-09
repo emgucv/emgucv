@@ -26,12 +26,9 @@ IF(HAVE_ANDROID)
   
   ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV)
   
-ENDIF()
-
-IF(HAVE_MAUI_ANDROID)
   INSTALL(
       DIRECTORY 
-      ${LIBRARY_OUTPUT_PATH}/Build/Emgu.CV.runtime.maui.android
+      ${EMGU_CV_SOURCE_DIR}/libs/Build/Emgu.CV.runtime.maui.android
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
       COMPONENT emgucv_binary)	  
 ENDIF()
