@@ -40,7 +40,7 @@ IF(HAVE_ANDROID AND HAVE_MAUI_IOS AND HAVE_MAUI_MAC)
   
   INSTALL(
     DIRECTORY 
-    ${LIBRARY_OUTPUT_PATH}/Build/Emgu.CV.runtime.maui.android
+    ${EMGU_CV_SOURCE_DIR}/libs/Build/Emgu.CV.runtime.maui.android
     DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
     COMPONENT emgucv_binary)	  
 ENDIF()

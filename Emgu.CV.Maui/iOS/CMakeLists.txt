@@ -28,12 +28,9 @@ IF(HAVE_IOS)
     endif() 
   ENDIF()
   
-ENDIF()
-
-IF(HAVE_MAUI_IOS)
   INSTALL(
       DIRECTORY 
-      ${LIBRARY_OUTPUT_PATH}/Build/Emgu.CV.runtime.maui.ios
+      ${EMGU_CV_SOURCE_DIR}/libs/Build/Emgu.CV.runtime.maui.ios
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
       COMPONENT emgucv_binary)	  
 ENDIF()
