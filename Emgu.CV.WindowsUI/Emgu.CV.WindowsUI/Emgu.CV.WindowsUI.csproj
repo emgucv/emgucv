@@ -22,7 +22,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Condition="'$(TargetFramework)' == 'net472'" Include="System.Resources.Extensions" Version="5.0.0" />
+    <PackageReference Condition="'$(TargetFramework)' == 'net472'" Include="System.Resources.Extensions" Version="8.0.0" />
   </ItemGroup>
   <!--
   <Target Name="DeployBinary" AfterTargets="AfterBuild">

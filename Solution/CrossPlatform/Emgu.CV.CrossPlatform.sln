@@ -49,13 +49,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildInfo.Console", "..\..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DynamicImage.Asp.Net", "..\..\Emgu.CV.Example\DynamicImage.Asp.Net\DynamicImage.Asp.Net.csproj", "{F37D160B-F54E-4289-8B05-DF1825B37C56}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Maui.Android", "..\..\Emgu.CV.Maui\Android\Emgu.CV.Maui.Android.csproj", "{1E4994AD-22E2-4E47-9A12-11E3EFC169E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.runtime.maui.android", "..\..\Emgu.CV.Runtime\Maui\Android\Emgu.CV.runtime.maui.android.csproj", "{1E4994AD-22E2-4E47-9A12-11E3EFC169E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Maui.iOS", "..\..\Emgu.CV.Maui\iOS\Emgu.CV.Maui.iOS.csproj", "{7C093A11-5B56-4F2F-AA3D-92E2EDC6904D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.runtime.maui.ios", "..\..\Emgu.CV.Runtime\Maui\iOS\Emgu.CV.runtime.maui.ios.csproj", "{7C093A11-5B56-4F2F-AA3D-92E2EDC6904D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Maui.Mac", "..\..\Emgu.CV.Maui\Mac\Emgu.CV.Maui.Mac.csproj", "{E9103F74-8633-4EE0-820A-9FF86A066E18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.runtime.maui.macos", "..\..\Emgu.CV.Runtime\Maui\Mac\Emgu.CV.runtime.maui.macos.csproj", "{E9103F74-8633-4EE0-820A-9FF86A066E18}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Maui.UI", "..\..\Emgu.CV.Maui\UI\Emgu.CV.Maui.UI.csproj", "{BE859AC6-A900-4C7A-BBB8-5133E37248A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.runtime.maui", "..\..\Emgu.CV.Runtime\Maui\UI\Emgu.CV.runtime.maui.csproj", "{BE859AC6-A900-4C7A-BBB8-5133E37248A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

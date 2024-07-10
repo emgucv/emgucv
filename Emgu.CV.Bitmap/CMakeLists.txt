@@ -21,7 +21,7 @@ IF (TARGET Emgu.CV)
     INSTALL(
       DIRECTORY 
       ${LIBRARY_OUTPUT_PATH}/Build/Emgu.CV.Bitmap
-      DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
+      DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}/Build
       COMPONENT emgucv_binary)	
     #INSTALL(
     #  FILES 
