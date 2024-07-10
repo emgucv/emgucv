@@ -29,6 +29,6 @@ IF(HAVE_ANDROID)
   INSTALL(
       DIRECTORY 
       ${EMGU_CV_SOURCE_DIR}/libs/Build/Emgu.CV.runtime.maui.android
-      DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
+      DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}/Build
       COMPONENT emgucv_binary)	  
 ENDIF()
