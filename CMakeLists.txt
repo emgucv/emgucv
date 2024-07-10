@@ -1977,7 +1977,7 @@ IF(HAVE_MAUI)
   IF (HAVE_WINDESKTOP)
     SET(EMGUCV_MAUI_PACKAGE_REFERENCE "
 	<ItemGroup>
-      <PackageReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="${EMGUCV_WINDOWS_NUGET_ID}" Version="${CPACK_PACKAGE_VERSION}">
+      <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WINDOWS_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
 	  </PackageReference>
     </ItemGroup>")
   ENDIF()
