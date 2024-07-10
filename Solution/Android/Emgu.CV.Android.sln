@@ -15,7 +15,7 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Shared", "..\..\Emg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV", "..\..\Emgu.CV\NetStandard\Emgu.CV.csproj", "{189AD97B-E6A5-4CEA-A514-375582E26040}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Maui.Android", "..\..\Emgu.CV.Maui\Android\Emgu.CV.Maui.Android.csproj", "{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.runtime.maui.android", "..\..\Emgu.CV.Runtime\Maui\Android\Emgu.CV.runtime.maui.android.csproj", "{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,22 +45,22 @@ Global
 		{189AD97B-E6A5-4CEA-A514-375582E26040}.Release|x64.Build.0 = Release|x64
 		{189AD97B-E6A5-4CEA-A514-375582E26040}.Release|x86.ActiveCfg = Release|Any CPU
 		{189AD97B-E6A5-4CEA-A514-375582E26040}.Release|x86.Build.0 = Release|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Debug|ARM.Build.0 = Debug|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Debug|x64.Build.0 = Debug|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Debug|x86.Build.0 = Debug|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Release|ARM.ActiveCfg = Release|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Release|ARM.Build.0 = Release|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Release|x64.ActiveCfg = Release|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Release|x64.Build.0 = Release|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Release|x86.ActiveCfg = Release|Any CPU
-		{28B575D2-E55D-4D53-9E72-2BEE0D89BE2B}.Release|x86.Build.0 = Release|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Debug|ARM.Build.0 = Debug|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Debug|x64.Build.0 = Debug|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Debug|x86.Build.0 = Debug|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Release|ARM.ActiveCfg = Release|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Release|ARM.Build.0 = Release|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Release|x64.ActiveCfg = Release|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Release|x64.Build.0 = Release|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Release|x86.ActiveCfg = Release|Any CPU
+		{EC880508-5EBF-4567-BE4B-4CCC6AAF29F5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

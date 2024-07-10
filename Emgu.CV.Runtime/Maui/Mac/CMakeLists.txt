@@ -7,7 +7,7 @@ IF(HAVE_MAUI_MAC)
   INSTALL(
     DIRECTORY
     ${CMAKE_CURRENT_SOURCE_DIR}
-    DESTINATION Emgu.CV.Maui
+    DESTINATION Emgu.CV.Runtime/Maui
     COMPONENT emgucv_source
     FILES_MATCHING 
     PATTERN "*.cs"

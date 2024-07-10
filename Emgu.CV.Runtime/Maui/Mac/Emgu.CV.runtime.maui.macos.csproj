@@ -6,7 +6,7 @@
     <IsBindingProject>true</IsBindingProject>	
     <AssemblyName>Emgu.CV.runtime.maui.macos</AssemblyName>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-	<OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</OpenCVBinaryDir>
+	<OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\libs))</OpenCVBinaryDir>
     <EmguCVCatalystBinaryDir>$(OpenCVBinaryDir)\iOS</EmguCVCatalystBinaryDir>
     <EmguCVCatalystNativeFileX64>$(EmguCVCatalystBinaryDir)\libcvextern_catalyst_x86_64.a</EmguCVCatalystNativeFileX64>
     <EmguCVCatalystNativeFileARM64>$(EmguCVCatalystBinaryDir)\libcvextern_catalyst_arm64.a</EmguCVCatalystNativeFileARM64>
@@ -22,16 +22,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)..\..\Emgu.CV.NativeImage\CGImageExtension.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\CGImageExtension.cs">
       <Link>CGImageExtension.cs</Link>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)..\..\Emgu.CV.NativeImage\UIImageExtension.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\UIImageExtension.cs">
       <Link>UIImageExtension.cs</Link>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)..\..\Emgu.CV.NativeImage\NSImageExtension.cs">
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\NSImageExtension.cs">
       <Link>NSImageExtension.cs</Link>
     </Compile>
-	<Compile Include="$(MSBuildThisFileDirectory)..\..\Emgu.CV.NativeImage\CIImageExtension.cs" Link="CIImageExtension.cs" />
+	<Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\CIImageExtension.cs" Link="CIImageExtension.cs" />
 	<Compile Include="$(MSBuildThisFileDirectory)..\iOS\CvInvokeIOS.cs" Link="CvInvokeIOS.cs" />
   </ItemGroup>
     <ItemGroup Condition="Exists('$(EmguCVCatalystNativeFileX64)')">
@@ -55,7 +55,7 @@
       </NativeReference>
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
+      <ProjectReference Include="..\..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
     </ItemGroup>
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
     <Warning Text="'$(EmguCVMauiMacErrorMessage)'" Condition="'$(EmguCVMauiMacErrorMessage)'!=''" />

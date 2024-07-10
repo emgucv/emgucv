@@ -514,7 +514,7 @@ IF (HAVE_IOS_DEVICE OR HAVE_IOS_SIMULATOR OR HAVE_IOS_UNIVERSAL)
 ELSE()
   SET(HAVE_IOS OFF)
 ENDIF()
-CHECK_BINARY_EXIST("libs/Build/Emgu.CV.Maui.iOS/AnyCPU/Release/net8.0-ios" "Emgu.CV.Maui.iOS.dll" HAVE_MAUI_IOS ${HAVE_IOS})
+CHECK_BINARY_EXIST("libs/Build/Emgu.CV.runtime.maui.ios/AnyCPU/Release/net8.0-ios" "Emgu.CV.runtime.maui.ios.dll" HAVE_MAUI_IOS ${HAVE_IOS})
 
 CHECK_BINARY_EXIST("libs/iOS" "libcvextern_catalyst_arm64.a" HAVE_MAC_CATALYST_ARM64 ${IS_MAC_CATALYST_ARM64_BUILD})
 CHECK_BINARY_EXIST("libs/iOS" "libcvextern_catalyst_x86_64.a" HAVE_MAC_CATALYST_X86_64 ${IS_MAC_CATALYST_X86_64_BUILD})
@@ -524,7 +524,7 @@ IF (HAVE_MAC_CATALYST_ARM64 OR HAVE_MAC_CATALYST_X86_64)
 ELSE()
   SET(HAVE_MAC_CATALYST OFF)
 ENDIF()
-CHECK_BINARY_EXIST("libs/Build/Emgu.CV.Maui.Mac/AnyCPU/Release/net8.0-maccatalyst" "Emgu.CV.Maui.Mac.dll" HAVE_MAUI_MAC ${HAVE_MAC_CATALYST})
+CHECK_BINARY_EXIST("libs/Build/Emgu.CV.runtime.maui.macos/AnyCPU/Release/net8.0-maccatalyst" "Emgu.CV.runtime.maui.macos.dll" HAVE_MAUI_MAC ${HAVE_MAC_CATALYST})
 
 
 #IF(NOT HAVE_IOS)
@@ -1338,8 +1338,8 @@ ENDIF()
 
 SET(EMGUCV_MAUI_MACOS_NUGET_FILE_LIST "")
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/Mac/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/Mac/docs/README.md)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Mac/Directory.Build.props)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Mac/docs/README.md)
 
 SET(EMGUCV_UWP_NUGET_FILE_LIST "")
 IF(HAVE_WINSTORE_10_X86)
@@ -1900,8 +1900,8 @@ IF(HAVE_ANDROID)
   </Target>
 	")
   ENDIF()
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/Android/Directory.Build.props)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/Android/docs/README.md)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/Directory.Build.props)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/docs/README.md)
 ENDIF()
 
 IF(HAVE_IOS)  
@@ -1913,8 +1913,8 @@ IF(HAVE_IOS)
   #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
   #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
   #</Target>")  
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/iOS/Directory.Build.props)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/iOS/docs/README.md)  
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/iOS/Directory.Build.props)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/iOS/docs/README.md)  
 ENDIF()
 
 IF(HAVE_MACOS)
@@ -1926,54 +1926,6 @@ IF(HAVE_MAUI)
   SET(EMGUCV_MAUI_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.maui${EMGUCV_RUNTIME_EXTRA_TAG}")
   SET(EMGUCV_MAUI_NUGET_TITLE "Emgu CV for MAUI Native Runtime")
   
-#  SET(EMGUCV_MAUI_NUGET_FILE_LIST "	
-#    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-#	
-#	<file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_ANDROID_SRC_FOLDER}\\Emgu.CV.Maui.UI.dll\" target=\"lib\\${EMGUCV_MAUI_ANDROID_DST_FOLDER}\" />
-#    <file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_ANDROID_SRC_FOLDER}\\Emgu.CV.Maui.UI.xml\" target=\"lib\\${EMGUCV_MAUI_ANDROID_DST_FOLDER}\" />
-#	
-#	<file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_IOS_SRC_FOLDER}\\Emgu.CV.Maui.UI.dll\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
-#    <file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_IOS_SRC_FOLDER}\\Emgu.CV.Maui.UI.xml\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
-#	
-#	<file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_MACOS_SRC_FOLDER}\\Emgu.CV.Maui.UI.dll\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
-#    <file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_MACOS_SRC_FOLDER}\\Emgu.CV.Maui.UI.xml\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
-#	
-#	<file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_WINDOWS_SRC_FOLDER}\\Emgu.CV.Maui.UI.dll\" target=\"lib\\${EMGUCV_MAUI_WINDOWS_DST_FOLDER}\" />
-#    <file src=\"..\\..\\..\\libs\\Build\\Emgu.CV.Maui.UI\\AnyCPU\\Release\\${EMGUCV_MAUI_WINDOWS_SRC_FOLDER}\\Emgu.CV.Maui.UI.xml\" target=\"lib\\${EMGUCV_MAUI_WINDOWS_DST_FOLDER}\" />
-#	
-#	<file src=\"README.md\" target=\"docs\\\" />
-#    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
-  
-#  SET(EMGUCV_MAUI_NUGET_DEPENDENCY "
-#      <dependencies>
-#      <group targetFramework=\"${EMGUCV_MAUI_ANDROID_DST_FOLDER}\">
-#	    <dependency id=\"${EMGUCV_MAUI_ANDROID_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" exclude=\"Build,Analyzers\" />
-#	    <dependency id=\"${EMGUCV_MODELS_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"System.Runtime.InteropServices\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-#      </group>
-#      <group targetFramework=\"${EMGUCV_MAUI_IOS_DST_FOLDER}\">
-#	    <dependency id=\"${EMGUCV_MAUI_IOS_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"${EMGUCV_MODELS_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"System.Runtime.InteropServices\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-#      </group>
-#      <group targetFramework=\"${EMGUCV_MAUI_MACOS_DST_FOLDER}\">
-#        <dependency id=\"${EMGUCV_MODELS_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"${EMGUCV_MAUI_MACOS_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"System.Runtime.InteropServices\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-#      </group>
-#      <group targetFramework=\"${EMGUCV_MAUI_WINDOWS_DST_FOLDER}\">
-#	    <dependency id=\"${EMGUCV_WINDOWS_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" exclude=\"Build,Analyzers\" />
-#	    <dependency id=\"${EMGUCV_MODELS_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"${EMGUCV_WPF_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"System.Runtime.InteropServices\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"System.Runtime.InteropServices.WindowsRuntime\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-#      </group>
-#    </dependencies>")
   SET(EMGUCV_MAUI_PACKAGE_REFERENCE "")
   IF (HAVE_WINDESKTOP)
     SET(EMGUCV_MAUI_PACKAGE_REFERENCE "
@@ -2004,8 +1956,8 @@ IF(HAVE_MAUI)
   #</Target>")    
   SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY} </Target>")    
   
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/UI/Directory.Build.props)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui/UI/docs/README.md)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/Directory.Build.props)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/docs/README.md)
   #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui/README.md)
   #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui/Package.nuspec)
 ENDIF()
@@ -2312,13 +2264,14 @@ IF (EMGU_CV_WITH_TESSERACT)
 ENDIF()
  
 ADD_SUBDIRECTORY(Emgu.CV.Contrib)
+ADD_SUBDIRECTORY(Emgu.CV.Models)
 
 ADD_SUBDIRECTORY(Emgu.CV.Runtime)
-ADD_SUBDIRECTORY(Emgu.CV.Models)
+
 ADD_SUBDIRECTORY(platforms/nuget)
 
 # MAUI will need to use some of the nuget packages. It need to be build after nuget packages is build.
-ADD_SUBDIRECTORY(Emgu.CV.Maui)
+ADD_SUBDIRECTORY(Emgu.CV.Runtime/Maui)
 
 INSTALL(
   FILES

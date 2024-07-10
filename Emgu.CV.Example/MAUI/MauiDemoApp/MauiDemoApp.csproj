@@ -152,9 +152,9 @@
 	  
 	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="..\..\..\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj" />
 	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="..\..\..\Emgu.CV.Wpf\Emgu.CV.Wpf.csproj" />
-	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="..\..\..\Emgu.CV.Maui\Android\Emgu.CV.Maui.Android.csproj" />
-	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'" Include="..\..\..\Emgu.CV.Maui\iOS\Emgu.CV.Maui.iOS.csproj" />
-	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'" Include="..\..\..\Emgu.CV.Maui\Mac\Emgu.CV.Maui.Mac.csproj" />
+	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="..\..\..\Emgu.CV.Runtime\Maui\Android\Emgu.CV.runtime.maui.android.csproj" />
+	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'" Include="..\..\..\Emgu.CV.Runtime\Maui\iOS\Emgu.CV.runtime.maui.ios.csproj" />
+	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'" Include="..\..\..\Emgu.CV.Runtime\Maui\Mac\Emgu.CV.runtime.maui.macos.csproj" />
 	</ItemGroup>
 	
 	<ItemGroup>

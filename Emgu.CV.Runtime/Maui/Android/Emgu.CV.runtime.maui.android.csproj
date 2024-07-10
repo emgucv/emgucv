@@ -7,7 +7,7 @@
 	<AssemblyName>Emgu.CV.runtime.maui.android</AssemblyName>
   </PropertyGroup>
     <PropertyGroup>
-    <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</OpenCVBinaryDir>
+    <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\libs))</OpenCVBinaryDir>
 	<BaseOutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\</BaseOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -101,7 +101,7 @@
     </EmbeddedNativeLibrary>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
+    <ProjectReference Include="..\..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
   </ItemGroup>
   <!--
     <ItemGroup>

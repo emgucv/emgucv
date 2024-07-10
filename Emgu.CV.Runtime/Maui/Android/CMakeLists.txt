@@ -3,22 +3,25 @@
 # --------------------------------------------------------
 
 IF(HAVE_ANDROID)
-  PROJECT(Emgu.CV.runtime.maui.android)
+
   INSTALL(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    DESTINATION Emgu.CV.Maui
+    DESTINATION Emgu.CV.Runtime/Maui
     COMPONENT emgucv_source
     FILES_MATCHING 
 	PATTERN "*.cs"
-    PATTERN "${PROJECT_NAME}.csproj"
+    PATTERN "*.csproj"
     PATTERN ".svn" EXCLUDE
     PATTERN "obj" EXCLUDE
     PATTERN "CMakeFiles" EXCLUDE
     PATTERN "${PROJECT_NAME}.dir" EXCLUDE
     )
+	
+  PROJECT(Emgu.CV.runtime.maui.android)
+
   SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
   
-  BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui.Android.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
+  BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.android.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
   
   if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")

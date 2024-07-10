@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV", "..\..\Emgu.CV\Ne
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models", "..\..\Emgu.CV.Models\NetStandard\Emgu.CV.Models.csproj", "{70F59E7D-5AFF-4DAA-9592-B209E8F3B2E8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Maui.Mac", "..\..\Emgu.CV.Maui\Mac\Emgu.CV.Maui.Mac.csproj", "{24036179-097C-4618-962F-FE576B07B917}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.runtime.maui.macos", "..\..\Emgu.CV.Runtime\Maui\Mac\Emgu.CV.runtime.maui.macos.csproj", "{24036179-097C-4618-962F-FE576B07B917}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
