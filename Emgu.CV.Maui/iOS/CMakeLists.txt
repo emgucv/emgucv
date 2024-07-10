@@ -31,6 +31,6 @@ IF(HAVE_IOS)
   INSTALL(
       DIRECTORY 
       ${EMGU_CV_SOURCE_DIR}/libs/Build/Emgu.CV.runtime.maui.ios
-      DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}
+      DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}/Build
       COMPONENT emgucv_binary)	  
 ENDIF()
