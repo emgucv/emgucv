@@ -21,7 +21,7 @@ IF(HAVE_MAUI_MAC)
   IF(APPLE)	
     PROJECT(Emgu.CV.runtime.maui.macos)
 	SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
-    BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Maui.Mac.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
+    BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.macos.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
         
     if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
