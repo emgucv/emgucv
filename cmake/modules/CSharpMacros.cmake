@@ -298,19 +298,26 @@ MACRO(BUILD_DOTNET_PROJ target csproj_file extra_flags)
 ENDMACRO()
 
 MACRO(BUILD_NUGET_PACKAGE target csproj_file nuspec_file output_dir working_dir)
-  IF(APPLE AND ("${EMGUCV_ARCH}" STREQUAL "x64"))
-    SET(MAC_FRESH_SHELL_PREFIX env -i zsh)
-  ENDIF()
-  IF (DOTNET_EXECUTABLE)
-    ADD_CUSTOM_TARGET(
-      ${target} ALL
-	  COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild -t:restore /p:Configuration=${DEFAULT_CS_CONFIG} ${csproj_file}
-      COMMAND ${DOTNET_EXECUTABLE} pack "${csproj_file}" -p:NuspecFile="${nuspec_file}" --no-build -o "${output_dir}"
-      WORKING_DIRECTORY "${working_dir}"
+  IF(NUGET_FOUND AND WIN32)
+	ADD_CUSTOM_TARGET(
+	  ${target} ALL
+	  COMMAND "${NUGET_EXECUTABLE}" pack "${nuspec_file}" -OutputDirectory "${output_dir}"
+	  WORKING_DIRECTORY "${working_dir}"
+	  COMMENT "Building ${target} with command: ${NUGET_EXECUTABLE} pack \"${nuspec_file}\" -OutputDirectory \"${output_dir}\""
+	)
+  ELSEIF(DOTNET_EXECUTABLE)
+	IF(APPLE AND ("${EMGUCV_ARCH}" STREQUAL "x64"))
+	  SET(MAC_FRESH_SHELL_PREFIX env -i zsh)
+	ENDIF()
+	ADD_CUSTOM_TARGET(
+	  ${target} ALL
+	  COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} restore /p:Configuration=${DEFAULT_CS_CONFIG} ${csproj_file}
+	  COMMAND ${DOTNET_EXECUTABLE} pack "${csproj_file}" -p:NuspecFile="${nuspec_file}" -o "${output_dir}"
+	  WORKING_DIRECTORY "${working_dir}"
 	  COMMENT "Building ${target} with command: ${DOTNET_EXECUTABLE} pack \"${csproj_file}\" -p:NuspecFile=\"${nuspec_file}\" --no-build -o \"${output_dir}\""
-    )
+	)
   ELSE()
-    MESSAGE(FATAL_ERROR "DOTNET_EXECUTABLE not found!")
+	MESSAGE(FATAL_ERROR "DOTNET_EXECUTABLE not found!")
   ENDIF()
 ENDMACRO()
 
