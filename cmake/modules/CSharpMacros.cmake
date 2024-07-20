@@ -298,7 +298,7 @@ MACRO(BUILD_DOTNET_PROJ target csproj_file extra_flags)
 ENDMACRO()
 
 MACRO(BUILD_NUGET_PACKAGE target csproj_file nuspec_file output_dir working_dir)
-  IF(NUGET_FOUND)
+  IF(NUGET_FOUND AND (WIN32 OR APPLE))
 	ADD_CUSTOM_TARGET(
 	  ${target} ALL
 	  COMMAND "${NUGET_EXECUTABLE}" pack "${nuspec_file}" -OutputDirectory "${output_dir}"
