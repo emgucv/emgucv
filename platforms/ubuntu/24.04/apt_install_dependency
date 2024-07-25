@@ -6,10 +6,10 @@ sudo apt-get install build-essential libgtk-3-dev libgstreamer1.0-dev \
   libvtk9-dev libfreetype-dev libharfbuzz-dev qtbase5-dev libeigen3-dev \
   libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgflags-dev \
   libgoogle-glog-dev liblapacke-dev libva-dev dotnet-sdk-8.0 \
-  mono-runtime mono-runtime libmono-system-net-http4.0-cil libmono-system-io-compression4.0-cil
+  mono-runtime libmono-system-net-http4.0-cil libmono-system-io-compression4.0-cil
 
 #libatlas-base-dev 
 
 if [ "$1" == "cuda" ]; then
-    sudo apt-get install nvidia-cuda-dev nvidia-cuda-toolkit nvidia-cudnn libcudnn-frontend-dev gcc-12 g++-12
+    sudo apt-get install nvidia-cuda-dev nvidia-cuda-toolkit nvidia-cudnn libcudnn-frontend-dev nvidia-cuda-toolkit-gcc 
 fi
