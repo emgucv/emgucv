@@ -2787,25 +2787,39 @@ ELSEIF (WIN32)
     ADD_SUBDIRECTORY(Emgu.RPC)
   ENDIF()
   
+#  # ----------------------------------------------------------------------------
+#  #  The source files
+#  # ----------------------------------------------------------------------------
+#  INSTALL(
+#    DIRECTORY
+#    ${CMAKE_CURRENT_SOURCE_DIR}/lib
+#    DESTINATION .
+#    COMPONENT emgucv_source
+#    FILES_MATCHING 
+#    PATTERN "*.dll"
+#    PATTERN "*.txt"
+#    PATTERN "*.xml"
+#    PATTERN ".git" EXCLUDE
+#    PATTERN "obj" EXCLUDE
+#    PATTERN "CMake*" EXCLUDE
+#    PATTERN "Release" EXCLUDE
+#    PATTERN "${PROJECT_NAME}.dir" EXCLUDE
+#    )
+	
   # ----------------------------------------------------------------------------
-  #  The source files
+  #  Include the version_str.inc files in the package
   # ----------------------------------------------------------------------------
   INSTALL(
     DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}/lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/libs
     DESTINATION .
-    COMPONENT emgucv_source
+    COMPONENT emgucv_binary
     FILES_MATCHING 
-    PATTERN "*.dll"
-    PATTERN "*.txt"
-    PATTERN "*.xml"
+    PATTERN "*version_str.inc"
     PATTERN ".git" EXCLUDE
     PATTERN "obj" EXCLUDE
     PATTERN "CMake*" EXCLUDE
-    PATTERN "Release" EXCLUDE
-    PATTERN "${PROJECT_NAME}.dir" EXCLUDE
     )
-  
   
   #WINDOWS STORE EXAMPLE
   IF(HAVE_WINSTORE_10_X86 OR HAVE_WINSTORE_10_X64 OR HAVE_WINSTORE_10_ARM)  
