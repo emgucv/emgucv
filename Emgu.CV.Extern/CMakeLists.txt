@@ -4159,10 +4159,10 @@ ELSEIF (IOS)
       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs/iOS/simulator_${IOS_ARCH}_version_string.inc
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
       COMMENT "Copying build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs/iOS/simulator_${IOS_ARCH}_version_string.inc")
-	INSTALL(FILES
-	  "${CMAKE_SOURCE_DIR}/libs/iOS/simulator_${IOS_ARCH}_version_string.inc"
-	  DESTINATION "libs/iOS/"
-	  COMPONENT emgucv_binary)   
+	#INSTALL(FILES
+	#  "${CMAKE_SOURCE_DIR}/libs/iOS/simulator_${IOS_ARCH}_version_string.inc"
+	#  DESTINATION "libs/iOS/"
+	#  COMPONENT emgucv_binary)   
   ELSEIF(IPHONEOS)
     SET(IOS_RELEASE_FOLDER "Release-iphoneos")
     SET(IOS_RELEASE_FILENAME "libcvextern_iphoneos_${IOS_ARCH}.a")
@@ -4171,10 +4171,10 @@ ELSEIF (IOS)
       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs/iOS/iphoneos_${IOS_ARCH}_version_string.inc
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
       COMMENT "Copying build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs/iOS/iphoneos_${IOS_ARCH}_version_string.inc")
-	INSTALL(FILES
-	  "${CMAKE_SOURCE_DIR}/libs/iOS/iphoneos_${IOS_ARCH}_version_string.inc"
-	  DESTINATION "libs/iOS/"
-	  COMPONENT emgucv_binary) 
+	#INSTALL(FILES
+	#  "${CMAKE_SOURCE_DIR}/libs/iOS/iphoneos_${IOS_ARCH}_version_string.inc"
+	#  DESTINATION "libs/iOS/"
+	#  COMPONENT emgucv_binary) 
   ELSEIF(MAC_CATALYST)
     SET(IOS_RELEASE_FOLDER "Release-catalyst")
     SET(IOS_RELEASE_FILENAME "libcvextern_catalyst_${IOS_ARCH}.a")
@@ -4183,10 +4183,10 @@ ELSEIF (IOS)
       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs/iOS/catalyst_${IOS_ARCH}_version_string.inc
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
       COMMENT "Copying build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs/iOS/catalyst_${IOS_ARCH}_version_string.inc")
-	INSTALL(FILES
-	  "${CMAKE_SOURCE_DIR}/libs/iOS/catalyst_${IOS_ARCH}_version_string.inc"
-	  DESTINATION "libs/iOS/"
-	  COMPONENT emgucv_binary) 	 
+	#INSTALL(FILES
+	#  "${CMAKE_SOURCE_DIR}/libs/iOS/catalyst_${IOS_ARCH}_version_string.inc"
+	#  DESTINATION "libs/iOS/"
+	#  COMPONENT emgucv_binary) 	 
   ENDIF()
   #MESSAGE(STATUS "<<<<<< IOS_RELEASE_FOLDER: ${IOS_RELEASE_FOLDER} >>>>>>") 
   SET(LIBTOOL_LINKING_COMMAND libtool -static -arch_only ${IOS_ARCH} -o ${CMAKE_SOURCE_DIR}/libs/iOS/${IOS_RELEASE_FILENAME} bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/Release/*.a opencv/3rdparty/lib/Release/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/*.a)
@@ -4297,18 +4297,18 @@ ELSEIF (IOS)
       "${IPHONE_UNIVERSAL_STATIC_LIB_FILE}"
       DESTINATION "libs/iOS/"
       COMPONENT emgucv_binary)  
-	IF(IPHONESIMULATOR AND (EXISTS "${CMAKE_SOURCE_DIR}/libs/iOS/iphoneos_arm64_version_string.inc"))
-	    INSTALL(FILES
-		  "${CMAKE_SOURCE_DIR}/libs/iOS/iphoneos_arm64_version_string.inc"
-		  DESTINATION "libs/iOS/"
-		  COMPONENT emgucv_binary)
-	ENDIF()
-	IF(IPHONEOS AND (EXISTS "${CMAKE_SOURCE_DIR}/libs/iOS/simulator_x86_64_version_string.inc"))
-	    INSTALL(FILES
-		  "${CMAKE_SOURCE_DIR}/libs/iOS/simulator_x86_64_version_string.inc"
-		  DESTINATION "libs/iOS/"
-		  COMPONENT emgucv_binary)
-	ENDIF()
+	#IF(IPHONESIMULATOR AND (EXISTS "${CMAKE_SOURCE_DIR}/libs/iOS/iphoneos_arm64_version_string.inc"))
+	#    INSTALL(FILES
+	#	  "${CMAKE_SOURCE_DIR}/libs/iOS/iphoneos_arm64_version_string.inc"
+	#	  DESTINATION "libs/iOS/"
+	#	  COMPONENT emgucv_binary)
+	#ENDIF()
+	#IF(IPHONEOS AND (EXISTS "${CMAKE_SOURCE_DIR}/libs/iOS/simulator_x86_64_version_string.inc"))
+	#    INSTALL(FILES
+	#	  "${CMAKE_SOURCE_DIR}/libs/iOS/simulator_x86_64_version_string.inc"
+	#	  DESTINATION "libs/iOS/"
+	#	  COMPONENT emgucv_binary)
+	#ENDIF()
   ELSEIF(MAC_CATALYST)
     INSTALL(FILES
       "${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst_${IOS_ARCH}.a"
@@ -4317,13 +4317,13 @@ ELSEIF (IOS)
     IF(("${IOS_ARCH}" STREQUAL "x86_64") AND (EXISTS "${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst_arm64.a"))
       INSTALL(FILES
 		"${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst_arm64.a"
-		"${CMAKE_SOURCE_DIR}/libs/iOS/catalyst_arm64_version_string.inc"
+		#"${CMAKE_SOURCE_DIR}/libs/iOS/catalyst_arm64_version_string.inc"
 		DESTINATION "libs/iOS/"
 		COMPONENT emgucv_binary)
     ELSEIF(("${IOS_ARCH}" STREQUAL "arm64") AND (EXISTS "${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst_x86_64.a"))
       INSTALL(FILES
 		"${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst_x86_64.a"
-		"${CMAKE_SOURCE_DIR}/libs/iOS/catalyst_x86_64_version_string.inc"
+		#"${CMAKE_SOURCE_DIR}/libs/iOS/catalyst_x86_64_version_string.inc"
 		DESTINATION "libs/iOS/"
 		COMPONENT emgucv_binary)
     ENDIF()
@@ -4340,10 +4340,10 @@ ELSEIF (ANDROID)
       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${ANDROID_ABI}_version_string.inc
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
       COMMENT "Copying build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${ANDROID_ABI}_version_string.inc")
-	INSTALL(FILES
-		"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${ANDROID_ABI}_version_string.inc"
-		DESTINATION "libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}"
-		COMPONENT emgucv_binary)  
+	#INSTALL(FILES
+	#	"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${ANDROID_ABI}_version_string.inc"
+	#	DESTINATION "libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}"
+	#	COMPONENT emgucv_binary)  
 ELSEIF (IS_UBUNTU OR IS_DEBIAN OR IS_RHEL)
 
   IF (WITH_CUDA)
@@ -4360,10 +4360,10 @@ ELSEIF (IS_UBUNTU OR IS_DEBIAN OR IS_RHEL)
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
       COMMENT "Copying build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${EMGUCV_ARCH}_version_string.inc")
 	  
-  INSTALL(FILES
-		"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${EMGUCV_ARCH}_version_string.inc"
-		DESTINATION "libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}"
-		COMPONENT emgucv_binary)  
+  #INSTALL(FILES
+  #		"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/${EMGUCV_ARCH}_version_string.inc"
+  #		DESTINATION "libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}"
+  #		COMPONENT emgucv_binary)  
   
 	  
 ELSEIF (APPLE)
@@ -4420,22 +4420,22 @@ ELSEIF (APPLE)
       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
       COMMENT "Copying build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc")
-    INSTALL(FILES
-		"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc"
-		DESTINATION "libs/runtimes/osx/native"
-		COMPONENT emgucv_binary)
+    #INSTALL(FILES
+	#	"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc"
+	#	DESTINATION "libs/runtimes/osx/native"
+	#	COMPONENT emgucv_binary)
 		
-    IF(("${EMGUCV_ARCH}" STREQUAL "x86_64") AND (EXISTS "${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../arm64_version_string.inc"))
-      INSTALL(FILES
-		"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../arm64_version_string.inc"
-		DESTINATION "libs/runtimes/osx/native"
-		COMPONENT emgucv_binary)
-    ELSEIF(("${EMGUCV_ARCH}" STREQUAL "arm64") AND (EXISTS "${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../x86_64_version_string.inc"))
-      INSTALL(FILES
-		"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../x86_64_version_string.inc"
-		DESTINATION "libs/runtimes/osx/native"
-		COMPONENT emgucv_binary)
-    ENDIF()
+    #IF(("${EMGUCV_ARCH}" STREQUAL "x86_64") AND (EXISTS "${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../arm64_version_string.inc"))
+    #  INSTALL(FILES
+	#	"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../arm64_version_string.inc"
+	#	DESTINATION "libs/runtimes/osx/native"
+	#	COMPONENT emgucv_binary)
+    #ELSEIF(("${EMGUCV_ARCH}" STREQUAL "arm64") AND (EXISTS "${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../x86_64_version_string.inc"))
+    #  INSTALL(FILES
+	#	"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../x86_64_version_string.inc"
+	#	DESTINATION "libs/runtimes/osx/native"
+	#	COMPONENT emgucv_binary)
+    #ENDIF()
 
   SET(CVEXTERN_AND_DEPENDENCY_DLLS ${CVEXTERN_DEPENDENCY_DLLS} "libcvextern.dylib")
   
