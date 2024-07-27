@@ -7,16 +7,10 @@ convert ../Emgu.CV.Test/stitch2.jpg Assets/Emgu.CV/Demo/Resources/stitch2.png
 convert ../Emgu.CV.Test/stitch3.jpg Assets/Emgu.CV/Demo/Resources/stitch3.png
 convert ../Emgu.CV.Test/stitch4.jpg Assets/Emgu.CV/Demo/Resources/stitch4.png
 
-cp ../Emgu.CV.Example/XamarinForms/Core/box.png Assets/Emgu.CV/Demo/Resources/
-cp ../Emgu.CV.Example/XamarinForms/Core/box_in_scene.png Assets/Emgu.CV/Demo/Resources/
-cp ../Emgu.CV.Example/XamarinForms/Core/DrawMatches.cs Assets/Emgu.CV/Demo/
+cp ../Emgu.CV.Example/MAUI/MauiDemoApp/Resources/Raw/box.png Assets/Emgu.CV/Demo/Resources/
+cp ../Emgu.CV.Example/MAUI/MauiDemoApp/Resources/Raw/box_in_scene.png Assets/Emgu.CV/Demo/Resources/
+cp ../Emgu.CV.Example/MAUI/MauiDemoApp/DrawMatches.cs Assets/Emgu.CV/Demo/
 
 cp ../opencv/data/haarcascades/haarcascade_frontalface_alt2.xml Assets/Emgu.CV/Demo/Resources
 
-#cd ../Emgu.CV.World/tessdata/
-#find . -type f -exec cp {} ../../Emgu.CV.Unity/Assets/Emgu.CV/Emgu.CV.Demo/Resources/tessdata/{}.bytes \;
-#cd ../../Emgu.CV.Unity
-
-#cp haarcascade_frontalface_alt2.xml.meta Assets/Emgu.CV/Emgu.CV.Demo/Resources
-#cp -rf demo/* Assets/Emgu.CV/Emgu.CV.Demo
 cp unityStoreIcons/EmguCVLogo_128x128.png Assets/Emgu.CV/Demo/EmguCVLogo.png
