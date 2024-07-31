@@ -2816,7 +2816,7 @@ ELSEIF (WIN32)
     DESTINATION .
     COMPONENT emgucv_binary
     FILES_MATCHING 
-    PATTERN "*version_str.inc"
+    PATTERN "*version_string.inc"
     PATTERN ".git" EXCLUDE
     PATTERN "obj" EXCLUDE
     PATTERN "CMake*" EXCLUDE
