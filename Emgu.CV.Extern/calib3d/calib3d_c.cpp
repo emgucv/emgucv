@@ -450,7 +450,15 @@ double cveStereoCalibrate2(
 #endif
 }
 
-bool cveSolvePnP(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_OutputArray* rvec, cv::_OutputArray* tvec, bool useExtrinsicGuess, int flags)
+bool cveSolvePnP(
+	cv::_InputArray* objectPoints, 
+	cv::_InputArray* imagePoints, 
+	cv::_InputArray* cameraMatrix, 
+	cv::_InputArray* distCoeffs, 
+	cv::_OutputArray* rvec, 
+	cv::_OutputArray* tvec, 
+	bool useExtrinsicGuess, 
+	int flags)
 {
 #ifdef HAVE_OPENCV_CALIB3D
 	return cv::solvePnP(*objectPoints, *imagePoints, *cameraMatrix, *distCoeffs, *rvec, *tvec, useExtrinsicGuess, flags);
@@ -753,6 +761,33 @@ double cveFisheyeStereoCalibrate(cv::_InputArray* objectPoints, cv::_InputArray*
 {
 #ifdef HAVE_OPENCV_CALIB3D
 	return cv::fisheye::stereoCalibrate(*objectPoints, *imagePoints1, *imagePoints2, *K1, *D1, *K2, *D2, *imageSize, *R, *T, flags, *criteria);
+#else
+	throw_no_calib3d();
+#endif
+}
+
+bool cveFisheyeSolvePnP(
+	cv::_InputArray* objectPoints,
+	cv::_InputArray* imagePoints,
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs,
+	cv::_OutputArray* rvec,
+	cv::_OutputArray* tvec,
+	bool useExtrinsicGuess,
+	int flags,
+	CvTermCriteria* criteria)
+{
+#ifdef HAVE_OPENCV_CALIB3D
+	return cv::fisheye::solvePnP(
+		*objectPoints, 
+		*imagePoints, 
+		*cameraMatrix, 
+		*distCoeffs, 
+		*rvec, 
+		*tvec, 
+		useExtrinsicGuess, 
+		flags,
+		*criteria);
 #else
 	throw_no_calib3d();
 #endif

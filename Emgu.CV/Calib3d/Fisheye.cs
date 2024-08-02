@@ -94,6 +94,21 @@ namespace Emgu.CV
            IntPtr objectPoints, IntPtr imagePoints1,
            IntPtr imagePoints2, IntPtr K1, IntPtr D1, IntPtr K2, IntPtr D2,
            ref Size imageSize, IntPtr R, IntPtr T, int flags, ref MCvTermCriteria criteria);
+
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool cveFisheyeSolvePnP(
+            IntPtr objectPoints,
+            IntPtr imagePoints,
+            IntPtr cameraMatrix,
+            IntPtr distCoeffs,
+            IntPtr rvec,
+            IntPtr tvec,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool useExtrinsicGuess,
+            CvEnum.SolvePnpMethod flags,
+            ref MCvTermCriteria criteria);
     }
 
     /// <summary>
@@ -443,5 +458,51 @@ namespace Emgu.CV
                     ref criteria);
             }
         }
+
+
+        /// <summary>
+        /// Estimates extrinsic camera parameters using known intrinsic parameters and extrinsic parameters for each view. The coordinates of 3D object points and their correspondent 2D projections must be specified. This function also minimizes back-projection error
+        /// </summary>
+        /// <param name="objectPoints">The array of object points, 3xN or Nx3, where N is the number of points in the view</param>
+        /// <param name="imagePoints">The array of corresponding image points, 2xN or Nx2, where N is the number of points in the view</param>
+        /// <param name="intrinsicMatrix">The camera matrix (A) [fx 0 cx; 0 fy cy; 0 0 1]. </param>
+        /// <param name="distortionCoeffs">The vector of distortion coefficients, 4x1 or 1x4 [k1, k2, p1, p2]. If it is IntPtr.Zero, all distortion coefficients are considered 0's.</param>
+        /// <param name="rotationVector">The output 3x1 or 1x3 rotation vector (compact representation of a rotation matrix, see cvRodrigues2). </param>
+        /// <param name="translationVector">The output 3x1 or 1x3 translation vector</param>
+        /// <param name="useExtrinsicGuess">Use the input rotation and translation parameters as a guess</param>
+        /// <param name="flags">Method for solving a PnP problem</param>
+        /// <param name="criteria">Termination criteria for the iterative optimization algorithm.</param>
+        /// <returns>True if successful</returns>
+        public static bool SolvePnP(
+           IInputArray objectPoints,
+           IInputArray imagePoints,
+           IInputArray intrinsicMatrix,
+           IInputArray distortionCoeffs,
+           IOutputArray rotationVector,
+           IOutputArray translationVector,
+           bool useExtrinsicGuess,
+           CvEnum.SolvePnpMethod flags,
+           MCvTermCriteria criteria
+           )
+        {
+            using (InputArray iaObjectPoints = objectPoints.GetInputArray())
+            using (InputArray iaImagePoints = imagePoints.GetInputArray())
+            using (InputArray iaIntrisicMatrix = intrinsicMatrix.GetInputArray())
+            using (InputArray iaDistortionCoeffs = distortionCoeffs.GetInputArray())
+            using (OutputArray oaRotationVector = rotationVector.GetOutputArray())
+            using (OutputArray oaTranslationVector = translationVector.GetOutputArray())
+                return CvInvoke.cveFisheyeSolvePnP(
+                   iaObjectPoints,
+                   iaImagePoints,
+                   iaIntrisicMatrix,
+                   iaDistortionCoeffs,
+                   oaRotationVector,
+                   oaTranslationVector,
+                   useExtrinsicGuess,
+                   flags,
+                   ref criteria);
+        }
+
+
     }
 }
