@@ -12,7 +12,7 @@ namespace Emgu.CV.CvEnum
     public enum Warp
     {
         /// <summary>
-        /// Neither FILL_OUTLIERS nor CV_WRAP_INVERSE_MAP
+        /// Neither FillOutliers nor InverseMap
         /// </summary>
         Default = 0,
         /// <summary>
@@ -22,6 +22,10 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Indicates that matrix is inverse transform from destination image to source and, thus, can be used directly for pixel interpolation. Otherwise, the function finds the inverse transform from map_matrix.
         /// </summary>
-        InverseMap = 16
+        InverseMap = 16,
+        /// <summary>
+        /// Relative displacement field
+        /// </summary>
+        RelativeMap = 32
     }
 }
