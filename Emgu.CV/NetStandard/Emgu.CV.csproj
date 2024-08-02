@@ -11,6 +11,7 @@
 		<Platforms>AnyCPU;x64;ARM</Platforms>
 		<Configurations>Release;Debug</Configurations>
 		<BaseOutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\</BaseOutputPath>
+		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
 	</PropertyGroup>
 
 	<PropertyGroup>
@@ -21,39 +22,39 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<!-- <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath> -->
 		<!-- <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath> -->
-		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+		<!-- <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile> -->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
 		<!-- <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath> -->
 		<!-- <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath> -->
-		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+		<!-- <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile> -->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
 		<!-- <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath> -->
 		<!-- <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath> -->
-		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+		<!-- <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile> -->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<!-- <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath> -->
 		<!-- <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath> -->
-		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+		<!-- <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile> -->
 		<DefineConstants>$(DefineConstants);TRACE;NETSTANDARD</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
 		<!-- <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath> -->
 		<!-- <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath> -->
-		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+		<!-- <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile> -->
 		<DefineConstants>$(DefineConstants);TRACE;NETSTANDARD</DefineConstants>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
 		<!-- <OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath> -->
 		<!-- <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath> -->
-		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+		<!-- <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile> -->
 		<DefineConstants>$(DefineConstants);TRACE;NETSTANDARD</DefineConstants>
 	</PropertyGroup>
 
