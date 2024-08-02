@@ -103,6 +103,7 @@ CVAPI(double) cveCompareHist(cv::_InputArray* h1, cv::_InputArray* h2, int metho
 CVAPI(void) cveGetRotationMatrix2D(CvPoint2D32f* center, double angle, double scale, cv::_OutputArray* rotationMatrix2D);
 
 CVAPI(void) cveFindContours(cv::_InputOutputArray* image, cv::_OutputArray* contours, cv::_OutputArray* hierarchy, int mode, int method, CvPoint* offset);
+CVAPI(void) cveFindContoursLinkRuns(cv::_InputArray* image, cv::_OutputArray* contours, cv::_OutputArray* hierarchy);
 CVAPI(double) cvePointPolygonTest(cv::_InputArray* contour, CvPoint2D32f* pt, bool measureDist);
 
 CVAPI(double) cveContourArea(cv::_InputArray* contour, bool oriented);

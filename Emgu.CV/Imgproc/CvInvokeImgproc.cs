@@ -1465,9 +1465,11 @@ namespace Emgu.CV
         /// <param name="mode">Retrieval mode</param>
         /// <param name="method">Approximation method (for all the modes, except CV_RETR_RUNS, which uses built-in approximation). </param>
         /// <param name="offset">Offset, by which every contour point is shifted. This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context</param>
-        /// <returns>The number of countours</returns>
+        /// <returns>The number of contours</returns>
         public static void FindContours(
-           IInputOutputArray image, IOutputArray contours, IOutputArray hierarchy,
+           IInputOutputArray image, 
+           IOutputArrayOfArrays contours, 
+           IOutputArray hierarchy,
            CvEnum.RetrType mode,
            CvEnum.ChainApproxMethod method,
            Point offset = new Point())
@@ -1488,7 +1490,8 @@ namespace Emgu.CV
         /// <param name="offset">Offset, by which every contour point is shifted. This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context</param>
         /// <returns>The contour hierarchy</returns>
         public static int[,] FindContourTree(
-           IInputOutputArray image, IOutputArray contours,
+           IInputOutputArray image,
+           IOutputArrayOfArrays contours,
            CvEnum.ChainApproxMethod method,
            Point offset = new Point())
         {
@@ -1510,80 +1513,33 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveFindContours(IntPtr image, IntPtr contours, IntPtr hierarchy, CvEnum.RetrType mode, CvEnum.ChainApproxMethod method, ref Point offset);
 
-        /*
         /// <summary>
-        /// Initializes and returns a pointer to the contour scanner. The scanner is used in
-        /// cvFindNextContour to retrieve the rest of the contours.
+        /// Find contours using link runs algorithm.
+        /// This function implements an algorithm different from FindContours:
+        /// - doesn't allocate temporary image internally, thus it has reduced memory consumption;
+        /// - supports CV_8UC1 images only;
+        /// - outputs 2-level hierarhy only;
+        /// - doesn't support approximation change other than CHAIN_APPROX_SIMPLE
         /// </summary>
-        /// <param name="image">The 8-bit, single channel, binary source image</param>
-        /// <param name="storage">Container of the retrieved contours</param>
-        /// <param name="headerSize">Size of the sequence header, &gt;=sizeof(CvChain) if method=CHAIN_CODE, and &gt;=sizeof(CvContour) otherwise</param>
-        /// <param name="mode">Retrieval mode</param>
-        /// <param name="method">Approximation method (for all the modes, except CV_RETR_RUNS, which uses built-in approximation). </param>
-        /// <param name="offset">Offset, by which every contour point is shifted. This is useful if the contours are extracted from the image ROI and then they should be analyzed in the whole image context</param>
-        /// <returns>Pointer to the contour scaner</returns>
-  #if ANDROID
-        public static IntPtr cvStartFindContours(
-           IntPtr image,
-           IntPtr storage,
-           int headerSize,
-           CvEnum.RETR_TYPE mode,
-           CvEnum.CHAIN_APPROX_METHOD method,
-           Point offset)
+        /// <param name="image">The source 8-bit single channel image. Non-zero pixels are treated as 1s, zero pixels remain 0s - that is image treated as binary.</param>
+        /// <param name="contours">Detected contours. Each contour is stored as a vector of points.</param>
+        /// <param name="hierarchy">Optional output vector, containing information about the image topology.</param>
+        public static void FindContoursLinkRuns(
+            IInputOutputArray image, 
+            IOutputArrayOfArrays contours, 
+            IOutputArray hierarchy = null)
         {
-           return cvStartFindContours(image, storage, headerSize, mode, method, offset.X, offset.Y);
+            using (InputOutputArray ioaImage = image.GetInputOutputArray())
+            using (OutputArray oaContours = contours.GetOutputArray())
+            using (OutputArray oaHierarchy = hierarchy == null ? OutputArray.GetEmpty() : hierarchy.GetOutputArray())
+                cveFindContoursLinkRuns(ioaImage, oaContours, oaHierarchy);
         }
-        [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cvStartFindContours(
-           IntPtr image,
-           IntPtr storage,
-           int headerSize,
-           CvEnum.RETR_TYPE mode,
-           CvEnum.CHAIN_APPROX_METHOD method,
-           int offsetX, int offsetY);
-  #else
-        [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern IntPtr cvStartFindContours(
-           IntPtr image,
-           IntPtr storage,
-           int headerSize,
-           CvEnum.RetrType mode,
-           CvEnum.ChainApproxMethod method,
-           Point offset);
-  #endif
 
-        /// <summary>
-        /// Finds the next contour in the image
-        /// </summary>
-        /// <param name="scanner">Pointer to the contour scaner</param>
-        /// <returns>The next contour in the image</returns>
-        [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern IntPtr cvFindNextContour(IntPtr scanner);
-
-        /// <summary>
-        /// The function replaces the retrieved contour, that was returned from the preceding call of
-        /// cvFindNextContour and stored inside the contour scanner state, with the user-specified contour.
-        /// The contour is inserted into the resulting structure, list, two-level hierarchy, or tree, depending on
-        /// the retrieval mode. If the parameter new contour is IntPtr.Zero, the retrieved contour is not included
-        /// in the resulting structure, nor are any of its children that might be added to this structure later.
-        /// </summary>
-        /// <param name="scanner">Contour scanner initialized by cvStartFindContours</param>
-        /// <param name="newContour">Substituting contour</param>
-        [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern void cvSubstituteContour(
-           IntPtr scanner,
-           IntPtr newContour);*/
-
-
-        /*
-        /// <summary>
-        /// Finishes the scanning process and returns a pointer to the first contour on the
-        /// highest level.
-        /// </summary>
-        /// <param name="scanner">Reference to the contour scanner</param>
-        /// <returns>pointer to the first contour on the highest level</returns>
-        [DllImport(OpencvImgprocLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern IntPtr cvEndFindContours(ref IntPtr scanner);*/
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveFindContoursLinkRuns(
+            IntPtr image, 
+            IntPtr contours, 
+            IntPtr hierarchy);
 
         /// <summary>
         /// Converts input image from one color space to another. The function ignores colorModel and channelSeq fields of IplImage header, so the source image color space should be specified correctly (including order of the channels in case of RGB space, e.g. BGR means 24-bit format with B0 G0 R0 B1 G1 R1 ... layout, whereas RGB means 24-bit format with R0 G0 B0 R1 G1 B1 ... layout). 
