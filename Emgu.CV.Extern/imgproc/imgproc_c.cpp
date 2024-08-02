@@ -348,6 +348,17 @@ void cveFindContours(cv::_InputOutputArray* image, cv::_OutputArray* contours, c
 	cv::findContours(*image, *contours, hierarchy ? *hierarchy : (cv::OutputArray) cv::noArray(), mode, method, *offset);
 }
 
+void cveFindContoursLinkRuns(cv::_InputArray* image, cv::_OutputArray* contours, cv::_OutputArray* hierarchy)
+{
+	if (hierarchy)
+	{
+		cv::findContoursLinkRuns(*image, *contours);
+	} else
+	{
+		cv::findContoursLinkRuns(*image, *contours, *hierarchy);
+	}
+}
+
 double cvePointPolygonTest(cv::_InputArray* contour, CvPoint2D32f* pt, bool measureDist)
 {
 	return cv::pointPolygonTest(*contour, *pt, measureDist);
