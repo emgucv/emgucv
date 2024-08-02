@@ -387,6 +387,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{0bfad282-50c1-449c-b01c-62fd23bbdbe5}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
+		..\..\Emgu.CV\Emgu.CV.Shared.projitems*{12d024ee-d0a5-4bbc-b7c0-7b18cf1ab262}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{19f8fc2f-e400-4dd6-aa04-7d1bef6820f4}*SharedItemsImports = 5
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{19f8fc2f-e400-4dd6-aa04-7d1bef6820f4}*SharedItemsImports = 5
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{19f8fc2f-e400-4dd6-aa04-7d1bef6820f4}*SharedItemsImports = 5
