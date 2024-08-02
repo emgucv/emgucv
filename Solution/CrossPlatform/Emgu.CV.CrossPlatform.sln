@@ -1271,6 +1271,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{0830246d-3f72-4b90-a933-3a9ee44f9684}*SharedItemsImports = 5
 		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{0bfad282-50c1-449c-b01c-62fd23bbdbe5}*SharedItemsImports = 13
+		..\..\Emgu.CV\Emgu.CV.Shared.projitems*{0e88523a-29db-4719-b734-d384765384c6}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.projitems*{20fa82fc-dee0-45f4-be16-0533752f4cef}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{20fa82fc-dee0-45f4-be16-0533752f4cef}*SharedItemsImports = 5
@@ -1291,6 +1292,7 @@ Global
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{978b8f58-57a8-49b6-b25b-60fd820e39c1}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\UWP\Emgu.CV.Runtime.UWP.projitems*{98476854-23f3-4116-8711-7ae17190a90f}*SharedItemsImports = 4
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+		..\..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.Shared.projitems*{ac06f404-0a97-4142-a021-572d686e231f}*SharedItemsImports = 13
 		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{d2cd55f9-3a62-4911-819f-27389117122d}*SharedItemsImports = 5
 		..\..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.Shared.projitems*{e3469cb8-15f3-4704-83e5-37d23f356d01}*SharedItemsImports = 5
 		..\..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.Shared.projitems*{e8f09998-297b-485c-b234-e5ace5f55772}*SharedItemsImports = 4
