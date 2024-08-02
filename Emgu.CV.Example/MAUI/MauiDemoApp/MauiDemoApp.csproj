@@ -146,7 +146,7 @@
 		-->
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\Emgu.CV.Maui\UI\Emgu.CV.Maui.UI.csproj" />
+	  <ProjectReference Include="..\..\..\Emgu.CV.Runtime\Maui\UI\Emgu.CV.runtime.maui.csproj" />
 	  <ProjectReference Include="..\..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
 	  <ProjectReference Include="..\..\..\Emgu.CV.Models\NetStandard\Emgu.CV.Models.csproj" />
 	  
