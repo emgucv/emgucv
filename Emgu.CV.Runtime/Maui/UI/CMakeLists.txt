@@ -29,20 +29,24 @@ IF(HAVE_ANDROID AND HAVE_MAUI_IOS AND HAVE_MAUI_MAC)
   ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV)
   
   IF (TARGET Emgu.CV.runtime.maui.ios)
-    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.runtime.maui.ios)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.maui.ios)
   ENDIF()
   
   IF (TARGET Emgu.CV.runtime.maui.macos)
-    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.runtime.maui.macos)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.maui.macos)
   ENDIF()
   
   IF (TARGET Emgu.CV.runtime.maui.android)
-    ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV.runtime.maui.android)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.maui.android)
   ENDIF()
   
   INSTALL(
     DIRECTORY 
     ${EMGU_CV_SOURCE_DIR}/libs/Build/Emgu.CV.runtime.maui
     DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}/Build
-    COMPONENT emgucv_binary)	  
+    COMPONENT emgucv_binary
+	FILES_MATCHING 
+      PATTERN "*.dll"
+      PATTERN "*.pdb"
+      PATTERN "*.xml")
 ENDIF()

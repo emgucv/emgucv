@@ -36,6 +36,10 @@ IF (HAVE_MAUI_MAC)
       DIRECTORY 
       ${EMGU_CV_SOURCE_DIR}/libs/Build/Emgu.CV.runtime.maui.macos
       DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}/Build
-      COMPONENT emgucv_binary)	
+      COMPONENT emgucv_binary	
+	  FILES_MATCHING 
+        PATTERN "*.dll"
+        PATTERN "*.pdb"
+        PATTERN "*.xml")	
 ENDIF()
 
