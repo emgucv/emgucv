@@ -35,6 +35,7 @@ IF (TARGET Emgu.CV)
       COMPONENT emgucv_source
       FILES_MATCHING 
       PATTERN "Emgu.CV.Wpf.csproj"
+	  PATTERN "Directory.Build.props"
 	  PATTERN "*.cs"
       PATTERN ".svn" EXCLUDE
       PATTERN "obj" EXCLUDE

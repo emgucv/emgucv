@@ -29,18 +29,18 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
 
     ADD_DEPENDENCIES(${PROJECT_NAME} cvextern)  
     
-    INSTALL(
-      DIRECTORY
-      ${CMAKE_CURRENT_SOURCE_DIR}
-      DESTINATION Emgu.CV
-      COMPONENT emgucv_source
-      FILES_MATCHING 
-      PATTERN "Emgu.CV.csproj"
-      PATTERN ".svn" EXCLUDE
-      PATTERN "obj" EXCLUDE
-      PATTERN "CMakeFiles" EXCLUDE
-      PATTERN "${PROJECT_NAME}.dir" EXCLUDE
-      )
+    #INSTALL(
+    #  DIRECTORY
+    #  ${CMAKE_CURRENT_SOURCE_DIR}
+    #  DESTINATION Emgu.CV
+    #  COMPONENT emgucv_source
+    #  FILES_MATCHING 
+    #  PATTERN "Emgu.CV.csproj"
+    #  PATTERN ".svn" EXCLUDE
+    #  PATTERN "obj" EXCLUDE
+    #  PATTERN "CMakeFiles" EXCLUDE
+    #  PATTERN "${PROJECT_NAME}.dir" EXCLUDE
+    #  )
     if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
 	endif() 

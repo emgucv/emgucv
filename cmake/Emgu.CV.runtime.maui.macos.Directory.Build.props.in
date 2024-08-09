@@ -5,7 +5,7 @@
 
   <PropertyGroup>
   
-    <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath(${EMGU_CV_SOURCE_DIR}))</EmguCVProjectRoot>
+    <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\))</EmguCVProjectRoot>
 	
     <PackageId>${EMGUCV_MAUI_MACOS_NUGET_ID}</PackageId>
 	<title>${EMGUCV_MAUI_MACOS_NUGET_TITLE}</title>

@@ -11,6 +11,7 @@ IF(HAVE_ANDROID AND HAVE_MAUI_IOS AND HAVE_MAUI_MAC)
     FILES_MATCHING 
 	PATTERN "*.cs"
     PATTERN "*.csproj"
+	PATTERN "Directory.Build.props"
     PATTERN ".svn" EXCLUDE
     PATTERN "obj" EXCLUDE
     PATTERN "CMakeFiles" EXCLUDE
