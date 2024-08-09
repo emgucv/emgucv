@@ -11,6 +11,7 @@ IF(HAVE_ANDROID)
     FILES_MATCHING 
 	PATTERN "*.cs"
     PATTERN "*.csproj"
+	PATTERN "Directory.Build.props"
     PATTERN ".svn" EXCLUDE
     PATTERN "obj" EXCLUDE
     PATTERN "CMakeFiles" EXCLUDE

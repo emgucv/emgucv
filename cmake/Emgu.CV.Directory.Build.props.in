@@ -4,7 +4,7 @@
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
   
   <PropertyGroup>
-    <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath(${EMGU_CV_SOURCE_DIR}))</EmguCVProjectRoot>
+    <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\))</EmguCVProjectRoot>
 	<OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(EmguCVProjectRoot)\libs))</OpenCVBinaryDir>
 
     <PackageId>${EMGUCV_NUGET_ID}</PackageId>
@@ -26,7 +26,7 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
 	<RepositoryUrl>${GITHUB_REPO_URL}</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 	<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageOutputPath>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\platforms\nuget))</PackageOutputPath>
+    <PackageOutputPath>$([System.IO.Path]::GetFullPath($(EmguCVProjectRoot)\platforms\nuget))</PackageOutputPath>
 	<PackageTags>opencv;emgu;emgucv;ai;image</PackageTags>
     <PackageProjectUrl>${NUGET_EMGU_URL}</PackageProjectUrl>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
