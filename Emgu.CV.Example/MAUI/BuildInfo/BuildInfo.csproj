@@ -58,11 +58,8 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Emgu.CV.runtime.maui.mini" Version="4.9.0.5494" />
-	  <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.21" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="8.0.21" />
+	  <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+	  <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 	</ItemGroup>
 
 </Project>
