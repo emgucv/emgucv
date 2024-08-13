@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<Project>
+  <PropertyGroup>
+	<title>Emgu CV</title>
+    <authors>Emgu Corporation</authors>
+    <owners>Emgu Corporation</owners>
+  </PropertyGroup>
+</Project>
