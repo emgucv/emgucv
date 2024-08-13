@@ -15,7 +15,6 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.csproj"
       PATTERN "*.config"
       PATTERN "*.shproj"
-      PATTERN "*.Xamarin"
       PATTERN "*.projitems"
       PATTERN "*.axml"
       PATTERN "*.xaml"
@@ -34,12 +33,6 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "Debug" EXCLUDE
       PATTERN "Release" EXCLUDE  
       )	  
-    #INSTALL(
-    #  FILES
-    #  "${OPENCV_EXTRA_SUBFOLDER}/testdata/dnn/mask_rcnn_inception_v2_coco_2018_01_28.pbtxt"
-    #  DESTINATION "opencv_extra/testdata/dnn/"
-    #  COMPONENT emgucv_example_source
-    #  )
   ENDIF()
   
   #Windows only demos
@@ -325,49 +318,6 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       )
   ENDIF()
   
-#  IF(HAVE_IOS)
-#    INSTALL(
-#      DIRECTORY
-#      "${CMAKE_CURRENT_SOURCE_DIR}/iOS/"
-#      DESTINATION Emgu.CV.Example/iOS/
-#      COMPONENT emgucv_example_source
-#      FILES_MATCHING 
-#      PATTERN "*.cs"
-#      PATTERN "*.csproj"
-#      PATTERN "*.axml"
-#      PATTERN "*.xml"
-#      PATTERN "*.txt"
-#      PATTERN "*.png"
-#      PATTERN "*.dll"
-#      PATTERN "*.plist"
-#      PATTERN ".git" EXCLUDE
-#      PATTERN "bin" EXCLUDE
-#      PATTERN "obj" EXCLUDE
-#      )
-#  ENDIF()
-#  IF(HAVE_MACOS)
-#    INSTALL(
-#      DIRECTORY
-#      "${CMAKE_CURRENT_SOURCE_DIR}/Mac/"
-#      DESTINATION Emgu.CV.Example/Mac/
-#      COMPONENT emgucv_example_source
-#      FILES_MATCHING 
-#      PATTERN "*.cs"
-#      PATTERN "*.csproj"
-#      PATTERN "*.axml"
-#      PATTERN "*.xml"
-#      PATTERN "*.txt"
-#      PATTERN "*.png"
-#      PATTERN "*.dll"
-#      PATTERN "*.plist"
-#      PATTERN "*.json"
-#      PATTERN "*.storyboard"
-#      PATTERN ".git" EXCLUDE
-#      PATTERN "bin" EXCLUDE
-#      PATTERN "obj" EXCLUDE
-#      )
-#  ENDIF()
-  
   IF(HAVE_WINSTORE_10)
     INSTALL(
       DIRECTORY
@@ -419,18 +369,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       )
 
   ENDIF()
- 
-
-#  IF(HAVE_ANDROID)    
-#    INSTALL(
-#      FILES
-#      "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
-#      "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_frontalface_default.xml"
-#      DESTINATION "opencv/data/haarcascades"
-#      COMPONENT emgucv_example_source
-#      )
-#  ENDIF()
-  
+   
   IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_MACOS OR HAVE_LINUX_ARM OR HAVE_LINUX_X64 OR HAVE_LINUX_X86)
     add_subdirectory(HelloWorld)
 	add_subdirectory(BuildInfo.Console)
@@ -478,6 +417,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 	  PATTERN "*.jpg"
       PATTERN "*.dll"
       PATTERN "*.json"
+	  PATTERN "*.Build.props"
       PATTERN "bin" EXCLUDE
       PATTERN "obj" EXCLUDE
       )	
