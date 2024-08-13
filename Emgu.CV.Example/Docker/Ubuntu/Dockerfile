@@ -14,7 +14,7 @@ WORKDIR "/emgu"
 RUN dotnet new console
 
 #Add Emgu.CV.runtime package
-RUN dotnet add package Emgu.CV.runtime.ubuntu.20.04-x64 --version 4.5.4.4788
+RUN dotnet add package Emgu.CV.runtime.ubuntu-x64 --version 4.9.0.5494
 
 #Copy the source code to the docker image
 COPY Program.cs "/emgu/Program.cs"
