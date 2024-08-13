@@ -15,6 +15,7 @@ INSTALL(
   PATTERN "*.resx"
   PATTERN "*.projitems"
   PATTERN "*.shproj"
+  PATTERN "Directory.Build.props"
   PATTERN ".svn" EXCLUDE
   PATTERN "obj" EXCLUDE
   PATTERN "bin" EXCLUDE
