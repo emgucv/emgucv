@@ -16,17 +16,24 @@
                 HorizontalOptions="Center" />
 
             <Label
-                Text="Hello, World!"
+                Text="Emgu CV"
                 SemanticProperties.HeadingLevel="Level1"
                 FontSize="32"
                 HorizontalOptions="Center" />
 
             <Label
 			    x:Name="DetailLabel"
-                Text="Welcome to .NET Multi-platform App UI"
+                Text="Click the top right 'About' button to see build information"
                 SemanticProperties.HeadingLevel="Level2"
                 SemanticProperties.Description="Welcome to dot net Multi platform App U I"
                 FontSize="18"
+                HorizontalOptions="Center" />
+
+            <Button
+                x:Name="InvertBtn"
+                Text="Invert image"
+                SemanticProperties.Hint="Click to invert an image"
+                Clicked="OnInvertClicked"
                 HorizontalOptions="Center" />
 
             <Button
