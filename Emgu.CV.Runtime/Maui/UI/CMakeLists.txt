@@ -41,6 +41,10 @@ IF(HAVE_ANDROID AND HAVE_MAUI_IOS AND HAVE_MAUI_MAC)
     ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.maui.android)
   ENDIF()
   
+  IF (TARGET Emgu.CV.runtime.windows.nuget)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.windows.nuget)
+  ENDIF()
+  
   INSTALL(
     DIRECTORY 
     ${EMGU_CV_SOURCE_DIR}/libs/Build/Emgu.CV.runtime.maui
