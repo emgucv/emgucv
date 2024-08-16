@@ -2114,6 +2114,12 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/README.txt.in ${CMAKE_CURRENT_S
 INSTALL(FILES "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/README.txt" DESTINATION "." COMPONENT libs)
 
 # ----------------------------------------------------------------------------
+#  Include license file & nuget icon into package
+# ----------------------------------------------------------------------------
+INSTALL(FILES "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt" DESTINATION "." COMPONENT libs)
+INSTALL(FILES "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/nuget_icon.png" DESTINATION "miscellaneous/" COMPONENT libs)
+
+# ----------------------------------------------------------------------------
 #  Generate CvInvokeEntryPoints.cs file for Emgu CV project
 # ----------------------------------------------------------------------------
 SET(OPENCV_LIBRARY_OUTPUT_NAME_PREFIX "")
@@ -2259,9 +2265,8 @@ ADD_SUBDIRECTORY(Emgu.CV.WindowsUI)
 ADD_SUBDIRECTORY(Emgu.CV.Example)
 ADD_SUBDIRECTORY(Emgu.CV.Test)
 ADD_SUBDIRECTORY(Emgu.CV.Cuda)
-IF (EMGU_CV_WITH_TESSERACT)
-  ADD_SUBDIRECTORY(Emgu.CV.OCR)
-ENDIF()
+
+ADD_SUBDIRECTORY(Emgu.CV.OCR)
  
 ADD_SUBDIRECTORY(Emgu.CV.Contrib)
 ADD_SUBDIRECTORY(Emgu.CV.Models)
@@ -2344,7 +2349,7 @@ IF(HAVE_MAC_CATALYST)
   ENDIF()
 ENDIF()
 
-IF(IS_PRO_BUILD)
+IF (TARGET Emgu.CV.runtime.maui)
   INSTALL(
     FILES
     "Solution/CrossPlatform/Emgu.CV.CrossPlatform.sln"
@@ -2360,17 +2365,15 @@ INSTALL(
   "${CMAKE_CURRENT_SOURCE_DIR}/CommonAssemblyInfo.cs"
   "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
   "${CMAKE_CURRENT_SOURCE_DIR}/${LICENSE_FILE_NAME}"
-  #"${CMAKE_CURRENT_SOURCE_DIR}/nuget.config"
-  #"${CMAKE_CURRENT_SOURCE_DIR}/components.config"
   DESTINATION .
   COMPONENT emgucv_source
   )
   
-IF (EMGU_CV_WITH_FREETYPE)
-  IF (ANDROID)  
+#IF (EMGU_CV_WITH_FREETYPE)
+#  IF (ANDROID)  
 	#INSTALL(EXPORT freetype DESTINATION lib)
-  ENDIF()
-ENDIF()
+#  ENDIF()
+#ENDIF()
 
 IF (ANDROID)
   SET(CPACK_GENERATOR ZIP)
