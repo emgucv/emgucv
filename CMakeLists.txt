@@ -1870,17 +1870,19 @@ IF(HAVE_ANDROID)
   SET(EMGUCV_MAUI_ANDROID_NUGET_TITLE "Emgu CV for MAUI Android Native Runtime")
   
   # Sign and copy the binary
-  SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">")
+  SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "")
   IF(EMGU_SIGN_FOUND AND WIN32)
     file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
 	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
     SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY}
-    <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-	<MakeDir Directories=\"$(OutputPath)\\signed\"/>
-    <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
+	<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
+      <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
+	  <MakeDir Directories=\"$(OutputPath)\\signed\"/>
+      <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
+	</Target>
 	")
   ENDIF()
-  SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY} </Target>")    
+  #SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY} ")    
   #SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY}
   #  <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\" Importance=\"high\" />
   #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
@@ -1939,14 +1941,16 @@ IF(HAVE_MAUI)
     <PropertyGroup>
 	  <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)../../../libs))</OpenCVBinaryDir>
 	</PropertyGroup>
-	<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">")
+	")
   IF(EMGU_SIGN_FOUND AND WIN32)
     file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
 	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
     SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY}
-    <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-	<MakeDir Directories=\"$(OutputPath)\\signed\"/>
-    <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)\\signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
+	<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
+      <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
+	  <MakeDir Directories=\"$(OutputPath)\\signed\"/>
+      <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)\\signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
+	</Target>
 	")
   ENDIF()
   #SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY}
@@ -1954,7 +1958,7 @@ IF(HAVE_MAUI)
   #  <Copy SourceFiles=\"$(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\\$(TargetFramework)\" ContinueOnError=\"true\" />
   #  <Copy SourceFiles=\"$(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\\$(TargetFramework)\" ContinueOnError=\"true\" />
   #</Target>")    
-  SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY} </Target>")    
+  #SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY}")    
   
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/Directory.Build.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/docs/README.md)
@@ -1989,9 +1993,10 @@ IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_ARM64)
   IF(EMGU_SIGN_FOUND AND WIN32)
     file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
     file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
-    SET(EMGUCV_UI_POST_PROCESS_BINARY "<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">
+    SET(EMGUCV_UI_POST_PROCESS_BINARY "
+	<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
       <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-  	<MakeDir Directories=\"$(OutputPath)\\signed\"/>
+  	  <MakeDir Directories=\"$(OutputPath)\\signed\"/>
       <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
   	</Target>
   	")
@@ -2043,10 +2048,10 @@ ENDIF()
     file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
 	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
     SET(EMGUCV_POST_PROCESS_BINARY "${EMGUCV_POST_PROCESS_BINARY}
-    <Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">
-        <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-        <MakeDir Directories=\"$(OutputPath)\\signed\"/>
-        <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
+    <Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
+      <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
+      <MakeDir Directories=\"$(OutputPath)\\signed\"/>
+      <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
     </Target>")
   ENDIF()  
 
@@ -2064,11 +2069,12 @@ SET(EMGUCV_BITMAP_POST_PROCESS_BINARY "")
 IF(EMGU_SIGN_FOUND AND WIN32)
   file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
   file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
-  SET(EMGUCV_BITMAP_POST_PROCESS_BINARY "<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">
+  SET(EMGUCV_BITMAP_POST_PROCESS_BINARY "
+  <Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
     <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-	<MakeDir Directories=\"$(OutputPath)\\signed\"/>
+    <MakeDir Directories=\"$(OutputPath)\\signed\"/>
     <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-	</Target>
+  </Target>
 	")
 ENDIF()
       
@@ -2099,11 +2105,12 @@ SET(EMGUCV_WPF_POST_PROCESS_BINARY "")
 IF(EMGU_SIGN_FOUND AND WIN32)
   file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
   file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
-  SET(EMGUCV_WPF_POST_PROCESS_BINARY "<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">
+  SET(EMGUCV_WPF_POST_PROCESS_BINARY "
+  <Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
     <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
 	<MakeDir Directories=\"$(OutputPath)\\signed\"/>
     <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-	</Target>
+  </Target>
 	")
 ENDIF()
 
