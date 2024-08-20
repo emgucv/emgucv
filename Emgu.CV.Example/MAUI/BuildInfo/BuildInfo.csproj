@@ -60,6 +60,7 @@
 	  <PackageReference Include="Emgu.CV.runtime.maui.mini" Version="4.9.0.5494" />
 	  <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 	  <PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+	  <!-- <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="$(ILLinkPackVersion)" /> -->
 	</ItemGroup>
 
 </Project>
