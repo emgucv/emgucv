@@ -9,7 +9,7 @@ To restore the nuget package, in the terminal run this command:
 To build the Mac OS MAUI App and run it, use this command:
 > dotnet build -t:Run -f net8.0-maccatalyst
 
-To build the iOS MAUI app and run it on a simulator, use this command:
+To build the iOS MAUI app and run it on an x86-64 ios simulator (arm64 simulator is currently not supported), use this command:
 > dotnet build -t:Run -f net8.0-ios
 
 To build the iOS MAUI .ipa file for iOS device, use this command:
