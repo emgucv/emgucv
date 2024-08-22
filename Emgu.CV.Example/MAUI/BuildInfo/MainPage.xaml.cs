@@ -2,7 +2,9 @@
 using Emgu.CV.CvEnum;
 using Emgu.CV.Models;
 using Emgu.CV.Platform.Maui.UI;
+using Emgu.CV.Structure;
 using Emgu.Util;
+using Point = System.Drawing.Point;
 
 namespace BuildInfo;
 
@@ -32,6 +34,15 @@ public partial class MainPage : ContentPage
                             }
         );
         this.ToolbarItems.Add(aboutItem);
+        
+        Mat helloWorldImage = new Mat(
+            new System.Drawing.Size(640, 480), 
+            DepthType.Cv8U, 
+            3);
+        helloWorldImage.SetTo(new MCvScalar(0,0,0)); //Set to black background
+        CvInvoke.PutText(helloWorldImage, "Hello, world!", new Point(100, 100), FontFace.HersheyDuplex, 2.0, new MCvScalar(0,0,255));
+        
+        this.HelloWorldImageView.SetImage(helloWorldImage);
     }
 
 
