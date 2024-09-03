@@ -43,6 +43,10 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
         <PackagePath>docs\</PackagePath>
       </None>
     </ItemGroup>
+  <Import Project="SignBinary.Targets" Condition="exists('SignBinary.Targets')" />		
+  <Import Project="SignPkg.Targets" Condition="exists('SignPkg.Targets')" />
+  <!--
   ${EMGUCV_UI_POST_PROCESS_BINARY}
   ${EMGUCV_UI_POST_PROCESS_NUGET}
+  -->
 </Project>
