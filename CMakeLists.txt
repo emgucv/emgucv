@@ -1865,23 +1865,51 @@ SET(EMGUCV_MACOS_NUGET_DEPENDENCY "	<dependencies>
 #      <frameworkAssembly assemblyName=\"System.Drawing\" targetFramework=\".NETFramework4.6.1\" />
 #    </frameworkAssemblies>")
 
+# Sign the binary
+  SET(EMGUCV_POST_PROCESS_BINARY "")
+  IF(EMGU_SIGN_FOUND AND WIN32)
+    file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
+	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
+    SET(EMGUCV_POST_PROCESS_BINARY "${EMGUCV_POST_PROCESS_BINARY}
+    <Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
+      <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
+      <MakeDir Directories=\"$(OutputPath)\\signed\"/>
+      <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
+    </Target>")
+  ENDIF()  
+  
+  # Generate nuget config file for Emgu.CV.Bitmap
+# Sign and copy the binary
+SET(EMGUCV_POST_PROCESS_NUGET "")
+IF(EMGU_SIGN_FOUND AND WIN32)
+  file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
+  file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
+  SET(EMGUCV_POST_PROCESS_NUGET "
+  <Target Name=\"PostProcessNuget\" AfterTargets=\"Pack\">
+    <Message Text=\"Signing $(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" Importance=\"high\" />
+    <MakeDir Directories=\"$(PackageOutputPath)\\signed\"/>
+    <Exec Command='${EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH} \"$(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" \"$(PackageOutputPath)\\signed\" \"${NUGET_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(PackageOutputPath)\" />
+  </Target>
+	")
+ENDIF()
+
 IF(HAVE_ANDROID)
 
   SET(EMGUCV_MAUI_ANDROID_NUGET_TITLE "Emgu CV for MAUI Android Native Runtime")
   
   # Sign and copy the binary
-  SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "")
-  IF(EMGU_SIGN_FOUND AND WIN32)
-    file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
-	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
-    SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY}
-	<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
-      <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-	  <MakeDir Directories=\"$(OutputPath)\\signed\"/>
-      <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-	</Target>
-	")
-  ENDIF()
+  #SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "")
+  #IF(EMGU_SIGN_FOUND AND WIN32)
+  #  file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
+#	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
+#    SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY}
+	#<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
+    #  <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
+	#  <MakeDir Directories=\"$(OutputPath)\\signed\"/>
+    #  <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
+	#</Target>
+	#")
+  #ENDIF()
   #SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY} ")    
   #SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY}
   #  <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\" Importance=\"high\" />
@@ -1890,19 +1918,25 @@ IF(HAVE_ANDROID)
   #</Target>")    
   
   # Sign the nuget package
-  SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET "")
-  IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-    file(TO_NATIVE_PATH ${EMGU_NUGET_SIGN_EXECUTABLE} EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH)
-	file(TO_NATIVE_PATH ${NUGET_EXECUTABLE} NUGET_EXECUTABLE_NATIVE_PATH)
-  	SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET "${EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET}
-  <Target Name=\"PostProcessNuget\" AfterTargets=\"Pack\">
-    <Message Text=\"Signing $(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" Importance=\"high\" />
-    <MakeDir Directories=\"$(PackageOutputPath)\\signed\"/>
-    <Exec Command='${EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH} \"$(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" \"$(PackageOutputPath)\\signed\" \"${NUGET_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(PackageOutputPath)\" />
-  </Target>
-	")
-  ENDIF()
+  #SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET "")
+  #IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+  #  file(TO_NATIVE_PATH ${EMGU_NUGET_SIGN_EXECUTABLE} EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH)
+#	file(TO_NATIVE_PATH ${NUGET_EXECUTABLE} NUGET_EXECUTABLE_NATIVE_PATH)
+#  	SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET "${EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET}
+#  <Target Name=\"PostProcessNuget\" AfterTargets=\"Pack\">
+ #   <Message Text=\"Signing $(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" Importance=\"high\" />
+  #  <MakeDir Directories=\"$(PackageOutputPath)\\signed\"/>
+   # <Exec Command='${EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH} \"$(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" \"$(PackageOutputPath)\\signed\" \"${NUGET_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(PackageOutputPath)\" />
+  #</Target>
+#	")
+  #ENDIF()
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/Directory.Build.props)
+  IF(EMGU_SIGN_FOUND AND WIN32)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/SignBinary.Targets)
+  ENDIF()
+  IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/SignPkg.Targets)
+  ENDIF()
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/docs/README.md)
 ENDIF()
 
@@ -1937,22 +1971,22 @@ IF(HAVE_MAUI)
     </ItemGroup>")
   ENDIF()
   # Sign and copy the binary
-  SET(EMGUCV_MAUI_POST_PROCESS_BINARY "
-    <PropertyGroup>
-	  <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)../../../libs))</OpenCVBinaryDir>
-	</PropertyGroup>
-	")
-  IF(EMGU_SIGN_FOUND AND WIN32)
-    file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
-	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
-    SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY}
-	<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
-      <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-	  <MakeDir Directories=\"$(OutputPath)\\signed\"/>
-      <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)\\signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-	</Target>
-	")
-  ENDIF()
+  #SET(EMGUCV_MAUI_POST_PROCESS_BINARY "
+  #  <PropertyGroup>
+#	  <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)../../../libs))</OpenCVBinaryDir>
+	#</PropertyGroup>
+	#")
+  #IF(EMGU_SIGN_FOUND AND WIN32)
+  #  file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
+#	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
+#    SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY}
+#	<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
+ #     <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
+	#  <MakeDir Directories=\"$(OutputPath)\\signed\"/>
+    #  <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)\\signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
+	#</Target>
+	#")
+  #ENDIF()
   #SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY}
   #  <Message Text=\"Copying $(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).dll, $(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\\$(TargetFramework)\" Importance=\"high\" />
   #  <Copy SourceFiles=\"$(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\\$(TargetFramework)\" ContinueOnError=\"true\" />
@@ -1961,6 +1995,12 @@ IF(HAVE_MAUI)
   #SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY}")    
   
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/Directory.Build.props)
+  IF(EMGU_SIGN_FOUND AND WIN32)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/SignBinary.Targets)
+  ENDIF()
+  IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/SignPkg.Targets)
+  ENDIF()
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/docs/README.md)
   #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui/README.md)
   #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui/Package.nuspec)
@@ -1989,20 +2029,26 @@ IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_ARM64)
   
   # Generate nuget config file for Emgu.CV.UI
   # Sign and copy the binary
-  SET(EMGUCV_UI_POST_PROCESS_BINARY "")
-  IF(EMGU_SIGN_FOUND AND WIN32)
-    file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
-    file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
-    SET(EMGUCV_UI_POST_PROCESS_BINARY "
-	<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
-      <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-  	  <MakeDir Directories=\"$(OutputPath)\\signed\"/>
-      <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-  	</Target>
-  	")
-  ENDIF()
+  #SET(EMGUCV_UI_POST_PROCESS_BINARY "")
+  #IF(EMGU_SIGN_FOUND AND WIN32)
+  #  file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
+  #  file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
+  #  SET(EMGUCV_UI_POST_PROCESS_BINARY "
+#	<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
+#      <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
+#  	  <MakeDir Directories=\"$(OutputPath)\\signed\"/>
+#      <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
+#  	</Target>
+#  	")
+#  ENDIF()
   
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/Directory.Build.props)
+  IF(EMGU_SIGN_FOUND AND WIN32)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/SignBinary.Targets)
+  ENDIF()
+  IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/SignPkg.Targets)
+  ENDIF()
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/docs/README.md)
 ENDIF()
 
@@ -2042,77 +2088,77 @@ IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 	ENDIF()
 ENDIF()
 
-# Sign the binary
-  SET(EMGUCV_POST_PROCESS_BINARY "")
-  IF(EMGU_SIGN_FOUND AND WIN32)
-    file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
-	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
-    SET(EMGUCV_POST_PROCESS_BINARY "${EMGUCV_POST_PROCESS_BINARY}
-    <Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
-      <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-      <MakeDir Directories=\"$(OutputPath)\\signed\"/>
-      <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-    </Target>")
-  ENDIF()  
+
 
 #generate nuget config file for Emgu.CV 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/Directory.Build.props)
+IF(EMGU_SIGN_FOUND AND WIN32)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/SignBinary.Targets)
+ENDIF()
+IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/SignPkg.Targets)
+ENDIF()
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/docs/README.md)
 
 #generate nuget config file for Emgu.CV.Models
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Models.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models/NetStandard/Directory.Build.props)
+IF(EMGU_SIGN_FOUND AND WIN32)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models/NetStandard/SignBinary.Targets)
+ENDIF()
+IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models/NetStandard/SignPkg.Targets)
+ENDIF()
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Models.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models/NetStandard/docs/README.md)
 
-# Generate nuget config file for Emgu.CV.Bitmap
-# Sign and copy the binary
-SET(EMGUCV_BITMAP_POST_PROCESS_BINARY "")
-IF(EMGU_SIGN_FOUND AND WIN32)
-  file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
-  file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
-  SET(EMGUCV_BITMAP_POST_PROCESS_BINARY "
-  <Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
-    <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-    <MakeDir Directories=\"$(OutputPath)\\signed\"/>
-    <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-  </Target>
-	")
-ENDIF()
+
       
 # Sign the nuget package
-SET(EMGUCV_BITMAP_POST_PROCESS_NUGET "")
-IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-  file(TO_NATIVE_PATH ${EMGU_NUGET_SIGN_EXECUTABLE} EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH)
-  file(TO_NATIVE_PATH ${NUGET_EXECUTABLE} NUGET_EXECUTABLE_NATIVE_PATH)
-  SET(EMGUCV_BITMAP_POST_PROCESS_NUGET "${EMGUCV_BITMAP_POST_PROCESS_NUGET}
-  <Target Name=\"PostProcessNuget\" AfterTargets=\"Pack\">
-    <Message Text=\"Signing $(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" Importance=\"high\" />
-    <MakeDir Directories=\"$(PackageOutputPath)\\signed\"/>
-    <Exec Command='${EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH} \"$(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" \"$(PackageOutputPath)\\signed\" \"${NUGET_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(PackageOutputPath)\" />
-  </Target>
-	")
-ENDIF()
+#SET(EMGUCV_BITMAP_POST_PROCESS_NUGET "")
+#IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+#  file(TO_NATIVE_PATH ${EMGU_NUGET_SIGN_EXECUTABLE} EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH)
+#  file(TO_NATIVE_PATH ${NUGET_EXECUTABLE} NUGET_EXECUTABLE_NATIVE_PATH)
+#  SET(EMGUCV_BITMAP_POST_PROCESS_NUGET "${EMGUCV_BITMAP_POST_PROCESS_NUGET}
+#  <Target Name=\"PostProcessNuget\" AfterTargets=\"Pack\">
+#    <Message Text=\"Signing $(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" Importance=\"high\" />
+#    <MakeDir Directories=\"$(PackageOutputPath)\\signed\"/>
+#    <Exec Command='${EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH} \"$(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" \"$(PackageOutputPath)\\signed\" \"${NUGET_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(PackageOutputPath)\" />
+#  </Target>
+#	")
+#ENDIF()
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Bitmap.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Bitmap/Directory.Build.props)
+IF(EMGU_SIGN_FOUND AND WIN32)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Bitmap/SignBinary.Targets)
+ENDIF()
+IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Bitmap/SignPkg.Targets)
+ENDIF()
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Bitmap.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Bitmap/docs/README.md)
 
 
 #generate nuget config file for Emgu.CV.Wpf
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Wpf.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Wpf/Directory.Build.props)
+IF(EMGU_SIGN_FOUND AND WIN32)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Wpf/SignBinary.Targets)
+ENDIF()
+IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Wpf/SignPkg.Targets)
+ENDIF()
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Wpf.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Wpf/docs/README.md)
 
 # Generate nuget config file for Emgu.CV.Wpf
 # Sign and copy the binary
-SET(EMGUCV_WPF_POST_PROCESS_BINARY "")
-IF(EMGU_SIGN_FOUND AND WIN32)
-  file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
-  file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
-  SET(EMGUCV_WPF_POST_PROCESS_BINARY "
-  <Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
-    <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-	<MakeDir Directories=\"$(OutputPath)\\signed\"/>
-    <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-  </Target>
-	")
-ENDIF()
+#SET(EMGUCV_WPF_POST_PROCESS_BINARY "")
+#IF(EMGU_SIGN_FOUND AND WIN32)
+#  file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
+#  file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
+#  SET(EMGUCV_WPF_POST_PROCESS_BINARY "
+#  <Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
+#    <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
+#	<MakeDir Directories=\"$(OutputPath)\\signed\"/>
+#    <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
+#  </Target>
+#	")
+#ENDIF()
 
 # ----------------------------------------------------------------------------
 #  Generate readme file for Emgu CV project
