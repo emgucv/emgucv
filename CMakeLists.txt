@@ -699,6 +699,13 @@ IF (("${TARGET_ARCH_NAME}" STREQUAL "ubuntu_x64"))
 ENDIF()
 CHECK_BINARY_EXIST("libs/runtimes/ubuntu-x64/native" "*.so" HAVE_UBUNTU_X64 ${IS_UBUNTU_X64_BUILD})
 
+SET(IS_UBUNTU_ARM64_BUILD OFF)
+IF (("${TARGET_ARCH_NAME}" STREQUAL "ubuntu_arm64"))
+  SET(IS_UBUNTU_ARM64_BUILD ON)
+  MESSAGE(STATUS "IS_UBUNTU_ARM64_BUILD: ${IS_UBUNTU_ARM64_BUILD}")
+ENDIF()
+CHECK_BINARY_EXIST("libs/runtimes/ubuntu-arm64/native" "*.so" HAVE_UBUNTU_ARM64 ${IS_UBUNTU_ARM64_BUILD})
+
 SET(IS_RHEL_X64_BUILD OFF)
 IF (("${TARGET_ARCH_NAME}" STREQUAL "rhel_x64"))
   SET(IS_RHEL_X64_BUILD ON)
@@ -1232,7 +1239,7 @@ IF(HAVE_LINUX_ARM64)
   SET(EMGUCV_DEBIAN_ARM64_NUGET_ID "${EMGUCV_NUGET_ID}.runtime${EMGUCV_RUNTIME_EXTRA_TAG}.debian-arm64")
 ENDIF()
 
-IF(HAVE_UBUNTU_X64 OR HAVE_UBUNTU_X86)
+IF(HAVE_UBUNTU_X64 OR HAVE_UBUNTU_X86 OR HAVE_UBUNTU_ARM64)
   SET(EMGUCV_UBUNTU_NUGET_ID "${EMGUCV_NUGET_ID}.runtime${EMGUCV_RUNTIME_EXTRA_TAG}.${NUGET_NATIVE_PLATFORM_ID_UBUNTU}")
 ENDIF()
 
@@ -1411,8 +1418,14 @@ IF(HAVE_UBUNTU_X64 OR HAVE_UBUNTU_X86 OR HAVE_UBUNTU_ARM64)
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />	
     <file src=\"README.md\" target=\"docs\\\" />")
+	IF(HAVE_UBUNTU_X86)
+	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x86\\native\\ubuntu_x86_version_string.inc\" target=\"docs\\build_info_x86.inc\" /> ")
+	ENDIF()
 	IF(HAVE_UBUNTU_X64)
 	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x64\\native\\ubuntu_x64_version_string.inc\" target=\"docs\\build_info_x64.inc\" /> ")
+	ENDIF()
+	IF(HAVE_UBUNTU_ARM64)
+	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-arm64\\native\\ubuntu_arm64_version_string.inc\" target=\"docs\\build_info_arm64.inc\" /> ")
 	ENDIF()
 ENDIF()
 
