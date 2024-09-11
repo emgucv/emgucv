@@ -1386,7 +1386,8 @@ IF(HAVE_LINUX_ARM)
 	
 	SET(EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST} 
       <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-      <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+      <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+	  <file src=\"Emgu.CV.runtime.debian-arm.props\" target=\"build\\\" />")
 ENDIF()
 IF(HAVE_LINUX_ARM64)
 	SET(EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST} 
@@ -1397,7 +1398,8 @@ IF(HAVE_LINUX_ARM64)
 	  
 	SET(EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST} 
       <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-      <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+      <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+	  <file src=\"Emgu.CV.runtime.debian-arm64.props\" target=\"build\\\" />")
 ENDIF()
 
 SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "")
@@ -2068,11 +2070,13 @@ ENDIF()
 
 IF(HAVE_LINUX_ARM)
   SET(EMGUCV_DEBIAN_ARM_NUGET_TITLE "Emgu CV Native ARM Runtime for Debian (including Raspberry Pi OS)")
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm/Emgu.CV.runtime.debian-arm.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm/Package.nuspec)
 ENDIF()
 
 IF(HAVE_LINUX_ARM64)
   SET(EMGUCV_DEBIAN_ARM64_NUGET_TITLE "Emgu CV Native ARM64 Runtime for Debian (including Raspberry Pi OS)")
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm64/Emgu.CV.runtime.debian-arm64.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm64.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm64/Package.nuspec)
 ENDIF()
 
