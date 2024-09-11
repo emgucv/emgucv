@@ -1450,7 +1450,8 @@ IF(HAVE_RHEL_X64 OR HAVE_RHEL_X86 OR HAVE_RHEL_ARM64)
 	SET(EMGUCV_RHEL_NUGET_FILE_LIST "${EMGUCV_RHEL_NUGET_FILE_LIST} 
     <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-    <file src=\"README.md\" target=\"docs\\\" />")
+    <file src=\"README.md\" target=\"docs\\\" />
+	<file src=\"Emgu.CV.runtime.rhel.props\" target=\"build\\\" />")
 	IF(HAVE_RHEL_X64)
 	  SET(EMGUCV_RHEL_NUGET_FILE_LIST "${EMGUCV_RHEL_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\rhel-x64\\native\\rhel_x64_version_string.inc\" target=\"docs\\build_info_x64.inc\" /> ")
 	ENDIF()
@@ -2089,6 +2090,7 @@ ENDIF()
 IF(HAVE_RHEL_X86 OR HAVE_RHEL_X64 OR HAVE_RHEL_ARM64)
   SET(EMGUCV_RHEL_NUGET_TITLE "Emgu CV Native Runtime for RHEL")
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.rhel.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/Package.nuspec)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/Emgu.CV.runtime.rhel.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.rhel.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/README.md)
 ENDIF()
 
