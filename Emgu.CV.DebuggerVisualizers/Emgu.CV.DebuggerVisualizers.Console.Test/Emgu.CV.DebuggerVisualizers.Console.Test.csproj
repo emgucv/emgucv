@@ -95,6 +95,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj">
+      <Project>{2b33f85d-23af-4ef4-b97f-fbf65f4e6e87}</Project>
+      <Name>Emgu.CV</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Emgu.CV.DebuggerVisualizers.csproj">
       <Project>{e8f09998-297b-485c-b234-e5ace5f55772}</Project>
       <Name>Emgu.CV.DebuggerVisualizers</Name>
