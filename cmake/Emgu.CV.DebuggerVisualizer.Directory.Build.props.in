@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<Project>
+  <!-- https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory?view=vs-2022 -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+  
+  <PropertyGroup>
+    <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\))</EmguCVProjectRoot>
+    <PackageOutputPath>$([System.IO.Path]::GetFullPath($(EmguCVProjectRoot)\platforms\nuget))</PackageOutputPath>
+    <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
+    
+	<!-- Add local repository path to RestoreSources -->
+    <RestoreSources>$(RestoreSources);$(PackageOutputPath)</RestoreSources>
+	
+  </PropertyGroup>
+  
+  ${EMGUCV_DEBUGGER_VISUALIZER_PACKAGE_REFERENCE}
+
+  <Import Project="SignBinary.Targets" Condition="exists('SignBinary.Targets')" />		
+  <Import Project="SignPkg.Targets" Condition="exists('SignPkg.Targets')" />
+</Project>

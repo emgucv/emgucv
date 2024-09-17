@@ -2022,6 +2022,17 @@ IF(HAVE_MAUI)
   #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui/Package.nuspec)
 ENDIF()
 
+IF (HAVE_WINDESKTOP)
+  SET(EMGUCV_DEBUGGER_VISUALIZER_PACKAGE_REFERENCE "
+	<ItemGroup>
+      <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WINDOWS_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
+	  </PackageReference>
+	  <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WPF_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
+	  </PackageReference>
+    </ItemGroup>")
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.DebuggerVisualizer.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/Directory.Build.props)
+ENDIF()
+
 IF(HAVE_WINSTORE_10)
   SET(EMGUCV_UWP_NUGET_TITLE "Emgu CV for UWP Native Runtime")
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.uwp.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.uwp/Package.nuspec)
