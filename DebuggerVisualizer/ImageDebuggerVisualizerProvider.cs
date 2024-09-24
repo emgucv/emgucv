@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 namespace Emgu.CV.DebuggerVisualizer
 {
     /// <summary>
-    /// Debugger visualizer provider class for <see cref="System.String"/>.
+    /// Debugger visualizer provider class for Mat and UMat
     /// </summary>
     [VisualStudioContribution]
     internal class ImageDebuggerVisualizerProvider : DebuggerVisualizerProvider
@@ -33,20 +33,59 @@ namespace Emgu.CV.DebuggerVisualizer
         }
 
         /// <inheritdoc/>
-        public override DebuggerVisualizerProviderConfiguration DebuggerVisualizerProviderConfiguration => new("Mat Visualizer", typeof(Emgu.CV.Mat));
+        public override DebuggerVisualizerProviderConfiguration DebuggerVisualizerProviderConfiguration =>
+            new DebuggerVisualizerProviderConfiguration(
+                new VisualizerTargetType("Emgu CV Visualizer", typeof(Emgu.CV.Mat)),
+                new VisualizerTargetType("Emgu CV Visualizer", typeof(Emgu.CV.UMat))
+                );
+        
 
         /// <inheritdoc/>
         public override async Task<IRemoteUserControl> CreateVisualizerAsync(VisualizerTarget visualizerTarget, CancellationToken cancellationToken)
-        {
-            Mat targetObjectValue = await visualizerTarget.ObjectSource.RequestDataAsync<Mat>(jsonSerializer: null, cancellationToken);
+        { 
+            //Both Mat & UMat are JSON serialized to Mat
+            Mat mat = await visualizerTarget.ObjectSource.RequestDataAsync<Mat>(jsonSerializer: null, cancellationToken);
+            if (mat != null)
+            {
+                // Create a temporary file path
+                string tempPngFilePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName() + ".png");
+
+                // Write the image to temporary file
+                CvInvoke.Imwrite(tempPngFilePath, mat);
+
+                return new Emgu.CV.DebuggerVisualizer.ImageVisualizerDialog(
+                    String.Format("Size: {0}x{1}", mat.Width, mat.Width),
+                    tempPngFilePath
+                );
+            }
+
+            /*
+            UMat umat = await visualizerTarget.ObjectSource.RequestDataAsync<UMat>(jsonSerializer: null, cancellationToken);
+            if (umat != null)
+            {
+                // Create a temporary file path
+                string tempPngFilePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName() + ".png");
+
+                // Write the image to temporary file
+                CvInvoke.Imwrite(tempPngFilePath, umat);
+
+                return new Emgu.CV.DebuggerVisualizer.ImageVisualizerDialog(
+                    String.Format("UMat: {0}x{1}", umat.Size.Height, umat.Size.Width),
+                    tempPngFilePath
+                );
+            }*/
+
+            return null;
+            /*
             //BitmapSource bs = targetObjectValue.ToBitmapSource();
             var data = CvInvoke.Imencode(".png", targetObjectValue);
-            
+
             //Bitmap bs = targetObjectValue.ToBitmap();
             return new Emgu.CV.DebuggerVisualizer.ImageVisualizerDialog(
                 String.Format("Size: {0}x{1}", targetObjectValue.Width, targetObjectValue.Width),
                 Convert.ToBase64String(data)
                 );
+            */
         }
     }
 }

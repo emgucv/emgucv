@@ -13,8 +13,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="ImageVisualizerDialog.xaml" LogicalName="$(RootNamespace).ImageVisualizerDialog.xaml" />
-    <!-- 
-    <None Remove="VisualizerDialog.xaml" />
-    -->
+    <Page Remove="ImageVisualizerDialog.xaml" />
   </ItemGroup>
 </Project>

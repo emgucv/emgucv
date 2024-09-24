@@ -28,6 +28,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Wpf", "..\..\Emgu.CV.Wpf\Emgu.CV.Wpf.csproj", "{19A5EFA9-82AF-44B2-BC3A-DAE1BFEE87E7}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Shared", "..\..\Emgu.CV\Emgu.CV.Shared.shproj", "{0E88523A-29DB-4719-B734-D384765384C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -158,6 +160,7 @@ Global
 		SolutionGuid = {F0B6D852-9561-43DA-9704-9DCA169CF9EC}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\Emgu.CV\Emgu.CV.Shared.projitems*{0e88523a-29db-4719-b734-d384765384c6}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{2b33f85d-23af-4ef4-b97f-fbf65f4e6e87}*SharedItemsImports = 5
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{2b33f85d-23af-4ef4-b97f-fbf65f4e6e87}*SharedItemsImports = 5

@@ -2032,6 +2032,9 @@ IF (HAVE_WINDESKTOP)
 	  </PackageReference>
     </ItemGroup>")
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.DebuggerVisualizer.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/Directory.Build.props)
+  IF(EMGU_SIGN_FOUND AND WIN32)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/SignBinary.Targets)
+  ENDIF()
 ENDIF()
 
 IF(HAVE_WINSTORE_10)
@@ -2479,6 +2482,10 @@ ELSEIF (WIN32)
   
   IF(NOT NETFX_CORE)
     ADD_SUBDIRECTORY(Emgu.CV.DebuggerVisualizers)
+  ENDIF()
+  
+  IF(NOT NETFX_CORE)
+	ADD_SUBDIRECTORY(DebuggerVisualizer)
   ENDIF()
    
   IF(NOT NETFX_CORE)
