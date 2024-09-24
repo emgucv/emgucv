@@ -4,6 +4,9 @@
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
   
   <PropertyGroup>
+    <version>${CPACK_PACKAGE_VERSION}</version>
+    <authors>${CPACK_PACKAGE_VENDOR}</authors>
+    <owners>${CPACK_PACKAGE_VENDOR}</owners>
     <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\))</EmguCVProjectRoot>
     <PackageOutputPath>$([System.IO.Path]::GetFullPath($(EmguCVProjectRoot)\platforms\nuget))</PackageOutputPath>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
@@ -16,5 +19,5 @@
   ${EMGUCV_DEBUGGER_VISUALIZER_PACKAGE_REFERENCE}
 
   <Import Project="SignBinary.Targets" Condition="exists('SignBinary.Targets')" />		
-  <Import Project="SignPkg.Targets" Condition="exists('SignPkg.Targets')" />
+  
 </Project>
