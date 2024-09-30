@@ -2,6 +2,10 @@
 #  Copyright (C) 2004-2023 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
+ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.x86")
+ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.x64")
+ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.arm64")
+
 ADD_SUBDIRECTORY("Emgu.runtime.windows.zlibwapi.x64")
 
 ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.rt")
@@ -46,6 +50,4 @@ add_subdirectory("Emgu.CV.runtime.ubuntu")
 
 add_subdirectory("Emgu.CV.runtime.rhel")
 
-ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.x86")
-ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.x64")
-ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.arm64")
+
