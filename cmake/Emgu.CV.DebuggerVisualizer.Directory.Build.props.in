@@ -12,7 +12,7 @@
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     
 	<!-- Add local repository path to RestoreSources -->
-    <RestoreSources>$(RestoreSources);$(PackageOutputPath)</RestoreSources>
+    <RestoreSources>$(RestoreSources);$(PackageOutputPath);https://api.nuget.org/v3/index.json</RestoreSources>
 	
   </PropertyGroup>
   
