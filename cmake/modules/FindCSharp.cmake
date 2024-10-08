@@ -125,6 +125,7 @@ MESSAGE(STATUS "MSBUILD_EXECUTABLE_140 : ${MSBUILD_EXECUTABLE_140}")
 FIND_PROGRAM (CSC_EXECUTABLE_150 
 NAMES csc 
 PATHS
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin/Roslyn"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2017/Community/MSBuild/15.0/Bin/Roslyn"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin/Roslyn"
 CMAKE_FIND_ROOT_PATH_BOTH
@@ -134,6 +135,7 @@ MESSAGE(STATUS "CSC_EXECUTABLE_150: ${CSC_EXECUTABLE_150}")
 FIND_PROGRAM (MSBUILD_EXECUTABLE_150 
 NAMES msbuild 
 PATHS
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2017/Professional/MSBuild/15.0/Bin"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2017/Community/MSBuild/15.0/Bin"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2017/Enterprise/MSBuild/15.0/Bin"
 CMAKE_FIND_ROOT_PATH_BOTH
@@ -143,6 +145,7 @@ MESSAGE(STATUS "MSBUILD_EXECUTABLE_150 : ${MSBUILD_EXECUTABLE_150}")
 FIND_PROGRAM (CSC_EXECUTABLE_160 
 NAMES csc 
 PATHS
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2019/Professional/MSBuild/Current/Bin/Roslyn"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin/Roslyn"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin/Roslyn"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2019/BuildTools/MSBuild/Current/Bin/Roslyn"
@@ -153,6 +156,7 @@ MESSAGE(STATUS "CSC_EXECUTABLE_160: ${CSC_EXECUTABLE_160}")
 FIND_PROGRAM (MSBUILD_EXECUTABLE_160 
 NAMES msbuild 
 PATHS
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2019/Professional/MSBuild/Current/Bin"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2019/Community/MSBuild/Current/Bin"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2019/Enterprise/MSBuild/Current/Bin"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft Visual Studio/2019/BuildTools/MSBuild/Current/Bin"
@@ -163,6 +167,7 @@ MESSAGE(STATUS "MSBUILD_EXECUTABLE_160 : ${MSBUILD_EXECUTABLE_160}")
 FIND_PROGRAM (CSC_EXECUTABLE_170 
 NAMES csc 
 PATHS
+"$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Professional/Msbuild/Current/Bin/Roslyn"
 "$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Community/Msbuild/Current/Bin/Roslyn"
 "$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Enterprise/Msbuild/Current/Bin/Roslyn"
 "$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/BuildTools/Msbuild/Current/Bin/Roslyn"
@@ -174,6 +179,7 @@ MESSAGE(STATUS "CSC_EXECUTABLE_170: ${CSC_EXECUTABLE_170}")
 FIND_PROGRAM (MSBUILD_EXECUTABLE_170 
 NAMES msbuild 
 PATHS
+"$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Professional/Msbuild/Current/Bin"
 "$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Community/Msbuild/Current/Bin"
 "$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/Enterprise/Msbuild/Current/Bin"
 "$ENV{${PROGRAM_FILES_X64_ENV_STR}}/Microsoft Visual Studio/2022/BuildTools/Msbuild/Current/Bin"
@@ -292,6 +298,7 @@ ENDIF()
 FIND_PROGRAM (GACUTIL_EXECUTABLE
 NAMES gacutil
 PATHS
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6.1 Tools"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6 Tools"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v8.1A/bin/NETFX 4.5.1 Tools"
@@ -312,6 +319,7 @@ CMAKE_FIND_ROOT_PATH_BOTH
 FIND_PROGRAM (AL_EXECUTABLE
 NAMES al
 PATHS
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6.1 Tools"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6 Tools"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v8.1A/bin/NETFX 4.5.1 Tools"
@@ -338,6 +346,7 @@ CMAKE_FIND_ROOT_PATH_BOTH
 FIND_PROGRAM (RESGEN_EXECUTABLE
 NAMES resgen
 PATHS
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.8 Tools"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6.1 Tools"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v10.0A/bin/NETFX 4.6 Tools"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Microsoft SDKs/Windows/v8.1A/bin/NETFX 4.5.1 Tools"
@@ -400,6 +409,7 @@ MESSAGE(STATUS "NUGET_EXECUTABLE : ${NUGET_EXECUTABLE}")
 FIND_PROGRAM (SIGNTOOL_EXECUTABLE 
 NAMES signtool 
 PATHS
+"$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Windows Kits/10/bin/10.0.22621.0/x64"
 "$ENV{${PROGRAM_FILES_X86_ENV_STR}}/Windows Kits/10/bin/10.0.19041.0/x64"
 CMAKE_FIND_ROOT_PATH_BOTH
 )
