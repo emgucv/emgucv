@@ -32,6 +32,17 @@ namespace Emgu.CV.Features2D
         }
 
         /// <summary>
+        /// Retrieves the contours of detected blobs.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="VectorOfVectorOfPoint"/> containing the contours of the detected blobs.
+        /// </returns>
+        public VectorOfVectorOfPoint GetBlobContours()
+        {
+            return new VectorOfVectorOfPoint(Features2DInvoke.cveSimpleBlobDetectorGetBlobContours(_ptr), false);
+        }
+
+        /// <summary>
         /// Release the unmanaged memory associated with this detector.
         /// </summary>
         protected override void DisposeObject()
@@ -84,6 +95,9 @@ namespace Emgu.CV.Features2D
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveSimpleBlobDetectorParamsRelease(ref IntPtr parameters);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveSimpleBlobDetectorGetBlobContours(IntPtr detector);
 
     }
 }
