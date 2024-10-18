@@ -13,11 +13,12 @@ namespace Emgu.CV.DebuggerVisualizer
         public override ExtensionConfiguration ExtensionConfiguration => new()
         {
             Metadata = new(
-                    id: "DebuggerVisualizer.cffe27be-9cce-48fa-829b-a6a446aaa28b",
+                    id: "com.emgu.cv.debuggervisualizer",
                     version: this.ExtensionAssemblyVersion,
                     publisherName: "Emgu Corporation",
-                    displayName: "Emgu CV DebuggerVisualizer",
-                    description: "Debugger Visualizer for Emgu CV"),
+                    displayName: "Debugger Visualizer for Emgu CV",
+                    description: "Debugger Visualizer for Emgu CV"
+                    ),
         };
 
         /// <inheritdoc />
