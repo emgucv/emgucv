@@ -639,8 +639,13 @@ namespace Emgu.CV.Test
         {
             Mat box = EmguAssert.LoadMat("box.png");
             SimpleBlobDetectorParams p = new SimpleBlobDetectorParams();
+            p.CollectContours = true;
             SimpleBlobDetector detector = new SimpleBlobDetector(p);
             MKeyPoint[] keypoints = detector.Detect(box);
+            using (VectorOfVectorOfPoint contour = detector.GetBlobContours())
+            {
+                int count = contour.Size;
+            }
         }
     }
 }

@@ -92,6 +92,7 @@ CVAPI(cv::SimpleBlobDetector*) cveSimpleBlobDetectorCreateWithParams(cv::Feature
 CVAPI(void) cveSimpleBlobDetectorRelease(cv::Ptr<cv::SimpleBlobDetector>** sharedPtr);
 CVAPI(cv::SimpleBlobDetector::Params*) cveSimpleBlobDetectorParamsCreate();
 CVAPI(void) cveSimpleBlobDetectorParamsRelease(cv::SimpleBlobDetector::Params** params);
+CVAPI(const std::vector< std::vector< cv::Point > >*) cveSimpleBlobDetectorGetBlobContours(cv::SimpleBlobDetector* detector);
 
 // Draw keypoints.
 CVAPI(void) cveDrawKeypoints(

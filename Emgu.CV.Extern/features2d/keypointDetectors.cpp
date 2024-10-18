@@ -182,6 +182,16 @@ void cveSimpleBlobDetectorParamsRelease(cv::SimpleBlobDetector::Params** params)
 #endif
 }
 
+const std::vector<std::vector<cv::Point>>* cveSimpleBlobDetectorGetBlobContours(cv::SimpleBlobDetector* detector)
+{
+#ifdef HAVE_OPENCV_FEATURES2D
+	const std::vector< std::vector< cv::Point > >& contours = detector->getBlobContours();
+	return &contours;
+#else
+	throw_no_features2d();
+#endif	
+}
+
 // Draw keypoints.
 void cveDrawKeypoints(
 	cv::_InputArray* image,
