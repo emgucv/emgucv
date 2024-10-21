@@ -27,7 +27,7 @@ INSTALL(
 #    COMPONENT emgucv_binary)
 
 PROJECT(DebuggerVisualizer)
-SET(EXTRA_BUILD_FLAGS "/p:Platform=\"Any CPU\"")
+#SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
 
 #MSBUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../Solution/Windows.Desktop/Emgu.CV.DebuggerVisualizers.sln" "DebuggerVisualizer" "${EXTRA_BUILD_FLAGS}" ALL)	
 BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer.csproj" "${EXTRA_BUILD_FLAGS}" ALL)

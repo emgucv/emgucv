@@ -1,0 +1,3 @@
+<Project>
+  ${EMGUCV_POST_PROCESS_VSIX}
+</Project>
