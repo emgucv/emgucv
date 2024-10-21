@@ -1884,14 +1884,27 @@ SET(EMGUCV_MACOS_NUGET_DEPENDENCY "	<dependencies>
 
 # Sign the binary
   SET(EMGUCV_POST_PROCESS_BINARY "")
-  IF(EMGU_SIGN_FOUND AND WIN32)
+  IF(EMGU_SIGN_FOUND AND WIN32)    
     file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
-	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
+    file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
     SET(EMGUCV_POST_PROCESS_BINARY "${EMGUCV_POST_PROCESS_BINARY}
     <Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
       <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
       <MakeDir Directories=\"$(OutputPath)\\signed\"/>
       <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
+    </Target>")
+  ENDIF()  
+
+# Sign the debugger visualizer
+  SET(EMGUCV_POST_PROCESS_VSIX "")
+  IF(EMGU_VSIX_SIGN_FOUND AND WIN32)
+    file(TO_NATIVE_PATH ${EMGU_VSIX_SIGN_EXECUTABLE} EMGU_VSIX_SIGN_EXECUTABLE_NATIVE_PATH)
+	file(TO_NATIVE_PATH ${OPENVSIXSIGNTOOL_EXECUTABLE} OPENVSIXSIGNTOOL_EXECUTABLE_NATIVE_PATH)
+    SET(EMGUCV_POST_PROCESS_VSIX "${EMGUCV_POST_PROCESS_VSIX}
+    <Target Name=\"PostProcessVSIX\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
+      <Message Text=\"Signing $(OutputPath)$(AssemblyName).vsix\" Importance=\"high\" />
+      <MakeDir Directories=\"$(OutputPath)\\signed\"/>
+      <Exec Command='${EMGU_VSIX_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).vsix\" \"$(OutputPath)signed\" \"${OPENVSIXSIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
     </Target>")
   ENDIF()  
   
@@ -2034,6 +2047,7 @@ IF (HAVE_WINDESKTOP)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.DebuggerVisualizer.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/Directory.Build.props)
   IF(EMGU_SIGN_FOUND AND WIN32)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/SignBinary.Targets)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignVSIX.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/SignVSIX.Targets)
   ENDIF()
 ENDIF()
 

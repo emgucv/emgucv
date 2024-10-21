@@ -10,6 +10,8 @@
 # NUGET_FOUND - If 'nuget' command is found
 # MONO_EXECUTABLE - Path to the mono executable
 # MONO_FOUND - If 'mono' command is found
+# SIGNTOOL_EXECUTABLE - Path to the signtool executable
+# SIGNTOOL_FOUND - If 'signtool' command is found
 # GACUTIL_EXECUTABLE - Path to the 'gacutil'
 # MSBUILD_EXECUTABLE - Path to 'msbuild'
 #
