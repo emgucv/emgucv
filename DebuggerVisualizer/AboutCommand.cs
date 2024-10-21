@@ -1,24 +1,30 @@
 ﻿using Microsoft;
 using Microsoft.VisualStudio.Extensibility;
 using Microsoft.VisualStudio.Extensibility.Commands;
+//using Microsoft.VisualStudio.Extensibility.
 using Microsoft.VisualStudio.Extensibility.Shell;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Emgu.CV.DebuggerVisualizer
 {
+
+
     /// <summary>
-    /// Command1 handler.
+    /// About Command handler.
     /// </summary>
     [VisualStudioContribution]
-    internal class Command1 : Command
+    internal class AboutCommand : Command
     {
+
+
         private readonly TraceSource logger;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Command1"/> class.
+        /// Initializes a new instance of the <see cref="Command"/> class.
         /// </summary>
         /// <param name="traceSource">Trace source instance to utilize.</param>
-        public Command1(TraceSource traceSource)
+        public AboutCommand(TraceSource traceSource)
         {
             // This optional TraceSource can be used for logging in the command. You can use dependency injection to access
             // other services here as well.
@@ -26,7 +32,7 @@ namespace Emgu.CV.DebuggerVisualizer
         }
 
         /// <inheritdoc />
-        public override CommandConfiguration CommandConfiguration => new("%DebuggerVisualizer.Command1.DisplayName%")
+        public override CommandConfiguration CommandConfiguration => new("%DebuggerVisualizer.AboutCommand.DisplayName%")
         {
             // Use this object initializer to set optional parameters for the command. The required parameter,
             // displayName, is set above. DisplayName is localized and references an entry in .vsextension\string-resources.json.
@@ -44,7 +50,11 @@ namespace Emgu.CV.DebuggerVisualizer
         /// <inheritdoc />
         public override async Task ExecuteCommandAsync(IClientContext context, CancellationToken cancellationToken)
         {
-            await this.Extensibility.Shell().ShowPromptAsync("Hello from an extension!", PromptOptions.OK, cancellationToken);
+            string assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            //assemblyVersion = Assembly.LoadFile("your assembly file").GetName().Version.ToString();
+
+            String versionMsg = String.Format("Emgu CV Debugger Visualizer v{0}", assemblyVersion);
+            await this.Extensibility.Shell().ShowPromptAsync(versionMsg, PromptOptions.OK, cancellationToken);
         }
     }
 }
