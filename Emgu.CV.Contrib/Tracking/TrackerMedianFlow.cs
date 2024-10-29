@@ -41,7 +41,7 @@ namespace Emgu.CV.Legacy
             Size winSizeNCC, 
             double maxMedianLengthOfDisplacementDifference = 10)
         {
-            TrackingInvoke.cveTrackerMedianFlowCreate(pointsInGrid, ref winSize, maxLevel, ref termCriteria, ref winSizeNCC, maxMedianLengthOfDisplacementDifference, ref _trackerPtr, ref _sharedPtr);
+            _ptr = TrackingInvoke.cveTrackerMedianFlowCreate(pointsInGrid, ref winSize, maxLevel, ref termCriteria, ref winSizeNCC, maxMedianLengthOfDisplacementDifference, ref _trackerPtr, ref _sharedPtr);
         }
 
         /// <summary>

@@ -40,6 +40,7 @@ using Emgu.CV.Util;
 using Emgu.CV.VideoStab;
 using Emgu.CV.XFeatures2D;
 using Emgu.CV.XImgproc;
+using Emgu.CV.Legacy;
 using Emgu.Util;
 
 using System.Threading.Tasks;
@@ -4415,6 +4416,23 @@ namespace Emgu.CV.Test
                 CvInvoke.BitwiseOr(image, contoursBgr, image);
                 //Emgu.CV.UI.ImageViewer.Show(image);
             }
+        }
+
+        [Test]
+        public void TestTrackerMedianFlow()
+        {
+            using (Mat box = EmguAssert.LoadMat("box.png"))
+            using (MultiTracker multiTracker = new MultiTracker())
+            using (TrackerMedianFlow medianFlowTracker = new TrackerMedianFlow(
+                10,
+                new Size(3, 3),
+                5,
+                new MCvTermCriteria(20, 0.3),
+                new Size(30, 30), 10.0))
+            {
+                bool success = multiTracker.Add(medianFlowTracker, box, new Rectangle(new Point(), box.Size));
+            }
+                
         }
 
 
