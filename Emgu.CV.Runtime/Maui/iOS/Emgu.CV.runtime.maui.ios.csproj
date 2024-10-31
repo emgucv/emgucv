@@ -6,7 +6,7 @@
     <ImplicitUsings>true</ImplicitUsings>
     <IsBindingProject>true</IsBindingProject>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseXCFramework>false</UseXCFramework>
+    <UseXCFramework>true</UseXCFramework>
     <NoBindingEmbedding>$(UseXCFramework)</NoBindingEmbedding>
     <AssemblyName>Emgu.CV.runtime.maui.ios</AssemblyName>
   </PropertyGroup>
@@ -74,7 +74,7 @@
     </NativeReference>
     
     <NativeReference Condition="'$(UseEmguCVNativeIOSFramework)'=='true'" Include="$(EmguCVNativeIOSFramework)">
-      <Kind>Framework</Kind>
+      <Kind>Static</Kind>
       <SmartLink>True</SmartLink>
       <ForceLoad>True</ForceLoad>
       <IsCxx>True</IsCxx>
