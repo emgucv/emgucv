@@ -3767,12 +3767,16 @@ namespace Emgu.CV.Test
         [Test]
         public void TestUnicodeImgFileIO()
         {
-            Mat m = EmguAssert.LoadMat("lena.jpg");
-            EmguAssert.IsTrue(CvInvoke.Imwrite("测试.jpg", m));
-            Bitmap bmp = new Bitmap("测试.jpg");
-            UMat m2 = bmp.ToImage<Bgr, Byte>().ToUMat();
-            Mat m3 = EmguAssert.LoadMat("测试.jpg");
-            //Emgu.CV.UI.ImageViewer.Show(m2);
+            //Bitmap is only available on windows
+            if (Platform.OperationSystem == Emgu.Util.Platform.OS.Windows)
+            {
+                Mat m = EmguAssert.LoadMat("lena.jpg");
+                EmguAssert.IsTrue(CvInvoke.Imwrite("测试.jpg", m));
+                Bitmap bmp = new Bitmap("测试.jpg");
+                UMat m2 = bmp.ToImage<Bgr, Byte>().ToUMat();
+                Mat m3 = EmguAssert.LoadMat("测试.jpg");
+                //Emgu.CV.UI.ImageViewer.Show(m2);
+            }
         }
 
         [Test]
