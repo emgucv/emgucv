@@ -3239,7 +3239,6 @@ namespace Emgu.CV.Test
         [Test]
         public void TestFileCapturePause()
         {
-
             int totalFrames1 = 0;
             String fileName = EmguAssert.GetFile("tree.avi");
             String fileName2 = fileName.Replace("tree.avi", "tree2.avi");
@@ -3259,8 +3258,6 @@ namespace Emgu.CV.Test
             capture1.Start();
 
             System.Threading.Thread.Sleep(2);
-
-
 
             int totalFrames2 = 0;
             VideoCapture capture2 = new VideoCapture(fileName2);
@@ -3455,6 +3452,13 @@ namespace Emgu.CV.Test
             classProb = maxVal;
         }
 
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
         [Test]
         public void TestDnnFcn8sHeavyPascal()
         {
@@ -3579,6 +3583,13 @@ namespace Emgu.CV.Test
         }
         */
 
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
         [Test]
         public void TestDnnBvlcGoogleNet()
         {
@@ -3647,6 +3658,13 @@ namespace Emgu.CV.Test
             }
         }
 
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
         [Test]
         public void TestDnnSSD()
         {
@@ -3713,7 +3731,13 @@ namespace Emgu.CV.Test
         }
 
 
-
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
         [Test]
         public void TestDnnTensorFlow()
         {
