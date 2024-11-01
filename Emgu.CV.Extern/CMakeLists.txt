@@ -4294,10 +4294,15 @@ ELSEIF (IOS)
       "${IPHONESIMULATOR_STATIC_LIB_FILE}"
       DESTINATION "libs/iOS/"
       COMPONENT emgucv_binary)
-	INSTALL(FILES
+    INSTALL(FILES
       "${IPHONE_UNIVERSAL_STATIC_LIB_FILE}"
       DESTINATION "libs/iOS/"
+      COMPONENT emgucv_binary)
+    INSTALL(DIRECTORY
+      "${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_ios.xcframework"
+      DESTINATION "libs/iOS/"
       COMPONENT emgucv_binary)  
+
 	#IF(IPHONESIMULATOR AND (EXISTS "${CMAKE_SOURCE_DIR}/libs/iOS/iphoneos_arm64_version_string.inc"))
 	#    INSTALL(FILES
 	#	  "${CMAKE_SOURCE_DIR}/libs/iOS/iphoneos_arm64_version_string.inc"
