@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0-ios</TargetFrameworks>
+    <TargetFrameworks>net9.0-ios</TargetFrameworks>
     <!--  <RuntimeIdentifiers>ios-arm64;iossimulator-x64</RuntimeIdentifiers> -->
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
