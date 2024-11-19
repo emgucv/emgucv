@@ -149,7 +149,7 @@ namespace Emgu.Util
             return c;
         }
 
-
+#if ! __IOS__
         /// <summary>
         /// Call a command from command line
         /// </summary>
@@ -185,6 +185,7 @@ namespace Emgu.Util
                 return output;
             }
         }
+#endif
 
         /// <summary>
         /// Use reflection to find the base type. If such type do not exist, null is returned
