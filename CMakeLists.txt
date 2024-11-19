@@ -2051,6 +2051,9 @@ IF (HAVE_WINDESKTOP)
   ENDIF()
 ENDIF()
 
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.BuildInfo.Console.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/BuildInfo.Console/Directory.Build.props)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Test.Net.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Test/Emgu.CV.Test.Net/Directory.Build.props)
+
 IF(HAVE_WINSTORE_10)
   SET(EMGUCV_UWP_NUGET_TITLE "Emgu CV for UWP Native Runtime")
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.uwp.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.uwp/Package.nuspec)

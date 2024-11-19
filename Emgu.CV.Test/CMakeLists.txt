@@ -13,7 +13,7 @@ IF(DOTNET_FOUND AND (NOT (IOS OR ANDROID OR NETFX_CORE)))
     #  SET(EXTRA_BUILD_FLAGS ${EXTRA_BUILD_FLAGS} "/p:TargetFrameworks=\"netstandard2.0\"")
     #ENDIF()
 
-    BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Test.Netcore/Emgu.CV.Test.Netcore.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
+    BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Test.Net/Emgu.CV.Test.Net.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
     #BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../Solution/Windows.Desktop/Emgu.CV.Test.Net.sln" "Emgu.CV.Test.Netcore" "" ALL)
   
   if(ENABLE_SOLUTION_FOLDERS)
