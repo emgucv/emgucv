@@ -4,6 +4,7 @@
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
   <PropertyGroup>
+	<TargetFramework>net${DOTNET_VERSION_MAJOR}-android</TargetFramework>
     <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\))</EmguCVProjectRoot>
   
     <PackageId>${EMGUCV_MAUI_ANDROID_NUGET_ID}</PackageId>
