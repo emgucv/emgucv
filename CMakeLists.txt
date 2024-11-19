@@ -1923,43 +1923,9 @@ IF(EMGU_SIGN_FOUND AND WIN32)
 	")
 ENDIF()
 
-IF(HAVE_ANDROID)
-
+#IF(HAVE_ANDROID)
   SET(EMGUCV_MAUI_ANDROID_NUGET_TITLE "Emgu CV for MAUI Android Native Runtime")
   
-  # Sign and copy the binary
-  #SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "")
-  #IF(EMGU_SIGN_FOUND AND WIN32)
-  #  file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
-#	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
-#    SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY}
-	#<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
-    #  <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-	#  <MakeDir Directories=\"$(OutputPath)\\signed\"/>
-    #  <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-	#</Target>
-	#")
-  #ENDIF()
-  #SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY} ")    
-  #SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY "${EMGUCV_MAUI_ANDROID_POST_PROCESS_BINARY}
-  #  <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\" Importance=\"high\" />
-  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
-  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
-  #</Target>")    
-  
-  # Sign the nuget package
-  #SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET "")
-  #IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-  #  file(TO_NATIVE_PATH ${EMGU_NUGET_SIGN_EXECUTABLE} EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH)
-#	file(TO_NATIVE_PATH ${NUGET_EXECUTABLE} NUGET_EXECUTABLE_NATIVE_PATH)
-#  	SET(EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET "${EMGUCV_MAUI_ANDROID_POST_PROCESS_NUGET}
-#  <Target Name=\"PostProcessNuget\" AfterTargets=\"Pack\">
- #   <Message Text=\"Signing $(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" Importance=\"high\" />
-  #  <MakeDir Directories=\"$(PackageOutputPath)\\signed\"/>
-   # <Exec Command='${EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH} \"$(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" \"$(PackageOutputPath)\\signed\" \"${NUGET_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(PackageOutputPath)\" />
-  #</Target>
-#	")
-  #ENDIF()
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/Directory.Build.props)
   IF(EMGU_SIGN_FOUND AND WIN32)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/SignBinary.Targets)
@@ -1968,11 +1934,11 @@ IF(HAVE_ANDROID)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/SignPkg.Targets)
   ENDIF()
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/docs/README.md)
-ENDIF()
+#ENDIF()
 
-IF(HAVE_IOS)  
+#IF(HAVE_IOS)  
   SET(EMGUCV_MAUI_IOS_NUGET_TITLE "Emgu CV for MAUI iOS Native Runtime")	
-  SET(EMGUCV_MAUI_IOS_POST_PROCESS_BINARY "${EMGUCV_MAUI_IOS_POST_PROCESS_BINARY}")
+  #SET(EMGUCV_MAUI_IOS_POST_PROCESS_BINARY "${EMGUCV_MAUI_IOS_POST_PROCESS_BINARY}")
   #SET(EMGUCV_MAUI_IOS_POST_PROCESS_BINARY "${EMGUCV_MAUI_IOS_POST_PROCESS_BINARY}
   #<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">
   #  <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\" Importance=\"high\" />
@@ -1981,14 +1947,14 @@ IF(HAVE_IOS)
   #</Target>")  
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/iOS/Directory.Build.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/iOS/docs/README.md)  
-ENDIF()
+#ENDIF()
 
-IF(HAVE_MACOS)
+#IF(HAVE_MACOS)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.macos.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/Package.nuspec)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.macos.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/docs/README.md)  
-ENDIF()
+#ENDIF()
 
-IF(HAVE_MAUI)
+#IF(HAVE_MAUI)
   SET(EMGUCV_MAUI_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.maui${EMGUCV_RUNTIME_EXTRA_TAG}")
   SET(EMGUCV_MAUI_NUGET_TITLE "Emgu CV for MAUI Native Runtime")
   
@@ -2000,29 +1966,6 @@ IF(HAVE_MAUI)
 	  </PackageReference>
     </ItemGroup>")
   ENDIF()
-  # Sign and copy the binary
-  #SET(EMGUCV_MAUI_POST_PROCESS_BINARY "
-  #  <PropertyGroup>
-#	  <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)../../../libs))</OpenCVBinaryDir>
-	#</PropertyGroup>
-	#")
-  #IF(EMGU_SIGN_FOUND AND WIN32)
-  #  file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
-#	file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
-#    SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY}
-#	<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
- #     <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-	#  <MakeDir Directories=\"$(OutputPath)\\signed\"/>
-    #  <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)\\signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-	#</Target>
-	#")
-  #ENDIF()
-  #SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY}
-  #  <Message Text=\"Copying $(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).dll, $(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\\$(TargetFramework)\" Importance=\"high\" />
-  #  <Copy SourceFiles=\"$(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\\$(TargetFramework)\" ContinueOnError=\"true\" />
-  #  <Copy SourceFiles=\"$(MSBuildThisFileDirectory)$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\\$(TargetFramework)\" ContinueOnError=\"true\" />
-  #</Target>")    
-  #SET(EMGUCV_MAUI_POST_PROCESS_BINARY "${EMGUCV_MAUI_POST_PROCESS_BINARY}")    
   
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/Directory.Build.props)
   IF(EMGU_SIGN_FOUND AND WIN32)
@@ -2034,7 +1977,7 @@ IF(HAVE_MAUI)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/docs/README.md)
   #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui/README.md)
   #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui/Package.nuspec)
-ENDIF()
+#ENDIF()
 
 IF (HAVE_WINDESKTOP)
   SET(EMGUCV_DEBUGGER_VISUALIZER_PACKAGE_REFERENCE "
