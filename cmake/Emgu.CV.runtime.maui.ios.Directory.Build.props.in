@@ -4,6 +4,8 @@
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
   <PropertyGroup>
+    <TargetFrameworks>net${DOTNET_VERSION_MAJOR}.0-ios</TargetFrameworks>
+	
     <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\))</EmguCVProjectRoot>
 	
     <PackageId>${EMGUCV_MAUI_IOS_NUGET_ID}</PackageId>
