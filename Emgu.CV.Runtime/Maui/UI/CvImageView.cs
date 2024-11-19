@@ -68,6 +68,10 @@ namespace Emgu.CV.Platform.Maui.UI
 
         private void DisplayImage_HandlerChanged(object sender, EventArgs e)
         {
+            if (this.Handler == null)
+                //Don't do anything if Handler is not available
+                return;
+
             var platformView = this.Handler.PlatformView;
 
 #if __ANDROID__
@@ -80,7 +84,6 @@ namespace Emgu.CV.Platform.Maui.UI
             this.ImageView = platformView as Microsoft.UI.Xaml.Controls.Image;
 #endif
             SetImage(_inputArray);
-
         }
 
         /// <summary>
