@@ -20,18 +20,18 @@ if [ "$2" == "device" ]; then
     CV_TOOLCHAIN_OPTION=( -DCMAKE_TOOLCHAIN_FILE=$CURRENT_SCRIPT_DIR/cmake/Toolchains/Toolchain-iPhoneOS_Xcode.cmake )
     CV_OPTIMIZATION_OPTION=
     INSTALL_FOLDER=$INSTALL_FOLDER/OpenCV_iPhoneOS_$3
-    IPHONEOS_DEPLOYMENT_TARGET=13.2 
+    IPHONEOS_DEPLOYMENT_TARGET=14.2 
 elif [ "$2" == "catalyst" ]; then
     CV_TOOLCHAIN_OPTION=( -DAPPLE_FRAME_WORK:BOOL=TRUE -DCMAKE_TOOLCHAIN_FILE=$CURRENT_SCRIPT_DIR/cmake/Toolchains/Toolchain-Catalyst_Xcode.cmake )
     CV_OPTIMIZATION_OPTION=
     INSTALL_FOLDER=$INSTALL_FOLDER/OpenCV_catalyst_$3
-    IPHONEOS_DEPLOYMENT_TARGET=13.2
+    IPHONEOS_DEPLOYMENT_TARGET=15.0
 else #simulator
     CV_TOOLCHAIN_OPTION=( -DCMAKE_TOOLCHAIN_FILE=$CURRENT_SCRIPT_DIR/cmake/Toolchains/Toolchain-iPhoneSimulator_Xcode.cmake )
     #disable optimization for ios simulator. It is causing compilation issue when NEON is enabled for Apple Arm64.
     CV_OPTIMIZATION_OPTION=( -DCV_DISABLE_OPTIMIZATION:BOOL=TRUE )
     INSTALL_FOLDER=$INSTALL_FOLDER/OpenCV_iPhoneSimulator_$3
-    IPHONEOS_DEPLOYMENT_TARGET=13.2
+    IPHONEOS_DEPLOYMENT_TARGET=14.2
 fi
 
 #need to set it as an enviroment variable for 4.9.0 release
