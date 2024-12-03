@@ -1259,14 +1259,13 @@ ENDIF()
 
 SET(EMGUCV_MACOS_NUGET_FILE_LIST "")
 IF(HAVE_MACOS)
-  IF (IS_MACOS_BUILD)
-  ENDIF()
   SET(EMGUCV_MACOS_NUGET_FILE_LIST "${EMGUCV_MACOS_NUGET_FILE_LIST} 
   <file src=\"..\\..\\..\\libs\\runtimes\\osx\\native\\*.dylib\" target=\"runtimes\\osx\\native\"/>
   <file src=\"..\\..\\..\\libs\\runtimes\\osx\\native\\*.inc\" target=\"docs\\\" />
   <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
   <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-  <file src=\"docs\\README.md\" target=\"docs\\\" />")
+  <file src=\"docs\\README.md\" target=\"docs\\\" />
+  <file src=\"Emgu.CV.runtime.macos.props\" target=\"build\\\" />")
 ENDIF()
 
 SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "")
@@ -1870,16 +1869,6 @@ SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "	<dependencies>
 SET(EMGUCV_MACOS_NUGET_DEPENDENCY "	<dependencies>
 		${EMGUCV_MACOS_NUGET_DEPENDENCY}
     </dependencies>")
-	
-#SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "	<dependencies>
-#      <group targetFramework=\"net461\">${EMGUCV_WINDOWS_NETFRAMEWORK_NUGET_DEPENDENCY}</group>
-#      <group targetFramework=\".NETStandard2.0\">${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}</group>
-#      <group targetFramework=\".NETCoreApp3.1\">${EMGUCV_WINDOWS_NETSTANDARD_NUGET_DEPENDENCY}</group>
-#    </dependencies>
-#    <frameworkAssemblies>
-#      <frameworkAssembly assemblyName=\"mscorlib\" targetFramework=\".NETFramework4.6.1\" />
-#      <frameworkAssembly assemblyName=\"System.Drawing\" targetFramework=\".NETFramework4.6.1\" />
-#    </frameworkAssemblies>")
 
 # Sign the binary
   SET(EMGUCV_POST_PROCESS_BINARY "")
@@ -1948,10 +1937,10 @@ ENDIF()
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/iOS/docs/README.md)  
 #ENDIF()
 
-#IF(HAVE_MACOS)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/Emgu.CV.runtime.macos.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.macos.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/Package.nuspec)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.macos.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/docs/README.md)  
-#ENDIF()
+
 
 #IF(HAVE_MAUI)
   SET(EMGUCV_MAUI_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.maui${EMGUCV_RUNTIME_EXTRA_TAG}")
