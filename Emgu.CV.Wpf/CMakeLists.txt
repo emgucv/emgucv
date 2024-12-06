@@ -36,7 +36,6 @@ IF (TARGET Emgu.CV)
       FILES_MATCHING 
       PATTERN "Emgu.CV.Wpf.csproj"
 	  PATTERN "Directory.Build.props"
-	  #PATTERN "LICENSE.txt"
 	  PATTERN "README.md"
 	  #PATTERN "*.png"
 	  PATTERN "*.cs"

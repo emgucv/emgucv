@@ -12,7 +12,6 @@ IF(HAVE_ANDROID AND HAVE_MAUI_IOS AND HAVE_MAUI_MAC)
 	PATTERN "*.cs"
     PATTERN "*.csproj"
 	PATTERN "Directory.Build.props"
-	#PATTERN "LICENSE.txt"
 	PATTERN "README.md"
 	#PATTERN "*.png"
     PATTERN ".svn" EXCLUDE

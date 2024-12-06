@@ -12,6 +12,7 @@ IF(HAVE_IOS)
       PATTERN "*.csproj"
 	  PATTERN "*.cs"
 	  PATTERN "Directory.Build.props"
+	  PATTERN "README.md"
       PATTERN ".svn" EXCLUDE
       PATTERN "obj" EXCLUDE
       PATTERN "CMakeFiles" EXCLUDE
