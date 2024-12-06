@@ -50,4 +50,13 @@ add_subdirectory("Emgu.CV.runtime.ubuntu")
 
 add_subdirectory("Emgu.CV.runtime.rhel")
 
+INSTALL(
+      DIRECTORY
+      ${CMAKE_CURRENT_SOURCE_DIR}
+      DESTINATION "platforms/nuget/"
+      COMPONENT emgucv_binary
+      FILES_MATCHING 
+      PATTERN "*.nupkg"
+)
+
 
