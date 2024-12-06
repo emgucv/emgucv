@@ -44,6 +44,7 @@ IF (TARGET Emgu.CV)
       PATTERN "Emgu.CV.Bitmap.csproj"
 	  PATTERN "*.cs"
 	  PATTERN "Directory.Build.props"
+	  PATTERN "README.md"
       PATTERN ".svn" EXCLUDE
       PATTERN "obj" EXCLUDE
       PATTERN "CMakeFiles" EXCLUDE

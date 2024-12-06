@@ -17,6 +17,7 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
 	  PATTERN "*.resx"
 	  PATTERN "Directory.Build.props"
 	  PATTERN "README.txt"
+	  PATTERN "README.md"
 	  PATTERN ".svn" EXCLUDE
 	  PATTERN "obj" EXCLUDE
 	  PATTERN "CMakeFiles" EXCLUDE

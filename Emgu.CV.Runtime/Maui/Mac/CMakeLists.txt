@@ -13,6 +13,7 @@ IF(HAVE_MAUI_MAC)
     PATTERN "*.cs"
     PATTERN "*.csproj"
 	PATTERN "Directory.Build.props"
+	PATTERN "README.md"
     PATTERN ".svn" EXCLUDE
     PATTERN "obj" EXCLUDE
     PATTERN "bin" EXCLUDE

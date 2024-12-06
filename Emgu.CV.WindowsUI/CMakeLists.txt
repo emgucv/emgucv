@@ -16,6 +16,7 @@ INSTALL(
   PATTERN "*.projitems"
   PATTERN "*.shproj"
   PATTERN "Directory.Build.props"
+  PATTERN "README.md"
   PATTERN ".svn" EXCLUDE
   PATTERN "obj" EXCLUDE
   PATTERN "bin" EXCLUDE
