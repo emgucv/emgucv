@@ -14,6 +14,7 @@ INSTALL(
   PATTERN "*.csproj"
   PATTERN "*.xaml"
   PATTERN "*.json"
+  PATTERN "Directory.Build.props"
   PATTERN ".svn" EXCLUDE
   PATTERN "obj" EXCLUDE
   PATTERN "CMakeFiles" EXCLUDE

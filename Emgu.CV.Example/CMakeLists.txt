@@ -394,6 +394,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 	  PATTERN "*.jpg"
       PATTERN "*.dll"
       PATTERN "*.json"
+	  PATTERN "*.Build.props"
       PATTERN "bin" EXCLUDE
       PATTERN "obj" EXCLUDE
       )	
@@ -441,6 +442,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 	  PATTERN "*.jpg"
       PATTERN "*.dll"
       PATTERN "*.json"
+	  PATTERN "*.Build.props"
       PATTERN "bin" EXCLUDE
       PATTERN "obj" EXCLUDE
       )	
