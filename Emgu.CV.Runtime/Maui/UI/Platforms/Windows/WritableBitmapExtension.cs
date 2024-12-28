@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if WINDOWS
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -101,3 +102,4 @@ namespace Emgu.CV.Platform.Maui.UI
     }
 
 }
+#endif

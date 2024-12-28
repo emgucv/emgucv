@@ -7,6 +7,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<PublishReadyToRun>False</PublishReadyToRun>
 		<AssemblyName>Emgu.CV.runtime.maui</AssemblyName>
+		<LangVersion>latest</LangVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
@@ -25,8 +26,8 @@
 	  <ProjectReference Include="..\..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
 	  <ProjectReference  Include="..\..\..\Emgu.CV.Models\NetStandard\Emgu.CV.Models.csproj" />
 	  
-	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="..\..\..\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj" />
-	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="..\..\..\Emgu.CV.Wpf\Emgu.CV.Wpf.csproj" />
+	  <ProjectReference Condition="($([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows') AND ('$(TargetFramework)'!='netstandard2.0')" Include="..\..\..\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj" />
+	  <ProjectReference Condition="($([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows') AND ('$(TargetFramework)'!='netstandard2.0')" Include="..\..\..\Emgu.CV.Wpf\Emgu.CV.Wpf.csproj" />
 	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="..\Android\Emgu.CV.runtime.maui.android.csproj" />
 	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'" Include="..\iOS\Emgu.CV.runtime.maui.ios.csproj" />
 	  <ProjectReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'" Include="..\Mac\Emgu.CV.runtime.maui.macos.csproj" />
@@ -43,4 +44,7 @@
 		<PackageReference Update="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 	</ItemGroup>
 	
+	<Target Name="DisplayMessages" AfterTargets="PostBuildEvent">
+        <Message Text="MauiVersion = '$(MauiVersion)'" Importance="high" />
+    </Target>
 </Project>
