@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.RpcContracts.DebuggerVisualizers;
 using Microsoft.Extensions.DependencyInjection;
 
 using System.Drawing;
-using System.Windows.Media.Imaging;
+//using System.Windows.Media.Imaging;
 
 namespace Emgu.CV.DebuggerVisualizer
 {

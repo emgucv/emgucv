@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.CompilerServices;
-using System.Windows.Data;
-using System.Windows.Media.Imaging;
+//using System.Windows.Data;
+//using System.Windows.Media.Imaging;
 using Microsoft.VisualStudio.Extensibility.UI;
 
 namespace Emgu.CV.DebuggerVisualizer
