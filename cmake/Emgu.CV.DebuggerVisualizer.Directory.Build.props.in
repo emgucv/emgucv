@@ -21,6 +21,7 @@
   ${EMGUCV_DEBUGGER_VISUALIZER_PACKAGE_REFERENCE}
 
   <Import Project="SignBinary.Targets" Condition="exists('SignBinary.Targets')" />		
+  <!--
   <Import Project="SignVSIX.Targets" Condition="exists('SignVSIX.Targets')" />
-  
+  -->
 </Project>
