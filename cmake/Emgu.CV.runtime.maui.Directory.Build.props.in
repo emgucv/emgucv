@@ -9,6 +9,8 @@
 	<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 	<!-- <TargetFrameworks>$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-tizen</TargetFrameworks> -->
 	
+	<MauiVersion Condition="'$(MauiVersion)' == ''">${DOTNET_VERSION_MAJOR}.0.0</MauiVersion>
+	
     <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\))</EmguCVProjectRoot>
 	
     <PackageId>${EMGUCV_MAUI_NUGET_ID}</PackageId>
