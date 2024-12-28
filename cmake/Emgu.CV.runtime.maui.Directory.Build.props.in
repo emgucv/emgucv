@@ -4,10 +4,10 @@
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
   
     <PropertyGroup>
-	<TargetFrameworks>net${DOTNET_VERSION_MAJOR}.0-android;net${DOTNET_VERSION_MAJOR}.0-ios;net${DOTNET_VERSION_MAJOR}.0-maccatalyst</TargetFrameworks>
+	<TargetFrameworks>netstandard2.0;net${DOTNET_VERSION_MAJOR}.0-android;net${DOTNET_VERSION_MAJOR}.0-ios;net${DOTNET_VERSION_MAJOR}.0-maccatalyst</TargetFrameworks>
 	<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-windows10.0.19041.0</TargetFrameworks>
 	<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-	<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
+	<!-- <TargetFrameworks>$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-tizen</TargetFrameworks> -->
 	
     <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\))</EmguCVProjectRoot>
 	
@@ -40,9 +40,16 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
 	
   </PropertyGroup>
   
-  ${EMGUCV_MAUI_PACKAGE_REFERENCE}
-
+    <PropertyGroup>
+	  <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
+	</PropertyGroup>
   
+  	<PropertyGroup Condition="'$(TargetFramework)'=='net${DOTNET_VERSION_MAJOR}.0-android'">
+	  <DefineConstants>$(DefineConstants);__USE_ANDROID_CAMERA2__</DefineConstants>
+	</PropertyGroup>
+  
+    ${EMGUCV_MAUI_PACKAGE_REFERENCE}
+
      <ItemGroup>
       <None Include="$(EmguCVProjectRoot)\LICENSE.txt">
         <Pack>True</Pack>
