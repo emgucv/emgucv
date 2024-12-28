@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using System.Windows.Media.Imaging;
+//using System.Windows.Media.Imaging;
 
 namespace Emgu.CV.DebuggerVisualizer;
 

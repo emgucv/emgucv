@@ -1973,8 +1973,10 @@ IF (HAVE_WINDESKTOP)
 	<ItemGroup>
       <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WINDOWS_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
 	  </PackageReference>
+	  <!--
 	  <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WPF_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
 	  </PackageReference>
+	  -->
     </ItemGroup>")
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.DebuggerVisualizer.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/Directory.Build.props)
   IF(EMGU_SIGN_FOUND AND WIN32)
