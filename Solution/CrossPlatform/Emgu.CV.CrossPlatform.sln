@@ -41,7 +41,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.WindowsUI", "..\..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Wpf", "..\..\Emgu.CV.Wpf\Emgu.CV.Wpf.csproj", "{86CFFFE8-665D-491D-87AC-08E5EB525509}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPF.NetCore", "..\..\Emgu.CV.Example\WPF.NetCore\WPF.NetCore.csproj", "{0830246D-3F72-4B90-A933-3A9EE44F9684}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorld.WPF", "..\..\Emgu.CV.Example\HelloWorld.WPF\HelloWorld.WPF.csproj", "{0830246D-3F72-4B90-A933-3A9EE44F9684}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildInfo.Console", "..\..\Emgu.CV.Example\BuildInfo.Console\BuildInfo.Console.csproj", "{20FA82FC-DEE0-45F4-BE16-0533752F4CEF}"
 EndProject
