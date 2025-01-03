@@ -1457,7 +1457,7 @@ IF(HAVE_RHEL_X64 OR HAVE_RHEL_X86 OR HAVE_RHEL_ARM64)
 ENDIF()
 
 
-SET(EMGUCV_NUGET_FILE_LIST "")
+#SET(EMGUCV_NUGET_FILE_LIST "")
 SET(EMGUCV_NUGET_DEPENDENCY "")
 SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
 
@@ -1477,12 +1477,12 @@ MESSAGE(STATUS "System.Drawing.Common = ${SYSTEM_DRAWING_COMMON_VERSION}")
 SET(NUGET_SYSTEM_TEXT_JSON_VERSION "${SYSTEM_TEXT_JSON_VERSION}")
 SET(NUGET_SYSTEM_DRAWING_COMMON_VERSION "${SYSTEM_DRAWING_COMMON_VERSION}")
 
-  SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
-	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
-    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
-	")
+#  SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
+#	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
+#    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
+#	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
+#    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
+#	")
   SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
 	  <group targetFramework=\"${EMGUCV_MAUI_MACOS_DST_FOLDER}\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
@@ -1498,12 +1498,12 @@ SET(NUGET_SYSTEM_DRAWING_COMMON_VERSION "${SYSTEM_DRAWING_COMMON_VERSION}")
       </group>")
 
 
-SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.dll\" target=\"lib\\netstandard2.0\" />
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.xml\" target=\"lib\\netstandard2.0\" />
-    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-	<file src=\"README.md\" target=\"docs\\\" />")
+#SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
+#    <file src=\"..\\..\\..\\libs\\Emgu.CV.dll\" target=\"lib\\netstandard2.0\" />
+#    <file src=\"..\\..\\..\\libs\\Emgu.CV.xml\" target=\"lib\\netstandard2.0\" />
+#    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+#    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+#	<file src=\"README.md\" target=\"docs\\\" />")
 SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
       <group targetFramework=\".NETStandard2.0\">
         <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
