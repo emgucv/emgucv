@@ -22,8 +22,11 @@ namespace Emgu.CV.Dai
     public partial class Device : UnmanagedObject
     {
         /// <summary>
-        /// Create a new device
+        /// Initializes a new instance of the <see cref="Device"/> class using the specified DepthAI pipeline.
         /// </summary>
+        /// <param name="pipeline">
+        /// The <see cref="Pipeline"/> object that defines the configuration and operations for the DepthAI device.
+        /// </param>
         public Device(Pipeline pipeline)
         {
             _ptr = DaiInvoke.daiDeviceCreate(pipeline);

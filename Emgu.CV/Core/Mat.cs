@@ -1295,6 +1295,7 @@ namespace Emgu.CV
         /// Returns a memory span that wraps the underlying memory buffer.
         /// </summary>
         /// <param name="size">The size of the Span. If it is less than or equals to 0, the full span is used.</param>
+        /// <typeparam name="T">The type of the elements in the span.</typeparam>
         /// <returns>A memory span that wraps the underlying memory buffer.</returns>
         public Span<T> GetSpan<T>(int size = 0) where T : struct
         {
