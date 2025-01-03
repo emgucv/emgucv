@@ -319,10 +319,18 @@ namespace Emgu.CV.Dnn
         private static extern IntPtr cveReadNetFromTensorflow2(IntPtr bufferModel, int lenModel, IntPtr bufferConfig, int lenConfig);
 
         /// <summary>
-        /// Reads a network model stored in TFLite framework's format.
+        /// Reads a network model stored in the TensorFlow Lite (TFLite) framework's format.
         /// </summary>
-        /// <param name="model"></param>
-        /// <returns>Net object</returns>
+        /// <param name="model">
+        /// The file path to the TFLite model.
+        /// </param>
+        /// <returns>
+        /// A <see cref="Net"/> object representing the loaded network.
+        /// </returns>
+        /// <remarks>
+        /// This method loads a pre-trained neural network model stored in the TFLite format.
+        /// The model can then be used for inference or further processing.
+        /// </remarks>
         public static Net ReadNetFromTFLite(String model)
         {
             using (CvString modelStr = new CvString(model))
