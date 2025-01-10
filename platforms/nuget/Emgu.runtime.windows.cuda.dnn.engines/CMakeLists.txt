@@ -4,7 +4,7 @@
 
 IF (WIN32 AND (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64) AND WITH_CUDNN)
 
-PROJECT(Emgu.runtime.windows.cuda.dnn.cnn.train.nuget)
+PROJECT(Emgu.runtime.windows.cuda.dnn.engines.nuget)
 
   get_filename_component(NUGET_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
 
@@ -17,7 +17,7 @@ PROJECT(Emgu.runtime.windows.cuda.dnn.cnn.train.nuget)
 	) 
 
   IF (EMGU_NUGET_SIGN_FOUND)
-    EMGU_SIGN_NUGET(${PROJECT_NAME} "${NUGET_OUTPUT_DIR}/${EMGU_CUDNN_CNN_TRAIN_NUGET_ID}.${EMGU_CUDNN_VERSION}.nupkg")
+    EMGU_SIGN_NUGET(${PROJECT_NAME} "${NUGET_OUTPUT_DIR}/${EMGU_CUDNN_ENGINES_NUGET_ID}.${EMGU_CUDNN_VERSION}.nupkg")
   ENDIF()
 
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.runtime.windows.cuda.dnn.nuget)

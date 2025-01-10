@@ -35,8 +35,8 @@ IF ( (TARGET Emgu.CV)
   IF (WIN32 AND HAVE_WINDESKTOP_X64 AND WITH_CUDA)
   	ADD_DEPENDENCIES(${PROJECT_NAME} 
 	  Emgu.runtime.windows.cuda.fft.nuget 
-	  Emgu.runtime.windows.cuda.dnn.cnn.infer.nuget 
-	  Emgu.runtime.windows.cuda.dnn.cnn.train.nuget 
+	  Emgu.runtime.windows.cuda.dnn.cnn.nuget 
+	  Emgu.runtime.windows.cuda.dnn.engines.nuget 
 	  Emgu.runtime.windows.cuda.dnn.ops.nuget 
 	  Emgu.runtime.windows.cuda.dnn.adv.nuget 
 	  Emgu.runtime.windows.cuda.blas.nuget
