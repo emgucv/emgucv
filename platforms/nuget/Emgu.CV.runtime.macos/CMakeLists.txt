@@ -2,8 +2,7 @@
 #  Copyright (C) 2004-2025 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF ( (TARGET Emgu.CV.Platform.NetStandard)
-  AND HAVE_MACOS)
+IF (HAVE_MACOS)
   
   PROJECT(Emgu.CV.runtime.macos.nuget)
 
