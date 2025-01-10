@@ -1093,6 +1093,7 @@ MATH(EXPR CPACK_PACKAGE_VERSION_PATCH_PLUS_ONE "${CPACK_PACKAGE_VERSION_PATCH}+1
 #SET(CPACK_PACKAGE_DEPENDENCY_VERSION "[${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.0,${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH_PLUS_ONE}.0)")
 #SET(CPACK_PACKAGE_DEPENDENCY_VERSION "(${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.0, ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH_PLUS_ONE}.0)")
 SET(CPACK_PACKAGE_DEPENDENCY_VERSION "${CPACK_PACKAGE_VERSION}")
+SET(NUGET_PACKAGE_DEPENDENCY_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.*")
 
 #IF(NETFX_CORE)
 #  SET(EMGU_CV_WITH_TESSERACT OFF CACHE BOOL "BUILD TESSERACT OCR")
@@ -1459,7 +1460,7 @@ ENDIF()
 
 
 #SET(EMGUCV_NUGET_FILE_LIST "")
-SET(EMGUCV_NUGET_DEPENDENCY "")
+#SET(EMGUCV_NUGET_DEPENDENCY "")
 SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
 
 
@@ -1484,19 +1485,19 @@ SET(NUGET_SYSTEM_DRAWING_COMMON_VERSION "${SYSTEM_DRAWING_COMMON_VERSION}")
 #	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
 #    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
 #	")
-  SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
-	  <group targetFramework=\"${EMGUCV_MAUI_MACOS_DST_FOLDER}\">
-        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-		<dependency id=\"System.Runtime.InteropServices.NFloat.Internal\" version=\"6.0.1\" exclude=\"Build,Analyzers\" />
-      </group>
-	  <group targetFramework=\"${EMGUCV_MAUI_IOS_DST_FOLDER}\">
-        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-		<dependency id=\"System.Runtime.InteropServices.NFloat.Internal\" version=\"6.0.1\" exclude=\"Build,Analyzers\" />
-      </group>")
+#  SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
+#	  <group targetFramework=\"${EMGUCV_MAUI_MACOS_DST_FOLDER}\">
+#        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
+#        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
+#        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
+#		<dependency id=\"System.Runtime.InteropServices.NFloat.Internal\" version=\"6.0.1\" exclude=\"Build,Analyzers\" />
+#      </group>
+#	  <group targetFramework=\"${EMGUCV_MAUI_IOS_DST_FOLDER}\">
+#        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
+#        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
+#        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
+#		<dependency id=\"System.Runtime.InteropServices.NFloat.Internal\" version=\"6.0.1\" exclude=\"Build,Analyzers\" />
+#      </group>")
 
 
 #SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
@@ -1505,13 +1506,13 @@ SET(NUGET_SYSTEM_DRAWING_COMMON_VERSION "${SYSTEM_DRAWING_COMMON_VERSION}")
 #    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
 #    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
 #	<file src=\"README.md\" target=\"docs\\\" />")
-SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
-      <group targetFramework=\".NETStandard2.0\">
-        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-		<dependency id=\"System.Text.Json\" version=\"${NUGET_SYSTEM_TEXT_JSON_VERSION}\" exclude=\"Build,Analyzers\" />
-      </group>")
+#SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
+#      <group targetFramework=\".NETStandard2.0\">
+#        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
+#        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
+#        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
+#		<dependency id=\"System.Text.Json\" version=\"${NUGET_SYSTEM_TEXT_JSON_VERSION}\" exclude=\"Build,Analyzers\" />
+#      </group>")
 
 
 SET(EMGUCV_BITMAP_NUGET_TITLE "Bitmap extension for Emgu CV")
@@ -1596,41 +1597,41 @@ IF (HAVE_WINDESKTOP_X64 OR HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_ARM64)
   ENDIF()
   
   SET(EMGUCV_UI_NUGET_TITLE "Windows UI components for Emgu CV")
-  SET(EMGUCV_UI_NUGET_FILE_LIST "${EMGUCV_UI_NUGET_FILE_LIST} 
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetFramework.dll\" target=\"lib\\net461\" />
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetFramework.xml\" target=\"lib\\net461\" />
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetCore.dll\" target=\"lib\\netcoreapp3.1\" />
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetCore.xml\" target=\"lib\\netcoreapp3.1\" />
-    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-	<file src=\"README.md\" target=\"docs\\\" />")
-  SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
-      <group targetFramework=\".NETFramework4.6.1\">
-        <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-      </group>")
-  SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
-      <group targetFramework=\".NETCoreApp3.1\">
-        <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-      </group>")
-  SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
-    <frameworkReferences>
-      <group targetFramework=\".NETCoreApp3.1\">
-        <frameworkReference name=\"Microsoft.WindowsDesktop.App.WindowsForms\" />
-      </group>
-    </frameworkReferences>")
-  SET(EMGUCV_UI_NUGET_DEPENDENCY "
-	<dependencies>
-${EMGUCV_UI_NUGET_DEPENDENCY}
-    </dependencies>
-    <frameworkAssemblies>
-      <frameworkAssembly assemblyName=\"System.Windows.Forms\" targetFramework=\".NETFramework4.6.1\" />
-    </frameworkAssemblies>")
+#  SET(EMGUCV_UI_NUGET_FILE_LIST "${EMGUCV_UI_NUGET_FILE_LIST} 
+#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetFramework.dll\" target=\"lib\\net461\" />
+#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetFramework.xml\" target=\"lib\\net461\" />
+#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetCore.dll\" target=\"lib\\netcoreapp3.1\" />
+#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetCore.xml\" target=\"lib\\netcoreapp3.1\" />
+#    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+#    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+#	<file src=\"README.md\" target=\"docs\\\" />")
+#  SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
+#      <group targetFramework=\".NETFramework4.6.1\">
+#        <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+#      </group>")
+#  SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
+#      <group targetFramework=\".NETCoreApp3.1\">
+#        <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+#      </group>")
+#  SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
+#    <frameworkReferences>
+#      <group targetFramework=\".NETCoreApp3.1\">
+#        <frameworkReference name=\"Microsoft.WindowsDesktop.App.WindowsForms\" />
+#      </group>
+#    </frameworkReferences>")
+#  SET(EMGUCV_UI_NUGET_DEPENDENCY "
+#	<dependencies>
+#${EMGUCV_UI_NUGET_DEPENDENCY}
+#    </dependencies>
+#    <frameworkAssemblies>
+#      <frameworkAssembly assemblyName=\"System.Windows.Forms\" targetFramework=\".NETFramework4.6.1\" />
+#    </frameworkAssemblies>")
 ENDIF()
 
-SET(EMGUCV_NUGET_DEPENDENCY "
-	<dependencies>
-${EMGUCV_NUGET_DEPENDENCY}
-    </dependencies>")
+#SET(EMGUCV_NUGET_DEPENDENCY "
+#	<dependencies>
+#${EMGUCV_NUGET_DEPENDENCY}
+#    </dependencies>")
 
 #SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "
 #	<frameworkReferences>
@@ -1650,7 +1651,7 @@ ENDIF()
 STRING(STRIP "${EMGUCV_NUGET_TITLE_ARCH}" EMGUCV_NUGET_TITLE_ARCH)
 STRING(REPLACE "x86 x64 arm64" "" EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH}")
 
-SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />")
+SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${NUGET_PACKAGE_DEPENDENCY_VERSION}\" />")
 #SET(EMGUCV_WINDOWS_NETCORE_NUGET_DEPENDENCY "<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />")
 #SET(EMGUCV_WINDOWS_NETFRAMEWORK_NUGET_DEPENDENCY "<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />")
  
@@ -1659,7 +1660,7 @@ SET(EMGUCV_WINDOWS_NUGET_TITLE "EMGU CV ${EMGUCV_NUGET_TITLE_ARCH}")
 STRING(STRIP "${EMGUCV_WINDOWS_NUGET_TITLE}" EMGUCV_WINDOWS_NUGET_TITLE)
 SET(EMGUCV_WINDOWS_NUGET_TITLE "${EMGUCV_WINDOWS_NUGET_TITLE} runtime for windows")
 
-SET(EMGUCV_MACOS_NUGET_DEPENDENCY "${EMGUCV_MACOS_NUGET_DEPENDENCY}<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />")
+SET(EMGUCV_MACOS_NUGET_DEPENDENCY "${EMGUCV_MACOS_NUGET_DEPENDENCY}<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${NUGET_PACKAGE_DEPENDENCY_VERSION}\" />")
 
 SET(EMGUCV_MACOS_NUGET_TITLE "EMGU CV")
 STRING(STRIP "${EMGUCV_MACOS_NUGET_TITLE}" EMGUCV_MACOS_NUGET_TITLE)
