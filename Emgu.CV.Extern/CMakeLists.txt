@@ -4020,6 +4020,9 @@ ENDIF()
 
 IF(ANDROID)
   ADD_DEFINITIONS(-DANDROID)
+  TARGET_LINK_LIBRARIES(${the_target} c++)
+  target_link_options(${the_target} PRIVATE "-Wl,-z,max-page-size=16384")
+  
   # For Android, tell the linker to transform all the symbols in the static libraries to hidden.
   # This can significantly reduce the binary size
   #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--exclude-libs,ALL")
