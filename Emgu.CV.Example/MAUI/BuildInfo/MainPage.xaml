@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:ui="clr-namespace:Emgu.CV.Platform.Maui.UI;assembly=Emgu.CV.Platform.Maui.UI"
+             xmlns:ui="clr-namespace:Emgu.CV.Platform.Maui.UI;assembly=Emgu.CV.runtime.maui"
              x:Class="BuildInfo.MainPage">
 
     <ScrollView>
