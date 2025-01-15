@@ -1,5 +1,5 @@
 # Use the bazel-android image
-FROM emgu/bazel-android:dotnet-6.0-bazel-4.2.1
+FROM emgu/bazel-android:ubuntu-24.04-dotnet-8-bazelisk
 
 #Create a new folder for our project
 RUN mkdir -p /emgu
@@ -14,7 +14,7 @@ WORKDIR "/emgu"
 RUN dotnet new console
 
 #Add Emgu.CV.runtime package
-RUN dotnet add package Emgu.CV.runtime.ubuntu-x64 --version 4.9.0.5494
+RUN dotnet add package Emgu.CV.runtime.ubuntu-x64 --version 4.10.0.5680
 
 #Copy the source code to the docker image
 COPY Program.cs "/emgu/Program.cs"
@@ -23,7 +23,7 @@ COPY Program.cs "/emgu/Program.cs"
 RUN dotnet publish -c Release
 
 #Move the published application to /app folder
-RUN mv bin/Release/net6.0/publish /app
+RUN mv bin/Release/net8.0/publish /app
 
 #Change work dir
 WORKDIR "/app"
