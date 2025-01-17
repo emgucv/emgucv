@@ -2154,13 +2154,13 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Wpf.Package.README.md.i
 #  Generate readme file for Emgu CV project
 # ----------------------------------------------------------------------------
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/README.txt.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/README.txt)
-INSTALL(FILES "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/README.txt" DESTINATION "." COMPONENT libs)
+INSTALL(FILES "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/README.txt" DESTINATION "." COMPONENT emgucv_source)
 
 # ----------------------------------------------------------------------------
 #  Include license file & nuget icon into package
 # ----------------------------------------------------------------------------
-INSTALL(FILES "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt" DESTINATION "." COMPONENT libs)
-INSTALL(FILES "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/nuget_icon.png" DESTINATION "miscellaneous/" COMPONENT libs)
+INSTALL(FILES "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt" DESTINATION "." COMPONENT emgucv_source)
+INSTALL(FILES "${CMAKE_CURRENT_SOURCE_DIR}/miscellaneous/nuget_icon.png" DESTINATION "miscellaneous/" COMPONENT emgucv_source)
 
 # ----------------------------------------------------------------------------
 #  Generate CvInvokeEntryPoints.cs file for Emgu CV project
