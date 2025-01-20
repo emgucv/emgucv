@@ -1,11 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-	    <!-- 
-		<TargetFrameworks>net9.0-android</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">$(TargetFrameworks);net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.22621.0</TargetFrameworks>
-		-->
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 		<OutputType>Exe</OutputType>
@@ -35,14 +30,14 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<Platforms>AnyCPU;x64</Platforms>
 
+		<AcceptAndroidSDKLicenses>true</AcceptAndroidSDKLicenses>
 		<!-- <WindowsPackageType>None</WindowsPackageType> -->
 	</PropertyGroup>
 
-	<PropertyGroup>
-	  <ApplicationTitle>Emgu CV demo</ApplicationTitle>
-	</PropertyGroup>
-
-	
+	<!-- Temporary work around MAUI iOS AOT compilation issue for dotnet 9: https://github.com/dotnet/runtime/issues/109966#issuecomment-2486161265 -->
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
+        <MtouchInterpreter>-all,System.Private.Windows.Core</MtouchInterpreter>
+    </PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
