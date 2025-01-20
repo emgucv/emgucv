@@ -37,6 +37,11 @@
 		<CodesignEntitlements Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">Platforms\MacCatalyst\Entitlements.plist</CodesignEntitlements>
 	</PropertyGroup>
 
+	<!-- Temporary work around MAUI iOS AOT compilation issue for dotnet 9: https://github.com/dotnet/runtime/issues/109966#issuecomment-2486161265 -->
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
+        <MtouchInterpreter>-all,System.Private.Windows.Core</MtouchInterpreter>
+    </PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
