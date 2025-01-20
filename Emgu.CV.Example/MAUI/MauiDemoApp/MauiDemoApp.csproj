@@ -31,6 +31,8 @@
 		<Platforms>AnyCPU;x64</Platforms>
 
 		<AcceptAndroidSDKLicenses>true</AcceptAndroidSDKLicenses>
+		<CodesignEntitlements Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">Platforms\MacCatalyst\Entitlements.plist</CodesignEntitlements>
+		
 		<!-- <WindowsPackageType>None</WindowsPackageType> -->
 	</PropertyGroup>
 
