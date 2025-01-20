@@ -5,6 +5,8 @@
         public App()
         {
             InitializeComponent();
+
+            Emgu.CV.Platform.Maui.MauiInvoke.Init();
         }
 
         protected override Window CreateWindow(IActivationState? activationState)
