@@ -22,6 +22,7 @@ jobs:
     - uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.x'
+        install-dir: 'C:\\actions-runner\\dotnet'  # Specify a directory with write access
     #- name: Install dotnet workload 
     #  run: dotnet workload install maui maccatalyst
     #- name: Check out submodules
