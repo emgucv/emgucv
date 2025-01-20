@@ -12,10 +12,10 @@ Release note can be found at
 
 ## Setup
 
-Please make sure to call `Emgu.CV.Platform.Maui.MauiInvoke.Init()` before making any other calls to Emgu CV library in MAUI. You can put that in your MainPage.xaml.cs file:
+Please make sure to call `Emgu.CV.Platform.Maui.MauiInvoke.Init()` before making any other calls to Emgu CV library in MAUI. You can put that in your App.xaml.cs file:
 
 ```csharp
-    public MainPage()
+    public App()
     {
         InitializeComponent();
 
