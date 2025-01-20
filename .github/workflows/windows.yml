@@ -21,7 +21,7 @@ jobs:
         submodules: true
     - uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.x'
+        dotnet-version: '9.x'
     #- name: Install dotnet workload 
     #  run: dotnet workload install maui maccatalyst
     #- name: Check out submodules
@@ -35,10 +35,10 @@ jobs:
     - name: Build Emgu CV 64-bit native binary
       run: .\Build_Binary_x86.bat x86_64 nogpu vc no-openni no-doc package build nuget
       working-directory: ${{ github.workspace }}\platforms\windows\
-    - uses: actions/upload-artifact@v4
-      with:
-        name: emgucv-windows-nsis-build-log
-        path: ${{ github.workspace }}\build_x86_64\_CPack_Packages\win64\NSIS\*.log
+    #- uses: actions/upload-artifact@v4
+    #  with:
+    #    name: emgucv-windows-nsis-build-log
+    #    path: ${{ github.workspace }}\build_x86_64\_CPack_Packages\win64\NSIS\*.log
     - uses: actions/upload-artifact@v4
       with:
         name: emgucv-windows-zip-package
