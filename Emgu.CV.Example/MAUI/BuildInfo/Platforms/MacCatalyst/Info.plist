@@ -26,5 +26,9 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app requires access to the camera to capture photos and videos.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app requires access to your location while in use to provide location-based functionality.</string>
 </dict>
 </plist>
