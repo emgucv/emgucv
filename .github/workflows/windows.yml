@@ -16,14 +16,19 @@ jobs:
     timeout-minutes: 2880
     
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      id: checkout_repo
+      uses: actions/checkout@v4
       with:
         submodules: true
-    - uses: actions/setup-dotnet@v4
+    - name: Setup dotnet
+      id: setup_dotnet
+      uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '9.x'
-    #- name: Install dotnet workload 
-    #  run: dotnet workload install maui maccatalyst
+    - name: Install dotnet workload 
+      id: install_dotnet_workload
+      run: dotnet workload install maui maccatalyst
     #- name: Check out submodules
     #  run: git submodule update --init --recursive
     - name: Build Emgu CV 32-bit native binary
@@ -59,3 +64,23 @@ jobs:
     #  with:
     #    name: emgucv-windows-gpu-zip-package
     #    path: ${{ github.workspace }}\build_x64\*.zip
+    - name: Add Visual Studio MSBuild to PATH
+      id: msbuild_path
+      uses: microsoft/setup-msbuild@v1.1
+    - name: Initialize CodeQL
+      id: init_codeql
+      uses: github/codeql-action/init@v3
+      with:
+        languages: csharp
+    - name: Build solution
+      id: build_solution
+      run: |
+          Push-Location ${{ github.workspace }}\Solution\Windows.Desktop\
+          msbuild Emgu.CV.sln `
+          -p:Configuration=Release `
+          -p:Platform=x64 `
+          -p:UseSharedCompilation=false `
+          -t:Restore,Build
+    - name: Perform CodeQL Analysis
+      id: analyze_codeql
+      uses: github/codeql-action/analyze@v3
