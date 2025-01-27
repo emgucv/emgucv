@@ -119,6 +119,17 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="value">The value to be written to the file storage</param>
         /// <param name="nodeName">The name of the node.</param>
+        public void Write(Int64 value, String nodeName = null)
+        {
+            using (CvString cs = new CvString(nodeName))
+                CvInvoke.cveFileStorageWriteInt64(_ptr, cs, value);
+        }
+
+        /// <summary>
+        /// Writes the specified Mat to the node with the specific name
+        /// </summary>
+        /// <param name="value">The value to be written to the file storage</param>
+        /// <param name="nodeName">The name of the node.</param>
         public void Write(float value, String nodeName = null)
         {
             using (CvString cs = new CvString(nodeName))
@@ -262,6 +273,8 @@ namespace Emgu.CV
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveFileStorageWriteInt(IntPtr fs, IntPtr name, int value);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveFileStorageWriteInt64(IntPtr fs, IntPtr name, Int64 value);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveFileStorageWriteFloat(IntPtr fs, IntPtr name, float value);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

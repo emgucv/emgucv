@@ -680,6 +680,10 @@ void cveFileStorageWriteInt(cv::FileStorage* fs, cv::String* name, int value)
 {
 	cv::write(*fs, *name, value);
 }
+void cveFileStorageWriteInt(cv::FileStorage* fs, cv::String* name, int64_t value)
+{
+	cv::write(*fs, *name, value);
+}
 void cveFileStorageWriteFloat(cv::FileStorage* fs, cv::String* name, float value)
 {
 	cv::write(*fs, *name, value);
@@ -752,6 +756,12 @@ void cveFileNodeReadString(cv::FileNode* node, cv::String* str, cv::String* defa
 int cveFileNodeReadInt(cv::FileNode* node, int defaultInt)
 {
 	int result = 0;
+	cv::read(*node, result, defaultInt);
+	return result;
+}
+int64_t cveFileNodeReadInt64(cv::FileNode* node, int64_t defaultInt)
+{
+	int64_t result = 0;
 	cv::read(*node, result, defaultInt);
 	return result;
 }
