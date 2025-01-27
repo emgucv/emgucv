@@ -201,12 +201,21 @@ namespace Emgu.CV
         /// Distorts 2D points using fisheye model.
         /// </summary>
         /// <param name="undistored">Array of object points, 1xN/Nx1 2-channel (or vector&lt;Point2f&gt; ), where N is the number of points in the view.</param>
-        /// <param name="distorted">	Output array of image points, 1xN/Nx1 2-channel, or vector&lt;Point2f&gt; .</param>
-        /// <param name="K">Camera matrix</param>
+        /// <param name="distorted">Output array of image points, 1xN/Nx1 2-channel, or vector&lt;Point2f&gt; .</param>
+        /// <param name="K">Camera intrinsic matrix</param>
         /// <param name="D">Input vector of distortion coefficients (k1,k2,k3,k4).</param>
         /// <param name="alpha">The skew coefficient.</param>
-        public static void DistortPoints(IInputArray undistored, IOutputArray distorted, IInputArray K, IInputArray D,
-           double alpha = 0)
+        /// <remarks>
+        /// Note that the function assumes the camera intrinsic matrix of the undistorted points to be identity.
+        /// This means if you want to distort image points you have to multiply them with K^(-1)
+        /// or use another function overload.
+        /// </remarks>
+        public static void DistortPoints(
+            IInputArray undistored, 
+            IOutputArray distorted, 
+            IInputArray K, 
+            IInputArray D,
+            double alpha = 0)
         {
             using (InputArray iaUndistorted = undistored.GetInputArray())
             using (OutputArray oaDistorted = distorted.GetOutputArray())
@@ -218,7 +227,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Transforms an image to compensate for fisheye lens distortion.
+        /// Undistorts 2D points using fisheye model.
         /// </summary>
         /// <param name="distorted">Array of object points, 1xN/Nx1 2-channel (or vector&lt;Point2f&gt; ), where N is the number of points in the view.</param>
         /// <param name="undistorted">Output array of image points, 1xN/Nx1 2-channel, or vector&lt;Point2f&gt;.</param>
@@ -226,8 +235,13 @@ namespace Emgu.CV
         /// <param name="D">Input vector of distortion coefficients (k1,k2,k3,k4).</param>
         /// <param name="R">Rectification transformation in the object space: 3x3 1-channel, or vector: 3x1/1x3 1-channel or 1x1 3-channel</param>
         /// <param name="P">New camera matrix (3x3) or new projection matrix (3x4)</param>
-        public static void UndistortPoints(IInputArray distorted, IOutputArray undistorted, IInputArray K, IInputArray D,
-           IInputArray R = null, IInputArray P = null)
+        public static void UndistortPoints(
+            IInputArray distorted, 
+            IOutputArray undistorted, 
+            IInputArray K, 
+            IInputArray D,
+            IInputArray R = null, 
+            IInputArray P = null)
         {
             using (InputArray iaDistorted = distorted.GetInputArray())
             using (OutputArray oaUndistorted = undistorted.GetOutputArray())
