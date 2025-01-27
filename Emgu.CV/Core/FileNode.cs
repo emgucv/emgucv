@@ -192,6 +192,16 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// Reads the int from the node.
+        /// </summary>
+        /// <param name="defaultInt">The default value if one is not found in the node.</param>
+        /// <returns>The int from the node.</returns>
+        public Int64 ReadInt64(Int64 defaultInt = int.MinValue)
+        {
+            return CvInvoke.cveFileNodeReadInt64(_ptr, defaultInt);
+        }
+
+        /// <summary>
         /// Reads the float from the node.
         /// </summary>
         /// <param name="defaultFloat">The default value if one is not found in the node.</param>
@@ -258,6 +268,9 @@ namespace Emgu.CV
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern int cveFileNodeReadInt(IntPtr node, int defaultInt);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern Int64 cveFileNodeReadInt64(IntPtr node, Int64 defaultInt);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern double cveFileNodeReadDouble(IntPtr node, double defaultDouble);
