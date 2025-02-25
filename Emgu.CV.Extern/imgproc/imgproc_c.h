@@ -127,6 +127,7 @@ CVAPI(void) cveDrawContours(
    CvScalar* color, int thickness, int lineType, cv::_InputArray* hierarchy, 
    int maxLevel, CvPoint* offset);
 CVAPI(void) cveApproxPolyDP(cv::_InputArray* curve, cv::_OutputArray* approxCurve, double epsilon, bool closed);
+CVAPI(void) cveApproxPolyN(cv::_InputArray* curve, cv::_OutputArray* approxCurve, int nsides, float epsilonPercentage, bool ensureConvex);
 CVAPI(void) cveConvexHull(cv::_InputArray* points, cv::_OutputArray* hull, bool clockwise, bool returnPoints);
 CVAPI(void) cveConvexityDefects(cv::_InputArray* contour, cv::_InputArray* convexhull, cv::_OutputArray* convexityDefects); 
 

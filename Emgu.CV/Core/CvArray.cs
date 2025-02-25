@@ -209,7 +209,7 @@ namespace Emgu.CV
                             using (GZipStream stream = new GZipStream(ms, CompressionMode.Decompress))
                             {
                                 bytes = new Byte[size];
-                                stream.Read(bytes, 0, size);
+                                int bytesRead = stream.Read(bytes, 0, size);
                             }
                         }
                     }
