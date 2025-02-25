@@ -1316,11 +1316,44 @@ namespace Emgu.CV
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveApproxPolyDP(
-           IntPtr curve,
-           IntPtr approxCurve,
-           double epsilon,
-           [MarshalAs(CvInvoke.BoolMarshalType)]
-         bool closed);
+            IntPtr curve,
+            IntPtr approxCurve,
+            double epsilon,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool closed);
+
+        /// <summary>
+        /// Approximates a polygon with a convex hull with a specified accuracy and number of sides.
+        /// The cv::approxPolyN function approximates a polygon with a convex hull so that the difference between the contour area
+        /// of the original contour and the new polygon is minimal.It uses a greedy algorithm for contracting two vertices into one
+        /// in such a way that the additional area is minimal.Straight lines formed by each edge of the convex contour are drawn
+        /// and the areas of the resulting triangles are considered.Each vertex will lie either on the original contour or outside it.
+        /// </summary>
+        /// <param name="curve">Input vector of a 2D points stored in std::vector or Mat, points must be float or integer.</param>
+        /// <param name="approxCurve">Result of the approximation. The type is vector of a 2D point (Point2f or Point) in std::vector or Mat.</param>
+        /// <param name="nsides">The parameter defines the number of sides of the result polygon.</param>
+        /// <param name="epsilonPercentage">defines the percentage of the maximum of additional area. If it equals -1, it is not used. Otherwise algorighm stops if additional area is greater than contourArea(_curve) * percentage. If additional area exceeds the limit, algorithm returns as many vertices as there were at the moment the limit was exceeded.</param>
+        /// <param name="ensureConvex">If it is true, algorithm creates a convex hull of input contour. Otherwise input vector should be convex.</param>
+        public static void ApproxPolyN(
+            IInputArray curve, 
+            IOutputArray approxCurve, 
+            int nsides, 
+            float epsilonPercentage=-1.0f, 
+            bool ensureConvex=true)
+        {
+            using (InputArray iaCurve = curve.GetInputArray())
+            using (OutputArray oaApproxCurve = approxCurve.GetOutputArray())
+                cveApproxPolyN(iaCurve, oaApproxCurve, nsides, epsilonPercentage, ensureConvex);
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveApproxPolyN(
+            IntPtr curve,
+            IntPtr approxCurve,
+            int nsides, 
+            float epsilonPercentage, 
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool ensureConvex);
 
         /// <summary>
         /// Returns the up-right bounding rectangle for 2d point set

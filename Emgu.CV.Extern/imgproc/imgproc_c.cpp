@@ -459,6 +459,10 @@ void cveApproxPolyDP(cv::_InputArray* curve, cv::_OutputArray* approxCurve, doub
 {
 	cv::approxPolyDP(*curve, *approxCurve, epsilon, closed);
 }
+void cveApproxPolyN(cv::_InputArray* curve, cv::_OutputArray* approxCurve, int nsides, float epsilonPercentage, bool ensureConvex)
+{
+	cv::approxPolyN(*curve, *approxCurve, nsides, epsilonPercentage, ensureConvex);
+}
 void cveConvexHull(cv::_InputArray* points, cv::_OutputArray* hull, bool clockwise, bool returnPoints)
 {
 	cv::convexHull(*points, *hull, clockwise, returnPoints);
