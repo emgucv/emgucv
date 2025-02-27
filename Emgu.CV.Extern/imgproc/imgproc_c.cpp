@@ -261,9 +261,20 @@ void cveHoughCircles(cv::_InputArray* image, cv::_OutputArray* circles, int meth
 {
 	cv::HoughCircles(*image, *circles, method, dp, minDist, param1, param2, minRadius, maxRadius);
 }
-void cveHoughLines(cv::_InputArray* image, cv::_OutputArray* lines, double rho, double theta, int threshold, double srn, double stn)
+void cveHoughLines(
+	cv::_InputArray* image, 
+	cv::_OutputArray* lines, 
+	double rho, 
+	double theta, 
+	int threshold, 
+	double srn, 
+	double stn, 
+	double minTheta,
+	double maxTheta,
+	bool useEdgeVal
+	)
 {
-	cv::HoughLines(*image, *lines, rho, theta, threshold, srn, stn);
+	cv::HoughLines(*image, *lines, rho, theta, threshold, srn, stn, minTheta, maxTheta, useEdgeVal);
 }
 void cveHoughLinesP(cv::_InputArray* image, cv::_OutputArray* lines, double rho, double theta, int threshold, double minLineLength, double maxGap)
 {

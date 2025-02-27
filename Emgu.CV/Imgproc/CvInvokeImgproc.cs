@@ -1754,15 +1754,50 @@ namespace Emgu.CV
         /// <param name="theta">Angle resolution of the accumulator in radians.</param>
         /// <param name="threshold">Accumulator threshold parameter. Only those lines are returned that get enough votes (&gt; threshold)</param>
         /// <param name="srn">For the multi-scale Hough transform, it is a divisor for the distance resolution rho . The coarse accumulator distance resolution is rho and the accurate accumulator resolution is rho/srn . If both srn=0 and stn=0 , the classical Hough transform is used. Otherwise, both these parameters should be positive.</param>
-        /// <param name="stn"> For the multi-scale Hough transform, it is a divisor for the distance resolution theta</param>
-        public static void HoughLines(IInputArray image, IOutputArray lines, double rho, double theta, int threshold, double srn = 0, double stn = 0)
+        /// <param name="stn">For the multi-scale Hough transform, it is a divisor for the distance resolution theta</param>
+        /// <param name="minTheta">For standard and multi-scale Hough transform, minimum angle to check for lines. Must fall between 0 and max_theta.</param>
+        /// <param name="maxTheta">For standard and multi-scale Hough transform, an upper bound for the angle. Must fall between min_theta and CV_PI. The actual maximum angle in the accumulator may be slightly less than max_theta, depending on the parameters min_theta and theta.</param>
+        /// <param name="useEdgeVal">True if you want to use weighted Hough transform.</param>
+        public static void HoughLines(
+            IInputArray image, 
+            IOutputArray lines, 
+            double rho, 
+            double theta, 
+            int threshold, 
+            double srn = 0, 
+            double stn = 0,
+            double minTheta = 0,
+            double maxTheta = Math.PI,
+            bool useEdgeVal = false
+            )
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaLines = lines.GetOutputArray())
-                cveHoughLines(iaImage, oaLines, rho, theta, threshold, srn, stn);
+                cveHoughLines(
+                    iaImage, 
+                    oaLines, 
+                    rho, 
+                    theta, 
+                    threshold, 
+                    srn, 
+                    stn,
+                    minTheta, 
+                    maxTheta, 
+                    useEdgeVal);
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveHoughLines(IntPtr image, IntPtr lines, double rho, double theta, int threshold, double srn, double stn);
+        private static extern void cveHoughLines(
+            IntPtr image, 
+            IntPtr lines, 
+            double rho, 
+            double theta, 
+            int threshold, 
+            double srn,
+            double stn,
+            double minTheta,
+            double maxTheta,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool useEdgeVal);
 
         /// <summary>
         /// Finds line segments in a binary image using the probabilistic Hough transform.
