@@ -152,7 +152,14 @@ CVAPI(void) cveApproxPolyN(cv::_InputArray* curve, cv::_OutputArray* approxCurve
 CVAPI(void) cveConvexHull(cv::_InputArray* points, cv::_OutputArray* hull, bool clockwise, bool returnPoints);
 CVAPI(void) cveConvexityDefects(cv::_InputArray* contour, cv::_InputArray* convexhull, cv::_OutputArray* convexityDefects); 
 
-CVAPI(void) cveGaussianBlur(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* ksize, double sigmaX, double sigmaY, int borderType);
+CVAPI(void) cveGaussianBlur(
+	cv::_InputArray* src, 
+	cv::_OutputArray* dst, 
+	CvSize* ksize, 
+	double sigmaX, 
+	double sigmaY, 
+	int borderType, 
+	int hint);
 CVAPI(void) cveBlur(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* kSize, CvPoint* anchor, int borderType);
 CVAPI(void) cveStackBlur(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* ksize);
 CVAPI(void) cveMedianBlur(cv::_InputArray* src, cv::_OutputArray* dst, int ksize);

@@ -790,17 +790,30 @@ namespace Emgu.CV
         /// <param name="sigmaX">Gaussian kernel standard deviation in X direction.</param>
         /// <param name="sigmaY">Gaussian kernel standard deviation in Y direction; if sigmaY is zero, it is set to be equal to sigmaX, if both sigmas are zeros, they are computed from ksize.width and ksize.height , respectively (see getGaussianKernel() for details); to fully control the result regardless of possible future modifications of all this semantics, it is recommended to specify all of ksize, sigmaX, and sigmaY.</param>
         /// <param name="borderType">Pixel extrapolation method</param>
-        public static void GaussianBlur(IInputArray src, IOutputArray dst, Size ksize, double sigmaX, double sigmaY = 0,
-            CvEnum.BorderType borderType = BorderType.Default)
+        /// <param name="hint">Implementation modification flags.</param>
+        public static void GaussianBlur(
+            IInputArray src, 
+            IOutputArray dst, 
+            Size ksize, 
+            double sigmaX, 
+            double sigmaY = 0,
+            BorderType borderType = BorderType.Default,
+            AlgorithmHint hint = AlgorithmHint.Default)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
-                cveGaussianBlur(iaSrc, oaDst, ref ksize, sigmaX, sigmaY, borderType);
+                cveGaussianBlur(iaSrc, oaDst, ref ksize, sigmaX, sigmaY, borderType, hint);
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveGaussianBlur(IntPtr src, IntPtr dst, ref Size ksize, double sigmaX, double sigmaY,
-            CvEnum.BorderType borderType);
+        private static extern void cveGaussianBlur(
+            IntPtr src, 
+            IntPtr dst, 
+            ref Size ksize, 
+            double sigmaX, 
+            double sigmaY,
+            BorderType borderType,
+            AlgorithmHint hint);
 
         /// <summary>
         /// Blurs an image using the normalized box filter.
