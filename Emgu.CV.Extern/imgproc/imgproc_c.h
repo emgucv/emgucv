@@ -52,8 +52,18 @@ CVAPI(void) cveCornerHarris(cv::_InputArray* src, cv::_OutputArray* dst, int blo
 CVAPI(double) cveThreshold(cv::_InputArray* src, cv::_OutputArray* dst, double thresh, double maxval, int type);
 CVAPI(void) cveWatershed(cv::_InputArray* image, cv::_InputOutputArray* markers);
 CVAPI(void) cveAdaptiveThreshold(cv::_InputArray* src, cv::_OutputArray* dst, double maxValue, int adaptiveMethod, int thresholdType, int blockSize, double c);
-CVAPI(void) cveCvtColor(cv::_InputArray* src, cv::_OutputArray* dst, int code, int dstCn);
-CVAPI(void) cveCvtColorTwoPlane(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int code);
+CVAPI(void) cveCvtColor(
+	cv::_InputArray* src,
+	cv::_OutputArray* dst,
+	int code,
+	int dstCn,
+	int hint);
+CVAPI(void) cveCvtColorTwoPlane(
+	cv::_InputArray* src1,
+	cv::_InputArray* src2,
+	cv::_OutputArray* dst,
+	int code,
+	int hint);
 CVAPI(void) cveDemosaicing(cv::_InputArray* src, cv::_OutputArray* dst, int code, int dstCn);
 CVAPI(void) cveCopyMakeBorder(cv::_InputArray* src, cv::_OutputArray* dst, int top, int bottom, int left, int right, int borderType, CvScalar* value);
 
