@@ -1613,16 +1613,27 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="src">The source 8-bit (8u), 16-bit (16u) or single-precision floating-point (32f) image</param>
         /// <param name="dst">The destination image of the same data type as the source one. The number of channels may be different</param>
-        /// <param name="code">Color conversion operation that can be specifed using CV_src_color_space2dst_color_space constants </param>
+        /// <param name="code">Color conversion operation that can be specified using CV_src_color_space2dst_color_space constants </param>
         /// <param name="dstCn">number of channels in the destination image; if the parameter is 0, the number of the channels is derived automatically from src and code .</param>
-        public static void CvtColor(IInputArray src, IOutputArray dst, CvEnum.ColorConversion code, int dstCn = 0)
+        /// <param name="hint">Implementation modification flags.</param>
+        public static void CvtColor(
+            IInputArray src, 
+            IOutputArray dst, 
+            CvEnum.ColorConversion code, 
+            int dstCn = 0,
+            AlgorithmHint hint = AlgorithmHint.Default)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
-                cveCvtColor(iaSrc, oaDst, code, dstCn);
+                cveCvtColor(iaSrc, oaDst, code, dstCn, hint);
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveCvtColor(IntPtr src, IntPtr dst, CvEnum.ColorConversion code, int dstCn);
+        private static extern void cveCvtColor(
+            IntPtr src, 
+            IntPtr dst, 
+            CvEnum.ColorConversion code, 
+            int dstCn,
+            AlgorithmHint hint);
 
         /// <summary>
         /// Converts an image from one color space to another where the source image is stored in two planes.
@@ -1640,15 +1651,26 @@ namespace Emgu.CV
         /// COLOR_YUV2BGRA_NV21
         /// COLOR_YUV2RGBA_NV21
         /// </param>
-        public static void CvtColorTwoPlane(IInputArray src1, IInputArray src2, IOutputArray dst, CvEnum.ColorConversion code)
+        /// <param name="hint">Implementation modification flags.</param>
+        public static void CvtColorTwoPlane(
+            IInputArray src1, 
+            IInputArray src2, 
+            IOutputArray dst, 
+            CvEnum.ColorConversion code,
+            AlgorithmHint hint = AlgorithmHint.Default)
         {
             using (InputArray iaSrc1 = src1.GetInputArray())
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
-                cveCvtColorTwoPlane(iaSrc1, iaSrc2, oaDst, code);
+                cveCvtColorTwoPlane(iaSrc1, iaSrc2, oaDst, code, hint);
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveCvtColorTwoPlane(IntPtr src1, IntPtr src2, IntPtr dst, CvEnum.ColorConversion code);
+        private static extern void cveCvtColorTwoPlane(
+            IntPtr src1, 
+            IntPtr src2, 
+            IntPtr dst, 
+            CvEnum.ColorConversion code,
+            AlgorithmHint hint);
 
         /// <summary>
         /// main function for all demosaicing processes

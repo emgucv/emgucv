@@ -138,13 +138,23 @@ void cveAdaptiveThreshold(cv::_InputArray* src, cv::_OutputArray* dst, double ma
 {
 	cv::adaptiveThreshold(*src, *dst, maxValue, adaptiveMethod, thresholdType, blockSize, c);
 }
-void cveCvtColor(cv::_InputArray* src, cv::_OutputArray* dst, int code, int dstCn)
+void cveCvtColor(
+	cv::_InputArray* src, 
+	cv::_OutputArray* dst, 
+	int code, 
+	int dstCn, 
+	int hint)
 {
-	cv::cvtColor(*src, *dst, code, dstCn);
+	cv::cvtColor(*src, *dst, code, dstCn, static_cast<cv::AlgorithmHint>(hint));
 }
-void cveCvtColorTwoPlane(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int code)
+void cveCvtColorTwoPlane(
+	cv::_InputArray* src1, 
+	cv::_InputArray* src2, 
+	cv::_OutputArray* dst, 
+	int code, 
+	int hint)
 {
-	cv::cvtColorTwoPlane(*src1, *src2, *dst, code);
+	cv::cvtColorTwoPlane(*src1, *src2, *dst, code, static_cast<cv::AlgorithmHint>(hint));
 }
 void cveDemosaicing(cv::_InputArray* src, cv::_OutputArray* dst, int code, int dstCn)
 {
