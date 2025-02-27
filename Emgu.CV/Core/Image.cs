@@ -856,7 +856,14 @@ namespace Emgu.CV
         /// <param name="minLineWidth">Minimum width of a line</param>
         /// <param name="gapBetweenLines">Minimum gap between lines</param>
         /// <returns>The line segments detected for each of the channels</returns>
-        public LineSegment2D[][] HoughLines(double cannyThreshold, double cannyThresholdLinking, double rhoResolution, double thetaResolution, int threshold, double minLineWidth, double gapBetweenLines)
+        public LineSegment2D[][] HoughLines(
+            double cannyThreshold, 
+            double cannyThresholdLinking, 
+            double rhoResolution, 
+            double thetaResolution, 
+            int threshold, 
+            double minLineWidth, 
+            double gapBetweenLines)
         {
             using (Image<Gray, Byte> canny = Canny(cannyThreshold, cannyThresholdLinking))
             {
