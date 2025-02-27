@@ -499,9 +499,23 @@ void cveConvexityDefects(cv::_InputArray* contour, cv::_InputArray* convexhull, 
 	cv::convexityDefects(*contour, *convexhull, *convexityDefects);
 }
 
-void cveGaussianBlur(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* ksize, double sigmaX, double sigmaY, int borderType)
+void cveGaussianBlur(
+	cv::_InputArray* src, 
+	cv::_OutputArray* dst, 
+	CvSize* ksize, 
+	double sigmaX, 
+	double sigmaY, 
+	int borderType,
+	int hint)
 {
-	cv::GaussianBlur(*src, *dst, *ksize, sigmaX, sigmaY, borderType);
+	cv::GaussianBlur(
+		*src, 
+		*dst, 
+		*ksize, 
+		sigmaX, 
+		sigmaY, 
+		borderType,
+		static_cast<cv::AlgorithmHint>(hint));
 }
 void cveBlur(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* kSize, CvPoint* anchor, int borderType)
 {
