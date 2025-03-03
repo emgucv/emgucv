@@ -38,7 +38,7 @@ CVAPI(void) cveSelectROI(
 CVAPI(void) cveSelectROIs(
 	cv::String* windowName,
 	cv::_InputArray* img,
-	std::vector< cv::Rect >* boundingBoxs,
+	std::vector< cv::Rect >* boundingBoxes,
 	bool showCrosshair,
 	bool fromCenter);
 #endif
