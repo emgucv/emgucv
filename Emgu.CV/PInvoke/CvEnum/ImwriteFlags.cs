@@ -87,6 +87,100 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// For JPEG2000, use to specify the target compression rate (multiplied by 1000). The value can be from 0 to 1000. Default is 1000.
         /// </summary>
-        Jpeg2000CompressionX1000 = 272 
+        Jpeg2000CompressionX1000 = 272,
+        /// <summary>
+        /// For AVIF, it can be a quality between 0 and 100 (the higher the better). Default is 95.
+        /// </summary>
+        AvifQuality = 512,
+        /// <summary>
+        /// For AVIF, it can be 8, 10 or 12. If >8, it is stored/read as CV_32F. Default is 8.
+        /// </summary>
+        AvifDepth = 513,
+        /// <summary>
+        /// For AVIF, it is between 0 (slowest) and (fastest). Default is 9.
+        /// </summary>
+        AvifSpeed = 514,
+        /// <summary>
+        /// For JPEG XL, it can be a quality from 0 to 100 (the higher is the better). Default value is 95. If set, distance parameter is re-calicurated from quality level automatically. This parameter request libjxl v0.10 or later.
+        /// </summary>
+        JpegxlQuality = 640,
+        /// <summary>
+        /// For JPEG XL, encoder effort/speed level without affecting decoding speed; it is between 1 (fastest) and 10 (slowest). Default is 7.
+        /// </summary>
+        JpegxlEffort = 641,
+        /// <summary>
+        /// For JPEG XL, distance level for lossy compression: target max butteraugli distance, lower = higher quality, 0 = lossless; range: 0 .. 25. Default is 1.
+        /// </summary>
+        JpegxlDistance = 642,
+        /// <summary>
+        /// For JPEG XL, decoding speed tier for the provided options; minimum is 0 (slowest to decode, best quality/density), and maximum is 4 (fastest to decode, at the cost of some quality/density). Default is 0.
+        /// </summary>
+        JpegxlDecodingSpeed = 643,
+        /// <summary>
+        /// For GIF, it can be a loop flag from 0 to 65535. Default is 0 - loop forever.
+        /// </summary>
+        GifLoop = 1024,
+        /// <summary>
+        /// For GIF, it is between 1 (slowest) and 100 (fastest). Default is 96.
+        /// </summary>
+        GifSpeed = 1025,
+        /// <summary>
+        /// For GIF, it can be a quality from 1 to 8. Default is 2. See cv::ImwriteGifCompressionFlags.
+        /// </summary>
+        GifQuality = 1026,
+        /// <summary>
+        /// For GIF, it can be a quality from -1(most dither) to 3(no dither). Default is 0.
+        /// </summary>
+        GifDither = 1027,
+        /// <summary>
+        /// For GIF, the alpha channel lower than this will be set to transparent. Default is 1.
+        /// </summary>
+        GifTransparency = 1028,
+        /// <summary>
+        /// For GIF, 0 means global color table is used, 1 means local color table is used. Default is 0.
+        /// </summary>
+        GifColortable = 1029  
+
     }
+
+    /// <summary>
+    /// Imwrite GIF specific values for IMWRITE_GIF_QUALITY parameter key, if larger than 3, then its related to the size of the color table.
+    /// </summary>
+    public enum ImwriteGIFCompressionFlags
+    {
+        /// <summary>
+        /// Specifies a fast GIF compression mode without dithering.
+        /// </summary>
+        FastNoDither = 1,
+
+        /// <summary>
+        /// Specifies the use of Floyd-Steinberg dithering for GIF compression with a faster processing speed.
+        /// </summary>
+        FastFloydDither = 2,
+        /// <summary>
+        /// Specifies the GIF compression flag for a color table size of 8.
+        /// </summary>
+        ColortableSize8 = 3,
+        /// <summary>
+        /// Specifies a GIF compression flag indicating a color table size of 16.
+        /// </summary>
+        ColortableSize16 = 4,
+        /// <summary>
+        /// Specifies a GIF compression flag indicating a color table size of 32.
+        /// </summary>
+        ColortableSize32 = 5,
+        /// <summary>
+        /// Specifies a GIF compression flag indicating a color table size of 64.
+        /// </summary>
+        ColortableSize64 = 6,
+        /// <summary>
+        /// Specifies a GIF compression flag indicating a color table size of 128.
+        /// </summary>
+        ColortableSize128 = 7,
+        /// <summary>
+        /// Specifies the GIF compression flag for a color table size of 256.
+        /// </summary>
+        ColortableSize256 = 8
+    };
+
 }
