@@ -428,18 +428,18 @@ namespace Emgu.CV.Test
         {
             Byte[] data = GetBytesFromFile(EmguAssert.GetFile("lena.jpg"));
             Mat imgJpg = new Mat();
-            CvInvoke.Imdecode(data, ImreadModes.Color, imgJpg);
+            CvInvoke.Imdecode(data, ImreadModes.ColorBgr, imgJpg);
 
             //Emgu.CV.UI.ImageViewer.Show(imgJpg);
 
             Mat imgPng = new Mat();
             data = GetBytesFromFile(EmguAssert.GetFile("pedestrian.png"));
-            CvInvoke.Imdecode(data, ImreadModes.Color, imgPng);
+            CvInvoke.Imdecode(data, ImreadModes.ColorBgr, imgPng);
 
             Mat imgSpan = new Mat();
             Span<Byte> span = data;
             using (VectorOfByte vSpan = new VectorOfByte(span))
-                CvInvoke.Imdecode(vSpan, ImreadModes.Color, imgSpan);
+                CvInvoke.Imdecode(vSpan, ImreadModes.ColorBgr, imgSpan);
             EmguAssert.IsTrue(imgPng.Equals(imgSpan));
             //Emgu.CV.UI.ImageViewer.Show(imgPng);
         }

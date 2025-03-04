@@ -1277,7 +1277,7 @@ namespace Emgu.CV.Test
         {
             if (!CudaInvoke.HasCuda)
                 return;
-            using (Mat image = EmguAssert.LoadMat("lena.jpg", ImreadModes.Color))
+            using (Mat image = EmguAssert.LoadMat("lena.jpg", ImreadModes.ColorBgr))
             using (Mat result = new Mat())
             {
                 for (int i = 0; i <= 1000; i++)

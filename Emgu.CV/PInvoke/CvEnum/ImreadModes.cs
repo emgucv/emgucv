@@ -26,7 +26,7 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// If set, always convert image to the 3 channel BGR color image.
         /// </summary>
-        Color = 1,
+        ColorBgr = 1,
 
         /// <summary>
         /// If set, return 16-bit/32-bit image when the input has the corresponding depth, otherwise convert it to 8-bit.
@@ -76,7 +76,12 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// If set, do not rotate the image according to EXIF's orientation flag.
         /// </summary>
-        IgnoreOrientation = 128
+        IgnoreOrientation = 128,
+
+        /// <summary>
+        /// If set, always convert image to the 3 channel RGB color image.
+        /// </summary>
+        ColorRgb = 256,
     }
 
 }

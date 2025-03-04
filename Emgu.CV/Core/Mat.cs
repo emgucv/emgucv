@@ -325,7 +325,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="fileName">The name of the file</param>
         /// <param name="loadType">File loading method</param>
-        public Mat(String fileName, CvEnum.ImreadModes loadType = ImreadModes.Color)
+        public Mat(String fileName, CvEnum.ImreadModes loadType = ImreadModes.ColorBgr)
            : this(MatInvoke.cveMatCreate(), true, false)
         {
 
