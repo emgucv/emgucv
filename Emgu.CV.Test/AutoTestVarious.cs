@@ -2671,7 +2671,7 @@ namespace Emgu.CV.Test
 
                 Mat image = new Mat();
 
-                CvInvoke.Imdecode(data, ImreadModes.Color, image);
+                CvInvoke.Imdecode(data, ImreadModes.ColorBgr, image);
                 //Emgu.CV.UI.ImageViewer.Show(image);
             }
         }
@@ -4035,7 +4035,7 @@ namespace Emgu.CV.Test
         private static Mat TestSeamlessCloneHelper(int size)
         {
             // create a 3 channel dst image
-            Mat source = new Mat("lena.jpg", ImreadModes.Color);
+            Mat source = new Mat("lena.jpg", ImreadModes.ColorBgr);
             Mat img1 = new Mat();
             CvInvoke.Resize(source, img1, new System.Drawing.Size(size, size));
             //Mat img1 = new Mat(height, width, DepthType.Cv8U, 3); 
@@ -4259,7 +4259,7 @@ namespace Emgu.CV.Test
         [Test]
         public static void TestIntensityTransform()
         {
-            Mat m = new Mat("lena.jpg", ImreadModes.Color);
+            Mat m = new Mat("lena.jpg", ImreadModes.ColorBgr);
             Mat bimef = new Mat();
             Mat autoScaling = new Mat();
             Mat gamma = new Mat();
