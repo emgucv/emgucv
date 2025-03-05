@@ -27,8 +27,11 @@ CVAPI(void) cveImread(cv::String* fileName, int flags, cv::Mat* result);
 CVAPI(bool) cveImreadmulti(const cv::String* filename, std::vector<cv::Mat>* mats, int flags);
 
 CVAPI(void) cveImdecode(cv::_InputArray* buf, int flags, cv::Mat* dst);
-CVAPI(bool) cveImencode(cv::String* ext, cv::_InputArray* img, std::vector< unsigned char >* buf, std::vector< int >* params);
+CVAPI(bool) cveImdecodemulti(cv::_InputArray* buf, int flags, std::vector<cv::Mat>* mats, cv::Range* range);
 
+
+CVAPI(bool) cveImencode(cv::String* ext, cv::_InputArray* img, std::vector< unsigned char >* buf, std::vector< int >* params);
+CVAPI(bool) cveImencodemulti(cv::String* ext, cv::_InputArray* imgs, std::vector<uchar>* buf, std::vector<int>* params);
 
 CVAPI(cv::Animation*) cveAnimationCreate(int loopCount, CvScalar* bgColor);
 CVAPI(void) cveAnimationRelease(cv::Animation** animation);
@@ -38,6 +41,8 @@ CVAPI(std::vector<cv::Mat>*) cveAnimationGetFrames(cv::Animation* animation);
 
 CVAPI(bool) cveImreadAnimation(cv::String* filename, cv::Animation* animation, int start, int count);
 CVAPI(bool) cveImwriteAnimation(cv::String* filename, cv::Animation* animation, std::vector<int>* params);
+
+
 
 
 #endif

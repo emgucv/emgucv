@@ -130,3 +130,26 @@ bool cveImwriteAnimation(cv::String* filename, cv::Animation* animation, std::ve
 	throw_no_imgcodecs();
 #endif
 }
+
+bool cveImencodemulti(cv::String* ext, cv::_InputArray* imgs, std::vector<uchar>* buf, std::vector<int>* params)
+{
+#ifdef HAVE_OPENCV_IMGCODECS
+	if (params)
+		return cv::imencodemulti(*ext, *imgs, *buf, *params);
+	else
+		return cv::imencodemulti(*ext, *imgs, *buf);
+#else
+	throw_no_imgcodecs();
+#endif
+}
+bool cveImdecodemulti(cv::_InputArray* buf, int flags, std::vector<cv::Mat>* mats, cv::Range* range)
+{
+#ifdef HAVE_OPENCV_IMGCODECS
+	if ((range->start == 0) && (range->end == 0))
+		return cv::imdecodemulti(*buf, flags, *mats);
+	else
+		return cv::imdecodemulti(*buf, flags, *mats, *range);
+#else
+	throw_no_imgcodecs();
+#endif	
+}

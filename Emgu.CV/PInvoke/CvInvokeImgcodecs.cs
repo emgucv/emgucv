@@ -211,6 +211,49 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveImdecode(IntPtr buf, CvEnum.ImreadModes loadType, IntPtr dst);
 
+        /// <summary>
+        /// Reads a multi-page image from a buffer in memory.
+        /// </summary>
+        /// <param name="buf">Input array of bytes.</param>
+        /// <param name="loadType">The same flags as in Imread</param>
+        /// <param name="mats">A vector of Mat objects holding each page, if more than one.</param>
+        /// <param name="range">A continuous selection of pages.</param>
+        /// <returns>The function imdecodemulti reads a multi-page image from the specified buffer in the memory. If the buffer is too short or contains invalid data, the function returns false.</returns>
+        public static bool Imdecodemulti(
+            byte[] buf,
+            CvEnum.ImreadModes loadType,
+            VectorOfMat mats,
+            Emgu.CV.Structure.Range range = new Emgu.CV.Structure.Range())
+        {
+            using (VectorOfByte vBuffer = new VectorOfByte(buf))
+            {
+                return Imdecodemulti(vBuffer, loadType, mats, range);
+            }
+        }
+
+        /// <summary>
+        /// Reads a multi-page image from a buffer in memory.
+        /// </summary>
+        /// <param name="buf">Input array or vector of bytes.</param>
+        /// <param name="loadType">The same flags as in Imread</param>
+        /// <param name="mats">A vector of Mat objects holding each page, if more than one.</param>
+        /// <param name="range">A continuous selection of pages.</param>
+        /// <returns>The function imdecodemulti reads a multi-page image from the specified buffer in the memory. If the buffer is too short or contains invalid data, the function returns false.</returns>
+        public static bool Imdecodemulti(
+            IInputArray buf, 
+            CvEnum.ImreadModes loadType, 
+            VectorOfMat mats, 
+            Emgu.CV.Structure.Range range = new Emgu.CV.Structure.Range())
+        {
+            using (var iaBuf = buf.GetInputArray())
+            {
+                return cveImdecodemulti(iaBuf, (int) loadType, mats, ref range);
+            }
+        }
+        
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveImdecodemulti(IntPtr buf, int flags, IntPtr mats, ref Emgu.CV.Structure.Range range);
 
         /// <summary>
         /// Encode image and return the result as a byte vector.
@@ -252,6 +295,93 @@ namespace Emgu.CV
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         private static extern bool cveImencode(IntPtr ext, IntPtr image, IntPtr buffer, IntPtr parameters);
 
+        /// <summary>
+        /// Encodes array of images into a memory buffer.
+        /// </summary>
+        /// <param name="ext">File extension that defines the output format. Must include a leading period.</param>
+        /// <param name="imgs">Vector of images to be written.</param>
+        /// <param name="parameters">Format-specific parameters.</param>
+        /// <returns>Output compressed data</returns>
+        public static byte[] Imencodemulti(
+            string ext, 
+            IInputArrayOfArrays imgs,
+            params KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
+        {
+            using (var buffer = new Util.VectorOfByte())
+            {
+                if (!Imencodemulti(ext, imgs, buffer, parameters))
+                    return null;
+                return buffer.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Encodes array of images into a memory buffer.
+        /// </summary>
+        /// <param name="ext">File extension that defines the output format. Must include a leading period.</param>
+        /// <param name="imgs">Vector of images to be written.</param>
+        /// <param name="buf">Output buffer resized to fit the compressed data.</param>
+        /// <param name="parameters">Format-specific parameters.</param>
+        /// <returns>True if encoding is successful</returns>
+        public static bool Imencodemulti(
+            string ext, 
+            IInputArrayOfArrays imgs, 
+            VectorOfByte buf,
+            params KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
+        {
+            using (var extPtr = new CvString(ext))
+            using (var imgsPtr = imgs.GetInputArray())
+            using (var paramVec = new VectorOfInt())
+            {
+                PushParameters(paramVec, parameters);
+                return cveImencodemulti(extPtr, imgsPtr, buf, paramVec);
+            }
+        }
+        
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveImencodemulti(IntPtr ext, IntPtr imgs, IntPtr buffer, IntPtr parameters);
+
+        /// <summary>
+        /// Loads frames from an animated image file into an Animation structure.
+        /// </summary>
+        /// <param name="fileName">A string containing the path to the file.</param>
+        /// <param name="animation">A reference to an Animation structure where the loaded frames will be stored. It should be initialized before the function is called.</param>
+        /// <param name="start">The index of the first frame to load. </param>
+        /// <param name="count">The number of frames to load.</param>
+        /// <returns>Returns true if the file was successfully loaded and frames were extracted; returns false otherwise.</returns>
+        public static bool ImreadAnimation(String fileName, Animation animation, int start = 0, int count = Int16.MaxValue)
+        {
+            using (CvString csFileName = new CvString(fileName))
+                return cveImreadAnimation(csFileName, animation, start, count);
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveImreadAnimation(IntPtr filename, IntPtr animation, int start, int count);
+
+        /// <summary>
+        /// Saves an Animation to a specified file.
+        /// </summary>
+        /// <param name="fileName">The name of the file where the animation will be saved. The file extension determines the format.</param>
+        /// <param name="animation">A constant reference to an Animation struct containing the frames and metadata to be saved.</param>
+        /// <param name="parameters">Optional format-specific parameters encoded as pairs (paramId_1, paramValue_1, paramId_2, paramValue_2, ...).</param>
+        /// <returns>Returns true if the animation was successfully saved; returns false otherwise.</returns>
+        public static bool ImwriteAnimation(String fileName, Animation animation, VectorOfInt parameters = null)
+        {
+
+            using (CvString csFileName = new CvString(fileName))
+            {
+                if (parameters == null)
+                    return cveImwriteAnimation(csFileName, animation, IntPtr.Zero);
+                else
+                    return cveImwriteAnimation(csFileName, animation, parameters);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveImwriteAnimation(IntPtr filename, IntPtr animation, IntPtr parameters);
 
     }
 }
