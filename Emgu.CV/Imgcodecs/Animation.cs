@@ -85,45 +85,5 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveAnimationGetFrames(IntPtr animation);
 
-        /// <summary>
-        /// Loads frames from an animated image file into an Animation structure.
-        /// </summary>
-        /// <param name="fileName">A string containing the path to the file.</param>
-        /// <param name="animation">A reference to an Animation structure where the loaded frames will be stored. It should be initialized before the function is called.</param>
-        /// <param name="start">The index of the first frame to load. </param>
-        /// <param name="count">The number of frames to load.</param>
-        /// <returns>Returns true if the file was successfully loaded and frames were extracted; returns false otherwise.</returns>
-        public static bool ImreadAnimation(String fileName, Animation animation, int start = 0, int count=Int16.MaxValue)
-        {
-            using (CvString csFileName = new CvString(fileName))
-                return cveImreadAnimation(csFileName, animation, start, count);
-        }
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        private static extern bool cveImreadAnimation(IntPtr filename, IntPtr animation, int start, int count);
-
-        /// <summary>
-        /// Saves an Animation to a specified file.
-        /// </summary>
-        /// <param name="fileName">The name of the file where the animation will be saved. The file extension determines the format.</param>
-        /// <param name="animation">A constant reference to an Animation struct containing the frames and metadata to be saved.</param>
-        /// <param name="parameters">Optional format-specific parameters encoded as pairs (paramId_1, paramValue_1, paramId_2, paramValue_2, ...).</param>
-        /// <returns>Returns true if the animation was successfully saved; returns false otherwise.</returns>
-        public static bool ImwriteAnimation(String fileName, Animation animation, VectorOfInt parameters = null)
-        {
-
-            using (CvString csFileName = new CvString(fileName))
-            {
-                if (parameters == null)
-                    return cveImwriteAnimation(csFileName, animation, IntPtr.Zero);
-                else
-                    return cveImwriteAnimation(csFileName, animation, parameters);
-            }
-        }
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        private static extern bool cveImwriteAnimation(IntPtr filename, IntPtr animation, IntPtr parameters);
     }
 }
