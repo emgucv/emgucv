@@ -240,4 +240,5 @@ CVAPI(void) cveDnnSegmentationModelSegment(
 	cv::_InputArray* frame,
 	cv::_OutputArray* mask);
 
+CVAPI(bool) cveDnnHaveCUDA();
 #endif
