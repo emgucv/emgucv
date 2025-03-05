@@ -6,6 +6,8 @@
 
 #include "dnn_c.h"
 
+#include "../../opencv/modules/dnn/src/op_cuda.hpp"
+
 cv::dnn::Net* cveReadNetFromDarknet(cv::String* cfgFile, cv::String* darknetModel)
 {
 #ifdef HAVE_OPENCV_DNN
@@ -913,4 +915,13 @@ void cveDnnSegmentationModelSegment(
 #else
 	throw_no_dnn();
 #endif
+}
+
+bool cveDnnHaveCUDA()
+{
+#ifdef HAVE_OPENCV_DNN
+	return cv::dnn::haveCUDA();
+#else
+	throw_no_dnn();
+#endif	
 }
