@@ -299,4 +299,13 @@ CVAPI(int) cveDecomposeHomographyMat(
 	cv::_OutputArray* translations,
 	cv::_OutputArray* normals);
 
+CVAPI(void) cveDrawFrameAxes(
+	cv::_InputOutputArray* image, 
+	cv::_InputArray* cameraMatrix, 
+	cv::_InputArray* distCoeffs,
+	cv::_InputArray* rvec, 
+	cv::_InputArray* tvec, 
+	float length, 
+	int thickness);
+
 #endif
