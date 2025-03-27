@@ -16,6 +16,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.config"
       PATTERN "*.shproj"
       PATTERN "*.projitems"
+	  PATTERN "*.props"
       PATTERN "*.axml"
       PATTERN "*.xaml"
       PATTERN "*.xml"
@@ -67,15 +68,14 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       )
     INSTALL(
       DIRECTORY
-      "${CMAKE_CURRENT_SOURCE_DIR}/WPF.NetCore/"
-      DESTINATION Emgu.CV.Example/WPF.NetCore/
+      "${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.WPF/"
+      DESTINATION Emgu.CV.Example/HelloWorld.WPF/
       COMPONENT emgucv_example_source
       FILES_MATCHING 
       PATTERN "*.cs"
       PATTERN "*.csproj"
       PATTERN "*.config"
-      PATTERN "*.shproj"
-      PATTERN "*.Xamarin"
+      PATTERN "*.props"
       PATTERN "*.projitems"
       PATTERN "*.axml"
       PATTERN "*.xaml"
@@ -292,26 +292,6 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.dll"
       PATTERN "*.json"
 	  PATTERN "*.resx"
-      PATTERN ".git" EXCLUDE
-      PATTERN "Debug" EXCLUDE
-      PATTERN "Release" EXCLUDE  
-      )
-  ENDIF()
-  IF(HAVE_ANDROID)
-    INSTALL(
-      DIRECTORY
-      "${CMAKE_CURRENT_SOURCE_DIR}/Android/"
-      DESTINATION Emgu.CV.Example/Android/
-      COMPONENT emgucv_example_source
-      FILES_MATCHING 
-      PATTERN "*.cs"
-      PATTERN "*.csproj"
-      PATTERN "*.axml"
-      PATTERN "*.xml"
-      PATTERN "*.txt"
-      PATTERN "*.png"
-      PATTERN "*.dll"
-	  PATTERN "*.config"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
       PATTERN "Release" EXCLUDE  
