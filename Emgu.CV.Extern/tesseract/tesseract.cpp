@@ -368,6 +368,25 @@ bool cveTessResultRendererEndDocument(tesseract::TessResultRenderer* resultRende
 #endif	
 }
 
+bool cveTessResultRendererHappy(tesseract::TessResultRenderer* resultRenderer)
+{
+#ifdef HAVE_EMGUCV_TESSERACT
+	return resultRenderer->happy();
+#else
+	throw_no_tesseract();
+#endif		
+}
+
+int cveTessResultRendererImageNum(tesseract::TessResultRenderer* resultRenderer)
+{
+#ifdef HAVE_EMGUCV_TESSERACT
+	return resultRenderer->imagenum();
+#else
+	throw_no_tesseract();
+#endif		
+}
+
+
 Pix* cveLeptCreatePixFromMat(cv::Mat* m)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
