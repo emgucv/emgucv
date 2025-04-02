@@ -155,6 +155,8 @@ CVAPI(void) cveTessPDFRendererRelease(tesseract::TessPDFRenderer** renderer);
 CVAPI(bool) cveTessResultRendererBeginDocument(tesseract::TessResultRenderer* resultRenderer, cv::String* title);
 CVAPI(bool) cveTessResultRendererAddImage(tesseract::TessResultRenderer* resultRenderer, EmguTesseract* api);
 CVAPI(bool) cveTessResultRendererEndDocument(tesseract::TessResultRenderer* resultRenderer);
+CVAPI(bool) cveTessResultRendererHappy(tesseract::TessResultRenderer* resultRenderer);
+CVAPI(int) cveTessResultRendererImageNum(tesseract::TessResultRenderer* resultRenderer);
 
 CVAPI(Pix*) cveLeptCreatePixFromMat(cv::Mat* m);
 CVAPI(void) cveLeptPixDestroy(Pix** pix);

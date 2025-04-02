@@ -20,6 +20,7 @@ namespace Emgu.CV.OCR
     /// <summary>
     /// Renders tesseract output into searchable PDF
     /// </summary>
+    [DebuggerTypeProxy(typeof(TessResultRendererDebuggerProxy))]
     public class PDFRenderer : UnmanagedObject, ITessResultRenderer
     {
         private IntPtr _tessResultRendererPtr;
@@ -27,7 +28,7 @@ namespace Emgu.CV.OCR
         /// <summary>
         /// Create a PDF renderer
         /// </summary>
-        /// <param name="outputBase">Output base</param>
+        /// <param name="outputBase">Output base. The path and file name without the .pdf extension.</param>
         /// <param name="dataDir">dataDir is the location of the TESSDATA. We need it because we load a custom PDF font from this location.</param>
         /// <param name="textOnly">Text only</param>
         public PDFRenderer(String outputBase, String dataDir, bool textOnly)
@@ -59,6 +60,7 @@ namespace Emgu.CV.OCR
                 return _tessResultRendererPtr;
             }
         }
+
     }
 
     public static partial class OcrInvoke
@@ -85,6 +87,13 @@ namespace Emgu.CV.OCR
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveTessResultRendererEndDocument(IntPtr resultRenderer);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool cveTessResultRendererHappy(IntPtr resultRenderer);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveTessResultRendererImageNum(IntPtr resultRenderer);
 
         /// <summary>
         /// Starts a new document with the given title.
@@ -120,6 +129,34 @@ namespace Emgu.CV.OCR
         public static bool EndDocument(this ITessResultRenderer renderer)
         {
             return cveTessResultRendererEndDocument(renderer.TessResultRendererPtr);
+        }
+
+        /// <summary>
+        /// Determines whether the specified Tesseract result renderer is in a "happy" state.
+        /// </summary>
+        /// <param name="renderer">The Tesseract result renderer to check.</param>
+        /// <returns>
+        /// <c>true</c> if the renderer is in a "happy" state; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool Happy(this ITessResultRenderer renderer)
+        {
+            return cveTessResultRendererHappy(renderer.TessResultRendererPtr);
+        }
+
+        /// <summary>
+        /// Returns the index of the last image given to AddImage
+        /// (i.e.images are incremented whether the image succeeded or not)
+        ///
+        /// This is always defined.It means either the number of the
+        /// current image, the last image ended, or in the completed document
+        /// depending on when in the document lifecycle you are looking at it.
+        /// Will return -1 if a document was never started.
+        /// </summary>
+        /// <param name="rendered">The Tesseract result renderer </param>
+        /// <returns>The index of the last image given to AddImage</returns>
+        public static int ImageNum(this ITessResultRenderer rendered)
+        {
+            return cveTessResultRendererImageNum(rendered.TessResultRendererPtr);
         }
     }
 }
