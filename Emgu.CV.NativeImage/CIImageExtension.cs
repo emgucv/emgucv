@@ -31,7 +31,7 @@ namespace Emgu.CV
             using (UIImage uiImage2 = uiImage.Scale(uiImage.Size)) //Scaling make a copy of the above UIImage (back by ci image) into a new UIImage (back by cg image)
             using (CGImage cgimage = uiImage2.CGImage)
             {
-                cgimage.ToArray(mat, ImreadModes.Color);
+                cgimage.ToArray(mat, ImreadModes.ColorBgr);
             }
 
         }
