@@ -128,7 +128,7 @@ namespace Emgu.CV
                 {
                     CvInvoke.CvtColor(m, mat, ColorConversion.Rgba2Bgra);
                 }
-                else if (modes == ImreadModes.Color)
+                else if (modes == ImreadModes.ColorBgr)
                 {
                     CvInvoke.CvtColor(m, mat, ColorConversion.Rgba2Bgr);
                 }
