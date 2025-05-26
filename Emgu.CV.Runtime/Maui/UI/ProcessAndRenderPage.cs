@@ -186,7 +186,7 @@ namespace Emgu.CV.Platform.Maui.UI
                     pixelBuffer.Lock(CoreVideo.CVPixelBufferLock.ReadOnly);
                     using (CoreImage.CIImage ciImage = new CoreImage.CIImage(pixelBuffer))
                     {
-                        ciImage.ToArray(_mat, ImreadModes.ColorBGR);
+                        ciImage.ToArray(_mat, ImreadModes.ColorBgr);
                     }
                     pixelBuffer.Unlock(CoreVideo.CVPixelBufferLock.ReadOnly);
                 }
