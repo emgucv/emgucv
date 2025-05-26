@@ -6,7 +6,7 @@
 
 #include "dnn_c.h"
 
-#include "../../opencv/modules/dnn/src/op_cuda.hpp"
+
 
 cv::dnn::Net* cveReadNetFromDarknet(cv::String* cfgFile, cv::String* darknetModel)
 {

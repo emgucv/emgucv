@@ -13,6 +13,7 @@
 
 #ifdef HAVE_OPENCV_DNN
 #include "opencv2/dnn/dnn.hpp"
+#include "../../opencv/modules/dnn/src/op_cuda.hpp"
 #else
 static inline CV_NORETURN void throw_no_dnn() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without DNN support. To use this module, please switch to the full Emgu CV runtime."); }
 
