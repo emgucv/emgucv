@@ -342,7 +342,7 @@ namespace Emgu.CV.Platform.Maui.UI
                     {
                         stream.CopyTo(ms);
                         Mat m = new Mat();
-                        CvInvoke.Imdecode(ms.ToArray(), ImreadModes.ColorBGR, m);
+                        CvInvoke.Imdecode(ms.ToArray(), ImreadModes.ColorBgr, m);
                         mats[i] = m;
                     }
 
@@ -417,7 +417,7 @@ namespace Emgu.CV.Platform.Maui.UI
                 await stream.CopyToAsync(ms);
                 byte[] data = ms.ToArray();
                 Mat m = new Mat();
-                CvInvoke.Imdecode(data, ImreadModes.ColorBGR, m);
+                CvInvoke.Imdecode(data, ImreadModes.ColorBgr, m);
                 return m;
             }
         }
