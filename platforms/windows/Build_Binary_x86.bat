@@ -542,6 +542,9 @@ GOTO WITHOUT_OPENVINO
 cd ..
 cd 3rdParty
 cd openvino 
+REM Apply patch if BUILD_FOLDER doesn't exist. e.g. first time this script is run.
+REM The IF condition prevent git patch to run multiple times if the build script is run multiple times.
+IF NOT EXIST %BUILD_FOLDER% git apply ../0001-Patch-manager.cpp-for-Visual-Studio-2022.patch
 IF NOT EXIST %BUILD_FOLDER% mkdir %BUILD_FOLDER%
 cd %BUILD_FOLDER%
 %CMAKE% -G %CMAKE_CONF% %GENERAL_CMAKE_CONFIG_FLAGS% ..
