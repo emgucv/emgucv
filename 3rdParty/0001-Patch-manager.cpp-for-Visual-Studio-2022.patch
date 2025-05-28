@@ -1,0 +1,24 @@
+From 148b1e195f5eb3762de109cfb97ba1742f81b021 Mon Sep 17 00:00:00 2001
+From: Canming Huang <support@emgu.com>
+Date: Wed, 28 May 2025 08:48:27 -0400
+Subject: [PATCH] Patch manager.cpp for Visual Studio 2022
+
+---
+ src/core/src/pass/manager.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/core/src/pass/manager.cpp b/src/core/src/pass/manager.cpp
+index 4b01c09a07..9d03bfa0d9 100644
+--- a/src/core/src/pass/manager.cpp
++++ b/src/core/src/pass/manager.cpp
+@@ -12,6 +12,7 @@
+ #include <mutex>
+ #include <unordered_map>
+ #include <utility>
++#include <chrono>
+ 
+ #include "itt.hpp"
+ #include "openvino/pass/graph_rewrite.hpp"
+-- 
+2.45.1.windows.1
+
