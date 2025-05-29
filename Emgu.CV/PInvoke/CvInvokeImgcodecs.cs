@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Emgu.CV.CvEnum;
@@ -193,7 +194,21 @@ namespace Emgu.CV
         {
             using (VectorOfByte vb = new VectorOfByte(buf))
             {
-                Imdecode(vb, loadType, dst);
+                Imdecode((IInputArray)vb, loadType, dst);
+            }
+        }
+
+        /// <summary>
+        /// Decode image stored in the buffer
+        /// </summary>
+        /// <param name="buf">The buffer</param>
+        /// <param name="loadType">The image loading type</param>
+        /// <param name="dst">The output placeholder for the decoded matrix.</param>
+        public static void Imdecode(Stream buf, CvEnum.ImreadModes loadType, Mat dst)
+        {
+            using (VectorOfByte vb = new VectorOfByte(buf))
+            {
+                Imdecode((IInputArray)vb, loadType, dst);
             }
         }
 

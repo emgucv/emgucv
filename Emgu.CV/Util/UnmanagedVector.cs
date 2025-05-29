@@ -91,17 +91,17 @@ namespace Emgu.CV.Util
             int bytesToRead = (int)Math.Min(buffer.Length, end.ToInt64() - begin.ToInt64());
             Marshal.Copy(begin, buffer, 0, bytesToRead);
             
-            _position = begin.ToInt64() + bytesToRead - start;
+            _position += bytesToRead;
 
             return bytesToRead;
         }
 
-
+        /*
         /// <inheritdoc/>
         public override long Length
         {
             get;
-        }
+        }*/
 
         /// <inheritdoc/>
         public override void SetLength(long value)
@@ -118,7 +118,7 @@ namespace Emgu.CV.Util
         /// <inheritdoc/>
         public override bool CanWrite
         {
-            get { return false; }
+            get { return true; }
         }
 
         /// <inheritdoc/>
@@ -136,13 +136,22 @@ namespace Emgu.CV.Util
         /// <inheritdoc/>
         public override void Write(byte[] buffer, int offset, int count)
         {
-            throw new NotSupportedException("Write is not supported");
+            Int64 start = this.StartAddress.ToInt64();
+            IntPtr beginPtr = new IntPtr(start + _position + offset);
+            
+            if (beginPtr.ToInt64() + count > start + Length)
+            {
+                throw new IndexOutOfRangeException(String.Format("Position ({0}) is beyond the stream boundary ({1})", _position+offset+count, Length));
+            }
+            Marshal.Copy(buffer, 0, beginPtr, count);
+
+            _position += count;
         }
 
         /// <inheritdoc/>
         public override void Flush()
         {
-            throw new NotSupportedException("Flush is not supported");
+            return;
         }
 
         #region DisposableObject
