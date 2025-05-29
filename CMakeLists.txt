@@ -232,7 +232,7 @@ INCLUDE (CSharpMacros)
 
 IF (NOT (DOTNET_FOUND))
   IF (IS_UBUNTU)
-    MESSAGE(FATAL_ERROR "dotnet sdk is required to build Emgu CV on Ubuntu, please follow the instructions to install dotnet sdk on Ubuntu: https://dotnet.microsoft.com/download/linux-package-manager/ubuntu18-04/sdk-current")  
+    MESSAGE(FATAL_ERROR "dotnet sdk is required to build Emgu CV on Ubuntu, please follow the instructions to install dotnet sdk on Ubuntu: https://learn.microsoft.com/en-ca/dotnet/core/install/linux-ubuntu-install?tabs=dotnet9")  
   ELSEIF(IS_DEBIAN OR IS_RHEL)
     MESSAGE(FATAL_ERROR "dotnet sdk is required to build Emgu CV")  
   ENDIF()
