@@ -434,9 +434,9 @@ namespace MauiDemoApp
                     using (Mat colors = new Mat())
                     {
                         streamL.CopyTo(msL);
-                        CvInvoke.Imdecode(msL.ToArray(), ImreadModes.Color, left);
+                        CvInvoke.Imdecode(msL.ToArray(), ImreadModes.ColorBgr, left);
                         streamR.CopyTo(msR);
-                        CvInvoke.Imdecode(msR.ToArray(), ImreadModes.Color, right);
+                        CvInvoke.Imdecode(msR.ToArray(), ImreadModes.ColorBgr, right);
                         Simple3DReconstruct.GetPointAndColor(left, right, points, colors);
                         Viz3d v = Simple3DReconstruct.GetViz3d(points, colors);
                         v.Spin();

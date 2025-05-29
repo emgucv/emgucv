@@ -182,9 +182,8 @@ namespace Emgu.CV
             {
                 await mediaCapture.CapturePhotoToStreamAsync(Windows.Media.MediaProperties.ImageEncodingProperties.CreateJpeg(), stream);
                 stream.Seek(0);
-                byte[] data = new byte[stream.Size];
-                await stream.AsStreamForRead().ReadAsync(data, 0, data.Length);
-                CvInvoke.Imdecode(data, ImreadModes.Color, result);
+                using (var readStream = stream.AsStreamForRead())
+                    CvInvoke.Imdecode(readStream, ImreadModes.ColorBgr, result);
             }
         }
     }
