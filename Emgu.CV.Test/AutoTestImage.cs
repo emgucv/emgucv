@@ -439,7 +439,7 @@ namespace Emgu.CV.Test
             Mat imgSpan = new Mat();
             Span<Byte> span = data;
             using (VectorOfByte vSpan = new VectorOfByte(span))
-                CvInvoke.Imdecode(vSpan, ImreadModes.ColorBgr, imgSpan);
+                CvInvoke.Imdecode((IInputArray) vSpan, ImreadModes.ColorBgr, imgSpan);
             EmguAssert.IsTrue(imgPng.Equals(imgSpan));
             //Emgu.CV.UI.ImageViewer.Show(imgPng);
         }
