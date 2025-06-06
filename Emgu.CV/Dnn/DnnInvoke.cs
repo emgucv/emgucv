@@ -729,6 +729,7 @@ namespace Emgu.CV.Dnn
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool isDiagnosticsMode);
 
+        /*
         /// <summary>
         /// Checks if the current system has CUDA (Compute Unified Device Architecture) support enabled for DNN.
         /// </summary>
@@ -744,5 +745,6 @@ namespace Emgu.CV.Dnn
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         private static extern  bool cveDnnHaveCUDA();
+        */
     }
 }

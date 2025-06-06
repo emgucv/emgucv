@@ -917,6 +917,7 @@ void cveDnnSegmentationModelSegment(
 #endif
 }
 
+/*
 bool cveDnnHaveCUDA()
 {
 #ifdef HAVE_OPENCV_DNN
@@ -925,3 +926,4 @@ bool cveDnnHaveCUDA()
 	throw_no_dnn();
 #endif	
 }
+*/
