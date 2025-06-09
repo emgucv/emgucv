@@ -22,8 +22,19 @@ namespace Emgu.CV
 {
 
     /// <summary>
-    /// The equivalent of cv::Mat
+    /// Represents a matrix object in the Emgu CV library, which is used for image processing and computer vision tasks.
     /// </summary>
+    /// <remarks>
+    /// This class provides a managed wrapper for the OpenCV matrix (cv::Mat) and includes functionality for creating, manipulating, and accessing matrix data.
+    /// It supports various constructors for initializing matrices with specific dimensions, data types, and data sources.
+    /// Additionally, it implements interfaces for serialization, equality comparison, and input/output array operations.
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// // Example of creating a Mat object
+    /// Mat mat = new Mat(100, 100, CvEnum.DepthType.Cv8U, 3);
+    /// </code>
+    /// </example>
     [Serializable]
     [DebuggerTypeProxy(typeof(Mat.DebuggerProxy))]
 #if !(UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR)
