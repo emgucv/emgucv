@@ -20,9 +20,29 @@ using System.Text.Json.Serialization;
 namespace Emgu.CV
 {
     /// <summary>
-    /// The equivalent of cv::Mat, should only be used if you know what you are doing.
-    /// In most case you should use the Matrix class instead
+    /// Represents a managed wrapper for the OpenCV UMat (Universal Matrix) structure, which provides 
+    /// a flexible and efficient way to handle multi-dimensional dense arrays in OpenCV. 
+    /// This class supports operations such as element-wise arithmetic, data manipulation, 
+    /// and interoperability with other OpenCV structures.
     /// </summary>
+    /// <remarks>
+    /// The <see cref="UMat"/> class is designed to work with OpenCV's GPU-accelerated operations, 
+    /// enabling efficient computation on supported hardware. It provides constructors and methods 
+    /// for creating, manipulating, and accessing data in various formats, including submatrices, 
+    /// reshaped matrices, and matrices loaded from files.
+    /// </remarks>
+    /// <example>
+    /// Example usage:
+    /// <code>
+    /// UMat umat = new UMat(100, 100, CvEnum.DepthType.Cv8U, 3);
+    /// umat.SetTo(new MCvScalar(255, 0, 0)); // Set all pixels to blue
+    /// umat.Save("output.png");
+    /// </code>
+    /// </example>
+    /// <seealso cref="Mat"/>
+    /// <seealso cref="IInputOutputArray"/>
+    /// <seealso cref="IEquatable{T}"/>
+    /// <seealso cref="ISerializable"/>
     [Serializable]
     [DebuggerTypeProxy(typeof(UMat.DebuggerProxy))]
 #if !(UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR)
