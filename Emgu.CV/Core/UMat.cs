@@ -153,7 +153,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Get or Set the raw image data
+        /// Set the raw image data, or get a copy of the raw image data.
         /// </summary>
         public byte[] Bytes
         {
@@ -193,7 +193,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Create a umat of the specific type.
+        /// Create an umat of the specific type.
         /// </summary>
         /// <param name="rows">Number of rows in a 2D array.</param>
         /// <param name="cols">Number of columns in a 2D array.</param>
@@ -207,7 +207,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Create a umat of the specific type.
+        /// Create an umat of the specific type.
         /// </summary>
         /// <param name="size">Size of the UMat</param>
         /// <param name="type">Mat element type</param>
@@ -220,9 +220,9 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Get the Umat header for the specific roi of the parent
+        /// Get the UMat header for the specific roi of the parent
         /// </summary>
-        /// <param name="parent">The parent Umat</param>
+        /// <param name="parent">The parent UMat</param>
         /// <param name="roi">The region of interest</param>
         public UMat(UMat parent, Rectangle roi)
           : this(UMatInvoke.cveUMatCreateFromRect(parent.Ptr, ref roi), true)
@@ -230,9 +230,9 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Create a umat header for the specific ROI
+        /// Create an UMat header for the specific ROI
         /// </summary>
-        /// <param name="umat">The umat where the new UMat header will share data from</param>
+        /// <param name="umat">The UMat where the new UMat header will share data from</param>
         /// <param name="rowRange">The region of interest</param>
         /// <param name="colRange">The region of interest</param>
         public UMat(UMat umat, Emgu.CV.Structure.Range rowRange, Emgu.CV.Structure.Range colRange)
@@ -314,7 +314,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Copy the data in this umat to the other mat
+        /// Copy the data in this UMat to the other mat
         /// </summary>
         /// <param name="mask">Operation mask. Its non-zero elements indicate which matrix elements need to be copied.</param>
         /// <param name="m">The input array to copy to</param>
@@ -465,7 +465,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Convert this Mat to Image
+        /// Convert this UMat to Image
         /// </summary>
         /// <typeparam name="TColor">The type of Color</typeparam>
         /// <typeparam name="TDepth">The type of Depth</typeparam>
@@ -689,7 +689,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Copy data from this Mat to the managed array
+        /// Copy data from this UMat to the managed array
         /// </summary>
         /// <typeparam name="T">The type of managed data array</typeparam>
         /// <param name="data">The managed array where data will be copied to.</param>
@@ -752,7 +752,7 @@ namespace Emgu.CV
         /// <summary>
         /// Get a copy of the data values as an array
         /// </summary>
-        /// <param name="jagged">If true, a jagged array will returned. Otherwise it will return a regular array.</param>
+        /// <param name="jagged">If true, a jagged array will be returned. Otherwise, it will return a regular array.</param>
         /// <returns>a copy of the data values as an array</returns>
         public Array GetData(bool jagged = true)
         {
@@ -847,7 +847,7 @@ namespace Emgu.CV
         }
 
         /// <summary> 
-        /// Perform an binary OR operation with some value
+        /// Perform a binary OR operation with some value
         /// </summary>
         /// <param name="mat1">The mat to OR</param>
         /// <param name="val"> The color to OR</param>
@@ -863,7 +863,7 @@ namespace Emgu.CV
         }
 
         /// <summary> 
-        /// Perform an binary OR operation with some color
+        /// Perform a binary OR operation with some color
         /// </summary>
         /// <param name="mat1">The mat to OR</param>
         /// <param name="val"> The color to OR</param>
@@ -874,7 +874,7 @@ namespace Emgu.CV
         }
 
         /// <summary> 
-        /// Perform an binary OR operation with some scalar
+        /// Perform a binary OR operation with some scalar
         /// </summary>
         /// <param name="mat1">The mat to OR</param>
         /// <param name="val"> The value to OR</param>
@@ -890,7 +890,7 @@ namespace Emgu.CV
         }
 
         /// <summary> 
-        /// Perform an binary OR operation with some scalar
+        /// Perform a binary OR operation with some scalar
         /// </summary>
         /// <param name="mat1">The mat to OR</param>
         /// <param name="val"> The color to OR</param>
@@ -1055,11 +1055,11 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        ///  <paramref name="mat"/> * <paramref name="scale"/>
+        /// Multiplies the specified <see cref="UMat"/> by a scalar value.
         /// </summary>
-        /// <param name="mat">The mat</param>
-        /// <param name="scale">The multiplication scale</param>
-        /// <returns><paramref name="mat"/> * <paramref name="scale"/></returns>
+        /// <param name="mat">The <see cref="UMat"/> to be multiplied.</param>
+        /// <param name="scale">The scalar value to multiply the <paramref name="mat"/> by.</param>
+        /// <returns>A new <see cref="UMat"/> that is the result of multiplying <paramref name="mat"/> by <paramref name="scale"/>.</returns>
         public static UMat operator *(UMat mat, double scale)
         {
             using (ScalarArray saValue = new ScalarArray(scale))
@@ -1071,33 +1071,35 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        ///   <paramref name="scale"/>*<paramref name="mat"/>
+        /// Multiplies the specified <see cref="UMat"/> by a scalar value.
         /// </summary>
-        /// <param name="mat">The mat</param>
-        /// <param name="scale">The multiplication scale</param>
-        /// <returns><paramref name="scale"/>*<paramref name="mat"/></returns>
+        /// <param name="mat">The <see cref="UMat"/> to be multiplied.</param>
+        /// <param name="scale">The scalar value to multiply the <paramref name="mat"/> by.</param>
+        /// <returns>A new <see cref="UMat"/> that is the result of multiplying <paramref name="mat"/> by <paramref name="scale"/>.</returns>
         public static UMat operator *(double scale, UMat mat)
         {
             return mat * scale;
         }
 
         /// <summary>
-        ///  <paramref name="mat"/> / <paramref name="scale"/>
+        /// Divides the elements of the specified <see cref="UMat"/> by the given scalar value.
         /// </summary>
-        /// <param name="mat">The mat</param>
-        /// <param name="scale">The division scale</param>
-        /// <returns><paramref name="mat"/> / <paramref name="scale"/></returns>
+        /// <param name="mat">The <see cref="UMat"/> whose elements are to be divided.</param>
+        /// <param name="scale">The scalar value by which to divide the elements of <paramref name="mat"/>.</param>
+        /// <returns>A new <see cref="UMat"/> where each element is the result of the division of the corresponding element in <paramref name="mat"/> by <paramref name="scale"/>.</returns>
+        /// <exception cref="System.DivideByZeroException">Thrown when <paramref name="scale"/> is zero.</exception>
         public static UMat operator /(UMat mat, double scale)
         {
             return mat * (1.0 / scale);
         }
 
         /// <summary>
-        ///   <paramref name="scale"/> / <paramref name="mat"/>
+        /// Divides the elements of the given scalar value by the specified <see cref="UMat"/>.
         /// </summary>
-        /// <param name="mat">The mat</param>
-        /// <param name="scale">The scale</param>
-        /// <returns><paramref name="scale"/> / <paramref name="mat"/></returns>
+        /// <param name="mat">The <see cref="UMat"/>The elements to be divided.</param>
+        /// <param name="scale">The scalar value by which to be divided by the elements of <paramref name="mat"/>.</param>
+        /// <returns>A new <see cref="UMat"/> where each element is the result of the division of <paramref name="scale"/> by the corresponding element in <paramref name="mat"/>.</returns>
+        /// <exception cref="System.DivideByZeroException">Thrown when <paramref name="scale"/> is zero.</exception>/returns>
         public static UMat operator /(double scale, UMat mat)
         {
             using (ScalarArray saScale = new ScalarArray(scale))
