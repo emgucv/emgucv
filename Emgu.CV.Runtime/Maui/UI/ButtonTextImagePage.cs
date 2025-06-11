@@ -247,24 +247,37 @@ namespace Emgu.CV.Platform.Maui.UI
         {
             Mat[] mats = new Mat[imageNames.Length];
 
+            SetMessage("Checking if camera option is available, please wait...");
+            //Run it once in case it need to check if camera is available, which could take a long time to run
+            await Task.Run(() => { bool cameraOption = this.HasCameraOption; });
+            SetMessage(null);
+
+            bool captureSupported;
+
+            if (Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.WinUI
+                || Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.macOS)
+            {
+                //Pick image from camera is not implemented on WPF.
+                captureSupported = false;
+            }
+            else
+            {
+                captureSupported = MediaPicker.IsCaptureSupported;
+                if (Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.Android)
+                {
+                    //Overwrite MediaPicker if there is no camera on this Android device.
+                    if (!this.HasCameraOption)
+                    {
+                        captureSupported = false;
+                    }
+                }
+            }
+
             for (int i = 0; i < mats.Length; i++)
             {
                 String pickImgString = "Use Image from";
                 if (labels != null && labels.Length > i)
                     pickImgString = labels[i];
-
-                bool captureSupported;
-
-                if (Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.WinUI
-                    || Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.macOS)
-                {
-                    //Pick image from camera is not implemented on WPF.
-                    captureSupported = false;
-                }
-                else
-                {
-                    captureSupported = MediaPicker.IsCaptureSupported;
-                }
 
                 String action;
                 List<String> options = new List<string>();
@@ -274,11 +287,6 @@ namespace Emgu.CV.Platform.Maui.UI
 
                 if (captureSupported)
                     options.Add("Photo from Camera");
-
-                SetMessage("Checking if camera option is available, please wait...");
-                //Run it once in case it need to check if camera is available, which could take a long time to run
-                await Task.Run(() => { bool cameraOption = this.HasCameraOption; });
-                SetMessage(null);
 
                 if (this.HasCameraOption)
                 {

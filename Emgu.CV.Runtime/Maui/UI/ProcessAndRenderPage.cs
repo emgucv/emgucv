@@ -87,9 +87,14 @@ namespace Emgu.CV.Platform.Maui.UI
                 || Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.MacCatalyst
                 || Microsoft.Maui.Devices.DeviceInfo.Platform == DevicePlatform.WinUI))
             {
-#if __ANDROID__ 
+#if __ANDROID__
                 if (CameraBackend == AndroidCameraBackend.AndroidCamera2)
-                    return true;
+                {
+                    var context = Android.App.Application.Context;
+                    var cameraManager =  (Android.Hardware.Camera2.CameraManager) context.GetSystemService(Android.Content.Context.CameraService);
+                    var cameraCount = cameraManager?.GetCameraIdList()?.Length;
+                    return cameraCount > 0;
+                }
 #endif
 
                 if (CvInvoke.Backends.Length > 0)
