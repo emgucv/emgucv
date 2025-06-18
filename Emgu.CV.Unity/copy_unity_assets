@@ -38,12 +38,13 @@ cp -r ../Emgu.CV/Calib Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Stereo Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Color Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Core Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
-cp -r ../Emgu.CV/Gapi Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 #cp -r ../Emgu.CV/Cvb Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Dnn Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Features2D Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Flann Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
+cp -r ../Emgu.CV/Gapi Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Geodetic Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
+cp -r ../Emgu.CV/Imgcodecs Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Imgproc Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Imgcodec Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/HighGUI Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
@@ -79,6 +80,8 @@ mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Bioinspired
 cp -r ../Emgu.CV.Contrib/Bioinspired/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Bioinspired
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DnnModern
 cp -r ../Emgu.CV.Contrib/DnnModern/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DnnModern
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DnnSuperres
+cp -r ../Emgu.CV.Contrib/DnnSuperres/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DnnSuperres
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Dpm
 cp -r ../Emgu.CV.Contrib/Dpm/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Dpm
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Face
@@ -87,22 +90,44 @@ mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Freetype
 cp -r ../Emgu.CV.Contrib/Freetype/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Freetype
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Fuzzy
 cp -r ../Emgu.CV.Contrib/Fuzzy/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Fuzzy
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Hdf
+cp -r ../Emgu.CV.Contrib/Hdf/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Hdf
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Hfs
 cp -r ../Emgu.CV.Contrib/Hfs/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Hfs
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/ImgHash
 cp -r ../Emgu.CV.Contrib/ImgHash/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/ImgHash
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/IntensityTransform
+cp -r ../Emgu.CV.Contrib/IntensityTransform/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/IntensityTransform
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/LineDescriptor
 cp -r ../Emgu.CV.Contrib/LineDescriptor/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/LineDescriptor
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc
+cp -r ../Emgu.CV.Contrib/Mcc/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/PhaseUnwrapping
 cp -r ../Emgu.CV.Contrib/PhaseUnwrapping/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/PhaseUnwrapping
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Plot
 cp -r ../Emgu.CV.Contrib/Plot/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Plot
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Quality
+cp -r ../Emgu.CV.Contrib/Quality/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Quality
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rapid
+cp -r ../Emgu.CV.Contrib/Rapid/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rapid
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Reg
+cp -r ../Emgu.CV.Contrib/Reg/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Reg
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rgbd
+cp -r ../Emgu.CV.Contrib/Rgbd/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rgbd
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Saliency
 cp -r ../Emgu.CV.Contrib/Saliency/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Saliency
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Stereo
+cp -r ../Emgu.CV.Contrib/Stereo/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Stereo
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/StructuredLight
+cp -r ../Emgu.CV.Contrib/StructuredLight/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/StructuredLight
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/SurfaceMatching
+cp -r ../Emgu.CV.Contrib/SurfaceMatching/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/SurfaceMatching
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Text
 cp -r ../Emgu.CV.Contrib/Text/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Text
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Tracking
 cp -r ../Emgu.CV.Contrib/Tracking/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Tracking 
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/WechatQrcode
+cp -r ../Emgu.CV.Contrib/WechatQrcode/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/WechatQrcode
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XFeatures2D
 cp -r ../Emgu.CV.Contrib/XFeatures2D/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XFeatures2D
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XImgproc
@@ -111,36 +136,12 @@ mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XObjdetect
 cp -r ../Emgu.CV.Contrib/XObjdetect/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XObjdetect
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XPhoto
 cp -r ../Emgu.CV.Contrib/XPhoto/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XPhoto
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XStereo
-cp -r ../Emgu.CV.Contrib/XStereo/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XStereo
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Quality
-cp -r ../Emgu.CV.Contrib/Quality/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Quality
 
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/SurfaceMatching
-cp -r ../Emgu.CV.Contrib/SurfaceMatching/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/SurfaceMatching
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DnnSuperres
-cp -r ../Emgu.CV.Contrib/DnnSuperres/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DnnSuperres
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/IntensityTransform
-cp -r ../Emgu.CV.Contrib/IntensityTransform/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/IntensityTransform
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rapid
-cp -r ../Emgu.CV.Contrib/Rapid/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rapid
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc
-cp -r ../Emgu.CV.Contrib/Mcc/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Hdf
-cp -r ../Emgu.CV.Contrib/Hdf/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Hdf
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/WechatQrcode
-cp -r ../Emgu.CV.Contrib/WechatQrcode/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/WechatQrcode
 #mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Barcode
 #cp -r ../Emgu.CV.Contrib/Barcode/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Barcode
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/StructuredLight
-cp -r ../Emgu.CV.Contrib/StructuredLight/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/StructuredLight
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rgbd
-cp -r ../Emgu.CV.Contrib/Rgbd/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rgbd
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Reg
-cp -r ../Emgu.CV.Contrib/Reg/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Reg
+
 #mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DepthAI
 #cp -r ../Emgu.CV.Contrib/DepthAI/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DepthAI
-
 
 cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.OCR/
 
