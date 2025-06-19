@@ -56,7 +56,7 @@ namespace Emgu.CV
                     byte[] jpgBytes = texture.EncodeToJPG();
                     using (Mat tmp = new Mat())
                     {
-                        CvInvoke.Imdecode(jpgBytes, ImreadModes.Color, tmp);
+                        CvInvoke.Imdecode(jpgBytes, ImreadModes.ColorBgr, tmp);
                         if (dstColorType == null || dstColorType == typeof(Bgr))
                             tmp.CopyTo(result);
                         else
