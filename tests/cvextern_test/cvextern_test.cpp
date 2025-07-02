@@ -3,6 +3,7 @@
 #include "stdio.h"
 #include <iostream>
 #include "quaternions.h"
+#include "opencv2/features2d.hpp"
 #include "opencv2/opencv_modules.hpp"
 
 #include "opencv2/core/core.hpp"
@@ -258,6 +259,19 @@ void Test_InferenceEngine()
 }
 #endif
 
+#ifdef HAVE_OPENCV_FEATURES2D
+void Test_SimpleBlobDetector()
+{
+	cv::Mat m(600, 480, CV_8UC1);
+	cv::Ptr<cv::SimpleBlobDetector> detector = cv::SimpleBlobDetector::create();
+	cv::Mat mask(m.size(), CV_8UC1);
+	mask.setTo(255);
+	std::vector<cv::KeyPoint> kps;
+	detector->detect(m, kps, mask);
+	cout << "SimpleBlobDetector: Passed";
+}
+#endif
+
 int main()
 {
 	char tmp;
@@ -306,6 +320,10 @@ int main()
 
 #ifdef HAVE_OPENCV_DNN
 	Test_InferenceEngine();
+#endif
+
+#ifdef HAVE_OPENCV_FEATURES2D
+	Test_SimpleBlobDetector();
 #endif
 
 	cin >> tmp; //wait for input only if compiling with visual C++ 
