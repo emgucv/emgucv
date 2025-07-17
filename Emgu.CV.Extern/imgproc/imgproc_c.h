@@ -147,6 +147,7 @@ CVAPI(double) cveMatchShapes(cv::_InputArray* contour1, cv::_InputArray* contour
 CVAPI(void) cveFitEllipse(cv::_InputArray* points, cv::RotatedRect* box);
 CVAPI(void) cveFitEllipseAMS(cv::_InputArray* points, cv::RotatedRect* box);
 CVAPI(void) cveFitEllipseDirect(cv::_InputArray* points, cv::RotatedRect* box);
+CVAPI(void) cveGetClosestEllipsePoints(CvBox2D* ellipseParams, cv::_InputArray* points, cv::_OutputArray* closestPts);
 
 CVAPI(void) cveFitLine(cv::_InputArray* points, cv::_OutputArray* line, int distType, double param, double reps, double aeps);
 CVAPI(int) cveRotatedRectangleIntersection(cv::RotatedRect* rect1, cv::RotatedRect* rect2, cv::_OutputArray* intersectingRegion);

@@ -686,6 +686,29 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveFitEllipseDirect(IntPtr points, ref RotatedRect ellipse);
 
+        /// <summary>
+        /// Compute for each 2d point the nearest 2d point located on a given ellipse.
+        /// </summary>
+        /// <param name="ellipseParams">Ellipse parameters</param>
+        /// <param name="points">Input 2d points</param>
+        /// <param name="closestPts">For each 2d point, their corresponding closest 2d point located on a given ellipse</param>
+        public static void GetClosestEllipsePoints(
+            RotatedRect ellipseParams,
+            IInputArray points,
+            IOutputArray closestPts)
+        {
+            using(InputArray iaPoints = points.GetInputArray())
+            using (OutputArray oaClosestPts = closestPts.GetOutputArray())
+            {
+                cveGetClosestEllipsePoints(ref ellipseParams, iaPoints, oaClosestPts);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveGetClosestEllipsePoints(
+            ref RotatedRect ellipseParams,
+            IntPtr points,
+            IntPtr closestPts);
 
         /// <summary>
         /// Finds convex hull of 2D point set using Sklansky's algorithm
