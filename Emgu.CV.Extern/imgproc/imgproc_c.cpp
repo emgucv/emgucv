@@ -473,7 +473,11 @@ void cveFitEllipseDirect(cv::_InputArray* points, CvBox2D* box)
 	box->size = cvSize2D32f(rect.size.width, rect.size.height);
 	box->angle = rect.angle;
 }
-
+void cveGetClosestEllipsePoints(CvBox2D* ellipseParams, cv::_InputArray* points, cv::_OutputArray* closestPts)
+{
+	cv::RotatedRect rect = *ellipseParams;
+	cv::getClosestEllipsePoints(rect, *points, *closestPts);
+}
 void cveFitLine(cv::_InputArray* points, cv::_OutputArray* line, int distType, double param, double reps, double aeps)
 {
 	cv::fitLine(*points, *line, distType, param, reps, aeps);
