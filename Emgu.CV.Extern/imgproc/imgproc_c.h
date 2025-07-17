@@ -50,6 +50,13 @@ CVAPI(void) cveCornerEigenValsAndVecs(cv::_InputArray* src, cv::_OutputArray* ds
 
 CVAPI(void) cveCornerHarris(cv::_InputArray* src, cv::_OutputArray* dst, int blockSize, int ksize, double k, int borderType);
 CVAPI(double) cveThreshold(cv::_InputArray* src, cv::_OutputArray* dst, double thresh, double maxval, int type);
+CVAPI(double) cveThresholdWithMask(
+	cv::_InputArray* src, 
+	cv::_InputOutputArray* dst, 
+	cv::_InputArray* mask,
+	double thresh, 
+	double maxval, 
+	int type);
 CVAPI(void) cveWatershed(cv::_InputArray* image, cv::_InputOutputArray* markers);
 CVAPI(void) cveAdaptiveThreshold(cv::_InputArray* src, cv::_OutputArray* dst, double maxValue, int adaptiveMethod, int thresholdType, int blockSize, double c);
 CVAPI(void) cveCvtColor(

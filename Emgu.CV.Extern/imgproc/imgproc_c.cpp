@@ -126,9 +126,24 @@ void cveCornerHarris(cv::_InputArray* src, cv::_OutputArray* dst, int blockSize,
 	cv::cornerHarris(*src, *dst, blockSize, ksize, k, borderType);
 }
 
-double cveThreshold(cv::_InputArray* src, cv::_OutputArray* dst, double thresh, double maxval, int type)
+double cveThreshold(
+	cv::_InputArray* src, 
+	cv::_OutputArray* dst, 
+	double thresh, 
+	double maxval, 
+	int type)
 {
 	return cv::threshold(*src, *dst, thresh, maxval, type);
+}
+double cveThresholdWithMask(
+	cv::_InputArray* src,
+	cv::_InputOutputArray* dst,
+	cv::_InputArray* mask,
+	double thresh,
+	double maxval,
+	int type)
+{
+	return cv::thresholdWithMask(*src, *dst, *mask, thresh, maxval, type);
 }
 void cveWatershed(cv::_InputArray* image, cv::_InputOutputArray* markers)
 {
