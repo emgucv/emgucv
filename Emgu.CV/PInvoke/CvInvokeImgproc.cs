@@ -1463,6 +1463,45 @@ namespace Emgu.CV
            CvEnum.ThresholdType thresholdType);
 
         /// <summary>
+        /// Applies a fixed-level threshold to each array element.
+        /// The function applies fixed-level thresholding to a multiple-channel array. The function is typically used to get a bi-level (binary) image out of a grayscale image ( compare could be also used for this purpose) or for removing a noise, that is, filtering out pixels with too small or too large values. There are several types of thresholding supported by the function. They are determined by type parameter.
+        /// </summary>
+        /// <param name="src">Input array (multiple-channel, 8-bit or 32-bit floating point).</param>
+        /// <param name="dst">Output array of the same size and type and the same number of channels as src.</param>
+        /// <param name="mask">optional mask (same size as src, 8-bit)</param>
+        /// <param name="threshold">Threshold value</param>
+        /// <param name="maxValue">Maximum value to use with CV_THRESH_BINARY and CV_THRESH_BINARY_INV thresholding types</param>
+        /// <param name="thresholdType">Thresholding type </param>
+        /// <returns>The computed threshold value if Otsu's or Triangle methods used.</returns>
+        public static double ThresholdWithMask(
+            IInputArray src,
+            IInputOutputArray dst,
+            IInputArray mask,
+            double threshold,
+            double maxValue,
+            CvEnum.ThresholdType thresholdType)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (InputOutputArray ioaDst = dst.GetInputOutputArray())
+            using( InputArray iaMask = mask.GetInputArray())    
+                return cveThresholdWithMask(
+                    iaSrc, 
+                    ioaDst, 
+                    iaMask,
+                    threshold, 
+                    maxValue, 
+                    thresholdType);
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern double cveThresholdWithMask(
+            IntPtr src,
+            IntPtr dst,
+            IntPtr mask,
+            double threshold,
+            double maxValue,
+            CvEnum.ThresholdType thresholdType);
+
+        /// <summary>
         /// Transforms grayscale image to binary image. 
         /// Threshold calculated individually for each pixel. 
         /// For the method CV_ADAPTIVE_THRESH_MEAN_C it is a mean of <paramref name="blockSize"/> x <paramref name="blockSize"/> pixel
