@@ -870,7 +870,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestMorphEx()
         {
-            Mat kernel1 = CvInvoke.GetStructuringElement(Emgu.CV.CvEnum.ElementShape.Cross, new Size(3, 3), new Point(1, 1));
+            Mat kernel1 = CvInvoke.GetStructuringElement(Emgu.CV.CvEnum.MorphShapes.Cross, new Size(3, 3), new Point(1, 1));
             Matrix<byte> kernel2 = new Matrix<byte>(new Byte[3, 3] { { 0, 1, 0 }, { 1, 0, 1 }, { 0, 1, 0 } });
             //StructuringElementEx element2 = new StructuringElementEx(new int[3, 3] { { 0, 1, 0 }, { 1, 0, 1 }, { 0, 1, 0 } }, 1, 1);
             Image<Bgr, Byte> tmp = new Image<Bgr, byte>(100, 100);
