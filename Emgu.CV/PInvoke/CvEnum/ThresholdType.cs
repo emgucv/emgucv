@@ -43,6 +43,10 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Use Triangle algorithm to choose the optimal threshold value
         /// </summary>
-        Triangle = 16
+        Triangle = 16,
+        /// <summary>
+        /// Compute threshold only (useful for OTSU/TRIANGLE) but does not actually run thresholding
+        /// </summary>
+        Dryrun = 128
     }
 }
