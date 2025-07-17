@@ -2059,14 +2059,14 @@ namespace Emgu.CV
         /// <param name="ksize">Size of the structuring element.</param>
         /// <param name="anchor">Anchor position within the element. The value (-1, -1) means that the anchor is at the center. Note that only the shape of a cross-shaped element depends on the anchor position. In other cases the anchor just regulates how much the result of the morphological operation is shifted.</param>
         /// <returns>The structuring element</returns>
-        public static Mat GetStructuringElement(CvEnum.ElementShape shape, Size ksize, Point anchor)
+        public static Mat GetStructuringElement(CvEnum.MorphShapes shape, Size ksize, Point anchor)
         {
             Mat res = new Mat();
             cveGetStructuringElement(res, shape, ref ksize, ref anchor);
             return res;
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveGetStructuringElement(IntPtr mat, CvEnum.ElementShape shape, ref Size ksize, ref Point anchor);
+        private static extern void cveGetStructuringElement(IntPtr mat, CvEnum.MorphShapes shape, ref Size ksize, ref Point anchor);
 
         /// <summary>
         /// Performs advanced morphological transformations.

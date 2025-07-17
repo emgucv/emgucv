@@ -9,7 +9,7 @@ namespace Emgu.CV.CvEnum
     /// <summary>
     /// Shape of the Structuring Element
     /// </summary>
-    public enum ElementShape
+    public enum MorphShapes
     {
         /// <summary>
         /// A rectangular element.
@@ -23,6 +23,10 @@ namespace Emgu.CV.CvEnum
         /// An elliptic element.
         /// </summary>
         Ellipse = 2,
+        /// <summary>
+        /// Represents a diamond-shaped structuring element used in morphological operations.
+        /// </summary>
+        Diamond = 3,
         /// <summary>
         /// A user-defined element.
         /// </summary>
