@@ -40,7 +40,8 @@ namespace Emgu.CV
             IntPtr K, 
             IntPtr D,
             IntPtr R, 
-            IntPtr P);
+            IntPtr P, 
+            ref MCvTermCriteria criteria);
 
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -107,6 +108,23 @@ namespace Emgu.CV
             IntPtr tvec,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool useExtrinsicGuess,
+            CvEnum.SolvePnpMethod flags,
+            ref MCvTermCriteria criteria);
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool cveFisheyeSolvePnPRansac(
+            IntPtr opoints,
+            IntPtr ipoints,
+            IntPtr cameraMatrix,
+            IntPtr distCoeffs,
+            IntPtr rvec,
+            IntPtr tvec,
+            bool useExtrinsicGuess,
+            int iterationsCount,
+            float reprojectionError,
+            double confidence,
+            IntPtr inliers,
             CvEnum.SolvePnpMethod flags,
             ref MCvTermCriteria criteria);
     }
@@ -236,12 +254,41 @@ namespace Emgu.CV
         /// <param name="R">Rectification transformation in the object space: 3x3 1-channel, or vector: 3x1/1x3 1-channel or 1x1 3-channel</param>
         /// <param name="P">New camera matrix (3x3) or new projection matrix (3x4)</param>
         public static void UndistortPoints(
+            IInputArray distorted,
+            IOutputArray undistorted,
+            IInputArray K,
+            IInputArray D,
+            IInputArray R = null,
+            IInputArray P = null)
+        {
+            UndistortPoints(
+                distorted, 
+                undistorted, 
+                K, 
+                D, 
+                R, 
+                P,
+                new MCvTermCriteria(10, 1e-8));
+        }
+
+        /// <summary>
+        /// Undistorts 2D points using fisheye model.
+        /// </summary>
+        /// <param name="distorted">Array of object points, 1xN/Nx1 2-channel (or vector&lt;Point2f&gt; ), where N is the number of points in the view.</param>
+        /// <param name="undistorted">Output array of image points, 1xN/Nx1 2-channel, or vector&lt;Point2f&gt;.</param>
+        /// <param name="K">Camera matrix</param>
+        /// <param name="D">Input vector of distortion coefficients (k1,k2,k3,k4).</param>
+        /// <param name="R">Rectification transformation in the object space: 3x3 1-channel, or vector: 3x1/1x3 1-channel or 1x1 3-channel</param>
+        /// <param name="P">New camera matrix (3x3) or new projection matrix (3x4)</param>
+        /// <param name="criteria">The termination criteria for the iterative optimization algorithm.</param>
+        public static void UndistortPoints(
             IInputArray distorted, 
             IOutputArray undistorted, 
             IInputArray K, 
             IInputArray D,
-            IInputArray R = null, 
-            IInputArray P = null)
+            IInputArray R, 
+            IInputArray P,
+            MCvTermCriteria criteria)
         {
             using (InputArray iaDistorted = distorted.GetInputArray())
             using (OutputArray oaUndistorted = undistorted.GetOutputArray())
@@ -250,7 +297,14 @@ namespace Emgu.CV
             using (InputArray iaR = R == null ? InputArray.GetEmpty() : R.GetInputArray())
             using (InputArray iaP = P == null ? InputArray.GetEmpty() : P.GetInputArray())
             {
-                CvInvoke.cveFisheyeUndistortPoints(iaDistorted, oaUndistorted, iaK, iaD, iaR, iaP);
+                CvInvoke.cveFisheyeUndistortPoints(
+                    iaDistorted, 
+                    oaUndistorted, 
+                    iaK, 
+                    iaD, 
+                    iaR, 
+                    iaP,
+                    ref criteria);
             }
         }
 
@@ -517,6 +571,106 @@ namespace Emgu.CV
                    ref criteria);
         }
 
+        /// <summary>
+        /// Finds an object pose from 3D-2D point correspondences using the RANSAC scheme.
+        /// </summary>
+        /// <param name="objectPoints">Array of object points in the object coordinate space, 3xN/Nx3 1-channel or 1xN/Nx1 3-channel, where N is the number of points. VectorOfPoint3D32f can be also passed here.</param>
+        /// <param name="imagePoints">Array of corresponding image points, 2xN/Nx2 1-channel or 1xN/Nx1 2-channel, where N is the number of points. VectorOfPointF can be also passed here.</param>
+        /// <param name="cameraMatrix">Input camera matrix</param>
+        /// <param name="distCoeffs">Input vector of distortion coefficients of 4, 5, 8 or 12 elements. If the vector is null/empty, the zero distortion coefficients are assumed.</param>
+        /// <param name="rvec">Output rotation vector </param>
+        /// <param name="tvec">Output translation vector.</param>
+        /// <param name="useExtrinsicGuess">If true, the function uses the provided rvec and tvec values as initial approximations of the rotation and translation vectors, respectively, and further optimizes them.</param>
+        /// <param name="iterationsCount">Number of iterations.</param>
+        /// <param name="reprojectionError">Inlier threshold value used by the RANSAC procedure. The parameter value is the maximum allowed distance between the observed and computed point projections to consider it an inlier.</param>
+        /// <param name="confident">The probability that the algorithm produces a useful result.</param>
+        /// <param name="inliers">Output vector that contains indices of inliers in objectPoints and imagePoints .</param>
+        /// <param name="flags">Method for solving a PnP problem </param>
+        /// <returns>True if successful</returns>
+        public static bool SolvePnPRansac(
+            IInputArray objectPoints,
+            IInputArray imagePoints,
+            IInputArray cameraMatrix,
+            IInputArray distCoeffs,
+            IOutputArray rvec,
+            IOutputArray tvec,
+            bool useExtrinsicGuess = false,
+            int iterationsCount = 100,
+            float reprojectionError = 8.0f,
+            double confident = 0.99,
+            IOutputArray inliers = null,
+            CvEnum.SolvePnpMethod flags = SolvePnpMethod.Iterative)
+        {
+            return SolvePnPRansac(
+                objectPoints, 
+                imagePoints, 
+                cameraMatrix, 
+                distCoeffs, 
+                rvec, 
+                tvec, 
+                useExtrinsicGuess, 
+                iterationsCount, 
+                reprojectionError, 
+                confident, 
+                inliers, 
+                flags,
+                new MCvTermCriteria(10, 1e-8)
+            );
+        }
 
+        /// <summary>
+        /// Finds an object pose from 3D-2D point correspondences using the RANSAC scheme.
+        /// </summary>
+        /// <param name="objectPoints">Array of object points in the object coordinate space, 3xN/Nx3 1-channel or 1xN/Nx1 3-channel, where N is the number of points. VectorOfPoint3D32f can be also passed here.</param>
+        /// <param name="imagePoints">Array of corresponding image points, 2xN/Nx2 1-channel or 1xN/Nx1 2-channel, where N is the number of points. VectorOfPointF can be also passed here.</param>
+        /// <param name="cameraMatrix">Input camera matrix</param>
+        /// <param name="distCoeffs">Input vector of distortion coefficients of 4, 5, 8 or 12 elements. If the vector is null/empty, the zero distortion coefficients are assumed.</param>
+        /// <param name="rvec">Output rotation vector </param>
+        /// <param name="tvec">Output translation vector.</param>
+        /// <param name="useExtrinsicGuess">If true, the function uses the provided rvec and tvec values as initial approximations of the rotation and translation vectors, respectively, and further optimizes them.</param>
+        /// <param name="iterationsCount">Number of iterations.</param>
+        /// <param name="reprojectionError">Inlier threshold value used by the RANSAC procedure. The parameter value is the maximum allowed distance between the observed and computed point projections to consider it an inlier.</param>
+        /// <param name="confident">The probability that the algorithm produces a useful result.</param>
+        /// <param name="inliers">Output vector that contains indices of inliers in objectPoints and imagePoints .</param>
+        /// <param name="flags">Method for solving a PnP problem </param>
+        /// <param name="criteria">The termination criteria for the iterative optimization algorithm.</param>
+        /// <returns>True if successful</returns>
+        public static bool SolvePnPRansac(
+           IInputArray objectPoints,
+           IInputArray imagePoints,
+           IInputArray cameraMatrix,
+           IInputArray distCoeffs,
+           IOutputArray rvec,
+           IOutputArray tvec,
+           bool useExtrinsicGuess,
+           int iterationsCount,
+           float reprojectionError,
+           double confident,
+           IOutputArray inliers,
+           CvEnum.SolvePnpMethod flags,
+           MCvTermCriteria criteria)
+        {
+            using (InputArray iaObjectPoints = objectPoints.GetInputArray())
+            using (InputArray iaImagePoints = imagePoints.GetInputArray())
+            using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
+            using (InputArray iaDistortionCoeffs = distCoeffs == null ? InputArray.GetEmpty() : distCoeffs.GetInputArray())
+            using (OutputArray oaRotationVector = rvec.GetOutputArray())
+            using (OutputArray oaTranslationVector = tvec.GetOutputArray())
+            using (OutputArray oaInliers = inliers == null ? OutputArray.GetEmpty() : inliers.GetOutputArray())
+                return CvInvoke.cveFisheyeSolvePnPRansac(
+                   iaObjectPoints, 
+                   iaImagePoints, 
+                   iaCameraMatrix, 
+                   iaDistortionCoeffs,
+                   oaRotationVector, 
+                   oaTranslationVector,
+                   useExtrinsicGuess, 
+                   iterationsCount, 
+                   reprojectionError, 
+                   confident,
+                   oaInliers, 
+                   flags, 
+                   ref criteria);
+        }
     }
 }

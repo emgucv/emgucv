@@ -212,7 +212,14 @@ CVAPI(void) cveFisheyeProjectPoints(cv::_InputArray* objectPoints, cv::_OutputAr
 
 CVAPI(void) cveFisheyeDistortPoints(cv::_InputArray* undistored, cv::_OutputArray* distorted, cv::_InputArray* K, cv::_InputArray* D, double alpha);
 
-CVAPI(void) cveFisheyeUndistortPoints(cv::_InputArray* distorted, cv::_OutputArray* undistorted, cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* R, cv::_InputArray* P);
+CVAPI(void) cveFisheyeUndistortPoints(
+	cv::_InputArray* distorted, 
+	cv::_OutputArray* undistorted, 
+	cv::_InputArray* K, 
+	cv::_InputArray* D, 
+	cv::_InputArray* R, 
+	cv::_InputArray* P,
+	CvTermCriteria* criteria);
 
 CVAPI(void) cveFisheyeInitUndistortRectifyMap(cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* R, cv::_InputArray* P, CvSize* size, int m1Type, cv::_OutputArray* map1, cv::_OutputArray* map2);
 
@@ -243,6 +250,20 @@ CVAPI(bool) cveFisheyeSolvePnP(
 	int flags, 
 	CvTermCriteria* criteria);
 
+CVAPI(bool) cveFisheyeSolvePnPRansac(
+	cv::_InputArray* opoints,
+	cv::_InputArray* ipoints,
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs,
+	cv::_OutputArray* rvec,
+	cv::_OutputArray* tvec,
+	bool useExtrinsicGuess,
+	int iterationsCount,
+	float reprojectionError,
+	double confidence,
+	cv::_OutputArray* inliers,
+	int flags,
+	CvTermCriteria* criteria);
 
 CVAPI(void) cveInitUndistortRectifyMap(cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* r, cv::_InputArray* newCameraMatrix, CvSize* size, int m1type, cv::_OutputArray* map1, cv::_OutputArray* map2);
 CVAPI(void) cveUndistort(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* cameraMatrix, cv::_InputArray* distorCoeffs, cv::_InputArray* newCameraMatrix);
