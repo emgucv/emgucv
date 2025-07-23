@@ -115,6 +115,11 @@ CVAPI(void) cveGroupRectanglesMeanshift(std::vector<cv::Rect>* rectList, std::ve
 CVAPI(cv::QRCodeDetector*) cveQRCodeDetectorCreate(cv::GraphicalCodeDetector** graphicalCodeDetector);
 CVAPI(void) cveQRCodeDetectorRelease(cv::QRCodeDetector** detector);
 CVAPI(void) cveQRCodeDetectorDecodeCurved(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightCode);
+CVAPI(int) cveQRCodeDetectorGetEncoding(cv::QRCodeDetector* detector, int codeIdx);
+
+CVAPI(cv::QRCodeEncoder*) cveQRCodeEncoderCreate(cv::Ptr<cv::QRCodeEncoder>** sharedPtr);
+CVAPI(void) cveQRCodeEncoderRelease(cv::QRCodeEncoder** encoder, cv::Ptr<cv::QRCodeEncoder>** sharedPtr);
+CVAPI(void) cveQRCodeEncode(cv::QRCodeEncoder* encoder, cv::String* encodedInfo, cv::_OutputArray* qrcode);
 
 CVAPI(cv::QRCodeDetectorAruco*) cveQRCodeDetectorArucoCreate(cv::GraphicalCodeDetector** graphicalCodeDetector);
 CVAPI(void) cveQRCodeDetectorArucoRelease(cv::QRCodeDetectorAruco** detector);

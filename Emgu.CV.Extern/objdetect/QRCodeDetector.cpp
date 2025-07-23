@@ -36,6 +36,15 @@ void cveQRCodeDetectorDecodeCurved(cv::QRCodeDetector* detector, cv::_InputArray
 #endif
 }
 
+int cveQRCodeDetectorGetEncoding(cv::QRCodeDetector* detector, int codeIdx)
+{
+#ifdef HAVE_OPENCV_OBJDETECT
+	return detector->getEncoding(codeIdx);
+#else 
+	throw_no_objdetect();
+#endif
+}
+
 cv::QRCodeDetectorAruco* cveQRCodeDetectorArucoCreate(cv::GraphicalCodeDetector** graphicalCodeDetector)
 {
 #ifdef HAVE_OPENCV_OBJDETECT
@@ -54,6 +63,37 @@ void cveQRCodeDetectorArucoRelease(cv::QRCodeDetectorAruco** detector)
 #else 
 	throw_no_objdetect();
 #endif
+}
+
+cv::QRCodeEncoder* cveQRCodeEncoderCreate(cv::Ptr<cv::QRCodeEncoder>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_OBJDETECT
+	cv::Ptr<cv::QRCodeEncoder> ptr = cv::QRCodeEncoder::create();
+	*sharedPtr = new cv::Ptr<cv::QRCodeEncoder>(ptr);
+	return ptr.get();
+#else 
+	throw_no_objdetect();
+#endif
+}
+
+void cveQRCodeEncoderRelease(cv::QRCodeEncoder** encoder, cv::Ptr<cv::QRCodeEncoder>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_OBJDETECT
+	delete* sharedPtr;
+	*encoder = 0;
+	*sharedPtr = 0;
+#else
+	throw_no_objdetect();
+#endif
+}
+
+void cveQRCodeEncode(cv::QRCodeEncoder* encoder, cv::String* encodedInfo, cv::_OutputArray* qrcode)
+{
+#ifdef HAVE_OPENCV_OBJDETECT
+	encoder->encode(*encodedInfo, *qrcode);
+#else
+	throw_no_objdetect();
+#endif	
 }
 
 cv::barcode::BarcodeDetector* cveBarcodeDetectorCreate(

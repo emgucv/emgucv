@@ -37,7 +37,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Release the unmanaged memory associated with this HOGDescriptor
+        /// Release the unmanaged memory associated with this QRCodeDetector
         /// </summary>
         protected override void DisposeObject()
         {
@@ -65,6 +65,16 @@ namespace Emgu.CV
             }
         }
 
+        /// <summary>
+        /// Returns a kind of encoding for the decoded info from the latest decode or detectAndDecode call.
+        /// </summary>
+        /// <param name="codeIdx">an index of the previously decoded QR code. When decode or detectAndDecode is used, valid value is zero. For decodeMulti or detectAndDecodeMulti use indices corresponding to the output order.</param>
+        /// <returns>The kind of encoding for the decoded info from the latest decode or detectAndDecode call.</returns>
+        public QRCodeEncoder.ECIEncodings GetEncoding(int codeIdx=0)
+        {
+            return ObjdetectInvoke.cveQRCodeDetectorGetEncoding(_ptr, codeIdx);
+        }
+        
     }
 
     public static partial class ObjdetectInvoke
@@ -77,6 +87,9 @@ namespace Emgu.CV
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveQRCodeDetectorDecodeCurved(IntPtr detector, IntPtr img, IntPtr points, IntPtr decodedInfo, IntPtr straightQrcode);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern QRCodeEncoder.ECIEncodings cveQRCodeDetectorGetEncoding(IntPtr detector, int codeIdx);
 
     }
 
