@@ -34,7 +34,9 @@ namespace Emgu.CV
         /// Defaults to `Scalar()`, indicating an empty color(usually transparent if supported).
         /// This background color provides a solid fill behind frames that have transparency, ensuring a consistent display appearance.
         /// </param>
-        public Animation(int loopCount, MCvScalar bgColor)
+        public Animation(
+            int loopCount=0, 
+            MCvScalar bgColor=new MCvScalar())
 		{
 			_ptr = CvInvoke.cveAnimationCreate(loopCount, ref bgColor);
 		}
