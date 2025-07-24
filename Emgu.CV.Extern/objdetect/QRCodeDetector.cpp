@@ -65,9 +65,19 @@ void cveQRCodeDetectorArucoRelease(cv::QRCodeDetectorAruco** detector)
 #endif
 }
 
-cv::QRCodeEncoder* cveQRCodeEncoderCreate(cv::Ptr<cv::QRCodeEncoder>** sharedPtr)
+cv::QRCodeEncoder* cveQRCodeEncoderCreate(
+    cv::Ptr<cv::QRCodeEncoder>** sharedPtr,
+    int version,
+    int correctionLevel,
+    int mode,
+    int structureNumber)
 {
 #ifdef HAVE_OPENCV_OBJDETECT
+	cv::QRCodeEncoder::Params p;
+	p.version = version;
+	p.correction_level = static_cast<cv::QRCodeEncoder::CorrectionLevel>(correctionLevel);
+	p.mode = static_cast<cv::QRCodeEncoder::EncodeMode>(mode);
+	p.structure_number = structureNumber;
 	cv::Ptr<cv::QRCodeEncoder> ptr = cv::QRCodeEncoder::create();
 	*sharedPtr = new cv::Ptr<cv::QRCodeEncoder>(ptr);
 	return ptr.get();
@@ -87,7 +97,7 @@ void cveQRCodeEncoderRelease(cv::QRCodeEncoder** encoder, cv::Ptr<cv::QRCodeEnco
 #endif
 }
 
-void cveQRCodeEncode(cv::QRCodeEncoder* encoder, cv::String* encodedInfo, cv::_OutputArray* qrcode)
+void cveQRCodeEncoderEncode(cv::QRCodeEncoder* encoder, cv::String* encodedInfo, cv::_OutputArray* qrcode)
 {
 #ifdef HAVE_OPENCV_OBJDETECT
 	encoder->encode(*encodedInfo, *qrcode);
