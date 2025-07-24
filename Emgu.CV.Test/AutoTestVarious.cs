@@ -4348,8 +4348,14 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void TestQCCode()
+        public void TestQRCode()
         {
+            using (QRCodeEncoder encoder = new QRCodeEncoder())
+            using (Mat qrcodeImg = new Mat())
+            {
+                encoder.Encode("https://www.emgu.com", qrcodeImg);
+            }
+
             using (Mat m = EmguAssert.LoadMat("link_github_ocv.jpg"))
             using (QRCodeDetector detector = new QRCodeDetector())
             using (VectorOfPoint pts = new VectorOfPoint())
@@ -4359,6 +4365,7 @@ namespace Emgu.CV.Test
                     String text = detector.Decode(m, pts);
                 }
             }
+
         }
 
         [Test]

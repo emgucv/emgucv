@@ -117,9 +117,14 @@ CVAPI(void) cveQRCodeDetectorRelease(cv::QRCodeDetector** detector);
 CVAPI(void) cveQRCodeDetectorDecodeCurved(cv::QRCodeDetector* detector, cv::_InputArray* img, cv::_InputArray* points, cv::String* decodedInfo, cv::_OutputArray* straightCode);
 CVAPI(int) cveQRCodeDetectorGetEncoding(cv::QRCodeDetector* detector, int codeIdx);
 
-CVAPI(cv::QRCodeEncoder*) cveQRCodeEncoderCreate(cv::Ptr<cv::QRCodeEncoder>** sharedPtr);
+CVAPI(cv::QRCodeEncoder*) cveQRCodeEncoderCreate(
+    cv::Ptr<cv::QRCodeEncoder>** sharedPtr,
+    int version,
+    int correctionLevel,
+    int mode,
+    int structureNumber);
 CVAPI(void) cveQRCodeEncoderRelease(cv::QRCodeEncoder** encoder, cv::Ptr<cv::QRCodeEncoder>** sharedPtr);
-CVAPI(void) cveQRCodeEncode(cv::QRCodeEncoder* encoder, cv::String* encodedInfo, cv::_OutputArray* qrcode);
+CVAPI(void) cveQRCodeEncoderEncode(cv::QRCodeEncoder* encoder, cv::String* encodedInfo, cv::_OutputArray* qrcode);
 
 CVAPI(cv::QRCodeDetectorAruco*) cveQRCodeDetectorArucoCreate(cv::GraphicalCodeDetector** graphicalCodeDetector);
 CVAPI(void) cveQRCodeDetectorArucoRelease(cv::QRCodeDetectorAruco** detector);
