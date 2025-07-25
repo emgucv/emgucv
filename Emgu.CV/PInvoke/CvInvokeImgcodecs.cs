@@ -2,15 +2,16 @@
 //  Copyright (C) 2004-2025 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 using Emgu.Util.TypeEnum;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Numerics;
+using System.Runtime.InteropServices;
 
 namespace Emgu.CV
 {
@@ -123,6 +124,50 @@ namespace Emgu.CV
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveImreadmulti(IntPtr filename, IntPtr mats, CvEnum.ImreadModes flags);
 
+        /// <summary>
+        /// Loads an image from the specified file and returns the pointer to the loaded image. Currently the following file formats are supported: 
+        /// Windows bitmaps - BMP, DIB; 
+        /// JPEG files - JPEG, JPG, JPE; 
+        /// Portable Network Graphics - PNG; 
+        /// Portable image format - PBM, PGM, PPM; 
+        /// Sun rasters - SR, RAS; 
+        /// TIFF files - TIFF, TIF; 
+        /// OpenEXR HDR images - EXR; 
+        /// JPEG 2000 images - jp2. 
+        /// </summary>
+        /// <param name="filename">The name of the file to be loaded</param>
+        /// <param name="readMode">The image reading mode</param>
+        /// <returns>The loaded image</returns>
+        public static Mat ImreadWithMetadata(
+            String filename,
+            VectorOfInt metadataTypes,
+            IOutputArrayOfArrays metaData,
+            ImreadModes readMode = ImreadModes.ColorBgr)
+        {
+            Mat result = new Mat();
+            using (CvString csFilename = new CvString(filename))
+            using(OutputArray oaMetaData = metaData.GetOutputArray())
+            {
+                cveImreadWithMetadata(
+                    csFilename,
+                    metadataTypes,
+                    oaMetaData,
+                    readMode,
+                    result
+                    );
+            }
+            return result;
+        }
+        
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern void cveImreadWithMetadata(
+            IntPtr filename,
+            IntPtr metadataTypes,
+            IntPtr metadata,
+            ImreadModes flags,
+            IntPtr result);
+
         private static void PushParameters(VectorOfInt vec, KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
         {
             if (parameters == null || parameters.Length == 0)
@@ -183,6 +228,82 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         private static extern bool cveImwrite(IntPtr filename, IntPtr image, IntPtr parameters);
+
+
+        /// <summary>
+        /// Saves the image to the specified file. The function imwrite saves the image to the specified file. The image format is chosen based on the filename extension (see cv::imread for the list of extensions).
+        /// </summary>
+        /// <param name="filename">The name of the file to be saved to</param>
+        /// <param name="image">The image to be saved</param>
+        /// <param name="parameters">The parameters</param>
+        /// <remarks>In general, only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function, with these exceptions:
+        /// 16-bit unsigned(CV_16U) images can be saved in the case of PNG, JPEG 2000, and TIFF formats
+        /// 32-bit float (CV_32F) images can be saved in PFM, TIFF, OpenEXR, and Radiance HDR formats; 3-channel(CV_32FC3) TIFF images will be saved using the LogLuv high dynamic range encoding(4 bytes per pixel)
+        /// PNG images with an alpha channel can be saved using this function.To do this, create 8-bit (or 16-bit) 4-channel image BGRA, where the alpha channel goes last. Fully transparent pixels should have alpha set to 0, fully opaque pixels should have alpha set to 255 / 65535(see the code sample below).
+        /// Multiple images(vector of Mat) can be saved in TIFF format(see the code sample below).
+        /// If the image format is not supported, the image will be converted to 8 - bit unsigned(CV_8U) and saved that way.
+        /// If the format, depth or channel order is different, use Mat::convertTo and cv::cvtColor to convert it before saving. Or, use the universal FileStorage I / O functions to save the image to XML or YAML format.</remarks>
+        /// <returns>true if success</returns>
+        public static bool ImwriteWithMetadata(
+            String filename, 
+            IInputArray image,
+            VectorOfInt metadataTypes,
+            IInputArrayOfArrays metaData,
+            params KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
+        {
+            using (CvString s = new CvString(filename))
+            {
+                bool containsUnicode = (s.Length != filename.Length);
+                if (containsUnicode &&
+                    (Emgu.Util.Platform.OperationSystem != Emgu.Util.Platform.OS.MacOS) &&
+                    (Emgu.Util.Platform.OperationSystem != Emgu.Util.Platform.OS.Linux))
+                {
+                    //Handle unicode in Windows platform
+                    //Work around for Open CV ticket:
+                    //https://github.com/Itseez/opencv/issues/4292
+                    //https://github.com/Itseez/opencv/issues/4866     
+                    System.IO.FileInfo fi = new System.IO.FileInfo(filename);
+
+                    using (VectorOfByte vb = new VectorOfByte())
+                    {
+                        CvInvoke.ImencodeWithMetadata(
+                            fi.Extension,
+                            image,
+                            metadataTypes,
+                            metaData,
+                            vb,
+                            parameters);
+                        byte[] arr = vb.ToArray();
+                        System.IO.File.WriteAllBytes(filename, arr);
+                        return true;
+                    }
+                }
+                else
+                {
+                    using (VectorOfInt vec = new VectorOfInt())
+                    using (InputArray iaMetaData = metaData.GetInputArray())
+                    using (InputArray iaImage = image.GetInputArray())
+                    {
+                        PushParameters(vec, parameters);
+                        return cveImwriteWithMetadata(
+                            s,
+                            iaImage,
+                            metadataTypes,
+                            iaMetaData,
+                            vec);
+                    }
+                }
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveImwriteWithMetadata(
+            IntPtr filename,
+            IntPtr img,
+            IntPtr metadataTypes,
+            IntPtr metadata,
+            IntPtr parameters);
 
         /// <summary>
         /// Decode image stored in the buffer
@@ -311,6 +432,51 @@ namespace Emgu.CV
         private static extern bool cveImencode(IntPtr ext, IntPtr image, IntPtr buffer, IntPtr parameters);
 
         /// <summary>
+        /// Encodes an image into a memory buffer.
+        /// The function imencode compresses the image and stores it in the memory buffer that is resized to fit the result.
+        /// </summary>
+        /// <param name="ext">	File extension that defines the output format. Must include a leading period.</param>
+        /// <param name="image">Image to be compressed.</param>
+        /// <param name="metadataTypes">Vector with types of metadata chucks stored in metadata to write</param>
+        /// <param name="metaData">Vector of vectors or vector of matrices with chunks of metadata to store into the file</param>
+        /// <param name="buf">Output buffer resized to fit the compressed image.</param>
+        /// <param name="parameters">Format-specific parameters.</param>
+        /// <returns>True if successfully encoded the image into the buffer.</returns>
+        public static bool ImencodeWithMetadata(
+            String ext,
+            IInputArray image,
+            VectorOfInt metadataTypes,
+            IInputArrayOfArrays metaData,
+            VectorOfByte buf,
+            params KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
+        {
+            using (CvString extStr = new CvString(ext))
+            using (VectorOfInt p = new VectorOfInt())
+            using (InputArray iaImage = image.GetInputArray())
+            using (InputArray iaMetaData = metaData.GetInputArray())
+            {
+                PushParameters(p, parameters);
+                return cveImencodeWithMetadata(
+                    extStr, 
+                    iaImage,
+                    metadataTypes, 
+                    iaMetaData,
+                    buf, 
+                    p);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveImencodeWithMetadata(
+            IntPtr ext,
+            IntPtr img,
+            IntPtr metadataTypes,
+            IntPtr metadata,
+            IntPtr buf,
+            IntPtr parameters);
+
+        /// <summary>
         /// Encodes array of images into a memory buffer.
         /// </summary>
         /// <param name="ext">File extension that defines the output format. Must include a leading period.</param>
@@ -384,13 +550,9 @@ namespace Emgu.CV
         /// <returns>Returns true if the animation was successfully saved; returns false otherwise.</returns>
         public static bool ImwriteAnimation(String fileName, Animation animation, VectorOfInt parameters = null)
         {
-
             using (CvString csFileName = new CvString(fileName))
             {
-                if (parameters == null)
-                    return cveImwriteAnimation(csFileName, animation, IntPtr.Zero);
-                else
-                    return cveImwriteAnimation(csFileName, animation, parameters);
+                return cveImwriteAnimation(csFileName, animation, parameters);
             }
         }
 

@@ -41,6 +41,25 @@ bool cveImwritemulti(cv::String* filename, cv::_InputArray* img, std::vector<int
 #endif
 }
 
+bool cveImwriteWithMetadata(
+	cv::String* filename,
+	cv::_InputArray* img,
+	std::vector<int>* metadataTypes,
+	cv::_InputArray* metadata,
+	std::vector<int>* params)
+{
+#ifdef HAVE_OPENCV_IMGCODECS
+	return cv::imwriteWithMetadata(
+		*filename, 
+		*img,
+		*metadataTypes,
+		*metadata,
+		params ? *params : std::vector<int>());
+#else
+	throw_no_imgcodecs();
+#endif	
+}
+
 void cveImread(cv::String* fileName, int flags, cv::Mat* result)
 {
 #ifdef HAVE_OPENCV_IMGCODECS
@@ -60,6 +79,25 @@ bool cveImreadmulti(const cv::String* filename, std::vector<cv::Mat>* mats, int 
 #endif
 }
 
+void cveImreadWithMetadata(
+	const cv::String* filename,
+	std::vector<int>* metadataTypes,
+	cv::_OutputArray* metadata,
+	int flags,
+	cv::Mat* result)
+{
+#ifdef HAVE_OPENCV_IMGCODECS
+	cv::Mat m = cv::imreadWithMetadata(
+		*filename,
+		*metadataTypes,
+		*metadata,
+		flags);
+	cv::swap(*result, m);
+#else
+	throw_no_imgcodecs();
+#endif	
+}
+
 void cveImdecode(cv::_InputArray* buf, int flags, cv::Mat* dst)
 {
 #ifdef HAVE_OPENCV_IMGCODECS
@@ -68,10 +106,76 @@ void cveImdecode(cv::_InputArray* buf, int flags, cv::Mat* dst)
 	throw_no_imgcodecs();
 #endif
 }
+
+bool cveImdecodemulti(cv::_InputArray* buf, int flags, std::vector<cv::Mat>* mats, cv::Range* range)
+{
+#ifdef HAVE_OPENCV_IMGCODECS
+	if ((range->start == 0) && (range->end == 0))
+		return cv::imdecodemulti(*buf, flags, *mats);
+	else
+		return cv::imdecodemulti(*buf, flags, *mats, *range);
+#else
+	throw_no_imgcodecs();
+#endif	
+}
+
+void cveImdecodeWithMetadata(
+	cv::_InputArray* buf,
+	std::vector<int>* metadataTypes,
+	cv::_OutputArray* metadata,
+	int flags,
+	cv::Mat* dst)
+{
+#ifdef HAVE_OPENCV_IMGCODECS
+	cv::Mat result = cv::imdecodeWithMetadata(
+		*buf,
+		*metadataTypes,
+		*metadata,
+		flags
+	);
+	cv::swap(result, *dst);
+#else
+	throw_no_imgcodecs();
+#endif
+}
+
 bool cveImencode(cv::String* ext, cv::_InputArray* img, std::vector< unsigned char >* buf, std::vector< int >* params)
 {
 #ifdef HAVE_OPENCV_IMGCODECS
 	return cv::imencode(*ext, *img, *buf, params ? *params : std::vector<int>());
+#else
+	throw_no_imgcodecs();
+#endif
+}
+
+bool cveImencodemulti(cv::String* ext, cv::_InputArray* imgs, std::vector<uchar>* buf, std::vector<int>* params)
+{
+#ifdef HAVE_OPENCV_IMGCODECS
+	if (params)
+		return cv::imencodemulti(*ext, *imgs, *buf, *params);
+	else
+		return cv::imencodemulti(*ext, *imgs, *buf);
+#else
+	throw_no_imgcodecs();
+#endif
+}
+
+bool cveImencodeWithMetadata(
+	cv::String* ext,
+	cv::_InputArray* img,
+	std::vector< int >* metadataTypes,
+	cv::_InputArray* metadata,
+	std::vector< uchar >* buf,
+	std::vector< int >* params)
+{
+#ifdef HAVE_OPENCV_IMGCODECS
+	return cv::imencodeWithMetadata(
+		*ext, 
+		*img,
+		*metadataTypes,
+		*metadata,
+		*buf, 
+		params ? *params : std::vector<int>());
 #else
 	throw_no_imgcodecs();
 #endif
@@ -131,25 +235,3 @@ bool cveImwriteAnimation(cv::String* filename, cv::Animation* animation, std::ve
 #endif
 }
 
-bool cveImencodemulti(cv::String* ext, cv::_InputArray* imgs, std::vector<uchar>* buf, std::vector<int>* params)
-{
-#ifdef HAVE_OPENCV_IMGCODECS
-	if (params)
-		return cv::imencodemulti(*ext, *imgs, *buf, *params);
-	else
-		return cv::imencodemulti(*ext, *imgs, *buf);
-#else
-	throw_no_imgcodecs();
-#endif
-}
-bool cveImdecodemulti(cv::_InputArray* buf, int flags, std::vector<cv::Mat>* mats, cv::Range* range)
-{
-#ifdef HAVE_OPENCV_IMGCODECS
-	if ((range->start == 0) && (range->end == 0))
-		return cv::imdecodemulti(*buf, flags, *mats);
-	else
-		return cv::imdecodemulti(*buf, flags, *mats, *range);
-#else
-	throw_no_imgcodecs();
-#endif	
-}

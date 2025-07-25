@@ -22,16 +22,49 @@ CVAPI(bool) cveHaveImageWriter(cv::String* filename);
 
 CVAPI(bool) cveImwrite(cv::String* filename, cv::_InputArray* img, std::vector<int>* params);
 CVAPI(bool) cveImwritemulti(cv::String* filename, cv::_InputArray* img, std::vector<int>* params);
+CVAPI(bool) cveImwriteWithMetadata(
+    cv::String* filename, 
+    cv::_InputArray* img,
+    std::vector< int >* metadataTypes,
+    cv::_InputArray* metadata,
+    std::vector< int >* params);
 
 CVAPI(void) cveImread(cv::String* fileName, int flags, cv::Mat* result);
 CVAPI(bool) cveImreadmulti(const cv::String* filename, std::vector<cv::Mat>* mats, int flags);
+CVAPI(void) cveImreadWithMetadata(
+    const cv::String* filename, 
+    std::vector<int>* metadataTypes,
+    cv::_OutputArray* metadata, 
+    int flags, 
+    cv::Mat* result);
 
 CVAPI(void) cveImdecode(cv::_InputArray* buf, int flags, cv::Mat* dst);
 CVAPI(bool) cveImdecodemulti(cv::_InputArray* buf, int flags, std::vector<cv::Mat>* mats, cv::Range* range);
+CVAPI(void) cveImdecodeWithMetadata(
+    cv::_InputArray* buf, 
+    std::vector< int >* metadataTypes,
+    cv::_OutputArray* metadata, 
+    int flags, 
+    cv::Mat* dst);
 
+CVAPI(bool) cveImencode(
+    cv::String* ext, 
+    cv::_InputArray* img, 
+    std::vector< unsigned char >* buf, 
+    std::vector< int >* params);
+CVAPI(bool) cveImencodemulti(
+    cv::String* ext, 
+    cv::_InputArray* imgs, 
+    std::vector<uchar>* buf, 
+    std::vector<int>* params);
+CVAPI(bool) cveImencodeWithMetadata(
+    cv::String* ext, 
+    cv::_InputArray* img,
+    std::vector< int >* metadataTypes,
+    cv::_InputArray* metadata,
+    std::vector< uchar >* buf,
+    std::vector< int >* params);
 
-CVAPI(bool) cveImencode(cv::String* ext, cv::_InputArray* img, std::vector< unsigned char >* buf, std::vector< int >* params);
-CVAPI(bool) cveImencodemulti(cv::String* ext, cv::_InputArray* imgs, std::vector<uchar>* buf, std::vector<int>* params);
 
 CVAPI(cv::Animation*) cveAnimationCreate(int loopCount, CvScalar* bgColor);
 CVAPI(void) cveAnimationRelease(cv::Animation** animation);
