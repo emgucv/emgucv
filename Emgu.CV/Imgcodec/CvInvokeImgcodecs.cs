@@ -137,6 +137,8 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="filename">The name of the file to be loaded</param>
         /// <param name="readMode">The image reading mode</param>
+        /// <param name="metadataTypes">Output vector with types of metadata chucks returned in metadata</param>
+        /// <param name="metaData">Output vector of vectors or vector of matrices to store the retrieved metadata</param>
         /// <returns>The loaded image</returns>
         public static Mat ImreadWithMetadata(
             String filename,
@@ -160,7 +162,6 @@ namespace Emgu.CV
         }
         
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
         private static extern void cveImreadWithMetadata(
             IntPtr filename,
             IntPtr metadataTypes,
@@ -391,6 +392,45 @@ namespace Emgu.CV
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         private static extern bool cveImdecodemulti(IntPtr buf, int flags, IntPtr mats, ref Emgu.CV.Structure.Range range);
 
+
+        /// <summary>
+        /// Reads an image from a buffer in memory together with associated metadata.
+        /// The function imdecode reads an image from the specified buffer in the memory. If the buffer is too short or contains invalid data, the function returns an empty matrix.
+        /// </summary>
+        /// <param name="buf">Input array or vector of bytes.</param>
+        /// <param name="image">The output image</param>
+        /// <param name="readMode">The image reading mode</param>
+        /// <param name="metadataTypes">Output vector with types of metadata chucks returned in metadata</param>
+        /// <param name="metaData">Output vector of vectors or vector of matrices to store the retrieved metadata</param>
+        public static void ImdecodeWithMetadata(
+            IInputArray buf,
+            VectorOfInt metadataTypes,
+            IOutputArrayOfArrays metaData,
+            ImreadModes readMode,
+            Mat image
+            )
+        {
+            using (InputArray iaBuf = buf.GetInputArray())
+            using (OutputArray oaMetaData = metaData.GetOutputArray())
+            {
+                cveImdecodeWithMetadata(
+                    iaBuf,
+                    metadataTypes,
+                    oaMetaData,
+                    readMode,
+                    image
+                    );
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveImdecodeWithMetadata(
+            IntPtr buf,
+            IntPtr metadataTypes,
+            IntPtr metadata,
+            ImreadModes flags,
+            IntPtr dst);
+
         /// <summary>
         /// Encode image and return the result as a byte vector.
         /// </summary>
@@ -542,6 +582,36 @@ namespace Emgu.CV
         private static extern bool cveImreadAnimation(IntPtr filename, IntPtr animation, int start, int count);
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="buf"></param>
+        /// <param name="animation"></param>
+        /// <param name="start"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public static bool ImdecodeAnimation(
+            IInputArray buf,
+            Animation animation,
+            int start,
+            int count)
+        {
+            using (InputArray iaBuf = buf.GetInputArray())
+            {
+                return cveImdecodeAnimation(iaBuf, animation, start, count);
+            }
+        }
+
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveImdecodeAnimation(
+            IntPtr buf, 
+            IntPtr animation, 
+            int start, 
+            int count);
+
+
+        /// <summary>
         /// Saves an Animation to a specified file.
         /// </summary>
         /// <param name="fileName">The name of the file where the animation will be saved. The file extension determines the format.</param>
@@ -560,5 +630,38 @@ namespace Emgu.CV
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         private static extern bool cveImwriteAnimation(IntPtr filename, IntPtr animation, IntPtr parameters);
 
+        /// <summary>
+        /// Encodes an Animation to a memory buffer. The function imencodeanimation encodes the provided Animation data into a memory buffer in an animated format. Supported formats depend on the implementation and may include formats like GIF, AVIF, APNG, or WEBP.
+        /// </summary>
+        /// <param name="ext">The file extension that determines the format of the encoded data.</param>
+        /// <param name="animation">A constant reference to an Animation struct containing the frames and metadata to be encoded.</param>
+        /// <param name="buf">A reference to a vector of unsigned chars where the encoded data will be stored.</param>
+        /// <param name="parameters">Optional format-specific parameters</param>
+        /// <returns>Returns true if the animation was successfully encoded; returns false otherwise.</returns>
+        public static bool ImencodeAnimation(
+            String ext, 
+            Animation animation, 
+            VectorOfByte buf,
+            params KeyValuePair<CvEnum.ImwriteFlags, int>[] parameters)
+        {
+            using (CvString csExt = new CvString(ext))
+                using(VectorOfInt p = new VectorOfInt())
+            {
+                PushParameters(p, parameters);
+                return cveImencodeAnimation(
+                    csExt,
+                    animation,
+                    buf,
+                    p);
+            }
+        }
+        
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveImencodeAnimation(
+            IntPtr ext,
+            IntPtr animation,
+            IntPtr buf,
+            IntPtr parameters);
     }
 }

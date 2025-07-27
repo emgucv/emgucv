@@ -223,6 +223,16 @@ bool cveImreadAnimation(cv::String* filename, cv::Animation* animation, int star
 	throw_no_imgcodecs();
 #endif
 }
+
+bool cveImdecodeAnimation(cv::_InputArray* buf, cv::Animation* animation, int start, int count)
+{
+#ifdef HAVE_OPENCV_IMGCODECS
+	return cv::imdecodeanimation(*buf, *animation, start, count);
+#else
+	throw_no_imgcodecs();
+#endif	
+}
+
 bool cveImwriteAnimation(cv::String* filename, cv::Animation* animation, std::vector<int>* params)
 {
 #ifdef HAVE_OPENCV_IMGCODECS
@@ -235,3 +245,18 @@ bool cveImwriteAnimation(cv::String* filename, cv::Animation* animation, std::ve
 #endif
 }
 
+bool cveImencodeAnimation(
+	cv::String* ext,
+	cv::Animation* animation,
+	std::vector<uchar>* buf,
+	std::vector<int>* params)
+{
+#ifdef HAVE_OPENCV_IMGCODECS
+	if (params)
+		return cv::imencodeanimation(*ext, *animation, *buf, *params);
+	else
+		return cv::imencodeanimation(*ext, *animation, *buf);
+#else
+	throw_no_imgcodecs();
+#endif	
+}
