@@ -19,6 +19,7 @@ namespace cv
     class HOGDescriptor {};
     class CascadeClassifier {};
     class GraphicalCodeDetector {};
+    class QRCodeEncoder {};
     class QRCodeDetector {};
     class QRCodeDetectorAruco {};
     class FaceDetectorYN {};
