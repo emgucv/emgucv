@@ -73,9 +73,13 @@ CVAPI(std::vector<cv::Mat>*) cveAnimationGetFrames(cv::Animation* animation);
 
 
 CVAPI(bool) cveImreadAnimation(cv::String* filename, cv::Animation* animation, int start, int count);
+CVAPI(bool) cveImdecodeAnimation(cv::_InputArray* buf, cv::Animation* animation, int start, int count);
 CVAPI(bool) cveImwriteAnimation(cv::String* filename, cv::Animation* animation, std::vector<int>* params);
-
-
+CVAPI(bool) cveImencodeAnimation(
+    cv::String* ext, 
+    cv::Animation* animation, 
+    std::vector<uchar>* buf, 
+    std::vector<int>* params);
 
 
 #endif
