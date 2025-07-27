@@ -582,25 +582,24 @@ namespace Emgu.CV
         private static extern bool cveImreadAnimation(IntPtr filename, IntPtr animation, int start, int count);
 
         /// <summary>
-        /// 
+        /// Loads frames from an animated image buffer into an Animation structure. The function imdecodeanimation loads frames from an animated image buffer (e.g., GIF, AVIF, APNG, WEBP) into the provided Animation struct.
         /// </summary>
-        /// <param name="buf"></param>
-        /// <param name="animation"></param>
-        /// <param name="start"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
+        /// <param name="buf">A reference to an InputArray containing the image buffer.</param>
+        /// <param name="animation">A reference to an Animation structure where the loaded frames will be stored. It should be initialized before the function is called.</param>
+        /// <param name="start">The index of the first frame to load. This is optional and defaults to 0.</param>
+        /// <param name="count">The number of frames to load. This is optional and defaults to Int16.MaxValue.</param>
+        /// <returns>Returns true if the buffer was successfully loaded and frames were extracted; returns false otherwise.</returns>
         public static bool ImdecodeAnimation(
             IInputArray buf,
             Animation animation,
-            int start,
-            int count)
+            int start = 0,
+            int count = Int16.MaxValue)
         {
             using (InputArray iaBuf = buf.GetInputArray())
             {
                 return cveImdecodeAnimation(iaBuf, animation, start, count);
             }
         }
-
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
