@@ -138,7 +138,11 @@ CVAPI(cv::TrackerMIL*) cveTrackerMILCreate(
 	cv::Ptr<cv::TrackerMIL>** sharedPtr);
 CVAPI(void) cveTrackerMILRelease(cv::Ptr<cv::TrackerMIL>** sharedPtr);
 
-CVAPI(cv::TrackerGOTURN*) cveTrackerGOTURNCreate(cv::Tracker** tracker, cv::Ptr<cv::TrackerGOTURN>** sharedPtr);
+CVAPI(cv::TrackerGOTURN*) cveTrackerGOTURNCreate(
+	cv::Tracker** tracker, 
+	cv::Ptr<cv::TrackerGOTURN>** sharedPtr,
+	cv::String* modelTxt,
+	cv::String* modelBin);
 CVAPI(void) cveTrackerGOTURNRelease(cv::Ptr<cv::TrackerGOTURN>** sharedPtr);
 
 CVAPI(cv::TrackerDaSiamRPN*) cveTrackerDaSiamRPNCreate(
