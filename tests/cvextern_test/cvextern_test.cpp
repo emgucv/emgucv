@@ -3,15 +3,25 @@
 #include "stdio.h"
 #include <iostream>
 #include "quaternions.h"
-#include "opencv2/features2d.hpp"
+
 #include "opencv2/opencv_modules.hpp"
 
 #include "opencv2/core/core.hpp"
 #include "opencv2/core/cuda.hpp"
 #include "opencv2/core/utils/logger.hpp"
+
+#ifdef HAVE_OPENCV_IMGPROC
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/imgproc/types_c.h"
+#endif
+
+#ifdef HAVE_OPENCV_FEATURES2D
+#include "opencv2/features2d.hpp"
+#endif
+
+#ifdef HAVE_OPENCV_HIGHGUI
 #include "opencv2/highgui/highgui.hpp"
+#endif
 
 #ifdef HAVE_OPENCV_PHOTO
 #include "opencv2/photo/photo.hpp"
