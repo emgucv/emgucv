@@ -680,7 +680,7 @@ void cveFileStorageWriteInt(cv::FileStorage* fs, cv::String* name, int value)
 {
 	cv::write(*fs, *name, value);
 }
-void cveFileStorageWriteInt(cv::FileStorage* fs, cv::String* name, int64_t value)
+void cveFileStorageWriteInt64(cv::FileStorage* fs, cv::String* name, int64_t value)
 {
 	cv::write(*fs, *name, value);
 }
