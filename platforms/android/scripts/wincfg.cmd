@@ -2,7 +2,7 @@
 :: Note: all pathes should be specified without tailing slashes!
 @echo on
 
-SET MAKE_EXE=
+SET MAKE=
 SET ANDROID_NDK_PARENT_DIR=C:\android
 
 :: variables required for android-opencv build ::
@@ -58,13 +58,15 @@ REM IF EXIST "%ANDROID_SDK%\ndk\27.1.12297006" SET ANDROID_NDK=%ANDROID_SDK%\ndk
 IF EXIST "%ANDROID_SDK%\ndk\28.0.12916984" SET ANDROID_NDK=%ANDROID_SDK%\ndk\28.0.12916984
 
 REM SET MAKE_EXE
-IF EXIST "%ANDROID_NDK%" SET MAKE_EXE=%ANDROID_NDK%\prebuilt\windows-x86_64\bin\make.exe
+IF EXIST "%ANDROID_NDK%" SET MAKE=%ANDROID_NDK%\prebuilt\windows-x86_64\bin\make.exe
 
-IF EXIST "%programfiles(x86)%\CMake 2.8\bin\cmake.exe" SET CMAKE_EXE=%programfiles(x86)%\CMake 2.8\bin\cmake.exe
-IF EXIST "%programfiles(x86)%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programfiles(x86)%\CMake\bin\cmake.exe
-IF EXIST "%programfiles%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programfiles%\CMake\bin\cmake.exe
-IF EXIST "%programw6432%\CMake\bin\cmake.exe" SET CMAKE_EXE=%programw6432%\CMake\bin\cmake.exe
-
+REM SET CMAKE_EXE
+FOR /F "tokens=* USEBACKQ" %%F IN (`..\..\..\miscellaneous\vswhere.exe -version [17.0^,18.0^) -property installationPath`) DO SET VS2022_DIR=%%F
+IF EXIST "%programfiles(x86)%\CMake 2.8\bin\cmake.exe" SET CMAKE=%programfiles(x86)%\CMake 2.8\bin\cmake.exe
+IF EXIST "%programfiles(x86)%\CMake\bin\cmake.exe" SET CMAKE=%programfiles(x86)%\CMake\bin\cmake.exe
+IF EXIST "%programfiles%\CMake\bin\cmake.exe" SET CMAKE=%programfiles%\CMake\bin\cmake.exe
+IF EXIST "%VS2022_DIR%\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" SET CMAKE=%VS2022_DIR%\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe
+IF EXIST "%programw6432%\CMake\bin\cmake.exe" SET CMAKE=%programw6432%\CMake\bin\cmake.exe
 
 
 SET ANT_DIR="%VS140COMNTOOLS%..\..\Apps\apache-ant-1.9.3"
@@ -72,11 +74,14 @@ SET ANT_DIR="%VS140COMNTOOLS%..\..\Apps\apache-ant-1.9.3"
 @ECHO OFF &SETLOCAL 
 FOR /F "tokens=2*" %%a IN ('REG QUERY "HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Development Kit\1.7" /v JavaHome') DO set "JavaHome17=%%b"
 FOR /F "tokens=2*" %%a IN ('REG QUERY "HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\Java Development Kit\1.8" /v JavaHome') DO set "JavaHome18=%%b"
+FOR /F "tokens=2*" %%a IN ('REG QUERY "HKEY_LOCAL_MACHINE\SOFTWARE\JavaSoft\JDK\25" /v JavaHome') DO set "JavaHome25=%%b"
 ::ECHO Java Home 17: %JavaHome17%
 
 IF NOT "" == "%JavaHome17%" SET JAVA_HOME=%JavaHome17%
 IF NOT "" == "%JavaHome18%" set JAVA_HOME=%JavaHome18%
+IF NOT "" == "%JavaHome25%" set JAVA_HOME=%JavaHome25%
 IF EXIST "C:\Program Files\Android\jdk\microsoft_dist_openjdk_1.8.0.25" SET JAVA_HOME=C:\Program Files\Android\jdk\microsoft_dist_openjdk_1.8.0.25
+IF EXIST "C:\Program Files (x86)\Android\openjdk\jdk-17.0.14" SET JAVA_HOME=C:\Program Files (x86)\Android\openjdk\jdk-17.0.14
 
 ECHO Java Home: %JAVA_HOME%
 :: configuration options ::
@@ -98,7 +103,7 @@ SET BUILD_DIR=build_%1
 :::: other options
 ::SET ANDROID_NATIVE_API_LEVEL=8   &:: android-3 is enough for native part of OpenCV but android-8 is required for Java API
 
-ECHO CMAKE_EXE: %CMAKE_EXE%
-ECHO MAKE_EXE: %MAKE_EXE%
+ECHO CMAKE: %CMAKE%
+ECHO MAKE: %MAKE%
 ECHO ANDROID_SDK: %ANDROID_SDK%
 ECHO ANDROID_NDK: %ANDROID_NDK%
