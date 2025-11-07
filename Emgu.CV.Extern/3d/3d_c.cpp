@@ -650,3 +650,27 @@ void cveSaveMesh(cv::String* filename, cv::_InputArray* vertices, cv::_InputArra
 	throw_no_3d();
 #endif
 }
+
+
+void cveDrawFrameAxes(
+	cv::_InputOutputArray* image,
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs,
+	cv::_InputArray* rvec,
+	cv::_InputArray* tvec,
+	float length,
+	int thickness)
+{
+#ifdef HAVE_OPENCV_CALIB3D
+	return cv::drawFrameAxes(
+		*image, 
+		*cameraMatrix,
+		*distCoeffs,
+		*rvec,
+		*tvec,
+		length,
+		thickness);
+#else
+	throw_no_calib3d();
+#endif
+}

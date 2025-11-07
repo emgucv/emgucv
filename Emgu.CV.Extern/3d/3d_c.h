@@ -207,4 +207,14 @@ CVAPI(void) cveSavePointCloud(cv::String* filename, cv::_InputArray* vertices, c
 CVAPI(void) cveLoadMesh(cv::String* filename, cv::_OutputArray* vertices, cv::_OutputArray* normals, cv::_OutputArray* indices);
 CVAPI(void) cveSaveMesh(cv::String* filename, cv::_InputArray* vertices, cv::_InputArray* normals, cv::_InputArray* indices);
 
+CVAPI(void) cveDrawFrameAxes(
+	cv::_InputOutputArray* image, 
+	cv::_InputArray* cameraMatrix, 
+	cv::_InputArray* distCoeffs,
+	cv::_InputArray* rvec, 
+	cv::_InputArray* tvec, 
+	float length, 
+	int thickness);
+
+
 #endif

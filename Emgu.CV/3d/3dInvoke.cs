@@ -1243,5 +1243,44 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveSaveMesh(IntPtr filename, IntPtr vertices, IntPtr normals, IntPtr indices);
 
+
+        /// <summary>
+        /// Draw axes of the world/object coordinate system from pose estimation.
+        /// </summary>
+        /// <param name="image">Input/output image. It must have 1 or 3 channels. The number of channels is not altered.</param>
+        /// <param name="cameraMatrix">Input 3x3 floating-point matrix of camera intrinsic parameters.</param>
+        /// <param name="distCoeffs">Input vector of distortion coefficients. If the vector is empty, the zero distortion coefficients are assumed.</param>
+        /// <param name="rvec">Rotation vector, together with tvec, brings points from the model coordinate system to the camera coordinate system.</param>
+        /// <param name="tvec">Translation vector.</param>
+        /// <param name="length">Length of the painted axes in the same unit than tvec (usually in meters).</param>
+        /// <param name="thickness">Line thickness of the painted axes.</param>
+        public static void DrawFrameAxes(
+            IInputOutputArray image, 
+            IInputArray cameraMatrix, 
+            IInputArray distCoeffs, 
+            IInputArray rvec,
+            IInputArray tvec, 
+            float length, 
+            int thickness = 3)
+        {
+            using (var iaImage = image.GetInputOutputArray())
+            using (var iaCameraMatrix = cameraMatrix.GetInputArray())
+            using (var iaDistCoeffs = distCoeffs.GetInputArray())
+            using (var iaRvec = rvec.GetInputArray())
+            using (var iaTvec = tvec.GetInputArray())
+            {
+                cveDrawFrameAxes(iaImage, iaCameraMatrix, iaDistCoeffs, iaRvec, iaTvec, length, thickness);
+            }
+        }
+        
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDrawFrameAxes(
+            IntPtr image,
+            IntPtr cameraMatrix,
+            IntPtr distCoeffs,
+            IntPtr rvec,
+            IntPtr tvec,
+            float length,
+            int thickness);
     }
 }
