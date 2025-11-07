@@ -371,6 +371,33 @@ double cveFisheyeStereoCalibrate(cv::_InputArray* objectPoints, cv::_InputArray*
 #endif
 }
 
+bool cveFisheyeSolvePnP(
+	cv::_InputArray* objectPoints,
+	cv::_InputArray* imagePoints,
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs,
+	cv::_OutputArray* rvec,
+	cv::_OutputArray* tvec,
+	bool useExtrinsicGuess,
+	int flags,
+	CvTermCriteria* criteria)
+{
+#ifdef HAVE_OPENCV_CALIB3D
+	return cv::fisheye::solvePnP(
+		*objectPoints, 
+		*imagePoints, 
+		*cameraMatrix, 
+		*distCoeffs, 
+		*rvec, 
+		*tvec, 
+		useExtrinsicGuess, 
+		flags,
+		*criteria);
+#else
+	throw_no_calib3d();
+#endif
+}
+
 void cveCalibrateHandEye(
 	cv::_InputArray* R_gripper2base, cv::_InputArray* t_gripper2base,
 	cv::_InputArray* R_target2cam, cv::_InputArray* t_target2cam,

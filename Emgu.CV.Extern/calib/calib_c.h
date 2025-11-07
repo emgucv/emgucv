@@ -132,6 +132,16 @@ CVAPI(double) cveFisheyeStereoCalibrate(cv::_InputArray* objectPoints, cv::_Inpu
    cv::_InputArray* imagePoints2, cv::_InputOutputArray* K1, cv::_InputOutputArray* D1, cv::_InputOutputArray* K2, cv::_InputOutputArray* D2,
    CvSize* imageSize, cv::_OutputArray* R, cv::_OutputArray* T, int flags, CvTermCriteria* criteria);
 
+CVAPI(bool) cveFisheyeSolvePnP(
+	cv::_InputArray* objectPoints, 
+	cv::_InputArray* imagePoints, 
+	cv::_InputArray* cameraMatrix, 
+	cv::_InputArray* distCoeffs, 
+	cv::_OutputArray* rvec, 
+	cv::_OutputArray* tvec, 
+	bool useExtrinsicGuess, 
+	int flags, 
+	CvTermCriteria* criteria);
 
 CVAPI(void) cveCalibrateHandEye(cv::_InputArray* R_gripper2base, cv::_InputArray* t_gripper2base,
 	cv::_InputArray* R_target2cam, cv::_InputArray* t_target2cam,
