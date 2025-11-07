@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-#  Copyright (C) 2004-2023 by EMGU Corporation. All rights reserved.
+#  Copyright (C) 2004-2025 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
 IF (DOTNET_FOUND AND NOT(APPLE AND ("${CMAKE_HOST_SYSTEM_PROCESSOR}" STREQUAL "arm64")) ) #DO not compile demo on Apple silicon

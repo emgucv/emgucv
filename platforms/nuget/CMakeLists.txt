@@ -1,5 +1,5 @@
 # --------------------------------------------------------
-#  Copyright (C) 2004-2023 by EMGU Corporation. All rights reserved.
+#  Copyright (C) 2004-2025 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
 ADD_SUBDIRECTORY("Emgu.runtime.windows.msvc.rt.x86")
