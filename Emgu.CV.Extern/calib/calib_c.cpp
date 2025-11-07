@@ -274,7 +274,15 @@ void cveFisheyeDistortPoints(cv::_InputArray* undistored, cv::_OutputArray* dist
 #endif
 }
 
-void cveFisheyeUndistortPoints(cv::_InputArray* distorted, cv::_OutputArray* undistorted, cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* R, cv::_InputArray* P)
+void cveFisheyeUndistortPoints(
+	cv::_InputArray* distorted,
+	cv::_OutputArray* undistorted, 
+	cv::_InputArray* K, 
+	cv::_InputArray* D, 
+	cv::_InputArray* R, 
+	cv::_InputArray* P,
+	CvTermCriteria* criteria
+	)
 {
 #ifdef HAVE_OPENCV_CALIB
 	cv::fisheye::undistortPoints(
@@ -283,7 +291,8 @@ void cveFisheyeUndistortPoints(cv::_InputArray* distorted, cv::_OutputArray* und
 		*K, 
 		*D, 
 		R ? *R : static_cast<cv::InputArray>(cv::noArray()), 
-		P ? *P : static_cast<cv::InputArray>(cv::noArray()));
+		P ? *P : static_cast<cv::InputArray>(cv::noArray()),
+		*criteria);
 #else
 	throw_no_calib();
 #endif
@@ -396,6 +405,42 @@ bool cveFisheyeSolvePnP(
 #else
 	throw_no_calib3d();
 #endif
+}
+
+bool cveFisheyeSolvePnPRansac(
+	cv::_InputArray* opoints,
+	cv::_InputArray* ipoints,
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs,
+	cv::_OutputArray* rvec,
+	cv::_OutputArray* tvec,
+	bool useExtrinsicGuess,
+	int iterationsCount,
+	float reprojectionError,
+	double confidence,
+	cv::_OutputArray* inliers,
+	int flags,
+	CvTermCriteria* criteria)
+{
+#ifdef HAVE_OPENCV_CALIB3D
+	return cv::fisheye::solvePnPRansac(
+		*opoints,
+		*ipoints,
+		*cameraMatrix,
+		*distCoeffs,
+		*rvec,
+		*tvec,
+		useExtrinsicGuess,
+		iterationsCount,
+		reprojectionError,
+		confidence,
+		*inliers,
+		flags,
+		*criteria
+		);
+#else
+	throw_no_calib3d();
+#endif	
 }
 
 void cveCalibrateHandEye(
