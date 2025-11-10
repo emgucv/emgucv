@@ -8,7 +8,7 @@
 #ifndef EMGU_FEATURES2D_C_H
 #define EMGU_FEATURES2D_C_H
 
-#include "opencv2/core/core_c.h"
+#include "cvapi_compat.h"
 #include "opencv2/imgproc/imgproc.hpp"
 
 

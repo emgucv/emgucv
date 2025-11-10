@@ -8,7 +8,9 @@
 #ifndef EMGU_C_H
 #define EMGU_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core/core.hpp"
+#include "cvapi_compat.h"
+
 #include "opencv2/imgproc/imgproc.hpp"
 #ifdef HAVE_OPENCV_OBJDETECT
 #include "opencv2/objdetect/objdetect.hpp"
@@ -34,20 +36,18 @@ namespace emgu
       int CvScalar;
       int CvRect;
       int CvRotatedRect;
-      int CvMat;
-      int CvMatND;
+      //int CvMat;
+      //int CvMatND;
       //int CvHistogram;
       int CvTermCriteria;
       //int CvSeq;
       //int CvContour;
-      int IplImage;
+      //int IplImage;
       //int ERStat;
    };
 }
 
 CVAPI(void) cveGetCvStructSizes(emgu::cvStructSizes* sizes);
-
-CVAPI(void) testDrawLine(IplImage* img, int startX, int startY, int endX, int endY, CvScalar c);
 
 CVAPI(void) cveMemcpy(void* dst, void* src, int length);
 #endif

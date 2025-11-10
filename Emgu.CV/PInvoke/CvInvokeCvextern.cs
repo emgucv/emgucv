@@ -62,13 +62,6 @@ namespace Emgu.CV
         private static extern void cveGetConfigDict(IntPtr names, IntPtr values);
 
         /*
-        public static void TestDrawLine(IntPtr img, int startX, int startY, int endX, int endY, MCvScalar color)
-        {
-           TestDrawLine(img, startX, startY, endX, endY, color.v0, color.v1, color.v2, color.v3);
-        }
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint="testDrawLine")]
-        private static extern void TestDrawLine(IntPtr img, int startX, int startY, int endX, int endY, double v0, double v1, double v2, double v3);
 
         /// <summary>
         /// Implements the chamfer matching algorithm on images taking into account both distance from

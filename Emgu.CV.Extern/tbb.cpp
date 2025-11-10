@@ -4,7 +4,8 @@
 //
 //----------------------------------------------------------------------------
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core/core.hpp"
+#include "cvapi_compat.h"
 
 #if HAVE_TBB
 #include "tbb/task_scheduler_init.h"

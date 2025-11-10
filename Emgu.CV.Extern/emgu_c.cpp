@@ -8,28 +8,19 @@
 
 void cveGetCvStructSizes(emgu::cvStructSizes* sizes)
 {
-   sizes->CvPoint = sizeof(CvPoint);
-   sizes->CvPoint2D32f = sizeof(CvPoint2D32f);
-   sizes->CvPoint3D32f = sizeof(CvPoint3D32f);
-   sizes->CvSize = sizeof(CvSize);
-   sizes->CvSize2D32f = sizeof(CvSize2D32f);
-   sizes->CvScalar = sizeof(CvScalar);
-   sizes->CvRect = sizeof(CvRect);
+   sizes->CvPoint = sizeof(cv::Point);
+   sizes->CvPoint2D32f = sizeof(cv::Point2f);
+   sizes->CvPoint3D32f = sizeof(cv::Point3f);
+   sizes->CvSize = sizeof(cv::Size);
+   sizes->CvSize2D32f = sizeof(cv::Size2f);
+   sizes->CvScalar = sizeof(cv::Scalar);
+   sizes->CvRect = sizeof(cv::Rect);
    sizes->CvRotatedRect = sizeof(cv::RotatedRect);
-   sizes->CvMat = sizeof(CvMat);
-   sizes->CvMatND = sizeof(CvMatND);
-   sizes->CvTermCriteria = sizeof(CvTermCriteria);
-   sizes->IplImage = sizeof(IplImage);
+   //sizes->CvMat = sizeof(CvMat);
+   //sizes->CvMatND = sizeof(CvMatND);
+   sizes->CvTermCriteria = sizeof(cv::TermCriteria);
+   //sizes->IplImage = sizeof(IplImage);
    
-}
-
-void testDrawLine(IplImage* img, int startX, int startY, int endX, int endY, CvScalar c)
-{
-   cv::Mat m = cv::cvarrToMat(img);
-   cv::Point start(startX, startY);
-   cv::Point end(endX, endY);
-   cv::Scalar color(c.val[0], c.val[1], c.val[2], c.val[3]);
-   cv::line(m, start, end, color);
 }
 
 void cveMemcpy(void* dst, void* src, int length)

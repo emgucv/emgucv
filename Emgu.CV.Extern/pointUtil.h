@@ -12,19 +12,19 @@
 #include "sse.h"
 
 /**
- * @fn   inline float cvPoint3D32fDotProduct(const CvPoint3D32f* p1, const CvPoint3D32f* p2)
+ * @fn   inline float cvPoint3D32fDotProduct(const cv::Point3d* p1, const cv::Point3d* p2)
  *
  * @brief   Compute the dot product of two 3D vector
  *
  * @author  Canming Huang
  * @date 8/31/2010
  *
- * @param   p1 The first const CvPoint3D32f*. 
- * @param   p2 The second const CvPoint3D32f*. 
+ * @param   p1 The first const cv::Point3d*. 
+ * @param   p2 The second const cv::Point3d*. 
  *
  * @return  The dot product of two 3D vector  
 **/
-inline float cvPoint3D32fDotProduct(const CvPoint3D32f* p1, const CvPoint3D32f* p2)
+inline float cvPoint3D32fDotProduct(const cv::Point3f* p1, const cv::Point3f* p2)
 {
    /*
 #if EMGU_SSE
@@ -38,19 +38,19 @@ inline float cvPoint3D32fDotProduct(const CvPoint3D32f* p1, const CvPoint3D32f* 
 };
 
 /**
- * @fn   inline double cvPoint3D64fDotProduct(const CvPoint3D64f* p1, const CvPoint3D64f* p2)
+ * @fn   inline double cvPoint3D64fDotProduct(const cv::Point3d* p1, const cv::Point3d* p2)
  *
  * @brief   Compute the dot product of two 3D vector
  *
  * @author  Canming Huang
  * @date 8/31/2010
  *
- * @param   p1 The first const CvPoint3D64f*. 
- * @param   p2 The second const CvPoint3D64f*. 
+ * @param   p1 The first const cv::Point3d*. 
+ * @param   p2 The second const cv::Point3d*. 
  *
  * @return  The dot product of two 3D vector 
 **/
-inline double cvPoint3D64fDotProduct(const CvPoint3D64f* p1, const CvPoint3D64f* p2)
+inline double cvPoint3D64fDotProduct(const cv::Point3d* p1, const cv::Point3d* p2)
 {
 #if EMGU_SSE2
    double tmp;
@@ -62,19 +62,19 @@ inline double cvPoint3D64fDotProduct(const CvPoint3D64f* p1, const CvPoint3D64f*
 };
 
 /**
- * @fn   inline void cvPoint3D64fCrossProduct(const CvPoint3D64f* p1, const CvPoint3D64f* p2,
- * CvPoint3D64f* crossProduct)
+ * @fn   inline void cvPoint3D64fCrossProduct(const cv::Point3d* p1, const cv::Point3d* p2,
+ * cv::Point3d* crossProduct)
  *
  * @brief   Compute the cross product of two 3D vector
  *
  * @author  Canming Huang
  * @date 8/31/2010
  *
- * @param   p1                      The first const CvPoint3D64f*. 
- * @param   p2                      The second const CvPoint3D64f*. 
+ * @param   p1                      The first const cv::Point3d*. 
+ * @param   p2                      The second const cv::Point3d*. 
  * @param [in, out]   crossProduct   If non-null, the cross product. 
 **/
-inline void cvPoint3D64fCrossProduct(const CvPoint3D64f* p1, const CvPoint3D64f* p2, CvPoint3D64f* crossProduct)
+inline void cvPoint3D64fCrossProduct(const cv::Point3d* p1, const cv::Point3d* p2, cv::Point3d* crossProduct)
 {
 #if EMGU_SSE2
    _mm_store_sd(&crossProduct->x, _cross_product(_mm_loadu_pd(&p1->y), _mm_loadu_pd(&p2->y))); 
@@ -87,7 +87,7 @@ inline void cvPoint3D64fCrossProduct(const CvPoint3D64f* p1, const CvPoint3D64f*
 #endif
 };
 
-inline void cvPoint3D64fSub(const CvPoint3D64f* p1, const CvPoint3D64f* p2, CvPoint3D64f* result)
+inline void cvPoint3D64fSub(const cv::Point3d* p1, const cv::Point3d* p2, cv::Point3d* result)
 {
 #if EMGU_SSE2
    _mm_storeu_pd((double*)result, _mm_sub_pd(_mm_loadu_pd((const double*) p1), _mm_loadu_pd((const double*) p2)));
@@ -98,7 +98,7 @@ inline void cvPoint3D64fSub(const CvPoint3D64f* p1, const CvPoint3D64f* p2, CvPo
    result->z = p1->z - p2->z;
 }
 
-inline void cvPoint3D64fAdd(const CvPoint3D64f* p1, const CvPoint3D64f* p2, CvPoint3D64f* result)
+inline void cvPoint3D64fAdd(const cv::Point3d* p1, const cv::Point3d* p2, cv::Point3d* result)
 {
 #if EMGU_SSE2
    _mm_storeu_pd((double*)result, _mm_add_pd(_mm_loadu_pd((const double*) p1), _mm_loadu_pd((const double*) p2)));
@@ -109,7 +109,7 @@ inline void cvPoint3D64fAdd(const CvPoint3D64f* p1, const CvPoint3D64f* p2, CvPo
    result->z = p1->z + p2->z;
 }
 
-inline void cvPoint3D64fMul(const CvPoint3D64f* p1, double scale, CvPoint3D64f* result)
+inline void cvPoint3D64fMul(const cv::Point3d* p1, double scale, cv::Point3d* result)
 {
 #if EMGU_SSE2
    _mm_storeu_pd((double*)result, _mm_mul_pd(_mm_loadu_pd((const double*) p1), _mm_set1_pd(scale)));
@@ -121,21 +121,21 @@ inline void cvPoint3D64fMul(const CvPoint3D64f* p1, double scale, CvPoint3D64f* 
 }
 
 /**
- * @fn   inline bool cvPoint3D64Equals(const CvPoint3D64f* p1, const CvPoint3D64f* p2)
+ * @fn   inline bool cvPoint3D64Equals(const cv::Point3d* p1, const cv::Point3d* p2)
  *
  * @brief   Check if the two point equals. 
  *
  * @author  Canming Huang
  * @date 9/01/2010
  *
- * @param   p1 The first CvPoint3D64f. 
- * @param   p2 The second CvPoint3D64f. 
+ * @param   p1 The first cv::Point3d. 
+ * @param   p2 The second cv::Point3d. 
  *
  * @return  true if the two point equals, false otherwise. 
 **/
-inline bool cvPoint3D64Equals(const CvPoint3D64f* p1, const CvPoint3D64f* p2)
+inline bool cvPoint3D64Equals(const cv::Point3d* p1, const cv::Point3d* p2)
 {
-   return memcmp(p1, p2, sizeof(CvPoint3D64f)) == 0;
+   return memcmp(p1, p2, sizeof(cv::Point3d)) == 0;
 }
 
 #endif

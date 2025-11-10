@@ -33,7 +33,7 @@ int tiffTileSize(TIFF* pTiff)
 #endif
 }
 
-void tiffWriteImageSize(TIFF* pTiff, CvSize* imageSize)
+void tiffWriteImageSize(TIFF* pTiff, cv::Size* imageSize)
 {
 #ifdef EMGU_CV_WITH_TIFF
 	TIFFSetField(pTiff, TIFFTAG_IMAGEWIDTH, imageSize->width);
@@ -69,11 +69,10 @@ void tiffWriteImageInfo(TIFF* pTiff, int bitsPerSample, int samplesPerPixel)
 #endif
 }
 
-void tiffWriteImage(TIFF* pTiff, IplImage* image)
+void tiffWriteImage(TIFF* pTiff, cv::Mat mat)
 {
 #ifdef EMGU_CV_WITH_TIFF
-	cv::Mat mat = cv::cvarrToMat(image);
-	CvSize imageSize = cvSize(image->width, image->height);
+	cv::Size imageSize = mat.size();
 	tiffWriteImageSize(pTiff, &imageSize);
 
 	//write scaneline image data
@@ -87,10 +86,9 @@ void tiffWriteImage(TIFF* pTiff, IplImage* image)
 #endif
 }
 
-void tiffWriteTile(TIFF* pTiff, int row, int col, IplImage* tileImage)
+void tiffWriteTile(TIFF* pTiff, int row, int col, cv::Mat tile)
 {
 #ifdef EMGU_CV_WITH_TIFF
-	cv::Mat tile = cv::cvarrToMat(tileImage);
 
 	int bufferStride = tile.cols * tile.elemSize();
 	unsigned char* buffer = (unsigned char*)malloc(tile.rows * bufferStride);
@@ -106,7 +104,7 @@ void tiffWriteTile(TIFF* pTiff, int row, int col, IplImage* tileImage)
 #endif
 }
 
-void tiffWriteTileInfo(TIFF* pTiff, CvSize* tileSize)
+void tiffWriteTileInfo(TIFF* pTiff, cv::Size* tileSize)
 {
 #ifdef EMGU_CV_WITH_TIFF
 	TIFFSetField(pTiff, TIFFTAG_TILEWIDTH, tileSize->width);

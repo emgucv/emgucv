@@ -8,7 +8,7 @@
 #ifndef EMGU_QUATERNIONS_H
 #define EMGU_QUATERNIONS_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core/core.hpp"
 #include "opencv2/core/core.hpp"
 #include "sse.h"
 #include "doubleOps.h"
@@ -138,7 +138,7 @@ typedef struct Quaternions
       return result;
    }
 
-   void rotatePoint(const CvPoint3D64f* point, CvPoint3D64f* pointDst) const
+   void rotatePoint(const cv::Point3d* point, cv::Point3d* pointDst) const
    {
       double
          t2 =   w*x,
@@ -218,7 +218,7 @@ typedef struct Quaternions
 #endif
    }
 
-   void getAxisAngle(CvPoint3D64f* axisAngle) const
+   void getAxisAngle(cv::Point3d* axisAngle) const
    {
       double theta = 2.0 * acos(w);
       if (theta < QUATERNIONS_THETA_EPS)
@@ -234,7 +234,7 @@ typedef struct Quaternions
       }
    }
 
-   void setAxisAngle(const CvPoint3D64f* axisAngle)
+   void setAxisAngle(const cv::Point3d* axisAngle)
    {
       double theta = sqrt(cvPoint3D64fDotProduct(axisAngle, axisAngle));
       if (theta < QUATERNIONS_THETA_EPS) 
@@ -314,31 +314,31 @@ CVAPI(void) eulerToQuaternions(double x, double y, double z, Quaternions* quater
 CVAPI(void) quaternionsToEuler(const Quaternions* quaternions, double* x, double* y, double* z);
 
 /**
-* @fn   void quaternionsToRotationMatrix(Quaternions* quaternions, CvMat* rotation)
+* @fn   void quaternionsToRotationMatrix(Quaternions* quaternions, cv::Mat* rotation)
 *
 * @brief   Convert quaternions to (3x3) rotation matrix 
 *
 **/
-CVAPI(void) quaternionsToRotationMatrix(const Quaternions* quaternions, CvMat* rotation);
+CVAPI(void) quaternionsToRotationMatrix(const Quaternions* quaternions, cv::Mat* rotation);
 
 /**
-* @fn   void quaternionsRotatePoint(Quaternions* quaternions, CvPoint3D64f* point,
+* @fn   void quaternionsRotatePoint(cv::Point3d* quaternions, cv::Point3d* point,
 * CvPoint3D64f* pointDst)
 *
 * @brief   Rotate a single point using the quaternions. 
 *
 **/
-CVAPI(void) quaternionsRotatePoint(const Quaternions* quaternions, const CvPoint3D64f* point, CvPoint3D64f* pointDst);
+CVAPI(void) quaternionsRotatePoint(const Quaternions* quaternions, const cv::Point3d* point, cv::Point3d* pointDst);
 
 
 /**
-* @fn   void quaternionsRotatePoints(Quaternions* quaternions, CvMat* pointSrc,
+* @fn   void quaternionsRotatePoints(Quaternions* quaternions, cv::Mat* pointSrc,
 * CvMat* pointDst)
 *
 * @brief   Rotate the (3x1 or nx3) matrix of points using the quaternions
 *
 **/
-CVAPI(void) quaternionsRotatePoints(const Quaternions* quaternions, const CvMat* pointSrc, CvMat* pointDst);
+CVAPI(void) quaternionsRotatePoints(const Quaternions* quaternions, const cv::Mat* pointSrc, cv::Mat* pointDst);
 
 /**
  * @fn   void quaternionsMultiply(Quaternions* quaternions1, Quaternions* quaternions2,
@@ -356,15 +356,15 @@ CVAPI(void) quaternionsMultiply(const Quaternions* quaternions1, const Quaternio
 * @brief   Convert axis angle vector to quaternions. The vetor (x,y,z) is the rotatation axis and the norm |(x,y,z)| is the rotation angle
 *
 **/
-CVAPI(void) axisAngleToQuaternions(const CvPoint3D64f* axisAngle, Quaternions* quaternions);
+CVAPI(void) axisAngleToQuaternions(const cv::Point3d* axisAngle, Quaternions* quaternions);
 
 /**
-* @fn   void quaternionsToAxisAngle(Quaternions* quaternions, CvPoint3D64f* axisAngle)
+* @fn   void quaternionsToAxisAngle(Quaternions* quaternions, cv::Point3d* axisAngle)
 *
 * @brief   Convert quaternions to axis angle vector. The vetor (x,y,z) is the rotatation axis and the norm |(x,y,z)| is the rotation angle
 *
 **/
-CVAPI(void) quaternionsToAxisAngle(const Quaternions* quaternions, CvPoint3D64f* axisAngle);
+CVAPI(void) quaternionsToAxisAngle(const Quaternions* quaternions, cv::Point3d* axisAngle);
 
 /**
  * @fn   void quaternionsRenorm(Quaternions* quaternions)

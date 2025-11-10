@@ -45,6 +45,8 @@ namespace Emgu.CV.Structure
       /// The size of cv::RotatedRect
       /// </summary>
       public int CvRotatedRect;
+
+      /*
       /// <summary>
       /// The size of CvMat
       /// </summary>
@@ -53,16 +55,19 @@ namespace Emgu.CV.Structure
       /// The size of CvMatND
       /// </summary>
       public int CvMatND;
+      */
 
       /// <summary>
       /// The size of CvTermCriteria
       /// </summary>
       public int CvTermCriteria;
 
+      /*
       /// <summary>
       /// The size of IplImage
       /// </summary>
       public int IplImage;
+      */
 
    }
 }

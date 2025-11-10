@@ -9,8 +9,8 @@
 #ifndef EMGU_TIFFIO_H
 #define EMGU_TIFFIO_H
 
-#include "opencv2/core/core_c.h"
 #include "opencv2/core/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef EMGU_CV_WITH_TIFF
 #include "geotiff.h"
@@ -28,15 +28,15 @@ CVAPI(int) tiffTileRowSize(TIFF* pTiff);
 
 CVAPI(int) tiffTileSize(TIFF* pTiff);
 
-CVAPI(void) tiffWriteImageSize(TIFF* pTiff, CvSize* imageSize);
+CVAPI(void) tiffWriteImageSize(TIFF* pTiff, cv::Size* imageSize);
 
 CVAPI(void) tiffWriteImageInfo(TIFF* pTiff, int bitsPerSample, int samplesPerPixel);
 
-CVAPI(void) tiffWriteImage(TIFF* pTiff, IplImage* image);
+CVAPI(void) tiffWriteImage(TIFF* pTiff, cv::Mat mat);
 
-CVAPI(void) tiffWriteTile(TIFF* pTiff, int row, int col, IplImage* tileImage);
+CVAPI(void) tiffWriteTile(TIFF* pTiff, int row, int col, cv::Mat* tileImage);
 
-CVAPI(void) tiffWriteTileInfo(TIFF* pTiff, CvSize* tileSize);
+CVAPI(void) tiffWriteTileInfo(TIFF* pTiff, cv::Size* tileSize);
 
 CVAPI(void) tiffWriterClose(TIFF** pTiff);
 

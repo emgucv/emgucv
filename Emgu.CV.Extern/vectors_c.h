@@ -11,12 +11,13 @@
 #include <vector>
 
 #include "opencv2/opencv_modules.hpp"
-#include "opencv2/core/core_c.h"
+#include "cvapi_compat.h"
+#include "opencv2/core/exception.hpp"
 
 #ifdef HAVE_OPENCV_FEATURES2D
 #include "opencv2/features2d/features2d.hpp"
 #else
-static inline CV_NORETURN void vectors_throw_no_features2d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without features2d support"); }
+static inline CV_NORETURN void vectors_throw_no_features2d() { CV_Error(cv::Error::Code::StsBadFunc, "The library is compiled without features2d support"); }
 #endif
 
 #ifdef HAVE_OPENCV_OBJDETECT
@@ -87,26 +88,28 @@ void VectorCopyData(std::vector<dataType>* v, dataType* data)
       memcpy(data, &(*v)[0], v->size() * sizeof(dataType));
 }
 
+/*
 //----------------------------------------------------------------------------
 //
 //  Vector of DMatch
 //
 //----------------------------------------------------------------------------
 
-CVAPI(void) VectorOfDMatchPushMatrix(std::vector<cv::DMatch>* matches, const CvMat* trainIdx, const CvMat* distance = 0, const CvMat* mask = 0);
+CVAPI(void) VectorOfDMatchPushMatrix(std::vector<cv::DMatch>* matches, const cv::Mat* trainIdx, const cv::Mat* distance = 0, const cv::Mat* mask = 0);
 
-CVAPI(void) VectorOfDMatchToMat(std::vector< std::vector<cv::DMatch> >* matches, CvMat* trainIdx, CvMat* distance);
+CVAPI(void) VectorOfDMatchToMat(std::vector< std::vector<cv::DMatch> >* matches, cv::Mat* trainIdx, cv::Mat* distance);
+*/
 
 //----------------------------------------------------------------------------
 //
 //  Vector of KeyPoint
 //
 //----------------------------------------------------------------------------
-CVAPI(void) VectorOfKeyPointFilterByImageBorder( std::vector<cv::KeyPoint>* keypoints, CvSize imageSize, int borderSize );
+CVAPI(void) VectorOfKeyPointFilterByImageBorder( std::vector<cv::KeyPoint>* keypoints, cv::Size imageSize, int borderSize );
 
 CVAPI(void) VectorOfKeyPointFilterByKeypointSize( std::vector<cv::KeyPoint>* keypoints, float minSize, float maxSize);
 
-CVAPI(void) VectorOfKeyPointFilterByPixelsMask( std::vector<cv::KeyPoint>* keypoints, CvMat* mask );
+CVAPI(void) VectorOfKeyPointFilterByPixelsMask( std::vector<cv::KeyPoint>* keypoints, cv::Mat* mask );
 
 /*
 //----------------------------------------------------------------------------

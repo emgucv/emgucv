@@ -9,7 +9,7 @@
 #define EMGU_DATA_LOGGER_H
 
 #include "opencv2/core/core.hpp"
-#include "opencv2/core/types_c.h"
+#include "cvapi_compat.h"
 
 #include <stdarg.h>
 #include <stdio.h>

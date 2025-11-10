@@ -15,7 +15,7 @@ typedef unsigned __int64 UINT64;
 #endif
 
 #include "opencv2/core/core.hpp"
-#include "opencv2/core/core_c.h"
+#include "cvapi_compat.h"
 #include "stdio.h"
 
 #if HAVE_EMGUCV_TESSERACT
@@ -77,7 +77,7 @@ struct TesseractResult
 {
    int length;
    float confident;
-   CvRect region;
+   cv::Rect region;
 };
 
 namespace cv {
