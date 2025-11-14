@@ -8,7 +8,8 @@
 #ifndef EMGU_3D_C_H
 #define EMGU_3D_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_3D
 #include "opencv2/3d.hpp"

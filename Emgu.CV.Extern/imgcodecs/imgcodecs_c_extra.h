@@ -8,7 +8,8 @@
 #ifndef EMGU_IMGCODECS_C_H
 #define EMGU_IMGCODECS_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_IMGCODECS
 #include "opencv2/imgcodecs/imgcodecs.hpp"
@@ -66,7 +67,7 @@ CVAPI(bool) cveImencodeWithMetadata(
     std::vector< int >* params);
 
 
-CVAPI(cv::Animation*) cveAnimationCreate(int loopCount, CvScalar* bgColor);
+CVAPI(cv::Animation*) cveAnimationCreate(int loopCount, cv::Scalar* bgColor);
 CVAPI(void) cveAnimationRelease(cv::Animation** animation);
 CVAPI(std::vector<int>*) cveAnimationGetDurations(cv::Animation* animation);
 CVAPI(std::vector<cv::Mat>*) cveAnimationGetFrames(cv::Animation* animation);

@@ -59,7 +59,7 @@ CVAPI(void) cveMapScale(
 	double factor);
 CVAPI(void) cveMapRelease(cv::Ptr< cv::reg::Map >** mapSharedPtr);
 
-CVAPI(cv::reg::MapShift*) cveMapShiftCreate(CvPoint2D64f* shift, cv::reg::Map** map);
+CVAPI(cv::reg::MapShift*) cveMapShiftCreate(cv::Point2d* shift, cv::reg::Map** map);
 CVAPI(void) cveMapShiftRelease(cv::reg::MapShift** mapShift);
 
 CVAPI(cv::reg::MapProjec*) cveMapProjecCreate(cv::_InputArray* projTr, cv::reg::Map** map);

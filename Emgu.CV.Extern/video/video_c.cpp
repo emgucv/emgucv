@@ -143,9 +143,9 @@ void cveSparseOpticalFlowCalc(
 }
 
 cv::SparsePyrLKOpticalFlow* cveSparsePyrLKOpticalFlowCreate(
-	CvSize* winSize,
+	cv::Size* winSize,
 	int maxLevel,
-	CvTermCriteria* crit,
+	cv::TermCriteria* crit,
 	int flags,
 	double minEigThreshold,
 	cv::SparseOpticalFlow** sparseOpticalFlow,
@@ -186,7 +186,17 @@ void cveDenseOpticalFlowRelease(cv::Ptr<cv::DenseOpticalFlow>** sharedPtr)
 #endif
 }
 
-void cveCalcOpticalFlowFarneback(cv::_InputArray* prev, cv::_InputArray* next, cv::_InputOutputArray* flow, double pyrScale, int levels, int winSize, int iterations, int polyN, double polySigma, int flags)
+void cveCalcOpticalFlowFarneback(
+	cv::_InputArray* prev, 
+	cv::_InputArray* next, 
+	cv::_InputOutputArray* flow, 
+	double pyrScale, 
+	int levels, 
+	int winSize, 
+	int iterations, 
+	int polyN, 
+	double polySigma, 
+	int flags)
 {
 #ifdef HAVE_OPENCV_VIDEO
 	cv::calcOpticalFlowFarneback(*prev, *next, *flow, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
@@ -195,7 +205,18 @@ void cveCalcOpticalFlowFarneback(cv::_InputArray* prev, cv::_InputArray* next, c
 #endif
 }
 
-void cveCalcOpticalFlowPyrLK(cv::_InputArray* prevImg, cv::_InputArray* nextImg, cv::_InputArray* prevPts, cv::_InputOutputArray* nextPts, cv::_OutputArray* status, cv::_OutputArray* err, CvSize* winSize, int maxLevel, CvTermCriteria* criteria, int flags, double minEigenThreshold)
+void cveCalcOpticalFlowPyrLK(
+	cv::_InputArray* prevImg, 
+	cv::_InputArray* nextImg, 
+	cv::_InputArray* prevPts, 
+	cv::_InputOutputArray* nextPts, 
+	cv::_OutputArray* status, 
+	cv::_OutputArray* err, 
+	cv::Size* winSize, 
+	int maxLevel, 
+	cv::TermCriteria* criteria, 
+	int flags, 
+	double minEigenThreshold)
 {
 #ifdef HAVE_OPENCV_VIDEO
 	cv::calcOpticalFlowPyrLK(*prevImg, *nextImg, *prevPts, *nextPts, *status, *err, *winSize, maxLevel, *criteria, flags, minEigenThreshold);
@@ -204,26 +225,26 @@ void cveCalcOpticalFlowPyrLK(cv::_InputArray* prevImg, cv::_InputArray* nextImg,
 #endif
 }
 
-void cveCamShift(cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria, cv::RotatedRect* result)
+void cveCamShift(cv::_InputArray* probImage, cv::Rect* window, cv::TermCriteria* criteria, cv::RotatedRect* result)
 {
 #ifdef HAVE_OPENCV_VIDEO
 	cv::Rect rect = *window;
 	cv::RotatedRect rr = cv::CamShift(*probImage, rect, *criteria);
-	*window = cvRect(rect);
-	result->center = cvPoint2D32f(rr.center.x, rr.center.y);
-	result->size = cvSize2D32f(rr.size.width, rr.size.height);
+	*window = rect;
+	result->center = rr.center;
+	result->size = rr.size;
 	result->angle = rr.angle;
 #else
 	throw_no_video();
 #endif
 }
 
-int cveMeanShift(cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria)
+int cveMeanShift(cv::_InputArray* probImage, cv::Rect* window, cv::TermCriteria* criteria)
 {
 #ifdef HAVE_OPENCV_VIDEO
 	cv::Rect rect = *window;
 	int result = cv::meanShift(*probImage, rect, *criteria);
-	*window = cvRect(rect);
+	*window = rect;
 	return result;
 #else
 	throw_no_video();
@@ -233,7 +254,7 @@ int cveMeanShift(cv::_InputArray* probImage, CvRect* window, CvTermCriteria* cri
 int cveBuildOpticalFlowPyramid(
 	cv::_InputArray* img,
 	cv::_OutputArray* pyramid,
-	CvSize* winSize,
+	cv::Size* winSize,
 	int maxLevel,
 	bool withDerivatives,
 	int pyrBorder,
@@ -257,7 +278,7 @@ void cveEstimateRigidTransform(cv::_InputArray* src, cv::_InputArray* dst, bool 
 double cveFindTransformECC(
 	cv::_InputArray* templateImage, cv::_InputArray* inputImage,
 	cv::_InputOutputArray* warpMatrix, int motionType,
-	CvTermCriteria* criteria,
+	cv::TermCriteria* criteria,
 	cv::_InputArray* inputMask)
 {
 #ifdef HAVE_OPENCV_VIDEO
@@ -364,7 +385,7 @@ cv::Tracker* cveTrackerCreate(cv::String* trackerType)
    tracker.addref();
    return tracker.get();
 }*/
-void cveTrackerInit(cv::Tracker* tracker, cv::_InputArray* image, CvRect* boundingBox)
+void cveTrackerInit(cv::Tracker* tracker, cv::_InputArray* image, cv::Rect* boundingBox)
 {
 #ifdef HAVE_OPENCV_VIDEO
 	return tracker->init(*image, *boundingBox);
@@ -372,12 +393,12 @@ void cveTrackerInit(cv::Tracker* tracker, cv::_InputArray* image, CvRect* boundi
 	throw_no_video();
 #endif
 }
-bool cveTrackerUpdate(cv::Tracker* tracker, cv::_InputArray* image, CvRect* boundingBox)
+bool cveTrackerUpdate(cv::Tracker* tracker, cv::_InputArray* image, cv::Rect* boundingBox)
 {
 #ifdef HAVE_OPENCV_VIDEO
 	cv::Rect box;
 	bool result = tracker->update(*image, box);
-	*boundingBox = cvRect(box);
+	*boundingBox = box;
 	return result;
 #else
 	throw_no_video();
@@ -430,6 +451,7 @@ void cveTrackerMILRelease(cv::Ptr<cv::TrackerMIL>** sharedPtr)
 #endif
 }
 
+/*
 cv::TrackerGOTURN* cveTrackerGOTURNCreate(
 	cv::Tracker** tracker,
 	cv::Ptr<cv::TrackerGOTURN>** sharedPtr,
@@ -448,6 +470,7 @@ cv::TrackerGOTURN* cveTrackerGOTURNCreate(
 	throw_no_video();
 #endif
 }
+
 void cveTrackerGOTURNRelease(cv::Ptr<cv::TrackerGOTURN>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_VIDEO
@@ -457,6 +480,7 @@ void cveTrackerGOTURNRelease(cv::Ptr<cv::TrackerGOTURN>** sharedPtr)
 	throw_no_video();
 #endif
 }
+*/
 
 cv::TrackerDaSiamRPN* cveTrackerDaSiamRPNCreate(
 	cv::String* model,

@@ -89,7 +89,7 @@ void cvePose3DRelease(cv::ppf_match_3d::Pose3D** pose3d)
 	throw_no_surface_matching();
 #endif
 }
-void cvePose3DGetT(cv::ppf_match_3d::Pose3D* pose3d, CvPoint3D64f* t)
+void cvePose3DGetT(cv::ppf_match_3d::Pose3D* pose3d, cv::Point3d* t)
 {
 #ifdef HAVE_OPENCV_SURFACE_MATCHING
 	cv::Vec3d translation = pose3d->t;
@@ -100,7 +100,7 @@ void cvePose3DGetT(cv::ppf_match_3d::Pose3D* pose3d, CvPoint3D64f* t)
 	throw_no_surface_matching();
 #endif
 }
-void cvePose3DSetT(cv::ppf_match_3d::Pose3D* pose3d, CvPoint3D64f* t)
+void cvePose3DSetT(cv::ppf_match_3d::Pose3D* pose3d, cv::Point3d* t)
 {
 #ifdef HAVE_OPENCV_SURFACE_MATCHING
 	cv::Vec3d translation;
@@ -113,7 +113,7 @@ void cvePose3DSetT(cv::ppf_match_3d::Pose3D* pose3d, CvPoint3D64f* t)
 #endif
 }
 
-void cvePose3DGetQ(cv::ppf_match_3d::Pose3D* pose3d, CvScalar* q)
+void cvePose3DGetQ(cv::ppf_match_3d::Pose3D* pose3d, cv::Scalar* q)
 {
 #ifdef HAVE_OPENCV_SURFACE_MATCHING
 	cv::Vec4d quat = pose3d->q;
@@ -125,7 +125,7 @@ void cvePose3DGetQ(cv::ppf_match_3d::Pose3D* pose3d, CvScalar* q)
 	throw_no_surface_matching();
 #endif
 }
-void cvePose3DSetQ(cv::ppf_match_3d::Pose3D* pose3d, CvScalar* q)
+void cvePose3DSetQ(cv::ppf_match_3d::Pose3D* pose3d, cv::Scalar* q)
 {
 #ifdef HAVE_OPENCV_SURFACE_MATCHING
 	cv::Vec4d quat;

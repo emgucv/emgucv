@@ -28,7 +28,7 @@ MACRO(CREATE_VECTOR_CS vname velement velement_cs element_type cs_source_folder 
   
   SET(VECTOR_ADDITIONAL_INCLUDE "")
   SET(VECTOR_ADDITIONAL_CODE "")
-  
+
   #SET(extra_macro_args ${ARGN})
   # Did we get any optional args?
   #LIST(LENGTH extra_macro_args num_extra_args)
@@ -1318,7 +1318,8 @@ ENDMACRO()
     "GpuMat"
 	""
     "#include \"opencv2/core/cuda.hpp\"
-	#include \"opencv2/core/types_c.h\""
+    #include \"opencv2/core.hpp\"
+    #include \"cvapi_compat.h\"
 	""
 	""
 	${HAVE_opencv_core})
@@ -1339,7 +1340,8 @@ ENDMACRO()
     "Stream"
 	""
     "#include \"opencv2/core/cuda.hpp\"
-	#include \"opencv2/core/types_c.h\""
+	#include \"opencv2/core.hpp\"
+    #include \"cvapi_compat.h\""
 	""
 	""
 	${HAVE_opencv_core})
@@ -1447,7 +1449,7 @@ ENDIF()
     "cv::FaceDetectorYN" 
     "FaceDetectorYN" 
     "ScoreThreshold;NMSThreshold;TopK;InputSize" 
-    "float;float;int;CvSize" 
+    "float;float;int;cv::Size" 
     "propW;propW;propW;struct"
     "ScoreThreshold;NMSThreshold;TopK;InputSize" 
     "float;float;int;System.Drawing.Size"
@@ -1682,7 +1684,7 @@ ENDIF()
     "cv::ml::EM" 
     "EM" 
     "ClustersNumber;CovarianceMatrixType;TermCriteria" 
-    "int;int;CvTermCriteria" 
+    "int;int;cv::TermCriteria" 
     "prop;prop;struct"
     "ClustersNumber;CovarianceMatrixType;TermCriteria" 
     "int;EM.CovarianMatrixType;MCvTermCriteria"
@@ -1704,7 +1706,7 @@ ENDIF()
     "cv::ml::SVM" 
     "SVM" 
     "Type;Gamma;Coef0;Degree;C;Nu;P;Kernel;TermCriteria;KernelType" 
-    "int;double;double;double;double;double;double;int;CvTermCriteria;int" 
+    "int;double;double;double;double;double;double;int;cv::TermCriteria;int" 
     "prop;prop;prop;prop;prop;prop;prop;propW;struct;propR"
     "Type;Gamma;Coef0;Degree;C;Nu;P;Kernel;TermCriteria;KernelType" 
     "SVM.SvmType;double;double;double;double;double;double;SVM.SvmKernelType;MCvTermCriteria;SVM.SvmKernelType"
@@ -1733,7 +1735,7 @@ ENDIF()
     "cv::ml::SVMSGD" 
     "SVMSGD" 
     "SvmsgdType;MarginType;MarginRegularization;InitialStepSize;StepDecreasingPower;TermCriteria" 
-    "int;int;float;float;float;CvTermCriteria" 
+    "int;int;float;float;float;cv::TermCriteria" 
     "prop;prop;prop;prop;prop;struct"
     "Type;Margin;MarginRegularization;InitialStepSize;StepDecreasingPower;TermCriteria" 
     "SVMSGD.SvmsgdType;SVMSGD.MarginType;float;float;float;MCvTermCriteria"
@@ -1781,7 +1783,7 @@ ENDIF()
     "cv::ml::ANN_MLP" 
     "ANN_MLP" 
     "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax;AnnealInitialT;AnnealFinalT;AnnealCoolingRatio;AnnealItePerStep" 
-    "CvTermCriteria;double;double;double;double;double;double;double;double;double;double;int" 
+    "cv::TermCriteria;double;double;double;double;double;double;double;double;double;double;int" 
     "struct;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;prop"
     "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax;AnnealInitialT;AnnealFinalT;AnnealCoolingRatio;AnnealItePerStep" 
     "MCvTermCriteria;double;double;double;double;double;double;double;double;double;double;int"
@@ -1812,7 +1814,7 @@ ENDIF()
     "cv::ml::LogisticRegression" 
     "LogisticRegression" 
     "LearningRate;Iterations;Regularization;TrainMethod;MiniBatchSize;TermCriteria" 
-    "double;int;int;int;int;CvTermCriteria" 
+    "double;int;int;int;int;cv::TermCriteria" 
     "prop;prop;prop;prop;prop;struct"
     "LearningRate;Iterations;Regularization;TrainMethod;MiniBatchSize;TermCriteria" 
     "double;int;LogisticRegression.RegularizationMethod;LogisticRegression.TrainType;int;MCvTermCriteria;"
@@ -1837,7 +1839,7 @@ ENDIF()
     "cv::ml::RTrees" 
     "RTrees" 
     "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy;CalculateVarImportance;ActiveVarCount;TermCriteria" 
-    "int;int;int;int;bool;bool;bool;float;bool;int;CvTermCriteria" 
+    "int;int;int;int;bool;bool;bool;float;bool;int;cv::TermCriteria" 
     "prop;prop;prop;prop;prop;prop;prop;prop;prop;prop;struct"
     "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy;CalculateVarImportance;ActiveVarCount;TermCriteria" 
     "int;int;int;int;bool;bool;bool;float;bool;int;MCvTermCriteria"
@@ -2457,7 +2459,7 @@ ENDIF()
     "cv::cuda::HOG" 
     "CudaHOG"
     "GammaCorrection;WinSigma;NumLevels;GroupThreshold;HitThreshold;ScaleFactor;L2HysThreshold;DescriptorFormat;DescriptorSize;WinStride;BlockHistogramSize" 
-    "bool;double;int;int;double;double;double;int;size_t;CvSize;size_t" 
+    "bool;double;int;int;double;double;double;int;size_t;cv::Size;size_t" 
     "prop;prop;prop;prop;prop;prop;prop;propR;propR;struct;propR"
     "GammaCorrection;WinSigma;NumLevels;GroupThreshold;HitThreshold;ScaleFactor;L2HysThreshold;DescriptorFormat;DescriptorSize;WinStride;BlockHistogramSize" 
     "bool;double;int;int;double;double;double;CudaHOG.DescrFormat;IntPtr;System.Drawing.Size;IntPtr"
@@ -2487,7 +2489,7 @@ ENDIF()
     "cv::cuda::CascadeClassifier"
     "CudaCascadeClassifier"
     "ScaleFactor;MinNeighbors;MaxNumObjects;FindLargestObject;MaxObjectSize;MinObjectSize;ClassifierSize" 
-    "double;int;int;bool;CvSize;CvSize;CvSize" 
+    "double;int;int;bool;cv::Size;cv::Size;cv::Size" 
     "prop;prop;prop;prop;struct;struct;structR"
     "ScaleFactor;MinNeighbors;MaxNumObjects;FindLargestObject;MaxObjectSize;MinObjectSize;ClassifierSize" 
     "double;int;int;bool;System.Drawing.Size;System.Drawing.Size;System.Drawing.Size"

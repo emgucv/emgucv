@@ -37,8 +37,8 @@ CVAPI(void) cveFreeType2PutText(
 	cv::freetype::FreeType2* freetype,
 	cv::_InputOutputArray* img, 
 	cv::String* text, 
-	CvPoint* org,
-	int fontHeight, CvScalar* color,
+	cv::Point* org,
+	int fontHeight, cv::Scalar* color,
 	int thickness, int lineType, bool bottomLeftOrigin
 );
 CVAPI(void) cveFreeType2GetTextSize(
@@ -46,5 +46,5 @@ CVAPI(void) cveFreeType2GetTextSize(
 	cv::String* text,
 	int fontHeight, int thickness,
 	int* baseLine,
-	CvSize* size);
+	cv::Size* size);
 #endif

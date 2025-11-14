@@ -6,11 +6,11 @@
 
 #include "quality_c.h"
 
-void cveQualityBaseCompute(cv::quality::QualityBase* qualityBase, cv::_InputArray* cmpImgs, CvScalar* score)
+void cveQualityBaseCompute(cv::quality::QualityBase* qualityBase, cv::_InputArray* cmpImgs, cv::Scalar* score)
 {
 #ifdef HAVE_OPENCV_QUALITY
 	cv::Scalar s = qualityBase->compute(*cmpImgs);
-	*score = cvScalar(s);
+	*score = s;
 #else
 	throw_no_quality();
 #endif

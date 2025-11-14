@@ -369,8 +369,7 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveInvertAffineTransform(IntPtr m, IntPtr im);
 
-
-
+        /*
         /// <summary>
         /// The function emulates the human "foveal" vision and can be used for fast scale and rotation-invariant template matching, for object tracking etc.
         /// </summary>
@@ -430,7 +429,7 @@ namespace Emgu.CV
             ref PointF center,
             double maxRadius,
             int flags);
-
+        */
         #endregion
 
         /// <summary>

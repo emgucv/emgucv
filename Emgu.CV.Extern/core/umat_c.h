@@ -8,7 +8,8 @@
 #ifndef EMGU_UMAT_C_H
 #define EMGU_UMAT_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 #include "opencv2/core/ocl.hpp"
 #include "emgu_c.h"
 #include "mat_c.h"
@@ -16,10 +17,10 @@
 CVAPI(cv::UMat*) cveUMatCreate(int flags);
 //CVAPI(void) cveUMatUseCustomAllocator(cv::UMat* mat, MatAllocateCallback allocator, MatDeallocateCallback deallocator, void* allocateDataActionPtr, void* freeDataActionPtr, cv::MatAllocator** matAllocator, cv::MatAllocator** oclAllocator);
 CVAPI(void) cveUMatCreateData(cv::UMat* mat, int row, int cols, int type, int flags);
-CVAPI(cv::UMat*) cveUMatCreateFromRect(cv::UMat* mat, CvRect* roi);
+CVAPI(cv::UMat*) cveUMatCreateFromRect(cv::UMat* mat, cv::Rect* roi);
 CVAPI(cv::UMat*) cveUMatCreateFromRange(cv::UMat* mat, cv::Range* rowRange, cv::Range* colRange);
 CVAPI(void) cveUMatRelease(cv::UMat** mat);
-CVAPI(void) cveUMatGetSize(cv::UMat* mat, CvSize* size);
+CVAPI(void) cveUMatGetSize(cv::UMat* mat, cv::Size* size);
 CVAPI(void) cveUMatCopyTo(cv::UMat* mat, cv::_OutputArray* m, cv::_InputArray* mask);
 CVAPI(int) cveUMatGetElementSize(cv::UMat* mat);
 

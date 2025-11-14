@@ -4,7 +4,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include "objdetect_c.h"
+#include "xobjdetect_c.h"
 
 cv::CascadeClassifier* cveCascadeClassifierCreate()
 {
@@ -45,8 +45,8 @@ void cveCascadeClassifierDetectMultiScale(
 	std::vector<cv::Rect>* objects,
 	double scaleFactor,
 	int minNeighbors, int flags,
-	CvSize* minSize,
-	CvSize* maxSize)
+	cv::Size* minSize,
+	cv::Size* maxSize)
 {
 #ifdef HAVE_OPENCV_OBJDETECT
 	classifier->detectMultiScale(*image, *objects, scaleFactor, minNeighbors, flags, *minSize, *maxSize);
@@ -63,7 +63,7 @@ bool cveCascadeClassifierIsOldFormatCascade(cv::CascadeClassifier* classifier)
 #endif
 }
 
-void cveCascadeClassifierGetOriginalWindowSize(cv::CascadeClassifier* classifier, CvSize* size)
+void cveCascadeClassifierGetOriginalWindowSize(cv::CascadeClassifier* classifier, cv::Size* size)
 {
 #ifdef HAVE_OPENCV_OBJDETECT
 	cv::Size s = classifier->getOriginalWindowSize();
@@ -106,7 +106,7 @@ void cveGroupRectangles4(std::vector<cv::Rect>* rectList, std::vector<int>* reje
 	throw_no_objdetect();
 #endif
 }
-void cveGroupRectanglesMeanshift(std::vector<cv::Rect>* rectList, std::vector<double>* foundWeights, std::vector<double>* foundScales, double detectThreshold, CvSize* winDetSize)
+void cveGroupRectanglesMeanshift(std::vector<cv::Rect>* rectList, std::vector<double>* foundWeights, std::vector<double>* foundScales, double detectThreshold, cv::Size* winDetSize)
 {
 #ifdef HAVE_OPENCV_OBJDETECT
 	cv::groupRectangles_meanshift(*rectList, *foundWeights, *foundScales, detectThreshold, *winDetSize);

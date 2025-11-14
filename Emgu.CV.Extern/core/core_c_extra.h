@@ -22,11 +22,14 @@
 CVAPI(bool) cveSetBreakOnError(bool flag);
 CVAPI(cv::ErrorCallback) cveRedirectError(cv::ErrorCallback errorHandler, void* userdata, void** prevUserdata);
 CVAPI(cv::String*) cveTempfile(cv::String* suffix);
+
+/*
 CVAPI(int) cveGetErrMode();
 CVAPI(int) cveSetErrMode(int mode);
 CVAPI(int) cveGetErrStatus();
 CVAPI(void) cveSetErrStatus(int status);
 CVAPI(const char*) cveErrorStr(int status);
+*/
 
 CVAPI(int) cveSetLogLevel(int logLevel);
 CVAPI(int) cveGetLogLevel();

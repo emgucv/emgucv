@@ -37,8 +37,8 @@ namespace cv {
 CVAPI(cv::mcc::CChecker*) cveCCheckerCreate(cv::Ptr<cv::mcc::CChecker>** sharedPtr);
 CVAPI(void) cveCCheckerGetBox(cv::mcc::CChecker* checker, std::vector< cv::Point2f >* box);
 CVAPI(void) cveCCheckerSetBox(cv::mcc::CChecker* checker, std::vector< cv::Point2f >* box);
-CVAPI(void) cveCCheckerGetCenter(cv::mcc::CChecker* checker, CvPoint2D32f* center);
-CVAPI(void) cveCCheckerSetCenter(cv::mcc::CChecker* checker, CvPoint2D32f* center);
+CVAPI(void) cveCCheckerGetCenter(cv::mcc::CChecker* checker, cv::Point2f* center);
+CVAPI(void) cveCCheckerSetCenter(cv::mcc::CChecker* checker, cv::Point2f* center);
 CVAPI(void) cveCCheckerRelease(cv::Ptr<cv::mcc::CChecker>** sharedPtr);
 CVAPI(void) cveCCheckerGetChartsRGB(cv::mcc::CChecker* checker, cv::_OutputArray* chartsRgb);
 CVAPI(void) cveCCheckerSetChartsRGB(cv::mcc::CChecker* checker, cv::Mat* chartsRgb);
@@ -46,7 +46,7 @@ CVAPI(void) cveCCheckerSetChartsRGB(cv::mcc::CChecker* checker, cv::Mat* chartsR
 
 CVAPI(cv::mcc::CCheckerDraw*) cveCCheckerDrawCreate(
 	cv::mcc::CChecker* pChecker,
-	CvScalar* color,
+	cv::Scalar* color,
 	int thickness,
 	cv::Ptr<cv::mcc::CCheckerDraw>** sharedPtr);
 CVAPI(void) cveCCheckerDrawDraw(cv::mcc::CCheckerDraw* ccheckerDraw, cv::_InputOutputArray* img);

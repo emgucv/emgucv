@@ -6,6 +6,7 @@
 
 #include "imgproc_c.h"
 
+/*
 IplImage* cvGetImageSubRect(IplImage* image, CvRect* rect)
 {
 	IplImage* res = cvCreateImageHeader(cvSize(rect->width, rect->height), image->depth, image->nChannels);
@@ -13,7 +14,7 @@ IplImage* cvGetImageSubRect(IplImage* image, CvRect* rect)
 	cvGetSubRect(image, &mat, *rect);
 	cvGetImage(&mat, res);
 	return res;
-}
+}*/
 
 //GrabCut
 void cveGrabCut(cv::_InputArray* img, cv::_InputOutputArray* mask, cv::Rect* rect, cv::_InputOutputArray* bgdModel, cv::_InputOutputArray* fgdModel, int iterCount, int flag)
@@ -21,13 +22,13 @@ void cveGrabCut(cv::_InputArray* img, cv::_InputOutputArray* mask, cv::Rect* rec
 	cv::grabCut(*img, mask ? *mask : cv::noArray(), *rect, *bgdModel, *fgdModel, iterCount, flag);
 }
 
-void cveFilter2D(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* kernel, CvPoint* anchor, double delta, int borderType)
+void cveFilter2D(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* kernel, cv::Point* anchor, double delta, int borderType)
 {
 	CV_Assert(src->size() == dst->size() && src->channels() == dst->channels());
 	cv::filter2D(*src, *dst, dst->depth(), *kernel, *anchor, delta, borderType);
 }
 
-void cveSepFilter2D(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, cv::_InputArray* kernelX, cv::_InputArray* kernelY, CvPoint* anchor, double delta, int borderType)
+void cveSepFilter2D(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, cv::_InputArray* kernelX, cv::_InputArray* kernelY, cv::Point* anchor, double delta, int borderType)
 {
 	cv::sepFilter2D(*src, *dst, ddepth, *kernelX, *kernelY, *anchor, delta, borderType);
 }
@@ -37,7 +38,7 @@ void cveBlendLinear(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputArra
 	cv::blendLinear(*src1, *src2, *weights1, *weights2, *dst);
 }
 
-void cveCLAHE(cv::_InputArray* src, double clipLimit, CvSize* tileGridSize, cv::_OutputArray* dst)
+void cveCLAHE(cv::_InputArray* src, double clipLimit, cv::Size* tileGridSize, cv::_OutputArray* dst)
 {
 	cv::Size s(tileGridSize->width, tileGridSize->height);
 	cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE(clipLimit, s);
@@ -51,22 +52,22 @@ void cveAdaptiveBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, CvS
    cv::adaptiveBilateralFilter(*src, *dst, s, sigmaSpace, maxSigmaColor, *anchor, borderType);
 }*/
 
-void cveErode(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* kernel, CvPoint* anchor, int iterations, int borderType, CvScalar* borderValue)
+void cveErode(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* kernel, cv::Point* anchor, int iterations, int borderType, cv::Scalar* borderValue)
 {
 	cv::erode(*src, *dst, kernel ? *kernel : (cv::InputArray) cv::noArray(), *anchor, iterations, borderType, *borderValue);
 }
 
-void cveDilate(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* kernel, CvPoint* anchor, int iterations, int borderType, CvScalar* borderValue)
+void cveDilate(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* kernel, cv::Point* anchor, int iterations, int borderType, cv::Scalar* borderValue)
 {
 	cv::dilate(*src, *dst, kernel ? *kernel : (cv::InputArray) cv::noArray(), *anchor, iterations, borderType, *borderValue);
 }
-void cveGetStructuringElement(cv::Mat* mat, int shape, CvSize* ksize, CvPoint* anchor)
+void cveGetStructuringElement(cv::Mat* mat, int shape, cv::Size* ksize, cv::Point* anchor)
 {
 	cv::Size s(ksize->width, ksize->height);
 	cv::Mat res = cv::getStructuringElement(shape, s, *anchor);
 	cv::swap(*mat, res);
 }
-void cveMorphologyEx(cv::_InputArray* src, cv::_OutputArray* dst, int op, cv::_InputArray* kernel, CvPoint* anchor, int iterations, int borderType, CvScalar* borderValue)
+void cveMorphologyEx(cv::_InputArray* src, cv::_OutputArray* dst, int op, cv::_InputArray* kernel, cv::Point* anchor, int iterations, int borderType, cv::Scalar* borderValue)
 {
 	cv::morphologyEx(*src, *dst, op, *kernel, *anchor, iterations, borderType, *borderValue);
 }
@@ -91,12 +92,12 @@ void cveLaplacian(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, int k
 	cv::Laplacian(*src, *dst, ddepth, ksize, scale, delta, borderType);
 }
 
-void cvePyrUp(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* size, int borderType)
+void cvePyrUp(cv::_InputArray* src, cv::_OutputArray* dst, cv::Size* size, int borderType)
 {
 	cv::Size s(size->width, size->height);
 	cv::pyrUp(*src, *dst, s, borderType);
 }
-void cvePyrDown(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* size, int borderType)
+void cvePyrDown(cv::_InputArray* src, cv::_OutputArray* dst, cv::Size* size, int borderType)
 {
 	cv::Size s(size->width, size->height);
 	cv::pyrDown(*src, *dst, s, borderType);
@@ -145,14 +146,17 @@ double cveThresholdWithMask(
 {
 	return cv::thresholdWithMask(*src, *dst, *mask, thresh, maxval, type);
 }
+
 void cveWatershed(cv::_InputArray* image, cv::_InputOutputArray* markers)
 {
 	cv::watershed(*image, *markers);
 }
+
 void cveAdaptiveThreshold(cv::_InputArray* src, cv::_OutputArray* dst, double maxValue, int adaptiveMethod, int thresholdType, int blockSize, double c)
 {
 	cv::adaptiveThreshold(*src, *dst, maxValue, adaptiveMethod, thresholdType, blockSize, c);
 }
+
 void cveCvtColor(
 	cv::_InputArray* src, 
 	cv::_OutputArray* dst, 
@@ -162,6 +166,7 @@ void cveCvtColor(
 {
 	cv::cvtColor(*src, *dst, code, dstCn, static_cast<cv::AlgorithmHint>(hint));
 }
+
 void cveCvtColorTwoPlane(
 	cv::_InputArray* src1, 
 	cv::_InputArray* src2, 
@@ -171,11 +176,13 @@ void cveCvtColorTwoPlane(
 {
 	cv::cvtColorTwoPlane(*src1, *src2, *dst, code, static_cast<cv::AlgorithmHint>(hint));
 }
+
 void cveDemosaicing(cv::_InputArray* src, cv::_OutputArray* dst, int code, int dstCn)
 {
 	cv::demosaicing(*src, *dst, code, dstCn);
 }
-void cveCopyMakeBorder(cv::_InputArray* src, cv::_OutputArray* dst, int top, int bottom, int left, int right, int borderType, CvScalar* value)
+
+void cveCopyMakeBorder(cv::_InputArray* src, cv::_OutputArray* dst, int top, int bottom, int left, int right, int borderType, cv::Scalar* value)
 {
 	cv::copyMakeBorder(*src, *dst, top, bottom, left, right, borderType, *value);
 }
@@ -196,7 +203,7 @@ void cveIntegral(cv::_InputArray* src, cv::_OutputArray* sum, cv::_OutputArray* 
 	}
 }
 
-int cveFloodFill(cv::_InputOutputArray* image, cv::_InputOutputArray* mask, CvPoint* seedPoint, CvScalar* newVal, CvRect* rect, CvScalar* loDiff, CvScalar* upDiff, int flags)
+int cveFloodFill(cv::_InputOutputArray* image, cv::_InputOutputArray* mask, cv::Point* seedPoint, cv::Scalar* newVal, cv::Rect* rect, cv::Scalar* loDiff, cv::Scalar* upDiff, int flags)
 {
 	cv::Rect r = *rect;
 	int val = 0;
@@ -212,7 +219,7 @@ int cveFloodFill(cv::_InputOutputArray* image, cv::_InputOutputArray* mask, CvPo
 	return val;
 }
 
-void cvePyrMeanShiftFiltering(cv::_InputArray* src, cv::_OutputArray* dst, double sp, double sr, int maxLevel, CvTermCriteria* termCrit)
+void cvePyrMeanShiftFiltering(cv::_InputArray* src, cv::_OutputArray* dst, double sp, double sr, int maxLevel, cv::TermCriteria* termCrit)
 {
 	cv::pyrMeanShiftFiltering(*src, *dst, sp, sr, maxLevel, *termCrit);
 }
@@ -243,38 +250,41 @@ void cveAccumulateWeighted(cv::_InputArray* src, cv::_InputOutputArray* dst, dou
 {
 	cv::accumulateWeighted(*src, *dst, alpha, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
-void cvePhaseCorrelate(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputArray* window, double* response, CvPoint2D64f* result)
+void cvePhaseCorrelate(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputArray* window, double* response, cv::Point2d* result)
 {
 	cv::Point2d pt = cv::phaseCorrelate(*src1, *src2, window ? *window : static_cast<cv::InputArray>(cv::noArray()), response);
 	result->x = pt.x; result->y = pt.y;
 }
-void cveCreateHanningWindow(cv::_OutputArray* dst, CvSize* winSize, int type)
+void cveCreateHanningWindow(cv::_OutputArray* dst, cv::Size* winSize, int type)
 {
 	cv::createHanningWindow(*dst, *winSize, type);
 }
 
-void cveResize(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* dsize, double fx, double fy, int interpolation)
+void cveResize(cv::_InputArray* src, cv::_OutputArray* dst, cv::Size* dsize, double fx, double fy, int interpolation)
 {
 	cv::resize(*src, *dst, *dsize, fx, fy, interpolation);
 }
-void cveWarpAffine(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* m, CvSize* dsize, int flags, int borderMode, CvScalar* borderValue)
+void cveWarpAffine(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* m, cv::Size* dsize, int flags, int borderMode, cv::Scalar* borderValue)
 {
 	cv::warpAffine(*src, *dst, *m, *dsize, flags, borderMode, *borderValue);
 }
-void cveWarpPerspective(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* m, CvSize* dsize, int flags, int borderMode, CvScalar* borderValue)
+void cveWarpPerspective(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* m, cv::Size* dsize, int flags, int borderMode, cv::Scalar* borderValue)
 {
 	cv::warpPerspective(*src, *dst, *m, *dsize, flags, borderMode, *borderValue);
 }
 
-void cveLogPolar(cv::_InputArray* src, cv::_OutputArray* dst, CvPoint2D32f* center, double M, int flags)
+/*
+void cveLogPolar(cv::_InputArray* src, cv::_OutputArray* dst, cv::Point2f* center, double M, int flags)
 {
 	cv::logPolar(*src, *dst, *center, M, flags);
 }
-void cveLinearPolar(cv::_InputArray* src, cv::_OutputArray* dst, CvPoint2D32f* center, double maxRadius, int flags)
+void cveLinearPolar(cv::_InputArray* src, cv::_OutputArray* dst, cv::Point2f* center, double maxRadius, int flags)
 {
 	cv::linearPolar(*src, *dst, *center, maxRadius, flags);
 }
-void cveRemap(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* map1, cv::_InputArray* map2, int interpolation, int borderMode, CvScalar* borderValue)
+*/
+
+void cveRemap(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* map1, cv::_InputArray* map2, int interpolation, int borderMode, cv::Scalar* borderValue)
 {
 	cv::remap(*src, *dst, *map1, *map2, interpolation, borderMode, *borderValue);
 }
@@ -310,7 +320,7 @@ void cveMatchTemplate(cv::_InputArray* image, cv::_InputArray* templ, cv::_Outpu
 {
 	cv::matchTemplate(*image, *templ, *result, method, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
-void cveCornerSubPix(cv::_InputArray* image, cv::_InputOutputArray* corners, CvSize* winSize, CvSize* zeroZone, CvTermCriteria* criteria)
+void cveCornerSubPix(cv::_InputArray* image, cv::_InputOutputArray* corners, cv::Size* winSize, cv::Size* zeroZone, cv::TermCriteria* criteria)
 {
 	cv::cornerSubPix(*image, *corners, *winSize, *zeroZone, *criteria);
 }
@@ -376,7 +386,7 @@ double cveCompareHist(cv::_InputArray* h1, cv::_InputArray* h2, int method)
 	return cv::compareHist(*h1, *h2, method);
 }
 
-void cveGetRotationMatrix2D(CvPoint2D32f* center, double angle, double scale, cv::_OutputArray* rotationMatrix2D)
+void cveGetRotationMatrix2D(cv::Point2f* center, double angle, double scale, cv::_OutputArray* rotationMatrix2D)
 {
 	cv::Mat r = cv::getRotationMatrix2D(*center, angle, scale);
 	if (rotationMatrix2D->empty() || r.type() == rotationMatrix2D->type())
@@ -385,7 +395,7 @@ void cveGetRotationMatrix2D(CvPoint2D32f* center, double angle, double scale, cv
 		r.convertTo(*rotationMatrix2D, rotationMatrix2D->type());
 }
 
-void cveFindContours(cv::_InputOutputArray* image, cv::_OutputArray* contours, cv::_OutputArray* hierarchy, int mode, int method, CvPoint* offset)
+void cveFindContours(cv::_InputOutputArray* image, cv::_OutputArray* contours, cv::_OutputArray* hierarchy, int mode, int method, cv::Point* offset)
 {
 	cv::findContours(*image, *contours, hierarchy ? *hierarchy : static_cast<cv::OutputArray>(cv::noArray()), mode, method, *offset);
 }
@@ -401,7 +411,7 @@ void cveFindContoursLinkRuns(cv::_InputArray* image, cv::_OutputArray* contours,
 	}
 }
 
-double cvePointPolygonTest(cv::_InputArray* contour, CvPoint2D32f* pt, bool measureDist)
+double cvePointPolygonTest(cv::_InputArray* contour, cv::Point2f* pt, bool measureDist)
 {
 	return cv::pointPolygonTest(*contour, *pt, measureDist);
 }
@@ -419,7 +429,7 @@ float cveIntersectConvexConvex(cv::_InputArray* p1, cv::_InputArray* p2, cv::_Ou
 {
 	return cv::intersectConvexConvex(*p1, *p2, *p12, handleNested);
 }
-void cveBoundingRectangle(cv::_InputArray* points, CvRect* boundingRect)
+void cveBoundingRectangle(cv::_InputArray* points, cv::Rect* boundingRect)
 {
 	cv::Rect rect = cv::boundingRect(*points);
 	boundingRect->x = rect.x;
@@ -434,8 +444,8 @@ double cveArcLength(cv::_InputArray* curve, bool closed)
 void cveMinAreaRect(cv::_InputArray* points, cv::RotatedRect* box)
 {
 	cv::RotatedRect rr = cv::minAreaRect(*points);
-	box->center = cvPoint2D32f(rr.center.x, rr.center.y);
-	box->size = cvSize2D32f(rr.size.width, rr.size.height);
+	box->center = rr.center;
+	box->size = rr.size;
 	box->angle = rr.angle;
 }
 void cveBoxPoints(cv::RotatedRect* box, cv::_OutputArray* points)
@@ -446,7 +456,7 @@ double cveMinEnclosingTriangle(cv::_InputArray* points, cv::_OutputArray* triang
 {
 	return cv::minEnclosingTriangle(*points, *triangle);
 }
-void cveMinEnclosingCircle(cv::_InputArray* points, CvPoint2D32f* center, float* radius)
+void cveMinEnclosingCircle(cv::_InputArray* points, cv::Point2f* center, float* radius)
 {
 	cv::Point2f c; float r;
 	cv::minEnclosingCircle(*points, c, r);
@@ -461,28 +471,27 @@ double cveMatchShapes(cv::_InputArray* contour1, cv::_InputArray* contour2, int 
 void cveFitEllipse(cv::_InputArray* points, cv::RotatedRect* box)
 {
 	cv::RotatedRect rect = cv::fitEllipse(*points);
-	box->center = cvPoint2D32f(rect.center.x, rect.center.y);
-	box->size = cvSize2D32f(rect.size.width, rect.size.height);
+	box->center = rect.center;
+	box->size = rect.size;
 	box->angle = rect.angle;
 }
 void cveFitEllipseAMS(cv::_InputArray* points, cv::RotatedRect* box)
 {
 	cv::RotatedRect rect = cv::fitEllipseAMS(*points);
-	box->center = cvPoint2D32f(rect.center.x, rect.center.y);
-	box->size = cvSize2D32f(rect.size.width, rect.size.height);
+	box->center = rect.center;
+	box->size = rect.size;
 	box->angle = rect.angle;
 }
 void cveFitEllipseDirect(cv::_InputArray* points, cv::RotatedRect* box)
 {
 	cv::RotatedRect rect = cv::fitEllipseDirect(*points);
-	box->center = cvPoint2D32f(rect.center.x, rect.center.y);
-	box->size = cvSize2D32f(rect.size.width, rect.size.height);
+	box->center = rect.center;
+	box->size = rect.size;
 	box->angle = rect.angle;
 }
-void cveGetClosestEllipsePoints(CvBox2D* ellipseParams, cv::_InputArray* points, cv::_OutputArray* closestPts)
+void cveGetClosestEllipsePoints(cv::RotatedRect* ellipseParams, cv::_InputArray* points, cv::_OutputArray* closestPts)
 {
-	cv::RotatedRect rect = *ellipseParams;
-	cv::getClosestEllipsePoints(rect, *points, *closestPts);
+	cv::getClosestEllipsePoints(*ellipseParams, *points, *closestPts);
 }
 void cveFitLine(cv::_InputArray* points, cv::_OutputArray* line, int distType, double param, double reps, double aeps)
 {
@@ -490,16 +499,29 @@ void cveFitLine(cv::_InputArray* points, cv::_OutputArray* line, int distType, d
 }
 int cveRotatedRectangleIntersection(cv::RotatedRect* rect1, cv::RotatedRect* rect2, cv::_OutputArray* intersectingRegion)
 {
-	cv::RotatedRect r1 = *rect1;
-	cv::RotatedRect r2 = *rect2;
-	return cv::rotatedRectangleIntersection(r1, r2, *intersectingRegion);
+	return cv::rotatedRectangleIntersection(*rect1, *rect2, *intersectingRegion);
 }
 void cveDrawContours(
-	cv::_InputOutputArray* image, cv::_InputArray* contours, int contourIdx,
-	CvScalar* color, int thickness, int lineType, cv::_InputArray* hierarchy,
-	int maxLevel, CvPoint* offset)
+	cv::_InputOutputArray* image, 
+	cv::_InputArray* contours, 
+	int contourIdx,
+	cv::Scalar* color, 
+	int thickness, 
+	int lineType, 
+	cv::_InputArray* hierarchy,
+	int maxLevel, 
+	cv::Point* offset)
 {
-	cv::drawContours(*image, *contours, contourIdx, *color, thickness, lineType, hierarchy ? *hierarchy : (cv::_InputArray) cv::noArray(), maxLevel, *offset);
+	cv::drawContours(
+		*image, 
+		*contours, 
+		contourIdx, 
+		*color, 
+		thickness, 
+		lineType, 
+		hierarchy ? *hierarchy : (cv::_InputArray) cv::noArray(), 
+		maxLevel, 
+		*offset);
 }
 void cveApproxPolyDP(cv::_InputArray* curve, cv::_OutputArray* approxCurve, double epsilon, bool closed)
 {
@@ -521,7 +543,7 @@ void cveConvexityDefects(cv::_InputArray* contour, cv::_InputArray* convexhull, 
 void cveGaussianBlur(
 	cv::_InputArray* src, 
 	cv::_OutputArray* dst, 
-	CvSize* ksize, 
+	cv::Size* ksize, 
 	double sigmaX, 
 	double sigmaY, 
 	int borderType,
@@ -536,11 +558,11 @@ void cveGaussianBlur(
 		borderType,
 		static_cast<cv::AlgorithmHint>(hint));
 }
-void cveBlur(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* kSize, CvPoint* anchor, int borderType)
+void cveBlur(cv::_InputArray* src, cv::_OutputArray* dst, cv::Size* kSize, cv::Point* anchor, int borderType)
 {
 	cv::blur(*src, *dst, *kSize, *anchor, borderType);
 }
-void cveStackBlur(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* ksize)
+void cveStackBlur(cv::_InputArray* src, cv::_OutputArray* dst, cv::Size* ksize)
 {
 	cv::stackBlur(*src, *dst, *ksize);
 }
@@ -548,11 +570,11 @@ void cveMedianBlur(cv::_InputArray* src, cv::_OutputArray* dst, int ksize)
 {
 	cv::medianBlur(*src, *dst, ksize);
 }
-void cveBoxFilter(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, CvSize* ksize, CvPoint* anchor, bool normailize, int borderType)
+void cveBoxFilter(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, cv::Size* ksize, cv::Point* anchor, bool normailize, int borderType)
 {
 	cv::boxFilter(*src, *dst, ddepth, *ksize, *anchor, normailize, borderType);
 }
-void cveSqrBoxFilter(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, CvSize* ksize, CvPoint* anchor, bool normalize, int borderType)
+void cveSqrBoxFilter(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, cv::Size* ksize, cv::Point* anchor, bool normalize, int borderType)
 {
 	cv::sqrBoxFilter(*src, *dst, ddepth, *ksize, *anchor, normalize, borderType);
 }
@@ -563,7 +585,7 @@ void cveBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int d, doub
 
 
 //Subdiv2D
-cv::Subdiv2D* cveSubdiv2DCreate(CvRect* rect)
+cv::Subdiv2D* cveSubdiv2DCreate(cv::Rect* rect)
 {
 	return new cv::Subdiv2D(*rect);
 }
@@ -576,7 +598,7 @@ void cveSubdiv2DInsertMulti(cv::Subdiv2D* subdiv, std::vector<cv::Point2f>* poin
 {
 	subdiv->insert(*points);
 }
-int cveSubdiv2DInsertSingle(cv::Subdiv2D* subdiv, CvPoint2D32f* pt)
+int cveSubdiv2DInsertSingle(cv::Subdiv2D* subdiv, cv::Point2f* pt)
 {
 	return subdiv->insert(*pt);
 }
@@ -588,14 +610,14 @@ void cveSubdiv2DGetVoronoiFacetList(cv::Subdiv2D* subdiv, std::vector<int>* idx,
 {
 	subdiv->getVoronoiFacetList(*idx, *facetList, *facetCenters);
 }
-int cveSubdiv2DFindNearest(cv::Subdiv2D* subdiv, CvPoint2D32f* pt, CvPoint2D32f* nearestPt)
+int cveSubdiv2DFindNearest(cv::Subdiv2D* subdiv, cv::Point2f* pt, cv::Point2f* nearestPt)
 {
 	cv::Point2f np;
 	int result = subdiv->findNearest(*pt, &np);
-	*nearestPt = cvPoint2D32f(np);
+	*nearestPt = np;
 	return result;
 }
-int cveSubdiv2DLocate(cv::Subdiv2D* subdiv, CvPoint2D32f* pt, int* edge, int* vertex)
+int cveSubdiv2DLocate(cv::Subdiv2D* subdiv, cv::Point2f* pt, int* edge, int* vertex)
 {
 	int e = 0, v = 0;
 	int result = subdiv->locate(*pt, e, v);
@@ -607,8 +629,8 @@ int cveSubdiv2DLocate(cv::Subdiv2D* subdiv, CvPoint2D32f* pt, int* edge, int* ve
 //LineIterator
 cv::LineIterator* cveLineIteratorCreate(
 	cv::Mat* img,
-	CvPoint* pt1,
-	CvPoint* pt2,
+	cv::Point* pt1,
+	cv::Point* pt2,
 	int connectivity,
 	bool leftToRight)
 {
@@ -618,9 +640,9 @@ uchar* cveLineIteratorGetDataPointer(cv::LineIterator* iterator)
 {
 	return *(*iterator);
 }
-void cveLineIteratorPos(cv::LineIterator* iterator, CvPoint* pos)
+void cveLineIteratorPos(cv::LineIterator* iterator, cv::Point* pos)
 {
-	*pos = cvPoint(iterator->pos());
+	*pos = iterator->pos();
 }
 void cveLineIteratorMoveNext(cv::LineIterator* iterator)
 {
@@ -634,8 +656,8 @@ void cveLineIteratorRelease(cv::LineIterator** iterator)
 
 void cveLineIteratorSampleLine(
 	cv::Mat* img,
-	CvPoint* pt1,
-	CvPoint* pt2,
+	cv::Point* pt1,
+	cv::Point* pt2,
 	int connectivity,
 	bool leftToRight,
 	cv::Mat* result)
@@ -651,51 +673,51 @@ void cveLineIteratorSampleLine(
 
 
 //Drawing
-void cveLine(cv::_InputOutputArray* img, CvPoint* p1, CvPoint* p2, CvScalar* color, int thickness, int lineType, int shift)
+void cveLine(cv::_InputOutputArray* img, cv::Point* p1, cv::Point* p2, cv::Scalar* color, int thickness, int lineType, int shift)
 {
 	cv::line(*img, *p1, *p2, *color, thickness, lineType, shift);
 }
 
-void cveArrowedLine(cv::_InputOutputArray* img, CvPoint* pt1, CvPoint* pt2, CvScalar* color, int thickness, int lineType, int shift, double tipLength)
+void cveArrowedLine(cv::_InputOutputArray* img, cv::Point* pt1, cv::Point* pt2, cv::Scalar* color, int thickness, int lineType, int shift, double tipLength)
 {
 	cv::arrowedLine(*img, *pt1, *pt2, *color, thickness, lineType, shift, tipLength);
 }
 
-void cveRectangle(cv::_InputOutputArray* img, CvRect* rect, CvScalar* color, int thickness, int lineType, int shift)
+void cveRectangle(cv::_InputOutputArray* img, cv::Rect* rect, cv::Scalar* color, int thickness, int lineType, int shift)
 {
 	cv::Point p1(rect->x, rect->y);
 	cv::Point p2(rect->x + rect->width, rect->y + rect->height);
 	cv::rectangle(*img, p1, p2, *color, thickness, lineType, shift);
 }
 
-void cveCircle(cv::_InputOutputArray* img, CvPoint* center, int radius, CvScalar* color, int thickness, int lineType, int shift)
+void cveCircle(cv::_InputOutputArray* img, cv::Point* center, int radius, cv::Scalar* color, int thickness, int lineType, int shift)
 {
 	cv::circle(*img, *center, radius, *color, thickness, lineType, shift);
 }
 
-void cvePutText(cv::_InputOutputArray* img, cv::String* text, CvPoint* org, int fontFace, double fontScale, CvScalar* color, int thickness, int lineType, bool bottomLeftOrigin)
+void cvePutText(cv::_InputOutputArray* img, cv::String* text, cv::Point* org, int fontFace, double fontScale, cv::Scalar* color, int thickness, int lineType, bool bottomLeftOrigin)
 {
 	cv::putText(*img, *text, *org, fontFace, fontScale, *color, thickness, lineType, bottomLeftOrigin);
 }
 
-void cveGetTextSize(cv::String* text, int fontFace, double fontScale, int thickness, int* baseLine, CvSize* size)
+void cveGetTextSize(cv::String* text, int fontFace, double fontScale, int thickness, int* baseLine, cv::Size* size)
 {
 	cv::Size s = cv::getTextSize(*text, fontFace, fontScale, thickness, baseLine);
-	*size = cvSize(s);
+	*size = s;
 }
 
-void cveFillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const CvScalar* color, int lineType, int shift)
+void cveFillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const cv::Scalar* color, int lineType, int shift)
 {
 	cv::fillConvexPoly(*img, *points, *color, lineType, shift);
 }
 
-void cveFillPoly(cv::_InputOutputArray* img, cv::_InputArray* pts, const CvScalar* color, int lineType, int shift, CvPoint* offset)
+void cveFillPoly(cv::_InputOutputArray* img, cv::_InputArray* pts, const cv::Scalar* color, int lineType, int shift, cv::Point* offset)
 {
 	cv::fillPoly(*img, *pts, *color, lineType, shift, *offset);
 }
 
 void cvePolylines(cv::_InputOutputArray* img, cv::_InputArray* pts,
-	bool isClosed, const CvScalar* color,
+	bool isClosed, const cv::Scalar* color,
 	int thickness, int lineType, int shift)
 {
 	cv::polylines(*img, *pts, isClosed, *color, thickness, lineType, shift);
@@ -703,12 +725,12 @@ void cvePolylines(cv::_InputOutputArray* img, cv::_InputArray* pts,
 
 void cveEllipse1(
 	cv::_InputOutputArray* img,
-	CvPoint* center,
-	CvSize* axes,
+	cv::Point* center,
+	cv::Size* axes,
 	double angle,
 	double startAngle,
 	double endAngle,
-	const CvScalar* color,
+	const cv::Scalar* color,
 	int thickness,
 	int lineType,
 	int shift)
@@ -719,7 +741,7 @@ void cveEllipse1(
 CVAPI(void) cveEllipse2(
 	cv::_InputOutputArray* img,
 	cv::RotatedRect* box,
-	CvScalar* color,
+	cv::Scalar* color,
 	int thickness,
 	int lineType)
 {
@@ -728,8 +750,8 @@ CVAPI(void) cveEllipse2(
 
 void cveDrawMarker(
 	cv::_InputOutputArray* img,
-	CvPoint* position,
-	CvScalar* color,
+	cv::Point* position,
+	cv::Scalar* color,
 	int markerType,
 	int markerSize,
 	int thickness,
@@ -756,7 +778,7 @@ void cveDistanceTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv::_Outp
 
 
 
-void cveGetRectSubPix(cv::_InputArray* image, CvSize* patchSize, CvPoint2D32f* center, cv::_OutputArray* patch, int patchType)
+void cveGetRectSubPix(cv::_InputArray* image, cv::Size* patchSize, cv::Point2f* center, cv::_OutputArray* patch, int patchType)
 {
 	cv::getRectSubPix(*image, *patchSize, *center, *patch, patchType);
 }
@@ -848,13 +870,13 @@ void cveIntelligentScissorsMBApplyImageFeatures(
 {
 	ptr->applyImageFeatures(*nonEdge, *gradientDirection, *gradientMagnitude, image ? *image : static_cast<cv::InputArray>(cv::noArray()));
 }
-void cveIntelligentScissorsMBBuildMap(cv::segmentation::IntelligentScissorsMB* ptr, CvPoint* sourcePt)
+void cveIntelligentScissorsMBBuildMap(cv::segmentation::IntelligentScissorsMB* ptr, cv::Point* sourcePt)
 {
 	ptr->buildMap(*sourcePt);
 }
 void cveIntelligentScissorsMBGetContour(
 	cv::segmentation::IntelligentScissorsMB* ptr,
-	CvPoint* targetPt,
+	cv::Point* targetPt,
 	cv::_OutputArray* contour,
 	bool backward)
 {
@@ -887,7 +909,7 @@ void cveGetDerivKernels(
 }
 
 void cveGetGaborKernel(
-	CvSize* ksize,
+	cv::Size* ksize,
 	double sigma,
 	double theta,
 	double lambd,

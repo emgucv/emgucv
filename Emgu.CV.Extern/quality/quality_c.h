@@ -27,7 +27,7 @@ class QualityGMSD {};
 }
 #endif
 
-CVAPI(void) cveQualityBaseCompute(cv::quality::QualityBase* qualityBase, cv::_InputArray* cmpImgs, CvScalar* score);
+CVAPI(void) cveQualityBaseCompute(cv::quality::QualityBase* qualityBase, cv::_InputArray* cmpImgs, cv::Scalar* score);
 CVAPI(void) cveQualityBaseGetQualityMap(cv::quality::QualityBase* qualityBase, cv::_OutputArray* dst);
 
 CVAPI(cv::quality::QualityMSE*) cveQualityMSECreate(

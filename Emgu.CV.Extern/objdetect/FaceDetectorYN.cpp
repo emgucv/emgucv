@@ -9,7 +9,7 @@
 cv::FaceDetectorYN* cveFaceDetectorYNCreate(
     cv::String* model,
     cv::String* config,
-    CvSize* inputSize,
+    cv::Size* inputSize,
     float scoreThreshold,
     float nmsThreshold,
     int topK,

@@ -22,7 +22,7 @@ namespace Emgu.CV
         /// </summary>
         public CascadeClassifier()
         {
-            _ptr = ObjdetectInvoke.cveCascadeClassifierCreate();
+            _ptr = XObjdetectInvoke.cveCascadeClassifierCreate();
         }
 
         /// <summary>Create a CascadeClassifier from the specific file</summary>
@@ -34,7 +34,7 @@ namespace Emgu.CV
             if (!file.Exists)
                 throw new FileNotFoundException(String.Format("File '{0}' not found", fileName));
             using (CvString s = new CvString(fileName))
-                _ptr = ObjdetectInvoke.cveCascadeClassifierCreateFromFile(s);
+                _ptr = XObjdetectInvoke.cveCascadeClassifierCreateFromFile(s);
 
             if (_ptr == IntPtr.Zero)
             {
@@ -49,7 +49,7 @@ namespace Emgu.CV
         /// <returns>True if the classifier can be imported.</returns>
         public bool Read(FileNode node)
         {
-            return ObjdetectInvoke.cveCascadeClassifierRead(_ptr, node);
+            return XObjdetectInvoke.cveCascadeClassifierRead(_ptr, node);
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Emgu.CV
             using (Util.VectorOfRect rectangles = new Util.VectorOfRect())
             using (InputArray iaImage = image.GetInputArray())
             {
-                ObjdetectInvoke.cveCascadeClassifierDetectMultiScale(_ptr, iaImage, rectangles, scaleFactor, minNeighbors, 0, ref minSize,
+                XObjdetectInvoke.cveCascadeClassifierDetectMultiScale(_ptr, iaImage, rectangles, scaleFactor, minNeighbors, 0, ref minSize,
                    ref maxSize);
                 return rectangles.ToArray();
             }
@@ -81,7 +81,7 @@ namespace Emgu.CV
         /// </summary>
         public bool IsOldFormatCascade
         {
-            get { return ObjdetectInvoke.cveCascadeClassifierIsOldFormatCascade(_ptr); }
+            get { return XObjdetectInvoke.cveCascadeClassifierIsOldFormatCascade(_ptr); }
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Emgu.CV
             get
             {
                 Size s = new Size();
-                ObjdetectInvoke.cveCascadeClassifierGetOriginalWindowSize(_ptr, ref s);
+                XObjdetectInvoke.cveCascadeClassifierGetOriginalWindowSize(_ptr, ref s);
                 return s;
             }
         }
@@ -103,11 +103,11 @@ namespace Emgu.CV
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                ObjdetectInvoke.cveCascadeClassifierRelease(ref _ptr);
+                XObjdetectInvoke.cveCascadeClassifierRelease(ref _ptr);
         }
     }
 
-    public static partial class ObjdetectInvoke
+    public static partial class XObjdetectInvoke
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

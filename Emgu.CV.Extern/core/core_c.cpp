@@ -26,6 +26,7 @@ cv::String* cveTempfile(cv::String* suffix)
 	return new cv::String(tempFile);
 }
 
+/*
 int cveGetErrMode()
 {
 	return cvGetErrMode();
@@ -46,6 +47,7 @@ const char* cveErrorStr(int status)
 {
 	return cvErrorStr(status);
 }
+*/
 
 int cveSetLogLevel(int logLevel)
 {

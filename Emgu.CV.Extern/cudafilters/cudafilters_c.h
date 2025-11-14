@@ -9,7 +9,8 @@
 #define EMGU_CUDAFILTERS_C_H
 
 #include "opencv2/opencv_modules.hpp"
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_CUDAFILTERS
 

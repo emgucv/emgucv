@@ -10,8 +10,8 @@
 
 //#include "opencv2/cuda.hpp"
 #include "opencv2/core/cuda.hpp"
-#include "opencv2/core/types_c.h"
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 #include "emgu_c.h"
 
 //----------------------------------------------------------------------------
@@ -96,7 +96,7 @@ CVAPI(void) gpuMatRelease(cv::cuda::GpuMat** mat);
 
 CVAPI(cv::cuda::GpuMat*) gpuMatCreateFromInputArray(cv::_InputArray* arr);
 
-CVAPI(void) gpuMatGetSize(cv::cuda::GpuMat* gpuMat, CvSize* size);
+CVAPI(void) gpuMatGetSize(cv::cuda::GpuMat* gpuMat, cv::Size* size);
 
 CVAPI(bool) gpuMatIsEmpty(cv::cuda::GpuMat* gpuMat);
 
@@ -114,11 +114,11 @@ CVAPI(void) gpuMatConvertTo(const cv::cuda::GpuMat* src, cv::_OutputArray* dst, 
 
 CVAPI(void) gpuMatCopyTo(const cv::cuda::GpuMat* src, cv::_OutputArray* dst, const cv::_InputArray* mask, cv::cuda::Stream* stream);
 
-CVAPI(void) gpuMatSetTo(cv::cuda::GpuMat* mat, const CvScalar* s, cv::_InputArray* mask, cv::cuda::Stream* stream);
+CVAPI(void) gpuMatSetTo(cv::cuda::GpuMat* mat, const cv::Scalar* s, cv::_InputArray* mask, cv::cuda::Stream* stream);
 
 CVAPI(void) gpuMatReshape(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int cn, int rows);
 
-CVAPI(cv::cuda::GpuMat*) gpuMatGetSubRect(const cv::cuda::GpuMat* arr, CvRect* rect);
+CVAPI(cv::cuda::GpuMat*) gpuMatGetSubRect(const cv::cuda::GpuMat* arr, cv::Rect* rect);
 
 //----------------------------------------------------------------------------
 //

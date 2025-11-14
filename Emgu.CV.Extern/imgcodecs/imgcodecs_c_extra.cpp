@@ -181,7 +181,7 @@ bool cveImencodeWithMetadata(
 #endif
 }
 
-cv::Animation* cveAnimationCreate(int loopCount, CvScalar* bgColor)
+cv::Animation* cveAnimationCreate(int loopCount, cv::Scalar* bgColor)
 {
 #ifdef HAVE_OPENCV_IMGCODECS
 	return new cv::Animation(loopCount, *bgColor);

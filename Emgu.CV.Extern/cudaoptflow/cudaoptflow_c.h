@@ -9,12 +9,12 @@
 #define EMGU_CUDAOPTFLOW_C_H
 
 #include "opencv2/opencv_modules.hpp"
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_CUDAOPTFLOW
 #include "opencv2/cudaoptflow.hpp"
 #include "opencv2/core/cuda.hpp"
-#include "opencv2/core/types_c.h"
 #include "emgu_c.h"
 #else
 static inline CV_NORETURN void throw_no_cudaoptflow() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Optflow support. To use this module, please switch to the Emgu CV runtime with CUDA support."); }

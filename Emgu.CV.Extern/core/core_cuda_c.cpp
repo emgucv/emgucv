@@ -107,7 +107,7 @@ void cudaConvertFp16(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stre
 #ifdef HAVE_OPENCV_CUDEV
 	cv::cuda::convertFp16(*src, *dst, *stream ? *stream : cv::cuda::Stream::Null());
 #else
-	CV_Error(CV_GpuNotSupported, "The library is compiled without CUDEV support");
+	CV_Error(cv::Error::GpuNotSupported, "The library is compiled without CUDEV support");
 #endif
 }
 
@@ -208,7 +208,7 @@ cv::cuda::GpuMat* gpuMatCreateFromInputArray(cv::_InputArray* arr)
 	return new cv::cuda::GpuMat(*arr);
 }
 
-void gpuMatGetSize(cv::cuda::GpuMat* gpuMat, CvSize* size)
+void gpuMatGetSize(cv::cuda::GpuMat* gpuMat, cv::Size* size)
 {
 	cv::Size s = gpuMat->size();
 	size->width = s.width;
@@ -265,7 +265,7 @@ void gpuMatCopyTo(const cv::cuda::GpuMat* src, cv::_OutputArray* dst, const cv::
 		src->copyTo(*dst, stream ? *stream : cv::cuda::Stream::Null());
 }
 
-void gpuMatSetTo(cv::cuda::GpuMat* mat, const CvScalar* s, cv::_InputArray* mask, cv::cuda::Stream* stream)
+void gpuMatSetTo(cv::cuda::GpuMat* mat, const cv::Scalar* s, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
 	if (mask)
 		mat->setTo(*s, *mask, stream ? *stream : cv::cuda::Stream::Null());
@@ -279,7 +279,7 @@ void gpuMatReshape(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int cn, i
 	dst->swap(tmp);
 }
 
-cv::cuda::GpuMat* gpuMatGetSubRect(const cv::cuda::GpuMat* arr, CvRect* rect)
+cv::cuda::GpuMat* gpuMatGetSubRect(const cv::cuda::GpuMat* arr, cv::Rect* rect)
 {
 	return new cv::cuda::GpuMat(*arr, *rect);
 }

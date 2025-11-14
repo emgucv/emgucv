@@ -8,7 +8,9 @@
 #ifndef EMGU_XIMGPROC_C_H
 #define EMGU_XIMGPROC_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
+
 #ifdef HAVE_OPENCV_XIMGPROC
 #include "opencv2/ximgproc.hpp"
 #else

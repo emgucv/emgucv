@@ -29,8 +29,10 @@ namespace Emgu.CV
            IntPtr data,
            int logLevel);
 
+        /*
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cvGetImageSubRect(IntPtr imagePtr, ref Rectangle rect);
+        */
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveMemcpy(IntPtr dst, IntPtr src, int length);

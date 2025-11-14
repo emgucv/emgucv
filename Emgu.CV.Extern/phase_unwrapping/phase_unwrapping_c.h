@@ -8,7 +8,9 @@
 #ifndef EMGU_PHASE_UNWRAPPING_C_H
 #define EMGU_PHASE_UNWRAPPING_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core/core.hpp"
+#include "cvapi_compat.h"
+
 #ifdef HAVE_OPENCV_PHASE_UNWRAPPING
 #include "opencv2/phase_unwrapping.hpp"
 #else

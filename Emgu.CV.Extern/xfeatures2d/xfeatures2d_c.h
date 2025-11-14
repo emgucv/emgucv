@@ -17,7 +17,7 @@
 #include "opencv2/xfeatures2d.hpp"
 #else
 
-#include "features2d_c.h"
+#include "features_c.h"
 
 static inline CV_NORETURN void throw_no_xfeatures2d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without xfeatures2d support. To use this module, please switch to the full Emgu CV runtime."); }
 namespace cv {
@@ -166,7 +166,8 @@ CVAPI(cv::xfeatures2d::HarrisLaplaceFeatureDetector*) cveHarrisLaplaceFeatureDet
 CVAPI(void) cveHarrisLaplaceFeatureDetectorRelease(cv::Ptr<cv::xfeatures2d::HarrisLaplaceFeatureDetector>** sharedPtr);
 
 CVAPI(void) cveMatchGMS(
-	CvSize* size1, CvSize* size2,
+	cv::Size* size1, 
+	cv::Size* size2,
 	std::vector< cv::KeyPoint >* keypoints1, std::vector< cv::KeyPoint >* keypoints2,
 	std::vector< cv::DMatch >* matches1to2, std::vector< cv::DMatch >* matchesGMS,
 	bool withRotation, bool withScale, double thresholdFactor);

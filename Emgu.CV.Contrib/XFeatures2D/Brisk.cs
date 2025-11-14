@@ -9,8 +9,9 @@ using System.Text;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
+using Emgu.CV.Features;
 
-namespace Emgu.CV.Features
+namespace Emgu.CV.XFeatures2D
 {
     /// <summary>
     /// BRISK: Binary Robust Invariant Scalable Keypoints
@@ -26,7 +27,7 @@ namespace Emgu.CV.Features
         /// <param name="patternScale">Pattern scale</param>
         public Brisk(int thresh = 30, int octaves = 3, float patternScale = 1.0f)
         {
-            _ptr = Features2DInvoke.cveBriskCreate(thresh, octaves, patternScale, ref _feature2D, ref _sharedPtr);
+            _ptr = XFeatures2DInvoke.cveBriskCreate(thresh, octaves, patternScale, ref _feature2D, ref _sharedPtr);
         }
 
         /// <summary>
@@ -35,12 +36,12 @@ namespace Emgu.CV.Features
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                Features2DInvoke.cveBriskRelease(ref _sharedPtr);
+                XFeatures2DInvoke.cveBriskRelease(ref _sharedPtr);
             base.DisposeObject();
         }
     }
 
-    public static partial class Features2DInvoke
+    public static partial class XFeatures2DInvoke
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

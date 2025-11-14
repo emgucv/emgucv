@@ -29,7 +29,7 @@ void cveUMatCreateData(cv::UMat* mat, int row, int cols, int type, int flags)
 {
    mat->create(row, cols, type, static_cast<cv::UMatUsageFlags>(flags));
 }
-cv::UMat* cveUMatCreateFromRect(cv::UMat* mat, CvRect* roi)
+cv::UMat* cveUMatCreateFromRect(cv::UMat* mat, cv::Rect* roi)
 {
    return new cv::UMat(*mat, *roi);
 }
@@ -42,7 +42,7 @@ void cveUMatRelease(cv::UMat** mat)
    delete *mat;
    *mat = 0;
 }
-void cveUMatGetSize(cv::UMat* mat, CvSize* s)
+void cveUMatGetSize(cv::UMat* mat, cv::Size* s)
 {
    s->width = mat->cols;
    s->height = mat->rows;
@@ -91,14 +91,14 @@ cv::UMat* cveUMatReshape(cv::UMat* mat, int cn, int rows)
 void cveUMatCopyDataTo(cv::UMat* mat, unsigned char* dest)
 {
    //const int* sizes = mat->size;
-   cv::Mat destMat = cv::Mat(mat->dims, mat->size, mat->type(), dest);
+   cv::Mat destMat = cv::Mat(mat->dims, mat->size.data(), mat->type(), dest);
    mat->copyTo(destMat);
 }
 
 void cveUMatCopyDataFrom(cv::UMat* mat, unsigned char* source)
 {
    //const int* sizes = mat->size;
-   cv::Mat fromMat = cv::Mat(mat->dims, mat->size, mat->type(), source);
+   cv::Mat fromMat = cv::Mat(mat->dims, mat->size.data(), mat->type(), source);
    fromMat.copyTo(*mat);
 }
 

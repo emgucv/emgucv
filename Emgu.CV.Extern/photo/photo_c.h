@@ -8,7 +8,9 @@
 #ifndef EMGU_PHOTO_C_H
 #define EMGU_PHOTO_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
+
 #ifdef HAVE_OPENCV_PHOTO
 #include "opencv2/photo/photo.hpp"
 #include "opencv2/photo/cuda.hpp"

@@ -8,7 +8,8 @@
 #ifndef EMGU_HIGHGUI_C_H
 #define EMGU_HIGHGUI_C_H
 #include "opencv2/core/cvdef.h"
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_HIGHGUI
 //#include "opencv2/highgui/highgui_c.h"
@@ -33,7 +34,7 @@ CVAPI(void) cveSelectROI(
 	cv::_InputArray* img,
 	bool showCrosshair,
 	bool fromCenter,
-	CvRect* roi);
+	cv::Rect* roi);
 
 CVAPI(void) cveSelectROIs(
 	cv::String* windowName,

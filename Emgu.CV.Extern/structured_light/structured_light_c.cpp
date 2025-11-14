@@ -75,7 +75,7 @@ void cveGrayCodePatternGetImagesForShadowMasks(cv::structured_light::GrayCodePat
 #endif	
 }
 
-bool cveGrayCodePatternGetProjPixel(cv::structured_light::GrayCodePattern* grayCodePattern, cv::_InputArray* patternImages, int x, int y, CvPoint* projPix)
+bool cveGrayCodePatternGetProjPixel(cv::structured_light::GrayCodePattern* grayCodePattern, cv::_InputArray* patternImages, int x, int y, cv::Point* projPix)
 {
 #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
     cv::Point p;
@@ -156,7 +156,7 @@ void cveSinusoidalPatternUnwrapPhaseMap(
     cv::structured_light::SinusoidalPattern* pattern,
     cv::_InputArray* wrappedPhaseMap,
     cv::_OutputArray* unwrappedPhaseMap,
-    CvSize* camSize,
+    cv::Size* camSize,
     cv::_InputArray* shadowMask)
 {
 #ifdef HAVE_OPENCV_STRUCTURED_LIGHT

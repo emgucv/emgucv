@@ -72,19 +72,19 @@ bool cveStereoRectifyUncalibrated(cv::_InputArray* points1, cv::_InputArray* poi
 void cveStereoRectify(
 	cv::_InputArray* cameraMatrix1, cv::_InputArray* distCoeffs1,
 	cv::_InputArray* cameraMatrix2, cv::_InputArray* distCoeffs2,
-	CvSize* imageSize, cv::_InputArray* r, cv::_InputArray* t,
+	cv::Size* imageSize, cv::_InputArray* r, cv::_InputArray* t,
 	cv::_OutputArray* r1, cv::_OutputArray* r2,
 	cv::_OutputArray* p1, cv::_OutputArray* p2,
 	cv::_OutputArray* q, int flags,
-	double alpha, CvSize* newImageSize,
-	CvRect* validPixROI1, CvRect* validPixROI2)
+	double alpha, cv::Size* newImageSize,
+	cv::Rect* validPixROI1, cv::Rect* validPixROI2)
 {
 #ifdef HAVE_OPENCV_STEREO
 	cv::Rect rect1, rect2;
 	cv::stereoRectify(*cameraMatrix1, *distCoeffs1, *cameraMatrix2, *distCoeffs2, *imageSize, *r, *t, *r1, *r2,
 		*p1, *p2, *q, flags, alpha, *newImageSize, &rect1, &rect2);
-	*validPixROI1 = cvRect(rect1);
-	*validPixROI2 = cvRect(rect2);
+	*validPixROI1 = rect1;
+	*validPixROI2 = rect2;
 #else
 	throw_no_stereo();
 #endif

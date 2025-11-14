@@ -50,8 +50,8 @@ void cveFreeType2PutText(
 	cv::freetype::FreeType2* freetype,
 	cv::_InputOutputArray* img,
 	cv::String* text,
-	CvPoint* org,
-	int fontHeight, CvScalar* color,
+	cv::Point* org,
+	int fontHeight, cv::Scalar* color,
 	int thickness, int lineType, bool bottomLeftOrigin
 )
 {
@@ -67,7 +67,7 @@ void cveFreeType2GetTextSize(
 	cv::String* text,
 	int fontHeight, int thickness,
 	int* baseLine,
-	CvSize* size)
+	cv::Size* size)
 {
 #ifdef HAVE_OPENCV_FREETYPE
 	cv::Size s = freetype->getTextSize(*text, fontHeight, thickness, baseLine);

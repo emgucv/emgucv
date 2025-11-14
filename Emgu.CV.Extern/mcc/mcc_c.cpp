@@ -35,7 +35,7 @@ void cveCCheckerSetBox(cv::mcc::CChecker* checker, std::vector< cv::Point2f >* b
 #endif
 }
 
-void cveCCheckerGetCenter(cv::mcc::CChecker* checker, CvPoint2D32f* center)
+void cveCCheckerGetCenter(cv::mcc::CChecker* checker, cv::Point2f* center)
 {
 #ifdef HAVE_OPENCV_MCC
 	cv::Point2f p = checker->getCenter();
@@ -45,7 +45,7 @@ void cveCCheckerGetCenter(cv::mcc::CChecker* checker, CvPoint2D32f* center)
 	throw_no_mcc();
 #endif
 }
-void cveCCheckerSetCenter(cv::mcc::CChecker* checker, CvPoint2D32f* center)
+void cveCCheckerSetCenter(cv::mcc::CChecker* checker, cv::Point2f* center)
 {
 #ifdef HAVE_OPENCV_MCC
 	cv::Point2f p = *center;
@@ -86,7 +86,7 @@ void cveCCheckerSetChartsRGB(cv::mcc::CChecker* checker, cv::Mat* chartsRgb)
 
 cv::mcc::CCheckerDraw* cveCCheckerDrawCreate(
 	cv::mcc::CChecker* pChecker,
-	CvScalar* color,
+	cv::Scalar* color,
 	int thickness,
 	cv::Ptr<cv::mcc::CCheckerDraw>** sharedPtr)
 {

@@ -73,9 +73,9 @@ CVAPI(void) cveSparseOpticalFlowCalc(
 	cv::_OutputArray* err);
 
 CVAPI(cv::SparsePyrLKOpticalFlow*) cveSparsePyrLKOpticalFlowCreate(
-	CvSize* winSize,
+	cv::Size* winSize,
 	int maxLevel, 
-    CvTermCriteria* crit,
+    cv::TermCriteria* crit,
 	int flags,
 	double minEigThreshold,
 	cv::SparseOpticalFlow** sparseOpticalFlow,
@@ -84,17 +84,38 @@ CVAPI(cv::SparsePyrLKOpticalFlow*) cveSparsePyrLKOpticalFlowCreate(
 CVAPI(void) cveSparsePyrLKOpticalFlowRelease(cv::SparsePyrLKOpticalFlow** flow, cv::Ptr<cv::SparsePyrLKOpticalFlow>** sharedPtr);
 
 
-CVAPI(void) cveCalcOpticalFlowFarneback(cv::_InputArray* prev, cv::_InputArray* next, cv::_InputOutputArray* flow, double pyrScale, int levels, int winSize, int iterations, int polyN, double polySigma, int flags);
-CVAPI(void) cveCalcOpticalFlowPyrLK(cv::_InputArray* prevImg, cv::_InputArray* nextImg, cv::_InputArray* prevPts, cv::_InputOutputArray* nextPts, cv::_OutputArray* status, cv::_OutputArray* err, CvSize* winSize, int maxLevel, CvTermCriteria* criteria, int flags, double minEigenThreshold);
+CVAPI(void) cveCalcOpticalFlowFarneback(
+	cv::_InputArray* prev, 
+	cv::_InputArray* next, 
+	cv::_InputOutputArray* flow, 
+	double pyrScale, 
+	int levels, 
+	int winSize, 
+	int iterations, 
+	int polyN, 
+	double polySigma, 
+	int flags);
+CVAPI(void) cveCalcOpticalFlowPyrLK(
+	cv::_InputArray* prevImg, 
+	cv::_InputArray* nextImg, 
+	cv::_InputArray* prevPts, 
+	cv::_InputOutputArray* nextPts, 
+	cv::_OutputArray* status, 
+	cv::_OutputArray* err, 
+	cv::Size* winSize, 
+	int maxLevel, 
+	cv::TermCriteria* criteria, 
+	int flags, 
+	double minEigenThreshold);
 
-CVAPI(void) cveCamShift( cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria, cv::RotatedRect* result);
+CVAPI(void) cveCamShift( cv::_InputArray* probImage, cv::Rect* window, cv::TermCriteria* criteria, cv::RotatedRect* result);
 
-CVAPI(int) cveMeanShift( cv::_InputArray* probImage, CvRect* window, CvTermCriteria* criteria );
+CVAPI(int) cveMeanShift( cv::_InputArray* probImage, cv::Rect* window, cv::TermCriteria* criteria );
 
 CVAPI(int) cveBuildOpticalFlowPyramid(
 	cv::_InputArray* img, 
 	cv::_OutputArray* pyramid,
-	CvSize* winSize, 
+	cv::Size* winSize, 
 	int maxLevel, 
 	bool withDerivatives,
 	int pyrBorder,
@@ -105,7 +126,7 @@ CVAPI(int) cveBuildOpticalFlowPyramid(
 
 CVAPI(double) cveFindTransformECC(cv::_InputArray* templateImage, cv::_InputArray* inputImage,
 	cv::_InputOutputArray* warpMatrix, int motionType,
-	CvTermCriteria* criteria,
+	cv::TermCriteria* criteria,
 	cv::_InputArray* inputMask);
 
 CVAPI(cv::KalmanFilter*) cveKalmanFilterCreate(int dynamParams, int measureParams, int controlParams, int type);
@@ -123,8 +144,8 @@ CVAPI(cv::VariationalRefinement*) cveVariationalRefinementCreate(cv::DenseOptica
 CVAPI(void) cveVariationalRefinementRelease(cv::VariationalRefinement** flow, cv::Ptr<cv::VariationalRefinement>** sharedPtr);
 
 //CVAPI(cv::Tracker*) cveTrackerCreate(cv::String* trackerType);
-CVAPI(void) cveTrackerInit(cv::Tracker* tracker, cv::_InputArray* image, CvRect* boundingBox);
-CVAPI(bool) cveTrackerUpdate(cv::Tracker* tracker, cv::_InputArray* image, CvRect* boundingBox);
+CVAPI(void) cveTrackerInit(cv::Tracker* tracker, cv::_InputArray* image, cv::Rect* boundingBox);
+CVAPI(bool) cveTrackerUpdate(cv::Tracker* tracker, cv::_InputArray* image, cv::Rect* boundingBox);
 //CVAPI(void) cveTrackerRelease(cv::Tracker** tracker);
 
 CVAPI(cv::TrackerMIL*) cveTrackerMILCreate(
@@ -139,12 +160,14 @@ CVAPI(cv::TrackerMIL*) cveTrackerMILCreate(
 	cv::Ptr<cv::TrackerMIL>** sharedPtr);
 CVAPI(void) cveTrackerMILRelease(cv::Ptr<cv::TrackerMIL>** sharedPtr);
 
+/*
 CVAPI(cv::TrackerGOTURN*) cveTrackerGOTURNCreate(
 	cv::Tracker** tracker, 
 	cv::Ptr<cv::TrackerGOTURN>** sharedPtr,
 	cv::String* modelTxt,
 	cv::String* modelBin);
 CVAPI(void) cveTrackerGOTURNRelease(cv::Ptr<cv::TrackerGOTURN>** sharedPtr);
+*/
 
 CVAPI(cv::TrackerDaSiamRPN*) cveTrackerDaSiamRPNCreate(
 	cv::String* model,

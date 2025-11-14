@@ -8,7 +8,8 @@
 #ifndef EMGU_NONFREE_C_H
 #define EMGU_NONFREE_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_XFEATURES2D
 #include "opencv2/xfeatures2d.hpp"

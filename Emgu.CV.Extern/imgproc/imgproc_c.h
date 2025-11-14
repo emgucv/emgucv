@@ -8,39 +8,40 @@
 #ifndef EMGU_IMGPROC_C_H
 #define EMGU_IMGPROC_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 #include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/imgproc/imgproc_c.h"
-#include "opencv2/imgproc/types_c.h"
+//#include "opencv2/imgproc/imgproc_c.h"
+//#include "opencv2/imgproc/types_c.h"
 #include "emgu_c.h"
 
-CVAPI(IplImage*) cvGetImageSubRect(IplImage* image, CvRect* rect);
+//CVAPI(IplImage*) cvGetImageSubRect(IplImage* image, CvRect* rect);
 
 //GrabCut
 CVAPI(void) cveGrabCut(cv::_InputArray* img, cv::_InputOutputArray* mask, cv::Rect* rect, cv::_InputOutputArray* bgdModel, cv::_InputOutputArray* fgdModel, int iterCount, int flag);
 
-CVAPI(void) cveFilter2D(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* kernel, CvPoint* anchor, double delta, int borderType );
+CVAPI(void) cveFilter2D(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* kernel, cv::Point* anchor, double delta, int borderType );
 
-CVAPI(void) cveSepFilter2D(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth,	cv::_InputArray* kernelX, cv::_InputArray* kernelY, CvPoint* anchor,	double delta, int borderType);
+CVAPI(void) cveSepFilter2D(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth,	cv::_InputArray* kernelX, cv::_InputArray* kernelY, cv::Point* anchor,	double delta, int borderType);
 
 CVAPI(void) cveBlendLinear(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputArray* weights1, cv::_InputArray* weights2, cv::_OutputArray* dst);
 
-CVAPI(void) cveCLAHE(cv::_InputArray* src, double clipLimit, CvSize* tileGridSize, cv::_OutputArray* dst);
+CVAPI(void) cveCLAHE(cv::_InputArray* src, double clipLimit, cv::Size* tileGridSize, cv::_OutputArray* dst);
 
 //CVAPI(void) cveAdaptiveBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* ksize, double sigmaSpace, double maxSigmaColor, CvPoint* anchor, int borderType);
 
-CVAPI(void) cveErode(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* kernel, CvPoint* anchor, int iterations, int borderType, CvScalar* borderValue);
+CVAPI(void) cveErode(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* kernel, cv::Point* anchor, int iterations, int borderType, cv::Scalar* borderValue);
 
-CVAPI(void) cveDilate(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* kernel, CvPoint* anchor, int iterations, int borderType, CvScalar* borderValue);
-CVAPI(void) cveGetStructuringElement(cv::Mat* mat, int shape, CvSize* ksize, CvPoint* anchor);
-CVAPI(void) cveMorphologyEx(cv::_InputArray* src, cv::_OutputArray* dst, int op, cv::_InputArray* kernel, CvPoint* anchor, int iterations, int borderType, CvScalar* borderValue);
+CVAPI(void) cveDilate(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* kernel, cv::Point* anchor, int iterations, int borderType, cv::Scalar* borderValue);
+CVAPI(void) cveGetStructuringElement(cv::Mat* mat, int shape, cv::Size* ksize, cv::Point* anchor);
+CVAPI(void) cveMorphologyEx(cv::_InputArray* src, cv::_OutputArray* dst, int op, cv::_InputArray* kernel, cv::Point* anchor, int iterations, int borderType, cv::Scalar* borderValue);
 
 CVAPI(void) cveSobel(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, int dx, int dy, int ksize, double scale, double delta, int borderType);
 CVAPI(void) cveSpatialGradient(cv::_InputArray* src, cv::_OutputArray* dx, cv::_OutputArray* dy, int ksize, int borderType);
 CVAPI(void) cveScharr(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, int dx, int dy, double scale, double delta, int borderType);
 CVAPI(void) cveLaplacian(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, int ksize, double scale, double delta, int borderType);
-CVAPI(void) cvePyrUp(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* size, int borderType);
-CVAPI(void) cvePyrDown(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* size, int borderType);
+CVAPI(void) cvePyrUp(cv::_InputArray* src, cv::_OutputArray* dst, cv::Size* size, int borderType);
+CVAPI(void) cvePyrDown(cv::_InputArray* src, cv::_OutputArray* dst, cv::Size* size, int borderType);
 CVAPI(void) cveBuildPyramid(cv::_InputArray* src, cv::_OutputArray* dst, int maxlevel, int borderType);
 
 CVAPI(void) cveCanny(cv::_InputArray* image, cv::_OutputArray* edges, double threshold1, double threshold2, int apertureSize, bool L2gradient);
@@ -72,11 +73,11 @@ CVAPI(void) cveCvtColorTwoPlane(
 	int code,
 	int hint);
 CVAPI(void) cveDemosaicing(cv::_InputArray* src, cv::_OutputArray* dst, int code, int dstCn);
-CVAPI(void) cveCopyMakeBorder(cv::_InputArray* src, cv::_OutputArray* dst, int top, int bottom, int left, int right, int borderType, CvScalar* value);
+CVAPI(void) cveCopyMakeBorder(cv::_InputArray* src, cv::_OutputArray* dst, int top, int bottom, int left, int right, int borderType, cv::Scalar* value);
 
 CVAPI(void) cveIntegral(cv::_InputArray* src, cv::_OutputArray* sum, cv::_OutputArray* sqsum, cv::_OutputArray* tilted, int sdepth, int sqdepth);
-CVAPI(int) cveFloodFill(cv::_InputOutputArray* image, cv::_InputOutputArray* mask, CvPoint* seedPoint, CvScalar* newVal, CvRect* rect, CvScalar* loDiff, CvScalar* upDiff, int flags);
-CVAPI(void) cvePyrMeanShiftFiltering(cv::_InputArray* src, cv::_OutputArray* dst, double sp, double sr, int maxLevel, CvTermCriteria* termCrit);
+CVAPI(int) cveFloodFill(cv::_InputOutputArray* image, cv::_InputOutputArray* mask, cv::Point* seedPoint, cv::Scalar* newVal, cv::Rect* rect, cv::Scalar* loDiff, cv::Scalar* upDiff, int flags);
+CVAPI(void) cvePyrMeanShiftFiltering(cv::_InputArray* src, cv::_OutputArray* dst, double sp, double sr, int maxLevel, cv::TermCriteria* termCrit);
 
 CVAPI(void) cveMoments(cv::_InputArray* arr, bool binaryImage, cv::Moments* moments);
 
@@ -86,16 +87,16 @@ CVAPI(void) cveAccumulate(cv::_InputArray* src, cv::_InputOutputArray* dst, cv::
 CVAPI(void) cveAccumulateSquare(cv::_InputArray* src, cv::_InputOutputArray* dst, cv::_InputArray* mask);
 CVAPI(void) cveAccumulateProduct(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputOutputArray* dst, cv::_InputArray* mask);
 CVAPI(void) cveAccumulateWeighted(cv::_InputArray* src, cv::_InputOutputArray* dst, double alpha, cv::_InputArray* mask);
-CVAPI(void) cvePhaseCorrelate(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputArray* window, double* response, CvPoint2D64f* result);
-CVAPI(void) cveCreateHanningWindow(cv::_OutputArray* dst, CvSize* winSize, int type);
+CVAPI(void) cvePhaseCorrelate(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputArray* window, double* response, cv::Point2d* result);
+CVAPI(void) cveCreateHanningWindow(cv::_OutputArray* dst, cv::Size* winSize, int type);
 
-CVAPI(void) cveResize(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* dsize, double fx, double fy, int interpolation);
-CVAPI(void) cveWarpAffine(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* m, CvSize* dsize, int flags, int borderMode, CvScalar* borderValue);
-CVAPI(void) cveWarpPerspective(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* m, CvSize* dsize, int flags, int borderMode, CvScalar* borderValue);
+CVAPI(void) cveResize(cv::_InputArray* src, cv::_OutputArray* dst, cv::Size* dsize, double fx, double fy, int interpolation);
+CVAPI(void) cveWarpAffine(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* m, cv::Size* dsize, int flags, int borderMode, cv::Scalar* borderValue);
+CVAPI(void) cveWarpPerspective(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* m, cv::Size* dsize, int flags, int borderMode, cv::Scalar* borderValue);
 
-CVAPI(void) cveLogPolar(cv::_InputArray* src, cv::_OutputArray* dst, CvPoint2D32f* center, double M, int flags);
-CVAPI(void) cveLinearPolar(cv::_InputArray* src, cv::_OutputArray* dst, CvPoint2D32f* center, double maxRadius, int flags);
-CVAPI(void) cveRemap(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* map1, cv::_InputArray* map2, int interpolation, int borderMode, CvScalar* borderValue);
+CVAPI(void) cveLogPolar(cv::_InputArray* src, cv::_OutputArray* dst, cv::Point2f* center, double M, int flags);
+CVAPI(void) cveLinearPolar(cv::_InputArray* src, cv::_OutputArray* dst, cv::Point2f* center, double maxRadius, int flags);
+CVAPI(void) cveRemap(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* map1, cv::_InputArray* map2, int interpolation, int borderMode, cv::Scalar* borderValue);
 CVAPI(void) cveRepeat(cv::_InputArray* src, int ny, int nx, cv::_OutputArray* dst);
 CVAPI(void) cveHoughCircles(cv::_InputArray* image, cv::_OutputArray* circles, int method, double dp, double minDist, double param1, double param2, int minRadius, int maxRadius);
 CVAPI(void) cveHoughLines(
@@ -113,7 +114,7 @@ CVAPI(void) cveHoughLines(
 CVAPI(void) cveHoughLinesP(cv::_InputArray* image, cv::_OutputArray* lines, double rho, double theta, int threshold, double minLineLength, double maxGap);
 
 CVAPI(void) cveMatchTemplate(cv::_InputArray* image, cv::_InputArray* templ, cv::_OutputArray* result, int method, cv::_InputArray* mask);
-CVAPI(void) cveCornerSubPix(cv::_InputArray* image, cv::_InputOutputArray* corners, CvSize* winSize, CvSize* zeroZone, CvTermCriteria* criteria);
+CVAPI(void) cveCornerSubPix(cv::_InputArray* image, cv::_InputOutputArray* corners, cv::Size* winSize, cv::Size* zeroZone, cv::TermCriteria* criteria);
 
 CVAPI(void) cveConvertMaps(cv::_InputArray* map1, cv::_InputArray* map2, cv::_OutputArray* dstmap1, cv::_OutputArray* dstmap2, int dstmap1Type, bool nninterpolation);
 
@@ -128,33 +129,39 @@ CVAPI(void) cveCalcHist( cv::_InputArray* images, const std::vector<int>* channe
 CVAPI(void) cveCalcBackProject(cv::_InputArray* images, const std::vector<int>* channels, cv::_InputArray* hist, cv::_OutputArray* dst, const std::vector<float>* ranges, double scale );
 CVAPI(double) cveCompareHist(cv::_InputArray* h1, cv::_InputArray* h2, int method);
 
-CVAPI(void) cveGetRotationMatrix2D(CvPoint2D32f* center, double angle, double scale, cv::_OutputArray* rotationMatrix2D);
+CVAPI(void) cveGetRotationMatrix2D(cv::Point2f* center, double angle, double scale, cv::_OutputArray* rotationMatrix2D);
 
-CVAPI(void) cveFindContours(cv::_InputOutputArray* image, cv::_OutputArray* contours, cv::_OutputArray* hierarchy, int mode, int method, CvPoint* offset);
+CVAPI(void) cveFindContours(cv::_InputOutputArray* image, cv::_OutputArray* contours, cv::_OutputArray* hierarchy, int mode, int method, cv::Point* offset);
 CVAPI(void) cveFindContoursLinkRuns(cv::_InputArray* image, cv::_OutputArray* contours, cv::_OutputArray* hierarchy);
-CVAPI(double) cvePointPolygonTest(cv::_InputArray* contour, CvPoint2D32f* pt, bool measureDist);
+CVAPI(double) cvePointPolygonTest(cv::_InputArray* contour, cv::Point2f* pt, bool measureDist);
 
 CVAPI(double) cveContourArea(cv::_InputArray* contour, bool oriented);
 CVAPI(bool) cveIsContourConvex(cv::_InputArray* contour);
 CVAPI(float) cveIntersectConvexConvex(cv::_InputArray* p1, cv::_InputArray* p2,	cv::_OutputArray* p12, bool handleNested);
-CVAPI(void) cveBoundingRectangle(cv::_InputArray* points, CvRect* boundingRect);
+CVAPI(void) cveBoundingRectangle(cv::_InputArray* points, cv::Rect* boundingRect);
 CVAPI(double) cveArcLength(cv::_InputArray* curve, bool closed);
 CVAPI(void) cveMinAreaRect(cv::_InputArray* points, cv::RotatedRect* box);
 CVAPI(void) cveBoxPoints(cv::RotatedRect* box, cv::_OutputArray* points);
 CVAPI(double) cveMinEnclosingTriangle(cv::_InputArray* points, cv::_OutputArray* triangle);
-CVAPI(void) cveMinEnclosingCircle(cv::_InputArray* points, CvPoint2D32f* center, float* radius);
+CVAPI(void) cveMinEnclosingCircle(cv::_InputArray* points, cv::Point2f* center, float* radius);
 CVAPI(double) cveMatchShapes(cv::_InputArray* contour1, cv::_InputArray* contour2, int method, double parameter);
 CVAPI(void) cveFitEllipse(cv::_InputArray* points, cv::RotatedRect* box);
 CVAPI(void) cveFitEllipseAMS(cv::_InputArray* points, cv::RotatedRect* box);
 CVAPI(void) cveFitEllipseDirect(cv::_InputArray* points, cv::RotatedRect* box);
-CVAPI(void) cveGetClosestEllipsePoints(CvBox2D* ellipseParams, cv::_InputArray* points, cv::_OutputArray* closestPts);
+CVAPI(void) cveGetClosestEllipsePoints(cv::RotatedRect* ellipseParams, cv::_InputArray* points, cv::_OutputArray* closestPts);
 
 CVAPI(void) cveFitLine(cv::_InputArray* points, cv::_OutputArray* line, int distType, double param, double reps, double aeps);
 CVAPI(int) cveRotatedRectangleIntersection(cv::RotatedRect* rect1, cv::RotatedRect* rect2, cv::_OutputArray* intersectingRegion);
 CVAPI(void) cveDrawContours(
-   cv::_InputOutputArray* image, cv::_InputArray* contours, int contourIdx, 
-   CvScalar* color, int thickness, int lineType, cv::_InputArray* hierarchy, 
-   int maxLevel, CvPoint* offset);
+	cv::_InputOutputArray* image, 
+	cv::_InputArray* contours, 
+	int contourIdx, 
+	cv::Scalar* color, 
+	int thickness, 
+	int lineType, 
+	cv::_InputArray* hierarchy, 
+	int maxLevel, 
+	cv::Point* offset);
 CVAPI(void) cveApproxPolyDP(cv::_InputArray* curve, cv::_OutputArray* approxCurve, double epsilon, bool closed);
 CVAPI(void) cveApproxPolyN(cv::_InputArray* curve, cv::_OutputArray* approxCurve, int nsides, float epsilonPercentage, bool ensureConvex);
 CVAPI(void) cveConvexHull(cv::_InputArray* points, cv::_OutputArray* hull, bool clockwise, bool returnPoints);
@@ -163,76 +170,76 @@ CVAPI(void) cveConvexityDefects(cv::_InputArray* contour, cv::_InputArray* conve
 CVAPI(void) cveGaussianBlur(
 	cv::_InputArray* src, 
 	cv::_OutputArray* dst, 
-	CvSize* ksize, 
+	cv::Size* ksize, 
 	double sigmaX, 
 	double sigmaY, 
 	int borderType, 
 	int hint);
-CVAPI(void) cveBlur(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* kSize, CvPoint* anchor, int borderType);
-CVAPI(void) cveStackBlur(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* ksize);
+CVAPI(void) cveBlur(cv::_InputArray* src, cv::_OutputArray* dst, cv::Size* kSize, cv::Point* anchor, int borderType);
+CVAPI(void) cveStackBlur(cv::_InputArray* src, cv::_OutputArray* dst, cv::Size* ksize);
 CVAPI(void) cveMedianBlur(cv::_InputArray* src, cv::_OutputArray* dst, int ksize);
-CVAPI(void) cveBoxFilter(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, CvSize* ksize, CvPoint* anchor, bool normailize, int borderType);
-CVAPI(void) cveSqrBoxFilter(cv::_InputArray* _src, cv::_OutputArray* _dst, int ddepth, CvSize* ksize, CvPoint* anchor, bool normalize, int borderType);
+CVAPI(void) cveBoxFilter(cv::_InputArray* src, cv::_OutputArray* dst, int ddepth, cv::Size* ksize, cv::Point* anchor, bool normailize, int borderType);
+CVAPI(void) cveSqrBoxFilter(cv::_InputArray* _src, cv::_OutputArray* _dst, int ddepth, cv::Size* ksize, cv::Point* anchor, bool normalize, int borderType);
 CVAPI(void) cveBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int d, double sigmaColor, double sigmaSpace, int borderType);
 
 //Subdiv2D
-CVAPI(cv::Subdiv2D*) cveSubdiv2DCreate(CvRect* rect);
+CVAPI(cv::Subdiv2D*) cveSubdiv2DCreate(cv::Rect* rect);
 CVAPI(void) cveSubdiv2DRelease(cv::Subdiv2D** subdiv);
 CVAPI(void) cveSubdiv2DInsertMulti(cv::Subdiv2D* subdiv, std::vector<cv::Point2f>* points);
-CVAPI(int) cveSubdiv2DInsertSingle(cv::Subdiv2D* subdiv, CvPoint2D32f* pt);
+CVAPI(int) cveSubdiv2DInsertSingle(cv::Subdiv2D* subdiv, cv::Point2f* pt);
 CVAPI(void) cveSubdiv2DGetTriangleList(cv::Subdiv2D* subdiv, std::vector<cv::Vec6f>* triangleList);
 CVAPI(void) cveSubdiv2DGetVoronoiFacetList(cv::Subdiv2D* subdiv, std::vector<int>* idx, std::vector< std::vector< cv::Point2f> >* facetList, std::vector< cv::Point2f >* facetCenters);
-CVAPI(int) cveSubdiv2DFindNearest(cv::Subdiv2D* subdiv, CvPoint2D32f* pt,  CvPoint2D32f* nearestPt);
-CVAPI(int) cveSubdiv2DLocate(cv::Subdiv2D* subdiv, CvPoint2D32f* pt, int* edge, int* vertex);
+CVAPI(int) cveSubdiv2DFindNearest(cv::Subdiv2D* subdiv, cv::Point2f* pt, cv::Point2f* nearestPt);
+CVAPI(int) cveSubdiv2DLocate(cv::Subdiv2D* subdiv, cv::Point2f* pt, int* edge, int* vertex);
 
 //LineIterator
 CVAPI(cv::LineIterator*) cveLineIteratorCreate(
 	cv::Mat* img, 
-	CvPoint* pt1, 
-	CvPoint* pt2,
+	cv::Point* pt1, 
+	cv::Point* pt2,
 	int connectivity, 
 	bool leftToRight);
 CVAPI(uchar*) cveLineIteratorGetDataPointer(cv::LineIterator* iterator);
-CVAPI(void) cveLineIteratorPos(cv::LineIterator* iterator, CvPoint* pos);
+CVAPI(void) cveLineIteratorPos(cv::LineIterator* iterator, cv::Point* pos);
 CVAPI(void) cveLineIteratorMoveNext(cv::LineIterator* iterator);
 CVAPI(void) cveLineIteratorRelease(cv::LineIterator** iterator);
 CVAPI(void) cveLineIteratorSampleLine(
 	cv::Mat* img,
-	CvPoint* pt1,
-	CvPoint* pt2,
+	cv::Point* pt1,
+	cv::Point* pt2,
 	int connectivity,
 	bool leftToRight, 
 	cv::Mat* result);
 
 //Drawing
-CVAPI(void) cveLine(cv::_InputOutputArray* img, CvPoint* p1, CvPoint* p2, CvScalar* color, int thickness, int lineType, int shift);
+CVAPI(void) cveLine(cv::_InputOutputArray* img, cv::Point* p1, cv::Point* p2, cv::Scalar* color, int thickness, int lineType, int shift);
 
-CVAPI(void) cveArrowedLine(cv::_InputOutputArray* img, CvPoint* pt1, CvPoint* pt2, CvScalar* color, int thickness, int lineType, int shift, double tipLength);
+CVAPI(void) cveArrowedLine(cv::_InputOutputArray* img, cv::Point* pt1, cv::Point* pt2, cv::Scalar* color, int thickness, int lineType, int shift, double tipLength);
 
-CVAPI(void) cveRectangle(cv::_InputOutputArray* img, CvRect* rect, CvScalar* color, int thickness, int lineType, int shift);
+CVAPI(void) cveRectangle(cv::_InputOutputArray* img, cv::Rect* rect, cv::Scalar* color, int thickness, int lineType, int shift);
 
-CVAPI(void) cveCircle(cv::_InputOutputArray* img, CvPoint* center, int radius, CvScalar* color, int thickness, int lineType, int shift);
+CVAPI(void) cveCircle(cv::_InputOutputArray* img, cv::Point* center, int radius, cv::Scalar* color, int thickness, int lineType, int shift);
 
-CVAPI(void) cvePutText(cv::_InputOutputArray* img, cv::String* text, CvPoint* org, int fontFace, double fontScale, CvScalar* color, int thickness, int lineType, bool bottomLeftOrigin);
+CVAPI(void) cvePutText(cv::_InputOutputArray* img, cv::String* text, cv::Point* org, int fontFace, double fontScale, cv::Scalar* color, int thickness, int lineType, bool bottomLeftOrigin);
 
-CVAPI(void) cveGetTextSize(cv::String* text, int fontFace, double fontScale, int thickness, int* baseLine, CvSize* size);
+CVAPI(void) cveGetTextSize(cv::String* text, int fontFace, double fontScale, int thickness, int* baseLine, cv::Size* size);
 
-CVAPI(void) cveFillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const CvScalar* color, int lineType, int shift);
+CVAPI(void) cveFillConvexPoly(cv::_InputOutputArray* img, cv::_InputArray* points, const cv::Scalar* color, int lineType, int shift);
 
-CVAPI(void) cveFillPoly(cv::_InputOutputArray* img, cv::_InputArray* pts, const CvScalar* color, int lineType, int shift, CvPoint* offset);
+CVAPI(void) cveFillPoly(cv::_InputOutputArray* img, cv::_InputArray* pts, const cv::Scalar* color, int lineType, int shift, cv::Point* offset);
 
 CVAPI(void) cvePolylines(cv::_InputOutputArray* img, cv::_InputArray* pts,
-                   bool isClosed, const CvScalar* color,
+                   bool isClosed, const cv::Scalar* color,
                    int thickness, int lineType, int shift );
 
 CVAPI(void) cveEllipse1(
 	cv::_InputOutputArray* img, 
-	CvPoint* center, 
-	CvSize* axes,
+	cv::Point* center, 
+	cv::Size* axes,
 	double angle, 
 	double startAngle, 
 	double endAngle,
-	const CvScalar* color, 
+	const cv::Scalar* color, 
 	int thickness, 
 	int lineType, 
 	int shift);
@@ -240,14 +247,14 @@ CVAPI(void) cveEllipse1(
 CVAPI(void) cveEllipse2(
 	cv::_InputOutputArray* img,
 	cv::RotatedRect* box,
-	CvScalar* color,
+	cv::Scalar* color,
 	int thickness,
 	int lineType);
 
 CVAPI(void) cveDrawMarker(
 	cv::_InputOutputArray* img, 
-	CvPoint* position, 
-	CvScalar* color,
+	cv::Point* position, 
+	cv::Scalar* color,
 	int markerType, 
 	int markerSize, 
 	int thickness,
@@ -261,7 +268,7 @@ CVAPI(void) cveDistanceTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv
 
 
 
-CVAPI(void) cveGetRectSubPix(cv::_InputArray* image, CvSize* patchSize, CvPoint2D32f* center, cv::_OutputArray* patch, int patchType);
+CVAPI(void) cveGetRectSubPix(cv::_InputArray* image, cv::Size* patchSize, cv::Point2f* center, cv::_OutputArray* patch, int patchType);
 
 
 //CVAPI(int) cveSampleLine(const void* _img, CvPoint* pt1, CvPoint* pt2, void* _buffer, int connectivity);
@@ -297,10 +304,10 @@ CVAPI(void) cveIntelligentScissorsMBApplyImageFeatures(
 	cv::_InputArray* gradientDirection, 
 	cv::_InputArray* gradientMagnitude,
 	cv::_InputArray* image);
-CVAPI(void) cveIntelligentScissorsMBBuildMap(cv::segmentation::IntelligentScissorsMB* ptr, CvPoint* sourcePt);
+CVAPI(void) cveIntelligentScissorsMBBuildMap(cv::segmentation::IntelligentScissorsMB* ptr, cv::Point* sourcePt);
 CVAPI(void) cveIntelligentScissorsMBGetContour(
 	cv::segmentation::IntelligentScissorsMB* ptr, 
-	CvPoint* targetPt, 
+	cv::Point* targetPt, 
 	cv::_OutputArray* contour, 
 	bool backward);
 
@@ -320,7 +327,7 @@ CVAPI(void) cveGetDerivKernels(
 	int ktype);
 
 CVAPI(void) cveGetGaborKernel(
-	CvSize* ksize, 
+	cv::Size* ksize, 
 	double sigma, 
 	double theta, 
 	double lambd,

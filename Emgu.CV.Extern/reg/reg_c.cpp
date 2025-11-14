@@ -48,7 +48,7 @@ void cveMapRelease(cv::Ptr< cv::reg::Map >** mapSharedPtr)
 }
 
 
-cv::reg::MapShift* cveMapShiftCreate(CvPoint2D64f* shift, cv::reg::Map** map)
+cv::reg::MapShift* cveMapShiftCreate(cv::Point2d* shift, cv::reg::Map** map)
 {
 #ifdef HAVE_OPENCV_REG
 	cv::Vec<double, 2> s(shift->x, shift->y);

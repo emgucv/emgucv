@@ -47,10 +47,10 @@ CVAPI(void) cveICPRelease(cv::ppf_match_3d::ICP** icp);
 CVAPI(cv::ppf_match_3d::Pose3D*) cvePose3DCreate();
 CVAPI(void) cvePose3DUpdatePose(cv::ppf_match_3d::Pose3D* pose3d, cv::Mat* pose);
 CVAPI(void) cvePose3DRelease(cv::ppf_match_3d::Pose3D** pose3d);
-CVAPI(void) cvePose3DGetT(cv::ppf_match_3d::Pose3D* pose3d, CvPoint3D64f* t);
-CVAPI(void) cvePose3DSetT(cv::ppf_match_3d::Pose3D* pose3d, CvPoint3D64f* t);
-CVAPI(void) cvePose3DGetQ(cv::ppf_match_3d::Pose3D* pose3d, CvScalar* q);
-CVAPI(void) cvePose3DSetQ(cv::ppf_match_3d::Pose3D* pose3d, CvScalar* q);
+CVAPI(void) cvePose3DGetT(cv::ppf_match_3d::Pose3D* pose3d, cv::Point3d* t);
+CVAPI(void) cvePose3DSetT(cv::ppf_match_3d::Pose3D* pose3d, cv::Point3d* t);
+CVAPI(void) cvePose3DGetQ(cv::ppf_match_3d::Pose3D* pose3d, cv::Scalar* q);
+CVAPI(void) cvePose3DSetQ(cv::ppf_match_3d::Pose3D* pose3d, cv::Scalar* q);
 
 CVAPI(cv::ppf_match_3d::PPF3DDetector*) cvePPF3DDetectorCreate(double relativeSamplingStep, double relativeDistanceStep, double numAngles);
 CVAPI(void) cvePPF3DDetectorTrainModel(cv::ppf_match_3d::PPF3DDetector* detector, cv::Mat* model);

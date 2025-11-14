@@ -14,10 +14,10 @@ void zlib_compress2(Byte* dataCompressed, int* sizeDataCompressed, Byte* dataOri
    switch(z_result)
    {
    case Z_BUF_ERROR:
-      CV_Error( CV_StsError, "Output buffer wasn't large enough\n");
+      CV_Error(cv::Error::StsError, "Output buffer wasn't large enough\n");
       break;
    case Z_MEM_ERROR:
-      CV_Error( CV_StsError, "Out of memory\n");
+      CV_Error(cv::Error::StsError, "Out of memory\n");
       break;
    default:
       *sizeDataCompressed = (int) sizeCompressed;
@@ -31,10 +31,10 @@ void zlib_uncompress(Byte* dataUncompressed, int* sizeDataUncompressed, Byte* co
    switch(z_result)
    {
    case Z_BUF_ERROR:
-      CV_Error( CV_StsError, "Output buffer wasn't large enough\n");
+      CV_Error(cv::Error::StsError, "Output buffer wasn't large enough\n");
       break;
    case Z_MEM_ERROR:
-      CV_Error( CV_StsError, "Out of memory\n");
+      CV_Error(cv::Error::StsError, "Out of memory\n");
       break;
    default:
       *sizeDataUncompressed = (int) sizeUncompressed;

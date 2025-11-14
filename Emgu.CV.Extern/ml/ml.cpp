@@ -196,7 +196,7 @@ void cveEMTrainM(
 	throw_no_ml();
 #endif
 }
-void cveEMPredict(cv::ml::EM* model, cv::_InputArray* sample, CvPoint2D64f* result, cv::_OutputArray* probs)
+void cveEMPredict(cv::ml::EM* model, cv::_InputArray* sample, cv::Point2d* result, cv::_OutputArray* probs)
 {
 #ifdef HAVE_OPENCV_ML
 	cv::Vec2d vec = model->predict(*sample, probs ? *probs : (cv::OutputArray) cv::noArray());

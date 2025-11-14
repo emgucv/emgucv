@@ -86,7 +86,7 @@ int cvePollKey()
 #endif	
 }
 
-void cveSelectROI(cv::String* windowName, cv::_InputArray* img, bool showCrosshair, bool fromCenter, CvRect* roi)
+void cveSelectROI(cv::String* windowName, cv::_InputArray* img, bool showCrosshair, bool fromCenter, cv::Rect* roi)
 {
 #ifdef HAVE_OPENCV_HIGHGUI
 	cv::Rect r = cv::selectROI(*windowName, *img, showCrosshair, fromCenter);

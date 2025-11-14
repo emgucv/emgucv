@@ -8,7 +8,8 @@
 #ifndef EMGU_SHAPE_C_H
 #define EMGU_SHAPE_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_SHAPE
 #include "opencv2/shape/shape.hpp"

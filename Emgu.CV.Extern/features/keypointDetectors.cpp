@@ -4,7 +4,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include "features2d_c.h"
+#include "features_c.h"
 
 //ORB
 cv::ORB* cveOrbCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D, cv::Ptr<cv::ORB>** sharedPtr)

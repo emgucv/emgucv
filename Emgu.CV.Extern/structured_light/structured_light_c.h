@@ -60,7 +60,7 @@ CVAPI(void) cveSinusoidalPatternUnwrapPhaseMap(
     cv::structured_light::SinusoidalPattern* pattern,
     cv::_InputArray* wrappedPhaseMap,
     cv::_OutputArray* unwrappedPhaseMap,
-    CvSize* camSize,
+    cv::Size* camSize,
     cv::_InputArray* shadowMask);
 
 
@@ -72,6 +72,6 @@ CVAPI(cv::structured_light::GrayCodePattern*) cveGrayCodePatternCreate(
     cv::Algorithm** algorithm);
 CVAPI(void) cveGrayCodePatternRelease(cv::Ptr<cv::structured_light::GrayCodePattern>** pattern);
 CVAPI(void) cveGrayCodePatternGetImagesForShadowMasks(cv::structured_light::GrayCodePattern* grayCodePattern, cv::_InputOutputArray* blackImage, cv::_InputOutputArray* whiteImage);
-CVAPI(bool) cveGrayCodePatternGetProjPixel(cv::structured_light::GrayCodePattern* grayCodePattern, cv::_InputArray* patternImages, int x, int y, CvPoint* projPix);
+CVAPI(bool) cveGrayCodePatternGetProjPixel(cv::structured_light::GrayCodePattern* grayCodePattern, cv::_InputArray* patternImages, int x, int y, cv::Point* projPix);
 
 #endif

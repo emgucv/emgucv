@@ -21,7 +21,7 @@ void cveDrawCorrespondencies(
 void cveDrawSearchLines(
 	cv::_InputOutputArray* img,
 	cv::_InputArray* locations,
-	CvScalar* color)
+	cv::Scalar* color)
 {
 #ifdef HAVE_OPENCV_RAPID
 	cv::rapid::drawSearchLines(*img, *locations, *color);
@@ -34,7 +34,7 @@ void cveDrawWireframe(
 	cv::_InputOutputArray* img,
 	cv::_InputArray* pts2d,
 	cv::_InputArray* tris,
-	CvScalar* color,
+	cv::Scalar* color,
 	int type,
 	bool cullBackface)
 {
@@ -52,7 +52,7 @@ void cveExtractControlPoints(
 	cv::_InputArray* rvec,
 	cv::_InputArray* tvec,
 	cv::_InputArray* K,
-	CvSize* imsize,
+	cv::Size* imsize,
 	cv::_InputArray* tris,
 	cv::_OutputArray* ctl2d,
 	cv::_OutputArray* ctl3d)
@@ -135,7 +135,7 @@ float cveTrackerCompute(
 	cv::_InputArray* K,
 	cv::_InputOutputArray* rvec,
 	cv::_InputOutputArray* tvec,
-	CvTermCriteria* termcrit)
+	cv::TermCriteria* termcrit)
 {
 #ifdef HAVE_OPENCV_RAPID
 	return tracker->compute(*img, num, len, *K, *rvec, *tvec, *termcrit);

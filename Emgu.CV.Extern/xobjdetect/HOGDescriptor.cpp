@@ -4,7 +4,7 @@
 //
 //----------------------------------------------------------------------------
 
-#include "objdetect_c.h"
+#include "xobjdetect_c.h"
 
 void cveHOGDescriptorPeopleDetectorCreate(std::vector<float>* seq)
 {
@@ -19,10 +19,10 @@ void cveHOGDescriptorPeopleDetectorCreate(std::vector<float>* seq)
 cv::HOGDescriptor* cveHOGDescriptorCreateDefault() { return new cv::HOGDescriptor; }
 
 cv::HOGDescriptor* cveHOGDescriptorCreate(
-	CvSize* _winSize,
-	CvSize* _blockSize,
-	CvSize* _blockStride,
-	CvSize* _cellSize,
+	cv::Size* _winSize,
+	cv::Size* _blockSize,
+	cv::Size* _blockStride,
+	cv::Size* _cellSize,
 	int _nbins,
 	int _derivAperture,
 	double _winSigma,
@@ -63,8 +63,8 @@ void cveHOGDescriptorDetectMultiScale(
 	std::vector<cv::Rect>* foundLocations,
 	std::vector<double>* weights,
 	double hitThreshold,
-	CvSize* winStride,
-	CvSize* padding,
+	cv::Size* winStride,
+	cv::Size* padding,
 	double scale,
 	double finalThreshold,
 	bool useMeanshiftGrouping)
@@ -80,8 +80,8 @@ void cveHOGDescriptorCompute(
 	cv::HOGDescriptor* descriptor,
 	cv::_InputArray* img,
 	std::vector<float>* descriptors,
-	CvSize* winStride,
-	CvSize* padding,
+	cv::Size* winStride,
+	cv::Size* padding,
 	std::vector< cv::Point >* locations)
 {
 #ifdef HAVE_OPENCV_OBJDETECT

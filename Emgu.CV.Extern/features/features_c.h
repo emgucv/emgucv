@@ -14,7 +14,7 @@
 
 #ifdef HAVE_OPENCV_FEATURES
 #include "opencv2/features/features.hpp"
-#include "opencv2/features/features2d.hpp"
+//#include "opencv2/features/features2d.hpp"
 #else
 static inline CV_NORETURN void throw_no_features() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without features support. To use this module, please switch to the full Emgu CV runtime."); }
 

@@ -46,11 +46,11 @@ CVAPI(bool) cveStereoRectifyUncalibrated(cv::_InputArray* points1, cv::_InputArr
 CVAPI(void) cveStereoRectify(
 	cv::_InputArray* cameraMatrix1, cv::_InputArray* distCoeffs1,
 	cv::_InputArray* cameraMatrix2, cv::_InputArray* distCoeffs2,
-	CvSize* imageSize, cv::_InputArray* r, cv::_InputArray* t,
+	cv::Size* imageSize, cv::_InputArray* r, cv::_InputArray* t,
 	cv::_OutputArray* r1, cv::_OutputArray* r2,
 	cv::_OutputArray* p1, cv::_OutputArray* p2,
 	cv::_OutputArray* q, int flags,
-	double alpha, CvSize* newImageSize,
-	CvRect* validPixROI1, CvRect* validPixROI2);
+	double alpha, cv::Size* newImageSize,
+	cv::Rect* validPixROI1, cv::Rect* validPixROI2);
 
 #endif

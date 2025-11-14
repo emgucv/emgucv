@@ -8,7 +8,8 @@
 #ifndef EMGU_ML_C_H
 #define EMGU_ML_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 #ifdef HAVE_OPENCV_ML
 #include "opencv2/ml/ml.hpp"
 #else
@@ -88,7 +89,7 @@ CVAPI(void) cveEMTrainM(
    cv::_OutputArray* labels,
    cv::_OutputArray* probs,
    cv::ml::StatModel** statModel, cv::Algorithm** algorithm);
-CVAPI(void) cveEMPredict(cv::ml::EM* model, cv::_InputArray* sample, CvPoint2D64f* result, cv::_OutputArray* probs);
+CVAPI(void) cveEMPredict(cv::ml::EM* model, cv::_InputArray* sample, cv::Point2d* result, cv::_OutputArray* probs);
 
 CVAPI(void) cveEMRelease(cv::ml::EM** model, cv::Ptr<cv::ml::EM>** sharedPtr);
 
