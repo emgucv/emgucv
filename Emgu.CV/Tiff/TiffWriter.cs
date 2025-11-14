@@ -47,7 +47,7 @@ namespace Emgu.CV.Tiff
             CvInvoke.Init();
         }
 
-        private bool _imageInfoWritten = false;
+        protected bool _imageInfoWritten = false;
 
         /// <summary>
         /// Create a tiff writer to save an image

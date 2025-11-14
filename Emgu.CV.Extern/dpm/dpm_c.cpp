@@ -28,7 +28,7 @@ DPMDetector* cveDPMDetectorCreate(std::vector<cv::String>* filenames, std::vecto
 #endif
 }
 
-void cveDPMDetectorDetect(DPMDetector* dpm, cv::Mat* image, std::vector<CvRect>* rects, std::vector<float>* scores, std::vector<int>* classIds)
+void cveDPMDetectorDetect(DPMDetector* dpm, cv::Mat* image, std::vector<cv::Rect>* rects, std::vector<float>* scores, std::vector<int>* classIds)
 {
 #ifdef HAVE_OPENCV_DPM
 	std::vector<DPMDetector::ObjectDetection> dobjects = std::vector<DPMDetector::ObjectDetection>();
@@ -36,7 +36,7 @@ void cveDPMDetectorDetect(DPMDetector* dpm, cv::Mat* image, std::vector<CvRect>*
 
 	for (std::vector<DPMDetector::ObjectDetection>::iterator it = dobjects.begin(); it != dobjects.end(); ++it)
 	{
-		rects->push_back(cvRect(it->rect));
+		rects->push_back(it->rect);
 		scores->push_back(it->score);
 		classIds->push_back(it->classID);
 	}

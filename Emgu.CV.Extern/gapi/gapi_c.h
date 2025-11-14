@@ -8,7 +8,8 @@
 #ifndef EMGU_GAPI_C_H
 #define EMGU_GAPI_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_GAPI
 #include "opencv2/gapi.hpp"

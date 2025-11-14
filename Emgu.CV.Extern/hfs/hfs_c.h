@@ -8,7 +8,9 @@
 #ifndef EMGU_HFS_C_H
 #define EMGU_HFS_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core/core.hpp"
+#include "cvapi_compat.h"
+
 #ifdef HAVE_OPENCV_HFS
 #include "opencv2/hfs.hpp"
 #else

@@ -15,7 +15,7 @@
 #include "opencv2/imgproc/types_c.h"
 #endif
 
-#ifdef HAVE_OPENCV_FEATURES2D
+#ifdef HAVE_OPENCV_FEATURES
 #include "opencv2/features2d.hpp"
 #endif
 
@@ -269,7 +269,7 @@ void Test_InferenceEngine()
 }
 #endif
 
-#ifdef HAVE_OPENCV_FEATURES2D
+#ifdef HAVE_OPENCV_FEATURES
 void Test_SimpleBlobDetector()
 {
 	cv::Mat m(600, 480, CV_8UC1);
@@ -332,7 +332,7 @@ int main()
 	Test_InferenceEngine();
 #endif
 
-#ifdef HAVE_OPENCV_FEATURES2D
+#ifdef HAVE_OPENCV_FEATURES
 	Test_SimpleBlobDetector();
 #endif
 

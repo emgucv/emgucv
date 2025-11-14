@@ -38,7 +38,7 @@ namespace Emgu.CV.Util
       /// Remove keypoints from some image by mask for pixels of this image.
       /// </summary>
       /// <param name="mask">The mask</param>
-      public void FilterByPixelsMask(Image<Gray, Byte> mask)
+      public void FilterByPixelsMask(Mat mask)
       {
          VectorOfKeyPointFilterByPixelsMask(Ptr, mask);
       }

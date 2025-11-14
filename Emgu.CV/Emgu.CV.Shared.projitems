@@ -12,7 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Core\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videoio\*.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Features2D\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Features\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Flann\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Geodetic\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\*.cs" />

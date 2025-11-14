@@ -8,7 +8,9 @@
 #ifndef EMGU_RGBD_C_H
 #define EMGU_RGBD_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core/core.hpp"
+#include "cvapi_compat.h"
+
 #ifdef HAVE_OPENCV_RGBD
 #include "opencv2/rgbd.hpp"
 #else

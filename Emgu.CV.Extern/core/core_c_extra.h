@@ -73,11 +73,11 @@ CVAPI(cv::_InputOutputArray*) cveInputOutputArrayFromUMat(cv::UMat* mat);
 CVAPI(cv::_InputOutputArray*) cveInputOutputArrayFromGpuMat(cv::cuda::GpuMat* mat);
 CVAPI(void) cveInputOutputArrayRelease(cv::_InputOutputArray** arr);
 
-CVAPI(cv::Scalar*) cveScalarCreate(CvScalar* scalar);
+CVAPI(cv::Scalar*) cveScalarCreate(cv::Scalar* scalar);
 CVAPI(void) cveScalarRelease(cv::Scalar** scalar);
 
 CVAPI(void) cveMinMaxIdx(cv::_InputArray* src, double* minVal, double* maxVal, int* minIdx, int* maxIdx, cv::_InputArray* mask);
-CVAPI(void) cveMinMaxLoc(cv::_InputArray* src, double* minVal, double* maxVal, CvPoint* minLoc, CvPoint* macLoc, cv::_InputArray* mask);
+CVAPI(void) cveMinMaxLoc(cv::_InputArray* src, double* minVal, double* maxVal, cv::Point* minLoc, cv::Point* macLoc, cv::_InputArray* mask);
 CVAPI(void) cveReduceArgMin(cv::_InputArray* src, cv::_OutputArray* dst, int axis, bool lastIndex);
 CVAPI(void) cveReduceArgMax(cv::_InputArray* src, cv::_OutputArray* dst, int axis, bool lastIndex);
 

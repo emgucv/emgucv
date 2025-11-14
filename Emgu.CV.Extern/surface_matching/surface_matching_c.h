@@ -8,7 +8,9 @@
 #ifndef EMGU_SURFACE_MATCHING_C_H
 #define EMGU_SURFACE_MATCHING_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core/core.hpp"
+#include "cvapi_compat.h"
+
 #ifdef HAVE_OPENCV_SURFACE_MATCHING
 
 #include "opencv2/surface_matching.hpp"

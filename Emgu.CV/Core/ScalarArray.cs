@@ -11,7 +11,7 @@ using Emgu.Util;
 namespace Emgu.CV
 {
    /// <summary>
-   /// An implementation of IInputArray intented to convert data to IInputArray
+   /// An implementation of IInputArray intended to convert data to IInputArray
    /// </summary>
    public class ScalarArray : UnmanagedObject, IInputArray
    {

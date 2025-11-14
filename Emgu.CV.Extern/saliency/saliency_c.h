@@ -8,9 +8,8 @@
 #ifndef EMGU_SALIENCY_C_H
 #define EMGU_SALIENCY_C_H
 
-
-#include "opencv2/opencv_modules.hpp"
-#include "opencv2/core/core_c.h"
+#include "opencv2/core/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_SALIENCY
 #include "opencv2/saliency.hpp"

@@ -12,7 +12,7 @@ cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Core/*.cs ../Emgu.CV/Core
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Gapi/*.cs ../Emgu.CV/Gapi 
 #cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Cvb/*.cs ../Emgu.CV/Cvb 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Dnn/*.cs ../Emgu.CV/Dnn  
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Features2D/*.cs ../Emgu.CV/Features2D 
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Features/*.cs ../Emgu.CV/Features
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Flann/*.cs ../Emgu.CV/Flann 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Geodetic/*.cs ../Emgu.CV/Geodetic 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Imgproc/*.cs ../Emgu.CV/Imgproc 

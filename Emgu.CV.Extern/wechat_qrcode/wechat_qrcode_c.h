@@ -8,7 +8,9 @@
 #ifndef EMGU_WECHAT_QRCODE_C_H
 #define EMGU_WECHAT_QRCODE_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core/core.hpp"
+#include "cvapi_compat.h"
+
 #ifdef HAVE_OPENCV_WECHAT_QRCODE
 #include "opencv2/wechat_qrcode.hpp"
 #else

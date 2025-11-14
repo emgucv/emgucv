@@ -8,7 +8,9 @@
 #ifndef EMGU_IMG_HASH_C_H
 #define EMGU_IMG_HASH_C_H
 
-#include "opencv2/core/types_c.h"
+#include "opencv2/core/core.hpp"
+#include "cvapi_compat.h"
+
 #ifdef HAVE_OPENCV_IMG_HASH
 #include "opencv2/img_hash.hpp"
 #else

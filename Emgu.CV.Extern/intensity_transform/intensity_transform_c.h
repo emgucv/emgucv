@@ -8,7 +8,8 @@
 #ifndef EMGU_INTENSITY_TRANSFORM_C_H
 #define EMGU_INTENSITY_TRANSFORM_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_INTENSITY_TRANSFORM
 #include "opencv2/intensity_transform.hpp"

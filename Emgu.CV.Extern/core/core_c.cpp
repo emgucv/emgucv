@@ -227,7 +227,7 @@ void cveInputOutputArrayRelease(cv::_InputOutputArray** arr)
 	*arr = 0;
 }
 
-cv::Scalar* cveScalarCreate(CvScalar* scalar)
+cv::Scalar* cveScalarCreate(cv::Scalar* scalar)
 {
 	return new cv::Scalar(scalar->val[0], scalar->val[1], scalar->val[2], scalar->val[3]);
 }
@@ -242,7 +242,7 @@ void cveMinMaxIdx(cv::_InputArray* src, double* minVal, double* maxVal, int* min
 	cv::minMaxIdx(*src, minVal, maxVal, minIdx, maxIdx, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
 
-void cveMinMaxLoc(cv::_InputArray* src, double* minVal, double* maxVal, CvPoint* minLoc, CvPoint* maxLoc, cv::_InputArray* mask)
+void cveMinMaxLoc(cv::_InputArray* src, double* minVal, double* maxVal, cv::Point* minLoc, cv::Point* maxLoc, cv::_InputArray* mask)
 {
 	cv::Point minPt;
 	cv::Point maxPt;
@@ -1242,8 +1242,8 @@ void cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value)
 	value->push_back(0);
 #endif
 
-	key->push_back("HAVE_OPENCV_FEATURES2D");
-#ifdef HAVE_OPENCV_FEATURES2D
+	key->push_back("HAVE_OPENCV_FEATURES");
+#ifdef HAVE_OPENCV_FEATURES
 	value->push_back(1);
 #else
 	value->push_back(0);

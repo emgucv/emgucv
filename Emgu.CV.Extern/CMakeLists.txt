@@ -1513,13 +1513,13 @@ ENDIF()
 
 ############################### imgproc code gen END ################################
 
-############################### features2d code gen START ##############################
-IF (NOT HAVE_opencv_features2d)
-  SET(HAVE_opencv_features2d FALSE)
+############################### features code gen START ##############################
+IF (NOT HAVE_OPENCV_FEATURES)
+  SET(HAVE_OPENCV_FEATURES FALSE)
 ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
-    "features2d/SimpleBlobDetector_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Features2D/SimpleBlobDetectorParams.g.cs"
+    "features/SimpleBlobDetector_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Features/SimpleBlobDetectorParams.g.cs"
     "cv::SimpleBlobDetector::Params" 
     "SimpleBlobDetectorParams" 
     "thresholdStep;minThreshold;maxThreshold;minDistBetweenBlobs;filterByColor;blobColor;filterByArea;minArea;maxArea;filterByCircularity;minCircularity;maxCircularity;filterByInertia;minInertiaRatio;maxInertiaRatio;filterByConvexity;minConvexity;maxConvexity;minRepeatability;collectContours" 
@@ -1547,17 +1547,17 @@ ENDIF()
   Max Convexity;
   Min Repeatability;
   Collect Contours"
-    "Emgu.CV.Features2D"
-    "Features2DInvoke"
+    "Emgu.CV.Features"
+    "FeaturesInvoke"
     "SimpleBlobDetectorParams"
 	""
-    "#include \"features2d_c.h\""
+    "#include \"features_c.h\""
 	""
 	""
-	${HAVE_opencv_features2d})
+	${HAVE_OPENCV_FEATURES})
   CREATE_OCV_CLASS_PROPERTY( 
-    "features2d/MSER_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Features2D/MSER.g.cs"
+    "features/MSER_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Features/MSER.g.cs"
     "cv::MSER" 
     "MSER" 
     "Pass2Only;Delta;MinArea;MaxArea" 
@@ -1569,16 +1569,16 @@ ENDIF()
     Delta;
     Min Area;
     Max Area"
-    "Emgu.CV.Features2D"
-    "Features2DInvoke"
+    "Emgu.CV.Features"
+    "FeaturesInvoke"
     "MSER"
 	""
-    "#include \"features2d_c.h\""
+    "#include \"features_c.h\""
 	""
 	""
-	${HAVE_opencv_features2d})
+	${HAVE_OPENCV_FEATURES})
 
-############################### features2d code gen END ################################
+############################### features code gen END ################################
 
 ############################### mcc code gen START ##############################
 IF (NOT HAVE_opencv_mcc)

@@ -8,7 +8,9 @@
 #ifndef EMGU_STRUCTURED_LIGHT_C_H
 #define EMGU_STRUCTURED_LIGHT_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core/core.hpp"
+#include "cvapi_compat.h"
+
 #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
 #include "opencv2/structured_light.hpp"
 #else

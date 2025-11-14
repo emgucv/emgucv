@@ -12,10 +12,11 @@
 #include "opencv2/imgproc/imgproc.hpp"
 
 
-#ifdef HAVE_OPENCV_FEATURES2D
-#include "opencv2/features2d/features2d.hpp"
+#ifdef HAVE_OPENCV_FEATURES
+#include "opencv2/features/features.hpp"
+#include "opencv2/features/features2d.hpp"
 #else
-static inline CV_NORETURN void throw_no_features2d() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without features2d support. To use this module, please switch to the full Emgu CV runtime."); }
+static inline CV_NORETURN void throw_no_features() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without features support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv {
 	class ORB {};
@@ -99,7 +100,7 @@ CVAPI(void) cveDrawKeypoints(
 	cv::_InputArray* image,
 	const std::vector<cv::KeyPoint>* keypoints,
 	cv::_InputOutputArray* outImage,
-	const CvScalar* color,
+	const cv::Scalar* color,
 	int flags);
 
 // Draws matches of keypoints from two images on output image.

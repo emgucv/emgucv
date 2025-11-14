@@ -10,7 +10,8 @@
 #ifndef EMGU_LINE_DESCRIPTOR_C_H
 #define EMGU_LINE_DESCRIPTOR_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_LINE_DESCRIPTOR
 
