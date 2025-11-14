@@ -9,7 +9,8 @@
 #define EMGU_CUDA_C_H
 
 #include "opencv2/opencv_modules.hpp"
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_CUDAOBJDETECT
 
@@ -62,9 +63,9 @@ CVAPI(int) cudaCascadeClassifierGetMinNeighbors(cv::cuda::CascadeClassifier* cla
 
 CVAPI(void) cudaCascadeClassifierSetMinNeighbors(cv::cuda::CascadeClassifier* classifier, int minNeighbours);
 */
-CVAPI(void) cudaCascadeClassifierGetMinObjectSize(cv::cuda::CascadeClassifier* classifier, CvSize* minObjectSize);
+CVAPI(void) cudaCascadeClassifierGetMinObjectSize(cv::cuda::CascadeClassifier* classifier, cv::Size* minObjectSize);
 
-CVAPI(void) cudaCascadeClassifierSetMinObjectSize(cv::cuda::CascadeClassifier* classifier, CvSize* minObjectSize);
+CVAPI(void) cudaCascadeClassifierSetMinObjectSize(cv::cuda::CascadeClassifier* classifier, cv::Size* minObjectSize);
 
 //----------------------------------------------------------------------------
 //
@@ -74,10 +75,10 @@ CVAPI(void) cudaCascadeClassifierSetMinObjectSize(cv::cuda::CascadeClassifier* c
 CVAPI(void) cudaHOGGetDefaultPeopleDetector(cv::cuda::HOG* descriptor, cv::Mat* detector);
 
 CVAPI(cv::cuda::HOG*) cudaHOGCreate(
-	CvSize* winSize,
-	CvSize* blockSize,
-	CvSize* blockStride,
-	CvSize* cellSize,
+	cv::Size* winSize,
+	cv::Size* blockSize,
+	cv::Size* blockStride,
+	cv::Size* cellSize,
 	int nbins,
 	cv::Ptr<cv::cuda::HOG>** sharedPtr);
 

@@ -2,7 +2,7 @@
 //  Copyright (C) 2004-2025 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -10,6 +10,7 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
+using Emgu.CV.Features;
 
 namespace Emgu.CV.Features
 {
@@ -31,7 +32,7 @@ namespace Emgu.CV.Features
       /// <param name="descriptorMatcher">Descriptor matcher that is used to find the nearest word of the trained vocabulary for each key point descriptor of the image.</param>
       public BOWImgDescriptorExtractor(Feature2D descriptorExtractor, DescriptorMatcher descriptorMatcher)
       {
-         _ptr = Features2DInvoke.cveBOWImgDescriptorExtractorCreate(descriptorExtractor.Feature2DPtr, descriptorMatcher);
+         _ptr = XFeatures2DInvoke.cveBOWImgDescriptorExtractorCreate(descriptorExtractor.Feature2DPtr, descriptorMatcher);
       }
 
       /// <summary>
@@ -40,7 +41,7 @@ namespace Emgu.CV.Features
       /// <param name="vocabulary">The vocabulary</param>
       public void SetVocabulary(Mat vocabulary)
       {
-          Features2DInvoke.cveBOWImgDescriptorExtractorSetVocabulary(_ptr, vocabulary);
+          XFeatures2DInvoke.cveBOWImgDescriptorExtractorSetVocabulary(_ptr, vocabulary);
       }
 
       /// <summary>
@@ -52,7 +53,7 @@ namespace Emgu.CV.Features
       public void Compute(IInputArray image, VectorOfKeyPoint keypoints, Mat imgDescriptors)
       {
          using (InputArray iaImage = image.GetInputArray())
-             Features2DInvoke.cveBOWImgDescriptorExtractorCompute(_ptr, iaImage, keypoints, imgDescriptors);
+             XFeatures2DInvoke.cveBOWImgDescriptorExtractorCompute(_ptr, iaImage, keypoints, imgDescriptors);
       }
 
       /// <summary>
@@ -62,12 +63,12 @@ namespace Emgu.CV.Features
       {
           if (IntPtr.Zero != _ptr)
           {
-              Features2DInvoke.cveBOWImgDescriptorExtractorRelease(ref _ptr);
+              XFeatures2DInvoke.cveBOWImgDescriptorExtractorRelease(ref _ptr);
           }
       }
    }
 
-   public static partial class Features2DInvoke
+   public static partial class XFeatures2DInvoke
    {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveBOWImgDescriptorExtractorCreate(IntPtr descriptorExtractor, IntPtr descriptorMatcher);

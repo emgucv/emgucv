@@ -143,7 +143,7 @@ cv::aruco::GridBoard* cveArucoGridBoardCreate(
 }
 
 
-void cveArucoBoardGenerateImage(cv::aruco::Board* board, CvSize* outSize, cv::_OutputArray* img, int marginSize, int borderBits)
+void cveArucoBoardGenerateImage(cv::aruco::Board* board, cv::Size* outSize, cv::_OutputArray* img, int marginSize, int borderBits)
 {
 #ifdef HAVE_OPENCV_ARUCO
    board->generateImage(*outSize, *img, marginSize, borderBits);
@@ -227,7 +227,7 @@ void cveArucoRefineDetectedMarkers(
 
 void cveArucoDrawDetectedMarkers(
    cv::_InputOutputArray* image, cv::_InputArray* corners,
-   cv::_InputArray* ids, CvScalar* borderColor)
+   cv::_InputArray* ids, cv::Scalar* borderColor)
 {
 #ifdef HAVE_OPENCV_ARUCO
    cv::aruco::drawDetectedMarkers(*image, *corners, ids ? *ids : static_cast<cv::InputArray>(cv::noArray()), *borderColor);
@@ -238,12 +238,12 @@ void cveArucoDrawDetectedMarkers(
 
 double cveArucoCalibrateCameraAruco(
 	cv::_InputArray* corners, cv::_InputArray* ids, cv::_InputArray* counter, cv::aruco::Board* board,
-	CvSize* imageSize, cv::_InputOutputArray* cameraMatrix, cv::_InputOutputArray* distCoeffs,
+	cv::Size* imageSize, cv::_InputOutputArray* cameraMatrix, cv::_InputOutputArray* distCoeffs,
 	cv::_OutputArray* rvecs, cv::_OutputArray* tvecs,
 	cv::_OutputArray* stdDeviationsIntrinsics,
 	cv::_OutputArray* stdDeviationsExtrinsics,
 	cv::_OutputArray* perViewErrors,
-	int flags, CvTermCriteria* criteria)
+	int flags, cv::TermCriteria* criteria)
 {
 #ifdef HAVE_OPENCV_ARUCO
 	cv::Ptr<cv::aruco::Board> boardPtr ( board, [](cv::aruco::Board*) {});
@@ -266,7 +266,7 @@ double cveArucoCalibrateCameraCharuco(
 	cv::_InputArray* charucoCorners, 
 	cv::_InputArray* charucoIds, 
 	cv::aruco::CharucoBoard* board,
-	CvSize* imageSize, 
+	cv::Size* imageSize, 
 	cv::_InputOutputArray* cameraMatrix, 
 	cv::_InputOutputArray* distCoeffs,
 	cv::_OutputArray* rvecs, 
@@ -275,7 +275,7 @@ double cveArucoCalibrateCameraCharuco(
 	cv::_OutputArray* stdDeviationsExtrinsics,
 	cv::_OutputArray* perViewErrors,
 	int flags, 
-	CvTermCriteria* criteria)
+	cv::TermCriteria* criteria)
 {
 #ifdef HAVE_OPENCV_ARUCO
 	cv::Ptr<cv::aruco::CharucoBoard> boardPtr(board, [](cv::aruco::CharucoBoard*) {});
@@ -338,7 +338,7 @@ void cveArucoDrawDetectedCornersCharuco(
 	cv::_InputOutputArray* image,
 	cv::_InputArray* charucoCorners,
 	cv::_InputArray* charucoIds,
-	CvScalar* cornerColor)
+	cv::Scalar* cornerColor)
 {
 #ifdef HAVE_OPENCV_ARUCO
 	cv::aruco::drawDetectedCornersCharuco(
@@ -403,7 +403,7 @@ void cveArucoDrawDetectedDiamonds(
 	cv::_InputOutputArray* image,
 	cv::_InputArray* diamondCorners,
 	cv::_InputArray* diamondIds,
-	CvScalar* borderColor)
+	cv::Scalar* borderColor)
 {
 #ifdef HAVE_OPENCV_ARUCO
 	cv::aruco::drawDetectedDiamonds(*image, *diamondCorners, *diamondIds, *borderColor);
@@ -431,7 +431,7 @@ void cveArucoDrawCharucoDiamond(
 
 void cveArucoDrawPlanarBoard(
 	cv::aruco::Board* board,
-	CvSize* outSize,
+	cv::Size* outSize,
 	cv::_OutputArray* img,
 	int marginSize,
 	int borderBits)

@@ -163,7 +163,7 @@ cv::dnn::Net* cveDnnNetCreate()
 #endif
 }
 
-void cveDnnNetSetInput(cv::dnn::Net* net, cv::_InputArray* blob, cv::String* name, double scalefactor, CvScalar* mean)
+void cveDnnNetSetInput(cv::dnn::Net* net, cv::_InputArray* blob, cv::String* name, double scalefactor, cv::Scalar* mean)
 {
 #ifdef HAVE_OPENCV_DNN
 	net->setInput(*blob, name ? *name : "", scalefactor, *mean);
@@ -331,8 +331,8 @@ void cveDnnBlobFromImage(
 	cv::_InputArray* image,
 	cv::_OutputArray* blob,
 	double scalefactor,
-	CvSize* size,
-	CvScalar* mean,
+	cv::Size* size,
+	cv::Scalar* mean,
 	bool swapRB,
 	bool crop,
 	int ddepth
@@ -349,8 +349,8 @@ void cveDnnBlobFromImages(
 	cv::_InputArray* images,
 	cv::_OutputArray* blob,
 	double scalefactor,
-	CvSize* size,
-	CvScalar* mean,
+	cv::Size* size,
+	cv::Scalar* mean,
 	bool swapRB,
 	bool crop,
 	int ddepth)
@@ -681,7 +681,7 @@ void cveModelPredict(cv::dnn::Model* model, cv::_InputArray* frame, cv::_OutputA
 #endif
 }
 
-void cveModelSetInputMean(cv::dnn::Model* model, CvScalar* mean)
+void cveModelSetInputMean(cv::dnn::Model* model, cv::Scalar* mean)
 {
 #ifdef HAVE_OPENCV_DNN
 	model->setInputMean(*mean);
@@ -697,7 +697,7 @@ void cveModelSetInputScale(cv::dnn::Model* model, double value)
 	throw_no_dnn();
 #endif
 }
-void cveModelSetInputSize(cv::dnn::Model* model, CvSize* size)
+void cveModelSetInputSize(cv::dnn::Model* model, cv::Size* size)
 {
 #ifdef HAVE_OPENCV_DNN
 	model->setInputSize(*size);

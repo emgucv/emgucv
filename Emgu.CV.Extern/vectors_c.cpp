@@ -89,7 +89,7 @@ void VectorOfKeyPointFilterByPixelsMask(std::vector<cv::KeyPoint>* keypoints, cv
 {
 #ifdef HAVE_OPENCV_FEATURES
 	//cv::Mat m = cv::cvarrToMat(mask);
-	cv::KeyPointsFilter::runByPixelsMask(*keypoints, mask);
+	cv::KeyPointsFilter::runByPixelsMask(*keypoints, *mask);
 #else
 	vectors_throw_no_features();
 #endif

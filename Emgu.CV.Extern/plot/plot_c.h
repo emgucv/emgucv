@@ -27,11 +27,11 @@ CVAPI(cv::plot::Plot2d*) cvePlot2dCreateFromXY(cv::_InputArray* dataX, cv::_Inpu
 CVAPI(void) cvePlot2dRender(cv::plot::Plot2d* plot, cv::_OutputArray* result);
 CVAPI(void) cvePlot2dRelease(cv::plot::Plot2d** plot, cv::Ptr<cv::plot::Plot2d>** sharedPtr);
 
-CVAPI(void) cvePlot2dSetPlotLineColor(cv::plot::Plot2d* plot, CvScalar* plotLineColor);
-CVAPI(void) cvePlot2dSetPlotBackgroundColor(cv::plot::Plot2d* plot, CvScalar* plotBackgroundColor);
-CVAPI(void) cvePlot2dSetPlotAxisColor(cv::plot::Plot2d* plot, CvScalar* plotAxisColor);
-CVAPI(void) cvePlot2dSetPlotGridColor(cv::plot::Plot2d* plot, CvScalar* plotGridColor);
-CVAPI(void) cvePlot2dSetPlotTextColor(cv::plot::Plot2d* plot, CvScalar* plotTextColor);
+CVAPI(void) cvePlot2dSetPlotLineColor(cv::plot::Plot2d* plot, cv::Scalar* plotLineColor);
+CVAPI(void) cvePlot2dSetPlotBackgroundColor(cv::plot::Plot2d* plot, cv::Scalar* plotBackgroundColor);
+CVAPI(void) cvePlot2dSetPlotAxisColor(cv::plot::Plot2d* plot, cv::Scalar* plotAxisColor);
+CVAPI(void) cvePlot2dSetPlotGridColor(cv::plot::Plot2d* plot, cv::Scalar* plotGridColor);
+CVAPI(void) cvePlot2dSetPlotTextColor(cv::plot::Plot2d* plot, cv::Scalar* plotTextColor);
 CVAPI(void) cvePlot2dSetPlotSize(cv::plot::Plot2d* plot, int plotSizeWidth, int plotSizeHeight);
 
 #endif

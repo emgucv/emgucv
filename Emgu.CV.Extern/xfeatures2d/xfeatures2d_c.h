@@ -178,4 +178,49 @@ CVAPI(void) cveMatchLOGOS(
 	std::vector< int >* nn1, 
 	std::vector< int >* nn2,
 	std::vector< cv::DMatch >* matches1to2);
+
+//Brisk
+CVAPI(cv::xfeatures2d::BRISK*) cveBriskCreate(int thresh, int octaves, float patternScale, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::BRISK>** sharedPtr);
+CVAPI(void) cveBriskRelease(cv::Ptr<cv::xfeatures2d::BRISK>** sharedPtr);
+
+
+//AKAZEDetector
+CVAPI(cv::xfeatures2d::AKAZE*) cveAKAZEDetectorCreate(
+	int descriptorType, int descriptorSize, int descriptorChannels,
+	float threshold, int octaves, int sublevels, int diffusivity,
+	cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::AKAZE>** sharedPtr);
+CVAPI(void) cveAKAZEDetectorRelease(cv::Ptr<cv::xfeatures2d::AKAZE>** sharedPtr);
+
+//KAZEDetector
+CVAPI(cv::xfeatures2d::KAZE*) cveKAZEDetectorCreate(
+	bool extended, bool upright, float threshold,
+	int octaves, int sublevels, int diffusivity,
+	cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::KAZE>** sharedPtr);
+CVAPI(void) cveKAZEDetectorRelease(cv::Ptr<cv::xfeatures2d::KAZE>** sharedPtr);
+
+
+//Agast
+CVAPI(cv::xfeatures2d::AgastFeatureDetector*) cveAgastFeatureDetectorCreate(int threshold, bool nonmaxSuppression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::AgastFeatureDetector>** sharedPtr);
+CVAPI(void) cveAgastFeatureDetectorRelease(cv::Ptr<cv::xfeatures2d::AgastFeatureDetector>** sharedPtr);
+
+
+//BowKMeansTrainer
+CVAPI(cv::xfeatures2d::BOWKMeansTrainer*) cveBOWKMeansTrainerCreate(int clusterCount, const cv::TermCriteria* termcrit, int attempts, int flags);
+CVAPI(void) cveBOWKMeansTrainerRelease(cv::xfeatures2d::BOWKMeansTrainer** trainer);
+CVAPI(int) cveBOWKMeansTrainerGetDescriptorCount(cv::xfeatures2d::BOWKMeansTrainer* trainer);
+CVAPI(void) cveBOWKMeansTrainerAdd(cv::xfeatures2d::BOWKMeansTrainer* trainer, cv::Mat* descriptors);
+CVAPI(void) cveBOWKMeansTrainerCluster(cv::xfeatures2d::BOWKMeansTrainer* trainer, cv::_OutputArray* cluster);
+
+//BOWImgDescriptorExtractor
+CVAPI(cv::xfeatures2d::BOWImgDescriptorExtractor*) cveBOWImgDescriptorExtractorCreate(cv::Feature2D* descriptorExtractor, cv::DescriptorMatcher* descriptorMatcher);
+CVAPI(void) cveBOWImgDescriptorExtractorRelease(cv::xfeatures2d::BOWImgDescriptorExtractor** descriptorExtractor);
+CVAPI(void) cveBOWImgDescriptorExtractorSetVocabulary(cv::xfeatures2d::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::Mat* vocabulary);
+CVAPI(void) cveBOWImgDescriptorExtractorCompute(
+	cv::xfeatures2d::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, 
+	cv::_InputArray* image, 
+	std::vector<cv::KeyPoint>* keypoints, 
+	cv::Mat* imgDescriptor);
+
+
+
 #endif

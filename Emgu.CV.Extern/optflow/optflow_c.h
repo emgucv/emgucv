@@ -47,7 +47,7 @@ CVAPI(void) cveRLOFOpticalFlowParameterRelease(cv::optflow::RLOFOpticalFlowParam
 CVAPI(cv::optflow::DenseRLOFOpticalFlow*) cveDenseRLOFOpticalFlowCreate(
 	cv::optflow::RLOFOpticalFlowParameter* rlofParameter, 
 	float forwardBackwardThreshold,
-	CvSize* gridStep,
+	cv::Size* gridStep,
 	int interpType,
 	int epicK,
 	float epicSigma,

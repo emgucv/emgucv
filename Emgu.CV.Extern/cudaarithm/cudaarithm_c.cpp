@@ -89,7 +89,7 @@ void cudaMerge(std::vector< cv::cuda::GpuMat >* src, cv::_OutputArray* dst, cv::
 }
 
 //only support single channel gpuMat
-void cudaMinMaxLoc(cv::_InputArray* src, double* minVal, double* maxVal, CvPoint* minLoc, CvPoint* maxLoc, cv::_InputArray* mask)
+void cudaMinMaxLoc(cv::_InputArray* src, double* minVal, double* maxVal, cv::Point* minLoc, cv::Point* maxLoc, cv::_InputArray* mask)
 {
 #ifdef HAVE_OPENCV_CUDAARITHM
 	cv::Point minimunLoc, maximunLoc;
@@ -112,7 +112,7 @@ void cudaFindMinMaxLoc(cv::_InputArray* src, cv::_OutputArray* minMaxVals, cv::_
 }
 
 
-void cudaMeanStdDev(cv::_InputArray* mtx, CvScalar* mean, CvScalar* stddev)
+void cudaMeanStdDev(cv::_InputArray* mtx, cv::Scalar* mean, cv::Scalar* stddev)
 {
 #ifdef HAVE_OPENCV_CUDAARITHM
 	cv::Scalar meanVal, stdDevVal;
@@ -159,7 +159,7 @@ void cudaCalcNormDiff(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputA
 #endif
 }
 
-void cudaAbsSum(cv::_InputArray* src, CvScalar* sum, cv::_InputArray* mask)
+void cudaAbsSum(cv::_InputArray* src, cv::Scalar* sum, cv::_InputArray* mask)
 {
 #ifdef HAVE_OPENCV_CUDAARITHM
 	*sum = cvScalar(cv::cuda::absSum(*src, mask ? *mask : (cv::_InputArray) cv::noArray()));
@@ -175,7 +175,7 @@ void cudaCalcAbsSum(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray
 	throw_no_cudaarithm();
 #endif
 }
-void cudaSqrSum(cv::_InputArray* src, CvScalar* sqrSum, cv::_InputArray* mask)
+void cudaSqrSum(cv::_InputArray* src, cv::Scalar* sqrSum, cv::_InputArray* mask)
 {
 #ifdef HAVE_OPENCV_CUDAARITHM
 	*sqrSum = cvScalar(cv::cuda::sqrSum(*src, mask ? *mask : (cv::_InputArray) cv::noArray()));
@@ -283,7 +283,7 @@ void cudaGemm(cv::_InputArray* src1, cv::_InputArray* src2, double alpha,
 #endif
 }
 
-void cudaLShift(cv::_InputArray* a, CvScalar* scale, cv::_OutputArray* c, cv::cuda::Stream* stream)
+void cudaLShift(cv::_InputArray* a, cv::Scalar* scale, cv::_OutputArray* c, cv::cuda::Stream* stream)
 {
 #ifdef HAVE_OPENCV_CUDAARITHM
 	cv::cuda::lshift(*a, static_cast<cv::Scalar>(*scale), *c, stream ? *stream : cv::cuda::Stream::Null());
@@ -292,7 +292,7 @@ void cudaLShift(cv::_InputArray* a, CvScalar* scale, cv::_OutputArray* c, cv::cu
 #endif
 }
 
-void cudaRShift(cv::_InputArray* a, CvScalar* scale, cv::_OutputArray* c, cv::cuda::Stream* stream)
+void cudaRShift(cv::_InputArray* a, cv::Scalar* scale, cv::_OutputArray* c, cv::cuda::Stream* stream)
 {
 #ifdef HAVE_OPENCV_CUDAARITHM
 	cv::cuda::rshift(*a, static_cast<cv::Scalar>(*scale), *c, stream ? *stream : cv::cuda::Stream::Null());
@@ -400,7 +400,7 @@ double cudaThreshold(cv::_InputArray* src, cv::_OutputArray* dst, double thresh,
 #endif
 }
 
-void cudaCopyMakeBorder(cv::_InputArray* src, cv::_OutputArray* dst, int top, int bottom, int left, int right, int gpuBorderType, const CvScalar* value, cv::cuda::Stream* stream)
+void cudaCopyMakeBorder(cv::_InputArray* src, cv::_OutputArray* dst, int top, int bottom, int left, int right, int gpuBorderType, const cv::Scalar* value, cv::cuda::Stream* stream)
 {
 #ifdef HAVE_OPENCV_CUDAARITHM
 	cv::cuda::copyMakeBorder(*src, *dst, top, bottom, left, right, gpuBorderType, *value, stream ? *stream : cv::cuda::Stream::Null());
@@ -427,7 +427,7 @@ void cudaSqrIntegral(cv::_InputArray* src, cv::_OutputArray* sqrSum, cv::cuda::S
 #endif
 }
 
-void cudaDft(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* dftSize, int flags, cv::cuda::Stream* stream)
+void cudaDft(cv::_InputArray* src, cv::_OutputArray* dst, cv::Size* dftSize, int flags, cv::cuda::Stream* stream)
 {
 #ifdef HAVE_OPENCV_CUDAARITHM
 	cv::cuda::dft(*src, *dst, *dftSize, flags | (dst->channels() == 1 ? cv::DFT_REAL_OUTPUT : 0), stream ? *stream : cv::cuda::Stream::Null());
@@ -528,7 +528,7 @@ void cudaSetGlDevice(int device)
 #endif
 }
 
-cv::cuda::Convolution* cudaConvolutionCreate(CvSize* userBlockSize, cv::Ptr<cv::cuda::Convolution>** sharedPtr)
+cv::cuda::Convolution* cudaConvolutionCreate(cv::Size* userBlockSize, cv::Ptr<cv::cuda::Convolution>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_CUDAARITHM
 	cv::Ptr<cv::cuda::Convolution> ptr = cv::cuda::createConvolution(*userBlockSize);
@@ -556,7 +556,7 @@ void cudaConvolutionRelease(cv::Ptr<cv::cuda::Convolution>** convolution)
 #endif
 }
 
-void cudaInRange(cv::_InputArray* src, CvScalar* lowerb, CvScalar* upperb, cv::_OutputArray* dst, cv::cuda::Stream* stream)
+void cudaInRange(cv::_InputArray* src, cv::Scalar* lowerb, cv::Scalar* upperb, cv::_OutputArray* dst, cv::cuda::Stream* stream)
 {
 #ifdef HAVE_OPENCV_CUDAARITHM
 	cv::cuda::inRange(*src, *lowerb, *upperb, *dst, stream ? *stream : cv::cuda::Stream::Null());

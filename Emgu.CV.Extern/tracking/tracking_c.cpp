@@ -143,7 +143,7 @@ void cveTrackerCSRTRelease(cv::TrackerCSRT** tracker, cv::Ptr<cv::TrackerCSRT>**
 }
 
 
-bool cveLegacyTrackerInit(cv::legacy::Tracker* tracker, cv::Mat* image, CvRect* boundingBox)
+bool cveLegacyTrackerInit(cv::legacy::Tracker* tracker, cv::Mat* image, cv::Rect* boundingBox)
 {
 #ifdef HAVE_OPENCV_TRACKING
 	return tracker->init(*image, *boundingBox);
@@ -151,12 +151,12 @@ bool cveLegacyTrackerInit(cv::legacy::Tracker* tracker, cv::Mat* image, CvRect* 
 	throw_no_tracking();
 #endif
 }
-bool cveLegacyTrackerUpdate(cv::legacy::Tracker* tracker, cv::Mat* image, CvRect* boundingBox)
+bool cveLegacyTrackerUpdate(cv::legacy::Tracker* tracker, cv::Mat* image, cv::Rect* boundingBox)
 {
 #ifdef HAVE_OPENCV_TRACKING
 	cv::Rect2d box;
 	bool result = tracker->update(*image, box);
-	*boundingBox = cvRect(box);
+	*boundingBox = box;
 	return result;
 #else
 	throw_no_tracking();
@@ -200,10 +200,10 @@ void cveTrackerBoostingRelease(cv::legacy::TrackerBoosting** tracker, cv::Ptr<cv
 
 cv::legacy::TrackerMedianFlow* cveTrackerMedianFlowCreate(
 	int pointsInGrid, 
-	CvSize* winSize, 
+	cv::Size* winSize, 
 	int maxLevel, 
-	CvTermCriteria* termCriteria, 
-	CvSize* winSizeNCC, 
+	cv::TermCriteria* termCriteria, 
+	cv::Size* winSizeNCC, 
 	double maxMedianLengthOfDisplacementDifference, 
 	cv::legacy::Tracker** tracker,
 	cv::Ptr<cv::legacy::TrackerMedianFlow>** sharedPtr)
@@ -289,7 +289,7 @@ cv::legacy::MultiTracker* cveMultiTrackerCreate()
 	throw_no_tracking();
 #endif
 }
-bool cveMultiTrackerAdd(cv::legacy::MultiTracker* multiTracker, cv::legacy::Tracker* tracker, cv::_InputArray* image, CvRect* boundingBox)
+bool cveMultiTrackerAdd(cv::legacy::MultiTracker* multiTracker, cv::legacy::Tracker* tracker, cv::_InputArray* image, cv::Rect* boundingBox)
 {
 #ifdef HAVE_OPENCV_TRACKING
 	cv::Ptr<cv::legacy::Tracker> trackerPtr(tracker, [](cv::legacy::Tracker*) {});
@@ -299,7 +299,7 @@ bool cveMultiTrackerAdd(cv::legacy::MultiTracker* multiTracker, cv::legacy::Trac
 #endif
 }
 
-bool cveMultiTrackerUpdate(cv::legacy::MultiTracker* tracker, cv::Mat* image, std::vector<CvRect>* boundingBox)
+bool cveMultiTrackerUpdate(cv::legacy::MultiTracker* tracker, cv::Mat* image, std::vector< cv::Rect >* boundingBox)
 {
 #ifdef HAVE_OPENCV_TRACKING
 	std::vector<cv::Rect2d> bb;
@@ -307,7 +307,7 @@ bool cveMultiTrackerUpdate(cv::legacy::MultiTracker* tracker, cv::Mat* image, st
 	boundingBox->clear();
 	for (std::vector<cv::Rect2d>::iterator it = bb.begin(); it != bb.end(); ++it)
 	{
-		boundingBox->push_back(cvRect(*it));
+		boundingBox->push_back( *it );
 	}
 	return result;
 #else
@@ -324,14 +324,14 @@ void cveMultiTrackerRelease(cv::legacy::MultiTracker** tracker)
 #endif
 }
 
-void cveMultiTrackerGetObjects(cv::legacy::MultiTracker* tracker, std::vector<CvRect>* boundingBox)
+void cveMultiTrackerGetObjects(cv::legacy::MultiTracker* tracker, std::vector< cv::Rect >* boundingBox)
 {
 #ifdef HAVE_OPENCV_TRACKING
 	std::vector<cv::Rect2d> bb = tracker->getObjects();
 	boundingBox->clear();
 	for (std::vector<cv::Rect2d>::iterator it = bb.begin(); it != bb.end(); ++it)
 	{
-		boundingBox->push_back(cvRect(*it));
+		boundingBox->push_back( *it );
 	}
 #else
 	throw_no_tracking();

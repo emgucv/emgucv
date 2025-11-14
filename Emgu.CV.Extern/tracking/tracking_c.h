@@ -91,13 +91,13 @@ CVAPI(cv::TrackerCSRT*) cveTrackerCSRTCreate(
 CVAPI(void) cveTrackerCSRTRelease(cv::TrackerCSRT** tracker, cv::Ptr<cv::TrackerCSRT>** sharedPtr);
 
 
-CVAPI(bool) cveLegacyTrackerInit(cv::legacy::Tracker* tracker, cv::Mat* image, CvRect* boundingBox);
-CVAPI(bool) cveLegacyTrackerUpdate(cv::legacy::Tracker* tracker, cv::Mat* image, CvRect* boundingBox);
+CVAPI(bool) cveLegacyTrackerInit(cv::legacy::Tracker* tracker, cv::Mat* image, cv::Rect* boundingBox);
+CVAPI(bool) cveLegacyTrackerUpdate(cv::legacy::Tracker* tracker, cv::Mat* image, cv::Rect* boundingBox);
 
 CVAPI(cv::legacy::TrackerBoosting*) cveTrackerBoostingCreate(int numClassifiers, float samplerOverlap, float samplerSearchFactor, int iterationInit, int featureSetNumFeatures, cv::legacy::Tracker** tracker, cv::Ptr<cv::legacy::TrackerBoosting>** sharedPtr);
 CVAPI(void) cveTrackerBoostingRelease(cv::legacy::TrackerBoosting** tracker, cv::Ptr<cv::legacy::TrackerBoosting>** sharedPtr);
 
-CVAPI(cv::legacy::TrackerMedianFlow*) cveTrackerMedianFlowCreate(int pointsInGrid, CvSize* winSize, int maxLevel, CvTermCriteria* termCriteria, CvSize* winSizeNCC, double maxMedianLengthOfDisplacementDifference, cv::legacy::Tracker** tracker, cv::Ptr<cv::legacy::TrackerMedianFlow>** sharedPtr);
+CVAPI(cv::legacy::TrackerMedianFlow*) cveTrackerMedianFlowCreate(int pointsInGrid, cv::Size* winSize, int maxLevel, cv::TermCriteria* termCriteria, cv::Size* winSizeNCC, double maxMedianLengthOfDisplacementDifference, cv::legacy::Tracker** tracker, cv::Ptr<cv::legacy::TrackerMedianFlow>** sharedPtr);
 CVAPI(void) cveTrackerMedianFlowRelease(cv::legacy::TrackerMedianFlow** tracker, cv::Ptr<cv::legacy::TrackerMedianFlow>** sharedPtr);
 
 CVAPI(cv::legacy::TrackerTLD*) cveTrackerTLDCreate(cv::legacy::Tracker** tracker, cv::Ptr<cv::legacy::TrackerTLD>** sharedPtr);
@@ -107,9 +107,9 @@ CVAPI(cv::legacy::TrackerMOSSE*) cveTrackerMOSSECreate(cv::legacy::Tracker** tra
 CVAPI(void) cveTrackerMOSSERelease(cv::legacy::TrackerMOSSE** tracker, cv::Ptr<cv::legacy::TrackerMOSSE>** sharedPtr);
 
 CVAPI(cv::legacy::MultiTracker*) cveMultiTrackerCreate();
-CVAPI(bool) cveMultiTrackerAdd(cv::legacy::MultiTracker* multiTracker, cv::legacy::Tracker* tracker, cv::_InputArray* image, CvRect* boundingBox);
-CVAPI(bool) cveMultiTrackerUpdate(cv::legacy::MultiTracker* tracker, cv::Mat* image, std::vector<CvRect>* boundingBox);
+CVAPI(bool) cveMultiTrackerAdd(cv::legacy::MultiTracker* multiTracker, cv::legacy::Tracker* tracker, cv::_InputArray* image, cv::Rect* boundingBox);
+CVAPI(bool) cveMultiTrackerUpdate(cv::legacy::MultiTracker* tracker, cv::Mat* image, std::vector< cv::Rect >* boundingBox);
 CVAPI(void) cveMultiTrackerRelease(cv::legacy::MultiTracker** tracker);
-CVAPI(void) cveMultiTrackerGetObjects(cv::legacy::MultiTracker* tracker, std::vector<CvRect>* boundingBox);
+CVAPI(void) cveMultiTrackerGetObjects(cv::legacy::MultiTracker* tracker, std::vector< cv::Rect >* boundingBox);
 
 #endif

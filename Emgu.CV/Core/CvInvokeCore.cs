@@ -2418,7 +2418,7 @@ namespace Emgu.CV
             set { cveSetUseOptimized(value); }
         }
 
-
+        /*
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         private static extern bool cveHaveOpenVX();
@@ -2436,6 +2436,16 @@ namespace Emgu.CV
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         private static extern bool cveUseOpenVX();
 
+
+        /// <summary>
+        /// Check if use of OpenVX is used.
+        /// </summary>
+        /// <returns>True use of OpenVX is used.</returns>
+        public static bool UseOpenVX
+        {
+            get { return cveUseOpenVX(); }
+        }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveSetUseOpenVX(
             [MarshalAs(BoolMarshalType)] 
@@ -2449,6 +2459,7 @@ namespace Emgu.CV
             get { return cveUseOpenVX(); }
             set { cveSetUseOpenVX(value); }
         }
+        */
 
         /// <summary>
         /// Returns full configuration time cmake output.

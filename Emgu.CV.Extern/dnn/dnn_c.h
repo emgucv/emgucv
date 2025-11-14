@@ -72,7 +72,7 @@ CVAPI(cv::dnn::Net*) cveReadNet(cv::String* model, cv::String* config, cv::Strin
 CVAPI(cv::dnn::Net*) cveReadNetFromModelOptimizer(cv::String* xml, cv::String* bin);
 
 CVAPI(cv::dnn::Net*) cveDnnNetCreate();
-CVAPI(void) cveDnnNetSetInput(cv::dnn::Net* net, cv::_InputArray* blob, cv::String* name, double scalefactor, CvScalar* mean);
+CVAPI(void) cveDnnNetSetInput(cv::dnn::Net* net, cv::_InputArray* blob, cv::String* name, double scalefactor, cv::Scalar* mean);
 
 CVAPI(void) cveDnnNetForward(cv::dnn::Net* net, cv::String* outputName, cv::Mat* output);
 CVAPI(void) cveDnnNetForward2(cv::dnn::Net* net, cv::_OutputArray* outputBlobs, cv::String* outputName);
@@ -99,8 +99,8 @@ CVAPI(void) cveDnnBlobFromImage(
 	cv::_InputArray* image, 
 	cv::_OutputArray* blob,
 	double scalefactor, 
-	CvSize* size,
-	CvScalar* mean, 
+	cv::Size* size,
+	cv::Scalar* mean, 
 	bool swapRB,
 	bool crop,
 	int ddepth);
@@ -109,8 +109,8 @@ CVAPI(void) cveDnnBlobFromImages(
 	cv::_InputArray* images,
 	cv::_OutputArray* blob,
 	double scalefactor,
-	CvSize* size, 
-	CvScalar* mean, 
+	cv::Size* size, 
+	cv::Scalar* mean, 
 	bool swapRB,
 	bool crop,
 	int ddepth);
@@ -194,9 +194,9 @@ CVAPI(cv::dnn::Model*) cveModelCreateFromNet(cv::dnn::Net* network);
 CVAPI(void) cveModelRelease(cv::dnn::Model** model);
 CVAPI(void) cveModelPredict(cv::dnn::Model* model, cv::_InputArray* frame, cv::_OutputArray* outs);
 
-CVAPI(void) cveModelSetInputMean(cv::dnn::Model* model, CvScalar* mean);
+CVAPI(void) cveModelSetInputMean(cv::dnn::Model* model, cv::Scalar* mean);
 CVAPI(void) cveModelSetInputScale(cv::dnn::Model* model, double value);
-CVAPI(void) cveModelSetInputSize(cv::dnn::Model* model, CvSize* size);
+CVAPI(void) cveModelSetInputSize(cv::dnn::Model* model, cv::Size* size);
 CVAPI(void) cveModelSetInputCrop(cv::dnn::Model* model, bool crop);
 CVAPI(void) cveModelSetInputSwapRB(cv::dnn::Model* model, bool swapRB);
 CVAPI(void) cveModelSetPreferableBackend(cv::dnn::Model* model, int backendId);

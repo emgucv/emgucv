@@ -12,7 +12,7 @@
 //
 //----------------------------------------------------------------------------
 
-cv::cudacodec::VideoWriter* cudaVideoWriterCreate(cv::String* fileName, CvSize* frameSize, cv::cudacodec::Codec codec, double fps, cv::cudacodec::ColorFormat colorFormat, cv::cuda::Stream* stream, cv::Ptr<cv::cudacodec::VideoWriter>** sharedPtr)
+cv::cudacodec::VideoWriter* cudaVideoWriterCreate(cv::String* fileName, cv::Size* frameSize, cv::cudacodec::Codec codec, double fps, cv::cudacodec::ColorFormat colorFormat, cv::cuda::Stream* stream, cv::Ptr<cv::cudacodec::VideoWriter>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_CUDACODEC
 	cv::Ptr<cv::cudacodec::VideoWriter> ptr = cv::cudacodec::createVideoWriter(*fileName, *frameSize, codec, fps, colorFormat, 0, stream ? *stream : cv::cuda::Stream::Null());

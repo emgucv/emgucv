@@ -9,8 +9,9 @@ using System.Text;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
+using Emgu.CV.Features;
 
-namespace Emgu.CV.Features
+namespace Emgu.CV.XFeatures2D
 {
     /// <summary>
     /// Wrapped AKAZE detector
@@ -60,7 +61,7 @@ namespace Emgu.CV.Features
             int nOctaveLayers = 4,
             KAZE.Diffusivity diffusivity = KAZE.Diffusivity.PmG2)
         {
-            _ptr = Features2DInvoke.cveAKAZEDetectorCreate(
+            _ptr = XFeatures2DInvoke.cveAKAZEDetectorCreate(
                descriptorType, descriptorSize, descriptorChannels,
                threshold, nOctaves, nOctaveLayers, diffusivity,
                ref _feature2D, ref _sharedPtr);
@@ -72,13 +73,13 @@ namespace Emgu.CV.Features
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                Features2DInvoke.cveAKAZEDetectorRelease(ref _sharedPtr);
+                XFeatures2DInvoke.cveAKAZEDetectorRelease(ref _sharedPtr);
             base.DisposeObject();
         }
 
     }
 
-    public static partial class Features2DInvoke
+    public static partial class XFeatures2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveAKAZEDetectorCreate(

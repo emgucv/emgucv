@@ -34,7 +34,7 @@ CVAPI(void) cveFindHomography(cv::_InputArray* srcPoints, cv::_InputArray* dstPo
 
 CVAPI(void) cveRQDecomp3x3(
 	cv::_InputArray* src,
-	CvPoint3D64f* out,
+	cv::Point3d* out,
 	cv::_OutputArray* mtxR,
 	cv::_OutputArray* mtxQ,
 	cv::_OutputArray* Qx,
@@ -75,7 +75,7 @@ CVAPI(void) cveSolvePnPRefineLM(
 	cv::_InputArray* distCoeffs,
 	cv::_InputOutputArray* rvec,
 	cv::_InputOutputArray* tvec,
-	CvTermCriteria* criteria);
+	cv::TermCriteria* criteria);
 
 CVAPI(void) cveSolvePnPRefineVVS(
 	cv::_InputArray* objectPoints,
@@ -84,7 +84,7 @@ CVAPI(void) cveSolvePnPRefineVVS(
 	cv::_InputArray* distCoeffs,
 	cv::_InputOutputArray* rvec,
 	cv::_InputOutputArray* tvec,
-	CvTermCriteria* criteria,
+	cv::TermCriteria* criteria,
 	double VVSlambda);
 
 CVAPI(int) cveSolvePnPGeneric(
@@ -185,16 +185,16 @@ CVAPI(void) cveEstimateAffinePartial2D(
 	int refineIters,
 	cv::Mat* affine);
 
-CVAPI(void) cveInitUndistortRectifyMap(cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* r, cv::_InputArray* newCameraMatrix, CvSize* size, int m1type, cv::_OutputArray* map1, cv::_OutputArray* map2);
+CVAPI(void) cveInitUndistortRectifyMap(cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* r, cv::_InputArray* newCameraMatrix, cv::Size* size, int m1type, cv::_OutputArray* map1, cv::_OutputArray* map2);
 CVAPI(void) cveUndistort(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* cameraMatrix, cv::_InputArray* distorCoeffs, cv::_InputArray* newCameraMatrix);
 CVAPI(void) cveUndistortPoints(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* r, cv::_InputArray* p);
 
-CVAPI(void) cveGetDefaultNewCameraMatrix(cv::_InputArray* cameraMatrix, CvSize* imgsize, bool centerPrincipalPoint, cv::Mat* cm);
+CVAPI(void) cveGetDefaultNewCameraMatrix(cv::_InputArray* cameraMatrix, cv::Size* imgsize, bool centerPrincipalPoint, cv::Mat* cm);
 
 CVAPI(void) cveGetOptimalNewCameraMatrix(
 	cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs,
-	CvSize* imageSize, double alpha, CvSize* newImgSize,
-	CvRect* validPixROI,
+	cv::Size* imageSize, double alpha, cv::Size* newImgSize,
+	cv::Rect* validPixROI,
 	bool centerPrincipalPoint,
 	cv::Mat* newCameraMatrix);
 

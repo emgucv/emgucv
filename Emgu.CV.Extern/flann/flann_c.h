@@ -8,7 +8,8 @@
 #ifndef EMGU_FLANN_C_H
 #define EMGU_FLANN_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_FLANN
 #include "opencv2/flann/flann.hpp"

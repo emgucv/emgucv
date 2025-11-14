@@ -1319,7 +1319,7 @@ ENDMACRO()
 	""
     "#include \"opencv2/core/cuda.hpp\"
     #include \"opencv2/core.hpp\"
-    #include \"cvapi_compat.h\"
+    #include \"cvapi_compat.h\""
 	""
 	""
 	${HAVE_opencv_core})

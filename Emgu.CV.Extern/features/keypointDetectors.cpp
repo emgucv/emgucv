@@ -29,34 +29,12 @@ void cveOrbRelease(cv::Ptr<cv::ORB>** sharedPtr)
 #endif
 }
 
-//Brisk
-cv::BRISK* cveBriskCreate(int thresh, int octaves, float patternScale, cv::Feature2D** feature2D, cv::Ptr<cv::BRISK>** sharedPtr)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	cv::Ptr<cv::BRISK> briskPtr = cv::BRISK::create(thresh, octaves, patternScale);
-	*sharedPtr = new cv::Ptr<cv::BRISK>(briskPtr);
-	*feature2D = dynamic_cast<cv::Feature2D*>(briskPtr.get());
-	return briskPtr.get();
-#else
-	throw_no_features();
-#endif
-}
-
-void cveBriskRelease(cv::Ptr<cv::BRISK>** sharedPtr)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	delete *sharedPtr;
-	*sharedPtr = 0;
-#else
-	throw_no_features();
-#endif
-}
 
 // detect corners using FAST algorithm
-cv::FastFeatureDetector* cveFASTFeatureDetectorCreate(int threshold, bool nonmax_supression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::FastFeatureDetector>** sharedPtr)
+cv::FastFeatureDetector* cveFASTFeatureDetectorCreate(int threshold, bool nonmaxSupression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::FastFeatureDetector>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_FEATURES
-	cv::Ptr<cv::FastFeatureDetector> fastPtr = cv::FastFeatureDetector::create(threshold, nonmax_supression, static_cast<cv::FastFeatureDetector::DetectorType>( type ));
+	cv::Ptr<cv::FastFeatureDetector> fastPtr = cv::FastFeatureDetector::create(threshold, nonmaxSupression, static_cast<cv::FastFeatureDetector::DetectorType>( type ));
 	*sharedPtr = new cv::Ptr<cv::FastFeatureDetector>(fastPtr);
 	*feature2D = dynamic_cast<cv::Feature2D*>(fastPtr.get());
 	return fastPtr.get();
@@ -215,8 +193,8 @@ void cveDrawMatchedFeatures1(
 	const std::vector<cv::KeyPoint>* keypoints2,
 	std::vector< cv::DMatch >* matches,
 	cv::_InputOutputArray* outImg,
-	const CvScalar* matchColor,
-	const CvScalar* singlePointColor,
+	const cv::Scalar* matchColor,
+	const cv::Scalar* singlePointColor,
 	std::vector< unsigned char >* matchesMask,
 	int flags)
 {
@@ -249,8 +227,8 @@ void cveDrawMatchedFeatures2(
 	const std::vector<cv::KeyPoint>* keypoints2,
 	std::vector< std::vector< cv::DMatch > >* matches,
 	cv::_InputOutputArray* outImg,
-	const CvScalar* matchColor, 
-	const CvScalar* singlePointColor,
+	const cv::Scalar* matchColor, 
+	const cv::Scalar* singlePointColor,
 	std::vector< std::vector< unsigned char > >* matchesMask,
 	int flags)
 {
@@ -288,7 +266,8 @@ void cveDrawMatchedFeatures3(
 	cv::_InputArray* img2, const std::vector<cv::KeyPoint>* keypoints2,
 	std::vector< std::vector< cv::DMatch > >* matches,
 	cv::_InputOutputArray* outImg,
-	const CvScalar* matchColor, const CvScalar* singlePointColor,
+	const cv::Scalar* matchColor, 
+	const cv::Scalar* singlePointColor,
 	cv::_InputArray* matchesMask,
 	int flags)
 {
@@ -662,165 +641,7 @@ void cveGFTTDetectorRelease(cv::Ptr<cv::GFTTDetector>** sharedPtr)
 }
 
 
-//BowKMeansTrainer
-cv::BOWKMeansTrainer* cveBOWKMeansTrainerCreate(int clusterCount, const CvTermCriteria* termcrit, int attempts, int flags)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	return new cv::BOWKMeansTrainer(clusterCount, *termcrit, attempts, flags);
-#else
-	throw_no_features();
-#endif
-}
-void cveBOWKMeansTrainerRelease(cv::BOWKMeansTrainer** trainer)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	delete * trainer;
-	*trainer = 0;
-#else
-	throw_no_features();
-#endif
-}
-int cveBOWKMeansTrainerGetDescriptorCount(cv::BOWKMeansTrainer* trainer)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	return trainer->descriptorsCount();
-#else
-	throw_no_features();
-#endif
-}
-void cveBOWKMeansTrainerAdd(cv::BOWKMeansTrainer* trainer, cv::Mat* descriptors)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	trainer->add(*descriptors);
-#else
-	throw_no_features();
-#endif
-}
-void cveBOWKMeansTrainerCluster(cv::BOWKMeansTrainer* trainer, cv::_OutputArray* cluster)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	cv::Mat m = trainer->cluster();
-	m.copyTo(*cluster);
-#else
-	throw_no_features();
-#endif
-}
 
-//BOWImgDescriptorExtractor
-cv::BOWImgDescriptorExtractor* cveBOWImgDescriptorExtractorCreate(cv::Feature2D* descriptorExtractor, cv::DescriptorMatcher* descriptorMatcher)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	cv::Ptr<cv::Feature2D> extractorPtr(descriptorExtractor, [] (cv::Feature2D*) {});
-	
-	cv::Ptr<cv::DescriptorMatcher> matcherPtr(descriptorMatcher, [] (cv::DescriptorMatcher*){});
-	
-	return new cv::BOWImgDescriptorExtractor(extractorPtr, matcherPtr);
-#else
-	throw_no_features();
-#endif
-}
-void cveBOWImgDescriptorExtractorRelease(cv::BOWImgDescriptorExtractor** descriptorExtractor)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	delete *descriptorExtractor;
-	*descriptorExtractor = 0;
-#else
-	throw_no_features();
-#endif
-}
-void cveBOWImgDescriptorExtractorSetVocabulary(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::Mat* vocabulary)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	bowImgDescriptorExtractor->setVocabulary(*vocabulary);
-#else
-	throw_no_features();
-#endif
-}
-void cveBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* imgDescriptor)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	bowImgDescriptorExtractor->compute(*image, *keypoints, *imgDescriptor);
-#else
-	throw_no_features();
-#endif
-}
-
-//KAZEDetector
-cv::KAZE* cveKAZEDetectorCreate(
-	bool extended, bool upright, float threshold,
-	int octaves, int sublevels, int diffusivity,
-	cv::Feature2D** feature2D,
-	cv::Ptr<cv::KAZE>** sharedPtr)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	cv::Ptr<cv::KAZE> kazePtr = cv::KAZE::create(extended, upright, threshold, octaves, sublevels, static_cast<cv::KAZE::DiffusivityType>( diffusivity ));
-	*sharedPtr = new cv::Ptr<cv::KAZE>(kazePtr);
-	*feature2D = dynamic_cast<cv::Feature2D*>(kazePtr.get());
-
-	return kazePtr.get();
-#else
-	throw_no_features();
-#endif
-}
-void cveKAZEDetectorRelease(cv::Ptr<cv::KAZE>** sharedPtr)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	delete *sharedPtr;
-	*sharedPtr = 0;
-#else
-	throw_no_features();
-#endif
-}
-
-
-//AKAZEDetector
-cv::AKAZE* cveAKAZEDetectorCreate(
-	int descriptorType, int descriptorSize, int descriptorChannels,
-	float threshold, int octaves, int sublevels, int diffusivity,
-	cv::Feature2D** feature2D,
-	cv::Ptr<cv::AKAZE>** sharedPtr)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	cv::Ptr<cv::AKAZE> akazePtr = cv::AKAZE::create( static_cast<cv::AKAZE::DescriptorType>( descriptorType ), descriptorSize, descriptorChannels, threshold, octaves, sublevels, static_cast<cv::KAZE::DiffusivityType>( diffusivity ));
-	*sharedPtr = new cv::Ptr<cv::AKAZE>(akazePtr);
-	*feature2D = dynamic_cast<cv::Feature2D*>(akazePtr.get());
-	return akazePtr.get();
-#else
-	throw_no_features();
-#endif
-}
-void cveAKAZEDetectorRelease(cv::Ptr<cv::AKAZE>** sharedPtr)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	delete *sharedPtr;
-	*sharedPtr = 0;
-#else
-	throw_no_features();
-#endif
-}
-
-
-//Agast
-cv::AgastFeatureDetector* cveAgastFeatureDetectorCreate(int threshold, bool nonmaxSuppression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::AgastFeatureDetector>** sharedPtr)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	cv::Ptr<cv::AgastFeatureDetector> agastPtr = cv::AgastFeatureDetector::create(threshold, nonmaxSuppression, static_cast<cv::AgastFeatureDetector::DetectorType>( type ));
-	*sharedPtr = new cv::Ptr<cv::AgastFeatureDetector>(agastPtr);
-	*feature2D = dynamic_cast<cv::Feature2D*>(agastPtr.get());
-	return agastPtr.get();
-#else
-	throw_no_features();
-#endif
-}
-void cveAgastFeatureDetectorRelease(cv::Ptr<cv::AgastFeatureDetector>** sharedPtr)
-{
-#ifdef HAVE_OPENCV_FEATURES
-	delete *sharedPtr;
-	*sharedPtr = 0;
-#else
-	throw_no_features();
-#endif
-}
 
 //SIFTDetector
 cv::SIFT* cveSIFTCreate(

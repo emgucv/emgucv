@@ -9,7 +9,8 @@
 #define EMGU_CUDACODEC_C_H
 
 #include "opencv2/opencv_modules.hpp"
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_CUDACODEC
 
@@ -57,7 +58,7 @@ namespace cv
 
 CVAPI(cv::cudacodec::VideoWriter*) cudaVideoWriterCreate(
 	cv::String* fileName, 
-	CvSize* frameSize, 
+	cv::Size* frameSize, 
 	cv::cudacodec::Codec codec, 
 	double fps, 
 	cv::cudacodec::ColorFormat colorFormat, 

@@ -358,7 +358,7 @@ void cveFacemarkTraining(cv::face::Facemark* facemark)
 }
 */
 
-void cveDrawFacemarks(cv::_InputOutputArray* image, cv::_InputArray* points, CvScalar* color)
+void cveDrawFacemarks(cv::_InputOutputArray* image, cv::_InputArray* points, cv::Scalar* color)
 {
 #ifdef HAVE_OPENCV_FACE
 	cv::face::drawFacemarks(*image, *points, *color);

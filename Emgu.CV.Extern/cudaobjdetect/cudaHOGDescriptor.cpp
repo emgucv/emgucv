@@ -17,10 +17,10 @@ void cudaHOGGetDefaultPeopleDetector(cv::cuda::HOG* descriptor, cv::Mat* detecto
 }
 
 cv::cuda::HOG* cudaHOGCreate(
-	CvSize* winSize,
-	CvSize* blockSize,
-	CvSize* blockStride,
-	CvSize* cellSize,
+	cv::Size* winSize,
+	cv::Size* blockSize,
+	cv::Size* blockStride,
+	cv::Size* cellSize,
 	int nbins,
 	cv::Ptr<cv::cuda::HOG>** sharedPtr)
 {

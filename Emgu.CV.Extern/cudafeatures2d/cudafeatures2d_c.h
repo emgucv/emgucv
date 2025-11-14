@@ -9,7 +9,8 @@
 #define EMGU_CUDAFEATURES2D_C_H
 
 #include "opencv2/opencv_modules.hpp"
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_CUDAFEATURES2D
 #include "opencv2/cudafeatures2d.hpp"

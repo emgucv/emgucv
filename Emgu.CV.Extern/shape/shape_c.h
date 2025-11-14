@@ -59,7 +59,7 @@ CVAPI(void) cveShapeTransformerWarpImage(
 	cv::_OutputArray* output,
 	int flags,
 	int borderMode,
-	CvScalar* borderValue);
+	cv::Scalar* borderValue);
 
 CVAPI(float) cveShapeDistanceExtractorComputeDistance(cv::ShapeDistanceExtractor* extractor, cv::_InputArray* contour1, cv::_InputArray* contour2);
 

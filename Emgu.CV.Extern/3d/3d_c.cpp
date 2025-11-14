@@ -26,7 +26,7 @@ void cveFindHomography(cv::_InputArray* srcPoints, cv::_InputArray* dstPoints, c
 
 void cveRQDecomp3x3(
 	cv::_InputArray* src,
-	CvPoint3D64f* out,
+	cv::Point3d* out,
 	cv::_OutputArray* mtxR,
 	cv::_OutputArray* mtxQ,
 	cv::_OutputArray* Qx,
@@ -158,7 +158,7 @@ void cveSolvePnPRefineLM(
 	cv::_InputArray* distCoeffs,
 	cv::_InputOutputArray* rvec,
 	cv::_InputOutputArray* tvec,
-	CvTermCriteria* criteria)
+	cv::TermCriteria* criteria)
 {
 #ifdef HAVE_OPENCV_3D
 	cv::solvePnPRefineLM(
@@ -181,7 +181,7 @@ void cveSolvePnPRefineVVS(
 	cv::_InputArray* distCoeffs,
 	cv::_InputOutputArray* rvec,
 	cv::_InputOutputArray* tvec,
-	CvTermCriteria* criteria,
+	cv::TermCriteria* criteria,
 	double VVSlambda)
 {
 #ifdef HAVE_OPENCV_3D
@@ -505,7 +505,15 @@ void cveEstimateAffinePartial2D(
 #endif
 }
 
-void cveInitUndistortRectifyMap(cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* r, cv::_InputArray* newCameraMatrix, CvSize* size, int m1type, cv::_OutputArray* map1, cv::_OutputArray* map2)
+void cveInitUndistortRectifyMap(
+	cv::_InputArray* cameraMatrix, 
+	cv::_InputArray* distCoeffs, 
+	cv::_InputArray* r, 
+	cv::_InputArray* newCameraMatrix, 
+	cv::Size* size, 
+	int m1type, 
+	cv::_OutputArray* map1, 
+	cv::_OutputArray* map2)
 {
 #ifdef HAVE_OPENCV_3D
 	cv::initUndistortRectifyMap(
@@ -550,7 +558,7 @@ void cveUndistortPoints(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputA
 #endif
 }
 
-void cveGetDefaultNewCameraMatrix(cv::_InputArray* cameraMatrix, CvSize* imgsize, bool centerPrincipalPoint, cv::Mat* cm)
+void cveGetDefaultNewCameraMatrix(cv::_InputArray* cameraMatrix, cv::Size* imgsize, bool centerPrincipalPoint, cv::Mat* cm)
 {
 #ifdef HAVE_OPENCV_3D
 	cv::Mat res = cv::getDefaultNewCameraMatrix(*cameraMatrix, *imgsize, centerPrincipalPoint);
@@ -562,8 +570,8 @@ void cveGetDefaultNewCameraMatrix(cv::_InputArray* cameraMatrix, CvSize* imgsize
 
 void cveGetOptimalNewCameraMatrix(
 	cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs,
-	CvSize* imageSize, double alpha, CvSize* newImgSize,
-	CvRect* validPixROI,
+	cv::Size* imageSize, double alpha, cv::Size* newImgSize,
+	cv::Rect* validPixROI,
 	bool centerPrincipalPoint,
 	cv::Mat* newCameraMatrix)
 {
@@ -602,7 +610,7 @@ cv::Octree* cveOctreeCreate()
 bool cveOctreeCreate2(cv::Octree* octree, std::vector< cv::Point3f >* pointCloud, int maxDepth)
 {
 #ifdef HAVE_OPENCV_3D
-	return octree->create(*pointCloud, maxDepth);
+	return octree->createWithDepth(maxDepth, *pointCloud);
 #else
 	throw_no_3d();
 #endif
@@ -661,7 +669,7 @@ void cveDrawFrameAxes(
 	float length,
 	int thickness)
 {
-#ifdef HAVE_OPENCV_CALIB3D
+#ifdef HAVE_OPENCV_3D
 	return cv::drawFrameAxes(
 		*image, 
 		*cameraMatrix,
@@ -671,6 +679,6 @@ void cveDrawFrameAxes(
 		length,
 		thickness);
 #else
-	throw_no_calib3d();
+	throw_no_3d();
 #endif
 }

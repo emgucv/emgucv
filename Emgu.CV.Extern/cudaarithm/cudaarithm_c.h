@@ -56,21 +56,21 @@ CVAPI(void) cudaPolarToCart(cv::_InputArray* magnitude, cv::_InputArray* angle, 
 CVAPI(void) cudaMerge(std::vector< cv::cuda::GpuMat >* src, cv::_OutputArray* dst, cv::cuda::Stream* stream);
 
 
-CVAPI(void) cudaMeanStdDev(cv::_InputArray* mtx, CvScalar* mean, CvScalar* stddev);
+CVAPI(void) cudaMeanStdDev(cv::_InputArray* mtx, cv::Scalar* mean, cv::Scalar* stddev);
 
 CVAPI(double) cudaNorm1(cv::_InputArray* src1, int normType, cv::_InputArray* mask);
 CVAPI(double) cudaNorm2(cv::_InputArray* src1, cv::_InputArray* src2, int normType);
 CVAPI(void) cudaCalcNorm(cv::_InputArray* src, cv::_OutputArray* dst,  int normType, cv::_InputArray* mask, cv::cuda::Stream* stream);
 CVAPI(void) cudaCalcNormDiff(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int normType, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaAbsSum(cv::_InputArray* src, CvScalar* sum, cv::_InputArray* mask);
+CVAPI(void) cudaAbsSum(cv::_InputArray* src, cv::Scalar* sum, cv::_InputArray* mask);
 CVAPI(void) cudaCalcAbsSum(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* mask, cv::cuda::Stream* stream);
-CVAPI(void) cudaSqrSum(cv::_InputArray* src, CvScalar* sqrSum, cv::_InputArray* mask);
+CVAPI(void) cudaSqrSum(cv::_InputArray* src, cv::Scalar* sqrSum, cv::_InputArray* mask);
 CVAPI(void) cudaCalcSqrSum(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* mask, cv::cuda::Stream* stream);
 
 
 //only support single channel gpuMat
-CVAPI(void) cudaMinMaxLoc(cv::_InputArray* src, double* minVal, double* maxVal, CvPoint* minLoc, CvPoint* maxLoc, cv::_InputArray* mask);
+CVAPI(void) cudaMinMaxLoc(cv::_InputArray* src, double* minVal, double* maxVal, cv::Point* minLoc, cv::Point* maxLoc, cv::_InputArray* mask);
 CVAPI(void) cudaFindMinMaxLoc(cv::_InputArray* src, cv::_OutputArray* minMaxVals, cv::_OutputArray* loc, cv::_InputArray* mask, cv::cuda::Stream* stream);
 
 CVAPI(int) cudaCountNonZero1(cv::_InputArray* src);
@@ -93,9 +93,9 @@ CVAPI(void) cudaMax(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArr
 CVAPI(void) cudaGemm(cv::_InputArray* src1, cv::_InputArray* src2, double alpha,
    cv::_InputArray* src3, double beta, cv::_OutputArray* dst, int flags, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaLShift(cv::_InputArray* a, CvScalar* scale, cv::_OutputArray* c, cv::cuda::Stream* stream);
+CVAPI(void) cudaLShift(cv::_InputArray* a, cv::Scalar* scale, cv::_OutputArray* c, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaRShift(cv::_InputArray* a, CvScalar* scale, cv::_OutputArray* c, cv::cuda::Stream* stream);
+CVAPI(void) cudaRShift(cv::_InputArray* a, cv::Scalar* scale, cv::_OutputArray* c, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaAdd(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray* c, cv::_InputArray* mask, int dtype, cv::cuda::Stream* stream);
 
@@ -119,13 +119,13 @@ CVAPI(void) cudaCompare(cv::_InputArray* a, cv::_InputArray* b, cv::_OutputArray
 
 CVAPI(double) cudaThreshold(cv::_InputArray* src, cv::_OutputArray* dst, double thresh, double maxval, int type, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaCopyMakeBorder(cv::_InputArray* src, cv::_OutputArray* dst, int top, int bottom, int left, int right, int gpuBorderType, const CvScalar* value, cv::cuda::Stream* stream);
+CVAPI(void) cudaCopyMakeBorder(cv::_InputArray* src, cv::_OutputArray* dst, int top, int bottom, int left, int right, int gpuBorderType, const cv::Scalar* value, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaIntegral(cv::_InputArray* src, cv::_OutputArray* sum, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaSqrIntegral(cv::_InputArray* src, cv::_OutputArray* sqrSum, cv::cuda::Stream* stream);
 
-CVAPI(void) cudaDft(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* dftSize, int flags, cv::cuda::Stream* stream);
+CVAPI(void) cudaDft(cv::_InputArray* src, cv::_OutputArray* dst, cv::Size* dftSize, int flags, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaMulAndScaleSpectrums(cv::_InputArray* src1, cv::_InputArray* src2, cv::_OutputArray* dst, int flags, float scale, bool conjB, cv::cuda::Stream* stream);
 
@@ -146,13 +146,13 @@ CVAPI(void) cudaTranspose(cv::_InputArray* src1, cv::_OutputArray* dst, cv::cuda
 CVAPI(void) cudaNormalize(cv::_InputArray* src, cv::_OutputArray* dst, double alpha, double beta,
    int norm_type, int dtype, cv::_InputArray* mask, cv::cuda::Stream* stream);
 
-CVAPI(cv::cuda::Convolution*) cudaConvolutionCreate(CvSize* userBlockSize, cv::Ptr<cv::cuda::Convolution>** sharedPtr);
+CVAPI(cv::cuda::Convolution*) cudaConvolutionCreate(cv::Size* userBlockSize, cv::Ptr<cv::cuda::Convolution>** sharedPtr);
 
 CVAPI(void) cudaConvolutionConvolve(cv::cuda::Convolution* convolution, cv::_InputArray* image, cv::_InputArray* templ, cv::_OutputArray* result, bool ccorr, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaConvolutionRelease(cv::Ptr<cv::cuda::Convolution>** convolution);
 
-CVAPI(void) cudaInRange(cv::_InputArray* src, CvScalar* lowerb, CvScalar* upperb, cv::_OutputArray* dst, cv::cuda::Stream* stream);
+CVAPI(void) cudaInRange(cv::_InputArray* src, cv::Scalar* lowerb, cv::Scalar* upperb, cv::_OutputArray* dst, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaSetGlDevice(int device);
 #endif

@@ -10,8 +10,9 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
+using Emgu.CV.Features;
 
-namespace Emgu.CV.Features
+namespace Emgu.CV.XFeatures2D
 {
     /// <summary>
     /// Kmeans-based class to train visual vocabulary using the bag of visual words approach.
@@ -32,7 +33,7 @@ namespace Emgu.CV.Features
             int attempts = 3,
             CvEnum.KMeansInitType flags = KMeansInitType.PPCenters)
         {
-            _ptr = Features2DInvoke.cveBOWKMeansTrainerCreate(clusterCount, ref termcrit, attempts, flags);
+            _ptr = XFeatures2DInvoke.cveBOWKMeansTrainerCreate(clusterCount, ref termcrit, attempts, flags);
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace Emgu.CV.Features
         {
             get
             {
-                return Features2DInvoke.cveBOWKMeansTrainerGetDescriptorCount(_ptr);
+                return XFeatures2DInvoke.cveBOWKMeansTrainerGetDescriptorCount(_ptr);
             }
         }
 
@@ -52,7 +53,7 @@ namespace Emgu.CV.Features
         /// <param name="descriptors">The descriptors to be added to the trainer</param>
         public void Add(Mat descriptors)
         {
-            Features2DInvoke.cveBOWKMeansTrainerAdd(_ptr, descriptors);
+            XFeatures2DInvoke.cveBOWKMeansTrainerAdd(_ptr, descriptors);
         }
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace Emgu.CV.Features
         public void Cluster(IOutputArray cluster)
         {
             using (OutputArray oaCluster = cluster.GetOutputArray())
-                Features2DInvoke.cveBOWKMeansTrainerCluster(_ptr, oaCluster);
+                XFeatures2DInvoke.cveBOWKMeansTrainerCluster(_ptr, oaCluster);
         }
 
         /// <summary>
@@ -72,13 +73,13 @@ namespace Emgu.CV.Features
         {
             if (_ptr != IntPtr.Zero)
             {
-                Features2DInvoke.cveBOWKMeansTrainerRelease(ref _ptr);
+                XFeatures2DInvoke.cveBOWKMeansTrainerRelease(ref _ptr);
             }
         }
 
     }
 
-    public static partial class Features2DInvoke
+    public static partial class XFeatures2DInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveBOWKMeansTrainerCreate(int clusterCount, ref MCvTermCriteria termcrit, int attempts, CvEnum.KMeansInitType flags);

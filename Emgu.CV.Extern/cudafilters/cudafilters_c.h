@@ -36,23 +36,23 @@ namespace cv
 
 CVAPI(cv::cuda::Filter*) cudaCreateSobelFilter(int srcType, int dstType,  int dx, int dy, int ksize, double scale, int rowBorderType, int columnBorderType, cv::Ptr<cv::cuda::Filter>** sharedPtr);
 
-CVAPI(cv::cuda::Filter*) cudaCreateGaussianFilter(int srcType, int dstType, CvSize* ksize, double sigma1, double sigma2, int rowBorderType, int columnBorderType, cv::Ptr<cv::cuda::Filter>** sharedPtr);
+CVAPI(cv::cuda::Filter*) cudaCreateGaussianFilter(int srcType, int dstType, cv::Size* ksize, double sigma1, double sigma2, int rowBorderType, int columnBorderType, cv::Ptr<cv::cuda::Filter>** sharedPtr);
 
-CVAPI(cv::cuda::Filter*) cudaCreateLaplacianFilter(int srcType, int dstType, int ksize, double scale, int borderMode, CvScalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr);
+CVAPI(cv::cuda::Filter*) cudaCreateLaplacianFilter(int srcType, int dstType, int ksize, double scale, int borderMode, cv::Scalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr);
 
-CVAPI(cv::cuda::Filter*) cudaCreateLinearFilter(int srcType, int dstType, cv::_InputArray* kernel, CvPoint* anchor, int borderMode, CvScalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr);
+CVAPI(cv::cuda::Filter*) cudaCreateLinearFilter(int srcType, int dstType, cv::_InputArray* kernel, cv::Point* anchor, int borderMode, cv::Scalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr);
 
-CVAPI(cv::cuda::Filter*) cudaCreateBoxFilter(int srcType, int dstType, CvSize* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr);
+CVAPI(cv::cuda::Filter*) cudaCreateBoxFilter(int srcType, int dstType, cv::Size* ksize, cv::Point* anchor, int borderMode, cv::Scalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr);
 
-CVAPI(cv::cuda::Filter*) cudaCreateBoxMaxFilter( int srcType, CvSize* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr);
+CVAPI(cv::cuda::Filter*) cudaCreateBoxMaxFilter( int srcType, cv::Size* ksize, cv::Point* anchor, int borderMode, cv::Scalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr);
 
-CVAPI(cv::cuda::Filter*) cudaCreateBoxMinFilter( int srcType, CvSize* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr);
+CVAPI(cv::cuda::Filter*) cudaCreateBoxMinFilter( int srcType, cv::Size* ksize, cv::Point* anchor, int borderMode, cv::Scalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr);
 
-CVAPI(cv::cuda::Filter*) cudaCreateMorphologyFilter( int op, int srcType, cv::_InputArray* kernel, CvPoint* anchor, int iterations, cv::Ptr<cv::cuda::Filter>** sharedPtr);
+CVAPI(cv::cuda::Filter*) cudaCreateMorphologyFilter( int op, int srcType, cv::_InputArray* kernel, cv::Point* anchor, int iterations, cv::Ptr<cv::cuda::Filter>** sharedPtr);
 
 CVAPI(cv::cuda::Filter*) cudaCreateSeparableLinearFilter(
 	int srcType, int dstType, cv::_InputArray* rowKernel, cv::_InputArray* columnKernel,
-	CvPoint* anchor, int rowBorderMode, int columnBorderMode, cv::Ptr<cv::cuda::Filter>** sharedPtr);
+	cv::Point* anchor, int rowBorderMode, int columnBorderMode, cv::Ptr<cv::cuda::Filter>** sharedPtr);
 
 CVAPI(cv::cuda::Filter*) cudaCreateDerivFilter(int srcType, int dstType, int dx, int dy,
 	int ksize, bool normalize, double scale,
@@ -62,9 +62,9 @@ CVAPI(cv::cuda::Filter*) cudaCreateScharrFilter(
 	int srcType, int dstType, int dx, int dy,
 	double scale, int rowBorderMode, int columnBorderMode, cv::Ptr<cv::cuda::Filter>** sharedPtr);
 
-CVAPI(cv::cuda::Filter*) cudaCreateRowSumFilter(int srcType, int dstType, int ksize, int anchor, int borderMode, CvScalar* borderVal, cv::Ptr<cv::cuda::Filter>** sharedPtr);
+CVAPI(cv::cuda::Filter*) cudaCreateRowSumFilter(int srcType, int dstType, int ksize, int anchor, int borderMode, cv::Scalar* borderVal, cv::Ptr<cv::cuda::Filter>** sharedPtr);
 
-CVAPI(cv::cuda::Filter*) cudaCreateColumnSumFilter(int srcType, int dstType, int ksize, int anchor, int borderMode, CvScalar* borderVal, cv::Ptr<cv::cuda::Filter>** sharedPtr);
+CVAPI(cv::cuda::Filter*) cudaCreateColumnSumFilter(int srcType, int dstType, int ksize, int anchor, int borderMode, cv::Scalar* borderVal, cv::Ptr<cv::cuda::Filter>** sharedPtr);
 
 CVAPI(cv::cuda::Filter*) cudaCreateMedianFilter(int srcType, int windowSize, int partition, cv::Ptr<cv::cuda::Filter>** sharedPtr);
 

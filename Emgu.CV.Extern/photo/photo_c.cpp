@@ -115,7 +115,7 @@ void cveDecolor(cv::_InputArray* src, cv::_OutputArray* grayscale, cv::_OutputAr
 #endif
 }
 
-void cveSeamlessClone(cv::_InputArray* src, cv::_InputArray* dst, cv::_InputArray* mask, CvPoint* p, cv::_OutputArray* blend, int flags)
+void cveSeamlessClone(cv::_InputArray* src, cv::_InputArray* dst, cv::_InputArray* mask, cv::Point* p, cv::_OutputArray* blend, int flags)
 {
 #ifdef HAVE_OPENCV_PHOTO
 	cv::seamlessClone(*src, *dst, *mask, *p, *blend, flags);

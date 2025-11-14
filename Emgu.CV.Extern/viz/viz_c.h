@@ -103,33 +103,33 @@ CVAPI(void) cveViz3dSpinOnce(cv::viz::Viz3d* viz, int time, bool forceRedraw);
 CVAPI(bool) cveViz3dWasStopped(cv::viz::Viz3d* viz);
 CVAPI(void) cveViz3dRelease(cv::viz::Viz3d** viz);
 
-CVAPI(cv::viz::WText*) cveWTextCreate(cv::String* text, CvPoint* pos, int fontSize, CvScalar* color, cv::viz::Widget2D** widget2D, cv::viz::Widget** widget);
+CVAPI(cv::viz::WText*) cveWTextCreate(cv::String* text, cv::Point* pos, int fontSize, cv::Scalar* color, cv::viz::Widget2D** widget2D, cv::viz::Widget** widget);
 CVAPI(void) cveWTextRelease(cv::viz::WText** text);
 
 CVAPI(cv::viz::WCoordinateSystem*) cveWCoordinateSystemCreate(double scale, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
 CVAPI(void) cveWCoordinateSystemRelease(cv::viz::WCoordinateSystem** system);
 
 CVAPI(cv::viz::WCloud*) cveWCloudCreateWithColorArray(cv::_InputArray* cloud, cv::_InputArray* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
-CVAPI(cv::viz::WCloud*) cveWCloudCreateWithColor(cv::_InputArray* cloud, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
+CVAPI(cv::viz::WCloud*) cveWCloudCreateWithColor(cv::_InputArray* cloud, cv::Scalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
 CVAPI(void) cveWCloudRelease(cv::viz::WCloud** cloud);
 
 CVAPI(void) cveWriteCloud(cv::String* file, cv::_InputArray* cloud, cv::_InputArray* colors, cv::_InputArray*, bool binary);
 CVAPI(void) cveReadCloud(cv::String* file, cv::Mat* cloud, cv::_OutputArray* colors, cv::_OutputArray* normals);
 
-CVAPI(cv::viz::WCube*) cveWCubeCreate(CvPoint3D64f* minPoint, CvPoint3D64f* maxPoint, bool wireFrame, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
+CVAPI(cv::viz::WCube*) cveWCubeCreate(cv::Point3d* minPoint, cv::Point3d* maxPoint, bool wireFrame, cv::Scalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
 CVAPI(void) cveWCubeRelease(cv::viz::WCube** cube);
 
-CVAPI(cv::viz::WCylinder*) cveWCylinderCreate(CvPoint3D64f* axisPoint1, CvPoint3D64f* axisPoint2, double radius, int numsides, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
+CVAPI(cv::viz::WCylinder*) cveWCylinderCreate(cv::Point3d* axisPoint1, cv::Point3d* axisPoint2, double radius, int numsides, cv::Scalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
 CVAPI(void) cveWCylinderRelease(cv::viz::WCylinder** cylinder);
 
-CVAPI(cv::viz::WCircle*) cveWCircleCreateAtOrigin(double radius, double thickness, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
-CVAPI(cv::viz::WCircle*) cveWCircleCreate(double radius, CvPoint3D64f* center, CvPoint3D64f* normal, double thickness, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
+CVAPI(cv::viz::WCircle*) cveWCircleCreateAtOrigin(double radius, double thickness, cv::Scalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
+CVAPI(cv::viz::WCircle*) cveWCircleCreate(double radius, cv::Point3d* center, cv::Point3d* normal, double thickness, cv::Scalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
 CVAPI(void) cveWCircleRelease(cv::viz::WCircle** circle);
 
-CVAPI(cv::viz::WCone*) cveWConeCreateAtOrigin(double length, double radius, int resolution, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
-CVAPI(cv::viz::WCone*) cveWConeCreate(double radius, CvPoint3D64f* center, CvPoint3D64f* tip, int resolution, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
+CVAPI(cv::viz::WCone*) cveWConeCreateAtOrigin(double length, double radius, int resolution, cv::Scalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
+CVAPI(cv::viz::WCone*) cveWConeCreate(double radius, cv::Point3d* center, cv::Point3d* tip, int resolution, cv::Scalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
 CVAPI(void) cveWConeRelease(cv::viz::WCone** cone);
 
-CVAPI(cv::viz::WArrow*) cveWArrowCreate(CvPoint3D64f* pt1, CvPoint3D64f* pt2, double thickness, CvScalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
+CVAPI(cv::viz::WArrow*) cveWArrowCreate(cv::Point3d* pt1, cv::Point3d* pt2, double thickness, cv::Scalar* color, cv::viz::Widget3D** widget3d, cv::viz::Widget** widget);
 CVAPI(void) cveWArrowRelease(cv::viz::WArrow** arrow);
 #endif

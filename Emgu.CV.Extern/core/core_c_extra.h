@@ -277,9 +277,11 @@ CVAPI(void) cveClearND(CvArr* arr, int* idx);
 CVAPI(bool) cveUseOptimized();
 CVAPI(void) cveSetUseOptimized(bool onoff);
 
+/*
 CVAPI(bool) cveHaveOpenVX();
 CVAPI(bool) cveUseOpenVX();
 CVAPI(void) cveSetUseOpenVX(bool flag);
+*/
 
 CVAPI(void) cveGetBuildInformation(cv::String* buildInformation);
 

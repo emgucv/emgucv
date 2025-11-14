@@ -45,7 +45,7 @@ void cvePlot2dRelease(cv::plot::Plot2d** plot, cv::Ptr<cv::plot::Plot2d>** share
 #endif
 }
 
-void cvePlot2dSetPlotLineColor(cv::plot::Plot2d* plot, CvScalar* plotLineColor)
+void cvePlot2dSetPlotLineColor(cv::plot::Plot2d* plot, cv::Scalar* plotLineColor)
 {
 #ifdef HAVE_OPENCV_PLOT
    plot->setPlotLineColor(*plotLineColor);
@@ -53,7 +53,7 @@ void cvePlot2dSetPlotLineColor(cv::plot::Plot2d* plot, CvScalar* plotLineColor)
 	throw_no_plot();
 #endif
 }
-void cvePlot2dSetPlotBackgroundColor(cv::plot::Plot2d* plot, CvScalar* plotBackgroundColor)
+void cvePlot2dSetPlotBackgroundColor(cv::plot::Plot2d* plot, cv::Scalar* plotBackgroundColor)
 {
 #ifdef HAVE_OPENCV_PLOT
    plot->setPlotBackgroundColor(*plotBackgroundColor);
@@ -61,7 +61,7 @@ void cvePlot2dSetPlotBackgroundColor(cv::plot::Plot2d* plot, CvScalar* plotBackg
 	throw_no_plot();
 #endif
 }
-void cvePlot2dSetPlotAxisColor(cv::plot::Plot2d* plot, CvScalar* plotAxisColor)
+void cvePlot2dSetPlotAxisColor(cv::plot::Plot2d* plot, cv::Scalar* plotAxisColor)
 {
 #ifdef HAVE_OPENCV_PLOT
    plot->setPlotAxisColor(*plotAxisColor);
@@ -69,7 +69,7 @@ void cvePlot2dSetPlotAxisColor(cv::plot::Plot2d* plot, CvScalar* plotAxisColor)
 	throw_no_plot();
 #endif
 }
-void cvePlot2dSetPlotGridColor(cv::plot::Plot2d* plot, CvScalar* plotGridColor)
+void cvePlot2dSetPlotGridColor(cv::plot::Plot2d* plot, cv::Scalar* plotGridColor)
 {
 #ifdef HAVE_OPENCV_PLOT
    plot->setPlotGridColor(*plotGridColor);
@@ -77,7 +77,7 @@ void cvePlot2dSetPlotGridColor(cv::plot::Plot2d* plot, CvScalar* plotGridColor)
 	throw_no_plot();
 #endif
 }
-void cvePlot2dSetPlotTextColor(cv::plot::Plot2d* plot, CvScalar* plotTextColor)
+void cvePlot2dSetPlotTextColor(cv::plot::Plot2d* plot, cv::Scalar* plotTextColor)
 {
 #ifdef HAVE_OPENCV_PLOT
    plot->setPlotTextColor(*plotTextColor);

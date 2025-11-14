@@ -77,7 +77,7 @@ void cudaCascadeClassifierSetMinNeighbors(cv::cuda::CascadeClassifier* classifie
    classifier->setMinNeighbors(minNeighbours); 
 }*/
 
-void cudaCascadeClassifierGetMinObjectSize(cv::cuda::CascadeClassifier* classifier, CvSize* minObjectSize)
+void cudaCascadeClassifierGetMinObjectSize(cv::cuda::CascadeClassifier* classifier, cv::Size* minObjectSize)
 {
 #ifdef HAVE_OPENCV_CUDAOBJDETECT
    cv::Size s = classifier->getMinObjectSize();
@@ -88,7 +88,7 @@ void cudaCascadeClassifierGetMinObjectSize(cv::cuda::CascadeClassifier* classifi
 #endif
 }
 
-void cudaCascadeClassifierSetMinObjectSize(cv::cuda::CascadeClassifier* classifier, CvSize* minObjectSize)
+void cudaCascadeClassifierSetMinObjectSize(cv::cuda::CascadeClassifier* classifier, cv::Size* minObjectSize)
 {
 #ifdef HAVE_OPENCV_CUDAOBJDETECT
    CvSize s = cvSize(minObjectSize->width, minObjectSize->height);

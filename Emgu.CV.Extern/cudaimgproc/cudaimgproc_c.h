@@ -75,13 +75,13 @@ CVAPI(void) cudaSwapChannels(cv::_InputOutputArray* image, const int* dstOrder, 
 CVAPI(void) cudaAlphaComp(cv::_InputArray* img1, cv::_InputArray* img2, cv::_OutputArray* dst, int alphaOp, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaMeanShiftFiltering(cv::_InputArray* src, cv::_OutputArray* dst, int sp, int sr,
-   CvTermCriteria* criteria, cv::cuda::Stream* stream);
+   cv::TermCriteria* criteria, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaMeanShiftProc(cv::_InputArray* src, cv::_OutputArray* dstr, cv::_OutputArray* dstsp, int sp, int sr,
-   CvTermCriteria* criteria, cv::cuda::Stream* stream);
+   cv::TermCriteria* criteria, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaMeanShiftSegmentation(cv::_InputArray* src, cv::_OutputArray* dst, int sp, int sr, int minsize,
-   CvTermCriteria* criteria, cv::cuda::Stream* stream);
+   cv::TermCriteria* criteria, cv::cuda::Stream* stream);
 
 CVAPI(void) cudaCalcHist(cv::_InputArray* src, cv::_OutputArray* hist, cv::cuda::Stream* stream);
 
@@ -108,7 +108,7 @@ CVAPI(void) cudaCornernessCriteriaRelease(cv::Ptr<cv::cuda::CornernessCriteria>*
 //  CudaCLAHE
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::cuda::CLAHE*) cudaCLAHECreate(double clipLimit, CvSize* tileGridSize, cv::Ptr<cv::cuda::CLAHE>** sharedPtr);
+CVAPI(cv::cuda::CLAHE*) cudaCLAHECreate(double clipLimit, cv::Size* tileGridSize, cv::Ptr<cv::cuda::CLAHE>** sharedPtr);
 CVAPI(void) cudaCLAHEApply(cv::cuda::CLAHE* clahe, cv::_InputArray* src, cv::_OutputArray* dst,  cv::cuda::Stream* stream);
 CVAPI(void) cudaCLAHERelease(cv::Ptr<cv::cuda::CLAHE>** clahe);
 
@@ -138,7 +138,7 @@ CVAPI(void) cudaCornersDetectorRelease(cv::Ptr<cv::cuda::CornersDetector>** dete
 //  CudaTemplateMatching
 //
 //----------------------------------------------------------------------------
-CVAPI(cv::cuda::TemplateMatching*) cudaTemplateMatchingCreate(int srcType, int method, CvSize* blockSize, cv::Ptr<cv::cuda::TemplateMatching>** sharedPtr);
+CVAPI(cv::cuda::TemplateMatching*) cudaTemplateMatchingCreate(int srcType, int method, cv::Size* blockSize, cv::Ptr<cv::cuda::TemplateMatching>** sharedPtr);
 CVAPI(void) cudaTemplateMatchingRelease(cv::Ptr<cv::cuda::TemplateMatching>** tm);
 CVAPI(void) cudaTemplateMatchingMatch(cv::cuda::TemplateMatching* tm, cv::_InputArray* image, cv::_InputArray* templ, cv::_OutputArray* result, cv::cuda::Stream* stream);
 

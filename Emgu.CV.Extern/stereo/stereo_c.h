@@ -41,7 +41,7 @@ CVAPI(cv::StereoMatcher*) cveStereoBMCreate(int mode, int numberOfDisparities, c
 CVAPI(void) cveStereoMatcherCompute(cv::StereoMatcher* disparitySolver, cv::_InputArray* left, cv::_InputArray* right, cv::_OutputArray* disparity);
 CVAPI(void) cveStereoMatcherRelease(cv::Ptr<cv::StereoMatcher>** sharedPtr);
 
-CVAPI(bool) cveStereoRectifyUncalibrated(cv::_InputArray* points1, cv::_InputArray* points2, cv::_InputArray* f, CvSize* imgSize, cv::_OutputArray* h1, cv::_OutputArray* h2, double threshold);
+CVAPI(bool) cveStereoRectifyUncalibrated(cv::_InputArray* points1, cv::_InputArray* points2, cv::_InputArray* f, cv::Size* imgSize, cv::_OutputArray* h1, cv::_OutputArray* h2, double threshold);
 
 CVAPI(void) cveStereoRectify(
 	cv::_InputArray* cameraMatrix1, cv::_InputArray* distCoeffs1,

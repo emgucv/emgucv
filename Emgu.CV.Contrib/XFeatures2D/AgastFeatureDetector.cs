@@ -9,8 +9,9 @@ using System.Text;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
+using Emgu.CV.Features;
 
-namespace Emgu.CV.Features
+namespace Emgu.CV.XFeatures2D
 {
     /// <summary>
     /// Wrapped AGAST detector
@@ -51,7 +52,7 @@ namespace Emgu.CV.Features
             bool nonmaxSuppression = true,
             Type type = Type.OAST_9_16)
         {
-            _ptr = Features2DInvoke.cveAgastFeatureDetectorCreate(
+            _ptr = XFeatures2DInvoke.cveAgastFeatureDetectorCreate(
                 threshold, nonmaxSuppression, type,
                 ref _feature2D, ref _sharedPtr);
         }
@@ -62,13 +63,13 @@ namespace Emgu.CV.Features
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                Features2DInvoke.cveAgastFeatureDetectorRelease(ref _sharedPtr);
+                XFeatures2DInvoke.cveAgastFeatureDetectorRelease(ref _sharedPtr);
             base.DisposeObject();
         }
 
     }
 
-    public static partial class Features2DInvoke
+    public static partial class XFeatures2DInvoke
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

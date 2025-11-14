@@ -114,7 +114,7 @@ CVAPI(void) cudaBroxOpticalFlowRelease(cv::Ptr<cv::cuda::BroxOpticalFlow>** flow
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::DensePyrLKOpticalFlow *) cudaDensePyrLKOpticalFlowCreate(
-	CvSize* winSize, 
+	cv::Size* winSize, 
 	int maxLevel, 
 	int iters, 
 	bool useInitialFlow, 
@@ -129,7 +129,7 @@ CVAPI(void) cudaDensePyrLKOpticalFlowRelease(cv::Ptr<cv::cuda::DensePyrLKOptical
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::SparsePyrLKOpticalFlow *) cudaSparsePyrLKOpticalFlowCreate(
-	CvSize* winSize, 
+	cv::Size* winSize, 
 	int maxLevel, 
 	int iters, 
 	bool useInitialFlow, 
@@ -186,7 +186,7 @@ CVAPI(void) cudaCreateOpticalFlowNeedleMap(const cv::cuda::GpuMat* u, const cv::
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::NvidiaOpticalFlow_1_0*) cudaNvidiaOpticalFlow_1_0_Create(
-	CvSize* imageSize,
+	cv::Size* imageSize,
 	int perfPreset,
 	bool enableTemporalHints,
 	bool enableExternalHints,
@@ -201,7 +201,7 @@ CVAPI(cv::cuda::NvidiaOpticalFlow_1_0*) cudaNvidiaOpticalFlow_1_0_Create(
 CVAPI(void) cudaNvidiaOpticalFlow_1_0_UpSampler(
 	cv::cuda::NvidiaOpticalFlow_1_0* nFlow,
 	cv::_InputArray* flow, 
-	CvSize* imageSize,
+	cv::Size* imageSize,
 	int gridSize, 
 	cv::_InputOutputArray* upsampledFlow);
 
@@ -232,7 +232,7 @@ CVAPI(int) cudaNvidiaOpticalFlowGetGridSize(cv::cuda::NvidiaHWOpticalFlow* nHWOp
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::cuda::NvidiaOpticalFlow_2_0*) cudaNvidiaOpticalFlow_2_0_Create(
-	CvSize* imageSize,
+	cv::Size* imageSize,
 	int perfPreset,
 	int outputGridSize,
 	int hintGridSize,

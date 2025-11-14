@@ -7,7 +7,7 @@
 #include "bioinspired_c.h"
 
 //Retina
-cv::bioinspired::Retina* cveRetinaCreate(CvSize* inputSize, const bool colorMode, int colorSamplingMethod, const bool useRetinaLogSampling, const double reductionFactor, const double samplingStrength, cv::Ptr<cv::bioinspired::Retina>** sharedPtr)
+cv::bioinspired::Retina* cveRetinaCreate(cv::Size* inputSize, const bool colorMode, int colorSamplingMethod, const bool useRetinaLogSampling, const double reductionFactor, const double samplingStrength, cv::Ptr<cv::bioinspired::Retina>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_BIOINSPIRED
 	cv::Ptr<cv::bioinspired::Retina> ptr = cv::bioinspired::Retina::create(*inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
@@ -78,7 +78,7 @@ void cveRetinaSetParameters(cv::bioinspired::Retina* retina, cv::bioinspired::Re
 
 
 //RetinaFastToneMapping
-cv::bioinspired::RetinaFastToneMapping* cveRetinaFastToneMappingCreate(CvSize* inputSize, cv::Ptr<cv::bioinspired::RetinaFastToneMapping>** sharedPtr)
+cv::bioinspired::RetinaFastToneMapping* cveRetinaFastToneMappingCreate(cv::Size* inputSize, cv::Ptr<cv::bioinspired::RetinaFastToneMapping>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_BIOINSPIRED
 	cv::Ptr<cv::bioinspired::RetinaFastToneMapping> ptr = cv::bioinspired::RetinaFastToneMapping::create(*inputSize);

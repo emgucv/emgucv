@@ -60,7 +60,7 @@ void cveStereoMatcherRelease(cv::Ptr<cv::StereoMatcher>** sharedPtr)
 #endif
 }
 
-bool cveStereoRectifyUncalibrated(cv::_InputArray* points1, cv::_InputArray* points2, cv::_InputArray* f, CvSize* imgSize, cv::_OutputArray* h1, cv::_OutputArray* h2, double threshold)
+bool cveStereoRectifyUncalibrated(cv::_InputArray* points1, cv::_InputArray* points2, cv::_InputArray* f, cv::Size* imgSize, cv::_OutputArray* h1, cv::_OutputArray* h2, double threshold)
 {
 #ifdef HAVE_OPENCV_STEREO
 	return cv::stereoRectifyUncalibrated(*points1, *points2, *f, *imgSize, *h1, *h2, threshold);

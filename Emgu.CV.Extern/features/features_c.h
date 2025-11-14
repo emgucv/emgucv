@@ -54,9 +54,7 @@ namespace cv {
 CVAPI(cv::ORB*) cveOrbCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D, cv::Ptr<cv::ORB>** sharedPtr);
 CVAPI(void) cveOrbRelease(cv::Ptr<cv::ORB>** sharedPtr);
 
-//Brisk
-CVAPI(cv::BRISK*) cveBriskCreate(int thresh, int octaves, float patternScale, cv::Feature2D** feature2D, cv::Ptr<cv::BRISK>** sharedPtr);
-CVAPI(void) cveBriskRelease(cv::Ptr<cv::BRISK>** sharedPtr);
+
 
 //FAST algorithm
 CVAPI(cv::FastFeatureDetector*) cveFASTFeatureDetectorCreate(int threshold, bool nonmax_supression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::FastFeatureDetector>** sharedPtr);
@@ -111,8 +109,8 @@ CVAPI(void) cveDrawMatchedFeatures1(
 	const std::vector<cv::KeyPoint>* keypoints2,
 	std::vector< cv::DMatch >* matches,
 	cv::_InputOutputArray* outImg,
-	const CvScalar* matchColor,
-	const CvScalar* singlePointColor,
+	const cv::Scalar* matchColor,
+	const cv::Scalar* singlePointColor,
 	std::vector< unsigned char >* matchesMask,
 	int flags);
 
@@ -123,8 +121,8 @@ CVAPI(void) cveDrawMatchedFeatures2(
 	const std::vector<cv::KeyPoint>* keypoints2,
 	std::vector< std::vector< cv::DMatch > >* matches,
 	cv::_InputOutputArray* outImg,
-	const CvScalar* matchColor,
-	const CvScalar* singlePointColor,
+	const cv::Scalar* matchColor,
+	const cv::Scalar* singlePointColor,
 	std::vector< std::vector< unsigned char > >* matchesMask,
 	int flags);
 
@@ -133,7 +131,8 @@ CVAPI(void) cveDrawMatchedFeatures3(
 	cv::_InputArray* img2, const std::vector<cv::KeyPoint>* keypoints2,
 	std::vector< std::vector< cv::DMatch > >* matches,
 	cv::_InputOutputArray* outImg,
-	const CvScalar* matchColor, const CvScalar* singlePointColor,
+	const cv::Scalar* matchColor, 
+	const cv::Scalar* singlePointColor,
 	cv::_InputArray* matchesMask,
 	int flags);
 
@@ -209,37 +208,6 @@ CVAPI(void) cveFeature2DDetect(cv::Feature2D* feature2D, cv::_InputArray* image,
 CVAPI(void) cveFeature2DCompute(cv::Feature2D* feature2D, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors);
 CVAPI(int) cveFeature2DGetDescriptorSize(cv::Feature2D* feature2D);
 CVAPI(cv::Algorithm*) cveFeature2DGetAlgorithm(cv::Feature2D* feature2D);
-
-//BowKMeansTrainer
-CVAPI(cv::BOWKMeansTrainer*) cveBOWKMeansTrainerCreate(int clusterCount, const CvTermCriteria* termcrit, int attempts, int flags);
-CVAPI(void) cveBOWKMeansTrainerRelease(cv::BOWKMeansTrainer** trainer);
-CVAPI(int) cveBOWKMeansTrainerGetDescriptorCount(cv::BOWKMeansTrainer* trainer);
-CVAPI(void) cveBOWKMeansTrainerAdd(cv::BOWKMeansTrainer* trainer, cv::Mat* descriptors);
-CVAPI(void) cveBOWKMeansTrainerCluster(cv::BOWKMeansTrainer* trainer, cv::_OutputArray* cluster);
-
-//BOWImgDescriptorExtractor
-CVAPI(cv::BOWImgDescriptorExtractor*) cveBOWImgDescriptorExtractorCreate(cv::Feature2D* descriptorExtractor, cv::DescriptorMatcher* descriptorMatcher);
-CVAPI(void) cveBOWImgDescriptorExtractorRelease(cv::BOWImgDescriptorExtractor** descriptorExtractor);
-CVAPI(void) cveBOWImgDescriptorExtractorSetVocabulary(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::Mat* vocabulary);
-CVAPI(void) cveBOWImgDescriptorExtractorCompute(cv::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* imgDescriptor);
-
-//KAZEDetector
-CVAPI(cv::KAZE*) cveKAZEDetectorCreate(
-	bool extended, bool upright, float threshold,
-	int octaves, int sublevels, int diffusivity,
-	cv::Feature2D** feature2D, cv::Ptr<cv::KAZE>** sharedPtr);
-CVAPI(void) cveKAZEDetectorRelease(cv::Ptr<cv::KAZE>** sharedPtr);
-
-//AKAZEDetector
-CVAPI(cv::AKAZE*) cveAKAZEDetectorCreate(
-	int descriptorType, int descriptorSize, int descriptorChannels,
-	float threshold, int octaves, int sublevels, int diffusivity,
-	cv::Feature2D** feature2D, cv::Ptr<cv::AKAZE>** sharedPtr);
-CVAPI(void) cveAKAZEDetectorRelease(cv::Ptr<cv::AKAZE>** sharedPtr);
-
-//Agast
-CVAPI(cv::AgastFeatureDetector*) cveAgastFeatureDetectorCreate(int threshold, bool nonmaxSuppression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::AgastFeatureDetector>** sharedPtr);
-CVAPI(void) cveAgastFeatureDetectorRelease(cv::Ptr<cv::AgastFeatureDetector>** sharedPtr);
 
 
 //SIFTDetector

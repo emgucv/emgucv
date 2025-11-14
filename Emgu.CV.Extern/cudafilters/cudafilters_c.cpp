@@ -17,7 +17,7 @@ cv::cuda::Filter* cudaCreateSobelFilter(int srcType, int dstType, int dx, int dy
 #endif
 }
 
-cv::cuda::Filter* cudaCreateGaussianFilter(int srcType, int dstType, CvSize* ksize, double sigma1, double sigma2, int rowBorderType, int columnBorderType, cv::Ptr<cv::cuda::Filter>** sharedPtr)
+cv::cuda::Filter* cudaCreateGaussianFilter(int srcType, int dstType, cv::Size* ksize, double sigma1, double sigma2, int rowBorderType, int columnBorderType, cv::Ptr<cv::cuda::Filter>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_CUDAFILTERS
 	cv::Size s(ksize->width, ksize->height);
@@ -29,7 +29,7 @@ cv::cuda::Filter* cudaCreateGaussianFilter(int srcType, int dstType, CvSize* ksi
 #endif
 }
 
-cv::cuda::Filter* cudaCreateLaplacianFilter(int srcType, int dstType, int ksize, double scale, int borderMode, CvScalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr)
+cv::cuda::Filter* cudaCreateLaplacianFilter(int srcType, int dstType, int ksize, double scale, int borderMode, cv::Scalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_CUDAFILTERS
 	cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createLaplacianFilter(srcType, dstType, ksize, scale, borderMode, *borderValue);
@@ -40,7 +40,7 @@ cv::cuda::Filter* cudaCreateLaplacianFilter(int srcType, int dstType, int ksize,
 #endif
 }
 
-cv::cuda::Filter* cudaCreateLinearFilter(int srcType, int dstType, cv::_InputArray* kernel, CvPoint* anchor, int borderMode, CvScalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr)
+cv::cuda::Filter* cudaCreateLinearFilter(int srcType, int dstType, cv::_InputArray* kernel, cv::Point* anchor, int borderMode, cv::Scalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_CUDAFILTERS
 	cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createLinearFilter(srcType, dstType, *kernel, *anchor, borderMode, *borderValue);
@@ -51,7 +51,7 @@ cv::cuda::Filter* cudaCreateLinearFilter(int srcType, int dstType, cv::_InputArr
 #endif
 }
 
-cv::cuda::Filter* cudaCreateBoxFilter(int srcType, int dstType, CvSize* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr)
+cv::cuda::Filter* cudaCreateBoxFilter(int srcType, int dstType, cv::Size* ksize, cv::Point* anchor, int borderMode, cv::Scalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_CUDAFILTERS
 	cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createBoxFilter(srcType, dstType, *ksize, *anchor, borderMode, *borderValue);
@@ -62,7 +62,7 @@ cv::cuda::Filter* cudaCreateBoxFilter(int srcType, int dstType, CvSize* ksize, C
 #endif
 }
 
-cv::cuda::Filter* cudaCreateBoxMaxFilter(int srcType, CvSize* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr)
+cv::cuda::Filter* cudaCreateBoxMaxFilter(int srcType, cv::Size* ksize, cv::Point* anchor, int borderMode, cv::Scalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_CUDAFILTERS
 	cv::Size s(ksize->width, ksize->height);
@@ -74,7 +74,7 @@ cv::cuda::Filter* cudaCreateBoxMaxFilter(int srcType, CvSize* ksize, CvPoint* an
 #endif
 }
 
-cv::cuda::Filter* cudaCreateBoxMinFilter(int srcType, CvSize* ksize, CvPoint* anchor, int borderMode, CvScalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr)
+cv::cuda::Filter* cudaCreateBoxMinFilter(int srcType, cv::Size* ksize, cv::Point* anchor, int borderMode, cv::Scalar* borderValue, cv::Ptr<cv::cuda::Filter>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_CUDAFILTERS
 	cv::Size s(ksize->width, ksize->height);
@@ -86,7 +86,7 @@ cv::cuda::Filter* cudaCreateBoxMinFilter(int srcType, CvSize* ksize, CvPoint* an
 #endif
 }
 
-cv::cuda::Filter* cudaCreateMorphologyFilter(int op, int srcType, cv::_InputArray* kernel, CvPoint* anchor, int iterations, cv::Ptr<cv::cuda::Filter>** sharedPtr)
+cv::cuda::Filter* cudaCreateMorphologyFilter(int op, int srcType, cv::_InputArray* kernel, cv::Point* anchor, int iterations, cv::Ptr<cv::cuda::Filter>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_CUDAFILTERS
 	cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createMorphologyFilter(op, srcType, *kernel, *anchor, iterations);
@@ -99,7 +99,7 @@ cv::cuda::Filter* cudaCreateMorphologyFilter(int op, int srcType, cv::_InputArra
 
 cv::cuda::Filter* cudaCreateSeparableLinearFilter(
 	int srcType, int dstType, cv::_InputArray* rowKernel, cv::_InputArray* columnKernel,
-	CvPoint* anchor, int rowBorderMode, int columnBorderMode, cv::Ptr<cv::cuda::Filter>** sharedPtr)
+	cv::Point* anchor, int rowBorderMode, int columnBorderMode, cv::Ptr<cv::cuda::Filter>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_CUDAFILTERS
 	cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createSeparableLinearFilter(srcType, dstType, *rowKernel, *columnKernel, *anchor, rowBorderMode, columnBorderMode);
@@ -135,7 +135,7 @@ cv::cuda::Filter* cudaCreateScharrFilter(int srcType, int dstType, int dx, int d
 #endif
 }
 
-cv::cuda::Filter* cudaCreateRowSumFilter(int srcType, int dstType, int ksize, int anchor, int borderMode, CvScalar* borderVal, cv::Ptr<cv::cuda::Filter>** sharedPtr)
+cv::cuda::Filter* cudaCreateRowSumFilter(int srcType, int dstType, int ksize, int anchor, int borderMode, cv::Scalar* borderVal, cv::Ptr<cv::cuda::Filter>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_CUDAFILTERS
 	cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createRowSumFilter(srcType, dstType, ksize, anchor, borderMode, *borderVal);
@@ -146,7 +146,7 @@ cv::cuda::Filter* cudaCreateRowSumFilter(int srcType, int dstType, int ksize, in
 #endif
 }
 
-cv::cuda::Filter* cudaCreateColumnSumFilter(int srcType, int dstType, int ksize, int anchor, int borderMode, CvScalar* borderVal, cv::Ptr<cv::cuda::Filter>** sharedPtr)
+cv::cuda::Filter* cudaCreateColumnSumFilter(int srcType, int dstType, int ksize, int anchor, int borderMode, cv::Scalar* borderVal, cv::Ptr<cv::cuda::Filter>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_CUDAFILTERS
 	cv::Ptr<cv::cuda::Filter> ptr = cv::cuda::createColumnSumFilter(srcType, dstType, ksize, anchor, borderMode, *borderVal);

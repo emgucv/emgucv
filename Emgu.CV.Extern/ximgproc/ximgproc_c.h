@@ -148,7 +148,7 @@ CVAPI(void) cveDisparityWLSFilterRelease(cv::Ptr<cv::ximgproc::DisparityWLSFilte
 CVAPI(void) cveDisparityFilterFilter(
 	cv::ximgproc::DisparityFilter* disparityFilter,
 	cv::_InputArray* disparity_map_left, cv::_InputArray* left_view, cv::_OutputArray* filtered_disparity_map,
-	cv::_InputArray* disparity_map_right, CvRect* ROI, cv::_InputArray* right_view);
+	cv::_InputArray* disparity_map_right, cv::Rect* ROI, cv::_InputArray* right_view);
 
 
 CVAPI(cv::ximgproc::RidgeDetectionFilter*) cveRidgeDetectionFilterCreate(

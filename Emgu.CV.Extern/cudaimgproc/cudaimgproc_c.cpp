@@ -55,7 +55,7 @@ void cudaAlphaComp(cv::_InputArray* img1, cv::_InputArray* img2, cv::_OutputArra
 }
 
 void cudaMeanShiftFiltering(cv::_InputArray* src, cv::_OutputArray* dst, int sp, int sr,
-	CvTermCriteria* criteria, cv::cuda::Stream* stream)
+	cv::TermCriteria* criteria, cv::cuda::Stream* stream)
 {
 #ifdef HAVE_OPENCV_CUDAIMGPROC
 	cv::cuda::meanShiftFiltering(*src, *dst, sp, sr, *criteria, stream ? *stream : cv::cuda::Stream::Null());
@@ -65,7 +65,7 @@ void cudaMeanShiftFiltering(cv::_InputArray* src, cv::_OutputArray* dst, int sp,
 }
 
 void cudaMeanShiftProc(cv::_InputArray* src, cv::_OutputArray* dstr, cv::_OutputArray* dstsp, int sp, int sr,
-	CvTermCriteria* criteria, cv::cuda::Stream* stream)
+	cv::TermCriteria* criteria, cv::cuda::Stream* stream)
 {
 #ifdef HAVE_OPENCV_CUDAIMGPROC
 	cv::cuda::meanShiftProc(*src, *dstr, *dstsp, sp, sr, *criteria, stream ? *stream : cv::cuda::Stream::Null());
@@ -75,7 +75,7 @@ void cudaMeanShiftProc(cv::_InputArray* src, cv::_OutputArray* dstr, cv::_Output
 }
 
 void cudaMeanShiftSegmentation(cv::_InputArray* src, cv::_OutputArray* dst, int sp, int sr, int minsize,
-	CvTermCriteria* criteria, cv::cuda::Stream* stream)
+	cv::TermCriteria* criteria, cv::cuda::Stream* stream)
 {
 #ifdef HAVE_OPENCV_CUDAIMGPROC
 	cv::cuda::meanShiftSegmentation(*src, *dst, sp, sr, minsize, *criteria, stream ? *stream : cv::cuda::Stream::Null());
@@ -180,7 +180,7 @@ void cudaCornernessCriteriaRelease(cv::Ptr<cv::cuda::CornernessCriteria>** detec
 //  CudaCLAHE
 //
 //----------------------------------------------------------------------------
-cv::cuda::CLAHE* cudaCLAHECreate(double clipLimit, CvSize* tileGridSize, cv::Ptr<cv::cuda::CLAHE>** sharedPtr)
+cv::cuda::CLAHE* cudaCLAHECreate(double clipLimit, cv::Size* tileGridSize, cv::Ptr<cv::cuda::CLAHE>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_CUDAIMGPROC
 	cv::Size s(tileGridSize->width, tileGridSize->height);
@@ -280,7 +280,7 @@ void cudaCornersDetectorRelease(cv::Ptr<cv::cuda::CornersDetector>** detector)
 //  GpuTemplateMatching
 //
 //----------------------------------------------------------------------------
-cv::cuda::TemplateMatching* cudaTemplateMatchingCreate(int srcType, int method, CvSize* blockSize, cv::Ptr<cv::cuda::TemplateMatching>** sharedPtr)
+cv::cuda::TemplateMatching* cudaTemplateMatchingCreate(int srcType, int method, cv::Size* blockSize, cv::Ptr<cv::cuda::TemplateMatching>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_CUDAIMGPROC
 	cv::Size s(blockSize->width, blockSize->height);

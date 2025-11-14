@@ -135,7 +135,7 @@ void cveShapeTransformerWarpImage(
 	cv::_OutputArray* output,
 	int flags,
 	int borderMode,
-	CvScalar* borderValue)
+	cv::Scalar* borderValue)
 {
 #ifdef HAVE_OPENCV_SHAPE
 	transformer->warpImage(*transformingImage, *output, flags, borderMode, *borderValue);

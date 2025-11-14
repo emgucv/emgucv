@@ -232,20 +232,19 @@ void cveMatCross(cv::Mat* mat, cv::_InputArray* m, cv::Mat* result)
 
 void cveMatCopyDataTo(cv::Mat* mat, unsigned char* dest)
 {
-	cv::Mat destMat = cv::Mat(mat->dims, mat->size, mat->type(), dest, 0);
+	cv::Mat destMat = cv::Mat(mat->dims, mat->size.data(), mat->type(), dest, 0);
 	mat->copyTo(destMat);
 }
 
 void cveMatCopyDataFrom(cv::Mat* mat, unsigned char* source)
 {
-	cv::Mat fromMat = cv::Mat(mat->dims, mat->size, mat->type(), source, 0);
+	cv::Mat fromMat = cv::Mat(mat->dims, mat->size.data(), mat->type(), source, 0);
 	fromMat.copyTo(*mat);
 }
 
 void cveMatGetSizeOfDimension(cv::Mat* mat, int* sizes)
 {
-	const int* s = mat->size;
-	memcpy(sizes, s, sizeof(int) * mat->dims);
+	memcpy(sizes, mat->size.data(), sizeof(int) * mat->dims);
 }
 
 void cveSwapMat(cv::Mat* mat1, cv::Mat* mat2)

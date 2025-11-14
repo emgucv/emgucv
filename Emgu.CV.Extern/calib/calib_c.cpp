@@ -45,7 +45,7 @@ bool cveGetHomographyMatrixFromMatchedFeatures(std::vector<cv::KeyPoint>* model,
 #endif
 }
 
-bool cveFindCirclesGrid(cv::_InputArray* image, CvSize* patternSize, cv::_OutputArray* centers, int flags, cv::Feature2D* blobDetector)
+bool cveFindCirclesGrid(cv::_InputArray* image, cv::Size* patternSize, cv::_OutputArray* centers, int flags, cv::Feature2D* blobDetector)
 {
 #ifdef HAVE_OPENCV_CALIB
 	cv::Ptr<cv::Feature2D> ptr(blobDetector, [](cv::Feature2D*){});
@@ -55,7 +55,7 @@ bool cveFindCirclesGrid(cv::_InputArray* image, CvSize* patternSize, cv::_Output
 #endif
 }
 
-bool cveFindChessboardCornersSB(cv::_InputArray* image, CvSize* patternSize, cv::_OutputArray* corners, int flags)
+bool cveFindChessboardCornersSB(cv::_InputArray* image, cv::Size* patternSize, cv::_OutputArray* corners, int flags)
 {
 #ifdef HAVE_OPENCV_CALIB
 	return cv::findChessboardCornersSB(*image, *patternSize, *corners, flags);
@@ -66,12 +66,12 @@ bool cveFindChessboardCornersSB(cv::_InputArray* image, CvSize* patternSize, cv:
 
 void cveEstimateChessboardSharpness(
 	cv::_InputArray* image,
-	CvSize* patternSize,
+	cv::Size* patternSize,
 	cv::_InputArray* corners,
 	float riseDistance,
 	bool vertical,
 	cv::_OutputArray* sharpness,
-	CvScalar* result)
+	cv::Scalar* result)
 {
 #ifdef HAVE_OPENCV_CALIB
 	cv::Scalar r = cv::estimateChessboardSharpness(*image, *patternSize, *corners, riseDistance, vertical, sharpness ? *sharpness : static_cast<cv::OutputArray>(cv::noArray())) ;
@@ -84,7 +84,7 @@ void cveEstimateChessboardSharpness(
 #endif
 }
 
-void cveDrawChessboardCorners(cv::_InputOutputArray* image, CvSize* patternSize, cv::_InputArray* corners, bool patternWasFound)
+void cveDrawChessboardCorners(cv::_InputOutputArray* image, cv::Size* patternSize, cv::_InputArray* corners, bool patternWasFound)
 {
 #ifdef HAVE_OPENCV_CALIB
 	cv::drawChessboardCorners(*image, *patternSize, *corners, patternWasFound);
@@ -102,7 +102,7 @@ void cveFilterSpeckles(cv::_InputOutputArray* img, double newVal, int maxSpeckle
 #endif
 }
 
-bool cveFindChessboardCorners(cv::_InputArray* image, CvSize* patternSize, cv::_OutputArray* corners, int flags)
+bool cveFindChessboardCorners(cv::_InputArray* image, cv::Size* patternSize, cv::_OutputArray* corners, int flags)
 {
 #ifdef HAVE_OPENCV_CALIB
 	return cv::findChessboardCorners(*image, *patternSize, *corners, flags);
@@ -111,7 +111,7 @@ bool cveFindChessboardCorners(cv::_InputArray* image, CvSize* patternSize, cv::_
 #endif
 }
 
-bool cveFind4QuadCornerSubpix(cv::_InputArray* image, cv::_InputOutputArray* corners, CvSize* regionSize)
+bool cveFind4QuadCornerSubpix(cv::_InputArray* image, cv::_InputOutputArray* corners, cv::Size* regionSize)
 {
 #ifdef HAVE_OPENCV_CALIB
 	return cv::find4QuadCornerSubpix(*image, *corners, *regionSize);
@@ -122,9 +122,9 @@ bool cveFind4QuadCornerSubpix(cv::_InputArray* image, cv::_InputOutputArray* cor
 
 
 double cveCalibrateCamera(
-	cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, CvSize* imageSize,
+	cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, cv::Size* imageSize,
 	cv::_InputOutputArray* cameraMatrix, cv::_InputOutputArray* distCoeffs,
-	cv::_OutputArray* rvecs, cv::_OutputArray* tvecs, int flags, CvTermCriteria* criteria)
+	cv::_OutputArray* rvecs, cv::_OutputArray* tvecs, int flags, cv::TermCriteria* criteria)
 {
 #ifdef HAVE_OPENCV_CALIB
 	return cv::calibrateCamera(*objectPoints, *imagePoints, *imageSize, *cameraMatrix, *distCoeffs, *rvecs, *tvecs, flags, *criteria);
@@ -144,8 +144,8 @@ void cveReprojectImageTo3D(cv::_InputArray* disparity, cv::_OutputArray* threeDI
 
 
 void cveCalibrationMatrixValues(
-	cv::_InputArray* cameraMatrix, CvSize* imageSize, double apertureWidth, double apertureHeight,
-	double* fovx, double* fovy, double* focalLength, CvPoint2D64f* principalPoint, double* aspectRatio)
+	cv::_InputArray* cameraMatrix, cv::Size* imageSize, double apertureWidth, double apertureHeight,
+	double* fovx, double* fovy, double* focalLength, cv::Point2d* principalPoint, double* aspectRatio)
 {
 #ifdef HAVE_OPENCV_CALIB
 	double _fovx, _fovy, _focalLength, _aspectRatio;
@@ -171,7 +171,7 @@ double cveStereoCalibrate1(
 	cv::_InputOutputArray* distCoeffs1,
 	cv::_InputOutputArray* cameraMatrix2,
 	cv::_InputOutputArray* distCoeffs2,
-	CvSize* imageSize,
+	cv::Size* imageSize,
 	cv::_InputOutputArray* r,
 	cv::_InputOutputArray* t,
 	cv::_OutputArray* e,
@@ -180,7 +180,7 @@ double cveStereoCalibrate1(
 	cv::_OutputArray* tvecs,
 	cv::_OutputArray* perViewErrors,
 	int flags,
-	CvTermCriteria* criteria)
+	cv::TermCriteria* criteria)
 {
 #ifdef HAVE_OPENCV_CALIB
 	return cv::stereoCalibrate(
@@ -215,13 +215,13 @@ double cveStereoCalibrate2(
 	cv::_InputOutputArray* distCoeffs1,
 	cv::_InputOutputArray* cameraMatrix2,
 	cv::_InputOutputArray* distCoeffs2,
-	CvSize* imageSize,
+	cv::Size* imageSize,
 	cv::_OutputArray* r,
 	cv::_OutputArray* t,
 	cv::_OutputArray* e,
 	cv::_OutputArray* f,
 	int flags,
-	CvTermCriteria* criteria)
+	cv::TermCriteria* criteria)
 {
 #ifdef HAVE_OPENCV_CALIB
 	return cv::stereoCalibrate(*objectPoints, *imagePoints1, *imagePoints2, *cameraMatrix1, *distCoeffs1, *cameraMatrix2, *distCoeffs2, *imageSize, *r, *t, *e, *f,
@@ -234,7 +234,7 @@ double cveStereoCalibrate2(
 void cveInitCameraMatrix2D(
 	cv::_InputArray* objectPoints,
 	cv::_InputArray* imagePoints,
-	CvSize* imageSize,
+	cv::Size* imageSize,
 	double aspectRatio,
 	cv::Mat* cameraMatrix)
 {
@@ -281,7 +281,7 @@ void cveFisheyeUndistortPoints(
 	cv::_InputArray* D, 
 	cv::_InputArray* R, 
 	cv::_InputArray* P,
-	CvTermCriteria* criteria
+	cv::TermCriteria* criteria
 	)
 {
 #ifdef HAVE_OPENCV_CALIB
@@ -303,7 +303,7 @@ void cveFisheyeInitUndistortRectifyMap(
 	cv::_InputArray* D, 
 	cv::_InputArray* R, 
 	cv::_InputArray* P, 
-	CvSize* size, 
+	cv::Size* size, 
 	int m1Type, 
 	cv::_OutputArray* map1, 
 	cv::_OutputArray* map2)
@@ -323,7 +323,7 @@ void cveFisheyeInitUndistortRectifyMap(
 #endif
 }
 
-void cveFisheyeUndistortImage(cv::_InputArray* distorted, cv::_OutputArray* undistored, cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* Knew, CvSize* newSize)
+void cveFisheyeUndistortImage(cv::_InputArray* distorted, cv::_OutputArray* undistored, cv::_InputArray* K, cv::_InputArray* D, cv::_InputArray* Knew, cv::Size* newSize)
 {
 #ifdef HAVE_OPENCV_CALIB
 	cv::fisheye::undistortImage(
@@ -338,7 +338,7 @@ void cveFisheyeUndistortImage(cv::_InputArray* distorted, cv::_OutputArray* undi
 #endif
 }
 
-void cveFisheyeEstimateNewCameraMatrixForUndistortRectify(cv::_InputArray* K, cv::_InputArray* D, CvSize* imageSize, cv::_InputArray* R, cv::_OutputArray* P, double balance, CvSize* newSize, double fovScale)
+void cveFisheyeEstimateNewCameraMatrixForUndistortRectify(cv::_InputArray* K, cv::_InputArray* D, cv::Size* imageSize, cv::_InputArray* R, cv::_OutputArray* P, double balance, cv::Size* newSize, double fovScale)
 {
 #ifdef HAVE_OPENCV_CALIB
 	cv::fisheye::estimateNewCameraMatrixForUndistortRectify(*K, *D, *imageSize, *R, *P, balance, *newSize, fovScale);
@@ -347,9 +347,9 @@ void cveFisheyeEstimateNewCameraMatrixForUndistortRectify(cv::_InputArray* K, cv
 #endif
 }
 
-void cveFisheyeStereoRectify(cv::_InputArray* K1, cv::_InputArray*D1, cv::_InputArray* K2, cv::_InputArray* D2, CvSize* imageSize,
+void cveFisheyeStereoRectify(cv::_InputArray* K1, cv::_InputArray*D1, cv::_InputArray* K2, cv::_InputArray* D2, cv::Size* imageSize,
 	cv::_InputArray* R, cv::_InputArray* tvec, cv::_OutputArray* R1, cv::_OutputArray* R2, cv::_OutputArray* P1, cv::_OutputArray* P2, cv::_OutputArray* Q, int flags,
-	CvSize* newImageSize, double balance, double fovScale)
+	cv::Size* newImageSize, double balance, double fovScale)
 {
 #ifdef HAVE_OPENCV_CALIB
 	cv::fisheye::stereoRectify(*K1, *D1, *K2, *D2, *imageSize, *R, *tvec, *R1, *R2, *P1, *P2, *Q, flags, *newImageSize, balance, fovScale);
@@ -358,9 +358,9 @@ void cveFisheyeStereoRectify(cv::_InputArray* K1, cv::_InputArray*D1, cv::_Input
 #endif
 }
 
-double cveFisheyeCalibrate(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, CvSize* imageSize,
+double cveFisheyeCalibrate(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, cv::Size* imageSize,
 	cv::_InputOutputArray* K, cv::_InputOutputArray* D, cv::_OutputArray* rvecs, cv::_OutputArray* tvecs, int flags,
-	CvTermCriteria* criteria)
+	cv::TermCriteria* criteria)
 {
 #ifdef HAVE_OPENCV_CALIB
 	return cv::fisheye::calibrate(*objectPoints, *imagePoints, *imageSize, *K, *D, *rvecs, *tvecs, flags, *criteria);
@@ -371,7 +371,7 @@ double cveFisheyeCalibrate(cv::_InputArray* objectPoints, cv::_InputArray* image
 
 double cveFisheyeStereoCalibrate(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints1,
 	cv::_InputArray* imagePoints2, cv::_InputOutputArray* K1, cv::_InputOutputArray* D1, cv::_InputOutputArray* K2, cv::_InputOutputArray* D2,
-	CvSize* imageSize, cv::_OutputArray* R, cv::_OutputArray* T, int flags, CvTermCriteria* criteria)
+	cv::Size* imageSize, cv::_OutputArray* R, cv::_OutputArray* T, int flags, cv::TermCriteria* criteria)
 {
 #ifdef HAVE_OPENCV_CALIB
 	return cv::fisheye::stereoCalibrate(*objectPoints, *imagePoints1, *imagePoints2, *K1, *D1, *K2, *D2, *imageSize, *R, *T, flags, *criteria);
@@ -389,9 +389,9 @@ bool cveFisheyeSolvePnP(
 	cv::_OutputArray* tvec,
 	bool useExtrinsicGuess,
 	int flags,
-	CvTermCriteria* criteria)
+	cv::TermCriteria* criteria)
 {
-#ifdef HAVE_OPENCV_CALIB3D
+#ifdef HAVE_OPENCV_CALIB
 	return cv::fisheye::solvePnP(
 		*objectPoints, 
 		*imagePoints, 
@@ -403,7 +403,7 @@ bool cveFisheyeSolvePnP(
 		flags,
 		*criteria);
 #else
-	throw_no_calib3d();
+	throw_no_calib();
 #endif
 }
 
@@ -420,9 +420,9 @@ bool cveFisheyeSolvePnPRansac(
 	double confidence,
 	cv::_OutputArray* inliers,
 	int flags,
-	CvTermCriteria* criteria)
+	cv::TermCriteria* criteria)
 {
-#ifdef HAVE_OPENCV_CALIB3D
+#ifdef HAVE_OPENCV_CALIB
 	return cv::fisheye::solvePnPRansac(
 		*opoints,
 		*ipoints,
@@ -439,7 +439,7 @@ bool cveFisheyeSolvePnPRansac(
 		*criteria
 		);
 #else
-	throw_no_calib3d();
+	throw_no_calib();
 #endif	
 }
 
