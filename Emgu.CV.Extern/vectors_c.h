@@ -17,7 +17,7 @@
 #ifdef HAVE_OPENCV_FEATURES
 #include "opencv2/features/features.hpp"
 #else
-static inline CV_NORETURN void vectors_throw_no_features() { CV_Error(cv::Error::Code::StsBadFunc, "The library is compiled without features2d support"); }
+static inline CV_NORETURN void vectors_throw_no_features() { CV_Error(cv::Error::Code::StsBadFunc, "The library is compiled without features support"); }
 #endif
 
 #ifdef HAVE_OPENCV_OBJDETECT

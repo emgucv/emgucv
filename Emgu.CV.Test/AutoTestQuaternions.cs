@@ -13,7 +13,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using Emgu.CV;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
 using Emgu.CV.Structure;
 using Emgu.Util;
 #if !__IOS__

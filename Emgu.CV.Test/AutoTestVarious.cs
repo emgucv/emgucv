@@ -17,7 +17,7 @@ using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.Aruco;
 using Emgu.CV.CvEnum;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
 using Emgu.CV.Flann;
 using Emgu.CV.Shape;
 using Emgu.CV.Stitching;
@@ -4174,8 +4174,8 @@ namespace Emgu.CV.Test
         [Test]
         public void TestGenerateLogo()
         {
-            String productName = null;
-            Image<Bgra, Byte> logo = GenerateLogo(800, 800, productName);
+            String productName = "CV";
+            Mat logo = GenerateLogo(800, 800, productName);
             logo.Save(String.Format("Emgu{0}Logo.png", productName == null ? String.Empty : productName));
         }
 
@@ -4186,7 +4186,7 @@ namespace Emgu.CV.Test
             logo.Save(String.Format("Emgu{0}Logo.png", productName == null ? String.Empty : productName));
         }*/
 
-        public Image<Bgra, byte> GenerateLogo(int width, int height = -1, String productName = null)
+        public Mat GenerateLogo(int width, int height = -1, String productName = null)
         {
             int heightShift = 0;
             int textHeight = (int)(width / 160.0 * 72.0);
@@ -4197,32 +4197,55 @@ namespace Emgu.CV.Test
                 heightShift = Math.Max((height - textHeight) / 2, 0);
             }
             double scale = width / 160.0;
-            Image<Bgr, Byte> semgu = new Image<Bgr, byte>(width, height, new Bgr(0, 0, 0));
-            Image<Bgr, Byte> scv = new Image<Bgr, byte>(width, height, new Bgr(0, 0, 0));
+            Mat semgu = new Mat(width, height, DepthType.Cv8U, 3);
+            Mat scv = new Mat(width, height, DepthType.Cv8U, 3);
+            semgu.SetTo(new MCvScalar(0,0,0));
+            scv.SetTo(new MCvScalar(0,0,0));
             //MCvFont f1 = new MCvFont(CvEnum.FontFace.HersheyTriplex, 1.5 * scale, 1.5 * scale);
             //MCvFont f2 = new MCvFont(CvEnum.FontFace.HersheyComplex, 1.6 * scale, 2.2 * scale);
-            semgu.Draw("Emgu", Point.Round(new PointF((float)(6 * scale), (float)(50 * scale + heightShift))), CvEnum.FontFace.HersheyTriplex, 1.5 * scale, new Bgr(55, 155, 255), (int)Math.Round(1.5 * scale));
-            semgu._Dilate((int)(1 * scale));
+            CvInvoke.PutText(
+                semgu, 
+                "Emgu", 
+                Point.Round(new PointF((float)(6 * scale), (float)(50 * scale + heightShift))), 
+                CvEnum.FontFace.HersheyTriplex, 
+                1.5 * scale, 
+                new MCvScalar(55, 155, 255),
+                (int)Math.Round(1.5 * scale));
+            CvInvoke.Dilate(semgu, semgu, null, new Point(-1, -1), (int) (1 * scale), BorderType.Default, new MCvScalar(0,0,0));
+            //semgu._Dilate((int)(1 * scale));
             if (productName != null)
-                scv.Draw(productName, Point.Round(new PointF((float)(50 * scale), (float)(60 * scale + heightShift))), CvEnum.FontFace.HersheySimplex, 1.6 * scale, new Bgr(255, 55, 255), (int)Math.Round(2.2 * scale));
+            {
+                CvInvoke.PutText(
+                    scv, 
+                    productName, 
+                    Point.Round(new PointF((float) (50 * scale), (float) (60 * scale + heightShift))),
+                    CvEnum.FontFace.HersheySimplex, 
+                    1.6 * scale, 
+                    new MCvScalar(255, 55, 255),
+                    (int) Math.Round(2.2 * scale));
+                CvInvoke.Dilate(scv, scv, null, new Point(-1, -1), (int)(2 * scale), BorderType.Default, new MCvScalar());
+            }
 
-            scv._Dilate((int)(2 * scale));
-            Image<Bgr, Byte> logoBgr = semgu.Or(scv);
-            Image<Gray, Byte> logoA = new Image<Gray, byte>(logoBgr.Size);
-            logoA.SetValue(255, logoBgr.Convert<Gray, Byte>());
-            logoBgr._Not();
-            logoA._Not();
-            Image<Gray, Byte>[] channels = logoBgr.Split();
-            channels = new Image<Gray, byte>[] { channels[0], channels[1], channels[2], new Image<Gray, Byte>(channels[0].Width, channels[0].Height, new Gray(255.0)) };
-            Image<Bgra, Byte> logoBgra = new Image<Bgra, byte>(channels);
-            logoBgra.SetValue(new Bgra(0.0, 0.0, 0.0, 0.0), logoA);
-            //logoBgra.Save("EmguCVLogo.png");
-            return logoBgra;
-            /*
-            Image<Bgr, Byte> bg_header = new Image<Bgr, byte>(1, 92);
-            for (int i = 0; i < 92; i++)
-               bg_header[i, 0] = new Bgr(210, 210 - i * 0.4, 210 - i * 0.9);
-            bg_header.Save("bg_header.gif");*/
+            using (Mat logoBgr = new Mat())
+            //using (Mat logoA = new Mat(semgu.Size, DepthType.Cv8U, 1))
+            using (Mat logoMask = new Mat())
+            {
+                CvInvoke.BitwiseOr(semgu, scv, logoBgr);
+                CvInvoke.CvtColor(logoBgr, logoMask, ColorConversion.Bgra2Gray);
+                
+                Mat logoBgra = new Mat();
+                CvInvoke.CvtColor(logoBgr, logoBgra, ColorConversion.Bgr2Bgra);
+                CvInvoke.BitwiseNot(logoMask, logoMask);
+
+                logoBgra.SetTo(new MCvScalar(0.0, 0.0, 0.0, 0.0), logoMask);
+                
+                return logoBgra;
+                /*
+                Image<Bgr, Byte> bg_header = new Image<Bgr, byte>(1, 92);
+                for (int i = 0; i < 92; i++)
+                   bg_header[i, 0] = new Bgr(210, 210 - i * 0.4, 210 - i * 0.9);
+                bg_header.Save("bg_header.gif");*/
+            }
         }
 
         [Test]

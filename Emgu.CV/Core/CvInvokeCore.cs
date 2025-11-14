@@ -47,7 +47,7 @@ namespace Emgu.CV
             int line,
             IntPtr userData)
         {
-            SetErrStatus(Emgu.CV.CvEnum.ErrorCodes.StsOk); //clear the error status
+            //SetErrStatus(Emgu.CV.CvEnum.ErrorCodes.StsOk); //clear the error status
             return 0; //signal the process to continue
         }
 
@@ -74,7 +74,7 @@ namespace Emgu.CV
         {
             try
             {
-                SetErrStatus(Emgu.CV.CvEnum.ErrorCodes.StsOk); //clear the error status
+                //SetErrStatus(Emgu.CV.CvEnum.ErrorCodes.StsOk); //clear the error status
                 return 0; //signal the process to continue
             }
             finally
@@ -101,32 +101,6 @@ namespace Emgu.CV
             int status, IntPtr funcName, IntPtr errMsg, IntPtr fileName, int line, IntPtr userData);
 
 #if UNITY_IOS
-        /// <summary>
-        /// Returns the current error status - the value set with the last cvSetErrStatus call. Note, that in Leaf mode the program terminates immediately after error occurred, so to always get control after the function call, one should call cvSetErrMode and set Parent or Silent error mode.
-        /// </summary>
-        /// <returns>the current error status</returns>
-        public static int GetErrStatus()
-        {
-            return 0;
-        }
-
-        /// <summary>
-        /// Sets the error status to the specified value. Mostly, the function is used to reset the error status (set to it CV_StsOk) to recover after error. In other cases it is more natural to call cvError or CV_ERROR.
-        /// </summary>
-        /// <param name="code">The error status.</param>
-        public static void SetErrStatus(CvEnum.ErrorCodes code)
-        {
-        }
-
-        /// <summary>
-        /// Returns the textual description for the specified error status code. In case of unknown status the function returns NULL pointer. 
-        /// </summary>
-        /// <param name="status">The error status</param>
-        /// <returns>the textual description for the specified error status code.</returns>
-        public static String ErrorStr(int status)
-        {
-            return String.Empty;
-        }
 
         /// <summary>
         /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
@@ -197,48 +171,6 @@ namespace Emgu.CV
             bool flag
             );
 
-        /// <summary>
-        /// Sets the specified error mode.
-        /// </summary>
-        /// <param name="errorMode">The error mode</param>
-        /// <returns>The previous error mode</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveSetErrMode")]
-        public static extern int SetErrMode(int errorMode);
-
-        /// <summary>
-        /// Returns the current error mode
-        /// </summary>
-        /// <returns>The error mode</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetErrMode")]
-        public static extern int GetErrMode();
-
-        /// <summary>
-        /// Returns the current error status - the value set with the last cvSetErrStatus call. Note, that in Leaf mode the program terminates immediately after error occurred, so to always get control after the function call, one should call cvSetErrMode and set Parent or Silent error mode.
-        /// </summary>
-        /// <returns>The current error status</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetErrStatus")]
-        public static extern int GetErrStatus();
-
-        /// <summary>
-        /// Sets the error status to the specified value. Mostly, the function is used to reset the error status (set to it CV_StsOk) to recover after error. In other cases it is more natural to call cvError or CV_ERROR.
-        /// </summary>
-        /// <param name="code">The error status.</param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveSetErrStatus")]
-        public static extern void SetErrStatus(CvEnum.ErrorCodes code);
-
-        /// <summary>
-        /// Returns the textual description for the specified error status code. In case of unknown status the function returns NULL pointer. 
-        /// </summary>
-        /// <param name="status">The error status</param>
-        /// <returns>the textual description for the specified error status code.</returns>
-        public static String ErrorStr(int status)
-        {
-            var ptr = cveErrorStr(status);
-            return ptr == IntPtr.Zero ? String.Empty : Marshal.PtrToStringAnsi(ptr);
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveErrorStr(int status);
 #endif
 
         #endregion
@@ -2785,7 +2717,7 @@ namespace Emgu.CV
             PointF[] dst = new PointF[src.Length];
             GCHandle handle = GCHandle.Alloc(src, GCHandleType.Pinned);
             GCHandle destHandle = GCHandle.Alloc(dst, GCHandleType.Pinned);
-            using (Matrix<float> pointMat = new Matrix<float>(src.Length, 1, 2, handle.AddrOfPinnedObject(), 0))
+            using (Mat pointMat = new Mat(src.Length, 1, DepthType.Cv32F, 2, handle.AddrOfPinnedObject(), 8))
             using (Mat dstMat = new Mat(dst.Length, 1, DepthType.Cv32F, 2, destHandle.AddrOfPinnedObject(), 8))
             {
                 CvInvoke.PerspectiveTransform(pointMat, dstMat, mat);

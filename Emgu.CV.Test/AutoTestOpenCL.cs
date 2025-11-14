@@ -13,7 +13,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.OCR;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
 using Emgu.CV.Ocl;
 using Emgu.CV.XFeatures2D;
 

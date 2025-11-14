@@ -10,7 +10,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 
-namespace Emgu.CV.Features2D
+namespace Emgu.CV.Features
 {
     /// <summary>
     /// The feature 2D base class

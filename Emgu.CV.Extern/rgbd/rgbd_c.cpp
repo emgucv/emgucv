@@ -53,7 +53,7 @@ int cveLinemodDetectorAddTemplate(
 	std::vector< cv::Mat >* sources,
 	cv::String* classId,
 	cv::Mat* objectMask,
-	CvRect* boundingBox)
+	cv::Rect* boundingBox)
 {
 #ifdef HAVE_OPENCV_RGBD
 	cv::Rect r;

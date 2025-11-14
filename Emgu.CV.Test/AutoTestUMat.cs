@@ -14,7 +14,7 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using Emgu.CV;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
 using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 using Emgu.Util;

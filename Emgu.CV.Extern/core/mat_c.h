@@ -8,7 +8,8 @@
 #ifndef EMGU_MAT_C_H
 #define EMGU_MAT_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 #include "opencv2/core/ocl.hpp"
 #include "emgu_c.h"
 
@@ -23,14 +24,14 @@ CVAPI(cv::Mat*) cveMatCreate();
 CVAPI(void) cveMatCreateData(cv::Mat* mat, int row, int cols, int type);
 CVAPI(cv::Mat*) cveMatCreateWithData(int rows, int cols, int type, void* data, size_t step);
 CVAPI(cv::Mat*) cveMatCreateMultiDimWithData(int ndims, const int* sizes, int type, void* data, size_t* steps);
-CVAPI(cv::Mat*) cveMatCreateFromRect(cv::Mat* mat, CvRect* roi);
+CVAPI(cv::Mat*) cveMatCreateFromRect(cv::Mat* mat, cv::Rect* roi);
 CVAPI(cv::Mat*) cveMatCreateFromRange(cv::Mat* mat, cv::Range* rowRange, cv::Range* colRange);
  
 CVAPI(void) cveMatRelease(cv::Mat** mat);
-CVAPI(void) cveMatGetSize(cv::Mat* mat, CvSize* size);
+CVAPI(void) cveMatGetSize(cv::Mat* mat, cv::Size* size);
 CVAPI(void) cveMatCopyTo(cv::Mat* mat, cv::_OutputArray* m, cv::_InputArray* mask);
-CVAPI(cv::Mat*) cveArrToMat(CvArr* cvArray, bool copyData, bool allowND, int coiMode);
-CVAPI(IplImage*) cveMatToIplImage(cv::Mat* mat);
+/*CVAPI(cv::Mat*) cveArrToMat(CvArr* cvArray, bool copyData, bool allowND, int coiMode);
+CVAPI(IplImage*) cveMatToIplImage(cv::Mat* mat);*/
 CVAPI(int) cveMatGetElementSize(cv::Mat* mat);
 //CVAPI(int) cveMatGetChannels(cv::Mat* mat);
 

@@ -624,8 +624,6 @@ namespace Emgu.CV
             CvStructSizes sizes = CvInvoke.GetCvStructSizes();
 
             sane &= (sizes.CvRotatedRect == Toolbox.SizeOf<RotatedRect>());
-            sane &= (sizes.CvMat == Toolbox.SizeOf<MCvMat>());
-            sane &= (sizes.CvMatND == Toolbox.SizeOf<MCvMatND>());
             sane &= (sizes.CvPoint == Toolbox.SizeOf<System.Drawing.Point>());
             sane &= (sizes.CvPoint2D32f == Toolbox.SizeOf<System.Drawing.PointF>());
             sane &= (sizes.CvPoint3D32f == Toolbox.SizeOf<MCvPoint3D32f>());
@@ -635,8 +633,6 @@ namespace Emgu.CV
             sane &= (sizes.CvSize2D32f == Toolbox.SizeOf<System.Drawing.SizeF>());
             sane &= (sizes.CvTermCriteria == Toolbox.SizeOf<MCvTermCriteria>());
             sane &= 2 * Toolbox.SizeOf<int>() == Toolbox.SizeOf<Emgu.CV.Structure.Range>();
-            int miplImageSize = Toolbox.SizeOf<MIplImage>();
-            sane &= (sizes.IplImage == miplImageSize);
             return sane;
         }
     }

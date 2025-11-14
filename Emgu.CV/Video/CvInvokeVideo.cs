@@ -314,6 +314,7 @@ namespace Emgu.CV
            CvEnum.LKFlowFlag flags,
            double minEigenThreshold);
 
+        /*
         /// <summary>
         /// Computes dense optical flow using Gunnar Farneback's algorithm
         /// </summary>
@@ -352,7 +353,7 @@ namespace Emgu.CV
                 CvInvoke.CalcOpticalFlowFarneback(prev0, next0, flow0, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
                 CvInvoke.Split(flow0, vm);
             }
-        }
+        }*/
 
         /// <summary>
         /// Computes dense optical flow using Gunnar Farneback's algorithm

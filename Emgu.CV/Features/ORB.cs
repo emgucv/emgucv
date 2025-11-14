@@ -10,7 +10,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 
-namespace Emgu.CV.Features2D
+namespace Emgu.CV.Features
 {
     /// <summary>
     /// Wrapped ORB detector
@@ -65,7 +65,7 @@ namespace Emgu.CV.Features2D
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveOrbCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTK_A, Features2D.ORB.ScoreType scoreType, int patchSize, int fastThreshold, ref IntPtr feature2D, ref IntPtr sharedPtr);
+        internal static extern IntPtr cveOrbCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTK_A, Features.ORB.ScoreType scoreType, int patchSize, int fastThreshold, ref IntPtr feature2D, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveOrbRelease(ref IntPtr sharedPtr);

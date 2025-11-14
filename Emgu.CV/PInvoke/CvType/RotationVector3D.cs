@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 
 namespace Emgu.CV
 {
+    /*
     /// <summary>
     /// A (3x1) Rodrigues rotation vector. Rotation vector is a compact representation of rotation matrix. Direction of the rotation vector is the rotation axis and the length of the vector is the rotation angle around the axis. 
     /// </summary>
@@ -64,5 +65,5 @@ namespace Emgu.CV
 
             }
         }
-    }
+    }*/
 }

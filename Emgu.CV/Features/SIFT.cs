@@ -10,9 +10,8 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.CV;
 using Emgu.Util;
-using Emgu.CV.Features2D;
 
-namespace Emgu.CV.Features2D
+namespace Emgu.CV.Features
 {
     /// <summary>
     /// Wrapped SIFT detector

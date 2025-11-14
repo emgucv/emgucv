@@ -17,7 +17,7 @@ using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.Aruco;
 using Emgu.CV.CvEnum;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
 using Emgu.CV.Flann;
 using Emgu.CV.Shape;
 using Emgu.CV.Stitching;

@@ -889,6 +889,7 @@ namespace Emgu.CV
             return new RangeF((float)minVal, (float)maxVal);
         }
 
+        /*
         /// <summary>
         /// Convert this Mat to Image
         /// </summary>
@@ -946,7 +947,7 @@ namespace Emgu.CV
 
             }
         }
-
+        */
 
         internal static DepthType GetDepthTypeFromArray(Array data)
         {

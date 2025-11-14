@@ -216,7 +216,7 @@ namespace Emgu.CV
             MCvPoint3D32f[] points3D = new MCvPoint3D32f[size.Width * size.Height];
             GCHandle handle = GCHandle.Alloc(points3D, GCHandleType.Pinned);
 
-            using (Matrix<float> pts = new Matrix<float>(size.Height, size.Width, 3, handle.AddrOfPinnedObject(), 0))
+            using (Mat pts = new Mat(size, DepthType.Cv32F, 3, handle.AddrOfPinnedObject(), 0))
                 CvInvoke.ReprojectImageTo3D(disparity, pts, Q, false, CvEnum.DepthType.Cv32F);
 
             handle.Free();
@@ -241,8 +241,7 @@ namespace Emgu.CV
 
            handle.Free();
            return points3D;
-        }*/
-
+        }
 
         /// <summary>
         /// Generate a random point cloud around the ellipse. 
@@ -268,5 +267,6 @@ namespace Emgu.CV
             handle.Free();
             return cloud;
         }
+        */
     }
 }

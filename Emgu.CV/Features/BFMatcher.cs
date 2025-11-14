@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using Emgu.CV;
 using Emgu.Util;
 
-namespace Emgu.CV.Features2D
+namespace Emgu.CV.Features
 {
     /// <summary>
     /// The match distance type
@@ -95,7 +95,7 @@ namespace Emgu.CV.Features2D
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveBFMatcherCreate(
-               Features2D.DistanceType distanceType,
+               Features.DistanceType distanceType,
                [MarshalAs(CvInvoke.BoolMarshalType)]
          bool crossCheck,
                ref IntPtr dmPtr);

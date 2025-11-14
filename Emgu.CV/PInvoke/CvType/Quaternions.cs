@@ -117,7 +117,7 @@ namespace Emgu.CV
       /// Fill the (3x3) rotation matrix with the value such that it represent the quaternions
       /// </summary>
       /// <param name="rotation">The (3x3) rotation matrix which values will be set to represent this quaternions</param>
-      public void GetRotationMatrix(Matrix<double> rotation)
+      public void GetRotationMatrix(Mat rotation)
       {
          CvInvoke.quaternionsToRotationMatrix(ref this, rotation);
       }
@@ -127,7 +127,7 @@ namespace Emgu.CV
       /// </summary>
       /// <param name="pointsSrc">The points to be rotated</param>
       /// <param name="pointsDst">The result of the rotation, should be the same size as <paramref name="pointsSrc"/>, can be <paramref name="pointsSrc"/> as well for inplace rotation</param>
-      public void RotatePoints(Matrix<double> pointsSrc, Matrix<double> pointsDst)
+      public void RotatePoints(Mat pointsSrc, Mat pointsDst)
       {
          CvInvoke.quaternionsRotatePoints(ref this, pointsSrc, pointsDst);
       }

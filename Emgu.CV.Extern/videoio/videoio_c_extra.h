@@ -9,10 +9,11 @@
 #define EMGU_HIGHGUI_C_H
 
 #include "opencv2/opencv_modules.hpp"
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_VIDEOIO
-#include "opencv2/videoio/videoio_c.h"
+//#include "opencv2/videoio/videoio_c.h"
 #include "opencv2/videoio/videoio.hpp"
 #include "opencv2/videoio/registry.hpp"
 
@@ -45,7 +46,7 @@ namespace cv
 
 struct ColorPoint
 {
-   CvPoint3D32f position;
+   cv::Point3f position;
    unsigned char blue;
    unsigned char green;
    unsigned char red;
@@ -60,11 +61,12 @@ namespace cv {
 	}
 }
 
+/*
 CVAPI(void) OpenniGetColorPoints(
                                  CvCapture* capture, // must be an openni capture
                                  std::vector<ColorPoint>* points, // sequence of ColorPoint
                                  IplImage* mask // CV_8UC1
-                                 );
+                                 );*/
 
 CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromDevice(int device, int apiPreference, std::vector< int >* params);
 CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromFile(cv::String* fileName, int apiPreference, std::vector< int >* params);
@@ -89,9 +91,9 @@ CVAPI(void) cveWinrtImshow();
 CVAPI(void) cveWinrtOnVisibilityChanged(bool visible);
 #endif
 
-CVAPI(cv::VideoWriter*) cveVideoWriterCreate(cv::String* filename, int fourcc, double fps, CvSize* frameSize, bool isColor);
-CVAPI(cv::VideoWriter*) cveVideoWriterCreate2(cv::String* filename, int apiPreference, int fourcc, double fps, CvSize* frameSize, bool isColor);
-CVAPI(cv::VideoWriter*) cveVideoWriterCreate3(cv::String* filename, int apiPreference, int fourcc, double fps, CvSize* frameSize, std::vector< int >* params);
+CVAPI(cv::VideoWriter*) cveVideoWriterCreate(cv::String* filename, int fourcc, double fps, cv::Size* frameSize, bool isColor);
+CVAPI(cv::VideoWriter*) cveVideoWriterCreate2(cv::String* filename, int apiPreference, int fourcc, double fps, cv::Size* frameSize, bool isColor);
+CVAPI(cv::VideoWriter*) cveVideoWriterCreate3(cv::String* filename, int apiPreference, int fourcc, double fps, cv::Size* frameSize, std::vector< int >* params);
 CVAPI(bool) cveVideoWriterIsOpened(cv::VideoWriter* writer);
 CVAPI(bool) cveVideoWriterSet(cv::VideoWriter* writer, int propId, double value);
 CVAPI(double) cveVideoWriterGet(cv::VideoWriter* writer, int propId);

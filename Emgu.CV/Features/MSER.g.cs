@@ -10,9 +10,9 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.Util;
 
-namespace Emgu.CV.Features2D
+namespace Emgu.CV.Features
 {
-   public static partial class Features2DInvoke
+   public static partial class FeaturesInvoke
    {
 
      [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)] 
@@ -55,8 +55,8 @@ namespace Emgu.CV.Features2D
      /// </summary>
      public bool Pass2Only
      {
-        get { return Features2DInvoke.cveMSERGetPass2Only(_ptr); } 
-        set { Features2DInvoke.cveMSERSetPass2Only(_ptr, value); }
+        get { return FeaturesInvoke.cveMSERGetPass2Only(_ptr); } 
+        set { FeaturesInvoke.cveMSERSetPass2Only(_ptr, value); }
      }
      
      /// <summary>
@@ -64,8 +64,8 @@ namespace Emgu.CV.Features2D
      /// </summary>
      public int Delta
      {
-        get { return Features2DInvoke.cveMSERGetDelta(_ptr); } 
-        set { Features2DInvoke.cveMSERSetDelta(_ptr, value); }
+        get { return FeaturesInvoke.cveMSERGetDelta(_ptr); } 
+        set { FeaturesInvoke.cveMSERSetDelta(_ptr, value); }
      }
      
      /// <summary>
@@ -73,8 +73,8 @@ namespace Emgu.CV.Features2D
      /// </summary>
      public int MinArea
      {
-        get { return Features2DInvoke.cveMSERGetMinArea(_ptr); } 
-        set { Features2DInvoke.cveMSERSetMinArea(_ptr, value); }
+        get { return FeaturesInvoke.cveMSERGetMinArea(_ptr); } 
+        set { FeaturesInvoke.cveMSERSetMinArea(_ptr, value); }
      }
      
      /// <summary>
@@ -82,8 +82,8 @@ namespace Emgu.CV.Features2D
      /// </summary>
      public int MaxArea
      {
-        get { return Features2DInvoke.cveMSERGetMaxArea(_ptr); } 
-        set { Features2DInvoke.cveMSERSetMaxArea(_ptr, value); }
+        get { return FeaturesInvoke.cveMSERGetMaxArea(_ptr); } 
+        set { FeaturesInvoke.cveMSERSetMaxArea(_ptr, value); }
      }
      
    }

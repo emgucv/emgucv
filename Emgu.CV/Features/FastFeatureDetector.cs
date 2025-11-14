@@ -10,7 +10,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 
-namespace Emgu.CV.Features2D
+namespace Emgu.CV.Features
 {
     /// <summary>
     /// FAST(Features from Accelerated Segment Test) keypoint detector. 
@@ -71,7 +71,7 @@ namespace Emgu.CV.Features2D
             int threshold,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool nonmaxSupression,
-            Features2D.FastFeatureDetector.DetectorType type,
+            Features.FastFeatureDetector.DetectorType type,
             ref IntPtr feature2D,
             ref IntPtr sharedPtr);
 

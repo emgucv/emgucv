@@ -52,12 +52,6 @@ namespace Emgu.CV.Test
         }
 
 #if __ANDROID__
-      public static Image<TColor, TDepth> LoadImage<TColor, TDepth>(String name)
-         where TColor : struct, IColor
-         where TDepth : new()
-      {
-         return AssetsUtil.LoadImage<TColor, TDepth>(name);
-      }
 
       public static Mat LoadMat(String name)
       {
@@ -82,16 +76,6 @@ namespace Emgu.CV.Test
          return m;
       }
 
-      public static Image<TColor, TDepth> LoadImage<TColor, TDepth>(String name)
-         where TColor : struct, IColor
-         where TDepth : new()
-      {
-         using (Mat m = Task.Run(async () => await ReadFile(name)).Result)
-         {
-            return m.ToImage<TColor, TDepth>();
-         }
-      }
-
       public static Mat LoadMat(String name, ImreadModes modes = ImreadModes.AnyColor | ImreadModes.AnyDepth)
       {
          return Task.Run(async () => await ReadFile(name, modes)).Result;
@@ -100,13 +84,6 @@ namespace Emgu.CV.Test
         public static String GetFile(String fileName)
         {
             return fileName;
-        }
-
-        public static Image<TColor, TDepth> LoadImage<TColor, TDepth>(String name)
-           where TColor : struct, IColor
-           where TDepth : new()
-        {
-            return new Image<TColor, TDepth>(name);
         }
 
         public static Mat LoadMat(string name, ImreadModes modes = ImreadModes.AnyColor | ImreadModes.AnyDepth)

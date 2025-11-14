@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Drawing;
 using Emgu.CV.CvEnum;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.CV;

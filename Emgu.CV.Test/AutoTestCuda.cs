@@ -14,7 +14,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 
 using Emgu.CV.Util;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
 using Emgu.CV.XFeatures2D;
 using System.Runtime.InteropServices;
 
@@ -100,7 +100,7 @@ namespace Emgu.CV.Test
         {
             if (!CudaInvoke.HasCuda)
                 return;
-            GpuMat<Byte> mat = new GpuMat<byte>(1200, 640, 1, true);
+            GpuMat mat = new GpuMat(1200, 640, DepthType.Cv8U, 1, true);
 
             EmguAssert.IsTrue(mat.IsContinuous);
         }
@@ -110,8 +110,8 @@ namespace Emgu.CV.Test
         {
             if (!CudaInvoke.HasCuda)
                 return;
-            Image<Gray, Byte> img1 = new Image<Gray, byte>(1200, 640);
-            img1.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
+            Mat img1 = new Mat(1200, 640, DepthType.Cv8U, 1);
+            CvInvoke.Randu(img1, new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
             using (GpuMat gpuImg1 = new GpuMat(img1))
             using (GpuMat mat = new GpuMat(gpuImg1, new Emgu.CV.Structure.Range(0, 1), Emgu.CV.Structure.Range.All))
             {
@@ -126,11 +126,12 @@ namespace Emgu.CV.Test
             if (!CudaInvoke.HasCuda)
                 return;
             int repeat = 1000;
-            Image<Gray, Byte> img1 = new Image<Gray, byte>(1200, 640);
-            Image<Gray, Byte> img2 = new Image<Gray, byte>(img1.Size);
-            img1.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
-            img2.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
-            Image<Gray, Byte> cpuImgSum = new Image<Gray, byte>(img1.Size);
+            Mat img1 = new Mat(1200, 640, DepthType.Cv8U, 1);
+            Mat img2 = new Mat(img1.Size, DepthType.Cv8U, 1);
+            CvInvoke.Randu(img1, new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
+            CvInvoke.Randu(img2, new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
+
+            Mat cpuImgSum = new Mat(img1.Size, DepthType.Cv8U, 1);
             Stopwatch watch = Stopwatch.StartNew();
             for (int i = 0; i < repeat; i++)
                 CvInvoke.Add(img1, img2, cpuImgSum, null, CvEnum.DepthType.Cv8U);
@@ -140,21 +141,22 @@ namespace Emgu.CV.Test
 
             watch.Reset();
             watch.Start();
-            CudaImage<Gray, Byte> gpuImg1 = new CudaImage<Gray, byte>(img1);
-            CudaImage<Gray, Byte> gpuImg2 = new CudaImage<Gray, byte>(img2);
-            CudaImage<Gray, Byte> gpuImgSum = new CudaImage<Gray, byte>(gpuImg1.Size);
+            GpuMat gpuImg1 = new GpuMat(img1);
+            GpuMat gpuImg2 = new GpuMat(img2);
+            GpuMat gpuImgSum = new GpuMat(gpuImg1.Size.Height, gpuImg1.Size.Width, DepthType.Cv8U, 1);
             Stopwatch watch2 = Stopwatch.StartNew();
             for (int i = 0; i < repeat; i++)
                 CudaInvoke.Add(gpuImg1, gpuImg2, gpuImgSum);
             watch2.Stop();
-            Image<Gray, Byte> cpuImgSumFromGpu = gpuImgSum.ToImage();
-            watch.Stop();
-            Trace.WriteLine(String.Format("Core GPU processing time: {0}ms",
-                (double)watch2.ElapsedMilliseconds / repeat));
-            //Trace.WriteLine(String.Format("Total GPU processing time: {0}ms", (double)watch.ElapsedMilliseconds/repeat));
+            using (Mat cpuImgSumFromGpu = gpuImgSum.ToMat())
+            {
+                watch.Stop();
+                Trace.WriteLine(String.Format("Core GPU processing time: {0}ms",
+                    (double)watch2.ElapsedMilliseconds / repeat));
+                //Trace.WriteLine(String.Format("Total GPU processing time: {0}ms", (double)watch.ElapsedMilliseconds/repeat));
 
-            EmguAssert.IsTrue(cpuImgSum.Equals(cpuImgSumFromGpu));
-
+                EmguAssert.IsTrue(cpuImgSum.Equals(cpuImgSumFromGpu));
+            }
         }
 
         [Test]
@@ -162,9 +164,9 @@ namespace Emgu.CV.Test
         {
             if (!CudaInvoke.HasCuda)
                 return;
-            using (Image<Bgr, Byte> img1 = new Image<Bgr, byte>(1200, 640))
+            using (Mat img1 = new Mat(1200, 640, DepthType.Cv8U, 3))
             {
-                img1.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
+                CvInvoke.Randu(img1, new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
 
                 using (GpuMat gpuImg1 = new GpuMat(img1))
                 {
@@ -173,14 +175,18 @@ namespace Emgu.CV.Test
                     for (int i = 0; i < channels.Length; i++)
                     {
                         Mat imgL = channels[i].ToMat();
-                        Image<Gray, Byte> imgR = img1[i];
-                        EmguAssert.IsTrue(imgL.Equals(imgR.Mat), "failed split GpuMat");
+
+                        using (Mat imgR = new Mat())
+                        {
+                            CvInvoke.ExtractChannel(img1, imgR, i);
+                            EmguAssert.IsTrue(imgL.Equals(imgR), "failed split GpuMat");
+                        }
                     }
 
                     using (GpuMat gpuImg2 = new GpuMat())
                     {
                         gpuImg2.MergeFrom(channels, null);
-                        using (Image<Bgr, byte> img2 = new Image<Bgr, byte>(img1.Size))
+                        using (Mat img2 = new Mat())
                         {
                             gpuImg2.Download(img2);
                             EmguAssert.IsTrue(img2.Equals(img1), "failed split and merge test");
@@ -201,14 +207,16 @@ namespace Emgu.CV.Test
         {
             if (!CudaInvoke.HasCuda)
                 return;
-            using (Image<Bgr, Byte> img1 = new Image<Bgr, byte>(1200, 640))
+            using (Mat img1 = new Mat(1200, 640, DepthType.Cv8U, 3))
             {
-                img1.SetRandUniform(new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
-                using (Image<Bgr, Byte> img1Flip = img1.Flip(CvEnum.FlipType.Horizontal | CvEnum.FlipType.Vertical))
-                using (CudaImage<Bgr, Byte> cudaImage = new CudaImage<Bgr, byte>(img1))
-                using (CudaImage<Bgr, Byte> cudaFlip = new CudaImage<Bgr, byte>(img1.Size))
+                CvInvoke.Randu(img1, new MCvScalar(0, 0, 0), new MCvScalar(255, 255, 255));
+                
+                using (Mat img1Flip = new Mat())
+                using (GpuMat cudaImage = new GpuMat(img1))
+                using (GpuMat cudaFlip = new GpuMat())
                 {
-                    CudaInvoke.Flip(cudaImage, cudaFlip, CvEnum.FlipType.Horizontal | CvEnum.FlipType.Vertical,
+                    CvInvoke.Flip(img1, img1Flip, FlipType.Both);
+                    CudaInvoke.Flip(cudaImage, cudaFlip, FlipType.Both,
                         null);
                     cudaFlip.Download(img1);
                     EmguAssert.IsTrue(img1.Equals(img1Flip));

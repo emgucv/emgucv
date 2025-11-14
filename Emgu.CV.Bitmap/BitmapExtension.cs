@@ -48,27 +48,31 @@ namespace Emgu.CV
         /// <param name="gTable">Lookup table for the G channel</param>
         /// <param name="rTable">Lookup table for the R channel</param>
         /// <param name="aTable">Lookup table for the A channel</param>
-        public static void ColorPaletteToLookupTable(ColorPalette palette, out Matrix<Byte> bTable,
-            out Matrix<Byte> gTable, out Matrix<Byte> rTable, out Matrix<Byte> aTable)
+        public static void ColorPaletteToLookupTable(ColorPalette palette, out Mat bTable,
+            out Mat gTable, out Mat rTable, out Mat aTable)
         {
-            bTable = new Matrix<byte>(256, 1);
-            gTable = new Matrix<byte>(256, 1);
-            rTable = new Matrix<byte>(256, 1);
-            aTable = new Matrix<byte>(256, 1);
-            byte[,] bData = bTable.Data;
-            byte[,] gData = gTable.Data;
-            byte[,] rData = rTable.Data;
-            byte[,] aData = aTable.Data;
+            bTable = new Mat(256, 1, DepthType.Cv8U, 1);
 
+            gTable = new Mat(256, 1, DepthType.Cv8U, 1);
+            rTable = new Mat(256, 1, DepthType.Cv8U, 1);
+            aTable = new Mat(256, 1, DepthType.Cv8U, 1);
+            byte[] bData = new byte[256];
+            byte[] gData = new byte[256];
+            byte[] rData = new byte[256];
+            byte[] aData = new byte[256];
             Color[] colors = palette.Entries;
             for (int i = 0; i < colors.Length; i++)
             {
                 Color c = colors[i];
-                bData[i, 0] = c.B;
-                gData[i, 0] = c.G;
-                rData[i, 0] = c.R;
-                aData[i, 0] = c.A;
+                bData[i] = c.B;
+                gData[i] = c.G;
+                rData[i] = c.R;
+                aData[i] = c.A;
             }
+            bTable.SetTo(bData);
+            gTable.SetTo(gData);
+            rTable.SetTo(rData);
+            aTable.SetTo(aData);
         }
 
         #endregion
@@ -301,7 +305,9 @@ namespace Emgu.CV
         /// Create a Mat from Bitmap
         /// </summary>
         /// <param name="bitmap">The Bitmap to be converted to Mat</param>
-        /// <param name="mat">The Mat converted from Bitmap</param>
+        /// <param name="mat">The Mat converted from Bitmap.
+        /// If Bitmap is 3-channel color image, the Mat will be in Bgr format.
+        /// If Bitmap is 4-channel, the Mat will be in Bgra format.</param>
         public static void ToMat(this Bitmap bitmap, Mat mat)
         {
             Size size = bitmap.Size;
@@ -347,7 +353,7 @@ namespace Emgu.CV
                     return;
                 case PixelFormat.Format8bppIndexed:
                     //Mat imageFrom8bppIndexed = new Mat();
-                    Matrix<Byte> bTable, gTable, rTable, aTable;
+                    Mat bTable, gTable, rTable, aTable;
                     ColorPaletteToLookupTable(bitmap.Palette, out bTable, out gTable, out rTable, out aTable);
                     BitmapData data8bppIndexed = bitmap.LockBits(
                         new Rectangle(Point.Empty, size),
@@ -440,7 +446,7 @@ namespace Emgu.CV
                     GCHandle imageDataHandle = GCHandle.Alloc(imagedata, GCHandleType.Pinned);
                     try
                     {
-                        using (Mat tmp = new Mat(new int[] {rows, cols}, DepthType.Cv8U,
+                        using (Mat tmp = new Mat(new int[] { rows, cols }, DepthType.Cv8U,
                             imageDataHandle.AddrOfPinnedObject()))
                         {
                             tmp.CopyTo(mat);
@@ -468,7 +474,7 @@ namespace Emgu.CV
                     GCHandle dataHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                     try
                     {
-                        using (Mat tmp = new Mat(new int[] {size.Height, size.Width, 4}, DepthType.Cv8U,
+                        using (Mat tmp = new Mat(new int[] { size.Height, size.Width, 4 }, DepthType.Cv8U,
                             dataHandle.AddrOfPinnedObject()))
                         {
                             tmp.CopyTo(mat);
@@ -483,6 +489,7 @@ namespace Emgu.CV
             }
         }
 
+        /*
         /// <summary>
         /// Create an Image &lt; TColor, TDepth &gt; from Bitmap
         /// </summary>
@@ -669,7 +676,7 @@ namespace Emgu.CV
 
             return image;
         }
-
+        
 
         /// <summary>
         /// Utility function for converting Bitmap to Image
@@ -826,7 +833,7 @@ namespace Emgu.CV
                 {
                     return tmp.ToBitmap();
                 }
-        }
+        }*/
     }
 
     /// <summary>
@@ -846,8 +853,38 @@ namespace Emgu.CV
             try
             {
                 using (Bitmap bmp = new Bitmap(fileName))
-                using (Image<Bgr, Byte> image = bmp.ToImage<Bgr, Byte>())
-                    image.Mat.CopyTo(mat);
+                {
+                    if (loadType.HasFlag(ImreadModes.AnyColor) || loadType.HasFlag(ImreadModes.ColorBgr))
+                        bmp.ToMat(mat);
+                    else if (loadType.HasFlag(ImreadModes.Grayscale))
+                    {
+                        using (Mat tmp = new Mat())
+                        {
+                            bmp.ToMat(tmp);
+                            if (tmp.NumberOfChannels == 3)
+                            {
+                                CvInvoke.CvtColor(tmp, mat, ColorConversion.Bgr2Gray);
+                            }
+                            else if (tmp.NumberOfChannels == 4)
+                            {
+                                CvInvoke.CvtColor(tmp, mat, ColorConversion.Bgra2Gray);
+                            }
+                            else
+                            {
+                                throw new NotImplementedException(String.Format(
+                                    "Converting {0} channels Bitmap to Grayscale is not supported.",
+                                        tmp.NumberOfChannels));
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        throw new NotImplementedException(String.Format(
+                            "Converting Bitmap image of type {0} to Mat is not implemented.", bmp.PixelFormat));
+                    }
+                }
+
                 return true;
             }
             catch (Exception e)

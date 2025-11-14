@@ -13,7 +13,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 
-namespace Emgu.CV.Features2D
+namespace Emgu.CV.Features
 {
     /// <summary>
     /// Tools for features 2D
@@ -279,7 +279,7 @@ namespace Emgu.CV.Features2D
            ref MCvScalar matchColor,
            ref MCvScalar singlePointColor,
            IntPtr matchesMask,
-           Features2D.Features2DToolbox.KeypointDrawType flags);
+           Features.Features2DToolbox.KeypointDrawType flags);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDrawMatchedFeatures2(
@@ -292,7 +292,7 @@ namespace Emgu.CV.Features2D
             ref MCvScalar matchColor,
             ref MCvScalar singlePointColor,
             IntPtr matchesMask,
-            Features2D.Features2DToolbox.KeypointDrawType flags);
+            Features.Features2DToolbox.KeypointDrawType flags);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDrawMatchedFeatures3(
@@ -305,7 +305,7 @@ namespace Emgu.CV.Features2D
             ref MCvScalar matchColor,
             ref MCvScalar singlePointColor,
             IntPtr matchesMask,
-            Features2D.Features2DToolbox.KeypointDrawType flags);
+            Features.Features2DToolbox.KeypointDrawType flags);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDrawKeypoints(
@@ -313,7 +313,7 @@ namespace Emgu.CV.Features2D
                             IntPtr vectorOfKeypoints,
                             IntPtr outImage,
                             ref MCvScalar color,
-                            Features2D.Features2DToolbox.KeypointDrawType flags);
+                            Features.Features2DToolbox.KeypointDrawType flags);
 
 
     }

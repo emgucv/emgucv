@@ -671,6 +671,7 @@ namespace Emgu.CV.Cuda
         internal static extern void gpuMatReshape(IntPtr src, IntPtr dst, int newCn, int newRows);
     }
 
+    /*
     /// <summary>
     /// Similar to CvArray but use GPU for processing
     /// </summary>
@@ -752,5 +753,5 @@ namespace Emgu.CV.Cuda
         {
             return new GpuMat<TDepth>(CudaInvoke.GetSubRect(this, ref region), true);
         }
-    }
+    }*/
 }

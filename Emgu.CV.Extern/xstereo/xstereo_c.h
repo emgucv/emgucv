@@ -24,7 +24,7 @@ namespace cv {
 #endif
 
 CVAPI(cv::stereo::QuasiDenseStereo*) cveQuasiDenseStereoCreate(
-	CvSize* monoImgSize, 
+	cv::Size* monoImgSize, 
 	cv::String* paramFilepath,
 	cv::Ptr<cv::stereo::QuasiDenseStereo>** sharedPtr);
 

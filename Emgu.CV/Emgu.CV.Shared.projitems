@@ -37,7 +37,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Calib\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)3d\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stereo\*.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Imgcodec\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Imgcodecs\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)HighGUI\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\CvType\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PInvoke\Windows.Store\*.cs" />

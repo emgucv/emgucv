@@ -181,8 +181,8 @@ CVAPI(cv::detail::AKAZEFeaturesFinder*) cveAKAZEFeaturesFinderCreate(
 CVAPI(void) cveAKAZEFeaturesFinderRelease(cv::detail::AKAZEFeaturesFinder** finder);
 */
 
-CVAPI(void) cveRotationWarperBuildMaps(cv::detail::RotationWarper* warper, CvSize* srcSize, cv::_InputArray* K, cv::_InputArray* R, cv::_OutputArray* xmap, cv::_OutputArray* ymap, CvRect* boundingBox);
-CVAPI(void) cveRotationWarperWarp(cv::detail::RotationWarper* warper, cv::_InputArray* src, cv::_InputArray* K, cv::_InputArray* R, int interpMode, int borderMode, cv::_OutputArray* dst, CvPoint* corner);
+CVAPI(void) cveRotationWarperBuildMaps(cv::detail::RotationWarper* warper, cv::Size* srcSize, cv::_InputArray* K, cv::_InputArray* R, cv::_OutputArray* xmap, cv::_OutputArray* ymap, cv::Rect* boundingBox);
+CVAPI(void) cveRotationWarperWarp(cv::detail::RotationWarper* warper, cv::_InputArray* src, cv::_InputArray* K, cv::_InputArray* R, int interpMode, int borderMode, cv::_OutputArray* dst, cv::Point* corner);
 
 CVAPI(cv::detail::PlaneWarper*) cveDetailPlaneWarperCreate(float scale, cv::detail::RotationWarper** rotationWarper);
 CVAPI(void) cveDetailPlaneWarperRelease(cv::detail::PlaneWarper** warper);
@@ -236,8 +236,8 @@ CVAPI(cv::TransverseMercatorWarper*) cveTransverseMercatorWarperCreate(cv::Warpe
 CVAPI(void) cveTransverseMercatorWarperRelease(cv::TransverseMercatorWarper** warperCreator);
 
 CVAPI(void) cveBlenderPrepare(cv::detail::Blender* blender, std::vector< cv::Point >* corners, const std::vector< cv::Size >* sizes);
-CVAPI(void) cveBlenderPrepare2(cv::detail::Blender* blender, CvRect* dstRoi);
-CVAPI(void) cveBlenderFeed(cv::detail::Blender* blender, cv::_InputArray* img, cv::_InputArray* mask, CvPoint* tl);
+CVAPI(void) cveBlenderPrepare2(cv::detail::Blender* blender, cv::Rect* dstRoi);
+CVAPI(void) cveBlenderFeed(cv::detail::Blender* blender, cv::_InputArray* img, cv::_InputArray* mask, cv::Point* tl);
 CVAPI(void) cveBlenderBlend(cv::detail::Blender* blender, cv::_InputOutputArray* dst, cv::_InputOutputArray* dstMask);
 
 CVAPI(cv::detail::FeatherBlender*) cveFeatherBlenderCreate(float sharpness, cv::detail::Blender** blender);

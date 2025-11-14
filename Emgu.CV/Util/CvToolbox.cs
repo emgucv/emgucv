@@ -9,7 +9,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
 using Emgu.CV.Structure;
 
 namespace Emgu.CV.Util
@@ -68,7 +68,7 @@ namespace Emgu.CV.Util
            if (typeOfDepth == typeof(Int16))
               return CvEnum.DepthType.Cv16S;
            throw new NotImplementedException("Unsupported matrix depth");
-        }*/
+        }
 
         /// <summary>
         /// Convert arrays of data to matrix
@@ -110,7 +110,7 @@ namespace Emgu.CV.Util
                 CopyVector(points[i], dst);
             }
             return res;
-        }
+        }*/
 
         /// <summary>
         /// Compute the minimum and maximum value from the points

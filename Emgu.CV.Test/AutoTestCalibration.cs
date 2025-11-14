@@ -13,7 +13,7 @@ using System.Threading;
 using System.Xml;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
@@ -38,7 +38,7 @@ namespace Emgu.CV.Test
         public void TestCalibration()
         {
             Size patternSize = new Size(9, 6);
-            Image<Gray, Byte> left01 = EmguAssert.LoadImage<Gray, byte>("left01.jpg");
+            Mat left01 = EmguAssert.LoadMat("left01.jpg", ImreadModes.Grayscale);
             using (Util.VectorOfPointF vec = new Util.VectorOfPointF())
             {
                 CvInvoke.FindChessboardCorners(left01, patternSize, vec);
@@ -80,8 +80,8 @@ namespace Emgu.CV.Test
             using (VectorOfMat translations = new VectorOfMat())
             {
                 Mat calMat = CvInvoke.InitCameraMatrix2D(ptsVec, imgPtsVec, chessboardImage.Size, 0);
-                Matrix<double> calMatF = new Matrix<double>(calMat.Rows, calMat.Cols, calMat.NumberOfChannels);
-                calMat.CopyTo(calMatF);
+                //Matrix<double> calMatF = new Matrix<double>(calMat.Rows, calMat.Cols, calMat.NumberOfChannels);
+                //calMat.CopyTo(calMatF);
                 double error = CvInvoke.CalibrateCamera(ptsVec, imgPtsVec, chessboardImage.Size, cameraMatrix,
                     distortionCoeff,
                     rotations, translations, CalibType.Default, new MCvTermCriteria(30, 1.0e-10));
@@ -136,8 +136,8 @@ namespace Emgu.CV.Test
             using (VectorOfMat translations = new VectorOfMat())
             {
                 Mat calMat = CvInvoke.InitCameraMatrix2D(ptsVec, imgPtsVec, chessboardImage.Size, 0);
-                Matrix<double> calMatF = new Matrix<double>(calMat.Rows, calMat.Cols, calMat.NumberOfChannels);
-                calMat.CopyTo(calMatF);
+                //Matrix<double> calMatF = new Matrix<double>(calMat.Rows, calMat.Cols, calMat.NumberOfChannels);
+                //calMat.CopyTo(calMatF);
                 double error = CvInvoke.CalibrateCamera(ptsVec, imgPtsVec, chessboardImage.Size, cameraMatrix,
                     distortionCoeff,
                     rotations, translations, CalibType.Default, new MCvTermCriteria(30, 1.0e-10));
@@ -171,7 +171,7 @@ namespace Emgu.CV.Test
         public void TestCirclesGrid()
         {
             Size patternSize = new Size(4, 3);
-            Image<Gray, Byte> circlesGridImage = EmguAssert.LoadImage<Gray, byte>("circlesGrid.bmp");
+            Mat circlesGridImage = EmguAssert.LoadMat("circlesGrid.bmp", ImreadModes.Grayscale);
             using (SimpleBlobDetector detector = new SimpleBlobDetector())
             using (Util.VectorOfPointF centers = new Util.VectorOfPointF())
             {

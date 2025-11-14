@@ -1,7 +1,7 @@
 #include "xstereo_c.h"
 
 cv::stereo::QuasiDenseStereo* cveQuasiDenseStereoCreate(
-	CvSize* monoImgSize,
+	cv::Size* monoImgSize,
 	cv::String* paramFilepath,
 	cv::Ptr<cv::stereo::QuasiDenseStereo>** sharedPtr)
 {

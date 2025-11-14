@@ -362,12 +362,12 @@ void cveLUT(cv::_InputArray* src, cv::_InputArray* lut, cv::_OutputArray* dst)
 	cv::LUT(*src, *lut, *dst);
 }
 
-void cveSum(cv::_InputArray* src, CvScalar* result)
+void cveSum(cv::_InputArray* src, cv::Scalar* result)
 {
 	cv::Scalar sum = cv::sum(*src);
 	memcpy(&result->val[0], &sum.val[0], sizeof(double) * 4);
 }
-void cveMean(cv::_InputArray* src, cv::_InputArray* mask, CvScalar* result)
+void cveMean(cv::_InputArray* src, cv::_InputArray* mask, cv::Scalar* result)
 {
 	cv::Scalar mean = cv::mean(*src, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 	memcpy(&result->val[0], &mean.val[0], sizeof(double) * 4);
@@ -376,7 +376,7 @@ void cveMeanStdDev(cv::_InputArray* src, cv::_OutputArray* mean, cv::_OutputArra
 {
 	cv::meanStdDev(*src, *mean, *stddev, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
-void cveTrace(cv::_InputArray* mtx, CvScalar* result)
+void cveTrace(cv::_InputArray* mtx, cv::Scalar* result)
 {
 	cv::Scalar trace = cv::trace(*mtx);
 	memcpy(&result->val[0], &trace.val[0], sizeof(double) * 4);
@@ -396,7 +396,7 @@ double cveNorm(cv::_InputArray* src1, cv::_InputArray* src2, int normType, cv::_
 		return cv::norm(*src1, normType, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 	}
 }
-bool cveCheckRange(cv::_InputArray* arr, bool quiet, CvPoint* index, double minVal, double maxVal)
+bool cveCheckRange(cv::_InputArray* arr, bool quiet, cv::Point* index, double minVal, double maxVal)
 {
 	cv::Point p;
 	bool result = cv::checkRange(*arr, quiet, &p, minVal, maxVal);
@@ -463,7 +463,7 @@ void cvePolarToCart(cv::_InputArray* magnitude, cv::_InputArray* angle, cv::_Out
 {
 	cv::polarToCart(*magnitude, *angle, *x, *y, angleInDegrees);
 }
-void cveSetIdentity(cv::_InputOutputArray* mtx, CvScalar* scalar)
+void cveSetIdentity(cv::_InputOutputArray* mtx, cv::Scalar* scalar)
 {
 	cv::setIdentity(*mtx, *scalar);
 }
@@ -563,7 +563,7 @@ void cveInsertChannel(cv::_InputArray* src, cv::_InputOutputArray* dst, int coi)
 }
 
 
-double cveKmeans(cv::_InputArray* data, int k, cv::_InputOutputArray* bestLabels, CvTermCriteria* criteria, int attempts, int flags, cv::_OutputArray* centers)
+double cveKmeans(cv::_InputArray* data, int k, cv::_InputOutputArray* bestLabels, cv::TermCriteria* criteria, int attempts, int flags, cv::_OutputArray* centers)
 {
 	return cv::kmeans(*data, k, *bestLabels, *criteria, attempts, flags, centers ? *centers : static_cast<cv::OutputArray>(cv::noArray()));
 }
@@ -635,7 +635,7 @@ void cveAlgorithmGetDefaultName(cv::Algorithm* algorithm, cv::String* defaultNam
 	*defaultName = name;
 }
 
-bool cveClipLine(CvRect* rect, CvPoint* pt1, CvPoint* pt2)
+bool cveClipLine(cv::Rect* rect, cv::Point* pt1, cv::Point* pt2)
 {
 	cv::Point p1 = *pt1, p2 = *pt2;
 	bool r = cv::clipLine(*rect, p1, p2);
@@ -811,7 +811,7 @@ void cveFileNodeIteratorRelease(cv::FileNodeIterator** iterator)
 	*iterator = 0;
 }
 
-
+/*
 IplImage* cveCreateImage(CvSize* size, int depth, int channels)
 {
 	return cvCreateImage(*size, depth, channels);
@@ -853,7 +853,9 @@ void cveGetImageROI(IplImage* image, CvRect* rect)
 	CvRect rect2 = cvGetImageROI(image);
 	memcpy(rect, &rect2, sizeof(CvRect));
 }
+*/
 
+/*
 CvMat* cveInitMatHeader(CvMat* mat, int rows, int cols, int type, void* data, int step)
 {
 	return cvInitMatHeader(mat, rows, cols, type, data, step);
@@ -961,6 +963,7 @@ void cveClearND(CvArr* arr, int* idx)
 {
 	cvClearND(arr, idx);
 }
+*/
 
 bool cveUseOptimized()
 {
@@ -989,6 +992,7 @@ void cveGetBuildInformation(cv::String* buildInformation)
 	*buildInformation = cv::getBuildInformation();
 }
 
+/*
 void cveGetRawData(CvArr* arr, uchar** data, int* step, CvSize* roiSize)
 {
 	cvGetRawData(arr, data, step, roiSize);
@@ -1012,12 +1016,11 @@ CvMat* cveReshape(CvArr* arr, CvMat* header, int newCn, int newRows)
 	return cvReshape(arr, header, newCn, newRows);
 }
 
-/*
 CvMat* cveGetDiag(CvArr* arr, CvMat* submat, int diag)
 {
 	return cvGetDiag(arr, submat, diag);
 }
-*/
+
 
 void cveConvertScale(CvArr* arr, CvArr* dst, double scale, double shift)
 {
@@ -1028,6 +1031,7 @@ void cveReleaseImage(IplImage** image)
 {
 	cvReleaseImage(image);
 }
+*/
 
 void cveSVDecomp(cv::_InputArray* src, cv::_OutputArray* w, cv::_OutputArray* u, cv::_OutputArray* vt, int flags)
 {

@@ -9,7 +9,7 @@ using Emgu.CV;
 using Emgu.CV.Util;
 using Emgu.Util;
 
-namespace Emgu.CV.Features2D
+namespace Emgu.CV.Features
 {
     /// <summary>
     /// Descriptor matcher

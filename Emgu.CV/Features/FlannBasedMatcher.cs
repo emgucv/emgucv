@@ -9,7 +9,7 @@ using Emgu.CV;
 using Emgu.CV.Flann;
 using Emgu.Util;
 
-namespace Emgu.CV.Features2D
+namespace Emgu.CV.Features
 {
     /// <summary>
     /// This matcher trains flann::Index_ on a train descriptor collection and calls its nearest search methods to find the best matches. So, this matcher may be faster when matching a large train collection than the brute force matcher. 

@@ -49,6 +49,7 @@ namespace Emgu.CV
             SetTo(new MCvScalar());
         }
 
+        /*
         /// <summary>
         /// Project the images to the histogram bins 
         /// </summary>
@@ -85,7 +86,7 @@ namespace Emgu.CV
             Calculate(mats, accumulate, mask);
         }
 
-        /*
+        
         /// <summary>
         /// Project the images to the histogram bins 
         /// </summary>
@@ -115,7 +116,7 @@ namespace Emgu.CV
             return rangevec;
         }
 
-        private void Calculate(Mat[] arrays, bool accumulate, CvArray<Byte> mask)
+        private void Calculate(Mat[] arrays, bool accumulate, Mat mask)
         {
             Debug.Assert(arrays.Length == _binSizes.Length, "Incompatible Dimension");
 
@@ -125,10 +126,11 @@ namespace Emgu.CV
 
             using (VectorOfMat vm = new VectorOfMat(arrays))
             {
-                CvInvoke.CalcHist(vm, channels, mask == null ? null : mask.Mat, this, _binSizes, GetRangeAsFloatVec(), accumulate);
+                CvInvoke.CalcHist(vm, channels, mask, this, _binSizes, GetRangeAsFloatVec(), accumulate);
             }
         }
 
+        /*
         /// <summary> 
         /// Backproject the histogram into a gray scale image
         /// </summary>
@@ -178,7 +180,7 @@ namespace Emgu.CV
 
                 return res;
             }
-        }
+        }*/
 
         #region Properties
         /// <summary>

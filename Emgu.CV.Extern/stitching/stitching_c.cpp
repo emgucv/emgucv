@@ -305,18 +305,18 @@ void cveStitcherGetResultMask(
 }
 
 
-void cveRotationWarperBuildMaps(cv::detail::RotationWarper* warper, CvSize* srcSize, cv::_InputArray* K, cv::_InputArray* R, cv::_OutputArray* xmap, cv::_OutputArray* ymap, CvRect* boundingBox)
+void cveRotationWarperBuildMaps(cv::detail::RotationWarper* warper, cv::Size* srcSize, cv::_InputArray* K, cv::_InputArray* R, cv::_OutputArray* xmap, cv::_OutputArray* ymap, cv::Rect* boundingBox)
 {
 #ifdef HAVE_OPENCV_STITCHING
-	*boundingBox = cvRect(warper->buildMaps(*srcSize, *K, *R, *xmap, *ymap));
+	*boundingBox = warper->buildMaps(*srcSize, *K, *R, *xmap, *ymap);
 #else
 	throw_no_stitching();
 #endif
 }
-void cveRotationWarperWarp(cv::detail::RotationWarper* warper, cv::_InputArray* src, cv::_InputArray* K, cv::_InputArray* R, int interpMode, int borderMode, cv::_OutputArray* dst, CvPoint* corner)
+void cveRotationWarperWarp(cv::detail::RotationWarper* warper, cv::_InputArray* src, cv::_InputArray* K, cv::_InputArray* R, int interpMode, int borderMode, cv::_OutputArray* dst, cv::Point* corner)
 {
 #ifdef HAVE_OPENCV_STITCHING
-	*corner = cvPoint(warper->warp(*src, *K, *R, interpMode, borderMode, *dst));
+	*corner = warper->warp(*src, *K, *R, interpMode, borderMode, *dst);
 #else
 	throw_no_stitching();
 #endif
@@ -721,7 +721,7 @@ void cveBlenderPrepare(cv::detail::Blender* blender, std::vector< cv::Point >* c
 	throw_no_stitching();
 #endif		
 }
-void cveBlenderPrepare2(cv::detail::Blender* blender, CvRect* dstRoi)
+void cveBlenderPrepare2(cv::detail::Blender* blender, cv::Rect* dstRoi)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	blender->prepare(*dstRoi);
@@ -729,7 +729,7 @@ void cveBlenderPrepare2(cv::detail::Blender* blender, CvRect* dstRoi)
 	throw_no_stitching();
 #endif	
 }
-void cveBlenderFeed(cv::detail::Blender* blender, cv::_InputArray* img, cv::_InputArray* mask, CvPoint* tl)
+void cveBlenderFeed(cv::detail::Blender* blender, cv::_InputArray* img, cv::_InputArray* mask, cv::Point* tl)
 {
 #ifdef HAVE_OPENCV_STITCHING
 	blender->feed(*img, *mask, *tl);

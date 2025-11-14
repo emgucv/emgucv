@@ -822,6 +822,7 @@ namespace Emgu.CV
         private static extern void cveCorrectMatches(IntPtr f, IntPtr points1, IntPtr points2, IntPtr newPoints1,
             IntPtr newPoints2);
 
+        /*
         /// <summary>
         /// Computes an optimal affine transformation between two 3D point sets.
         /// </summary>
@@ -859,7 +860,7 @@ namespace Emgu.CV
             dstHandle.Free();
 
             return result;
-        }
+        }*/
 
         /// <summary>
         /// Computes an optimal affine transformation between two 3D point sets.

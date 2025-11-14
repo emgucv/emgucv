@@ -11,6 +11,7 @@ using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
+    /*
     /// <summary>
     /// A (2x3) 2D rotation matrix. This Matrix defines an Affine Transform
     /// </summary>
@@ -162,5 +163,5 @@ namespace Emgu.CV
             dstImageSize = new Size(maxX - minX + 1, maxY - minY + 1);
             return rotationMatrix;
         }
-    }
+    }*/
 }

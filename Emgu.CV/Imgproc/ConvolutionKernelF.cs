@@ -9,6 +9,7 @@ using Emgu.CV.CvEnum;
 
 namespace Emgu.CV
 {
+    /*
    /// <summary>
    /// A convolution kernel 
    /// </summary>
@@ -103,5 +104,5 @@ namespace Emgu.CV
          base.Transpose(),
          new Point(_center.Y, _center.X));
       }
-   }
+   }*/
 }

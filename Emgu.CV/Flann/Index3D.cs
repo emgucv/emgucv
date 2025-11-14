@@ -14,6 +14,7 @@ using Emgu.CV.Util;
 
 namespace Emgu.CV.Flann
 {
+    /*
     /// <summary>
     /// Create index for 3D points
     /// </summary>
@@ -131,5 +132,5 @@ namespace Emgu.CV.Flann
             _query.Dispose();
             _distance.Dispose();
         }
-    }
+    }*/
 }

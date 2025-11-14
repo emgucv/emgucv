@@ -9,7 +9,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Util;
 using System.Drawing;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
 
 namespace Emgu.CV
 {
@@ -844,6 +844,7 @@ namespace Emgu.CV
             IntPtr sharpness,
             ref MCvScalar result);
 
+        /*
         /// <summary>
         /// Finds centers in the grid of circles
         /// </summary>
@@ -866,7 +867,7 @@ namespace Emgu.CV
                       );
                 return patternFound ? vec.ToArray() : null;
             }
-        }
+        }*/
 
         /// <summary>
         /// Finds centers in the grid of circles

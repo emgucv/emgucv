@@ -6,7 +6,7 @@
 
 #include "videoio_c_extra.h"
 
-
+/*
 void OpenniGetColorPoints(CvCapture* capture, std::vector<ColorPoint>* points, IplImage* maskImg)
 {
 #ifdef HAVE_OPENCV_VIDEOIO
@@ -51,6 +51,7 @@ void OpenniGetColorPoints(CvCapture* capture, std::vector<ColorPoint>* points, I
 	throw_no_videoio();
 #endif
 }
+*/
 
 cv::VideoCapture* cveVideoCaptureCreateFromDevice(int device, int apiPreference, std::vector< int >* params)
 {
@@ -206,7 +207,7 @@ void cveWinrtOnVisibilityChanged(bool visible)
 }
 #endif
 
-cv::VideoWriter* cveVideoWriterCreate(cv::String* filename, int fourcc, double fps, CvSize* frameSize, bool isColor)
+cv::VideoWriter* cveVideoWriterCreate(cv::String* filename, int fourcc, double fps, cv::Size* frameSize, bool isColor)
 {
 #ifdef HAVE_OPENCV_VIDEOIO
 	return new cv::VideoWriter(*filename, fourcc, fps, *frameSize, isColor);
@@ -214,7 +215,7 @@ cv::VideoWriter* cveVideoWriterCreate(cv::String* filename, int fourcc, double f
 	throw_no_videoio();
 #endif
 }
-cv::VideoWriter* cveVideoWriterCreate2(cv::String* filename, int apiPreference, int fourcc, double fps, CvSize* frameSize, bool isColor)
+cv::VideoWriter* cveVideoWriterCreate2(cv::String* filename, int apiPreference, int fourcc, double fps, cv::Size* frameSize, bool isColor)
 {
 #ifdef HAVE_OPENCV_VIDEOIO
 	return new cv::VideoWriter(*filename, apiPreference, fourcc, fps, *frameSize, isColor);
@@ -222,7 +223,7 @@ cv::VideoWriter* cveVideoWriterCreate2(cv::String* filename, int apiPreference, 
 	throw_no_videoio();
 #endif
 }
-cv::VideoWriter* cveVideoWriterCreate3(cv::String* filename, int apiPreference, int fourcc, double fps, CvSize* frameSize, std::vector< int >* params)
+cv::VideoWriter* cveVideoWriterCreate3(cv::String* filename, int apiPreference, int fourcc, double fps, cv::Size* frameSize, std::vector< int >* params)
 {
 #ifdef HAVE_OPENCV_VIDEOIO
 	return new cv::VideoWriter(*filename, apiPreference, fourcc, fps, *frameSize, *params);

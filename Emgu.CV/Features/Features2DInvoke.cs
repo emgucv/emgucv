@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Emgu.CV.Features2D
+namespace Emgu.CV.Features
 {
    /// <summary>
    /// Library to invoke Features2D functions

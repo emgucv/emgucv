@@ -444,7 +444,7 @@ Pix* cveLeptCreatePixFromMat(cv::Mat* m)
 		break;
 
 	default:
-		CV_Error(CV_StsError, "Cannot convert RAW image to Pix\n");
+		CV_Error(cv::Error::StsError, "Cannot convert RAW image to Pix\n");
 	}
 	pixSetYRes(pix, 300);
 	return pix;

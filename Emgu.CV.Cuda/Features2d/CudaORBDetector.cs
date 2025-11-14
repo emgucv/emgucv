@@ -9,7 +9,7 @@ using System.Text;
 using Emgu.CV.Structure;
 using Emgu.Util;
 using Emgu.CV.Util;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
 
 namespace Emgu.CV.Cuda
 {

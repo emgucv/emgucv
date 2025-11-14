@@ -141,7 +141,7 @@ namespace Emgu.CV.Stitching
         /// Set the features finder for this stitcher.
         /// </summary>
         /// <param name="finder">The features finder</param>
-        public void SetFeaturesFinder(Features2D.Feature2D finder)
+        public void SetFeaturesFinder(Features.Feature2D finder)
         {
             StitchingInvoke.cveStitcherSetFeaturesFinder(_ptr, finder.Feature2DPtr);
         }

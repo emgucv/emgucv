@@ -13,7 +13,7 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
 
 
 namespace Emgu.CV.XFeatures2D

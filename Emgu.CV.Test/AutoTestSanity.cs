@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Xml;
 using Emgu.CV;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
 using Emgu.CV.Structure;
 using Emgu.Util;
 

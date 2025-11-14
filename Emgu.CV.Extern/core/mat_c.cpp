@@ -115,7 +115,7 @@ cv::Mat* cveMatCreateMultiDimWithData(int ndims, const int* sizes, int type, voi
 	return new cv::Mat(ndims, sizes, type, data, steps);
 }
 
-cv::Mat* cveMatCreateFromRect(cv::Mat* mat, CvRect* roi)
+cv::Mat* cveMatCreateFromRect(cv::Mat* mat, cv::Rect* roi)
 {
 	return new cv::Mat(*mat, *roi);
 }
@@ -130,7 +130,7 @@ void cveMatRelease(cv::Mat** mat)
 	delete* mat;
 	*mat = 0;
 }
-void cveMatGetSize(cv::Mat* mat, CvSize* size)
+void cveMatGetSize(cv::Mat* mat, cv::Size* size)
 {
 	size->width = mat->cols;
 	size->height = mat->rows;
@@ -142,6 +142,8 @@ void cveMatCopyTo(cv::Mat* mat, cv::_OutputArray* m, cv::_InputArray* mask)
 	else
 		mat->copyTo(*m);
 }
+
+/*
 cv::Mat* cveArrToMat(CvArr* cvArray, bool copyData, bool allowND, int coiMode)
 {
 	cv::Mat* mat = new cv::Mat();
@@ -158,6 +160,8 @@ IplImage* cveMatToIplImage(cv::Mat* m)
 	cvSetData(result, m->data, static_cast<int>(m->step[0]));
 	return result;
 }
+*/
+
 int cveMatGetElementSize(cv::Mat* mat)
 {
 	return static_cast<int>(mat->elemSize());
@@ -228,15 +232,13 @@ void cveMatCross(cv::Mat* mat, cv::_InputArray* m, cv::Mat* result)
 
 void cveMatCopyDataTo(cv::Mat* mat, unsigned char* dest)
 {
-	const int* sizes = mat->size;
-	cv::Mat destMat = cv::Mat(mat->dims, mat->size, mat->type(), dest);
+	cv::Mat destMat = cv::Mat(mat->dims, mat->size, mat->type(), dest, 0);
 	mat->copyTo(destMat);
 }
 
 void cveMatCopyDataFrom(cv::Mat* mat, unsigned char* source)
 {
-	const int* sizes = mat->size;
-	cv::Mat fromMat = cv::Mat(mat->dims, mat->size, mat->type(), source);
+	cv::Mat fromMat = cv::Mat(mat->dims, mat->size, mat->type(), source, 0);
 	fromMat.copyTo(*mat);
 }
 

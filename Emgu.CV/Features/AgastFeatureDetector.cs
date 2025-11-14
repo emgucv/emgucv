@@ -6,12 +6,11 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-using Emgu.CV.Features2D;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 
-namespace Emgu.CV.Features2D
+namespace Emgu.CV.Features
 {
     /// <summary>
     /// Wrapped AGAST detector
@@ -77,7 +76,7 @@ namespace Emgu.CV.Features2D
            int threshold,
            [MarshalAs(CvInvoke.BoolMarshalType)]
            bool nonmaxSuppression,
-           Emgu.CV.Features2D.AgastFeatureDetector.Type type,
+           Emgu.CV.Features.AgastFeatureDetector.Type type,
            ref IntPtr feature2D,
            ref IntPtr sharedPtr);
 

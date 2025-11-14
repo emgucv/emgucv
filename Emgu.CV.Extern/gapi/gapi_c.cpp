@@ -601,7 +601,7 @@ cv::GMat* cveGapiRemap(
 	cv::Mat* map2,
 	int interpolation,
 	int borderMode,
-	CvScalar* borderValue)
+	cv::Scalar* borderValue)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::GMat* result = new cv::GMat();
@@ -621,7 +621,7 @@ cv::GMat* cveGapiFlip(cv::GMat* src, int flipCode)
 	throw_no_gapi();
 #endif
 }
-cv::GMat* cveGapiCrop(cv::GMat* src, CvRect* rect)
+cv::GMat* cveGapiCrop(cv::GMat* src, cv::Rect* rect)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::GMat* result = new cv::GMat();
@@ -713,10 +713,10 @@ cv::GMat* cveGapiNormalize(
 cv::GMat* cveGapiWarpPerspective(
 	cv::GMat* src,
 	cv::Mat* M,
-	CvSize* dsize,
+	cv::Size* dsize,
 	int flags,
 	int borderMode,
-	CvScalar* borderValue)
+	cv::Scalar* borderValue)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::GMat* result = new cv::GMat();
@@ -729,10 +729,10 @@ cv::GMat* cveGapiWarpPerspective(
 cv::GMat* cveGapiWarpAffine(
 	cv::GMat* src,
 	cv::Mat* M,
-	CvSize* dsize,
+	cv::Size* dsize,
 	int flags,
 	int borderMode,
-	CvScalar* borderValue)
+	cv::Scalar* borderValue)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::GMat* result = new cv::GMat();
@@ -816,12 +816,12 @@ void cveGComputationApply1(cv::GComputation* computation, cv::Mat* input, cv::Ma
 #endif
 }
 
-void cveGComputationApply2(cv::GComputation* computation, cv::Mat* input, CvScalar* output)
+void cveGComputationApply2(cv::GComputation* computation, cv::Mat* input, cv::Scalar* output)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::Scalar o;
 	computation->apply(*input, o);
-	*output = cvScalar(o);
+	*output = o;
 #else
 	throw_no_gapi();
 #endif
@@ -834,12 +834,12 @@ void cveGComputationApply3(cv::GComputation* computation, cv::Mat* input1, cv::M
 	throw_no_gapi();
 #endif
 }
-void cveGComputationApply4(cv::GComputation* computation, cv::Mat* input1, cv::Mat* input2, CvScalar* output)
+void cveGComputationApply4(cv::GComputation* computation, cv::Mat* input1, cv::Mat* input2, cv::Scalar* output)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::Scalar o;
 	computation->apply(*input1, *input2, o);
-	*output = cvScalar(o);
+	*output = o;
 #else
 	throw_no_gapi();
 #endif
@@ -853,7 +853,7 @@ void cveGComputationApply5(cv::GComputation* computation, std::vector< cv::Mat >
 #endif
 }
 
-cv::GScalar* cveGScalarCreate(CvScalar* value)
+cv::GScalar* cveGScalarCreate(cv::Scalar* value)
 {
 #ifdef HAVE_OPENCV_GAPI
 	return new cv::GScalar(*value);
@@ -876,10 +876,10 @@ cv::GMat* cveGapiSepFilter(
 	int ddepth,
 	cv::Mat* kernelX,
 	cv::Mat* kernelY,
-	CvPoint* anchor,
-	CvScalar* delta,
+	cv::Point* anchor,
+	cv::Scalar* delta,
 	int borderType,
-	CvScalar* borderValue)
+	cv::Scalar* borderValue)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::GMat* result = new cv::GMat();
@@ -902,10 +902,10 @@ cv::GMat* cveGapiFilter2D(
 	cv::GMat* src,
 	int ddepth,
 	cv::Mat* kernel,
-	CvPoint* anchor,
-	CvScalar* delta,
+	cv::Point* anchor,
+	cv::Scalar* delta,
 	int borderType,
-	CvScalar* borderValue)
+	cv::Scalar* borderValue)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::GMat* result = new cv::GMat();
@@ -925,11 +925,11 @@ cv::GMat* cveGapiFilter2D(
 cv::GMat* cveGapiBoxFilter(
 	cv::GMat* src,
 	int dtype,
-	CvSize* ksize,
-	CvPoint* anchor,
+	cv::Size* ksize,
+	cv::Point* anchor,
 	bool normalize,
 	int borderType,
-	CvScalar* borderValue)
+	cv::Scalar* borderValue)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::GMat* result = new cv::GMat();
@@ -949,10 +949,10 @@ cv::GMat* cveGapiBoxFilter(
 
 cv::GMat* cveGapiBlur(
 	cv::GMat* src,
-	CvSize* ksize,
-	CvPoint* anchor,
+	cv::Size* ksize,
+	cv::Point* anchor,
 	int borderType,
-	CvScalar* borderValue)
+	cv::Scalar* borderValue)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::GMat* result = new cv::GMat();
@@ -970,11 +970,11 @@ cv::GMat* cveGapiBlur(
 }
 cv::GMat* cveGapiGaussianBlur(
 	cv::GMat* src,
-	CvSize* ksize,
+	cv::Size* ksize,
 	double sigmaX,
 	double sigmaY,
 	int borderType,
-	CvScalar* borderValue)
+	cv::Scalar* borderValue)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::GMat* result = new cv::GMat();
@@ -1009,10 +1009,10 @@ cv::GMat* cveGapiMedianBlur(
 cv::GMat* cveGapiErode(
 	cv::GMat* src,
 	cv::Mat* kernel,
-	CvPoint* anchor,
+	cv::Point* anchor,
 	int iterations,
 	int borderType,
-	CvScalar* borderValue)
+	cv::Scalar* borderValue)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::GMat* result = new cv::GMat();
@@ -1033,7 +1033,7 @@ cv::GMat* cveGapiErode3x3(
 	cv::GMat* src,
 	int iterations,
 	int borderType,
-	CvScalar* borderValue)
+	cv::Scalar* borderValue)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::GMat* result = new cv::GMat();
@@ -1051,10 +1051,10 @@ cv::GMat* cveGapiErode3x3(
 cv::GMat* cveGapiDilate(
 	cv::GMat* src,
 	cv::Mat* kernel,
-	CvPoint* anchor,
+	cv::Point* anchor,
 	int iterations,
 	int borderType,
-	CvScalar* borderValue)
+	cv::Scalar* borderValue)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::GMat* result = new cv::GMat();
@@ -1075,7 +1075,7 @@ cv::GMat* cveGapiDilate3x3(
 	cv::GMat* src,
 	int iterations,
 	int borderType,
-	CvScalar* borderValue)
+	cv::Scalar* borderValue)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::GMat* result = new cv::GMat();
@@ -1094,10 +1094,10 @@ cv::GMat* cveGapiMorphologyEx(
 	cv::GMat* src,
 	int op,
 	cv::Mat* kernel,
-	CvPoint* anchor,
+	cv::Point* anchor,
 	int  iterations,
 	int  borderType,
-	CvScalar* borderValue)
+	cv::Scalar* borderValue)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::GMat* result = new cv::GMat();
@@ -1125,7 +1125,7 @@ cv::GMat* cveGapiSobel(
 	double scale,
 	double delta,
 	int borderType,
-	CvScalar* borderValue)
+	cv::Scalar* borderValue)
 {
 #ifdef HAVE_OPENCV_GAPI
 	cv::GMat* result = new cv::GMat();
@@ -1153,7 +1153,7 @@ void cveGapiSobelXY(
 	double scale,
 	double delta,
 	int borderType,
-	CvScalar* borderValue,
+	cv::Scalar* borderValue,
 	cv::GMat* sobelX,
 	cv::GMat* sobelY)
 {
