@@ -61,7 +61,7 @@ if (NOT (ANDROID OR APPLE))
   MESSAGE(STATUS "leptonica HAVE_LIBJPEG: ${LEPT_USE_JPEG}")
   if(LEPT_USE_JPEG)
     add_definitions(-DHAVE_LIBJPEG)
-    include_directories(${OPENCV_SUBFOLDER}/3rdparty/libjpeg)
+    include_directories(${OPENCV_SUBFOLDER}/3rdparty/libjpeg-turbo)
   endif()
 endif()
 

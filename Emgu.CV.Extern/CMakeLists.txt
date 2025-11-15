@@ -1296,7 +1296,7 @@ ENDMACRO()
 	""
 	""
 	${HAVE_opencv_core})
-  
+
   CREATE_OCV_CLASS_PROPERTY( 
     "core/gpumat_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/GpuMat.g.cs"
