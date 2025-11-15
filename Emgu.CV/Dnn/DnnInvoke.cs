@@ -340,6 +340,7 @@ namespace Emgu.CV.Dnn
         /// <param name="model">
         /// The file path to the TFLite model.
         /// </param>
+        /// <param name="engine">Select DNN engine to be used. With auto selection the new engine is used first and falls back to classic.</param>
         /// <returns>
         /// A <see cref="Net"/> object representing the loaded network.
         /// </returns>
@@ -347,22 +348,23 @@ namespace Emgu.CV.Dnn
         /// This method loads a pre-trained neural network model stored in the TFLite format.
         /// The model can then be used for inference or further processing.
         /// </remarks>
-        public static Net ReadNetFromTFLite(String model)
+        public static Net ReadNetFromTFLite(String model, EngineType engine = EngineType.Auto)
         {
             using (CvString modelStr = new CvString(model))
             {
-                return new Net(cveReadNetFromTFLite(modelStr));
+                return new Net(cveReadNetFromTFLite(modelStr, engine));
             }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveReadNetFromTFLite(IntPtr model);
+        private static extern IntPtr cveReadNetFromTFLite(IntPtr model, EngineType engine);
 
         /// <summary>
         /// Reads a network model stored in TFLite framework's format.
         /// </summary>
         /// <param name="model">buffer containing the content of the tflite file</param>
+        /// <param name="engine">Select DNN engine to be used. With auto selection the new engine is used first and falls back to classic.</param>
         /// <returns>Net object</returns>
-        public static Net ReadNetFromTFLite(byte[] model)
+        public static Net ReadNetFromTFLite(byte[] model, EngineType engine = EngineType.Auto)
         {
             GCHandle modelHandle = GCHandle.Alloc(model, GCHandleType.Pinned);
 
@@ -370,7 +372,8 @@ namespace Emgu.CV.Dnn
             {
                 return new Net(cveReadNetFromTFLite2(
                     modelHandle.AddrOfPinnedObject(),
-                    model.Length));
+                    model.Length,
+                    engine));
             }
             finally
             {
@@ -379,7 +382,7 @@ namespace Emgu.CV.Dnn
 
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveReadNetFromTFLite2(IntPtr bufferModel, int lenModel);
+        private static extern IntPtr cveReadNetFromTFLite2(IntPtr bufferModel, int lenModel, EngineType engine);
 
         /*
         /// <summary>
@@ -430,6 +433,7 @@ namespace Emgu.CV.Dnn
         /// Reads a network model ONNX.
         /// </summary>
         /// <param name="onnxFile">Path to the .onnx file with text description of the network architecture.</param>
+        /// <param name="engine">Select DNN engine to be used. With auto selection the new engine is used first and falls back to classic.</param>
         /// <returns>Network object that ready to do forward, throw an exception in failure cases.</returns>
         public static Net ReadNetFromONNX(String onnxFile, EngineType engine = EngineType.Auto)
         {

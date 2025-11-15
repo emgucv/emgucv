@@ -61,7 +61,12 @@ if (NOT (ANDROID OR APPLE))
   MESSAGE(STATUS "leptonica HAVE_LIBJPEG: ${LEPT_USE_JPEG}")
   if(LEPT_USE_JPEG)
     add_definitions(-DHAVE_LIBJPEG)
-    include_directories(${OPENCV_SUBFOLDER}/3rdparty/libjpeg-turbo)
+	if (TARGET libjpeg-turbo)
+		
+		get_target_property(LIBJPEG_TURBO_INCLUDE_DIR libjpeg-turbo INCLUDE_DIRECTORIES)
+		include_directories(${LIBJPEG_TURBO_INCLUDE_DIR})
+		#include_directories(${OPENCV_SUBFOLDER}/3rdparty/libjpeg-turbo/src)
+	endif()
   endif()
 endif()
 
@@ -93,6 +98,10 @@ endif()
 include_directories(${OPENCV_SUBFOLDER}/3rdparty/zlib)
 
 add_library(${the_target} STATIC ${lepton_srcs} ${lepton_hdrs})
+
+if (TARGET libjpeg-turbo)
+  ADD_DEPENDENCIES(${PROJECT_NAME} libjpeg-turbo)
+endif()
 
 IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${the_target} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
