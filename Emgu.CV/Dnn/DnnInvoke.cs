@@ -15,6 +15,22 @@ using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.Dnn
 {
+    public enum EngineType
+    {
+        /// <summary>
+        /// Force use the old dnn engine similar to 4.x branch
+        /// </summary>
+        Classic = 1,
+        /// <summary>
+        /// Force use the new dnn engine. The engine does not support non CPU back-ends for now.
+        /// </summary>
+        New = 2,
+        /// <summary>
+        /// Try to use the new engine and then fall back to the classic version.
+        /// </summary>
+        Auto = 3     
+    };
+
     /// <summary>
     /// Entry points to the Open CV Dnn module
     /// </summary>
@@ -415,22 +431,23 @@ namespace Emgu.CV.Dnn
         /// </summary>
         /// <param name="onnxFile">Path to the .onnx file with text description of the network architecture.</param>
         /// <returns>Network object that ready to do forward, throw an exception in failure cases.</returns>
-        public static Net ReadNetFromONNX(String onnxFile)
+        public static Net ReadNetFromONNX(String onnxFile, EngineType engine = EngineType.Auto)
         {
             using (CvString csOnnxFile = new CvString(onnxFile))
             {
-                return new Net(cveReadNetFromONNX(csOnnxFile));
+                return new Net(cveReadNetFromONNX(csOnnxFile, engine));
             }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveReadNetFromONNX(IntPtr onnxFile);
+        private static extern IntPtr cveReadNetFromONNX(IntPtr onnxFile, EngineType engine);
 
         /// <summary>
         /// Reads a network model from ONNX in-memory buffer.
         /// </summary>
         /// <param name="model">Memory address of the first byte of the buffer.</param>
+        /// <param name="engine">Select DNN engine to be used. With auto selection the new engine is used first and falls back to classic.</param>
         /// <returns>Net object</returns>
-        public static Net ReadNetFromONNX(byte[] model)
+        public static Net ReadNetFromONNX(byte[] model, EngineType engine = EngineType.Auto)
         {
             GCHandle modelHandle = GCHandle.Alloc(model, GCHandleType.Pinned);
             
@@ -438,7 +455,8 @@ namespace Emgu.CV.Dnn
             {
                 return new Net(cveReadNetFromONNX2(
                     modelHandle.AddrOfPinnedObject(),
-                    model.Length));
+                    model.Length,
+                    engine));
             }
             finally
             {
@@ -448,7 +466,7 @@ namespace Emgu.CV.Dnn
 
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveReadNetFromONNX2(IntPtr bufferModel, int lenModel);
+        private static extern IntPtr cveReadNetFromONNX2(IntPtr bufferModel, int lenModel, EngineType engine);
 
         /// <summary>
         /// Creates blob from .pb file.

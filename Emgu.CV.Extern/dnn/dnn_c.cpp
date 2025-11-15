@@ -64,19 +64,19 @@ cv::dnn::Net* cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, c
 #endif
 }
 
-cv::dnn::Net* cveReadNetFromTFLite(cv::String* model)
+cv::dnn::Net* cveReadNetFromTFLite(cv::String* model, int engine)
 {
 #ifdef HAVE_OPENCV_DNN
-	cv::dnn::Net net = cv::dnn::readNetFromTFLite(*model);
+	cv::dnn::Net net = cv::dnn::readNetFromTFLite(*model, engine);
 	return new cv::dnn::Net(net);
 #else
 	throw_no_dnn();
 #endif	
 }
-cv::dnn::Net* cveReadNetFromTFLite2(const char* bufferModel, int lenModel)
+cv::dnn::Net* cveReadNetFromTFLite2(const char* bufferModel, int lenModel, int engine)
 {
 #ifdef HAVE_OPENCV_DNN
-	cv::dnn::Net net = cv::dnn::readNetFromTFLite(bufferModel, lenModel);
+	cv::dnn::Net net = cv::dnn::readNetFromTFLite(bufferModel, lenModel, engine);
 	return new cv::dnn::Net(net);
 #else
 	throw_no_dnn();
@@ -104,19 +104,19 @@ void cveReadTorchBlob(cv::String* filename, bool isBinary, cv::Mat* tensor)
 }
 */
 
-cv::dnn::Net* cveReadNetFromONNX(cv::String* onnxFile)
+cv::dnn::Net* cveReadNetFromONNX(cv::String* onnxFile, int engine)
 {
 #ifdef HAVE_OPENCV_DNN
-	cv::dnn::Net net = cv::dnn::readNetFromONNX(*onnxFile);
+	cv::dnn::Net net = cv::dnn::readNetFromONNX(*onnxFile, engine);
 	return new cv::dnn::Net(net);
 #else
 	throw_no_dnn();
 #endif
 }
-cv::dnn::Net* cveReadNetFromONNX2(const char* bufferModel, int lenModel)
+cv::dnn::Net* cveReadNetFromONNX2(const char* bufferModel, int lenModel, int engine)
 {
 #ifdef HAVE_OPENCV_DNN
-	cv::dnn::Net net = cv::dnn::readNetFromONNX(bufferModel, lenModel);
+	cv::dnn::Net net = cv::dnn::readNetFromONNX(bufferModel, lenModel, engine);
 	return new cv::dnn::Net(net);
 #else
 	throw_no_dnn();

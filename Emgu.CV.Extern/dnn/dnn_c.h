@@ -56,11 +56,11 @@ CVAPI(cv::dnn::Net*) cveReadNetFromCaffe2(const char *bufferProto, int lenProto,
 CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow(cv::String* model, cv::String* config);
 CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, const char *bufferConfig, int lenConfig);
 
-CVAPI(cv::dnn::Net*) cveReadNetFromTFLite(cv::String* model);
-CVAPI(cv::dnn::Net*) cveReadNetFromTFLite2(const char* bufferModel, int lenModel);
+CVAPI(cv::dnn::Net*) cveReadNetFromTFLite(cv::String* model, int engine);
+CVAPI(cv::dnn::Net*) cveReadNetFromTFLite2(const char* bufferModel, int lenModel, int engine);
 
-CVAPI(cv::dnn::Net*) cveReadNetFromONNX(cv::String* onnxFile);
-CVAPI(cv::dnn::Net*) cveReadNetFromONNX2(const char* bufferModel, int lenModel);
+CVAPI(cv::dnn::Net*) cveReadNetFromONNX(cv::String* onnxFile, int engine);
+CVAPI(cv::dnn::Net*) cveReadNetFromONNX2(const char* bufferModel, int lenModel, int engine);
 CVAPI(void) cveReadTensorFromONNX(cv::String* path, cv::Mat* tensor);
 
 /*
