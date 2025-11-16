@@ -116,15 +116,21 @@ namespace Emgu.CV
             return rangevec;
         }
 
-        private void Calculate(Mat[] arrays, bool accumulate, Mat mask)
+        /// <summary>
+        /// Project the images to the histogram bins 
+        /// </summary>
+        /// <param name="images">images to project</param>
+        /// <param name="accumulate">If it is true, the histogram is not cleared in the beginning. This feature allows user to compute a single histogram from several images, or to update the histogram online. </param>
+        /// <param name="mask">Can be null if not needed. The operation mask, determines what pixels of the source images are counted</param>
+        public void Calculate(Mat[] images, bool accumulate, Mat mask)
         {
-            Debug.Assert(arrays.Length == _binSizes.Length, "Incompatible Dimension");
+            Debug.Assert(images.Length == _binSizes.Length, "Incompatible Dimension");
 
-            int[] channels = new int[arrays.Length];
-            for (int i = 0; i < arrays.Length; i++)
+            int[] channels = new int[images.Length];
+            for (int i = 0; i < images.Length; i++)
                 channels[i] = i;
 
-            using (VectorOfMat vm = new VectorOfMat(arrays))
+            using (VectorOfMat vm = new VectorOfMat(images))
             {
                 CvInvoke.CalcHist(vm, channels, mask, this, _binSizes, GetRangeAsFloatVec(), accumulate);
             }

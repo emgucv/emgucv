@@ -26,6 +26,7 @@ using NUnit.Framework;
 #endif
 
 using MlEnum = Emgu.CV.ML.MlEnum;
+using Range = Emgu.CV.Structure.Range;
 
 namespace Emgu.CV.Test
 {
@@ -41,29 +42,33 @@ namespace Emgu.CV.Test
 
             #region Generate the training data and classes
 
-            Matrix<float> trainData = new Matrix<float>(trainSampleCount, 2);
-            Matrix<float> trainClasses = new Matrix<float>(trainSampleCount, 1);
+            Mat trainData = new Mat(trainSampleCount, 2, DepthType.Cv32F, 1);
+            Mat trainClasses = new Mat(trainSampleCount, 1, DepthType.Cv32F, 1);
 
-            Image<Bgr, Byte> img = new Image<Bgr, byte>(500, 500);
+            Mat img = new Mat(500, 500, DepthType.Cv8U, 3);
 
-            Matrix<float> sample = new Matrix<float>(1, 2);
+            Mat sample = new Mat(1, 2, DepthType.Cv32F, 1);
 
-            Matrix<float> trainData1 = trainData.GetRows(0, trainSampleCount >> 1, 1);
-            trainData1.SetRandNormal(new MCvScalar(200), new MCvScalar(50));
-            Matrix<float> trainData2 = trainData.GetRows(trainSampleCount >> 1, trainSampleCount, 1);
-            trainData2.SetRandNormal(new MCvScalar(300), new MCvScalar(50));
+            Mat trainData1 = new Mat(trainData, new Range(0, trainSampleCount>>1), Range.All);
+            CvInvoke.Randn(trainData1, new MCvScalar(200), new MCvScalar(50));
 
-            Matrix<float> trainClasses1 = trainClasses.GetRows(0, trainSampleCount >> 1, 1);
-            trainClasses1.SetValue(1);
-            Matrix<float> trainClasses2 = trainClasses.GetRows(trainSampleCount >> 1, trainSampleCount, 1);
-            trainClasses2.SetValue(2);
+            Mat trainData2 = new Mat(trainData, new Range(trainSampleCount >> 1, trainSampleCount), Range.All);
+            CvInvoke.Randn(trainData2, new MCvScalar(300), new MCvScalar(50)); 
+
+            Mat trainClasses1 = new Mat(trainClasses, new Range(0, trainSampleCount >> 1), Range.All);
+            trainClasses1.SetTo(new MCvScalar(1.0));
+            //Matrix<float> trainClasses1 = trainClasses.GetRows(0, trainSampleCount >> 1, 1);
+            //trainClasses1.SetValue(1);
+            Mat trainClasses2 = new Mat(trainClasses, new Range(trainSampleCount >> 1, trainSampleCount), Range.All);
+            trainClasses2.SetTo(new MCvScalar(2.0));
+            //Matrix<float> trainClasses2 = trainClasses.GetRows(trainSampleCount >> 1, trainSampleCount, 1);
+            //trainClasses2.SetValue(2);
 
             #endregion
 
-            Matrix<float> results, neighborResponses;
-            results = new Matrix<float>(sample.Rows, 1);
-            neighborResponses = new Matrix<float>(sample.Rows, K);
-            //dist = new Matrix<float>(sample.Rows, K);
+            Mat results = new Mat(sample.Rows, 1, DepthType.Cv32F, 1);
+            Mat neighborResponses = new Mat(sample.Rows, K, DepthType.Cv32F, 1);
+            
 
             using (KNearest knn = new KNearest())
             {
@@ -77,12 +82,11 @@ namespace Emgu.CV.Test
                 {
                     for (int j = 0; j < img.Width; j++)
                     {
-                        sample.Data[0, 0] = j;
-                        sample.Data[0, 1] = i;
+                        sample.SetTo(new float[] {(float)j, (float)i});
 
                         // estimates the response and get the neighbors' labels
                         float response = knn.Predict(sample);
-                        //knn.FindNearest(sample, K, results, null, neighborResponses, null);
+                        knn.FindNearest(sample, K, results,  neighborResponses, null);
 
                         int accuracy = 0;
                         // compute the number of neighbors representing the majority
@@ -535,6 +539,7 @@ namespace Emgu.CV.Test
            //Emgu.CV.UI.ImageViewer.Show(img);
         }*/
 
+        /*
         private static void ReadLetterRecognitionData(out Matrix<float> data, out Matrix<float> response)
         {
             string[] rows = EmguAssert.ReadAllLines("letter-recognition.data");
@@ -553,7 +558,7 @@ namespace Emgu.CV.Test
                 count++;
             }
         }
-
+        */
         /*
                 private static void ReadMushroomData(out Matrix<float> data, out Matrix<float> response)
                 {

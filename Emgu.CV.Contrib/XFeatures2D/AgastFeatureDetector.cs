@@ -77,7 +77,7 @@ namespace Emgu.CV.XFeatures2D
            int threshold,
            [MarshalAs(CvInvoke.BoolMarshalType)]
            bool nonmaxSuppression,
-           Emgu.CV.Features.AgastFeatureDetector.Type type,
+           AgastFeatureDetector.Type type,
            ref IntPtr feature2D,
            ref IntPtr sharedPtr);
 

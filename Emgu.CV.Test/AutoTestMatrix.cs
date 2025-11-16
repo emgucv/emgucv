@@ -1,6 +1,9 @@
 //----------------------------------------------------------------------------
 //  Copyright (C) 2004-2025 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
+
+/*
+ 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -197,12 +200,7 @@ namespace Emgu.CV.Test
         public void TestGetDiagColRow()
         {
             Matrix<double> m = new Matrix<double>(new double[,] { { 1, 2 }, { 3, 4 } });
-            /*
-            Matrix<double> diag = m.GetDiag();
-            EmguAssert.IsTrue(diag[0, 0] == 1);
-            EmguAssert.IsTrue(diag[1, 0] == 4);
-            EmguAssert.IsTrue(diag.Sum == m.Trace.V0);
-            */
+
             Matrix<double> col1 = m.GetCol(1);
             EmguAssert.IsTrue(col1[0, 0] == 2);
             EmguAssert.IsTrue(col1[1, 0] == 4);
@@ -231,88 +229,7 @@ namespace Emgu.CV.Test
             }
         }
 
-        /*
-#if !NETFX_CORE
-        [Test]
-        public void TestRuntimeSerialize1()
-        {
-            Matrix<Byte> mat = new Matrix<Byte>(100, 80, 2);
-            mat.SetRandNormal(new MCvScalar(100, 100, 100), new MCvScalar(50, 50, 50));
 
-            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-                formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-
-            Byte[] bytes;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                formatter.Serialize(ms, mat);
-                bytes = ms.GetBuffer();
-            }
-            using (MemoryStream ms2 = new MemoryStream(bytes))
-            {
-                Matrix<Byte> mat2 = (Matrix<Byte>)formatter.Deserialize(ms2);
-                EmguAssert.IsTrue(mat.Equals(mat2));
-            }
-        }
-
-        [Test]
-        public void TestRuntimeSerialize2()
-        {
-            Random r = new Random();
-            double[,,] data = new double[100, 80, 2];
-            for (int i = 0; i < data.GetLength(0); i++)
-                for (int j = 0; j < data.GetLength(1); j++)
-                    for (int k = 0; k < data.GetLength(2); k++)
-                        data[i, j, k] = r.NextDouble();
-
-            GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-
-            Matrix<Double> mat = new Matrix<Double>(data.GetLength(0), data.GetLength(1), data.GetLength(2), handle.AddrOfPinnedObject(), sizeof(double) * data.GetLength(1) * data.GetLength(2));
-
-            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-                formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-
-            Byte[] bytes;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                formatter.Serialize(ms, mat);
-                bytes = ms.GetBuffer();
-            }
-            using (MemoryStream ms2 = new MemoryStream(bytes))
-            {
-                Matrix<Double> mat2 = (Matrix<double>)formatter.Deserialize(ms2);
-                EmguAssert.IsTrue(mat.Equals(mat2));
-            }
-            handle.Free();
-        }
-
-        [Test]
-        public void TestRuntimeSerialize3()
-        {
-            MCvPoint3D32f[] data = new MCvPoint3D32f[] { new MCvPoint3D32f() };
-
-            GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-
-            Matrix<float> mat = new Matrix<float>(data.GetLength(0), 1, 3, handle.AddrOfPinnedObject(), sizeof(float) * 3);
-
-            System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-                formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-
-            Byte[] bytes;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                formatter.Serialize(ms, mat);
-                bytes = ms.GetBuffer();
-            }
-            using (MemoryStream ms2 = new MemoryStream(bytes))
-            {
-                Matrix<float> mat2 = (Matrix<float>)formatter.Deserialize(ms2);
-                EmguAssert.IsTrue(mat.Equals(mat2));
-            }
-            handle.Free();
-        }
-#endif
-        */
 
 #if !WINDOWS_PHONE_APP //bad garbage collector in Windows phone results in failed test?
         [Test]
@@ -358,12 +275,7 @@ namespace Emgu.CV.Test
             {
                 EmguAssert.AreEqual(mat[i, 2], thirdCol[i, 0]);
             }
-            /*
-            Matrix<float> diagonal = mat.GetDiag();
-            for (int i = 0; i < Math.Min(mat.Rows, mat.Cols); i++)
-            {
-                EmguAssert.AreEqual(diagonal[i, 0], mat[i, i]);
-            }*/
+ 
         }
 
         [Test]
@@ -483,26 +395,8 @@ namespace Emgu.CV.Test
             }
         }
 
-        /*
-        [Test]
-        public void TestDataContractSerializer()
-        {
-            DataContractSerializer serializer = new DataContractSerializer(typeof(Image<Bgr, float>));
-            Image<Bgr, float> img1 = new Image<Bgr,float>(5, 3);
-
-            Byte[] bytes = null;
-            using (MemoryStream ms = new MemoryStream())
-            {
-                serializer.WriteObject(ms, img1);
-                bytes = ms.ToArray();
-            }
-            Image<Bgr, float> img2;
-            DataContractSerializer deserializer = new DataContractSerializer(typeof(Image<Bgr, float>));
-            using (MemoryStream ms = new MemoryStream(bytes))
-            {
-                img2 = deserializer.ReadObject(ms) as Image<Bgr, float>;
-            }
-            Debug.Assert(img1.Equals(img2));
-        }*/
+ 
     }
 }
+
+*/

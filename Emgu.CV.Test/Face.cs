@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Text;
 using Emgu.CV.Structure;
 using System.Drawing;
+using System.Drawing.Imaging;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Util;
 
 namespace Emgu.CV.Test
 {
@@ -20,19 +23,18 @@ namespace Emgu.CV.Test
 
       }
 
-      public List<Face> Detect(Image<Bgr, Byte> img)
+      public List<Face> Detect(Mat img)
       {
-         using (Image<Gray, Byte> gray = img.Convert<Gray, Byte>())
+         using (Mat gray = new Mat() )
          {
-            Rectangle[] objects = _faceCascade.DetectMultiScale(gray, 1.1, 3, Size.Empty, Size.Empty);
+             CvInvoke.CvtColor(img, gray, ColorConversion.Bgr2Gray);
+                Rectangle[] objects = _faceCascade.DetectMultiScale(gray, 1.1, 3, Size.Empty, Size.Empty);
             List<Face> res = new List<Face>();
 
             foreach (Rectangle o in objects)
             {
-               img.ROI = o;
-               res.Add(new Face(img.Copy(), o));
+               res.Add(new Face(new Mat(gray, o), o));
             }
-            img.ROI = Rectangle.Empty;
             return res;
          }
       }
@@ -45,13 +47,13 @@ namespace Emgu.CV.Test
 
    public class Eye
    {
-      private Image<Bgr, Byte> _image;
-      public Eye(Image<Bgr, Byte> img, Rectangle rect)
+      private Mat _image;
+      public Eye(Mat img)
       {
          _image = img;
       }
 
-      public Image<Bgr, Byte> RGB
+      public Mat RGB
       {
          get
          {
@@ -62,18 +64,18 @@ namespace Emgu.CV.Test
 
    public class Face 
    {
-      private Image<Bgr, Byte> _image;
-      private Image<Gray, Byte> _imageGray;
-      private Image<Hsv, Byte> _imageHSV;
-      private Image<Gray, Byte> _h;
-      private Image<Gray, Byte> _s;
-      private Image<Gray, Byte> _v;
+      private Mat _image;
+      private Mat _imageGray;
+      private Mat _imageHSV;
+      private Mat _h;
+      private Mat _s;
+      private Mat _v;
       //private DenseHistogram _hueHtg;
       //private Seq<MCvContour> _skinContour;
       private Rectangle _rect;
       private CascadeClassifier _eyeCascade;
 
-      public Face(Image<Bgr, Byte> img, Rectangle rect)
+      public Face(Mat img, Rectangle rect)
       {
          _image = img;
          _rect = rect;
@@ -87,10 +89,10 @@ namespace Emgu.CV.Test
 
          foreach (Rectangle o in objects)
          {
-            _image.ROI = o;
-            res.Add(new Eye(_image.Copy(), o));
+            
+            res.Add(new Eye(new Mat(_image, o)));
          }
-         _image.ROI = Rectangle.Empty;
+         
          return res;
       }
 
@@ -99,7 +101,7 @@ namespace Emgu.CV.Test
          get { return _rect; }
       }
 
-      public Image<Bgr, Byte> Bgr
+      public Mat Bgr
       {
          get
          {
@@ -107,64 +109,75 @@ namespace Emgu.CV.Test
          }
       }
 
-      public Image<Gray, Byte> Gray
+      public Mat Gray
       {
          get
          {
-            if (_imageGray == null) _imageGray = _image.Convert<Gray, Byte>();
+             if (_imageGray == null)
+             {
+                 _imageGray = new Mat();
+                 CvInvoke.CvtColor(_image, _imageGray, ColorConversion.Bgr2Gray);
+             }
             return _imageGray;
          }
       }
 
-      public Image<Hsv, Byte> Hsv
+      public Mat Hsv
       {
          get
          {
-            if (_imageHSV == null) _imageHSV = _image.Convert<Hsv, Byte>();
+             if (_imageHSV == null)
+             {
+                 _imageHSV = new Mat();
+                 CvInvoke.CvtColor(_image, _imageHSV, ColorConversion.Bgr2Hsv);
+             }
             return _imageHSV;
          }
       }
 
-      public Image<Gray, Byte> H
+      public Mat H
       {
          get
          {
             if (_h == null)
             {
-               Image<Gray, Byte>[] imgs = Hsv.Split();
-               _h = imgs[0];
-               _s = imgs[1];
-               _v = imgs[2];
+               _h = new Mat();
+               _s = new Mat();
+               _v = new Mat();
+               using (VectorOfMat vm = new VectorOfMat(_h, _s, _v))
+                CvInvoke.Split(Hsv, vm);
             }
             return _h;
          }
       }
-      public Image<Gray, Byte> S
+      public Mat S
       {
          get
          {
             if (_s == null)
             {
-               Image<Gray, Byte>[] imgs = Hsv.Split();
-               _h = imgs[0];
-               _s = imgs[1];
-               _v = imgs[2];
+                _h = new Mat();
+                _s = new Mat();
+                _v = new Mat();
+                using (VectorOfMat vm = new VectorOfMat(_h, _s, _v))
+                    CvInvoke.Split(Hsv, vm);
             }
-            return _s;
+                return _s;
          }
       }
-      public Image<Gray, Byte> V
+      public Mat V
       {
          get
          {
             if (_h == null)
             {
-               Image<Gray, Byte>[] imgs = Hsv.Split();
-               _h = imgs[0];
-               _s = imgs[1];
-               _v = imgs[2];
+                _h = new Mat();
+                _s = new Mat();
+                _v = new Mat();
+                using (VectorOfMat vm = new VectorOfMat(_h, _s, _v))
+                    CvInvoke.Split(Hsv, vm);
             }
-            return _v;
+                return _v;
          }
       }
 
@@ -182,13 +195,14 @@ namespace Emgu.CV.Test
          }
       }*/
 
-      public Image<Gray, Byte> SkinMask
+      public Mat SkinMask
       {
          get
          {
-            Image<Gray, Byte> skinMask = Gray.CopyBlank();
+             Mat skinMask = new Mat();
+             Gray.CopyTo(skinMask);
 
-            //skinMask.Draw(SkinContour, new Gray(255.0), new Gray(120.0), -1);
+            
 
             return skinMask;
          }

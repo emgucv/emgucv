@@ -85,7 +85,8 @@ namespace Emgu.CV.Test
         public void TestAkazeBlankImage()
         {
             AKAZE detector = new AKAZE();
-            Image<Gray, Byte> img = new Image<Gray, byte>(1024, 900);
+            Mat img = new Mat(1024, 900, DepthType.Cv8U, 1);
+            img.SetTo(new MCvScalar());
             VectorOfKeyPoint vp = new VectorOfKeyPoint();
             Mat descriptors = new Mat();
             detector.DetectAndCompute(img, null, vp, descriptors, false);
@@ -242,7 +243,7 @@ namespace Emgu.CV.Test
                     feature2D = keyPointDetector as Feature2D;
                 }
 
-                Mat modelImage = EmguAssert.LoadMat("box.png");
+                Mat modelImage = EmguAssert.LoadMat("box.png", ImreadModes.Grayscale);
                 //Image<Gray, Byte> modelImage = new Image<Gray, byte>("stop.jpg");
                 //modelImage = modelImage.Resize(400, 400, true);
 
@@ -266,7 +267,7 @@ namespace Emgu.CV.Test
                 #endregion
 
                 //Image<Gray, Byte> observedImage = new Image<Gray, byte>("traffic.jpg");
-                Image<Gray, Byte> observedImage = EmguAssert.LoadImage<Gray, byte>("box_in_scene.png");
+                Mat observedImage = EmguAssert.LoadMat("box_in_scene.png", ImreadModes.Grayscale);
                 //Image<Gray, Byte> observedImage = modelImage.Rotate(45, new Gray(0.0));
                 //image = image.Resize(400, 400, true);
 
@@ -293,7 +294,9 @@ namespace Emgu.CV.Test
                     #endregion
 
                     //Merge the object image and the observed image into one big image for display
-                    Image<Gray, Byte> res = modelImage.ToImage<Gray, Byte>().ConcateVertical(observedImage);
+                    Mat res = new Mat();
+                    CvInvoke.VConcat(modelImage, observedImage, res);
+                    //Image<Gray, Byte> res = modelImage.ToImage<Gray, Byte>().ConcateVertical(observedImage);
 
                     Rectangle rect = new Rectangle(Point.Empty, modelImage.Size);
                     PointF[] pts = new PointF[] {
@@ -343,10 +346,11 @@ namespace Emgu.CV.Test
 
                         for (int i = 0; i < points.Length; i++)
                             points[i].Y += modelImage.Height;
-
+                        CvInvoke.Polylines(res, Array.ConvertAll<PointF, Point>(points, Point.Round), true, new MCvScalar(255), 5);
+                        /*
                         res.DrawPolyline(
                             Array.ConvertAll<PointF, Point>(points, Point.Round), true, new Gray(255.0), 5);
-
+                        */
                         success = true;
                     }
                     //Emgu.CV.UI.ImageViewer.Show(res);
@@ -587,7 +591,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestBOWKmeansTrainer()
         {
-            Image<Gray, byte> box = EmguAssert.LoadImage<Gray, byte>("box.png");
+            Mat box = EmguAssert.LoadMat("box.png", ImreadModes.Grayscale);
             Feature2D detector = new KAZE();
             VectorOfKeyPoint kpts = new VectorOfKeyPoint();
             Mat descriptors = new Mat();
@@ -610,7 +614,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestBOWKmeansTrainer2()
         {
-            Image<Gray, byte> box = EmguAssert.LoadImage<Gray, byte>("box.png");
+            Mat box = EmguAssert.LoadMat("box.png", ImreadModes.Grayscale);
             Brisk detector = new Brisk(30, 3, 1.0f);
             VectorOfKeyPoint kpts = new VectorOfKeyPoint();
             Mat descriptors = new Mat();
