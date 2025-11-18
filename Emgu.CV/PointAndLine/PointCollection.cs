@@ -242,6 +242,7 @@ namespace Emgu.CV
            handle.Free();
            return points3D;
         }
+        */
 
         /// <summary>
         /// Generate a random point cloud around the ellipse. 
@@ -253,9 +254,9 @@ namespace Emgu.CV
         {
             PointF[] cloud = new PointF[numberOfPoints];
             GCHandle handle = GCHandle.Alloc(cloud, GCHandleType.Pinned);
-            using (Matrix<float> points = new Matrix<float>(numberOfPoints, 2, handle.AddrOfPinnedObject()))
-            using (Matrix<float> xValues = points.GetCol(0))
-            using (Matrix<float> yValues = points.GetCol(1))
+            using (Mat points = new Mat(numberOfPoints, 2, DepthType.Cv32F, 1, handle.AddrOfPinnedObject(), Marshal.SizeOf<float>()*2))
+            using (Mat xValues = new Mat(points, new Range(0, numberOfPoints), new Range(0, 1)))
+            using (Mat yValues = new Mat(points, new Range(0, numberOfPoints), new Range(1, 2)))
             using (RotationMatrix2D rotation = new RotationMatrix2D(e.RotatedRect.Center, e.RotatedRect.Angle, 1.0))
             using (Mat tmp = new Mat())
             {
@@ -267,6 +268,6 @@ namespace Emgu.CV
             handle.Free();
             return cloud;
         }
-        */
+        
     }
 }

@@ -9,6 +9,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Features;
 using Emgu.CV.Structure;
 
@@ -69,6 +70,7 @@ namespace Emgu.CV.Util
               return CvEnum.DepthType.Cv16S;
            throw new NotImplementedException("Unsupported matrix depth");
         }
+        */
 
         /// <summary>
         /// Convert arrays of data to matrix
@@ -76,41 +78,54 @@ namespace Emgu.CV.Util
         /// <param name="data">Arrays of data</param>
         /// <returns>A two dimension matrix that represent the array</returns>
         /// <typeparam name="T">The data type of the matrix</typeparam>
-        public static Matrix<T> GetMatrixFromArrays<T>(T[][] data)
+        public static Mat GetMatrixFromArrays<T>(T[][] data)
          where T : struct
         {
             int rows = data.Length;
             int cols = data[0].Length;
-            Matrix<T> res = new Matrix<T>(rows, cols);
-            MCvMat mat = res.MCvMat;
-            long dataPos = mat.Data.ToInt64();
+            Mat res;
+            if (typeof(T) == typeof(double))
+                res = new Mat(rows, cols, DepthType.Cv64F, 1);
+            else if (typeof(T) == typeof(float))
+                res = new Mat(rows, cols, DepthType.Cv32F, 1);
+            else if (typeof(T) == typeof(int))
+                res = new Mat(rows, cols, DepthType.Cv32S, 1);
+            else
+            {
+                throw new NotImplementedException(String.Format("Support for data type {0} is not implemented",
+                    typeof(T)));
+            }
+
+            long dataPos = res.DataPointer.ToInt64();
+            long step = res.Step;
             //int rowSizeInBytes = Marshal.SizeOf(typeof(T)) * cols;
-            for (int i = 0; i < rows; i++, dataPos += mat.Step)
+            for (int i = 0; i < rows; i++, dataPos += step)
             {
                 CopyVector(data[i], new IntPtr(dataPos));
             }
             return res;
         }
+        
 
         /// <summary>
         /// Convert arrays of points to matrix
         /// </summary>
         /// <param name="points">Arrays of points</param>
         /// <returns>A two dimension matrix that represent the points</returns>
-        public static Matrix<double> GetMatrixFromPoints(MCvPoint2D64f[][] points)
+        public static Mat GetMatrixFromPoints(MCvPoint2D64f[][] points)
         {
             int rows = points.Length;
             int cols = points[0].Length;
-            Matrix<double> res = new Matrix<double>(rows, cols, 2);
+            Mat res = new Mat(rows, cols, DepthType.Cv64F, 2);
 
-            MCvMat cvMat = res.MCvMat;
+            //MCvMat cvMat = res.MCvMat;
             for (int i = 0; i < rows; i++)
-            {
-                IntPtr dst = new IntPtr(cvMat.Data.ToInt64() + cvMat.Step * i);
+            {   
+                IntPtr dst = new IntPtr(res.DataPointer.ToInt64() + res.Step * i);
                 CopyVector(points[i], dst);
             }
             return res;
-        }*/
+        }
 
         /// <summary>
         /// Compute the minimum and maximum value from the points

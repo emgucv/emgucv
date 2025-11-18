@@ -7,11 +7,12 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Diagnostics;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 
 namespace Emgu.CV
 {
-    /*
+    
     /// <summary>
     /// A (2x3) 2D rotation matrix. This Matrix defines an Affine Transform
     /// </summary>
@@ -29,7 +30,7 @@ namespace Emgu.CV
         /// Create a (2x3) 2D rotation matrix
         /// </summary>
         /// <param name="center">Center of the rotation in the source image</param>
-        /// <param name="angle">The rotation angle in degrees. Positive values mean couter-clockwise rotation (the coordiate origin is assumed at top-left corner). </param>
+        /// <param name="angle">The rotation angle in degrees. Positive values mean counter-clockwise rotation (the coordinate origin is assumed at top-left corner). </param>
         /// <param name="scale">Isotropic scale factor.</param>
         public RotationMatrix2D(PointF center, double angle, double scale)
            : this()
@@ -41,7 +42,7 @@ namespace Emgu.CV
         /// Set the values of the rotation matrix
         /// </summary>
         /// <param name="center">Center of the rotation in the source image</param>
-        /// <param name="angle">The rotation angle in degrees. Positive values mean couter-clockwise rotation (the coordiate origin is assumed at top-left corner). </param>
+        /// <param name="angle">The rotation angle in degrees. Positive values mean counter-clockwise rotation (the coordinate origin is assumed at top-left corner). </param>
         /// <param name="scale">Isotropic scale factor.</param>
         public void SetRotation(PointF center, double angle, double scale)
         {
@@ -55,7 +56,7 @@ namespace Emgu.CV
         public void RotatePoints(MCvPoint2D64f[] points)
         {
             GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-            using (Matrix<double> mat = new Matrix<double>(points.Length, 2, handle.AddrOfPinnedObject()))
+            using (Mat mat = new Mat(points.Length, 2, DepthType.Cv64F, 1, handle.AddrOfPinnedObject(), Marshal.SizeOf<MCvPoint2D64f>()))
                 RotatePoints(mat);
             handle.Free();
         }
@@ -67,7 +68,7 @@ namespace Emgu.CV
         public void RotatePoints(PointF[] points)
         {
             GCHandle handle = GCHandle.Alloc(points, GCHandleType.Pinned);
-            using (Matrix<float> mat = new Matrix<float>(points.Length, 2, handle.AddrOfPinnedObject()))
+            using (Mat mat = new Mat(points.Length, 2, DepthType.Cv32F, 1, handle.AddrOfPinnedObject(), Marshal.SizeOf<PointF>()))
                 RotatePoints(mat);
             handle.Free();
         }
@@ -79,32 +80,30 @@ namespace Emgu.CV
         public void RotateLines(LineSegment2DF[] lineSegments)
         {
             GCHandle handle = GCHandle.Alloc(lineSegments, GCHandleType.Pinned);
-            using (Matrix<float> mat = new Matrix<float>(lineSegments.Length * 2, 2, handle.AddrOfPinnedObject()))
+            using (Mat mat = new Mat(lineSegments.Length * 2, 2, DepthType.Cv32F, 1, handle.AddrOfPinnedObject(), Marshal.SizeOf<PointF>()))
                 RotatePoints(mat);
             handle.Free();
         }
 
         /// <summary>
-        /// Rotate the single channel Nx2 matrix where N is the number of 2D points. The value of the matrix is changed after rotation.
+        /// Rotate the single channel Nx2 matrix where N is the number of 2D points. The value of the matrix is changed after rotation. The points value must be double or float.
         /// </summary>
-        /// <typeparam name="TDepth">The depth of the points, must be double or float</typeparam>
         /// <param name="points">The N 2D-points to be rotated</param>
-        public void RotatePoints<TDepth>(Matrix<TDepth> points) where TDepth : new()
+        public void RotatePoints(Mat points)
         {
-            Debug.Assert(typeof(TDepth) == typeof(float) || typeof(TDepth) == typeof(Double), "Only type of double or float is supported");
+            CvEnum.DepthType dt = points.Depth;
+            Debug.Assert(dt == DepthType.Cv32F || dt == DepthType.Cv64F, "Only type of double or float is supported");
             Debug.Assert(points.NumberOfChannels == 1 && points.Cols == 2, "The matrix must be a single channel Nx2 matrix where N is the number of points");
 
-            CvEnum.DepthType dt = CvInvoke.GetDepthType(typeof(TDepth));
-
-            using (Mat tmp = new Mat(points.Rows, 3, CvInvoke.GetDepthType(typeof(TDepth)), 1))
-            using (Mat rotationMatrix = new Mat(Rows, Cols, CvInvoke.GetDepthType(typeof(TDepth)), 1))
+            using (Mat tmp = new Mat(points.Rows, 3, dt, 1))
+            using (Mat rotationMatrix = new Mat(Rows, Cols, dt, 1))
             {
                 CvInvoke.CopyMakeBorder(points, tmp, 0, 0, 0, 1, Emgu.CV.CvEnum.BorderType.Constant, new MCvScalar(1.0));
 
-                if (typeof(double).Equals(typeof(TDepth)))
+                if (dt == DepthType.Cv64F)
                     CopyTo(rotationMatrix);
                 else
-                    ConvertTo(rotationMatrix, CvInvoke.GetDepthType(typeof(TDepth)));
+                    ConvertTo(rotationMatrix, dt);
 
                 CvInvoke.Gemm(
                    tmp,
@@ -152,10 +151,17 @@ namespace Emgu.CV
             int minY = (int)Math.Round(Math.Min(Math.Min(corners[0].Y, corners[1].Y), Math.Min(corners[2].Y, corners[3].Y)));
             int maxY = (int)Math.Round(Math.Max(Math.Max(corners[0].Y, corners[1].Y), Math.Max(corners[2].Y, corners[3].Y)));
 
-            using (Matrix<double> offset = new Matrix<double>(2, 3))
+            using (Mat offset = new Mat(2, 3, DepthType.Cv64F, 1))
             {
+                offset.SetTo(new double[]
+                {
+                    0.0, 0.0, minX,
+                    0.0, 0.0, minY
+                });
+                /*
                 offset[0, 2] = minX;
                 offset[1, 2] = minY;
+                */
                 CvInvoke.Subtract(rotationMatrix, offset, rotationMatrix);
                 //rotationMatrix[0, 2] -= minX;
                 //rotationMatrix[1, 2] -= minY;
@@ -163,5 +169,5 @@ namespace Emgu.CV
             dstImageSize = new Size(maxX - minX + 1, maxY - minY + 1);
             return rotationMatrix;
         }
-    }*/
+    }
 }

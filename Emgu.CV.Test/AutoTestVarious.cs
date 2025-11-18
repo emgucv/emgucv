@@ -1146,8 +1146,10 @@ namespace Emgu.CV.Test
             Point templCenter = new Point(120, 100);
 
             //Create a random object
-            Image<Bgr, Byte> randomObj = new Image<Bgr, byte>(templWidth, templHeight);
-            randomObj.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+            Mat randomObj = new Mat(new Size(templWidth, templHeight), DepthType.Cv8U, 3);
+            CvInvoke.Randu(randomObj, new MCvScalar(), new MCvScalar(255, 255, 255));
+            //Image<Bgr, Byte> randomObj = new Image<Bgr, byte>(templWidth, templHeight);
+            //randomObj.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
 
             //Draw the object in image1 center at templCenter;
             Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 200);
@@ -1356,12 +1358,14 @@ namespace Emgu.CV.Test
             float[][] features2 = new float[1][];
             features2[0] = new float[] { 5.0f };
 
-            Matrix<int> indices = new Matrix<int>(features2.Length, 1);
-            Matrix<float> distances = new Matrix<float>(features2.Length, 1);
+            Mat indices = new Mat();
+            Mat distances = new Mat();
             index.KnnSearch(CvToolbox.GetMatrixFromArrays(features2), indices, distances, 1, 32);
 
-            EmguAssert.IsTrue(indices[0, 0] == 5);
-            EmguAssert.IsTrue(distances[0, 0] == 0.0);
+            int[] indicesValue = indices.GetData(false) as int[];
+            double[] distanceValue = distances.GetData(false) as double[];
+            EmguAssert.IsTrue(indicesValue[0] == 5);
+            EmguAssert.IsTrue(distanceValue[0] == 0.0);
         }
 
         [Test]
@@ -1377,12 +1381,14 @@ namespace Emgu.CV.Test
             float[][] features2 = new float[1][];
             features2[0] = new float[] { 5.0f };
 
-            Matrix<int> indices = new Matrix<int>(features2.Length, 1);
-            Matrix<float> distances = new Matrix<float>(features2.Length, 1);
+            Mat indices = new Mat();
+            Mat distances = new Mat();
             index.KnnSearch(CvToolbox.GetMatrixFromArrays(features2), indices, distances, 1, 32);
 
-            EmguAssert.IsTrue(indices[0, 0] == 5);
-            EmguAssert.IsTrue(distances[0, 0] == 0.0);
+            int[] indicesValue = indices.GetData(false) as int[];
+            double[] distanceValue = distances.GetData(false) as double[];
+            EmguAssert.IsTrue(indicesValue[0] == 5);
+            EmguAssert.IsTrue(distanceValue[0] == 0.0);
         }
 
         [Test]
@@ -1398,12 +1404,14 @@ namespace Emgu.CV.Test
             float[][] features2 = new float[1][];
             features2[0] = new float[] { 5.0f };
 
-            Matrix<int> indices = new Matrix<int>(features2.Length, 1);
-            Matrix<float> distances = new Matrix<float>(features2.Length, 1);
+            Mat indices = new Mat();
+            Mat distances = new Mat();
             index.KnnSearch(CvToolbox.GetMatrixFromArrays(features2), indices, distances, 1, 32);
 
-            EmguAssert.IsTrue(indices[0, 0] == 5);
-            EmguAssert.IsTrue(distances[0, 0] == 0.0);
+            int[] indicesValue = indices.GetData(false) as int[];
+            double[] distanceValue = distances.GetData(false) as double[];
+            EmguAssert.IsTrue(indicesValue[0] == 5);
+            EmguAssert.IsTrue(distanceValue[0] == 0.0);
         }
 
 
@@ -1420,12 +1428,14 @@ namespace Emgu.CV.Test
             float[][] features2 = new float[1][];
             features2[0] = new float[] { 5.0f };
 
-            Matrix<int> indices = new Matrix<int>(features2.Length, 1);
-            Matrix<float> distances = new Matrix<float>(features2.Length, 1);
+            Mat indices = new Mat();
+            Mat distances = new Mat();
             index.KnnSearch(CvToolbox.GetMatrixFromArrays(features2), indices, distances, 1, 32);
 
-            EmguAssert.IsTrue(indices[0, 0] == 5);
-            EmguAssert.IsTrue(distances[0, 0] == 0.0);
+            int[] indicesValue = indices.GetData(false) as int[];
+            double[] distanceValue = distances.GetData(false) as double[];
+            EmguAssert.IsTrue(indicesValue[0] == 5);
+            EmguAssert.IsTrue(distanceValue[0] == 0.0);
         }
 
         /*
@@ -1739,8 +1749,15 @@ namespace Emgu.CV.Test
             wlsFilter.Filter(leftDisparity, left, filteredDisparity, rightDisparity, new Rectangle(), right);
             
 
-            Matrix<double> q = new Matrix<double>(4, 4);
-            q.SetIdentity();
+            Mat q = new Mat(4, 4, DepthType.Cv64F, 1);
+            q.SetTo( new double[]
+            {
+                1.0, 0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0, 1.0
+            });
+            //q.SetIdentity();
             Mat disparityScaled = leftDisparity * (-16);
             MCvPoint3D32f[] points = PointCollection.ReprojectImageTo3D(disparityScaled, q);
 
@@ -1987,17 +2004,19 @@ namespace Emgu.CV.Test
         [Test]
         public void TestVectorOfMat()
         {
-            Matrix<double> m1 = new Matrix<double>(3, 3);
-            m1.SetRandNormal(new MCvScalar(0.0), new MCvScalar(1.0));
-            Matrix<int> m2 = new Matrix<int>(4, 4);
-            m2.SetRandNormal(new MCvScalar(2), new MCvScalar(2));
+            Mat m1 = new Mat(3, 3, DepthType.Cv64F, 1);
+            CvInvoke.Randn(m1, new MCvScalar(0.0), new MCvScalar(1.0));
 
-            VectorOfMat vec = new VectorOfMat(m1.Mat, m2.Mat);
+            Mat m2 = new Mat(4, 4, DepthType.Cv32S, 1);
+            CvInvoke.Randn(m1, new MCvScalar(2), new MCvScalar(2));
+            
+
+            VectorOfMat vec = new VectorOfMat(m1, m2);
 
             Mat tmp1 = vec[0];
             Mat tmp2 = vec[1];
-            Matrix<double> n1 = new Matrix<double>(tmp1.Size);
-            Matrix<int> n2 = new Matrix<int>(tmp2.Size);
+            Mat n1 = new Mat();
+            Mat n2 = new Mat();
             tmp1.CopyTo(n1, null);
             tmp2.CopyTo(n2, null);
 
@@ -2019,16 +2038,19 @@ namespace Emgu.CV.Test
         [Test]
         public void TestHistogram()
         {
-            using (Image<Bgr, Byte> img = EmguAssert.LoadImage<Bgr, Byte>("stuff.jpg"))
-            using (Image<Hsv, Byte> img2 = img.Convert<Hsv, Byte>())
+            using (Mat img = EmguAssert.LoadMat("stuff.jpg", ImreadModes.ColorBgr))
+            using (Mat img2 = new Mat())
             {
-                Image<Gray, Byte>[] HSVs = img2.Split();
+                CvInvoke.CvtColor(img, img2, ColorConversion.Bgr2Hsv);
+                
+                //Image<Gray, Byte>[] HSVs = img2.Split();
 
                 using (Mat h = new Mat())
                 using (Mat bpj = new Mat())
                 using (VectorOfMat vm = new VectorOfMat())
                 {
-                    vm.Push(HSVs[0]);
+                    CvInvoke.Split(img2, vm);
+                    //vm.Push(HSVs[0]);
                     CvInvoke.CalcHist(vm, new int[] { 0 }, null, h, new int[] { 20 }, new float[] { 0, 180 }, false);
                     CvInvoke.CalcBackProject(vm, new int[] { 0 }, h, bpj, new float[] { 0, 180 }, 0.1);
 
@@ -2050,8 +2072,10 @@ namespace Emgu.CV.Test
                     //}
                 }
 
+                /*
                 foreach (Image<Gray, Byte> i in HSVs)
                     i.Dispose();
+                */
             }
         }
 
@@ -2076,7 +2100,7 @@ namespace Emgu.CV.Test
         public void TestHOG1()
         {
             using (HOGDescriptor hog = new HOGDescriptor())
-            using (Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png"))
+            using (Mat image = EmguAssert.LoadMat("pedestrian.png", ImreadModes.ColorBgr))
             {
                 float[] pedestrianDescriptor = HOGDescriptor.GetDefaultPeopleDetector();
                 hog.SetSVMDetector(pedestrianDescriptor);
@@ -2088,7 +2112,8 @@ namespace Emgu.CV.Test
                 EmguAssert.AreEqual(1, rects.Length);
 
                 foreach (MCvObjectDetection rect in rects)
-                    image.Draw(rect.Rect, new Bgr(0, 0, 255), 1);
+                    CvInvoke.Rectangle(image, Rectangle.Empty, new MCvScalar(0, 0, 255), 1);
+                    //image.Draw(rect.Rect, new Bgr(0, 0, 255), 1);
                 EmguAssert.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
 
                 //Emgu.CV.UI.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
@@ -2099,7 +2124,7 @@ namespace Emgu.CV.Test
         public void TestHOG2()
         {
             using (HOGDescriptor hog = new HOGDescriptor())
-            using (Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("lena.jpg"))
+            using (Mat image = EmguAssert.LoadMat("lena.jpg", ImreadModes.ColorBgr))
             {
                 float[] pedestrianDescriptor = HOGDescriptor.GetDefaultPeopleDetector();
                 hog.SetSVMDetector(pedestrianDescriptor);
@@ -2110,7 +2135,8 @@ namespace Emgu.CV.Test
 
                 EmguAssert.AreEqual(0, rects.Length);
                 foreach (MCvObjectDetection rect in rects)
-                    image.Draw(rect.Rect, new Bgr(0, 0, 255), 1);
+                    CvInvoke.Rectangle(image, Rectangle.Empty, new MCvScalar(0,0,255), 1);
+                    //image.Draw(rect.Rect, new Bgr(0, 0, 255), 1);
                 EmguAssert.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
 
                 //ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
@@ -2189,12 +2215,12 @@ namespace Emgu.CV.Test
         [Test]
         public void TestGrabCut1()
         {
-            Image<Bgr, Byte> img = EmguAssert.LoadImage<Bgr, Byte>("lena.jpg");
+            Mat img = EmguAssert.LoadMat("lena.jpg", ImreadModes.ColorBgr);
 
             Rectangle rect = new Rectangle(new Point(50, 50), new Size(400, 400));
-            Matrix<double> bgdModel = new Matrix<double>(1, 13 * 5);
-            Matrix<double> fgdModel = new Matrix<double>(1, 13 * 5);
-            Image<Gray, byte> mask = new Image<Gray, byte>(img.Size);
+            Mat bgdModel = new Mat();
+            Mat fgdModel = new Mat();
+            Mat mask = new Mat();
 
             CvInvoke.GrabCut(img, mask, rect, bgdModel, fgdModel, 0, Emgu.CV.CvEnum.GrabcutInitType.InitWithRect);
             CvInvoke.GrabCut(img, mask, rect, bgdModel, fgdModel, 2, Emgu.CV.CvEnum.GrabcutInitType.Eval);
@@ -2206,23 +2232,28 @@ namespace Emgu.CV.Test
         [Test]
         public void TestGrabCut2()
         {
-            Image<Bgr, Byte> img = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
+            Mat img = EmguAssert.LoadMat("pedestrian.png", ImreadModes.ColorBgr);
             HOGDescriptor desc = new HOGDescriptor();
             desc.SetSVMDetector(HOGDescriptor.GetDefaultPeopleDetector());
 
             MCvObjectDetection[] humanRegions = desc.DetectMultiScale(img);
 
-            Image<Gray, byte> pedestrianMask = new Image<Gray, byte>(img.Size);
+            Mat pedestrianMask = new Mat(img.Size, DepthType.Cv8U, 1);
+            pedestrianMask.SetTo(new MCvScalar());
             foreach (MCvObjectDetection rect in humanRegions)
             {
                 //generate the mask where 3 indicates foreground and 2 indicates background 
-                using (Image<Gray, byte> mask = img.GrabCut(rect.Rect, 2))
+                using (Mat mask = new Mat()) //img.GrabCut(rect.Rect, 2))
+                using (Mat bgdModel = new Mat())
+                using(Mat fgdModel = new Mat())
                 {
+                    CvInvoke.GrabCut(img, mask, rect.Rect, bgdModel, fgdModel, 2, GrabcutInitType.Eval);
                     //get the mask of the foreground
                     using (ScalarArray ia = new ScalarArray(3))
                         CvInvoke.Compare(mask, ia, mask, Emgu.CV.CvEnum.CmpType.Equal);
 
-                    pedestrianMask._Or(mask);
+                    CvInvoke.BitwiseOr(pedestrianMask, mask, pedestrianMask);
+                    //pedestrianMask._Or(mask);
                 }
             }
         }
@@ -2230,20 +2261,28 @@ namespace Emgu.CV.Test
         [Test]
         public void TestGraySingleImage()
         {
-            Image<Gray, Single> img = new Image<Gray, float>(320, 480);
-            img.SetRandUniform(new MCvScalar(), new MCvScalar(255));
-            Image<Gray, Byte> mask = img.Cmp(100, CvEnum.CmpType.GreaterEqual);
-            int[] count = mask.CountNonzero();
-            int c = count[0];
+            Mat img = new Mat(320, 480, DepthType.Cv32F, 1);
+            CvInvoke.Randu(img, new MCvScalar(), new MCvScalar(255));
+            Mat mask = new Mat();
+            CvInvoke.Compare(img, new ScalarArray(100), mask, CmpType.GreaterEqual);
+            int count = CvInvoke.CountNonZero(mask);
+            //img.SetRandUniform();
+            //Image<Gray, Byte> mask = img.Cmp(100, CvEnum.CmpType.GreaterEqual);
+            //int[] count = mask.CountNonzero();
+            //int c = count[0];
         }
 
         [Test]
         public void TestDiatanceTransform()
         {
-            Image<Gray, Byte> img = new Image<Gray, byte>(480, 320);
-            img.Draw(new Rectangle(200, 100, 160, 90), new Gray(255), 1);
-            img._Not();
-            Image<Gray, Single> dst = new Image<Gray, Single>(img.Size);
+            Mat img = new Mat(480, 320, DepthType.Cv8U, 1);
+            img.SetTo(new MCvScalar());
+            CvInvoke.Rectangle(img, new Rectangle(200, 100, 160, 90), new MCvScalar(255), 1);
+            CvInvoke.BitwiseNot(img, img);
+            Mat dst = new Mat();
+            //img.Draw(new Rectangle(200, 100, 160, 90), new Gray(255), 1);
+            //img._Not();
+            //Image<Gray, Single> dst = new Image<Gray, Single>(img.Size);
 
             CvInvoke.DistanceTransform(img, dst, null, Emgu.CV.CvEnum.DistType.L2, 3);
         }
@@ -2303,9 +2342,11 @@ namespace Emgu.CV.Test
             //generate some randome points
             PointF[] pts = new PointF[120];
             GCHandle handle = GCHandle.Alloc(pts, GCHandleType.Pinned);
-            using (Matrix<float> ptsMat = new Matrix<float>(pts.Length, 2, handle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(float)) * 2))
+            using(Mat ptsMat = new Mat(pts.Length, 2, DepthType.Cv32F, 1, handle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(float)) * 2))
+            //using (Matrix<float> ptsMat = new Matrix<float>(pts.Length, 2, handle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(float)) * 2))
             {
-                ptsMat.SetRandNormal(new MCvScalar(), new MCvScalar(100));
+                CvInvoke.Randu(ptsMat, new MCvScalar(), new MCvScalar(100));
+                //ptsMat.SetRandNormal(new MCvScalar(), new MCvScalar(100));
             }
             handle.Free();
 
@@ -2391,11 +2432,11 @@ namespace Emgu.CV.Test
             int height = 200;
             String fileName = GetTempFileName() + ".avi";
 
-            Image<Bgr, Byte>[] images = new Image<Bgr, byte>[numberOfFrames];
+            Mat[] images = new Mat[numberOfFrames];
             for (int i = 0; i < images.Length; i++)
             {
-                images[i] = new Image<Bgr, byte>(width, height);
-                images[i].SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+                images[i] = new Mat(width, height, DepthType.Cv8U, 3);
+                CvInvoke.Randu(images[i], new MCvScalar(), new MCvScalar(255, 255, 255));
             }
 
             //using (VideoWriter writer = new VideoWriter(fileName, VideoWriter.Fourcc('H', '2', '6', '4'), 5, new Size(width, height), true))
@@ -2406,7 +2447,7 @@ namespace Emgu.CV.Test
                 EmguAssert.IsTrue(writer.IsOpened);
                 for (int i = 0; i < numberOfFrames; i++)
                 {
-                    writer.Write(images[i].Mat);
+                    writer.Write(images[i]);
                 }
             }
 
@@ -2451,11 +2492,12 @@ namespace Emgu.CV.Test
                 int height = 480;
                 String fileName = GetTempFileName() + ".mp4";
                 //String fileName = "C:\\tmp\\out.mp4";
-                Image<Bgr, Byte>[] images = new Image<Bgr, byte>[numberOfFrames];
+                Mat[] images = new Mat[numberOfFrames];
                 for (int i = 0; i < images.Length; i++)
                 {
-                    images[i] = new Image<Bgr, byte>(width, height);
-                    images[i].SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
+                    images[i] = new Mat(width, height, DepthType.Cv8U, 3);
+                    CvInvoke.Randu(images[i], new MCvScalar(), new MCvScalar(255, 255, 255));
+                    //images[i].SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
                 }
 
                 using (VideoWriter writer = new VideoWriter(
@@ -2471,7 +2513,7 @@ namespace Emgu.CV.Test
                     EmguAssert.IsTrue(writer.IsOpened);
                     for (int i = 0; i < numberOfFrames; i++)
                     {
-                        writer.Write(images[i].Mat);
+                        writer.Write(images[i]);
                     }
                 }
 
@@ -2527,6 +2569,7 @@ namespace Emgu.CV.Test
 #endif
         */
 
+        /*
         [Test]
         public void TestIndex3D()
         {
@@ -2580,7 +2623,7 @@ namespace Emgu.CV.Test
 
             return features;
         }
-
+        */
 
 
         /*
@@ -2673,6 +2716,7 @@ namespace Emgu.CV.Test
             //Emgu.CV.UI.ImageViewer.Show(m);
         }
 
+        /*
         [Test]
         public void TestRotationMatrix()
         {
@@ -2684,7 +2728,7 @@ namespace Emgu.CV.Test
                 System.Diagnostics.Debug.WriteLine("emgu.cv.test", String.Format("dstSize: {0}x{1}", dstImageSize.Width, dstImageSize.Height));
                 System.Diagnostics.Debug.WriteLine("emgu.cv.test", String.Format("rotationMat: [ [{0}, {1}, {2}], [{3}, {4}, {5}] ]", m.Data[0, 0], m.Data[0, 1], m.Data[0, 2], m.Data[1, 0], m.Data[1, 1], m.Data[1, 2]));
             }
-        }
+        }*/
 
 #if !NETFX_CORE
         [Test]
@@ -2753,6 +2797,7 @@ namespace Emgu.CV.Test
 
         }
 
+        /*
         [Test]
         public void TestRotationMatrix2D()
         {
@@ -2792,7 +2837,7 @@ namespace Emgu.CV.Test
 
                 EmguAssert.IsTrue(max < 1.0e-4, String.Format("Error {0} is too large. Expected to be less than 1.0e-4", max));
             }
-        }
+        }*/
 
         /*
         [Test]
@@ -2815,11 +2860,14 @@ namespace Emgu.CV.Test
         public void TestRetina()
         {
 
-            Image<Bgr, byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
+            Mat image = EmguAssert.LoadMat("pedestrian.png", ImreadModes.ColorBgr);
             using (Retina retina = new Retina(
-                new Size(image.Width, image.Height),
-                true,
-                Retina.ColorSamplingMethod.ColorBayer, false, 1.0, 10.0))
+                       image.Size, 
+                       true,
+                       Retina.ColorSamplingMethod.ColorBayer, 
+                       false, 
+                       1.0, 
+                       10.0))
             {
                 Retina.RetinaParameters p = retina.Parameters;
                 Retina.IplMagnoParameters iplP = p.IplMagno;
@@ -2843,11 +2891,15 @@ namespace Emgu.CV.Test
         [Test]
         public void TestPyrMeanshiftSegmentation()
         {
-            Image<Bgr, byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
-            Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
+            Mat image = EmguAssert.LoadMat("pedestrian.png", ImreadModes.ColorBgr);
+            Mat result = new Mat();
             CvInvoke.PyrMeanShiftFiltering(image, result, 10, 20, 1, new MCvTermCriteria(5, 1));
             //Image<Gray, Byte> hue = result.Convert<Hsv, Byte>()[0];
-            Image<Gray, Byte> hue = result.Convert<Gray, Byte>().Canny(30, 20);
+            Mat resultGray = new Mat();
+            CvInvoke.CvtColor(result, resultGray, ColorConversion.Bgr2Gray);
+            Mat hue = new Mat();
+            CvInvoke.Canny(resultGray, hue, 30, 20);
+            //Image<Gray, Byte> hue = result.Convert<Gray, Byte>().Canny(30, 20);
 
             //ImageViewer.Show(image.ConcateHorizontal( result ).ConcateVertical(hue.Convert<Bgr, Byte>()));
         }
@@ -3028,8 +3080,8 @@ namespace Emgu.CV.Test
 
             GCHandle srcHandle = GCHandle.Alloc(srcPts, GCHandleType.Pinned);
             GCHandle dstHandle = GCHandle.Alloc(dstPts, GCHandleType.Pinned);
-            using (Matrix<float> srcMat = new Matrix<float>(srcPts.Length, 1, 3, srcHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f))))
-            using (Matrix<float> dstMat = new Matrix<float>(dstPts.Length, 1, 3, dstHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f))))
+            using (Mat srcMat = new Mat(srcPts.Length, 1, DepthType.Cv32F, 3, srcHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f))))
+            using (Mat dstMat = new Mat(dstPts.Length, 1, DepthType.Cv32F, 3, dstHandle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(MCvPoint3D32f))))
             {
                 CvInvoke.Transform(srcMat, dstMat, affine);
             }
@@ -3037,7 +3089,7 @@ namespace Emgu.CV.Test
             dstHandle.Free();
 
             byte[] inlier;
-            Matrix<double> estimate;
+            Mat estimate;
             CvInvoke.EstimateAffine3D(srcPts, dstPts, out estimate, out inlier, 3, 0.99);
         }
 

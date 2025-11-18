@@ -822,7 +822,7 @@ namespace Emgu.CV
         private static extern void cveCorrectMatches(IntPtr f, IntPtr points1, IntPtr points2, IntPtr newPoints1,
             IntPtr newPoints2);
 
-        /*
+        
         /// <summary>
         /// Computes an optimal affine transformation between two 3D point sets.
         /// </summary>
@@ -833,14 +833,14 @@ namespace Emgu.CV
         /// <param name="ransacThreshold">Maximum reprojection error in the RANSAC algorithm to consider a point as an inlier.</param>
         /// <param name="confidence">Confidence level, between 0 and 1, for the estimated transformation. Anything between 0.95 and 0.99 is usually good enough. Values too close to 1 can slow down the estimation significantly. Values lower than 0.8-0.9 can result in an incorrectly estimated transformation.</param>
         /// <returns>The result</returns>
-        public static int EstimateAffine3D(MCvPoint3D32f[] src, MCvPoint3D32f[] dst, out Matrix<double> estimate,
+        public static int EstimateAffine3D(MCvPoint3D32f[] src, MCvPoint3D32f[] dst, out Mat estimate,
            out Byte[] inliers, double ransacThreshold, double confidence)
         {
             GCHandle srcHandle = GCHandle.Alloc(src, GCHandleType.Pinned);
             GCHandle dstHandle = GCHandle.Alloc(dst, GCHandleType.Pinned);
             int result;
 
-            estimate = new Matrix<double>(3, 4);
+            estimate = new Mat();
 
             int sizeOfPoint3D32f = Toolbox.SizeOf<MCvPoint3D64f>();
 
@@ -860,7 +860,7 @@ namespace Emgu.CV
             dstHandle.Free();
 
             return result;
-        }*/
+        }
 
         /// <summary>
         /// Computes an optimal affine transformation between two 3D point sets.
