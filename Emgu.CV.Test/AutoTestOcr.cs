@@ -111,8 +111,9 @@ namespace Emgu.CV.Test
         public async Task TestOCRBgrText()
         {
             using (TesseractModel ocr = new TesseractModel())
-            using (Image<Bgr, Byte> img = new Image<Bgr, byte>(480, 200))
+            using (Mat img = new Mat(480, 200, DepthType.Cv8U, 3))
             {
+                img.SetTo(new MCvScalar());
                 await ocr.Init(AutoTestModels.DownloadManager_OnDownloadProgressChanged);
                 Tesseract tesseract = ocr.Model;
                 tesseract.SetVariable("tessedit_char_whitelist", "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,");

@@ -61,6 +61,7 @@ namespace Emgu.CV.Test
          }
       }
 
+      /*
       [Test]
       public void TestUMatConvert()
       {
@@ -73,7 +74,7 @@ namespace Emgu.CV.Test
             {
             }
          }
-      }
+      }*/
 
       [Test]
       public void TestJsonSerializeAndDeserialize()

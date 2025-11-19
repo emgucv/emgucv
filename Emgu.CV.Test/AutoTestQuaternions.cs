@@ -13,6 +13,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Features;
 using Emgu.CV.Structure;
 using Emgu.Util;
@@ -43,11 +44,12 @@ namespace Emgu.CV.Test
          Quaternions q = new Quaternions();
          double epsilon = 1.0e-10;
 
-         Matrix<double> point = new Matrix<double>(3, 1);
-         point.SetRandNormal(new MCvScalar(), new MCvScalar(20));
-         using (Matrix<double> pt1 = new Matrix<double>(3, 1))
-         using (Matrix<double> pt2 = new Matrix<double>(3, 1))
-         using (Matrix<double> pt3 = new Matrix<double>(3, 1))
+         Mat point = new Mat(3, 1, DepthType.Cv64F, 1);
+         CvInvoke.Randn(point, new MCvScalar(), new MCvScalar(20));
+         //point.SetRandNormal(new MCvScalar(), new MCvScalar(20));
+         using (Mat pt1 = new Mat())
+         using (Mat pt2 = new Mat())
+         using (Mat pt3 = new Mat())
          {
             double x1 = 1.0, y1 = 0.2, z1 = 0.1;
             double x2 = 0.0, y2 = 0.0, z2 = 0.0;
@@ -62,16 +64,15 @@ namespace Emgu.CV.Test
 
             q.RotatePoints(point, pt1);
 
-            Matrix<double> rMat = new Matrix<double>(3, 3);
+            Mat rMat = new Mat();
             q.GetRotationMatrix(rMat);
             CvInvoke.Gemm(rMat, point, 1.0, null, 0.0, pt2, Emgu.CV.CvEnum.GemmType.Default);
 
             CvInvoke.AbsDiff(pt1, pt2, pt3);
-
-            EmguAssert.IsTrue(
-               pt3[0, 0] < epsilon &&
-               pt3[1, 0] < epsilon &&
-               pt3[2, 0] < epsilon);
+            Mat compareResult = new Mat();
+            CvInvoke.Compare(pt3, new ScalarArray(epsilon), compareResult, CmpType.GreaterEqual );
+            int badCount = CvInvoke.CountNonZero(compareResult);
+                EmguAssert.IsTrue(badCount == 0);
 
          }
 
@@ -155,9 +156,9 @@ namespace Emgu.CV.Test
 
          RotationVector3D rVec = new RotationVector3D(new double[] { q1.AxisAngle.X, q1.AxisAngle.Y, q1.AxisAngle.Z });
          Mat m1 = rVec.RotationMatrix;
-         Matrix<double> m2 = new Matrix<double>(3, 3);
+         Mat m2 = new Mat();
          q1.GetRotationMatrix(m2);
-         Matrix<double> diff = new Matrix<double>(3, 3);
+         Mat diff = new Mat();
          CvInvoke.AbsDiff(m1, m2, diff);
          double norm = CvInvoke.Norm(diff, Emgu.CV.CvEnum.NormType.C);
          EmguAssert.IsTrue(norm < epsilon);

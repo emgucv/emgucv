@@ -845,10 +845,10 @@ namespace Emgu.CV
             int sizeOfPoint3D32f = Toolbox.SizeOf<MCvPoint3D64f>();
 
             using (
-               Matrix<float> srcMat = new Matrix<float>(1, src.Length, 3, srcHandle.AddrOfPinnedObject(),
+               Mat srcMat = new Mat(1, src.Length, DepthType.Cv32F, 3, srcHandle.AddrOfPinnedObject(),
                   sizeOfPoint3D32f * src.Length))
             using (
-               Matrix<float> dstMat = new Matrix<float>(1, dst.Length, 3, dstHandle.AddrOfPinnedObject(),
+               Mat dstMat = new Mat(1, dst.Length, DepthType.Cv32F, 3, dstHandle.AddrOfPinnedObject(),
                   sizeOfPoint3D32f * dst.Length))
             using (Util.VectorOfByte vectorOfByte = new Util.VectorOfByte())
             {

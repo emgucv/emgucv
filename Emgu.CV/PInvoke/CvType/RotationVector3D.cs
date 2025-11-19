@@ -6,15 +6,16 @@ using System;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
+using Emgu.CV.CvEnum;
 
 namespace Emgu.CV
 {
-    /*
+    
     /// <summary>
     /// A (3x1) Rodrigues rotation vector. Rotation vector is a compact representation of rotation matrix. Direction of the rotation vector is the rotation axis and the length of the vector is the rotation angle around the axis. 
     /// </summary>
     [Serializable]
-    public class RotationVector3D : Matrix<double>
+    public class RotationVector3D : Mat
     {
         /// <summary>
         /// Constructor used to deserialize 3D rotation vector
@@ -30,7 +31,7 @@ namespace Emgu.CV
         /// Create a 3D rotation vector (3x1 Matrix).
         /// </summary>
         public RotationVector3D()
-           : base(3, 1)
+           : base(3, 1, DepthType.Cv64F, 1)
         {
         }
 
@@ -42,7 +43,8 @@ namespace Emgu.CV
            : this()
         {
             Debug.Assert(value.Length == 3, "Rodrigues rotation Vector must have size == 3");
-            Buffer.BlockCopy(value, 0, this.Data, 0, 3*sizeof(double));
+            this.SetTo(value);
+            //Buffer.BlockCopy((value, 0, this.GetData(false) as double[], 0, 3*sizeof(double));
         }
 
         /// <summary>
@@ -65,5 +67,5 @@ namespace Emgu.CV
 
             }
         }
-    }*/
+    }
 }

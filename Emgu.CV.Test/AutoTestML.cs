@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging.Effects;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -27,6 +28,7 @@ using NUnit.Framework;
 
 using MlEnum = Emgu.CV.ML.MlEnum;
 using Range = Emgu.CV.Structure.Range;
+//using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Emgu.CV.Test
 {
@@ -41,7 +43,6 @@ namespace Emgu.CV.Test
             int trainSampleCount = 100;
 
             #region Generate the training data and classes
-
             Mat trainData = new Mat(trainSampleCount, 2, DepthType.Cv32F, 1);
             Mat trainClasses = new Mat(trainSampleCount, 1, DepthType.Cv32F, 1);
 
@@ -57,13 +58,9 @@ namespace Emgu.CV.Test
 
             Mat trainClasses1 = new Mat(trainClasses, new Range(0, trainSampleCount >> 1), Range.All);
             trainClasses1.SetTo(new MCvScalar(1.0));
-            //Matrix<float> trainClasses1 = trainClasses.GetRows(0, trainSampleCount >> 1, 1);
-            //trainClasses1.SetValue(1);
+
             Mat trainClasses2 = new Mat(trainClasses, new Range(trainSampleCount >> 1, trainSampleCount), Range.All);
             trainClasses2.SetTo(new MCvScalar(2.0));
-            //Matrix<float> trainClasses2 = trainClasses.GetRows(trainSampleCount >> 1, trainSampleCount, 1);
-            //trainClasses2.SetValue(2);
-
             #endregion
 
             Mat results = new Mat(sample.Rows, 1, DepthType.Cv32F, 1);
@@ -77,29 +74,58 @@ namespace Emgu.CV.Test
                 knn.Train(trainData, MlEnum.DataLayoutType.RowSample, trainClasses);
                 //ParamDef[] defs =  knn.GetParams();
 
-
+                byte[] imageData = img.GetData(false) as byte[];
                 for (int i = 0; i < img.Height; i++)
                 {
                     for (int j = 0; j < img.Width; j++)
                     {
-                        sample.SetTo(new float[] {(float)j, (float)i});
+                        sample.SetTo(new float[] {(float) j, (float) i});
 
                         // estimates the response and get the neighbors' labels
                         float response = knn.Predict(sample);
-                        knn.FindNearest(sample, K, results,  neighborResponses, null);
+                        knn.FindNearest(sample, K, results, neighborResponses, null);
 
                         int accuracy = 0;
+                        float[,] neighborResponsesData = neighborResponses.GetData(true) as float[,];
                         // compute the number of neighbors representing the majority
                         for (int k = 0; k < K; k++)
                         {
-                            if (neighborResponses.Data[0, k] == response)
+                            if (neighborResponsesData[0, k] == response)
                                 accuracy++;
                         }
                         // highlight the pixel depending on the accuracy (or confidence)
-                        img[i, j] =
-                            response == 1
-                                ? (accuracy > 5 ? new Bgr(90, 0, 0) : new Bgr(90, 40, 0))
-                                : (accuracy > 5 ? new Bgr(0, 90, 0) : new Bgr(40, 90, 0));
+                        if (response == 1)
+                        {
+                            if (accuracy > 5)
+                            {
+                                imageData[i * j * 3 + j * 3 + 0] = 90;
+                                imageData[i * j * 3 + j * 3 + 1] = 0;
+                                imageData[i * j * 3 + j * 3 + 2] = 0;
+                            }
+                            else
+                            {
+                                imageData[i * j * 3 + j * 3 + 0] = 90;
+                                imageData[i * j * 3 + j * 3 + 1] = 40;
+                                imageData[i * j * 3 + j * 3 + 2] = 0;
+                            }
+                        }
+                        else
+                        {
+                            if (accuracy > 5)
+                            {
+                                imageData[i * j * 3 + j * 3 + 0] = 0;
+                                imageData[i * j * 3 + j * 3 + 1] = 90;
+                                imageData[i * j * 3 + j * 3 + 2] = 0;
+                            }
+                            else
+                            {
+                                imageData[i * j * 3 + j * 3 + 0] = 4;
+                                imageData[i * j * 3 + j * 3 + 1] = 90;
+                                imageData[i * j * 3 + j * 3 + 2] = 0;
+                            }
+                        }
+                        img.SetTo(imageData);
+
                     }
                 }
 
@@ -125,14 +151,17 @@ namespace Emgu.CV.Test
 
 #endif
             }
-
+            float[,] trainData1Array = trainData1.GetData(true) as float[,];
+            float[,] trainData2Array = trainData2.GetData(true) as float[,];
             // display the original training samples
             for (int i = 0; i < (trainSampleCount >> 1); i++)
             {
-                PointF p1 = new PointF(trainData1[i, 0], trainData1[i, 1]);
-                img.Draw(new CircleF(p1, 2.0f), new Bgr(255, 100, 100), -1);
-                PointF p2 = new PointF(trainData2[i, 0], trainData2[i, 1]);
-                img.Draw(new CircleF(p2, 2.0f), new Bgr(100, 255, 100), -1);
+                PointF p1 = new PointF(trainData1Array[i, 0], trainData1Array[i, 1]);
+                CvInvoke.Circle(img, Point.Round(p1), 2, new MCvScalar(255, 100, 100), -1);
+                //img.Draw();
+                PointF p2 = new PointF(trainData2Array[i, 0], trainData2Array[i, 1]);
+                CvInvoke.Circle(img, Point.Round(p2), 2, new MCvScalar(100, 255, 100), -1);
+                //img.Draw(new CircleF(p2, 2.0f), new Bgr(100, 255, 100), -1);
             }
 
             //Emgu.CV.UI.ImageViewer.Show(img);
@@ -234,11 +263,14 @@ namespace Emgu.CV.Test
                 em.CovarianceMatrixType = EM.CovarianMatrixType.Diagonal;
                 em.TermCriteria = new MCvTermCriteria(100, 1.0e-6);
                 //ParamDef[] parameters = em.GetParams();
-                Matrix<int> labels = new Matrix<int>(numberOfPoints, 1);
-                Matrix<float> featuresM = new Matrix<float>(numberOfPoints, dimensions);
+                Mat labels = new Mat(numberOfPoints, 1, DepthType.Cv32S, 1);
+                labels.SetTo(new MCvScalar());
+                Mat featuresM = new Mat(numberOfPoints, dimensions, DepthType.Cv32S, 1);
+                float[] featuresMData = new float[numberOfPoints * dimensions];
                 for (int i = 0; i < numberOfPoints; i++)
                     for (int j = 0; j < dimensions; j++)
-                        featuresM[i, j] = 100 * (float)r.NextDouble() - 50;
+                        featuresMData[i*dimensions + j] = 100 * (float)r.NextDouble() - 50;
+                featuresM.SetTo(featuresMData);
 
                 em.Train(featuresM, MlEnum.DataLayoutType.RowSample, labels);
             }
@@ -252,114 +284,146 @@ namespace Emgu.CV.Test
             int trainSampleCount = 150;
             int sigma = 60;
 
+            MCvScalar[] colors = new MCvScalar[]
+            {
+                new MCvScalar(255, 100, 100),
+                new MCvScalar(100, 255, 100),
+                new MCvScalar(100, 100, 255)
+            };
+
             #region Generate the training data and classes
+            Mat trainData = new Mat(trainSampleCount, 2, DepthType.Cv32F, 1);
+            Mat trainClasses = new Mat(trainSampleCount, 1, DepthType.Cv32F, 1);
 
-            Matrix<float> trainData = new Matrix<float>(trainSampleCount, 2);
-            Matrix<float> trainClasses = new Matrix<float>(trainSampleCount, 1);
+            Mat img = new Mat(500, 500, DepthType.Cv8U, 3);
 
-            Image<Bgr, Byte> img = new Image<Bgr, byte>(500, 500);
+            Mat sample = new Mat(1, 2, DepthType.Cv32F, 1);
 
-            Matrix<float> sample = new Matrix<float>(1, 2);
+            Mat trainData1 = new Mat(trainData, new Range(0, trainSampleCount / 3), Range.All);
+            Mat trainData1Col0 = new Mat(trainData1, Range.All, new Range(0, 1));
+            CvInvoke.Randn(trainData1Col0, new MCvScalar(100), new MCvScalar(sigma));
+            Mat trainData1Col1 = new Mat(trainData1, Range.All, new Range(1, 2));
+            CvInvoke.Randn(trainData1Col1, new MCvScalar(300), new MCvScalar(sigma));
+            
+            Mat trainData2 = new Mat(trainData, new Range(trainSampleCount / 3, 2 * trainSampleCount / 3), Range.All);
+            CvInvoke.Randn(trainData2, new MCvScalar(400), new MCvScalar(sigma));
 
-            Matrix<float> trainData1 = trainData.GetRows(0, trainSampleCount / 3, 1);
-            trainData1.GetCols(0, 1).SetRandNormal(new MCvScalar(100), new MCvScalar(sigma));
-            trainData1.GetCols(1, 2).SetRandNormal(new MCvScalar(300), new MCvScalar(sigma));
+            Mat trainData3 = new Mat(trainData, new Range(2 * trainSampleCount / 3, trainSampleCount), Range.All);
+            Mat trainData3Col0 = new Mat(trainData3, Range.All, new Range(0, 1));
+            CvInvoke.Randn(trainData3Col0, new MCvScalar(300), new MCvScalar(sigma));
+            Mat trainData3Col1 = new Mat(trainData3, Range.All, new Range(1, 2));
+            CvInvoke.Randn(trainData3Col1, new MCvScalar(100), new MCvScalar(sigma));
 
-            Matrix<float> trainData2 = trainData.GetRows(trainSampleCount / 3, 2 * trainSampleCount / 3, 1);
-            trainData2.SetRandNormal(new MCvScalar(400), new MCvScalar(sigma));
-
-            Matrix<float> trainData3 = trainData.GetRows(2 * trainSampleCount / 3, trainSampleCount, 1);
-            trainData3.GetCols(0, 1).SetRandNormal(new MCvScalar(300), new MCvScalar(sigma));
-            trainData3.GetCols(1, 2).SetRandNormal(new MCvScalar(100), new MCvScalar(sigma));
-
-            Matrix<float> trainClasses1 = trainClasses.GetRows(0, trainSampleCount / 3, 1);
-            trainClasses1.SetValue(1);
-            Matrix<float> trainClasses2 = trainClasses.GetRows(trainSampleCount / 3, 2 * trainSampleCount / 3, 1);
-            trainClasses2.SetValue(2);
-            Matrix<float> trainClasses3 = trainClasses.GetRows(2 * trainSampleCount / 3, trainSampleCount, 1);
-            trainClasses3.SetValue(3);
-
+            Mat trainClasses1 = new Mat(trainClasses, new Range(0, trainSampleCount / 3), Range.All);
+            trainClasses1.SetTo(new MCvScalar(1));
+            Mat trainClasses2 = new Mat( trainClasses, new Range(trainSampleCount / 3, 2 * trainSampleCount / 3), Range.All);
+            trainClasses2.SetTo(new MCvScalar(2));
+            Mat trainClasses3 = new Mat(trainClasses, new Range(2 * trainSampleCount / 3, trainSampleCount), Range.All);
+            trainClasses3.SetTo(new MCvScalar(3));
             #endregion
 
             //using (SVM.Params p = new SVM.Params(MlEnum.SvmType.CSvc, MlEnum.SvmKernelType.Linear, 0, 1, 0, 1, 0, 0, null, new MCvTermCriteria(100, 1.0e-6)))
             using (SVM model = new SVM())
-            using (Matrix<int> trainClassesInt = trainClasses.Convert<int>())
-            using (TrainData td = new TrainData(trainData, MlEnum.DataLayoutType.RowSample, trainClassesInt))
+            using (Mat trainClassesInt = new Mat())
             {
-                model.Type = SVM.SvmType.CSvc;
-                model.SetKernel(SVM.SvmKernelType.Inter);
-                model.Degree = 0;
-                model.Gamma = 1;
-                model.Coef0 = 0;
-                model.C = 1;
-                model.Nu = 0;
-                model.P = 0;
-                model.TermCriteria = new MCvTermCriteria(100, 1.0e-6);
-                //bool trained = model.TrainAuto(td, 5);
-                model.Train(td);
+                trainClasses.ConvertTo(trainClassesInt, DepthType.Cv32S);
+                using (TrainData td = new TrainData(trainData, MlEnum.DataLayoutType.RowSample, trainClassesInt))
+                {
+                    model.Type = SVM.SvmType.CSvc;
+                    model.SetKernel(SVM.SvmKernelType.Inter);
+                    model.Degree = 0;
+                    model.Gamma = 1;
+                    model.Coef0 = 0;
+                    model.C = 1;
+                    model.Nu = 0;
+                    model.P = 0;
+                    model.TermCriteria = new MCvTermCriteria(100, 1.0e-6);
+                    //bool trained = model.TrainAuto(td, 5);
+                    model.Train(td);
 #if !NETFX_CORE
-                String fileName = "svmModel.xml";
-                //String fileName = Path.Combine(Path.GetTempPath(), "svmModel.xml");
-                model.Save(fileName);
+                    String fileName = "svmModel.xml";
+                    //String fileName = Path.Combine(Path.GetTempPath(), "svmModel.xml");
+                    model.Save(fileName);
 
-                SVM model2 = new SVM();
-                FileStorage fs = new FileStorage(fileName, FileStorage.Mode.Read);
-                model2.Read(fs.GetFirstTopLevelNode());
+                    SVM model2 = new SVM();
+                    FileStorage fs = new FileStorage(fileName, FileStorage.Mode.Read);
+                    model2.Read(fs.GetFirstTopLevelNode());
 
-                if (File.Exists(fileName))
-                    File.Delete(fileName);
+                    if (File.Exists(fileName))
+                        File.Delete(fileName);
 #endif
 
-                for (int i = 0; i < img.Height; i++)
-                {
-                    for (int j = 0; j < img.Width; j++)
+                    byte[] imageData = img.GetData(false) as byte[];
+                    //float epsilon = 0.00000001f;
+                    for (int i = 0; i < img.Height; i++)
                     {
-                        sample.Data[0, 0] = j;
-                        sample.Data[0, 1] = i;
+                        for (int j = 0; j < img.Width; j++)
+                        {
+                            sample.SetTo(new float[] {j, i});
+                            int response = (int)Math.Round(model.Predict(sample));
+                            MCvScalar color = colors[response - 1];
+                            /*
+                            if (response == 1)
+                            {
+                                color = colors[0];
+                            } else if (response == 2)
+                            {
+                                color = colors[1];
+                            }
+                            else
+                            {
+                                color = colors[2];
+                            }*/
 
-                        float response = model.Predict(sample);
+                            imageData[i * j * 3 + j * 3 + 0] = (Byte)color.V0;
+                            imageData[i * j * 3 + j * 3 + 1] = (Byte)color.V1;
+                            imageData[i * j * 3 + j * 3 + 2] = (Byte)color.V2;
 
-                        img[i, j] =
-                            response == 1
-                                ? new Bgr(90, 0, 0)
-                                : response == 2
-                                    ? new Bgr(0, 90, 0)
-                                    : new Bgr(0, 0, 90);
+                        }
                     }
-                }
-                Mat supportVectors = model.GetSupportVectors();
-                //TODO: find out how to draw the support vectors
-                Image<Gray, float> pts = supportVectors.ToImage<Gray, float>();
-                PointF[] vectors = new PointF[supportVectors.Rows];
-                GCHandle handler = GCHandle.Alloc(vectors, GCHandleType.Pinned);
-                using (
-                    Mat vMat = new Mat(supportVectors.Rows, supportVectors.Cols, DepthType.Cv32F, 1,
-                        handler.AddrOfPinnedObject(), supportVectors.Cols * 4))
-                {
-                    supportVectors.CopyTo(vMat);
-                }
-                handler.Free();
+                    img.SetTo(imageData);
 
+                    Mat supportVectors = model.GetSupportVectors();
 
-                Mat supportVec = model.GetSupportVectors();
-                /*
-                for (int i = 0; i < c; i++)
-                {
-                   float[] v = model.GetSupportVector(i);
-                   PointF p1 = new PointF(v[0], v[1]);
-                   img.Draw(new CircleF(p1, 4), new Bgr(128, 128, 128), 2);
-                }*/
+                    //TODO: find out how to draw the support vectors
+                    //Image<Gray, float> pts = supportVectors.ToImage<Gray, float>();
+
+                    PointF[] vectors = new PointF[supportVectors.Rows];
+                    GCHandle handler = GCHandle.Alloc(vectors, GCHandleType.Pinned);
+                    using (
+                        Mat vMat = new Mat(supportVectors.Rows, supportVectors.Cols, DepthType.Cv32F, 1,
+                            handler.AddrOfPinnedObject(), supportVectors.Cols * 4))
+                    {
+                        supportVectors.CopyTo(vMat);
+                    }
+                    handler.Free();
+
+                    Mat supportVec = model.GetSupportVectors();
+                    /*
+                    for (int i = 0; i < c; i++)
+                    {
+                       float[] v = model.GetSupportVector(i);
+                       PointF p1 = new PointF(v[0], v[1]);
+                       img.Draw(new CircleF(p1, 4), new Bgr(128, 128, 128), 2);
+                    }*/
+                }
             }
 
             // display the original training samples
+            float[,] trainData1Array = trainData1.GetData(true) as float[,];
+            float[,] trainData2Array = trainData2.GetData(true) as float[,];
+            float[,] trainData3Array = trainData3.GetData(true) as float[,];
             for (int i = 0; i < (trainSampleCount / 3); i++)
             {
-                PointF p1 = new PointF(trainData1[i, 0], trainData1[i, 1]);
-                img.Draw(new CircleF(p1, 2.0f), new Bgr(255, 100, 100), -1);
-                PointF p2 = new PointF(trainData2[i, 0], trainData2[i, 1]);
-                img.Draw(new CircleF(p2, 2.0f), new Bgr(100, 255, 100), -1);
-                PointF p3 = new PointF(trainData3[i, 0], trainData3[i, 1]);
-                img.Draw(new CircleF(p3, 2.0f), new Bgr(100, 100, 255), -1);
+                PointF p1 = new PointF(trainData1Array[i, 0], trainData1Array[i, 1]);
+                CvInvoke.Circle(img, Point.Round(p1), 2, colors[0], -1);
+                
+                PointF p2 = new PointF(trainData2Array[i, 0], trainData2Array[i, 1]);
+                CvInvoke.Circle(img, Point.Round(p2), 2, colors[1], -1);
+                
+                PointF p3 = new PointF(trainData3Array[i, 0], trainData3Array[i, 1]);
+                CvInvoke.Circle(img, Point.Round(p3), 2, colors[2], -1);
+                
             }
 
             //Emgu.CV.UI.ImageViewer.Show(img);
@@ -371,40 +435,44 @@ namespace Emgu.CV.Test
         [Test]
         public void TestNormalBayesClassifier()
         {
-            Bgr[] colors = new Bgr[]
+            MCvScalar[] colors = new MCvScalar[]
             {
-                new Bgr(0, 0, 255),
-                new Bgr(0, 255, 0),
-                new Bgr(255, 0, 0)
+                new MCvScalar(0, 0, 255),
+                new MCvScalar(0, 255, 0),
+                new MCvScalar(255, 0, 0)
             };
             int trainSampleCount = 150;
-
+            int sigma = 50;
             #region Generate the training data and classes
 
-            Matrix<float> trainData = new Matrix<float>(trainSampleCount, 2);
-            Matrix<int> trainClasses = new Matrix<int>(trainSampleCount, 1);
+            Mat trainData = new Mat(trainSampleCount, 2, DepthType.Cv32F, 1);
+            Mat trainClasses = new Mat(trainSampleCount, 1, DepthType.Cv32F, 1);
 
-            Image<Bgr, Byte> img = new Image<Bgr, byte>(500, 500);
+            Mat img = new Mat(500, 500, DepthType.Cv8U, 3);
 
-            Matrix<float> sample = new Matrix<float>(1, 2);
+            Mat sample = new Mat(1, 2, DepthType.Cv32F, 1);
 
-            Matrix<float> trainData1 = trainData.GetRows(0, trainSampleCount / 3, 1);
-            trainData1.GetCols(0, 1).SetRandNormal(new MCvScalar(100), new MCvScalar(50));
-            trainData1.GetCols(1, 2).SetRandNormal(new MCvScalar(300), new MCvScalar(50));
+            Mat trainData1 = new Mat(trainData, new Range(0, trainSampleCount / 3), Range.All);
+            Mat trainData1Col0 = new Mat(trainData1, Range.All, new Range(0, 1));
+            CvInvoke.Randn(trainData1Col0, new MCvScalar(100), new MCvScalar(sigma));
+            Mat trainData1Col1 = new Mat(trainData1, Range.All, new Range(1, 2));
+            CvInvoke.Randn(trainData1Col1, new MCvScalar(300), new MCvScalar(sigma));
 
-            Matrix<float> trainData2 = trainData.GetRows(trainSampleCount / 3, 2 * trainSampleCount / 3, 1);
-            trainData2.SetRandNormal(new MCvScalar(400), new MCvScalar(50));
+            Mat trainData2 = new Mat(trainData, new Range(trainSampleCount / 3, 2 * trainSampleCount / 3), Range.All);
+            CvInvoke.Randn(trainData2, new MCvScalar(400), new MCvScalar(sigma));
 
-            Matrix<float> trainData3 = trainData.GetRows(2 * trainSampleCount / 3, trainSampleCount, 1);
-            trainData3.GetCols(0, 1).SetRandNormal(new MCvScalar(300), new MCvScalar(50));
-            trainData3.GetCols(1, 2).SetRandNormal(new MCvScalar(100), new MCvScalar(50));
+            Mat trainData3 = new Mat(trainData, new Range(2 * trainSampleCount / 3, trainSampleCount), Range.All);
+            Mat trainData3Col0 = new Mat(trainData3, Range.All, new Range(0, 1));
+            CvInvoke.Randn(trainData3Col0, new MCvScalar(300), new MCvScalar(sigma));
+            Mat trainData3Col1 = new Mat(trainData3, Range.All, new Range(1, 2));
+            CvInvoke.Randn(trainData3Col1, new MCvScalar(100), new MCvScalar(sigma));
 
-            Matrix<int> trainClasses1 = trainClasses.GetRows(0, trainSampleCount / 3, 1);
-            trainClasses1.SetValue(1);
-            Matrix<int> trainClasses2 = trainClasses.GetRows(trainSampleCount / 3, 2 * trainSampleCount / 3, 1);
-            trainClasses2.SetValue(2);
-            Matrix<int> trainClasses3 = trainClasses.GetRows(2 * trainSampleCount / 3, trainSampleCount, 1);
-            trainClasses3.SetValue(3);
+            Mat trainClasses1 = new Mat(trainClasses, new Range(0, trainSampleCount / 3), Range.All);
+            trainClasses1.SetTo(new MCvScalar(1));
+            Mat trainClasses2 = new Mat(trainClasses, new Range(trainSampleCount / 3, 2 * trainSampleCount / 3), Range.All);
+            trainClasses2.SetTo(new MCvScalar(2));
+            Mat trainClasses3 = new Mat(trainClasses, new Range(2 * trainSampleCount / 3, trainSampleCount), Range.All);
+            trainClasses3.SetTo(new MCvScalar(3));
 
             #endregion
 
@@ -423,23 +491,42 @@ namespace Emgu.CV.Test
 #endif
 
                 #region Classify every image pixel
-
+                byte[] imageData = img.GetData(false) as byte[];
                 for (int i = 0; i < img.Height; i++)
                     for (int j = 0; j < img.Width; j++)
                     {
-                        sample.Data[0, 0] = i;
-                        sample.Data[0, 1] = j;
+                        sample.SetTo(new float[] { j, i });
+                        //sample.Data[0, 0] = i;
+                        //sample.Data[0, 1] = j;
                         int response = (int)classifier.Predict(sample, null);
 
-                        Bgr color = colors[response - 1];
-
-                        img[j, i] = new Bgr(color.Blue * 0.5, color.Green * 0.5, color.Red * 0.5);
+                        MCvScalar color = colors[response - 1];
+                        imageData[i * j * 3 + j * 3 + 0] = (Byte)color.V0;
+                        imageData[i * j * 3 + j * 3 + 1] = (Byte)color.V1;
+                        imageData[i * j * 3 + j * 3 + 2] = (Byte)color.V2;
+                        //img[j, i] = new Bgr(color.Blue * 0.5, color.Green * 0.5, color.Red * 0.5);
                     }
-
+                img.SetTo(imageData);
                 #endregion
             }
 
             // display the original training samples
+            float[,] trainData1Array = trainData1.GetData(true) as float[,];
+            float[,] trainData2Array = trainData2.GetData(true) as float[,];
+            float[,] trainData3Array = trainData3.GetData(true) as float[,];
+            for (int i = 0; i < (trainSampleCount / 3); i++)
+            {
+                PointF p1 = new PointF(trainData1Array[i, 0], trainData1Array[i, 1]);
+                CvInvoke.Circle(img, Point.Round(p1), 2, colors[0], -1);
+
+                PointF p2 = new PointF(trainData2Array[i, 0], trainData2Array[i, 1]);
+                CvInvoke.Circle(img, Point.Round(p2), 2, colors[1], -1);
+
+                PointF p3 = new PointF(trainData3Array[i, 0], trainData3Array[i, 1]);
+                CvInvoke.Circle(img, Point.Round(p3), 2, colors[2], -1);
+
+            }
+            /*
             for (int i = 0; i < (trainSampleCount / 3); i++)
             {
                 PointF p1 = new PointF(trainData1[i, 0], trainData1[i, 1]);
@@ -448,7 +535,7 @@ namespace Emgu.CV.Test
                 img.Draw(new CircleF(p2, 2.0f), colors[1], -1);
                 PointF p3 = new PointF(trainData3[i, 0], trainData3[i, 1]);
                 img.Draw(new CircleF(p3, 2.0f), colors[2], -1);
-            }
+            }*/
 
             //Emgu.CV.UI.ImageViewer.Show(img);
         }
@@ -539,26 +626,30 @@ namespace Emgu.CV.Test
            //Emgu.CV.UI.ImageViewer.Show(img);
         }*/
 
-        /*
-        private static void ReadLetterRecognitionData(out Matrix<float> data, out Matrix<float> response)
+        
+        private static void ReadLetterRecognitionData(out Mat data, out Mat response)
         {
             string[] rows = EmguAssert.ReadAllLines("letter-recognition.data");
 
             int varCount = rows[0].Split(',').Length - 1;
-            data = new Matrix<float>(rows.Length, varCount);
-            response = new Matrix<float>(rows.Length, 1);
+            data = new Mat(rows.Length, varCount, DepthType.Cv32F, 1);
+            response = new Mat(rows.Length, 1, DepthType.Cv32F, 1);
             int count = 0;
+            float[] dataValues = new float[rows.Length * varCount];
+            float[] responseValues = new float[rows.Length];
             foreach (string row in rows)
             {
                 string[] values = row.Split(',');
                 Char c = Convert.ToChar(values[0]);
-                response[count, 0] = Convert.ToInt32(c);
+                responseValues[count] = Convert.ToInt32(c);
                 for (int i = 1; i < values.Length; i++)
-                    data[count, i - 1] = Convert.ToSingle(values[i]);
+                    dataValues[count * varCount + i - 1] = Convert.ToSingle(values[i]);
                 count++;
             }
+            data.SetTo(dataValues);
+            response.SetTo(responseValues);
         }
-        */
+        
         /*
                 private static void ReadMushroomData(out Matrix<float> data, out Matrix<float> response)
                 {
@@ -654,18 +745,25 @@ namespace Emgu.CV.Test
         [Test]
         public void TestRTreesLetterRecognition()
         {
-            Matrix<float> data, response;
+            Mat data, response;
             ReadLetterRecognitionData(out data, out response);
+            float[] responseValues = response.GetData(false) as float[];
 
             int trainingSampleCount = (int)(data.Rows * 0.8);
 
-            Matrix<Byte> varType = new Matrix<byte>(data.Cols + 1, 1);
-            varType.SetValue((byte)MlEnum.VarType.Numerical); //the data is numerical
-            varType[data.Cols, 0] = (byte)MlEnum.VarType.Categorical; //the response is catagorical
+            Mat varType = new Mat(data.Cols + 1, 1, DepthType.Cv8U, 1);
+            Byte[] varTypeValues = new byte[data.Cols + 1];
+            for (int i = 0; i < varTypeValues.Length - 1; i++)
+            {
+                varTypeValues[i] = (byte) MlEnum.VarType.Numerical; //the data is numerical
+            }
+            varTypeValues[data.Cols] = (byte)MlEnum.VarType.Categorical; //the response is categorical
+            varType.SetTo(varTypeValues);
 
-            Matrix<byte> sampleIdx = new Matrix<byte>(data.Rows, 1);
-            using (Matrix<byte> sampleRows = sampleIdx.GetRows(0, trainingSampleCount, 1))
-                sampleRows.SetValue(255);
+            Mat sampleIdx = new Mat(data.Rows, 1, DepthType.Cv8U, 1);
+            //using (Matrix<byte> sampleRows = sampleIdx.GetRows(0, trainingSampleCount, 1))
+            using (Mat sampleRows = new Mat(sampleIdx, new Range(0, trainingSampleCount), Range.All))
+                sampleRows.SetTo(new MCvScalar(255, 255, 255, 255));
 
             using (RTrees forest = new RTrees())
             using (
@@ -689,10 +787,11 @@ namespace Emgu.CV.Test
                 double testDataCorrectRatio = 0;
                 for (int i = 0; i < data.Rows; i++)
                 {
-                    using (Matrix<float> sample = data.GetRow(i))
+                    //using (Matrix<float> sample = data.GetRow(i))
+                    using (Mat sample = new Mat(data, new Range(i, i + 1), Range.All))
                     {
                         double r = forest.Predict(sample, null);
-                        r = Math.Abs(r - response[i, 0]);
+                        r = Math.Abs(r - responseValues[i]);
                         if (r < 1.0e-5)
                         {
                             if (i < trainingSampleCount)
@@ -805,6 +904,26 @@ namespace Emgu.CV.Test
 
             #region Generate the traning data and classes
 
+            Mat trainData = new Mat(trainSampleCount, 2, DepthType.Cv32F, 1);
+            Mat trainClasses = new Mat(trainSampleCount, 1, DepthType.Cv32F, 1);
+
+            Mat img = new Mat(500, 500, DepthType.Cv8U, 3);
+
+            Mat sample = new Mat(1, 2, DepthType.Cv32F, 1);
+
+            Mat trainData1 = new Mat(trainData, new Range(0, trainSampleCount >> 1), Range.All);
+            CvInvoke.Randn(trainData1, new MCvScalar(200), new MCvScalar(50));
+
+            Mat trainData2 = new Mat(trainData, new Range(trainSampleCount >> 1, trainSampleCount), Range.All);
+            CvInvoke.Randn(trainData2, new MCvScalar(300), new MCvScalar(50));
+
+            Mat trainClasses1 = new Mat(trainClasses, new Range(0, trainSampleCount >> 1), Range.All);
+            trainClasses1.SetTo(new MCvScalar(1.0));
+
+            Mat trainClasses2 = new Mat(trainClasses, new Range(trainSampleCount >> 1, trainSampleCount), Range.All);
+            trainClasses2.SetTo(new MCvScalar(2.0));
+
+            /*
             Matrix<float> trainData = new Matrix<float>(trainSampleCount, 2);
             Matrix<float> trainClasses = new Matrix<float>(trainSampleCount, 1);
 
@@ -822,15 +941,17 @@ namespace Emgu.CV.Test
             trainClasses1.SetValue(1);
             Matrix<float> trainClasses2 = trainClasses.GetRows(trainSampleCount >> 1, trainSampleCount, 1);
             trainClasses2.SetValue(2);
-
+            */
             #endregion
 
-            using (Matrix<int> layerSize = new Matrix<int>(new int[] { 2, 5, 1 }))
-            using (Mat layerSizeMat = layerSize.Mat)
-
+            //using (Matrix<int> layerSize = new Matrix<int>(new int[] { 2, 5, 1 }))
+            //using(Mat layerSize = )
+            using (Mat layerSizeMat = new Mat(3, 1, DepthType.Cv32S, 1))
             using (TrainData td = new TrainData(trainData, MlEnum.DataLayoutType.RowSample, trainClasses))
             using (ANN_MLP network = new ANN_MLP())
+                using(Mat prediction = new Mat())
             {
+                layerSizeMat.SetTo(new int[] { 2, 5, 1 });
                 network.SetLayerSizes(layerSizeMat);
                 network.SetActivationFunction(ANN_MLP.AnnMlpActivationFunction.SigmoidSym, 0, 0);
                 network.TermCriteria = new MCvTermCriteria(10, 1.0e-8);
@@ -843,31 +964,40 @@ namespace Emgu.CV.Test
                 if (File.Exists(fileName))
                     File.Delete(fileName);
 #endif
-
+                byte[] imageData = img.GetData(false) as byte[];
                 for (int i = 0; i < img.Height; i++)
                 {
                     for (int j = 0; j < img.Width; j++)
                     {
-                        sample.Data[0, 0] = j;
-                        sample.Data[0, 1] = i;
+                        sample.SetTo(new float[] { j, i});
+                        //sample.Data[0, 0] = j;
+                        //sample.Data[0, 1] = i;
                         network.Predict(sample, prediction);
 
                         // estimates the response and get the neighbors' labels
-                        float response = prediction.Data[0, 0];
+                        float[] responses = prediction.GetData(false) as float[];
+                        float response = responses[0];
 
                         // highlight the pixel depending on the accuracy (or confidence)
-                        img[i, j] = response < 1.5 ? new Bgr(90, 0, 0) : new Bgr(0, 90, 0);
+                        imageData[(i*img.Width + j)*3] = response < 1.5 ? (byte) 90 : (byte)0;
+                        imageData[(i * img.Width + j) * 3+1] = response < 1.5 ? (byte)0 : (byte)90;
+                        imageData[(i * img.Width + j) * 3+2] = response < 1.5 ? (byte)0 : (byte)0;
                     }
                 }
+                img.SetTo(imageData);
             }
 
             // display the original training samples
+            float[,] trainData1Array = trainData1.GetData(true) as float[,];
+            float[,] trainData2Array = trainData2.GetData(true) as float[,];
             for (int i = 0; i < (trainSampleCount >> 1); i++)
             {
-                PointF p1 = new PointF(trainData1[i, 0], trainData1[i, 1]);
-                img.Draw(new CircleF(p1, 2), new Bgr(255, 100, 100), -1);
-                PointF p2 = new PointF((int)trainData2[i, 0], (int)trainData2[i, 1]);
-                img.Draw(new CircleF(p2, 2), new Bgr(100, 255, 100), -1);
+                Point p1 = Point.Round(new PointF(trainData1Array[i, 0], trainData1Array[i, 1]));
+                CvInvoke.Circle(img, p1, 2, new MCvScalar(255, 100,100), -1);
+                //img.Draw(new CircleF(p1, 2), new Bgr(255, 100, 100), -1);
+                Point p2 = Point.Round(new PointF(trainData2Array[i, 0], trainData2Array[i, 1]));
+                CvInvoke.Circle(img, p2, 2, new MCvScalar(100, 255, 100), -1);
+                //img.Draw(new CircleF(p2, 2), new Bgr(100, 255, 100), -1);
             }
 
             //Emgu.CV.UI.ImageViewer.Show(img);
@@ -882,29 +1012,32 @@ namespace Emgu.CV.Test
             int sampleCount = 300;
             int imageSize = 500;
 
-            Bgr[] colors = new Bgr[]
+            MCvScalar[] colors = new MCvScalar[]
             {
-                new Bgr(0, 0, 255),
-                new Bgr(0, 255, 0),
-                new Bgr(255, 100, 100),
-                new Bgr(255, 0, 255),
-                new Bgr(0, 255, 255)
+                new MCvScalar(0, 0, 255),
+                new MCvScalar(0, 255, 0),
+                new MCvScalar(255, 100, 100),
+                new MCvScalar(255, 0, 255),
+                new MCvScalar(0, 255, 255)
             };
 
-            Image<Bgr, Byte> image = new Image<Bgr, byte>(imageSize, imageSize);
+            Mat image = new Mat(imageSize, imageSize, DepthType.Cv8U, 3);
 
             #region generate random samples
 
-            Matrix<float> points = new Matrix<float>(sampleCount, 1, 2);
+            Mat points = new Mat(sampleCount, 1, DepthType.Cv32F, 2);
 
-            Matrix<int> clusters = new Matrix<int>(sampleCount, 1);
+            Mat clusters = new Mat(sampleCount, 1, DepthType.Cv32S, 1);
             Random r = new Random();
             for (int i = 0; i < clustersCount; i++)
             {
-                Matrix<float> row = points.GetRows(i * (sampleCount / clustersCount),
-                    (i + 1) * (sampleCount / clustersCount), 1);
-                row.SetRandNormal(new MCvScalar(r.Next() % imageSize, r.Next() % imageSize),
+                //Matrix<float> row = points.GetRows(i * (sampleCount / clustersCount),
+                //    (i + 1) * (sampleCount / clustersCount), 1);
+                Mat row = new Mat(points, new Range(i * (sampleCount / clustersCount), (i + 1) * (sampleCount / clustersCount)), Range.All);
+                CvInvoke.Randn(row, new MCvScalar(r.Next() % imageSize, r.Next() % imageSize),
                     new MCvScalar((r.Next() % imageSize) / 6, (r.Next() % imageSize) / 6));
+                //row.SetRandNormal(new MCvScalar(r.Next() % imageSize, r.Next() % imageSize),
+                //    new MCvScalar((r.Next() % imageSize) / 6, (r.Next() % imageSize) / 6));
             }
             using (ScalarArray ia = new ScalarArray(new MCvScalar()))
             {
@@ -922,10 +1055,13 @@ namespace Emgu.CV.Test
                 5,
                 CvEnum.KMeansInitType.PPCenters);
 
+            float[,] pointsData = points.GetData(true) as float[,];
+            int[,] clustersData = clusters.GetData(true) as int[,];
             for (int i = 0; i < sampleCount; i++)
             {
-                PointF p = new PointF(points.Data[i, 0], points.Data[i, 1]);
-                image.Draw(new CircleF(p, 1.0f), colors[clusters[i, 0]], 1);
+                PointF p = new PointF(pointsData[i, 0], pointsData[i, 1]);
+                CvInvoke.Circle(image, Point.Round(p), 1, colors[clustersData[i, 0]], 1);
+                //image.Draw(new CircleF(p, 1.0f), );
             }
 
             //Emgu.CV.UI.ImageViewer.Show(image);

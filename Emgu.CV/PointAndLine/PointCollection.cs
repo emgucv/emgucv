@@ -255,14 +255,16 @@ namespace Emgu.CV
             PointF[] cloud = new PointF[numberOfPoints];
             GCHandle handle = GCHandle.Alloc(cloud, GCHandleType.Pinned);
             using (Mat points = new Mat(numberOfPoints, 2, DepthType.Cv32F, 1, handle.AddrOfPinnedObject(), Marshal.SizeOf<float>()*2))
-            using (Mat xValues = new Mat(points, new Range(0, numberOfPoints), new Range(0, 1)))
-            using (Mat yValues = new Mat(points, new Range(0, numberOfPoints), new Range(1, 2)))
+            using (Mat xValues = new Mat(points, new Emgu.CV.Structure.Range(0, numberOfPoints), new Emgu.CV.Structure.Range(0, 1)))
+            using (Mat yValues = new Mat(points, new Emgu.CV.Structure.Range(0, numberOfPoints), new Emgu.CV.Structure.Range(1, 2)))
             using (RotationMatrix2D rotation = new RotationMatrix2D(e.RotatedRect.Center, e.RotatedRect.Angle, 1.0))
             using (Mat tmp = new Mat())
             {
                 rotation.ConvertTo(tmp, DepthType.Cv32F);
-                xValues.SetRandNormal(new MCvScalar(e.RotatedRect.Center.X), new MCvScalar(e.RotatedRect.Size.Width / 2.0f));
-                yValues.SetRandNormal(new MCvScalar(e.RotatedRect.Center.Y), new MCvScalar(e.RotatedRect.Size.Height / 2.0f));
+                CvInvoke.Randn(xValues, new MCvScalar(e.RotatedRect.Center.X), new MCvScalar(e.RotatedRect.Size.Width / 2.0f));
+                CvInvoke.Randn(yValues, new MCvScalar(e.RotatedRect.Center.Y), new MCvScalar(e.RotatedRect.Size.Height / 2.0f));
+                //xValues.SetRandNormal();
+                //yValues.SetRandNormal(new MCvScalar(e.RotatedRect.Center.Y), new MCvScalar(e.RotatedRect.Size.Height / 2.0f));
                 rotation.RotatePoints(points);
             }
             handle.Free();

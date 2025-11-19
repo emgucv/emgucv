@@ -1152,14 +1152,21 @@ namespace Emgu.CV.Test
             //randomObj.SetRandUniform(new MCvScalar(), new MCvScalar(255, 255, 255));
 
             //Draw the object in image1 center at templCenter;
-            Image<Bgr, Byte> img = new Image<Bgr, byte>(300, 200);
+            Mat img = new Mat(300, 200, DepthType.Cv8U, 3);
+            //Image <Bgr, Byte> img = new Image<Bgr, byte>(300, 200);
             Rectangle objectLocation = new Rectangle(templCenter.X - (templWidth >> 1), templCenter.Y - (templHeight >> 1), templWidth, templHeight);
-            img.ROI = objectLocation;
-            randomObj.Copy(img, null);
-            img.ROI = Rectangle.Empty;
+            using (Mat tmp = new Mat(img, objectLocation))
+            {
+                randomObj.CopyTo(tmp);
+            }
+            //img.ROI = objectLocation;
+            //randomObj.Copy(img, null);
+            //img.ROI = Rectangle.Empty;
             #endregion
 
-            Image<Gray, Single> match = img.MatchTemplate(randomObj, Emgu.CV.CvEnum.TemplateMatchingType.Sqdiff);
+            Mat match = new Mat();
+            CvInvoke.MatchTemplate(img, randomObj, match, TemplateMatchingType.Sqdiff);
+            //Image<Gray, Single> match = img.MatchTemplate(randomObj, Emgu.CV.CvEnum.TemplateMatchingType.Sqdiff);
             double[] minVal, maxVal;
             Point[] minLoc, maxLoc;
             match.MinMax(out minVal, out maxVal, out minLoc, out maxLoc);
