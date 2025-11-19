@@ -302,7 +302,7 @@ namespace Emgu.CV
         /// <param name="data">Pointer to the user data. Matrix constructors that take data and step parameters do not allocate matrix data. Instead, they just initialize the matrix header that points to the specified data, which means that no data is copied. This operation is very efficient and can be used to process external data using OpenCV functions. The external data is not automatically deallocated, so you should take care of it.</param>
         /// <param name="step">Number of bytes each matrix row occupies. The value should include the padding bytes at the end of each row, if any.</param>
         public Mat(int rows, int cols, CvEnum.DepthType type, int channels, IntPtr data, int step)
-           : this(MatInvoke.cveMatCreateWithData(rows, cols, CvInvoke.MakeType(type, channels), data, new IntPtr(step)), true, true)
+           : this(MatInvoke.cveMatCreateWithData(rows, cols, CvInvoke.MakeType(type, channels), data, new IntPtr(step)), true, false)
         {
         }
 
@@ -314,7 +314,7 @@ namespace Emgu.CV
         /// <param name="data">The pointer to the unmanaged data</param>
         /// <param name="steps">The steps</param>
         public Mat(int[] sizes, CvEnum.DepthType type, IntPtr data, IntPtr[] steps = null)
-           : this(MatInvoke.cveMatCreateMultiDimWithData(sizes, type, data, steps), true, true)
+           : this(MatInvoke.cveMatCreateMultiDimWithData(sizes, type, data, steps), true, false)
         {
         }
 

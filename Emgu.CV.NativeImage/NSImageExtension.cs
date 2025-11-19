@@ -18,8 +18,7 @@ namespace Emgu.CV
     /// </summary>
     public static class NSImageExtension
     {
-
-
+        /*
         /// <summary>
         /// Convert this Image object to NSImage
         /// </summary>
@@ -32,9 +31,7 @@ namespace Emgu.CV
                 return new NSImage(cgImage, new CGSize(cgImage.Width, cgImage.Height));
             }
         }
-
-
-
+        */
 
         /// <summary>
         /// Converts to NSImage.
@@ -76,6 +73,8 @@ namespace Emgu.CV
         }
 
 #if __MACOS__
+
+/*
         /// <summary>
         /// Creating an Image from the NSImage
         /// </summary>
@@ -89,6 +88,7 @@ namespace Emgu.CV
                 return cgImage.ToImage<TColor, TDepth>();
             }
         }
+*/
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Emgu.CV.UMat"/> class from UIImage

@@ -130,15 +130,16 @@ namespace MauiDemoApp
                 float scale = Math.Max(size.Width, size.Height);
 
                 //Construct a simple Q matrix, if you have a matrix from cvStereoRectify, you should use that instead
-                using (Matrix<double> q = new Matrix<double>(
-                    new double[,]
-                    {
-                        {1.0, 0.0, 0.0, -size.Width/2}, //shift the x origin to image center
-                        {0.0, -1.0, 0.0, size.Height/2}, //shift the y origin to image center and flip it upside down
-                        {0.0, 0.0, -1.0, 0.0}, //Multiply the z value by -1.0, 
-                        {0.0, 0.0, 0.0, scale}
-                    })) //scale the object's coordinate to within a [-0.5, 0.5] cube
+                using (Mat q = new Mat(4, 4, DepthType.Cv64F, 1))
+                    
                 {
+                    q.SetTo(new double[]
+                    {
+                        1.0, 0.0, 0.0, -size.Width/2, //shift the x origin to image center
+                        0.0, -1.0, 0.0, size.Height/2, //shift the y origin to image center and flip it upside down
+                        0.0, 0.0, -1.0, 0.0, //Multiply the z value by -1.0, 
+                        0.0, 0.0, 0.0, scale
+                    }); //scale the object's coordinate to within a [-0.5, 0.5] cube
 
                     CvInvoke.ReprojectImageTo3D(outputDisparityMap, points, q, handleMissingValues, DepthType.Cv32F);
                     //CvInvoke.ReprojectImageTo3D(leftDisparity, points, q, false, DepthType.Cv32F);

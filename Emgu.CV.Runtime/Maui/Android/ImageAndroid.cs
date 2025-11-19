@@ -2,6 +2,7 @@
 //  Copyright (C) 2004-2025 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+/*
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,6 +15,7 @@ using Emgu.CV.Util;
 using Emgu.Util;
 using Android.Content;
 using Android.Content.Res;
+using Emgu.CV.CvEnum;
 using Bitmap = Android.Graphics.Bitmap;
 
 namespace Emgu.CV
@@ -99,51 +101,36 @@ namespace Emgu.CV
             }
         }
 
-        //#region Conversion with Bitmap
         /// <summary>
-        /// The Get property provide a more efficient way to convert Image&lt;Gray, Byte&gt;, Image&lt;Bgr, Byte&gt; and Image&lt;Bgra, Byte&gt; into Bitmap
-        /// such that the image data is <b>shared</b> with Bitmap. 
-        /// If you change the pixel value on the Bitmap, you change the pixel values on the Image object as well!
-        /// For other types of image this property has the same effect as ToBitmap()
-        /// <b>Take extra caution not to use the Bitmap after the Image object is disposed</b>
-        /// The Set property convert the bitmap to this Image type.
+        /// Convert Android bitmap to Mat
         /// </summary>
-        public static Image<TColor, TDepth> ToImage<TColor, TDepth>(this Bitmap bitmap)
-            where TColor : struct, IColor
-            where TDepth : new()
+        public static void ToMat(this Bitmap bitmap, Mat image)
         {
-
-            #region reallocate memory if necessary
-            Size size = new Size(bitmap.Width, bitmap.Height);
-            Image<TColor, TDepth> image = new Image<TColor, TDepth>(size);
-            /*
-            if (image.Ptr == IntPtr.Zero)
-            {
-                image.AllocateData(size.Height, size.Width, image.NumberOfChannels);
-            }
-            else if (!Size.Equals(size))
-            {
-                image.DisposeObject();
-                image.AllocateData(size.Height, size.Width, image.NumberOfChannels);
-            }*/
-            #endregion
+            //Mat image = new Mat();
 
             Android.Graphics.Bitmap.Config config = bitmap.GetConfig();
             if (config.Equals(Android.Graphics.Bitmap.Config.Argb8888))
             {
                 using (BitmapArgb8888Image bi = new BitmapArgb8888Image(bitmap))
                 {
-                    image.ConvertFrom(bi);
+                    CvInvoke.CvtColor(bi, image, ColorConversion.Bgra2Bgr);
+                    //image.ConvertFrom(bi);
                 }
             }
             else if (config.Equals(Android.Graphics.Bitmap.Config.Rgb565))
             {
+                Size size = new Size(bitmap.Width, bitmap.Height);
                 int[] values = new int[size.Width * size.Height];
                 bitmap.GetPixels(values, 0, size.Width, 0, 0, size.Width, size.Height);
                 GCHandle handle = GCHandle.Alloc(values, GCHandleType.Pinned);
-                using (Image<Bgra, Byte> bgra = new Image<Bgra, byte>(size.Width, size.Height, size.Width * 4, handle.AddrOfPinnedObject()))
+                using (Mat bgra = new Mat(
+                           size,
+                           DepthType.Cv8U,
+                           4,
+                           handle.AddrOfPinnedObject(),
+                           size.Width * 4))
                 {
-                    image.ConvertFrom(bgra);
+                    CvInvoke.CvtColor(bgra, image, ColorConversion.Bgra2Bgr);
                 }
                 handle.Free();
             }
@@ -152,7 +139,8 @@ namespace Emgu.CV
                 throw new NotImplementedException(String.Format("Coping from Bitmap of {0} is not implemented", config));
             }
 
-            return image;
+            //return image;
         }
     }
 }
+*/

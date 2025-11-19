@@ -58,6 +58,7 @@ namespace Emgu.CV.UI
             }
 
             double[] binVal = new double[histogram.Size.Height];
+            /*
             GCHandle handle = GCHandle.Alloc(binVal, GCHandleType.Pinned);
 
             using (Matrix<double> m = new Matrix<double>(binVal.Length, 1, handle.AddrOfPinnedObject(),
@@ -66,7 +67,7 @@ namespace Emgu.CV.UI
                 histogram.ConvertTo(m, DepthType.Cv64F);
             }
             handle.Free();
-
+            */
             using (VectorOfDouble x = new VectorOfDouble(bin))
             using (VectorOfDouble y = new VectorOfDouble(binVal))
             {

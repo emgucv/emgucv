@@ -18,6 +18,7 @@ namespace Emgu.CV
     /// </summary>
     public static class CGImageExtension
     {
+        /*
         /// <summary>
         /// Creating an Image from the CGImage
         /// </summary>
@@ -93,7 +94,8 @@ namespace Emgu.CV
                 }
             }
         }
-
+        */
+        
         /// <summary>
         /// Convert a CGImage to a IOutputArray
         /// </summary>

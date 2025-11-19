@@ -36,18 +36,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)ImageViewer.designer.cs">
       <DependentUpon>ImageViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)MatrixBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)MatrixBox.Designer.cs">
-      <DependentUpon>MatrixBox.cs</DependentUpon>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)MatrixViewer.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)MatrixViewer.Designer.cs">
-      <DependentUpon>MatrixViewer.cs</DependentUpon>
-    </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Operation.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)OperationsView.cs">
       <SubType>UserControl</SubType>
@@ -98,14 +86,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)ImageViewer.resx">
       <DependentUpon>ImageViewer.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MatrixBox.resx">
-      <DependentUpon>MatrixBox.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="$(MSBuildThisFileDirectory)MatrixViewer.resx">
-      <DependentUpon>MatrixViewer.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="$(MSBuildThisFileDirectory)OperationsView.resx">

@@ -23,6 +23,7 @@ namespace Emgu.CV
 {
     public static class WriteableBitmapExtension
     {
+        /*
         public static WriteableBitmap ToWriteableBitmap<TColor, TDepth>(this Image<TColor, TDepth> image)
             where TColor : struct, IColor
             where TDepth : new()
@@ -65,7 +66,7 @@ namespace Emgu.CV
             {
                 dataHandle.Free();
             }
-        }
+        }*/
 
         public static void ToArray(this WriteableBitmap writeableBitmap, IOutputArray outputArray)
         {
@@ -161,7 +162,7 @@ namespace Emgu.CV
 
                 byte[] sourcePixels = pixelData.DetachPixelData();
                 GCHandle handle = GCHandle.Alloc(sourcePixels, GCHandleType.Pinned);
-                using (Image<Bgra, Byte> img = new Image<Bgra, byte>(s.Width, s.Height, s.Width * 4, handle.AddrOfPinnedObject()))
+                using (Mat img = new Mat(s, DepthType.Cv8U, 4, handle.AddrOfPinnedObject(), s.Width * 4))
                 {
                     if (modes.HasFlag( ImreadModes.Grayscale ))
                     {

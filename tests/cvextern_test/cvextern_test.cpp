@@ -12,7 +12,7 @@
 
 #ifdef HAVE_OPENCV_IMGPROC
 #include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/imgproc/types_c.h"
+//#include "opencv2/imgproc/types_c.h"
 #endif
 
 #ifdef HAVE_OPENCV_FEATURES
@@ -56,10 +56,10 @@ void Test_2D_cross_product()
 
 void Test_3D_cross_product()
 {
-	CvPoint3D64f
-		x = cvPoint3D64f(1.0, 0.0, 0.0),
-		y = cvPoint3D64f(0.0, 1.0, 0.0),
-		z = cvPoint3D64f(0.0, 0.0, 1.0),
+	cv::Point3d
+		x = cv::Point3d(1.0, 0.0, 0.0),
+		y = cv::Point3d(0.0, 1.0, 0.0),
+		z = cv::Point3d(0.0, 0.0, 1.0),
 		temp;
 
 	bool pass = true;
@@ -116,7 +116,7 @@ void Test_quaternions()
 {
 	const double eps = 1.0e-10;
 	Quaternions q1, q2, q;
-	CvPoint3D64f a1, a2;
+	cv::Point3d a1, a2;
 	a1.x = 0.0; a1.y = 175.0 / 180.0 * CV_PI; a1.z = 0.0;
 	a2.x = 0.0; a2.y = 5.0 / 180.0 * CV_PI; a2.z = 0.0;
 	q1.setAxisAngle(&a1);
@@ -302,11 +302,11 @@ int main()
 	Test_UMat_MinMaxLoc();
 
 	cout << "Size of cv::Size (expected " << sizeof(int) * 2 << "): " << sizeof(cv::Size) << std::endl;
-	cout << "Size of CvSize (expected " << sizeof(int) * 2 << "): " << sizeof(CvSize) << std::endl;
-	cout << "Size of CvPoint2D32f (expected " << sizeof(float) * 2 << "): " << sizeof(CvPoint2D32f) << std::endl;
-	cout << "Size of CvRect (expected " << sizeof(int) * 4 << "): " << sizeof(CvRect) << std::endl;
-	cout << "Size of IplImage: " << sizeof(IplImage) << std::endl;
-	cout << "Size of CvScalar (expected " << sizeof(double) * 4 << "): " << sizeof(CvScalar) << std::endl;
+	//cout << "Size of CvSize (expected " << sizeof(int) * 2 << "): " << sizeof(CvSize) << std::endl;
+	cout << "Size of cv::Point3d (expected " << sizeof(float) * 2 << "): " << sizeof(cv::Point3d) << std::endl;
+	cout << "Size of cv::Rect (expected " << sizeof(int) * 4 << "): " << sizeof(cv::Rect) << std::endl;
+	//cout << "Size of IplImage: " << sizeof(IplImage) << std::endl;
+	cout << "Size of cv::Scalar (expected " << sizeof(double) * 4 << "): " << sizeof(cv::Scalar) << std::endl;
 
 	int cudaDeviceCount = cv::cuda::getCudaEnabledDeviceCount();
 	cout << std::endl << "CUDA Enabled device count: " << cudaDeviceCount << std::endl;

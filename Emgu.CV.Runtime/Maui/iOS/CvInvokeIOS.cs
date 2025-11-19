@@ -61,7 +61,7 @@ namespace Emgu.CV
             int line,
             IntPtr userData)
         {
-            CvInvoke.SetErrStatus(Emgu.CV.CvEnum.ErrorCodes.StsOk); //clear the error status
+            //CvInvoke.SetErrStatus(Emgu.CV.CvEnum.ErrorCodes.StsOk); //clear the error status
             return 0; //signal the process to continue
         }
 
@@ -86,7 +86,7 @@ namespace Emgu.CV
         {
             try
             {
-                CvInvoke.SetErrStatus(Emgu.CV.CvEnum.ErrorCodes.StsOk); //clear the error status
+                //CvInvoke.SetErrStatus(Emgu.CV.CvEnum.ErrorCodes.StsOk); //clear the error status
                 return 0; //signal the process to continue
             }
             finally

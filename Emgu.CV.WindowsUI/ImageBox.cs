@@ -504,7 +504,7 @@ namespace Emgu.CV.UI
                 try
                 {
                     String filename = loadImageFromFileDialog.FileName;
-                    Image = new Image<Bgr, byte>(filename);
+                    Image = CvInvoke.Imread(filename); //new Image<Bgr, byte>(filename);
                 }
                 catch (Exception excpt)
                 {

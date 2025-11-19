@@ -2,8 +2,11 @@
 //  Copyright (C) 2004-2025 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+
 using System;
+using System.Drawing;
 using Android.Graphics;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 
 namespace Emgu.CV
@@ -11,7 +14,7 @@ namespace Emgu.CV
     /// <summary>
     /// An image that shares the data with Bitmap
     /// </summary>
-    public class BitmapArgb8888Image : Image<Rgba, Byte>
+    public class BitmapArgb8888Image : Mat //Image<Rgba, Byte>
     {
         private Bitmap _bmp;
 
@@ -31,11 +34,12 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="bmp">The Bitmap to create the BitmapImage from. The BitmapImage should always be disposed before this Bitmap is disposed.</param>
         public BitmapArgb8888Image(Bitmap bmp)
+        : base(new Size(bmp.Width, bmp.Height), DepthType.Cv8U, 4, bmp.LockPixels(), bmp.RowBytes )
         {
             if (!bmp.GetConfig().Equals(Bitmap.Config.Argb8888))
                 throw new NotImplementedException("Only Bitmap format of Argb8888 is supported for this class.");
             _bmp = bmp;
-            MapDataToImage(bmp.Width, bmp.Height, bmp.RowBytes, _bmp.LockPixels());
+            //MapDataToImage(bmp.Width, bmp.Height, bmp.RowBytes, _bmp.LockPixels());
         }
 
         /// <summary>
@@ -52,7 +56,7 @@ namespace Emgu.CV
     /// <summary>
     /// An Image that shares data with the Bitmap
     /// </summary>
-    public class BitmapRgb565Image : Image<Bgr565, Byte>
+    public class BitmapRgb565Image : Mat
     {
         private Bitmap _bmp;
 
@@ -72,11 +76,12 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="bmp">The bitmap object to create the image from</param>
         public BitmapRgb565Image(Bitmap bmp)
+        : base(new Size(bmp.Width, bmp.Height), DepthType.Cv8U, 2, bmp.LockPixels(), bmp.RowBytes)
         {
             if (!bmp.GetConfig().Equals(Bitmap.Config.Rgb565))
                 throw new NotImplementedException("Only Bitmap format of Rgb565 is supported for this class.");
             _bmp = bmp;
-            MapDataToImage(bmp.Width, bmp.Height, bmp.RowBytes, _bmp.LockPixels());
+            //MapDataToImage(bmp.Width, bmp.Height, bmp.RowBytes, _bmp.LockPixels());
         }
 
         /// <summary>

@@ -294,8 +294,18 @@ namespace Emgu.CV.Test
                     #endregion
 
                     //Merge the object image and the observed image into one big image for display
-                    Mat res = new Mat();
-                    CvInvoke.VConcat(modelImage, observedImage, res);
+                    int maxWidth = Math.Max(modelImage.Width, observedImage.Width);
+                    
+                    Mat res = new Mat(
+                        new Size(maxWidth, modelImage.Height + observedImage.Height),
+                        DepthType.Cv8U,
+                        1);
+                    res.SetTo(new MCvScalar(0,0,0,0));
+                    using (Mat roiTop = new Mat(res, new Rectangle(Point.Empty, modelImage.Size)))
+                        modelImage.CopyTo(roiTop);
+                    using (Mat roiBottom = new Mat(res, new Rectangle(new Point(0, modelImage.Height), observedImage.Size)))
+                        observedImage.CopyTo(roiBottom);
+                    //CvInvoke.VConcat(modelImage, observedImage, res);
                     //Image<Gray, Byte> res = modelImage.ToImage<Gray, Byte>().ConcateVertical(observedImage);
 
                     Rectangle rect = new Rectangle(Point.Empty, modelImage.Size);

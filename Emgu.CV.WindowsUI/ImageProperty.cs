@@ -127,9 +127,10 @@ namespace Emgu.CV.UI
             if (image != null)
             {
                 Type imgType = image.GetType();
-                if (IsSubTypeOf(imgType, typeof(CvArray<>)))
-                    _imageType = typeof(CvArray<>);
-                else if (IsSubTypeOf(imgType, typeof(Mat)))
+                //if (IsSubTypeOf(imgType, typeof(CvArray<>)))
+                //    _imageType = typeof(CvArray<>);
+                //else 
+                if (IsSubTypeOf(imgType, typeof(Mat)))
                     _imageType = typeof(Mat);
                 else if (IsSubTypeOf(imgType, typeof(UMat)))
                     _imageType = typeof(UMat);
@@ -177,6 +178,7 @@ namespace Emgu.CV.UI
 
                 mousePositionTextbox.Text = location.ToString();
 
+                /*
                 if (_imageType == typeof(CvArray<>))
                 {
                     using (Mat mat = iaImage.GetMat())
@@ -184,7 +186,8 @@ namespace Emgu.CV.UI
                         RenderIntensityForMat(mat, location);
                     }
                 }
-                else if (_imageType == typeof(Mat))
+                else */
+                if (_imageType == typeof(Mat))
                 {
                     Mat mat = img as Mat;
                     RenderIntensityForMat(mat, location);

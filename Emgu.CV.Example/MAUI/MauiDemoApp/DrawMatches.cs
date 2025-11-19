@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
 using Emgu.CV.Flann;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;

@@ -21,7 +21,8 @@ using Android.Preferences;
 
 using Emgu.CV;
 using Emgu.CV.CvEnum;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
+using Emgu.CV.XFeatures2D;
 using Emgu.CV.Platform.Maui.UI;
 using Emgu.CV.Structure;
 using Emgu.Util;
@@ -68,7 +69,7 @@ namespace MauiDemoApp
                 () =>
                 {
                     long time;
-                    Emgu.CV.Features2D.Feature2D featureDetectorExtractor;
+                    Emgu.CV.Features.Feature2D featureDetectorExtractor;
                     String pickedFeature2D = GetSelectedFeatrure2D();
 
                     if (pickedFeature2D.Equals("SIFT"))

@@ -15,13 +15,12 @@ using UIKit;
 
 namespace Emgu.CV
 {
-
-
-   /// <summary>
-   /// Provide extension method to convert IInputArray to and from UIImage
-   /// </summary>
-   public static class UIImageExtension
+    /// <summary>
+    /// Provide extension method to convert IInputArray to and from UIImage
+    /// </summary>
+    public static class UIImageExtension
     {
+        /*
         /// <summary>
         /// Creating an Image from the UIImage
         /// </summary>
@@ -48,6 +47,7 @@ namespace Emgu.CV
                 return UIImage.FromImage(cgImage);
             }
         }
+        */
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Emgu.CV.UMat"/> class from UIImage
@@ -89,25 +89,25 @@ namespace Emgu.CV
             }
         }
 
-      /// <summary>
-      /// Initializes a new instance of the <see cref="Emgu.CV.Mat"/> class from UIImage
-      /// </summary>
-      /// <param name="mode">The color conversion mode. By default, it convert the UIImage to BGRA color type to preserve all the image channels.</param>
-      /// <param name="uiImage">The UIImage.</param>
-      /// <param name="outputArray">The output array</param>
-      public static void ToArray (this UIImage uiImage, IOutputArray outputArray, ImreadModes mode = ImreadModes.AnyColor)
-      {
-         using (CGImage cgImage = uiImage.CGImage ?? throw new InvalidOperationException()) 
-         {
-            cgImage.ToArray (outputArray, mode);
-         }
-      }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Emgu.CV.Mat"/> class from UIImage
+        /// </summary>
+        /// <param name="mode">The color conversion mode. By default, it convert the UIImage to BGRA color type to preserve all the image channels.</param>
+        /// <param name="uiImage">The UIImage.</param>
+        /// <param name="outputArray">The output array</param>
+        public static void ToArray(this UIImage uiImage, IOutputArray outputArray, ImreadModes mode = ImreadModes.AnyColor)
+        {
+            using (CGImage cgImage = uiImage.CGImage ?? throw new InvalidOperationException())
+            {
+                cgImage.ToArray(outputArray, mode);
+            }
+        }
 
-      /// <summary>
-      /// Converts to UIImage.
-      /// </summary>
-      /// <returns>The UIImage</returns>
-      public static UIImage ToUIImage(this Mat mat)
+        /// <summary>
+        /// Converts to UIImage.
+        /// </summary>
+        /// <returns>The UIImage</returns>
+        public static UIImage ToUIImage(this Mat mat)
         {
             using (CGImage tmp = mat.ToCGImage())
             {
@@ -115,16 +115,16 @@ namespace Emgu.CV
             }
         }
 
-      /// <summary>
-      /// Converts to UIImage.
-      /// </summary>
-      /// <returns>The UIImage</returns>
-      public static UIImage ToUIImage(this IInputArray inputArray)
+        /// <summary>
+        /// Converts to UIImage.
+        /// </summary>
+        /// <returns>The UIImage</returns>
+        public static UIImage ToUIImage(this IInputArray inputArray)
         {
-            using(InputArray ia = inputArray.GetInputArray())
-            using(Mat mat = ia.GetMat())
+            using (InputArray ia = inputArray.GetInputArray())
+            using (Mat mat = ia.GetMat())
             {
-            return mat.ToUIImage ();
+                return mat.ToUIImage();
             }
         }
 
