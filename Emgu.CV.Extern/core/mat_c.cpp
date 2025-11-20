@@ -190,6 +190,12 @@ void cveMatSetTo(cv::Mat* mat, cv::_InputArray* value, cv::_InputArray* mask)
 	mat->setTo(*value, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 }
 
+void cveMatSetToScalar(cv::Mat* mat, cv::Scalar* value, cv::_InputArray* mask)
+{
+	mat->setTo(*value, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
+}
+
+
 cv::UMat* cveMatGetUMat(cv::Mat* mat, int access, cv::UMatUsageFlags usageFlags)
 {
 	cv::UMat* result = new cv::UMat();

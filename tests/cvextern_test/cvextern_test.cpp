@@ -83,6 +83,13 @@ void Test_UMat_MinMaxLoc()
 	cout << "minVal: " << minVal << "; maxVal: " << maxVal << std::endl;
 }
 
+void Test_Mat_SetTo()
+{
+	cv::Mat m(100, 400, CV_8UC3);
+	m.setTo(cv::Scalar(255, 255, 255));
+	cout << "cv::Mat::SetTo works." << std::endl;
+}
+
 void Test_double_MulS()
 {
 	double val0[] = { 0.1, 0.2, 0.3 };
@@ -293,6 +300,8 @@ int main()
 	//Test_CvPoint2D32f();
 	Test_2D_cross_product();
 	Test_3D_cross_product();
+
+	Test_Mat_SetTo();
 
 	Test_double_MulS();
 	Test_quaternions();

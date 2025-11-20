@@ -24,7 +24,7 @@ namespace Emgu.CV.WPF
       private void image1_Initialized(object sender, EventArgs e)
       {
          Mat image = new Mat(100, 400, DepthType.Cv8U, 3);
-         image.SetTo(new Bgr(255, 255, 255).MCvScalar);
+         image.SetTo(new MCvScalar(255, 255, 255));
          CvInvoke.PutText(image, "Hello, world", new System.Drawing.Point(10, 50), Emgu.CV.CvEnum.FontFace.HersheyPlain, 3.0, new Bgr(255.0, 0.0, 0.0).MCvScalar);
 
          image1.Source = image.ToBitmapSource();

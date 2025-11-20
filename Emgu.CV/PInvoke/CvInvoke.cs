@@ -594,7 +594,9 @@ namespace Emgu.CV
         /// <returns>An integer that represent a mat type</returns>
         public static int MakeType(CvEnum.DepthType depth, int channels)
         {
-            const int shift = 3;
+            const int shift = 5;
+            //const int depth_max = 1 << shift;
+            
             return (((int)depth) & ((1 << shift) - 1)) + (((channels) - 1) << shift);
         }
 

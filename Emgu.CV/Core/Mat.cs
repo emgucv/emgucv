@@ -1053,10 +1053,12 @@ namespace Emgu.CV
         /// <param name="mask">Optional mask</param>
         public void SetTo(MCvScalar value, IInputArray mask = null)
         {
-            using (ScalarArray ia = new ScalarArray(value))
-            {
-                SetTo(ia, mask);
-            }
+            //using (ScalarArray ia = new ScalarArray(value))
+            //{
+            //    SetTo(ia, mask);
+            //}
+            using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+                MatInvoke.cveMatSetToScalar(Ptr, ref value, iaMask);
         }
 
         /// <summary>
@@ -1774,6 +1776,9 @@ namespace Emgu.CV
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveMatSetTo(IntPtr mat, IntPtr value, IntPtr mask);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveMatSetToScalar(IntPtr mat, ref MCvScalar value, IntPtr mask);
 
         //[DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         //internal extern static IntPtr cveMatUseCustomAllocator(IntPtr mat, MatDataAllocatorInvoke.MatAllocateCallback allocator, MatDataAllocatorInvoke.MatDeallocateCallback deallocator, IntPtr allocateDataActionPtr, IntPtr freeDataActionPtr);
