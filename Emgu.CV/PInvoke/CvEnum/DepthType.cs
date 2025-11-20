@@ -42,6 +42,30 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// double
         /// </summary>
-        Cv64F = 6
+        Cv64F = 6,
+        /// <summary>
+        /// Represents a 16-bit floating-point depth type in OpenCV.
+        /// </summary>
+        Cv16F = 7,
+        /// <summary>
+        /// Represents a 16-bit floating-point depth type with a brain floating-point format (BF16).
+        /// </summary>
+        Cv16BF = 8,
+        /// <summary>
+        /// Represents a boolean data type in OpenCV.
+        /// </summary>
+        CvBool = 9,
+        /// <summary>
+        /// Represents a 64-bit unsigned integer depth type in OpenCV.
+        /// </summary>
+        Cv64U = 10,
+        /// <summary>
+        /// Represents a 64-bit signed integer depth type in OpenCV.
+        /// </summary>
+        Cv64S = 11,
+        /// <summary>
+        /// Represents a 32-bit unsigned integer depth type in OpenCV.
+        /// </summary>
+        Cv32U = 12
     }
 }

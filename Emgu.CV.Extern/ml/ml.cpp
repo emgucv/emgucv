@@ -42,10 +42,10 @@ cv::ml::TrainData* cveTrainDataCreate(
 #ifdef HAVE_OPENCV_ML
 	cv::Ptr<cv::ml::TrainData> ptr = cv::ml::TrainData::create(
 		*samples, layout, *responses,
-		varIdx ? *varIdx : (cv::InputArray) cv::noArray(),
-		sampleIdx ? *sampleIdx : (cv::InputArray) cv::noArray(),
-		sampleWeights ? *sampleWeights : (cv::InputArray) cv::noArray(),
-		varType ? *varType : (cv::InputArray) cv::noArray());
+		varIdx ? *varIdx : static_cast<cv::InputArray>(cv::noArray()),
+		sampleIdx ? *sampleIdx : static_cast<cv::InputArray>(cv::noArray()),
+		sampleWeights ? *sampleWeights : static_cast<cv::InputArray>(cv::noArray()),
+		varType ? *varType : static_cast<cv::InputArray>(cv::noArray()));
 	*sharedPtr = new cv::Ptr<cv::ml::TrainData>(ptr);
 	return ptr.get();
 #else
@@ -130,8 +130,8 @@ float cveKNearestFindNearest(
 		*samples,
 		k,
 		*results,
-		neighborResponses ? *neighborResponses : (cv::OutputArray) cv::noArray(),
-		dist ? *dist : (cv::OutputArray) cv::noArray());
+		neighborResponses ? *neighborResponses : static_cast<cv::OutputArray>(cv::noArray()),
+		dist ? *dist : static_cast<cv::OutputArray>(cv::noArray()));
 #else
 	throw_no_ml();
 #endif
@@ -167,11 +167,11 @@ void cveEMTrainE(
 	model->trainE(
 		*samples,
 		*means0,
-		covs0 ? *covs0 : (cv::InputArray) cv::noArray(),
-		weights0 ? *weights0 : (cv::InputArray) cv::noArray(),
-		logLikelihoods ? *logLikelihoods : (cv::OutputArray) cv::noArray(),
-		labels ? *labels : (cv::OutputArray) cv::noArray(),
-		probs ? *probs : (cv::OutputArray) cv::noArray());
+		covs0 ? *covs0 : static_cast<cv::InputArray>(cv::noArray()),
+		weights0 ? *weights0 : static_cast<cv::InputArray>(cv::noArray()),
+		logLikelihoods ? *logLikelihoods : static_cast<cv::OutputArray>(cv::noArray()),
+		labels ? *labels : static_cast<cv::OutputArray>(cv::noArray()),
+		probs ? *probs : static_cast<cv::OutputArray>(cv::noArray()));
 #else
 	throw_no_ml();
 #endif
@@ -189,9 +189,9 @@ void cveEMTrainM(
 	model->trainM(
 		*samples,
 		*probs,
-		logLikelihoods ? *logLikelihoods : (cv::OutputArray) cv::noArray(),
-		labels ? *labels : (cv::OutputArray) cv::noArray(),
-		probs ? *probs : (cv::OutputArray) cv::noArray());
+		logLikelihoods ? *logLikelihoods : static_cast<cv::OutputArray>(cv::noArray()),
+		labels ? *labels : static_cast<cv::OutputArray>(cv::noArray()),
+		probs ? *probs : static_cast<cv::OutputArray>(cv::noArray()));
 #else
 	throw_no_ml();
 #endif
@@ -199,7 +199,7 @@ void cveEMTrainM(
 void cveEMPredict(cv::ml::EM* model, cv::_InputArray* sample, cv::Point2d* result, cv::_OutputArray* probs)
 {
 #ifdef HAVE_OPENCV_ML
-	cv::Vec2d vec = model->predict(*sample, probs ? *probs : (cv::OutputArray) cv::noArray());
+	cv::Vec2d vec = model->predict(*sample, probs ? *probs : static_cast<cv::OutputArray>(cv::noArray()));
 	result->x = vec(0);
 	result->y = vec(1);
 #else

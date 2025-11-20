@@ -1516,8 +1516,8 @@ ENDIF()
 ############################### imgproc code gen END ################################
 
 ############################### features code gen START ##############################
-IF (NOT HAVE_OPENCV_FEATURES)
-  SET(HAVE_OPENCV_FEATURES FALSE)
+IF (NOT HAVE_opencv_features)
+  SET(HAVE_opencv_features FALSE)
 ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
     "features/SimpleBlobDetector_property" 
@@ -1556,7 +1556,7 @@ ENDIF()
     "#include \"features_c.h\""
 	""
 	""
-	${HAVE_OPENCV_FEATURES})
+	${HAVE_opencv_features})
   CREATE_OCV_CLASS_PROPERTY( 
     "features/MSER_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Features/MSER.g.cs"
@@ -1578,7 +1578,7 @@ ENDIF()
     "#include \"features_c.h\""
 	""
 	""
-	${HAVE_OPENCV_FEATURES})
+	${HAVE_opencv_features})
 
 ############################### features code gen END ################################
 

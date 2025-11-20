@@ -103,7 +103,7 @@
 		<!-- <PackageReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="Microsoft.WindowsAppSDK" Version="1.1.3" /> -->
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
-		<PackageReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="System.Formats.Nrbf" Version="9.0.5" />
+		<PackageReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'" Include="System.Formats.Nrbf" Version="10.0.0" />
 		<!-- <PackageReference Include="System.Private.Uri" Version="4.3.2" /> -->
 		<PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
 		<PackageReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="System.Runtime.InteropServices.WindowsRuntime" Version="4.3.0" />

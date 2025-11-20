@@ -12,13 +12,15 @@ namespace Emgu.CV.ML.MlEnum
     public enum DataLayoutType
     {
         /// <summary>
-        /// Feature vectors are stored as cols
+        /// Each training sample is a row of samples
         /// </summary>
-        ColSample = 1,
+        RowSample = 0,
+        
         /// <summary>
-        /// Feature vectors are stored as rows
+        /// Each training sample occupies a column of samples
         /// </summary>
-        RowSample = 0
+        ColSample = 0,
+        
     }
 
 }

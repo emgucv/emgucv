@@ -8,34 +8,34 @@
 
 void cveArucoDictionaryGenerateImageMarker(cv::aruco::Dictionary* dict, int id, int sizePixels, cv::_OutputArray* _img, int borderBits)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	dict->generateImageMarker(id, sizePixels, *_img, borderBits);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
 cv::aruco::Dictionary* cveArucoGetPredefinedDictionary(int name, cv::Ptr<cv::aruco::Dictionary>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::aruco::Dictionary dict = cv::aruco::getPredefinedDictionary(name);
 	cv::Ptr<cv::aruco::Dictionary> ptr = cv::makePtr<cv::aruco::Dictionary>();
 	*ptr = dict;
 	*sharedPtr = new cv::Ptr<cv::aruco::Dictionary>(ptr);
 	return ptr.get();
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
 cv::aruco::Dictionary* cveArucoDictionaryCreate(cv::Ptr<cv::aruco::Dictionary>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::Ptr<cv::aruco::Dictionary> ptr = cv::makePtr<cv::aruco::Dictionary>();
 	*sharedPtr = new cv::Ptr<cv::aruco::Dictionary>(ptr);
 	return ptr.get();
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -46,45 +46,45 @@ cv::aruco::Dictionary* cveArucoExtendDictionary(
 	int randomSeed,
 	cv::Ptr<cv::aruco::Dictionary>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::aruco::Dictionary dict = cv::aruco::extendDictionary(nMarkers, markerSize, *(baseDictionary->get()), randomSeed);
 	cv::Ptr<cv::aruco::Dictionary> ptr = cv::makePtr<cv::aruco::Dictionary>();
 	*ptr = dict;
 	*sharedPtr = new cv::Ptr<cv::aruco::Dictionary>(ptr);
 	return ptr.get();
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
 void cveArucoDictionaryRelease(cv::aruco::Dictionary** dict, cv::Ptr<cv::aruco::Dictionary>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	delete *sharedPtr;
 	*dict = 0;
 	*sharedPtr = 0;
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
 /*
 void cveArucoDrawMarker(cv::aruco::Dictionary* dictionary, int id, int sidePixels, cv::_OutputArray* img, int borderBits)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::Ptr<cv::aruco::Dictionary> dictPtr(dictionary, [](cv::aruco::Dictionary*) {});
     cv::aruco::drawMarker(dictPtr, id, sidePixels, *img, borderBits);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
 void cveArucoDrawAxis(cv::_InputOutputArray* image, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* rvec, cv::_InputArray* tvec, float length)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
    cv::aruco::drawAxis(*image, *cameraMatrix, *distCoeffs, *rvec, *tvec, length);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 */
@@ -94,7 +94,7 @@ void cveArucoDetectMarkers(
    cv::_OutputArray* ids, cv::aruco::DetectorParameters* parameters,
    cv::_OutputArray* rejectedImgPoints)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::Ptr<cv::aruco::DetectorParameters> arucoParam = cv::makePtr<cv::aruco::DetectorParameters>();
 	if (parameters)
 		memcpy(arucoParam.get(), parameters, sizeof(cv::aruco::DetectorParameters));
@@ -107,7 +107,7 @@ void cveArucoDetectMarkers(
 		arucoParam, 
 		rejectedImgPoints ? *rejectedImgPoints : static_cast<cv::OutputArrayOfArrays>(cv::noArray()));
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -115,10 +115,10 @@ void cveArucoEstimatePoseSingleMarkers(cv::_InputArray* corners, float markerLen
    cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs,
    cv::_OutputArray* rvecs, cv::_OutputArray* tvecs)
 {
-#ifdef HAVE_OPENCV_ARUCO
-   cv::aruco::estimatePoseSingleMarkers(*corners, markerLength, *cameraMatrix, *distCoeffs, *rvecs, *tvecs);
+#ifdef HAVE_OPENCV_OBJDETECT
+    cv::aruco::estimatePoseSingleMarkers(*corners, markerLength, *cameraMatrix, *distCoeffs, *rvecs, *tvecs);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -126,7 +126,7 @@ cv::aruco::GridBoard* cveArucoGridBoardCreate(
    int markersX, int markersY, float markerLength, float markerSeparation,
    cv::aruco::Dictionary* dictionary, cv::_InputArray* ids, cv::aruco::Board** boardPtr, cv::Ptr<cv::aruco::GridBoard>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 
 	cv::aruco::GridBoard* ptr = new cv::aruco::GridBoard(
 		cv::Size(markersX, markersY), 
@@ -138,29 +138,29 @@ cv::aruco::GridBoard* cveArucoGridBoardCreate(
 	*sharedPtr = new cv::Ptr<cv::aruco::GridBoard>(ptr, [](cv::aruco::GridBoard* b) { delete b; });
 	return ptr;
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
 
 void cveArucoBoardGenerateImage(cv::aruco::Board* board, cv::Size* outSize, cv::_OutputArray* img, int marginSize, int borderBits)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
    board->generateImage(*outSize, *img, marginSize, borderBits);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
 
 void cveArucoGridBoardRelease(cv::aruco::GridBoard** gridBoard, cv::Ptr<cv::aruco::GridBoard>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
    delete *sharedPtr;
    *gridBoard = 0;
    *sharedPtr = 0;
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -168,34 +168,34 @@ cv::aruco::CharucoBoard* cveCharucoBoardCreate(
     int squaresX, int squaresY, float squareLength, float markerLength,
 	cv::aruco::Dictionary* dictionary, cv::aruco::Board** boardPtr, cv::Ptr<cv::aruco::CharucoBoard>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::aruco::CharucoBoard* ptr = new cv::aruco::CharucoBoard(cv::Size(squaresX, squaresY), squareLength, markerLength, *dictionary, cv::noArray());
 	*boardPtr = dynamic_cast<cv::aruco::Board*>(ptr);
 	*sharedPtr = new cv::Ptr<cv::aruco::CharucoBoard>(ptr, [](cv::aruco::CharucoBoard* b) {delete b; });
 	return ptr;
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
 /*
 void cveCharucoBoardDraw(cv::aruco::CharucoBoard* charucoBoard, CvSize* outSize, cv::_OutputArray* img, int marginSize, int borderBits)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
    charucoBoard->draw(*outSize, *img, marginSize, borderBits);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }*/
 
 void cveCharucoBoardRelease(cv::aruco::CharucoBoard** charucoBoard, cv::Ptr<cv::aruco::CharucoBoard>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
    delete *sharedPtr;
    *charucoBoard = 0;
    *sharedPtr = 0;
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -206,7 +206,7 @@ void cveArucoRefineDetectedMarkers(
    float minRepDistance, float errorCorrectionRate, bool checkAllOrders,
    cv::_OutputArray* recoveredIdxs, cv::aruco::DetectorParameters* parameters)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::Ptr<cv::aruco::DetectorParameters> detectorParametersPtr = cv::makePtr<cv::aruco::DetectorParameters>();
 	if (parameters)
 		memcpy(detectorParametersPtr.get(), parameters, sizeof(cv::aruco::DetectorParameters));
@@ -221,7 +221,7 @@ void cveArucoRefineDetectedMarkers(
 	  recoveredIdxs ? *recoveredIdxs : static_cast<cv::OutputArray>(cv::noArray()),
 	  detectorParametersPtr);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -229,10 +229,10 @@ void cveArucoDrawDetectedMarkers(
    cv::_InputOutputArray* image, cv::_InputArray* corners,
    cv::_InputArray* ids, cv::Scalar* borderColor)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
    cv::aruco::drawDetectedMarkers(*image, *corners, ids ? *ids : static_cast<cv::InputArray>(cv::noArray()), *borderColor);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -245,7 +245,7 @@ double cveArucoCalibrateCameraAruco(
 	cv::_OutputArray* perViewErrors,
 	int flags, cv::TermCriteria* criteria)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::Ptr<cv::aruco::Board> boardPtr ( board, [](cv::aruco::Board*) {});
 
 	return cv::aruco::calibrateCameraAruco(
@@ -258,7 +258,7 @@ double cveArucoCalibrateCameraAruco(
 		perViewErrors ? *perViewErrors : (cv::OutputArrayOfArrays) cv::noArray(),
 		flags, *criteria);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -277,7 +277,7 @@ double cveArucoCalibrateCameraCharuco(
 	int flags, 
 	cv::TermCriteria* criteria)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::Ptr<cv::aruco::CharucoBoard> boardPtr(board, [](cv::aruco::CharucoBoard*) {});
 
 	return cv::aruco::calibrateCameraCharuco(
@@ -294,17 +294,17 @@ double cveArucoCalibrateCameraCharuco(
 		flags, 
 		*criteria);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
 void cveArucoDetectorParametersGetDefault(cv::aruco::DetectorParameters* parameters)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
    cv::aruco::DetectorParameters p;
    memcpy(parameters, &p, sizeof(cv::aruco::DetectorParameters));
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -319,7 +319,7 @@ int cveArucoInterpolateCornersCharuco(
 	cv::_InputArray* distCoeffs,
 	int minMarkers)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::Ptr<cv::aruco::CharucoBoard> boardPtr ( board, [](cv::aruco::CharucoBoard*) {} );
 
 	return cv::aruco::interpolateCornersCharuco(
@@ -330,7 +330,7 @@ int cveArucoInterpolateCornersCharuco(
 		distCoeffs ? *distCoeffs : (cv::InputArray) cv::noArray(),
 		minMarkers);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -340,14 +340,14 @@ void cveArucoDrawDetectedCornersCharuco(
 	cv::_InputArray* charucoIds,
 	cv::Scalar* cornerColor)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::aruco::drawDetectedCornersCharuco(
 		*image, 
 		*charucoCorners, 
 		charucoIds ? *charucoIds : (cv::InputArray) cv::noArray(), 
 		*cornerColor);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -361,7 +361,7 @@ bool cveArucoEstimatePoseCharucoBoard(
 	cv::_InputOutputArray* tvec,
 	bool useExtrinsicGuess)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::Ptr<cv::aruco::CharucoBoard> boardPtr ( board , [] (cv::aruco::CharucoBoard*) {} );
 	return cv::aruco::estimatePoseCharucoBoard(
 		*charucoCorners,
@@ -373,7 +373,7 @@ bool cveArucoEstimatePoseCharucoBoard(
 		*tvec,
 		useExtrinsicGuess);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -387,7 +387,7 @@ void cveArucoDetectCharucoDiamond(
 	cv::_InputArray* cameraMatrix,
 	cv::_InputArray* distCoeffs)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::aruco::detectCharucoDiamond(
 		*image, *markerCorners, *markerIds,
 		squareMarkerLengthRate,
@@ -395,7 +395,7 @@ void cveArucoDetectCharucoDiamond(
 		cameraMatrix ? *cameraMatrix : (cv::InputArray) cv::noArray(),
 		distCoeffs ? *distCoeffs : (cv::InputArray) cv::noArray());
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -405,10 +405,10 @@ void cveArucoDrawDetectedDiamonds(
 	cv::_InputArray* diamondIds,
 	cv::Scalar* borderColor)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::aruco::drawDetectedDiamonds(*image, *diamondCorners, *diamondIds, *borderColor);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -420,12 +420,12 @@ void cveArucoDrawCharucoDiamond(
 	int marginSize,
 	int borderBits)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::Ptr<cv::aruco::Dictionary> dictPtr ( dictionary, [] (cv::aruco::Dictionary*) {} );
 	cv::Vec4i idsVec(ids[0], ids[1], ids[2], ids[3]);
 	cv::aruco::drawCharucoDiamond(dictPtr, idsVec, squareLength, markerLength, *img, marginSize, borderBits);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -436,11 +436,11 @@ void cveArucoDrawPlanarBoard(
 	int marginSize,
 	int borderBits)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::Ptr<cv::aruco::Board> boardPtr(board, [](cv::aruco::Board* b) {});
 	cv::aruco::drawPlanarBoard(boardPtr, *outSize, *img, marginSize, borderBits);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -455,11 +455,11 @@ int cveArucoEstimatePoseBoard(
 	cv::_InputOutputArray* tvec,
 	bool useExtrinsicGuess)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::Ptr<cv::aruco::Board> boardPtr(board, [](cv::aruco::Board* b) {});
 	return cv::aruco::estimatePoseBoard(*corners, *ids, boardPtr, *cameraMatrix, *distCoeffs, *rvec, *tvec, useExtrinsicGuess);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }
 
@@ -470,10 +470,10 @@ void cveArucoGetBoardObjectAndImagePoints(
 	cv::_OutputArray* objPoints,
 	cv::_OutputArray* imgPoints)
 {
-#ifdef HAVE_OPENCV_ARUCO
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::Ptr<cv::aruco::Board> boardPtr(board, [](cv::aruco::Board* b) {});
 	cv::aruco::getBoardObjectAndImagePoints(boardPtr, *detectedCorners, *detectedIds, *objPoints, *imgPoints);
 #else
-	throw_no_aruco();
+	throw_no_objdetect();
 #endif
 }

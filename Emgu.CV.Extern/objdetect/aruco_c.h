@@ -8,18 +8,21 @@
 #ifndef EMGU_ARUCO_C_H
 #define EMGU_ARUCO_C_H
 
-#include "opencv2/opencv_modules.hpp"
-#include "opencv2/core/core.hpp"
-#include "cvapi_compat.h"
+//#include "opencv2/opencv_modules.hpp"
+//#include "opencv2/core/core.hpp"
+//#include "cvapi_compat.h"
+#include "objdetect_c.h"
 
-#ifdef HAVE_OPENCV_ARUCO
-
-#include "opencv2/aruco.hpp"
-#include "opencv2/aruco/charuco.hpp"
+#ifdef HAVE_OPENCV_OBJDETECT
+//#include "opencv2/objdetect.hpp"
+#include "opencv2/objdetect/aruco_detector.hpp"
+#include "opencv2/objdetect/charuco_detector.hpp"
+//#include "opencv2/objdetect/aruco_board.hpp"
+//#include "opencv2/objdetect/aruco_dictionary.hpp"
 
 #else
 
-static inline CV_NORETURN void throw_no_aruco() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Aruco support. To use this module, please switch to the full Emgu CV runtime."); }
+//static inline CV_NORETURN void throw_no_aruco() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Aruco support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv
 {
