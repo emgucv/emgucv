@@ -49,33 +49,6 @@ namespace Emgu.CV.Aruco
             int borderBits);
         */
 
-        /// <summary>
-        /// Performs marker detection in the input image. Only markers included in the specific dictionary are searched. For each detected marker, it returns the 2D position of its corner in the image and its corresponding identifier. Note that this function does not perform pose estimation.
-        /// </summary>
-        /// <param name="image">input image</param>
-        /// <param name="dict">indicates the type of markers that will be searched</param>
-        /// <param name="corners">Vector of detected marker corners. For each marker, its four corners are provided, (e.g VectorOfVectorOfPointF ). For N detected markers, the dimensions of this array is Nx4. The order of the corners is clockwise.</param>
-        /// <param name="ids">vector of identifiers of the detected markers. The identifier is of type int (e.g. VectorOfInt). For N detected markers, the size of ids is also N. The identifiers have the same order than the markers in the imgPoints array.</param>
-        /// <param name="parameters">marker detection parameters</param>
-        /// <param name="rejectedImgPoints">contains the imgPoints of those squares whose inner code has not a correct codification. Useful for debugging purposes.</param>
-        public static void DetectMarkers(
-           IInputArray image, Dictionary dict, IOutputArrayOfArrays corners,
-           IOutputArray ids, DetectorParameters parameters,
-           IOutputArrayOfArrays rejectedImgPoints = null
-           )
-        {
-            using (InputArray iaImage = image.GetInputArray())
-            using (OutputArray oaCorners = corners.GetOutputArray())
-            using (OutputArray oaIds = ids.GetOutputArray())
-            using (OutputArray oaRejectedImgPoints = rejectedImgPoints != null ? rejectedImgPoints.GetOutputArray() : OutputArray.GetEmpty())
-            {
-                cveArucoDetectMarkers(iaImage, dict, oaCorners, oaIds, ref parameters, oaRejectedImgPoints);
-            }
-        }
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveArucoDetectMarkers(IntPtr image, IntPtr dictionary, IntPtr corners,
-           IntPtr ids, ref DetectorParameters parameters,
-           IntPtr rejectedImgPoints);
 
         /*
         /// <summary>
@@ -131,53 +104,7 @@ namespace Emgu.CV.Aruco
            IntPtr cameraMatrix, IntPtr distCoeffs,
            IntPtr rvecs, IntPtr tvecs);
 
-        /// <summary>
-        /// Refine not detected markers based on the already detected and the board layout.
-        /// </summary>
-        /// <param name="image">Input image</param>
-        /// <param name="board">Layout of markers in the board.</param>
-        /// <param name="detectedCorners">Vector of already detected marker corners.</param>
-        /// <param name="detectedIds">Vector of already detected marker identifiers.</param>
-        /// <param name="rejectedCorners">Vector of rejected candidates during the marker detection process</param>
-        /// <param name="cameraMatrix">Optional input 3x3 floating-point camera matrix </param>
-        /// <param name="distCoeffs">Optional vector of distortion coefficients (k1,k2,p1,p2[,k3[,k4,k5,k6],[s1,s2,s3,s4]]) of 4, 5, 8 or 12 elements</param>
-        /// <param name="minRepDistance">Minimum distance between the corners of the rejected candidate and the reprojected marker in order to consider it as a correspondence. (default 10)</param>
-        /// <param name="errorCorrectionRate">Rate of allowed erroneous bits respect to the error correction capability of the used dictionary. -1 ignores the error correction step. (default 3)</param>
-        /// <param name="checkAllOrders">Consider the four posible corner orders in the rejectedCorners array. If it set to false, only the provided corner order is considered (default true).</param>
-        /// <param name="recoveredIdxs">Optional array to returns the indexes of the recovered candidates in the original rejectedCorners array.</param>
-        /// <param name="parameters">marker detection parameters</param>
-        public static void RefineDetectedMarkers(
-           IInputArray image, IBoard board, IInputOutputArray detectedCorners,
-           IInputOutputArray detectedIds, IInputOutputArray rejectedCorners,
-           IInputArray cameraMatrix, IInputArray distCoeffs,
-           float minRepDistance, float errorCorrectionRate,
-           bool checkAllOrders,
-           IOutputArray recoveredIdxs, DetectorParameters parameters)
-        {
-            using (InputArray iaImage = image.GetInputArray())
-            using (InputOutputArray ioaDetectedCorners = detectedCorners.GetInputOutputArray())
-            using (InputOutputArray ioaDetectedIds = detectedIds.GetInputOutputArray())
-            using (InputOutputArray ioaRejectedCorners = rejectedCorners.GetInputOutputArray())
-            using (InputArray iaCameraMatrix = cameraMatrix == null ? InputArray.GetEmpty() : cameraMatrix.GetInputArray())
-            using (InputArray iaDistCoeffs = distCoeffs == null ? InputArray.GetEmpty() : distCoeffs.GetInputArray())
-            using (
-               OutputArray oaRecovervedIdx = recoveredIdxs == null
-                  ? OutputArray.GetEmpty()
-                  : recoveredIdxs.GetOutputArray())
-            {
-                cveArucoRefineDetectedMarkers(iaImage, board.BoardPtr, ioaDetectedCorners, ioaDetectedIds, ioaRejectedCorners,
-                   iaCameraMatrix, iaDistCoeffs, minRepDistance, errorCorrectionRate, checkAllOrders, oaRecovervedIdx, ref parameters);
-            }
-        }
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveArucoRefineDetectedMarkers(
-            IntPtr image, IntPtr board, IntPtr detectedCorners,
-            IntPtr detectedIds, IntPtr rejectedCorners,
-            IntPtr cameraMatrix, IntPtr distCoeffs,
-            float minRepDistance, float errorCorrectionRate,
-            [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool checkAllOrders,
-            IntPtr ecoveredIdxs, ref DetectorParameters parameters);
+
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveArucoDetectorParametersGetDefault(ref DetectorParameters parameters);
@@ -521,49 +448,6 @@ namespace Emgu.CV.Aruco
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool useExtrinsicGuess);
 
-        /// <summary>
-        /// Detect ChArUco Diamond markers
-        /// </summary>
-        /// <param name="image">input image necessary for corner subpixel.</param>
-        /// <param name="markerCorners">list of detected marker corners from detectMarkers function.</param>
-        /// <param name="markerIds">list of marker ids in markerCorners.</param>
-        /// <param name="squareMarkerLengthRate">rate between square and marker length: squareMarkerLengthRate = squareLength / markerLength.The real units are not necessary.</param>
-        /// <param name="diamondCorners">output list of detected diamond corners (4 corners per diamond). The order is the same than in marker corners: top left, top right, bottom right and bottom left. Similar format than the corners returned by detectMarkers(e.g VectorOfVectorOfPointF ).</param>
-        /// <param name="diamondIds">ids of the diamonds in diamondCorners. The id of each diamond is in fact of type Vec4i, so each diamond has 4 ids, which are the ids of the aruco markers composing the diamond.</param>
-        /// <param name="cameraMatrix">Optional camera calibration matrix.</param>
-        /// <param name="distCoeffs">Optional camera distortion coefficients.</param>
-        public static void DetectCharucoDiamond(
-            IInputArray image,
-            IInputArray markerCorners,
-            IInputArray markerIds,
-            float squareMarkerLengthRate,
-            IOutputArray diamondCorners,
-            IOutputArray diamondIds,
-            IInputArray cameraMatrix = null,
-            IInputArray distCoeffs = null)
-        {
-            using (InputArray iaImage = image.GetInputArray())
-            using (InputArray iaMarkerCorners = markerCorners.GetInputArray())
-            using (InputArray iaMarkerIds = markerIds.GetInputArray())
-            using (OutputArray oaDiamondCorners = diamondCorners.GetOutputArray())
-            using (OutputArray oaDiamondIds = diamondIds.GetOutputArray())
-            using (InputArray iaCameraMatrix = cameraMatrix == null ? InputArray.GetEmpty() : cameraMatrix.GetInputArray())
-            using (InputArray iaDistCoeffs = distCoeffs == null ? InputArray.GetEmpty() : distCoeffs.GetInputArray())
-            {
-                cveArucoDetectCharucoDiamond(iaImage, iaMarkerCorners, iaMarkerIds, squareMarkerLengthRate, oaDiamondCorners, oaDiamondIds, iaCameraMatrix, iaDistCoeffs);
-            }
-        }
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveArucoDetectCharucoDiamond(
-            IntPtr image,
-            IntPtr markerCorners,
-            IntPtr markerIds,
-            float squareMarkerLengthRate,
-            IntPtr diamondCorners,
-            IntPtr diamondIds,
-            IntPtr cameraMatrix,
-            IntPtr distCoeffs);
 
         /// <summary>
         /// Draw a set of detected ChArUco Diamond markers

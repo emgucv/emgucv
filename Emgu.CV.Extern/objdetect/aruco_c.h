@@ -72,10 +72,30 @@ CVAPI(void) cveArucoDictionaryRelease(cv::aruco::Dictionary** dict, cv::Ptr<cv::
 
 //CVAPI(void) cveArucoDrawAxis(cv::_InputOutputArray* image, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_InputArray* rvec, cv::_InputArray* tvec, float length);
 
-CVAPI(void) cveArucoDetectMarkers(
-   cv::_InputArray* image, cv::aruco::Dictionary* dictionary, cv::_OutputArray* corners,
-   cv::_OutputArray* ids, cv::aruco::DetectorParameters* parameters,
-   cv::_OutputArray* rejectedImgPoints);
+CVAPI(cv::aruco::ArucoDetector*) cveArucoDetectorCreate(
+	cv::aruco::Dictionary* dictionary,
+	cv::aruco::DetectorParameters* detectorParams,
+	cv::aruco::RefineParameters* refineParams,
+	cv::Algorithm** algorithm);
+CVAPI(void) cveArucoDetectorRelease(cv::aruco::ArucoDetector** arucoDetector);
+
+CVAPI(void) cveArucoDetectorDetectMarkers(
+	cv::aruco::ArucoDetector* detector,
+	cv::_InputArray* image,  
+	cv::_OutputArray* corners,
+	cv::_OutputArray* ids, 
+	cv::_OutputArray* rejectedImgPoints);
+
+CVAPI(void) cveArucoDetectorRefineDetectedMarkers(
+	cv::aruco::ArucoDetector* detector,
+	cv::_InputArray* image, 
+	cv::aruco::Board* board, 
+	cv::_InputOutputArray* detectedCorners,
+	cv::_InputOutputArray* detectedIds, 
+	cv::_InputOutputArray* rejectedCorners,
+	cv::_InputArray* cameraMatrix, 
+	cv::_InputArray* distCoeffs,
+	cv::_OutputArray* recoveredIdxs);
 
 CVAPI(void) cveArucoEstimatePoseSingleMarkers(cv::_InputArray* corners, float markerLength,
    cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs,
@@ -84,11 +104,9 @@ CVAPI(void) cveArucoEstimatePoseSingleMarkers(cv::_InputArray* corners, float ma
 CVAPI(cv::aruco::GridBoard*) cveArucoGridBoardCreate(
 	int markersX, int markersY, float markerLength, float markerSeparation,
 	cv::aruco::Dictionary* dictionary, cv::_InputArray* ids, cv::aruco::Board** boardPtr, cv::Ptr<cv::aruco::GridBoard>** sharedPtr);
+CVAPI(void) cveArucoGridBoardRelease(cv::aruco::GridBoard** gridBoard, cv::Ptr<cv::aruco::GridBoard>** sharedPtr);
 
 CVAPI(void) cveArucoBoardGenerateImage(cv::aruco::Board* gridBoard, cv::Size* outSize, cv::_OutputArray* img, int marginSize, int borderBits);
-
-
-CVAPI(void) cveArucoGridBoardRelease(cv::aruco::GridBoard** gridBoard, cv::Ptr<cv::aruco::GridBoard>** sharedPtr);
 
 CVAPI(cv::aruco::CharucoBoard*) cveCharucoBoardCreate(
    int squaresX, int squaresY, float squareLength, float markerLength,
@@ -96,12 +114,27 @@ CVAPI(cv::aruco::CharucoBoard*) cveCharucoBoardCreate(
 //CVAPI(void) cveCharucoBoardDraw(cv::aruco::CharucoBoard* charucoBoard, CvSize* outSize, cv::_OutputArray* img, int marginSize, int borderBits);
 CVAPI(void) cveCharucoBoardRelease(cv::aruco::CharucoBoard** charucoBoard, cv::Ptr<cv::aruco::CharucoBoard>** sharedPtr);
 
-CVAPI(void) cveArucoRefineDetectedMarkers(
-   cv::_InputArray* image, cv::aruco::Board* board, cv::_InputOutputArray* detectedCorners,
-   cv::_InputOutputArray* detectedIds, cv::_InputOutputArray* rejectedCorners,
-   cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs,
-   float minRepDistance, float errorCorrectionRate, bool checkAllOrders,
-   cv::_OutputArray* recoveredIdxs, cv::aruco::DetectorParameters* parameters);
+CVAPI(cv::aruco::CharucoParameters*) cveCharucoParametersCreate(
+	int minMarkers,
+	bool tryRefineMarkers,
+	bool checkMarkers);
+CVAPI(void) cveCharucoParametersRelease(cv::aruco::CharucoParameters** charucoParameters);
+
+CVAPI(cv::aruco::CharucoDetector*) cveCharucoDetectorCreate(
+	cv::aruco::CharucoBoard* board,
+	cv::aruco::CharucoParameters* charucoParams,
+	cv::aruco::DetectorParameters* detectorParams,
+	cv::aruco::RefineParameters* refineParams,
+	cv::Algorithm** algorithm);
+CVAPI(void) cveCharucoDetectorRelease(cv::aruco::CharucoDetector** detector);
+CVAPI(void) cveCharucoDetectorDetectDiamonds(
+	cv::aruco::CharucoDetector* detector,
+	cv::_InputArray* image,
+	cv::_OutputArray* diamondCorners,
+	cv::_OutputArray* diamondIds,
+	cv::_InputOutputArray* markerCorners,
+	cv::_InputOutputArray* markerIds);
+
 
 CVAPI(void) cveArucoDrawDetectedMarkers(
    cv::_InputOutputArray* image, cv::_InputArray* corners,
@@ -162,15 +195,7 @@ CVAPI(bool) cveArucoEstimatePoseCharucoBoard(
 	bool useExtrinsicGuess);
 
 
-CVAPI(void) cveArucoDetectCharucoDiamond(
-	cv::_InputArray* image,
-	cv::_InputArray* markerCorners,
-	cv::_InputArray* markerIds,
-	float squareMarkerLengthRate,
-	cv::_OutputArray* diamondCorners,
-	cv::_OutputArray* diamondIds,
-	cv::_InputArray* cameraMatrix,
-	cv::_InputArray* distCoeffs);
+
 
 CVAPI(void) cveArucoDrawDetectedDiamonds(
 	cv::_InputOutputArray* image, 

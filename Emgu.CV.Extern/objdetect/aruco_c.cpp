@@ -89,23 +89,69 @@ void cveArucoDrawAxis(cv::_InputOutputArray* image, cv::_InputArray* cameraMatri
 }
 */
 
-void cveArucoDetectMarkers(
-   cv::_InputArray* image, cv::aruco::Dictionary* dictionary, cv::_OutputArray* corners,
-   cv::_OutputArray* ids, cv::aruco::DetectorParameters* parameters,
-   cv::_OutputArray* rejectedImgPoints)
+cv::aruco::ArucoDetector* cveArucoDetectorCreate(
+	cv::aruco::Dictionary* dictionary,
+	cv::aruco::DetectorParameters* detectorParams,
+	cv::aruco::RefineParameters* refineParams,
+	cv::Algorithm** algorithm)
 {
 #ifdef HAVE_OPENCV_OBJDETECT
-	cv::Ptr<cv::aruco::DetectorParameters> arucoParam = cv::makePtr<cv::aruco::DetectorParameters>();
-	if (parameters)
-		memcpy(arucoParam.get(), parameters, sizeof(cv::aruco::DetectorParameters));
-	cv::Ptr<cv::aruco::Dictionary> dictPtr(dictionary, [](cv::aruco::Dictionary*) {});
-    cv::aruco::detectMarkers(
-		*image, 
-		dictPtr, 
-		*corners, 
-		*ids, 
-		arucoParam, 
+	cv::aruco::ArucoDetector* detector = new cv::aruco::ArucoDetector(
+		*dictionary,
+		detectorParams ? *detectorParams : cv::aruco::DetectorParameters(),
+		refineParams ? *refineParams : cv::aruco::RefineParameters());
+	*algorithm = dynamic_cast<cv::Algorithm*>(detector);
+	return detector;
+#else
+	throw_no_objdetect();
+#endif
+}
+void cveArucoDetectorRelease(cv::aruco::ArucoDetector** arucoDetector)
+{
+#ifdef HAVE_OPENCV_OBJDETECT
+	delete* arucoDetector;
+	*arucoDetector = 0;
+#else
+	throw_no_objdetect();
+#endif	
+}
+
+void cveArucoDetectorDetectMarkers(
+	cv::aruco::ArucoDetector* detector,
+	cv::_InputArray* image,
+	cv::_OutputArray* corners,
+	cv::_OutputArray* ids,
+	cv::_OutputArray* rejectedImgPoints)
+{
+#ifdef HAVE_OPENCV_OBJDETECT
+	detector->detectMarkers(
+		*image,
+		*corners,
+		*ids,
 		rejectedImgPoints ? *rejectedImgPoints : static_cast<cv::OutputArrayOfArrays>(cv::noArray()));
+#else
+	throw_no_objdetect();
+#endif
+}
+
+void cveArucoRefineDetectedMarkers(
+	cv::aruco::ArucoDetector* detector,
+	cv::_InputArray* image, 
+	cv::aruco::Board* board, 
+	cv::_InputOutputArray* detectedCorners,
+	cv::_InputOutputArray* detectedIds, 
+	cv::_InputOutputArray* rejectedCorners,
+	cv::_InputArray* cameraMatrix, 
+	cv::_InputArray* distCoeffs,
+	cv::_OutputArray* recoveredIdxs)
+{
+#ifdef HAVE_OPENCV_OBJDETECT
+	detector->refineDetectedMarkers(
+		*image, 
+		*board, *detectedCorners, *detectedIds, *rejectedCorners,
+		cameraMatrix ? *cameraMatrix : static_cast<cv::InputArray>(cv::noArray()),
+		distCoeffs ? *distCoeffs : static_cast<cv::InputArray>(cv::noArray()),
+		recoveredIdxs ? *recoveredIdxs : static_cast<cv::OutputArray>(cv::noArray()));
 #else
 	throw_no_objdetect();
 #endif
@@ -199,27 +245,66 @@ void cveCharucoBoardRelease(cv::aruco::CharucoBoard** charucoBoard, cv::Ptr<cv::
 #endif
 }
 
-void cveArucoRefineDetectedMarkers(
-   cv::_InputArray* image, cv::aruco::Board* board, cv::_InputOutputArray* detectedCorners,
-   cv::_InputOutputArray* detectedIds, cv::_InputOutputArray* rejectedCorners,
-   cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs,
-   float minRepDistance, float errorCorrectionRate, bool checkAllOrders,
-   cv::_OutputArray* recoveredIdxs, cv::aruco::DetectorParameters* parameters)
+cv::aruco::CharucoParameters* cveCharucoParametersCreate(
+	int minMarkers,
+	bool tryRefineMarkers,
+	bool checkMarkers)
+{
+	return new cv::aruco::CharucoParameters(
+		minMarkers,
+		tryRefineMarkers,
+		checkMarkers);
+}
+void cveCharucoParametersRelease(cv::aruco::CharucoParameters** charucoParameters)
+{
+	delete* charucoParameters;
+	*charucoParameters = 0;
+}
+
+cv::aruco::CharucoDetector* cveCharucoDetectorCreate(
+	cv::aruco::CharucoBoard* board,
+	cv::aruco::CharucoParameters* charucoParams,
+	cv::aruco::DetectorParameters* detectorParams,
+	cv::aruco::RefineParameters* refineParams,
+	cv::Algorithm** algorithm)
 {
 #ifdef HAVE_OPENCV_OBJDETECT
-	cv::Ptr<cv::aruco::DetectorParameters> detectorParametersPtr = cv::makePtr<cv::aruco::DetectorParameters>();
-	if (parameters)
-		memcpy(detectorParametersPtr.get(), parameters, sizeof(cv::aruco::DetectorParameters));
+	cv::aruco::CharucoDetector* detector = new cv::aruco::CharucoDetector(
+		*board, 
+		*charucoParams,
+		*detectorParams,
+		*refineParams);
+	*algorithm = dynamic_cast<cv::Algorithm*>(detector);
+	return detector;
+#else
+	throw_no_objdetect();
+#endif
+}
+void cveCharucoDetectorRelease(cv::aruco::CharucoDetector** detector)
+{
+#ifdef HAVE_OPENCV_OBJDETECT
+	delete* detector;
+	*detector = 0;
+#else
+	throw_no_objdetect();
+#endif
+}
 
-	cv::Ptr<cv::aruco::Board> boardPtr(board, [](cv::aruco::Board*) {});
-
-	cv::aruco::refineDetectedMarkers(
-	  *image, boardPtr, *detectedCorners, *detectedIds, *rejectedCorners,
-	  cameraMatrix ? *cameraMatrix : static_cast<cv::InputArray>(cv::noArray()),
-	  distCoeffs ? *distCoeffs : static_cast<cv::InputArray>(cv::noArray()),
-	  minRepDistance, errorCorrectionRate, checkAllOrders,
-	  recoveredIdxs ? *recoveredIdxs : static_cast<cv::OutputArray>(cv::noArray()),
-	  detectorParametersPtr);
+void cveCharucoDetectorDetectDiamonds(
+	cv::aruco::CharucoDetector* detector,
+	cv::_InputArray* image,
+	cv::_OutputArray* diamondCorners,
+	cv::_OutputArray* diamondIds,
+	cv::_InputOutputArray* markerCorners,
+	cv::_InputOutputArray* markerIds)
+{
+#ifdef HAVE_OPENCV_OBJDETECT
+	detector->detectDiamonds(
+		*image, 
+		*diamondCorners,
+		*diamondIds,
+		*markerCorners, 
+		*markerIds);
 #else
 	throw_no_objdetect();
 #endif
@@ -372,28 +457,6 @@ bool cveArucoEstimatePoseCharucoBoard(
 		*rvec,
 		*tvec,
 		useExtrinsicGuess);
-#else
-	throw_no_objdetect();
-#endif
-}
-
-void cveArucoDetectCharucoDiamond(
-	cv::_InputArray* image,
-	cv::_InputArray* markerCorners,
-	cv::_InputArray* markerIds,
-	float squareMarkerLengthRate,
-	cv::_OutputArray* diamondCorners,
-	cv::_OutputArray* diamondIds,
-	cv::_InputArray* cameraMatrix,
-	cv::_InputArray* distCoeffs)
-{
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::aruco::detectCharucoDiamond(
-		*image, *markerCorners, *markerIds,
-		squareMarkerLengthRate,
-		*diamondCorners, *diamondIds,
-		cameraMatrix ? *cameraMatrix : (cv::InputArray) cv::noArray(),
-		distCoeffs ? *distCoeffs : (cv::InputArray) cv::noArray());
 #else
 	throw_no_objdetect();
 #endif
