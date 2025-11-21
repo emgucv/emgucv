@@ -75,7 +75,7 @@ namespace Emgu.CV.Aruco
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveArucoDrawAxis(IntPtr image, IntPtr cameraMatrix, IntPtr distCoeffs, IntPtr rvec, IntPtr tvec, float length);
-        */
+        
 
         /// <summary>
         /// This function receives the detected markers and returns their pose estimation respect to the camera individually. So for each marker, one rotation and translation vector is returned. The returned transformation is the one that transforms points from each marker coordinate system to the camera coordinate system. The marker corrdinate system is centered on the middle of the marker, with the Z axis perpendicular to the marker plane. The coordinates of the four corners of the marker in its own coordinate system are: (-markerLength/2, markerLength/2, 0), (markerLength/2, markerLength/2, 0), (markerLength/2, -markerLength/2, 0), (-markerLength/2, -markerLength/2, 0)
@@ -103,7 +103,7 @@ namespace Emgu.CV.Aruco
         internal static extern void cveArucoEstimatePoseSingleMarkers(IntPtr corners, float markerLength,
            IntPtr cameraMatrix, IntPtr distCoeffs,
            IntPtr rvecs, IntPtr tvecs);
-
+        */
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -135,6 +135,7 @@ namespace Emgu.CV.Aruco
            IntPtr ids, 
            ref MCvScalar borderColor);
 
+        /*
         /// <summary>
         /// Calibrate a camera using aruco markers.
         /// </summary>
@@ -315,7 +316,8 @@ namespace Emgu.CV.Aruco
             IntPtr perViewErrors,
             CalibType flags,
             ref MCvTermCriteria criteria);
-
+        
+        
         /// <summary>
         /// Interpolate position of ChArUco board corners
         /// </summary>
@@ -366,7 +368,8 @@ namespace Emgu.CV.Aruco
             IntPtr cameraMatrix,
             IntPtr distCoeffs,
             int minMarkers);
-
+        */
+        
         /// <summary>
         /// Draws a set of Charuco corners
         /// </summary>
@@ -394,6 +397,7 @@ namespace Emgu.CV.Aruco
             IntPtr charucoIds,
             ref MCvScalar cornerColor);
 
+        /*
         /// <summary>
         ///  Pose estimation for a ChArUco board given some of their corners
         /// </summary>
@@ -447,7 +451,7 @@ namespace Emgu.CV.Aruco
             IntPtr tvec,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool useExtrinsicGuess);
-
+        */
 
         /// <summary>
         /// Draw a set of detected ChArUco Diamond markers
@@ -477,6 +481,7 @@ namespace Emgu.CV.Aruco
             IntPtr diamondIds,
             ref MCvScalar borderColor);
 
+        /*
         /// <summary>
         /// Draw a ChArUco Diamond marker
         /// </summary>
@@ -512,7 +517,8 @@ namespace Emgu.CV.Aruco
             IntPtr img,
             int marginSize,
             int borderBits);
-
+        
+        
         /// <summary>
         /// Draw a planar board.
         /// </summary>
@@ -541,7 +547,8 @@ namespace Emgu.CV.Aruco
             IntPtr img,
             int marginSize,
             int borderBits);
-
+        */
+        
         /// <summary>
         /// Draw a planar board.
         /// </summary>
@@ -567,6 +574,32 @@ namespace Emgu.CV.Aruco
         internal static extern void cveArucoBoardGenerateImage(IntPtr board, ref Size outSize, IntPtr img, int marginSize, int borderBits);
 
 
+        public static void MatchImagePoints(this IBoard board, IInputArrayOfArrays detectedCorners, IInputArray detectedIds,
+            IOutputArray objPoints, IOutputArray imgPoints)
+        {
+            using (var iaDetectedCorners = detectedCorners.GetInputArray())
+            using (var iaDetectedIds = detectedIds.GetInputArray())
+            using (var oaObjPoints = objPoints.GetOutputArray())
+            using (var oaImgPoints = imgPoints.GetOutputArray())
+            {
+                cveArucoBoardMatchImagePoints(
+                    board.BoardPtr, 
+                    iaDetectedCorners, 
+                    iaDetectedIds, 
+                    oaObjPoints,
+                    oaImgPoints);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveArucoBoardMatchImagePoints(
+            IntPtr gridBoard,
+            IntPtr detectedCorners,
+            IntPtr detectedIds,
+            IntPtr objPoints,
+            IntPtr imgPoints);
+
+        /*
         /// <summary>
         /// Pose estimation for a board of markers.
         /// </summary>
@@ -612,7 +645,8 @@ namespace Emgu.CV.Aruco
             IntPtr tvec,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool useExtrinsicGuess);
-
+        
+        
         /// <summary>
         /// Given a board configuration and a set of detected markers, returns the corresponding image points and object points to call solvePnP.
         /// </summary>
@@ -649,6 +683,6 @@ namespace Emgu.CV.Aruco
             IntPtr detectedIds,
             IntPtr objPoints,
             IntPtr imgPoints);
-            
+        */    
     }
 }

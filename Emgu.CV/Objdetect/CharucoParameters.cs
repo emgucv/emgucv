@@ -18,9 +18,9 @@ namespace Emgu.CV.Aruco
     public class CharucoParameters : UnmanagedObject
     {        
         public CharucoParameters(	
-			int minMarkers,
-			bool tryRefineMarkers,
-			bool checkMarkers)
+			int minMarkers = 2,
+			bool tryRefineMarkers = false,
+			bool checkMarkers = true)
         {
             _ptr = ObjdetectInvoke.cveCharucoParametersCreate(minMarkers, tryRefineMarkers, checkMarkers);
         }

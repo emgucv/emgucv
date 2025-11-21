@@ -15,13 +15,14 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
 
+/*
 namespace Emgu.CV.Models
 {
     public class CharucoCameraCalibrationModel : Emgu.CV.Models.IProcessAndRenderModel
     {
 
-        private Mat _cameraMatrix = new Mat();
-        private Mat _distCoeffs = new Mat();
+        //private Mat _cameraMatrix = new Mat();
+        //private Mat _distCoeffs = new Mat();
 
         private VectorOfVectorOfInt _allIds = new VectorOfVectorOfInt();
         private VectorOfVectorOfVectorOfPointF _allCorners = new VectorOfVectorOfVectorOfPointF();
@@ -38,9 +39,13 @@ namespace Emgu.CV.Models
         int _markersLength = 80;
         int _markersSeparation = 30;
 
+        private CharucoParameters _charucoParameters;
         private DetectorParameters _detectorParameters;
+        private CharucoBoard _charucoBoard;
         private Dictionary _dict;
-
+        private RefineParameters _refineParameters;
+        private CharucoDetector _detector;
+        
         private Dictionary ArucoDictionary
         {
             get
@@ -50,7 +55,7 @@ namespace Emgu.CV.Models
 
         }
 
-        private CharucoBoard _charucoBoard;
+        
         private CharucoBoard Board
         {
             get
@@ -84,6 +89,12 @@ namespace Emgu.CV.Models
         /// </summary>
         public void Clear()
         {
+            if (_detector != null)
+            {
+                _detector.Dispose();
+                _detector = null;
+            }
+            
             if (_dict != null)
             {
                 _dict.Dispose();
@@ -94,6 +105,19 @@ namespace Emgu.CV.Models
                 _charucoBoard.Dispose();
                 _charucoBoard = null;
             }
+
+            if (_charucoParameters != null)
+            {
+                _charucoParameters.Dispose();
+                _charucoParameters = null;
+            }
+
+            
+            //if (_refineParameters != null)
+            //{
+            //    _refineParameters.Dispose();
+            //    _refineParameters = null;
+            //}
 
             _allCorners.Clear();
             _allIds.Clear();
@@ -159,7 +183,10 @@ namespace Emgu.CV.Models
 #else
             _dict = new Dictionary(Dictionary.PredefinedDictionaryName.Dict7X7_100);
             _charucoBoard = new CharucoBoard(_markersX, _markersY, _markersLength, _markersSeparation, ArucoDictionary);
+            _charucoParameters = new CharucoParameters();
             _detectorParameters = DetectorParameters.GetDefault();
+            _refineParameters = new RefineParameters();
+            _detector = new CharucoDetector(_dict, _charucoParameters, _detectorParameters, _refineParameters);
             await Task.Delay(1);
 #endif
         }
@@ -329,3 +356,4 @@ namespace Emgu.CV.Models
         }
     }
 }
+*/
