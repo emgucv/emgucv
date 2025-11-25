@@ -23,7 +23,7 @@ namespace Emgu.CV.Mcc
         /// <summary>
         /// The type of checker
         /// </summary>
-        public enum TypeChart
+        public enum ColorChart
         {
             /// <summary>
             /// Standard Macbeth Chart with 24 squares

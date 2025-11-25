@@ -1032,7 +1032,6 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   intensity_transform
   rapid
   line_descriptor
-  mcc
   hdf
   gapi
   wechat_qrcode

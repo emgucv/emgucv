@@ -1583,19 +1583,19 @@ ENDIF()
 ############################### features code gen END ################################
 
 ############################### mcc code gen START ##############################
-IF (NOT HAVE_opencv_mcc)
-  SET(HAVE_opencv_mcc FALSE)
+IF (NOT HAVE_opencv_objdetect)
+  SET(HAVE_opencv_objdetect FALSE)
 ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
-    "mcc/CChecker_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Mcc/CChecker.g.cs"
+    "objdetect/CChecker_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Objdetect/CChecker.g.cs"
     "cv::mcc::CChecker" 
     "CChecker" 
     "Target;Cost" 
-    "cv::mcc::TYPECHART;float" 
+    "cv::mcc::ColorChart;float" 
     "prop;prop"
     "Target;Cost" 
-    "CChecker.TypeChart;float"
+    "CChecker.ColorChart;float"
     "Target;Cost"
     "Emgu.CV.Mcc"
     "MccInvoke"
@@ -1604,13 +1604,13 @@ ENDIF()
     "#include \"mcc_c.h\""
 	""
 	""
-	${HAVE_opencv_mcc})
+	${HAVE_opencv_objdetect})
 
       CREATE_OCV_CLASS_PROPERTY( 
-    "mcc/DetectorParameters_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Mcc/DetectorParameters.g.cs"
-    "cv::mcc::DetectorParameters" 
-    "DetectorParameters" 
+    "objdetect/DetectorParametersMCC_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Objdetect/DetectorParametersMCC.g.cs"
+    "cv::mcc::DetectorParametersMCC" 
+    "DetectorParametersMCC" 
     "adaptiveThreshWinSizeMin;adaptiveThreshWinSizeMax;adaptiveThreshWinSizeStep;adaptiveThreshConstant;minContoursAreaRate;minContoursArea;confidenceThreshold;minContourSolidity;findCandidatesApproxPolyDPEpsMultiplier;borderWidth;B0factor;maxError;minContourPointsAllowed;minContourLengthAllowed;minInterContourDistance;minInterCheckerDistance;minImageSize;minGroupSize" 
     "int;int;int;double;double;double;double;double;double;int;float;float;int;int;int;int;int;unsigned" 
     "element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element;element"
@@ -1637,42 +1637,14 @@ ENDIF()
     "  # documentation
     "Emgu.CV.Mcc"
     "MccInvoke"
-    "DetectorParameters"
+    "DetectorParametersMCC"
 	""
     "#include \"mcc_c.h\""
 	""
 	""
-	${HAVE_opencv_mcc})
+	${HAVE_opencv_objdetect})
 
-      CREATE_OCV_CLASS_PROPERTY( 
-    "mcc/ColorCorrectionModel_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Mcc/ColorCorrectionModel.g.cs"
-    "cv::ccm::ColorCorrectionModel" 
-    "ColorCorrectionModel" 
-    "ColorSpace;CCM_TYPE;Loss;Distance;Linear;LinearGamma;LinearDegree;WeightCoeff;MaxCount" 
-    "cv::ccm::COLOR_SPACE;cv::ccm::CCM_TYPE;double;cv::ccm::DISTANCE_TYPE;cv::ccm::LINEAR_TYPE;double;int;double;int" 
-    "propW;propW;propR;propW;propW;propW;propW;propW;propW"
-    "ColorSpace;CcmType;Loss;DistanceType;LinearType;LinearGamma;LinearDegree;WeightCoeff;MaxCount" 
-    "ColorCorrectionModel.ColorSpace;ColorCorrectionModel.CcmType;double;ColorCorrectionModel.DistanceType;ColorCorrectionModel.LinearType;double;int;double;int"
-    "Color space;
-     Ccm type;
-     Loss;
-     The type of color distance;
-     The method of linearization;
-     The gamma value of gamma correction;
-     The degree of linearization polynomial;
-     The exponent number of L* component of the reference color in CIE Lab color space;
-     Used in MinProblemSolver-DownhillSolver, terminal criteria to the algorithm"
-    "Emgu.CV.Ccm"
-    "CcmInvoke"
-    "ColorCorrectionModel"
-	""
-    "#include \"mcc_c.h\""
-	""
-	""
-	${HAVE_opencv_mcc})
-
-############################### features code gen END ################################
+############################### objdetect code gen END ################################
 
 ############################### ml code gen START ##############################
 IF (NOT HAVE_opencv_ml)
@@ -2164,6 +2136,33 @@ ENDIF()
 	""
 	${HAVE_opencv_photo})	
 
+  CREATE_OCV_CLASS_PROPERTY( 
+    "photo/ColorCorrectionModel_property" 
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Photo/ColorCorrectionModel.g.cs"
+    "cv::ccm::ColorCorrectionModel" 
+    "ColorCorrectionModel" 
+    "ColorSpace;CcmType;Loss;Distance;Linearization;LinearizationGamma;LinearizationDegree;WeightCoeff;MaxCount" 
+    "cv::ccm::ColorSpace;cv::ccm::CcmType;double;cv::ccm::DistanceType;cv::ccm::LinearizationType;double;int;double;int" 
+    "propW;propW;propR;propW;propW;propW;propW;propW;propW"
+    "ColorSpace;CcmType;Loss;DistanceType;LinearizationType;LinearGamma;LinearDegree;WeightCoeff;MaxCount" 
+    "ColorCorrectionModel.ColorSpace;ColorCorrectionModel.CcmType;double;ColorCorrectionModel.DistanceType;ColorCorrectionModel.LinearizationType;double;int;double;int"
+    "Color space;
+     Ccm type;
+     Loss;
+     The type of color distance;
+     The method of linearization;
+     The gamma value of gamma correction;
+     The degree of linearization polynomial;
+     The exponent number of L* component of the reference color in CIE Lab color space;
+     Used in MinProblemSolver-DownhillSolver, terminal criteria to the algorithm"
+    "Emgu.CV.Ccm"
+    "CcmInvoke"
+    "ColorCorrectionModel"
+	""
+    "#include \"photo_c.h\""
+	""
+	""
+	${HAVE_opencv_photo})
 ############################### photo code gen END ##############################
 
 

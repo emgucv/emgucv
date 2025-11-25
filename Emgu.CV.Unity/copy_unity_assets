@@ -100,8 +100,8 @@ mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/IntensityTransform
 cp -r ../Emgu.CV.Contrib/IntensityTransform/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/IntensityTransform
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/LineDescriptor
 cp -r ../Emgu.CV.Contrib/LineDescriptor/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/LineDescriptor
-mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc
-cp -r ../Emgu.CV.Contrib/Mcc/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc
+#mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc
+#cp -r ../Emgu.CV.Contrib/Mcc/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/PhaseUnwrapping
 cp -r ../Emgu.CV.Contrib/PhaseUnwrapping/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/PhaseUnwrapping
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Plot

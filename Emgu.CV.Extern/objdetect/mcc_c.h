@@ -11,26 +11,20 @@
 #include "opencv2/core/core.hpp"
 #include "cvapi_compat.h"
 
-#ifdef HAVE_OPENCV_MCC
-#include "opencv2/mcc.hpp"
+#ifdef HAVE_OPENCV_OBJDETECT
+#include "opencv2/objdetect/mcc_checker_detector.hpp"
 #else
 static inline CV_NORETURN void throw_no_mcc() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without mcc support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv {
 	namespace mcc {
 		class CChecker {};
-		class CCheckerDraw {};
+		//class CCheckerDraw {};
 		class CCheckerDetector {};
 		class DetectorParameters {};
 		enum TYPECHART {};
 	}
-	namespace ccm {
-		class ColorCorrectionModel {};
-		enum CCM_TYPE {};
-		enum DISTANCE_TYPE {};
-		enum LINEAR_TYPE {};
-		enum COLOR_SPACE {};
-	}
+
 }
 #endif
 
@@ -43,7 +37,7 @@ CVAPI(void) cveCCheckerRelease(cv::Ptr<cv::mcc::CChecker>** sharedPtr);
 CVAPI(void) cveCCheckerGetChartsRGB(cv::mcc::CChecker* checker, cv::_OutputArray* chartsRgb);
 CVAPI(void) cveCCheckerSetChartsRGB(cv::mcc::CChecker* checker, cv::Mat* chartsRgb);
 
-
+/*
 CVAPI(cv::mcc::CCheckerDraw*) cveCCheckerDrawCreate(
 	cv::mcc::CChecker* pChecker,
 	cv::Scalar* color,
@@ -51,28 +45,31 @@ CVAPI(cv::mcc::CCheckerDraw*) cveCCheckerDrawCreate(
 	cv::Ptr<cv::mcc::CCheckerDraw>** sharedPtr);
 CVAPI(void) cveCCheckerDrawDraw(cv::mcc::CCheckerDraw* ccheckerDraw, cv::_InputOutputArray* img);
 CVAPI(void) cveCCheckerDrawRelease(cv::Ptr<cv::mcc::CCheckerDraw>** sharedPtr);
+*/
 
-CVAPI(cv::mcc::CCheckerDetector*) cveCCheckerDetectorCreate(cv::Algorithm** algorithm, cv::Ptr<cv::mcc::CCheckerDetector>** sharedPtr);
+CVAPI(cv::mcc::CCheckerDetector*) cveCCheckerDetectorCreate(
+	cv::Algorithm** algorithm, 
+	cv::Ptr<cv::mcc::CCheckerDetector>** sharedPtr);
+
 CVAPI(bool) cveCCheckerDetectorProcess(
 	cv::mcc::CCheckerDetector* detector,
 	cv::_InputArray* image,
-	const cv::mcc::TYPECHART chartType,
-	const int nc,
-	bool useNet,
-	cv::mcc::DetectorParameters* param);
+	std::vector< cv::Rect >* regionOfInterest,
+	int nc);
+
+CVAPI(void) cveCCheckerDetectorDraw(
+	cv::mcc::CCheckerDetector* detector,
+	cv::mcc::CChecker* pChecker, 
+	cv::_InputOutputArray* img, 
+	cv::Scalar* color, 
+	int thickness);
+
 CVAPI(cv::mcc::CChecker*) cveCCheckerDetectorGetBestColorChecker(cv::mcc::CCheckerDetector* detector);
+
 CVAPI(void) cveCCheckerDetectorRelease(cv::Ptr<cv::mcc::CCheckerDetector>** sharedPtr);
 
-CVAPI(cv::mcc::DetectorParameters*) cveCCheckerDetectorParametersCreate();
-CVAPI(void) cveCCheckerDetectorParametersRelease(cv::mcc::DetectorParameters** parameters);
+CVAPI(cv::mcc::DetectorParametersMCC*) cveDetectorParametersMCCCreate();
+CVAPI(void) cveDetectorParametersMCCRelease(cv::mcc::DetectorParametersMCC** parameters);
 
 
-
-CVAPI(cv::ccm::ColorCorrectionModel*) cveColorCorrectionModelCreate1(cv::Mat* src, int constColor);
-CVAPI(cv::ccm::ColorCorrectionModel*) cveColorCorrectionModelCreate2(cv::Mat* src, cv::Mat* colors, int refCs);
-CVAPI(cv::ccm::ColorCorrectionModel*) cveColorCorrectionModelCreate3(cv::Mat* src, cv::Mat* colors, int refCs, cv::Mat* colored);
-CVAPI(void) cveColorCorrectionModelRelease(cv::ccm::ColorCorrectionModel** ccm);
-CVAPI(void) cveColorCorrectionModelRun(cv::ccm::ColorCorrectionModel* ccm);
-CVAPI(void) cveColorCorrectionModelGetCCM(cv::ccm::ColorCorrectionModel* ccm, cv::_OutputArray* result);
-CVAPI(void) cveColorCorrectionModelInfer(cv::ccm::ColorCorrectionModel* ccm, cv::Mat* img, cv::_OutputArray* result, bool islinear);
 #endif

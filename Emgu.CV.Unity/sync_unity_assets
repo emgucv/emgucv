@@ -55,7 +55,7 @@ cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Hfs/*.cs ../Emgu.CV.Contrib/
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/ImgHash/*.cs ../Emgu.CV.Contrib/ImgHash
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/IntensityTransform/*.cs ../Emgu.CV.Contrib/IntensityTransform
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/LineDescriptor/*.cs ../Emgu.CV.Contrib/LineDescriptor
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc/*.cs ../Emgu.CV.Contrib/Mcc
+#cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc/*.cs ../Emgu.CV.Contrib/Mcc
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/PhaseUnwrapping/*.cs ../Emgu.CV.Contrib/PhaseUnwrapping/      
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Plot/*.cs ../Emgu.CV.Contrib/Plot  
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Quality/*.cs ../Emgu.CV.Contrib/Quality  

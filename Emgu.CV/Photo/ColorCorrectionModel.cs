@@ -96,7 +96,7 @@ namespace Emgu.CV.Ccm
         /// <summary>
         /// Linearization transformation type.
         /// </summary>
-        public enum LinearType
+        public enum LinearizationType
         {
             /// <summary>
             /// No change is made
@@ -339,11 +339,13 @@ namespace Emgu.CV.Ccm
         /// <summary>
         /// Make color correction
         /// </summary>
-        public void Run()
+        /// <param name="result">The CCM matrix</param>
+        public void Compute(Mat result)
         {
-            CcmInvoke.cveColorCorrectionModelRun(_ptr);
+            CcmInvoke.cveColorCorrectionModelCompute(_ptr, result);
         }
 
+        /*
         /// <summary>
         /// Get the CCM
         /// </summary>
@@ -354,22 +356,21 @@ namespace Emgu.CV.Ccm
             using (OutputArray oaM = m.GetOutputArray())
                 CcmInvoke.cveColorCorrectionModelGetCCM(_ptr, oaM);
             return m;
-        }
+        }*/
 
         /// <summary>
-        /// Infer using fitting ccm.
+        /// Applies color correction to the input image using a fitted color correction matrix.
         /// </summary>
-        /// <param name="img">The input image.</param>
+        /// <param name="src">Input 8-bit, 16-bit unsigned or 32-bit float 3-channel image.</param>
         /// <param name="isLinear">Default false</param>
-        /// <returns>The output array.</returns>
-        public Mat Infer(Mat img, bool isLinear = false)
+        /// <param name="dst">The output array.</param>
+        public void CorrectImage(IInputOutputArray src, IOutputArray dst, bool isLinear = false)
         {
-            Mat m = new Mat();
-            using (OutputArray oaM = m.GetOutputArray())
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray osDst = dst.GetOutputArray())
             {
-                CcmInvoke.cveColorCorrectionModelInfer(_ptr, img, oaM, isLinear);
+                CcmInvoke.cveColorCorrectionModelCorrectImage(_ptr, iaSrc, osDst, isLinear);
             }
-            return m;
         }
 
         /// <summary>
@@ -409,13 +410,15 @@ namespace Emgu.CV.Ccm
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveColorCorrectionModelRun(IntPtr ccm);
+        internal static extern void cveColorCorrectionModelCompute(IntPtr ccm, IntPtr result);
 
+        /*
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveColorCorrectionModelGetCCM(IntPtr ccm, IntPtr result);
+        */
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveColorCorrectionModelInfer(
+        internal static extern void cveColorCorrectionModelCorrectImage(
             IntPtr ccm,
             IntPtr img,
             IntPtr result,

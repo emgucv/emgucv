@@ -36,7 +36,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DnnSuperres\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IntensityTransform\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rapid\*.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Mcc\*.cs" />
+    <!-- <Compile Include="$(MSBuildThisFileDirectory)Mcc\*.cs" /> -->
     <Compile Include="$(MSBuildThisFileDirectory)Hdf\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DepthAI\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)WechatQrcode\*.cs" />

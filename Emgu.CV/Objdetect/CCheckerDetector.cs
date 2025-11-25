@@ -71,29 +71,33 @@ namespace Emgu.CV.Mcc
         /// and GetListColorChecker()
         /// </summary>
         /// <param name="image">Image in color space BGR</param>
-        /// <param name="chartType">Type of the chart to detect</param>
         /// <param name="nc">Number of charts in the image, if you don't know the exact then keeping this number high helps.</param>
-        /// <param name="useNet">If it is true, the network provided using the setNet() is used for preliminary search for regions where chart
-        /// could be present, inside the regionsOfInterest provided.</param>
-        /// <param name="p">Parameters of the detection system</param>
+        /// <param name="regionOfInterest">Regions of image to look for the chart, if it is empty, charts are looked for in the entire image</param>
         /// <returns>true if at least one chart is detected, otherwise false</returns>
         public bool Process(
-            IInputArray image,
-            CChecker.TypeChart chartType,
-            int nc = 1,
-            bool useNet = false, 
-            DetectorParameters p = null
-            )
+            IInputArray image, 
+            VectorOfRect regionOfInterest = null,
+            int nc = 1)
         {
             using (InputArray iaImage = image.GetInputArray())
             {
                return  MccInvoke.cveCCheckerDetectorProcess(
                     _ptr,
                     iaImage,
-                    chartType,
-                    nc,
-                    useNet,
-                    p ?? IntPtr.Zero);
+                    regionOfInterest ?? IntPtr.Zero,
+                    nc);
+            }
+        }
+
+        public void Draw(
+            CChecker pChecker,
+            IInputOutputArray img,
+            MCvScalar color,
+            int thickness)
+        {
+            using (InputOutputArray ioaImg = img.GetInputOutputArray())
+            {
+                MccInvoke.cveCCheckerDetectorDraw(_ptr, pChecker, ioaImg, ref color, thickness);
             }
         }
     }
@@ -113,11 +117,16 @@ namespace Emgu.CV.Mcc
         internal static extern bool cveCCheckerDetectorProcess(
             IntPtr detector,
             IntPtr image,
-            CChecker.TypeChart chartType,
-            int nc,
-            [MarshalAs(CvInvoke.BoolMarshalType)]
-            bool useNet,
-            IntPtr param);
+            IntPtr regionOfInterest,
+            int nc);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveCCheckerDetectorDraw(
+            IntPtr detector,
+            IntPtr pChecker,
+            IntPtr img,
+            ref MCvScalar color,
+            int thickness);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveCCheckerDetectorGetBestColorChecker(IntPtr detector);

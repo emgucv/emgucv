@@ -445,3 +445,70 @@ void cudaFastNlMeansDenoisingColored(
 	throw_no_photo();
 #endif
 }
+
+
+cv::ccm::ColorCorrectionModel* cveColorCorrectionModelCreate1(cv::Mat* src, int constColor)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	return new cv::ccm::ColorCorrectionModel(*src, static_cast<cv::ccm::ColorCheckerType>(constColor));
+#else
+	throw_no_objdetect();
+#endif	
+}
+
+cv::ccm::ColorCorrectionModel* cveColorCorrectionModelCreate2(cv::Mat* src, cv::Mat* colors, int refCs)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	return new cv::ccm::ColorCorrectionModel(*src, *colors, static_cast<cv::ccm::ColorSpace>(refCs));
+#else
+	throw_no_objdetect();
+#endif	
+}
+
+cv::ccm::ColorCorrectionModel* cveColorCorrectionModelCreate3(cv::Mat* src, cv::Mat* colors, int refCs, cv::Mat* colored)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	return new cv::ccm::ColorCorrectionModel(*src, *colors, static_cast<cv::ccm::ColorSpace>(refCs), *colored);
+#else
+	throw_no_objdetect();
+#endif	
+}
+
+void cveColorCorrectionModelRelease(cv::ccm::ColorCorrectionModel** ccm)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	delete* ccm;
+	*ccm = 0;
+#else
+	throw_no_objdetect();
+#endif	
+}
+void cveColorCorrectionModelCompute(cv::ccm::ColorCorrectionModel* ccm, cv::Mat* result)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	cv::Mat ccmMat = ccm->compute();
+	ccmMat.copyTo(*result);
+#else
+	throw_no_objdetect();
+#endif	
+}
+
+/*
+void cveColorCorrectionModelGetCCM(cv::ccm::ColorCorrectionModel* ccm, cv::_OutputArray* result)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	cv::Mat m = ccm->getCCM();
+	m.copyTo(*result);
+#else
+	throw_no_objdetect();
+#endif	
+}*/
+
+void cveColorCorrectionModelCorrectImage(cv::ccm::ColorCorrectionModel* ccm, cv::_InputArray* img, cv::_OutputArray* result, bool islinear)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	ccm->correctImage(*img, *result, islinear);
+#else
+	throw_no_objdetect();
+#endif		
+}

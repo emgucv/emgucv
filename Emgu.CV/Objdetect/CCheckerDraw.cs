@@ -2,6 +2,8 @@
 //  Copyright (C) 2004-2025 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
+/*
+
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -77,3 +79,4 @@ namespace Emgu.CV.Mcc
 
     }
 }
+*/

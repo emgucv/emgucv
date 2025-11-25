@@ -32,6 +32,14 @@ namespace cv
 	class TonemapMantiuk {};
 	class AlignExposures {};
 	class AlignMTB {};
+
+	namespace ccm {
+		class ColorCorrectionModel {};
+		enum CCM_TYPE {};
+		enum DISTANCE_TYPE {};
+		enum LINEAR_TYPE {};
+		enum COLOR_SPACE {};
+	}
 }
 
 #endif
@@ -134,4 +142,16 @@ CVAPI(void) cudaFastNlMeansDenoisingColored(
 	int searchWindow,
 	int blockSize,
 	cv::cuda::Stream* stream);
+
+
+CVAPI(cv::ccm::ColorCorrectionModel*) cveColorCorrectionModelCreate1(cv::Mat* src, int constColor);
+CVAPI(cv::ccm::ColorCorrectionModel*) cveColorCorrectionModelCreate2(cv::Mat* src, cv::Mat* colors, int refCs);
+CVAPI(cv::ccm::ColorCorrectionModel*) cveColorCorrectionModelCreate3(cv::Mat* src, cv::Mat* colors, int refCs, cv::Mat* colored);
+
+CVAPI(void) cveColorCorrectionModelRelease(cv::ccm::ColorCorrectionModel** ccm);
+CVAPI(void) cveColorCorrectionModelCompute(cv::ccm::ColorCorrectionModel* ccm, cv::Mat* result);
+//CVAPI(void) cveColorCorrectionModelGetCCM(cv::ccm::ColorCorrectionModel* ccm, cv::_OutputArray* result);
+CVAPI(void) cveColorCorrectionModelCorrectImage(cv::ccm::ColorCorrectionModel* ccm, cv::_InputArray* img, cv::_OutputArray* result, bool islinear);
+
+
 #endif

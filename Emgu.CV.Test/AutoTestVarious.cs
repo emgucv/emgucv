@@ -4549,9 +4549,13 @@ namespace Emgu.CV.Test
             using (Mat image = EmguAssert.LoadMat("MCC24.png"))
             using (CCheckerDetector detector = new CCheckerDetector())
             {
-                if (detector.Process(image, CChecker.TypeChart.MCC24))
+                if (detector.Process(image))
                 {
                     using (CChecker checker = detector.BestColorChecker)
+                    {
+                        detector.Draw(checker, image, new MCvScalar(0, 255, 0), 1);
+                    }
+                        /*
                     using (CCheckerDraw drawer = new CCheckerDraw(checker, new MCvScalar(0, 255, 0), 1))
                     {
                         drawer.Draw(image);
@@ -4560,7 +4564,7 @@ namespace Emgu.CV.Test
                     //using (Mat img = new Mat(new Size(480, 320), DepthType.Cv8U, 3))
                     //{
                     //    drawer.Draw(img);
-                    //}
+                    //}*/
                 }
             }
 
