@@ -16,6 +16,9 @@ using System.IO;
 #if !(UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR)
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Xml;
+using System.Xml.Schema;
+using System.Xml.Serialization;
 #endif
 
 namespace Emgu.CV
@@ -39,8 +42,16 @@ namespace Emgu.CV
     [DebuggerTypeProxy(typeof(Mat.DebuggerProxy))]
 #if !(UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR)
     [JsonConverter(typeof(Mat.MatJsonConverter))]
+    [XmlRoot("opencv_storage")]
 #endif
-    public partial class Mat : UnmanagedObject, IEquatable<Mat>, IInputOutputArray, ISerializable
+    public partial class Mat : 
+        UnmanagedObject, 
+        IEquatable<Mat>, 
+        IInputOutputArray,
+#if !(UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR)
+        IXmlSerializable,
+#endif
+        ISerializable
     {
 #if !(UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR)
         /// <summary>
@@ -137,6 +148,101 @@ namespace Emgu.CV
                 WriteMat(writer, mat);
             }
         }
+
+        /// <summary>
+        /// This method is required for XML serialization and returns the XML schema for the <see cref="Mat"/> class.
+        /// </summary>
+        /// <returns>
+        /// Always returns <c>null</c> as the <see cref="Mat"/> class does not utilize a specific XML schema.
+        /// </returns>
+        public XmlSchema GetSchema() => null;
+
+        private const String _xmlNodeName = "Mat";
+
+        /// <summary>
+        /// Writes the current <see cref="Mat"/> object to an <see cref="XmlWriter"/> in OpenCV-style XML format.
+        /// </summary>
+        /// <param name="writer">The <see cref="XmlWriter"/> to which the <see cref="Mat"/> data will be written.</param>
+        /// <remarks>
+        /// This method uses OpenCV's <see cref="FileStorage"/> in memory mode to generate XML data for the <see cref="Mat"/> object.
+        /// Only the children of the root node in the OpenCV-style XML are written to the provided <see cref="XmlWriter"/>.
+        /// If the <see cref="Mat"/> is empty, this method does nothing.
+        /// </remarks>
+        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="writer"/> is <c>null</c>.</exception>
+        public void WriteXml(XmlWriter writer)
+        {
+            if (this.IsEmpty)
+                return;
+
+            //String nodeName = "Mat";
+            // 1. Use FileStorage in MEMORY mode to get OpenCV-style XML as a string
+            using (var fs = new Emgu.CV.FileStorage(
+                       "dummy.xml",
+                       Emgu.CV.FileStorage.Mode.Write | Emgu.CV.FileStorage.Mode.Memory,
+                       encoding: null))
+            {
+                // This writes:
+                // <opencv_storage><NodeName type_id="opencv-matrix">...</NodeName></opencv_storage>
+                fs.Write(this, _xmlNodeName);
+
+                // Get the entire XML text produced by OpenCV
+                string rawXml = fs.ReleaseAndGetString();
+
+                // 2. Parse that XML and copy ONLY the children of <opencv_storage>
+                var doc = new XmlDocument();
+                doc.LoadXml(rawXml);
+
+                XmlElement root = doc.DocumentElement; // <opencv_storage>
+
+                // We’re already inside <opencv_storage> (our class root),
+                // so write out just its children (e.g. <Mat> or <CameraMatrix>).
+                foreach (XmlNode child in root.ChildNodes)
+                {
+                    child.WriteTo(writer);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reads the XML representation of the <see cref="Mat"/> object from the specified <see cref="XmlReader"/>.
+        /// </summary>
+        /// <param name="reader">The <see cref="XmlReader"/> from which the XML data is read.</param>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the XML data cannot be parsed or the <see cref="FileStorage"/> fails to open.
+        /// </exception>
+        public void ReadXml(XmlReader reader)
+        {
+            // If element is empty: <opencv_storage />
+            if (reader.IsEmptyElement)
+            {
+                reader.Read();
+                
+                return;
+            }
+
+            // 1. Read inner XML (everything inside <opencv_storage>...</opencv_storage>)
+            string innerContent = reader.ReadInnerXml(); // string of child nodes
+
+            // 2. Wrap it back into an <opencv_storage> root so FileStorage can parse it
+            string wrappedXml = String.Format("<?xml version=\"1.0\" encoding=\"UTF-8\"?> <opencv_storage>{0}</opencv_storage>", innerContent);
+
+            using (var fs = new Emgu.CV.FileStorage(
+                       wrappedXml,
+                       Emgu.CV.FileStorage.Mode.Read | Emgu.CV.FileStorage.Mode.Memory | FileStorage.Mode.FormatXml,
+                       encoding: null))
+            {
+                if (!fs.IsOpened)
+                    throw new InvalidOperationException("Failed to open FileStorage from XML string.");
+
+                // Get the node and read it into the Mat
+                var node = fs.GetNode(_xmlNodeName);
+
+                // Emgu helper to convert FileNode -> Mat 
+                node.ReadMat(this);   
+                
+            }
+        }
+
 #endif
 
         #region Implement ISerializable interface
