@@ -714,7 +714,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestFileStorage1()
         {
-            FileStorage fs = new FileStorage("haarcascade_eye.xml", FileStorage.Mode.Read);
+            FileStorage fs = new FileStorage(EmguAssert.GetFile("trained_classifierNM1.xml"), FileStorage.Mode.Read);
         }
 
         [Test]
@@ -834,8 +834,7 @@ namespace Emgu.CV.Test
                 img.Save(tmpFileName);
 
                 Stopwatch stopwatch = Stopwatch.StartNew();
-                Mat img2 = new Mat();
-                CvInvoke.Imread(tmpFileName, ImreadModes.Unchanged);
+                Mat img2 = CvInvoke.Imread(tmpFileName, ImreadModes.Unchanged);
                 //Image<Bgra, Byte> img2 = new Image<Bgra, byte>("tmp.png");
                 stopwatch.Stop();
                 Trace.WriteLine(string.Format("Time: {0} milliseconds", stopwatch.ElapsedMilliseconds));
@@ -858,7 +857,9 @@ namespace Emgu.CV.Test
                     EmguAssert.AreEqual(System.Drawing.Imaging.PixelFormat.Format32bppArgb, bmpImage.PixelFormat);
 
                     //Image<Gray, Byte> img3 = bmp.ToImage<Gray, byte>();
-                    Mat img3 = bmp.ToMat();
+                    Mat img3Bgra = bmp.ToMat();
+                    Mat img3 = new Mat();
+                    CvInvoke.CvtColor(img3Bgra, img3, ColorConversion.Bgra2Gray);
                     Mat imgGray = new Mat();
                     CvInvoke.CvtColor(img, imgGray, ColorConversion.Bgra2Gray);
                     stopwatch.Stop();
@@ -1370,7 +1371,7 @@ namespace Emgu.CV.Test
             index.KnnSearch(CvToolbox.GetMatrixFromArrays(features2), indices, distances, 1, 32);
 
             int[] indicesValue = indices.GetData(false) as int[];
-            double[] distanceValue = distances.GetData(false) as double[];
+            float[] distanceValue = distances.GetData(false) as float[];
             EmguAssert.IsTrue(indicesValue[0] == 5);
             EmguAssert.IsTrue(distanceValue[0] == 0.0);
         }
@@ -1393,7 +1394,7 @@ namespace Emgu.CV.Test
             index.KnnSearch(CvToolbox.GetMatrixFromArrays(features2), indices, distances, 1, 32);
 
             int[] indicesValue = indices.GetData(false) as int[];
-            double[] distanceValue = distances.GetData(false) as double[];
+            float[] distanceValue = distances.GetData(false) as float[];
             EmguAssert.IsTrue(indicesValue[0] == 5);
             EmguAssert.IsTrue(distanceValue[0] == 0.0);
         }
@@ -1416,7 +1417,7 @@ namespace Emgu.CV.Test
             index.KnnSearch(CvToolbox.GetMatrixFromArrays(features2), indices, distances, 1, 32);
 
             int[] indicesValue = indices.GetData(false) as int[];
-            double[] distanceValue = distances.GetData(false) as double[];
+            float[] distanceValue = distances.GetData(false) as float[];
             EmguAssert.IsTrue(indicesValue[0] == 5);
             EmguAssert.IsTrue(distanceValue[0] == 0.0);
         }
@@ -1440,7 +1441,7 @@ namespace Emgu.CV.Test
             index.KnnSearch(CvToolbox.GetMatrixFromArrays(features2), indices, distances, 1, 32);
 
             int[] indicesValue = indices.GetData(false) as int[];
-            double[] distanceValue = distances.GetData(false) as double[];
+            float[] distanceValue = distances.GetData(false) as float[];
             EmguAssert.IsTrue(indicesValue[0] == 5);
             EmguAssert.IsTrue(distanceValue[0] == 0.0);
         }
@@ -2254,7 +2255,7 @@ namespace Emgu.CV.Test
                 using (Mat bgdModel = new Mat())
                 using(Mat fgdModel = new Mat())
                 {
-                    CvInvoke.GrabCut(img, mask, rect.Rect, bgdModel, fgdModel, 2, GrabcutInitType.Eval);
+                    CvInvoke.GrabCut(img, mask, rect.Rect, bgdModel, fgdModel, 2, GrabcutInitType.InitWithRect);
                     //get the mask of the foreground
                     using (ScalarArray ia = new ScalarArray(3))
                         CvInvoke.Compare(mask, ia, mask, Emgu.CV.CvEnum.CmpType.Equal);

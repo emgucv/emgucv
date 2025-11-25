@@ -155,7 +155,7 @@ bool cveCCheckerDetectorProcess(
 #endif
 }
 
-/*
+
 void cveCCheckerDetectorDraw(
 	cv::mcc::CCheckerDetector* detector,
 	cv::mcc::CChecker* pChecker,
@@ -164,11 +164,11 @@ void cveCCheckerDetectorDraw(
 	int thickness)
 {
 	std::vector< cv::Ptr<cv::mcc::CChecker> > checkers;
-	cv::Ptr< cv::mcc::CChecker > checkerPtr(pChecker, [](cv::mcc::CCheckerDetector* p) {});
+	cv::Ptr< cv::mcc::CChecker > checkerPtr(pChecker, [](cv::mcc::CChecker* p) {});
 	checkers.push_back(checkerPtr);
 	detector->draw(checkers, *img, *color, thickness);
 }
-*/
+
 
 cv::mcc::CChecker* cveCCheckerDetectorGetBestColorChecker(cv::mcc::CCheckerDetector* detector)
 {

@@ -76,27 +76,31 @@ namespace Emgu.CV.Test
         [Test]
         public void TestAkaze()
         {
-            AKAZE detector = new AKAZE();
-            //ParamDef[] parameters = detector.GetParams();
-            EmguAssert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
+            using (AKAZE detector = new AKAZE())
+            {
+                //ParamDef[] parameters = detector.GetParams();
+                EmguAssert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
+            }
         }
 
         [Test]
         public void TestAkazeBlankImage()
         {
-            AKAZE detector = new AKAZE();
-            Mat img = new Mat(1024, 900, DepthType.Cv8U, 1);
-            img.SetTo(new MCvScalar());
-            VectorOfKeyPoint vp = new VectorOfKeyPoint();
-            Mat descriptors = new Mat();
-            detector.DetectAndCompute(img, null, vp, descriptors, false);
+            using (AKAZE detector = new AKAZE())
+            using(Mat img = new Mat(1024, 900, DepthType.Cv8U, 1))
+            using (VectorOfKeyPoint vp = new VectorOfKeyPoint())
+            {
+                img.SetTo(new MCvScalar());
+                Mat descriptors = new Mat();
+                detector.DetectAndCompute(img, null, vp, descriptors, false);
+            }
         }
 
         [Test]
         public void TestSIFT()
         {
-            SIFT detector = new SIFT();
-            EmguAssert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
+            using (SIFT detector = new SIFT())
+                EmguAssert.IsTrue(TestFeature2DTracker(detector, detector), "Unable to find homography matrix");
         }
 
         /*
@@ -141,19 +145,17 @@ namespace Emgu.CV.Test
         [Test]
         public void TestStar()
         {
-            StarDetector keyPointDetector = new StarDetector();
-
-            BriefDescriptorExtractor descriptorGenerator = new BriefDescriptorExtractor(32);
-            TestFeature2DTracker(keyPointDetector, descriptorGenerator);
+            using (StarDetector keyPointDetector = new StarDetector())
+            using (BriefDescriptorExtractor descriptorGenerator = new BriefDescriptorExtractor(32))
+                TestFeature2DTracker(keyPointDetector, descriptorGenerator);
         }
 
         [Test]
         public void TestGFTTDetector()
         {
-            GFTTDetector keyPointDetector = new GFTTDetector(1000, 0.01, 1, 3, false, 0.04);
-            BriefDescriptorExtractor descriptorGenerator = new BriefDescriptorExtractor(32);
-
-            TestFeature2DTracker(keyPointDetector, descriptorGenerator);
+            using (GFTTDetector keyPointDetector = new GFTTDetector(1000, 0.01, 1, 3, false, 0.04))
+            using (BriefDescriptorExtractor descriptorGenerator = new BriefDescriptorExtractor(32))
+                TestFeature2DTracker(keyPointDetector, descriptorGenerator);
         }
 
         /*
@@ -182,10 +184,10 @@ namespace Emgu.CV.Test
         [Test]
         public void TestMSER()
         {
-            MSER keyPointDetector = new MSER();
-            BriefDescriptorExtractor descriptorGenerator = new BriefDescriptorExtractor(32);
-            //ParamDef[] parameters = keyPointDetector.GetParams();
-            TestFeature2DTracker(keyPointDetector, descriptorGenerator);
+            using (MSER keyPointDetector = new MSER())
+            using (BriefDescriptorExtractor descriptorGenerator = new BriefDescriptorExtractor(32))
+                //ParamDef[] parameters = keyPointDetector.GetParams();
+                TestFeature2DTracker(keyPointDetector, descriptorGenerator);
         }
 
         /*
@@ -208,29 +210,35 @@ namespace Emgu.CV.Test
         [Test]
         public void TestFAST()
         {
-            FastFeatureDetector fast = new FastFeatureDetector(10, true);
-            //GridAdaptedFeatureDetector fastGrid = new GridAdaptedFeatureDetector(fast, 2000, 4, 4);
-            BriefDescriptorExtractor brief = new BriefDescriptorExtractor(32);
-            //ParamDef[] parameters = fastGrid.GetParams();
-            EmguAssert.IsTrue(TestFeature2DTracker(fast, brief), "Unable to find homography matrix");
+            using (FastFeatureDetector fast = new FastFeatureDetector(10, true))
+            using (BriefDescriptorExtractor brief = new BriefDescriptorExtractor(32))
+            {
+                //GridAdaptedFeatureDetector fastGrid = new GridAdaptedFeatureDetector(fast, 2000, 4, 4);
+                //ParamDef[] parameters = fastGrid.GetParams();
+                EmguAssert.IsTrue(TestFeature2DTracker(fast, brief), "Unable to find homography matrix");
+            }
         }
 
         [Test]
         public void TestORB()
         {
-            ORB orb = new ORB(700);
-            //String[] parameters = orb.GetParamNames();
-            EmguAssert.IsTrue(TestFeature2DTracker(orb, orb), "Unable to find homography matrix");
+            using (ORB orb = new ORB(700))
+            {
+                //String[] parameters = orb.GetParamNames();
+                EmguAssert.IsTrue(TestFeature2DTracker(orb, orb), "Unable to find homography matrix");
+            }
         }
 
         [Test]
         public void TestFreak()
         {
-            FastFeatureDetector fast = new FastFeatureDetector(10, true);
-            Freak freak = new Freak(true, true, 22.0f, 4);
-            //ParamDef[] parameters = freak.GetParams();
-            //int nOctaves = freak.GetInt("nbOctave");
-            EmguAssert.IsTrue(TestFeature2DTracker(fast, freak), "Unable to find homography matrix");
+            using (FastFeatureDetector fast = new FastFeatureDetector(10, true))
+            using (Freak freak = new Freak(true, true, 22.0f, 4))
+            {
+                //ParamDef[] parameters = freak.GetParams();
+                //int nOctaves = freak.GetInt("nbOctave");
+                EmguAssert.IsTrue(TestFeature2DTracker(fast, freak), "Unable to find homography matrix");
+            }
         }
 
         public static bool TestFeature2DTracker(Feature2D keyPointDetector, Feature2D descriptorGenerator)
@@ -653,16 +661,18 @@ namespace Emgu.CV.Test
         {
             using (Mat box = EmguAssert.LoadMat("box.png"))
             {
-                SimpleBlobDetectorParams p = new SimpleBlobDetectorParams();
-                p.CollectContours = true;
-                SimpleBlobDetector detector = new SimpleBlobDetector(p);
-                using (Mat mask = new Mat(box.Size, DepthType.Cv8U, 1))
+                using (SimpleBlobDetectorParams p = new SimpleBlobDetectorParams())
                 {
-                    mask.SetTo(new MCvScalar(255));
-                    MKeyPoint[] keypoints = detector.Detect(box, mask);
-                    using (VectorOfVectorOfPoint contour = detector.GetBlobContours())
+                    p.CollectContours = true;
+                    using (SimpleBlobDetector detector = new SimpleBlobDetector(p))
+                    using (Mat mask = new Mat(box.Size, DepthType.Cv8U, 1))
                     {
-                        int count = contour.Size;
+                        mask.SetTo(new MCvScalar(255));
+                        MKeyPoint[] keypoints = detector.Detect(box, mask);
+                        using (VectorOfVectorOfPoint contour = detector.GetBlobContours())
+                        {
+                            int count = contour.Size;
+                        }
                     }
                 }
             }
