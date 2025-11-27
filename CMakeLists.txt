@@ -2477,25 +2477,6 @@ ELSEIF (WIN32)
   IF(EMGU_CV_EXTRA_BUILD)
     ADD_SUBDIRECTORY(Emgu.RPC)
   ENDIF()
-  
-#  # ----------------------------------------------------------------------------
-#  #  The source files
-#  # ----------------------------------------------------------------------------
-#  INSTALL(
-#    DIRECTORY
-#    ${CMAKE_CURRENT_SOURCE_DIR}/lib
-#    DESTINATION .
-#    COMPONENT emgucv_source
-#    FILES_MATCHING 
-#    PATTERN "*.dll"
-#    PATTERN "*.txt"
-#    PATTERN "*.xml"
-#    PATTERN ".git" EXCLUDE
-#    PATTERN "obj" EXCLUDE
-#    PATTERN "CMake*" EXCLUDE
-#    PATTERN "Release" EXCLUDE
-#    PATTERN "${PROJECT_NAME}.dir" EXCLUDE
-#    )
 	
   # ----------------------------------------------------------------------------
   #  Include the version_str.inc files in the package
@@ -2576,59 +2557,13 @@ ELSEIF (WIN32)
 	  PATTERN "Mac" EXCLUDE
       )
     
-    # ----------------------------------------------------------------------------
-    #  The example files
-    # ----------------------------------------------------------------------------
-    # INSTALL(
-      # DIRECTORY
-      # ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example
-      # DESTINATION .
-      # COMPONENT emgucv_example_source
-      # FILES_MATCHING 
-      # PATTERN "*.cs"
-      # PATTERN "*.csproj"
-      # PATTERN "*.resx"
-      # PATTERN "*.h"
-      # PATTERN "*.cpp"
-      # PATTERN "*.resX"
-      # PATTERN "*.ico"
-      # PATTERN "*.rc"
-      # PATTERN "CPlusPlus/*.vcproj"
-      # PATTERN "CPlusPlus/*.vcxproj"
-      # PATTERN "*.vb"
-      # PATTERN "*.vbproj"
-      # PATTERN "*.aspx" 
-      # PATTERN "*.dll"
-      # PATTERN "*.txt"
-      # PATTERN "*.xml"
-      # PATTERN "*.xaml"
-      # PATTERN "*.jpg"
-      # PATTERN "*.png"
-	  # PATTERN "*.svg"
-      # PATTERN "*.settings"
-      # PATTERN "*.config"
-      # PATTERN "tessdata/*"
-      # PATTERN ".git" EXCLUDE
-      # PATTERN "obj" EXCLUDE
-      # PATTERN "CMake*" EXCLUDE
-      # PATTERN "Release" EXCLUDE
-      # PATTERN "Debug" EXCLUDE
-      # PATTERN "RelWithDebInfo" EXCLUDE
-      # PATTERN "*.dir" EXCLUDE
-      # PATTERN "Android" EXCLUDE
-      # PATTERN "iOS" EXCLUDE
-      # PATTERN "Mac" EXCLUDE
-      # PATTERN "WindowsStore" EXCLUDE
-      # PATTERN "WindowsPhoneApp" EXCLUDE
-      # PATTERN "WindowsStoreCameraApp" EXCLUDE
-      # )
   ENDIF()
   
   INSTALL(
     FILES
-    "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_frontalface_default.xml"
-    "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
-    DESTINATION opencv/data/haarcascades
+    "${OPENCV_EXTRA_SUBFOLDER}/testdata/cv/cascadeandhog/cascades/haarcascade_frontalface_default.xml"
+    "${OPENCV_EXTRA_SUBFOLDER}/testdata/cv/cascadeandhog/cascades/haarcascade_eye.xml"
+    DESTINATION opencv_extra/test_data/cv/cascadeandhog/cascades
     COMPONENT emgucv_example_source
     )
   INSTALL(

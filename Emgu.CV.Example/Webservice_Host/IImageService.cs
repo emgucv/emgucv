@@ -16,6 +16,6 @@ namespace Webservice_Host
    public interface IImageService
    {
       [OperationContract(IsOneWay = false)]
-      Image<Bgr, Byte> GrabFrame();
+      Mat GrabFrame();
    }
 }
