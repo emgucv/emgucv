@@ -107,6 +107,9 @@ SET VS2019="%VS2019_DIR%\Common7\IDE\devenv.com"
 FOR /F "tokens=* USEBACKQ" %%F IN (`..\miscellaneous\vswhere.exe -version [17.0^,18.0^) -property installationPath`) DO SET VS2022_DIR=%%F
 SET VS2022="%VS2022_DIR%\Common7\IDE\devenv.com"
 
+FOR /F "tokens=* USEBACKQ" %%F IN (`..\miscellaneous\vswhere.exe -version [18.0^,19.0^) -property installationPath`) DO SET VS2026_DIR=%%F
+SET VS2026="%VS2026_DIR%\Common7\IDE\devenv.com"
+
 FOR /F "tokens=* USEBACKQ" %%F IN (`..\miscellaneous\vswhere.exe -products * -property installationPath`) DO SET VS_BUILDTOOLS=%%F
 
 IF EXIST "%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe" SET MSBUILD35=%windir%\Microsoft.NET\Framework\v3.5\MSBuild.exe
@@ -159,6 +162,8 @@ IF EXIST %VS2019% SET DEVENV=%VS2019%
 
 IF EXIST %VS2022% SET DEVENV=%VS2022%
 
+IF EXIST %VS2026% SET DEVENV=%VS2026%
+
 :SET_BUILD_TYPE
 IF %DEVENV%=="%MSBUILD35%" SET BUILD_TYPE=/property:Configuration=Release
 IF %DEVENV%=="%MSBUILD40%" SET BUILD_TYPE=/property:Configuration=Release
@@ -172,6 +177,7 @@ IF %DEVENV%==%VS2015% SET BUILD_TYPE=/Build Release
 IF %DEVENV%==%VS2017% SET BUILD_TYPE=/Build Release
 IF %DEVENV%==%VS2019% SET BUILD_TYPE=/Build Release
 IF %DEVENV%==%VS2022% SET BUILD_TYPE=/Build Release
+IF %DEVENV%==%VS2026% SET BUILD_TYPE=/Build Release
 
 IF %DEVENV%=="%MSBUILD35%" SET CMAKE_CONF="Visual Studio 12 2005%OS_MODE%"
 IF %DEVENV%=="%MSBUILD40%" SET CMAKE_CONF="Visual Studio 16" %BUILD_ARCH%
@@ -185,6 +191,7 @@ IF %DEVENV%==%VS2015% SET CMAKE_CONF="Visual Studio 14%OS_MODE%"
 IF %DEVENV%==%VS2017% SET CMAKE_CONF="Visual Studio 15%OS_MODE%"
 IF %DEVENV%==%VS2019% SET CMAKE_CONF="Visual Studio 16" %BUILD_ARCH%
 IF %DEVENV%==%VS2022% SET CMAKE_CONF="Visual Studio 17" %BUILD_ARCH%
+IF %DEVENV%==%VS2026% SET CMAKE_CONF="Visual Studio 18" %BUILD_ARCH%
 
 SET INSTALL_FOLDER=%cd%\install
 SET HDF5_DIR=%INSTALL_FOLDER:\=/%/cmake/hdf5
