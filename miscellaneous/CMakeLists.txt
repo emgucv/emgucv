@@ -28,7 +28,7 @@ ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.WindowsUI)
 INSTALL(
   FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/../Help/Emgu.CV.Documentation.chm"
-  DESTINATION ./
+  DESTINATION .
   COMPONENT emgucv_document
   )
 

@@ -155,12 +155,14 @@ MACRO(BUILD_CSPROJ target csproj_file extra_flags)
   IF (DOTNET_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
+	  POST_BUILD
       COMMAND ${MAC_FRESH_SHELL_PREFIX} "${DOTNET_EXECUTABLE}" build -c ${DEFAULT_CS_CONFIG} "${csproj_file}"
       COMMENT "Building ${target} with ${DOTNET_EXECUTABLE}")
   ELSEIF(MSBUILD_EXECUTABLE)
     #MESSAGE(STATUS "Adding custom command: ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}")
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
+	  POST_BUILD
       COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /t:Build /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${csproj_file}
       COMMENT "Building ${target} with ${MSBUILD_EXECUTABLE}")
   ELSE()
@@ -207,6 +209,7 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
   IF (DOTNET_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
 	TARGET ${target}
+	POST_BUILD
 	#COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild -t:restore /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
 	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} restore ${solution_file}
 	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}
@@ -214,6 +217,7 @@ MACRO(BUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
   ELSEIF(MSBUILD_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
 	TARGET ${target}
+	POST_BUILD
 	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
 	COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}
 	COMMENT "Building ${target} with command: ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}")
@@ -243,6 +247,7 @@ MACRO(MSBUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_flags)
   IF(MSBUILD_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
     TARGET ${target}
+	POST_BUILD
     #COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} -t:restore /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
     COMMAND ${DOTNET_EXECUTABLE} restore ${solution_file}
     COMMAND ${MAC_FRESH_SHELL_PREFIX} ${MSBUILD_EXECUTABLE} /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}
@@ -271,6 +276,7 @@ MACRO(DOTNET_MSBUILD_CSPROJ_IN_SOLUTION target solution_file project_name extra_
   IF(DOTNET_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
     TARGET ${target}
+	POST_BUILD
     COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild -t:restore /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file}
     COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}
     COMMENT "Building ${target} with command: ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} msbuild /p:Configuration=${DEFAULT_CS_CONFIG} ${extra_flags} ${solution_file} ${MSBUILD_TARGET_OPTION}")  
@@ -289,6 +295,7 @@ MACRO(BUILD_DOTNET_PROJ target csproj_file extra_flags)
   IF (DOTNET_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
+	  POST_BUILD
       #COMMAND ${MAC_FRESH_SHELL_PREFIX} "${DOTNET_EXECUTABLE}" workload restore "${csproj_file}"
       COMMAND ${MAC_FRESH_SHELL_PREFIX} "${DOTNET_EXECUTABLE}" build -c ${DEFAULT_CS_CONFIG} ${extra_flags} "${csproj_file}"
       COMMENT "Building ${target} with command: ${MAC_FRESH_SHELL_PREFIX} \"${DOTNET_EXECUTABLE}\" build -c ${DEFAULT_CS_CONFIG} ${extra_flags} \"${csproj_file}\"")
@@ -386,6 +393,7 @@ MACRO(COMPILE_CS target target_type source)
   
   ADD_CUSTOM_COMMAND (
     TARGET ${target}
+	POST_BUILD
     ${CS_PREBUILD_COMMAND}	   
     COMMAND ${CSC_EXECUTABLE} ${CS_COMMANDLINE_FLAGS} @${target}_SourceList.rsp
     ${CS_POSTBUILD_COMMAND}

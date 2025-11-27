@@ -1250,7 +1250,7 @@ ENDIF()
 
 IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 	MESSAGE(STATUS "Configuring nuget package for commercial only release")
-ELSEIF()
+ELSE()
 	MESSAGE(STATUS "Configuring nuget package for dual license release")
 ENDIF()
 
@@ -2448,7 +2448,7 @@ ELSEIF (WIN32)
     INSTALL(
   	FILES
   	"${UNMANAGED_LIBRARY_OUTPUT_PATH}/${OPENCV_FFMPEG_OUTPUT_NAME}.dll"
-  	DESTINATION "libs/${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/"
+  	DESTINATION "libs/${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}"
   	COMPONENT libs
   	)
   endif()
