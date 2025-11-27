@@ -27,9 +27,8 @@
 	<Import Project="..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems')" />
 	<Import Project="..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems" Label="Shared" Condition="Exists('..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems')" />
 	<Import Project="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />
-
 	<ItemGroup>
-		<PackageReference Include="System.Drawing.Primitives" Version="4.3.0" />
+    <!-- <PackageReference Include="System.Drawing.Primitives" Version="4.3.0" /> -->
     <!-- <PackageReference Include="System.Runtime" Version="4.3.1" /> -->
 		<!-- <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" /> -->
 		<PackageReference Include="System.Text.Json" Version="10.0.0" />
