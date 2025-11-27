@@ -8,50 +8,26 @@
 #ifndef EMGU_ARUCO_C_H
 #define EMGU_ARUCO_C_H
 
-//#include "opencv2/opencv_modules.hpp"
-//#include "opencv2/core/core.hpp"
-//#include "cvapi_compat.h"
 #include "objdetect_c.h"
 
 #ifdef HAVE_OPENCV_OBJDETECT
-//#include "opencv2/objdetect.hpp"
 #include "opencv2/objdetect/aruco_detector.hpp"
 #include "opencv2/objdetect/charuco_detector.hpp"
-//#include "opencv2/objdetect/aruco_board.hpp"
-//#include "opencv2/objdetect/aruco_dictionary.hpp"
-
 #else
-
-//static inline CV_NORETURN void throw_no_aruco() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without Aruco support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv
 {
 	namespace aruco
 	{
-		class Dictionary
-		{
-
-		};
-
-		class DetectorParameters
-		{
-
-		};
-
-		class Board
-		{
-			
-		};
-		
-		class GridBoard
-		{
-			
-		};
-
-		class CharucoBoard
-		{
-			
-		};
+		class Dictionary {};
+		class DetectorParameters {};
+		class RefineParameters {};
+		class Board {};
+		class GridBoard	{};
+		class ArucoDetector {};
+		class CharucoBoard {};
+		class CharucoParameters {};
+		class CharucoDetector {};
 	}
 }
 

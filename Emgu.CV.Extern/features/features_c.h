@@ -5,16 +5,23 @@
 //----------------------------------------------------------------------------
 
 #pragma once
-#ifndef EMGU_FEATURES2D_C_H
-#define EMGU_FEATURES2D_C_H
+#ifndef EMGU_FEATURES_C_H
+#define EMGU_FEATURES_C_H
 
 #include "cvapi_compat.h"
 #include "opencv2/imgproc/imgproc.hpp"
 
-
 #ifdef HAVE_OPENCV_FEATURES
 #include "opencv2/features/features.hpp"
-//#include "opencv2/features/features2d.hpp"
+
+#include "flann_c.h"
+#ifndef HAVE_OPENCV_FLANN
+namespace cv
+{
+	class FlannBasedMatcher {};
+}
+#endif
+
 #else
 static inline CV_NORETURN void throw_no_features() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without features support. To use this module, please switch to the full Emgu CV runtime."); }
 

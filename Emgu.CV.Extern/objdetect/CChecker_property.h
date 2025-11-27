@@ -1,7 +1,7 @@
 #include "mcc_c.h"
-CVAPI(cv::mcc::ColorChart) cveCCheckerGetTarget(cv::mcc::CChecker* obj);
-CVAPI(void) cveCCheckerSetTarget(cv::mcc::CChecker* obj, cv::mcc::ColorChart value);     
+CVAPI(cv::mcc::ColorChart) cveCCheckerGetTarget(void* obj);
+CVAPI(void) cveCCheckerSetTarget(void* obj, cv::mcc::ColorChart value);     
      
-CVAPI(float) cveCCheckerGetCost(cv::mcc::CChecker* obj);
-CVAPI(void) cveCCheckerSetCost(cv::mcc::CChecker* obj, float value);     
+CVAPI(float) cveCCheckerGetCost(void* obj);
+CVAPI(void) cveCCheckerSetCost(void* obj, float value);     
      

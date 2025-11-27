@@ -274,11 +274,15 @@ cv::aruco::CharucoParameters* cveCharucoParametersCreate(
 	bool tryRefineMarkers,
 	bool checkMarkers)
 {
+#ifdef HAVE_OPENCV_OBJDETECT
 	cv::aruco::CharucoParameters* p = new cv::aruco::CharucoParameters();
 	p->minMarkers = minMarkers;
 	p->tryRefineMarkers = tryRefineMarkers;
 	p->checkMarkers = checkMarkers;
 	return p;
+#else
+	throw_no_objdetect();
+#endif
 }
 void cveCharucoParametersRelease(cv::aruco::CharucoParameters** charucoParameters)
 {

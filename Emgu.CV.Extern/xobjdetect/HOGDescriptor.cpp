@@ -8,15 +8,22 @@
 
 void cveHOGDescriptorPeopleDetectorCreate(std::vector<float>* seq)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_XOBJDETECT
 	std::vector<float> v = cv::HOGDescriptor::getDefaultPeopleDetector();
 	seq->resize(v.size());
 	memcpy(&(*seq)[0], &v[0], sizeof(float) * seq->size());
 #else 
-	throw_no_objdetect();
+	throw_no_xobjdetect();
 #endif
 }
-cv::HOGDescriptor* cveHOGDescriptorCreateDefault() { return new cv::HOGDescriptor; }
+cv::HOGDescriptor* cveHOGDescriptorCreateDefault()
+{
+#ifdef HAVE_OPENCV_XOBJDETECT
+	return new cv::HOGDescriptor;
+#else 
+	throw_no_xobjdetect();
+#endif
+}
 
 cv::HOGDescriptor* cveHOGDescriptorCreate(
 	cv::Size* _winSize,
@@ -30,32 +37,31 @@ cv::HOGDescriptor* cveHOGDescriptorCreate(
 	double _L2HysThreshold,
 	bool _gammaCorrection)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_XOBJDETECT
 	return new cv::HOGDescriptor(*_winSize, *_blockSize, *_blockStride, *_cellSize, _nbins, _derivAperture, _winSigma, static_cast<cv::HOGDescriptor::HistogramNormType>(_histogramNormType), _L2HysThreshold, _gammaCorrection);
 #else 
-	throw_no_objdetect();
+	throw_no_xobjdetect();
 #endif
 }
 
 void cveHOGSetSVMDetector(cv::HOGDescriptor* descriptor, std::vector<float>* vector)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_XOBJDETECT
 	descriptor->setSVMDetector(*vector);
 #else 
-	throw_no_objdetect();
+	throw_no_xobjdetect();
 #endif
 }
 
 void cveHOGDescriptorRelease(cv::HOGDescriptor** descriptor)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_XOBJDETECT
 	delete* descriptor;
 	*descriptor = 0;
 #else 
-	throw_no_objdetect();
+	throw_no_xobjdetect();
 #endif
 }
-
 
 void cveHOGDescriptorDetectMultiScale(
 	cv::HOGDescriptor* descriptor,
@@ -69,10 +75,10 @@ void cveHOGDescriptorDetectMultiScale(
 	double finalThreshold,
 	bool useMeanshiftGrouping)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_XOBJDETECT
 	descriptor->detectMultiScale(*img, *foundLocations, *weights, hitThreshold, *winStride, *padding, scale, finalThreshold, useMeanshiftGrouping);
 #else 
-	throw_no_objdetect();
+	throw_no_xobjdetect();
 #endif
 }
 
@@ -84,7 +90,7 @@ void cveHOGDescriptorCompute(
 	cv::Size* padding,
 	std::vector< cv::Point >* locations)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_XOBJDETECT
 	std::vector<cv::Point> emptyVec;
 
 	descriptor->compute(
@@ -94,7 +100,7 @@ void cveHOGDescriptorCompute(
 		*padding,
 		locations ? *locations : emptyVec);
 #else 
-	throw_no_objdetect();
+	throw_no_xobjdetect();
 #endif
 }
 
@@ -119,9 +125,9 @@ void CvHOGDescriptorDetect(
 
 unsigned int cveHOGDescriptorGetDescriptorSize(cv::HOGDescriptor* descriptor)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
+#ifdef HAVE_OPENCV_XOBJDETECT
 	return static_cast<unsigned int>(descriptor->getDescriptorSize());
 #else 
-	throw_no_objdetect();
+	throw_no_xobjdetect();
 #endif
 }

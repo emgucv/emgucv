@@ -1,9 +1,9 @@
  
    #include "objdetect/CChecker_property.h"
-cv::mcc::ColorChart cveCCheckerGetTarget(cv::mcc::CChecker* obj) { return obj->getTarget(); }
-void cveCCheckerSetTarget(cv::mcc::CChecker* obj, cv::mcc::ColorChart value) { obj->setTarget( value ); }     
+cv::mcc::ColorChart cveCCheckerGetTarget(void* obj) { CV_Error(cv::Error::StsBadFunc, "This function is not implemented in the current platform"); }
+void cveCCheckerSetTarget(void* obj, cv::mcc::ColorChart value) { CV_Error(cv::Error::StsBadFunc, "This function is not implemented in the current platform"); }     
      
-float cveCCheckerGetCost(cv::mcc::CChecker* obj) { return obj->getCost(); }
-void cveCCheckerSetCost(cv::mcc::CChecker* obj, float value) { obj->setCost( value ); }     
+float cveCCheckerGetCost(void* obj) { CV_Error(cv::Error::StsBadFunc, "This function is not implemented in the current platform"); }
+void cveCCheckerSetCost(void* obj, float value) { CV_Error(cv::Error::StsBadFunc, "This function is not implemented in the current platform"); }     
       
   

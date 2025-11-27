@@ -18,8 +18,9 @@ static inline CV_NORETURN void throw_no_xobjdetect() { CV_Error(cv::Error::StsBa
 namespace cv {
 	namespace xobjdetect {
 		class WBDetector {};
-        class HOGDescriptor {};
 	}
+    class HOGDescriptor {};
+    class CascadeClassifier {};
 }
 #endif
 CVAPI(cv::xobjdetect::WBDetector*) cveWBDetectorCreate(cv::Ptr<cv::xobjdetect::WBDetector>** sharedPtr);

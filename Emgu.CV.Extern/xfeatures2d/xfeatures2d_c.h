@@ -37,7 +37,12 @@ namespace cv {
 		class PCTSignatures {};
 		class PCTSignaturesSQFD {};
 		class HarrisLaplaceFeatureDetector {};
-
+		class BRISK {};
+		class AKAZE {};
+		class KAZE {};
+		class AgastFeatureDetector {};
+		class BOWKMeansTrainer {};
+		class BOWImgDescriptorExtractor {};
 	}
 
 //	class Feature2D {};

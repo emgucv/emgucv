@@ -163,10 +163,14 @@ void cveCCheckerDetectorDraw(
 	cv::Scalar* color,
 	int thickness)
 {
+#ifdef HAVE_OPENCV_OBJDETECT
 	std::vector< cv::Ptr<cv::mcc::CChecker> > checkers;
 	cv::Ptr< cv::mcc::CChecker > checkerPtr(pChecker, [](cv::mcc::CChecker* p) {});
 	checkers.push_back(checkerPtr);
 	detector->draw(checkers, *img, *color, thickness);
+#else
+	throw_no_objdetect();
+#endif
 }
 
 

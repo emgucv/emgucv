@@ -8,21 +8,23 @@
 #ifndef EMGU_MCC_C_H
 #define EMGU_MCC_C_H
 
-#include "opencv2/core/core.hpp"
-#include "cvapi_compat.h"
+//#include "opencv2/core/core.hpp"
+//#include "cvapi_compat.h"
+
+#include "objdetect_c.h"
 
 #ifdef HAVE_OPENCV_OBJDETECT
 #include "opencv2/objdetect/mcc_checker_detector.hpp"
 #else
-static inline CV_NORETURN void throw_no_mcc() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without mcc support. To use this module, please switch to the full Emgu CV runtime."); }
+//static inline CV_NORETURN void throw_no_mcc() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without mcc support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv {
 	namespace mcc {
 		class CChecker {};
 		//class CCheckerDraw {};
 		class CCheckerDetector {};
-		class DetectorParameters {};
-		enum TYPECHART {};
+		class DetectorParametersMCC {};
+		enum ColorChart {};
 	}
 
 }

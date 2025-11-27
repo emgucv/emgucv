@@ -512,7 +512,7 @@ cv::xfeatures2d::BRISK* cveBriskCreate(int thresh, int octaves, float patternSca
 	*feature2D = dynamic_cast<cv::Feature2D*>(briskPtr.get());
 	return briskPtr.get();
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 
@@ -522,7 +522,7 @@ void cveBriskRelease(cv::Ptr<cv::xfeatures2d::BRISK>** sharedPtr)
 	delete* sharedPtr;
 	*sharedPtr = 0;
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 
@@ -540,7 +540,7 @@ cv::xfeatures2d::AKAZE* cveAKAZEDetectorCreate(
 	*feature2D = dynamic_cast<cv::Feature2D*>(akazePtr.get());
 	return akazePtr.get();
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 void cveAKAZEDetectorRelease(cv::Ptr<cv::xfeatures2d::AKAZE>** sharedPtr)
@@ -549,7 +549,7 @@ void cveAKAZEDetectorRelease(cv::Ptr<cv::xfeatures2d::AKAZE>** sharedPtr)
 	delete* sharedPtr;
 	*sharedPtr = 0;
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 
@@ -561,45 +561,45 @@ cv::xfeatures2d::KAZE* cveKAZEDetectorCreate(
 	cv::Feature2D** feature2D,
 	cv::Ptr<cv::xfeatures2d::KAZE>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_FEATURES
+#ifdef HAVE_OPENCV_XFEATURES2D
 	cv::Ptr<cv::xfeatures2d::KAZE> kazePtr = cv::xfeatures2d::KAZE::create(extended, upright, threshold, octaves, sublevels, static_cast<cv::xfeatures2d::KAZE::DiffusivityType>(diffusivity));
 	*sharedPtr = new cv::Ptr<cv::xfeatures2d::KAZE>(kazePtr);
 	*feature2D = dynamic_cast<cv::Feature2D*>(kazePtr.get());
 
 	return kazePtr.get();
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 void cveKAZEDetectorRelease(cv::Ptr<cv::xfeatures2d::KAZE>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_FEATURES
+#ifdef HAVE_OPENCV_XFEATURES2D
 	delete* sharedPtr;
 	*sharedPtr = 0;
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 
 //Agast
 cv::xfeatures2d::AgastFeatureDetector* cveAgastFeatureDetectorCreate(int threshold, bool nonmaxSuppression, int type, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::AgastFeatureDetector>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_FEATURES
+#ifdef HAVE_OPENCV_XFEATURES2D
 	cv::Ptr<cv::xfeatures2d::AgastFeatureDetector> agastPtr = cv::xfeatures2d::AgastFeatureDetector::create(threshold, nonmaxSuppression, static_cast<cv::xfeatures2d::AgastFeatureDetector::DetectorType>(type));
 	*sharedPtr = new cv::Ptr<cv::xfeatures2d::AgastFeatureDetector>(agastPtr);
 	*feature2D = dynamic_cast<cv::Feature2D*>(agastPtr.get());
 	return agastPtr.get();
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 void cveAgastFeatureDetectorRelease(cv::Ptr<cv::xfeatures2d::AgastFeatureDetector>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_FEATURES
+#ifdef HAVE_OPENCV_XFEATURES2D
 	delete* sharedPtr;
 	*sharedPtr = 0;
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 
@@ -607,83 +607,83 @@ void cveAgastFeatureDetectorRelease(cv::Ptr<cv::xfeatures2d::AgastFeatureDetecto
 //BowKMeansTrainer
 cv::xfeatures2d::BOWKMeansTrainer* cveBOWKMeansTrainerCreate(int clusterCount, const cv::TermCriteria* termcrit, int attempts, int flags)
 {
-#ifdef HAVE_OPENCV_FEATURES
+#ifdef HAVE_OPENCV_XFEATURES2D
 	return new cv::xfeatures2d::BOWKMeansTrainer(clusterCount, *termcrit, attempts, flags);
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 void cveBOWKMeansTrainerRelease(cv::xfeatures2d::BOWKMeansTrainer** trainer)
 {
-#ifdef HAVE_OPENCV_FEATURES
+#ifdef HAVE_OPENCV_XFEATURES2D
 	delete* trainer;
 	*trainer = 0;
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 int cveBOWKMeansTrainerGetDescriptorCount(cv::xfeatures2d::BOWKMeansTrainer* trainer)
 {
-#ifdef HAVE_OPENCV_FEATURES
+#ifdef HAVE_OPENCV_XFEATURES2D
 	return trainer->descriptorsCount();
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 void cveBOWKMeansTrainerAdd(cv::xfeatures2d::BOWKMeansTrainer* trainer, cv::Mat* descriptors)
 {
-#ifdef HAVE_OPENCV_FEATURES
+#ifdef HAVE_OPENCV_XFEATURES2D
 	trainer->add(*descriptors);
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 void cveBOWKMeansTrainerCluster(cv::xfeatures2d::BOWKMeansTrainer* trainer, cv::_OutputArray* cluster)
 {
-#ifdef HAVE_OPENCV_FEATURES
+#ifdef HAVE_OPENCV_XFEATURES2D
 	cv::Mat m = trainer->cluster();
 	m.copyTo(*cluster);
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 
 //BOWImgDescriptorExtractor
 cv::xfeatures2d::BOWImgDescriptorExtractor* cveBOWImgDescriptorExtractorCreate(cv::Feature2D* descriptorExtractor, cv::DescriptorMatcher* descriptorMatcher)
 {
-#ifdef HAVE_OPENCV_FEATURES
+#ifdef HAVE_OPENCV_XFEATURES2D
 	cv::Ptr<cv::Feature2D> extractorPtr(descriptorExtractor, [](cv::Feature2D*) {});
 
 	cv::Ptr<cv::DescriptorMatcher> matcherPtr(descriptorMatcher, [](cv::DescriptorMatcher*) {});
 
 	return new cv::xfeatures2d::BOWImgDescriptorExtractor(extractorPtr, matcherPtr);
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 void cveBOWImgDescriptorExtractorRelease(cv::xfeatures2d::BOWImgDescriptorExtractor** descriptorExtractor)
 {
-#ifdef HAVE_OPENCV_FEATURES
+#ifdef HAVE_OPENCV_XFEATURES2D
 	delete* descriptorExtractor;
 	*descriptorExtractor = 0;
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 void cveBOWImgDescriptorExtractorSetVocabulary(cv::xfeatures2d::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::Mat* vocabulary)
 {
-#ifdef HAVE_OPENCV_FEATURES
+#ifdef HAVE_OPENCV_XFEATURES2D
 	bowImgDescriptorExtractor->setVocabulary(*vocabulary);
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 void cveBOWImgDescriptorExtractorCompute(cv::xfeatures2d::BOWImgDescriptorExtractor* bowImgDescriptorExtractor, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* imgDescriptor)
 {
-#ifdef HAVE_OPENCV_FEATURES
+#ifdef HAVE_OPENCV_XFEATURES2D
 	bowImgDescriptorExtractor->compute(*image, *keypoints, *imgDescriptor);
 #else
-	throw_no_features();
+	throw_no_xfeatures2d();
 #endif
 }
 

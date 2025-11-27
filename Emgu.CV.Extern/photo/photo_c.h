@@ -35,10 +35,10 @@ namespace cv
 
 	namespace ccm {
 		class ColorCorrectionModel {};
-		enum CCM_TYPE {};
-		enum DISTANCE_TYPE {};
-		enum LINEAR_TYPE {};
-		enum COLOR_SPACE {};
+		enum CcmType {};
+		enum DistanceType {};
+		enum LinearizationType {};
+		enum ColorSpace {};
 	}
 }
 

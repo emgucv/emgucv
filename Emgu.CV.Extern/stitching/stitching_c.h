@@ -8,8 +8,11 @@
 #ifndef EMGU_STITCHING_C_H
 #define EMGU_STITCHING_C_H
 
-#include "opencv2/core/core.hpp"
-#include "cvapi_compat.h"
+//#include "opencv2/core/core.hpp"
+//#include "cvapi_compat.h"
+
+#include "features_c.h"
+
 #ifdef HAVE_OPENCV_STITCHING
 
 #include "opencv2/stitching.hpp"
@@ -30,7 +33,7 @@ static inline CV_NORETURN void throw_no_stitching() { CV_Error(cv::Error::StsBad
 namespace cv
 {
 	class Stitcher {};
-	class Feature2D {};
+	//class Feature2D {};
 	class WarperCreator {};
 	class PlaneWarper {};
 	class CylindricalWarper {};

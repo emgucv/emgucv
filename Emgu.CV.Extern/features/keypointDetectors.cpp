@@ -466,11 +466,15 @@ void cveDescriptorMatcherRadiusMatch2(
 cv::FlannBasedMatcher* cveFlannBasedMatcherCreate(cv::flann::IndexParams* indexParams, cv::flann::SearchParams* searchParams, cv::DescriptorMatcher** m)
 {
 #ifdef HAVE_OPENCV_FEATURES
+#ifdef HAVE_OPENCV_FLANN
 	cv::Ptr<cv::flann::IndexParams> ip(indexParams, [](cv::flann::IndexParams*){});
 	cv::Ptr<cv::flann::SearchParams> sp(searchParams, [](cv::flann::SearchParams*) {});
 	cv::FlannBasedMatcher* matcher = new cv::FlannBasedMatcher(ip, sp);
 	*m = dynamic_cast<cv::DescriptorMatcher*>(matcher);
 	return matcher;
+#else 
+	throw_no_flann();
+#endif
 #else
 	throw_no_features();
 #endif
