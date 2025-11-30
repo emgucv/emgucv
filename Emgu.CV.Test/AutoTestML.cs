@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging.Effects;
+//using System.Drawing.Imaging.Effects;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
