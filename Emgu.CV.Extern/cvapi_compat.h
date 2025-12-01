@@ -6,6 +6,7 @@
 #  define CV_EXTERN_C
 #endif
 
+/*
 #if defined(_WIN32) || defined(WINCE) || defined(__CYGWIN__)
 #  define CV_EXPORTS __declspec(dllexport)
 #elif defined(__GNUC__) && __GNUC__ >= 4
@@ -13,6 +14,7 @@
 #else
 #  define CV_EXPORTS
 #endif
+*/
 
 #ifndef CVAPI
 #  define CVAPI(rettype) CV_EXTERN_C CV_EXPORTS rettype
