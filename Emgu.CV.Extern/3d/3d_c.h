@@ -203,10 +203,30 @@ CVAPI(cv::Octree*) cveOctreeCreate();
 CVAPI(bool) cveOctreeCreate2(cv::Octree*  octree, std::vector< cv::Point3f >* pointCloud, int maxDepth);
 CVAPI(void) cveOctreeRelease(cv::Octree** octree);
 
-CVAPI(void) cveLoadPointCloud(cv::String* filename, cv::_OutputArray* vertices, cv::_OutputArray* normals);
-CVAPI(void) cveSavePointCloud(cv::String* filename, cv::_InputArray* vertices, cv::_InputArray* normals);
-CVAPI(void) cveLoadMesh(cv::String* filename, cv::_OutputArray* vertices, cv::_OutputArray* normals, cv::_OutputArray* indices);
-CVAPI(void) cveSaveMesh(cv::String* filename, cv::_InputArray* vertices, cv::_InputArray* normals, cv::_InputArray* indices);
+CVAPI(void) cveLoadPointCloud(
+	cv::String* filename, 
+	cv::_OutputArray* vertices, 
+	cv::_OutputArray* normals, 
+	cv::_OutputArray* rgb);
+CVAPI(void) cveSavePointCloud(
+	cv::String* filename, 
+	cv::_InputArray* vertices, 
+	cv::_InputArray* normals, 
+	cv::_InputArray* rgb);
+CVAPI(void) cveLoadMesh(
+	cv::String* filename,
+	cv::_OutputArray* vertices,
+	cv::_OutputArray* indices,
+	cv::_OutputArray* normals,
+	cv::_OutputArray* colors,
+	cv::_OutputArray* texCoords);
+CVAPI(void) cveSaveMesh(
+	cv::String* filename,
+	cv::_InputArray* vertices,
+	cv::_InputArray* indices,
+	cv::_InputArray* normals,
+	cv::_InputArray* colors,
+	cv::_InputArray* texCoords);
 
 CVAPI(void) cveDrawFrameAxes(
 	cv::_InputOutputArray* image, 

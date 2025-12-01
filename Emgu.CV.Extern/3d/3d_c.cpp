@@ -352,7 +352,7 @@ cv::RgbdNormals* cveRgbdNormalsCreate(
 		depth,
 		*K,
 		window_size,
-		(cv::RgbdNormals::RgbdNormalsMethod) method);
+		(cv::RgbdNormals::RgbdNormalsMethod)method);
 	*sharedPtr = new cv::Ptr<cv::RgbdNormals>(odometry);
 	*algorithm = dynamic_cast<cv::Algorithm*>((*sharedPtr)->get());
 	return (*sharedPtr)->get();
@@ -506,13 +506,13 @@ void cveEstimateAffinePartial2D(
 }
 
 void cveInitUndistortRectifyMap(
-	cv::_InputArray* cameraMatrix, 
-	cv::_InputArray* distCoeffs, 
-	cv::_InputArray* r, 
-	cv::_InputArray* newCameraMatrix, 
-	cv::Size* size, 
-	int m1type, 
-	cv::_OutputArray* map1, 
+	cv::_InputArray* cameraMatrix,
+	cv::_InputArray* distCoeffs,
+	cv::_InputArray* r,
+	cv::_InputArray* newCameraMatrix,
+	cv::Size* size,
+	int m1type,
+	cv::_OutputArray* map1,
 	cv::_OutputArray* map2)
 {
 #ifdef HAVE_OPENCV_3D
@@ -626,34 +626,69 @@ void cveOctreeRelease(cv::Octree** octree)
 #endif
 }
 
-void cveLoadPointCloud(cv::String* filename, cv::_OutputArray* vertices, cv::_OutputArray* normals)
+void cveLoadPointCloud(cv::String* filename, cv::_OutputArray* vertices, cv::_OutputArray* normals, cv::_OutputArray* rgb)
 {
 #ifdef HAVE_OPENCV_3D
-	cv::loadPointCloud(*filename, *vertices, normals ? *normals : static_cast<cv::OutputArray>(cv::noArray()));
+	cv::loadPointCloud(
+		*filename,
+		*vertices,
+		normals ? *normals : static_cast<cv::OutputArray>(cv::noArray()),
+		rgb ? *rgb : static_cast<cv::OutputArray>(cv::noArray())
+	);
 #else
 	throw_no_3d();
 #endif
 }
-void cveSavePointCloud(cv::String* filename, cv::_InputArray* vertices, cv::_InputArray* normals)
+void cveSavePointCloud(cv::String* filename, cv::_InputArray* vertices, cv::_InputArray* normals, cv::_InputArray* rgb)
 {
 #ifdef HAVE_OPENCV_3D
-	cv::savePointCloud(*filename, *vertices, normals ? *normals : static_cast<cv::InputArray>(cv::noArray()));
+	cv::savePointCloud(
+		*filename,
+		*vertices,
+		normals ? *normals : static_cast<cv::InputArray>(cv::noArray()),
+		rgb ? *rgb : static_cast<cv::InputArray>(cv::noArray())
+	);
 #else
 	throw_no_3d();
 #endif
 }
-void cveLoadMesh(cv::String* filename, cv::_OutputArray* vertices, cv::_OutputArray* normals, cv::_OutputArray* indices)
+void cveLoadMesh(
+	cv::String* filename,
+	cv::_OutputArray* vertices,
+	cv::_OutputArray* indices,
+	cv::_OutputArray* normals,
+	cv::_OutputArray* colors,
+	cv::_OutputArray* texCoords)
 {
 #ifdef HAVE_OPENCV_3D
-	cv::loadMesh(*filename, *vertices, *normals, indices? *indices : static_cast<cv::OutputArray>(cv::noArray()));
+	cv::loadMesh(
+		*filename,
+		*vertices,
+		*indices,
+		normals ? *normals : static_cast<cv::OutputArray>(cv::noArray()),
+		colors ? *colors : static_cast<cv::OutputArray>(cv::noArray()),
+		texCoords ? *texCoords : static_cast<cv::OutputArray>(cv::noArray()));
 #else
 	throw_no_3d();
 #endif
 }
-void cveSaveMesh(cv::String* filename, cv::_InputArray* vertices, cv::_InputArray* normals, cv::_InputArray* indices)
+void cveSaveMesh(
+	cv::String* filename,
+	cv::_InputArray* vertices,
+	cv::_InputArray* indices,
+	cv::_InputArray* normals,
+	cv::_InputArray* colors,
+	cv::_InputArray* texCoords)
 {
 #ifdef HAVE_OPENCV_3D
-	cv::saveMesh(*filename, *vertices, *normals, indices ? *indices : static_cast<cv::InputArray>(cv::noArray()));
+	cv::saveMesh(
+		*filename,
+		*vertices,
+		*indices,
+		normals ? *normals : static_cast<cv::InputArray>(cv::noArray()),
+		colors ? *colors : static_cast<cv::InputArray>(cv::noArray()),
+		texCoords ? *texCoords : static_cast<cv::InputArray>(cv::noArray())
+	);
 #else
 	throw_no_3d();
 #endif
@@ -671,7 +706,7 @@ void cveDrawFrameAxes(
 {
 #ifdef HAVE_OPENCV_3D
 	return cv::drawFrameAxes(
-		*image, 
+		*image,
 		*cameraMatrix,
 		*distCoeffs,
 		*rvec,
