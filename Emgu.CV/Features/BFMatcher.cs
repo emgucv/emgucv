@@ -76,7 +76,7 @@ namespace Emgu.CV.Features
         /// <param name="crossCheck">Specify whether or not cross check is needed. Use false for default.</param>
         public BFMatcher(DistanceType distanceType, bool crossCheck = false)
         {
-            _ptr = Features2DInvoke.cveBFMatcherCreate(distanceType, crossCheck, ref _descriptorMatcherPtr);
+            _ptr = FeaturesInvoke.cveBFMatcherCreate(distanceType, crossCheck, ref _descriptorMatcherPtr);
         }
 
         /// <summary>
@@ -85,13 +85,13 @@ namespace Emgu.CV.Features
         protected override void DisposeObject()
         {
             if (IntPtr.Zero != _ptr)
-                Features2DInvoke.cveBFMatcherRelease(ref _ptr);
+                FeaturesInvoke.cveBFMatcherRelease(ref _ptr);
             base.DisposeObject();
         }
     }
 
 
-    public static partial class Features2DInvoke
+    public static partial class FeaturesInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveBFMatcherCreate(

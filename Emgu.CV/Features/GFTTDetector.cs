@@ -29,7 +29,7 @@ namespace Emgu.CV.Features
         /// <param name="k">K</param>
         public GFTTDetector(int maxCorners = 1000, double qualityLevel = 0.01, double minDistance = 1, int blockSize = 3, bool useHarrisDetector = false, double k = 0.04)
         {
-            _ptr = Features2DInvoke.cveGFTTDetectorCreate(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k, ref _feature2D, ref _sharedPtr);
+            _ptr = FeaturesInvoke.cveGFTTDetectorCreate(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k, ref _feature2D, ref _sharedPtr);
         }
 
         /// <summary>
@@ -38,13 +38,13 @@ namespace Emgu.CV.Features
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                Features2DInvoke.cveGFTTDetectorRelease(ref _sharedPtr);
+                FeaturesInvoke.cveGFTTDetectorRelease(ref _sharedPtr);
 
             base.DisposeObject();
         }
     }
 
-    public static partial class Features2DInvoke
+    public static partial class FeaturesInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveGFTTDetectorCreate(

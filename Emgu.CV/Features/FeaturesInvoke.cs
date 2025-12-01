@@ -9,11 +9,11 @@ using System.Text;
 namespace Emgu.CV.Features
 {
    /// <summary>
-   /// Library to invoke Features2D functions
+   /// Library to invoke Features functions
    /// </summary>
-   public static partial class Features2DInvoke
+   public static partial class FeaturesInvoke
    {
-      static Features2DInvoke()
+      static FeaturesInvoke()
       {
          CvInvoke.Init();
       }

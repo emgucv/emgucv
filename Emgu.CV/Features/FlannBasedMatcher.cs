@@ -23,7 +23,7 @@ namespace Emgu.CV.Features
         /// <param name="search">The search parameters</param>
         public FlannBasedMatcher(IIndexParams indexParams, SearchParams search)
         {
-            _ptr = Features2DInvoke.cveFlannBasedMatcherCreate(indexParams.IndexParamPtr, search.Ptr, ref _descriptorMatcherPtr);
+            _ptr = FeaturesInvoke.cveFlannBasedMatcherCreate(indexParams.IndexParamPtr, search.Ptr, ref _descriptorMatcherPtr);
         }
 
         /// <summary>
@@ -32,12 +32,12 @@ namespace Emgu.CV.Features
         protected override void DisposeObject()
         {
             if (_ptr != IntPtr.Zero)
-                Features2DInvoke.cveFlannBasedMatcherRelease(ref _ptr);
+                FeaturesInvoke.cveFlannBasedMatcherRelease(ref _ptr);
             base.DisposeObject();
         }
     }
 
-    public static partial class Features2DInvoke
+    public static partial class FeaturesInvoke
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

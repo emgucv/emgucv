@@ -342,14 +342,14 @@ namespace Emgu.CV.Test
                         Mat mask = new Mat(matches.Size, 1, DepthType.Cv8U, 1);
                         mask.SetTo(new MCvScalar(255));
                         //mask.SetValue(255);
-                        Features2DToolbox.VoteForUniqueness(matches, 0.8, mask);
+                        FeaturesToolbox.VoteForUniqueness(matches, 0.8, mask);
 
                         int nonZeroCount = CvInvoke.CountNonZero(mask);
                         if (nonZeroCount >= 4)
                         {
-                            nonZeroCount = Features2DToolbox.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, matches, mask, 1.5, 20);
+                            nonZeroCount = FeaturesToolbox.VoteForSizeAndOrientation(modelKeypoints, observedKeypoints, matches, mask, 1.5, 20);
                             if (nonZeroCount >= 4)
-                                homography = Features2DToolbox.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, matches, mask, 2);
+                                homography = FeaturesToolbox.GetHomographyMatrixFromMatchedFeatures(modelKeypoints, observedKeypoints, matches, mask, 2);
                         }
                     }
                     stopwatch.Stop();

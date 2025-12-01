@@ -48,7 +48,7 @@ namespace Emgu.CV.Features
         /// <param name="type">One of the three neighborhoods as defined in the paper</param>
         public FastFeatureDetector(int threshold = 10, bool nonmaxSupression = true, DetectorType type = DetectorType.Type9_16)
         {
-            _ptr = Features2DInvoke.cveFASTFeatureDetectorCreate(threshold, nonmaxSupression, type, ref _feature2D, ref _sharedPtr);
+            _ptr = FeaturesInvoke.cveFASTFeatureDetectorCreate(threshold, nonmaxSupression, type, ref _feature2D, ref _sharedPtr);
         }
 
         /// <summary>
@@ -57,14 +57,14 @@ namespace Emgu.CV.Features
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                Features2DInvoke.cveFASTFeatureDetectorRelease(ref _sharedPtr);
+                FeaturesInvoke.cveFASTFeatureDetectorRelease(ref _sharedPtr);
 
             base.DisposeObject();
         }
 
     }
 
-    public static partial class Features2DInvoke
+    public static partial class FeaturesInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveFASTFeatureDetectorCreate(

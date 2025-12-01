@@ -16,9 +16,9 @@ using Emgu.Util;
 namespace Emgu.CV.Features
 {
     /// <summary>
-    /// Tools for features 2D
+    /// Tools for features module
     /// </summary>
-    public static class Features2DToolbox
+    public static class FeaturesToolbox
     {
         /// <summary>
         /// Draw the keypoints found on the image.
@@ -33,12 +33,12 @@ namespace Emgu.CV.Features
            VectorOfKeyPoint keypoints,
            IInputOutputArray outImage,
            Bgr color,
-           Features2DToolbox.KeypointDrawType type = KeypointDrawType.Default)
+           FeaturesToolbox.KeypointDrawType type = KeypointDrawType.Default)
         {
             MCvScalar c = color.MCvScalar;
             using (InputArray iaImage = image.GetInputArray())
             using (InputOutputArray ioaOutImage = outImage.GetInputOutputArray())
-                Features2DInvoke.cveDrawKeypoints(iaImage, keypoints, ioaOutImage, ref c, type);
+                FeaturesInvoke.cveDrawKeypoints(iaImage, keypoints, ioaOutImage, ref c, type);
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Emgu.CV.Features
             using (InputArray iaModelImage = modelImage.GetInputArray())
             using (InputArray iaObservedImage = observedImage.GetInputArray())
             using (InputOutputArray ioaResult = result.GetInputOutputArray())
-                Features2DInvoke.cveDrawMatchedFeatures2(
+                FeaturesInvoke.cveDrawMatchedFeatures2(
                     iaObservedImage,
                     observedKeyPoints,
                     iaModelImage,
@@ -110,7 +110,7 @@ namespace Emgu.CV.Features
             using (InputArray iaModelImage = modelImage.GetInputArray())
             using (InputArray iaObservedImage = observedImage.GetInputArray())
             using (InputOutputArray ioaResult = result.GetInputOutputArray())
-                Features2DInvoke.cveDrawMatchedFeatures1(iaObservedImage, observedKeyPoints, iaModelImage,
+                FeaturesInvoke.cveDrawMatchedFeatures1(iaObservedImage, observedKeyPoints, iaModelImage,
                modelKeypoints, matches, ioaResult, ref matchColor, ref singlePointColor, mask, flags);
         }
 
@@ -143,7 +143,7 @@ namespace Emgu.CV.Features
             using (InputArray iaObservedImage = observedImage.GetInputArray())
             using (InputOutputArray ioaResult = result.GetInputOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-                Features2DInvoke.cveDrawMatchedFeatures3(iaObservedImage, observedKeyPoints, iaModelImage,
+                FeaturesInvoke.cveDrawMatchedFeatures3(iaObservedImage, observedKeyPoints, iaModelImage,
                modelKeypoints, matches, ioaResult, ref matchColor, ref singlePointColor, iaMask, flags);
         }
 
@@ -189,7 +189,7 @@ namespace Emgu.CV.Features
             double scaleIncrement,
             int rotationBins)
         {
-            return Features2DInvoke.cveVoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, matches, mask, scaleIncrement,
+            return FeaturesInvoke.cveVoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, matches, mask, scaleIncrement,
                rotationBins);
         }
 
@@ -217,7 +217,7 @@ namespace Emgu.CV.Features
             double ransacReprojThreshold)
         {
             Mat homography = new Mat();
-            bool found = Features2DInvoke.cveGetHomographyMatrixFromMatchedFeatures(model, observed, matches, mask,
+            bool found = FeaturesInvoke.cveGetHomographyMatrixFromMatchedFeatures(model, observed, matches, mask,
                ransacReprojThreshold, homography);
             if (found)
             {
@@ -259,7 +259,7 @@ namespace Emgu.CV.Features
         }
     }
 
-    public static partial class Features2DInvoke
+    public static partial class FeaturesInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
@@ -279,7 +279,7 @@ namespace Emgu.CV.Features
            ref MCvScalar matchColor,
            ref MCvScalar singlePointColor,
            IntPtr matchesMask,
-           Features.Features2DToolbox.KeypointDrawType flags);
+           Features.FeaturesToolbox.KeypointDrawType flags);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDrawMatchedFeatures2(
@@ -292,7 +292,7 @@ namespace Emgu.CV.Features
             ref MCvScalar matchColor,
             ref MCvScalar singlePointColor,
             IntPtr matchesMask,
-            Features.Features2DToolbox.KeypointDrawType flags);
+            Features.FeaturesToolbox.KeypointDrawType flags);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDrawMatchedFeatures3(
@@ -305,7 +305,7 @@ namespace Emgu.CV.Features
             ref MCvScalar matchColor,
             ref MCvScalar singlePointColor,
             IntPtr matchesMask,
-            Features.Features2DToolbox.KeypointDrawType flags);
+            Features.FeaturesToolbox.KeypointDrawType flags);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDrawKeypoints(
@@ -313,7 +313,7 @@ namespace Emgu.CV.Features
                             IntPtr vectorOfKeypoints,
                             IntPtr outImage,
                             ref MCvScalar color,
-                            Features.Features2DToolbox.KeypointDrawType flags);
+                            Features.FeaturesToolbox.KeypointDrawType flags);
 
 
     }

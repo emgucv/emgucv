@@ -31,7 +31,7 @@ namespace Emgu.CV.Features
            double contrastThreshold = 0.04, double edgeThreshold = 10.0,
            double sigma = 1.6)
         {
-            _ptr = Features2DInvoke.cveSIFTCreate(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma,
+            _ptr = FeaturesInvoke.cveSIFTCreate(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma,
                ref _feature2D, ref _sharedPtr);
         }
 
@@ -41,12 +41,12 @@ namespace Emgu.CV.Features
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                Features2DInvoke.cveSIFTRelease(ref _sharedPtr);
+                FeaturesInvoke.cveSIFTRelease(ref _sharedPtr);
             base.DisposeObject();
         }
     }
 
-    public static partial class Features2DInvoke
+    public static partial class FeaturesInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveSIFTCreate(

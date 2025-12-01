@@ -24,10 +24,10 @@ namespace Emgu.CV.Features
         public SimpleBlobDetector(SimpleBlobDetectorParams parameters = null)
         {
             if (parameters == null)
-                _ptr = Features2DInvoke.cveSimpleBlobDetectorCreate(ref _feature2D, ref _sharedPtr);
+                _ptr = FeaturesInvoke.cveSimpleBlobDetectorCreate(ref _feature2D, ref _sharedPtr);
             else
             {
-                _ptr = Features2DInvoke.cveSimpleBlobDetectorCreateWithParams(ref _feature2D, parameters, ref _sharedPtr);
+                _ptr = FeaturesInvoke.cveSimpleBlobDetectorCreateWithParams(ref _feature2D, parameters, ref _sharedPtr);
             }
         }
 
@@ -39,7 +39,7 @@ namespace Emgu.CV.Features
         /// </returns>
         public VectorOfVectorOfPoint GetBlobContours()
         {
-            return new VectorOfVectorOfPoint(Features2DInvoke.cveSimpleBlobDetectorGetBlobContours(_ptr), false);
+            return new VectorOfVectorOfPoint(FeaturesInvoke.cveSimpleBlobDetectorGetBlobContours(_ptr), false);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Emgu.CV.Features
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                Features2DInvoke.cveSimpleBlobDetectorRelease(ref _sharedPtr);
+                FeaturesInvoke.cveSimpleBlobDetectorRelease(ref _sharedPtr);
 
             base.DisposeObject();
         }
@@ -64,7 +64,7 @@ namespace Emgu.CV.Features
         /// </summary>
         public SimpleBlobDetectorParams()
         {
-            _ptr = Features2DInvoke.cveSimpleBlobDetectorParamsCreate();
+            _ptr = FeaturesInvoke.cveSimpleBlobDetectorParamsCreate();
         }
 
         /// <summary>
@@ -74,12 +74,12 @@ namespace Emgu.CV.Features
         {
             if (_ptr != IntPtr.Zero)
             {
-                Features2DInvoke.cveSimpleBlobDetectorParamsRelease(ref _ptr);
+                FeaturesInvoke.cveSimpleBlobDetectorParamsRelease(ref _ptr);
             }
         }
     }
 
-    public static partial class Features2DInvoke
+    public static partial class FeaturesInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveSimpleBlobDetectorCreate(ref IntPtr feature2DPtr, ref IntPtr sharedPtr);

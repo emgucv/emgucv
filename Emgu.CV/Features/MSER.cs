@@ -32,7 +32,7 @@ namespace Emgu.CV.Features
            int delta = 5, int minArea = 60, int maxArea = 14400, double maxVariation = 0.25, double minDiversity = 0.2,
            int maxEvolution = 200, double areaThreshold = 1.01, double minMargin = 0.003, int edgeBlurSize = 5)
         {
-            _ptr = Features2DInvoke.cveMserCreate(
+            _ptr = FeaturesInvoke.cveMserCreate(
                delta,
                minArea,
                maxArea,
@@ -52,7 +52,7 @@ namespace Emgu.CV.Features
         protected override void DisposeObject()
         {
             if (_sharedPtr != IntPtr.Zero)
-                Features2DInvoke.cveMserRelease(ref _sharedPtr);
+                FeaturesInvoke.cveMserRelease(ref _sharedPtr);
             base.DisposeObject();
         }
 
@@ -65,11 +65,11 @@ namespace Emgu.CV.Features
         public void DetectRegions(IInputArray image, VectorOfVectorOfPoint msers, VectorOfRect bboxes)
         {
             using (InputArray iaImage = image.GetInputArray())
-                Features2DInvoke.cveMserDetectRegions(_ptr, iaImage, msers, bboxes);
+                FeaturesInvoke.cveMserDetectRegions(_ptr, iaImage, msers, bboxes);
         }
     }
 
-    public static partial class Features2DInvoke
+    public static partial class FeaturesInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveMserCreate(

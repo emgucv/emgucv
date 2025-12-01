@@ -12,7 +12,7 @@ using Emgu.CV.Util;
 using Emgu.Util;
 using Emgu.CV.Features;
 
-namespace Emgu.CV.Features
+namespace Emgu.CV.XFeatures2D
 {
    /// <summary>
    /// Class to compute an image descriptor using the bag of visual words. Such a computation consists of the following

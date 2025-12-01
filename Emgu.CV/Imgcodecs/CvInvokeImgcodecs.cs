@@ -232,11 +232,14 @@ namespace Emgu.CV
 
 
         /// <summary>
-        /// Saves the image to the specified file. The function imwrite saves the image to the specified file. The image format is chosen based on the filename extension (see cv::imread for the list of extensions).
+        /// Saves the image to the specified file.
+        /// The function imwriteWithMetadata saves the image to the specified file. It does the same thing as imwrite, but additionally writes metadata if the corresponding format supports it.
         /// </summary>
-        /// <param name="filename">The name of the file to be saved to</param>
-        /// <param name="image">The image to be saved</param>
-        /// <param name="parameters">The parameters</param>
+        /// <param name="filename">Name of the file. As with imwrite, image format is determined by the file extension.</param>
+        /// <param name="image"> Image or Images to be saved.</param>
+        /// <param name="parameters">Format-specific parameters encoded as pairs (paramId_1, paramValue_1, paramId_2, paramValue_2, ... .)</param>
+        /// <param name="metadataTypes">Vector with types of metadata chucks stored in metadata to write, see ImageMetadataType.</param>
+        /// <param name="metaData">Vector of vectors or vector of matrices with chunks of metadata to store into the file</param>
         /// <remarks>In general, only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function, with these exceptions:
         /// 16-bit unsigned(CV_16U) images can be saved in the case of PNG, JPEG 2000, and TIFF formats
         /// 32-bit float (CV_32F) images can be saved in PFM, TIFF, OpenEXR, and Radiance HDR formats; 3-channel(CV_32FC3) TIFF images will be saved using the LogLuv high dynamic range encoding(4 bytes per pixel)
