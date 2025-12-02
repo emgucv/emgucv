@@ -2797,9 +2797,9 @@ ELSEIF (APPLE)
   
   INSTALL(
     FILES
-    "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_frontalface_default.xml"
-    "${OPENCV_SUBFOLDER}/data/haarcascades/haarcascade_eye.xml"
-    DESTINATION opencv/data/haarcascades
+    "${OPENCV_EXTRA_SUBFOLDER}/testdata/cv/cascadeandhog/cascades/haarcascade_frontalface_default.xml"
+    "${OPENCV_EXTRA_SUBFOLDER}/testdata/cv/cascadeandhog/cascades/haarcascade_eye.xml"
+    DESTINATION opencv_extra/test_data/cv/cascadeandhog/cascades
     COMPONENT emgucv_example_source
     )
   
