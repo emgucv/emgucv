@@ -6,9 +6,8 @@
   <PropertyGroup>
 	<TargetFrameworks>net${DOTNET_VERSION_MAJOR}.0-android</TargetFrameworks>
     <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\))</EmguCVProjectRoot>
-  
+    <AcceptAndroidSDKLicenses>true</AcceptAndroidSDKLicenses>
     <PackageId>${EMGUCV_MAUI_ANDROID_NUGET_ID}</PackageId>
-	
 	<title>${EMGUCV_MAUI_ANDROID_NUGET_TITLE}</title>
     <version>${CPACK_PACKAGE_VERSION}</version>
     <authors>${CPACK_PACKAGE_VENDOR}</authors>
