@@ -15,6 +15,14 @@ using System.Runtime.InteropServices.ComTypes;
 
 namespace Emgu.CV.Aruco
 {
+    /// <summary>
+    /// Represents a detector for ChArUco boards, which combines ArUco markers and chessboard corners
+    /// to improve the accuracy of pose estimation and marker detection.
+    /// </summary>
+    /// <remarks>
+    /// This class provides functionality to detect ChArUco boards and diamonds in images.
+    /// It utilizes parameters for marker detection, ChArUco-specific settings, and refinement options.
+    /// </remarks>
     public class CharucoDetector : UnmanagedObject, IAlgorithm
     {
         
@@ -28,26 +36,40 @@ namespace Emgu.CV.Aruco
             get { return _algorithmPtr; }
         }
 
+        /// <summary>
+        /// Basic CharucoDetector constructor.
+        /// </summary>
+        /// <param name="board">ChAruco board</param>
+        /// <param name="charucoParameters">Charuco detection parameters</param>
+        /// <param name="detectorParams">Marker detection parameters</param>
+        /// <param name="refineParams">Marker refine detection parameters</param>
         public CharucoDetector(
-            Dictionary dictionary,
+            CharucoBoard board,
             CharucoParameters charucoParameters,
             DetectorParameters detectorParams,
             RefineParameters refineParams)
         {
             _ptr = ObjdetectInvoke.cveCharucoDetectorCreate(
-                dictionary,
+                board,
                 charucoParameters,
                 ref detectorParams,
                 ref refineParams,
                 ref _algorithmPtr);
         }
 
-
+        /// <summary>
+        /// Detect ChArUco Diamond markers.
+        /// </summary>
+        /// <param name="image">Input image necessary for corner subpixel.</param>
+        /// <param name="diamondCorners">Output list of detected diamond corners (4 corners per diamond). The order is the same than in marker corners: top left, top right, bottom right and bottom left. Similar format than the corners returned by detectMarkers </param>
+        /// <param name="diamondIds">Ids of the diamonds in diamondCorners. The id of each diamond is in fact of type Vec4i, so each diamond has 4 ids, which are the ids of the aruco markers composing the diamond.</param>
+        /// <param name="markerCorners">List of detected marker corners from detectMarkers function. If markerCorners and markerCorners are empty, the function detect aruco markers and ids.</param>
+        /// <param name="markerIds">List of marker ids in markerCorners. If markerCorners and markerCorners are empty, the function detect aruco markers and ids.</param>
         public void DetectDiamonds(
             IInputArray image,
-            IOutputArray diamondCorners,
+            IOutputArrayOfArrays diamondCorners,
             IOutputArray diamondIds,
-            IInputOutputArray markerCorners,
+            IInputOutputArrayOfArrays markerCorners,
             IInputOutputArray markerIds)
         {
             using (InputArray iaImage = image.GetInputArray())

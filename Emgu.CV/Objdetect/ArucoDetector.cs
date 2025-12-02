@@ -36,6 +36,12 @@ namespace Emgu.CV.Aruco
             get { return _algorithmPtr; }
         }
 
+        /// <summary>
+        /// Basic ArucoDetector constructor.
+        /// </summary>
+        /// <param name="dictionary">Indicates the type of markers that will be searched</param>
+        /// <param name="detectorParams">Marker detection parameters</param>
+        /// <param name="refineParams">Marker refine detection parameters</param>
         public ArucoDetector(
             Dictionary dictionary,
             DetectorParameters detectorParams,
@@ -59,8 +65,7 @@ namespace Emgu.CV.Aruco
            IInputArray image,
            IOutputArrayOfArrays corners,
            IOutputArray ids,
-           IOutputArrayOfArrays rejectedImgPoints = null
-           )
+           IOutputArrayOfArrays rejectedImgPoints = null)
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaCorners = corners.GetOutputArray())

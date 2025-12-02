@@ -15,6 +15,9 @@ using Emgu.CV.CvEnum;
 
 namespace Emgu.CV.Dnn
 {
+    /// <summary>
+    /// Specifies the type of deep neural network (DNN) engine to be used for processing.
+    /// </summary>
     public enum EngineType
     {
         /// <summary>

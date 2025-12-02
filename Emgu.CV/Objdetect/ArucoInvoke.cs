@@ -573,9 +573,23 @@ namespace Emgu.CV.Aruco
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveArucoBoardGenerateImage(IntPtr board, ref Size outSize, IntPtr img, int marginSize, int borderBits);
 
-
-        public static void MatchImagePoints(this IBoard board, IInputArrayOfArrays detectedCorners, IInputArray detectedIds,
-            IOutputArray objPoints, IOutputArray imgPoints)
+        /// <summary>
+        /// Given a board configuration and a set of detected markers, returns the corresponding image points and object points, can be used in solvePnP()
+        /// </summary>
+        /// <param name="board">The aruco board</param>
+        /// <param name="detectedCorners">
+        /// List of detected marker corners of the board.
+        /// For cv::Board and cv::GridBoard the method expects VectorOfVectorOfPointF or VectorOfMat with Aruco marker corners.
+        /// For cv::CharucoBoard the method expects VectorOfPointF or Mat with ChAruco corners (chess board corners matched with Aruco markers)</param>
+        /// <param name="detectedIds"></param>
+        /// <param name="objPoints"></param>
+        /// <param name="imgPoints"></param>
+        public static void MatchImagePoints(
+            this IBoard board, 
+            IInputArrayOfArrays detectedCorners, 
+            IInputArray detectedIds,
+            IOutputArray objPoints, 
+            IOutputArray imgPoints)
         {
             using (var iaDetectedCorners = detectedCorners.GetInputArray())
             using (var iaDetectedIds = detectedIds.GetInputArray())
