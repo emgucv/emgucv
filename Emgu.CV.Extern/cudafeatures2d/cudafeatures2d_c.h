@@ -15,7 +15,7 @@
 #ifdef HAVE_OPENCV_CUDAFEATURES2D
 #include "opencv2/cudafeatures2d.hpp"
 #include "opencv2/core/cuda.hpp"
-#include "opencv2/core/types_c.h"
+//#include "opencv2/core/types_c.h"
 #include "emgu_c.h"
 #else
 

@@ -16,7 +16,7 @@
 //#include "opencv2/cuda.hpp"
 #include "opencv2/cudalegacy.hpp"
 #include "opencv2/core/cuda.hpp"
-#include "opencv2/core/types_c.h"
+//#include "opencv2/core/types_c.h"
 #include "emgu_c.h"
 #else
 static inline CV_NORETURN void throw_no_cudalegacy() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Legacy support. To use this module, please switch to the Emgu CV runtime with CUDA support."); }

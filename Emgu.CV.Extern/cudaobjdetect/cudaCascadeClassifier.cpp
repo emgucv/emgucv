@@ -91,8 +91,8 @@ void cudaCascadeClassifierGetMinObjectSize(cv::cuda::CascadeClassifier* classifi
 void cudaCascadeClassifierSetMinObjectSize(cv::cuda::CascadeClassifier* classifier, cv::Size* minObjectSize)
 {
 #ifdef HAVE_OPENCV_CUDAOBJDETECT
-   CvSize s = cvSize(minObjectSize->width, minObjectSize->height);
-   classifier->setMinObjectSize(s);
+   //CvSize s = cvSize(minObjectSize->width, minObjectSize->height);
+   classifier->setMinObjectSize(*minObjectSize);
 #else
 	throw_no_cudaobjdetect();
 #endif

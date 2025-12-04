@@ -15,7 +15,7 @@
 #ifdef HAVE_OPENCV_CUDABGSEGM
 #include "opencv2/cudabgsegm.hpp"
 #include "opencv2/core/cuda.hpp"
-#include "opencv2/core/types_c.h"
+//#include "opencv2/core/types_c.h"
 #include "emgu_c.h"
 #else
 static inline CV_NORETURN void throw_no_cudabgsegm() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA BgSegm support. To use this module, please switch to the Emgu CV runtime with CUDA support."); }

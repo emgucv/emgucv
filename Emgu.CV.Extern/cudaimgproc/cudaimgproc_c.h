@@ -16,7 +16,7 @@
 
 #include "opencv2/cudaimgproc.hpp"
 #include "opencv2/core/cuda.hpp"
-#include "opencv2/core/types_c.h"
+//#include "opencv2/core/types_c.h"
 #include "emgu_c.h"
 
 #else
