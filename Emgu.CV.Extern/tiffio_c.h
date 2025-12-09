@@ -32,7 +32,7 @@ CVAPI(void) tiffWriteImageSize(TIFF* pTiff, cv::Size* imageSize);
 
 CVAPI(void) tiffWriteImageInfo(TIFF* pTiff, int bitsPerSample, int samplesPerPixel);
 
-CVAPI(void) tiffWriteImage(TIFF* pTiff, cv::Mat mat);
+CVAPI(void) tiffWriteImage(TIFF* pTiff, cv::Mat* mat);
 
 CVAPI(void) tiffWriteTile(TIFF* pTiff, int row, int col, cv::Mat* tileImage);
 

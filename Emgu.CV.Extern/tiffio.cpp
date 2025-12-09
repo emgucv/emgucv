@@ -69,16 +69,16 @@ void tiffWriteImageInfo(TIFF* pTiff, int bitsPerSample, int samplesPerPixel)
 #endif
 }
 
-void tiffWriteImage(TIFF* pTiff, cv::Mat mat)
+void tiffWriteImage(TIFF* pTiff, cv::Mat* mat)
 {
 #ifdef EMGU_CV_WITH_TIFF
-	cv::Size imageSize = mat.size();
+	cv::Size imageSize = mat->size();
 	tiffWriteImageSize(pTiff, &imageSize);
 
 	//write scaneline image data
-	for (int row = 0; row < mat.rows; row++)
+	for (int row = 0; row < mat->rows; row++)
 	{
-		TIFFWriteScanline(pTiff, mat.ptr(row), row, 0);
+		TIFFWriteScanline(pTiff, mat->ptr(row), row, 0);
 	}
 	//end writing image data
 #else
@@ -86,16 +86,16 @@ void tiffWriteImage(TIFF* pTiff, cv::Mat mat)
 #endif
 }
 
-void tiffWriteTile(TIFF* pTiff, int row, int col, cv::Mat tile)
+void tiffWriteTile(TIFF* pTiff, int row, int col, cv::Mat* tile)
 {
 #ifdef EMGU_CV_WITH_TIFF
 
-	int bufferStride = tile.cols * tile.elemSize();
-	unsigned char* buffer = (unsigned char*)malloc(tile.rows * bufferStride);
+	int bufferStride = tile->cols * tile->elemSize();
+	unsigned char* buffer = static_cast<unsigned char*>(malloc(tile->rows * bufferStride));
 	unsigned char* ptr = buffer;
 
-	for (int i = 0; i < tile.rows; i++, ptr += bufferStride)
-		memcpy(ptr, tile.ptr(i), bufferStride);
+	for (int i = 0; i < tile->rows; i++, ptr += bufferStride)
+		memcpy(ptr, tile->ptr(i), bufferStride);
 
 	TIFFWriteTile(pTiff, buffer, col, row, 0, 0);
 	free(buffer);
