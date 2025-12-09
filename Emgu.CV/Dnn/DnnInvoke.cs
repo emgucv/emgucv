@@ -410,7 +410,6 @@ namespace Emgu.CV.Dnn
             bool isBinary,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool evaluate);
-        */
 
         /// <summary>
         /// Loads blob which was serialized as torch.Tensor object of Torch7 framework.
@@ -429,7 +428,7 @@ namespace Emgu.CV.Dnn
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveReadTorchBlob(IntPtr filename, bool isBinary, IntPtr tensor);
-
+        */
 
 
         /// <summary>

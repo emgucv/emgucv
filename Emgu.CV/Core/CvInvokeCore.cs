@@ -1573,8 +1573,7 @@ namespace Emgu.CV
         /// <returns>Pointer to the resulting sub-array header</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetDiag")]
         public static extern IntPtr cvGetDiag(IntPtr arr, IntPtr submat, int diag);
-        */
-
+        
         /// <summary>
         /// Returns number of rows (CvSize::height) and number of columns (CvSize::width) of the input matrix or image. In case of image the size of ROI is returned.
         /// </summary>
@@ -1589,7 +1588,8 @@ namespace Emgu.CV
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveGetSize(IntPtr arr, ref int width, ref int height);
-
+        */
+        
         /// <summary>
         /// Draws a simple or filled circle with given center and radius. The circle is clipped by ROI rectangle.
         /// </summary>
@@ -1941,13 +1941,15 @@ namespace Emgu.CV
 
         #endregion
 
+        /*
         /// <summary>
         /// Releases the header and the image data.
         /// </summary>
         /// <param name="image">Double pointer to the header of the deallocated image</param>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveReleaseImage")]
         public static extern void cvReleaseImage(ref IntPtr image);
-
+        */
+        
         /// <summary>
         /// Draws contours outlines or filled contours.
         /// </summary>
