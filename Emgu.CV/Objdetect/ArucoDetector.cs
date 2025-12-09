@@ -173,7 +173,7 @@ namespace Emgu.CV.Aruco
             IntPtr rejectedCorners,
             IntPtr cameraMatrix, 
             IntPtr distCoeffs,
-            IntPtr ecoveredIdxs);
+            IntPtr recoveredIdxs);
     }
 
 }

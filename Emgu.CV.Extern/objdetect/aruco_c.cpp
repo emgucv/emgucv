@@ -134,7 +134,7 @@ void cveArucoDetectorDetectMarkers(
 #endif
 }
 
-void cveArucoRefineDetectedMarkers(
+void cveArucoDetectorRefineDetectedMarkers(
 	cv::aruco::ArucoDetector* detector,
 	cv::_InputArray* image, 
 	cv::aruco::Board* board, 

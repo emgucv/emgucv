@@ -2317,6 +2317,7 @@ namespace Emgu.CV
             CvEnum.BorderType bordertype,
             ref MCvScalar value);
 
+        /*
         /// <summary>
         /// Return the particular array element
         /// </summary>
@@ -2397,7 +2398,7 @@ namespace Emgu.CV
         /// <returns>the particular element of single-channel array</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetReal3D")]
         public static extern double cvGetReal3D(IntPtr arr, int idx0, int idx1, int idx2);
-
+        */
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
@@ -3049,6 +3050,7 @@ namespace Emgu.CV
 
         #endregion
 
+        /*
         /// <summary>
         /// Fills output variables with low-level information about the array data. All output parameters are optional, so some of the pointers may be set to NULL. If the array is IplImage with ROI set, parameters of ROI are returned. 
         /// </summary>
@@ -3079,7 +3081,6 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetImage")]
         public static extern IntPtr cvGetImage(IntPtr arr, IntPtr imageHeader);
 
-        /*
         /// <summary>
         /// Checks that every array element is neither NaN nor Infinity. If CV_CHECK_RANGE is set, it also checks that every element is greater than or equal to minVal and less than maxVal. 
         /// </summary>
