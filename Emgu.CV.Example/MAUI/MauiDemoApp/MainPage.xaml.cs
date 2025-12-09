@@ -88,7 +88,7 @@ namespace MauiDemoApp
             //bool haveBarcode = (openCVConfigDict["HAVE_OPENCV_BARCODE"] != 0);
             bool haveObjdetect = (openCVConfigDict["HAVE_OPENCV_OBJDETECT"] != 0);
             bool haveTesseract = (openCVConfigDict["HAVE_EMGUCV_TESSERACT"] != 0);
-            bool haveFeatures2D = (openCVConfigDict["HAVE_OPENCV_FEATURES2D"] != 0);
+            bool haveFeatures = (openCVConfigDict["HAVE_OPENCV_FEATURES"] != 0);
             bool haveVideo = (openCVConfigDict["HAVE_OPENCV_VIDEO"] != 0);
            // bool haveOptFlow = (openCVConfigDict["HAVE_OPENCV_OPTFLOW"] != 0);
 
@@ -284,7 +284,7 @@ namespace MauiDemoApp
             sceneTextDetectionButton.IsVisible = haveDNN && haveFreetype;
             //licensePlateRecognitionButton.IsVisible = hasInferenceEngine;
             licensePlateRecognitionButton.IsVisible = false;
-            featureDetectionButton.IsVisible = haveFeatures2D;
+            featureDetectionButton.IsVisible = haveFeatures;
             
             
             if (haveTesseract)
