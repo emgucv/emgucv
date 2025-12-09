@@ -214,6 +214,7 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern CvEnum.LogLevel cveGetLogLevel();
 
+        /*
         /// <summary>
         /// initializes CvMat header so that it points to the same data as the original array but has different shape - different number of channels, different number of rows or both
         /// </summary>
@@ -228,7 +229,8 @@ namespace Emgu.CV
             IntPtr header,
             int newCn,
             int newRows);
-
+        */
+        
         /// <summary>
         /// Fills the destination array with source array tiled:
         /// dst(i,j)=src(i mod rows(src), j mod cols(src))So the destination array may be as larger as well as smaller than the source array

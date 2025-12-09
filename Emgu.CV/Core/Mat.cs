@@ -1898,9 +1898,11 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveMatReshape2(IntPtr mat, int cn, int newndims, IntPtr newsz);
 
+        /*
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveMatToIplImage(IntPtr mat);
-
+        */
+        
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern double cveMatDot(IntPtr mat, IntPtr m);
 
