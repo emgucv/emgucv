@@ -610,7 +610,7 @@ namespace Emgu.CV
         private static extern void cveBitwiseXor(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
 
         #region Copying and Filling
-
+        /*
         /// <summary>
         /// Copies selected elements from input array to output array:
         /// dst(I)=src(I) if mask(I)!=0. 
@@ -621,7 +621,8 @@ namespace Emgu.CV
         /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveCopy")]
         public static extern void cvCopy(IntPtr src, IntPtr des, IntPtr mask);
-
+        */
+        
         /// <summary>
         /// Initializes scaled identity matrix:
         /// arr(i,j)=value if i=j,
@@ -638,7 +639,7 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveSetIdentity(IntPtr mat, ref MCvScalar value);
 
-
+        /*
         /// <summary>
         /// Initializes the matrix as following:
         /// arr(i,j)=(end-start)*(i*cols(arr)+j)/(cols(arr)*rows(arr))
@@ -648,7 +649,7 @@ namespace Emgu.CV
         /// <param name="end">The upper exclusive boundary of the range</param>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveRange")]
         public static extern void cvRange(IntPtr mat, double start, double end);
-
+        */
         #endregion
 
         #region Math Functions
@@ -1119,7 +1120,7 @@ namespace Emgu.CV
             IntPtr mask);
 
         #region Initialization
-
+        /*
         /// <summary>
         /// Creates the header and allocates data. 
         /// </summary>
@@ -1213,7 +1214,6 @@ namespace Emgu.CV
             EntryPoint = "cveReleaseImageHeader")]
         public static extern void cvReleaseImageHeader(ref IntPtr image);
 
-        /*
         /// <summary>
         /// Initializes already allocated CvMat structure. It can be used to process raw data with OpenCV matrix functions.
         /// </summary>
@@ -1232,7 +1232,6 @@ namespace Emgu.CV
            CV.CvEnum.DepthType type,
            IntPtr data,
            int step);
-  */
 
         /// <summary>
         /// Initializes already allocated CvMat structure. It can be used to process raw data with OpenCV matrix functions.
@@ -1358,9 +1357,10 @@ namespace Emgu.CV
         /// <param name="mat">Reference of the pointer to the array</param>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveReleaseSparseMat")]
         public static extern void cvReleaseSparseMat(ref IntPtr mat);
-
+        */
         #endregion
 
+        /*
         /// <summary>
         /// Assign the new value to the particular element of single-channel array
         /// </summary>
@@ -1403,6 +1403,7 @@ namespace Emgu.CV
             [In] int[] idx,
             double value);
 
+        
         /// <summary>
         /// Clears (sets to zero) the particular element of dense array or deletes the element of sparse array. If the element does not exists, the function does nothing
         /// </summary>
@@ -1412,7 +1413,8 @@ namespace Emgu.CV
         public static extern void cvClearND(
             IntPtr arr,
             [In] int[] idx);
-
+        
+        
         /// <summary>
         /// Assign the new value to the particular element of array
         /// </summary>
@@ -1427,7 +1429,8 @@ namespace Emgu.CV
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveSet2D(IntPtr arr, int idx0, int idx1, ref MCvScalar value);
-
+        */
+        
         /// <summary>
         /// Flips the array in one of different 3 ways (row and column indices are 0-based)
         /// </summary>
@@ -1495,6 +1498,7 @@ namespace Emgu.CV
 
         #region Accessing Elements and sub-Arrays
 
+        /*
         /// <summary>
         /// Returns header, corresponding to a specified rectangle of the input array. In other words, it allows the user to treat a rectangular part of input array as a stand-alone array. ROI is taken into account by the function so the sub-array of ROI is actually extracted.
         /// </summary>
@@ -1509,7 +1513,6 @@ namespace Emgu.CV
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGetSubRect(IntPtr arr, IntPtr submat, ref Rectangle rect);
-
 
         /// <summary>
         /// Return the header, corresponding to a specified row span of the input array
@@ -1557,7 +1560,7 @@ namespace Emgu.CV
         {
             return cvGetCols(arr, submat, col, col + 1);
         }
-
+        */
         #endregion
 
         /*
@@ -1752,6 +1755,7 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveLUT(IntPtr src, IntPtr lut, IntPtr dst);
 
+        /*
         /// <summary>
         /// This function has several different purposes and thus has several synonyms. It copies one array to another with optional scaling, which is performed first, and/or optional type conversion, performed after:
         /// dst(I)=src(I)*scale + (shift,shift,...)
@@ -1766,7 +1770,6 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveConvertScale")]
         public static extern void cvConvertScale(IntPtr src, IntPtr dst, double scale, double shift);
 
-        /*
         /// <summary>
         /// This function has several different purposes and thus has several synonyms. It copies one array to another with optional scaling, which is performed first, and/or optional type conversion, performed after:
         /// dst(I)=src(I)*scale + (shift,shift,...)
@@ -3076,7 +3079,7 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetImage")]
         public static extern IntPtr cvGetImage(IntPtr arr, IntPtr imageHeader);
 
-
+        /*
         /// <summary>
         /// Checks that every array element is neither NaN nor Infinity. If CV_CHECK_RANGE is set, it also checks that every element is greater than or equal to minVal and less than maxVal. 
         /// </summary>
@@ -3090,7 +3093,8 @@ namespace Emgu.CV
         /// <returns>Returns nonzero if the check succeeded, i.e. all elements are valid and within the range, and zero otherwise. In the latter case if CV_CHECK_QUIET flag is not set, the function raises runtime error.</returns>
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveCheckArr")]
         public static extern int cvCheckArr(IntPtr arr, CvEnum.CheckType flags, double minVal, double maxVal);
-
+        */
+        
 #if !UNITY_IOS
         /// <summary>
         /// Get or set the number of threads that are used by parallelized OpenCV functions
@@ -3188,7 +3192,7 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveCompare(IntPtr src1, IntPtr src2, IntPtr dst, CvEnum.CmpType cmpOp);
 
-
+        /*
         /// <summary>
         /// Converts CvMat, IplImage , or CvMatND to Mat.
         /// </summary>
@@ -3208,7 +3212,8 @@ namespace Emgu.CV
             [MarshalAs(CvInvoke.BoolMarshalType)] bool copyData,
             [MarshalAs(CvInvoke.BoolMarshalType)] bool allowND,
             int coiMode);
-
+        */
+        
         /// <summary>
         /// Horizontally concatenate two images
         /// </summary>
