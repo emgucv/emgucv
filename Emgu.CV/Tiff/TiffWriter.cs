@@ -47,6 +47,12 @@ namespace Emgu.CV.Tiff
             CvInvoke.Init();
         }
 
+        /// <summary>
+        /// Indicates whether the image information has been written.
+        /// </summary>
+        /// <remarks>This field is intended for use by derived classes to track whether image metadata or related
+        /// information has already been output. It should be set to <see langword="true"/> after the image information is
+        /// written to prevent duplicate operations.</remarks>
         protected bool _imageInfoWritten = false;
 
         /// <summary>

@@ -89,6 +89,21 @@ namespace Emgu.CV.Mcc
             }
         }
 
+        /// <summary>
+        /// Draws the specified color checker on the provided image.
+        /// </summary>
+        /// <param name="pChecker">
+        /// The <see cref="CChecker"/> object representing the color checker to be drawn.
+        /// </param>
+        /// <param name="img">
+        /// The image on which the color checker will be drawn. This parameter must implement <see cref="IInputOutputArray"/>.
+        /// </param>
+        /// <param name="color">
+        /// The color of the drawn checker, specified as an <see cref="MCvScalar"/>.
+        /// </param>
+        /// <param name="thickness">
+        /// The thickness of the lines used to draw the checker.
+        /// </param>
         public void Draw(
             CChecker pChecker,
             IInputOutputArray img,

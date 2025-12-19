@@ -15,8 +15,28 @@ using System.Runtime.InteropServices.ComTypes;
 
 namespace Emgu.CV.Aruco
 {
+    /// <summary>
+    /// Represents the parameters used for ChArUco marker detection.
+    /// </summary>
+    /// <remarks>
+    /// This class provides configuration options for detecting ChArUco markers, 
+    /// including the minimum number of markers required, whether to refine marker detection, 
+    /// and whether to validate detected markers.
+    /// </remarks>
     public class CharucoParameters : UnmanagedObject
-    {        
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CharucoParameters"/> class with specified parameters.
+        /// </summary>
+        /// <param name="minMarkers">
+        /// The minimum number of adjacent markers that must be detected to return a charuco corner. Default is 2.
+        /// </param>
+        /// <param name="tryRefineMarkers">
+        /// A boolean value indicating whether to refine the detected markers for improved accuracy. Default is <c>false</c>.
+        /// </param>
+        /// <param name="checkMarkers">
+        /// A boolean value indicating whether to validate the detected markers. Default is <c>true</c>.
+        /// </param>
         public CharucoParameters(	
 			int minMarkers = 2,
 			bool tryRefineMarkers = false,

@@ -107,6 +107,9 @@ namespace Emgu.CV
         }
     }
 
+    /// <summary>
+    /// Provides PInvoke methods for XObjdetect functionalities.
+    /// </summary>
     public static partial class XObjdetectInvoke
     {
 

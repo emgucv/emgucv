@@ -349,10 +349,12 @@ namespace Emgu.CV
 
         internal bool _needDispose;
 
+        /*
         /// <summary>
         /// An option parent object to keep reference to
         /// </summary>
         internal object _parent;
+        */
 
         internal Mat(IntPtr ptr, bool needDispose, bool useCustomMemAllocator = false)
         {
