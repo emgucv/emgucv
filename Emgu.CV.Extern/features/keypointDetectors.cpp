@@ -323,7 +323,7 @@ void cveDescriptorMatcherKnnMatch1(
 	bool compactResult)
 {
 #ifdef HAVE_OPENCV_FEATURES
-	matcher->knnMatch(*queryDescriptors, *trainDescriptors, *matches, k, mask ? *mask : (cv::InputArray) cv::noArray(), compactResult);
+	matcher->knnMatch(*queryDescriptors, *trainDescriptors, *matches, k, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()), compactResult);
 #else
 	throw_no_features();
 #endif
@@ -338,7 +338,7 @@ void cveDescriptorMatcherKnnMatch2(
 	bool compactResult)
 {
 #ifdef HAVE_OPENCV_FEATURES
-	matcher->knnMatch(*queryDescriptors, *matches, k, mask ? *mask : (cv::InputArrayOfArrays) cv::noArray(), compactResult);
+	matcher->knnMatch(*queryDescriptors, *matches, k, mask ? *mask : static_cast<cv::InputArrayOfArrays>(cv::noArray()), compactResult);
 #else
 	throw_no_features();
 #endif
@@ -414,7 +414,7 @@ void cveDescriptorMatcherMatch1(
 	cv::_InputArray* mask)
 {
 #ifdef HAVE_OPENCV_FEATURES
-	matcher->match(*queryDescriptors, *trainDescriptors, *matches, mask ? *mask : (cv::InputArray) cv::noArray());
+	matcher->match(*queryDescriptors, *trainDescriptors, *matches, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 #else
 	throw_no_features();
 #endif
@@ -426,7 +426,7 @@ void cveDescriptorMatcherMatch2(
 	cv::_InputArray* masks)
 {
 #ifdef HAVE_OPENCV_FEATURES
-	matcher->match(*queryDescriptors, *matches, masks ? *masks : (cv::InputArrayOfArrays) cv::noArray());
+	matcher->match(*queryDescriptors, *matches, masks ? *masks : static_cast<cv::InputArrayOfArrays>(cv::noArray()));
 #else
 	throw_no_features();
 #endif
@@ -442,7 +442,7 @@ void cveDescriptorMatcherRadiusMatch1(
 	bool compactResult)
 {
 #ifdef HAVE_OPENCV_FEATURES
-	matcher->radiusMatch(*queryDescriptors, *matches, maxDistance, mask ? *mask : (cv::InputArray) cv::noArray(), compactResult);
+	matcher->radiusMatch(*queryDescriptors, *matches, maxDistance, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()), compactResult);
 #else
 	throw_no_features();
 #endif
@@ -456,7 +456,7 @@ void cveDescriptorMatcherRadiusMatch2(
 	bool compactResult)
 {
 #ifdef HAVE_OPENCV_FEATURES
-	matcher->radiusMatch(*queryDescriptors, *matches, maxDistance, masks ? *masks : (cv::InputArrayOfArrays) cv::noArray(), compactResult);
+	matcher->radiusMatch(*queryDescriptors, *matches, maxDistance, masks ? *masks : static_cast<cv::InputArrayOfArrays>(cv::noArray()), compactResult);
 #else
 	throw_no_features();
 #endif
@@ -568,7 +568,7 @@ int cveVoteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std:
 void cveFeature2DDetectAndCompute(cv::Feature2D* feature2D, cv::_InputArray* image, cv::_InputArray* mask, std::vector<cv::KeyPoint>* keypoints, cv::_OutputArray* descriptors, bool useProvidedKeyPoints)
 {
 #ifdef HAVE_OPENCV_FEATURES
-	feature2D->detectAndCompute(*image, mask ? *mask : (cv::InputArray) cv::noArray(), *keypoints, *descriptors, useProvidedKeyPoints);
+	feature2D->detectAndCompute(*image, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()), *keypoints, *descriptors, useProvidedKeyPoints);
 #else
 	throw_no_features();
 #endif
@@ -576,7 +576,7 @@ void cveFeature2DDetectAndCompute(cv::Feature2D* feature2D, cv::_InputArray* ima
 void cveFeature2DDetect(cv::Feature2D* feature2D, cv::_InputArray* image, std::vector<cv::KeyPoint>* keypoints, cv::_InputArray* mask)
 {
 #ifdef HAVE_OPENCV_FEATURES
-	feature2D->detect(*image, *keypoints, mask ? *mask : (cv::InputArray) cv::noArray());
+	feature2D->detect(*image, *keypoints, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
 #else
 	throw_no_features();
 #endif
@@ -643,9 +643,6 @@ void cveGFTTDetectorRelease(cv::Ptr<cv::GFTTDetector>** sharedPtr)
 	throw_no_features();
 #endif
 }
-
-
-
 
 //SIFTDetector
 cv::SIFT* cveSIFTCreate(
