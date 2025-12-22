@@ -76,7 +76,7 @@ if [ $SYSTEM_ARCH == "64" ]
 then
     PNG_OPTIONS=
 else
-    PNG_OPTIONS=-DPNG_ARM_NEON:BOOL=OFF
+    PNG_OPTIONS=-DPNG_ARM_NEON:String="off"
 fi
 
 
