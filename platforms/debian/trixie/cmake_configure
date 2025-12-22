@@ -2,6 +2,9 @@
 
 cd "$(dirname "$0")"
 
+SYSTEM_ARCH=$(getconf LONG_BIT)
+echo System is $SYSTEM_ARCH bit
+
 CURRENT_FOLDER=$PWD
 INSTALL_FOLDER=$PWD/build/install
 TOP_FOLDER=$PWD/../../../
@@ -68,31 +71,41 @@ fi
 
 cd $CURRENT_FOLDER
 cd build
-cmake\
-      ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} \
-      -DBUILD_TESTS:BOOL=FALSE \
-      -DBUILD_PERF_TESTS:BOOL=FALSE \
-      -DBUILD_opencv_apps:BOOL=FALSE \
-      -DBUILD_DOCS:BOOL=FALSE \
-      -DWITH_CUDA:BOOL=FALSE \
-      -DWITH_IPP:BOOL=FALSE \
-      ${CONTRIB_OPTION[@]} \
-      -DBUILD_opencv_ts:BOOL=FALSE \
-      -DBUILD_WITH_DEBUG_INFO:BOOL=FALSE \
-      -DBUILD_SHARED_LIBS:BOOL=FALSE \
-      ${VTK_OPTION[@]} \
-      ${EMGU_CV_TESSERACT_OPTION[@]} \
-      $TESSERACT_OPTION \
-      -DWITH_EIGEN:BOOL=TRUE \
-      -DEigen3_DIR:String="$TOP_FOLDER/eigen/build" \
-      -DBUILD_TIFF:BOOL=TRUE \
-      -DBUILD_PNG:BOOL=TRUE \
-      -DBUILD_JPEG:BOOL=TRUE \
-      -DBUILD_OPENEXR:BOOL=TRUE \
-      -DBUILD_opencv_python2:BOOL=FALSE \
-      -DBUILD_opencv_python3:BOOL=FALSE \
-      -DBUILD_opencv_java:BOOL=FALSE \
-      $TOP_FOLDER
+
+if [ $SYSTEM_ARCH == "64" ]
+then
+    PNG_OPTIONS=
+else
+    PNG_OPTIONS=-DPNG_ARM_NEON:BOOL=OFF
+fi
+
+
+cmake \
+    ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} \
+    $PNG_OPTIONS \
+    -DBUILD_TESTS:BOOL=FALSE \
+    -DBUILD_PERF_TESTS:BOOL=FALSE \
+    -DBUILD_opencv_apps:BOOL=FALSE \
+    -DBUILD_DOCS:BOOL=FALSE \
+    -DWITH_CUDA:BOOL=FALSE \
+    -DWITH_IPP:BOOL=FALSE \
+    ${CONTRIB_OPTION[@]} \
+    -DBUILD_opencv_ts:BOOL=FALSE \
+    -DBUILD_WITH_DEBUG_INFO:BOOL=FALSE \
+    -DBUILD_SHARED_LIBS:BOOL=FALSE \
+    ${VTK_OPTION[@]} \
+    ${EMGU_CV_TESSERACT_OPTION[@]} \
+    $TESSERACT_OPTION \
+    -DWITH_EIGEN:BOOL=TRUE \
+    -DEigen3_DIR:String="$TOP_FOLDER/eigen/build" \
+    -DBUILD_TIFF:BOOL=TRUE \
+    -DBUILD_PNG:BOOL=TRUE \
+    -DBUILD_JPEG:BOOL=TRUE \
+    -DBUILD_OPENEXR:BOOL=TRUE \
+    -DBUILD_opencv_python2:BOOL=FALSE \
+    -DBUILD_opencv_python3:BOOL=FALSE \
+    -DBUILD_opencv_java:BOOL=FALSE \
+    $TOP_FOLDER
 
 #      -DCMAKE_CXX_FLAGS="-DPNG_ARM_NEON_OPT=0 " \
 #      -DCMAKE_C_FLAGS="-DPNG_ARM_NEON_OPT=0 " \
