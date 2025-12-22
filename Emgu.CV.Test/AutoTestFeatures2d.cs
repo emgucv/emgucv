@@ -660,22 +660,21 @@ namespace Emgu.CV.Test
         public void TestSimpleBlobDetector()
         {
             using (Mat box = EmguAssert.LoadMat("box.png"))
+            using (SimpleBlobDetectorParams p = new SimpleBlobDetectorParams())
             {
-                using (SimpleBlobDetectorParams p = new SimpleBlobDetectorParams())
+                p.CollectContours = true;
+                using (SimpleBlobDetector detector = new SimpleBlobDetector(p))
+                using (Mat mask = new Mat(box.Size, DepthType.Cv8U, 1))
                 {
-                    p.CollectContours = true;
-                    using (SimpleBlobDetector detector = new SimpleBlobDetector(p))
-                    using (Mat mask = new Mat(box.Size, DepthType.Cv8U, 1))
+                    mask.SetTo(new MCvScalar(255));
+                    MKeyPoint[] keypoints = detector.Detect(box, mask);
+                    using (VectorOfVectorOfPoint contour = detector.GetBlobContours())
                     {
-                        mask.SetTo(new MCvScalar(255));
-                        MKeyPoint[] keypoints = detector.Detect(box, mask);
-                        using (VectorOfVectorOfPoint contour = detector.GetBlobContours())
-                        {
-                            int count = contour.Size;
-                        }
+                        int count = contour.Size;
                     }
                 }
             }
+
         }
     }
 }

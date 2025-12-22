@@ -1210,11 +1210,14 @@ namespace Emgu.CV.Test
         public void TestPCAFlow()
         {
             Mat[] images = OpticalFlowImage();
-            Mat flow = new Mat();
-
+            using (Mat flow = new Mat())
             using (Emgu.CV.OpticalFlowPCAFlow pcaFlow = new OpticalFlowPCAFlow())
             {
                 pcaFlow.Calc(images[0], images[1], flow);
+                foreach (Mat image in images)
+                {
+                    image.Dispose();
+                }
             }
         }
 
@@ -1222,11 +1225,14 @@ namespace Emgu.CV.Test
         public void TestDISOpticalFlow()
         {
             Mat[] images = OpticalFlowImage();
-            Mat flow = new Mat();
-
+            using (Mat flow = new Mat())
             using (Emgu.CV.DISOpticalFlow disFlow = new DISOpticalFlow())
             {
                 disFlow.Calc(images[0], images[1], flow);
+                foreach (Mat image in images)
+                {
+                    image.Dispose();
+                }
             }
         }
 
