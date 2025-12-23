@@ -31,7 +31,7 @@ if [[ $# -lt 2 ]]; then
     echo "Building with contrib module"
 else
     if [ "$2" == "core" ]; then
-      TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE 
+      TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE
       echo "Building without contrib module"
     elif [ "$2" == "mini" ]; then
       TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE
@@ -45,6 +45,7 @@ else
     elif [ "$2" == "freetype" ]; then
       CV_CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules
       FREETYPE_OPTIONS=( -DEMGU_CV_WITH_FREETYPE:BOOL=TRUE )
+      TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
       echo "Building with freetype"
       BUILD_FREETYPE=true
     else
@@ -129,6 +130,7 @@ cd $BUILD_FOLDER
 set -x
 cmake $BUILD_ARCH $OSX_SYSROOT_OPTION $CV_OPTIMIZATION \
       -DCMAKE_BUILD_TYPE:STRING="Release" \
+      -DOPENCV_FORCE_3RDPARTY_BUILD:BOOL=TRUE \
       -DBUILD_PERF_TESTS=FALSE \
       -DBUILD_TESTS:BOOL=FALSE \
       -DBUILD_DOCS:BOOL=FALSE \
@@ -146,16 +148,18 @@ cmake $BUILD_ARCH $OSX_SYSROOT_OPTION $CV_OPTIMIZATION \
       -DBUILD_opencv_python3:BOOL=OFF \
       -DBUILD_opencv_apps:BOOL=OFF \
       -DWITH_CUDA:BOOL=OFF \
-	  -DWITH_OBSENSOR:BOOL=OFF \
+      -DWITH_OBSENSOR:BOOL=OFF \
       $CV_CONTRIB_OPTION \
       $CV_MODULE_OPTION \
       $TESSERACT_OPTION \
+      -DWITH_TESSERACT:BOOL=OFF \
       -DBUILD_SHARED_LIBS:BOOL=OFF \
       $VTK_OPTION \
       -DCMAKE_FIND_ROOT_PATH:STRING=$CMAKE_FIND_ROOT_FOLDER \
       -DEigen3_DIR:STRING="$PWD/../../../eigen/build" \
       -DWITH_LAPACK:BOOL=OFF \
       -DCMAKE_INSTALL_PREFIX:STRING=$INSTALL_FOLDER \
+      -DCMAKE_IGNORE_PREFIX_PATH:STRING=/usr/local \
       ${FREETYPE_OPTIONS[@]} \
       ../../../
 set +x
