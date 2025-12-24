@@ -13,7 +13,8 @@ using Emgu.CV;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Runtime.InteropServices;
-using Emgu.CV.Features2D;
+using Emgu.CV.Features;
+using Emgu.CV.XFeatures2D;
 using Emgu.CV.Ocl;
 using UnityEngine.UI;
 
@@ -36,7 +37,7 @@ namespace Emgu.CV.Demo
 
             long time;
             Texture2D texture;
-            using (Emgu.CV.Features2D.Feature2D f2d = new KAZE())
+            using (Emgu.CV.Features.Feature2D f2d = new KAZE())
             using (Mat img = FeatureMatchingExample.DrawMatches.Draw(box, boxInScene, f2d, out time))
             {
                 texture = img.ToTexture2D();
