@@ -332,7 +332,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Drawing.Common">
-      <Version>9.0.2</Version>
+      <Version>10.0.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

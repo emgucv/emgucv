@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Drawing.Common" Version="10.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="10.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,7 +22,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Condition="'$(TargetFramework)' == 'net472'" Include="System.Resources.Extensions" Version="10.0.0" />
+    <PackageReference Condition="'$(TargetFramework)' == 'net472'" Include="System.Resources.Extensions" Version="10.0.1" />
   </ItemGroup>
   <!--
   <Target Name="DeployBinary" AfterTargets="AfterBuild">
