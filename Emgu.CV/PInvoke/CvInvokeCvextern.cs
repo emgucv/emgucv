@@ -335,16 +335,17 @@ namespace Emgu.CV
         /// <param name="src">The source image</param>
         /// <param name="clipLimit">Clip Limit, use 40 for default</param>
         /// <param name="tileGridSize">Tile grid size, use (8, 8) for default</param>
+        /// <param name="bitShift">Bit shift parameter for histogram bins.</param>
         /// <param name="dst">The destination image</param>
-        public static void CLAHE(IInputArray src, double clipLimit, Size tileGridSize, IOutputArray dst)
+        public static void CLAHE(IInputArray src, double clipLimit, Size tileGridSize, int bitShift, IOutputArray dst)
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
-                cveCLAHE(iaSrc, clipLimit, ref tileGridSize, oaDst);
+                cveCLAHE(iaSrc, clipLimit, ref tileGridSize, bitShift, oaDst);
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveCLAHE(IntPtr srcArr, double clipLimit, ref Size tileGridSize, IntPtr dstArr);
+        private static extern void cveCLAHE(IntPtr srcArr, double clipLimit, ref Size tileGridSize, int bitShift, IntPtr dstArr);
 
 
         /// <summary>

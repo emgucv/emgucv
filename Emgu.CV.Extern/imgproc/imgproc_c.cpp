@@ -37,10 +37,11 @@ void cveBlendLinear(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputArra
 	cv::blendLinear(*src1, *src2, *weights1, *weights2, *dst);
 }
 
-void cveCLAHE(cv::_InputArray* src, double clipLimit, CvSize* tileGridSize, cv::_OutputArray* dst)
+void cveCLAHE(cv::_InputArray* src, double clipLimit, CvSize* tileGridSize, int bitShift, cv::_OutputArray* dst)
 {
 	cv::Size s(tileGridSize->width, tileGridSize->height);
 	cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE(clipLimit, s);
+	clahe->setBitShift(bitShift);
 	clahe->apply(*src, *dst);
 }
 
