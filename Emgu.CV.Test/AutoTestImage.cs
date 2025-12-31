@@ -1759,7 +1759,7 @@ namespace Emgu.CV.Test
         {
             Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("pedestrian.png");
             Image<Gray, Byte> result = new Image<Gray, byte>(image.Size);
-            CvInvoke.CLAHE(image, 4, new Size(8, 8), result);
+            CvInvoke.CLAHE(image, 4, new Size(8, 8), 0, result);
             //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
         }
 
