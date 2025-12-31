@@ -312,6 +312,62 @@ namespace Emgu.CV
             IntPtr affine);
 
         /// <summary>
+        /// Computes a pure 2D translation between two 2D point sets.
+        /// </summary>
+        /// <param name="from">First input 2D point set</param>
+        /// <param name="to">Second input 2D point set</param>
+        /// <param name="inliners">Output vector indicating which points are inliers (1-inlier, 0-outlier).</param>
+        /// <param name="method">Robust method used to compute the transformation. The following methods are possible:
+        /// RANSAC - RANSAC-based robust method;
+        /// LMEDS - Least-Median robust method RANSAC is the default method.</param>
+        /// <param name="ransacReprojThreshold">Maximum reprojection error in the RANSAC algorithm to consider a point as an inlier. Applies only to RANSAC.</param>
+        /// <param name="maxIters">The maximum number of robust method iterations.</param>
+        /// <param name="confidence">Confidence level, between 0 and 1, for the estimated transformation. Anything between 0.95 and 0.99 is usually good enough. Values too close to 1 can slow down the estimation significantly. Values lower than 0.8–0.9 can result in an incorrectly estimated transformation.</param>
+        /// <param name="refineIters">Maximum number of iterations of the refining algorithm. For pure translation the least-squares solution on inliers is closed-form, so passing 0 is recommended (no additional refine).</param>
+        /// <returns>A 2D translation vector. If the translation could not be estimated, both components are set to NaN and, if inliers is provided, the mask is filled with zeros.</returns>
+        public static MCvPoint2D64f EstimateTranslation2D(
+            IInputArray from, 
+            IInputArray to,
+            IOutputArray inliners,
+            CvEnum.RobustEstimationAlgorithm method,
+            double ransacReprojThreshold,
+            int maxIters, 
+            double confidence,
+            int refineIters)
+        {
+            MCvPoint2D64f result = new MCvPoint2D64f();
+            using (InputArray iaFrom = from.GetInputArray())
+            using (InputArray iaTo = to.GetInputArray())
+            using (OutputArray oaInliners = inliners == null ? OutputArray.GetEmpty() : inliners.GetOutputArray())
+            {
+                cveEstimateTranslation2D(
+                    iaFrom,
+                    iaTo,
+                    oaInliners,
+                    method,
+                    ransacReprojThreshold,
+                    maxIters,
+                    confidence,
+                    refineIters,
+                    ref result
+                );
+            }
+            return result;
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveEstimateTranslation2D(
+            IntPtr from,
+            IntPtr to,
+            IntPtr inliers,
+            CvEnum.RobustEstimationAlgorithm method,
+            double ransacReprojThreshold,
+            int maxIters,
+            double confidence,
+            int refineIters,
+            ref MCvPoint2D64f result);
+
+        /// <summary>
         /// Computes Hand-Eye calibration
         /// </summary>
         /// <param name="rGripper2base">

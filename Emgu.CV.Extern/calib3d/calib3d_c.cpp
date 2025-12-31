@@ -915,7 +915,7 @@ void cveEstimateAffine2D(
 
 void cveEstimateAffinePartial2D(
 	cv::_InputArray* from, cv::_InputArray* to,
-	cv::_OutputArray* inliners,
+	cv::_OutputArray* inliers,
 	int method, double ransacReprojThreshold,
 	int maxIters, double confidence,
 	int refineIters,
@@ -924,9 +924,37 @@ void cveEstimateAffinePartial2D(
 #ifdef HAVE_OPENCV_CALIB3D
 	cv::Mat m = cv::estimateAffinePartial2D(
 		*from, *to,
-		inliners ? *inliners : static_cast<cv::OutputArray>(cv::noArray()),
+		inliers ? *inliers : static_cast<cv::OutputArray>(cv::noArray()),
 		method, ransacReprojThreshold, maxIters, confidence, refineIters);
 	cv::swap(m, *affine);
+#else
+	throw_no_calib3d();
+#endif
+}
+
+void cveEstimateTranslation2D(
+	cv::_InputArray* from,
+	cv::_InputArray* to,
+	cv::_OutputArray* inliers,
+	int method,
+	double ransacReprojThreshold,
+	int maxIters,
+	double confidence,
+	int refineIters,
+	CvPoint2D64f* result)
+{
+#ifdef HAVE_OPENCV_CALIB3D
+	cv::Vec2d m = cv::estimateTranslation2D(
+		*from, 
+		*to,
+		inliers ? *inliers : static_cast<cv::OutputArray>(cv::noArray()),
+		method, 
+		ransacReprojThreshold, 
+		maxIters, 
+		confidence, 
+		refineIters);
+	result->x = m[0];
+	result->y = m[1];
 #else
 	throw_no_calib3d();
 #endif

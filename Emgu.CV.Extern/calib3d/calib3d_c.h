@@ -287,6 +287,17 @@ CVAPI(void) cveEstimateAffinePartial2D(
 	int refineIters,
 	cv::Mat* affine);
 
+CVAPI(void) cveEstimateTranslation2D(
+	cv::_InputArray* from, 
+	cv::_InputArray* to,
+	cv::_OutputArray* inliers,
+	int method,
+	double ransacReprojThreshold,
+	int maxIters, 
+	double confidence,
+	int refineIters, 
+	CvPoint2D64f* result);
+
 CVAPI(void) cveCalibrateHandEye(cv::_InputArray* R_gripper2base, cv::_InputArray* t_gripper2base,
 	cv::_InputArray* R_target2cam, cv::_InputArray* t_target2cam,
 	cv::_OutputArray* R_cam2gripper, cv::_OutputArray* t_cam2gripper,
