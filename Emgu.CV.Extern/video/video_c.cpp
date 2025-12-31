@@ -33,12 +33,28 @@ void cveBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubtrac
 }
 
 //BackgroundSubtractor
-void cveBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubtractor, cv::_InputArray* image, cv::_OutputArray* fgmask, double learningRate)
+void cveBackgroundSubtractorApply1(
+	cv::BackgroundSubtractor* bgSubtractor, 
+	cv::_InputArray* image, 
+	cv::_OutputArray* fgmask, 
+	double learningRate)
 {
 #ifdef HAVE_OPENCV_VIDEO
-	//cv::Mat imgMat = cv::cvarrToMat(image);
-	//cv::Mat fgMat = cv::cvarrToMat(fgmask);
 	bgSubtractor->apply(*image, *fgmask, learningRate);
+#else
+	throw_no_video();
+#endif
+}
+
+CVAPI(void) cveBackgroundSubtractorApply2(
+	cv::BackgroundSubtractor* bgSubtractor,
+	cv::_InputArray* image,
+	cv::_InputArray* knownForegroundMask,
+	cv::_OutputArray* fgmask,
+	double learningRate)
+{
+#ifdef HAVE_OPENCV_VIDEO
+	bgSubtractor->apply(*image, *knownForegroundMask, *fgmask,  learningRate);
 #else
 	throw_no_video();
 #endif

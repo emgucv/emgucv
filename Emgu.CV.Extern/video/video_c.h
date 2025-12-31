@@ -38,7 +38,17 @@ CVAPI(cv::BackgroundSubtractorMOG2*) cveBackgroundSubtractorMOG2Create(int histo
 CVAPI(void) cveBackgroundSubtractorMOG2Release(cv::BackgroundSubtractorMOG2** bgSubtractor, cv::Ptr<cv::BackgroundSubtractorMOG2>** sharedPtr);
 
 //BackgroundSubtractor
-CVAPI(void) cveBackgroundSubtractorUpdate(cv::BackgroundSubtractor* bgSubtractor, cv::_InputArray* image, cv::_OutputArray* fgmask, double learningRate);
+CVAPI(void) cveBackgroundSubtractorApply1(
+	cv::BackgroundSubtractor* bgSubtractor, 
+	cv::_InputArray* image, 
+	cv::_OutputArray* fgmask, 
+	double learningRate);
+CVAPI(void) cveBackgroundSubtractorApply2(
+	cv::BackgroundSubtractor* bgSubtractor, 
+	cv::_InputArray* image,
+	cv::_InputArray* knownForegroundMask,
+	cv::_OutputArray* fgmask,
+	double learningRate);
 CVAPI(void) cveBackgroundSubtractorGetBackgroundImage(cv::BackgroundSubtractor* bgSubtractor, cv::_OutputArray* backgroundImage);
 
 

@@ -38,7 +38,33 @@ namespace Emgu.CV
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaFgMask = fgMask.GetOutputArray())
-                CvInvoke.cveBackgroundSubtractorUpdate(subtractor.BackgroundSubtractorPtr, iaImage, oaFgMask, learningRate);
+                CvInvoke.cveBackgroundSubtractorApply1(subtractor.BackgroundSubtractorPtr, iaImage, oaFgMask, learningRate);
+        }
+
+        /// <summary>
+        /// Update the background model
+        /// </summary>
+        /// <param name="image">The image that is used to update the background model</param>
+        /// <param name="learningRate">Use -1 for default</param>
+        /// <param name="subtractor">The background subtractor</param>
+        /// <param name="fgMask">The output foreground mask</param>
+        /// <param name="knownForegroundMask">The mask for inputting already known foreground, allows model to ignore pixels.</param>
+        public static void Apply(
+            this IBackgroundSubtractor subtractor, 
+            IInputArray image, 
+            IInputArray knownForegroundMask,
+            IOutputArray fgMask, 
+            double learningRate = -1)
+        {
+            using (InputArray iaImage = image.GetInputArray())
+            using (InputArray iaKnownForegroundMask = knownForegroundMask.GetInputArray())
+            using (OutputArray oaFgMask = fgMask.GetOutputArray())
+                CvInvoke.cveBackgroundSubtractorApply2(
+                    subtractor.BackgroundSubtractorPtr, 
+                    iaImage, 
+                    iaKnownForegroundMask,
+                    oaFgMask, 
+                    learningRate);
         }
 
         /// <summary>
@@ -57,7 +83,19 @@ namespace Emgu.CV
     public static partial class CvInvoke
     {
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveBackgroundSubtractorUpdate(IntPtr bgSubtractor, IntPtr image, IntPtr fgmask, double learningRate);
+        internal static extern void cveBackgroundSubtractorApply1(
+            IntPtr bgSubtractor, 
+            IntPtr image, 
+            IntPtr fgmask, 
+            double learningRate);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveBackgroundSubtractorApply2(
+            IntPtr bgSubtractor,
+            IntPtr image,
+            IntPtr knownForegroundMask,
+            IntPtr fgmask,
+            double learningRate);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveBackgroundSubtractorGetBackgroundImage(IntPtr bgSubtractor, IntPtr backgroundImage);
