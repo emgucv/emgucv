@@ -2,11 +2,15 @@
 //  Copyright (C) 2004-2025 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
-using System;
-using System.Runtime.InteropServices;
-using System.Drawing;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
+using System;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
+using static Emgu.CV.Fuzzy.FuzzyInvoke;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Emgu.CV
 {
@@ -408,27 +412,92 @@ namespace Emgu.CV
         /// <param name="motionType">Specifying the type of motion. Use Affine for default</param>
         /// <param name="criteria">specifying the termination criteria of the ECC algorithm; criteria.epsilon defines the threshold of the increment in the correlation coefficient between two iterations (a negative criteria.epsilon makes criteria.maxcount the only termination criterion). Default values can use 50 iteration and 0.001 eps.</param>
         /// <param name="inputMask">An optional mask to indicate valid values of inputImage.</param>
+        /// <param name="gaussFiltSize">An optional value indicating size of gaussian blur filter (DEFAULT: 5)</param>
         /// <returns>The final enhanced correlation coefficient, that is the correlation coefficient between the template image and the final warped input image.</returns>
         public static double FindTransformECC(
             IInputArray templateImage, IInputArray inputImage,
             IInputOutputArray warpMatrix, CvEnum.MotionType motionType,
             MCvTermCriteria criteria,
-            IInputArray inputMask = null)
+            IInputArray inputMask = null,
+            int gaussFiltSize = 5)
         {
             using (InputArray iaTemplateImage = templateImage.GetInputArray())
             using (InputArray iaInputImage = inputImage.GetInputArray())
             using (InputOutputArray ioaWarpMatrix = warpMatrix.GetInputOutputArray())
             using (InputArray iaInputMask = inputMask == null ? InputArray.GetEmpty() : inputMask.GetInputArray())
             {
-                return cveFindTransformECC(iaTemplateImage, iaInputImage, ioaWarpMatrix, motionType, ref criteria, iaInputMask);
+                return cveFindTransformECC(
+                    iaTemplateImage, 
+                    iaInputImage, 
+                    ioaWarpMatrix, 
+                    motionType, 
+                    ref criteria, 
+                    iaInputMask,
+                    gaussFiltSize);
             }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern double cveFindTransformECC(IntPtr templateImage, IntPtr inputImage,
-            IntPtr warpMatrix, CvEnum.MotionType motionType,
+        private static extern double cveFindTransformECC(
+            IntPtr templateImage, 
+            IntPtr inputImage,
+            IntPtr warpMatrix, 
+            CvEnum.MotionType motionType,
             ref MCvTermCriteria criteria,
-            IntPtr inputMask);
+            IntPtr inputMask,
+            int gaussFiltSize);
+
+        /// <summary>
+        /// Finds the geometric transform (warp) between two images in terms of the ECC criterion [84] using validity masks for both the template and the input images.
+        /// This function extends findTransformECC() by adding a mask for the template image.The Enhanced Correlation Coefficient is evaluated only over pixels that are valid in both images: on each iteration inputMask is warped into the template frame and combined with templateMask, and only the intersection of these masks contributes to the objective function.
+        /// </summary>
+        /// <param name="templateImage">1 or 3 channel template image; CV_8U, CV_16U, CV_32F, CV_64F type.</param>
+        /// <param name="inputImage">input image which should be warped with the final warpMatrix in order to provide an image similar to templateImage, same type as templateImage.</param>
+        /// <param name="templateMask">single-channel 8-bit mask for templateImage indicating valid pixels to be used in the alignment. Must have the same size as templateImage. Default us Null</param>
+        /// <param name="inputMask">single-channel 8-bit mask for inputImage indicating valid pixels before warping. Must have the same size as inputImage. Default is Null</param>
+        /// <param name="warpMatrix">floating-point 2x3 or 3x3 mapping matrix(warp).</param>
+        /// <param name="motionType">parameter, specifying the type of motion</param>
+        /// <param name="criteria">specifying the termination criteria of the ECC algorithm; criteria.epsilon defines the threshold of the increment in the correlation coefficient between two iterations (a negative criteria.epsilon makes criteria.maxcount the only termination criterion). Default values can use 50 iteration and 0.001 eps.</param>
+        /// <param name="gaussFiltSize">An optional value indicating size of gaussian blur filter (DEFAULT: 5)</param>
+        /// <returns>The final enhanced correlation coefficient, that is the correlation coefficient between the template image and the final warped input image.</returns>
+        public static double FindTransformECCWithMask(
+            IInputArray templateImage, 
+            IInputArray inputImage,
+            IInputArray templateMask,
+            IInputArray inputMask,
+            IInputOutputArray warpMatrix, 
+            CvEnum.MotionType motionType,
+            MCvTermCriteria criteria,
+            int gaussFiltSize = 5)
+        {
+            using (InputArray iaTemplateImage = templateImage.GetInputArray())
+            using (InputArray iaInputImage = inputImage.GetInputArray())
+            using (InputArray iaTemplateMask = templateMask == null ? InputArray.GetEmpty() : templateMask.GetInputArray())
+            using (InputArray iaInputMask = inputMask == null ? InputArray.GetEmpty() : inputMask.GetInputArray())
+            using (InputOutputArray ioaWarpMatrix = warpMatrix.GetInputOutputArray())
+            {
+                return cveFindTransformECCWithMask(
+                    iaTemplateImage,
+                    iaInputImage,
+                    iaTemplateMask,
+                    iaInputMask,
+                    ioaWarpMatrix,
+                    motionType,
+                    ref criteria,
+                    gaussFiltSize);
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern double cveFindTransformECCWithMask(
+            IntPtr templateImage,
+            IntPtr inputImage,
+            IntPtr templateMask,
+            IntPtr inputMask,
+            IntPtr warpMatrix,
+            CvEnum.MotionType motionType,
+            ref MCvTermCriteria criteria,
+            int gaussFiltSize);
 
         /*
         /// <summary>

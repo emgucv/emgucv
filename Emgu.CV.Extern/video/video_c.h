@@ -102,10 +102,24 @@ CVAPI(int) cveBuildOpticalFlowPyramid(
 
 //CVAPI(void) cveEstimateRigidTransform(cv::_InputArray* src, cv::_InputArray* dst, bool fullAffine, cv::Mat* result);
 
-CVAPI(double) cveFindTransformECC(cv::_InputArray* templateImage, cv::_InputArray* inputImage,
-	cv::_InputOutputArray* warpMatrix, int motionType,
+CVAPI(double) cveFindTransformECC(
+	cv::_InputArray* templateImage, 
+	cv::_InputArray* inputImage,
+	cv::_InputOutputArray* warpMatrix, 
+	int motionType,
 	CvTermCriteria* criteria,
-	cv::_InputArray* inputMask);
+	cv::_InputArray* inputMask,
+	int gaussFiltSize);
+
+CVAPI(double) cveFindTransformECCWithMask(
+	cv::_InputArray* templateImage,
+	cv::_InputArray* inputImage,
+	cv::_InputArray* templateMask,
+	cv::_InputArray* inputMask,
+	cv::_InputOutputArray* warpMatrix,
+	int motionType,
+	CvTermCriteria* criteria,
+	int gaussFiltSize);
 
 CVAPI(cv::KalmanFilter*) cveKalmanFilterCreate(int dynamParams, int measureParams, int controlParams, int type);
 

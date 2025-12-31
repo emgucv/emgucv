@@ -255,17 +255,48 @@ void cveEstimateRigidTransform(cv::_InputArray* src, cv::_InputArray* dst, bool 
 }*/
 
 double cveFindTransformECC(
-	cv::_InputArray* templateImage, cv::_InputArray* inputImage,
-	cv::_InputOutputArray* warpMatrix, int motionType,
+	cv::_InputArray* templateImage, 
+	cv::_InputArray* inputImage,
+	cv::_InputOutputArray* warpMatrix, 
+	int motionType,
 	CvTermCriteria* criteria,
-	cv::_InputArray* inputMask)
+	cv::_InputArray* inputMask,
+	int gaussFiltSize)
 {
 #ifdef HAVE_OPENCV_VIDEO
 	return cv::findTransformECC(
-		*templateImage, *inputImage,
-		*warpMatrix, motionType,
+		*templateImage,
+		*inputImage,
+		*warpMatrix,
+		motionType,
 		*criteria,
-		inputMask ? *inputMask : static_cast<cv::InputArray>(cv::noArray()));
+		inputMask ? *inputMask : static_cast<cv::InputArray>(cv::noArray()),
+		gaussFiltSize);
+#else
+	throw_no_video();
+#endif
+}
+
+double cveFindTransformECCWithMask(
+	cv::_InputArray* templateImage,
+	cv::_InputArray* inputImage,
+	cv::_InputArray* templateMask,
+	cv::_InputArray* inputMask,
+	cv::_InputOutputArray* warpMatrix,
+	int motionType,
+	CvTermCriteria* criteria,
+	int gaussFiltSize)
+{
+#ifdef HAVE_OPENCV_VIDEO
+	return cv::findTransformECCWithMask(
+		*templateImage,
+		*inputImage,
+		templateMask ? *templateMask : static_cast<cv::InputArray>(cv::noArray()),
+		inputMask ? *inputMask : static_cast<cv::InputArray>(cv::noArray()),
+		*warpMatrix,
+		motionType,
+		*criteria,
+		gaussFiltSize);
 #else
 	throw_no_video();
 #endif
