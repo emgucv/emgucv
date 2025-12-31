@@ -248,6 +248,11 @@ void cvePhaseCorrelate(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputA
 	cv::Point2d pt = cv::phaseCorrelate(*src1, *src2, window ? *window : (cv::InputArray) cv::noArray(), response);
 	result->x = pt.x; result->y = pt.y;
 }
+void cvePhaseCorrelateIterative(cv::_InputArray* src1, cv::_InputArray* src2, int L2size, int maxIters, CvPoint2D64f* result)
+{
+	cv::Point2d pt = cv::phaseCorrelateIterative(*src1, *src2, L2size, maxIters);
+	result->x = pt.x; result->y = pt.y;
+}
 void cveCreateHanningWindow(cv::_OutputArray* dst, CvSize* winSize, int type)
 {
 	cv::createHanningWindow(*dst, *winSize, type);

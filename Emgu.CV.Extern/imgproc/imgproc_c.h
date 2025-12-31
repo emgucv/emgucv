@@ -87,6 +87,7 @@ CVAPI(void) cveAccumulateSquare(cv::_InputArray* src, cv::_InputOutputArray* dst
 CVAPI(void) cveAccumulateProduct(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputOutputArray* dst, cv::_InputArray* mask);
 CVAPI(void) cveAccumulateWeighted(cv::_InputArray* src, cv::_InputOutputArray* dst, double alpha, cv::_InputArray* mask);
 CVAPI(void) cvePhaseCorrelate(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputArray* window, double* response, CvPoint2D64f* result);
+CVAPI(void) cvePhaseCorrelateIterative(cv::_InputArray* src1, cv::_InputArray* src2, int L2size, int maxIters, CvPoint2D64f* result);
 CVAPI(void) cveCreateHanningWindow(cv::_OutputArray* dst, CvSize* winSize, int type);
 
 CVAPI(void) cveResize(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* dsize, double fx, double fy, int interpolation);

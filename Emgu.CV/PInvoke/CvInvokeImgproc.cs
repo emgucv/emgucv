@@ -2822,6 +2822,27 @@ namespace Emgu.CV
         private static extern void cvePhaseCorrelate(IntPtr src1, IntPtr src2, IntPtr window, ref double response, ref MCvPoint2D64f result);
 
         /// <summary>
+        /// Detects translational shifts between two images.
+        /// This function extends the standard phaseCorrelate method by improving sub-pixel accuracy through iterative shift refinement in the phase-correlation space.
+        /// </summary>
+        /// <param name="src1">Source floating point array (CV_32FC1 or CV_64FC1)</param>
+        /// <param name="src2">Source floating point array (CV_32FC1 or CV_64FC1)</param>
+        /// <param name="l2size">The size of the correlation neighborhood used by the iterative shift refinement algorithm.</param>
+        /// <param name="maxIters">The maximum number of iterations the iterative refinement algorithm will run.</param>
+        /// <returns>Detected sub-pixel shift between the two arrays.</returns>
+        public static MCvPoint2D64f PhaseCorrelateIterative(IInputArray src1, IInputArray src2, int l2size, int maxIters)
+        {
+            MCvPoint2D64f resultPt = new MCvPoint2D64f();
+            using (InputArray iaSrc1 = src1.GetInputArray())
+            using (InputArray iaSrc2 = src2.GetInputArray())
+                cvePhaseCorrelateIterative(iaSrc1, iaSrc2, l2size, maxIters, ref resultPt);
+            return resultPt;
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cvePhaseCorrelateIterative(IntPtr src1, IntPtr src2, int l2size, int maxIters, ref MCvPoint2D64f result);
+
+        /// <summary>
         /// This function computes a Hanning window coefficients in two dimensions.
         /// </summary>
         /// <param name="dst">Destination array to place Hann coefficients in</param>
