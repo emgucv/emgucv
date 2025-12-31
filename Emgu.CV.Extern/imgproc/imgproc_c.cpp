@@ -559,7 +559,8 @@ void cveBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int d, doub
 //Subdiv2D
 cv::Subdiv2D* cveSubdiv2DCreate(CvRect* rect)
 {
-	return new cv::Subdiv2D(*rect);
+	cv::Rect2f r(*rect);
+	return new cv::Subdiv2D(r);
 }
 void cveSubdiv2DRelease(cv::Subdiv2D** subdiv)
 {
