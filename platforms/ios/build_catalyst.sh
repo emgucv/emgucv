@@ -27,7 +27,7 @@ JOB_COUNT=1
 
 mkdir -p platforms/ios/catalyst_$1     
 cd platforms/ios/catalyst_$1
-../configure_xcode.sh $CV_CONTRIB_OPTION catalyst $1 -DCMAKE_C_COMPILER="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang" -DCMAKE_CXX_COMPILER="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++" ${@:3}
+../configure_xcode.sh $CV_CONTRIB_OPTION catalyst $1 -DCMAKE_C_COMPILER="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang" -DCMAKE_CXX_COMPILER="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++" -DWITH_KLEIDICV:BOOL=OFF ${@:3}
 cmake --build . --config Release --target package
 cd ../../..
     
