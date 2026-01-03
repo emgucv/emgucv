@@ -195,9 +195,15 @@ CVAPI(void) cveDescriptorMatcherRadiusMatch2(
 CVAPI(cv::BFMatcher*) cveBFMatcherCreate(int distanceType, bool crossCheck, cv::DescriptorMatcher** m);
 CVAPI(void) cveBFMatcherRelease(cv::BFMatcher** matcher);
 
+#ifdef HAVE_OPENCV_FLANN
 //FlannBasedMatcher
 CVAPI(cv::FlannBasedMatcher*) cveFlannBasedMatcherCreate(cv::flann::IndexParams* indexParams, cv::flann::SearchParams* searchParams, cv::DescriptorMatcher** m);
 CVAPI(void) cveFlannBasedMatcherRelease(cv::FlannBasedMatcher** matcher);
+#else
+//FlannBasedMatcher
+CVAPI(void*) cveFlannBasedMatcherCreate(void* indexParams, void* searchParams, void** m);
+CVAPI(void) cveFlannBasedMatcherRelease(void** matcher);
+#endif
 
 //2D Tracker
 CVAPI(int) cveVoteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, std::vector< std::vector< cv::DMatch > >* matches, cv::Mat* mask, double scaleIncrement, int rotationBins);

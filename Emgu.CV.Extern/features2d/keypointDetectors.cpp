@@ -483,6 +483,7 @@ void cveDescriptorMatcherRadiusMatch2(
 #endif
 }
 
+#ifdef HAVE_OPENCV_FLANN
 //FlannBasedMatcher
 cv::FlannBasedMatcher* cveFlannBasedMatcherCreate(cv::flann::IndexParams* indexParams, cv::flann::SearchParams* searchParams, cv::DescriptorMatcher** m)
 {
@@ -505,6 +506,18 @@ void cveFlannBasedMatcherRelease(cv::FlannBasedMatcher** matcher)
 	throw_no_features2d();
 #endif
 }
+#else
+//FlannBasedMatcher
+void* cveFlannBasedMatcherCreate(void* indexParams, void* searchParams, void** m)
+{
+	CV_Error(cv::Error::StsBadFunc, "The library is compiled without FLANN support. To use this module, please switch to the full Emgu CV runtime."
+}
+void cveFlannBasedMatcherRelease(void** matcher)
+{
+	CV_Error(cv::Error::StsBadFunc, "The library is compiled without FLANN support. To use this module, please switch to the full Emgu CV runtime."
+}
+#endif
+
 
 //2D tracker
 int cveVoteForSizeAndOrientation(std::vector<cv::KeyPoint>* modelKeyPoints, std::vector<cv::KeyPoint>* observedKeyPoints, std::vector< std::vector< cv::DMatch > >* matches, cv::Mat* mask, double scaleIncrement, int rotationBins)
