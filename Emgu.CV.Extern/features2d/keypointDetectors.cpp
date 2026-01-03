@@ -510,11 +510,11 @@ void cveFlannBasedMatcherRelease(cv::FlannBasedMatcher** matcher)
 //FlannBasedMatcher
 void* cveFlannBasedMatcherCreate(void* indexParams, void* searchParams, void** m)
 {
-	CV_Error(cv::Error::StsBadFunc, "The library is compiled without FLANN support. To use this module, please switch to the full Emgu CV runtime."
+	CV_Error(cv::Error::StsBadFunc, "The library is compiled without FLANN support. To use this module, please switch to the full Emgu CV runtime.");
 }
 void cveFlannBasedMatcherRelease(void** matcher)
 {
-	CV_Error(cv::Error::StsBadFunc, "The library is compiled without FLANN support. To use this module, please switch to the full Emgu CV runtime."
+	CV_Error(cv::Error::StsBadFunc, "The library is compiled without FLANN support. To use this module, please switch to the full Emgu CV runtime.");
 }
 #endif
 
