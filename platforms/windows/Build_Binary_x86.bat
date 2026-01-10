@@ -135,7 +135,10 @@ IF EXIST "%PROGRAMFILES_DIR%\CMake\bin\cmake.exe" SET CMAKE="%PROGRAMFILES_DIR%\
 IF EXIST "%PROGRAMW6432%\CMake\bin\cmake.exe" SET CMAKE="%PROGRAMW6432%\CMake\bin\cmake.exe"
 IF EXIST "%PROGRAMW6432%\CMake\bin\cmake.exe" SET CMAKE="%PROGRAMW6432%\CMake\bin\cmake.exe"
 IF EXIST "%VS2022_DIR%\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" SET CMAKE="%VS2022_DIR%\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"
+REM IF cuda is enabled, do not use CMAKE from VS2026. It will only generate solution for VS2026
+IF "%2%"=="gpu" GOTO END_FIND_CMAKE
 IF EXIST "%VS2026_DIR%\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" SET CMAKE="%VS2026_DIR%\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"
+:END_FIND_CMAKE
 IF EXIST "CMakeCache.txt" del CMakeCache.txt
 
 
@@ -466,9 +469,10 @@ REM https://stackoverflow.com/questions/45525377/installing-opencv-3-3-0-with-co
 
 SET CUDA_SDK_DIR=%CUDA_PATH%
 
-REM prefer CUDA 12.8
-IF EXIST "%CUDA_PATH_V12_8%" SET CUDA_SDK_DIR=%CUDA_PATH_V12_8%
+REM prefer CUDA 13.1
+IF EXIST "%CUDA_PATH_V13_1%" SET CUDA_SDK_DIR=%CUDA_PATH_V13_1%
 
+IF NOT EXIST "%CUDA_SDK_DIR%" SET CUDA_SDK_DIR=%CUDA_PATH_V13_1%
 IF NOT EXIST "%CUDA_SDK_DIR%" SET CUDA_SDK_DIR=%CUDA_PATH_V13_0%
 IF NOT EXIST "%CUDA_SDK_DIR%" SET CUDA_SDK_DIR=%CUDA_PATH_V12_9%
 IF NOT EXIST "%CUDA_SDK_DIR%" SET CUDA_SDK_DIR=%CUDA_PATH_V12_8%
@@ -531,6 +535,7 @@ IF "%CUDA_SDK_DIR%" == "%CUDA_PATH_V12_6%" SET CUDA_ARCH_BIN_OPTION="5.2 6.0 6.1
 IF "%CUDA_SDK_DIR%" == "%CUDA_PATH_V12_8%" SET CUDA_ARCH_BIN_OPTION="5.2 6.0 6.1 7.0 7.5 8.0 8.6 8.9 9.0 12.0"
 IF "%CUDA_SDK_DIR%" == "%CUDA_PATH_V12_9%" SET CUDA_ARCH_BIN_OPTION="5.2 6.0 6.1 7.0 7.5 8.0 8.6 8.9 9.0 12.0"
 IF "%CUDA_SDK_DIR%" == "%CUDA_PATH_V13_0%" SET CUDA_ARCH_BIN_OPTION="7.5 8.0 8.6 8.9 9.0 12.0"
+IF "%CUDA_SDK_DIR%" == "%CUDA_PATH_V13_1%" SET CUDA_ARCH_BIN_OPTION="7.5 8.0 8.6 8.9 9.0 12.0"
 
 GOTO END_GPU_ARCH_BIN
 
