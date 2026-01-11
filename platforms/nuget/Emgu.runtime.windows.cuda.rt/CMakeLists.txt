@@ -20,10 +20,10 @@ PROJECT(Emgu.runtime.windows.cuda.rt.nuget)
     EMGU_SIGN_NUGET(${PROJECT_NAME} "${NUGET_OUTPUT_DIR}/${EMGU_CUDART_NUGET_ID}.${EMGU_CUDART_VERSION}.nupkg")
   ENDIF()
 
-#ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.nuget cvextern)
+  ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV cvextern)
 
-if(ENABLE_SOLUTION_FOLDERS)
-  set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "nuget")
-endif() 
+  if(ENABLE_SOLUTION_FOLDERS)
+    set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "nuget")
+  endif() 
 
 ENDIF()
