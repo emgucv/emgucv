@@ -1390,6 +1390,7 @@ IF(HAVE_LINUX_ARM)
 	SET(EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST} 
       <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
       <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+	  <file src=\"README.md\" target=\"docs\\\" />
 	  <file src=\"Emgu.CV.runtime.debian-arm.props\" target=\"build\\\" />")
 ENDIF()
 IF(HAVE_LINUX_ARM64)
@@ -1402,6 +1403,7 @@ IF(HAVE_LINUX_ARM64)
 	SET(EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST} 
       <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
       <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+	  <file src=\"README.md\" target=\"docs\\\" />
 	  <file src=\"Emgu.CV.runtime.debian-arm64.props\" target=\"build\\\" />")
 ENDIF()
 
@@ -2070,26 +2072,28 @@ IF(HAVE_LINUX_ARM)
   SET(EMGUCV_DEBIAN_ARM_NUGET_TITLE "Emgu CV Native ARM Runtime for Debian (including Raspberry Pi OS)")
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm/Emgu.CV.runtime.debian-arm.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm/Package.nuspec)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm/README.md
 ENDIF()
 
 IF(HAVE_LINUX_ARM64)
   SET(EMGUCV_DEBIAN_ARM64_NUGET_TITLE "Emgu CV Native ARM64 Runtime for Debian (including Raspberry Pi OS)")
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm64/Emgu.CV.runtime.debian-arm64.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm64.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm64/Package.nuspec)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm64.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm64/README.md
 ENDIF()
 
 IF(HAVE_UBUNTU_X86 OR HAVE_UBUNTU_X64 OR HAVE_UBUNTU_ARM64)
   SET(EMGUCV_UBUNTU_NUGET_TITLE "Emgu CV Native Runtime for Ubuntu")
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/Emgu.CV.runtime.ubuntu.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ubuntu.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/Package.nuspec)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ubuntu.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/README.md)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ubuntu.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/README.md)
 ENDIF()
 
 IF(HAVE_RHEL_X86 OR HAVE_RHEL_X64 OR HAVE_RHEL_ARM64)
   SET(EMGUCV_RHEL_NUGET_TITLE "Emgu CV Native Runtime for RHEL")
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.rhel.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/Package.nuspec)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/Emgu.CV.runtime.rhel.props)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.rhel.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/README.md)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.rhel.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/README.md)
 ENDIF()
 
 SET(EMGUCV_NUGET_TITLE "Emgu CV")
