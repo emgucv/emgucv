@@ -13,6 +13,7 @@
 	<summary>This package provides the native CUDA runtime</summary>
     <description>This package provides the native CUDA runtime</description>
     <releaseNotes>This is the ${EMGU_CUDART_VERSION} release of CUDA runtime.</releaseNotes>
+	<readme>docs/README.md</readme>
 	${EMGU_CUDART_NUGET_DEPENDENCY}
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved</copyright>
     <tags>native emgu cuda</tags>

@@ -1724,7 +1724,7 @@ ENDIF()
 	""
 	""
 	${HAVE_opencv_ml})
-	
+
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/svmsgd_property" 
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/SVMSGD.g.cs"

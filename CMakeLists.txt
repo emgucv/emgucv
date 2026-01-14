@@ -1308,7 +1308,8 @@ IF(HAVE_WINDESKTOP_X64)
 	SET(EMGU_WINDOWS_ZLIBWAPI_X64_NUGET_FILE_LIST "${EMGU_WINDOWS_ZLIBWAPI_X64_NUGET_FILE_LIST}
 	<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\zlibwapi.dll\" target=\"runtimes\\win-x64\\native\" /> 
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-	<file src=\"zlib_license.txt\" target=\"\" />")
+	<file src=\"zlib_license.txt\" target=\"\" />
+	<file src=\"README.md\" target=\"docs\\\" />")
     INSTALL(
       FILES
       "libs/runtimes/win-x64/native/version_string.inc"
@@ -1708,36 +1709,44 @@ IF(WITH_CUDA)
 		SET(EMGU_CUDA_RT_NUGET_FILE_LIST "${EMGU_CUDA_RT_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cu*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cufft*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cublas*.dll\" target=\"runtimes\\win-x64\\native\" /> 
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
-		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
+		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />
+		<file src=\"README.md\" target=\"docs\\\" />")
 		SET(EMGU_CUDA_NPP_NUGET_FILE_LIST "${EMGU_CUDA_NPP_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\npp*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
-		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
+		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />
+		<file src=\"README.md\" target=\"docs\\\" />")
 		SET(EMGU_CUDA_BLAS_NUGET_FILE_LIST "${EMGU_CUDA_BLAS_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cublas64*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
-		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
+		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />
+		<file src=\"README.md\" target=\"docs\\\" />")
 		SET(EMGU_CUDA_BLAS_LT_NUGET_FILE_LIST "${EMGU_CUDA_BLAS_LT_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cublasLt*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
-		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
+		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />
+		<file src=\"README.md\" target=\"docs\\\" />")
 		SET(EMGU_CUFFT_NUGET_FILE_LIST "${EMGU_CUFFT_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cufft*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />")
+		<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />
+		<file src=\"README.md\" target=\"docs\\\" />")
 		SET(EMGU_CUDNN_NUGET_FILE_LIST "${EMGU_CUDNN_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_engines*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_ops*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_cnn*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_adv*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
+		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />
+		<file src=\"README.md\" target=\"docs\\\" />")
 
 		SET(EMGU_CUDNN_CNN_NUGET_FILE_LIST "${EMGU_CUDNN_CNN_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_cnn*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
+		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />
+		<file src=\"README.md\" target=\"docs\\\" />")
 		SET(EMGU_CUDNN_ENGINES_NUGET_FILE_LIST "${EMGU_CUDNN_ENGINES_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_engines*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
+		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />
+		<file src=\"README.md\" target=\"docs\\\" />")
 		SET(EMGU_CUDNN_CNN_NUGET_DEPENDENCY "
 		<dependencies>
 		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
@@ -1749,7 +1758,8 @@ IF(WITH_CUDA)
 		SET(EMGU_CUDNN_OPS_NUGET_FILE_LIST "${EMGU_CUDNN_OPS_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_ops*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
+		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />
+		<file src=\"README.md\" target=\"docs\\\" />")
 		SET(EMGU_CUDNN_OPS_NUGET_DEPENDENCY "
 		<dependencies>
 		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
@@ -1757,7 +1767,8 @@ IF(WITH_CUDA)
 		SET(EMGU_CUDNN_ADV_NUGET_FILE_LIST "${EMGU_CUDNN_ADV_NUGET_FILE_LIST} 
 		<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_adv*.dll\" target=\"runtimes\\win-x64\\native\" />
 		<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />")
+		<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />
+		<file src=\"README.md\" target=\"docs\\\" />")
 		SET(EMGU_CUDNN_ADV_NUGET_DEPENDENCY "
 		<dependencies>
 		  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
@@ -1833,16 +1844,27 @@ IF(WITH_CUDA)
 	
 	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/Package.nuspec)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_ZLIBWAPI_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_ZLIBWAPI_ID}/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_ZLIBWAPI_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_ZLIBWAPI_ID}/README.md)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUFFT_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUFFT_NUGET_ID}/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUFFT_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUFFT_NUGET_ID}/README.md)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_NUGET_ID}/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_NUGET_ID}/README.md)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_ADV_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_ADV_NUGET_ID}/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_ADV_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_ADV_NUGET_ID}/README.md)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_CNN_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_CNN_NUGET_ID}/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_CNN_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_CNN_NUGET_ID}/README.md)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_ENGINES_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_ENGINES_NUGET_ID}/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_ENGINES_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_ENGINES_NUGET_ID}/README.md)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_OPS_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_OPS_NUGET_ID}/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_OPS_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_OPS_NUGET_ID}/README.md)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_NPP_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_NPP_NUGET_ID}/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_NPP_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_NPP_NUGET_ID}/README.md)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDART_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDART_NUGET_ID}/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDART_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDART_NUGET_ID}/README.md)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDA_BLAS_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDA_BLAS_NUGET_ID}/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDA_BLAS_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDA_BLAS_NUGET_ID}/README.md)
 	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDA_BLAS_LT_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDA_BLAS_LT_NUGET_ID}/Package.nuspec)
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDA_BLAS_LT_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDA_BLAS_LT_NUGET_ID}/README.md)
 ENDIF()
 
 IF(HAVE_WINDESKTOP_X86)

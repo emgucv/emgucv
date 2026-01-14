@@ -13,6 +13,7 @@
 	<summary>This package provides the native zlibwapi runtime dependencies for CUDNN </summary>
     <description>This package provides the native zlibwapi runtime dependencies for CUDNN</description>
     <releaseNotes>This is the ${EMGU_ZLIBWAPI_VERSION} release of zlibwapi runtime. </releaseNotes>
+	<readme>docs/README.md</readme>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved</copyright>
     <tags>native emgu zlib zlibwapi</tags>
   </metadata>

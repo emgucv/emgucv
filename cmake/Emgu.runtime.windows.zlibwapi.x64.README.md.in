@@ -1,0 +1,18 @@
+## About this package
+
+This package is the ${EMGU_ZLIBWAPI_VERSION} release of zlibwapi runtime.
+
+This package provides the native CUDA dependencies for EMGU software libraries.
+
+It is used by the Emgu CV and Emgu TF cuda release.
+
+For for information, please visit
+<${NUGET_EMGU_URL}/wiki/>
+
+## Note
+
+If you are targeting .Net Framework, please read this first:
+<${NUGET_EMGU_URL}/wiki/index.php/Download_And_Installation#Targeting_.Net_Framework>
+
+If you have issues getting the pacakge installed for your project, and your project use packages.config to manage nuget packages, the following instructions will help:
+<${NUGET_EMGU_URL}/wiki/index.php/Download_And_Installation#Upgrade_from_packages.config_to_package_reference>
