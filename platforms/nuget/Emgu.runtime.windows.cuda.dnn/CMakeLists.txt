@@ -23,8 +23,8 @@ PROJECT(Emgu.runtime.windows.cuda.dnn.nuget)
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.runtime.windows.cuda.rt.nuget)
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.runtime.windows.zlibwapi.nuget)
 
-if(ENABLE_SOLUTION_FOLDERS)
-  set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "nuget")
-endif() 
+  if(ENABLE_SOLUTION_FOLDERS)
+    set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "nuget")
+  endif() 
 
 ENDIF()
