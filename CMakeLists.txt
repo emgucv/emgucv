@@ -1280,7 +1280,8 @@ IF(HAVE_WINDESKTOP_X86)
 	<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\vcruntime*.dll\" target=\"runtimes\\win-x86\\native\" />     
 	<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\vccorlib*.dll\" target=\"runtimes\\win-x86\\native\" />     
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+	<file src=\"README.md\" target=\"docs\\\" />")
 	INSTALL(
       FILES
       "libs/runtimes/win-x86/native/version_string.inc"
@@ -1303,7 +1304,8 @@ IF(HAVE_WINDESKTOP_X64)
 	<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\vcruntime*.dll\" target=\"runtimes\\win-x64\\native\" />     
 	<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\vccorlib*.dll\" target=\"runtimes\\win-x64\\native\" />     
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+	<file src=\"README.md\" target=\"docs\\\" />")
 	
 	SET(EMGU_WINDOWS_ZLIBWAPI_X64_NUGET_FILE_LIST "${EMGU_WINDOWS_ZLIBWAPI_X64_NUGET_FILE_LIST}
 	<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\zlibwapi.dll\" target=\"runtimes\\win-x64\\native\" /> 
@@ -1328,7 +1330,8 @@ IF(HAVE_WINDESKTOP_ARM64)
 	<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vcruntime*.dll\" target=\"runtimes\\win-arm64\\native\" />
 	<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vccorlib*.dll\" target=\"runtimes\\win-arm64\\native\" />
 	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />")
+    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+	<file src=\"README.md\" target=\"docs\\\" />")
 	INSTALL(
       FILES
       "libs/runtimes/win-arm64/native/version_string.inc"
