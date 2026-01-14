@@ -15,6 +15,7 @@
     <description>This package contains the native x64 MSVC runtime for Windows</description>
     <releaseNotes>This is the x64 MSVC runtime v${MSVC_TOOLSET_VERSION} built by ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV.   	        
     </releaseNotes>
+	<readme>docs/README.md</readme>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>native emgu msvc</tags>
   </metadata>
