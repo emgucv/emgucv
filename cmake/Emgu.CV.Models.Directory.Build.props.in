@@ -13,11 +13,11 @@
  
     <PackageId>${EMGUCV_MODELS_NUGET_ID}</PackageId>
 	
-	<title>${EMGUCV_MODELS_NUGET_TITLE}</title>
+	<title>Experimental component to help download, initialize and execute image processing/AI models.</title>
     <version>${CPACK_PACKAGE_VERSION}</version>
     <authors>${CPACK_PACKAGE_VENDOR}</authors>
     <owners>${CPACK_PACKAGE_VENDOR}</owners>
-	<summary>${EMGUCV_MODELS_NUGET_SUMMARY}</summary>
+	<summary>Experimental component to help download, initialize and execute image processing/AI models. This is under active development and API may change from time to time.</summary>
     <Description>Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library. Allowing OpenCV functions to be called from .NET compatible languages such as C#, VB, VC++, IronPython etc. </Description>
     <PackageReleaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. For online documentation please visit
 ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html    	        
