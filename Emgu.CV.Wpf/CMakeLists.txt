@@ -11,6 +11,16 @@ IF (TARGET Emgu.CV)
       #  SET(EXTRA_BUILD_FLAGS "/p:Platform=\"Any CPU\"")
       #ENDIF()
 
+    #generate nuget config file for Emgu.CV.Wpf
+    CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/Emgu.CV.Wpf.Directory.Build.props.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Wpf/Directory.Build.props)
+    IF(EMGU_SIGN_FOUND AND WIN32)
+      CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignBinary.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Wpf/SignBinary.Targets)
+    ENDIF()
+    IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+      CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignPkg.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Wpf/SignPkg.Targets)
+    ENDIF()
+    CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/Emgu.CV.Wpf.Package.README.md.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Wpf/docs/README.md)
+
     BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Wpf.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
 	
     #IF (EMGU_SIGN_FOUND)

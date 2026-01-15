@@ -8,18 +8,28 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
   
   PROJECT(Emgu.CV.Models)
   
-  #SET(EXTRA_MSBUILD_FLAGS "")
+  SET(EXTRA_MSBUILD_FLAGS "")
   #IF(WIN32)
   #  SET(EXTRA_BUILD_FLAGS "/p:Platform=\"Any CPU\"")
   #ENDIF()
-  
+
+  #generate nuget config file for Emgu.CV.Models
+  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/Emgu.CV.Models.Directory.Build.props.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Models/NetStandard/Directory.Build.props)
+  IF(EMGU_SIGN_FOUND AND WIN32)
+    CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignBinary.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Models/NetStandard/SignBinary.Targets)
+  ENDIF()
+  IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+    CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignPkg.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Models/NetStandard/SignPkg.Targets)
+  ENDIF()
+  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/Emgu.CV.Models.Package.README.md.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Models/NetStandard/docs/README.md)
+
   IF(DOTNET_FOUND)
     #IF (APPLE AND NOT ${CMAKE_APPLE_SILICON_PROCESSOR})
     # Need to use dotnet to build the project.
     # dotnet msbuild seems to have a bug on Mac OS, it do not respect the assembly name.
     # It output Emgu.CV.Model.NetStandard.dll instead of Emgu.CV.Model.dll specified in
     # the csproj file. dotnet seems to work just fine.
-    BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models.csproj" "" ALL)
+    BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
     #ELSEIF (DOTNET_FOUND)
     # BUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../../Solution/CrossPlatform/Emgu.CV.sln" "Emgu.CV.Models.NetStandard" "${EXTRA_BUILD_FLAGS}" ALL)
   ELSE()
