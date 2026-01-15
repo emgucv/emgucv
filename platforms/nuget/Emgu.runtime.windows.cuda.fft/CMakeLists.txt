@@ -2,10 +2,13 @@
 #  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF (WIN32 AND (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64) AND WITH_CUDA)
+IF (WIN32 AND HAVE_WINDESKTOP_X64 AND WITH_CUDA)
 
 PROJECT(Emgu.runtime.windows.cuda.fft.nuget)
 
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
+	
   get_filename_component(NUGET_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
 
   BUILD_NUGET_PACKAGE(
