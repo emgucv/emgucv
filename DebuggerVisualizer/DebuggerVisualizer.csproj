@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Emgu.CV.DebuggerVisualizer</RootNamespace>
 	<BaseOutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\</BaseOutputPath>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
