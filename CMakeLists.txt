@@ -1346,10 +1346,10 @@ IF(HAVE_WINDESKTOP)
 	<file src=\"README.md\" target=\"docs\\\" />")
 ENDIF()
 
-SET(EMGUCV_MAUI_MACOS_NUGET_FILE_LIST "")
+#SET(EMGUCV_MAUI_MACOS_NUGET_FILE_LIST "")
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Mac/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Mac/docs/README.md)
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Mac/Directory.Build.props)
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Mac/docs/README.md)
 
 SET(EMGUCV_UWP_NUGET_FILE_LIST "")
 IF(HAVE_WINSTORE_10_X86)
@@ -1519,25 +1519,25 @@ SET(NUGET_SYSTEM_DRAWING_COMMON_VERSION "${SYSTEM_DRAWING_COMMON_VERSION}")
 #      </group>")
 
 
-SET(EMGUCV_BITMAP_NUGET_TITLE "Bitmap extension for Emgu CV")
-SET(EMGUCV_BITMAP_NUGET_SUMMARY "This package add extension method to convert Bitmap to and from Emgu objects (e.g. Mat, UMat, GpuMat)")
-SET(EMGUCV_BITMAP_NUGET_FILE_LIST "")
-SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "")
-SET(EMGUCV_BITMAP_NUGET_FILE_LIST "${EMGUCV_BITMAP_NUGET_FILE_LIST} 
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Bitmap.dll\" target=\"lib\\netstandard2.0\" />
-    <file src=\"..\\..\\..\\libs\\Emgu.CV.Bitmap.xml\" target=\"lib\\netstandard2.0\" />
-    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-	<file src=\"README.md\" target=\"docs\\\" />")
-SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "${EMGUCV_BITMAP_NUGET_DEPENDENCY} 
-      <group targetFramework=\".NETStandard2.0\">
-        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
-        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-      </group>")
-SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "
-	<dependencies>
-${EMGUCV_BITMAP_NUGET_DEPENDENCY}
-    </dependencies>")
+#SET(EMGUCV_BITMAP_NUGET_TITLE "Bitmap extension for Emgu CV")
+#SET(EMGUCV_BITMAP_NUGET_SUMMARY "This package add extension method to convert Bitmap to and from Emgu objects (e.g. Mat, UMat, GpuMat)")
+#SET(EMGUCV_BITMAP_NUGET_FILE_LIST "")
+#SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "")
+#SET(EMGUCV_BITMAP_NUGET_FILE_LIST "${EMGUCV_BITMAP_NUGET_FILE_LIST} 
+#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Bitmap.dll\" target=\"lib\\netstandard2.0\" />
+#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Bitmap.xml\" target=\"lib\\netstandard2.0\" />
+#    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+#    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+#	<file src=\"README.md\" target=\"docs\\\" />")
+#SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "${EMGUCV_BITMAP_NUGET_DEPENDENCY} 
+#      <group targetFramework=\".NETStandard2.0\">
+#        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
+#        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+#      </group>")
+#SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "
+#	<dependencies>
+#${EMGUCV_BITMAP_NUGET_DEPENDENCY}
+#    </dependencies>")
 	
 #SET(EMGUCV_WPF_NUGET_TITLE "WPF extension for Emgu CV")
 #SET(EMGUCV_WPF_NUGET_SUMMARY "This package add extension method to convert BitmapSource to and from Emgu objects (e.g. Mat)")
@@ -1942,20 +1942,20 @@ IF(EMGU_SIGN_FOUND AND WIN32)
 ENDIF()
 
 #IF(HAVE_ANDROID)
-  SET(EMGUCV_MAUI_ANDROID_NUGET_TITLE "Emgu CV for MAUI Android Native Runtime")
+  #SET(EMGUCV_MAUI_ANDROID_NUGET_TITLE "Emgu CV for MAUI Android Native Runtime")
   
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/Directory.Build.props)
-  IF(EMGU_SIGN_FOUND AND WIN32)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/SignBinary.Targets)
-  ENDIF()
-  IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/SignPkg.Targets)
-  ENDIF()
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/docs/README.md)
+  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/Directory.Build.props)
+  #IF(EMGU_SIGN_FOUND AND WIN32)
+  #  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/SignBinary.Targets)
+  #ENDIF()
+  #IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+  #  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/SignPkg.Targets)
+  #ENDIF()
+  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/docs/README.md)
 #ENDIF()
 
 #IF(HAVE_IOS)  
-  SET(EMGUCV_MAUI_IOS_NUGET_TITLE "Emgu CV for MAUI iOS Native Runtime")	
+  #SET(EMGUCV_MAUI_IOS_NUGET_TITLE "Emgu CV for MAUI iOS Native Runtime")	
   #SET(EMGUCV_MAUI_IOS_POST_PROCESS_BINARY "${EMGUCV_MAUI_IOS_POST_PROCESS_BINARY}")
   #SET(EMGUCV_MAUI_IOS_POST_PROCESS_BINARY "${EMGUCV_MAUI_IOS_POST_PROCESS_BINARY}
   #<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">
@@ -1963,13 +1963,13 @@ ENDIF()
   #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
   #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
   #</Target>")  
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/iOS/Directory.Build.props)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/iOS/docs/README.md)  
+  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/iOS/Directory.Build.props)
+  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/iOS/docs/README.md)  
 #ENDIF()
 
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/Emgu.CV.runtime.macos.props)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.macos.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/Package.nuspec)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.macos.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/docs/README.md)  
+  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/Emgu.CV.runtime.macos.props)
+  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.macos.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/Package.nuspec)
+  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.macos.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/docs/README.md)  
 
 
 #IF(HAVE_MAUI)
@@ -1985,47 +1985,48 @@ ENDIF()
     </ItemGroup>")
   ENDIF()
   
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/Directory.Build.props)
-  IF(EMGU_SIGN_FOUND AND WIN32)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/SignBinary.Targets)
-  ENDIF()
-  IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/SignPkg.Targets)
-  ENDIF()
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/docs/README.md)
+  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/Directory.Build.props)
+  #IF(EMGU_SIGN_FOUND AND WIN32)
+  #  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/SignBinary.Targets)
+  #ENDIF()
+  #IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+  #  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/SignPkg.Targets)
+  #ENDIF()
+  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/docs/README.md)
+  
   #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui/README.md)
   #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui/Package.nuspec)
 #ENDIF()
 
-IF (HAVE_WINDESKTOP)
-  SET(EMGUCV_DEBUGGER_VISUALIZER_PACKAGE_REFERENCE "
-	<ItemGroup>
-      <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WINDOWS_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
-	  </PackageReference>
-	  <!--
-	  <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WPF_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
-	  </PackageReference>
-	  -->
-    </ItemGroup>")
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.DebuggerVisualizer.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/Directory.Build.props)
-  IF(EMGU_SIGN_FOUND AND WIN32)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/SignBinary.Targets)
-	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignVSIX.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/SignVSIX.Targets)
-  ENDIF()
-ENDIF()
+#IF (HAVE_WINDESKTOP)
+#  SET(EMGUCV_DEBUGGER_VISUALIZER_PACKAGE_REFERENCE "
+#	<ItemGroup>
+#      <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WINDOWS_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
+#	  </PackageReference>
+#	  <!--
+#	  <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WPF_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
+#	  </PackageReference>
+#	  -->
+#    </ItemGroup>")
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.DebuggerVisualizer.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/Directory.Build.props)
+#  IF(EMGU_SIGN_FOUND AND WIN32)
+#    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/SignBinary.Targets)
+#	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignVSIX.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/SignVSIX.Targets)
+#  ENDIF()
+#ENDIF()
 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.BuildInfo.Console.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/BuildInfo.Console/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Test.Net.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Test/Emgu.CV.Test.Net/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.DynamicImage.Asp.Net.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/DynamicImage.Asp.Net/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.HelloWorld.Console.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/HelloWorld/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.HelloWorld.WPF.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/HelloWorld.WPF/Directory.Build.props)
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Maui.Demo.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/MAUI/MauiDemoApp/Directory.Build.props)
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.BuildInfo.Console.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/BuildInfo.Console/Directory.Build.props)
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Test.Net.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Test/Emgu.CV.Test.Net/Directory.Build.props)
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.DynamicImage.Asp.Net.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/DynamicImage.Asp.Net/Directory.Build.props)
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.HelloWorld.Console.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/HelloWorld/Directory.Build.props)
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.HelloWorld.WPF.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/HelloWorld.WPF/Directory.Build.props)
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Maui.Demo.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/MAUI/MauiDemoApp/Directory.Build.props)
 
-IF(HAVE_WINSTORE_10)
-  SET(EMGUCV_UWP_NUGET_TITLE "Emgu CV for UWP Native Runtime")
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.uwp.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.uwp/Package.nuspec)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.uwp.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.uwp/README.md)
-ENDIF()
+#IF(HAVE_WINSTORE_10)
+#  SET(EMGUCV_UWP_NUGET_TITLE "Emgu CV for UWP Native Runtime")
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.uwp.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.uwp/Package.nuspec)
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.uwp.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.uwp/README.md)
+#ENDIF()
 
 #IF(HAVE_WINDESKTOP_X86)
 #  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}/Package.nuspec)
@@ -2043,8 +2044,8 @@ ENDIF()
 #ENDIF()
 
 IF(HAVE_WINDESKTOP)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/Package.nuspec)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/README.md)
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/Package.nuspec)
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/README.md)
   
   # Generate nuget config file for Emgu.CV.UI
   # Sign and copy the binary
@@ -2061,50 +2062,50 @@ IF(HAVE_WINDESKTOP)
 #  	")
 #  ENDIF()
   
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/Directory.Build.props)
-  IF(EMGU_SIGN_FOUND AND WIN32)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/SignBinary.Targets)
-  ENDIF()
-  IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/SignPkg.Targets)
-  ENDIF()
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/docs/README.md)
+  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/Directory.Build.props)
+  #IF(EMGU_SIGN_FOUND AND WIN32)
+  #  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/SignBinary.Targets)
+  #ENDIF()
+  #IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+  #  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/SignPkg.Targets)
+  #ENDIF()
+  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/docs/README.md)
 ENDIF()
 
-IF(HAVE_LINUX_ARM)
-  SET(EMGUCV_DEBIAN_ARM_NUGET_TITLE "Emgu CV Native ARM Runtime for Debian (including Raspberry Pi OS)")
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm/Emgu.CV.runtime.debian-arm.props)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm/Package.nuspec)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm/README.md)
-ENDIF()
+#IF(HAVE_LINUX_ARM)
+#  SET(EMGUCV_DEBIAN_ARM_NUGET_TITLE "Emgu CV Native ARM Runtime for Debian (including Raspberry Pi OS)")
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm/Emgu.CV.runtime.debian-arm.props)
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm/Package.nuspec)
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm/README.md)
+#ENDIF()
 
-IF(HAVE_LINUX_ARM64)
-  SET(EMGUCV_DEBIAN_ARM64_NUGET_TITLE "Emgu CV Native ARM64 Runtime for Debian (including Raspberry Pi OS)")
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm64/Emgu.CV.runtime.debian-arm64.props)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm64.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm64/Package.nuspec)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm64.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm64/README.md)
-ENDIF()
+#IF(HAVE_LINUX_ARM64)
+#  SET(EMGUCV_DEBIAN_ARM64_NUGET_TITLE "Emgu CV Native ARM64 Runtime for Debian (including Raspberry Pi OS)")
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm64/Emgu.CV.runtime.debian-arm64.props)
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm64.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm64/Package.nuspec)
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm64.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm64/README.md)
+#ENDIF()
 
-IF(HAVE_UBUNTU_X86 OR HAVE_UBUNTU_X64 OR HAVE_UBUNTU_ARM64)
-  SET(EMGUCV_UBUNTU_NUGET_TITLE "Emgu CV Native Runtime for Ubuntu")
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/Emgu.CV.runtime.ubuntu.props)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ubuntu.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/Package.nuspec)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ubuntu.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/README.md)
-ENDIF()
+#IF(HAVE_UBUNTU_X86 OR HAVE_UBUNTU_X64 OR HAVE_UBUNTU_ARM64)
+#  SET(EMGUCV_UBUNTU_NUGET_TITLE "Emgu CV Native Runtime for Ubuntu")
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/Emgu.CV.runtime.ubuntu.props)
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ubuntu.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/Package.nuspec)
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ubuntu.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/README.md)
+#ENDIF()
 
-IF(HAVE_RHEL_X86 OR HAVE_RHEL_X64 OR HAVE_RHEL_ARM64)
-  SET(EMGUCV_RHEL_NUGET_TITLE "Emgu CV Native Runtime for RHEL")
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.rhel.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/Package.nuspec)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/Emgu.CV.runtime.rhel.props)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.rhel.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/README.md)
-ENDIF()
+#IF(HAVE_RHEL_X86 OR HAVE_RHEL_X64 OR HAVE_RHEL_ARM64)
+#  SET(EMGUCV_RHEL_NUGET_TITLE "Emgu CV Native Runtime for RHEL")
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.rhel.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/Package.nuspec)
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/Emgu.CV.runtime.rhel.props)
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.rhel.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/README.md)
+#ENDIF()
 
 SET(EMGUCV_NUGET_TITLE "Emgu CV")
 SET(EMGUCV_NUGET_SUMMARY "Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.")
 
 IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
-	SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} Commercial Release")
-	SET(EMGUCV_NUGET_SUMMARY "${EMGUCV_NUGET_SUMMARY} This is the commercial release.")
+	#SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} Commercial Release")
+	#SET(EMGUCV_NUGET_SUMMARY "${EMGUCV_NUGET_SUMMARY} This is the commercial release.")
 	IF(HAVE_ANDROID)
       SET(EMGUCV_MAUI_ANDROID_NUGET_TITLE "${EMGUCV_MAUI_ANDROID_NUGET_TITLE} Commercial Release for MAUI")	  
 	ENDIF()	
@@ -2115,14 +2116,14 @@ ENDIF()
 
 
 #generate nuget config file for Emgu.CV 
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/Directory.Build.props)
-IF(EMGU_SIGN_FOUND AND WIN32)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/SignBinary.Targets)
-ENDIF()
-IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/SignPkg.Targets)
-ENDIF()
-CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/docs/README.md)
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/Directory.Build.props)
+#IF(EMGU_SIGN_FOUND AND WIN32)
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/SignBinary.Targets)
+#ENDIF()
+#IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/SignPkg.Targets)
+#ENDIF()
+#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/docs/README.md)
 
 #generate nuget config file for Emgu.CV.Models
 #CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/Emgu.CV.Models.Directory.Build.props.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Models/NetStandard/Directory.Build.props)

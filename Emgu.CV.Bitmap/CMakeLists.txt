@@ -8,14 +8,17 @@ IF (TARGET Emgu.CV)
     #DO NOT build Emgu.CV.Bitmap for Android or APPLE
     PROJECT(Emgu.CV.Bitmap)
 
-	  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/Emgu.CV.Bitmap.Directory.Build.props.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Bitmap/Directory.Build.props)
+      #SET(EMGUCV_BITMAP_NUGET_TITLE "Bitmap extension for Emgu CV")
+      #SET(EMGUCV_BITMAP_NUGET_SUMMARY "This package add extension method to convert Bitmap to and from Emgu objects (e.g. Mat, UMat, GpuMat)")
+
+	  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
 	  IF(EMGU_SIGN_FOUND AND WIN32)
-		CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignBinary.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Bitmap/SignBinary.Targets)
+		CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/SignBinary.Targets)
 	  ENDIF()
 	  IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-        CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignPkg.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Bitmap/SignPkg.Targets)
+        CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/SignPkg.Targets)
 	  ENDIF()
-	  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/Emgu.CV.Bitmap.Package.README.md.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Bitmap/docs/README.md)
+	  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md)
 	  
       SET(EXTRA_BUILD_FLAGS "")
       IF(WIN32)

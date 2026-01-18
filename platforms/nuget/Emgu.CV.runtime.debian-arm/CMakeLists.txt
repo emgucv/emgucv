@@ -6,6 +6,11 @@ IF(HAVE_LINUX_ARM)
 
   PROJECT(Emgu.CV.runtime.debian-arm.nuget)
 
+  SET(EMGUCV_DEBIAN_ARM_NUGET_TITLE "Emgu CV Native ARM Runtime for Debian (including Raspberry Pi OS)")
+  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.debian-arm.props)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
+  
   get_filename_component(NUGET_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
 
   BUILD_NUGET_PACKAGE(

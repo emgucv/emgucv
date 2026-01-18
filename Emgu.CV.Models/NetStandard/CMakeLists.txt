@@ -14,14 +14,14 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
   #ENDIF()
 
   #generate nuget config file for Emgu.CV.Models
-  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/Emgu.CV.Models.Directory.Build.props.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Models/NetStandard/Directory.Build.props)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
   IF(EMGU_SIGN_FOUND AND WIN32)
     CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignBinary.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Models/NetStandard/SignBinary.Targets)
   ENDIF()
   IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
     CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignPkg.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Models/NetStandard/SignPkg.Targets)
   ENDIF()
-  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/Emgu.CV.Models.README.md.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Models/NetStandard/docs/README.md)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md)
 
   IF(DOTNET_FOUND)
     #IF (APPLE AND NOT ${CMAKE_APPLE_SILICON_PROCESSOR})

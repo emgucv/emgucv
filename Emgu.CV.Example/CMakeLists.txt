@@ -5,7 +5,10 @@
 IF(EMGU_CV_EXAMPLE_BUILD)
    
   IF (HAVE_ANDROID OR HAVE_IOS OR HAVE_MACOS OR HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINSTORE_10) 
-    INSTALL(
+    
+	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/MAUI/MauiDemoApp/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/MAUI/MauiDemoApp/Directory.Build.props)
+    
+	INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/MAUI/MauiDemoApp/"
       DESTINATION Emgu.CV.Example/MAUI/MauiDemoApp/
@@ -41,6 +44,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
     add_subdirectory(CameraCapture)
     add_subdirectory(Webservice_Host)
     add_subdirectory(Webservice_Client)
+	add_subdirectory(HelloWorld.WPF)
     add_subdirectory(OCR)
     INSTALL(
       DIRECTORY

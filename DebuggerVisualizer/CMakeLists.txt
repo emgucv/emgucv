@@ -28,6 +28,22 @@ INSTALL(
 #    COMPONENT emgucv_binary)
 
 PROJECT(DebuggerVisualizer)
+
+  SET(EMGUCV_DEBUGGER_VISUALIZER_PACKAGE_REFERENCE "
+	<ItemGroup>
+      <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WINDOWS_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
+	  </PackageReference>
+	  <!--
+	  <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WPF_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
+	  </PackageReference>
+	  -->
+    </ItemGroup>")
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
+  IF(EMGU_SIGN_FOUND AND WIN32)
+    CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/SignBinary.Targets)
+	CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignVSIX.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/SignVSIX.Targets)
+  ENDIF()
+
 #SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
 
 #MSBUILD_CSPROJ_IN_SOLUTION(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/../Solution/Windows.Desktop/Emgu.CV.DebuggerVisualizers.sln" "DebuggerVisualizer" "${EXTRA_BUILD_FLAGS}" ALL)	
@@ -36,6 +52,7 @@ BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualize
 IF (TARGET Emgu.CV.Platform.NetStandard)
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.Platform.NetStandard)
 ENDIF()
+
 ADD_DEPENDENCIES(${PROJECT_NAME} cvextern)
 
 IF (TARGET Emgu.CV.runtime.windows.nuget)
