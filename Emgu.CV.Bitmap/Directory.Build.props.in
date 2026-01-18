@@ -3,12 +3,12 @@
  <PropertyGroup>
     <PackageId>${EMGUCV_BITMAP_NUGET_ID}</PackageId>
 	
-	<title>${EMGUCV_BITMAP_NUGET_TITLE}</title>
+	<title>Bitmap extension for Emgu CV</title>
     <version>${CPACK_PACKAGE_VERSION}</version>
     <authors>${CPACK_PACKAGE_VENDOR}</authors>
     <owners>${CPACK_PACKAGE_VENDOR}</owners>
-	<summary>${EMGUCV_BITMAP_NUGET_SUMMARY}</summary>
-    <Description>${EMGUCV_BITMAP_NUGET_SUMMARY}</Description>
+	<summary>This package add extension method to convert Bitmap to and from Emgu objects (e.g. Mat, UMat, GpuMat)</summary>
+    <Description>This package add extension method to convert Bitmap to and from Emgu objects (e.g. Mat, UMat, GpuMat)</Description>
     <PackageReleaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. For online documentation please visit
 ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html    	        
 </PackageReleaseNotes>

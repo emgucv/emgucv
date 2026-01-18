@@ -21,6 +21,11 @@ IF(HAVE_IOS)
 	  
   IF (APPLE)
     PROJECT(Emgu.CV.runtime.maui.ios)
+	
+	SET(EMGUCV_MAUI_IOS_NUGET_TITLE "Emgu CV for MAUI iOS Native Runtime")	
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/README.md)  
+	
 	SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
     BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.ios.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
 

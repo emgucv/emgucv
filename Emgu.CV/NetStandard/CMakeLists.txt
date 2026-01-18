@@ -6,6 +6,17 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
   IF (DOTNET_FOUND)
     #IF(WIN32 AND (MSVC_VERSION GREATER 1900)) #need MSVC to be at least 2017
     PROJECT(Emgu.CV)
+	
+	#generate nuget config file for Emgu.CV 
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
+    IF(EMGU_SIGN_FOUND AND WIN32)
+      CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/SignBinary.Targets)
+    ENDIF()
+    IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+      CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/SignPkg.Targets)
+    ENDIF()
+    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md)
+
     #SET(EXTRA_MSBUILD_FLAGS "")
     
     SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
