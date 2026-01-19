@@ -868,18 +868,6 @@ ELSEIF(NOT ("${ANDROID_LABEL}" STREQUAL ""))
   SET(ANDROID_LABEL "-android${ANDROID_LABEL}")
 ENDIF()
 
-#CHECK_BINARY_EXIST("libs" "Emgu.CV.World*" HAVE_PREBUILD_EMGU_CV_WORLD OFF)
-#CHECK_BINARY_EXIST("libs" "Emgu.CV.Platform.IOS.*" HAVE_PREBUILD_EMGU_CV_IOS OFF)
-#IF(HAVE_PREBUILD_EMGU_CV_IOS)
-#  INSTALL(
-#	FILES
-#	"${CMAKE_SOURCE_DIR}/libs/Emgu.CV.Platform.IOS.dll"
-#	"${CMAKE_SOURCE_DIR}/libs/Emgu.CV.Platform.IOS.xml"
-#	DESTINATION "libs/"
-#	COMPONENT emgucv_binary
-#	)
-#ENDIF()
-
 IF (HAVE_IOS AND (NOT HAVE_MACOS) AND (NOT HAVE_ANDROID) AND (NOT HAVE_WINSTORE_10) AND (NOT (HAVE_WINDESKTOP)) AND (NOT HAVE_LINUX))
   SET(HAVE_IOS_ONLY ON)
 ELSE()
@@ -1208,8 +1196,6 @@ IF(WITH_CUDA)
 	SET(EMGU_CUDNN_CNN_NUGET_ID "${EMGU_CUDNN_NUGET_ID}.cnn")
 	SET(EMGU_CUDNN_ENGINES_NUGET_ID "${EMGU_CUDNN_NUGET_ID}.engines")
 	SET(EMGU_CUDNN_OPS_NUGET_ID "${EMGU_CUDNN_NUGET_ID}.ops")
-#ELSE()
-#	SET(EMGUCV_NUGET_ID "${EMGUCV_NUGET_ID_BASE}")
 ENDIF()
 
 IF(HAVE_MACOS)
@@ -1258,30 +1244,11 @@ IF(WITH_OPENVINO OR WITH_INF_ENGINE)
   SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_WINDOWS_NUGET_ID}.dldt")
 ENDIF()
 
-#SET(EMGUCV_MACOS_NUGET_FILE_LIST "")
-#IF(HAVE_MACOS)
-#  SET(EMGUCV_MACOS_NUGET_FILE_LIST "${EMGUCV_MACOS_NUGET_FILE_LIST} 
-#  <file src=\"..\\..\\..\\libs\\runtimes\\osx\\native\\*.dylib\" target=\"runtimes\\osx\\native\"/>
-#  <file src=\"..\\..\\..\\libs\\runtimes\\osx\\native\\*.inc\" target=\"docs\\\" />
-#  <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-#  <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-#  <file src=\"docs\\README.md\" target=\"docs\\\" />
-#  <file src=\"Emgu.CV.runtime.macos.props\" target=\"build\\\" />")
-#ENDIF()
-
 SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "")
 IF(HAVE_WINDESKTOP_X86)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\cu*.dll;..\\..\\..\\libs\\runtimes\\win-x86\\native\\npp*.dll;..\\..\\..\\libs\\runtimes\\win-x86\\native\\concrt*.dll;..\\..\\..\\libs\\runtimes\\win-x86\\native\\msvcp*.dll;..\\..\\..\\libs\\runtimes\\win-x86\\native\\vcruntime*.dll;..\\..\\..\\libs\\runtimes\\win-x86\\native\\vccorlib*.dll\" target=\"runtimes\\win-x86\\native\" />")
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\version_string.inc\" target=\"docs\\build_info_x86.inc\" />")
-	#SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_TITLE "MSVC x86 runtime for windows")
-	#SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST} 
-	#<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\concrt*.dll\" target=\"runtimes\\win-x86\\native\" /> 
-	#<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\msvcp*.dll\" target=\"runtimes\\win-x86\\native\" /> 
-	#<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\vcruntime*.dll\" target=\"runtimes\\win-x86\\native\" />     
-	#<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\vccorlib*.dll\" target=\"runtimes\\win-x86\\native\" />     
-	#<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    #<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-	#<file src=\"README.md\" target=\"docs\\\" />")
+	
 	INSTALL(
       FILES
       "libs/runtimes/win-x86/native/version_string.inc"
@@ -1297,21 +1264,7 @@ IF(HAVE_WINDESKTOP_X64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\*.elf\" target=\"runtimes\\win-x64\\native\" />")
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\*.mvcmd\" target=\"runtimes\\win-x64\\native\" />")
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\version_string.inc\" target=\"docs\\build_info_x64.inc\" />")
-	#SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_TITLE "MSVC x64 runtime for windows")
-	#SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X64_NUGET_FILE_LIST} 
-	#<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\concrt*.dll\" target=\"runtimes\\win-x64\\native\" /> 
-	#<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\msvcp*.dll\" target=\"runtimes\\win-x64\\native\" /> 
-	#<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\vcruntime*.dll\" target=\"runtimes\\win-x64\\native\" />     
-	#<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\vccorlib*.dll\" target=\"runtimes\\win-x64\\native\" />     
-	#<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    #<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-	#<file src=\"README.md\" target=\"docs\\\" />")
-	
-	#SET(EMGU_WINDOWS_ZLIBWAPI_X64_NUGET_FILE_LIST "${EMGU_WINDOWS_ZLIBWAPI_X64_NUGET_FILE_LIST}
-	#<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\zlibwapi.dll\" target=\"runtimes\\win-x64\\native\" /> 
-	#<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-	#<file src=\"zlib_license.txt\" target=\"\" />
-	#<file src=\"README.md\" target=\"docs\\\" />")
+
     INSTALL(
       FILES
       "libs/runtimes/win-x64/native/version_string.inc"
@@ -1323,15 +1276,7 @@ IF(HAVE_WINDESKTOP_ARM64)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} 
 	   <file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\cu*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\npp*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\concrt*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\msvcp*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vcruntime*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vccorlib*.dll;..\\..\\..\\libs\\runtimes\\win-arm64\\native\\opencv_videoio_ffmpeg*.dll\" target=\"runtimes\\win-arm64\\native\" />
 	   <file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\version_string.inc\" target=\"docs\\build_info_arm64.inc\" />")
-	#SET(EMGU_WINDOWS_MSVCRT_ARM64_NUGET_TITLE "MSVC arm64 runtime for windows")
-	#SET(EMGU_WINDOWS_MSVCRT_ARM64_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_ARM64_NUGET_FILE_LIST} 
-	#<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\concrt*.dll\" target=\"runtimes\\win-arm64\\native\" />
-	#<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\msvcp*.dll\" target=\"runtimes\\win-arm64\\native\" />
-	#<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vcruntime*.dll\" target=\"runtimes\\win-arm64\\native\" />
-	#<file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\vccorlib*.dll\" target=\"runtimes\\win-arm64\\native\" />
-	#<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    #<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-	#<file src=\"README.md\" target=\"docs\\\" />")
+
 	INSTALL(
       FILES
       "libs/runtimes/win-arm64/native/version_string.inc"
@@ -1346,121 +1291,8 @@ IF(HAVE_WINDESKTOP)
 	<file src=\"README.md\" target=\"docs\\\" />")
 ENDIF()
 
-#SET(EMGUCV_MAUI_MACOS_NUGET_FILE_LIST "")
 
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Mac/Directory.Build.props)
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.macos.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Mac/docs/README.md)
-
-#SET(EMGUCV_UWP_NUGET_FILE_LIST "")
-#IF(HAVE_WINSTORE_10_X86)
-#	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win10-x86\\native\\*.dll\" target=\"runtimes\\win10-x86\\native\" />")
-#ENDIF()
-#IF(HAVE_WINSTORE_10_X64)
-#	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win10-x64\\native\\*.dll\" target=\"runtimes\\win10-x64\\native\" />")
-#ENDIF()
-#IF(HAVE_WINSTORE_10_ARM)
-#	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win10-arm\\native\\*.dll\" target=\"runtimes\\win10-arm\\native\" />")
-#ENDIF()
-#IF(HAVE_WINSTORE_10_ARM64)
-#	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win10-arm64\\native\\*.dll\" target=\"runtimes\\win10-arm64\\native\" />")
-#ENDIF()
-#IF(HAVE_WINSTORE_10)
-#    SET(EMGUCV_UWP_NUGET_DEPENDENCY "
-#    <dependencies>
-#      <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-#    </dependencies>")
-#	#<file src=\"Emgu.CV.runtime.uwp.targets\" target=\"build\\${EMGUCV_UWP_NUGET_ID}.targets\" />
-#	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} 
-#    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-#    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-#	<file src=\"README.md\" target=\"docs\\\" />")
-#ENDIF()
-
-#SET(EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST "")
-#SET(EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST "")
-#SET(EMGUCV_DEBIAN_NUGET_DEPENDENCY "    <dependencies>
-#      <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-#      </dependencies>")
-#IF(HAVE_LINUX_ARM)
-#	SET(EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST} 
-#      <file src=\"..\\..\\..\\libs\\runtimes\\linux-arm\\native\\*.so\" target=\"runtimes\\linux-arm\\native\" />")
-#	
-#	SET(EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST} 
-#	  <file src=\"..\\..\\..\\libs\\runtimes\\linux-arm\\native\\debian_arm_version_string.inc\" target=\"docs\\build_info_arm.inc\" />")
-#	
-#	SET(EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM_NUGET_FILE_LIST} 
-#      <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-#      <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-#	  <file src=\"README.md\" target=\"docs\\\" />
-#	  <file src=\"Emgu.CV.runtime.debian-arm.props\" target=\"build\\\" />")
-#ENDIF()
-#IF(HAVE_LINUX_ARM64)
-#	SET(EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST} 
-#      <file src=\"..\\..\\..\\libs\\runtimes\\linux-arm64\\native\\*.so\" target=\"runtimes\\linux-arm64\\native\" />")
-#	  
-#	SET(EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST "${EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST} 
-#	  <file src=\"..\\..\\..\\libs\\runtimes\\linux-arm64\\native\\debian_arm64_version_string.inc\" target=\"docs\\build_info_arm64.inc\" />
-#      <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-#      <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-#	  <file src=\"README.md\" target=\"docs\\\" />
-#	  <file src=\"Emgu.CV.runtime.debian-arm64.props\" target=\"build\\\" />")
-#ENDIF()
-
-#SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "")
-#IF(HAVE_UBUNTU_X64 OR HAVE_UBUNTU_X86 OR HAVE_UBUNTU_ARM64)
-#    SET(EMGUCV_UBUNTU_NUGET_DEPENDENCY "
-#    <dependencies>
-#      <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-#    </dependencies>")
-#	SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} 
-#    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-#    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />	
-#    <file src=\"README.md\" target=\"docs\\\" />
-#	<file src=\"Emgu.CV.runtime.ubuntu.props\" target=\"build\\\" />")
-#	IF(HAVE_UBUNTU_X86)
-#	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x86\\native\\*.so\" target=\"runtimes\\ubuntu-x86\\native\" />")
-#	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x86\\native\\ubuntu_x86_version_string.inc\" target=\"docs\\build_info_x86.inc\" /> ")
-#	ENDIF()
-#	IF(HAVE_UBUNTU_X64)
-#	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x64\\native\\*.so\" target=\"runtimes\\ubuntu-x64\\native\" />")
-#	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x64\\native\\ubuntu_x64_version_string.inc\" target=\"docs\\build_info_x64.inc\" /> ")
-#	ENDIF()
-#	IF(HAVE_UBUNTU_ARM64)
-#	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-arm64\\native\\*.so\" target=\"runtimes\\ubuntu-arm64\\native\" />")
-#	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-arm64\\native\\ubuntu_arm64_version_string.inc\" target=\"docs\\build_info_arm64.inc\" /> ")
-#	ENDIF()
-#ENDIF()
-
-#SET(EMGUCV_RHEL_NUGET_FILE_LIST "")
-#IF(HAVE_RHEL_X64)
-#  SET(EMGUCV_RHEL_NUGET_FILE_LIST "${EMGUCV_RHEL_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\rhel-x64\\native\\*.so\" target=\"runtimes\\rhel-x64\\native\" />")
-#ENDIF()
-#IF(HAVE_RHEL_X86)
-#  SET(EMGUCV_RHEL_NUGET_FILE_LIST "${EMGUCV_RHEL_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\rhel-x86\\native\\*.so\" target=\"runtimes\\rhel-x86\\native\" />")
-#ENDIF()
-#IF(HAVE_RHEL_ARM64)
-#  SET(EMGUCV_RHEL_NUGET_FILE_LIST "${EMGUCV_RHEL_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\rhel-arm64\\native\\*.so\" target=\"runtimes\\rhel-arm64\\native\" />")
-#ENDIF()
-#IF(HAVE_RHEL_X64 OR HAVE_RHEL_X86 OR HAVE_RHEL_ARM64)
-#    SET(EMGUCV_RHEL_NUGET_DEPENDENCY "
-#    <dependencies>
-#      <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-#    </dependencies>")
-#	SET(EMGUCV_RHEL_NUGET_FILE_LIST "${EMGUCV_RHEL_NUGET_FILE_LIST} 
-#    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-#    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-#    <file src=\"README.md\" target=\"docs\\\" />
-#	<file src=\"Emgu.CV.runtime.rhel.props\" target=\"build\\\" />")
-#	IF(HAVE_RHEL_X64)
-#	  SET(EMGUCV_RHEL_NUGET_FILE_LIST "${EMGUCV_RHEL_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\rhel-x64\\native\\rhel_x64_version_string.inc\" target=\"docs\\build_info_x64.inc\" /> ")
-#	ENDIF()
-#ENDIF()
-
-
-#SET(EMGUCV_NUGET_FILE_LIST "")
-#SET(EMGUCV_NUGET_DEPENDENCY "")
 SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
-
 
 
 # find the System.Text.Json nuget pacakge version
@@ -1476,105 +1308,6 @@ MESSAGE(STATUS "System.Drawing.Common = ${SYSTEM_DRAWING_COMMON_VERSION}")
 
 SET(NUGET_SYSTEM_TEXT_JSON_VERSION "${SYSTEM_TEXT_JSON_VERSION}")
 SET(NUGET_SYSTEM_DRAWING_COMMON_VERSION "${SYSTEM_DRAWING_COMMON_VERSION}")
-
-#  SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
-#	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
-#    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
-#	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.dll\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
-#    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.xml\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
-#	")
-#  SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
-#	  <group targetFramework=\"${EMGUCV_MAUI_MACOS_DST_FOLDER}\">
-#        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-#		<dependency id=\"System.Runtime.InteropServices.NFloat.Internal\" version=\"6.0.1\" exclude=\"Build,Analyzers\" />
-#      </group>
-#	  <group targetFramework=\"${EMGUCV_MAUI_IOS_DST_FOLDER}\">
-#        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-#		<dependency id=\"System.Runtime.InteropServices.NFloat.Internal\" version=\"6.0.1\" exclude=\"Build,Analyzers\" />
-#      </group>")
-
-
-#SET(EMGUCV_NUGET_FILE_LIST "${EMGUCV_NUGET_FILE_LIST} 
-#    <file src=\"..\\..\\..\\libs\\Emgu.CV.dll\" target=\"lib\\netstandard2.0\" />
-#    <file src=\"..\\..\\..\\libs\\Emgu.CV.xml\" target=\"lib\\netstandard2.0\" />
-#    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-#    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-#	<file src=\"README.md\" target=\"docs\\\" />")
-#SET(EMGUCV_NUGET_DEPENDENCY "${EMGUCV_NUGET_DEPENDENCY} 
-#      <group targetFramework=\".NETStandard2.0\">
-#        <dependency id=\"System.Drawing.Primitives\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"System.Runtime\" version=\"4.3.1\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"System.Runtime.InteropServices.RuntimeInformation\" version=\"4.3.0\" exclude=\"Build,Analyzers\" />
-#		<dependency id=\"System.Text.Json\" version=\"${NUGET_SYSTEM_TEXT_JSON_VERSION}\" exclude=\"Build,Analyzers\" />
-#      </group>")
-
-
-#SET(EMGUCV_BITMAP_NUGET_TITLE "Bitmap extension for Emgu CV")
-#SET(EMGUCV_BITMAP_NUGET_SUMMARY "This package add extension method to convert Bitmap to and from Emgu objects (e.g. Mat, UMat, GpuMat)")
-#SET(EMGUCV_BITMAP_NUGET_FILE_LIST "")
-#SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "")
-#SET(EMGUCV_BITMAP_NUGET_FILE_LIST "${EMGUCV_BITMAP_NUGET_FILE_LIST} 
-#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Bitmap.dll\" target=\"lib\\netstandard2.0\" />
-#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Bitmap.xml\" target=\"lib\\netstandard2.0\" />
-#    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-#    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-#	<file src=\"README.md\" target=\"docs\\\" />")
-#SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "${EMGUCV_BITMAP_NUGET_DEPENDENCY} 
-#      <group targetFramework=\".NETStandard2.0\">
-#        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-#      </group>")
-#SET(EMGUCV_BITMAP_NUGET_DEPENDENCY "
-#	<dependencies>
-#${EMGUCV_BITMAP_NUGET_DEPENDENCY}
-#    </dependencies>")
-	
-#SET(EMGUCV_WPF_NUGET_TITLE "WPF extension for Emgu CV")
-#SET(EMGUCV_WPF_NUGET_SUMMARY "This package add extension method to convert BitmapSource to and from Emgu objects (e.g. Mat)")
-#SET(EMGUCV_WPF_NUGET_FILE_LIST "")
-	
-#SET(EMGUCV_MODELS_NUGET_TITLE "Experimental component to help download, initialize and execute image processing/AI models.")
-#SET(EMGUCV_MODELS_NUGET_SUMMARY "Experimental component to help download, initialize and execute image processing/AI models. This is under active development and API may change from time to time.")
-#SET(EMGUCV_MODELS_NUGET_FILE_LIST "")
-#SET(EMGUCV_MODELS_NUGET_DEPENDENCY "")
-
-#IF (HAVE_IOS)
-  #SET(EMGUCV_MODELS_NUGET_FILE_LIST "${EMGUCV_MODELS_NUGET_FILE_LIST} 
-#	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
-#    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\${EMGUCV_MAUI_MACOS_DST_FOLDER}\" />
-#	<file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.dll\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
-#    <file src=\"..\\..\\..\\libs\\iOS\\Emgu.CV.Models.xml\" target=\"lib\\${EMGUCV_MAUI_IOS_DST_FOLDER}\" />
-#	")
-#  SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY}
-#	  <group targetFramework=\"${EMGUCV_MAUI_MACOS_DST_FOLDER}\">
-#        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-#      </group>
-#	  <group targetFramework=\"${EMGUCV_MAUI_IOS_DST_FOLDER}\">
-#        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-#      </group>")
-#ENDIF()
-
-#SET(EMGUCV_MODELS_NUGET_FILE_LIST "${EMGUCV_MODELS_NUGET_FILE_LIST} 
-#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Models.dll\" target=\"lib\\netstandard2.0\" />
-#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Models.xml\" target=\"lib\\netstandard2.0\" />
-#    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-#    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-#	<file src=\"README.md\" target=\"docs\\\" />")
-#SET(EMGUCV_MODELS_NUGET_DEPENDENCY "${EMGUCV_MODELS_NUGET_DEPENDENCY} 
-#      <group targetFramework=\".NETStandard2.0\">
-#        <dependency id=\"System.Drawing.Common\" version=\"${NUGET_SYSTEM_DRAWING_COMMON_VERSION}\" exclude=\"Build,Analyzers\" />
-#        <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-#      </group>")
-#SET(EMGUCV_MODELS_NUGET_DEPENDENCY "
-#	<dependencies>
-#${EMGUCV_MODELS_NUGET_DEPENDENCY}
-#    </dependencies>")
 
 
 IF (HAVE_WINDESKTOP)
@@ -1594,47 +1327,8 @@ IF (HAVE_WINDESKTOP)
 	MESSAGE(STATUS "MSVCRT NUGET VERSION: ${EMGU_WINDOWS_MSVCRT_NUGET_VERSION}")
   ENDIF()
   
-  #SET(EMGUCV_UI_NUGET_TITLE "Windows UI components for Emgu CV")
-#  SET(EMGUCV_UI_NUGET_FILE_LIST "${EMGUCV_UI_NUGET_FILE_LIST} 
-#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetFramework.dll\" target=\"lib\\net461\" />
-#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetFramework.xml\" target=\"lib\\net461\" />
-#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetCore.dll\" target=\"lib\\netcoreapp3.1\" />
-#    <file src=\"..\\..\\..\\libs\\Emgu.CV.Platform.NetCore.xml\" target=\"lib\\netcoreapp3.1\" />
-#    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-#    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-#	<file src=\"README.md\" target=\"docs\\\" />")
-#  SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
-#      <group targetFramework=\".NETFramework4.6.1\">
-#        <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-#      </group>")
-#  SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
-#      <group targetFramework=\".NETCoreApp3.1\">
-#        <dependency id=\"${EMGUCV_BITMAP_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
-#      </group>")
-#  SET(EMGUCV_UI_NUGET_DEPENDENCY "${EMGUCV_UI_NUGET_DEPENDENCY}
-#    <frameworkReferences>
-#      <group targetFramework=\".NETCoreApp3.1\">
-#        <frameworkReference name=\"Microsoft.WindowsDesktop.App.WindowsForms\" />
-#      </group>
-#    </frameworkReferences>")
-#  SET(EMGUCV_UI_NUGET_DEPENDENCY "
-#	<dependencies>
-#${EMGUCV_UI_NUGET_DEPENDENCY}
-#    </dependencies>
-#    <frameworkAssemblies>
-#      <frameworkAssembly assemblyName=\"System.Windows.Forms\" targetFramework=\".NETFramework4.6.1\" />
-#    </frameworkAssemblies>")
 ENDIF()
 
-#SET(EMGUCV_NUGET_DEPENDENCY "
-#	<dependencies>
-#${EMGUCV_NUGET_DEPENDENCY}
-#    </dependencies>")
-
-#SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "
-#	<frameworkReferences>
-#${EMGUCV_NUGET_FRAMEWORK_REFERENCES}
-#    </frameworkReferences>")
 
 SET(EMGUCV_NUGET_TITLE_ARCH "")
 IF(HAVE_WINDESKTOP_X86)
@@ -1650,15 +1344,11 @@ STRING(STRIP "${EMGUCV_NUGET_TITLE_ARCH}" EMGUCV_NUGET_TITLE_ARCH)
 STRING(REPLACE "x86 x64 arm64" "" EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH}")
 
 SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${NUGET_PACKAGE_DEPENDENCY_VERSION}\" />")
-#SET(EMGUCV_WINDOWS_NETCORE_NUGET_DEPENDENCY "<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />")
-#SET(EMGUCV_WINDOWS_NETFRAMEWORK_NUGET_DEPENDENCY "<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />")
  
 SET(EMGUCV_WINDOWS_NUGET_TITLE "EMGU CV ${EMGUCV_NUGET_TITLE_ARCH}")
-#SET(EMGUCV_WINDOWS_NUGET_TITLE "EMGU CV ${EMGUCV_NUGET_TITLE_ARCH}")
 STRING(STRIP "${EMGUCV_WINDOWS_NUGET_TITLE}" EMGUCV_WINDOWS_NUGET_TITLE)
 SET(EMGUCV_WINDOWS_NUGET_TITLE "${EMGUCV_WINDOWS_NUGET_TITLE} runtime for windows")
 
-SET(EMGUCV_MACOS_NUGET_DEPENDENCY "${EMGUCV_MACOS_NUGET_DEPENDENCY}<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${NUGET_PACKAGE_DEPENDENCY_VERSION}\" />")
 
 SET(EMGUCV_MACOS_NUGET_TITLE "EMGU CV")
 STRING(STRIP "${EMGUCV_MACOS_NUGET_TITLE}" EMGUCV_MACOS_NUGET_TITLE)
@@ -1704,78 +1394,6 @@ IF(WITH_CUDA)
 		#file(DOWNLOAD ${CUDA_EULA_URL} "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows.cuda.npp/EULA.pdf")
 		#file(DOWNLOAD ${CUDA_EULA_URL} "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows.cuda.cufft/EULA.pdf")
 		#file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cudnn")
-		#SET(EMGU_CUDA_RT_NUGET_FILE_LIST "${EMGU_CUDA_RT_NUGET_FILE_LIST} 
-		#<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cu*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cufft*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cublas*.dll\" target=\"runtimes\\win-x64\\native\" /> 
-		#<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
-		#<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />
-		#<file src=\"README.md\" target=\"docs\\\" />")
-		#SET(EMGU_CUDA_NPP_NUGET_FILE_LIST "${EMGU_CUDA_NPP_NUGET_FILE_LIST} 
-		#<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\npp*.dll\" target=\"runtimes\\win-x64\\native\" />
-		#<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
-		#<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />
-		#<file src=\"README.md\" target=\"docs\\\" />")
-		#SET(EMGU_CUDA_BLAS_NUGET_FILE_LIST "${EMGU_CUDA_BLAS_NUGET_FILE_LIST} 
-		#<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cublas64*.dll\" target=\"runtimes\\win-x64\\native\" />
-		#<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
-		#<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />
-		#<file src=\"README.md\" target=\"docs\\\" />")
-		#SET(EMGU_CUDA_BLAS_LT_NUGET_FILE_LIST "${EMGU_CUDA_BLAS_LT_NUGET_FILE_LIST} 
-		#<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cublasLt*.dll\" target=\"runtimes\\win-x64\\native\" />
-		#<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />		
-		#<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />
-		#<file src=\"README.md\" target=\"docs\\\" />")
-		#SET(EMGU_CUFFT_NUGET_FILE_LIST "${EMGU_CUFFT_NUGET_FILE_LIST} 
-		#<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cufft*.dll\" target=\"runtimes\\win-x64\\native\" />
-		#<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-		#<file src=\"EULA.txt\" target=\"CUDA_EULA.txt\" />
-		#<file src=\"README.md\" target=\"docs\\\" />")
-		#SET(EMGU_CUDNN_NUGET_FILE_LIST "${EMGU_CUDNN_NUGET_FILE_LIST} 
-		#<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn*.dll\" exclude=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_engines*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_ops*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_cnn*.dll;..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_adv*.dll\" target=\"runtimes\\win-x64\\native\" />
-		#<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-		#<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />
-		#<file src=\"README.md\" target=\"docs\\\" />")
-
-		#SET(EMGU_CUDNN_CNN_NUGET_FILE_LIST "${EMGU_CUDNN_CNN_NUGET_FILE_LIST} 
-		#<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_cnn*.dll\" target=\"runtimes\\win-x64\\native\" />
-		#<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-		#<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />
-		#<file src=\"README.md\" target=\"docs\\\" />")
-		#SET(EMGU_CUDNN_ENGINES_NUGET_FILE_LIST "${EMGU_CUDNN_ENGINES_NUGET_FILE_LIST} 
-		#<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_engines*.dll\" target=\"runtimes\\win-x64\\native\" />
-		#<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-		#<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />
-		#<file src=\"README.md\" target=\"docs\\\" />")
-		#SET(EMGU_CUDNN_CNN_NUGET_DEPENDENCY "
-		#<dependencies>
-		#  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
-		#</dependencies>")
-		#SET(EMGU_CUDNN_ENGINES_NUGET_DEPENDENCY "
-		#<dependencies>
-		#  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
-		#</dependencies>")
-		#SET(EMGU_CUDNN_OPS_NUGET_FILE_LIST "${EMGU_CUDNN_OPS_NUGET_FILE_LIST} 
-		#<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_ops*.dll\" target=\"runtimes\\win-x64\\native\" />
-		#<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-		#<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />
-		#<file src=\"README.md\" target=\"docs\\\" />")
-		#SET(EMGU_CUDNN_OPS_NUGET_DEPENDENCY "
-		#<dependencies>
-		#  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
-		#</dependencies>")
-		#SET(EMGU_CUDNN_ADV_NUGET_FILE_LIST "${EMGU_CUDNN_ADV_NUGET_FILE_LIST} 
-		#<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\cudnn_adv*.dll\" target=\"runtimes\\win-x64\\native\" />
-		#<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-		#<file src=\"NVIDIA_SLA_cuDNN_Support.txt\" target=\"cuDNN_SLA.txt\" />
-		#<file src=\"README.md\" target=\"docs\\\" />")
-		#SET(EMGU_CUDNN_ADV_NUGET_DEPENDENCY "
-		#<dependencies>
-		#  <dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
-		#</dependencies>")
-		#SET(EMGU_CUDNN_NUGET_DEPENDENCY "
-		#<dependencies>
-		#  <dependency id=\"${EMGU_CUDART_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />
-		#  <dependency id=\"${EMGU_ZLIBWAPI_ID}\" version=\"${EMGU_ZLIBWAPI_VERSION}\" />
-		#</dependencies>")
 		SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
 		  <dependency id=\"${EMGU_CUDART_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />
 		  <dependency id=\"${EMGU_CUDA_BLAS_LT_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />
@@ -1840,29 +1458,6 @@ IF(WITH_CUDA)
 	
 	#MESSAGE(STATUS "<<<<<<<<<<<<<<<< CUDA_VERSION_NUMERIC_ONLY: ${CUDA_VERSION_NUMERIC_ONLY} >>>>>>>>>>>>>>>>>>>>>> ")
 	
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/Package.nuspec)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_ZLIBWAPI_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_ZLIBWAPI_ID}/Package.nuspec)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_ZLIBWAPI_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_ZLIBWAPI_ID}/README.md)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUFFT_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUFFT_NUGET_ID}/Package.nuspec)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUFFT_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUFFT_NUGET_ID}/README.md)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_NUGET_ID}/Package.nuspec)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_NUGET_ID}/README.md)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_ADV_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_ADV_NUGET_ID}/Package.nuspec)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_ADV_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_ADV_NUGET_ID}/README.md)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_CNN_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_CNN_NUGET_ID}/Package.nuspec)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_CNN_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_CNN_NUGET_ID}/README.md)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_ENGINES_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_ENGINES_NUGET_ID}/Package.nuspec)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_ENGINES_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_ENGINES_NUGET_ID}/README.md)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_OPS_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_OPS_NUGET_ID}/Package.nuspec)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDNN_OPS_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDNN_OPS_NUGET_ID}/README.md)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_NPP_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_NPP_NUGET_ID}/Package.nuspec)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_NPP_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_NPP_NUGET_ID}/README.md)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDART_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDART_NUGET_ID}/Package.nuspec)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDART_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDART_NUGET_ID}/README.md)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDA_BLAS_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDA_BLAS_NUGET_ID}/Package.nuspec)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDA_BLAS_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDA_BLAS_NUGET_ID}/README.md)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDA_BLAS_LT_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDA_BLAS_LT_NUGET_ID}/Package.nuspec)
-	#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_CUDA_BLAS_LT_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_CUDA_BLAS_LT_NUGET_ID}/README.md)
 ENDIF()
 
 IF(HAVE_WINDESKTOP_X86)
@@ -1883,215 +1478,13 @@ IF(HAVE_WINDESKTOP_ARM64)
 	  ")		
 ENDIF()
 
-SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "	<dependencies>
-		${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
-    </dependencies>")
+#SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "	<dependencies>
+#		${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
+#    </dependencies>")
 
-SET(EMGUCV_MACOS_NUGET_DEPENDENCY "	<dependencies>
-		${EMGUCV_MACOS_NUGET_DEPENDENCY}
-    </dependencies>")
-
-# Sign the binary
-  #SET(EMGUCV_POST_PROCESS_BINARY "")
-  #IF(EMGU_SIGN_FOUND AND WIN32)    
-    #IF (NOT SIGNTOOL_FOUND)
-	#	MESSAGE(FATAL_ERROR "EMGU_SIGN_FOUND=${EMGU_SIGN_FOUND}, but SIGNTOOL_FOUND=${SIGNTOOL_FOUND}")
-	#ENDIF()
-    #SET(EMGUCV_POST_PROCESS_BINARY "${EMGUCV_POST_PROCESS_BINARY}
-    #<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
-    #  <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-    #  <MakeDir Directories=\"$(OutputPath)\\signed\"/>
-    #  <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-    #</Target>")
-  #ENDIF()  
-
-# Sign debugger visualizer
-  #SET(EMGUCV_POST_PROCESS_VSIX "")
-  #IF(EMGU_VSIX_SIGN_FOUND AND WIN32)
-    #IF (NOT OPENVSIXSIGNTOOL_FOUND)
-	#  MESSAGE(FATAL_ERROR "EMGU_SIGN_FOUND=${EMGU_SIGN_FOUND}, but OPENVSIXSIGNTOOL_FOUND=${OPENVSIXSIGNTOOL_FOUND}")
-    #ENDIF()
-    #SET(EMGUCV_POST_PROCESS_VSIX "${EMGUCV_POST_PROCESS_VSIX}
-    #<Target Name=\"PostProcessVSIX\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
-    #  <Message Text=\"Signing $(OutputPath)$(AssemblyName).vsix\" Importance=\"high\" />
-    #  <MakeDir Directories=\"$(OutputPath)\\signed\"/>
-    #  <Exec Command='${EMGU_VSIX_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).vsix\" \"$(OutputPath)signed\" \"${OPENVSIXSIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-    #</Target>")
-  #ENDIF()  
-  
-# Sign and copy the binary
-#SET(EMGUCV_POST_PROCESS_NUGET "")
-#IF(EMGU_SIGN_FOUND AND WIN32)
-#  IF (NOT NUGET_FOUND)
-#	MESSAGE(FATAL_ERROR "EMGU_SIGN_FOUND=${EMGU_SIGN_FOUND}, but NUGET_EXECUTABLE_FOUND=${NUGET_EXECUTABLE_FOUND}")
-#  ENDIF()
-  #SET(EMGUCV_POST_PROCESS_NUGET "
-  #<Target Name=\"PostProcessNuget\" AfterTargets=\"Pack\">
-  #  <Message Text=\"Signing $(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" Importance=\"high\" />
-  #  <MakeDir Directories=\"$(PackageOutputPath)\\signed\"/>
-  #  <Exec Command='${EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH} \"$(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" \"$(PackageOutputPath)\\signed\" \"${NUGET_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(PackageOutputPath)\" />
-  #</Target>
-#	")
-#ENDIF()
-
-#IF(HAVE_ANDROID)
-  #SET(EMGUCV_MAUI_ANDROID_NUGET_TITLE "Emgu CV for MAUI Android Native Runtime")
-  
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/Directory.Build.props)
-  #IF(EMGU_SIGN_FOUND AND WIN32)
-  #  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/SignBinary.Targets)
-  #ENDIF()
-  #IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-  #  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/SignPkg.Targets)
-  #ENDIF()
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.android.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/Android/docs/README.md)
-#ENDIF()
-
-#IF(HAVE_IOS)  
-  #SET(EMGUCV_MAUI_IOS_NUGET_TITLE "Emgu CV for MAUI iOS Native Runtime")	
-  #SET(EMGUCV_MAUI_IOS_POST_PROCESS_BINARY "${EMGUCV_MAUI_IOS_POST_PROCESS_BINARY}")
-  #SET(EMGUCV_MAUI_IOS_POST_PROCESS_BINARY "${EMGUCV_MAUI_IOS_POST_PROCESS_BINARY}
-  #<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\">
-  #  <Message Text=\"Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)\" Importance=\"high\" />
-  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).dll\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
-  #  <Copy SourceFiles=\"$(OutputPath)$(AssemblyName).xml\" DestinationFolder=\"$(OpenCVBinaryDir)\" ContinueOnError=\"true\" />
-  #</Target>")  
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/iOS/Directory.Build.props)
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.ios.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/iOS/docs/README.md)  
-#ENDIF()
-
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/Emgu.CV.runtime.macos.props)
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.macos.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/Package.nuspec)
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.macos.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.macos/docs/README.md)  
-
-
-#IF(HAVE_MAUI)
-#  SET(EMGUCV_MAUI_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.maui${EMGUCV_RUNTIME_EXTRA_TAG}")
-#  SET(EMGUCV_MAUI_NUGET_TITLE "Emgu CV for MAUI Native Runtime")
-#  
-#  SET(EMGUCV_MAUI_PACKAGE_REFERENCE "")
-#  IF (HAVE_WINDESKTOP)
-#    SET(EMGUCV_MAUI_PACKAGE_REFERENCE "
-#	<ItemGroup>
-#      <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WINDOWS_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
-#	  </PackageReference>
-#    </ItemGroup>")
-#  ENDIF()
-  
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/Directory.Build.props)
-  #IF(EMGU_SIGN_FOUND AND WIN32)
-  #  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/SignBinary.Targets)
-  #ENDIF()
-  #IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-  #  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/SignPkg.Targets)
-  #ENDIF()
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime/Maui/UI/docs/README.md)
-  
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui/README.md)
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.maui.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.maui/Package.nuspec)
-#ENDIF()
-
-#IF (HAVE_WINDESKTOP)
-#  SET(EMGUCV_DEBUGGER_VISUALIZER_PACKAGE_REFERENCE "
-#	<ItemGroup>
-#      <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WINDOWS_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
-#	  </PackageReference>
-#	  <!--
-#	  <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WPF_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
-#	  </PackageReference>
-#	  -->
-#    </ItemGroup>")
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.DebuggerVisualizer.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/Directory.Build.props)
-#  IF(EMGU_SIGN_FOUND AND WIN32)
-#    CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/SignBinary.Targets)
-#	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignVSIX.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/DebuggerVisualizer/SignVSIX.Targets)
-#  ENDIF()
-#ENDIF()
-
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.BuildInfo.Console.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/BuildInfo.Console/Directory.Build.props)
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Test.Net.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Test/Emgu.CV.Test.Net/Directory.Build.props)
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.DynamicImage.Asp.Net.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/DynamicImage.Asp.Net/Directory.Build.props)
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.HelloWorld.Console.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/HelloWorld/Directory.Build.props)
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.HelloWorld.WPF.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/HelloWorld.WPF/Directory.Build.props)
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Maui.Demo.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Example/MAUI/MauiDemoApp/Directory.Build.props)
-
-#IF(HAVE_WINSTORE_10)
-#  SET(EMGUCV_UWP_NUGET_TITLE "Emgu CV for UWP Native Runtime")
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.uwp.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.uwp/Package.nuspec)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.uwp.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.uwp/README.md)
-#ENDIF()
-
-#IF(HAVE_WINDESKTOP_X86)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}/Package.nuspec)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}/README.md)
-#ENDIF()
-
-#IF(HAVE_WINDESKTOP_X64)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}/Package.nuspec)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}/README.md)
-#ENDIF()
-
-#IF(HAVE_WINDESKTOP_ARM64)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_ARM64_NUGET_ID}.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_ARM64_NUGET_ID}/Package.nuspec)  
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/${EMGU_WINDOWS_MSVCRT_ARM64_NUGET_ID}.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/${EMGU_WINDOWS_MSVCRT_ARM64_NUGET_ID}/README.md)
-#ENDIF()
-
-#IF(HAVE_WINDESKTOP)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/Package.nuspec)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.windows.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows/README.md)
-  
-  # Generate nuget config file for Emgu.CV.UI
-  # Sign and copy the binary
-  #SET(EMGUCV_UI_POST_PROCESS_BINARY "")
-  #IF(EMGU_SIGN_FOUND AND WIN32)
-  #  file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
-  #  file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
-  #  SET(EMGUCV_UI_POST_PROCESS_BINARY "
-#	<Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
-#      <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-#  	  <MakeDir Directories=\"$(OutputPath)\\signed\"/>
-#      <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-#  	</Target>
-#  	")
-#  ENDIF()
-  
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/Directory.Build.props)
-  #IF(EMGU_SIGN_FOUND AND WIN32)
-  #  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/SignBinary.Targets)
-  #ENDIF()
-  #IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-  #  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/SignPkg.Targets)
-  #ENDIF()
-  #CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.UI.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WindowsUI/Emgu.CV.WindowsUI/docs/README.md)
-#ENDIF()
-
-#IF(HAVE_LINUX_ARM)
-#  SET(EMGUCV_DEBIAN_ARM_NUGET_TITLE "Emgu CV Native ARM Runtime for Debian (including Raspberry Pi OS)")
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm/Emgu.CV.runtime.debian-arm.props)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm/Package.nuspec)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm/README.md)
-#ENDIF()
-
-#IF(HAVE_LINUX_ARM64)
-#  SET(EMGUCV_DEBIAN_ARM64_NUGET_TITLE "Emgu CV Native ARM64 Runtime for Debian (including Raspberry Pi OS)")
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm64/Emgu.CV.runtime.debian-arm64.props)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm64.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm64/Package.nuspec)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.debian-arm64.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.debian-arm64/README.md)
-#ENDIF()
-
-#IF(HAVE_UBUNTU_X86 OR HAVE_UBUNTU_X64 OR HAVE_UBUNTU_ARM64)
-#  SET(EMGUCV_UBUNTU_NUGET_TITLE "Emgu CV Native Runtime for Ubuntu")
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/Emgu.CV.runtime.ubuntu.props)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ubuntu.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/Package.nuspec)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.ubuntu.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.ubuntu/README.md)
-#ENDIF()
-
-#IF(HAVE_RHEL_X86 OR HAVE_RHEL_X64 OR HAVE_RHEL_ARM64)
-#  SET(EMGUCV_RHEL_NUGET_TITLE "Emgu CV Native Runtime for RHEL")
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.rhel.Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/Package.nuspec)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/Emgu.CV.runtime.rhel.props)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.runtime.rhel.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.rhel/README.md)
-#ENDIF()
+#SET(EMGUCV_MACOS_NUGET_DEPENDENCY "	<dependencies>
+#		<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${NUGET_PACKAGE_DEPENDENCY_VERSION}\" />
+#    </dependencies>")
 
 SET(EMGUCV_NUGET_TITLE "Emgu CV")
 SET(EMGUCV_NUGET_SUMMARY "Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.")
@@ -2106,77 +1499,6 @@ IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
 	  SET(EMGUCV_UWP_NUGET_TITLE "${EMGUCV_UWP_NUGET_TITLE} Commercial Release")
 	ENDIF()
 ENDIF()
-
-
-#generate nuget config file for Emgu.CV 
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/Directory.Build.props)
-#IF(EMGU_SIGN_FOUND AND WIN32)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/SignBinary.Targets)
-#ENDIF()
-#IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-#  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/SignPkg.Targets)
-#ENDIF()
-#CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Emgu.CV.Package.README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/docs/README.md)
-
-#generate nuget config file for Emgu.CV.Models
-#CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/Emgu.CV.Models.Directory.Build.props.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Models/NetStandard/Directory.Build.props)
-#IF(EMGU_SIGN_FOUND AND WIN32)
-#  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignBinary.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Models/NetStandard/SignBinary.Targets)
-#ENDIF()
-#IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-#  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignPkg.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Models/NetStandard/SignPkg.Targets)
-#ENDIF()
-#CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/Emgu.CV.Models.Package.README.md.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Models/NetStandard/docs/README.md)
-
-
-      
-# Sign the nuget package
-#SET(EMGUCV_BITMAP_POST_PROCESS_NUGET "")
-#IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-#  file(TO_NATIVE_PATH ${EMGU_NUGET_SIGN_EXECUTABLE} EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH)
-#  file(TO_NATIVE_PATH ${NUGET_EXECUTABLE} NUGET_EXECUTABLE_NATIVE_PATH)
-#  SET(EMGUCV_BITMAP_POST_PROCESS_NUGET "${EMGUCV_BITMAP_POST_PROCESS_NUGET}
-#  <Target Name=\"PostProcessNuget\" AfterTargets=\"Pack\">
-#    <Message Text=\"Signing $(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" Importance=\"high\" />
-#    <MakeDir Directories=\"$(PackageOutputPath)\\signed\"/>
-#    <Exec Command='${EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH} \"$(PackageOutputPath)\\$(PackageId).$(PackageVersion).nupkg\" \"$(PackageOutputPath)\\signed\" \"${NUGET_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(PackageOutputPath)\" />
-#  </Target>
-#	")
-#ENDIF()
-#CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/Emgu.CV.Bitmap.Directory.Build.props.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Bitmap/Directory.Build.props)
-#IF(EMGU_SIGN_FOUND AND WIN32)
-#  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignBinary.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Bitmap/SignBinary.Targets)
-#ENDIF()
-#IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-#  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignPkg.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Bitmap/SignPkg.Targets)
-#ENDIF()
-#CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/Emgu.CV.Bitmap.Package.README.md.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Bitmap/docs/README.md)
-
-
-#generate nuget config file for Emgu.CV.Wpf
-#CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/Emgu.CV.Wpf.Directory.Build.props.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Wpf/Directory.Build.props)
-#IF(EMGU_SIGN_FOUND AND WIN32)
-#  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignBinary.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Wpf/SignBinary.Targets)
-#ENDIF()
-#IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-#  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignPkg.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Wpf/SignPkg.Targets)
-#ENDIF()
-#CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/Emgu.CV.Wpf.Package.README.md.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Wpf/docs/README.md)
-
-# Generate nuget config file for Emgu.CV.Wpf
-# Sign and copy the binary
-#SET(EMGUCV_WPF_POST_PROCESS_BINARY "")
-#IF(EMGU_SIGN_FOUND AND WIN32)
-#  file(TO_NATIVE_PATH ${EMGU_SIGN_EXECUTABLE} EMGU_SIGN_EXECUTABLE_NATIVE_PATH)
-#  file(TO_NATIVE_PATH ${SIGNTOOL_EXECUTABLE} SIGNTOOL_EXECUTABLE_NATIVE_PATH)
-#  SET(EMGUCV_WPF_POST_PROCESS_BINARY "
-#  <Target Name=\"PostProcessBinary\" AfterTargets=\"PostBuildEvent\" Condition=\"Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')\">
-#    <Message Text=\"Signing $(OutputPath)$(AssemblyName).dll\" Importance=\"high\" />
-#	<MakeDir Directories=\"$(OutputPath)\\signed\"/>
-#    <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} \"$(OutputPath)$(AssemblyName).dll\" \"$(OutputPath)signed\" \"${SIGNTOOL_EXECUTABLE_NATIVE_PATH}\"' WorkingDirectory=\"$(OutputPath)\" />
-#  </Target>
-#	")
-#ENDIF()
 
 # ----------------------------------------------------------------------------
 #  Generate readme file for Emgu CV project
@@ -2560,15 +1882,15 @@ ELSEIF (WIN32)
 	  PATTERN "Mac" EXCLUDE
 	  PATTERN "Windows.UWP" EXCLUDE
       )
-    INSTALL(
-      DIRECTORY
-      ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WPF
-      DESTINATION .
-      COMPONENT emgucv_example_source
-      FILES_MATCHING 
-      PATTERN "*.cs"
-      PATTERN ".git" EXCLUDE
-      )
+    #INSTALL(
+    #  DIRECTORY
+    #  ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.WPF
+    #  DESTINATION .
+    #  COMPONENT emgucv_example_source
+    #  FILES_MATCHING 
+    #  PATTERN "*.cs"
+    #  PATTERN ".git" EXCLUDE
+    #  )
     INSTALL(
       DIRECTORY
       ${CMAKE_CURRENT_SOURCE_DIR}/Solution
