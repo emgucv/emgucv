@@ -16,7 +16,9 @@
     <releaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV ARM64 native runtime for Debian (including Raspberry Pi OS). For online documentation please visit
 ${NUGET_EMGU_URL}/wiki/files/emgucv/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/
     </releaseNotes>
-	${EMGUCV_DEBIAN_NUGET_DEPENDENCY}
+	<dependencies>
+      <dependency id="${EMGUCV_NUGET_ID}" version="${CPACK_PACKAGE_DEPENDENCY_VERSION}" />
+    </dependencies>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>native opencv emgu emgucv ai image debian raspberry pi</tags>
   </metadata>

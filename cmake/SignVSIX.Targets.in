@@ -1,3 +1,7 @@
 <Project>
-  ${EMGUCV_POST_PROCESS_VSIX}
+    <Target Name="PostProcessVSIX" AfterTargets="PostBuildEvent" Condition="Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')">
+      <Message Text="Signing $(OutputPath)$(AssemblyName).vsix" Importance="high" />
+      <MakeDir Directories="$(OutputPath)signed"/>
+      <Exec Command='${EMGU_VSIX_SIGN_EXECUTABLE_NATIVE_PATH} "$(OutputPath)$(AssemblyName).vsix" "$(OutputPath)signed" "${OPENVSIXSIGNTOOL_EXECUTABLE_NATIVE_PATH}"' WorkingDirectory="$(OutputPath)" />
+    </Target>
 </Project>

@@ -6,6 +6,17 @@ IF (HAVE_MACOS)
   
   PROJECT(Emgu.CV.runtime.macos.nuget)
 
+  #SET(EMGUCV_MACOS_NUGET_FILE_LIST "")
+  #IF(HAVE_MACOS)
+  #  SET(EMGUCV_MACOS_NUGET_FILE_LIST "${EMGUCV_MACOS_NUGET_FILE_LIST} 
+  #<file src=\"..\\..\\..\\libs\\runtimes\\osx\\native\\*.dylib\" target=\"runtimes\\osx\\native\"/>
+  #<file src=\"..\\..\\..\\libs\\runtimes\\osx\\native\\*.inc\" target=\"docs\\\" />
+  #<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+  #<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+  #<file src=\"docs\\README.md\" target=\"docs\\\" />
+  #<file src=\"Emgu.CV.runtime.macos.props\" target=\"build\\\" />")
+  #ENDIF()
+
   CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.macos.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md)  

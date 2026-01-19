@@ -18,6 +18,9 @@
     <tags>native emgu cuda fft</tags>
   </metadata>
   <files>
-	${EMGU_CUFFT_NUGET_FILE_LIST}
+	<file src="..\..\..\libs\runtimes\win-x64\native\cufft*.dll" target="runtimes\win-x64\native" />
+	<file src="..\..\..\miscellaneous\nuget_icon.png" target="icon.png" />
+	<file src="EULA.txt" target="CUDA_EULA.txt" />
+	<file src="README.md" target="docs\" />
   </files>
 </package>

@@ -6,6 +6,16 @@ IF (WIN32 AND HAVE_WINDESKTOP_X86)
 
 PROJECT(Emgu.runtime.windows.msvc.rt.x86.nuget)
 
+  #SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_TITLE "MSVC x86 runtime for windows")
+  #SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST "${EMGU_WINDOWS_MSVCRT_X86_NUGET_FILE_LIST} 
+#	<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\concrt*.dll\" target=\"runtimes\\win-x86\\native\" /> 
+#	<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\msvcp*.dll\" target=\"runtimes\\win-x86\\native\" /> 
+#	<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\vcruntime*.dll\" target=\"runtimes\\win-x86\\native\" />     
+#	<file src=\"..\\..\\..\\libs\\runtimes\\win-x86\\native\\vccorlib*.dll\" target=\"runtimes\\win-x86\\native\" />     
+#	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+#   <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
+#	<file src=\"README.md\" target=\"docs\\\" />")
+
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec)  
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
   
