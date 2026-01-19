@@ -17,7 +17,9 @@
 ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html    	        
     </releaseNotes>
 	<readme>docs/README.md</readme>
-	${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
+	<dependencies>
+		${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
+    </dependencies>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>native opencv emgu emgucv ai image</tags>
   </metadata>
