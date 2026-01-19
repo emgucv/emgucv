@@ -23,6 +23,18 @@ IF(HAVE_ANDROID AND HAVE_MAUI_IOS AND HAVE_MAUI_MAC)
 	
   PROJECT(Emgu.CV.runtime.maui)
   
+  SET(EMGUCV_MAUI_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.maui${EMGUCV_RUNTIME_EXTRA_TAG}")
+  SET(EMGUCV_MAUI_NUGET_TITLE "Emgu CV for MAUI Native Runtime")
+  
+  SET(EMGUCV_MAUI_PACKAGE_REFERENCE "")
+  IF (HAVE_WINDESKTOP)
+    SET(EMGUCV_MAUI_PACKAGE_REFERENCE "
+	<ItemGroup>
+      <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WINDOWS_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
+	  </PackageReference>
+    </ItemGroup>")
+  ENDIF()
+  
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
   IF(EMGU_SIGN_FOUND AND WIN32)
     CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/SignBinary.Targets)

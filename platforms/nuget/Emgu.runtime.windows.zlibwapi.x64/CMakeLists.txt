@@ -6,6 +6,12 @@ IF (WIN32 AND HAVE_WINDESKTOP_X64 AND WITH_CUDNN)
 
   PROJECT(Emgu.runtime.windows.zlibwapi.nuget)
   
+  #SET(EMGU_WINDOWS_ZLIBWAPI_X64_NUGET_FILE_LIST "${EMGU_WINDOWS_ZLIBWAPI_X64_NUGET_FILE_LIST}
+#	<file src=\"..\\..\\..\\libs\\runtimes\\win-x64\\native\\zlibwapi.dll\" target=\"runtimes\\win-x64\\native\" /> 
+#	<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+#	<file src=\"zlib_license.txt\" target=\"\" />
+#	<file src=\"README.md\" target=\"docs\\\" />")
+  
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
   

@@ -1,3 +1,7 @@
 <Project>
-  ${EMGUCV_POST_PROCESS_NUGET}
+  <Target Name="PostProcessNuget" AfterTargets="Pack">
+    <Message Text="Signing $(PackageOutputPath)\$(PackageId).$(PackageVersion).nupkg" Importance="high" />
+    <MakeDir Directories="$(PackageOutputPath)\signed"/>
+    <Exec Command='${EMGU_NUGET_SIGN_EXECUTABLE_NATIVE_PATH} "$(PackageOutputPath)\$(PackageId).$(PackageVersion).nupkg" "$(PackageOutputPath)\signed" "${NUGET_EXECUTABLE_NATIVE_PATH}"' WorkingDirectory="$(PackageOutputPath)" />
+  </Target>
 </Project>

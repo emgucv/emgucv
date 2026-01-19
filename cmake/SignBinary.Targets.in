@@ -1,3 +1,7 @@
 <Project>
-  ${EMGUCV_POST_PROCESS_BINARY}
+    <Target Name="PostProcessBinary" AfterTargets="PostBuildEvent" Condition="Exists('${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}')">
+      <Message Text="Signing $(OutputPath)$(AssemblyName).dll" Importance="high" />
+      <MakeDir Directories="$(OutputPath)signed"/>
+      <Exec Command='${EMGU_SIGN_EXECUTABLE_NATIVE_PATH} "$(OutputPath)$(AssemblyName).dll" "$(OutputPath)signed" "${SIGNTOOL_EXECUTABLE_NATIVE_PATH}"' WorkingDirectory="$(OutputPath)" />
+    </Target>
 </Project>

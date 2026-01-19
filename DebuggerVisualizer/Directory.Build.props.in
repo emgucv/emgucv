@@ -18,7 +18,14 @@
 	
   </PropertyGroup>
   
-  ${EMGUCV_DEBUGGER_VISUALIZER_PACKAGE_REFERENCE}
+  	<ItemGroup>
+      <PackageReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="${EMGUCV_WINDOWS_NUGET_ID}" Version="${CPACK_PACKAGE_VERSION}">
+	  </PackageReference>
+	  <!--
+	  <PackageReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="${EMGUCV_WPF_NUGET_ID}" Version="${CPACK_PACKAGE_VERSION}">
+	  </PackageReference>
+	  -->
+    </ItemGroup>
 
   <Import Project="SignBinary.Targets" Condition="exists('SignBinary.Targets')" />		
   <!--
