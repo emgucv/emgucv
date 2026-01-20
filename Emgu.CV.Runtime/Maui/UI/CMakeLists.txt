@@ -2,6 +2,16 @@
 #  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
+IF(EMGU_SIGN_FOUND AND WIN32)
+  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/SignBinary.Targets)
+ENDIF()
+IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
+  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/SignPkg.Targets)
+ENDIF()
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md)
+
+
 IF(HAVE_MAUI)
 
   INSTALL(
@@ -9,14 +19,14 @@ IF(HAVE_MAUI)
     DESTINATION Emgu.CV.Runtime/Maui
     COMPONENT emgucv_source
     FILES_MATCHING 
-	PATTERN "*.cs"
+    PATTERN "*.cs"
     PATTERN "*.csproj"
-	PATTERN "Directory.Build.props"
-	PATTERN "README.md"
-	#PATTERN "*.png"
+    PATTERN "Directory.Build.props"
+    PATTERN "README.md"
+    #PATTERN "*.png"
     PATTERN ".svn" EXCLUDE
     PATTERN "obj" EXCLUDE
-	PATTERN "bin" EXCLUDE
+    PATTERN "bin" EXCLUDE
     PATTERN "CMakeFiles" EXCLUDE
     PATTERN "${PROJECT_NAME}.dir" EXCLUDE
     )
@@ -34,16 +44,7 @@ IF(HAVE_MAUI)
 	  </PackageReference>
     </ItemGroup>")
   ENDIF()
-  
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
-  IF(EMGU_SIGN_FOUND AND WIN32)
-    CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/SignBinary.Targets)
-  ENDIF()
-  IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
-    CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignPkg.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/SignPkg.Targets)
-  ENDIF()
-  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
-  
+    
   SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
   
   BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
