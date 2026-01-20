@@ -1664,12 +1664,11 @@ ADD_SUBDIRECTORY(Emgu.CV.OCR)
 ADD_SUBDIRECTORY(Emgu.CV.Contrib)
 ADD_SUBDIRECTORY(Emgu.CV.Models)
 
-ADD_SUBDIRECTORY(Emgu.CV.Runtime)
-
 ADD_SUBDIRECTORY(platforms/nuget)
 
 # MAUI will need to use some of the nuget packages. It need to be build after nuget packages is build.
-ADD_SUBDIRECTORY(Emgu.CV.Runtime/Maui)
+ADD_SUBDIRECTORY(Emgu.CV.Runtime)
+#ADD_SUBDIRECTORY(Emgu.CV.Runtime/Maui)
 
 INSTALL(
   FILES

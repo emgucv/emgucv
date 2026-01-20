@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(HAVE_ANDROID AND HAVE_MAUI_IOS AND HAVE_MAUI_MAC)
+IF(HAVE_MAUI)
 
   INSTALL(
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
