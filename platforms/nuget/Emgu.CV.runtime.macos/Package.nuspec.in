@@ -24,8 +24,8 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
     <tags>native opencv emgu emgucv ai image macos</tags>
   </metadata>
   <files>
-    <file src="..\..\..\libs\\runtimes\osx\native\*.dylib" target="runtimes\osx\native"/>
-    <file src="..\..\..\libs\\runtimes\osx\native\*.inc" target="docs\" />
+    <file src="..\..\..\libs\runtimes\osx\native\*.dylib" target="runtimes\osx\native"/>
+    <file src="..\..\..\libs\runtimes\osx\native\*.inc" target="docs\" />
     <file src="..\..\..\miscellaneous\nuget_icon.png\" target="icon.png" />
     <file src="..\..\..\${EMGUCV_LICENSE_FILE}" target="" />
     <file src="docs\README.md" target="docs\" />
