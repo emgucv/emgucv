@@ -17,7 +17,7 @@
 ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html</releaseNotes>
 	<readme>docs/README.md</readme>
     <dependencies>
-      <dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${CPACK_PACKAGE_DEPENDENCY_VERSION}\" />
+      <dependency id="${EMGUCV_NUGET_ID}" version="${CPACK_PACKAGE_DEPENDENCY_VERSION}" />
     </dependencies>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>native opencv emgu emgucv vison ubuntu</tags>
