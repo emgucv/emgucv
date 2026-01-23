@@ -2,20 +2,20 @@
 <package >
   <metadata>
     <id>${EMGUCV_UBUNTU_NUGET_ID}</id>
-	<title>${EMGUCV_UBUNTU_NUGET_TITLE}</title>
+	  <title>${EMGUCV_UBUNTU_NUGET_TITLE}</title>
     <version>${CPACK_PACKAGE_VERSION}</version>
     <authors>${CPACK_PACKAGE_VENDOR}</authors>
     <owners>${CPACK_PACKAGE_VENDOR}</owners>
     <license type="file">${EMGUCV_LICENSE_FILE}</license>
     <projectUrl>${NUGET_EMGU_URL}</projectUrl>
-	<repository type="git" url="https://github.com/emgucv/emgucv" />
-	<icon>icon.png</icon>
+	  <repository type="git" url="https://github.com/emgucv/emgucv" />
+	  <icon>nuget_icon.png</icon>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-	<summary>Runtime package of Emgu CV for Ubuntu</summary>
+	  <summary>Runtime package of Emgu CV for Ubuntu</summary>
     <description>This package contains the native runtime of Emgu CV for Ubuntu</description>
     <releaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV for Ubuntu. For online documentation please visit
 ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html</releaseNotes>
-	<readme>docs/README.md</readme>
+	  <readme>docs/README.md</readme>
     <dependencies>
       <dependency id="${EMGUCV_NUGET_ID}" version="${CPACK_PACKAGE_DEPENDENCY_VERSION}" />
     </dependencies>
@@ -23,6 +23,10 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
     <tags>native opencv emgu emgucv vison ubuntu</tags>
   </metadata>
   <files>
-  ${EMGUCV_UBUNTU_NUGET_FILE_LIST}
+    <file src="..\..\..\miscellaneous\nuget_icon.png" target="" />
+    <file src="..\..\..\${EMGUCV_LICENSE_FILE}" target="" />
+    <file src="README.md" target="docs" />
+    <file src="${EMGUCV_UBUNTU_NUGET_ID}.props" target="build" />
+    ${EMGUCV_UBUNTU_NUGET_FILE_LIST}
   </files>
 </package>
