@@ -6,6 +6,8 @@ IF (HAVE_WINSTORE_10)
 
   PROJECT(Emgu.CV.runtime.uwp.nuget)
 
+  SET(EMGUCV_UWP_NUGET_ID "${EMGUCV_NUGET_ID}.runtime${EMGUCV_RUNTIME_EXTRA_TAG}.uwp")
+
   SET(EMGUCV_UWP_NUGET_TITLE "Emgu CV for UWP Native Runtime")
   
   SET(EMGUCV_UWP_NUGET_FILE_LIST "")
@@ -21,12 +23,6 @@ IF (HAVE_WINSTORE_10)
   IF(HAVE_WINSTORE_10_ARM64)
 	SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\win10-arm64\\native\\*.dll\" target=\"runtimes\\win10-arm64\\native\" />")
   ENDIF()
-  #IF(HAVE_WINSTORE_10)
-  SET(EMGUCV_UWP_NUGET_FILE_LIST "${EMGUCV_UWP_NUGET_FILE_LIST} 
-    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-	<file src=\"README.md\" target=\"docs\\\" />")
-  #ENDIF()
   
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
@@ -39,7 +35,23 @@ IF (HAVE_WINSTORE_10)
 	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" #nuspec_file 
 	"${NUGET_OUTPUT_DIR}" #output_dir 
 	"${CMAKE_CURRENT_SOURCE_DIR}" #working_dir
-	) 
+	)
+
+  TARGET_SOURCES(${PROJECT_NAME} PRIVATE
+	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec"
+	"${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
+	"${CMAKE_CURRENT_SOURCE_DIR}/README.md"
+  )
+
+  source_group("Template" FILES 
+	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in"
+	"${CMAKE_CURRENT_SOURCE_DIR}/README.md.in")
+	
+  source_group("Nuget" FILES 
+	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec"
+	"${CMAKE_CURRENT_SOURCE_DIR}/README.md"
+  )
 	
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV cvextern)
   

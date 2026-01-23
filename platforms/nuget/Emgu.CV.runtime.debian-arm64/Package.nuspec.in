@@ -2,27 +2,32 @@
 <package >
   <metadata>
     <id>${EMGUCV_DEBIAN_ARM64_NUGET_ID}</id>
-	<title>${EMGUCV_DEBIAN_ARM64_NUGET_TITLE}</title>
+	  <title>${EMGUCV_DEBIAN_ARM64_NUGET_TITLE}</title>
     <version>${CPACK_PACKAGE_VERSION}</version>
     <authors>${CPACK_PACKAGE_VENDOR}</authors>
     <owners>${CPACK_PACKAGE_VENDOR}</owners>
     <license type="file">${EMGUCV_LICENSE_FILE}</license>
     <projectUrl>${NUGET_EMGU_URL}</projectUrl>
-	<repository type="git" url="https://github.com/emgucv/emgucv" />
-	<icon>icon.png</icon>
+	  <repository type="git" url="https://github.com/emgucv/emgucv" />
+	  <icon>nuget_icon.png</icon>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-	<summary>Emgu CV ARM64 native runtime for Debian (including Raspberry Pi OS)</summary>
+	  <summary>Emgu CV ARM64 native runtime for Debian (including Raspberry Pi OS)</summary>
     <description>This package contains the Emgu CV ARM64 native runtime for Debian (including Raspberry Pi OS)</description>
     <releaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV ARM64 native runtime for Debian (including Raspberry Pi OS). For online documentation please visit
 ${NUGET_EMGU_URL}/wiki/files/emgucv/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/
     </releaseNotes>
-	<dependencies>
+    <readme>docs/README.md</readme>
+	  <dependencies>
       <dependency id="${EMGUCV_NUGET_ID}" version="${CPACK_PACKAGE_DEPENDENCY_VERSION}" />
     </dependencies>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>native opencv emgu emgucv ai image debian raspberry pi</tags>
   </metadata>
   <files>
-  ${EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST}
+    <file src="..\..\..\miscellaneous\nuget_icon.png" target="" />
+    <file src="..\..\..\${EMGUCV_LICENSE_FILE}" target="" />
+    <file src="README.md" target="docs" />
+    <file src="${EMGUCV_DEBIAN_ARM64_NUGET_ID}.props" target="build" />
+    ${EMGUCV_DEBIAN_ARM64_NUGET_FILE_LIST}
   </files>
 </package>

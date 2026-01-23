@@ -2,23 +2,23 @@
 <package >
   <metadata>
     <id>${EMGUCV_WINDOWS_NUGET_ID}</id>
-	<title>${EMGUCV_WINDOWS_NUGET_TITLE}</title>
+	  <title>${EMGUCV_WINDOWS_NUGET_TITLE}</title>
     <version>${CPACK_PACKAGE_VERSION}</version>
     <authors>${CPACK_PACKAGE_VENDOR}</authors>
     <owners>${CPACK_PACKAGE_VENDOR}</owners>
     <license type="file">${EMGUCV_LICENSE_FILE}</license>
     <projectUrl>${NUGET_EMGU_URL}</projectUrl>
-	<repository type="git" url="https://github.com/emgucv/emgucv" />
-	<icon>icon.png</icon>
+	  <repository type="git" url="https://github.com/emgucv/emgucv" />
+	  <icon>icon.png</icon>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-	<summary>Runtime package of Emgu CV for Windows</summary>
+	  <summary>Runtime package of Emgu CV for Windows</summary>
     <description>This package contains the native runtime of Emgu CV for Windows</description>
     <releaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. For online documentation please visit
 ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html    	        
     </releaseNotes>
-	<readme>docs/README.md</readme>
-	<dependencies>
-		${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
+	  <readme>docs/README.md</readme>
+	  <dependencies>
+		  ${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
     </dependencies>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>native opencv emgu emgucv ai image</tags>

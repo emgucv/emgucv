@@ -6,21 +6,12 @@ IF (HAVE_MACOS)
   
   PROJECT(Emgu.CV.runtime.macos.nuget)
 
-  #SET(EMGUCV_MACOS_NUGET_FILE_LIST "")
-  #IF(HAVE_MACOS)
-  #  SET(EMGUCV_MACOS_NUGET_FILE_LIST "${EMGUCV_MACOS_NUGET_FILE_LIST} 
-  #<file src=\"..\\..\\..\\libs\\runtimes\\osx\\native\\*.dylib\" target=\"runtimes\\osx\\native\"/>
-  #<file src=\"..\\..\\..\\libs\\runtimes\\osx\\native\\*.inc\" target=\"docs\\\" />
-  #<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-  #<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-  #<file src=\"docs\\README.md\" target=\"docs\\\" />
-  #<file src=\"Emgu.CV.runtime.macos.props\" target=\"build\\\" />")
-  #ENDIF()
+  SET(EMGUCV_MACOS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime${EMGUCV_RUNTIME_EXTRA_TAG}.macos")
 
-  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.macos.props)
+  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/${EMGUCV_MACOS_NUGET_ID}.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md)  
-
+  
   get_filename_component(NUGET_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
 
   BUILD_NUGET_PACKAGE(
@@ -30,6 +21,26 @@ IF (HAVE_MACOS)
 	"${NUGET_OUTPUT_DIR}" #output_dir 
 	"${CMAKE_CURRENT_SOURCE_DIR}" #working_dir
 	) 
+
+  TARGET_SOURCES(${PROJECT_NAME} PRIVATE
+    #"${EMGU_CV_SOURCE_DIR}/cmake/UseRidGraph.props.in"
+	"${CMAKE_CURRENT_SOURCE_DIR}/${EMGUCV_MACOS_NUGET_ID}.props"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec"
+	"${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
+	"${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md"
+  )
+
+  source_group("Template" FILES 
+    #"${EMGU_CV_SOURCE_DIR}/cmake/UseRidGraph.props.in"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in"
+	"${CMAKE_CURRENT_SOURCE_DIR}/README.md.in")
+	
+  source_group("Nuget" FILES 
+    "${CMAKE_CURRENT_SOURCE_DIR}/${EMGUCV_MACOS_NUGET_ID}.props"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec"
+	"${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md"
+  )
 
   IF (EMGU_NUGET_SIGN_FOUND)
     EMGU_SIGN_NUGET(${PROJECT_NAME} "${NUGET_OUTPUT_DIR}/${EMGUCV_MACOS_NUGET_ID}.${CPACK_PACKAGE_VERSION}.nupkg")

@@ -2,20 +2,20 @@
 <package >
   <metadata>
     <id>${EMGU_WINDOWS_MSVCRT_ARM64_NUGET_ID}</id>
-	<title>MSVC arm64 runtime for windows</title>
+	  <title>MSVC arm64 runtime for windows</title>
     <version>${EMGU_WINDOWS_MSVCRT_VERSION}</version>
     <authors>${CPACK_PACKAGE_VENDOR}</authors>
     <owners>${CPACK_PACKAGE_VENDOR}</owners>
     <license type="file">${EMGUCV_LICENSE_FILE}</license>
     <projectUrl>${NUGET_EMGU_URL}</projectUrl>
-	<repository type="git" url="https://github.com/emgucv/emgucv" />
-	<icon>icon.png</icon>
+	  <repository type="git" url="https://github.com/emgucv/emgucv" />
+	  <icon>icon.png</icon>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-	<summary>MSVC ARM64 runtime package for Windows</summary>
+	  <summary>MSVC ARM64 runtime package for Windows</summary>
     <description>This package contains the native arm64 MSVC runtime for Windows</description>
     <releaseNotes>This is the arm64 MSVC runtime v${MSVC_TOOLSET_VERSION} built by ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV.   	        
     </releaseNotes>
-	<readme>docs/README.md</readme>
+	  <readme>docs/README.md</readme>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>native emgu msvc</tags>
   </metadata>
@@ -25,7 +25,7 @@
 	<file src="..\..\..\libs\runtimes\win-arm64\native\vcruntime*.dll" target="runtimes\win-arm64\native" />
 	<file src="..\..\..\libs\runtimes\win-arm64\native\vccorlib*.dll" target="runtimes\win-arm64\native" />
 	<file src="..\..\..\miscellaneous\nuget_icon.png" target="icon.png" />
-    <file src="..\..\..\${EMGUCV_LICENSE_FILE}" target="" />
+  <file src="..\..\..\${EMGUCV_LICENSE_FILE}" target="" />
 	<file src="README.md" target="docs\" />
   </files>
 </package>
