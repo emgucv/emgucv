@@ -4,51 +4,49 @@
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
   <PropertyGroup>
-	<TargetFrameworks>net${DOTNET_VERSION_MAJOR}.0-android</TargetFrameworks>
+    <TargetFrameworks>net${DOTNET_VERSION_MAJOR}.0-android</TargetFrameworks>
     <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\))</EmguCVProjectRoot>
     <AcceptAndroidSDKLicenses>true</AcceptAndroidSDKLicenses>
     <PackageId>${EMGUCV_MAUI_ANDROID_NUGET_ID}</PackageId>
-	<title>${EMGUCV_MAUI_ANDROID_NUGET_TITLE}</title>
+    <title>${EMGUCV_MAUI_ANDROID_NUGET_TITLE}</title>
     <version>${CPACK_PACKAGE_VERSION}</version>
     <authors>${CPACK_PACKAGE_VENDOR}</authors>
     <owners>${CPACK_PACKAGE_VENDOR}</owners>
-	<summary>Android runtime package of Emgu CV for MAUI</summary>
+	  <summary>Android runtime package of Emgu CV for MAUI</summary>
     <Description>This package contains the native Android runtime of Emgu CV for MAUI</Description>
     <PackageReleaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. For online documentation please visit
 ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html    	        
-</PackageReleaseNotes>
+    </PackageReleaseNotes>
 	
-	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	<PackageIcon>nuget_icon.png</PackageIcon>
+	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	  <PackageIcon>nuget_icon.png</PackageIcon>
     <PackageReadmeFile>docs/README.md</PackageReadmeFile>
-	<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-	<RepositoryUrl>https://github.com/emgucv/emgucv</RepositoryUrl>
+	  <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+	  <RepositoryUrl>https://github.com/emgucv/emgucv</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-	<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+	  <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageOutputPath>$([System.IO.Path]::GetFullPath($(EmguCVProjectRoot)\platforms\nuget))</PackageOutputPath>
-	<PackageTags>native;opencv;emgu;emgucv;ai;image;android;maui</PackageTags>
+	  <PackageTags>native;opencv;emgu;emgucv;ai;image;android;maui</PackageTags>
     <PackageProjectUrl>${NUGET_EMGU_URL}</PackageProjectUrl>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
-	
-    
   </PropertyGroup>
  
-    <ItemGroup>
-      <None Include="$(EmguCVProjectRoot)\LICENSE.txt">
-        <Pack>True</Pack>
-        <PackagePath></PackagePath>
-      </None>
-      <None Include="$(EmguCVProjectRoot)\miscellaneous\nuget_icon.png">
-        <Pack>True</Pack>
-        <PackagePath></PackagePath>
-      </None>
-    </ItemGroup>
-    <ItemGroup>
-      <None Include="docs\README.md">
-        <Pack>True</Pack>
-        <PackagePath>docs\</PackagePath>
-      </None>
-    </ItemGroup>
+  <ItemGroup>
+    <None Include="$(EmguCVProjectRoot)\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="$(EmguCVProjectRoot)\miscellaneous\nuget_icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="docs\README.md">
+      <Pack>True</Pack>
+      <PackagePath>docs\</PackagePath>
+    </None>
+  </ItemGroup>
 	<ItemGroup Condition="Exists('$(EmguCVProjectRoot)\libs\android\arm64-v8a\arm64-v8a_version_string.inc')">
 	  <None Include="$(EmguCVProjectRoot)\libs\android\arm64-v8a\arm64-v8a_version_string.inc">
         <Pack>True</Pack>

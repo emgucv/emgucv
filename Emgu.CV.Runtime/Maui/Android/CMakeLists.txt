@@ -36,6 +36,25 @@ IF(HAVE_MAUI)
     SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
   
     BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.android.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
+
+    TARGET_SOURCES(${PROJECT_NAME} PRIVATE
+	  "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in"
+	  "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
+	  "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
+	  "${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md"
+      "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.android.csproj"
+    )
+
+    source_group("Template" FILES 
+	  "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in"
+	  "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
+    )
+	
+    source_group("Csproj" FILES 
+	  "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
+      "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.android.csproj"
+	  "${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md"
+    )
   
     if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
