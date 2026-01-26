@@ -5,14 +5,14 @@
 SET(EMGUCV_MAUI_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.maui${EMGUCV_RUNTIME_EXTRA_TAG}")
 SET(EMGUCV_MAUI_NUGET_TITLE "Emgu CV for MAUI Native Runtime")
   
-SET(EMGUCV_MAUI_PACKAGE_REFERENCE "")
-IF (HAVE_WINDESKTOP)
-  SET(EMGUCV_MAUI_PACKAGE_REFERENCE "
-    <ItemGroup>
-      <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WINDOWS_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
-	  </PackageReference>
-    </ItemGroup>")
-ENDIF()
+#SET(EMGUCV_MAUI_PACKAGE_REFERENCE "")
+#IF (HAVE_WINDESKTOP)
+#  SET(EMGUCV_MAUI_PACKAGE_REFERENCE "
+#    <ItemGroup>
+#      <PackageReference Condition=\"$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'\" Include=\"${EMGUCV_WINDOWS_NUGET_ID}\" Version=\"${CPACK_PACKAGE_VERSION}\">
+#	  </PackageReference>
+#    </ItemGroup>")
+#ENDIF()
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
 IF(EMGU_SIGN_FOUND AND WIN32)
@@ -49,6 +49,25 @@ IF(HAVE_MAUI)
   
   BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
   
+    TARGET_SOURCES(${PROJECT_NAME} PRIVATE
+	  "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in"
+	  "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
+	  "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
+	  "${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md"
+      "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.csproj"
+    )
+
+    source_group("Template" FILES 
+	  "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in"
+	  "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
+    )
+	
+    source_group("Csproj" FILES 
+	  "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
+      "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.csproj"
+	  "${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md"
+    )
+
   if(ENABLE_SOLUTION_FOLDERS)
       set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
   endif() 

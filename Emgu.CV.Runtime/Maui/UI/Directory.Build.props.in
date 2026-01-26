@@ -2,74 +2,75 @@
 <Project>
   <!-- https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory?view=vs-2022 -->
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
-  
-    <PropertyGroup>
-	<TargetFrameworks>netstandard2.0;net${DOTNET_VERSION_MAJOR}.0-android;net${DOTNET_VERSION_MAJOR}.0-ios;net${DOTNET_VERSION_MAJOR}.0-maccatalyst</TargetFrameworks>
-	<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-windows10.0.19041.0</TargetFrameworks>
-	<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-	<!-- <TargetFrameworks>$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-tizen</TargetFrameworks> -->
-	
-	<MauiVersion Condition="'$(MauiVersion)' == ''">${DOTNET_VERSION_MAJOR}.0.0</MauiVersion>
-	
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net${DOTNET_VERSION_MAJOR}.0-android;net${DOTNET_VERSION_MAJOR}.0-ios;net${DOTNET_VERSION_MAJOR}.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-windows10.0.19041.0</TargetFrameworks>
+    <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+    <!-- <TargetFrameworks>$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-tizen</TargetFrameworks> -->
+
+    <MauiVersion Condition="'$(MauiVersion)' == ''">${DOTNET_VERSION_MAJOR}.0.0</MauiVersion>
     <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\))</EmguCVProjectRoot>
-	
     <PackageId>${EMGUCV_MAUI_NUGET_ID}</PackageId>
-	
-	<title>${EMGUCV_MAUI_NUGET_TITLE}</title>
+    <title>${EMGUCV_MAUI_NUGET_TITLE}</title>
     <version>${CPACK_PACKAGE_VERSION}</version>
     <authors>${CPACK_PACKAGE_VENDOR}</authors>
     <owners>${CPACK_PACKAGE_VENDOR}</owners>
-	<summary>Runtime package of Emgu CV for MAUI</summary>
+    <summary>Runtime package of Emgu CV for MAUI</summary>
     <Description>This package contains the native runtime of Emgu CV for MAUI</Description>
-    <PackageReleaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. For online documentation please visit
-${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html    	        
-</PackageReleaseNotes>
-	
-	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-	<PackageIcon>nuget_icon.png</PackageIcon>
+    <PackageReleaseNotes>
+      This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. For online documentation please visit
+      ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html
+    </PackageReleaseNotes>
+
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageIcon>nuget_icon.png</PackageIcon>
     <PackageReadmeFile>docs/README.md</PackageReadmeFile>
-	<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-	<RepositoryUrl>https://github.com/emgucv/emgucv</RepositoryUrl>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/emgucv/emgucv</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-	<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageOutputPath>$([System.IO.Path]::GetFullPath($(EmguCVProjectRoot)\platforms\nuget))</PackageOutputPath>
-	<PackageTags>opencv;emgu;emgucv;ai;image;maui</PackageTags>
+    <PackageTags>opencv;emgu;emgucv;ai;image;maui</PackageTags>
     <PackageProjectUrl>${NUGET_EMGU_URL}</PackageProjectUrl>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
-    
-	<!-- Add local repository path & nuget.org to RestoreSources -->
+
+    <!-- Add local repository path & nuget.org to RestoreSources -->
     <RestoreSources>$(RestoreSources);$(PackageOutputPath);https://api.nuget.org/v3/index.json</RestoreSources>
-	
+
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='net${DOTNET_VERSION_MAJOR}.0-android'">
+    <DefineConstants>$(DefineConstants);__USE_ANDROID_CAMERA2__</DefineConstants>
   </PropertyGroup>
   
-    <PropertyGroup>
-	  <DefineConstants>$(DefineConstants);TRACE</DefineConstants>
-	</PropertyGroup>
-  
-  	<PropertyGroup Condition="'$(TargetFramework)'=='net${DOTNET_VERSION_MAJOR}.0-android'">
-	  <DefineConstants>$(DefineConstants);__USE_ANDROID_CAMERA2__</DefineConstants>
-	</PropertyGroup>
-  
-    ${EMGUCV_MAUI_PACKAGE_REFERENCE}
+  <ItemGroup>
+    <PackageReference Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'" Include="${EMGUCV_WINDOWS_NUGET_ID}" Version="${CPACK_PACKAGE_VERSION}">
+    </PackageReference>
+  </ItemGroup>
 
-     <ItemGroup>
-      <None Include="$(EmguCVProjectRoot)\LICENSE.txt">
-        <Pack>True</Pack>
-        <PackagePath></PackagePath>
-      </None>
-      <None Include="$(EmguCVProjectRoot)\miscellaneous\nuget_icon.png">
-        <Pack>True</Pack>
-        <PackagePath></PackagePath>
-      </None>
-    </ItemGroup>
-    <ItemGroup>
-      <None Include="docs\README.md">
-        <Pack>True</Pack>
-        <PackagePath>docs\</PackagePath>
-      </None>
-    </ItemGroup>
-	
+  <ItemGroup>
+    <None Include="$(EmguCVProjectRoot)\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="$(EmguCVProjectRoot)\miscellaneous\nuget_icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="docs\README.md">
+      <Pack>True</Pack>
+      <PackagePath>docs\</PackagePath>
+    </None>
+  </ItemGroup>
+
   <!-- ${EMGUCV_MAUI_POST_PROCESS_BINARY} -->
-  <Import Project="SignBinary.Targets" Condition="exists('SignBinary.Targets')" />		
+  <Import Project="SignBinary.Targets" Condition="exists('SignBinary.Targets')" />
   <Import Project="SignPkg.Targets" Condition="exists('SignPkg.Targets')" />
 </Project>
