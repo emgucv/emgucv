@@ -2,25 +2,25 @@
 <package >
   <metadata>
     <id>${EMGU_CUFFT_NUGET_ID}</id>
-	<title>${EMGU_CUFFT_NUGET_TITLE}</title>
+	  <title>${EMGU_CUFFT_NUGET_TITLE}</title>
     <version>${EMGU_CUFFT_VERSION}</version>
     <authors>${NUGET_PACKAGE_VENDOR}</authors>
     <owners>${NUGET_PACKAGE_VENDOR}</owners>
-    <license type="file">CUDA_EULA.txt</license>
+    <license type="file">EULA.txt</license>
     <projectUrl>${NUGET_EMGU_URL}</projectUrl>
-	<icon>icon.png</icon>
+	  <icon>nuget_icon.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-	<summary>This package provides the native CUDA FFT dependencies for EMGU software libraries</summary>
+	  <summary>This package provides the native CUDA FFT dependencies for EMGU software libraries</summary>
     <description>This package provides the native CUDA FFT dependencies for EMGU software libraries</description>
     <releaseNotes>This is the CUFFT component of CUDA ${EMGU_CUFFT_VERSION}. </releaseNotes>
-	<readme>docs/README.md</readme>
+	  <readme>docs/README.md</readme>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
     <tags>native emgu cuda fft</tags>
   </metadata>
   <files>
-	<file src="..\..\..\libs\runtimes\win-x64\native\cufft*.dll" target="runtimes\win-x64\native" />
-	<file src="..\..\..\miscellaneous\nuget_icon.png" target="icon.png" />
-	<file src="EULA.txt" target="CUDA_EULA.txt" />
-	<file src="README.md" target="docs\" />
+	  <file src="..\..\..\libs\runtimes\win-x64\native\cufft*.dll" target="runtimes\win-x64\native" />
+	  <file src="..\..\..\miscellaneous\nuget_icon.png" target="" />
+	  <file src="EULA.txt" target="" />
+	  <file src="README.md" target="docs\" />
   </files>
 </package>

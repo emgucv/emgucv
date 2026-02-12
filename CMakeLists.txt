@@ -1265,7 +1265,7 @@ IF(HAVE_WINDESKTOP_ARM64)
 ENDIF()
 IF(HAVE_WINDESKTOP)
 	SET(EMGUCV_WINDOWS_NUGET_FILE_LIST "${EMGUCV_WINDOWS_NUGET_FILE_LIST} 
-    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
+    <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"\" />
     <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
 	<file src=\"README.md\" target=\"docs\\\" />")
 ENDIF()
