@@ -23,7 +23,23 @@ IF (WIN32 AND HAVE_WINDESKTOP_X64 AND WITH_CUDNN)
 	  "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" #nuspec_file 
 	  "${CMAKE_CURRENT_SOURCE_DIR}/../" #output_dir 
 	  "${CMAKE_CURRENT_SOURCE_DIR}" #working_dir
-	  ) 
+	  )
+
+  TARGET_SOURCES(${PROJECT_NAME} PRIVATE
+	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec"
+	"${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
+	"${CMAKE_CURRENT_SOURCE_DIR}/README.md"
+  )
+
+  source_group("Template" FILES 
+	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in"
+	"${CMAKE_CURRENT_SOURCE_DIR}/README.md.in")
+	
+  source_group("Nuget" FILES 
+	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec"
+	"${CMAKE_CURRENT_SOURCE_DIR}/README.md"
+  )
 	  
   IF (EMGU_NUGET_SIGN_FOUND)
     EMGU_SIGN_NUGET(${PROJECT_NAME} "${NUGET_OUTPUT_DIR}/${EMGU_ZLIBWAPI_ID}.${EMGU_ZLIBWAPI_VERSION}.nupkg")
