@@ -3,8 +3,6 @@
 //----------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace Emgu.CV.Util
@@ -12,7 +10,7 @@ namespace Emgu.CV.Util
     /// <summary>
     /// Use zlib included in OpenCV to perform in-memory binary compression and decompression
     /// </summary>
-    internal static class ZlibCompression
+    public static class ZlibCompression
     {
         /// <summary>
         /// Compress the data using the specific compression level
