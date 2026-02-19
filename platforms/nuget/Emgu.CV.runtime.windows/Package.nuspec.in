@@ -26,6 +26,7 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
   <files>
     <file src="..\..\..\miscellaneous\nuget_icon.png" target="" />
     <file src="README.md" target="docs\" />
+    <file src="..\..\..\${EMGUCV_LICENSE_FILE}" target="" />
     ${EMGUCV_WINDOWS_NUGET_FILE_LIST}
   </files>
 </package>
