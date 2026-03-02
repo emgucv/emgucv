@@ -4444,11 +4444,19 @@ ELSEIF (APPLE)
     ENDIF()
   ENDIF()
 
+  IF (IS_UBUNTU)
+    add_custom_command(TARGET ${the_target}
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_{UBUNTU_VERSION}_version_string.inc
+      WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+      COMMENT "Copying build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_{UBUNTU_VERSION}_version_string.inc")
+  ELSE()
 	add_custom_command(TARGET ${the_target}
       POST_BUILD
       COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
       COMMENT "Copying build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc")
+  ENDIF()
     #INSTALL(FILES
 	#	"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc"
 	#	DESTINATION "libs/runtimes/osx/native"
