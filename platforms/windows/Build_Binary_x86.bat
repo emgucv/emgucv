@@ -10,6 +10,7 @@ REM %3%: "intel", build with intel compiler
 REM %3%: "inf", build with OpenVino 
 REM %3%: "WindowsStore10", target UWP 
 REM %3%: "vs2015", force to build with vs_2015, it may no longer work as of 2020
+REM %3%: "vs2022", force to build with vs_2022
 REM %3%: "commercial", use to enable optimization with targeting 32-bit architecture
 REM %4%: "nonfree", build the nonfree module
 REM %4%: "openni", build the openni module
@@ -137,6 +138,7 @@ IF EXIST "%PROGRAMW6432%\CMake\bin\cmake.exe" SET CMAKE="%PROGRAMW6432%\CMake\bi
 IF EXIST "%VS2022_DIR%\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" SET CMAKE="%VS2022_DIR%\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"
 REM IF cuda is enabled, do not use CMAKE from VS2026. It will only generate solution for VS2026
 IF "%2%"=="gpu" GOTO END_FIND_CMAKE
+IF "%3%"=="vs2022" GOTO END_FIND_CMAKE
 IF EXIST "%VS2026_DIR%\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" SET CMAKE="%VS2026_DIR%\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"
 :END_FIND_CMAKE
 IF EXIST "CMakeCache.txt" del CMakeCache.txt
@@ -164,6 +166,8 @@ REM IF "%3%"=="intel_inf" GOTO SET_BUILD_TYPE
 IF EXIST %VS2019% SET DEVENV=%VS2019%
 
 IF EXIST %VS2022% SET DEVENV=%VS2022%
+
+IF "%3%"=="vs2022" GOTO SET_BUILD_TYPE
 
 REM DO NOT USE VS2026 if we are building for CUDA
 IF "%2%"=="gpu" GOTO SET_BUILD_TYPE
