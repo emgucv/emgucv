@@ -164,7 +164,7 @@ namespace Emgu.CV.Test
             using (Mat img = EmguAssert.LoadMat("lena.jpg"))
             using (Mat result = new Mat())
             {
-                detector.Init(AutoTestModels.DownloadManager_OnDownloadProgressChanged);
+                await detector.Init(AutoTestModels.DownloadManager_OnDownloadProgressChanged);
                 img.CopyTo(result);
                 detector.ProcessAndRender(img, result);
                 CvInvoke.Imwrite("rgb_ssd_facedetect.jpg", result);
