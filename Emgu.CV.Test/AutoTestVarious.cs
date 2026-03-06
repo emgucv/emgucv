@@ -7,7 +7,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;  
+using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
 using System.Text;
@@ -3566,10 +3567,14 @@ namespace Emgu.CV.Test
                 //Download the bvlc googlenet file
                 String CaffeModelUrl = "http://dl.caffe.berkeleyvision.org/fcn8s-heavy-pascal.caffemodel";
                 Trace.WriteLine("downloading file from:" + CaffeModelUrl + " to: " + caffeModelFile);
-                System.Net.WebClient downloadClient = new System.Net.WebClient();
                 try
                 {
-                    downloadClient.DownloadFile(CaffeModelUrl, caffeModelFile);
+                    using (HttpClient httpClient = new HttpClient())
+                    using (System.IO.Stream responseStream = httpClient.GetStreamAsync(CaffeModelUrl).GetAwaiter().GetResult())
+                    using (FileStream fileStream = new FileStream(caffeModelFile, FileMode.Create))
+                    {
+                        responseStream.CopyTo(fileStream);
+                    }
                 }
                 catch
                 {
@@ -3698,10 +3703,14 @@ namespace Emgu.CV.Test
                 //Download the bvlc googlenet file
                 String googleNetUrl = "http://dl.caffe.berkeleyvision.org/bvlc_googlenet.caffemodel";
                 Trace.WriteLine("downloading file from:" + googleNetUrl + " to: " + googleNetFile);
-                System.Net.WebClient downloadClient = new System.Net.WebClient();
                 try
                 {
-                    downloadClient.DownloadFile(googleNetUrl, googleNetFile);
+                    using (HttpClient httpClient = new HttpClient())
+                    using (System.IO.Stream responseStream = httpClient.GetStreamAsync(googleNetUrl).GetAwaiter().GetResult())
+                    using (FileStream fileStream = new FileStream(googleNetFile, FileMode.Create))
+                    {
+                        responseStream.CopyTo(fileStream);
+                    }
                 }
                 catch
                 {
@@ -3742,10 +3751,14 @@ namespace Emgu.CV.Test
                 //Download the ssd file    
                 String fileUrl = url + fileName;
                 Trace.WriteLine("downloading file from:" + fileUrl + " to: " + fileName);
-                System.Net.WebClient downloadClient = new System.Net.WebClient();
                 try
                 {
-                    downloadClient.DownloadFile(fileUrl, fileName);
+                    using (HttpClient httpClient = new HttpClient())
+                    using (System.IO.Stream responseStream = httpClient.GetStreamAsync(fileUrl).GetAwaiter().GetResult())
+                    using (FileStream fileStream = new FileStream(fileName, FileMode.Create))
+                    {
+                        responseStream.CopyTo(fileStream);
+                    }
                 }
                 catch
                 {
@@ -3847,8 +3860,12 @@ namespace Emgu.CV.Test
                 String inceptionFile = "inception5h.zip";
                 String googleNetUrl = "https://storage.googleapis.com/download.tensorflow.org/models/inception5h.zip";
                 Trace.WriteLine("downloading file from:" + googleNetUrl + " to: " + inceptionFile);
-                System.Net.WebClient downloadClient = new System.Net.WebClient();
-                downloadClient.DownloadFile(googleNetUrl, inceptionFile);
+                using (HttpClient httpClient = new HttpClient())
+                using (System.IO.Stream responseStream = httpClient.GetStreamAsync(googleNetUrl).GetAwaiter().GetResult())
+                using (FileStream fileStream = new FileStream(inceptionFile, FileMode.Create))
+                {
+                    responseStream.CopyTo(fileStream);
+                }
 
                 System.IO.Compression.ZipFile.ExtractToDirectory(inceptionFile, ".");
             }
