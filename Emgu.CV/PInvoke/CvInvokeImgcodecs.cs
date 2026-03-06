@@ -236,6 +236,8 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="filename">The name of the file to be saved to</param>
         /// <param name="image">The image to be saved</param>
+        /// <param name="metadataTypes">The vector of metadata types to be written</param>
+        /// <param name="metaData">The metadata values corresponding to each type in metadataTypes</param>
         /// <param name="parameters">The parameters</param>
         /// <remarks>In general, only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function, with these exceptions:
         /// 16-bit unsigned(CV_16U) images can be saved in the case of PNG, JPEG 2000, and TIFF formats
