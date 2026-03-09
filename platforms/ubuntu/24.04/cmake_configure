@@ -123,7 +123,13 @@ cmake \
 #      -DWITH_CUDA:BOOL=FALSE \
     
 #C_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-9.2 CPLUS_INCLUDE_PATH=$PWD/../../../../eigen/:$INSTALL_FOLDER/include/vtk-9.2:$PWD/../../../../harfbuzz/src:$INSTALL_FOLDER/include/harfbuzz make
-make
+#make
+
+# If a build target is specified as the 2nd parameter, build the target.
+# If not specified, do not build target, only configuration will be performed.
+if [[ $# -gt 1 ]]; then
+  cmake --build . --config Release --target $2
+fi
 
 #if [ "$1" == "cuda" ]; then
 #    cp -rf bin/x64/*.so ../../../../libs/x64

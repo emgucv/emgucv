@@ -114,9 +114,12 @@ cmake \
 #      -DCMAKE_CXX_FLAGS_RELEASE="-DPNG_ARM_NEON_OPT=0 " \
 #      -DCMAKE_C_FLAGS_RELEASE="-DPNG_ARM_NEON_OPT=0 " \
 
+# If a build target is specified as the 2nd parameter, build the target.
+# If not specified, do not build target, only configuration will be performed.
+if [[ $# -gt 1 ]];; then
+  C_INCLUDE_PATH=$TOP_FOLDER/eigen/:$INSTALL_FOLDER/include/vtk-9.2 CPLUS_INCLUDE_PATH=$TOP_FOLDER/eigen/:$INSTALL_FOLDER/include/vtk-9.2 cmake --build . --config Release --parallel 1 --target $2
+fi
 
-C_INCLUDE_PATH=$TOP_FOLDER/eigen/:$INSTALL_FOLDER/include/vtk-9.2 CPLUS_INCLUDE_PATH=$TOP_FOLDER/eigen/:$INSTALL_FOLDER/include/vtk-9.2 cmake --build . --config Release --parallel 1 --target package
-#make
 cd ..
 
 #mkdir -p libs/arm
