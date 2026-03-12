@@ -11,23 +11,17 @@ IF(HAVE_UBUNTU_X64 OR HAVE_UBUNTU_X86 OR HAVE_UBUNTU_ARM64)
   
   SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "")
 
-	#SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} 
-    #<file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-    #<file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />	
-    #<file src=\"README.md\" target=\"docs\\\" />
-	#<file src=\"${EMGUCV_UBUNTU_NUGET_ID}.props\" target=\"build\\\" />")
-
 	IF(HAVE_UBUNTU_X86)
 	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x86\\native\\*.so\" target=\"runtimes\\ubuntu-x86\\native\" />")
-	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x86\\native\\ubuntu_x86_version_string.inc\" target=\"docs\\build_info_x86.inc\" /> ")
+	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x86\\native\\*_version_string.inc\" target=\"docs\" /> ")
 	ENDIF()
 	IF(HAVE_UBUNTU_X64)
 	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x64\\native\\*.so\" target=\"runtimes\\ubuntu-x64\\native\" />")
-	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x64\\native\\ubuntu_x64_version_string.inc\" target=\"docs\\build_info_x64.inc\" /> ")
+	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x64\\native\\*_version_string.inc\" target=\"docs\" /> ")
 	ENDIF()
 	IF(HAVE_UBUNTU_ARM64)
 	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-arm64\\native\\*.so\" target=\"runtimes\\ubuntu-arm64\\native\" />")
-	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-arm64\\native\\ubuntu_arm64_version_string.inc\" target=\"docs\\build_info_arm64.inc\" /> ")
+	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-arm64\\native\\*_version_string.inc\" target=\"docs\" /> ")
 	ENDIF()
   
   CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/${EMGUCV_UBUNTU_NUGET_ID}.props)
