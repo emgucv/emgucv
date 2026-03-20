@@ -35,6 +35,85 @@ dotnet build Emgu.CV/NetStandard/Emgu.CV.csproj
 dotnet build Solution/Windows.Desktop/Emgu.CV.NetStandard.sln
 ```
 
+### Native C++ (iOS / Xcode)
+The iOS build uses shell scripts in `platforms/ios/`. Run from within **`platforms/ios/`**:
+
+```bash
+cd platforms/ios
+./build.sh [target] [variant]
+```
+
+**Targets (`$1`):**
+- *(empty or `all`)* — build all three targets
+- `device_arm64` — physical iOS device (arm64)
+- `simulator_arm64` — Apple Silicon simulator
+- `simulator_x86_64` — Intel simulator
+
+**Variants (`$2`):**
+- *(empty)* — full build with `opencv_contrib` + Tesseract
+- `core` — core OpenCV only, no contrib/Freetype/Tesseract
+- `mini` — minimal subset (strips dnn, ml, calib, video, etc.)
+
+Example — device only, core variant:
+```bash
+cd platforms/ios
+./build.sh device_arm64 core
+```
+
+Output lands in `platforms/ios/{iphoneos_arm64,simulator_arm64,simulator_x86_64}/`.
+
+Prerequisites:
+- Xcode installed at `/Applications/Xcode.app`
+- `eigen` submodule present (built automatically as a dependency)
+- For full/default builds: `opencv_contrib/` submodule present
+
+The script calls `configure_xcode.sh` which invokes `cmake -GXcode` with the appropriate iOS toolchain file from `opencv/platforms/ios/cmake/Toolchains/`, then builds with `xcodebuild`. Deployment target is iOS 14.2 for device and simulator.
+
+### Native C++ (MacCatalyst / Xcode)
+Similar to iOS, run from within **`platforms/ios/`**:
+
+```bash
+cd platforms/ios
+./build_catalyst.sh [arch] [variant]
+```
+
+**Architectures (`$1`):**
+- `arm64` — Apple Silicon
+- `x86_64` — Intel
+
+**Variants (`$2`):** same as iOS — *(empty)* for full, `core`, or `mini`.
+
+Example — Apple Silicon, full variant:
+```bash
+cd platforms/ios
+./build_catalyst.sh arm64
+```
+
+Output lands in `platforms/ios/catalyst_<arch>/`.
+
+### MAUI Demo App (MacCatalyst)
+
+After the MacCatalyst C++ binary is built, build then launch the MAUI demo app directly on macOS:
+
+```bash
+dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-maccatalyst
+open "Emgu.CV.Example/MAUI/MauiDemoApp/bin/Debug/net10.0-maccatalyst/maccatalyst-arm64/Emgu CV MAUI Demo.app"
+```
+
+Note: `-t:Run` does not work reliably for MacCatalyst — build and `open` separately instead.
+
+### MAUI Demo App (iOS Simulator)
+
+After the C++ iOS binaries are built, you can build and run the MAUI demo app on an iOS simulator.
+
+Build then run on the default iOS simulator:
+```bash
+dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-ios
+dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-ios -t:Run
+```
+
+The project is defined in `Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj`. The solution file for iOS is at `Solution/iOS/Emgu.CV.iOS.Maui.sln`.
+
 ### Running Tests
 ```bash
 dotnet test Emgu.CV.Test/Emgu.CV.Test.Net/Emgu.CV.Test.Net.csproj
