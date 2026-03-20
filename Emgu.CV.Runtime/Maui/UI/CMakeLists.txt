@@ -53,7 +53,7 @@ IF(HAVE_MAUI)
 	  "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
     )
 	
-    source_group("Csproj" FILES 
+    source_group("Source" FILES 
 	  "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
       "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.csproj"
 	  "${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md"

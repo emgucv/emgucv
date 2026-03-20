@@ -296,7 +296,7 @@ MACRO(BUILD_DOTNET_PROJ target csproj_file extra_flags)
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
 	  POST_BUILD
-      #COMMAND ${MAC_FRESH_SHELL_PREFIX} "${DOTNET_EXECUTABLE}" workload restore "${csproj_file}"
+      #COMMAND ${MAC_FRESH_SHELL_PREFIX} "${DOTNET_EXECUTABLE}" restore ${extra_flags} "${csproj_file}"
       COMMAND ${MAC_FRESH_SHELL_PREFIX} "${DOTNET_EXECUTABLE}" build -c ${DEFAULT_CS_CONFIG} ${extra_flags} "${csproj_file}"
       COMMENT "Building ${target} with command: ${MAC_FRESH_SHELL_PREFIX} \"${DOTNET_EXECUTABLE}\" build -c ${DEFAULT_CS_CONFIG} ${extra_flags} \"${csproj_file}\"")
   ELSE()

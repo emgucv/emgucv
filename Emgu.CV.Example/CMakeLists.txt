@@ -4,40 +4,7 @@
 
 IF(EMGU_CV_EXAMPLE_BUILD)
    
-  IF (HAVE_ANDROID OR HAVE_IOS OR HAVE_MACOS OR HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_WINSTORE_10) 
-    
-	CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/MAUI/MauiDemoApp/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/MAUI/MauiDemoApp/Directory.Build.props)
-    
-	INSTALL(
-      DIRECTORY
-      "${CMAKE_CURRENT_SOURCE_DIR}/MAUI/MauiDemoApp/"
-      DESTINATION Emgu.CV.Example/MAUI/MauiDemoApp/
-      COMPONENT emgucv_example_source
-      FILES_MATCHING 
-      PATTERN "*.cs"
-      PATTERN "*.csproj"
-      PATTERN "*.config"
-      PATTERN "*.shproj"
-      PATTERN "*.projitems"
-	  PATTERN "*.props"
-      PATTERN "*.axml"
-      PATTERN "*.xaml"
-      PATTERN "*.xml"
-      PATTERN "*.txt"
-      PATTERN "*.png"
-	  PATTERN "*.jpg"
-	  PATTERN "*.svg"
-      PATTERN "*.dll"
-      PATTERN "*.json"
-	  PATTERN "*.manifest"
-	  PATTERN "*.appxmanifest"
-	  PATTERN "*.plist"
-	  PATTERN "*.ttf"
-      PATTERN ".git" EXCLUDE
-      PATTERN "Debug" EXCLUDE
-      PATTERN "Release" EXCLUDE  
-      )	  
-  ENDIF()
+  add_subdirectory(MAUI)
   
   #Windows only demos
   IF (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
