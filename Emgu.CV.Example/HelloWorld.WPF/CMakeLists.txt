@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF (DOTNET_FOUND AND WIN32 ) 
+IF (DOTNET_FOUND AND WIN32) 
   PROJECT(Example.HelloWorld.WPF)
   
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
