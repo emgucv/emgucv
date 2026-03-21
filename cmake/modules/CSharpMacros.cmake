@@ -291,14 +291,14 @@ MACRO(BUILD_DOTNET_PROJ target csproj_file extra_flags)
   #IF(APPLE)
   #  SET(MAC_FRESH_SHELL_PREFIX env -i zsh)
   #ENDIF()
-  
+  SEPARATE_ARGUMENTS(extra_flag_list UNIX_COMMAND "${extra_flags}")
   IF (DOTNET_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
       TARGET ${target}
 	  POST_BUILD
       #COMMAND ${MAC_FRESH_SHELL_PREFIX} "${DOTNET_EXECUTABLE}" restore ${extra_flags} "${csproj_file}"
-      COMMAND ${MAC_FRESH_SHELL_PREFIX} "${DOTNET_EXECUTABLE}" build -c ${DEFAULT_CS_CONFIG} ${extra_flags} "${csproj_file}"
-      COMMENT "Building ${target} with command: ${MAC_FRESH_SHELL_PREFIX} \"${DOTNET_EXECUTABLE}\" build -c ${DEFAULT_CS_CONFIG} ${extra_flags} \"${csproj_file}\"")
+      COMMAND ${MAC_FRESH_SHELL_PREFIX} "${DOTNET_EXECUTABLE}" build -c ${DEFAULT_CS_CONFIG} ${extra_flag_list} "${csproj_file}"
+      COMMENT "Building ${target} with command: ${MAC_FRESH_SHELL_PREFIX} \"${DOTNET_EXECUTABLE}\" build -c ${DEFAULT_CS_CONFIG} ${extra_flag_list} \"${csproj_file}\"")
   ELSE()
     MESSAGE(FATAL_ERROR "DOTNET_EXECUTABLE not found!")
   ENDIF()
