@@ -36,9 +36,9 @@
 		<!-- <WindowsPackageType>None</WindowsPackageType> -->
 	</PropertyGroup>
 
-	<!-- Temporary work around MAUI iOS AOT compilation issue for dotnet 9: https://github.com/dotnet/runtime/issues/109966#issuecomment-2486161265 -->
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0-ios|AnyCPU'">
-        <MtouchInterpreter>-all,System.Private.Windows.Core</MtouchInterpreter>
+	<!-- Temporary work around MAUI iOS/MacCatalyst AOT compilation issue: https://github.com/dotnet/runtime/issues/109966#issuecomment-2486161265 -->
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' OR $([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">
+        <MtouchInterpreter>-all,System.Private.Windows.Core,aot-instances</MtouchInterpreter>
     </PropertyGroup>
 
 	<ItemGroup>
