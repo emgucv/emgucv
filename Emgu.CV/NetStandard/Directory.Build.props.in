@@ -5,10 +5,10 @@
   
   <PropertyGroup>
   
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
-	<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx')) Or $([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-ios;net${DOTNET_VERSION_MAJOR}.0-maccatalyst</TargetFrameworks>
+  <TargetFrameworks>netstandard2.0</TargetFrameworks>
+	<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx')) Or $([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-ios26.0;net${DOTNET_VERSION_MAJOR}.0-maccatalyst26.0</TargetFrameworks>
 	
-    <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\))</EmguCVProjectRoot>
+  <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\))</EmguCVProjectRoot>
 	<OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(EmguCVProjectRoot)\libs))</OpenCVBinaryDir>
 
     <PackageId>${EMGUCV_NUGET_ID}</PackageId>

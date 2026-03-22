@@ -21,6 +21,22 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
     
     BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
 
+    TARGET_SOURCES(${PROJECT_NAME} PRIVATE
+	"${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in"
+	"${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
+    "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
+    )
+
+    source_group("Template" FILES 
+	"${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in")
+	
+    source_group("Source" FILES 
+	"${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
+    "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
+    )
+
     INSTALL(
       DIRECTORY 
       ${EMGU_CV_SOURCE_DIR}/libs/Build/Emgu.CV
