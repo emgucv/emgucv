@@ -1597,7 +1597,6 @@ ADD_SUBDIRECTORY(Emgu.CV.Bitmap)
 ADD_SUBDIRECTORY(Emgu.CV.Wpf)
 ADD_SUBDIRECTORY(Emgu.CV.WindowsUI)
 
-ADD_SUBDIRECTORY(Emgu.CV.Example)
 ADD_SUBDIRECTORY(Emgu.CV.Test)
 ADD_SUBDIRECTORY(Emgu.CV.Cuda)
 
@@ -1610,7 +1609,9 @@ ADD_SUBDIRECTORY(platforms/nuget)
 
 # MAUI will need to use some of the nuget packages. It need to be build after nuget packages is build.
 ADD_SUBDIRECTORY(Emgu.CV.Runtime)
-#ADD_SUBDIRECTORY(Emgu.CV.Runtime/Maui)
+
+# Example may need to use some of the Emgu.CV.Runtime library. It need to be defined after Emgu.CV.Runtime
+ADD_SUBDIRECTORY(Emgu.CV.Example)
 
 INSTALL(
   FILES
