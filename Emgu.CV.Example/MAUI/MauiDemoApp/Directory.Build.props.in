@@ -5,5 +5,8 @@
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-ios;net${DOTNET_VERSION_MAJOR}.0-maccatalyst</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-windows${MAUI_WINDOWS_SDK_VERSION}</TargetFrameworks>
     <!-- <TargetFramework>net${DOTNET_VERSION_MAJOR}.0</TargetFramework> -->
+	
+	<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">${IOS_TFM_VERSION}</SupportedOSPlatformVersion>
+	<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">${IOS_TFM_VERSION}</SupportedOSPlatformVersion>
   </PropertyGroup>
 </Project>
