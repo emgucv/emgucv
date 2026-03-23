@@ -1,20 +1,33 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    
+
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
-    <IsBindingProject>true</IsBindingProject>	
+    <IsBindingProject>true</IsBindingProject>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseXCFramework>true</UseXCFramework>
+    <NoBindingEmbedding>$(UseXCFramework)</NoBindingEmbedding>
     <AssemblyName>Emgu.CV.runtime.maui.macos</AssemblyName>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-	<OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\libs))</OpenCVBinaryDir>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EmguCVLinkTarget>MAUI MacCatalyst Library</EmguCVLinkTarget>
+    <OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\libs))</OpenCVBinaryDir>
     <EmguCVCatalystBinaryDir>$(OpenCVBinaryDir)\iOS</EmguCVCatalystBinaryDir>
+    <EmguCVNativeCatalystFramework>$(EmguCVCatalystBinaryDir)\libcvextern_catalyst.xcframework</EmguCVNativeCatalystFramework>
     <EmguCVCatalystNativeFileX64>$(EmguCVCatalystBinaryDir)\libcvextern_catalyst_x86_64.a</EmguCVCatalystNativeFileX64>
     <EmguCVCatalystNativeFileARM64>$(EmguCVCatalystBinaryDir)\libcvextern_catalyst_arm64.a</EmguCVCatalystNativeFileARM64>
-    <EmguCVLinkTarget>MAUI MacCatalyst Library</EmguCVLinkTarget>
-    <EmguCVMauiMacErrorMessage Condition="!Exists('$(EmguCVCatalystNativeFileX64)')">This package do not contains necessary binary for $(EmguCVLinkTarget). Emgu CV for MacOS Commercial license is required, Mac Catalyst x86_64 is targeted, but file $(EmguCVCatalystNativeFileX64) is missing.</EmguCVMauiMacErrorMessage>
-    <EmguCVMauiMacErrorMessage Condition="!Exists('$(EmguCVCatalystNativeFileARM64)')">This package do not contains necessary binary for $(EmguCVLinkTarget). Emgu CV for MacOS Commercial license is required, Mac Catalyst ARM64 is targeted, but file $(EmguCVCatalystNativeFileARM64) is missing.</EmguCVMauiMacErrorMessage>
+    <UseEmguCVNativeCatalystFramework Condition="('$(UseXCFramework)'=='true') And Exists('$(EmguCVNativeCatalystFramework)')">true</UseEmguCVNativeCatalystFramework>
+    <UseEmguCVNativeCatalystBinaryX64 Condition="('$(UseXCFramework)'!='true') And Exists('$(EmguCVCatalystNativeFileX64)')">true</UseEmguCVNativeCatalystBinaryX64>
+    <UseEmguCVNativeCatalystBinaryARM64 Condition="('$(UseXCFramework)'!='true') And Exists('$(EmguCVCatalystNativeFileARM64)')">true</UseEmguCVNativeCatalystBinaryARM64>
+    <CatalystFrameworkUsed Condition="'$(UseEmguCVNativeCatalystFramework)'=='true'">$(EmguCVNativeCatalystFramework);$(CatalystFrameworkUsed)</CatalystFrameworkUsed>
+    <CatalystFrameworkUsed Condition="'$(UseEmguCVNativeCatalystBinaryX64)'=='true'">$(EmguCVCatalystNativeFileX64);$(CatalystFrameworkUsed)</CatalystFrameworkUsed>
+    <CatalystFrameworkUsed Condition="'$(UseEmguCVNativeCatalystBinaryARM64)'=='true'">$(EmguCVCatalystNativeFileARM64);$(CatalystFrameworkUsed)</CatalystFrameworkUsed>
+    <EmguCVMauiMacErrorMessage Condition="('$(UseXCFramework)'=='true') And (!Exists('$(EmguCVNativeCatalystFramework)'))">This package does not contain the necessary binary for $(EmguCVLinkTarget). Emgu CV for MacOS Commercial License is required. Mac Catalyst is targeted, but file $(EmguCVNativeCatalystFramework) is missing.</EmguCVMauiMacErrorMessage>
+    <EmguCVMauiMacErrorMessage Condition="('$(UseXCFramework)'!='true') And (!Exists('$(EmguCVCatalystNativeFileX64)'))">This package does not contain the necessary binary for $(EmguCVLinkTarget). Emgu CV for MacOS Commercial License is required. Mac Catalyst x86_64 is targeted, but file $(EmguCVCatalystNativeFileX64) is missing.</EmguCVMauiMacErrorMessage>
+    <EmguCVMauiMacErrorMessage Condition="('$(UseXCFramework)'!='true') And (!Exists('$(EmguCVCatalystNativeFileARM64)'))">This package does not contain the necessary binary for $(EmguCVLinkTarget). Emgu CV for MacOS Commercial License is required. Mac Catalyst ARM64 is targeted, but file $(EmguCVCatalystNativeFileARM64) is missing.</EmguCVMauiMacErrorMessage>
     <BaseOutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\</BaseOutputPath>
-    </PropertyGroup>
+  </PropertyGroup>
 
   <ItemGroup>
     <ObjcBindingApiDefinition Include="ApiDefinition.cs" />
@@ -31,36 +44,43 @@
     <Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\NSImageExtension.cs">
       <Link>NSImageExtension.cs</Link>
     </Compile>
-	<Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\CIImageExtension.cs" Link="CIImageExtension.cs" />
-	<Compile Include="$(MSBuildThisFileDirectory)..\iOS\CvInvokeIOS.cs" Link="CvInvokeIOS.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\CIImageExtension.cs" Link="CIImageExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\iOS\CvInvokeIOS.cs" Link="CvInvokeIOS.cs" />
   </ItemGroup>
-    <ItemGroup Condition="Exists('$(EmguCVCatalystNativeFileX64)')">
-      <NativeReference Include="$(EmguCVCatalystNativeFileX64)">
-        <Kind>Static</Kind>
-        <SmartLink>True</SmartLink>
-	<ForceLoad>True</ForceLoad>
-	<IsCxx>True</IsCxx>
-	<LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
-        <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
-      </NativeReference>
-    </ItemGroup>
-    <ItemGroup Condition="Exists('$(EmguCVCatalystNativeFileARM64)')">
-      <NativeReference Include="$(EmguCVCatalystNativeFileARM64)">
-        <Kind>Static</Kind>
-        <SmartLink>True</SmartLink>
-	<ForceLoad>True</ForceLoad>
-	<IsCxx>True</IsCxx>
-	<LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
-        <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
-      </NativeReference>
-    </ItemGroup>
-    <ItemGroup>
-      <ProjectReference Include="..\..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
-    </ItemGroup>
-  <Target Name="DeployBinary" AfterTargets="AfterBuild">
+
+  <ItemGroup>
+    <NativeReference Condition="'$(UseEmguCVNativeCatalystFramework)'=='true'" Include="$(EmguCVNativeCatalystFramework)">
+      <Kind>Static</Kind>
+      <SmartLink>True</SmartLink>
+      <ForceLoad>True</ForceLoad>
+      <IsCxx>True</IsCxx>
+      <LinkerFlags>-v -stdlib=libc++ -ObjC -lc++</LinkerFlags>
+      <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
+    </NativeReference>
+    <NativeReference Condition="'$(UseEmguCVNativeCatalystBinaryX64)'=='true'" Include="$(EmguCVCatalystNativeFileX64)">
+      <Kind>Static</Kind>
+      <SmartLink>True</SmartLink>
+      <ForceLoad>True</ForceLoad>
+      <IsCxx>True</IsCxx>
+      <LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
+      <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
+    </NativeReference>
+    <NativeReference Condition="'$(UseEmguCVNativeCatalystBinaryARM64)'=='true'" Include="$(EmguCVCatalystNativeFileARM64)">
+      <Kind>Static</Kind>
+      <SmartLink>True</SmartLink>
+      <ForceLoad>True</ForceLoad>
+      <IsCxx>True</IsCxx>
+      <LinkerFlags>-stdlib=libc++ -ObjC -lc++</LinkerFlags>
+      <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
+    </NativeReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
+  </ItemGroup>
+
+  <Target Name="EmguCVMauiMacPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <Message Text="Mac Catalyst native binary linked: '$(CatalystFrameworkUsed)'" Importance="high" />
     <Warning Text="'$(EmguCVMauiMacErrorMessage)'" Condition="'$(EmguCVMauiMacErrorMessage)'!=''" />
-    <Message Text="Copying $(OutputPath)$(AssemblyName).dll, $(OutputPath)$(AssemblyName).xml to $(OpenCVBinaryDir)" Importance="high" />
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(OpenCVBinaryDir)" ContinueOnError="true" />
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="$(OpenCVBinaryDir)" ContinueOnError="true" />
   </Target>
 </Project>
