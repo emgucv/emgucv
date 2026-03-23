@@ -449,7 +449,7 @@ if(CMAKE_GENERATOR STREQUAL "Xcode")
     string(REGEX MATCH "Xcode ([0-9]+(\\.[0-9]+)*)" _ "${XCODE_VERSION_OUTPUT}")
     set(XCODE_VERSION "${CMAKE_MATCH_1}")
     message(STATUS "Using Xcode ${XCODE_VERSION}")
-    SET(IOS_TFM_VERSION ${XCODE_VERSION})
+    #SET(IOS_TFM_VERSION ${XCODE_VERSION})
 endif()
 
 
