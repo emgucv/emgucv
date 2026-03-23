@@ -288,9 +288,16 @@ ENDMACRO()
 
 MACRO(BUILD_DOTNET_PROJ target csproj_file extra_flags)
   ADD_CUSTOM_TARGET (${target} ${ARGV3})
-  #IF(APPLE)
-  #  SET(MAC_FRESH_SHELL_PREFIX env -i zsh)
-  #ENDIF()
+  IF(APPLE)
+    # Use env -i to strip all Xcode-injected build settings from the environment.
+    # Xcode sets many build settings (PRODUCT_NAME, EXECUTABLE_NAME, PROJECT_NAME, etc.)
+    # as environment variables when running shell script build phases. MSBuild treats
+    # environment variables as properties (case-insensitively), so any Xcode variable
+    # whose name matches an MSBuild property can silently override project-defined values
+    # (e.g. AssemblyName). Using env -i gives dotnet a clean environment with only
+    # the essential variables it needs: PATH (for tool discovery) and HOME (for NuGet cache).
+    SET(MAC_FRESH_SHELL_PREFIX env -i "PATH=$ENV{PATH}" "HOME=$ENV{HOME}" "TMPDIR=$ENV{TMPDIR}")
+  ENDIF()
   SEPARATE_ARGUMENTS(extra_flag_list UNIX_COMMAND "${extra_flags}")
   IF (DOTNET_EXECUTABLE)
     ADD_CUSTOM_COMMAND (
