@@ -4278,6 +4278,22 @@ ELSEIF (IOS)
       WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/libs/iOS"
       COMMENT "Creating xcframework for iOS using files from: ${XCFRAMEWORK_INPUT_FILES}")
   ENDIF()
+
+  IF(MAC_CATALYST)
+    SET(CATALYST_FAT_LIB ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst.a)
+    add_custom_command(TARGET ${the_target}
+      POST_BUILD
+      COMMAND lipo -create -output ${CATALYST_FAT_LIB} ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst_*.a
+      WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+      COMMENT "Merging Mac Catalyst static libraries into ${CATALYST_FAT_LIB}")
+    add_custom_command(TARGET ${the_target}
+      POST_BUILD
+      COMMAND rm -rf ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst.xcframework
+      COMMAND xcodebuild -create-xcframework -library ${CATALYST_FAT_LIB} -output ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst.xcframework
+      WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/libs/iOS"
+      COMMENT "Creating xcframework for Mac Catalyst")
+  ENDIF()
+
   LIST(LENGTH LIPO_INPUT_FILES LIPO_INPUT_FILES_LENGTH)
   IF (LIPO_INPUT_FILES_LENGTH EQUAL 1)
     add_custom_command(TARGET ${the_target}
@@ -4349,6 +4365,10 @@ ELSEIF (IOS)
 		DESTINATION "libs/iOS/"
 		COMPONENT emgucv_binary)
     ENDIF()
+    INSTALL(DIRECTORY
+      "${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst.xcframework"
+      DESTINATION "libs/iOS/"
+      COMPONENT emgucv_binary)
   ENDIF()
 
 ELSEIF (ANDROID)
