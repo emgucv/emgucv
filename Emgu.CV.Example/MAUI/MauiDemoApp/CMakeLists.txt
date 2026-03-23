@@ -110,14 +110,26 @@ IF (NOT "${MAUI_BUILD_FRAMEWORKS_STR}" STREQUAL "")
       PATTERN "Release" EXCLUDE  
       )
 	set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Emgu.CV.Examples")
+
+    IF (TARGET Emgu.CV.runtime.maui.ios)
+      ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.maui.ios)
+    ENDIF()
   
     IF (TARGET Emgu.CV.runtime.maui.macos)
       ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.maui.macos)
     ENDIF()
+  
+    IF (TARGET Emgu.CV.runtime.maui.android)
+      ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.maui.android)
+    ENDIF()
+  
+    IF (TARGET Emgu.CV.runtime.windows.nuget)
+      ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.windows.nuget)
+    ENDIF()
 
-    #IF (TARGET Emgu.CV.runtime.maui)
+    IF (TARGET Emgu.CV.runtime.maui)
       ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.maui)
-    #ENDIF()
+    ENDIF()
 
     IF (TARGET cvextern)
       ADD_DEPENDENCIES(${PROJECT_NAME} cvextern)
