@@ -15,7 +15,7 @@
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
     
-    <MauiVersion Condition="'$(MauiVersion)' == ''">${DOTNET_VERSION_MAJOR}.0.0</MauiVersion>
+    <MauiVersion Condition="'$(MauiVersion)' == ''">${EMGUCV_MAUI_PACKAGE_VERSION}</MauiVersion>
     <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\..\))</EmguCVProjectRoot>
     <PackageId>${EMGUCV_MAUI_NUGET_ID}</PackageId>
     <title>${EMGUCV_MAUI_NUGET_TITLE}</title>
