@@ -1,0 +1,92 @@
+@page "/"
+
+<PageTitle>Emgu CV Hello World — WebAssembly</PageTitle>
+
+<h1>Emgu CV Hello World</h1>
+<h2>Running OpenCV in the browser via WebAssembly</h2>
+
+<p>
+    <button @onclick="RunDemo" disabled="@running">
+        @(running ? "Running…" : "Run OpenCV Demo")
+    </button>
+</p>
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <pre style="color:red">@error</pre>
+}
+
+@if (!string.IsNullOrEmpty(output))
+{
+    <pre>@output</pre>
+}
+
+@code {
+    private string output = string.Empty;
+    private string error = string.Empty;
+    private bool running = false;
+
+    private void RunDemo()
+    {
+        running = true;
+        output = string.Empty;
+        error = string.Empty;
+
+        try
+        {
+            var sb = new System.Text.StringBuilder();
+
+            // 1. Create a 200x100 BGR Mat, fill it blue, draw green text
+            using var img = new Mat(100, 200, DepthType.Cv8U, 3);
+            img.SetTo(new MCvScalar(255, 0, 0)); // BGR blue
+
+            CvInvoke.PutText(
+                img,
+                "Hello, WASM!",
+                new System.Drawing.Point(5, 60),
+                FontFace.HersheyComplex,
+                0.6,
+                new MCvScalar(0, 255, 0)); // green
+
+            sb.AppendLine($"Mat size       : {img.Width} x {img.Height}");
+            sb.AppendLine($"Channels       : {img.NumberOfChannels}");
+            sb.AppendLine($"Depth          : {img.Depth}");
+            sb.AppendLine($"Is continuous  : {img.IsContinuous}");
+            sb.AppendLine();
+
+            // 3. Basic image processing: convert BGR to grayscale
+            using var gray = new Mat();
+            CvInvoke.CvtColor(img, gray, ColorConversion.Bgr2Gray);
+            sb.AppendLine($"Grayscale size : {gray.Width} x {gray.Height}  (channels: {gray.NumberOfChannels})");
+            sb.AppendLine();
+
+            // 4. Gaussian blur
+            using var blurred = new Mat();
+            CvInvoke.GaussianBlur(gray, blurred, new System.Drawing.Size(5, 5), 1.5);
+            sb.AppendLine($"Blurred size   : {blurred.Width} x {blurred.Height}");
+            sb.AppendLine();
+
+            // 5. Report selected build flags
+            sb.AppendLine("--- Build information (excerpt) ---");
+            string buildInfo = CvInvoke.BuildInformation;
+            foreach (var line in buildInfo.Split('\n'))
+            {
+                if (line.Contains("Version") || line.Contains("Platform") ||
+                    line.Contains("CPU") || line.Contains("OpenCL"))
+                {
+                    sb.AppendLine(line.TrimEnd());
+                }
+            }
+
+            output = sb.ToString();
+        }
+        catch (Exception ex)
+        {
+            error = $"{ex.GetType().Name}: {ex.Message}\n\n{ex.StackTrace}";
+        }
+        finally
+        {
+            running = false;
+        }
+    }
+}
