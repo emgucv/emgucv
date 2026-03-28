@@ -15,6 +15,12 @@
       CvInvokeEntryPoints.cs picks "__Internal" as the DllImport target.
     -->
     <DefineConstants>$(DefineConstants);BLAZORWASM</DefineConstants>
+    <!--
+      Override the default -O0 link optimization.  OpenCV's xfeatures2d
+      pixelTests64 function generates too many WASM locals at -O0 (browser
+      limit ~50k).  -O1 coalesces locals and stays well under the limit.
+    -->
+    <EmccExtraLDFlags>-O1</EmccExtraLDFlags>
   </PropertyGroup>
 
   <ItemGroup>
