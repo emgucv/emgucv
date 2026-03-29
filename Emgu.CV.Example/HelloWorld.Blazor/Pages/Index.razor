@@ -21,9 +21,15 @@
     <pre>@output</pre>
 }
 
+@if (!string.IsNullOrEmpty(imageDataUrl))
+{
+    <img src="@imageDataUrl" alt="Hello, world!" style="display:block; image-rendering:pixelated; width:400px;" />
+}
+
 @code {
     private string output = string.Empty;
     private string error = string.Empty;
+    private string imageDataUrl = string.Empty;
     private bool running = false;
 
     private void RunDemo()
@@ -31,6 +37,7 @@
         running = true;
         output = string.Empty;
         error = string.Empty;
+        imageDataUrl = string.Empty;
 
         try
         {
@@ -42,23 +49,28 @@
             output = sb.ToString();
             StateHasChanged();
 
-            // 1. Create a 200x100 BGR Mat, fill it blue, draw green text
-            using var img = new Mat(100, 200, DepthType.Cv8U, 3);
-            img.SetTo(new MCvScalar(255, 0, 0)); // BGR blue
+            // 1. Create a 400x100 BGR Mat, fill it white, draw black text
+            using var img = new Mat(100, 400, DepthType.Cv8U, 3);
+            img.SetTo(new MCvScalar(255, 255, 255)); // white background
 
             CvInvoke.PutText(
                 img,
-                "Hello, WASM!",
-                new System.Drawing.Point(5, 60),
+                "Hello, world!",
+                new System.Drawing.Point(10, 65),
                 FontFace.HersheyComplex,
-                0.6,
-                new MCvScalar(0, 255, 0)); // green
+                1.2,
+                new MCvScalar(0, 0, 0)); // black text
 
             sb.AppendLine($"Mat size       : {img.Width} x {img.Height}");
             sb.AppendLine($"Channels       : {img.NumberOfChannels}");
             sb.AppendLine($"Depth          : {img.Depth}");
             sb.AppendLine($"Is continuous  : {img.IsContinuous}");
             sb.AppendLine();
+
+            // 2. Encode to PNG and produce a data URL for display
+            using var pngBuf = new Emgu.CV.Util.VectorOfByte();
+            CvInvoke.Imencode(".png", img, pngBuf);
+            imageDataUrl = "data:image/png;base64," + Convert.ToBase64String(pngBuf.ToArray());
 
             // 3. Basic image processing: convert BGR to grayscale
             using var gray = new Mat();
