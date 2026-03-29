@@ -27,6 +27,14 @@
       static data.  Increase initial heap so wasm-ld does not reject the link.
     -->
     <WasmInitialHeapSize>134217728</WasmInitialHeapSize>
+    <!--
+      Point the Emscripten cache to a project-local directory instead of the
+      read-only SDK cache.  When WasmCachePath differs from the SDK default,
+      the SDK sets EM_FROZEN_CACHE=0, so any missing system libraries (e.g.
+      libbulkmemory.a) are built automatically on the first run — no manual
+      setup required after a fresh checkout.
+    -->
+    <WasmCachePath>$([MSBuild]::NormalizeDirectory($(MSBuildThisFileDirectory), '..', '..', 'platforms', 'emscripten', 'wasm-cache'))</WasmCachePath>
   </PropertyGroup>
 
   <ItemGroup>
