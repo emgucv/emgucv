@@ -11,7 +11,7 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <!--
       BLAZORWASM causes:
-        CvInvokeEntryPoints.cs  → ExternLibrary = "__Internal"
+        CvInvokeEntryPoints.cs  → ExternLibrary = "libcvextern"
         CvInvoke.cs             → skip dynamic DLL loading in static constructor
     -->
     <DefineConstants>$(DefineConstants);UNSAFE_ALLOWED;BLAZORWASM</DefineConstants>
