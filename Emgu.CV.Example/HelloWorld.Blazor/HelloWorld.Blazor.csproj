@@ -12,7 +12,8 @@
     <WasmBuildNative>true</WasmBuildNative>
     <!--
       Forward BLAZORWASM to every C# file in the compilation so that
-      CvInvokeEntryPoints.cs picks "__Internal" as the DllImport target.
+      CvInvokeEntryPoints.cs picks "libcvextern" as the DllImport target,
+      matching the NativeFileReference filename and the wasm pinvoke table.
     -->
     <DefineConstants>$(DefineConstants);BLAZORWASM</DefineConstants>
     <!--
@@ -21,6 +22,11 @@
       limit ~50k).  -O1 coalesces locals and stays well under the limit.
     -->
     <EmccExtraLDFlags>-O1</EmccExtraLDFlags>
+    <!--
+      The full cvextern library is statically linked and requires ~80 MB of
+      static data.  Increase initial heap so wasm-ld does not reject the link.
+    -->
+    <WasmInitialHeapSize>134217728</WasmInitialHeapSize>
   </PropertyGroup>
 
   <ItemGroup>
@@ -45,7 +51,7 @@
 
   <ItemGroup>
     <!-- WASM-specific Emgu.CV build: same sources compiled with BLAZORWASM
-         so ExternLibrary="__Internal" and static ctor skips DLL loading -->
+         so ExternLibrary="libcvextern" and static ctor skips DLL loading -->
     <ProjectReference Include="..\..\Emgu.CV\WebAssembly\Emgu.CV.WebAssembly.csproj" />
     <ProjectReference Include="..\..\Emgu.CV.Runtime\WebAssembly\Emgu.CV.Runtime.WebAssembly.csproj" />
   </ItemGroup>

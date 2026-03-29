@@ -36,6 +36,12 @@
         {
             var sb = new System.Text.StringBuilder();
 
+            // Diagnostic: show ExternLibrary and libraryLoaded state
+            sb.AppendLine($"ExternLibrary  : {CvInvoke.ExternLibrary}");
+            sb.AppendLine($"LibraryLoaded  : {CvInvoke.Init()}");
+            output = sb.ToString();
+            StateHasChanged();
+
             // 1. Create a 200x100 BGR Mat, fill it blue, draw green text
             using var img = new Mat(100, 200, DepthType.Cv8U, 3);
             img.SetTo(new MCvScalar(255, 0, 0)); // BGR blue
