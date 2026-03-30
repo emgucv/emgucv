@@ -117,12 +117,20 @@ The project is defined in `Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj`.
 ### Native C++ (WebAssembly / Emscripten)
 
 The pre-built Emscripten bitcode lives at `libs/webgl/libcvextern.bc`.  To
-rebuild it from source use the scripts in `platforms/emscripten/`:
+rebuild it from source use the script in `platforms/emscripten/`:
 
 ```bash
 cd platforms/emscripten
-./build_dotnet          # full build (outputs libcvextern.bc to libs/webgl/)
+./cmake_configure_dotnet.sh
 ```
+
+This script uses the Emscripten toolchain bundled with the .NET SDK WASM
+workload (`Microsoft.NET.Runtime.Emscripten.*.Sdk.*` under `~/.dotnet/packs`)
+so the bitcode ABI matches what the Blazor build links against.  If the
+workload is not installed, run `dotnet workload install wasm-tools` first.
+
+The older `cmake_configure.sh` uses the system Emscripten instead and outputs
+to `build/` — do not use it for the Blazor demo.
 
 ### Blazor WebAssembly Demo
 

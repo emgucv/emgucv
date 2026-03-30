@@ -1,6 +1,0 @@
-# Emscripten cache — platform-specific compiled artefacts, do not commit.
-# The directory is kept so that WasmCachePath resolves on a fresh checkout.
-# dotnet build will rebuild any missing entries automatically because
-# WasmCachePath != EmscriptenCacheSdkCacheDir (which disables FROZEN_CACHE).
-*
-!.gitignore
