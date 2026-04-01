@@ -15,13 +15,22 @@
 
   <ItemGroup>
     <!--
-      Link the Emscripten-compiled cvextern LLVM IR archive into the .NET
-      WebAssembly runtime image.  The wasm-tools build pipeline (Emscripten
-      3.1.56) will LTO-link this archive when building the final .wasm.
+      Declares the Emscripten-compiled cvextern LLVM IR archive so that
+      GetNativeFileReferences (below) can return it to the root Blazor project.
       Built by platforms/emscripten/cmake_configure_dotnet.sh.
     -->
-    <NativeFileReference Include="$(MSBuildThisFileDirectory)..\..\libs\webgl\libcvextern.a" />
+    <_CvExternNativeRef Include="$(MSBuildThisFileDirectory)..\..\libs\webgl\libcvextern.a" />
   </ItemGroup>
+
+  <!--
+    The .NET WebAssembly SDK does not automatically propagate NativeFileReference
+    items from library projects to the root Blazor project.  To make this project
+    self-contained, we expose a GetNativeFileReferences target that outputs the
+    archive path.  The root Blazor project must call this target via the
+    Targets + OutputItemType attributes on its ProjectReference (see
+    HelloWorld.Blazor.csproj).
+  -->
+  <Target Name="GetNativeFileReferences" Returns="@(_CvExternNativeRef)" />
 
   <ItemGroup>
     <ProjectReference Include="$(MSBuildThisFileDirectory)..\..\Emgu.CV\WebAssembly\Emgu.CV.WebAssembly.csproj" />
