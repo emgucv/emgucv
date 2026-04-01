@@ -15,13 +15,32 @@ cd "$(dirname "$0")"
 # ---------------------------------------------------------------------------
 # Locate the .NET SDK's Emscripten pack
 # ---------------------------------------------------------------------------
-DOTNET_PACKS="${DOTNET_ROOT:-$HOME/.dotnet}/packs"
+# Locate the dotnet packs directory by searching known locations
+_find_dotnet_packs() {
+    local candidates=(
+        "${DOTNET_ROOT}/packs"
+        "$HOME/.dotnet/packs"
+        "/usr/local/share/dotnet/packs"
+        "/usr/share/dotnet/packs"
+        "$(dirname "$(dirname "$(readlink -f "$(which dotnet 2>/dev/null)" 2>/dev/null)" 2>/dev/null)" 2>/dev/null)/packs"
+    )
+    for dir in "${candidates[@]}"; do
+        if [ -d "$dir" ] && find "$dir" -maxdepth 5 -name "emcc" -path "*/Microsoft.NET.Runtime.Emscripten.*" 2>/dev/null | grep -q .; then
+            echo "$dir"
+            return
+        fi
+    done
+}
+DOTNET_PACKS=$(_find_dotnet_packs)
+if [ -z "$DOTNET_PACKS" ]; then
+    DOTNET_PACKS="${DOTNET_ROOT:-$HOME/.dotnet}/packs"
+fi
 
 EMSCRIPTEN_SDK_ROOT=$(find "$DOTNET_PACKS" \
     -maxdepth 5 \
     -name "emcc" \
     -path "*/Microsoft.NET.Runtime.Emscripten.*.Sdk.*" \
-    2>/dev/null | head -1 | xargs -I{} dirname {})
+    2>/dev/null | sort -V | tail -1 | xargs -I{} dirname {})
 
 if [ -z "$EMSCRIPTEN_SDK_ROOT" ]; then
     echo "ERROR: Could not find the .NET Emscripten SDK under $DOTNET_PACKS"
@@ -105,6 +124,11 @@ export FROZEN_CACHE=""
 # that the warmup step just built.
 export EM_IGNORE_SANITY=1
 
+# Add emscripten SDK to PATH so that cmake_link_script can find 'emcc' by name.
+# CMakeLists.txt sets CMAKE_AR="emcc" (no full path), so emcc must be in PATH
+# when the static-library link rules run during make.
+export PATH="$EMSCRIPTEN_SDK_ROOT:$PATH"
+
 echo "  LLVM_ROOT:    $DOTNET_EMSCRIPTEN_LLVM_ROOT"
 echo "  BINARYEN_ROOT:$DOTNET_EMSCRIPTEN_BINARYEN_ROOT"
 echo "  NODE_JS:      $DOTNET_EMSCRIPTEN_NODE_JS"
@@ -146,7 +170,8 @@ cd "$BUILD_DIR"
     -DCV_ENABLE_INTRINSICS:BOOL=FALSE \
     -DWITH_OPENCL:BOOL=OFF \
     -DBUILD_JPEG:BOOL=TRUE \
-    -DBUILD_PNG:BOOL=TRUE \
+    -DBUILD_PNG:BOOL=FALSE \
+    -DWITH_PNG:BOOL=FALSE \
     -DBUILD_TIFF:BOOL=OFF \
     -DWITH_TIFF:BOOL=OFF \
     -DEMGU_CV_WITH_TIFF:BOOL=OFF \
@@ -154,6 +179,7 @@ cd "$BUILD_DIR"
     -DEMGU_CV_WITH_FREETYPE:BOOL=FALSE \
     -DWITH_PTHREADS_PF:BOOL=OFF \
     -DEMGU_CV_WITH_DEPTHAI:BOOL=OFF \
+    -DEMGU_CV_EMSCRIPTEN_LLVM_AR_PATH="$LLVM_SHIM_DIR/llvm-ar" \
     "$REPO_ROOT"
 
 # ---------------------------------------------------------------------------
@@ -173,21 +199,43 @@ echo "Sysroot ready."
 "$EMMAKE" make cvextern -j$(nproc) VERBOSE=1
 
 # ---------------------------------------------------------------------------
-# Link all bitcode into a single libcvextern.bc
+# Merge all LLVM IR bitcode archives into a single libcvextern.a
 # ---------------------------------------------------------------------------
-# Use llvm-link instead of "emcc -r" because emcc 3.1.56 -r produces a wasm
-# relocatable object rather than LLVM bitcode. llvm-link merges all bitcode
-# (OpenCV modules, 3rdparty libs, and cvextern wrapper objects) into a single
-# LLVM IR bitcode file that the Blazor NativeFileReference link step expects.
+# Because we used llvm-ar (EMGU_CV_EMSCRIPTEN_LLVM_AR_PATH) as CMAKE_AR,
+# all *.bc files are LLVM IR archives (llvm-ar format), not WASM relocatable
+# objects.  WASM SjLj/EH lowering is deferred to the final non-relocatable
+# Blazor link step (EmccExtraLDFlags: -flto -sSUPPORT_LONGJMP=wasm) where
+# the LLVM 19 wasm-ld crash in --relocatable mode does not occur.
+#
+# Merge strategy: use 'llvm-ar qL' (quick-append + library-contents) to add
+# every member from each source archive into the output archive WITHOUT
+# replacing existing members.  This correctly handles:
+#  - Cross-archive name conflicts (alloc.cpp.o in multiple modules)
+#  - Intra-archive duplicate names (parallel.cpp.o x2 in libopencv_core.bc,
+#    28 dups in liblibjpeg-turbo.bc from dispatch variants)
+# 'q' never replaces; both copies land in the archive at different offsets.
+# The final symbol table maps each exported symbol to the first member that
+# defines it, so all needed definitions are found by the LTO linker.
 cd "$REPO_ROOT"
 
-"$LLVM_SHIM_DIR/llvm-link" \
-    -o libs/webgl/libcvextern.bc \
+mkdir -p libs/webgl
+rm -f libs/webgl/libcvextern.a
+
+# Step 1: Quick-append all members from each OpenCV and 3rdparty .bc archive.
+for bc_archive in \
     platforms/emscripten/build_dotnet/bin/webgl/*.bc \
-    platforms/emscripten/build_dotnet/opencv/3rdparty/lib/*.bc \
-    platforms/emscripten/build_dotnet/Emgu.CV.Extern/CMakeFiles/cvextern.dir/**/*.o \
-    platforms/emscripten/build_dotnet/Emgu.CV.Extern/CMakeFiles/cvextern.dir/*.o
+    platforms/emscripten/build_dotnet/opencv/3rdparty/lib/*.bc; do
+    [ -f "$bc_archive" ] || continue
+    "$LLVM_SHIM_DIR/llvm-ar" qL libs/webgl/libcvextern.a "$bc_archive"
+done
+
+# Step 2: Append cvextern objects in batches to avoid ARG_MAX limits.
+find platforms/emscripten/build_dotnet/Emgu.CV.Extern/CMakeFiles/cvextern.dir -name "*.o" | \
+    xargs -n100 "$LLVM_SHIM_DIR/llvm-ar" q libs/webgl/libcvextern.a
+
+# Step 3: Build the symbol table so the LTO linker can resolve symbols.
+"$LLVM_SHIM_DIR/llvm-ar" s libs/webgl/libcvextern.a
 
 echo ""
-echo "Done. Output: libs/webgl/libcvextern.bc"
-ls -lh libs/webgl/libcvextern.bc
+echo "Done. Output: libs/webgl/libcvextern.a"
+ls -lh libs/webgl/libcvextern.a

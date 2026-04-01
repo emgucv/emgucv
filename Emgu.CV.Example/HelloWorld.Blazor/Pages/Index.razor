@@ -67,10 +67,11 @@
             sb.AppendLine($"Is continuous  : {img.IsContinuous}");
             sb.AppendLine();
 
-            // 2. Encode to PNG and produce a data URL for display
+            // 2. Encode to BMP and produce a data URL for display
+            // (PNG is not compiled into the WASM build; BMP is always available)
             using var pngBuf = new Emgu.CV.Util.VectorOfByte();
-            CvInvoke.Imencode(".png", img, pngBuf);
-            imageDataUrl = "data:image/png;base64," + Convert.ToBase64String(pngBuf.ToArray());
+            CvInvoke.Imencode(".bmp", img, pngBuf);
+            imageDataUrl = "data:image/bmp;base64," + Convert.ToBase64String(pngBuf.ToArray());
 
             // 3. Basic image processing: convert BGR to grayscale
             using var gray = new Mat();

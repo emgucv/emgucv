@@ -15,11 +15,12 @@
 
   <ItemGroup>
     <!--
-      Link the Emscripten-compiled cvextern bitcode directly into the .NET
+      Link the Emscripten-compiled cvextern LLVM IR archive into the .NET
       WebAssembly runtime image.  The wasm-tools build pipeline (Emscripten
-      3.1.56) will re-link this bitcode when building the final .wasm.
+      3.1.56) will LTO-link this archive when building the final .wasm.
+      Built by platforms/emscripten/cmake_configure_dotnet.sh.
     -->
-    <NativeFileReference Include="$(MSBuildThisFileDirectory)..\..\libs\webgl\libcvextern.bc" />
+    <NativeFileReference Include="$(MSBuildThisFileDirectory)..\..\libs\webgl\libcvextern.a" />
   </ItemGroup>
 
   <ItemGroup>
