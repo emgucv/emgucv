@@ -5,7 +5,11 @@
 IF(EMGU_CV_EXAMPLE_BUILD)
    
   add_subdirectory(MAUI)
-  
+
+  IF(IS_EMSCRIPTEN)
+    add_subdirectory(HelloWorld.Blazor)
+  ENDIF()
+
   #Windows only demos
   IF (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
     add_subdirectory(CameraCapture)
