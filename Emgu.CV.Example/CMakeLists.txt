@@ -6,7 +6,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
    
   add_subdirectory(MAUI)
 
-  IF(IS_EMSCRIPTEN_BUILD)
+  IF(HAVE_EMSCRIPTEN)
     add_subdirectory(HelloWorld.Blazor)
   ENDIF()
 
