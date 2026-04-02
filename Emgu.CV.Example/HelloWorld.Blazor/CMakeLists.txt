@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-IF(IS_EMSCRIPTEN)
+IF(IS_EMSCRIPTEN_BUILD)
 
   IF (DOTNET_FOUND)
     PROJECT(Example.HelloWorld.Blazor)
