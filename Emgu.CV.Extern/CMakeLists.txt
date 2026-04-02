@@ -4542,10 +4542,14 @@ ELSEIF (APPLE)
   
 ENDIF()
 
-#IF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
-#  add_custom_command(TARGET ${the_target}
-#    POST_BUILD
-#    COMMAND emcc -o ${CMAKE_SOURCE_DIR}/libs/libcvextern.bc bin${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/*.a opencv/3rdparty/lib/*.a opencv/lib/*.a ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/*.a
-#    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
-#    COMMENT "Merging libcvextern.bc")
-#ENDIF()
+IF(IS_EMSCRIPTEN_BUILD AND EMGU_CV_EMSCRIPTEN_LLVM_AR_PATH)
+  add_custom_command(TARGET ${the_target}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND}
+      -DLLVM_AR=${EMGU_CV_EMSCRIPTEN_LLVM_AR_PATH}
+      -DBUILD_DIR=${CMAKE_BINARY_DIR}
+      -DSOURCE_DIR=${CMAKE_SOURCE_DIR}
+      -DOBJ_DIR=${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${the_target}.dir
+      -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/merge_emscripten_libs.cmake
+    COMMENT "Merging LLVM IR bitcode archives into libs/webgl/libcvextern.a")
+ENDIF()
