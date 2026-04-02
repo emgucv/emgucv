@@ -195,47 +195,8 @@ echo "Sysroot ready."
 
 # ---------------------------------------------------------------------------
 # Build cvextern
+# The POST_BUILD step in Emgu.CV.Extern/CMakeLists.txt (via
+# cmake/merge_emscripten_libs.cmake) merges all LLVM IR bitcode archives
+# into libs/webgl/libcvextern.a automatically after the build completes.
 # ---------------------------------------------------------------------------
 "$EMMAKE" make cvextern -j$(nproc) VERBOSE=1
-
-# ---------------------------------------------------------------------------
-# Merge all LLVM IR bitcode archives into a single libcvextern.a
-# ---------------------------------------------------------------------------
-# Because we used llvm-ar (EMGU_CV_EMSCRIPTEN_LLVM_AR_PATH) as CMAKE_AR,
-# all *.bc files are LLVM IR archives (llvm-ar format), not WASM relocatable
-# objects.  WASM SjLj/EH lowering is deferred to the final non-relocatable
-# Blazor link step (EmccExtraLDFlags: -flto -sSUPPORT_LONGJMP=wasm) where
-# the LLVM 19 wasm-ld crash in --relocatable mode does not occur.
-#
-# Merge strategy: use 'llvm-ar qL' (quick-append + library-contents) to add
-# every member from each source archive into the output archive WITHOUT
-# replacing existing members.  This correctly handles:
-#  - Cross-archive name conflicts (alloc.cpp.o in multiple modules)
-#  - Intra-archive duplicate names (parallel.cpp.o x2 in libopencv_core.bc,
-#    28 dups in liblibjpeg-turbo.bc from dispatch variants)
-# 'q' never replaces; both copies land in the archive at different offsets.
-# The final symbol table maps each exported symbol to the first member that
-# defines it, so all needed definitions are found by the LTO linker.
-cd "$REPO_ROOT"
-
-mkdir -p libs/webgl
-rm -f libs/webgl/libcvextern.a
-
-# Step 1: Quick-append all members from each OpenCV and 3rdparty .bc archive.
-for bc_archive in \
-    platforms/emscripten/build_dotnet/bin/webgl/*.bc \
-    platforms/emscripten/build_dotnet/opencv/3rdparty/lib/*.bc; do
-    [ -f "$bc_archive" ] || continue
-    "$LLVM_SHIM_DIR/llvm-ar" qL libs/webgl/libcvextern.a "$bc_archive"
-done
-
-# Step 2: Append cvextern objects in batches to avoid ARG_MAX limits.
-find platforms/emscripten/build_dotnet/Emgu.CV.Extern/CMakeFiles/cvextern.dir -name "*.o" | \
-    xargs -n100 "$LLVM_SHIM_DIR/llvm-ar" q libs/webgl/libcvextern.a
-
-# Step 3: Build the symbol table so the LTO linker can resolve symbols.
-"$LLVM_SHIM_DIR/llvm-ar" s libs/webgl/libcvextern.a
-
-echo ""
-echo "Done. Output: libs/webgl/libcvextern.a"
-ls -lh libs/webgl/libcvextern.a
