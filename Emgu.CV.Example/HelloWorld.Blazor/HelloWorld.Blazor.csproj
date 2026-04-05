@@ -21,17 +21,25 @@
       pixelTests64 function generates too many WASM locals at -O0 (browser
       limit ~50k).  -O1 coalesces locals and stays well under the limit.
 
-      -flto: libcvextern.a contains LLVM IR bitcode objects (compiled with
-      -flto and archived with llvm-ar).  The final wasm-ld link must use LTO
-      to compile these IR objects to WASM.
-
       -sSUPPORT_LONGJMP=wasm: OpenCV's JPEG codec (and others) use setjmp/
       longjmp.  WASM SjLj mode is required here because the Blazor runtime
       uses -fwasm-exceptions, which is incompatible with Emscripten SjLj.
-      WASM SjLj lowering is deferred to this final non-relocatable link
-      step to avoid the LLVM 19 wasm-ld crash in relocatable mode.
+      The SjLj lowering pass runs at the final wasm-ld link step via the
+      -mllvm -wasm-enable-sjlj flag that -sSUPPORT_LONGJMP=wasm injects.
+
+      NOTE: -flto is intentionally absent.  libcvextern.a contains LLVM IR
+      bitcode objects (Emscripten's default object format).  wasm-ld compiles
+      them to WASM at link time regardless of -flto — the flag only adds
+      cross-module optimisation.  With -flto, emcc switches all system
+      libraries to the LTO sysroot (bitcode), which causes a
+      "attempt to add bitcode file after LTO" error: the Blazor-generated
+      WASM objects (pinvoke.o, libmono*.a, etc.) reference htonl/htons,
+      whose lazy-loaded bitcode archive member (libc.a(htonl.o)) cannot be
+      added after the LTO pass has already concluded.  Without -flto, the
+      regular WASM sysroot is used and libc.a members are ordinary WASM
+      objects that can be loaded at any point.
     -->
-    <EmccExtraLDFlags>-O1 -flto -sSUPPORT_LONGJMP=wasm</EmccExtraLDFlags>
+    <EmccExtraLDFlags>-O1 -sSUPPORT_LONGJMP=wasm</EmccExtraLDFlags>
     <!--
       The full cvextern library is statically linked and requires ~80 MB of
       static data.  Increase initial heap so wasm-ld does not reject the link.
@@ -77,14 +85,12 @@
 
   <ItemGroup>
     <!--
-      Link the Emscripten-compiled cvextern LLVM IR archive directly into
-      dotnet.native.wasm.  Built by platforms/emscripten/cmake_configure_dotnet.sh.
-      We reference it here explicitly rather than using the GetNativeFileReferences
-      cross-project target mechanism because .NET 10 passes the runtime project's
-      output DLL to wasm-ld as a "native" input when that pattern is used, causing
-      "unknown file type" linker errors.
+      The runtime package ships libcvextern.a and a .targets file that
+      automatically adds it to NativeFileReference when WasmBuildNative=true,
+      so the Emscripten link step links it into dotnet.native.wasm.
+      Build the package first: dotnet build Emgu.CV.Runtime/WebAssembly/Emgu.CV.Runtime.WebAssembly.csproj
     -->
-    <NativeFileReference Include="..\..\libs\webgl\libcvextern.a" />
+    <PackageReference Include="Emgu.CV.runtime.mini.webassembly" Version="4.13.0.5890" />
   </ItemGroup>
 
 </Project>
