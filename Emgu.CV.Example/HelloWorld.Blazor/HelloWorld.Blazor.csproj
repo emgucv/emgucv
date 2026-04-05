@@ -38,13 +38,17 @@
     -->
     <WasmInitialHeapSize>134217728</WasmInitialHeapSize>
     <!--
-      Point the Emscripten cache to a project-local directory instead of the
-      read-only SDK cache.  When WasmCachePath differs from the SDK default,
-      the SDK sets EM_FROZEN_CACHE=0, so any missing system libraries (e.g.
-      libbulkmemory.a) are built automatically on the first run — no manual
-      setup required after a fresh checkout.
+      Point the Emscripten cache to a writable directory.  On Windows the
+      cache must be on the same drive as the Emscripten SDK; otherwise
+      Python's os.path.relpath() raises ValueError when the project lives on
+      a different drive letter than the SDK (e.g. E: vs C:).  On non-Windows
+      hosts a project-local path is fine.
+      In both cases WasmCachePath differs from the SDK default, so the SDK
+      sets EM_FROZEN_CACHE=0 and rebuilds any missing system libraries (e.g.
+      libbulkmemory.a) on the first run — no manual setup required.
     -->
-    <WasmCachePath>$([MSBuild]::NormalizeDirectory($(MSBuildThisFileDirectory), '..', '..', 'platforms', 'emscripten', 'wasm-cache'))</WasmCachePath>
+    <WasmCachePath Condition="$([MSBuild]::IsOSPlatform('Windows'))">$([MSBuild]::NormalizeDirectory($(USERPROFILE), '.emscripten_cache', 'emgucv'))</WasmCachePath>
+    <WasmCachePath Condition="!$([MSBuild]::IsOSPlatform('Windows'))">$([MSBuild]::NormalizeDirectory($(MSBuildThisFileDirectory), '..', '..', 'platforms', 'emscripten', 'wasm-cache'))</WasmCachePath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -69,23 +73,18 @@
     <!-- WASM-specific Emgu.CV build: same sources compiled with BLAZORWASM
          so ExternLibrary="libcvextern" and static ctor skips DLL loading -->
     <ProjectReference Include="..\..\Emgu.CV\WebAssembly\Emgu.CV.WebAssembly.csproj" />
-    <!-- Managed assembly reference (standard). -->
-    <ProjectReference Include="..\..\Emgu.CV.Runtime\WebAssembly\Emgu.CV.Runtime.WebAssembly.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!--
-      Second entry (same project) collects NativeFileReference items.
-      ReferenceOutputAssembly="false" / Private="false" prevent the DLL from being
-      added again as a C# assembly reference.  Targets="GetNativeFileReferences"
-      calls only that target (defined in the runtime csproj), and
-      OutputItemType="NativeFileReference" feeds its output into NativeFileReference
-      here — so libcvextern.a propagates without being hard-coded in this file.
-      This two-entry pattern is necessary because the Blazor SDK does not propagate
-      NativeFileReference items through project references automatically.
+      Link the Emscripten-compiled cvextern LLVM IR archive directly into
+      dotnet.native.wasm.  Built by platforms/emscripten/cmake_configure_dotnet.sh.
+      We reference it here explicitly rather than using the GetNativeFileReferences
+      cross-project target mechanism because .NET 10 passes the runtime project's
+      output DLL to wasm-ld as a "native" input when that pattern is used, causing
+      "unknown file type" linker errors.
     -->
-    <ProjectReference Include="..\..\Emgu.CV.Runtime\WebAssembly\Emgu.CV.Runtime.WebAssembly.csproj"
-                      Targets="GetNativeFileReferences"
-                      OutputItemType="NativeFileReference"
-                      ReferenceOutputAssembly="false"
-                      Private="false" />
+    <NativeFileReference Include="..\..\libs\webgl\libcvextern.a" />
   </ItemGroup>
 
 </Project>
