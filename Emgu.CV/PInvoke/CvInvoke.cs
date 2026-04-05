@@ -450,7 +450,13 @@ namespace Emgu.CV
 #if ( UNITY_WEBGL || BLAZORWASM ) && ! UNITY_EDITOR
             _libraryLoaded = true;
 #else
-            if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS ||
+            if (OperatingSystem.IsBrowser())
+            {
+                // Running in WebAssembly (Blazor): cvextern is statically linked into
+                // dotnet.native.wasm — no dynamic library loading required.
+                _libraryLoaded = true;
+            }
+            else if (Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.IOS ||
                 Emgu.Util.Platform.OperationSystem == Emgu.Util.Platform.OS.MacCatalyst)
             {
                 /*
