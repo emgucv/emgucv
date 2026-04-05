@@ -116,7 +116,7 @@ The project is defined in `Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj`.
 
 ### Native C++ (WebAssembly / Emscripten)
 
-The pre-built Emscripten bitcode lives at `libs/webgl/libcvextern.bc`.  To
+The pre-built Emscripten bitcode lives at `libs/webgl/cvextern.bc`.  To
 rebuild it from source use the script in `platforms/emscripten/`:
 
 ```bash
@@ -135,7 +135,7 @@ to `build/` — do not use it for the Blazor demo.
 ### Blazor WebAssembly Demo
 
 The demo project is `Emgu.CV.Example/HelloWorld.Blazor/`.  It links
-`libcvextern.bc` directly into `dotnet.native.wasm` via `NativeFileReference`.
+`cvextern.bc` directly into `dotnet.native.wasm` via `NativeFileReference`.
 
 **Prerequisites (one-time, automated)**
 
@@ -161,20 +161,20 @@ dotnet run --project Emgu.CV.Example/HelloWorld.Blazor/HelloWorld.Blazor.csproj 
 Then open **http://localhost:5000** and click **Run OpenCV Demo**.
 
 **Key design notes:**
-- `BLAZORWASM` define → `ExternLibrary = "libcvextern"`, matching the
+- `BLAZORWASM` define → `ExternLibrary = "cvextern"`, matching the
   `NativeFileReference` filename and the Mono WASM P/Invoke table key.
 - `WasmInitialHeapSize` is set to 128 MB because the full statically-linked
   cvextern data segment requires ~80 MB.
 - `-O1` link optimisation prevents the WASM local-count browser limit from
   being hit by xfeatures2d functions at the default `-O0`.
-- `-flto` is intentionally **not** used even though `libcvextern.a` contains
+- `-flto` is intentionally **not** used even though `cvextern.a` contains
   LLVM IR bitcode (Emscripten's default object format). wasm-ld compiles
   bitcode to WASM at link time without `-flto`; the flag only adds
   cross-module optimisation. With `-flto`, emcc switches all system libraries
   to the LTO sysroot (bitcode), which causes `"attempt to add bitcode file
   after LTO"` when Blazor's regular-WASM objects (pinvoke.o, libmono*.a, etc.)
   lazily pull in `libc.a(htonl.o)` after the LTO pass has concluded.
-- `libcvextern.a` is shipped via the `Emgu.CV.runtime.mini.webassembly` NuGet
+- `cvextern.a` is shipped via the `Emgu.CV.runtime.mini.webassembly` NuGet
   package (in `build/native/`). The package's `.targets` file adds it to
   `NativeFileReference` when `WasmBuildNative=true`. The local feed is at
   `platforms/nuget/` (configured in `nuget.config`).

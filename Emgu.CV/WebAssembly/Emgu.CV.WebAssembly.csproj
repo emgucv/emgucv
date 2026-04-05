@@ -11,7 +11,7 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <!--
       BLAZORWASM causes:
-        CvInvokeEntryPoints.cs  → ExternLibrary = "libcvextern"
+        CvInvokeEntryPoints.cs  → ExternLibrary = "cvextern"
         CvInvoke.cs             → skip dynamic DLL loading in static constructor
     -->
     <DefineConstants>$(DefineConstants);UNSAFE_ALLOWED;BLAZORWASM</DefineConstants>
@@ -22,7 +22,7 @@
   </PropertyGroup>
 
   <!-- Same source sets as Emgu.CV.csproj, minus OCR/CUDA which are not
-       included in the Emscripten build of libcvextern.bc -->
+       included in the Emscripten build of cvextern.bc -->
   <Import Project="..\Emgu.CV.Shared.projitems" Label="Shared" />
   <Import Project="..\..\Emgu.Util\Emgu.Util.projitems" Label="Shared" />
   <Import Project="..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems" Label="Shared" />

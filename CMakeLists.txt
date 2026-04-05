@@ -529,7 +529,7 @@ ELSEIF(APPLE)
 
 ENDIF()
 
-CHECK_BINARY_EXIST("libs/webgl" "libcvextern.a" HAVE_EMSCRIPTEN ${IS_EMSCRIPTEN_BUILD})
+CHECK_BINARY_EXIST("libs/webgl" "cvextern.a" HAVE_EMSCRIPTEN ${IS_EMSCRIPTEN_BUILD})
 
 CHECK_BINARY_EXIST("libs/iOS" "libcvextern_iphoneos.a" HAVE_IOS_DEVICE ${IS_IOS_BUILD})
 CHECK_BINARY_EXIST("libs/iOS" "libcvextern_simulator.a" HAVE_IOS_SIMULATOR ${IS_IOS_BUILD})
