@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-# Merge all LLVM IR bitcode archives into a single libcvextern.a
+# Merge all LLVM IR bitcode archives into a single cvextern.a
 # ---------------------------------------------------------------------------
 # Invoked as a POST_BUILD step for the cvextern target when building for
 # Emscripten.  Variables passed in via -D from the add_custom_command:
@@ -26,7 +26,7 @@
 # defines it, so all needed definitions are found by the LTO linker.
 
 set(OUTPUT_DIR "${SOURCE_DIR}/libs/webgl")
-set(OUTPUT_FILE "${OUTPUT_DIR}/libcvextern.a")
+set(OUTPUT_FILE "${OUTPUT_DIR}/cvextern.a")
 
 file(MAKE_DIRECTORY "${OUTPUT_DIR}")
 file(REMOVE "${OUTPUT_FILE}")

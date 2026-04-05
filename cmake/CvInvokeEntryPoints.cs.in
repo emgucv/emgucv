@@ -10,7 +10,7 @@ namespace Emgu.CV
       /// The file name of the cvextern library
       /// </summary>
 #if BLAZORWASM
-      public const string ExternLibrary = "libcvextern";
+      public const string ExternLibrary = "cvextern";
 #elif (__IOS__ || UNITY_IPHONE || UNITY_WEBGL) && (!UNITY_EDITOR)
       public const string ExternLibrary = "__Internal";
 #else

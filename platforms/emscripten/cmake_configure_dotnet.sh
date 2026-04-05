@@ -1,8 +1,8 @@
 #!/bin/bash
-# Build libcvextern.bc for Blazor/WASM using the Emscripten toolchain that
+# Build cvextern.bc for Blazor/WASM using the Emscripten toolchain that
 # ships with the .NET SDK WASM workload (Microsoft.NET.Runtime.Emscripten.*).
 #
-# This produces libs/webgl/libcvextern.bc which is linked by
+# This produces libs/webgl/cvextern.bc which is linked by
 # Emgu.CV.Example/HelloWorld.Blazor via NativeFileReference.
 #
 # Usage:
@@ -197,6 +197,6 @@ echo "Sysroot ready."
 # Build cvextern
 # The POST_BUILD step in Emgu.CV.Extern/CMakeLists.txt (via
 # cmake/merge_emscripten_libs.cmake) merges all LLVM IR bitcode archives
-# into libs/webgl/libcvextern.a automatically after the build completes.
+# into libs/webgl/cvextern.a automatically after the build completes.
 # ---------------------------------------------------------------------------
 "$EMMAKE" make cvextern -j$(nproc) VERBOSE=1

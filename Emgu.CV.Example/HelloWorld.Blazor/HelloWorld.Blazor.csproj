@@ -12,7 +12,7 @@
     <WasmBuildNative>true</WasmBuildNative>
     <!--
       Forward BLAZORWASM to every C# file in the compilation so that
-      CvInvokeEntryPoints.cs picks "libcvextern" as the DllImport target,
+      CvInvokeEntryPoints.cs picks "cvextern" as the DllImport target,
       matching the NativeFileReference filename and the wasm pinvoke table.
     -->
     <DefineConstants>$(DefineConstants);BLAZORWASM</DefineConstants>
@@ -27,7 +27,7 @@
       The SjLj lowering pass runs at the final wasm-ld link step via the
       -mllvm -wasm-enable-sjlj flag that -sSUPPORT_LONGJMP=wasm injects.
 
-      NOTE: -flto is intentionally absent.  libcvextern.a contains LLVM IR
+      NOTE: -flto is intentionally absent.  cvextern.a contains LLVM IR
       bitcode objects (Emscripten's default object format).  wasm-ld compiles
       them to WASM at link time regardless of -flto — the flag only adds
       cross-module optimisation.  With -flto, emcc switches all system
@@ -79,13 +79,13 @@
 
   <ItemGroup>
     <!-- WASM-specific Emgu.CV build: same sources compiled with BLAZORWASM
-         so ExternLibrary="libcvextern" and static ctor skips DLL loading -->
+         so ExternLibrary="cvextern" and static ctor skips DLL loading -->
     <ProjectReference Include="..\..\Emgu.CV\WebAssembly\Emgu.CV.WebAssembly.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <!--
-      The runtime package ships libcvextern.a and a .targets file that
+      The runtime package ships cvextern.a and a .targets file that
       automatically adds it to NativeFileReference when WasmBuildNative=true,
       so the Emscripten link step links it into dotnet.native.wasm.
       Build the package first: dotnet build Emgu.CV.Runtime/WebAssembly/Emgu.CV.Runtime.WebAssembly.csproj

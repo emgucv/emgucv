@@ -10,4 +10,4 @@ Release note can be found at
 
 ## Note
 
-This package provides the Emscripten-compiled WebAssembly runtime (`libcvextern.a`) for use in Blazor WebAssembly projects. Add this package to your Blazor WASM project and reference it via `NativeFileReference` so the native OpenCV code is statically linked into `dotnet.native.wasm`.
+This package provides the Emscripten-compiled WebAssembly runtime (`cvextern.a`) for use in Blazor WebAssembly projects. Add this package to your Blazor WASM project and reference it via `NativeFileReference` so the native OpenCV code is statically linked into `dotnet.native.wasm`.
