@@ -12,8 +12,7 @@
     <WasmBuildNative>true</WasmBuildNative>
     <!--
       Forward BLAZORWASM to every C# file in the compilation so that
-      CvInvokeEntryPoints.cs picks "cvextern" as the DllImport target,
-      matching the NativeFileReference filename and the wasm pinvoke table.
+      CvInvoke.cs skips dynamic DLL loading in its static constructor.
     -->
     <DefineConstants>$(DefineConstants);BLAZORWASM</DefineConstants>
     <!--
@@ -78,9 +77,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- WASM-specific Emgu.CV build: same sources compiled with BLAZORWASM
-         so ExternLibrary="cvextern" and static ctor skips DLL loading -->
-    <ProjectReference Include="..\..\Emgu.CV\WebAssembly\Emgu.CV.WebAssembly.csproj" />
+    <ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
   </ItemGroup>
 
   <ItemGroup>
