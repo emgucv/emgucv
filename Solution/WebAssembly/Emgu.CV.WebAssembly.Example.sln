@@ -1,0 +1,95 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34916.146
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.Util", "..\..\Emgu.Util\Emgu.Util.shproj", "{98561642-5EC3-4244-BAF9-6876D9BA5527}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Shared", "..\..\Emgu.CV\Emgu.CV.Shared.shproj", "{0E88523A-29DB-4719-B734-D384765384C6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV", "..\..\Emgu.CV\NetStandard\Emgu.CV.csproj", "{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Runtime.WebAssembly", "..\..\..\emgucv\Emgu.CV.Runtime\WebAssembly\Emgu.CV.Runtime.WebAssembly.csproj", "{1E28C581-856E-819B-9729-4E664333D95E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.WebAssembly", "..\..\Emgu.CV\WebAssembly\Emgu.CV.WebAssembly.csproj", "{896605C3-131D-41A3-15F0-4D873D81669E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|ARM = Debug|ARM
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|ARM = Release|ARM
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Debug|ARM.ActiveCfg = Debug|ARM
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Debug|ARM.Build.0 = Debug|ARM
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Debug|x64.ActiveCfg = Debug|x64
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Debug|x64.Build.0 = Debug|x64
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Debug|x86.Build.0 = Debug|Any CPU
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Release|ARM.ActiveCfg = Release|ARM
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Release|ARM.Build.0 = Release|ARM
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Release|x64.ActiveCfg = Release|x64
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Release|x64.Build.0 = Release|x64
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Release|x86.ActiveCfg = Release|Any CPU
+		{3107801B-1E1A-4882-BFEC-50D4CC6F45B9}.Release|x86.Build.0 = Release|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Debug|ARM.Build.0 = Debug|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Debug|x64.Build.0 = Debug|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Debug|x86.Build.0 = Debug|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Release|ARM.ActiveCfg = Release|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Release|ARM.Build.0 = Release|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Release|x64.ActiveCfg = Release|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Release|x64.Build.0 = Release|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Release|x86.ActiveCfg = Release|Any CPU
+		{1E28C581-856E-819B-9729-4E664333D95E}.Release|x86.Build.0 = Release|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|ARM.Build.0 = Debug|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|x64.Build.0 = Debug|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|x86.Build.0 = Debug|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|ARM.ActiveCfg = Release|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|ARM.Build.0 = Release|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|x64.ActiveCfg = Release|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|x64.Build.0 = Release|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|x86.ActiveCfg = Release|Any CPU
+		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BEF46B3C-2D11-40C3-AAEF-8EDD16057123}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		..\..\Emgu.CV\Emgu.CV.Shared.projitems*{0e88523a-29db-4719-b734-d384765384c6}*SharedItemsImports = 13
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{3107801b-1e1a-4882-bfec-50d4cc6f45b9}*SharedItemsImports = 5
+		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{3107801b-1e1a-4882-bfec-50d4cc6f45b9}*SharedItemsImports = 5
+		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{3107801b-1e1a-4882-bfec-50d4cc6f45b9}*SharedItemsImports = 5
+		..\..\Emgu.CV\Emgu.CV.Shared.projitems*{3107801b-1e1a-4882-bfec-50d4cc6f45b9}*SharedItemsImports = 5
+		..\..\Emgu.Util\Emgu.Util.projitems*{3107801b-1e1a-4882-bfec-50d4cc6f45b9}*SharedItemsImports = 5
+		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{896605c3-131d-41a3-15f0-4d873d81669e}*SharedItemsImports = 5
+		..\..\Emgu.CV\Emgu.CV.Shared.projitems*{896605c3-131d-41a3-15f0-4d873d81669e}*SharedItemsImports = 5
+		..\..\Emgu.Util\Emgu.Util.projitems*{896605c3-131d-41a3-15f0-4d873d81669e}*SharedItemsImports = 5
+		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
+	EndGlobalSection
+EndGlobal
