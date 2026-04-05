@@ -68,3 +68,4 @@
     )
 
 ADD_SUBDIRECTORY(Maui)
+ADD_SUBDIRECTORY(WebAssembly)
