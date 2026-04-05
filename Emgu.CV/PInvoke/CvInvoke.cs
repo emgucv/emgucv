@@ -81,7 +81,7 @@ namespace Emgu.CV
             //Let unity handle the library loading
             return true;
 #else
-            if (OperatingSystem.IsBrowser())
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Create("BROWSER")))
             {
                 if (loadDirectory != null)
                 {
@@ -391,7 +391,7 @@ namespace Emgu.CV
             bool libraryLoaded = true;
 
 #if !(UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE || UNITY_WSA  || UNITY_WEBGL)
-            if (OperatingSystem.IsBrowser())
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Create("BROWSER")))
                 return libraryLoaded;
             else if (Emgu.Util.Platform.OperationSystem == Platform.OS.IOS)
                 return libraryLoaded;
@@ -461,7 +461,7 @@ namespace Emgu.CV
 #if UNITY_WEBGL && !UNITY_EDITOR
             _libraryLoaded = true;
 #else
-            if (OperatingSystem.IsBrowser())
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Create("BROWSER")))
             {
                 // Running in WebAssembly (Blazor): cvextern is statically linked into
                 // dotnet.native.wasm — no dynamic library loading required.
