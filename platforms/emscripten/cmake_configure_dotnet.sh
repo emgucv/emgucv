@@ -199,4 +199,4 @@ echo "Sysroot ready."
 # cmake/merge_emscripten_libs.cmake) merges all LLVM IR bitcode archives
 # into libs/webgl/cvextern.a automatically after the build completes.
 # ---------------------------------------------------------------------------
-"$EMMAKE" make cvextern -j$(nproc) VERBOSE=1
+"$EMMAKE" make -j$(nproc) VERBOSE=1
