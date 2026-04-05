@@ -73,14 +73,23 @@ namespace Emgu.CV
         /// <remarks>If <paramref name="loadDirectory"/> is null, the default location on windows is the dll's path appended by either "x64" or "x86", depends on the applications current mode.</remarks>
         public static bool LoadUnmanagedModules(String loadDirectory, params String[] unmanagedModules)
         {
-#if UNITY_WSA || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL || BLAZORWASM
+#if UNITY_WSA || UNITY_STANDALONE || UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS || UNITY_WEBGL
             if (loadDirectory != null)
             {
                 throw new NotImplementedException("Loading modules from a specific directory is not implemented on the current platform");
             }
-            //Let unity/blazor handle the library loading
+            //Let unity handle the library loading
             return true;
 #else
+            if (OperatingSystem.IsBrowser())
+            {
+                if (loadDirectory != null)
+                {
+                    throw new NotImplementedException("Loading modules from a specific directory is not implemented on the current platform");
+                }
+                // cvextern is statically linked into dotnet.native.wasm — no dynamic loading required.
+                return true;
+            }
             List<String> loadDirectories = new List<String>();
 
             if (loadDirectory == null)
@@ -381,8 +390,10 @@ namespace Emgu.CV
         {
             bool libraryLoaded = true;
 
-#if !(UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE || UNITY_WSA  || UNITY_WEBGL || BLAZORWASM)
-            if (Emgu.Util.Platform.OperationSystem == Platform.OS.IOS)
+#if !(UNITY_ANDROID || UNITY_IOS || UNITY_EDITOR || UNITY_STANDALONE || UNITY_WSA  || UNITY_WEBGL)
+            if (OperatingSystem.IsBrowser())
+                return libraryLoaded;
+            else if (Emgu.Util.Platform.OperationSystem == Platform.OS.IOS)
                 return libraryLoaded;
             else if (Emgu.Util.Platform.OperationSystem == Platform.OS.Android && (Emgu.Util.Platform.ClrType != Platform.Clr.Unity))
             {
@@ -447,7 +458,7 @@ namespace Emgu.CV
         /// </summary>
         static CvInvoke()
         {
-#if ( UNITY_WEBGL || BLAZORWASM ) && ! UNITY_EDITOR
+#if UNITY_WEBGL && !UNITY_EDITOR
             _libraryLoaded = true;
 #else
             if (OperatingSystem.IsBrowser())
