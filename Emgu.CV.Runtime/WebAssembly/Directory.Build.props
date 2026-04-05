@@ -4,32 +4,32 @@
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
   <PropertyGroup>
-    <TargetFramework>net${DOTNET_VERSION_MAJOR}.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <EmguCVProjectRoot>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\))</EmguCVProjectRoot>
-    <PackageId>${EMGUCV_WEBASSEMBLY_NUGET_ID}</PackageId>
-    <title>${EMGUCV_WEBASSEMBLY_NUGET_TITLE}</title>
-    <version>${CPACK_PACKAGE_VERSION}</version>
-    <authors>${CPACK_PACKAGE_VENDOR}</authors>
-    <owners>${CPACK_PACKAGE_VENDOR}</owners>
+    <PackageId>Emgu.CV.runtime.mini.webassembly</PackageId>
+    <title>Emgu CV WebAssembly Native Runtime</title>
+    <version>4.13.0.5890</version>
+    <authors>Emgu Corporation</authors>
+    <owners>Emgu Corporation</owners>
     <summary>WebAssembly runtime package of Emgu CV</summary>
     <Description>This package contains the native WebAssembly (Emscripten) runtime of Emgu CV for use with Blazor WebAssembly projects.</Description>
-    <PackageReleaseNotes>This is the ${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH} release of Emgu CV. For online documentation please visit
-${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}/document/index.html
+    <PackageReleaseNotes>This is the 4.13.0 release of Emgu CV. For online documentation please visit
+https://www.emgu.com/wiki/files/4.13.0/document/index.html
     </PackageReleaseNotes>
 
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageIcon>nuget_icon.png</PackageIcon>
     <PackageReadmeFile>docs/README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <RepositoryUrl>${GITHUB_REPO_URL}</RepositoryUrl>
+    <RepositoryUrl>https://github.com/emgucv/emgucv</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageOutputPath>$([System.IO.Path]::GetFullPath($(EmguCVProjectRoot)\platforms\nuget))</PackageOutputPath>
     <!-- Add local repository path & nuget.org to RestoreSources -->
     <RestoreSources>$(RestoreSources);$(PackageOutputPath);https://api.nuget.org/v3/index.json</RestoreSources>
     <PackageTags>native;opencv;emgu;emgucv;ai;image;webassembly;wasm;blazor;emscripten</PackageTags>
-    <PackageProjectUrl>${NUGET_EMGU_URL}</PackageProjectUrl>
-    <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
+    <PackageProjectUrl>https://www.emgu.com</PackageProjectUrl>
+    <copyright>© Emgu Corporation 2026. All rights reserved.</copyright>
   </PropertyGroup>
 
   <ItemGroup>
