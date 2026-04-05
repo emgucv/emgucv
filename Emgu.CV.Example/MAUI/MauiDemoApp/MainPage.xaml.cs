@@ -453,18 +453,87 @@ namespace MauiDemoApp
                 };
             }
             
-            StackLayout buttonsLayout = new StackLayout
+            string titleFont = DeviceInfo.Platform == DevicePlatform.iOS ? "AvenirNext-Heavy" : "OpenSansSemibold";
+            string bodyFont = DeviceInfo.Platform == DevicePlatform.iOS ? "AvenirNext-Regular" : "OpenSansRegular";
+
+            Color pageBackground = Color.FromArgb("#F2F2F7");
+            Color cardBackground = Colors.White;
+            Color primaryText = Color.FromArgb("#1C1C1E");
+            Color secondaryText = Color.FromArgb("#8A8A8E");
+            Color separatorColor = Color.FromArgb("#C6C6C8");
+
+            foreach (View v in buttonList)
             {
-                VerticalOptions = LayoutOptions.Start,
+                if (v is Button btn)
+                {
+                    btn.HorizontalOptions = LayoutOptions.Fill;
+                    btn.BackgroundColor = cardBackground;
+                    btn.TextColor = primaryText;
+                    btn.FontFamily = bodyFont;
+                    btn.FontSize = 17;
+                    btn.Padding = new Thickness(20, 15);
+                    btn.CornerRadius = 0;
+                    btn.Margin = new Thickness(0);
+                }
+            }
+
+            var titleLabel = new Label
+            {
+                Text = "Emgu CV",
+                FontFamily = titleFont,
+                FontSize = 44,
+                FontAttributes = FontAttributes.Bold,
+                TextColor = primaryText,
             };
 
-            foreach (View b in buttonList)
-                buttonsLayout.Children.Add(b);
-
-            this.Content = new ScrollView()
+            var subtitleLabel = new Label
             {
-                Content = buttonsLayout,
+                Text = "Computer Vision",
+                FontFamily = bodyFont,
+                FontSize = 14,
+                TextColor = secondaryText,
+                Margin = new Thickness(0, 4, 0, 0)
             };
+
+            var headerLayout = new StackLayout
+            {
+                Padding = new Thickness(24, 56, 24, 20),
+                BackgroundColor = pageBackground,
+                Children = { titleLabel, subtitleLabel }
+            };
+
+            var buttonsCard = new StackLayout
+            {
+                Spacing = 0,
+                BackgroundColor = cardBackground,
+            };
+
+            bool firstVisible = true;
+            foreach (View v in buttonList)
+            {
+                if (!firstVisible)
+                {
+                    buttonsCard.Children.Add(new BoxView
+                    {
+                        HeightRequest = 0.5,
+                        BackgroundColor = separatorColor,
+                        Margin = new Thickness(20, 0, 0, 0),
+                        HorizontalOptions = LayoutOptions.Fill
+                    });
+                }
+                firstVisible = false;
+                buttonsCard.Children.Add(v);
+            }
+
+            var contentLayout = new StackLayout
+            {
+                BackgroundColor = pageBackground,
+                Spacing = 16,
+                Children = { headerLayout, buttonsCard }
+            };
+
+            this.BackgroundColor = pageBackground;
+            this.Content = new ScrollView { Content = contentLayout };
         }
 
 
