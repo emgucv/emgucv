@@ -1,0 +1,11 @@
+<Project>
+  <!--
+    Injected by the Emgu.CV.runtime.mini.webassembly NuGet package.
+    Adds cvextern.a as a NativeFileReference so that any Blazor WebAssembly
+    project that references this package gets the cvextern symbols statically
+    linked into dotnet.native.wasm by the Emscripten link step.
+  -->
+  <ItemGroup Condition="'$(WasmBuildNative)' == 'true'">
+    <NativeFileReference Include="$(MSBuildThisFileDirectory)native\cvextern.a" />
+  </ItemGroup>
+</Project>

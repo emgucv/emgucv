@@ -5,11 +5,6 @@
     <AssemblyName>Emgu.CV.runtime.webassembly</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Nullable>enable</Nullable>
-    <!--
-      BLAZORWASM causes CvInvokeEntryPoints.cs to use "__Internal" as the
-      DllImport library name, so P/Invoke calls resolve into the native code
-      that is statically linked into dotnet.native.wasm via NativeFileReference.
-    -->
     <DefineConstants>$(DefineConstants);BLAZORWASM</DefineConstants>
   </PropertyGroup>
 
@@ -19,7 +14,7 @@
       it into any consuming project.  The targets file adds cvextern.a to
       NativeFileReference when WasmBuildNative=true.
     -->
-    <None Include="Emgu.CV.runtime.mini.webassembly.targets">
+    <None Include="$(PackageId).targets">
       <Pack>True</Pack>
       <PackagePath>build/</PackagePath>
     </None>
