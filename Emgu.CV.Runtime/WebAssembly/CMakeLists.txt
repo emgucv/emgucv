@@ -6,6 +6,7 @@ SET(EMGUCV_WEBASSEMBLY_NUGET_ID "${EMGUCV_NUGET_ID}.runtime${EMGUCV_RUNTIME_EXTR
 SET(EMGUCV_WEBASSEMBLY_NUGET_TITLE "Emgu CV WebAssembly Native Runtime")
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.webassembly.targets.in ${CMAKE_CURRENT_SOURCE_DIR}/${EMGUCV_WEBASSEMBLY_NUGET_ID}.targets)
 IF(EMGU_SIGN_FOUND AND WIN32)
   CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignBinary.Targets.in ${CMAKE_CURRENT_SOURCE_DIR}/SignBinary.Targets)
 ENDIF()
@@ -43,16 +44,20 @@ IF(HAVE_EMSCRIPTEN)
     "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
     "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
     "${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.webassembly.targets.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/${EMGUCV_WEBASSEMBLY_NUGET_ID}.targets"
     "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime.WebAssembly.csproj"
   )
 
   source_group("Template" FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in"
     "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.webassembly.targets.in"
   )
 
   source_group("Source" FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
+    "${CMAKE_CURRENT_SOURCE_DIR}/${EMGUCV_WEBASSEMBLY_NUGET_ID}.targets"
     "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime.WebAssembly.csproj"
     "${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md"
   )
