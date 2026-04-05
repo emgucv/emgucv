@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV", "..\..\Emgu.CV\Ne
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.Runtime.WebAssembly", "..\..\Emgu.CV.Runtime\WebAssembly\Emgu.CV.Runtime.WebAssembly.csproj", "{1E28C581-856E-819B-9729-4E664333D95E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Emgu.CV.WebAssembly", "..\..\Emgu.CV\WebAssembly\Emgu.CV.WebAssembly.csproj", "{896605C3-131D-41A3-15F0-4D873D81669E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld.Blazor", "..\..\Emgu.CV.Example\HelloWorld.Blazor\HelloWorld.Blazor.csproj", "{9244A2C3-1C9E-15E8-DEC0-4BFAF2704D68}"
 EndProject
 Global
@@ -59,22 +57,6 @@ Global
 		{1E28C581-856E-819B-9729-4E664333D95E}.Release|x64.Build.0 = Release|Any CPU
 		{1E28C581-856E-819B-9729-4E664333D95E}.Release|x86.ActiveCfg = Release|Any CPU
 		{1E28C581-856E-819B-9729-4E664333D95E}.Release|x86.Build.0 = Release|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|ARM.Build.0 = Debug|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|x64.Build.0 = Debug|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Debug|x86.Build.0 = Debug|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|ARM.ActiveCfg = Release|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|ARM.Build.0 = Release|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|x64.ActiveCfg = Release|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|x64.Build.0 = Release|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|x86.ActiveCfg = Release|Any CPU
-		{896605C3-131D-41A3-15F0-4D873D81669E}.Release|x86.Build.0 = Release|Any CPU
 		{9244A2C3-1C9E-15E8-DEC0-4BFAF2704D68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9244A2C3-1C9E-15E8-DEC0-4BFAF2704D68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9244A2C3-1C9E-15E8-DEC0-4BFAF2704D68}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -105,9 +87,6 @@ Global
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{3107801b-1e1a-4882-bfec-50d4cc6f45b9}*SharedItemsImports = 5
 		..\..\Emgu.CV\Emgu.CV.Shared.projitems*{3107801b-1e1a-4882-bfec-50d4cc6f45b9}*SharedItemsImports = 5
 		..\..\Emgu.Util\Emgu.Util.projitems*{3107801b-1e1a-4882-bfec-50d4cc6f45b9}*SharedItemsImports = 5
-		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{896605c3-131d-41a3-15f0-4d873d81669e}*SharedItemsImports = 5
-		..\..\Emgu.CV\Emgu.CV.Shared.projitems*{896605c3-131d-41a3-15f0-4d873d81669e}*SharedItemsImports = 5
-		..\..\Emgu.Util\Emgu.Util.projitems*{896605c3-131d-41a3-15f0-4d873d81669e}*SharedItemsImports = 5
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal
