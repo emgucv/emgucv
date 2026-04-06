@@ -11,4 +11,4 @@ docker run \
   -v /etc/passwd:/etc/passwd \
   -w /src/workspace \
   emgu/bazel-android:latest \
-  /bin/bash -c "/emsdk/emsdk activate latest; source /emsdk/emsdk_env.sh; cd platforms/emscripten; ./cmake_configure.sh"
+  /bin/bash -c "cd platforms/emscripten; ./cmake_configure_dotnet.sh"
