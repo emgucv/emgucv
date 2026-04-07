@@ -1181,20 +1181,21 @@ void cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value)
 	value->push_back(0);
 #endif
 
-	key->push_back("HAVE_OPENCV_CALIB");
-#ifdef HAVE_OPENCV_CALIB
+	key->push_back("HAVE_OPENCV_CALIB3D");
+#ifdef HAVE_OPENCV_CALIB3D
 	value->push_back(1);
 #else
 	value->push_back(0);
 #endif
-
+	
+/*
 	key->push_back("HAVE_OPENCV_3D");
 #ifdef HAVE_OPENCV_3D
 	value->push_back(1);
 #else
 	value->push_back(0);
 #endif
-
+*/
 
 	key->push_back("HAVE_OPENCV_CORE");
 #ifdef HAVE_OPENCV_CORE
@@ -1399,6 +1400,13 @@ void cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value)
 	value->push_back(0);
 #endif
 
+	key->push_back("HAVE_OPENCV_SIGNAL");
+#ifdef HAVE_OPENCV_SIGNAL
+	value->push_back(1);
+#else
+	value->push_back(0);
+#endif
+
 	key->push_back("HAVE_OPENCV_STEREO");
 #ifdef HAVE_OPENCV_STEREO
 	value->push_back(1);
@@ -1406,8 +1414,8 @@ void cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value)
 	value->push_back(0);
 #endif
 
-	key->push_back("HAVE_OPENCV_XSTEREO");
-#ifdef HAVE_OPENCV_XSTEREO
+	key->push_back("HAVE_OPENCV_STRUCTURED_LIGHT");
+#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
 	value->push_back(1);
 #else
 	value->push_back(0);
