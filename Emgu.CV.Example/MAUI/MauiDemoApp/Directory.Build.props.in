@@ -2,8 +2,8 @@
 <Project>
   <PropertyGroup>
     <!-- Versions -->
-    <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>${${CPACK_PACKAGE_VERSION_MAJOR}}.${CPACK_PACKAGE_VERSION_MINOR}</ApplicationDisplayVersion>
+    <ApplicationVersion>${CPACK_PACKAGE_VERSION}</ApplicationVersion>
     
     <TargetFrameworks>net${DOTNET_VERSION_MAJOR}.0-android</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-ios;net${DOTNET_VERSION_MAJOR}.0-maccatalyst</TargetFrameworks>
