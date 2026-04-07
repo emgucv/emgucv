@@ -91,6 +91,25 @@ cd platforms/ios
 
 Output lands in `platforms/ios/catalyst_<arch>/`.
 
+### MAUI Demo App (Windows)
+
+**Prerequisites:** Windows App Runtime 1.8 must be installed. Download from
+https://aka.ms/windowsappruntimeinstall or install via `winget install Microsoft.WindowsAppRuntime.1.8`.
+
+Pass `WindowsPackageType=None` on the command line (unpackaged mode) so the app
+runs directly as an `.exe` without MSIX packaging. It uses bootstrap mode to
+locate the installed Windows App Runtime 1.8 framework package at startup.
+
+**Build:**
+```bash
+dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-windows10.0.19041.0 -p:WindowsPackageType=None
+```
+
+**Run:**
+```bash
+Emgu.CV.Example/MAUI/MauiDemoApp/bin/Debug/net10.0-windows10.0.19041.0/win-x64/MauiDemoApp.exe
+```
+
 ### MAUI Demo App (MacCatalyst)
 
 After the MacCatalyst C++ binary is built, build then launch the MAUI demo app directly on macOS:
