@@ -7,6 +7,9 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Dnn;
 using Emgu.CV.Models;
 using Emgu.CV.Platform.Maui.UI;
+#if DEBUG
+using System.Diagnostics;
+#endif
 
 namespace MauiDemoApp
 {
@@ -14,6 +17,16 @@ namespace MauiDemoApp
     {
         //int count = 0;
 
+        private bool HasOpenCVModule(Dictionary<String, double> configDictionary, String key)
+        {
+            if (!configDictionary.ContainsKey(key))
+                return false;
+#if DEBUG
+            Trace.WriteLine(String.Format("The module key '{0}' is not found in Open CV config dict. Available keys are: {1}", key, String.Join(";", configDictionary.Keys)));
+#endif
+            return configDictionary[key] != 0;
+        }
+        
         public MainPage()
         {
             InitializeComponent();
@@ -80,17 +93,17 @@ namespace MauiDemoApp
             };
 
             var openCVConfigDict = CvInvoke.ConfigDict;
-            bool haveViz = (openCVConfigDict["HAVE_OPENCV_VIZ"] != 0);
-            bool haveDNN = (openCVConfigDict["HAVE_OPENCV_DNN"] != 0);
-            bool haveFreetype = (openCVConfigDict["HAVE_OPENCV_FREETYPE"] != 0);
-            bool haveFace = (openCVConfigDict["HAVE_OPENCV_FACE"] != 0);
-            bool haveWechatQRCode = (openCVConfigDict["HAVE_OPENCV_WECHAT_QRCODE"] != 0);
-            //bool haveBarcode = (openCVConfigDict["HAVE_OPENCV_BARCODE"] != 0);
-            bool haveObjdetect = (openCVConfigDict["HAVE_OPENCV_OBJDETECT"] != 0);
-            bool haveTesseract = (openCVConfigDict["HAVE_EMGUCV_TESSERACT"] != 0);
-            bool haveFeatures2D = (openCVConfigDict["HAVE_OPENCV_FEATURES2D"] != 0);
-            bool haveVideo = (openCVConfigDict["HAVE_OPENCV_VIDEO"] != 0);
-           // bool haveOptFlow = (openCVConfigDict["HAVE_OPENCV_OPTFLOW"] != 0);
+            bool haveViz = HasOpenCVModule(openCVConfigDict, "HAVE_OPENCV_VIZ");
+            bool haveDNN = HasOpenCVModule(openCVConfigDict, "HAVE_OPENCV_DNN");
+            bool haveFreetype = HasOpenCVModule(openCVConfigDict, "HAVE_OPENCV_FREETYPE");
+            bool haveFace = HasOpenCVModule(openCVConfigDict, "HAVE_OPENCV_FACE");
+            bool haveWechatQRCode = HasOpenCVModule(openCVConfigDict, "HAVE_OPENCV_WECHAT_QRCODE");
+            //bool haveBarcode = HasOpenCVModule(openCVConfigDict, "HAVE_OPENCV_BARCODE");
+            bool haveObjdetect = HasOpenCVModule(openCVConfigDict, "HAVE_OPENCV_OBJDETECT");
+            bool haveTesseract = HasOpenCVModule(openCVConfigDict, "HAVE_EMGUCV_TESSERACT");
+            bool haveFeatures2D = HasOpenCVModule(openCVConfigDict, "HAVE_OPENCV_FEATURES2D");
+            bool haveVideo = HasOpenCVModule(openCVConfigDict, "HAVE_OPENCV_VIDEO");
+            //bool haveOptFlow = HasOpenCVModule(openCVConfigDict, "HAVE_OPENCV_OPTFLOW");
 
 
             bool hasInferenceEngine = false;
