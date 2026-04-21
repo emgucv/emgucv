@@ -6,6 +6,11 @@
 
 #include "directx.h"
 
+cv::ocl::Context* cveDirectxOclInitializeContextFromD3D11Device(ID3D11Device* pD3D11Device)
+{
+	return &cv::directx::ocl::initializeContextFromD3D11Device(pD3D11Device);
+}
+
 void cveDirectxConvertToD3D11Texture2D(cv::_InputArray* src, ID3D11Texture2D* pD3D11Texture2D)
 {
 	cv::directx::convertToD3D11Texture2D(*src, pD3D11Texture2D);
