@@ -20,6 +20,17 @@ namespace Emgu.CV
     public static class DirectX
     {
         /// <summary>
+        /// Creates an OpenCL context from a D3D11 device.
+        /// The returned context is owned by OpenCV and must not be disposed by the caller.
+        /// </summary>
+        /// <param name="pD3D11Device">Pointer to the ID3D11Device</param>
+        /// <returns>Reference to the OpenCL context initialized from the D3D11 device</returns>
+        public static Ocl.Context InitializeContextFromD3D11Device(IntPtr pD3D11Device)
+        {
+            return new Ocl.Context(CvInvoke.cveDirectxOclInitializeContextFromD3D11Device(pD3D11Device), false);
+        }
+
+        /// <summary>
         /// Converts InputArray to ID3D11Texture2D. If destination texture format is DXGI_FORMAT_NV12 then input UMat expected to be in BGR format and data will be downsampled and color-converted to NV12.
         /// </summary>
         /// <param name="src">Source InputArray</param>
@@ -106,6 +117,8 @@ namespace Emgu.CV
     public static partial class CvInvoke
     {
 
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveDirectxOclInitializeContextFromD3D11Device(IntPtr pD3D11Device);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDirectxConvertToD3D11Texture2D(IntPtr src, IntPtr pD3D11Texture2D);

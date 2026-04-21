@@ -7,6 +7,8 @@
 #include "core_c_extra.h"
 #include "opencv2/core/directx.hpp"
 
+CVAPI(cv::ocl::Context*) cveDirectxOclInitializeContextFromD3D11Device(ID3D11Device* pD3D11Device);
+
 CVAPI(void) cveDirectxConvertToD3D11Texture2D(cv::_InputArray* src, ID3D11Texture2D* pD3D11Texture2D);
 
 CVAPI(void) cveDirectxConvertFromD3D11Texture2D(ID3D11Texture2D* pD3D11Texture2D, cv::_OutputArray* dst);
