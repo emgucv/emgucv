@@ -325,7 +325,7 @@ IF(EMGU_CV_EXAMPLE_BUILD)
 
   ENDIF()
    
-  IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64 OR HAVE_MACOS OR HAVE_LINUX_ARM OR HAVE_LINUX_X64 OR HAVE_LINUX_X86)
+  IF(HAVE_WINDESKTOP OR HAVE_MACOS OR HAVE_LINUX) 
     add_subdirectory(HelloWorld)
 	add_subdirectory(BuildInfo.Console)
 	add_subdirectory(DynamicImage.Asp.Net)
