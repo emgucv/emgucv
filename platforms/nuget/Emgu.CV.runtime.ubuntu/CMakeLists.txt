@@ -17,8 +17,9 @@ IF(HAVE_UBUNTU_X64 OR HAVE_UBUNTU_X86 OR HAVE_UBUNTU_ARM64)
   ELSE()
 	SET(UBUNTU_DEFAULT_PLATFORM_ID "ubuntu")
 	IF (HAVE_UBUNTU_X86 OR HAVE_UBUNTU_X64 OR HAVE_UBUNTU_ARM64)
-	  # Attempt to get the ubuntu version from version_string.inc file. This is to make sure the ubuntu version is included in the nuget package id, so that the correct ubuntu version can be installed by users. 
+	  # Attempt to get the ubuntu version from version_string.inc file. This is to make sure the ubuntu version is included in the nuget package id, so that the correct ubuntu version can be installed by users.
       file(GLOB VERSION_FILES
+	    "${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/runtimes/ubuntu.*/native/*version_string.inc"
 	    "${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/runtimes/ubuntu-arm64/native/*version_string.inc"
 	    "${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/runtimes/ubuntu-x86/native/*version_string.inc"
         "${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/runtimes/ubuntu-x64/native/*version_string.inc"
@@ -28,7 +29,14 @@ IF(HAVE_UBUNTU_X64 OR HAVE_UBUNTU_X86 OR HAVE_UBUNTU_ARM64)
 	  get_filename_component(VERSION_FILE_NAME ${VERSION_FILE} NAME)
 	  string(REGEX MATCH "ubuntu_(.*)_(.*)_version_string.inc" _ ${VERSION_FILE_NAME})
 	  #ubuntu_${ARCH}_${UBUNTU_VERSION}_version_string.inc
-	  set(UBUNTU_VERSION ${CMAKE_MATCH_2}) 
+	  set(UBUNTU_VERSION ${CMAKE_MATCH_2})
+	  # Compute UBUNTU_RID_PREFIX from the detected version
+	  string(REGEX MATCH "^([0-9]+)" _ "${UBUNTU_VERSION}")
+	  if(CMAKE_MATCH_1 GREATER 22)
+	    set(UBUNTU_RID_PREFIX "ubuntu")
+	  else()
+	    set(UBUNTU_RID_PREFIX "ubuntu.${UBUNTU_VERSION}")
+	  endif()
 	ENDIF()
 
 	IF (HAVE_UBUNTU_X86)
@@ -50,16 +58,16 @@ IF(HAVE_UBUNTU_X64 OR HAVE_UBUNTU_X86 OR HAVE_UBUNTU_ARM64)
   SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "")
 
 	IF(HAVE_UBUNTU_X86)
-	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x86\\native\\*.so\" target=\"runtimes\\ubuntu-x86\\native\" />")
-	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x86\\native\\*_version_string.inc\" target=\"docs\" /> ")
+	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\${UBUNTU_RID_PREFIX}-x86\\native\\*.so\" target=\"runtimes\\${UBUNTU_RID_PREFIX}-x86\\native\" />")
+	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\${UBUNTU_RID_PREFIX}-x86\\native\\*_version_string.inc\" target=\"docs\" /> ")
 	ENDIF()
 	IF(HAVE_UBUNTU_X64)
-	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x64\\native\\*.so\" target=\"runtimes\\ubuntu-x64\\native\" />")
-	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-x64\\native\\*_version_string.inc\" target=\"docs\" /> ")
+	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\${UBUNTU_RID_PREFIX}-x64\\native\\*.so\" target=\"runtimes\\${UBUNTU_RID_PREFIX}-x64\\native\" />")
+	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\${UBUNTU_RID_PREFIX}-x64\\native\\*_version_string.inc\" target=\"docs\" /> ")
 	ENDIF()
 	IF(HAVE_UBUNTU_ARM64)
-	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-arm64\\native\\*.so\" target=\"runtimes\\ubuntu-arm64\\native\" />")
-	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\ubuntu-arm64\\native\\*_version_string.inc\" target=\"docs\" /> ")
+	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\${UBUNTU_RID_PREFIX}-arm64\\native\\*.so\" target=\"runtimes\\${UBUNTU_RID_PREFIX}-arm64\\native\" />")
+	  SET(EMGUCV_UBUNTU_NUGET_FILE_LIST "${EMGUCV_UBUNTU_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\${UBUNTU_RID_PREFIX}-arm64\\native\\*_version_string.inc\" target=\"docs\" /> ")
 	ENDIF()
   
   CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/${EMGUCV_UBUNTU_NUGET_ID}.props)
