@@ -8,16 +8,28 @@ INSTALL_FOLDER=$PWD/platforms/macos/$BUILD_FOLDER/install
 CMAKE_FIND_ROOT_FOLDER=$INSTALL_FOLDER
 OPENVINO_OPTION=-DWITH_OPENVINO:BOOL=FALSE
 
-if [ "$1" == "all" ]; then 
+MACOS_SDK_PATH="$(xcrun --sdk macosx --show-sdk-path)"
+OSX_SYSROOT_OPTION="-DCMAKE_OSX_SYSROOT:STRING=$MACOS_SDK_PATH"
+
+HOST_ARCH="$(uname -m)"
+
+if [ "$1" == "all" ]; then
   BUILD_ARCH=-DMACOSX_DEPLOYMENT_TARGET=11.0
-  OSX_SYSROOT_OPTION=-DCMAKE_OSX_SYSROOT:STRING="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/" 
   CV_OPTIMIZATION=-DCV_DISABLE_OPTIMIZATION:BOOL=ON
-  CV_PNG_OPTION=-DWITH_PNG:BOOL=FALSE 
+  CV_PNG_OPTION=-DWITH_PNG:BOOL=FALSE
+  KLEIDICV_OPTION=
   echo "Building for default architecture"
 else
-  BUILD_ARCH=-DCMAKE_OSX_ARCHITECTURES="$1" 
-  CV_OPTIMIZATION= 
-  CV_PNG_OPTION=-DBUILD_PNG:BOOL=TRUE 
+  BUILD_ARCH="-DCMAKE_OSX_ARCHITECTURES=$1"
+  CV_OPTIMIZATION=
+  CV_PNG_OPTION=-DBUILD_PNG:BOOL=TRUE
+  # Disable KleidicV (ARM NEON library) when cross-compiling x86_64 on Apple Silicon
+  if [ "$1" == "x86_64" ] && [ "$HOST_ARCH" == "arm64" ]; then
+    KLEIDICV_OPTION=-DWITH_KLEIDICV:BOOL=OFF
+    echo "Cross-compiling x86_64 on Apple Silicon: disabling KleidicV"
+  else
+    KLEIDICV_OPTION=
+  fi
   echo "Building for $1"
 fi
 
@@ -149,6 +161,7 @@ cmake $BUILD_ARCH $OSX_SYSROOT_OPTION $CV_OPTIMIZATION \
       -DBUILD_opencv_apps:BOOL=OFF \
       -DWITH_CUDA:BOOL=OFF \
       -DWITH_OBSENSOR:BOOL=OFF \
+      $KLEIDICV_OPTION \
       $CV_CONTRIB_OPTION \
       $CV_MODULE_OPTION \
       $TESSERACT_OPTION \
