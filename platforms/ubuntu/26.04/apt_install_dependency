@@ -8,7 +8,7 @@ sudo apt install -y build-essential libgtk-3-dev libgstreamer1.0-dev \
   cmake-curses-gui ocl-icd-dev freeglut3-dev libgeotiff-dev libusb-1.0-0-dev \
   libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgflags-dev \
   libgoogle-glog-dev liblapacke-dev libva-dev dotnet-sdk-10.0 \
-  libvtk9-dev
+  libvtk9-dev libavif-bin
 
 # mono is needed to build nuget package
 sudo apt install mono-complete
