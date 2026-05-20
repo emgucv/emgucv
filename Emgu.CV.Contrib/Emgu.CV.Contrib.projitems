@@ -44,5 +44,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)StructuredLight\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Rgbd\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Reg\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Signal\*.cs" />
   </ItemGroup>
 </Project>

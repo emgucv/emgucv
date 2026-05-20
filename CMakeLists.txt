@@ -1078,6 +1078,7 @@ SET (OPENCV_MODULE_NAME_CANDIDATES
   surface_matching
   alphamat
   intensity_transform
+  signal
   rapid
   line_descriptor
   hdf
