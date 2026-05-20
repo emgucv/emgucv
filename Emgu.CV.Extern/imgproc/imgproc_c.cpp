@@ -37,12 +37,60 @@ void cveBlendLinear(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputArra
 	cv::blendLinear(*src1, *src2, *weights1, *weights2, *dst);
 }
 
-void cveCLAHE(cv::_InputArray* src, double clipLimit, CvSize* tileGridSize, int bitShift, cv::_OutputArray* dst)
+cv::CLAHE* cveCLAHECreate(double clipLimit, CvSize* tileGridSize, cv::Ptr<cv::CLAHE>** sharedPtr)
 {
 	cv::Size s(tileGridSize->width, tileGridSize->height);
-	cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE(clipLimit, s);
-	clahe->setBitShift(bitShift);
+	cv::Ptr<cv::CLAHE> ptr = cv::createCLAHE(clipLimit, s);
+	*sharedPtr = new cv::Ptr<cv::CLAHE>(ptr);
+	return (*sharedPtr)->get();
+}
+
+void cveCLAHEApply(cv::CLAHE* clahe, cv::_InputArray* src, cv::_OutputArray* dst)
+{
 	clahe->apply(*src, *dst);
+}
+
+void cveCLAHERelease(cv::Ptr<cv::CLAHE>** sharedPtr)
+{
+	delete *sharedPtr;
+	*sharedPtr = 0;
+}
+
+void cveCLAHESetClipLimit(cv::CLAHE* clahe, double clipLimit)
+{
+	clahe->setClipLimit(clipLimit);
+}
+
+double cveCLAHEGetClipLimit(cv::CLAHE* clahe)
+{
+	return clahe->getClipLimit();
+}
+
+void cveCLAHESetTilesGridSize(cv::CLAHE* clahe, CvSize* tileGridSize)
+{
+	clahe->setTilesGridSize(cv::Size(tileGridSize->width, tileGridSize->height));
+}
+
+void cveCLAHEGetTilesGridSize(cv::CLAHE* clahe, CvSize* size)
+{
+	cv::Size s = clahe->getTilesGridSize();
+	size->width = s.width;
+	size->height = s.height;
+}
+
+void cveCLAHESetBitShift(cv::CLAHE* clahe, int shift)
+{
+	clahe->setBitShift(shift);
+}
+
+int cveCLAHEGetBitShift(cv::CLAHE* clahe)
+{
+	return clahe->getBitShift();
+}
+
+void cveCLAHECollectGarbage(cv::CLAHE* clahe)
+{
+	clahe->collectGarbage();
 }
 
 /*

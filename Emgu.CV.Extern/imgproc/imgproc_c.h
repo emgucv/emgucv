@@ -25,7 +25,16 @@ CVAPI(void) cveSepFilter2D(cv::_InputArray* src, cv::_OutputArray* dst, int ddep
 
 CVAPI(void) cveBlendLinear(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputArray* weights1, cv::_InputArray* weights2, cv::_OutputArray* dst);
 
-CVAPI(void) cveCLAHE(cv::_InputArray* src, double clipLimit, CvSize* tileGridSize, int bitShift, cv::_OutputArray* dst);
+CVAPI(cv::CLAHE*) cveCLAHECreate(double clipLimit, CvSize* tileGridSize, cv::Ptr<cv::CLAHE>** sharedPtr);
+CVAPI(void) cveCLAHEApply(cv::CLAHE* clahe, cv::_InputArray* src, cv::_OutputArray* dst);
+CVAPI(void) cveCLAHERelease(cv::Ptr<cv::CLAHE>** sharedPtr);
+CVAPI(void) cveCLAHESetClipLimit(cv::CLAHE* clahe, double clipLimit);
+CVAPI(double) cveCLAHEGetClipLimit(cv::CLAHE* clahe);
+CVAPI(void) cveCLAHESetTilesGridSize(cv::CLAHE* clahe, CvSize* tileGridSize);
+CVAPI(void) cveCLAHEGetTilesGridSize(cv::CLAHE* clahe, CvSize* size);
+CVAPI(void) cveCLAHESetBitShift(cv::CLAHE* clahe, int shift);
+CVAPI(int) cveCLAHEGetBitShift(cv::CLAHE* clahe);
+CVAPI(void) cveCLAHECollectGarbage(cv::CLAHE* clahe);
 
 //CVAPI(void) cveAdaptiveBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* ksize, double sigmaSpace, double maxSigmaColor, CvPoint* anchor, int borderType);
 

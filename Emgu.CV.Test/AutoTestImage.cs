@@ -1758,8 +1758,11 @@ namespace Emgu.CV.Test
         public void TestClahe()
         {
             Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("pedestrian.png");
-            Image<Gray, Byte> result = new Image<Gray, byte>(image.Size);
-            CvInvoke.CLAHE(image, 4, new Size(8, 8), 0, result);
+            Mat result = new Mat();
+            using (Clahe clahe = new Clahe(clipLimit: 4, tileGridSize: new Size(8, 8)))
+            {
+                clahe.Apply(image, result);
+            }
             //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
         }
 

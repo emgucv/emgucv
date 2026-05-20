@@ -330,25 +330,6 @@ namespace Emgu.CV
 
 
         /// <summary>
-        /// Contrast Limited Adaptive Histogram Equalization (CLAHE)
-        /// </summary>
-        /// <param name="src">The source image</param>
-        /// <param name="clipLimit">Clip Limit, use 40 for default</param>
-        /// <param name="tileGridSize">Tile grid size, use (8, 8) for default</param>
-        /// <param name="bitShift">Bit shift parameter for histogram bins.</param>
-        /// <param name="dst">The destination image</param>
-        public static void CLAHE(IInputArray src, double clipLimit, Size tileGridSize, int bitShift, IOutputArray dst)
-        {
-            using (InputArray iaSrc = src.GetInputArray())
-            using (OutputArray oaDst = dst.GetOutputArray())
-                cveCLAHE(iaSrc, clipLimit, ref tileGridSize, bitShift, oaDst);
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveCLAHE(IntPtr srcArr, double clipLimit, ref Size tileGridSize, int bitShift, IntPtr dstArr);
-
-
-        /// <summary>
         /// This function retrieve the Open CV structure sizes in unmanaged code
         /// </summary>
         /// <returns>The structure that will hold the Open CV structure sizes</returns>
