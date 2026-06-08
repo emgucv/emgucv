@@ -1,1 +1,3 @@
+pushd %~dp0
 CALL Build_Binary_x86.bat x86_64 nogpu intel_inf no-openni doc
+popd

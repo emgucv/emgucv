@@ -1,1 +1,3 @@
+pushd %~dp0
 call Build_Binary_x86.bat x86_64 gpu no-intel nonfree no-doc no-package configure no-nuget 8.6
+popd
