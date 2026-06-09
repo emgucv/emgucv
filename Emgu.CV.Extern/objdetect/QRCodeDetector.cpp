@@ -107,14 +107,13 @@ void cveQRCodeEncoderEncode(cv::QRCodeEncoder* encoder, cv::String* encodedInfo,
 }
 
 cv::barcode::BarcodeDetector* cveBarcodeDetectorCreate(
-	cv::String* prototxtPath,
-	cv::String* modelPath,
+	cv::String* superResolutionModelPath,
 	cv::GraphicalCodeDetector** graphicalCodeDetector)
 {
 #ifdef HAVE_OPENCV_OBJDETECT
-	cv::barcode::BarcodeDetector* result = 	new cv::barcode::BarcodeDetector(
-		*prototxtPath,
-		*modelPath);
+	cv::barcode::BarcodeDetector* result = superResolutionModelPath->empty()
+		? new cv::barcode::BarcodeDetector()
+		: new cv::barcode::BarcodeDetector(*superResolutionModelPath);
 	*graphicalCodeDetector = static_cast<cv::GraphicalCodeDetector*>(result);
 	return result;
 #else

@@ -60,14 +60,8 @@ namespace Emgu.CV.Models
                 FileDownloadManager manager = new FileDownloadManager();
 
                 manager.AddFile(
-                    "https://github.com/WeChatCV/opencv_3rdparty/raw/wechat_qrcode/sr.prototxt",
-                    _modelFolderName,
-                    "8AE41ACBA97E8B4A8E741EE350481E49B8E01D787193F470A4C95EE1C02D5B61");
-
-                manager.AddFile(
-                    "https://github.com/WeChatCV/opencv_3rdparty/raw/wechat_qrcode/sr.caffemodel",
-                    _modelFolderName,
-                    "E5D36889D8E6EF2F1C1F515F807CEC03979320AC81792CD8FB927C31FD658AE3");
+                    "https://github.com/WeChatCV/opencv_3rdparty/raw/wechat_qrcode/sr.onnx",
+                    _modelFolderName);
 
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
@@ -80,10 +74,7 @@ namespace Emgu.CV.Models
 
                 if (manager.AllFilesDownloaded)
                 {
-                    _barcodeDetector = new BarcodeDetector(
-                        manager.Files[0].LocalFile,
-                        manager.Files[1].LocalFile
-                        );
+                    _barcodeDetector = new BarcodeDetector(manager.Files[0].LocalFile);
                 }
             }
         }

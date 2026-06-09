@@ -53,8 +53,7 @@ CVAPI(cv::QRCodeDetectorAruco*) cveQRCodeDetectorArucoCreate(cv::GraphicalCodeDe
 CVAPI(void) cveQRCodeDetectorArucoRelease(cv::QRCodeDetectorAruco** detector);
 
 CVAPI(cv::barcode::BarcodeDetector*) cveBarcodeDetectorCreate(
-    cv::String* prototxtPath,
-    cv::String* modelPath,
+    cv::String* superResolutionModelPath,
     cv::GraphicalCodeDetector** graphicalCodeDetector);
 CVAPI(void) cveBarcodeDetectorRelease(cv::barcode::BarcodeDetector** detector);
 

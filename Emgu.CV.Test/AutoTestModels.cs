@@ -101,6 +101,25 @@ namespace Emgu.CV.Test
 #endif
 #endif
         [Test]
+        public async Task TestBarcodeDetector()
+        {
+            using (Mat m = EmguAssert.LoadMat("barcode_book.jpg"))
+            using (Emgu.CV.Models.BarcodeDetectorModel detector = new BarcodeDetectorModel())
+            {
+                await detector.Init(DownloadManager_OnDownloadProgressChanged);
+                String text = detector.ProcessAndRender(m, m);
+                Trace.WriteLine(text);
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
         public async Task TestYolo()
         {
             using (Mat m = EmguAssert.LoadMat("pedestrian.png"))

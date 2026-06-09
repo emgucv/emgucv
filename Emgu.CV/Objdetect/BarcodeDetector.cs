@@ -31,19 +31,22 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Initialize the BarcodeDetector.
+        /// Initialize the BarcodeDetector. Super resolution is disabled.
         /// </summary>
-        /// <param name="prototxtPath">prototxt file path for the super resolution model</param>
-        /// <param name="modelPath">model file path for the super resolution model</param>
-        public BarcodeDetector(
-            String prototxtPath,
-            String modelPath)
+        public BarcodeDetector()
+            : this(String.Empty)
         {
-            using (CvString csPrototxtPath = new CvString(prototxtPath))
-            using (CvString csModelPath = new CvString(modelPath))
+        }
+
+        /// <summary>
+        /// Initialize the BarcodeDetector with an ONNX Super Resolution model.
+        /// </summary>
+        /// <param name="superResolutionModelPath">Path to the ONNX super resolution model file. Leave empty to disable super resolution.</param>
+        public BarcodeDetector(String superResolutionModelPath)
+        {
+            using (CvString csSrModelPath = new CvString(superResolutionModelPath))
                 _ptr = ObjdetectInvoke.cveBarcodeDetectorCreate(
-                    csPrototxtPath,
-                    csModelPath, 
+                    csSrModelPath,
                     ref _graphicalCodeDetectorPtr);
         }
 
@@ -104,8 +107,7 @@ namespace Emgu.CV
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveBarcodeDetectorCreate(
-            IntPtr prototxtPath,
-            IntPtr modelPath, 
+            IntPtr superResolutionModelPath,
             ref IntPtr graphicalCodeDetector);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
