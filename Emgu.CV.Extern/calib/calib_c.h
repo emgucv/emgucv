@@ -14,6 +14,7 @@
 #ifdef HAVE_OPENCV_CALIB
 #include "opencv2/calib.hpp"
 #include "opencv2/calib3d.hpp"
+#include "opencv2/objdetect.hpp"
 
 #else
 static inline CV_NORETURN void throw_no_calib() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without calib support. To use this module, please switch to the full Emgu CV runtime."); }
