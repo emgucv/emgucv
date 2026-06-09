@@ -6,17 +6,13 @@
 
 #include "wechat_qrcode_c.h"
 cv::wechat_qrcode::WeChatQRCode* cveWeChatQRCodeCreate(
-    cv::String* detectorPrototxtPath,
-    cv::String* detectorCaffeModelPath,
-    cv::String* superResolutionPrototxtPath,
-    cv::String* superResolutionCaffeModelPath)
+    cv::String* detectorModelPath,
+    cv::String* superResolutionModelPath)
 {
 #ifdef HAVE_OPENCV_WECHAT_QRCODE
     return new cv::wechat_qrcode::WeChatQRCode(
-        *detectorPrototxtPath,
-        *detectorCaffeModelPath,
-        *superResolutionPrototxtPath,
-        *superResolutionCaffeModelPath);
+        *detectorModelPath,
+        *superResolutionModelPath);
 #else
     throw_no_wechat_qrcode();
 #endif

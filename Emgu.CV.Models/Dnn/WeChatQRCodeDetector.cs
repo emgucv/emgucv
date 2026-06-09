@@ -23,7 +23,7 @@ using Emgu.Util;
 namespace Emgu.CV.Models
 {
     /// <summary>
-    /// WeChatQRCodeDetector model
+    /// WeChatQRCode detector model. Downloads ONNX models from opencv_extra and uses them for QR code detection and decoding.
     /// </summary>
     public class WeChatQRCodeDetector : DisposableObject, IProcessAndRenderModel
     {
@@ -71,24 +71,12 @@ namespace Emgu.CV.Models
             {
                 FileDownloadManager manager = new FileDownloadManager();
                 manager.AddFile(
-                    "https://github.com/WeChatCV/opencv_3rdparty/raw/wechat_qrcode/detect.prototxt",
-                    _modelFolderName,
-                    "E8ACFC395CAF443A47F15686A9B9207B36CB8F7E6CEB8FBAF6466665E68A9466");
+                    "https://github.com/opencv/opencv_extra/raw/master/testdata/dnn/wechat_2021-01/detect.onnx",
+                    _modelFolderName);
 
                 manager.AddFile(
-                        "https://github.com/WeChatCV/opencv_3rdparty/raw/wechat_qrcode/detect.caffemodel",
-                        _modelFolderName,
-                        "CC49B8C9BABAF45F3037610FE499DF38C8819EBDA29E90CA9F2E33270F6EF809");
-
-                manager.AddFile(
-                    "https://github.com/WeChatCV/opencv_3rdparty/raw/wechat_qrcode/sr.prototxt",
-                    _modelFolderName,
-                    "8AE41ACBA97E8B4A8E741EE350481E49B8E01D787193F470A4C95EE1C02D5B61");
-
-                manager.AddFile(
-                    "https://github.com/WeChatCV/opencv_3rdparty/raw/wechat_qrcode/sr.caffemodel",
-                    _modelFolderName,
-                    "E5D36889D8E6EF2F1C1F515F807CEC03979320AC81792CD8FB927C31FD658AE3");
+                    "https://github.com/opencv/opencv_extra/raw/master/testdata/dnn/wechat_2021-01/sr.onnx",
+                    _modelFolderName);
 
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
@@ -102,11 +90,8 @@ namespace Emgu.CV.Models
                 if (manager.AllFilesDownloaded)
                 {
                     _weChatQRCodeDetectionModel = new WeChatQRCode(
-                        manager.Files[0].LocalFile, 
-                        manager.Files[1].LocalFile,
-                        manager.Files[2].LocalFile,
-                        manager.Files[3].LocalFile
-                        );
+                        manager.Files[0].LocalFile,
+                        manager.Files[1].LocalFile);
                 }
             }
         }

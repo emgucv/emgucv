@@ -20,28 +20,19 @@ namespace Emgu.CV
     public class WeChatQRCode : UnmanagedObject
     {
         /// <summary>
-        /// Initialize the WeChatQRCode. It includes two models, which are packaged with caffe format. Therefore, there are prototxt and caffe models (In total, four paramenters).
+        /// Initialize the WeChatQRCode. It includes two CNN-based models in ONNX format: a detector model and a super resolution model.
         /// </summary>
-        /// <param name="detectorPrototxtPath">Prototxt file path for the detector</param>
-        /// <param name="detectorCaffeModelPath">Caffe model file path for the detector</param>
-        /// <param name="superResolutionPrototxtPath">Prototxt file path for the super resolution model</param>
-        /// <param name="superResolutionCaffeModelPath">Caffe file path for the super resolution model</param>
+        /// <param name="detectorModelPath">ONNX model file path for the detector. Leave empty to use the built-in detector.</param>
+        /// <param name="superResolutionModelPath">ONNX model file path for the super resolution model. Leave empty to skip super resolution.</param>
         public WeChatQRCode(
-            String detectorPrototxtPath,
-            String detectorCaffeModelPath,
-            String superResolutionPrototxtPath,
-            String superResolutionCaffeModelPath)
+            String detectorModelPath = "",
+            String superResolutionModelPath = "")
         {
-            using (CvString csDetectorPrototxtPath = new CvString(detectorPrototxtPath))
-            using (CvString csDetectorCaffeModelPath = new CvString(detectorCaffeModelPath))
-            using (CvString csSuperResolutionPrototxtPath = new CvString(superResolutionPrototxtPath))
-            using (CvString csSuperResolutionCaffeModelPath = new CvString(superResolutionCaffeModelPath))
+            using (CvString csDetectorModelPath = new CvString(detectorModelPath))
+            using (CvString csSuperResolutionModelPath = new CvString(superResolutionModelPath))
                 _ptr = WeChatQRCodeInvoke.cveWeChatQRCodeCreate(
-                    csDetectorPrototxtPath,
-                    csDetectorCaffeModelPath,
-                    csSuperResolutionPrototxtPath,
-                    csSuperResolutionCaffeModelPath
-                    );
+                    csDetectorModelPath,
+                    csSuperResolutionModelPath);
         }
 
         /// <summary>
@@ -171,10 +162,8 @@ namespace Emgu.CV
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveWeChatQRCodeCreate(
-            IntPtr detectorPrototxtPath,
-            IntPtr detectorCaffeModelPath,
-            IntPtr superResolutionPrototxtPath,
-            IntPtr superResolutionCaffeModelPath);
+            IntPtr detectorModelPath,
+            IntPtr superResolutionModelPath);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveWeChatQRCodeRelease(ref IntPtr detector);

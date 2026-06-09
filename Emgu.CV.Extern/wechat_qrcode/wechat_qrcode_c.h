@@ -27,10 +27,8 @@ namespace cv
 #endif
 
 CVAPI(cv::wechat_qrcode::WeChatQRCode*) cveWeChatQRCodeCreate(
-    cv::String* detectorPrototxtPath,
-    cv::String* detectorCaffeModelPath,
-    cv::String* superResolutionPrototxtPath,
-    cv::String* superResolutionCaffeModelPath);
+    cv::String* detectorModelPath,
+    cv::String* superResolutionModelPath);
 
 CVAPI(void) cveWeChatQRCodeRelease(cv::wechat_qrcode::WeChatQRCode** detector);
 
