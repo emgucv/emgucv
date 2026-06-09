@@ -47,12 +47,6 @@ namespace cv
 }
 #endif
 
-CVAPI(cv::dnn::Net*) cveReadNetFromDarknet(cv::String* cfgFile, cv::String* darknetModel);
-CVAPI(cv::dnn::Net*) cveReadNetFromDarknet2(const char *bufferCfg, int lenCfg, const char *bufferModel, int lenModel);
-
-CVAPI(cv::dnn::Net*) cveReadNetFromCaffe(cv::String* prototxt, cv::String* caffeModel);
-CVAPI(cv::dnn::Net*) cveReadNetFromCaffe2(const char *bufferProto, int lenProto, const char *bufferModel, int lenModel);
-
 CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow(cv::String* model, cv::String* config);
 CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, const char *bufferConfig, int lenConfig);
 
@@ -116,8 +110,6 @@ CVAPI(void) cveDnnBlobFromImages(
 	int ddepth);
 
 CVAPI(void) cveDnnImagesFromBlob(cv::Mat* blob, cv::_OutputArray* images);
-
-CVAPI(void) cveDnnShrinkCaffeModel(cv::String* src, cv::String* dst);
 
 CVAPI(void) cveDnnWriteTextGraph(cv::String* model, cv::String* output);
 

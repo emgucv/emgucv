@@ -195,102 +195,6 @@ namespace Emgu.CV.Dnn
         private static extern void cveDnnImagesFromBlob(IntPtr blob, IntPtr images);
 
         /// <summary>
-        /// Reads a network model stored in Darknet model files.
-        /// </summary>
-        /// <param name="cfgFile">path to the .cfg file with text description of the network architecture.</param>
-        /// <param name="darknetModel">path to the .weights file with learned network.</param>
-        /// <returns>Network object that ready to do forward, throw an exception in failure cases.</returns>
-        public static Net ReadNetFromDarknet(String cfgFile, String darknetModel = null)
-        {
-            using (CvString cfgFileStr = new CvString(cfgFile))
-            using (CvString darknetModelStr = darknetModel == null ? new CvString() : new CvString(darknetModel))
-            {
-                return new Net(cveReadNetFromDarknet(cfgFileStr, darknetModelStr));
-            }
-        }
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveReadNetFromDarknet(IntPtr cfgFile, IntPtr darknetModel);
-
-
-        /// <summary>
-        /// Reads a network model stored in Darknet model files.
-        /// </summary>
-        /// <param name="bufferCfg">Buffer containing the content of the .cfg file with text description of the network architecture.</param>
-        /// <param name="bufferModel">Buffer containing the content of the the .weights file with learned network.</param>
-        /// <returns>Net object.</returns>
-        public static Net ReadNetFromDarknet(byte[] bufferCfg, byte[] bufferModel = null)
-        {
-            GCHandle bufferCfgHandle = GCHandle.Alloc(bufferCfg, GCHandleType.Pinned);
-            GCHandle bufferModelHandle = bufferModel == null ? new GCHandle() : GCHandle.Alloc(bufferModel, GCHandleType.Pinned);
-
-            try
-            {
-                return new Net(cveReadNetFromDarknet2(
-                    bufferCfgHandle.AddrOfPinnedObject(),
-                    bufferCfg.Length,
-                    bufferModel == null ? IntPtr.Zero : bufferModelHandle.AddrOfPinnedObject(),
-                    bufferModel == null ? 0 : bufferModel.Length));
-            }
-            finally
-            {
-                bufferCfgHandle.Free();
-                if (bufferModelHandle.IsAllocated)
-                    bufferModelHandle.Free();
-            }
-
-        }
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveReadNetFromDarknet2(IntPtr bufferCfg, int lenCfg, IntPtr bufferModel, int lenModel);
-
-
-        /// <summary>
-        /// Reads a network model stored in Caffe framework's format.
-        /// </summary>
-        /// <param name="prototxt">Buffer containing the content of the .prototxt file</param>
-        /// <param name="caffeModel">Buffer containing the content of the .caffemodel file</param>
-        /// <returns>Net object.</returns>
-        public static Net ReadNetFromCaffe(byte[] prototxt, byte[] caffeModel = null)
-        {
-            GCHandle prototxtHandle = GCHandle.Alloc(prototxt, GCHandleType.Pinned);
-            GCHandle caffeModelHandle = caffeModel == null? new GCHandle() : GCHandle.Alloc(caffeModel, GCHandleType.Pinned);
-
-            try
-            {
-                return new Net(cveReadNetFromCaffe2(
-                    prototxtHandle.AddrOfPinnedObject(), 
-                    prototxt.Length, 
-                    caffeModel == null ? IntPtr.Zero : caffeModelHandle.AddrOfPinnedObject(),
-                    caffeModel == null ? 0 : caffeModel.Length));
-            } finally
-            {
-                prototxtHandle.Free();
-                if (caffeModelHandle.IsAllocated)
-                    caffeModelHandle.Free();
-            }
-            
-        }
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveReadNetFromCaffe2(IntPtr bufferProto, int lenProto, IntPtr bufferModel, int lenModel);
-
-        /// <summary>
-        /// Reads a network model stored in Caffe framework's format.
-        /// </summary>
-        /// <param name="prototxt">path to the .prototxt file with text description of the network architecture.</param>
-        /// <param name="caffeModel">path to the .caffemodel file with learned network.</param>
-        /// <returns>Net object.</returns>
-        public static Net ReadNetFromCaffe(String prototxt, String caffeModel = null)
-        {
-            using (CvString prototxtStr = new CvString(prototxt))
-            using (CvString caffeModelStr = caffeModel == null ? new CvString() : new CvString(caffeModel))
-            {
-                return new Net(cveReadNetFromCaffe(prototxtStr, caffeModelStr));
-            }
-        }
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveReadNetFromCaffe(IntPtr prototxt, IntPtr caffeModel);
-
-
-        /// <summary>
         /// Reads a network model stored in TensorFlow framework's format.
         /// </summary>
         /// <param name="model">path to the .pb file with binary protobuf description of the network architecture</param>
@@ -496,16 +400,13 @@ namespace Emgu.CV.Dnn
         /// </summary>
         /// <param name="model">
         /// Binary file contains trained weights. The following file extensions are expected for models from different frameworks:
-        ///    *.caffemodel(Caffe, http://caffe.berkeleyvision.org/)
         ///    *.pb (TensorFlow, https://www.tensorflow.org/)
-        ///    *.t7 | *.net (Torch, http://torch.ch/)
-        ///    *.weights (Darknet, https://pjreddie.com/darknet/)
+        ///    *.tflite (TensorFlow Lite)
+        ///    *.onnx (ONNX, https://onnx.ai/)
         ///    *.bin (DLDT, https://software.intel.com/openvino-toolkit)</param>
         /// <param name="config">
         /// Text file contains network configuration. It could be a file with the following extensions:
-        ///    *.prototxt(Caffe, http://caffe.berkeleyvision.org/)
         ///    *.pbtxt (TensorFlow, https://www.tensorflow.org/)
-        ///    *.cfg (Darknet, https://pjreddie.com/darknet/)
         ///    *.xml (DLDT, https://software.intel.com/openvino-toolkit)
         /// </param>
         /// <param name="framework">Explicit framework name tag to determine a format.</param>
@@ -539,20 +440,6 @@ namespace Emgu.CV.Dnn
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNetFromModelOptimizer(IntPtr xml, IntPtr bin);
 
-
-        /// <summary>
-        /// Convert all weights of Caffe network to half precision floating point
-        /// </summary>
-        /// <param name="src">Path to origin model from Caffe framework contains single precision floating point weights (usually has .caffemodel extension).</param>
-        /// <param name="dst">Path to destination model with updated weights.</param>
-        public static void ShrinkCaffeModel(String src, String dst)
-        {
-            using (CvString csSrc = new CvString(src))
-            using (CvString csDst = new CvString(dst))
-                cveDnnShrinkCaffeModel(csSrc, csDst);
-        }
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveDnnShrinkCaffeModel(IntPtr src, IntPtr dst);
 
         /// <summary>
         /// Create a text representation for a binary network stored in protocol buffer format.

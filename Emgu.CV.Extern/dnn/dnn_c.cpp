@@ -8,43 +8,6 @@
 
 
 
-cv::dnn::Net* cveReadNetFromDarknet(cv::String* cfgFile, cv::String* darknetModel)
-{
-#ifdef HAVE_OPENCV_DNN
-	cv::dnn::Net net = cv::dnn::readNetFromDarknet(*cfgFile, *darknetModel);
-	return new cv::dnn::Net(net);
-#else
-	throw_no_dnn();
-#endif
-}
-cv::dnn::Net* cveReadNetFromDarknet2(const char *bufferCfg, int lenCfg, const char *bufferModel, int lenModel)
-{
-#ifdef HAVE_OPENCV_DNN
-	cv::dnn::Net net = cv::dnn::readNetFromDarknet(bufferCfg, lenCfg, bufferModel, lenModel);
-	return new cv::dnn::Net(net);
-#else
-	throw_no_dnn();
-#endif
-}
-
-cv::dnn::Net* cveReadNetFromCaffe(cv::String* prototxt, cv::String* caffeModel)
-{
-#ifdef HAVE_OPENCV_DNN
-	cv::dnn::Net net = cv::dnn::readNetFromCaffe(*prototxt, *caffeModel);
-	return new cv::dnn::Net(net);
-#else
-	throw_no_dnn();
-#endif
-}
-cv::dnn::Net* cveReadNetFromCaffe2(const char *bufferProto, int lenProto, const char *bufferModel, int lenModel)
-{
-#ifdef HAVE_OPENCV_DNN
-	cv::dnn::Net net = cv::dnn::readNetFromCaffe(bufferProto, lenProto, bufferModel, lenModel);
-	return new cv::dnn::Net(net);
-#else
-	throw_no_dnn();
-#endif
-}
 cv::dnn::Net* cveReadNetFromTensorflow(cv::String* model, cv::String* config)
 {
 #ifdef HAVE_OPENCV_DNN
@@ -366,15 +329,6 @@ void cveDnnImagesFromBlob(cv::Mat* blob, cv::_OutputArray* images)
 {
 #ifdef HAVE_OPENCV_DNN
 	cv::dnn::imagesFromBlob(*blob, *images);
-#else
-	throw_no_dnn();
-#endif
-}
-
-void cveDnnShrinkCaffeModel(cv::String* src, cv::String* dst)
-{
-#ifdef HAVE_OPENCV_DNN
-	cv::dnn::shrinkCaffeModel(*src, *dst);
 #else
 	throw_no_dnn();
 #endif
