@@ -11,6 +11,7 @@
 #include "opencv2/core.hpp"
 #include "cvapi_compat.h"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/geometry.hpp"
 //#include "opencv2/imgproc/imgproc_c.h"
 //#include "opencv2/imgproc/types_c.h"
 #include "emgu_c.h"
