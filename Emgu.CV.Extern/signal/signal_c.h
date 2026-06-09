@@ -8,7 +8,8 @@
 #ifndef EMGU_SIGNAL_C_H
 #define EMGU_SIGNAL_C_H
 
-#include "opencv2/core/core_c.h"
+#include "opencv2/core.hpp"
+#include "cvapi_compat.h"
 
 #ifdef HAVE_OPENCV_SIGNAL
 #include "opencv2/signal.hpp"
