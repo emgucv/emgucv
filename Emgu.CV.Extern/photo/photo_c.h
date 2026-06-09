@@ -14,6 +14,7 @@
 #ifdef HAVE_OPENCV_PHOTO
 #include "opencv2/photo/photo.hpp"
 #include "opencv2/photo/cuda.hpp"
+#include "opencv2/photo/segmentation.hpp"
 #else
 static inline CV_NORETURN void throw_no_photo() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without photo support. To use this module, please switch to the full Emgu CV runtime."); }
 
@@ -39,6 +40,10 @@ namespace cv
 		enum DistanceType {};
 		enum LinearizationType {};
 		enum ColorSpace {};
+	}
+
+	namespace segmentation {
+		class IntelligentScissorsMB {};
 	}
 }
 
@@ -153,5 +158,32 @@ CVAPI(void) cveColorCorrectionModelCompute(cv::ccm::ColorCorrectionModel* ccm, c
 //CVAPI(void) cveColorCorrectionModelGetCCM(cv::ccm::ColorCorrectionModel* ccm, cv::_OutputArray* result);
 CVAPI(void) cveColorCorrectionModelCorrectImage(cv::ccm::ColorCorrectionModel* ccm, cv::_InputArray* img, cv::_OutputArray* result, bool islinear);
 
+//IntelligentScissorsMB
+CVAPI(cv::segmentation::IntelligentScissorsMB*) cveIntelligentScissorsMBCreate();
+CVAPI(void) cveIntelligentScissorsMBRelease(cv::segmentation::IntelligentScissorsMB** ptr);
+CVAPI(void) cveIntelligentScissorsMBSetWeights(
+	cv::segmentation::IntelligentScissorsMB* ptr,
+	float weightNonEdge,
+	float weightGradientDirection,
+	float weightGradientMagnitude);
+CVAPI(void) cveIntelligentScissorsMBSetEdgeFeatureCannyParameters(
+	cv::segmentation::IntelligentScissorsMB* ptr,
+	double threshold1,
+	double threshold2,
+	int apertureSize,
+	bool L2gradient);
+CVAPI(void) cveIntelligentScissorsMBApplyImage(cv::segmentation::IntelligentScissorsMB* ptr, cv::_InputArray* image);
+CVAPI(void) cveIntelligentScissorsMBApplyImageFeatures(
+	cv::segmentation::IntelligentScissorsMB* ptr,
+	cv::_InputArray* nonEdge,
+	cv::_InputArray* gradientDirection,
+	cv::_InputArray* gradientMagnitude,
+	cv::_InputArray* image);
+CVAPI(void) cveIntelligentScissorsMBBuildMap(cv::segmentation::IntelligentScissorsMB* ptr, cv::Point* sourcePt);
+CVAPI(void) cveIntelligentScissorsMBGetContour(
+	cv::segmentation::IntelligentScissorsMB* ptr,
+	cv::Point* targetPt,
+	cv::_OutputArray* contour,
+	bool backward);
 
 #endif

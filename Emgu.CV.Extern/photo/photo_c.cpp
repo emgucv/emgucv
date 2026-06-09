@@ -510,5 +510,90 @@ void cveColorCorrectionModelCorrectImage(cv::ccm::ColorCorrectionModel* ccm, cv:
 	ccm->correctImage(*img, *result, islinear);
 #else
 	throw_no_photo();
-#endif		
+#endif
+}
+
+//IntelligentScissorsMB
+cv::segmentation::IntelligentScissorsMB* cveIntelligentScissorsMBCreate()
+{
+#ifdef HAVE_OPENCV_PHOTO
+	return new cv::segmentation::IntelligentScissorsMB();
+#else
+	throw_no_photo();
+#endif
+}
+void cveIntelligentScissorsMBRelease(cv::segmentation::IntelligentScissorsMB** ptr)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	delete* ptr;
+	*ptr = 0;
+#else
+	throw_no_photo();
+#endif
+}
+void cveIntelligentScissorsMBSetWeights(
+	cv::segmentation::IntelligentScissorsMB* ptr,
+	float weightNonEdge,
+	float weightGradientDirection,
+	float weightGradientMagnitude)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	ptr->setWeights(weightNonEdge, weightGradientDirection, weightGradientMagnitude);
+#else
+	throw_no_photo();
+#endif
+}
+void cveIntelligentScissorsMBSetEdgeFeatureCannyParameters(
+	cv::segmentation::IntelligentScissorsMB* ptr,
+	double threshold1,
+	double threshold2,
+	int apertureSize,
+	bool L2gradient)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	ptr->setEdgeFeatureCannyParameters(threshold1, threshold2, apertureSize, L2gradient);
+#else
+	throw_no_photo();
+#endif
+}
+void cveIntelligentScissorsMBApplyImage(cv::segmentation::IntelligentScissorsMB* ptr, cv::_InputArray* image)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	ptr->applyImage(*image);
+#else
+	throw_no_photo();
+#endif
+}
+void cveIntelligentScissorsMBApplyImageFeatures(
+	cv::segmentation::IntelligentScissorsMB* ptr,
+	cv::_InputArray* nonEdge,
+	cv::_InputArray* gradientDirection,
+	cv::_InputArray* gradientMagnitude,
+	cv::_InputArray* image)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	ptr->applyImageFeatures(*nonEdge, *gradientDirection, *gradientMagnitude, image ? *image : static_cast<cv::InputArray>(cv::noArray()));
+#else
+	throw_no_photo();
+#endif
+}
+void cveIntelligentScissorsMBBuildMap(cv::segmentation::IntelligentScissorsMB* ptr, cv::Point* sourcePt)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	ptr->buildMap(*sourcePt);
+#else
+	throw_no_photo();
+#endif
+}
+void cveIntelligentScissorsMBGetContour(
+	cv::segmentation::IntelligentScissorsMB* ptr,
+	cv::Point* targetPt,
+	cv::_OutputArray* contour,
+	bool backward)
+{
+#ifdef HAVE_OPENCV_PHOTO
+	ptr->getContour(*targetPt, *contour, backward);
+#else
+	throw_no_photo();
+#endif
 }
