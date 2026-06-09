@@ -224,11 +224,6 @@ void cvePyrMeanShiftFiltering(cv::_InputArray* src, cv::_OutputArray* dst, doubl
 	cv::pyrMeanShiftFiltering(*src, *dst, sp, sr, maxLevel, *termCrit);
 }
 
-void cveMoments(cv::_InputArray* arr, bool binaryImage, cv::Moments* moments)
-{
-	cv::Moments m = cv::moments(*arr, binaryImage);
-	memcpy(moments, &m, sizeof(cv::Moments));
-}
 void cveEqualizeHist(cv::_InputArray* src, cv::_OutputArray* dst)
 {
 	cv::equalizeHist(*src, *dst);
@@ -337,23 +332,6 @@ void cveConvertMaps(cv::_InputArray* map1, cv::_InputArray* map2, cv::_OutputArr
 }
 
 
-void cveGetAffineTransform(cv::_InputArray* src, cv::_InputArray* dst, cv::Mat* affine)
-{
-	cv::Mat result = cv::getAffineTransform(*src, *dst);
-	cv::swap(result, *affine);
-}
-
-void cveGetPerspectiveTransform(cv::_InputArray* src, cv::_InputArray* dst, cv::Mat* perspective)
-{
-	cv::Mat result = cv::getPerspectiveTransform(*src, *dst);
-	cv::swap(result, *perspective);
-}
-
-void cveInvertAffineTransform(cv::_InputArray* m, cv::_OutputArray* im)
-{
-	cv::invertAffineTransform(*m, *im);
-}
-
 float cveEMD(cv::_InputArray* signature1, cv::_InputArray* signature2, int distType, cv::_InputArray* cost, float* lowerBound, cv::_OutputArray* flow)
 {
 	return cv::EMD(
@@ -386,15 +364,6 @@ double cveCompareHist(cv::_InputArray* h1, cv::_InputArray* h2, int method)
 	return cv::compareHist(*h1, *h2, method);
 }
 
-void cveGetRotationMatrix2D(cv::Point2f* center, double angle, double scale, cv::_OutputArray* rotationMatrix2D)
-{
-	cv::Mat r = cv::getRotationMatrix2D(*center, angle, scale);
-	if (rotationMatrix2D->empty() || r.type() == rotationMatrix2D->type())
-		r.copyTo(*rotationMatrix2D);
-	else
-		r.convertTo(*rotationMatrix2D, rotationMatrix2D->type());
-}
-
 void cveFindContours(cv::_InputOutputArray* image, cv::_OutputArray* contours, cv::_OutputArray* hierarchy, int mode, int method, cv::Point* offset)
 {
 	cv::findContours(*image, *contours, hierarchy ? *hierarchy : static_cast<cv::OutputArray>(cv::noArray()), mode, method, *offset);
@@ -411,96 +380,6 @@ void cveFindContoursLinkRuns(cv::_InputArray* image, cv::_OutputArray* contours,
 	}
 }
 
-double cvePointPolygonTest(cv::_InputArray* contour, cv::Point2f* pt, bool measureDist)
-{
-	return cv::pointPolygonTest(*contour, *pt, measureDist);
-}
-
-double cveContourArea(cv::_InputArray* contour, bool oriented)
-{
-	return cv::contourArea(*contour, oriented);
-}
-
-bool cveIsContourConvex(cv::_InputArray* contour)
-{
-	return cv::isContourConvex(*contour);
-}
-float cveIntersectConvexConvex(cv::_InputArray* p1, cv::_InputArray* p2, cv::_OutputArray* p12, bool handleNested)
-{
-	return cv::intersectConvexConvex(*p1, *p2, *p12, handleNested);
-}
-void cveBoundingRectangle(cv::_InputArray* points, cv::Rect* boundingRect)
-{
-	cv::Rect rect = cv::boundingRect(*points);
-	boundingRect->x = rect.x;
-	boundingRect->y = rect.y;
-	boundingRect->width = rect.width;
-	boundingRect->height = rect.height;
-}
-double cveArcLength(cv::_InputArray* curve, bool closed)
-{
-	return cv::arcLength(*curve, closed);
-}
-void cveMinAreaRect(cv::_InputArray* points, cv::RotatedRect* box)
-{
-	cv::RotatedRect rr = cv::minAreaRect(*points);
-	box->center = rr.center;
-	box->size = rr.size;
-	box->angle = rr.angle;
-}
-void cveBoxPoints(cv::RotatedRect* box, cv::_OutputArray* points)
-{
-	cv::boxPoints(*box, *points);
-}
-double cveMinEnclosingTriangle(cv::_InputArray* points, cv::_OutputArray* triangle)
-{
-	return cv::minEnclosingTriangle(*points, *triangle);
-}
-void cveMinEnclosingCircle(cv::_InputArray* points, cv::Point2f* center, float* radius)
-{
-	cv::Point2f c; float r;
-	cv::minEnclosingCircle(*points, c, r);
-	center->x = c.x;
-	center->y = c.y;
-	*radius = r;
-}
-double cveMatchShapes(cv::_InputArray* contour1, cv::_InputArray* contour2, int method, double parameter)
-{
-	return cv::matchShapes(*contour1, *contour2, method, parameter);
-}
-void cveFitEllipse(cv::_InputArray* points, cv::RotatedRect* box)
-{
-	cv::RotatedRect rect = cv::fitEllipse(*points);
-	box->center = rect.center;
-	box->size = rect.size;
-	box->angle = rect.angle;
-}
-void cveFitEllipseAMS(cv::_InputArray* points, cv::RotatedRect* box)
-{
-	cv::RotatedRect rect = cv::fitEllipseAMS(*points);
-	box->center = rect.center;
-	box->size = rect.size;
-	box->angle = rect.angle;
-}
-void cveFitEllipseDirect(cv::_InputArray* points, cv::RotatedRect* box)
-{
-	cv::RotatedRect rect = cv::fitEllipseDirect(*points);
-	box->center = rect.center;
-	box->size = rect.size;
-	box->angle = rect.angle;
-}
-void cveGetClosestEllipsePoints(cv::RotatedRect* ellipseParams, cv::_InputArray* points, cv::_OutputArray* closestPts)
-{
-	cv::getClosestEllipsePoints(*ellipseParams, *points, *closestPts);
-}
-void cveFitLine(cv::_InputArray* points, cv::_OutputArray* line, int distType, double param, double reps, double aeps)
-{
-	cv::fitLine(*points, *line, distType, param, reps, aeps);
-}
-int cveRotatedRectangleIntersection(cv::RotatedRect* rect1, cv::RotatedRect* rect2, cv::_OutputArray* intersectingRegion)
-{
-	return cv::rotatedRectangleIntersection(*rect1, *rect2, *intersectingRegion);
-}
 void cveDrawContours(
 	cv::_InputOutputArray* image, 
 	cv::_InputArray* contours, 
@@ -523,23 +402,6 @@ void cveDrawContours(
 		maxLevel, 
 		*offset);
 }
-void cveApproxPolyDP(cv::_InputArray* curve, cv::_OutputArray* approxCurve, double epsilon, bool closed)
-{
-	cv::approxPolyDP(*curve, *approxCurve, epsilon, closed);
-}
-void cveApproxPolyN(cv::_InputArray* curve, cv::_OutputArray* approxCurve, int nsides, float epsilonPercentage, bool ensureConvex)
-{
-	cv::approxPolyN(*curve, *approxCurve, nsides, epsilonPercentage, ensureConvex);
-}
-void cveConvexHull(cv::_InputArray* points, cv::_OutputArray* hull, bool clockwise, bool returnPoints)
-{
-	cv::convexHull(*points, *hull, clockwise, returnPoints);
-}
-void cveConvexityDefects(cv::_InputArray* contour, cv::_InputArray* convexhull, cv::_OutputArray* convexityDefects)
-{
-	cv::convexityDefects(*contour, *convexhull, *convexityDefects);
-}
-
 void cveGaussianBlur(
 	cv::_InputArray* src, 
 	cv::_OutputArray* dst, 
@@ -583,48 +445,6 @@ void cveBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int d, doub
 	cv::bilateralFilter(*src, *dst, d, sigmaColor, sigmaSpace, borderType);
 }
 
-
-//Subdiv2D
-cv::Subdiv2D* cveSubdiv2DCreate(cv::Rect* rect)
-{
-	return new cv::Subdiv2D(*rect);
-}
-void cveSubdiv2DRelease(cv::Subdiv2D** subdiv)
-{
-	delete* subdiv;
-	*subdiv = 0;
-}
-void cveSubdiv2DInsertMulti(cv::Subdiv2D* subdiv, std::vector<cv::Point2f>* points)
-{
-	subdiv->insert(*points);
-}
-int cveSubdiv2DInsertSingle(cv::Subdiv2D* subdiv, cv::Point2f* pt)
-{
-	return subdiv->insert(*pt);
-}
-void cveSubdiv2DGetTriangleList(cv::Subdiv2D* subdiv, std::vector<cv::Vec6f>* triangleList)
-{
-	subdiv->getTriangleList(*triangleList);
-}
-void cveSubdiv2DGetVoronoiFacetList(cv::Subdiv2D* subdiv, std::vector<int>* idx, std::vector< std::vector< cv::Point2f> >* facetList, std::vector< cv::Point2f >* facetCenters)
-{
-	subdiv->getVoronoiFacetList(*idx, *facetList, *facetCenters);
-}
-int cveSubdiv2DFindNearest(cv::Subdiv2D* subdiv, cv::Point2f* pt, cv::Point2f* nearestPt)
-{
-	cv::Point2f np;
-	int result = subdiv->findNearest(*pt, &np);
-	*nearestPt = np;
-	return result;
-}
-int cveSubdiv2DLocate(cv::Subdiv2D* subdiv, cv::Point2f* pt, int* edge, int* vertex)
-{
-	int e = 0, v = 0;
-	int result = subdiv->locate(*pt, e, v);
-	*edge = e;
-	*vertex = v;
-	return result;
-}
 
 //LineIterator
 cv::LineIterator* cveLineIteratorCreate(
@@ -789,17 +609,6 @@ int cveSampleLine(const void* _img, CvPoint* pt1, CvPoint* pt2, void* _buffer, i
    return cvSampleLine(_img, *pt1, *pt2, _buffer, connectivity);
 }*/
 
-
-void cveHuMoments(cv::Moments* moments, cv::_OutputArray* hu)
-{
-	cv::HuMoments(*moments, *hu);
-}
-void cveHuMoments2(cv::Moments* moments, double* hu)
-{
-	double hu_m[7];
-	cv::HuMoments(*moments, hu_m);
-	memcpy(hu, hu_m, sizeof(double) * 7);
-}
 
 /*
 double cveGetSpatialMoment(CvMoments* moments, int xOrder, int yOrder)
