@@ -3798,6 +3798,30 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestTrueTypeFont()
+        {
+            using (TrueTypeFont font = new TrueTypeFont())
+            {
+                String name = font.Name;
+                EmguAssert.IsTrue(!String.IsNullOrEmpty(name));
+
+                Rectangle rect = CvInvoke.GetTextSize(new Size(640, 480), "Hello world", new Point(100, 100), font, 32);
+                EmguAssert.IsTrue(rect.Width > 0);
+                EmguAssert.IsTrue(rect.Height > 0);
+
+                using (Mat m = new Mat(new Size(640, 480), DepthType.Cv8U, 3))
+                {
+                    m.SetTo(new MCvScalar(0, 0, 0, 0));
+                    Point continuation = CvInvoke.PutText(m, "Hello world", new Point(100, 100), new MCvScalar(255, 255, 0), font, 32);
+                    EmguAssert.IsTrue(continuation.X > 100);
+                    EmguAssert.IsTrue(CvInvoke.CountNonZero(m.Reshape(1)) > 0);
+                }
+
+                EmguAssert.IsTrue(font.Set("italic"));
+            }
+        }
+
+        [Test]
         public void TestArucoCreateBoard()
         {
             Emgu.CV.Aruco.DetectorParameters p = DetectorParameters.GetDefault();

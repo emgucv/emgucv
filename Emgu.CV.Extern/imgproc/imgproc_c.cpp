@@ -678,3 +678,58 @@ void cveGetGaborKernel(
 	cv::Mat m = cv::getGaborKernel(*ksize, sigma, theta, lambd, gamma, psi, ktype);
 	cv::swap(m, *result);
 }
+
+cv::FontFace* cveFontFaceCreate(cv::String* fontPathOrName)
+{
+	return new cv::FontFace(*fontPathOrName);
+}
+void cveFontFaceRelease(cv::FontFace** fontFace)
+{
+	delete *fontFace;
+	*fontFace = 0;
+}
+bool cveFontFaceSet(cv::FontFace* fontFace, cv::String* fontPathOrName)
+{
+	return fontFace->set(*fontPathOrName);
+}
+void cveFontFaceGetName(cv::FontFace* fontFace, cv::String* name)
+{
+	*name = fontFace->getName();
+}
+bool cveFontFaceSetInstance(cv::FontFace* fontFace, std::vector<int>* params)
+{
+	return fontFace->setInstance(*params);
+}
+bool cveFontFaceGetInstance(cv::FontFace* fontFace, std::vector<int>* params)
+{
+	return fontFace->getInstance(*params);
+}
+
+void cvePutTextFontFace(
+	cv::_InputOutputArray* img,
+	cv::String* text,
+	cv::Point* org,
+	cv::Scalar* color,
+	cv::FontFace* fface,
+	int size,
+	int weight,
+	int flags,
+	cv::Range* wrap,
+	cv::Point* result)
+{
+	*result = cv::putText(*img, *text, *org, *color, *fface, size, weight, static_cast<cv::PutTextFlags>(flags), *wrap);
+}
+
+void cveGetTextSizeFontFace(
+	cv::Size* imgsize,
+	cv::String* text,
+	cv::Point* org,
+	cv::FontFace* fface,
+	int size,
+	int weight,
+	int flags,
+	cv::Range* wrap,
+	cv::Rect* result)
+{
+	*result = cv::getTextSize(*imgsize, *text, *org, *fface, size, weight, static_cast<cv::PutTextFlags>(flags), *wrap);
+}

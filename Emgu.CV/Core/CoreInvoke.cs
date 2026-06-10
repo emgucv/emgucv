@@ -2106,6 +2106,90 @@ namespace Emgu.CV
         private static extern void cveGetTextSize(IntPtr text, CvEnum.FontFace fontFace, double fontScale,
             int thickness, ref int baseLine, ref Size size);
 
+        /// <summary>
+        /// Draws a text string using the specified TrueType/OpenType font. Symbols that cannot be rendered using the specified font are replaced by question marks.
+        /// </summary>
+        /// <param name="img">Input image</param>
+        /// <param name="text">String to print</param>
+        /// <param name="org">Bottom-left corner of the first character of the printed text (also see PutTextFlags alignment flags)</param>
+        /// <param name="color">Text color</param>
+        /// <param name="font">The font to use for the text</param>
+        /// <param name="size">Font size in pixels</param>
+        /// <param name="weight">Font weight, 100..1000, where 100 is "thin", 400 is "regular", 600 is "semibold", 800 is "bold". The parameter is ignored if the font is not a variable font or if it does not provide variation along the 'wght' axis. If the weight is 0, the weight currently set via TrueTypeFont.SetInstance is used.</param>
+        /// <param name="flags">Various put text flags</param>
+        /// <param name="wrap">The optional text wrapping range: if the printed character would cross the wrap boundary, the "cursor" is moved to the start of the range. If not set, [org.X, img width] is used for left-to-right text and [0, org.X] for right-to-left text.</param>
+        /// <returns>The coordinates in pixels from where the text can be continued.</returns>
+        public static Point PutText(
+            IInputOutputArray img,
+            String text,
+            Point org,
+            MCvScalar color,
+            TrueTypeFont font,
+            int size,
+            int weight = 0,
+            CvEnum.PutTextFlags flags = CvEnum.PutTextFlags.AlignLeft,
+            Emgu.CV.Structure.Range wrap = new Emgu.CV.Structure.Range())
+        {
+            Point result = new Point();
+            using (CvString s = new CvString(text))
+            using (InputOutputArray ioaImg = img.GetInputOutputArray())
+                cvePutTextFontFace(ioaImg, s, ref org, ref color, font, size, weight, flags, ref wrap, ref result);
+            return result;
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cvePutTextFontFace(
+            IntPtr img,
+            IntPtr text,
+            ref Point org,
+            ref MCvScalar color,
+            IntPtr fface,
+            int size,
+            int weight,
+            CvEnum.PutTextFlags flags,
+            ref Emgu.CV.Structure.Range wrap,
+            ref Point result);
+
+        /// <summary>
+        /// Calculates the bounding rectangle for the text when rendered using the specified TrueType/OpenType font.
+        /// </summary>
+        /// <param name="imgSize">Size of the target image, can be empty</param>
+        /// <param name="text">Input text string</param>
+        /// <param name="org">Bottom-left corner of the first character of the printed text (also see PutTextFlags alignment flags)</param>
+        /// <param name="font">The font to use for the text</param>
+        /// <param name="size">Font size in pixels</param>
+        /// <param name="weight">Font weight, 100..1000. See PutText for details.</param>
+        /// <param name="flags">Various put text flags</param>
+        /// <param name="wrap">The optional text wrapping range. See PutText for details.</param>
+        /// <returns>The bounding rectangle for the text</returns>
+        public static Rectangle GetTextSize(
+            Size imgSize,
+            String text,
+            Point org,
+            TrueTypeFont font,
+            int size,
+            int weight = 0,
+            CvEnum.PutTextFlags flags = CvEnum.PutTextFlags.AlignLeft,
+            Emgu.CV.Structure.Range wrap = new Emgu.CV.Structure.Range())
+        {
+            Rectangle result = new Rectangle();
+            using (CvString s = new CvString(text))
+                cveGetTextSizeFontFace(ref imgSize, s, ref org, font, size, weight, flags, ref wrap, ref result);
+            return result;
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveGetTextSizeFontFace(
+            ref Size imgSize,
+            IntPtr text,
+            ref Point org,
+            IntPtr fface,
+            int size,
+            int weight,
+            CvEnum.PutTextFlags flags,
+            ref Emgu.CV.Structure.Range wrap,
+            ref Rectangle result);
+
         #endregion
 
         /*
@@ -3515,7 +3599,7 @@ namespace Emgu.CV
         #region optim
         /// <summary>
         /// Solve given (non-integer) linear programming problem using the Simplex Algorithm (Simplex Method). 
-        /// What we mean here by “linear programming problem” (or LP problem, for short) can be formulated as:
+        /// What we mean here by ï¿½linear programming problemï¿½ (or LP problem, for short) can be formulated as:
         /// Maximize c x subject to: Ax &lt;= b and x &gt;= 0 
         /// </summary>
         /// <param name="functionMatrix">This row-vector corresponds to c in the LP problem formulation (see above). It should contain 32- or 64-bit floating point numbers. As a convenience, column-vector may be also submitted, in the latter case it is understood to correspond to c^T.</param>

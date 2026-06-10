@@ -255,13 +255,44 @@ CVAPI(void) cveGetDerivKernels(
 	int ktype);
 
 CVAPI(void) cveGetGaborKernel(
-	cv::Size* ksize, 
-	double sigma, 
-	double theta, 
+	cv::Size* ksize,
+	double sigma,
+	double theta,
 	double lambd,
-	double gamma, 
-	double psi, 
+	double gamma,
+	double psi,
 	int ktype,
 	cv::Mat* result);
+
+//FontFace, the truetype/opentype font rendering introduced in OpenCV 5
+CVAPI(cv::FontFace*) cveFontFaceCreate(cv::String* fontPathOrName);
+CVAPI(void) cveFontFaceRelease(cv::FontFace** fontFace);
+CVAPI(bool) cveFontFaceSet(cv::FontFace* fontFace, cv::String* fontPathOrName);
+CVAPI(void) cveFontFaceGetName(cv::FontFace* fontFace, cv::String* name);
+CVAPI(bool) cveFontFaceSetInstance(cv::FontFace* fontFace, std::vector<int>* params);
+CVAPI(bool) cveFontFaceGetInstance(cv::FontFace* fontFace, std::vector<int>* params);
+
+CVAPI(void) cvePutTextFontFace(
+	cv::_InputOutputArray* img,
+	cv::String* text,
+	cv::Point* org,
+	cv::Scalar* color,
+	cv::FontFace* fface,
+	int size,
+	int weight,
+	int flags,
+	cv::Range* wrap,
+	cv::Point* result);
+
+CVAPI(void) cveGetTextSizeFontFace(
+	cv::Size* imgsize,
+	cv::String* text,
+	cv::Point* org,
+	cv::FontFace* fface,
+	int size,
+	int weight,
+	int flags,
+	cv::Range* wrap,
+	cv::Rect* result);
 
 #endif
