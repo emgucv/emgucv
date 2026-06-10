@@ -4,7 +4,6 @@ cd "$(dirname "$0")"
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.Util/*.cs ../Emgu.Util/
 
 #cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/*.cs ../Emgu.CV/
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/3d/*.cs ../Emgu.CV/3d
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Calib/*.cs ../Emgu.CV/Calib
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Stereo/*.cs ../Emgu.CV/Stereo
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Color/*.cs ../Emgu.CV/Color 
@@ -14,15 +13,17 @@ cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Gapi/*.cs ../Emgu.CV/Gapi
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Dnn/*.cs ../Emgu.CV/Dnn  
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Features/*.cs ../Emgu.CV/Features
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Flann/*.cs ../Emgu.CV/Flann 
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Geodetic/*.cs ../Emgu.CV/Geodetic 
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Imgproc/*.cs ../Emgu.CV/Imgproc 
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Imgcodec/*.cs ../Emgu.CV/Imgcodec 
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Geodetic/*.cs ../Emgu.CV/Geodetic
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Geometry/*.cs ../Emgu.CV/Geometry
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Imgproc/*.cs ../Emgu.CV/Imgproc
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Imgcodecs/*.cs ../Emgu.CV/Imgcodecs
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/HighGUI/*.cs ../Emgu.CV/HighGUI 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Ml/*.cs ../Emgu.CV/Ml
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Objdetect/*.cs ../Emgu.CV/Objdetect  
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Ocl/*.cs ../Emgu.CV/Ocl 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Optflow/*.cs ../Emgu.CV/Optflow 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Photo/*.cs ../Emgu.CV/Photo
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Ptcloud/*.cs ../Emgu.CV/Ptcloud
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/PInvoke/*.cs ../Emgu.CV/PInvoke  
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/PInvoke/CvType/*.cs ../Emgu.CV/PInvoke/CvType
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/PInvoke/System.Drawing/*.cs ../Emgu.CV/PInvoke/System.Drawing
@@ -60,7 +61,8 @@ cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/PhaseUnwrapping/*.cs ../Emgu
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Plot/*.cs ../Emgu.CV.Contrib/Plot  
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Quality/*.cs ../Emgu.CV.Contrib/Quality  
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Rapid/*.cs ../Emgu.CV.Contrib/Rapid
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Saliency/*.cs ../Emgu.CV.Contrib/Saliency  
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Saliency/*.cs ../Emgu.CV.Contrib/Saliency
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Signal/*.cs ../Emgu.CV.Contrib/Signal
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XStereo/*.cs ../Emgu.CV.Contrib/XStereo  
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/SurfaceMatching/*.cs ../Emgu.CV.Contrib/SurfaceMatching 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Text/*.cs ../Emgu.CV.Contrib/Text 
