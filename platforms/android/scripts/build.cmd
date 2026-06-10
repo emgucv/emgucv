@@ -91,7 +91,8 @@ GOTO END_CONFIG
 
 :MINI_BUILD_CONFIG
 SET TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=OFF
-SET EMGU_CV_CMAKE_EXTRA_FLAGS=-DBUILD_opencv_calib:BOOL=FALSE -DBUILD_opencv_dnn:BOOL=FALSE -DBUILD_opencv_ml:BOOL=FALSE -DBUILD_opencv_photo:BOOL=FALSE -DBUILD_opencv_features2d:BOOL=FALSE -DBUILD_opencv_gapi:BOOL=FALSE -DBUILD_opencv_flann:BOOL=FALSE -DBUILD_opencv_video:BOOL=FALSE 
+REM flann must stay enabled: in OpenCV 5 imgproc depends on geometry, which depends on flann.
+SET EMGU_CV_CMAKE_EXTRA_FLAGS=-DBUILD_opencv_calib:BOOL=FALSE -DBUILD_opencv_dnn:BOOL=FALSE -DBUILD_opencv_ml:BOOL=FALSE -DBUILD_opencv_photo:BOOL=FALSE -DBUILD_opencv_features:BOOL=FALSE -DBUILD_opencv_gapi:BOOL=FALSE -DBUILD_opencv_video:BOOL=FALSE 
 
 :END_CONFIG
 
