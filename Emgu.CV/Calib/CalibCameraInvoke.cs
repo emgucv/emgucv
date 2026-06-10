@@ -1,5 +1,5 @@
-﻿//----------------------------------------------------------------------------
-//  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.       
+//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
 using Emgu.CV.CvEnum;
@@ -19,7 +19,7 @@ namespace Emgu.CV
     public static partial class CvInvoke
     {
         /// <summary>
-        /// Converts a rotation vector to rotation matrix or vice versa. Rotation vector is a compact representation of rotation matrix. Direction of the rotation vector is the rotation axis and the length of the vector is the rotation angle around the axis. 
+        /// Converts a rotation vector to rotation matrix or vice versa. Rotation vector is a compact representation of rotation matrix. Direction of the rotation vector is the rotation axis and the length of the vector is the rotation angle around the axis.
         /// </summary>
         /// <param name="src">The input rotation vector (3x1 or 1x3) or rotation matrix (3x3). </param>
         /// <param name="dst">The output rotation matrix (3x3) or rotation vector (3x1 or 1x3), respectively</param>
@@ -42,8 +42,8 @@ namespace Emgu.CV
         /// <param name="dstPoints">Point coordinates in the destination plane</param>
         /// <param name="method">FindHomography method</param>
         /// <param name="ransacReprojThreshold">
-        /// The maximum allowed reprojection error to treat a point pair as an inlier. 
-        /// The parameter is only used in RANSAC-based homography estimation. 
+        /// The maximum allowed reprojection error to treat a point pair as an inlier.
+        /// The parameter is only used in RANSAC-based homography estimation.
         /// E.g. if dst_points coordinates are measured in pixels with pixel-accurate precision, it makes sense to set this parameter somewhere in the range ~1..3
         /// </param>
         /// <param name="mask">Optional output mask set by a robust method ( CV_RANSAC or CV_LMEDS ). Note that the input mask values are ignored.</param>
@@ -211,7 +211,7 @@ namespace Emgu.CV
 
         /// <summary>
         /// Computes projections of 3D points to the image plane given intrinsic and extrinsic camera parameters. Optionally, the function computes jacobians - matrices of partial derivatives of image points as functions of all the input parameters w.r.t. the particular parameters, intrinsic and/or extrinsic. The jacobians are used during the global optimization in cvCalibrateCamera2 and cvFindExtrinsicCameraParams2. The function itself is also used to compute back-projection error for with current intrinsic and extrinsic parameters.
-        /// Note, that with intrinsic and/or extrinsic parameters set to special values, the function can be used to compute just extrinsic transformation or just intrinsic transformation (i.e. distortion of a sparse set of points). 
+        /// Note, that with intrinsic and/or extrinsic parameters set to special values, the function can be used to compute just extrinsic transformation or just intrinsic transformation (i.e. distortion of a sparse set of points).
         /// </summary>
         /// <param name="objectPoints">The array of object points, 3xN or Nx3, where N is the number of points in the view</param>
         /// <param name="rvec">The rotation vector, 1x3 or 3x1</param>
@@ -241,7 +241,7 @@ namespace Emgu.CV
            IntPtr distCoeffs, IntPtr imagePoints, IntPtr jacobian, double aspectRatio);
 
         /// <summary>
-        /// Estimates extrinsic camera parameters using known intrinsic parameters and extrinsic parameters for each view. The coordinates of 3D object points and their correspondent 2D projections must be specified. This function also minimizes back-projection error. 
+        /// Estimates extrinsic camera parameters using known intrinsic parameters and extrinsic parameters for each view. The coordinates of 3D object points and their correspondent 2D projections must be specified. This function also minimizes back-projection error.
         /// </summary>
         /// <param name="objectPoints">The array of object points</param>
         /// <param name="imagePoints">The array of corresponding image points</param>
@@ -507,7 +507,7 @@ namespace Emgu.CV
             double VVSlambda);
 
         /// <summary>
-        /// Finds an object pose from 3D-2D point correspondences. 
+        /// Finds an object pose from 3D-2D point correspondences.
         /// </summary>
         /// <param name="objectPoints">Array of object points in the object coordinate space, Nx3 1-channel or 1xN/Nx1 3-channel, where N is the number of points. VectorOfPoint3f can also be passed here.</param>
         /// <param name="imagePoints">Array of corresponding image points, Nx2 1-channel or 1xN/Nx1 2-channel, where N is the number of points. VectorOfPoint2f can also be passed here.</param>
@@ -638,7 +638,7 @@ namespace Emgu.CV
             IntPtr normals);
 
         /// <summary>
-        /// Calculates fundamental matrix using one of four methods listed above and returns the number of fundamental matrices found (1 or 3) and 0, if no matrix is found. 
+        /// Calculates fundamental matrix using one of four methods listed above and returns the number of fundamental matrices found (1 or 3) and 0, if no matrix is found.
         /// </summary>
         /// <param name="points1">Array of N points from the first image. The point coordinates should be floating-point (single or double precision).</param>
         /// <param name="points2">Array of the second image points of the same size and format as points1 </param>
@@ -718,11 +718,11 @@ namespace Emgu.CV
             IntPtr essentialMat);
 
         /// <summary>
-        /// For every point in one of the two images of stereo-pair the function cvComputeCorrespondEpilines finds equation of a line that contains the corresponding point (i.e. projection of the same 3D point) in the other image. Each line is encoded by a vector of 3 elements l=[a,b,c]^T, so that: 
+        /// For every point in one of the two images of stereo-pair the function cvComputeCorrespondEpilines finds equation of a line that contains the corresponding point (i.e. projection of the same 3D point) in the other image. Each line is encoded by a vector of 3 elements l=[a,b,c]^T, so that:
         /// l^T*[x, y, 1]^T=0, or
         /// a*x + b*y + c = 0
-        /// From the fundamental matrix definition (see cvFindFundamentalMatrix discussion), line l2 for a point p1 in the first image (which_image=1) can be computed as: 
-        /// l2=F*p1 and the line l1 for a point p2 in the second image (which_image=1) can be computed as: 
+        /// From the fundamental matrix definition (see cvFindFundamentalMatrix discussion), line l2 for a point p1 in the first image (which_image=1) can be computed as:
+        /// l2=F*p1 and the line l1 for a point p2 in the second image (which_image=1) can be computed as:
         /// l1=F^T*p2Line coefficients are defined up to a scale. They are normalized (a2+b2=1) are stored into correspondent_lines
         /// </summary>
         /// <param name="points">The input points. 2xN, Nx2, 3xN or Nx3 array (where N number of points). Multi-channel 1xN or Nx1 array is also acceptable.</param>
@@ -822,7 +822,7 @@ namespace Emgu.CV
         private static extern void cveCorrectMatches(IntPtr f, IntPtr points1, IntPtr points2, IntPtr newPoints1,
             IntPtr newPoints2);
 
-        
+
         /// <summary>
         /// Computes an optimal affine transformation between two 3D point sets.
         /// </summary>
@@ -1005,7 +1005,7 @@ namespace Emgu.CV
             IntPtr affine);
 
         /// <summary>
-        /// Transforms the image to compensate radial and tangential lens distortion. 
+        /// Transforms the image to compensate radial and tangential lens distortion.
         /// </summary>
         /// <param name="src">The input (distorted) image</param>
         /// <param name="dst">The output (corrected) image</param>
@@ -1085,9 +1085,9 @@ namespace Emgu.CV
            IntPtr map2);
 
         /// <summary>
-        /// Similar to cvInitUndistortRectifyMap and is opposite to it at the same time. 
-        /// The functions are similar in that they both are used to correct lens distortion and to perform the optional perspective (rectification) transformation. 
-        /// They are opposite because the function cvInitUndistortRectifyMap does actually perform the reverse transformation in order to initialize the maps properly, while this function does the forward transformation. 
+        /// Similar to cvInitUndistortRectifyMap and is opposite to it at the same time.
+        /// The functions are similar in that they both are used to correct lens distortion and to perform the optional perspective (rectification) transformation.
+        /// They are opposite because the function cvInitUndistortRectifyMap does actually perform the reverse transformation in order to initialize the maps properly, while this function does the forward transformation.
         /// </summary>
         /// <param name="src">The observed point coordinates</param>
         /// <param name="dst">The ideal point coordinates, after undistortion and reverse perspective transformation. </param>
@@ -1193,12 +1193,12 @@ namespace Emgu.CV
         /// <param name="length">Length of the painted axes in the same unit than tvec (usually in meters).</param>
         /// <param name="thickness">Line thickness of the painted axes.</param>
         public static void DrawFrameAxes(
-            IInputOutputArray image, 
-            IInputArray cameraMatrix, 
-            IInputArray distCoeffs, 
+            IInputOutputArray image,
+            IInputArray cameraMatrix,
+            IInputArray distCoeffs,
             IInputArray rvec,
-            IInputArray tvec, 
-            float length, 
+            IInputArray tvec,
+            float length,
             int thickness = 3)
         {
             using (var iaImage = image.GetInputOutputArray())
@@ -1210,7 +1210,7 @@ namespace Emgu.CV
                 cveDrawFrameAxes(iaImage, iaCameraMatrix, iaDistCoeffs, iaRvec, iaTvec, length, thickness);
             }
         }
-        
+
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDrawFrameAxes(
             IntPtr image,

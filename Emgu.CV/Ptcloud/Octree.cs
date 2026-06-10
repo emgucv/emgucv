@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
 using System;
@@ -24,31 +24,16 @@ namespace Emgu.CV
     /// and querying of large point cloud datasets. This class manages unmanaged resources and should be disposed of
     /// properly to release native memory. Thread safety is not guaranteed; synchronize access if used from multiple
     /// threads.</remarks>
-    public class Octree : UnmanagedObject
+    public class Octree : SharedPtrObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Octree"/> class.
+        /// Creates an octree from a point cloud up to the specified depth.
         /// </summary>
-        public Octree()
+        /// <param name="pointCloud">The input point cloud.</param>
+        /// <param name="maxDepth">The maximum depth of the octree.</param>
+        public Octree(VectorOfPoint3D32F pointCloud, int maxDepth)
         {
-            _ptr = CvInvoke.cveOctreeCreate();
-        }
-
-        /// <summary>
-        /// Creates an octree structure from a given point cloud.
-        /// </summary>
-        /// <param name="pointCloud">
-        /// A <see cref="VectorOfPoint3D32F"/> object representing the input point cloud.
-        /// </param>
-        /// <param name="maxDepth">
-        /// The maximum depth of the octree. This determines the level of detail in the octree structure.
-        /// </param>
-        /// <returns>
-        /// A boolean value indicating whether the octree creation was successful.
-        /// </returns>
-        public bool Create(VectorOfPoint3D32F pointCloud, int maxDepth)
-        {
-            return CvInvoke.cveOctreeCreate2(_ptr, pointCloud, maxDepth);
+            _ptr = CvInvoke.cveOctreeCreate(pointCloud, maxDepth, ref _sharedPtr);
         }
 
         /// <summary>
@@ -56,9 +41,10 @@ namespace Emgu.CV
         /// </summary>
         protected override void DisposeObject()
         {
-            if (_ptr != IntPtr.Zero)
+            if (_sharedPtr != IntPtr.Zero)
             {
-                CvInvoke.cveOctreeRelease(ref _ptr);
+                CvInvoke.cveOctreeRelease(ref _sharedPtr);
+                _ptr = IntPtr.Zero;
             }
         }
     }
@@ -70,13 +56,9 @@ namespace Emgu.CV
     {
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveOctreeCreate();
+        internal static extern IntPtr cveOctreeCreate(IntPtr pointCloud, int maxDepth, ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveOctreeRelease(ref IntPtr sharedPtr);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal static extern bool cveOctreeCreate2(IntPtr octree, IntPtr pointCloud, int maxDepth);
     }
 }

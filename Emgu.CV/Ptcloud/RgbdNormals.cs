@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
 using System;
@@ -19,17 +19,15 @@ namespace Emgu.CV
     /// <summary>
     /// Object that can compute the normals in an image. It is an object as it can cache data for speed efficiency
     /// </summary>
-    public class RgbdNormals : SharedPtrObject, IAlgorithm
+    public class RgbdNormals : SharedPtrObject
     {
-        private IntPtr _algorithmPtr;
-
         /// <summary>
         /// Rgbd method
         /// </summary>
         public enum Method
         {
             /// <summary>
-            /// FALS (the fastest) 
+            /// FALS (the fastest)
             /// </summary>
             Fals = 0,
             /// <summary>
@@ -59,6 +57,7 @@ namespace Emgu.CV
             int windowSize = 5,
             Method method = Method.Fals)
         {
+            IntPtr algorithmPtr = IntPtr.Zero;
             using (InputArray iaK = k.GetInputArray())
                 _ptr = CvInvoke.cveRgbdNormalsCreate(
                     rows,
@@ -67,17 +66,9 @@ namespace Emgu.CV
                     iaK,
                     windowSize,
                     method,
-                    ref _algorithmPtr,
+                    ref algorithmPtr,
                     ref _sharedPtr
                 );
-        }
-
-        /// <summary>
-        /// Pointer to the native algorithm object
-        /// </summary>
-        public IntPtr AlgorithmPtr
-        {
-            get { return _algorithmPtr; }
         }
 
         /// <summary>
@@ -105,7 +96,6 @@ namespace Emgu.CV
             if (_sharedPtr != IntPtr.Zero)
             {
                 CvInvoke.cveRgbdNormalsRelease(ref _sharedPtr);
-                _algorithmPtr = IntPtr.Zero;
                 _ptr = IntPtr.Zero;
             }
         }
@@ -124,7 +114,7 @@ namespace Emgu.CV
             DepthType depth,
             IntPtr K,
             int windowSize,
-            RgbdNormals.Method method, 
+            RgbdNormals.Method method,
             ref IntPtr algorithm,
             ref IntPtr sharedPtr
         );
@@ -133,8 +123,7 @@ namespace Emgu.CV
         internal static extern void cveRgbdNormalsRelease(ref IntPtr sharedPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal static extern bool cveRgbdNormalsApply(
+        internal static extern void cveRgbdNormalsApply(
             IntPtr rgbdNormals,
             IntPtr points,
             IntPtr normals);
