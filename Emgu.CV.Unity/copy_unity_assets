@@ -41,7 +41,6 @@ cp -r ../Emgu.CV/Core Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Dnn Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Features Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Flann Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
-cp -r ../Emgu.CV/Gapi Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Geodetic Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Geometry Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Imgcodecs Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
@@ -88,6 +87,8 @@ mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Face
 cp -r ../Emgu.CV.Contrib/Face/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Face
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Freetype
 cp -r ../Emgu.CV.Contrib/Freetype/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Freetype
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Gapi
+cp -r ../Emgu.CV.Contrib/Gapi/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Gapi
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Fuzzy
 cp -r ../Emgu.CV.Contrib/Fuzzy/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Fuzzy
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Hdf

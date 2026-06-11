@@ -124,7 +124,7 @@ CREATE_VECTOR_CS("TesseractResult" "TesseractResult" "TesseractResult" "struct" 
 
 CREATE_VECTOR_CS("Mat" "cv::Mat" "Mat" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
 CREATE_VECTOR_CS("UMat" "cv::UMat" "UMat" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
-CREATE_VECTOR_CS("GMat" "cv::GMat" "GMat" "object_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "#include \"gapi_c.h\"" "" "defined(HAVE_OPENCV_GAPI)")
+CREATE_VECTOR_CS("GMat" "cv::GMat" "GMat" "object_not_array" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Gapi" Emgu.CV.Util "" "#include \"gapi_c.h\"" "" "defined(HAVE_OPENCV_GAPI)")
 CREATE_VECTOR_CS("CvString" "cv::String" "CvString" "object" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
 
 CREATE_VECTOR_CS("VectorOfPoint" "std::vector< cv::Point >" "Point" "vector" "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Util" Emgu.CV.Util "" "" "" "1")
