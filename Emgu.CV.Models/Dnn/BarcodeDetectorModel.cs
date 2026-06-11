@@ -184,7 +184,7 @@ namespace Emgu.CV.Models
                         imageOut,
                         barcodesFound[i].DecodedInfo,
                         Point.Round(barcodesFound[i].Points[0]),
-                        FontFace.HersheySimplex,
+                        HersheyFonts.HersheySimplex,
                         1.0,
                         RenderColor
                         );

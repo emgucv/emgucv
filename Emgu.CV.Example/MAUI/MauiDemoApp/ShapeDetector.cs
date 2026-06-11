@@ -181,7 +181,7 @@ namespace Emgu.CV.Models
                     new MCvScalar(120, 120, 120));
                 //Draw the labels
                 CvInvoke.PutText(triangleRectangleImage, "Triangles and Rectangles", new Point(20, 20),
-                    FontFace.HersheyDuplex, 0.5, new MCvScalar(120, 120, 120));
+                    HersheyFonts.HersheyDuplex, 0.5, new MCvScalar(120, 120, 120));
 
                 #endregion
 
@@ -197,7 +197,7 @@ namespace Emgu.CV.Models
                     new Rectangle(Point.Empty, new Size(circleImage.Width - 1, circleImage.Height - 1)),
                     new MCvScalar(120, 120, 120));
                 //Draw the labels
-                CvInvoke.PutText(circleImage, "Circles", new Point(20, 20), FontFace.HersheyDuplex, 0.5,
+                CvInvoke.PutText(circleImage, "Circles", new Point(20, 20), HersheyFonts.HersheyDuplex, 0.5,
                     new MCvScalar(120, 120, 120));
 
                 #endregion
@@ -212,7 +212,7 @@ namespace Emgu.CV.Models
                     new Rectangle(Point.Empty, new Size(lineImage.Width - 1, lineImage.Height - 1)),
                     new MCvScalar(120, 120, 120));
                 //Draw the labels
-                CvInvoke.PutText(lineImage, "Lines", new Point(20, 20), FontFace.HersheyDuplex, 0.5,
+                CvInvoke.PutText(lineImage, "Lines", new Point(20, 20), HersheyFonts.HersheyDuplex, 0.5,
                     new MCvScalar(120, 120, 120));
 
                 #endregion

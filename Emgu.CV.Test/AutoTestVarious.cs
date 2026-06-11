@@ -3226,12 +3226,12 @@ namespace Emgu.CV.Test
                        using (Image<Gray, Byte> mask = img.GrabCut(result, 10))
                        using (Image<Gray, Byte> canny = img.Canny(120, 80))
                        {
-                          //MCvFont f = new MCvFont(CvEnum.FontFace.HersheyComplex, 2.0, 2.0);
+                          //MCvFont f = new MCvFont(CvEnum.HersheyFonts.HersheyComplex, 2.0, 2.0);
                           using (ScalarArray ia = new ScalarArray(3))
                              CvInvoke.Compare(mask, ia, mask, CvEnum.CmpType.NotEqual);
                           //CvInvoke.Set(canny, new MCvScalar(), mask);
                           canny.SetValue(new MCvScalar(), mask);
-                          canny.Draw(@"http://www.emgu.com", new Point(50, 50), CvEnum.FontFace.HersheyComplex, 2.0, new Gray(255), 2);
+                          canny.Draw(@"http://www.emgu.com", new Point(50, 50), CvEnum.HersheyFonts.HersheyComplex, 2.0, new Gray(255), 2);
 
                           CvInvoke.BitwiseNot(canny, canny, null);
 
@@ -3794,13 +3794,13 @@ namespace Emgu.CV.Test
         public void TestGetTextSize()
         {
             int baseline = 0;
-            Size s = CvInvoke.GetTextSize("Hello world", FontFace.HersheyPlain, 16, 1, ref baseline);
+            Size s = CvInvoke.GetTextSize("Hello world", HersheyFonts.HersheyPlain, 16, 1, ref baseline);
         }
 
         [Test]
-        public void TestTrueTypeFont()
+        public void TestFontFace()
         {
-            using (TrueTypeFont font = new TrueTypeFont())
+            using (FontFace font = new FontFace())
             {
                 String name = font.Name;
                 EmguAssert.IsTrue(!String.IsNullOrEmpty(name));
@@ -4138,13 +4138,13 @@ namespace Emgu.CV.Test
             Mat scv = new Mat(width, height, DepthType.Cv8U, 3);
             semgu.SetTo(new MCvScalar(0,0,0));
             scv.SetTo(new MCvScalar(0,0,0));
-            //MCvFont f1 = new MCvFont(CvEnum.FontFace.HersheyTriplex, 1.5 * scale, 1.5 * scale);
-            //MCvFont f2 = new MCvFont(CvEnum.FontFace.HersheyComplex, 1.6 * scale, 2.2 * scale);
+            //MCvFont f1 = new MCvFont(CvEnum.HersheyFonts.HersheyTriplex, 1.5 * scale, 1.5 * scale);
+            //MCvFont f2 = new MCvFont(CvEnum.HersheyFonts.HersheyComplex, 1.6 * scale, 2.2 * scale);
             CvInvoke.PutText(
                 semgu, 
                 "Emgu", 
                 Point.Round(new PointF((float)(6 * scale), (float)(50 * scale + heightShift))), 
-                CvEnum.FontFace.HersheyTriplex, 
+                CvEnum.HersheyFonts.HersheyTriplex, 
                 1.5 * scale, 
                 new MCvScalar(55, 155, 255),
                 (int)Math.Round(1.5 * scale));
@@ -4156,7 +4156,7 @@ namespace Emgu.CV.Test
                     scv, 
                     productName, 
                     Point.Round(new PointF((float) (50 * scale), (float) (60 * scale + heightShift))),
-                    CvEnum.FontFace.HersheySimplex, 
+                    CvEnum.HersheyFonts.HersheySimplex, 
                     1.6 * scale, 
                     new MCvScalar(255, 55, 255),
                     (int) Math.Round(2.2 * scale));

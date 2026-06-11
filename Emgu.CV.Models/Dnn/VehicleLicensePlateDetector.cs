@@ -556,7 +556,7 @@ namespace Emgu.CV.Models
                     image,
                     label,
                     new Point(v.Region.Location.X, v.Region.Location.Y + 20),
-                    FontFace.HersheyComplex,
+                    HersheyFonts.HersheyComplex,
                     1.0,
                     RenderColor,
                     2);

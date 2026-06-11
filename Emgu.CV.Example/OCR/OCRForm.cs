@@ -42,7 +42,7 @@ namespace OCR
                     img,
                     "Hello, world",
                     new System.Drawing.Point(10, 80),
-                    FontFace.HersheyComplex,
+                    HersheyFonts.HersheyComplex,
                     1.0,
                     new Bgr(0, 255, 0).MCvScalar);
                 OcrImage(img);

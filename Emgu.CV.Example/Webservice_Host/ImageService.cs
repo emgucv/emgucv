@@ -21,8 +21,8 @@ namespace Webservice_Host
             img.SetTo(new MCvScalar(255, 255, 255));
 
             String str = DateTime.Now.Ticks.ToString();
-            CvInvoke.PutText(img, str, new System.Drawing.Point(50, 150), FontFace.HersheyPlain, 1.0, new MCvScalar(0,0,0) );
-            //img.Draw(str, new System.Drawing.Point(50, 150), FontFace.HersheyPlain, 1.0, new Bgr(0, 0, 0));
+            CvInvoke.PutText(img, str, new System.Drawing.Point(50, 150), HersheyFonts.HersheyPlain, 1.0, new MCvScalar(0,0,0) );
+            //img.Draw(str, new System.Drawing.Point(50, 150), HersheyFonts.HersheyPlain, 1.0, new Bgr(0, 0, 0));
             return img;
         }
     }

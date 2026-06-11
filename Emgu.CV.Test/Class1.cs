@@ -184,9 +184,9 @@ namespace Emgu.CV.Test
             using (Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 200, new Bgr(255, 0, 0)))
             {
                 //Create the font
-                //MCvFont f = new MCvFont(CvEnum.FontFace.HersheyComplex, 1.0, 1.0);
+                //MCvFont f = new MCvFont(CvEnum.HersheyFonts.HersheyComplex, 1.0, 1.0);
                 //Draw "Hello, world." on the image using the specific font
-                img.Draw("Hello, world", new Point(10, 80), CvEnum.FontFace.HersheyComplex, 1.0, new Bgr(0, 255, 0));
+                img.Draw("Hello, world", new Point(10, 80), CvEnum.HersheyFonts.HersheyComplex, 1.0, new Bgr(0, 255, 0));
 
                 //Show the image
                 CvInvoke.Imshow(win1, img);
@@ -203,10 +203,10 @@ namespace Emgu.CV.Test
             using (Image<Bgr, Byte> img = new Image<Bgr, byte>(400, 200, new Bgr(255, 0, 0)))
             {
                 //Create the font
-                //MCvFont f = new MCvFont(CvEnum.FontFace.HersheyComplex, 1.0, 1.0);
+                //MCvFont f = new MCvFont(CvEnum.HersheyFonts.HersheyComplex, 1.0, 1.0);
 
                 //Draw "Hello, world." on the image using the specific font
-                img.Draw("Hello, world", new Point(10, 80), CvEnum.FontFace.HersheyComplex, 1.0, new Bgr(0, 255, 0));
+                img.Draw("Hello, world", new Point(10, 80), CvEnum.HersheyFonts.HersheyComplex, 1.0, new Bgr(0, 255, 0));
 
                 //Show the image using ImageViewer from Emgu.CV.UI
                 ImageViewer.Show(img, "Test Window");
@@ -953,7 +953,7 @@ namespace Emgu.CV.Test
            param.FGTrainFrames = 10;
            BlobTrackerAuto<Bgr> tracker = new BlobTrackerAuto<Bgr>(param);
 
-           //MCvFont font = new MCvFont(Emgu.CV.CvEnum.FontFace.HersheySimplex, 1.0, 1.0);
+           //MCvFont font = new MCvFont(Emgu.CV.CvEnum.HersheyFonts.HersheySimplex, 1.0, 1.0);
 
            using(ImageViewer viewer = new ImageViewer())
            using (Capture capture = new Capture())
@@ -968,7 +968,7 @@ namespace Emgu.CV.Test
                  foreach (MCvBlob blob in tracker)
                  {
                     img.Draw((Rectangle)blob, new Bgr(255.0, 255.0, 255.0), 2);
-                    img.Draw(blob.ID.ToString(), Point.Round(blob.Center), CvEnum.FontFace.HersheySimplex, 1.0, new Bgr(255.0, 255.0, 255.0));
+                    img.Draw(blob.ID.ToString(), Point.Round(blob.Center), CvEnum.HersheyFonts.HersheySimplex, 1.0, new Bgr(255.0, 255.0, 255.0));
                  }
                  viewer.Image = img;
               };
@@ -980,7 +980,7 @@ namespace Emgu.CV.Test
         /*
         public void TestCvBlob()
         {
-            //MCvFont font = new MCvFont(Emgu.CV.CvEnum.FontFace.HersheySimplex, 0.5, 0.5);
+            //MCvFont font = new MCvFont(Emgu.CV.CvEnum.HersheyFonts.HersheySimplex, 0.5, 0.5);
             using (CvTracks tracks = new CvTracks())
             using (ImageViewer viewer = new ImageViewer())
             using (VideoCapture capture = new VideoCapture())
@@ -1018,7 +1018,7 @@ namespace Emgu.CV.Test
                         {
                                 CvBlob b = blobs[pair.Value.BlobLabel];
                                 Bgr color = detector.MeanColor(b, frame.ToImage<Bgr, Byte>());
-                                result.Draw(pair.Key.ToString(), pair.Value.BoundingBox.Location, CvEnum.FontFace.HersheySimplex, 0.5, color);
+                                result.Draw(pair.Key.ToString(), pair.Value.BoundingBox.Location, CvEnum.HersheyFonts.HersheySimplex, 0.5, color);
                                 result.Draw(pair.Value.BoundingBox, color, 2);
                                 Point[] contour = b.GetContour();
                                 result.Draw(contour, new Bgr(0, 0, 255), 1);

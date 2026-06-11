@@ -54,7 +54,7 @@ namespace Emgu.CV.Models
                     image,
                     label,
                     this.Region.Location,
-                    FontFace.HersheyDuplex,
+                    HersheyFonts.HersheyDuplex,
                     1.0,
                     color,
                     1);

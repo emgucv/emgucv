@@ -7,9 +7,9 @@ using System;
 namespace Emgu.CV.CvEnum
 {
     /// <summary>
-    /// Fonts
+    /// Hershey fonts
     /// </summary>
-    public enum FontFace
+    public enum HersheyFonts
     {
         /// <summary>
         /// Hershey simplex

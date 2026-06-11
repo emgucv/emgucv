@@ -13,13 +13,13 @@ namespace Emgu.CV
     /// Wrapper on top of a truetype/opentype/etc font (cv::FontFace). The loaded font
     /// can be passed to CvInvoke.PutText and CvInvoke.GetTextSize.
     /// </summary>
-    public partial class TrueTypeFont : UnmanagedObject
+    public partial class FontFace : UnmanagedObject
     {
         /// <summary>
         /// Load a font at the specified path or with the specified name.
         /// </summary>
         /// <param name="fontPathOrName">Either path to the custom font or the name of an embedded font: "sans", "italic" or "uni". A null or empty value loads the default embedded font.</param>
-        public TrueTypeFont(String fontPathOrName = null)
+        public FontFace(String fontPathOrName = null)
         {
             using (CvString csFontPathOrName = new CvString(fontPathOrName ?? String.Empty))
                 _ptr = CvInvoke.cveFontFaceCreate(csFontPathOrName);

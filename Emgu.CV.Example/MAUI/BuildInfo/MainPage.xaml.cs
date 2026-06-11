@@ -40,7 +40,7 @@ public partial class MainPage : ContentPage
             DepthType.Cv8U, 
             3);
         helloWorldImage.SetTo(new MCvScalar(0,0,0)); //Set to black background
-        CvInvoke.PutText(helloWorldImage, "Hello, world!", new Point(100, 100), FontFace.HersheyDuplex, 2.0, new MCvScalar(0,0,255));
+        CvInvoke.PutText(helloWorldImage, "Hello, world!", new Point(100, 100), HersheyFonts.HersheyDuplex, 2.0, new MCvScalar(0,0,255));
         
         this.HelloWorldImageView.SetImage(helloWorldImage);
     }

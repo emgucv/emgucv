@@ -2067,7 +2067,7 @@ namespace Emgu.CV
         /// <param name="lineType">Line type</param>
         /// <param name="bottomLeftOrigin">When true, the image data origin is at the bottom-left corner. Otherwise, it is at the top-left corner.</param>
         public static void PutText(
-            IInputOutputArray img, String text, Point org, CvEnum.FontFace fontFace, double fontScale,
+            IInputOutputArray img, String text, Point org, CvEnum.HersheyFonts fontFace, double fontScale,
             MCvScalar color, int thickness = 1, CvEnum.LineType lineType = CvEnum.LineType.EightConnected,
             bool bottomLeftOrigin = false)
         {
@@ -2080,7 +2080,7 @@ namespace Emgu.CV
         private static extern void cvePutText(
             IntPtr img,
             IntPtr text,
-            ref Point org, CvEnum.FontFace fontFace, double fontScale,
+            ref Point org, CvEnum.HersheyFonts fontFace, double fontScale,
             ref MCvScalar color, int thickness, CvEnum.LineType lineType,
             [MarshalAs(CvInvoke.BoolMarshalType)] bool bottomLeftOrigin);
 
@@ -2093,7 +2093,7 @@ namespace Emgu.CV
         /// <param name="thickness">Thickness of lines used to render the text. </param>
         /// <param name="baseLine">Y-coordinate of the baseline relative to the bottom-most text point.</param>
         /// <returns>The size of a box that contains the specified text.</returns>
-        public static Size GetTextSize(String text, CvEnum.FontFace fontFace, double fontScale, int thickness,
+        public static Size GetTextSize(String text, CvEnum.HersheyFonts fontFace, double fontScale, int thickness,
             ref int baseLine)
         {
             Size s = new Size();
@@ -2103,7 +2103,7 @@ namespace Emgu.CV
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveGetTextSize(IntPtr text, CvEnum.FontFace fontFace, double fontScale,
+        private static extern void cveGetTextSize(IntPtr text, CvEnum.HersheyFonts fontFace, double fontScale,
             int thickness, ref int baseLine, ref Size size);
 
         /// <summary>
@@ -2115,7 +2115,7 @@ namespace Emgu.CV
         /// <param name="color">Text color</param>
         /// <param name="font">The font to use for the text</param>
         /// <param name="size">Font size in pixels</param>
-        /// <param name="weight">Font weight, 100..1000, where 100 is "thin", 400 is "regular", 600 is "semibold", 800 is "bold". The parameter is ignored if the font is not a variable font or if it does not provide variation along the 'wght' axis. If the weight is 0, the weight currently set via TrueTypeFont.SetInstance is used.</param>
+        /// <param name="weight">Font weight, 100..1000, where 100 is "thin", 400 is "regular", 600 is "semibold", 800 is "bold". The parameter is ignored if the font is not a variable font or if it does not provide variation along the 'wght' axis. If the weight is 0, the weight currently set via FontFace.SetInstance is used.</param>
         /// <param name="flags">Various put text flags</param>
         /// <param name="wrap">The optional text wrapping range: if the printed character would cross the wrap boundary, the "cursor" is moved to the start of the range. If not set, [org.X, img width] is used for left-to-right text and [0, org.X] for right-to-left text.</param>
         /// <returns>The coordinates in pixels from where the text can be continued.</returns>
@@ -2124,7 +2124,7 @@ namespace Emgu.CV
             String text,
             Point org,
             MCvScalar color,
-            TrueTypeFont font,
+            FontFace font,
             int size,
             int weight = 0,
             CvEnum.PutTextFlags flags = CvEnum.PutTextFlags.AlignLeft,
@@ -2166,7 +2166,7 @@ namespace Emgu.CV
             Size imgSize,
             String text,
             Point org,
-            TrueTypeFont font,
+            FontFace font,
             int size,
             int weight = 0,
             CvEnum.PutTextFlags flags = CvEnum.PutTextFlags.AlignLeft,
