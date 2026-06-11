@@ -47,6 +47,47 @@ namespace Emgu.CV.Test
             m.Create(18, 22, CvEnum.DepthType.Cv64F, 3);
         }
 
+        [TestAttribute]
+        public void TestMatNewDepthTypes()
+        {
+            // Depth types added in OpenCV 5: CV_16BF, CV_Bool, CV_64U, CV_64S, CV_32U
+            using (Mat m = new Mat(4, 5, CvEnum.DepthType.Cv32U, 1))
+            {
+                EmguAssert.AreEqual(CvEnum.DepthType.Cv32U, m.Depth);
+                EmguAssert.AreEqual(4, m.ElementSize);
+                EmguAssert.AreEqual(typeof(UInt32), CvInvoke.GetDepthType(m.Depth));
+            }
+            using (Mat m = new Mat(4, 5, CvEnum.DepthType.Cv64U, 1))
+            {
+                EmguAssert.AreEqual(CvEnum.DepthType.Cv64U, m.Depth);
+                EmguAssert.AreEqual(8, m.ElementSize);
+                EmguAssert.AreEqual(typeof(UInt64), CvInvoke.GetDepthType(m.Depth));
+            }
+            using (Mat m = new Mat(4, 5, CvEnum.DepthType.Cv64S, 1))
+            {
+                EmguAssert.AreEqual(CvEnum.DepthType.Cv64S, m.Depth);
+                EmguAssert.AreEqual(8, m.ElementSize);
+                EmguAssert.AreEqual(typeof(Int64), CvInvoke.GetDepthType(m.Depth));
+            }
+            using (Mat m = new Mat(4, 5, CvEnum.DepthType.CvBool, 1))
+            {
+                EmguAssert.AreEqual(CvEnum.DepthType.CvBool, m.Depth);
+                EmguAssert.AreEqual(1, m.ElementSize);
+                m.SetTo(new MCvScalar(1));
+                EmguAssert.AreEqual(20, CvInvoke.CountNonZero(m));
+            }
+            using (Mat m = new Mat(4, 5, CvEnum.DepthType.Cv16BF, 1))
+            {
+                EmguAssert.AreEqual(CvEnum.DepthType.Cv16BF, m.Depth);
+                EmguAssert.AreEqual(2, m.ElementSize);
+            }
+
+            EmguAssert.AreEqual(CvEnum.DepthType.Cv32U, CvInvoke.GetDepthType(typeof(UInt32)));
+            EmguAssert.AreEqual(CvEnum.DepthType.Cv64U, CvInvoke.GetDepthType(typeof(UInt64)));
+            EmguAssert.AreEqual(CvEnum.DepthType.Cv64S, CvInvoke.GetDepthType(typeof(Int64)));
+            EmguAssert.AreEqual(CvEnum.DepthType.CvBool, CvInvoke.GetDepthType(typeof(bool)));
+        }
+
         /*
         [TestAttribute]
         public void TestArrToMat()

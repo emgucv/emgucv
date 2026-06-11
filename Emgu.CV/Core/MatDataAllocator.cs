@@ -75,7 +75,18 @@ namespace Emgu.CV
             case CvEnum.DepthType.Cv64F:
                _data = new double[totalInBytes >> 3];
                break;
+            case CvEnum.DepthType.Cv32U:
+               _data = new UInt32[totalInBytes >> 2];
+               break;
+            case CvEnum.DepthType.Cv64U:
+               _data = new UInt64[totalInBytes >> 3];
+               break;
+            case CvEnum.DepthType.Cv64S:
+               _data = new Int64[totalInBytes >> 3];
+               break;
             default:
+               // Cv8U, CvBool (1 byte per element), Cv16F and Cv16BF (no managed
+               // equivalent) are stored as raw bytes.
                _data = new byte[totalInBytes];
                break;
          }

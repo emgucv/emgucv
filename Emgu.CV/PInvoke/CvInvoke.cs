@@ -557,7 +557,18 @@ namespace Emgu.CV
                     return typeof(float);
                 case CvEnum.DepthType.Cv64F:
                     return typeof(double);
+                case CvEnum.DepthType.CvBool:
+                    // OpenCV stores Bool elements as a single byte each. There is no managed
+                    // mapping to System.Boolean because Marshal.SizeOf(bool) is 4.
+                    return typeof(byte);
+                case CvEnum.DepthType.Cv64U:
+                    return typeof(UInt64);
+                case CvEnum.DepthType.Cv64S:
+                    return typeof(Int64);
+                case CvEnum.DepthType.Cv32U:
+                    return typeof(UInt32);
                 default:
+                    // Cv16F and Cv16BF have no managed equivalent on netstandard2.0
                     throw new ArgumentException(String.Format("Unable to convert type {0} to depth type", t.ToString()));
             }
         }
@@ -596,6 +607,22 @@ namespace Emgu.CV
             else if (t == typeof(double))
             {
                 return CvEnum.DepthType.Cv64F;
+            }
+            else if (t == typeof(UInt32))
+            {
+                return CvEnum.DepthType.Cv32U;
+            }
+            else if (t == typeof(UInt64))
+            {
+                return CvEnum.DepthType.Cv64U;
+            }
+            else if (t == typeof(Int64))
+            {
+                return CvEnum.DepthType.Cv64S;
+            }
+            else if (t == typeof(bool))
+            {
+                return CvEnum.DepthType.CvBool;
             }
             else
             {
