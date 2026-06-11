@@ -46,6 +46,37 @@ namespace Emgu.CV.Features
         }
 
         /// <summary>
+        /// Create a DISK detector from in-memory model data. Intended for cases where the
+        /// model is read from application resources (for example Android assets) and is not
+        /// available as a path on the filesystem.
+        /// </summary>
+        /// <param name="modelData">Buffer containing the contents of the DISK ONNX model.</param>
+        /// <param name="maxKeypoints">Maximum number of keypoints to return per image. The strongest responses (by network score) are kept; -1 keeps all detections.</param>
+        /// <param name="scoreThreshold">Discard keypoints with network score strictly below this value.</param>
+        /// <param name="imageSize">Target input size (width, height) fed to the network. Use an empty size (the default) to fall back to the network's expected fixed input shape of 1024x1024. When overriding, both dimensions must be positive multiples of 16, since DISK downsamples by a factor of 16.</param>
+        /// <param name="backend">DNN backend.</param>
+        /// <param name="target">DNN target.</param>
+        public DISK(
+            byte[] modelData,
+            int maxKeypoints = -1,
+            float scoreThreshold = 0.0f,
+            Size imageSize = new Size(),
+            Emgu.CV.Dnn.Backend backend = Emgu.CV.Dnn.Backend.Default,
+            Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu)
+        {
+            using (Util.VectorOfByte vbModelData = new Util.VectorOfByte(modelData))
+                _ptr = FeaturesInvoke.cveDISKCreateFromMemory(
+                    vbModelData,
+                    maxKeypoints,
+                    scoreThreshold,
+                    ref imageSize,
+                    backend,
+                    target,
+                    ref _feature2D,
+                    ref _sharedPtr);
+        }
+
+        /// <summary>
         /// Release the unmanaged resources associated with this object
         /// </summary>
         protected override void DisposeObject()
@@ -61,6 +92,17 @@ namespace Emgu.CV.Features
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveDISKCreate(
             IntPtr modelPath,
+            int maxKeypoints,
+            float scoreThreshold,
+            ref Size imageSize,
+            Emgu.CV.Dnn.Backend backend,
+            Emgu.CV.Dnn.Target target,
+            ref IntPtr feature2D,
+            ref IntPtr sharedPtr);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveDISKCreateFromMemory(
+            IntPtr modelData,
             int maxKeypoints,
             float scoreThreshold,
             ref Size imageSize,

@@ -49,6 +49,8 @@ namespace cv {
 	class ALIKED {};
 	class DISK {};
 	class LightGlueMatcher {};
+	class AffineFeature {};
+	class ANNIndex {};
 		
 	namespace flann
 	{
@@ -267,4 +269,61 @@ CVAPI(void) cveLightGlueMatcherSetPairInfo(
 	cv::Size* trainImageSize);
 CVAPI(void) cveLightGlueMatcherClearPairInfo(cv::LightGlueMatcher* matcher);
 CVAPI(void) cveLightGlueMatcherRelease(cv::Ptr<cv::LightGlueMatcher>** sharedPtr);
+
+//In-memory model create overloads
+CVAPI(cv::ALIKED*) cveALIKEDCreateFromMemory(
+	std::vector<unsigned char>* modelData,
+	cv::Size* inputSize,
+	bool normalizeDescriptors,
+	int engine,
+	int backend,
+	int target,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::ALIKED>** sharedPtr);
+CVAPI(cv::DISK*) cveDISKCreateFromMemory(
+	std::vector<unsigned char>* modelData,
+	int maxKeypoints,
+	float scoreThreshold,
+	cv::Size* imageSize,
+	int backendId,
+	int targetId,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::DISK>** sharedPtr);
+CVAPI(cv::LightGlueMatcher*) cveLightGlueMatcherCreateFromMemory(
+	std::vector<unsigned char>* modelData,
+	float scoreThreshold,
+	int backend,
+	int target,
+	cv::DescriptorMatcher** matcher,
+	cv::Ptr<cv::LightGlueMatcher>** sharedPtr);
+
+//AffineFeature
+CVAPI(cv::AffineFeature*) cveAffineFeatureCreate(
+	cv::Feature2D* backend,
+	int maxTilt,
+	int minTilt,
+	float tiltStep,
+	float rotateStepBase,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::AffineFeature>** sharedPtr);
+CVAPI(void) cveAffineFeatureRelease(cv::Ptr<cv::AffineFeature>** sharedPtr);
+
+//ANNIndex
+CVAPI(cv::ANNIndex*) cveANNIndexCreate(int dim, int distType, cv::Ptr<cv::ANNIndex>** sharedPtr);
+CVAPI(void) cveANNIndexRelease(cv::Ptr<cv::ANNIndex>** sharedPtr);
+CVAPI(void) cveANNIndexAddItems(cv::ANNIndex* annIndex, cv::_InputArray* features);
+CVAPI(void) cveANNIndexBuild(cv::ANNIndex* annIndex, int trees);
+CVAPI(void) cveANNIndexKnnSearch(
+	cv::ANNIndex* annIndex,
+	cv::_InputArray* query,
+	cv::_OutputArray* indices,
+	cv::_OutputArray* dists,
+	int knn,
+	int searchK);
+CVAPI(void) cveANNIndexSave(cv::ANNIndex* annIndex, cv::String* filename, bool prefault);
+CVAPI(void) cveANNIndexLoad(cv::ANNIndex* annIndex, cv::String* filename, bool prefault);
+CVAPI(int) cveANNIndexGetTreeNumber(cv::ANNIndex* annIndex);
+CVAPI(int) cveANNIndexGetItemNumber(cv::ANNIndex* annIndex);
+CVAPI(bool) cveANNIndexSetOnDiskBuild(cv::ANNIndex* annIndex, cv::String* filename);
+CVAPI(void) cveANNIndexSetSeed(cv::ANNIndex* annIndex, int seed);
 #endif

@@ -24,6 +24,7 @@ namespace cv {
 
 	namespace xfeatures2d {
 		class BEBLID {};
+		class TEBLID {};
 		class TBMR {};
 		class StarDetector {};
 		class FREAK {};
@@ -56,6 +57,14 @@ CVAPI(cv::xfeatures2d::BEBLID*) cveBEBLIDCreate(
 	cv::Feature2D** feature2D, 
 	cv::Ptr<cv::xfeatures2d::BEBLID>** sharedPtr);
 CVAPI(void) cveBEBLIDRelease(cv::Ptr<cv::xfeatures2d::BEBLID>** sharedPtr);
+
+//TEBLID
+CVAPI(cv::xfeatures2d::TEBLID*) cveTEBLIDCreate(
+	float scaleFactor,
+	int nBits,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::xfeatures2d::TEBLID>** sharedPtr);
+CVAPI(void) cveTEBLIDRelease(cv::Ptr<cv::xfeatures2d::TEBLID>** sharedPtr);
 
 //TBMR
 CVAPI(cv::xfeatures2d::TBMR*) cveTBMRCreate(

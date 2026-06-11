@@ -786,3 +786,198 @@ void cveLightGlueMatcherRelease(cv::Ptr<cv::LightGlueMatcher>** sharedPtr)
 	throw_no_features();
 #endif
 }
+
+//In-memory model create overloads
+cv::ALIKED* cveALIKEDCreateFromMemory(
+	std::vector<unsigned char>* modelData,
+	cv::Size* inputSize,
+	bool normalizeDescriptors,
+	int engine,
+	int backend,
+	int target,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::ALIKED>** sharedPtr)
+{
+#if defined(HAVE_OPENCV_FEATURES) && defined(HAVE_OPENCV_DNN)
+	cv::ALIKED::Params p;
+	if (inputSize->width > 0 && inputSize->height > 0)
+		p.inputSize = *inputSize;
+	p.normalizeDescriptors = normalizeDescriptors;
+	p.engine = engine;
+	p.backend = backend;
+	p.target = target;
+	cv::Ptr<cv::ALIKED> alikedPtr = cv::ALIKED::create(*modelData, p);
+	*sharedPtr = new cv::Ptr<cv::ALIKED>(alikedPtr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(alikedPtr.get());
+	return alikedPtr.get();
+#else
+	throw_no_features();
+#endif
+}
+
+cv::DISK* cveDISKCreateFromMemory(
+	std::vector<unsigned char>* modelData,
+	int maxKeypoints,
+	float scoreThreshold,
+	cv::Size* imageSize,
+	int backendId,
+	int targetId,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::DISK>** sharedPtr)
+{
+#if defined(HAVE_OPENCV_FEATURES) && defined(HAVE_OPENCV_DNN)
+	cv::Ptr<cv::DISK> diskPtr = cv::DISK::create(*modelData, maxKeypoints, scoreThreshold, *imageSize, backendId, targetId);
+	*sharedPtr = new cv::Ptr<cv::DISK>(diskPtr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(diskPtr.get());
+	return diskPtr.get();
+#else
+	throw_no_features();
+#endif
+}
+
+cv::LightGlueMatcher* cveLightGlueMatcherCreateFromMemory(
+	std::vector<unsigned char>* modelData,
+	float scoreThreshold,
+	int backend,
+	int target,
+	cv::DescriptorMatcher** matcher,
+	cv::Ptr<cv::LightGlueMatcher>** sharedPtr)
+{
+#if defined(HAVE_OPENCV_FEATURES) && defined(HAVE_OPENCV_DNN)
+	cv::Ptr<cv::LightGlueMatcher> lgPtr = cv::LightGlueMatcher::create(*modelData, scoreThreshold, backend, target);
+	*sharedPtr = new cv::Ptr<cv::LightGlueMatcher>(lgPtr);
+	*matcher = dynamic_cast<cv::DescriptorMatcher*>(lgPtr.get());
+	return lgPtr.get();
+#else
+	throw_no_features();
+#endif
+}
+
+//AffineFeature
+cv::AffineFeature* cveAffineFeatureCreate(
+	cv::Feature2D* backend,
+	int maxTilt,
+	int minTilt,
+	float tiltStep,
+	float rotateStepBase,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::AffineFeature>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	cv::Ptr<cv::Feature2D> backendPtr(backend, [](cv::Feature2D*) {});
+	cv::Ptr<cv::AffineFeature> affinePtr = cv::AffineFeature::create(backendPtr, maxTilt, minTilt, tiltStep, rotateStepBase);
+	*sharedPtr = new cv::Ptr<cv::AffineFeature>(affinePtr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(affinePtr.get());
+	return affinePtr.get();
+#else
+	throw_no_features();
+#endif
+}
+void cveAffineFeatureRelease(cv::Ptr<cv::AffineFeature>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	delete *sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_features();
+#endif
+}
+
+//ANNIndex
+cv::ANNIndex* cveANNIndexCreate(int dim, int distType, cv::Ptr<cv::ANNIndex>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	cv::Ptr<cv::ANNIndex> annPtr = cv::ANNIndex::create(dim, static_cast<cv::ANNIndex::Distance>(distType));
+	*sharedPtr = new cv::Ptr<cv::ANNIndex>(annPtr);
+	return annPtr.get();
+#else
+	throw_no_features();
+#endif
+}
+void cveANNIndexRelease(cv::Ptr<cv::ANNIndex>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	delete *sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_features();
+#endif
+}
+void cveANNIndexAddItems(cv::ANNIndex* annIndex, cv::_InputArray* features)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	annIndex->addItems(*features);
+#else
+	throw_no_features();
+#endif
+}
+void cveANNIndexBuild(cv::ANNIndex* annIndex, int trees)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	annIndex->build(trees);
+#else
+	throw_no_features();
+#endif
+}
+void cveANNIndexKnnSearch(
+	cv::ANNIndex* annIndex,
+	cv::_InputArray* query,
+	cv::_OutputArray* indices,
+	cv::_OutputArray* dists,
+	int knn,
+	int searchK)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	annIndex->knnSearch(*query, indices ? *indices : (cv::_OutputArray) cv::noArray(), dists ? *dists : (cv::_OutputArray) cv::noArray(), knn, searchK);
+#else
+	throw_no_features();
+#endif
+}
+void cveANNIndexSave(cv::ANNIndex* annIndex, cv::String* filename, bool prefault)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	annIndex->save(*filename, prefault);
+#else
+	throw_no_features();
+#endif
+}
+void cveANNIndexLoad(cv::ANNIndex* annIndex, cv::String* filename, bool prefault)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	annIndex->load(*filename, prefault);
+#else
+	throw_no_features();
+#endif
+}
+int cveANNIndexGetTreeNumber(cv::ANNIndex* annIndex)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	return annIndex->getTreeNumber();
+#else
+	throw_no_features();
+#endif
+}
+int cveANNIndexGetItemNumber(cv::ANNIndex* annIndex)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	return annIndex->getItemNumber();
+#else
+	throw_no_features();
+#endif
+}
+bool cveANNIndexSetOnDiskBuild(cv::ANNIndex* annIndex, cv::String* filename)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	return annIndex->setOnDiskBuild(*filename);
+#else
+	throw_no_features();
+#endif
+}
+void cveANNIndexSetSeed(cv::ANNIndex* annIndex, int seed)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	annIndex->setSeed(seed);
+#else
+	throw_no_features();
+#endif
+}

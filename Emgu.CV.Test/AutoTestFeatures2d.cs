@@ -46,6 +46,52 @@ namespace Emgu.CV.Test
 #endif
 
         [Test]
+        public void TestAffineFeature()
+        {
+            using (SIFT sift = new SIFT())
+            using (AffineFeature affine = new AffineFeature(sift))
+            using (Mat img = EmguAssert.LoadMat("box.png"))
+            using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
+            using (Mat descriptors = new Mat())
+            {
+                affine.DetectAndCompute(img, null, kpts, descriptors, false);
+                EmguAssert.IsTrue(kpts.Size > 0, "AffineFeature should detect keypoints");
+                EmguAssert.IsTrue(descriptors.Rows == kpts.Size, "One descriptor per keypoint expected");
+            }
+        }
+
+        [Test]
+        public void TestTEBLID()
+        {
+            AKAZE akaze = new AKAZE();
+            TEBLID teblid = new TEBLID(5.00f, TEBLID.TeblidSize.BitSize256);
+            TestFeature2DTracker(akaze, teblid);
+        }
+
+        [Test]
+        public void TestANNIndex()
+        {
+            int dim = 16;
+            int count = 100;
+            using (Mat features = new Mat(count, dim, DepthType.Cv32F, 1))
+            using (ANNIndex index = new ANNIndex(dim))
+            {
+                CvInvoke.Randu(features, new MCvScalar(0), new MCvScalar(1));
+                index.AddItems(features);
+                index.Build();
+                EmguAssert.IsTrue(index.ItemNumber == count, "Item number should match the number of features added");
+                EmguAssert.IsTrue(index.TreeNumber > 0, "Tree number should be positive after build");
+
+                using (Mat indices = new Mat())
+                using (Mat dists = new Mat())
+                {
+                    index.KnnSearch(features.Row(0), indices, dists, 3);
+                    EmguAssert.IsTrue(!indices.IsEmpty, "KnnSearch should return indices");
+                }
+            }
+        }
+
+        [Test]
         public void TestALIKEDDISKLightGlueInvalidModel()
         {
             // ALIKED, DISK and LightGlueMatcher require ONNX model files. Constructing

@@ -687,3 +687,31 @@ void cveBOWImgDescriptorExtractorCompute(cv::xfeatures2d::BOWImgDescriptorExtrac
 #endif
 }
 
+
+//TEBLID
+cv::xfeatures2d::TEBLID* cveTEBLIDCreate(
+	float scaleFactor,
+	int nBits,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::xfeatures2d::TEBLID>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_XFEATURES2D
+	cv::Ptr<cv::xfeatures2d::TEBLID> detectorPtr = cv::xfeatures2d::TEBLID::create(
+		scaleFactor,
+		nBits);
+	*sharedPtr = new cv::Ptr<cv::xfeatures2d::TEBLID>(detectorPtr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(detectorPtr.get());
+	return detectorPtr.get();
+#else
+	throw_no_xfeatures2d();
+#endif
+}
+void cveTEBLIDRelease(cv::Ptr<cv::xfeatures2d::TEBLID>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_XFEATURES2D
+	delete *sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_xfeatures2d();
+#endif
+}

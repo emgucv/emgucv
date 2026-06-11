@@ -42,6 +42,31 @@ namespace Emgu.CV.Features
         }
 
         /// <summary>
+        /// Create a LightGlueMatcher from in-memory model data. Intended for cases where the
+        /// model is read from application resources (for example Android assets) and is not
+        /// available as a path on the filesystem.
+        /// </summary>
+        /// <param name="modelData">Buffer containing the contents of the LightGlue ONNX model.</param>
+        /// <param name="scoreThreshold">Match confidence threshold.</param>
+        /// <param name="backend">DNN backend.</param>
+        /// <param name="target">DNN target.</param>
+        public LightGlueMatcher(
+            byte[] modelData,
+            float scoreThreshold = 0.0f,
+            Emgu.CV.Dnn.Backend backend = Emgu.CV.Dnn.Backend.Default,
+            Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu)
+        {
+            using (Util.VectorOfByte vbModelData = new Util.VectorOfByte(modelData))
+                _ptr = FeaturesInvoke.cveLightGlueMatcherCreateFromMemory(
+                    vbModelData,
+                    scoreThreshold,
+                    backend,
+                    target,
+                    ref _descriptorMatcherPtr,
+                    ref _sharedPtr);
+        }
+
+        /// <summary>
         /// Sets the keypoint and image size context for the next match call. This provides
         /// the spatial context that LightGlue needs in addition to descriptors. Must be
         /// called before Match/KnnMatch/RadiusMatch unless using automatic context from
@@ -83,6 +108,15 @@ namespace Emgu.CV.Features
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveLightGlueMatcherCreate(
             IntPtr modelPath,
+            float scoreThreshold,
+            Emgu.CV.Dnn.Backend backend,
+            Emgu.CV.Dnn.Target target,
+            ref IntPtr matcher,
+            ref IntPtr sharedPtr);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveLightGlueMatcherCreateFromMemory(
+            IntPtr modelData,
             float scoreThreshold,
             Emgu.CV.Dnn.Backend backend,
             Emgu.CV.Dnn.Target target,

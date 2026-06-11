@@ -46,6 +46,37 @@ namespace Emgu.CV.Features
         }
 
         /// <summary>
+        /// Create an ALIKED detector from in-memory model data. Intended for cases where the
+        /// model is read from application resources (for example Android assets) and is not
+        /// available as a path on the filesystem.
+        /// </summary>
+        /// <param name="modelData">Buffer containing the contents of the ALIKED ONNX model.</param>
+        /// <param name="inputSize">Input image size for the network. Use an empty size (the default) for the network's default of 640x640.</param>
+        /// <param name="normalizeDescriptors">Whether to L2-normalize descriptors.</param>
+        /// <param name="engine">DNN engine type.</param>
+        /// <param name="backend">DNN backend.</param>
+        /// <param name="target">DNN target.</param>
+        public ALIKED(
+            byte[] modelData,
+            Size inputSize = new Size(),
+            bool normalizeDescriptors = true,
+            Emgu.CV.Dnn.EngineType engine = Emgu.CV.Dnn.EngineType.New,
+            Emgu.CV.Dnn.Backend backend = Emgu.CV.Dnn.Backend.Default,
+            Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu)
+        {
+            using (Util.VectorOfByte vbModelData = new Util.VectorOfByte(modelData))
+                _ptr = FeaturesInvoke.cveALIKEDCreateFromMemory(
+                    vbModelData,
+                    ref inputSize,
+                    normalizeDescriptors,
+                    engine,
+                    backend,
+                    target,
+                    ref _feature2D,
+                    ref _sharedPtr);
+        }
+
+        /// <summary>
         /// Release the unmanaged resources associated with this object
         /// </summary>
         protected override void DisposeObject()
@@ -61,6 +92,18 @@ namespace Emgu.CV.Features
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveALIKEDCreate(
             IntPtr modelPath,
+            ref Size inputSize,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool normalizeDescriptors,
+            Emgu.CV.Dnn.EngineType engine,
+            Emgu.CV.Dnn.Backend backend,
+            Emgu.CV.Dnn.Target target,
+            ref IntPtr feature2D,
+            ref IntPtr sharedPtr);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveALIKEDCreateFromMemory(
+            IntPtr modelData,
             ref Size inputSize,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool normalizeDescriptors,
