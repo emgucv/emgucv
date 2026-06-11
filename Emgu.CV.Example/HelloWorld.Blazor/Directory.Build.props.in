@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<Project>
+  <!-- https://learn.microsoft.com/en-us/visualstudio/msbuild/customize-by-directory?view=vs-2022 -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <ItemGroup>
+    <!--
+      The runtime package ships cvextern.a and a .targets file that
+      automatically adds it to NativeFileReference when WasmBuildNative=true,
+      so the Emscripten link step links it into dotnet.native.wasm.
+      Build the package first: cd platforms/emscripten/build_dotnet && make ${EMGUCV_WEBASSEMBLY_NUGET_ID}
+    -->
+    <PackageReference Include="${EMGUCV_WEBASSEMBLY_NUGET_ID}" Version="${CPACK_PACKAGE_VERSION}" />
+  </ItemGroup>
+</Project>
