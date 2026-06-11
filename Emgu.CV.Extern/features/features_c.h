@@ -46,6 +46,9 @@ namespace cv {
 	class AKAZE {};
 	class AgastFeatureDetector {};
 	class SIFT {};
+	class ALIKED {};
+	class DISK {};
+	class LightGlueMatcher {};
 		
 	namespace flann
 	{
@@ -223,4 +226,45 @@ CVAPI(cv::SIFT*) cveSIFTCreate(
 	double contrastThreshold, double edgeThreshold,
 	double sigma, cv::Feature2D** feature2D, cv::Ptr<cv::SIFT>** sharedPtr);
 CVAPI(void) cveSIFTRelease(cv::Ptr<cv::SIFT>** sharedPtr);
+
+//ALIKED
+CVAPI(cv::ALIKED*) cveALIKEDCreate(
+	cv::String* modelPath,
+	cv::Size* inputSize,
+	bool normalizeDescriptors,
+	int engine,
+	int backend,
+	int target,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::ALIKED>** sharedPtr);
+CVAPI(void) cveALIKEDRelease(cv::Ptr<cv::ALIKED>** sharedPtr);
+
+//DISK
+CVAPI(cv::DISK*) cveDISKCreate(
+	cv::String* modelPath,
+	int maxKeypoints,
+	float scoreThreshold,
+	cv::Size* imageSize,
+	int backendId,
+	int targetId,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::DISK>** sharedPtr);
+CVAPI(void) cveDISKRelease(cv::Ptr<cv::DISK>** sharedPtr);
+
+//LightGlueMatcher
+CVAPI(cv::LightGlueMatcher*) cveLightGlueMatcherCreate(
+	cv::String* modelPath,
+	float scoreThreshold,
+	int backend,
+	int target,
+	cv::DescriptorMatcher** matcher,
+	cv::Ptr<cv::LightGlueMatcher>** sharedPtr);
+CVAPI(void) cveLightGlueMatcherSetPairInfo(
+	cv::LightGlueMatcher* matcher,
+	cv::_InputArray* queryKpts,
+	cv::_InputArray* trainKpts,
+	cv::Size* queryImageSize,
+	cv::Size* trainImageSize);
+CVAPI(void) cveLightGlueMatcherClearPairInfo(cv::LightGlueMatcher* matcher);
+CVAPI(void) cveLightGlueMatcherRelease(cv::Ptr<cv::LightGlueMatcher>** sharedPtr);
 #endif

@@ -671,3 +671,118 @@ void cveSIFTRelease(cv::Ptr<cv::SIFT>** sharedPtr)
 	throw_no_features();
 #endif
 }
+//ALIKED
+cv::ALIKED* cveALIKEDCreate(
+	cv::String* modelPath,
+	cv::Size* inputSize,
+	bool normalizeDescriptors,
+	int engine,
+	int backend,
+	int target,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::ALIKED>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	cv::ALIKED::Params p;
+	if (inputSize->width > 0 && inputSize->height > 0)
+		p.inputSize = *inputSize;
+	p.normalizeDescriptors = normalizeDescriptors;
+	p.engine = engine;
+	p.backend = backend;
+	p.target = target;
+	cv::Ptr<cv::ALIKED> alikedPtr = cv::ALIKED::create(*modelPath, p);
+	*sharedPtr = new cv::Ptr<cv::ALIKED>(alikedPtr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(alikedPtr.get());
+	return alikedPtr.get();
+#else
+	throw_no_features();
+#endif
+}
+void cveALIKEDRelease(cv::Ptr<cv::ALIKED>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	delete* sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_features();
+#endif
+}
+
+//DISK
+cv::DISK* cveDISKCreate(
+	cv::String* modelPath,
+	int maxKeypoints,
+	float scoreThreshold,
+	cv::Size* imageSize,
+	int backendId,
+	int targetId,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::DISK>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	cv::Ptr<cv::DISK> diskPtr = cv::DISK::create(*modelPath, maxKeypoints, scoreThreshold, *imageSize, backendId, targetId);
+	*sharedPtr = new cv::Ptr<cv::DISK>(diskPtr);
+	*feature2D = dynamic_cast<cv::Feature2D*>(diskPtr.get());
+	return diskPtr.get();
+#else
+	throw_no_features();
+#endif
+}
+void cveDISKRelease(cv::Ptr<cv::DISK>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	delete* sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_features();
+#endif
+}
+
+//LightGlueMatcher
+cv::LightGlueMatcher* cveLightGlueMatcherCreate(
+	cv::String* modelPath,
+	float scoreThreshold,
+	int backend,
+	int target,
+	cv::DescriptorMatcher** matcher,
+	cv::Ptr<cv::LightGlueMatcher>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	cv::Ptr<cv::LightGlueMatcher> lgPtr = cv::LightGlueMatcher::create(*modelPath, scoreThreshold, backend, target);
+	*sharedPtr = new cv::Ptr<cv::LightGlueMatcher>(lgPtr);
+	*matcher = dynamic_cast<cv::DescriptorMatcher*>(lgPtr.get());
+	return lgPtr.get();
+#else
+	throw_no_features();
+#endif
+}
+void cveLightGlueMatcherSetPairInfo(
+	cv::LightGlueMatcher* matcher,
+	cv::_InputArray* queryKpts,
+	cv::_InputArray* trainKpts,
+	cv::Size* queryImageSize,
+	cv::Size* trainImageSize)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	matcher->setPairInfo(*queryKpts, *trainKpts, *queryImageSize, *trainImageSize);
+#else
+	throw_no_features();
+#endif
+}
+void cveLightGlueMatcherClearPairInfo(cv::LightGlueMatcher* matcher)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	matcher->clearPairInfo();
+#else
+	throw_no_features();
+#endif
+}
+void cveLightGlueMatcherRelease(cv::Ptr<cv::LightGlueMatcher>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_FEATURES
+	delete* sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_features();
+#endif
+}

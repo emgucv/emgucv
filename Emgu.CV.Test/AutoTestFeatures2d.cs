@@ -46,6 +46,51 @@ namespace Emgu.CV.Test
 #endif
 
         [Test]
+        public void TestALIKEDDISKLightGlueInvalidModel()
+        {
+            // ALIKED, DISK and LightGlueMatcher require ONNX model files. Constructing
+            // with a non-existent model path must surface a managed CvException from the
+            // native layer, which exercises the full P/Invoke path.
+            // Same as TestCvException: exceptions raised from the native error handler
+            // crash the process on Linux, so the test is skipped there.
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                return;
+
+            try
+            {
+                using (ALIKED aliked = new ALIKED("non_existent_aliked_model.onnx"))
+                {
+                }
+                EmguAssert.IsTrue(false, "ALIKED creation with a missing model should throw");
+            }
+            catch (CvException)
+            {
+            }
+
+            try
+            {
+                using (DISK disk = new DISK("non_existent_disk_model.onnx"))
+                {
+                }
+                EmguAssert.IsTrue(false, "DISK creation with a missing model should throw");
+            }
+            catch (CvException)
+            {
+            }
+
+            try
+            {
+                using (LightGlueMatcher lightGlue = new LightGlueMatcher("non_existent_lightglue_model.onnx"))
+                {
+                }
+                EmguAssert.IsTrue(false, "LightGlueMatcher creation with a missing model should throw");
+            }
+            catch (CvException)
+            {
+            }
+        }
+
+        [Test]
         public void TestDAISY()
         {
             //SURF surf = new SURF(300);
