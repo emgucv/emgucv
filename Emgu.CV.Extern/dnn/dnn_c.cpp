@@ -97,10 +97,10 @@ void cveReadTensorFromONNX(cv::String* path, cv::Mat* tensor)
 }
 
 
-cv::dnn::Net* cveReadNet(cv::String* model, cv::String* config, cv::String* framework)
+cv::dnn::Net* cveReadNet(cv::String* model, cv::String* config, cv::String* framework, int engine)
 {
 #ifdef HAVE_OPENCV_DNN
-	cv::dnn::Net net = cv::dnn::readNet(*model, *config, *framework);
+	cv::dnn::Net net = cv::dnn::readNet(*model, *config, *framework, engine);
 	return new cv::dnn::Net(net);
 #else
 	throw_no_dnn();

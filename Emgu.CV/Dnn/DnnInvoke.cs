@@ -410,18 +410,19 @@ namespace Emgu.CV.Dnn
         ///    *.xml (DLDT, https://software.intel.com/openvino-toolkit)
         /// </param>
         /// <param name="framework">Explicit framework name tag to determine a format.</param>
+        /// <param name="engine">Select DNN engine to be used. With auto selection the new engine is used first and falls back to classic.</param>
         /// <returns>Net object.</returns>
-        public static Net ReadNet(String model, String config = null, String framework = null)
+        public static Net ReadNet(String model, String config = null, String framework = null, EngineType engine = EngineType.Auto)
         {
             using (CvString modelStr = new CvString(model))
             using (CvString configStr = new CvString(config == null ? String.Empty : config))
             using (CvString frameworkStr = new CvString(framework == null ? String.Empty : framework))
             {
-                return new Net(cveReadNet(modelStr, configStr, frameworkStr));
+                return new Net(cveReadNet(modelStr, configStr, frameworkStr, engine));
             }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveReadNet(IntPtr model, IntPtr config, IntPtr framework);
+        private static extern IntPtr cveReadNet(IntPtr model, IntPtr config, IntPtr framework, EngineType engine);
 
         /// <summary>
         /// Load a network from Intel's Model Optimizer intermediate representation.

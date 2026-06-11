@@ -62,7 +62,7 @@ CVAPI(cv::dnn::Net*) cveReadNetFromTorch(cv::String* model, bool isBinary, bool 
 CVAPI(void) cveReadTorchBlob(cv::String* filename, bool isBinary, cv::Mat* tensor);
 */
 
-CVAPI(cv::dnn::Net*) cveReadNet(cv::String* model, cv::String* config, cv::String* framework);
+CVAPI(cv::dnn::Net*) cveReadNet(cv::String* model, cv::String* config, cv::String* framework, int engine);
 CVAPI(cv::dnn::Net*) cveReadNetFromModelOptimizer(cv::String* xml, cv::String* bin);
 
 CVAPI(cv::dnn::Net*) cveDnnNetCreate();
