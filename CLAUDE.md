@@ -236,7 +236,33 @@ dotnet test Emgu.CV.Test/Emgu.CV.Test.Net/Emgu.CV.Test.Net.csproj --filter "Test
 
 Test files (NUnit) are in `Emgu.CV.Test/` as `AutoTest*.cs`.
 
-## Architecture
+### Cleaning the Repository
+
+To remove all build outputs and generated files from the repository and every
+submodule in one go:
+
+```bash
+./miscellaneous/git-clean
+```
+
+The script runs `git clean -d -f -x` in each submodule (opencv, opencv_contrib,
+opencv_extra, eigen, vtk, tesseract, leptonica, depthai-core, freetype2,
+harfbuzz, hdf5, openvino) and finally in the repository root. It deletes
+**every untracked file**, including:
+
+- CMake build trees (`build_x86_64/`, `platforms/ubuntu/*/build/`,
+  `platforms/emscripten/build_dotnet/`, etc.)
+- Native binaries under `libs/`
+- Generated sources (`*.g.cs`, `Util/VectorOf*.cs`, `Directory.Build.props`,
+  `CvInvokeEntryPoints.cs`) — these are recreated by the next CMake configure
+- NuGet packages in `platforms/nuget/`
+- All `bin/` and `obj/` directories
+
+Before running it, commit (or move out of the tree) any untracked file you
+want to keep — uncommitted patches, notes, or downloaded models are deleted
+without confirmation. Modified *tracked* files are not affected. After a
+clean, the relevant platform `cmake_configure` script must be re-run before
+anything can be built.
 
 ### C# Project Structure
 Projects share source via `.projitems` files (MSBuild Shared Projects):
