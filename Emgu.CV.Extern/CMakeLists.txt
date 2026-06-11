@@ -1652,7 +1652,7 @@ IF (NOT HAVE_opencv_ml)
 ENDIF()
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/em_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/EM.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Ml/EM.g.cs"
     "cv::ml::EM" 
     "EM" 
     "ClustersNumber;CovarianceMatrixType;TermCriteria" 
@@ -1674,7 +1674,7 @@ ENDIF()
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/svm_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/SVM.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Ml/SVM.g.cs"
     "cv::ml::SVM" 
     "SVM" 
     "Type;Gamma;Coef0;Degree;C;Nu;P;Kernel;TermCriteria;KernelType" 
@@ -1703,7 +1703,7 @@ ENDIF()
 
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/svmsgd_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/SVMSGD.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Ml/SVMSGD.g.cs"
     "cv::ml::SVMSGD" 
     "SVMSGD" 
     "SvmsgdType;MarginType;MarginRegularization;InitialStepSize;StepDecreasingPower;TermCriteria" 
@@ -1728,7 +1728,7 @@ ENDIF()
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/knearest_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/KNearest.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Ml/KNearest.g.cs"
     "cv::ml::KNearest" 
     "KNearest" 
     "DefaultK;IsClassifier;Emax;AlgorithmType" 
@@ -1751,7 +1751,7 @@ ENDIF()
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/ann_mlp_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/ANN_MLP.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Ml/ANN_MLP.g.cs"
     "cv::ml::ANN_MLP" 
     "ANN_MLP" 
     "TermCriteria;BackpropWeightScale;BackpropMomentumScale;RpropDW0;RpropDWPlus;RpropDWMinus;RpropDWMin;RpropDWMax;AnnealInitialT;AnnealFinalT;AnnealCoolingRatio;AnnealItePerStep" 
@@ -1782,7 +1782,7 @@ ENDIF()
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/logistic_regression_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/LogisticRegression.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Ml/LogisticRegression.g.cs"
     "cv::ml::LogisticRegression" 
     "LogisticRegression" 
     "LearningRate;Iterations;Regularization;TrainMethod;MiniBatchSize;TermCriteria" 
@@ -1807,7 +1807,7 @@ ENDIF()
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/rtrees_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/RTrees.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Ml/RTrees.g.cs"
     "cv::ml::RTrees" 
     "RTrees" 
     "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy;CalculateVarImportance;ActiveVarCount;TermCriteria" 
@@ -1837,7 +1837,7 @@ ENDIF()
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/dtree_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/DTrees.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Ml/DTrees.g.cs"
     "cv::ml::DTrees" 
     "DTrees" 
     "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 
@@ -1864,7 +1864,7 @@ ENDIF()
   
   CREATE_OCV_CLASS_PROPERTY( 
     "ml/boost_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ml/Boost.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Ml/Boost.g.cs"
     "cv::ml::Boost" 
     "Boost" 
     "MaxCategories;MaxDepth;MinSampleCount;CVFolds;UseSurrogates;Use1SERule;TruncatePrunedTree;RegressionAccuracy" 

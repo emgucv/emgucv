@@ -30,7 +30,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Stitching\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Superres\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Videostab\*.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Ml\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Dnn\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Objdetect\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Imgproc\*.cs" />

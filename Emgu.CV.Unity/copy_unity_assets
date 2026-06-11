@@ -46,7 +46,6 @@ cp -r ../Emgu.CV/Geometry Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Imgcodecs Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Imgproc Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/HighGUI Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
-cp -r ../Emgu.CV/Ml Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Objdetect Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Ocl Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Optflow Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
@@ -103,6 +102,8 @@ mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/LineDescriptor
 cp -r ../Emgu.CV.Contrib/LineDescriptor/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/LineDescriptor
 #mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc
 #cp -r ../Emgu.CV.Contrib/Mcc/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc
+mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Ml
+cp -r ../Emgu.CV.Contrib/Ml/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Ml
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/PhaseUnwrapping
 cp -r ../Emgu.CV.Contrib/PhaseUnwrapping/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/PhaseUnwrapping
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Plot

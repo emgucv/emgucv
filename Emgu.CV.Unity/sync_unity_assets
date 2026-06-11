@@ -17,7 +17,6 @@ cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Geometry/*.cs ../Emgu.CV/Geometry
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Imgproc/*.cs ../Emgu.CV/Imgproc
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Imgcodecs/*.cs ../Emgu.CV/Imgcodecs
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/HighGUI/*.cs ../Emgu.CV/HighGUI 
-cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Ml/*.cs ../Emgu.CV/Ml
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Objdetect/*.cs ../Emgu.CV/Objdetect  
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Ocl/*.cs ../Emgu.CV/Ocl 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV/Optflow/*.cs ../Emgu.CV/Optflow 
@@ -51,6 +50,7 @@ cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Face/*.cs ../Emgu.CV.Contrib
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Freetype/*.cs ../Emgu.CV.Contrib/Freetype 
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Fuzzy/*.cs ../Emgu.CV.Contrib/Fuzzy
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Gapi/*.cs ../Emgu.CV.Contrib/Gapi
+cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Ml/*.cs ../Emgu.CV.Contrib/Ml
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Hdf/*.cs ../Emgu.CV.Contrib/Hdf
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Hfs/*.cs ../Emgu.CV.Contrib/Hfs
 cp -r Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/ImgHash/*.cs ../Emgu.CV.Contrib/ImgHash
