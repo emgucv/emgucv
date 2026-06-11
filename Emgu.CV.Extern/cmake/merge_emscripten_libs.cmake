@@ -34,6 +34,7 @@ file(REMOVE "${OUTPUT_FILE}")
 # Step 1: Quick-append all members from each OpenCV and 3rdparty .bc archive.
 file(GLOB BC_ARCHIVES
     "${BUILD_DIR}/bin/webgl/*.bc"
+    "${BUILD_DIR}/opencv/lib/*.bc"
     "${BUILD_DIR}/opencv/3rdparty/lib/*.bc"
 )
 foreach(bc_archive ${BC_ARCHIVES})

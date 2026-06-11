@@ -87,9 +87,9 @@
       The runtime package ships cvextern.a and a .targets file that
       automatically adds it to NativeFileReference when WasmBuildNative=true,
       so the Emscripten link step links it into dotnet.native.wasm.
-      Build the package first: dotnet build Emgu.CV.Runtime/WebAssembly/Emgu.CV.Runtime.WebAssembly.csproj
+      Build the package first: cd platforms/emscripten/build_dotnet && make Emgu.CV.runtime.webassembly
     -->
-    <PackageReference Include="Emgu.CV.runtime.mini.webassembly" Version="4.13.0.5890" />
+    <PackageReference Include="Emgu.CV.runtime.webassembly" Version="5.0.0.*" />
   </ItemGroup>
 
 </Project>
