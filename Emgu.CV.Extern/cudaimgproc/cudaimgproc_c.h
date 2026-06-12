@@ -19,21 +19,6 @@
 //#include "opencv2/core/types_c.h"
 #include "emgu_c.h"
 
-// In OpenCV 5 CornernessCriteria and CornersDetector moved from cudaimgproc
-// to cudafeatures2d.
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-#include "opencv2/cudafeatures2d.hpp"
-#else
-namespace cv
-{
-	namespace cuda
-	{
-		class CornernessCriteria {};
-		class CornersDetector {};
-	}
-}
-#endif
-
 #else
 static inline CV_NORETURN void throw_no_cudaimgproc() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Imgproc support. To use this module, please switch to the Emgu CV runtime with CUDA support."); }
 
@@ -41,19 +26,11 @@ namespace cv
 {
 	namespace cuda
 	{
-		class CornernessCriteria
-		{
-		};
-
 		class CLAHE
 		{
 		};
 
 		class CannyEdgeDetector
-		{
-		};
-
-		class CornersDetector
 		{
 		};
 
@@ -108,15 +85,6 @@ CVAPI(void) cudaHistRange(cv::_InputArray* src, cv::_OutputArray* hist, cv::_Inp
 
 CVAPI(void) cudaBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, int kernelSize, float sigmaColor, float sigmaSpatial, int borderMode, cv::cuda::Stream* stream);
 
-//----------------------------------------------------------------------------
-//
-//  CudaCornernessCriteria
-//
-//----------------------------------------------------------------------------
-CVAPI(cv::cuda::CornernessCriteria*) cudaCreateHarrisCorner(int srcType, int blockSize, int ksize, double k, int borderType, cv::Ptr<cv::cuda::CornernessCriteria>** sharedPtr);
-CVAPI(cv::cuda::CornernessCriteria*) cudaCreateMinEigenValCorner(int srcType, int blockSize, int ksize, int borderType, cv::Ptr<cv::cuda::CornernessCriteria>** sharedPtr);
-CVAPI(void) cudaCornernessCriteriaCompute(cv::Ptr<cv::cuda::CornernessCriteria>* detector, cv::_InputArray* src, cv::_OutputArray* dst,  cv::cuda::Stream* stream);
-CVAPI(void) cudaCornernessCriteriaRelease(cv::Ptr<cv::cuda::CornernessCriteria>** detector);
 
 //----------------------------------------------------------------------------
 //
@@ -138,14 +106,6 @@ CVAPI(void) cudaCannyEdgeDetectorDetect(cv::cuda::CannyEdgeDetector* detector, c
 
 CVAPI(void) cudaCannyEdgeDetectorRelease(cv::Ptr<cv::cuda::CannyEdgeDetector>** detector);
 
-//----------------------------------------------------------------------------
-//
-//  CudaGoodFeaturesToTrackDetector
-//
-//----------------------------------------------------------------------------
-CVAPI(cv::cuda::CornersDetector*) cudaGoodFeaturesToTrackDetectorCreate(int srcType, int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double harrisK, cv::Ptr<cv::cuda::CornersDetector>** sharedPtr);
-CVAPI(void) cudaCornersDetectorDetect(cv::cuda::CornersDetector* detector, cv::_InputArray* image, cv::_OutputArray* corners, cv::_InputArray* mask, cv::cuda::Stream* stream);
-CVAPI(void) cudaCornersDetectorRelease(cv::Ptr<cv::cuda::CornersDetector>** detector);
 
 
 //----------------------------------------------------------------------------

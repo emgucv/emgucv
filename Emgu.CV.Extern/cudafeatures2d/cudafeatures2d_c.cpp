@@ -472,3 +472,82 @@ void cveCudaORBRelease(cv::Ptr<cv::cuda::ORB>** sharedPtr)
 	throw_no_cudafeature2d();
 #endif
 }
+
+//----------------------------------------------------------------------------
+//
+//  CudaCornernessCriteria
+//
+//----------------------------------------------------------------------------
+cv::cuda::CornernessCriteria* cudaCreateHarrisCorner(int srcType, int blockSize, int ksize, double k, int borderType, cv::Ptr<cv::cuda::CornernessCriteria>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_CUDAFEATURES2D
+	cv::Ptr<cv::cuda::CornernessCriteria> ptr = cv::cuda::createHarrisCorner(srcType, blockSize, ksize, k, borderType);
+	*sharedPtr = new cv::Ptr<cv::cuda::CornernessCriteria>(ptr);
+	return (*sharedPtr)->get();
+#else
+	throw_no_cudafeature2d();
+#endif
+}
+
+cv::cuda::CornernessCriteria* cudaCreateMinEigenValCorner(int srcType, int blockSize, int ksize, int borderType, cv::Ptr<cv::cuda::CornernessCriteria>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_CUDAFEATURES2D
+	cv::Ptr<cv::cuda::CornernessCriteria> ptr = cv::cuda::createMinEigenValCorner(srcType, blockSize, ksize, borderType);
+	*sharedPtr = new cv::Ptr<cv::cuda::CornernessCriteria>(ptr);
+	return (*sharedPtr)->get();
+#else
+	throw_no_cudafeature2d();
+#endif
+}
+
+void cudaCornernessCriteriaCompute(cv::Ptr<cv::cuda::CornernessCriteria>* detector, cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream)
+{
+#ifdef HAVE_OPENCV_CUDAFEATURES2D
+	(*detector)->compute(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
+#else
+	throw_no_cudafeature2d();
+#endif
+}
+
+void cudaCornernessCriteriaRelease(cv::Ptr<cv::cuda::CornernessCriteria>** detector)
+{
+#ifdef HAVE_OPENCV_CUDAFEATURES2D
+	delete *detector;
+	*detector = 0;
+#else
+	throw_no_cudafeature2d();
+#endif
+}
+
+//----------------------------------------------------------------------------
+//
+//  GpuGoodFeaturesToTrackDetector
+//
+//----------------------------------------------------------------------------
+cv::cuda::CornersDetector* cudaGoodFeaturesToTrackDetectorCreate(int srcType, int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double harrisK, cv::Ptr<cv::cuda::CornersDetector>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_CUDAFEATURES2D
+	cv::Ptr<cv::cuda::CornersDetector> detector = cv::cuda::createGoodFeaturesToTrackDetector(srcType, maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, harrisK);
+	*sharedPtr = new cv::Ptr<cv::cuda::CornersDetector>(detector);
+	return (*sharedPtr)->get();
+#else
+	throw_no_cudafeature2d();
+#endif
+}
+void cudaCornersDetectorDetect(cv::cuda::CornersDetector* detector, cv::_InputArray* image, cv::_OutputArray* corners, cv::_InputArray* mask, cv::cuda::Stream* stream)
+{
+#ifdef HAVE_OPENCV_CUDAFEATURES2D
+	detector->detect(*image, *corners, mask ? *mask : (cv::InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+#else
+	throw_no_cudafeature2d();
+#endif
+}
+void cudaCornersDetectorRelease(cv::Ptr<cv::cuda::CornersDetector>** detector)
+{
+#ifdef HAVE_OPENCV_CUDAFEATURES2D
+	delete *detector;
+	*detector = 0;
+#else
+	throw_no_cudafeature2d();
+#endif
+}
