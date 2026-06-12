@@ -1351,24 +1351,6 @@ namespace Emgu.CV.Cuda
         */
 
         /// <summary>
-        /// Converts an array to half precision floating number.
-        /// </summary>
-        /// <param name="src">Input array.</param>
-        /// <param name="dst">Output array.</param>
-        /// <param name="stream">Stream for the asynchronous version.</param>
-        public static void ConvertFp16(IInputArray src, IOutputArray dst, Stream stream = null)
-        {
-            using (InputArray iaSrc = src.GetInputArray())
-            using (OutputArray oaDst = dst.GetOutputArray())
-            {
-                cudaConvertFp16(iaSrc, oaDst, stream);
-            }
-        }
-
-        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cudaConvertFp16(IntPtr src, IntPtr dst, IntPtr stream);
-
-        /// <summary>
         /// Checks if array elements lie between two scalars.
         /// </summary>
         /// <param name="src">First input array.</param>

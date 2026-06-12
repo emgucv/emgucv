@@ -50,8 +50,6 @@ CVAPI(void) cudaPrintCudaDeviceInfo(int device);
 
 CVAPI(void) cudaPrintShortCudaDeviceInfo(int device);
 
-CVAPI(void) cudaConvertFp16(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream);
-
 //----------------------------------------------------------------------------
 //
 //  Gpu Module Info
