@@ -436,7 +436,7 @@ namespace Emgu.CV.Test
         {
             if (!CudaInvoke.HasCuda)
                 return;
-            Mat image = EmguAssert.LoadMat("pedestrian.png");
+            Mat image = EmguAssert.LoadMat("pedestrian.png", ImreadModes.Grayscale);
             GpuMat cudaImage = new GpuMat(image);
             GpuMat cudaResult = new GpuMat();
 
@@ -615,15 +615,13 @@ namespace Emgu.CV.Test
         {
             if (!CudaInvoke.HasCuda)
                 return;
-            using (Mat img = EmguAssert.LoadMat("box.png"))
-            using (GpuMat cudaImage = new GpuMat(img))
-            using (GpuMat grayCudaImage = new GpuMat())
+            using (Mat img = EmguAssert.LoadMat("box.png", ImreadModes.Grayscale))
+            using (GpuMat grayCudaImage = new GpuMat(img))
             using (CudaFastFeatureDetector featureDetector =
                 new CudaFastFeatureDetector(10, true, FastFeatureDetector.DetectorType.Type9_16, 1000))
             using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
             using (GpuMat keyPointsMat = new GpuMat())
             {
-                CudaInvoke.CvtColor(cudaImage, grayCudaImage, ColorConversion.Bgr2Gray);
                 featureDetector.DetectAsync(grayCudaImage, keyPointsMat);
                 featureDetector.Convert(keyPointsMat, kpts);
                 //featureDetector.DetectKeyPointsRaw(grayCudaImage, null, keyPointsMat);
@@ -645,16 +643,13 @@ namespace Emgu.CV.Test
         {
             if (!CudaInvoke.HasCuda)
                 return;
-            using (Mat img = EmguAssert.LoadMat("box.png"))
-            using (GpuMat cudaImage = new GpuMat(img))
-            using (GpuMat grayCudaImage = new GpuMat())
+            using (Mat img = EmguAssert.LoadMat("box.png", ImreadModes.Grayscale))
+            using (GpuMat grayCudaImage = new GpuMat(img))
             using (CudaORBDetector detector = new CudaORBDetector(500))
             using (VectorOfKeyPoint kpts = new VectorOfKeyPoint())
             using (GpuMat keyPointMat = new GpuMat())
             using (GpuMat descriptorMat = new GpuMat())
             {
-                CudaInvoke.CvtColor(cudaImage, grayCudaImage, ColorConversion.Bgr2Gray);
-
                 //Async version
                 detector.DetectAsync(grayCudaImage, keyPointMat);
                 detector.Convert(keyPointMat, kpts);
@@ -697,7 +692,7 @@ namespace Emgu.CV.Test
             Mat gDownCpu = new Mat();
             gDown.Download(gDownCpu);
             Mat gUpCpu = new Mat();
-            gUp.Download(gDownCpu);
+            gUp.Download(gUpCpu);
 
             CvInvoke.AbsDiff(down, gDownCpu, down);
             CvInvoke.AbsDiff(up, gUpCpu, up);
@@ -941,6 +936,14 @@ namespace Emgu.CV.Test
             //Image<Gray, Byte> prevImg, currImg;
             //AutoTestVarious.OpticalFlowImage(out prevImg, out currImg);
             GpuMat[] images = OpticalFlowImage();
+            // Brox optical flow requires CV_32FC1 input
+            for (int i = 0; i < images.Length; i++)
+            {
+                GpuMat img32F = new GpuMat();
+                images[i].ConvertTo(img32F, DepthType.Cv32F, 1.0 / 255, 0, null);
+                images[i].Dispose();
+                images[i] = img32F;
+            }
             Mat flow = new Mat();
             CudaBroxOpticalFlow opticalflow = new CudaBroxOpticalFlow();
             //using (CudaImage<Gray, float> prevGpu = new CudaImage<Gray, float>(prevImg.Convert<Gray, float>()))
@@ -1266,9 +1269,17 @@ namespace Emgu.CV.Test
                 PointF[] points = CvInvoke.PerspectiveTransform(pts, homography);
                 //homography.ProjectPoints(points);
 
-                //Merge the object image and the observed image into one big image for display
+                //Merge the object image and the observed image into one big image for display.
+                //VConcat requires both images to have the same width, pad the narrower one.
                 Mat res = new Mat();
-                CvInvoke.VConcat(box, observedImage, res);
+                int width = Math.Max(box.Width, observedImage.Width);
+                using (Mat boxPadded = new Mat())
+                using (Mat observedPadded = new Mat())
+                {
+                    CvInvoke.CopyMakeBorder(box, boxPadded, 0, 0, 0, width - box.Width, BorderType.Constant, new MCvScalar());
+                    CvInvoke.CopyMakeBorder(observedImage, observedPadded, 0, 0, 0, width - observedImage.Width, BorderType.Constant, new MCvScalar());
+                    CvInvoke.VConcat(boxPadded, observedPadded, res);
+                }
                 //Image<Gray, Byte> res = box.ConcateVertical(observedImage);
 
                 for (int i = 0; i < points.Length; i++)
@@ -1306,6 +1317,13 @@ namespace Emgu.CV.Test
         {
             if (!CudaInvoke.HasCuda)
                 return;
+            // The NVIDIA Optical Flow runtime dlopens libnvidia-opticalflow.so.1 and the
+            // libcuda.so dev symlink; skip when either cannot be loaded (e.g. under WSL the
+            // driver only registers libcuda.so.1).
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+                && !(System.Runtime.InteropServices.NativeLibrary.TryLoad("libnvidia-opticalflow.so.1", out _)
+                     && System.Runtime.InteropServices.NativeLibrary.TryLoad("libcuda.so", out _)))
+                return;
             int cudaDevice = CudaInvoke.GetDevice();
             using (CudaDeviceInfo deviceInfo = new CudaDeviceInfo(cudaDevice))
             {
@@ -1334,6 +1352,13 @@ namespace Emgu.CV.Test
         public void TestNVidiaOpticalFlow_2_0()
         {
             if (!CudaInvoke.HasCuda)
+                return;
+            // The NVIDIA Optical Flow runtime dlopens libnvidia-opticalflow.so.1 and the
+            // libcuda.so dev symlink; skip when either cannot be loaded (e.g. under WSL the
+            // driver only registers libcuda.so.1).
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
+                && !(System.Runtime.InteropServices.NativeLibrary.TryLoad("libnvidia-opticalflow.so.1", out _)
+                     && System.Runtime.InteropServices.NativeLibrary.TryLoad("libcuda.so", out _)))
                 return;
             int cudaDevice = CudaInvoke.GetDevice();
             using (CudaDeviceInfo deviceInfo = new CudaDeviceInfo(cudaDevice))
