@@ -117,10 +117,13 @@ namespace Emgu.CV.Models
                     //_mode = mode;
                     FileInfo fi = new FileInfo(manager.Files[0].LocalFile);
                     _tessDataDirectory = fi.DirectoryName;
-                    var rawData = System.IO.File.ReadAllBytes(Path.Combine(_tessDataDirectory, String.Format("{0}.traineddata", _lang)));
+                    // Initialize from the tessdata directory rather than from the raw
+                    // language buffer: the in-memory init leaves tesseract without a
+                    // tessdata path, so secondary languages such as "osd" (required by
+                    // PageSegMode.AutoOsd, and downloaded next to the main language
+                    // file) can never be loaded.
                     _ocr = new Tesseract();
-                    _ocr.Init(rawData, _lang, _mode);
-                    //_ocr = new Tesseract(_tessDataDirectory, _lang, _mode);
+                    _ocr.Init(_tessDataDirectory, _lang, _mode);
                 }
             }
         }
