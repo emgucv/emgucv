@@ -111,7 +111,7 @@ namespace Emgu.CV.Test
         public async Task TestOCRBgrText()
         {
             using (TesseractModel ocr = new TesseractModel())
-            using (Mat img = new Mat(480, 200, DepthType.Cv8U, 3))
+            using (Mat img = new Mat(new Size(480, 200), DepthType.Cv8U, 3))
             {
                 img.SetTo(new MCvScalar());
                 await ocr.Init(AutoTestModels.DownloadManager_OnDownloadProgressChanged);
