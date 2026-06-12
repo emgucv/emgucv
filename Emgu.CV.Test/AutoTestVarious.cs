@@ -2450,7 +2450,7 @@ namespace Emgu.CV.Test
             Mat[] images = new Mat[numberOfFrames];
             for (int i = 0; i < images.Length; i++)
             {
-                images[i] = new Mat(width, height, DepthType.Cv8U, 3);
+                images[i] = new Mat(height, width, DepthType.Cv8U, 3);
                 CvInvoke.Randu(images[i], new MCvScalar(), new MCvScalar(255, 255, 255));
             }
 
