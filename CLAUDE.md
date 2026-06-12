@@ -251,7 +251,7 @@ Platform runtime libraries (which native DLLs to load) are in `Emgu.CV.Runtime/`
 The entry point project for the main managed assembly is `Emgu.CV/NetStandard/Emgu.CV.csproj`.
 
 ### P/Invoke Pattern
-All native calls go through the static partial class `CvInvoke` in `Emgu.CV/PInvoke/`.
+All native calls go through the static partial class `CvInvoke` (in `namespace Emgu.CV`). Core wrappers live in `Emgu.CV/PInvoke/`; module-specific wrappers live in their own folder alongside the corresponding C# classes (e.g., `Emgu.CV/Geometry/GeometryInvoke.cs`, `Emgu.CV/Photo/CvInvokePhoto.cs`). All files contribute to the same `partial class CvInvoke`.
 - Native library constant: `CvInvoke.ExternLibrary = "cvextern"`
 - Calling convention: `CallingConvention.Cdecl`
 - Bool marshaling: `UnmanagedType.U1`
@@ -288,5 +288,6 @@ After building, native binaries land in `libs/runtimes/<rid>/native/` and are re
 - The assembly is strong-named using `Emgu.CV.snk`.
 - `UNSAFE_ALLOWED` and `AllowUnsafeBlocks` are enabled project-wide.
 - `NETSTANDARD` is defined in Debug builds.
-- When adding a new native C++ property/method exposed to C#: add the declaration to `Emgu.CV.Extern/<module>/<class>_property.h`, add the implementation to the corresponding `.cpp`, then re-run CMake to regenerate the `.g.cs` file. Do not write `.g.cs` files by hand.
+- When adding a new native C++ property/method exposed to C#: add the declaration to `Emgu.CV.Extern/<module>/<class>_property.h`, add the implementation to the corresponding `.cpp`, update the `CREATE_OCV_CLASS_PROPERTY` call in `Emgu.CV.Extern/CMakeLists.txt` to point to the correct module folder and include header, then re-run CMake to regenerate the `.g.cs` file. Do not write `.g.cs` files by hand.
 - When adding a new `VectorOf*` collection type: use the CMake `CREATE_VECTOR_CS` macro in `Emgu.CV.Extern/CMakeLists.txt` rather than writing the wrapper manually.
+- When adding a new OpenCV module wrapper: create `Emgu.CV.Extern/<module>/<module>_c.h` and `<module>_c.cpp` for the C++ side (guard all implementations with `#ifdef HAVE_OPENCV_<MODULE>` / `throw_no_<module>()` fallback); create a matching `Emgu.CV/<Module>/` folder for the C# wrappers; add `<Compile Include="$(MSBuildThisFileDirectory)<Module>\*.cs" />` to `Emgu.CV/Emgu.CV.Shared.projitems`.
