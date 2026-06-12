@@ -19,6 +19,21 @@
 //#include "opencv2/core/types_c.h"
 #include "emgu_c.h"
 
+// In OpenCV 5 CornernessCriteria and CornersDetector moved from cudaimgproc
+// to cudafeatures2d.
+#ifdef HAVE_OPENCV_CUDAFEATURES2D
+#include "opencv2/cudafeatures2d.hpp"
+#else
+namespace cv
+{
+	namespace cuda
+	{
+		class CornernessCriteria {};
+		class CornersDetector {};
+	}
+}
+#endif
+
 #else
 static inline CV_NORETURN void throw_no_cudaimgproc() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without CUDA Imgproc support. To use this module, please switch to the Emgu CV runtime with CUDA support."); }
 

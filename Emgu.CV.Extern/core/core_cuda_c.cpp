@@ -105,7 +105,12 @@ void cudaPrintShortCudaDeviceInfo(int device)
 void cudaConvertFp16(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream)
 {
 #ifdef HAVE_OPENCV_CUDEV
-	cv::cuda::convertFp16(*src, *dst, *stream ? *stream : cv::cuda::Stream::Null());
+	// cv::cuda::convertFp16 was removed in OpenCV 5; GpuMat::convertTo handles
+	// CV_16F directly. Keep the old semantics: a 16F input converts to 32F,
+	// any other input converts to 16F.
+	cv::cuda::GpuMat srcMat = src->getGpuMat();
+	int rtype = CV_MAKETYPE(srcMat.depth() == CV_16F ? CV_32F : CV_16F, srcMat.channels());
+	srcMat.convertTo(*dst, rtype, *stream ? *stream : cv::cuda::Stream::Null());
 #else
 	CV_Error(cv::Error::GpuNotSupported, "The library is compiled without CUDEV support");
 #endif
