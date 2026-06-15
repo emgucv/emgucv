@@ -4,8 +4,11 @@
   <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net${DOTNET_VERSION_MAJOR}.0-android;net${DOTNET_VERSION_MAJOR}.0-ios${IOS_TFM_VERSION};net${DOTNET_VERSION_MAJOR}.0-maccatalyst${IOS_TFM_VERSION}</TargetFrameworks>
-    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-windows${WINDOWS_TFM_VERSION}</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks Condition="'${HAVE_MAUI_ANDROID}' == 'ON'">$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-android</TargetFrameworks>
+    <TargetFrameworks Condition="'${HAVE_MAUI_IOS}' == 'ON'">$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-ios${IOS_TFM_VERSION}</TargetFrameworks>
+    <TargetFrameworks Condition="'${HAVE_MAUI_MAC}' == 'ON'">$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-maccatalyst${IOS_TFM_VERSION}</TargetFrameworks>
+    <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows')) And '${HAVE_WINDESKTOP}' == 'ON'">$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-windows${WINDOWS_TFM_VERSION}</TargetFrameworks>
     <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
     <!-- <TargetFrameworks>$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-tizen</TargetFrameworks> -->
 

@@ -323,7 +323,7 @@ ENDIF()
 SET(tesseract_arch_srcs "${TESSERACT_SRC_DIR}/arch/dotproduct.cpp" "${TESSERACT_SRC_DIR}/arch/intsimdmatrix.cpp" "${TESSERACT_SRC_DIR}/arch/simddetect.cpp")
 
 set(NEON_OPT OFF)
-IF (("NEON" IN_LIST CPU_BASELINE_FINAL) OR (IPHONESIMULATOR AND ("${IOS_ARCH}" STREQUAL "arm64")) OR (MAC_CATALYST AND ("${IOS_ARCH}" STREQUAL "arm64")))
+IF (("NEON" IN_LIST CPU_BASELINE_FINAL) OR (IPHONESIMULATOR AND ("${IOS_ARCH}" STREQUAL "arm64")) OR (MAC_CATALYST AND ("${IOS_ARCH}" STREQUAL "arm64")) OR (ANDROID AND ("${ANDROID_ABI}" STREQUAL "arm64-v8a")))
   SET(NEON_OPT ON)
   LIST(APPEND tesseract_arch_srcs "${TESSERACT_SRC_DIR}/arch/dotproductneon.cpp" "${TESSERACT_SRC_DIR}/arch/intsimdmatrixneon.cpp") 
   MESSAGE(STATUS "TESSERACT with NEON: ON")

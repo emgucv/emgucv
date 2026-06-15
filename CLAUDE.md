@@ -35,6 +35,34 @@ dotnet build Emgu.CV/NetStandard/Emgu.CV.csproj
 dotnet build Solution/Windows.Desktop/Emgu.CV.NetStandard.sln
 ```
 
+### Native C++ (Android)
+The Android build is pre-configured per-ABI in `android_<abi>/` (e.g. `android_arm64-v8a/`, `android_x86_64/`, `android_x86/`, `android_armeabi-v7a/`). To rebuild the native library and the MAUI runtime nuget package for an ABI:
+```bash
+cd android_arm64-v8a
+cmake --build . --config Release --target Emgu.CV.runtime.maui
+```
+
+If CMakeLists.txt files changed, reconfigure first:
+```bash
+cd android_arm64-v8a
+cmake .
+```
+
+To configure from scratch, run from **`platforms/android/scripts/`**:
+```bash
+cd platforms/android/scripts
+build.cmd [abi] [variant] [toolchain]
+```
+
+**ABI (`%1`):** `arm64-v8a`, `x86_64`, `x86`, or `armeabi-v7a`
+
+**Variant (`%2`):**
+- *(empty)* — full build with `opencv_contrib` + Tesseract
+- `core` — core OpenCV only, no Tesseract/Freetype
+- `mini` — minimal subset (strips dnn, ml, calib, video, etc.)
+
+Requires environment variables `ANDROID_NDK`, `CMAKE`, and `MAKE` to be set. Output lands in `android_<abi>/`, and binaries are copied to `libs/android/<abi>/`.
+
 ### Native C++ (iOS / Xcode)
 The iOS build uses shell scripts in `platforms/ios/`. Run from within **`platforms/ios/`**:
 
