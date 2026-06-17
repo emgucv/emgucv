@@ -76,14 +76,17 @@ cd build
 if [ $SYSTEM_ARCH == "64" ]
 then
     PNG_OPTIONS=
+    MLAS_OPTIONS=
 else
     PNG_OPTIONS=-DPNG_ARM_NEON:String="off"
+    MLAS_OPTIONS=-DWITH_MLAS:BOOL=FALSE
 fi
 
 
 cmake \
     ${EMGUCV_CMAKE_SHARED_OPTIONS[@]} \
     $PNG_OPTIONS \
+    $MLAS_OPTIONS \
     -DBUILD_TESTS:BOOL=FALSE \
     -DBUILD_PERF_TESTS:BOOL=FALSE \
     -DBUILD_opencv_apps:BOOL=FALSE \
