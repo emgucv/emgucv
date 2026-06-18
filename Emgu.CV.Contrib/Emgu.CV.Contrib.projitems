@@ -40,7 +40,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Rapid\*.cs" />
     <!-- <Compile Include="$(MSBuildThisFileDirectory)Mcc\*.cs" /> -->
     <Compile Include="$(MSBuildThisFileDirectory)Hdf\*.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DepthAI\*.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DepthAI\*.cs" Condition="'$(EmguCvWithDepthAI)' == 'true'" />
     <Compile Include="$(MSBuildThisFileDirectory)WechatQrcode\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Barcode\*.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)StructuredLight\*.cs" />

@@ -5,6 +5,7 @@
 //----------------------------------------------------------------------------
 
 #include "features_c.h"
+#include "../dnn/dnn_c.h"
 
 //ORB
 cv::ORB* cveOrbCreate(int numberOfFeatures, float scaleFactor, int nLevels, int edgeThreshold, int firstLevel, int WTA_K, int scoreType, int patchSize, int fastThreshold, cv::Feature2D** feature2D, cv::Ptr<cv::ORB>** sharedPtr)
@@ -719,20 +720,24 @@ cv::DISK* cveDISKCreate(
 	cv::Feature2D** feature2D,
 	cv::Ptr<cv::DISK>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_FEATURES
+#if defined(HAVE_OPENCV_FEATURES) && defined(HAVE_OPENCV_DNN)
 	cv::Ptr<cv::DISK> diskPtr = cv::DISK::create(*modelPath, maxKeypoints, scoreThreshold, *imageSize, backendId, targetId);
 	*sharedPtr = new cv::Ptr<cv::DISK>(diskPtr);
 	*feature2D = dynamic_cast<cv::Feature2D*>(diskPtr.get());
 	return diskPtr.get();
+#elif defined(HAVE_OPENCV_FEATURES)
+	throw_no_dnn();
 #else
 	throw_no_features();
 #endif
 }
 void cveDISKRelease(cv::Ptr<cv::DISK>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_FEATURES
+#if defined(HAVE_OPENCV_FEATURES) && defined(HAVE_OPENCV_DNN)
 	delete* sharedPtr;
 	*sharedPtr = 0;
+#elif defined(HAVE_OPENCV_FEATURES)
+	throw_no_dnn();
 #else
 	throw_no_features();
 #endif
@@ -810,6 +815,8 @@ cv::ALIKED* cveALIKEDCreateFromMemory(
 	*sharedPtr = new cv::Ptr<cv::ALIKED>(alikedPtr);
 	*feature2D = dynamic_cast<cv::Feature2D*>(alikedPtr.get());
 	return alikedPtr.get();
+#elif defined(HAVE_OPENCV_FEATURES)
+	throw_no_dnn();
 #else
 	throw_no_features();
 #endif
@@ -830,6 +837,8 @@ cv::DISK* cveDISKCreateFromMemory(
 	*sharedPtr = new cv::Ptr<cv::DISK>(diskPtr);
 	*feature2D = dynamic_cast<cv::Feature2D*>(diskPtr.get());
 	return diskPtr.get();
+#elif defined(HAVE_OPENCV_FEATURES)
+	throw_no_dnn();
 #else
 	throw_no_features();
 #endif
@@ -848,6 +857,8 @@ cv::LightGlueMatcher* cveLightGlueMatcherCreateFromMemory(
 	*sharedPtr = new cv::Ptr<cv::LightGlueMatcher>(lgPtr);
 	*matcher = dynamic_cast<cv::DescriptorMatcher*>(lgPtr.get());
 	return lgPtr.get();
+#elif defined(HAVE_OPENCV_FEATURES)
+	throw_no_dnn();
 #else
 	throw_no_features();
 #endif
