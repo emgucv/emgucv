@@ -29,7 +29,6 @@ if [ "$VARIANT" == "mini" ]; then
         -DBUILD_opencv_dnn:BOOL=FALSE
         -DBUILD_opencv_photo:BOOL=FALSE
         -DBUILD_opencv_features:BOOL=FALSE
-        -DBUILD_opencv_gapi:BOOL=FALSE
         -DBUILD_opencv_video:BOOL=FALSE
     )
     echo "Performing a mini build (build dir: $BUILD_DIR_NAME, output: libs/webgl/cvextern.a)"
