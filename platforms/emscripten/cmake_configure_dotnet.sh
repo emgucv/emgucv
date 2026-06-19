@@ -1,16 +1,48 @@
 #!/bin/bash
-# Build cvextern.bc for Blazor/WASM using the Emscripten toolchain that
+# Build cvextern.a for Blazor/WASM using the Emscripten toolchain that
 # ships with the .NET SDK WASM workload (Microsoft.NET.Runtime.Emscripten.*).
 #
-# This produces libs/webgl/cvextern.bc which is linked by
-# Emgu.CV.Example/HelloWorld.Blazor via NativeFileReference.
+# This produces libs/webgl/cvextern.a (full) or libs/webgl/cvextern_mini.a
+# (mini), linked by Emgu.CV.Example/HelloWorld.Blazor via NativeFileReference.
 #
 # Usage:
 #   cd platforms/emscripten
-#   ./cmake_configure_dotnet.sh
+#   ./cmake_configure_dotnet.sh          # full build
+#   ./cmake_configure_dotnet.sh mini     # mini build (no contrib, no dnn/ml/calib/...)
 
 set -e
 cd "$(dirname "$0")"
+REPO_ROOT="$(cd "$PWD/../.."; pwd)"
+
+# ---------------------------------------------------------------------------
+# Variant selection
+# ---------------------------------------------------------------------------
+VARIANT="${1:-full}"
+if [ "$VARIANT" == "mini" ]; then
+    BUILD_DIR_NAME="build_dotnet_mini"
+    OUTPUT_SUFFIX=""
+    MAKE_TARGET="cvextern"
+    # flann must stay enabled: in OpenCV 5 imgproc depends on geometry, which depends on flann.
+    VARIANT_OPTIONS=(
+        -DOPENCV_EXTRA_MODULES_PATH:STRING=
+        -DBUILD_opencv_calib:BOOL=FALSE
+        -DBUILD_opencv_dnn:BOOL=FALSE
+        -DBUILD_opencv_ml:BOOL=FALSE
+        -DBUILD_opencv_photo:BOOL=FALSE
+        -DBUILD_opencv_features:BOOL=FALSE
+        -DBUILD_opencv_gapi:BOOL=FALSE
+        -DBUILD_opencv_video:BOOL=FALSE
+    )
+    echo "Performing a mini build (build dir: $BUILD_DIR_NAME, output: libs/webgl/cvextern.a)"
+else
+    BUILD_DIR_NAME="build_dotnet"
+    OUTPUT_SUFFIX=""
+    MAKE_TARGET=""
+    VARIANT_OPTIONS=(
+        -DOPENCV_EXTRA_MODULES_PATH="$REPO_ROOT/opencv_contrib/modules"
+    )
+    echo "Performing a full build (build dir: $BUILD_DIR_NAME, output: libs/webgl/cvextern.a)"
+fi
 
 # ---------------------------------------------------------------------------
 # Locate the .NET SDK's Emscripten pack
@@ -138,8 +170,7 @@ echo "  FROZEN_CACHE: '${FROZEN_CACHE}' (empty = False in Python)"
 # ---------------------------------------------------------------------------
 # Configure
 # ---------------------------------------------------------------------------
-REPO_ROOT="$(cd "$PWD/../.."; pwd)"
-BUILD_DIR="$PWD/build_dotnet"
+BUILD_DIR="$PWD/$BUILD_DIR_NAME"
 
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
@@ -158,7 +189,7 @@ cd "$BUILD_DIR"
     -DWITH_CUDA:BOOL=FALSE \
     -DWITH_IPP:BOOL=FALSE \
     -DWITH_EIGEN:BOOL=FALSE \
-    -DOPENCV_EXTRA_MODULES_PATH="$REPO_ROOT/opencv_contrib/modules" \
+    "${VARIANT_OPTIONS[@]}" \
     -DBUILD_opencv_ts:BOOL=FALSE \
     -DBUILD_opencv_java:BOOL=FALSE \
     -DBUILD_opencv_python2:BOOL=FALSE \
@@ -180,6 +211,7 @@ cd "$BUILD_DIR"
     -DWITH_PTHREADS_PF:BOOL=OFF \
     -DEMGU_CV_WITH_DEPTHAI:BOOL=OFF \
     -DEMGU_CV_EMSCRIPTEN_LLVM_AR_PATH="$LLVM_SHIM_DIR/llvm-ar" \
+    -DEMGU_CV_EMSCRIPTEN_OUTPUT_SUFFIX="$OUTPUT_SUFFIX" \
     "$REPO_ROOT"
 
 # ---------------------------------------------------------------------------
@@ -199,4 +231,4 @@ echo "Sysroot ready."
 # cmake/merge_emscripten_libs.cmake) merges all LLVM IR bitcode archives
 # into libs/webgl/cvextern.a automatically after the build completes.
 # ---------------------------------------------------------------------------
-"$EMMAKE" make -j$(nproc) VERBOSE=1
+"$EMMAKE" make -j$(nproc) $MAKE_TARGET VERBOSE=1

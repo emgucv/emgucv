@@ -8,6 +8,7 @@
 #   SOURCE_DIR     - CMAKE_SOURCE_DIR (repo root)
 #   OBJ_DIR        - directory containing cvextern object files
 #                    (CMAKE_CURRENT_BINARY_DIR/CMakeFiles/cvextern.dir)
+#   OUTPUT_SUFFIX  - optional suffix for the output filename (e.g. "_mini")
 #
 # Because we used llvm-ar (EMGU_CV_EMSCRIPTEN_LLVM_AR_PATH) as CMAKE_AR,
 # all *.bc files are LLVM IR archives (llvm-ar format), not WASM relocatable
@@ -26,7 +27,7 @@
 # defines it, so all needed definitions are found by the LTO linker.
 
 set(OUTPUT_DIR "${SOURCE_DIR}/libs/webgl")
-set(OUTPUT_FILE "${OUTPUT_DIR}/cvextern.a")
+set(OUTPUT_FILE "${OUTPUT_DIR}/cvextern${OUTPUT_SUFFIX}.a")
 
 file(MAKE_DIRECTORY "${OUTPUT_DIR}")
 file(REMOVE "${OUTPUT_FILE}")

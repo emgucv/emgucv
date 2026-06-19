@@ -4556,6 +4556,7 @@ IF(IS_EMSCRIPTEN_BUILD AND EMGU_CV_EMSCRIPTEN_LLVM_AR_PATH)
       -DBUILD_DIR=${CMAKE_BINARY_DIR}
       -DSOURCE_DIR=${CMAKE_SOURCE_DIR}
       -DOBJ_DIR=${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${the_target}.dir
+      "-DOUTPUT_SUFFIX=${EMGU_CV_EMSCRIPTEN_OUTPUT_SUFFIX}"
       -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/merge_emscripten_libs.cmake
-    COMMENT "Merging LLVM IR bitcode archives into libs/webgl/cvextern.a")
+    COMMENT "Merging LLVM IR bitcode archives into libs/webgl/cvextern${EMGU_CV_EMSCRIPTEN_OUTPUT_SUFFIX}.a")
 ENDIF()
