@@ -27,7 +27,6 @@ if [ "$VARIANT" == "mini" ]; then
         -DOPENCV_EXTRA_MODULES_PATH:STRING=
         -DBUILD_opencv_calib:BOOL=FALSE
         -DBUILD_opencv_dnn:BOOL=FALSE
-        -DBUILD_opencv_ml:BOOL=FALSE
         -DBUILD_opencv_photo:BOOL=FALSE
         -DBUILD_opencv_features:BOOL=FALSE
         -DBUILD_opencv_gapi:BOOL=FALSE
