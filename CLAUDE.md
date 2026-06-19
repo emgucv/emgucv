@@ -163,18 +163,31 @@ The project is defined in `Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj`.
 
 ### Native C++ (WebAssembly / Emscripten)
 
-The pre-built Emscripten bitcode lives at `libs/webgl/cvextern.bc`.  To
-rebuild it from source use the script in `platforms/emscripten/`:
+The script in `platforms/emscripten/` configures and builds `libs/webgl/cvextern.a`
+using the Emscripten toolchain bundled with the .NET SDK WASM workload
+(`Microsoft.NET.Runtime.Emscripten.*.Sdk.*` under `~/.dotnet/packs`).
+If the workload is not installed, run `dotnet workload install wasm-tools` first.
 
+**Full build** (all OpenCV modules + contrib, outputs `libs/webgl/cvextern.a`,
+build tree in `platforms/emscripten/build_dotnet/`):
 ```bash
 cd platforms/emscripten
 ./cmake_configure_dotnet.sh
 ```
 
-This script uses the Emscripten toolchain bundled with the .NET SDK WASM
-workload (`Microsoft.NET.Runtime.Emscripten.*.Sdk.*` under `~/.dotnet/packs`)
-so the bitcode ABI matches what the Blazor build links against.  If the
-workload is not installed, run `dotnet workload install wasm-tools` first.
+**Mini build** (core modules only — no contrib, no dnn/calib/ml/photo/features/gapi/video,
+also outputs `libs/webgl/cvextern.a`, build tree in `platforms/emscripten/build_dotnet_mini/`):
+```bash
+cd platforms/emscripten
+./cmake_configure_dotnet.sh mini
+```
+
+After building `cvextern.a`, build the NuGet runtime package so the Blazor demo
+can reference it:
+```bash
+cd platforms/emscripten/build_dotnet      # or build_dotnet_mini for mini
+make Emgu.CV.runtime.webassembly
+```
 
 The older `cmake_configure.sh` uses the system Emscripten instead and outputs
 to `build/` — do not use it for the Blazor demo.
@@ -182,7 +195,9 @@ to `build/` — do not use it for the Blazor demo.
 ### Blazor WebAssembly Demo
 
 The demo project is `Emgu.CV.Example/HelloWorld.Blazor/`.  It links
-`cvextern.bc` directly into `dotnet.native.wasm` via `NativeFileReference`.
+`cvextern.a` into `dotnet.native.wasm` via `NativeFileReference` (supplied by
+the `Emgu.CV.runtime.webassembly` NuGet package from the local feed at
+`platforms/nuget/`).
 
 **Prerequisites (one-time, automated)**
 
@@ -197,7 +212,7 @@ needed after a fresh checkout.
 dotnet build Emgu.CV.Example/HelloWorld.Blazor/HelloWorld.Blazor.csproj
 ```
 
-The first build takes ~9 minutes (Emscripten link step).  Subsequent builds
+The first build takes ~4 minutes (Emscripten link step).  Subsequent builds
 are incremental and much faster.
 
 **Run:**
@@ -221,8 +236,8 @@ Then open **http://localhost:5000** and click **Run OpenCV Demo**.
   to the LTO sysroot (bitcode), which causes `"attempt to add bitcode file
   after LTO"` when Blazor's regular-WASM objects (pinvoke.o, libmono*.a, etc.)
   lazily pull in `libc.a(htonl.o)` after the LTO pass has concluded.
-- `cvextern.a` is shipped via the `Emgu.CV.runtime.mini.webassembly` NuGet
-  package (in `build/native/`). The package's `.targets` file adds it to
+- `cvextern.a` is shipped via the `Emgu.CV.runtime.webassembly` NuGet package
+  (in `build/native/`). The package's `.targets` file adds it to
   `NativeFileReference` when `WasmBuildNative=true`. The local feed is at
   `platforms/nuget/` (configured in `nuget.config`).
 - `-sSUPPORT_LONGJMP=wasm` enables WASM-native setjmp/longjmp for OpenCV's
