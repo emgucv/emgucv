@@ -31,7 +31,6 @@ using Emgu.CV.Freetype;
 
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
-using Emgu.CV.Dai;
 using Emgu.CV.Mcc;
 using Emgu.CV.Models;
 using Emgu.CV.Tiff;
