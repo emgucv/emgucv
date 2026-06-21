@@ -1,14 +1,14 @@
 #!/bin/bash
-# Build cvextern.a for Blazor/WASM using the Emscripten toolchain that
-# ships with the .NET SDK WASM workload (Microsoft.NET.Runtime.Emscripten.*).
+# Build the Emgu.CV.runtime.webassembly NuGet package using the Emscripten
+# toolchain that ships with the .NET SDK WASM workload
+# (Microsoft.NET.Runtime.Emscripten.*).
 #
-# This produces libs/webgl/cvextern.a (full) or libs/webgl/cvextern_mini.a
-# (mini), linked by Emgu.CV.Example/HelloWorld.Blazor via NativeFileReference.
+# Builds cvextern.a then packages it into platforms/nuget/.
 #
 # Usage:
 #   cd platforms/emscripten
 #   ./cmake_configure_dotnet.sh          # full build
-#   ./cmake_configure_dotnet.sh mini     # mini build (no contrib, no dnn/ml/calib/...)
+#   ./cmake_configure_dotnet.sh mini     # mini build (no contrib, no dnn/calib/...)
 
 set -e
 cd "$(dirname "$0")"
@@ -21,7 +21,7 @@ VARIANT="${1:-full}"
 if [ "$VARIANT" == "mini" ]; then
     BUILD_DIR_NAME="build_dotnet_mini"
     OUTPUT_SUFFIX=""
-    MAKE_TARGET="cvextern"
+    MAKE_TARGET="Emgu.CV.runtime.webassembly"
     # flann must stay enabled: in OpenCV 5 imgproc depends on geometry, which depends on flann.
     VARIANT_OPTIONS=(
         -DOPENCV_EXTRA_MODULES_PATH:STRING=
@@ -35,7 +35,7 @@ if [ "$VARIANT" == "mini" ]; then
 else
     BUILD_DIR_NAME="build_dotnet"
     OUTPUT_SUFFIX=""
-    MAKE_TARGET=""
+    MAKE_TARGET="Emgu.CV.runtime.webassembly"
     VARIANT_OPTIONS=(
         -DOPENCV_EXTRA_MODULES_PATH="$REPO_ROOT/opencv_contrib/modules"
     )

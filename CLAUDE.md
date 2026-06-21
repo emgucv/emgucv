@@ -168,22 +168,25 @@ using the Emscripten toolchain bundled with the .NET SDK WASM workload
 (`Microsoft.NET.Runtime.Emscripten.*.Sdk.*` under `~/.dotnet/packs`).
 If the workload is not installed, run `dotnet workload install wasm-tools` first.
 
-**Full build** (all OpenCV modules + contrib, outputs `libs/webgl/cvextern.a`,
+**Full build** (all OpenCV modules + contrib, outputs `libs/webgl/cvextern.a`
+and `platforms/nuget/Emgu.CV.runtime.webassembly.*.nupkg`,
 build tree in `platforms/emscripten/build_dotnet/`):
 ```bash
 cd platforms/emscripten
 ./cmake_configure_dotnet.sh
 ```
 
-**Mini build** (core modules only — no contrib, no dnn/calib/ml/photo/features/gapi/video,
-also outputs `libs/webgl/cvextern.a`, build tree in `platforms/emscripten/build_dotnet_mini/`):
+**Mini build** (core modules only — no contrib, no dnn/calib/photo/features/video,
+also outputs `libs/webgl/cvextern.a` and the NuGet package,
+build tree in `platforms/emscripten/build_dotnet_mini/`):
 ```bash
 cd platforms/emscripten
 ./cmake_configure_dotnet.sh mini
 ```
 
-After building `cvextern.a`, build the NuGet runtime package so the Blazor demo
-can reference it:
+Both variants build `cvextern.a` and then the `Emgu.CV.runtime.webassembly`
+NuGet package in one step. To rebuild just the NuGet package after the native
+library is already up to date:
 ```bash
 cd platforms/emscripten/build_dotnet      # or build_dotnet_mini for mini
 make Emgu.CV.runtime.webassembly
