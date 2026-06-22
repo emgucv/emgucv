@@ -111,9 +111,40 @@ namespace MauiDemoApp
                                 Html =
                                     @"<html>
             <head>
-            <style>body { background-color: #EEEEEE; }</style>
+            <meta name=""viewport"" content=""width=device-width, initial-scale=1"">
             <style type=""text/css"">
-            textarea { width: 100%; margin: 0; padding: 0; border - width: 0; }
+            body {
+                background-color: #F2F2F7;
+                color: #1C1C1E;
+                font-family: -apple-system, ""Segoe UI"", Roboto, sans-serif;
+                font-size: 15px;
+                line-height: 1.5;
+                margin: 0;
+                padding: 20px;
+            }
+            h2 { font-size: 28px; font-weight: 700; margin: 0 0 4px 0; }
+            h4 {
+                font-size: 13px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: #8A8A8E;
+                margin: 24px 0 6px 0;
+            }
+            a { color: #007AFF; text-decoration: none; }
+            textarea {
+                width: 100%;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 10px;
+                border: 1px solid #C6C6C8;
+                border-radius: 10px;
+                background-color: #FFFFFF;
+                color: #1C1C1E;
+                font-family: ui-monospace, Menlo, Consolas, monospace;
+                font-size: 12px;
+            }
+            p { margin: 2px 0; }
             </style>
             </head>
             <body>
@@ -172,7 +203,7 @@ namespace MauiDemoApp
 
                         }
                 };
-            Content.BackgroundColor = Color.FromRgb(1.0, 0.0, 0.0);
+            Content.BackgroundColor = Color.FromArgb("#F2F2F7");
         }
 
         private static String GetBackendInfo(Emgu.CV.Backend[] backends)
