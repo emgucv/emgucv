@@ -82,11 +82,12 @@ bool cveSetParallelForBackend(cv::String* backendName, bool propagateNumThreads)
 void cveGetParallelBackends(std::vector< cv::String >* backendNames)
 {
 	backendNames->clear();
-	std::vector< cv::parallel::ParallelBackendInfo > backendsInfo = cv::parallel::getParallelBackendsInfo();
-	for (std::vector< cv::parallel::ParallelBackendInfo >::iterator it = backendsInfo.begin(); it != backendsInfo.end(); ++it)
-	{
-		backendNames->push_back(it->name);
-	}
+#ifdef HAVE_TBB
+	backendNames->push_back("TBB");
+#endif
+#ifdef HAVE_OPENMP
+	backendNames->push_back("OPENMP");
+#endif
 }
 
 cv::String* cveStringCreate()
