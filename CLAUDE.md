@@ -2,6 +2,14 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Windows Shell Note
+
+On this machine, `cmd.exe` in PATH may resolve to the msys64 version, which cannot run Windows batch files (`.bat`) correctly. **Always use the full path `C:\Windows\System32\cmd.exe`** when invoking cmd.exe from PowerShell or Bash tools. Example:
+
+```powershell
+& "C:\Windows\System32\cmd.exe" /c "E:\repo\emgucv_5.0\platforms\windows\Build_Binary_x86-64_inf_doc.bat"
+```
+
 ## Project Overview
 
 Emgu CV is a .NET wrapper for OpenCV. It has two distinct layers:
