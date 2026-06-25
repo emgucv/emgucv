@@ -341,31 +341,25 @@ bool cveFacemarkGetFaces(cv::face::Facemark* facemark, cv::_InputArray* image, c
 bool cveFacemarkFit(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* faces, cv::_OutputArray* landmarks)
 {
 #ifdef HAVE_OPENCV_FACE
-	// _copyVector2Output in facemarkLBF uses getMat(i) for STD_VECTOR_VECTOR outputs
-	// (e.g. VectorOfVectorOfPointF). getMat(i) returns a Mat header that shares the
-	// inner vector's data pointer, but when copyTo receives a size-mismatched source
-	// it reallocates the header with a fresh buffer — the inner vector's buffer is
-	// never written and stays all-zeros.
-	//
-	// Fix: run fit() into a temporary std::vector<cv::Mat> (isMatVector path, which
-	// uses getMatRef — a true reference — so the write sticks). Then write each Mat's
-	// bytes directly into the caller's OutputArray via memcpy on getMat(i).data,
-	// bypassing copyTo's shape-mismatch reallocation entirely.
+	// Run fit() into a temporary std::vector<cv::Mat> so that _copyVector2Output
+	// takes its isMatVector() branch (which uses getMatRef — a true reference —
+	// ensuring the write sticks rather than going to a reallocated header copy).
 	std::vector<cv::Mat> tmpLandmarks;
 	bool result = facemark->fit(*image, *faces, tmpLandmarks);
 	if (result)
 	{
-		landmarks->create((int)tmpLandmarks.size(), 1, CV_32FC2);
-		for (int i = 0; i < (int)tmpLandmarks.size(); i++)
+		// Bypass OutputArray create/getMat machinery entirely: cast obj directly
+		// to the underlying std::vector<std::vector<Point2f>> and populate it.
+		auto* pOut = reinterpret_cast<std::vector<std::vector<cv::Point2f>>*>(landmarks->getObj());
+		pOut->resize(tmpLandmarks.size());
+		for (size_t i = 0; i < tmpLandmarks.size(); i++)
 		{
 			const cv::Mat& src = tmpLandmarks[i];
-			int n = (int)src.total(); // number of Point2f (e.g. 68)
-			landmarks->create(n, 1, CV_32FC2, i);
-			cv::Mat dst = landmarks->getMat(i);
-			// dst.data always points to the inner vector's contiguous buffer.
-			// Use memcpy instead of copyTo so no shape check triggers reallocation.
 			CV_Assert(src.isContinuous());
-			memcpy(dst.data, src.data, n * src.elemSize());
+			int n = (int)src.total();
+			(*pOut)[i].resize(n);
+			if (n > 0)
+				memcpy((*pOut)[i].data(), src.data, n * sizeof(cv::Point2f));
 		}
 	}
 	return result;

@@ -98,11 +98,11 @@ namespace Emgu.CV.Face
         /// <param name="faces">Output of the function which represent region of interest of the detected faces. Each face is stored in cv::Rect container.</param>
         /// <param name="landmarks">The detected landmark points for each faces.</param>
         /// <returns>True if successful</returns>
-        public static bool Fit(this IFacemark facemark, IInputArray image, IInputArray faces, IInputOutputArray landmarks)
+        public static bool Fit(this IFacemark facemark, IInputArray image, IInputArray faces, IOutputArray landmarks)
         {
             using (InputArray iaImage = image.GetInputArray())
             using (InputArray iaFaces = faces.GetInputArray())
-            using (InputOutputArray ioaLandmarks = landmarks.GetInputOutputArray())
+            using (OutputArray ioaLandmarks = landmarks.GetOutputArray())
             {
                 return cveFacemarkFit(facemark.FacemarkPtr, iaImage, iaFaces, ioaLandmarks);
             }

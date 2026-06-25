@@ -106,7 +106,7 @@ CVAPI(bool) cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_Face
 */
 CVAPI(void) cveFacemarkLoadModel(cv::face::Facemark* facemark, cv::String* model);
 //CVAPI(bool) cveFacemarkGetFaces(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_OutputArray* faces);
-CVAPI(bool) cveFacemarkFit(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* faces, cv::_InputOutputArray* landmarks);
+CVAPI(bool) cveFacemarkFit(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* faces, cv::_OutputArray* landmarks);
 
 //CVAPI(bool) cveFacemarkAddTrainingSample(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* landmarks);
 //CVAPI(void) cveFacemarkTraining(cv::face::Facemark* facemark);
