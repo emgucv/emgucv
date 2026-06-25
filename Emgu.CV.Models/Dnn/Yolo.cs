@@ -52,6 +52,31 @@ namespace Emgu.CV.Models
         public enum YoloVersion
         {
             /// <summary>
+            /// Represents the nano version of the YOLO12 model. 2.6M parameters, 6.5G FLOPS, 40.6% AP_val
+            /// </summary>
+            Yolo12N,
+
+            /// <summary>
+            /// Represents the small version of the YOLO12 model. 9.3M parameters, 21.4G FLOPS, 48.0% AP_val
+            /// </summary>
+            Yolo12S,
+
+            /// <summary>
+            /// Represents the medium version of the YOLO12 model. 20.2M parameters, 67.5G FLOPS, 52.5% AP_val
+            /// </summary>
+            Yolo12M,
+
+            /// <summary>
+            /// Represents the large version of the YOLO12 model. 26.4M parameters, 88.9G FLOPS, 53.7% AP_val
+            /// </summary>
+            Yolo12L,
+
+            /// <summary>
+            /// Represents the extra-large version of the YOLO12 model. 59.1M parameters, 199.0G FLOPS, 55.2% AP_val
+            /// </summary>
+            Yolo12X,
+
+            /// <summary>
             /// Represents the nano version of the YOLO11 model. 2.6M parameters, 6.5G FLOPS, 39.5% AP_val
             /// </summary>
             Yolo11N,
@@ -114,7 +139,7 @@ namespace Emgu.CV.Models
             /// <summary>
             /// The default YoloVersion
             /// </summary>
-            YoloDefault = Yolo11N
+            YoloDefault = Yolo12N
         }
 
         /// <summary>
@@ -150,6 +175,36 @@ namespace Emgu.CV.Models
 
                 switch (version)
                 {
+                    case YoloVersion.Yolo12N:
+                        manager.AddFile(
+                            "https://emgu-public.s3.amazonaws.com/yolo12/yolo12n.onnx",
+                            _modelFolderName,
+                            "FA0141234202F103B0A5CFD12CDB2DD28919837CD3A7A50D2FFBDF4FE093D389");
+                        break;
+                    case YoloVersion.Yolo12S:
+                        manager.AddFile(
+                            "https://emgu-public.s3.amazonaws.com/yolo12/yolo12s.onnx",
+                            _modelFolderName,
+                            "F99511551746F42CDD0AE0D9113CF439704C89C35B7054F732185E0343B25281");
+                        break;
+                    case YoloVersion.Yolo12M:
+                        manager.AddFile(
+                            "https://emgu-public.s3.amazonaws.com/yolo12/yolo12m.onnx",
+                            _modelFolderName,
+                            "8B340BEC82FA9624F733AEC2EEB016B5E9D65A905E615C5D304125FF6F728615");
+                        break;
+                    case YoloVersion.Yolo12L:
+                        manager.AddFile(
+                            "https://emgu-public.s3.amazonaws.com/yolo12/yolo12l.onnx",
+                            _modelFolderName,
+                            "A4D0828C6CE1E58155020E8C4B2A0C7808E9F0CB96677E1EB62E431B57CE2C98");
+                        break;
+                    case YoloVersion.Yolo12X:
+                        manager.AddFile(
+                            "https://emgu-public.s3.amazonaws.com/yolo12/yolo12x.onnx",
+                            _modelFolderName,
+                            "4A667CE6FB2CAA177CEDC51E5183527AF438A58B75FA5AD54BAD4452E1C8920F");
+                        break;
                     case YoloVersion.Yolo11N:
                         manager.AddFile(
                             "https://emgu-public.s3.amazonaws.com/yolo11/yolo11n.onnx",
