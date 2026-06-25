@@ -223,7 +223,11 @@ namespace Emgu.CV.Models
             using (Mat blob = DnnInvoke.BlobFromImage(image, 1.0 / 255.0, inputSize, swapRB: true))
             {
                 _yoloNet.SetInput(blob);
-                using (Mat output = _yoloNet.Forward())
+                // V10 models exported without NMS have 0 declared ONNX outputs; specify the
+                // tensor name explicitly so the new DNN engine can retrieve it from its buffer.
+                bool isV8 = (_versionUsed == YoloVersion.YoloV8N);
+                string outputTensorName = isV8 ? "output0" : "/model.23/Concat_5_output_0";
+                using (Mat output = _yoloNet.Forward(outputTensorName))
                 {
                     Size imageSize = iaImage.GetSize();
                     int[] dims = output.SizeOfDimension;
@@ -234,8 +238,6 @@ namespace Emgu.CV.Models
                         // detected objects and C is a number of classes + 4 where the first 4
                         // numbers are [center_x, center_y, width, height] (V8) or
                         // [left, top, right, bottom] (V10).
-
-                        bool isV8 = (_versionUsed == YoloVersion.YoloV8N);
                         List<Rectangle> bboxes = new List<Rectangle>();
                         List<float> scores = new List<float>();
                         List<int> classes = new List<int>();
