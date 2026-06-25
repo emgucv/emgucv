@@ -348,19 +348,10 @@ bool cveFacemarkFit(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_I
 	bool result = facemark->fit(*image, *faces, tmpLandmarks);
 	if (result)
 	{
-		// Bypass OutputArray create/getMat machinery entirely: cast obj directly
-		// to the underlying std::vector<std::vector<Point2f>> and populate it.
 		auto* pOut = reinterpret_cast<std::vector<std::vector<cv::Point2f>>*>(landmarks->getObj());
 		pOut->resize(tmpLandmarks.size());
 		for (size_t i = 0; i < tmpLandmarks.size(); i++)
-		{
-			const cv::Mat& src = tmpLandmarks[i];
-			CV_Assert(src.isContinuous());
-			int n = (int)src.total();
-			(*pOut)[i].resize(n);
-			if (n > 0)
-				memcpy((*pOut)[i].data(), src.data, n * sizeof(cv::Point2f));
-		}
+			tmpLandmarks[i].copyTo((*pOut)[i]);
 	}
 	return result;
 #else
