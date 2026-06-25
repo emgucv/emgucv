@@ -329,11 +329,22 @@ namespace Emgu.CV.Platform.Maui.UI
             SetImage(null);
 
             Picker p = this.Picker;
-            if ((!p.IsVisible) || p.SelectedIndex < 0)
-                await _model.Init(DownloadManager_OnDownloadProgressChanged, null);
-            else
+            try
             {
-                await _model.Init(DownloadManager_OnDownloadProgressChanged, p.Items[p.SelectedIndex].ToString());
+                if ((!p.IsVisible) || p.SelectedIndex < 0)
+                    await _model.Init(DownloadManager_OnDownloadProgressChanged, null);
+                else
+                {
+                    await _model.Init(DownloadManager_OnDownloadProgressChanged, p.Items[p.SelectedIndex].ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                SetImage(null);
+                SetMessage(String.Format("Failed to initialize model: {0}", ex.Message));
+                Picker.IsEnabled = true;
+                return;
             }
 
             if (!_model.Initialized)
