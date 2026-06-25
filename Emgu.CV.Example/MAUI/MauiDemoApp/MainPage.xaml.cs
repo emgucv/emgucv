@@ -241,11 +241,7 @@ namespace MauiDemoApp
                 p.Items.Add("YoloV10B");
                 p.Items.Add("YoloV10L");
                 p.Items.Add("YoloV10X");
-                p.Items.Add("YoloV4");
-                p.Items.Add("YoloV4Tiny");
-                p.Items.Add("YoloV3");
-                p.Items.Add("YoloV3Spp");
-                p.Items.Add("YoloV3Tiny");
+                p.Items.Add("YoloV8N");
                 this.Navigation.PushAsync(yoloPage);
             };
 
