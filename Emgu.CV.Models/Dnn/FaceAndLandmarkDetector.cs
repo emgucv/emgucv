@@ -27,7 +27,7 @@ namespace Emgu.CV.Models
     /// </summary>
     public class FaceAndLandmarkDetector : DisposableObject, IProcessAndRenderModel
     {
-        private FaceDetector _faceDetector = null;
+        private FaceDetectorYNModel _faceDetector = null;
         private FacemarkDetector _facemarkDetector = null;
 
         /// <summary>
@@ -88,11 +88,11 @@ namespace Emgu.CV.Models
         {
             if (_faceDetector == null)
             {
-                _faceDetector = new FaceDetector();
+                _faceDetector = new FaceDetectorYNModel();
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-                yield return _faceDetector.Init(onDownloadProgressChanged);
+                yield return _faceDetector.Init(onDownloadProgressChanged, null);
 #else
-                await _faceDetector.Init(onDownloadProgressChanged);
+                await _faceDetector.Init(onDownloadProgressChanged, null);
 #endif
             }
         }
@@ -187,35 +187,31 @@ namespace Emgu.CV.Models
         {
             Stopwatch watch = Stopwatch.StartNew();
 
-            List<DetectedObject> fullFaceRegions = new List<DetectedObject>();
-            List<DetectedObject> partialFaceRegions = new List<DetectedObject>();
-            _faceDetector.Detect(imageIn, fullFaceRegions, partialFaceRegions);
+            FaceDetectorYNModel.FaceDetectorYNResult[] faces = _faceDetector.Detect(imageIn);
 
-            if (partialFaceRegions.Count > 0)
+            using (InputArray iaImage = imageIn.GetInputArray())
             {
-                foreach (DetectedObject face in partialFaceRegions)
-                {
-                    CvInvoke.Rectangle(imageOut, face.Region, RenderColorRectangle);
-                }
-            }
+                Rectangle imageRegion = new Rectangle(Point.Empty, iaImage.GetSize());
+                List<Rectangle> fullFaceRects = new List<Rectangle>();
 
-            if (fullFaceRegions.Count > 0)
-            {
-                foreach (DetectedObject face in fullFaceRegions)
+                foreach (var face in faces)
                 {
-                    CvInvoke.Rectangle(imageOut, face.Region, RenderColorRectangle);
+                    Rectangle region = Rectangle.Round(face.Region);
+                    CvInvoke.Rectangle(imageOut, region, RenderColorRectangle);
+                    if (imageRegion.Contains(region))
+                        fullFaceRects.Add(region);
                 }
 
-                var fullFaceRegionsArr = fullFaceRegions.ToArray();
-                var rectRegionArr = Array.ConvertAll(fullFaceRegionsArr, r => r.Region);
-
-                using (VectorOfVectorOfPointF landmarks = _facemarkDetector.Detect(imageIn, rectRegionArr))
+                if (fullFaceRects.Count > 0)
                 {
-                    int len = landmarks.Size;
-                    for (int i = 0; i < len; i++)
+                    using (VectorOfVectorOfPointF landmarks = _facemarkDetector.Detect(imageIn, fullFaceRects.ToArray()))
                     {
-                        using (VectorOfPointF vpf = landmarks[i])
-                            FaceInvoke.DrawFacemarks(imageOut, vpf, RenderColorLandmark);
+                        int len = landmarks.Size;
+                        for (int i = 0; i < len; i++)
+                        {
+                            using (VectorOfPointF vpf = landmarks[i])
+                                FaceInvoke.DrawFacemarks(imageOut, vpf, RenderColorLandmark);
+                        }
                     }
                 }
             }
