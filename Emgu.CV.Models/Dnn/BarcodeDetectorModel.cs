@@ -60,7 +60,7 @@ namespace Emgu.CV.Models
                 FileDownloadManager manager = new FileDownloadManager();
 
                 manager.AddFile(
-                    "https://github.com/WeChatCV/opencv_3rdparty/raw/wechat_qrcode/sr.onnx",
+                    "https://github.com/opencv/opencv_extra/raw/master/testdata/dnn/wechat_2021-01/sr.onnx",
                     _modelFolderName);
 
                 if (onDownloadProgressChanged != null)
