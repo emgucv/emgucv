@@ -52,6 +52,31 @@ namespace Emgu.CV.Models
         public enum YoloVersion
         {
             /// <summary>
+            /// Represents the nano version of the YOLO11 model. 2.6M parameters, 6.5G FLOPS, 39.5% AP_val
+            /// </summary>
+            Yolo11N,
+
+            /// <summary>
+            /// Represents the small version of the YOLO11 model. 9.4M parameters, 21.5G FLOPS, 47.0% AP_val
+            /// </summary>
+            Yolo11S,
+
+            /// <summary>
+            /// Represents the medium version of the YOLO11 model. 20.1M parameters, 68.0G FLOPS, 51.5% AP_val
+            /// </summary>
+            Yolo11M,
+
+            /// <summary>
+            /// Represents the large version of the YOLO11 model. 25.3M parameters, 86.9G FLOPS, 53.4% AP_val
+            /// </summary>
+            Yolo11L,
+
+            /// <summary>
+            /// Represents the extra-large version of the YOLO11 model. 56.9M parameters, 194.9G FLOPS, 54.7% AP_val
+            /// </summary>
+            Yolo11X,
+
+            /// <summary>
             /// Represents the nano version of the Yolo V10 model. 2.3M parameters, 6.7G FLOPS, 38.5% AP_val
             /// </summary>
             YoloV10N,
@@ -89,7 +114,7 @@ namespace Emgu.CV.Models
             /// <summary>
             /// The default YoloVersion
             /// </summary>
-            YoloDefault = YoloV10N
+            YoloDefault = Yolo11N
         }
 
         /// <summary>
@@ -125,6 +150,36 @@ namespace Emgu.CV.Models
 
                 switch (version)
                 {
+                    case YoloVersion.Yolo11N:
+                        manager.AddFile(
+                            "https://emgu-public.s3.amazonaws.com/yolo11/yolo11n.onnx",
+                            _modelFolderName,
+                            "DEAAC1046874862D88934C558747D064E8A869F029365A33C6B9FB87BAF041BC");
+                        break;
+                    case YoloVersion.Yolo11S:
+                        manager.AddFile(
+                            "https://emgu-public.s3.amazonaws.com/yolo11/yolo11s.onnx",
+                            _modelFolderName,
+                            "C8AB6D22E0BF3AF9CCBE034866CED8FE84CA009CB22FF4E76DA8CD5DA6144DC7");
+                        break;
+                    case YoloVersion.Yolo11M:
+                        manager.AddFile(
+                            "https://emgu-public.s3.amazonaws.com/yolo11/yolo11m.onnx",
+                            _modelFolderName,
+                            "3890CAF9D0FF24D8C5FF736779F41C3CC40787DC65153B7A5A3B0C19AEA4BE43");
+                        break;
+                    case YoloVersion.Yolo11L:
+                        manager.AddFile(
+                            "https://emgu-public.s3.amazonaws.com/yolo11/yolo11l.onnx",
+                            _modelFolderName,
+                            "3D7105E7286CFD873F3E176B4505CC15297A9FA8EF8A91A2C9E1391710A96C18");
+                        break;
+                    case YoloVersion.Yolo11X:
+                        manager.AddFile(
+                            "https://emgu-public.s3.amazonaws.com/yolo11/yolo11x.onnx",
+                            _modelFolderName,
+                            "DC01218DB2FC4E6FB5F81B53FED127F0A276E37B0AE4DD6F28FA165341CAF007");
+                        break;
                     case YoloVersion.YoloV8N:
                         manager.AddFile(
                             "https://emgu-public.s3.amazonaws.com/yolov8/yolov8n.onnx",
@@ -223,10 +278,12 @@ namespace Emgu.CV.Models
             using (Mat blob = DnnInvoke.BlobFromImage(image, 1.0 / 255.0, inputSize, swapRB: true))
             {
                 _yoloNet.SetInput(blob);
-                // V10 models exported without NMS have 0 declared ONNX outputs; specify the
-                // tensor name explicitly so the new DNN engine can retrieve it from its buffer.
-                bool isV8 = (_versionUsed == YoloVersion.YoloV8N);
-                string outputTensorName = isV8 ? "output0" : "/model.23/Concat_5_output_0";
+                // V10 models exported without NMS have 0 declared ONNX outputs; retrieve by
+                // internal tensor name. V8 and YOLO11 declare output0 in the ONNX graph.
+                bool isV10 = _versionUsed == YoloVersion.YoloV10N || _versionUsed == YoloVersion.YoloV10S ||
+                             _versionUsed == YoloVersion.YoloV10M || _versionUsed == YoloVersion.YoloV10B ||
+                             _versionUsed == YoloVersion.YoloV10L || _versionUsed == YoloVersion.YoloV10X;
+                string outputTensorName = isV10 ? "/model.23/Concat_5_output_0" : "output0";
                 using (Mat output = _yoloNet.Forward(outputTensorName))
                 {
                     Size imageSize = iaImage.GetSize();
@@ -261,21 +318,23 @@ namespace Emgu.CV.Models
                                         float[] data = rectData.GetData(jagged: false) as float[];
 
                                         Rectangle rect;
-                                        if (isV8)
+                                        if (isV10)
                                         {
-                                            int centerX = (int)(data[0] / inputSize.Width * imageSize.Width);
-                                            int centerY = (int)(data[1] / inputSize.Height * imageSize.Height);
-                                            int width   = (int)(data[2] / inputSize.Width * imageSize.Width);
-                                            int height  = (int)(data[3] / inputSize.Height * imageSize.Height);
-                                            rect = new Rectangle(centerX - width / 2, centerY - height / 2, width, height);
-                                        }
-                                        else
-                                        {
+                                            // V10: output coords are [x1, y1, x2, y2]
                                             int left   = (int)(data[0] / inputSize.Width  * imageSize.Width);
                                             int top    = (int)(data[1] / inputSize.Height * imageSize.Height);
                                             int right  = (int)(data[2] / inputSize.Width  * imageSize.Width);
                                             int bottom = (int)(data[3] / inputSize.Height * imageSize.Height);
                                             rect = new Rectangle(left, top, right - left, bottom - top);
+                                        }
+                                        else
+                                        {
+                                            // V8 and YOLO11: output coords are [cx, cy, w, h]
+                                            int centerX = (int)(data[0] / inputSize.Width * imageSize.Width);
+                                            int centerY = (int)(data[1] / inputSize.Height * imageSize.Height);
+                                            int width   = (int)(data[2] / inputSize.Width * imageSize.Width);
+                                            int height  = (int)(data[3] / inputSize.Height * imageSize.Height);
+                                            rect = new Rectangle(centerX - width / 2, centerY - height / 2, width, height);
                                         }
                                         bboxes.Add(rect);
                                     }
