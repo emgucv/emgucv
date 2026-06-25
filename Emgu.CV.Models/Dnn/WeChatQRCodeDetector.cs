@@ -71,11 +71,11 @@ namespace Emgu.CV.Models
             {
                 FileDownloadManager manager = new FileDownloadManager();
                 manager.AddFile(
-                    "https://github.com/opencv/opencv_extra/raw/master/testdata/dnn/wechat_2021-01/detect.onnx",
+                    "https://github.com/omrope79/opencv-test-models/releases/download/v1.1.0/detect.onnx",
                     _modelFolderName);
 
                 manager.AddFile(
-                    "https://github.com/opencv/opencv_extra/raw/master/testdata/dnn/wechat_2021-01/sr.onnx",
+                    "https://github.com/omrope79/opencv-test-models/releases/download/v1.1.0/sr.onnx",
                     _modelFolderName);
 
                 if (onDownloadProgressChanged != null)
