@@ -214,6 +214,25 @@ namespace Emgu.CV.Dnn
         /// <summary>
         /// Reads a network model stored in TensorFlow framework's format.
         /// </summary>
+        /// <param name="model">path to the .pb file with binary protobuf description of the network architecture</param>
+        /// <param name="config">path to the .pbtxt file that contains text graph definition in protobuf format.</param>
+        /// <param name="extraOutputs">Names of intermediate tensors to expose as additional model outputs.</param>
+        /// <returns>Net object.</returns>
+        public static Net ReadNetFromTensorflow(String model, String config, String[] extraOutputs)
+        {
+            using (CvString modelStr = new CvString(model))
+            using (CvString configStr = config == null ? new CvString() : new CvString(config))
+            using (VectorOfCvString vcs = new VectorOfCvString(extraOutputs))
+            {
+                return new Net(cveReadNetFromTensorflow3(modelStr, configStr, vcs));
+            }
+        }
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern IntPtr cveReadNetFromTensorflow3(IntPtr model, IntPtr config, IntPtr extraOutputs);
+
+        /// <summary>
+        /// Reads a network model stored in TensorFlow framework's format.
+        /// </summary>
         /// <param name="model">buffer containing the content of the pb file</param>
         /// <param name="config">buffer containing the content of the pbtxt file</param>
         /// <returns>Net object</returns>

@@ -112,7 +112,10 @@ namespace Emgu.CV.Models
 
                 if (manager.AllFilesDownloaded)
                 {
-                    _maskRcnnDetector = Emgu.CV.Dnn.DnnInvoke.ReadNetFromTensorflow(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
+                    _maskRcnnDetector = Emgu.CV.Dnn.DnnInvoke.ReadNetFromTensorflow(
+                        manager.Files[0].LocalFile,
+                        manager.Files[1].LocalFile,
+                        new string[] { "detection_out_final", "detection_masks" });
                     /*
                     _maskRcnnModel = new Model(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
                     _maskRcnnModel.SetInputSize(new Size(-1, -1));
@@ -231,11 +234,9 @@ namespace Emgu.CV.Models
             using (InputArray iaM = m.GetInputArray())
             using (Mat blob = DnnInvoke.BlobFromImage(m))
             using (VectorOfMat tensors = new VectorOfMat())
-            //using(VectorOfMat outputTensors = new VectorOfMat())
             {
                 _maskRcnnDetector.SetInput(blob, "image_tensor");
                 _maskRcnnDetector.Forward(tensors, new string[] { "detection_out_final", "detection_masks" });
-                //_maskRcnnModel.Predict(m, outputTensors);
 
                 using (Mat boxes = tensors[0])
                 using (Mat masks = tensors[1])

@@ -17,6 +17,15 @@ cv::dnn::Net* cveReadNetFromTensorflow(cv::String* model, cv::String* config)
 	throw_no_dnn();
 #endif
 }
+cv::dnn::Net* cveReadNetFromTensorflow3(cv::String* model, cv::String* config, std::vector<cv::String>* extraOutputs)
+{
+#ifdef HAVE_OPENCV_DNN
+	cv::dnn::Net net = cv::dnn::readNetFromTensorflow(*model, *config, cv::dnn::ENGINE_AUTO, *extraOutputs);
+	return new cv::dnn::Net(net);
+#else
+	throw_no_dnn();
+#endif
+}
 cv::dnn::Net* cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, const char *bufferConfig, int lenConfig)
 {
 #ifdef HAVE_OPENCV_DNN

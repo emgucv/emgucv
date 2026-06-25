@@ -49,6 +49,7 @@ namespace cv
 
 CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow(cv::String* model, cv::String* config);
 CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, const char *bufferConfig, int lenConfig);
+CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow3(cv::String* model, cv::String* config, std::vector<cv::String>* extraOutputs);
 
 CVAPI(cv::dnn::Net*) cveReadNetFromTFLite(cv::String* model, int engine);
 CVAPI(cv::dnn::Net*) cveReadNetFromTFLite2(const char* bufferModel, int lenModel, int engine);
