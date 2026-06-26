@@ -23,17 +23,9 @@ namespace MauiDemoApp
             CvInvoke.LogLevel = LogLevel.Verbose; //LogLevel.Debug;
 #endif
 
-            String aboutIcon = null;
-
-
-            ToolbarItem aboutItem = new ToolbarItem("About", aboutIcon,
-                () =>
-                {
-                    this.Navigation.PushAsync(new AboutPage());
-                    //page.DisplayAlert("Emgu CV Examples", "App version: ...", "Ok");
-                }
-            );
-            this.ToolbarItems.Add(aboutItem);
+            // Hide the top navigation bar on the home page for a cleaner, more spacious look.
+            // (The "About" page is reached from a row at the bottom of the list instead.)
+            Shell.SetNavBarIsVisible(this, false);
 
             Button helloWorldButton = new Button();
             helloWorldButton.Text = "Hello world";
@@ -453,83 +445,354 @@ namespace MauiDemoApp
                 };
             }
             
-            string titleFont = DeviceInfo.Platform == DevicePlatform.iOS ? "AvenirNext-Heavy" : "OpenSansSemibold";
-            string bodyFont = DeviceInfo.Platform == DevicePlatform.iOS ? "AvenirNext-Regular" : "OpenSansRegular";
+            // ---------- Palette ----------
+            string titleFont = "InterSemiBold";
+            string bodyFont = "InterRegular";
+            string mediumFont = "InterSemiBold";
+            const string IconFont = "MaterialSymbols";
 
-            Color pageBackground = Color.FromArgb("#F2F2F7");
+            Color pageBackground = Color.FromArgb("#EEF1F8");
             Color cardBackground = Colors.White;
-            Color primaryText = Color.FromArgb("#1C1C1E");
-            Color secondaryText = Color.FromArgb("#8A8A8E");
-            Color separatorColor = Color.FromArgb("#C6C6C8");
+            Color primaryText = Color.FromArgb("#1A1C2E");
+            Color secondaryText = Color.FromArgb("#8A8FA3");
+            Color accent = Color.FromArgb("#3D7BF7");
+            Color rowBorder = Color.FromArgb("#ECEEF5");
+            Color tileBackground = Color.FromArgb("#E8EFFE");
+            Color chevronColor = Color.FromArgb("#C2C7D6");
 
+            // ---------- Icon helper (Material Symbols glyphs) ----------
+            const string gInfo = "", gSearch = "", gSparkle = "", gChevron = "";
+
+            Func<string, Color, double, Image> makeIcon = (glyph, color, size) => new Image
+            {
+                Source = new FontImageSource { FontFamily = IconFont, Glyph = glyph, Color = color, Size = size },
+                WidthRequest = size,
+                HeightRequest = size,
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.Center
+            };
+
+            Func<string, string> demoGlyph = (text) =>
+            {
+                string t = (text ?? "").ToLowerInvariant();
+                if (t.Contains("shape")) return "";                              // crop_free
+                if (t.Contains("mask rcnn")) return "";                          // theater_comedy
+                if (t.Contains("stop sign")) return "";                          // report
+                if (t.Contains("yolo")) return "";                               // gps_fixed
+                if (t.Contains("scene text")) return "";                         // match_case
+                if (t.Contains("tesseract") || t.Contains("ocr")) return "";     // text_fields
+                if (t.Contains("license")) return "";                            // text_fields
+                if (t.Contains("landmark")) return "";                           // tag_faces
+                if (t.Contains("yunet")) return "";                              // face_retouching_natural
+                if (t.Contains("face")) return "";                               // face
+                if (t.Contains("pedestrian")) return "";                         // directions_walk
+                if (t.Contains("barcode") || t.Contains("qrcode")) return "";    // grid_on
+                if (t.Contains("hello")) return "";                              // waving_hand
+                if (t.Contains("planar")) return "";                             // polyline
+                if (t.Contains("feature matching")) return "";                   // compare
+                if (t.Contains("super resolution")) return "";                   // auto_fix_high
+                if (t.Contains("3d")) return "";                                 // view_in_ar
+                if (t.Contains("free type")) return "";                          // font_download
+                if (t.Contains("video")) return "";                             // videocam
+                return "";                                                       // widgets
+            };
+
+            // ---------- Sort the demo buttons into broad groups ----------
+            string[] categoryNames = { "Detection", "Image & 3D", "Video" };
+            string[] pillGlyphs = { "", "", "" }; // crop_free, view_in_ar, smart_display // crop_free, view_in_ar, smart_display
+            var categoryDemos = new List<Button>[] { new List<Button>(), new List<Button>(), new List<Button>() };
+
+            Func<string, int> categorize = (text) =>
+            {
+                string t = (text ?? "").ToLowerInvariant();
+                if (t.Contains("video")) return 2;
+                if (t.Contains("hello") || t.Contains("planar") || t.Contains("feature matching")
+                    || t.Contains("super resolution") || t.Contains("3d") || t.Contains("free type"))
+                    return 1;
+                return 0;
+            };
+
+            var demoNames = new Dictionary<Button, string>();
             foreach (View v in buttonList)
             {
-                if (v is Button btn)
+                if (v is Button b && b.IsVisible)
                 {
-                    btn.HorizontalOptions = LayoutOptions.Fill;
-                    btn.BackgroundColor = cardBackground;
-                    btn.TextColor = primaryText;
-                    btn.FontFamily = bodyFont;
-                    btn.FontSize = 17;
-                    btn.Padding = new Thickness(20, 15);
-                    btn.CornerRadius = 0;
-                    btn.Margin = new Thickness(0);
+                    demoNames[b] = b.Text;
+                    categoryDemos[categorize(b.Text)].Add(b);
                 }
             }
 
-            var titleLabel = new Label
+            // ---------- Build a rich row (icon tile + name + chevron) for a demo ----------
+            Func<Button, View> buildRow = (b) =>
             {
-                Text = "Emgu CV",
-                FontFamily = titleFont,
-                FontSize = 44,
-                FontAttributes = FontAttributes.Bold,
-                TextColor = primaryText,
+                string name = demoNames.TryGetValue(b, out var nm) ? nm : b.Text;
+
+                var tile = new Border
+                {
+                    WidthRequest = 42,
+                    HeightRequest = 42,
+                    BackgroundColor = tileBackground,
+                    Stroke = Colors.Transparent,
+                    StrokeThickness = 0,
+                    StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(11) },
+                    VerticalOptions = LayoutOptions.Center,
+                    Content = makeIcon(demoGlyph(name), accent, 22)
+                };
+
+                var nameLabel = new Label
+                {
+                    Text = name,
+                    FontFamily = bodyFont,
+                    FontSize = 16,
+                    TextColor = primaryText,
+                    VerticalOptions = LayoutOptions.Center,
+                    LineBreakMode = LineBreakMode.TailTruncation
+                };
+
+                var chevron = makeIcon(gChevron, chevronColor, 22);
+                chevron.HorizontalOptions = LayoutOptions.End;
+
+                var grid = new Grid
+                {
+                    Padding = new Thickness(12, 12),
+                    ColumnSpacing = 12,
+                    ColumnDefinitions =
+                    {
+                        new ColumnDefinition(GridLength.Auto),
+                        new ColumnDefinition(GridLength.Star),
+                        new ColumnDefinition(GridLength.Auto)
+                    }
+                };
+                grid.Add(tile, 0, 0);
+                grid.Add(nameLabel, 1, 0);
+                grid.Add(chevron, 2, 0);
+
+                // Reuse the original button as a transparent tap layer over the whole row.
+                b.Text = "";
+                b.BackgroundColor = Colors.Transparent;
+                b.BorderWidth = 0;
+                b.CornerRadius = 14;
+                b.Margin = new Thickness(0);
+                b.Padding = new Thickness(0);
+                b.HorizontalOptions = LayoutOptions.Fill;
+                b.VerticalOptions = LayoutOptions.Fill;
+                grid.Add(b, 0, 0);
+                Grid.SetColumnSpan(b, 3);
+
+                return new Border
+                {
+                    BackgroundColor = cardBackground,
+                    Stroke = rowBorder,
+                    StrokeThickness = 1,
+                    StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(14) },
+                    Content = grid
+                };
             };
 
+            // Pre-build all rows once (avoids re-parenting issues when switching categories).
+            var categoryRows = new List<(View row, string name)>[categoryNames.Length];
+            for (int c = 0; c < categoryNames.Length; c++)
+            {
+                categoryRows[c] = new List<(View, string)>();
+                foreach (Button b in categoryDemos[c])
+                    categoryRows[c].Add((buildRow(b), demoNames[b]));
+            }
+
+            // ---------- Section card (header + rows) ----------
+            var demoStack = new VerticalStackLayout { Spacing = 10 };
+
+            var sectionTitle = new Label
+            {
+                FontFamily = mediumFont,
+                FontSize = 20,
+                TextColor = primaryText,
+                VerticalOptions = LayoutOptions.Center
+            };
+            var sectionHeader = new HorizontalStackLayout
+            {
+                Spacing = 10,
+                Padding = new Thickness(6, 4, 6, 12),
+                Children = { makeIcon(gSparkle, accent, 22), sectionTitle }
+            };
+            var sectionCard = new Border
+            {
+                BackgroundColor = cardBackground,
+                Stroke = Colors.Transparent,
+                StrokeThickness = 0,
+                StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(24) },
+                Padding = new Thickness(14, 14, 14, 16),
+                Margin = new Thickness(16, 0, 16, 28),
+                Content = new VerticalStackLayout { Children = { sectionHeader, demoStack } }
+            };
+
+            // ---------- Search box (toggled by the header search button) ----------
+            var searchEntry = new Entry
+            {
+                Placeholder = "Search modules",
+                FontFamily = bodyFont,
+                FontSize = 16,
+                TextColor = primaryText,
+                PlaceholderColor = secondaryText,
+                BackgroundColor = Colors.Transparent,
+                VerticalOptions = LayoutOptions.Center
+            };
+            var searchGrid = new Grid
+            {
+                ColumnSpacing = 8,
+                Padding = new Thickness(14, 2),
+                ColumnDefinitions =
+                {
+                    new ColumnDefinition(GridLength.Auto),
+                    new ColumnDefinition(GridLength.Star)
+                }
+            };
+            searchGrid.Add(makeIcon(gSearch, secondaryText, 20), 0, 0);
+            searchGrid.Add(searchEntry, 1, 0);
+            var searchCard = new Border
+            {
+                IsVisible = false,
+                BackgroundColor = cardBackground,
+                Stroke = rowBorder,
+                StrokeThickness = 1,
+                StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(14) },
+                Margin = new Thickness(16, 0, 16, 0),
+                Content = searchGrid
+            };
+
+            // ---------- Category pills ----------
+            int currentCategory = 0;
+            Action<int> selectCategory = null;
+
+            var carouselRow = new HorizontalStackLayout { Spacing = 12, Padding = new Thickness(16, 0, 16, 0) };
+            var categoryCards = new Border[categoryNames.Length];
+            var categoryLabels = new Label[categoryNames.Length];
+            var categoryIcons = new Image[categoryNames.Length];
+
+            for (int i = 0; i < categoryNames.Length; i++)
+            {
+                int idx = i;
+                var ic = makeIcon(pillGlyphs[i], primaryText, 20);
+                var lbl = new Label
+                {
+                    Text = categoryNames[i],
+                    FontFamily = mediumFont,
+                    FontSize = 15,
+                    TextColor = primaryText,
+                    VerticalOptions = LayoutOptions.Center
+                };
+                var hs = new HorizontalStackLayout { Spacing = 8, VerticalOptions = LayoutOptions.Center, Children = { ic, lbl } };
+                var catCard = new Border
+                {
+                    StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(16) },
+                    Stroke = rowBorder,
+                    StrokeThickness = 1,
+                    BackgroundColor = cardBackground,
+                    Padding = new Thickness(18, 12),
+                    Content = hs
+                };
+                var tap = new TapGestureRecognizer();
+                tap.Tapped += (s, e) => selectCategory(idx);
+                catCard.GestureRecognizers.Add(tap);
+                categoryCards[i] = catCard;
+                categoryLabels[i] = lbl;
+                categoryIcons[i] = ic;
+                carouselRow.Children.Add(catCard);
+            }
+
+            var carousel = new ScrollView
+            {
+                Orientation = ScrollOrientation.Horizontal,
+                HorizontalScrollBarVisibility = ScrollBarVisibility.Never,
+                Content = carouselRow
+            };
+
+            selectCategory = (idx) =>
+            {
+                currentCategory = idx;
+                for (int i = 0; i < categoryCards.Length; i++)
+                {
+                    bool sel = (i == idx);
+                    categoryCards[i].BackgroundColor = sel ? accent : cardBackground;
+                    categoryCards[i].Stroke = sel ? Colors.Transparent : rowBorder;
+                    categoryLabels[i].TextColor = sel ? Colors.White : primaryText;
+                    ((FontImageSource)categoryIcons[i].Source).Color = sel ? Colors.White : primaryText;
+                }
+
+                sectionTitle.Text = categoryNames[idx] + " Modules";
+
+                string q = (searchEntry.Text ?? "").Trim().ToLowerInvariant();
+                demoStack.Children.Clear();
+                foreach (var (row, name) in categoryRows[idx])
+                {
+                    row.IsVisible = q.Length == 0 || name.ToLowerInvariant().Contains(q);
+                    demoStack.Children.Add(row);
+                }
+            };
+
+            searchEntry.TextChanged += (s, e) => selectCategory(currentCategory);
+
+            // ---------- Header (title + subtitle + info/search buttons) ----------
+            Func<string, Action, Border> circleButton = (glyph, onTap) =>
+            {
+                var cb = new Border
+                {
+                    WidthRequest = 46,
+                    HeightRequest = 46,
+                    BackgroundColor = cardBackground,
+                    Stroke = rowBorder,
+                    StrokeThickness = 1,
+                    StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(23) },
+                    VerticalOptions = LayoutOptions.Center,
+                    Content = makeIcon(glyph, primaryText, 22)
+                };
+                var t = new TapGestureRecognizer();
+                t.Tapped += (s, e) => onTap();
+                cb.GestureRecognizers.Add(t);
+                return cb;
+            };
+
+            var infoBtn = circleButton(gInfo, () => this.Navigation.PushAsync(new AboutPage()));
+            var searchBtn = circleButton(gSearch, () =>
+            {
+                searchCard.IsVisible = !searchCard.IsVisible;
+                if (searchCard.IsVisible)
+                    searchEntry.Focus();
+                else
+                {
+                    searchEntry.Text = "";
+                    selectCategory(currentCategory);
+                }
+            });
+
+            var titleLabel = new Label { Text = "Emgu CV", FontFamily = titleFont, FontSize = 40, TextColor = primaryText };
             var subtitleLabel = new Label
             {
-                Text = "Computer Vision",
+                Text = "Computer Vision made simple",
                 FontFamily = bodyFont,
-                FontSize = 14,
+                FontSize = 15,
                 TextColor = secondaryText,
-                Margin = new Thickness(0, 4, 0, 0)
+                Margin = new Thickness(0, 2, 0, 0)
             };
+            var titleStack = new VerticalStackLayout { VerticalOptions = LayoutOptions.Center, Children = { titleLabel, subtitleLabel } };
 
-            var headerLayout = new StackLayout
+            var header = new Grid
             {
-                Padding = new Thickness(24, 56, 24, 20),
-                BackgroundColor = pageBackground,
-                Children = { titleLabel, subtitleLabel }
-            };
-
-            var buttonsCard = new StackLayout
-            {
-                Spacing = 0,
-                BackgroundColor = cardBackground,
-            };
-
-            bool firstVisible = true;
-            foreach (View v in buttonList)
-            {
-                if (!firstVisible)
+                Padding = new Thickness(24, 22, 20, 8),
+                ColumnDefinitions =
                 {
-                    buttonsCard.Children.Add(new BoxView
-                    {
-                        HeightRequest = 0.5,
-                        BackgroundColor = separatorColor,
-                        Margin = new Thickness(20, 0, 0, 0),
-                        HorizontalOptions = LayoutOptions.Fill
-                    });
+                    new ColumnDefinition(GridLength.Star),
+                    new ColumnDefinition(GridLength.Auto)
                 }
-                firstVisible = false;
-                buttonsCard.Children.Add(v);
-            }
+            };
+            header.Add(titleStack, 0, 0);
+            header.Add(new HorizontalStackLayout { Spacing = 10, VerticalOptions = LayoutOptions.Center, Children = { infoBtn, searchBtn } }, 1, 0);
 
-            var contentLayout = new StackLayout
+            selectCategory(0);
+
+            var contentLayout = new VerticalStackLayout
             {
-                BackgroundColor = pageBackground,
                 Spacing = 16,
-                Children = { headerLayout, buttonsCard }
+                Children = { header, searchCard, carousel, sectionCard }
             };
 
             this.BackgroundColor = pageBackground;
