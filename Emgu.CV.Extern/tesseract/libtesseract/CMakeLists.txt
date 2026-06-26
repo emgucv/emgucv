@@ -354,8 +354,10 @@ if(SSE41_OPT)
 endif()
 if(NEON_OPT)
    list(APPEND tesseract_arch_srcs ${TESSERACT_SRC_DIR}/arch/dotproductneon.cpp ${TESSERACT_SRC_DIR}/arch/intsimdmatrixneon.cpp)
-   if(CMAKE_SIZEOF_VOID_P EQUAL 4 AND CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
-      # 32-bit ARM: NEON is not always-on; -mfpu=neon is required per translation unit
+   if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+      # 32-bit ARM: NEON is not always-on; -mfpu=neon is required per translation unit.
+      # Use CMAKE_SIZEOF_VOID_P (compiler target width) not CMAKE_SYSTEM_PROCESSOR
+      # because on Pi OS 32-bit with a 64-bit kernel, uname -m reports aarch64.
       set_source_files_properties(${TESSERACT_SRC_DIR}/arch/dotproductneon.cpp ${TESSERACT_SRC_DIR}/arch/intsimdmatrixneon.cpp PROPERTIES COMPILE_FLAGS "-D__ARM_NEON -mfpu=neon")
    else()
       set_source_files_properties(${TESSERACT_SRC_DIR}/arch/dotproductneon.cpp ${TESSERACT_SRC_DIR}/arch/intsimdmatrixneon.cpp PROPERTIES COMPILE_FLAGS "-D__ARM_NEON")
