@@ -354,7 +354,12 @@ if(SSE41_OPT)
 endif()
 if(NEON_OPT)
    list(APPEND tesseract_arch_srcs ${TESSERACT_SRC_DIR}/arch/dotproductneon.cpp ${TESSERACT_SRC_DIR}/arch/intsimdmatrixneon.cpp)
-   set_source_files_properties(${TESSERACT_SRC_DIR}/arch/dotproductneon.cpp ${TESSERACT_SRC_DIR}/arch/intsimdmatrixneon.cpp PROPERTIES COMPILE_FLAGS "-D__ARM_NEON")
+   if(CMAKE_SIZEOF_VOID_P EQUAL 4 AND CMAKE_SYSTEM_PROCESSOR MATCHES "arm")
+      # 32-bit ARM: NEON is not always-on; -mfpu=neon is required per translation unit
+      set_source_files_properties(${TESSERACT_SRC_DIR}/arch/dotproductneon.cpp ${TESSERACT_SRC_DIR}/arch/intsimdmatrixneon.cpp PROPERTIES COMPILE_FLAGS "-D__ARM_NEON -mfpu=neon")
+   else()
+      set_source_files_properties(${TESSERACT_SRC_DIR}/arch/dotproductneon.cpp ${TESSERACT_SRC_DIR}/arch/intsimdmatrixneon.cpp PROPERTIES COMPILE_FLAGS "-D__ARM_NEON")
+   endif()
    SET(TESSERACT_SIMDDETECT_COMPILE_FLAGS "${TESSERACT_SIMDDETECT_COMPILE_FLAGS} -DHAVE_NEON")
 endif()
 
