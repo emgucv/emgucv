@@ -31,7 +31,7 @@
 	<key>CFBundleIdentifier</key>
 	<string></string>
 	<key>CFBundleDisplayName</key>
-	<string>Emgu CV Maui Demo</string>
+	<string>Emgu</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera access is required for live video processing demos.</string>
 </dict>

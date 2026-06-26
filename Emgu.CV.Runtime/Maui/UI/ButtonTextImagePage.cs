@@ -180,7 +180,7 @@ namespace Emgu.CV.Platform.Maui.UI
 
             _mainLayout.Children.Add(DisplayImage);
             DisplayImage.BackgroundColor =
-                Microsoft.Maui.Graphics.Color.FromRgb(1.0, 0.0, 0.0);
+                Microsoft.Maui.Graphics.Color.FromArgb("#F2F2F7");
 
             //_mainLayout.Children.Add(MessageLabel);
 
