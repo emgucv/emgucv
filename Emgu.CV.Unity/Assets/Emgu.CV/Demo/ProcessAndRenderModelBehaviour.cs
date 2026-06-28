@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ namespace Emgu.CV.Demo
         protected void updateTextureWithString(String text)
         {
             Mat img = new Mat(new Size(640, 240), DepthType.Cv8U, 3);
-            CvInvoke.PutText(img, text, new System.Drawing.Point(10, 60), Emgu.CV.CvEnum.HersheyFonts.HersheyDuplex,
+            CvInvoke.PutText(img, text, new System.Drawing.Point(10, 60), Emgu.CV.CvEnum.HersheyFonts.Duplex,
                 1.0, new MCvScalar(0, 255, 0));
 
             Texture2D texture = img.ToTexture2D();

@@ -57,7 +57,7 @@ namespace Emgu.CV.Test
 
                 img.SetTo(new MCvScalar(0, 0, 0));
                 String message = "Hello, World";
-                CvInvoke.PutText(img, message, new Point(50, 100), CvEnum.HersheyFonts.HersheySimplex, 1.0, new MCvScalar(255));
+                CvInvoke.PutText(img, message, new Point(50, 100), CvEnum.HersheyFonts.Simplex, 1.0, new MCvScalar(255));
 
                 ocr.PageSegMode = PageSegMode.AutoOsd;
                 ocr.SetImage(img);
@@ -119,7 +119,7 @@ namespace Emgu.CV.Test
                 tesseract.SetVariable("tessedit_char_whitelist", "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,");
 
                 String message = "Hello, World";
-                CvInvoke.PutText(img, message, new Point(50, 100), CvEnum.HersheyFonts.HersheySimplex, 1.0, new MCvScalar(0, 0, 255));
+                CvInvoke.PutText(img, message, new Point(50, 100), CvEnum.HersheyFonts.Simplex, 1.0, new MCvScalar(0, 0, 255));
                 //ImageViewer.Show(img);
                 tesseract.SetImage(img);
                 tesseract.Recognize();

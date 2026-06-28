@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -14,34 +14,34 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Hershey simplex
         /// </summary>
-        HersheySimplex = 0,
+        Simplex = 0,
         /// <summary>
         /// Hershey plain
         /// </summary>
-        HersheyPlain = 1,
+        Plain = 1,
         /// <summary>
         /// Hershey duplex 
         /// </summary>
-        HersheyDuplex = 2,
+        Duplex = 2,
         /// <summary>
         /// Hershey complex
         /// </summary>
-        HersheyComplex = 3,
+        Complex = 3,
         /// <summary>
         /// Hershey triplex
         /// </summary>
-        HersheyTriplex = 4,
+        Triplex = 4,
         /// <summary>
         /// Hershey complex small
         /// </summary>
-        HersheyComplexSmall = 5,
+        ComplexSmall = 5,
         /// <summary>
         /// Hershey script simplex
         /// </summary>
-        HersheyScriptSimplex = 6,
+        ScriptSimplex = 6,
         /// <summary>
         /// Hershey script complex
         /// </summary>
-        HersheyScriptComplex = 7
+        ScriptComplex = 7
     }
 }

@@ -250,7 +250,7 @@ namespace Emgu.CV.Models
                     Rectangle boundingBox = boundingBoxesTracked[i];
                     CvInvoke.Rectangle(_frameCopy, boundingBox, new MCvScalar(255.0, 255.0, 255.0), 2);
                     CvInvoke.PutText(_frameCopy, idsTracked[i].ToString(), new Point(boundingBox.X, boundingBox.Y),
-                        HersheyFonts.HersheyPlain,
+                        HersheyFonts.Plain,
                         1.0, new MCvScalar(255.0, 255.0, 255.0));
                 }
 

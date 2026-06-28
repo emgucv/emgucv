@@ -181,7 +181,7 @@ namespace Emgu.CV.Models
                     imageOut,
                     qrCodesFound[i].Code,
                     Point.Round(qrCodesFound[i].Region[0]),
-                    HersheyFonts.HersheySimplex,
+                    HersheyFonts.Simplex,
                     1.0,
                     RenderColor
                     );

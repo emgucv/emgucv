@@ -28,7 +28,7 @@ namespace DynamicImage.Asp.NetCore.Controllers
                     img,
                     String.Format("The time is: {0}", DateTime.Now.ToString()),
                     new System.Drawing.Point(20, img.Height - 20),
-                    Emgu.CV.CvEnum.HersheyFonts.HersheyPlain,
+                    Emgu.CV.CvEnum.HersheyFonts.Plain,
                     2.0,
                     new Emgu.CV.Structure.MCvScalar(255.0, 255.0, 255.0),
                     1, LineType.EightConnected, false);

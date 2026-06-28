@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ namespace HelloWorld
                img,
                "Hello, world",
                new System.Drawing.Point(10, 80),
-               HersheyFonts.HersheyComplex,
+               HersheyFonts.Complex,
                1.0,
                new Bgr(0, 255, 0).MCvScalar);
 

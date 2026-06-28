@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -1236,10 +1236,10 @@ namespace Emgu.CV.Test
         {
             using (Image<Gray, Byte> img = new Image<Gray, Byte>(200, 300, new Gray()))
             {
-                //MCvFont f = new MCvFont(CvEnum.HersheyFonts.HersheyComplexSmall, 1.0, 1.0);
+                //MCvFont f = new MCvFont(CvEnum.HersheyFonts.ComplexSmall, 1.0, 1.0);
                 {
-                    img.Draw("h.", new Point(100, 10), CvEnum.HersheyFonts.HersheyComplexSmall, 1.0, new Gray(255.0));
-                    img.Draw("a.", new Point(100, 50), CvEnum.HersheyFonts.HersheyComplexSmall, 1.0, new Gray(255.0));
+                    img.Draw("h.", new Point(100, 10), CvEnum.HersheyFonts.ComplexSmall, 1.0, new Gray(255.0));
+                    img.Draw("a.", new Point(100, 50), CvEnum.HersheyFonts.ComplexSmall, 1.0, new Gray(255.0));
                 }
             }
         }

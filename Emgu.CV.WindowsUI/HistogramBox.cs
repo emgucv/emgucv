@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.       
 //----------------------------------------------------------------------------
 
@@ -87,7 +87,7 @@ namespace Emgu.CV.UI
 
                     Mat render = new Mat();
                     plot.Render(render);
-                    CvInvoke.PutText(render, name, new Point(20, 30), HersheyFonts.HersheyComplex, 0.8,
+                    CvInvoke.PutText(render, name, new Point(20, 30), HersheyFonts.Complex, 0.8,
                         new MCvScalar(0, 0, 255));
                     return render;
                 }

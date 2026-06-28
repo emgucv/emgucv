@@ -105,7 +105,7 @@ namespace CVInterop.Lite.Net
                 CvInvoke.Rectangle(m, rect, new Emgu.CV.Structure.MCvScalar(0, 0, 255), 2);
 
                 //draw the label
-                CvInvoke.PutText(m, r.Label, Point.Round(rect.Location), Emgu.CV.CvEnum.HersheyFonts.HersheyComplex, 1.0, new Emgu.CV.Structure.MCvScalar(0, 255, 0), 1);
+                CvInvoke.PutText(m, r.Label, Point.Round(rect.Location), Emgu.CV.CvEnum.HersheyFonts.Complex, 1.0, new Emgu.CV.Structure.MCvScalar(0, 255, 0), 1);
 
                 goodResultCount++;
 
