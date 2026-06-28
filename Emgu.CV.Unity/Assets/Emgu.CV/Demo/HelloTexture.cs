@@ -41,11 +41,11 @@ namespace Emgu.CV.Demo
             }
 
             CvInvoke.PutText(img, String.Format("Emgu CV for Unity {0}", Emgu.Util.Platform.OperationSystem),
-                new System.Drawing.Point(10, 60), Emgu.CV.CvEnum.FontFace.HersheyDuplex,
+                new System.Drawing.Point(10, 60), Emgu.CV.CvEnum.HersheyFonts.HersheyDuplex,
                 1.0, new MCvScalar(0, 255, 0));
 
             CvInvoke.PutText(img, String.Format("OpenCL: {0}", openclStr), new System.Drawing.Point(10, 120),
-                Emgu.CV.CvEnum.FontFace.HersheyDuplex,
+                Emgu.CV.CvEnum.HersheyFonts.HersheyDuplex,
                 1.0, new MCvScalar(0, 0, 255));
 
             Texture2D texture = img.ToTexture2D();
