@@ -135,12 +135,7 @@ namespace MauiDemoApp
             
             shapeDetectionButton.Clicked += (sender, args) =>
             {
-                ProcessAndRenderPage shapeDetectionPage = new ProcessAndRenderPage(
-                    new ShapeDetector(),
-                    "Shape detection",
-                    "pic3.png",
-                    "Shape detection");
-                this.Navigation.PushAsync(shapeDetectionPage);
+                this.Navigation.PushAsync(new ShapeDetectionPage());
             };
 
             

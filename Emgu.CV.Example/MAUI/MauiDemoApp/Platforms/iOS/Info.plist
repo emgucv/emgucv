@@ -34,5 +34,9 @@
 	<string>Emgu</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera access is required for live video processing demos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photo library access lets you run the demos on your own images.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Allows saving captured photos used by the demos.</string>
 </dict>
 </plist>
