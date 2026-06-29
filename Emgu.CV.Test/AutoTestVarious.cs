@@ -3481,7 +3481,7 @@ namespace Emgu.CV.Test
             {
                 blank.SetTo(new MCvScalar(0));
                 LineSegment2D[] lines = CvInvoke.HoughLinesP(blank, 1, Math.PI / 180, 10);
-                Assert.AreEqual(0, lines.Length);
+                EmguAssert.IsTrue(0 == lines.Length);
             }
         }
 

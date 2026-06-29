@@ -1220,16 +1220,17 @@ namespace Emgu.CV
             using (Mat lines = new Mat())
             {
                 HoughLinesP(image, lines, rho, theta, threshold, minLineLength, maxGap);
-                Size s = lines.Size;
-
-                LineSegment2D[] segments = new LineSegment2D[s.Height];
-                GCHandle handle = GCHandle.Alloc(segments, GCHandleType.Pinned);
-                using (Mat tmp = new Mat(s.Height, s.Width, CV.CvEnum.DepthType.Cv32S, 4, handle.AddrOfPinnedObject(), sizeof(int) * 4))
+                int count = lines.Total.ToInt32();
+                LineSegment2D[] segments = new LineSegment2D[count];
+                if (count > 0)
                 {
-                    lines.CopyTo(tmp);
+                    GCHandle handle = GCHandle.Alloc(segments, GCHandleType.Pinned);
+                    using (Mat tmp = new Mat(lines.Rows, lines.Cols, CV.CvEnum.DepthType.Cv32S, 4, handle.AddrOfPinnedObject(), sizeof(int) * 4))
+                    {
+                        lines.CopyTo(tmp);
+                    }
+                    handle.Free();
                 }
-                handle.Free();
-
                 return segments;
             }
         }
