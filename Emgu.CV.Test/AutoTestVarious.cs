@@ -3475,6 +3475,17 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestHoughLinesPBlankImage()
+        {
+            using (Mat blank = new Mat(100, 100, DepthType.Cv8U, 1))
+            {
+                blank.SetTo(new MCvScalar(0));
+                LineSegment2D[] lines = CvInvoke.HoughLinesP(blank, 1, Math.PI / 180, 10);
+                Assert.AreEqual(0, lines.Length);
+            }
+        }
+
+        [Test]
         public void TestFastLineDetector()
         {
             using (Mat img = new Mat("box.png", ImreadModes.Grayscale))
