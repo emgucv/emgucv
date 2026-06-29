@@ -35,6 +35,7 @@ namespace MauiDemoApp
         public FeatureMatchingPage()
            : base()
         {
+            this.Title = "Feature Matching";
             var button = this.GetButton();
             button.Text = "Perform Feature Matching";
             button.Clicked += OnButtonClicked;

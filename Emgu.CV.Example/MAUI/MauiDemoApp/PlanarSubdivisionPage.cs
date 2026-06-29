@@ -14,6 +14,7 @@ namespace MauiDemoApp
     {
        public PlanarSubdivisionPage()
        {
+          this.Title = "Planar Subdivision";
           var button = this.GetButton();
           button.Text = "Calculate Planar Subdivision";
           button.Clicked += (sender, args) =>

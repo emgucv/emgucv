@@ -28,6 +28,7 @@ namespace MauiDemoApp
         public FreetypePage()
             : base()
         {
+            this.Title = "Free Type";
             var button = this.GetButton();
             button.Text = "Draw Freetype Text";
             button.Clicked += async (sender, args) =>
