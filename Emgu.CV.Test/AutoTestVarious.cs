@@ -3486,6 +3486,29 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestHoughLinesBlankImage()
+        {
+            using (Mat blank = new Mat(100, 100, DepthType.Cv8U, 1))
+            using (VectorOfPointF lines = new VectorOfPointF())
+            {
+                blank.SetTo(new MCvScalar(0));
+                CvInvoke.HoughLines(blank, lines, 1, Math.PI / 180, 10);
+                EmguAssert.IsTrue(0 == lines.Size);
+            }
+        }
+
+        [Test]
+        public void TestHoughCirclesBlankImage()
+        {
+            using (Mat blank = new Mat(100, 100, DepthType.Cv8U, 1))
+            {
+                blank.SetTo(new MCvScalar(0));
+                CircleF[] circles = CvInvoke.HoughCircles(blank, CvEnum.HoughModes.Gradient, 1, 10);
+                EmguAssert.IsTrue(0 == circles.Length);
+            }
+        }
+
+        [Test]
         public void TestFastLineDetector()
         {
             using (Mat img = new Mat("box.png", ImreadModes.Grayscale))
