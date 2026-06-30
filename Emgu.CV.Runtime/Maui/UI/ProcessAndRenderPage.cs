@@ -331,12 +331,8 @@ namespace Emgu.CV.Platform.Maui.UI
             Picker p = this.Picker;
             try
             {
-                if ((!p.IsVisible) || p.SelectedIndex < 0)
-                    await _model.Init(DownloadManager_OnDownloadProgressChanged, null);
-                else
-                {
-                    await _model.Init(DownloadManager_OnDownloadProgressChanged, p.Items[p.SelectedIndex].ToString());
-                }
+                string pickerSelection = (p.IsVisible && p.SelectedIndex >= 0) ? p.Items[p.SelectedIndex].ToString() : null;
+                await Task.Run(() => _model.Init(DownloadManager_OnDownloadProgressChanged, pickerSelection));
             }
             catch (Exception ex)
             {

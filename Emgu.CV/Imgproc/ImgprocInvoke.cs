@@ -1225,7 +1225,7 @@ namespace Emgu.CV
                 if (count > 0)
                 {
                     GCHandle handle = GCHandle.Alloc(segments, GCHandleType.Pinned);
-                    using (Mat tmp = new Mat(lines.Rows, lines.Cols, CV.CvEnum.DepthType.Cv32S, 4, handle.AddrOfPinnedObject(), sizeof(int) * 4))
+                    using (Mat tmp = new Mat(lines.Rows, lines.Cols, CV.CvEnum.DepthType.Cv32S, 4, handle.AddrOfPinnedObject(), lines.Cols * sizeof(int) * 4))
                     {
                         lines.CopyTo(tmp);
                     }
