@@ -35,7 +35,16 @@ namespace MauiDemoApp
                 if (_freetype2 == null)
                 {
                     _freetype2 = new FreetypeNotoSansCJK();
-                    await _freetype2.Init(DownloadManager_OnDownloadProgressChanged);
+                    try
+                    {
+                        await Task.Run(() => _freetype2.Init(DownloadManager_OnDownloadProgressChanged));
+                    }
+                    catch (Exception ex)
+                    {
+                        SetMessage(String.Format("Failed to initialize FreeType: {0}", ex.Message));
+                        _freetype2 = null;
+                        return;
+                    }
                 }
 
                 Mat img = new Mat(new Size(640, 480), DepthType.Cv8U, 3);
