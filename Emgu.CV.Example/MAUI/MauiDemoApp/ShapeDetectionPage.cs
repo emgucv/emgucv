@@ -12,10 +12,7 @@ using Emgu.CV.Models;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 
-using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls.Shapes;
-using Microsoft.Maui.Media;
-using Microsoft.Maui.Storage;
 
 using DrawColor = System.Drawing.Color;
 using DrawPoint = System.Drawing.Point;
@@ -25,7 +22,7 @@ namespace MauiDemoApp
 {
     /// <summary>
     /// Bespoke, on-theme showcase page for the classic (non-DNN) OpenCV shape
-    /// detection demo. Loads a sample image (default, random, or user-picked),
+    /// detection demo. Generates a random scene of non-overlapping shapes,
     /// runs <see cref="ShapeDetector"/>, and presents each detection stage as a
     /// tappable result row.
     /// </summary>
@@ -141,10 +138,6 @@ namespace MauiDemoApp
 
             // ---------- Sample Image card ----------
             var sampleTitle = new Label { Text = "Sample Image", FontFamily = TitleFont, FontSize = 19, TextColor = PrimaryText, VerticalOptions = LayoutOptions.Center };
-            var randomButton = PillButton(GlyphCube, "Random", OnRandom);
-            var sampleHeader = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            sampleHeader.Add(sampleTitle, 0, 0);
-            sampleHeader.Add(randomButton, 1, 0);
 
             _previewImage = new Image { Aspect = Aspect.AspectFit, HeightRequest = 220 };
             var previewFrame = new Border
@@ -157,21 +150,19 @@ namespace MauiDemoApp
                 Content = _previewImage
             };
 
-            var chooseRow = ChooseImageRow();
-
             var sampleCard = new Border
             {
                 BackgroundColor = CardBackground,
                 Stroke = Colors.Transparent,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
                 Padding = new Thickness(16),
-                Content = new VerticalStackLayout { Spacing = 14, Children = { sampleHeader, previewFrame, chooseRow } }
+                Content = new VerticalStackLayout { Spacing = 14, Children = { sampleTitle, previewFrame } }
             };
 
             // ---------- Detect button ----------
             _detectButton = new Button
             {
-                Text = "Detect Shapes",
+                Text = "New Image",
                 FontFamily = TitleFont,
                 FontSize = 17,
                 BackgroundColor = Accent,
@@ -199,7 +190,7 @@ namespace MauiDemoApp
 
             _resultsHint = new Label
             {
-                Text = "Tap “Detect Shapes” to run the pipeline.",
+                Text = "Tap “New Image” to generate a scene and detect shapes.",
                 FontFamily = BodyFont,
                 FontSize = 14,
                 TextColor = SecondaryText,
@@ -334,101 +325,14 @@ namespace MauiDemoApp
 
         // ---------- Sample image sources ----------
 
-        private void OnRandom(object sender, EventArgs e)
-        {
-            SetCurrentImage(GenerateRandomShapes());
-        }
-
-        private async void OnChooseImage()
-        {
-            string action = await DisplayActionSheet("Choose Image", "Cancel", null, "Photo Library", "Camera", "Files");
-            if (string.IsNullOrEmpty(action) || action == "Cancel")
-                return;
-
-            // iOS cannot present a new controller while the action sheet is still
-            // dismissing; yield a beat so the camera/picker presents reliably.
-            await Task.Delay(250);
-
-            try
-            {
-                FileResult file = null;
-                if (action == "Photo Library")
-                    file = await MediaPicker.Default.PickPhotoAsync();
-                else if (action == "Camera")
-                {
-                    if (!MediaPicker.Default.IsCaptureSupported)
-                    {
-                        await DisplayAlert("Camera", "Camera capture is not supported on this device.", "OK");
-                        return;
-                    }
-
-                    var status = await Permissions.RequestAsync<Permissions.Camera>();
-                    if (status != PermissionStatus.Granted)
-                    {
-                        await DisplayAlert("Camera", "Camera permission is required to take a photo.", "OK");
-                        return;
-                    }
-
-                    file = await MediaPicker.Default.CapturePhotoAsync();
-                }
-                else if (action == "Files")
-                    file = await FilePicker.Default.PickAsync(PickOptions.Images);
-
-                if (file == null) // cancelled
-                    return;
-
-                // Decoding can take a moment for large photos — show the spinner.
-                SetBusy(true, "Loading image…");
-                using Stream stream = await file.OpenReadAsync();
-                using MemoryStream ms = new MemoryStream();
-                await stream.CopyToAsync(ms);
-                Mat m = new Mat();
-                CvInvoke.Imdecode(ms.ToArray(), ImreadModes.ColorBgr, m);
-                if (m.IsEmpty)
-                {
-                    m.Dispose();
-                    SetBusy(false);
-                    await DisplayAlert("Image", "That file could not be decoded as an image.", "OK");
-                    return;
-                }
-                // SetCurrentImage kicks off detection, which keeps the overlay up.
-                SetCurrentImage(m);
-            }
-            catch (Exception ex)
-            {
-                SetBusy(false);
-                await DisplayAlert("Could not load image", ex.Message, "OK");
-            }
-        }
-
         private void SetCurrentImage(Mat image)
         {
-            // Large camera/library photos are downscaled so detection (and the
-            // result thumbnails) stay fast and the Hough thresholds behave.
-            image = Downscale(image, 1280);
-
             _currentImage?.Dispose();
             _currentImage = image;
             _previewImage.Source = MatToImageSource(image);
 
             // A new input automatically runs detection.
             _ = RunDetectionAsync();
-        }
-
-        // Shrink the image so its longest side is at most maxDim (in place: the
-        // original is disposed and a resized copy returned). Returns the input
-        // unchanged when it is already small enough.
-        private static Mat Downscale(Mat src, int maxDim)
-        {
-            int longest = Math.Max(src.Width, src.Height);
-            if (longest <= maxDim)
-                return src;
-
-            double scale = (double)maxDim / longest;
-            Mat dst = new Mat();
-            CvInvoke.Resize(src, dst, new DrawSize((int)(src.Width * scale), (int)(src.Height * scale)));
-            src.Dispose();
-            return dst;
         }
 
         private static readonly DrawColor[] ShapePalette =
@@ -438,51 +342,96 @@ namespace MauiDemoApp
         };
 
         /// <summary>
-        /// Generate a fresh random scene of shapes. The number of shapes, their
-        /// positions, sizes, rotation, colors and fill/outline style are all
-        /// randomized, and shapes may overlap, so each scene differs in difficulty.
+        /// Generate a fresh random scene of shapes. Shapes are placed so they
+        /// never overlap each other and are always fully inside the canvas (never
+        /// clipped by an edge), which keeps every shape cleanly detectable. Their
+        /// type, size, rotation, color and fill/outline style are randomized.
         /// </summary>
         private Mat GenerateRandomShapes()
         {
-            const int w = 800, h = 560, margin = 40;
+            const int w = 800, h = 560, margin = 28, gap = 16;
             Mat img = new Mat(new DrawSize(w, h), DepthType.Cv8U, 3);
             img.SetTo(new MCvScalar(255, 255, 255));
 
-            int shapeCount = _rng.Next(6, 12);
-            for (int n = 0; n < shapeCount; n++)
-            {
-                int cx = _rng.Next(margin, w - margin);
-                int cy = _rng.Next(margin, h - margin);
-                int size = _rng.Next(35, 95);
-                double angle = _rng.NextDouble() * Math.PI; // random rotation
-                MCvScalar color = new Bgr(ShapePalette[_rng.Next(ShapePalette.Length)]).MCvScalar;
-                // Mix filled and bold-outline styles for variety.
-                int thickness = _rng.Next(3) == 0 ? _rng.Next(3, 6) : -1;
+            int target = _rng.Next(5, 9); // 5–8 shapes
+            var placed = new System.Collections.Generic.List<(int cx, int cy, int r)>();
 
-                switch (_rng.Next(5))
+            int attempts = 0;
+            while (placed.Count < target && attempts < 400)
+            {
+                attempts++;
+                int type = _rng.Next(5);
+                int size = _rng.Next(34, 74);
+                int r = BoundingRadius(type, size);
+
+                // Keep the whole shape inside the canvas (with a margin) so it is
+                // never cut off by an edge.
+                int minX = margin + r, maxX = w - margin - r;
+                int minY = margin + r, maxY = h - margin - r;
+                if (maxX <= minX || maxY <= minY)
+                    continue; // too big for this canvas — try another
+
+                int cx = _rng.Next(minX, maxX);
+                int cy = _rng.Next(minY, maxY);
+
+                // Reject a position that would overlap an already-placed shape.
+                bool overlaps = false;
+                foreach (var p in placed)
                 {
-                    case 0: // axis-aligned rectangle
-                        CvInvoke.Rectangle(img,
-                            new System.Drawing.Rectangle(cx - size, cy - (int)(size * 0.7), size * 2, (int)(size * 1.4)),
-                            color, thickness);
-                        break;
-                    case 1: // circle
-                        CvInvoke.Circle(img, new DrawPoint(cx, cy), size, color, thickness);
-                        break;
-                    case 2: // rotated rectangle (harder to detect)
-                        DrawPolygon(img, RotatedRectPoints(cx, cy, size * 2, (int)(size * 1.3), angle), color, thickness);
-                        break;
-                    case 3: // triangle
-                        DrawPolygon(img, RotatedTrianglePoints(cx, cy, size, angle), color, thickness);
-                        break;
-                    default: // line
-                        int dx = (int)(size * Math.Cos(angle)), dy = (int)(size * Math.Sin(angle));
-                        CvInvoke.Line(img, new DrawPoint(cx - dx, cy - dy), new DrawPoint(cx + dx, cy + dy),
-                            color, _rng.Next(3, 6));
-                        break;
+                    long dx = p.cx - cx, dy = p.cy - cy;
+                    long minDist = p.r + r + gap;
+                    if (dx * dx + dy * dy < minDist * minDist) { overlaps = true; break; }
                 }
+                if (overlaps)
+                    continue;
+
+                placed.Add((cx, cy, r));
+                DrawShape(img, type, cx, cy, size);
             }
             return img;
+        }
+
+        // The maximum distance from a shape's center to any of its points — used
+        // both to keep it inside the canvas and to space shapes apart.
+        private static int BoundingRadius(int type, int size) => type switch
+        {
+            0 => (int)Math.Ceiling(size * 1.23), // axis-aligned rectangle (half-diagonal)
+            1 => size,                           // circle
+            2 => (int)Math.Ceiling(size * 1.20), // rotated rectangle (half-diagonal)
+            3 => size,                           // triangle (circumradius)
+            _ => size                            // line (half-length)
+        };
+
+        // Draw one randomly-styled shape of the given type, centered at (cx, cy).
+        private void DrawShape(Mat img, int type, int cx, int cy, int size)
+        {
+            double angle = _rng.NextDouble() * Math.PI; // random rotation
+            MCvScalar color = new Bgr(ShapePalette[_rng.Next(ShapePalette.Length)]).MCvScalar;
+            // Mix filled and bold-outline styles for variety.
+            int thickness = _rng.Next(3) == 0 ? _rng.Next(3, 6) : -1;
+
+            switch (type)
+            {
+                case 0: // axis-aligned rectangle
+                    CvInvoke.Rectangle(img,
+                        new System.Drawing.Rectangle(cx - size, cy - (int)(size * 0.7), size * 2, (int)(size * 1.4)),
+                        color, thickness);
+                    break;
+                case 1: // circle
+                    CvInvoke.Circle(img, new DrawPoint(cx, cy), size, color, thickness);
+                    break;
+                case 2: // rotated rectangle (harder to detect)
+                    DrawPolygon(img, RotatedRectPoints(cx, cy, size * 2, (int)(size * 1.3), angle), color, thickness);
+                    break;
+                case 3: // triangle
+                    DrawPolygon(img, RotatedTrianglePoints(cx, cy, size, angle), color, thickness);
+                    break;
+                default: // line
+                    int dx = (int)(size * Math.Cos(angle)), dy = (int)(size * Math.Sin(angle));
+                    CvInvoke.Line(img, new DrawPoint(cx - dx, cy - dy), new DrawPoint(cx + dx, cy + dy),
+                        color, _rng.Next(3, 6));
+                    break;
+            }
         }
 
         private static DrawPoint[] RotatedRectPoints(int cx, int cy, int width, int height, double angle)
@@ -519,7 +468,8 @@ namespace MauiDemoApp
 
         // ---------- Detection ----------
 
-        // The button doubles as Run / Cancel depending on the busy state.
+        // The button doubles as New Image / Cancel depending on the busy state.
+        // Idle: generate a fresh scene (which automatically runs detection).
         private void OnDetectButtonClicked(object sender, EventArgs e)
         {
             if (_detecting)
@@ -529,7 +479,7 @@ namespace MauiDemoApp
             }
             else
             {
-                _ = RunDetectionAsync();
+                SetCurrentImage(GenerateRandomShapes());
             }
         }
 
@@ -595,7 +545,7 @@ namespace MauiDemoApp
                     _resultsRows.Children.Clear();
                     _statusStack.IsVisible = false;
                     _resultsHint.IsVisible = true;
-                    _resultsHint.Text = "Detection cancelled. Tap “Detect Shapes” to run.";
+                    _resultsHint.Text = "Detection cancelled. Tap “New Image” to run again.";
                 }
             }
         }
@@ -606,12 +556,12 @@ namespace MauiDemoApp
             _loadingLabel.Text = message;
             _loadingOverlay.IsVisible = busy;
             _loadingIndicator.IsRunning = busy;
-            _detectButton.Text = busy ? "Cancel" : "Detect Shapes";
+            _detectButton.Text = busy ? "Cancel" : "New Image";
             _detectButton.BackgroundColor = busy ? CancelColor : Accent;
             _detectButton.ImageSource = new FontImageSource
             {
                 FontFamily = IconFont,
-                Glyph = busy ? GlyphClose : GlyphPlay,
+                Glyph = busy ? GlyphClose : GlyphCube,
                 Color = Colors.White,
                 Size = 20
             };
@@ -715,62 +665,6 @@ namespace MauiDemoApp
             t.Tapped += (s, e) => onTap();
             cb.GestureRecognizers.Add(t);
             return cb;
-        }
-
-        private Border PillButton(string glyph, string text, EventHandler onTap)
-        {
-            var pill = new Border
-            {
-                BackgroundColor = TileBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(13) },
-                Padding = new Thickness(14, 9),
-                VerticalOptions = LayoutOptions.Center,
-                Content = new HorizontalStackLayout
-                {
-                    Spacing = 7,
-                    Children =
-                    {
-                        MakeIcon(glyph, Accent, 18),
-                        new Label { Text = text, FontFamily = TitleFont, FontSize = 14, TextColor = Accent, VerticalOptions = LayoutOptions.Center }
-                    }
-                }
-            };
-            var t = new TapGestureRecognizer();
-            t.Tapped += (s, e) => onTap(s, e);
-            pill.GestureRecognizers.Add(t);
-            return pill;
-        }
-
-        private Border ChooseImageRow()
-        {
-            var grid = new Grid
-            {
-                Padding = new Thickness(14, 12),
-                ColumnSpacing = 12,
-                ColumnDefinitions =
-                {
-                    new ColumnDefinition(GridLength.Auto),
-                    new ColumnDefinition(GridLength.Star),
-                    new ColumnDefinition(GridLength.Auto)
-                }
-            };
-            grid.Add(MakeIcon(GlyphImage, Accent, 22), 0, 0);
-            grid.Add(new Label { Text = "Choose Image", FontFamily = TitleFont, FontSize = 16, TextColor = Accent, VerticalOptions = LayoutOptions.Center }, 1, 0);
-            grid.Add(MakeIcon(GlyphChevronRight, Color.FromArgb("#C2C7D6"), 22), 2, 0);
-
-            var row = new Border
-            {
-                BackgroundColor = CardBackground,
-                Stroke = RowBorder,
-                StrokeThickness = 1,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(14) },
-                Content = grid
-            };
-            var tap = new TapGestureRecognizer();
-            tap.Tapped += (s, e) => OnChooseImage();
-            row.GestureRecognizers.Add(tap);
-            return row;
         }
 
         private View PipelineStep(string name, string description)
