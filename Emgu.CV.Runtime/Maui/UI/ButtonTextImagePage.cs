@@ -141,30 +141,55 @@ namespace Emgu.CV.Platform.Maui.UI
         /// <param name="additionalButtons">Additional buttons added below the standard button.</param>
         public ButtonTextImagePage(Microsoft.Maui.Controls.Button[] additionalButtons = null)
         {
-            var horizontalLayoutOptions = LayoutOptions.Center;
+            // ---------- Palette (matches the home screen) ----------
+            var pageBackground = Microsoft.Maui.Graphics.Color.FromArgb("#EEF1F8");
+            var cardBackground = Microsoft.Maui.Graphics.Colors.White;
+            var primaryText = Microsoft.Maui.Graphics.Color.FromArgb("#1A1C2E");
+            var secondaryText = Microsoft.Maui.Graphics.Color.FromArgb("#8A8FA3");
+            var accent = Microsoft.Maui.Graphics.Color.FromArgb("#3D7BF7");
+            var rowBorder = Microsoft.Maui.Graphics.Color.FromArgb("#ECEEF5");
+            var imageBackground = Microsoft.Maui.Graphics.Color.FromArgb("#F2F2F7");
+            const string bodyFont = "InterRegular";
+            const string mediumFont = "InterSemiBold";
 
-            TopButton.Text = "Click me";
+            // Accent "pill" button used for the primary action and any extras.
+            Action<Microsoft.Maui.Controls.Button> stylePrimaryButton = (button) =>
+            {
+                button.BackgroundColor = accent;
+                button.TextColor = Microsoft.Maui.Graphics.Colors.White;
+                button.FontFamily = mediumFont;
+                button.FontSize = 16;
+                button.CornerRadius = 14;
+                button.HeightRequest = 50;
+                button.Padding = new Thickness(20, 0);
+                button.HorizontalOptions = LayoutOptions.Fill;
+            };
+
+            TopButton.Text = "Run";
             TopButton.IsEnabled = true;
-            TopButton.HorizontalOptions = horizontalLayoutOptions;
+            stylePrimaryButton(TopButton);
 
             MessageLabel.Text = "";
-            MessageLabel.HorizontalOptions = horizontalLayoutOptions;
+            MessageLabel.FontFamily = bodyFont;
+            MessageLabel.FontSize = 14;
+            MessageLabel.TextColor = secondaryText;
+            MessageLabel.HorizontalTextAlignment = TextAlignment.Center;
+            MessageLabel.HorizontalOptions = LayoutOptions.Center;
 
+            _mainLayout.Spacing = 14;
 
-            //DisplayImage.HeightRequest = 100;
-            //DisplayImage.WidthRequest = 100;
-            //DisplayImage.MinimumHeightRequest = 10;
-
-            //StackLayout mainLayout = new StackLayout();
             _mainLayout.Children.Add(Picker);
             Picker.IsVisible = false;
+            Picker.FontFamily = bodyFont;
+            Picker.TextColor = primaryText;
+            Picker.TitleColor = secondaryText;
 
             _mainLayout.Children.Add(TopButton);
             if (additionalButtons != null)
             {
                 foreach (Microsoft.Maui.Controls.Button button in additionalButtons)
                 {
-                    button.HorizontalOptions = horizontalLayoutOptions;
+                    stylePrimaryButton(button);
                     _mainLayout.Children.Add(button);
                 }
             }
@@ -173,27 +198,34 @@ namespace Emgu.CV.Platform.Maui.UI
 
             _mainLayout.Children.Add(MessageLabel);
 
+            DisplayImage.BackgroundColor = imageBackground;
 
-            //MessageLabel.BackgroundColor = Color.AliceBlue;
-            //DisplayImage.BackgroundColor = Color.Aqua;
-            //_mainLayout.BackgroundColor = Color.Blue;
-
-            _mainLayout.Children.Add(DisplayImage);
-            DisplayImage.BackgroundColor =
-                Microsoft.Maui.Graphics.Color.FromArgb("#F2F2F7");
-
-            //_mainLayout.Children.Add(MessageLabel);
+            // Wrap the result image in a rounded white "card" to match the theme.
+            var imageCard = new Border
+            {
+                BackgroundColor = cardBackground,
+                Stroke = rowBorder,
+                StrokeThickness = 1,
+                Padding = new Thickness(6),
+                StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(18) },
+                Content = DisplayImage
+            };
+            _mainLayout.Children.Add(imageCard);
 
             LogEditor.Text = "";
-            LogEditor.HorizontalOptions = LayoutOptions.Center;
+            LogEditor.FontFamily = bodyFont;
+            LogEditor.TextColor = secondaryText;
+            LogEditor.BackgroundColor = cardBackground;
+            LogEditor.HorizontalOptions = LayoutOptions.Fill;
             LogEditor.VerticalOptions = LayoutOptions.Center;
             LogEditor.FontSize = LogEditor.FontSize / 2;
             _mainLayout.Children.Add(LogEditor);
 
             SetLog(null);
 
-            _mainLayout.Padding = new Thickness(10, 10, 10, 10);
+            _mainLayout.Padding = new Thickness(16, 16, 16, 16);
 
+            this.BackgroundColor = pageBackground;
             this.Content = new Microsoft.Maui.Controls.ScrollView()
             {
                 Content = _mainLayout

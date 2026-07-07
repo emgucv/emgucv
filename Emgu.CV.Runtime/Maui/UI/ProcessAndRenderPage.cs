@@ -159,14 +159,30 @@ namespace Emgu.CV.Platform.Maui.UI
             outputRecorder.BufferReceived += OutputRecorder_BufferReceived;
 #endif
             _deaultImage = defaultImage;
-            _defaultButtonText = defaultButtonText;
+
+            // The module name (passed as defaultButtonText) now lives in the
+            // navigation bar title so it is shown exactly once. The action
+            // button uses a generic verb instead of repeating the name.
+            this.Title = defaultButtonText;
+            _defaultButtonText = (defaultImage == null) ? "Open Camera" : "Run";
 
             var button = this.GetButton();
             button.Text = _defaultButtonText;
             button.Clicked += OnButtonClicked;
 
+            // Only show the description label when it adds information beyond
+            // the module name (otherwise it is redundant with the nav title).
             var label = this.GetLabel();
-            label.Text = defaultLabelText;
+            if (String.IsNullOrWhiteSpace(defaultLabelText)
+                || String.Equals(defaultLabelText.Trim(), (defaultButtonText ?? String.Empty).Trim(), StringComparison.OrdinalIgnoreCase))
+            {
+                label.Text = String.Empty;
+                label.IsVisible = false;
+            }
+            else
+            {
+                label.Text = defaultLabelText;
+            }
 
             _model = model;
 

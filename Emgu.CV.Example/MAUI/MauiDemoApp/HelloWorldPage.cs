@@ -18,6 +18,7 @@ namespace MauiDemoApp
         public HelloWorldPage()
            : base()
         {
+            this.Title = "Hello World";
             var button = this.GetButton();
             if (button != null)
                 button.Opacity = 0;
