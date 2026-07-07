@@ -166,21 +166,7 @@ namespace MauiDemoApp
 
             maskRcnnButton.Clicked += (sender, args) =>
             {
-                ProcessAndRenderPage maskRcnnPage = new ProcessAndRenderPage(
-                    new MaskRcnn(),
-                    "Mask-rcnn Detection",
-                    "dog416.png",
-                    "");
-                Picker p = maskRcnnPage.Picker;
-                p.IsVisible = true;
-                p.Title = "Preferred DNN backend & target";
-
-                foreach (String option in GetDnnBackends())
-                {
-                    p.Items.Add(option);
-                }
-
-                this.Navigation.PushAsync(maskRcnnPage);
+                this.Navigation.PushAsync(new MaskRcnnPage());
             };
 
 
