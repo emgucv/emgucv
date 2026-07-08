@@ -631,7 +631,6 @@ namespace MauiDemoApp
             };
             var nameLabel = new Label { Text = Capitalize(f.Label), FontFamily = BodyFont, FontSize = 16, TextColor = PrimaryText, VerticalOptions = LayoutOptions.Center };
             var confLabel = new Label { Text = $"{(int)Math.Round(f.Confident * 100)}%", FontFamily = TitleFont, FontSize = 15, TextColor = PrimaryText, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center };
-            var chevron = MakeIcon(GlyphChevronRight, Color.FromArgb("#C2C7D6"), 20);
 
             var grid = new Grid
             {
@@ -641,14 +640,12 @@ namespace MauiDemoApp
                 {
                     new ColumnDefinition(GridLength.Auto),
                     new ColumnDefinition(GridLength.Star),
-                    new ColumnDefinition(GridLength.Auto),
                     new ColumnDefinition(GridLength.Auto)
                 }
             };
             grid.Add(dot, 0, 0);
             grid.Add(nameLabel, 1, 0);
             grid.Add(confLabel, 2, 0);
-            grid.Add(chevron, 3, 0);
 
             var stack = new VerticalStackLayout();
             stack.Children.Add(grid);
