@@ -26,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Models", "..\..\Emgu.CV.Models\NetStandard\Emgu.CV.Models.csproj", "{4BB94FBA-FE6D-4AB3-80EB-CBD5CE105C9B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.WindowsUI", "..\..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.csproj", "{0A44FA9B-C897-4245-9A31-F2D8227E5AB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.WinForms", "..\..\Emgu.CV.WinForms\Emgu.CV.WinForms\Emgu.CV.WinForms.csproj", "{0A44FA9B-C897-4245-9A31-F2D8227E5AB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -140,7 +140,7 @@ Global
 		SolutionGuid = {BDD55E85-CC60-4852-A841-1E57022A38A5}
 	EndGlobalSection
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		..\..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.Shared.projitems*{0a44fa9b-c897-4245-9a31-f2d8227e5ab3}*SharedItemsImports = 5
+		..\..\Emgu.CV.WinForms\Emgu.CV.WinForms.Shared.projitems*{0a44fa9b-c897-4245-9a31-f2d8227e5ab3}*SharedItemsImports = 5
 		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{0bfad282-50c1-449c-b01c-62fd23bbdbe5}*SharedItemsImports = 13
 		..\..\Emgu.CV\Emgu.CV.Shared.projitems*{0e88523a-29db-4719-b734-d384765384c6}*SharedItemsImports = 13
 		..\..\Emgu.CV.Contrib\Emgu.CV.Contrib.projitems*{11e54a7e-778d-466c-a176-71e150976ac1}*SharedItemsImports = 13

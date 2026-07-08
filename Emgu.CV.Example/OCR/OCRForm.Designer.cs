@@ -39,7 +39,7 @@
          this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.loadLanguageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
          this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-         this.imageBox1 = new Emgu.CV.UI.ImageBox();
+         this.imageBox1 = new Emgu.CV.WinForms.ImageBox();
          this.openImageFileDialog = new System.Windows.Forms.OpenFileDialog();
          this.openLanguageFileDialog = new System.Windows.Forms.OpenFileDialog();
          this.splitContainer3 = new System.Windows.Forms.SplitContainer();
@@ -277,7 +277,7 @@
       private System.Windows.Forms.Button loadImageButton;
       private System.Windows.Forms.SplitContainer splitContainer1;
       private System.Windows.Forms.SplitContainer splitContainer2;
-      private Emgu.CV.UI.ImageBox imageBox1;
+      private Emgu.CV.WinForms.ImageBox imageBox1;
       private System.Windows.Forms.OpenFileDialog openImageFileDialog;
       private System.Windows.Forms.MenuStrip menuStrip1;
       private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;

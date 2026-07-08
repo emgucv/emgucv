@@ -35,7 +35,7 @@ using Emgu.CV.Cuda;
 using Emgu.CV.Mcc;
 using Emgu.CV.Models;
 using Emgu.CV.Tiff;
-//using Emgu.CV.UI;
+//using Emgu.CV.WinForms;
 using Emgu.CV.Util;
 using Emgu.CV.VideoStab;
 using Emgu.CV.XFeatures2D;
@@ -355,7 +355,7 @@ namespace Emgu.CV.Test
                     }
                 }
 
-                //Emgu.CV.UI.ImageViewer.Show(image);
+                //Emgu.CV.WinForms.ImageViewer.Show(image);
             }
         }
 
@@ -1668,7 +1668,7 @@ namespace Emgu.CV.Test
                Array.ConvertAll<PointF, Point>(hull, Point.Round),
                true, new MCvScalar(255.0, 0.0, 0.0));
 
-            //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Convex Hull Computed in {0} milliseconds", watch.ElapsedMilliseconds));
+            //Emgu.CV.WinForms.ImageViewer.Show(img, String.Format("Convex Hull Computed in {0} milliseconds", watch.ElapsedMilliseconds));
 
         }
 
@@ -1864,7 +1864,7 @@ namespace Emgu.CV.Test
             CvInvoke.Ellipse(img, rect, new MCvScalar(0, 0, 255), 2);
             #endregion
 
-            //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+            //Emgu.CV.WinForms.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
         }
 
         [Test]
@@ -1892,7 +1892,7 @@ namespace Emgu.CV.Test
                 CvInvoke.Circle(img, Point.Round(p), 2, new MCvScalar(0, 255, 0), 1);
             #endregion
 
-            //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+            //Emgu.CV.WinForms.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
         }
 
         [Test]
@@ -1916,7 +1916,7 @@ namespace Emgu.CV.Test
                 CvInvoke.Circle(img, Point.Round(p), 2, new MCvScalar(0, 255, 0), 1);
             #endregion
 
-            //Emgu.CV.UI.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
+            //Emgu.CV.WinForms.ImageViewer.Show(img, String.Format("Time used: {0} milliseconds", watch.ElapsedMilliseconds));
         }
 
         /*
@@ -2068,8 +2068,8 @@ namespace Emgu.CV.Test
                     CvInvoke.CalcHist(vm, new int[] { 0 }, null, h, new int[] { 20 }, new float[] { 0, 180 }, false);
                     CvInvoke.CalcBackProject(vm, new int[] { 0 }, h, bpj, new float[] { 0, 180 }, 0.1);
 
-                    //Emgu.CV.UI.HistogramViewer.Show(bpj);
-                    //Emgu.CV.UI.ImageViewer.Show(bpj);
+                    //Emgu.CV.WinForms.HistogramViewer.Show(bpj);
+                    //Emgu.CV.WinForms.ImageViewer.Show(bpj);
                     //h.Calculate(new Image<Gray, Byte>[1] { HSVs[0] }, true, null);
                     //using (Image<Gray, Byte> bpj = h.BackProject(new Image<Gray, Byte>[1] { HSVs[0] }))
                     //{
@@ -2106,7 +2106,7 @@ namespace Emgu.CV.Test
               foreach (SoftCascadeDetector.Detection detection in detections)
                  image.Draw(detection.BoundingBox, new Bgr(Color.Red), 1);
 
-              //Emgu.CV.UI.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+              //Emgu.CV.WinForms.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
            }
         }*/
 
@@ -2130,7 +2130,7 @@ namespace Emgu.CV.Test
                     //image.Draw(rect.Rect, new Bgr(0, 0, 255), 1);
                 EmguAssert.WriteLine(String.Format("HOG detection time: {0} ms", watch.ElapsedMilliseconds));
 
-                //Emgu.CV.UI.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+                //Emgu.CV.WinForms.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
             }
         }
 
@@ -2240,7 +2240,7 @@ namespace Emgu.CV.Test
             CvInvoke.GrabCut(img, mask, rect, bgdModel, fgdModel, 2, Emgu.CV.CvEnum.GrabcutInitType.Eval);
             using (ScalarArray ia = new ScalarArray(3))
                 CvInvoke.Compare(mask, ia, mask, CvEnum.CmpType.Equal);
-            //Emgu.CV.UI.ImageViewer.Show(img.ConcateHorizontal( mask.Convert<Bgr, Byte>()));
+            //Emgu.CV.WinForms.ImageViewer.Show(img.ConcateHorizontal( mask.Convert<Bgr, Byte>()));
         }
 
         [Test]
@@ -2727,7 +2727,7 @@ namespace Emgu.CV.Test
             Mat m = new Mat(new Size(640, 480), DepthType.Cv8U, 3);
             m.SetTo(new MCvScalar(0, 0, 0));
             CvInvoke.DrawMarker(m, new Point(200, 200), new MCvScalar(255.0, 255.0, 0), MarkerTypes.Diamond);
-            //Emgu.CV.UI.ImageViewer.Show(m);
+            //Emgu.CV.WinForms.ImageViewer.Show(m);
         }
 
         /*
@@ -2756,7 +2756,7 @@ namespace Emgu.CV.Test
                 Mat image = new Mat();
 
                 CvInvoke.Imdecode(data, ImreadModes.ColorBgr, image);
-                //Emgu.CV.UI.ImageViewer.Show(image);
+                //Emgu.CV.WinForms.ImageViewer.Show(image);
             }
         }
 
@@ -2940,7 +2940,7 @@ namespace Emgu.CV.Test
                         int[] component = stitcher.Component();
                     }
                 }
-                //Emgu.CV.UI.ImageViewer.Show(result);
+                //Emgu.CV.WinForms.ImageViewer.Show(result);
             }
         }
 
@@ -2964,7 +2964,7 @@ namespace Emgu.CV.Test
                     vm.Push(images);
                     stitcher.Stitch(vm, result);
                 }
-                //Emgu.CV.UI.ImageViewer.Show(result);
+                //Emgu.CV.WinForms.ImageViewer.Show(result);
             }
         }
 
@@ -2988,7 +2988,7 @@ namespace Emgu.CV.Test
                     vm.Push(images);
                     stitcher.Stitch(vm, result);
                 }
-                //Emgu.CV.UI.ImageViewer.Show(result);
+                //Emgu.CV.WinForms.ImageViewer.Show(result);
             }
         }
 
@@ -3010,7 +3010,7 @@ namespace Emgu.CV.Test
                     vm.Push(images);
                     stitcher.Stitch(vm, result);
                 }
-                //Emgu.CV.UI.ImageViewer.Show(result);
+                //Emgu.CV.WinForms.ImageViewer.Show(result);
             }
         }
 
@@ -3044,7 +3044,7 @@ namespace Emgu.CV.Test
                     stitcher.Stitch(vm, result);
                 }
 
-                //Emgu.CV.UI.ImageViewer.Show(result);
+                //Emgu.CV.WinForms.ImageViewer.Show(result);
             }
         }
 
@@ -3067,7 +3067,7 @@ namespace Emgu.CV.Test
                  vm.Push(images);
                  stitcher.Stitch(vm, result);
               }
-              //Emgu.CV.UI.ImageViewer.Show(result);
+              //Emgu.CV.WinForms.ImageViewer.Show(result);
            }
         }*/
 
@@ -3219,7 +3219,7 @@ namespace Emgu.CV.Test
                           }
                        }
                        CvInvoke.Rectangle(img, result, new MCvScalar(0, 0, 255));
-                       Emgu.CV.UI.ImageViewer.Show(img);
+                       Emgu.CV.WinForms.ImageViewer.Show(img);
 
                        result.Inflate((int)(result.Width * 0.2), (int)(result.Height * 0.2));
                        using (Image<Gray, Byte> mask = img.GrabCut(result, 10))
@@ -3237,7 +3237,7 @@ namespace Emgu.CV.Test
                           Image<Bgr, byte> displayImg = img.ConcateHorizontal(canny.Convert<Bgr, Byte>());
 
                           //displayImg.Save("out_" + files[idx]);
-                          Emgu.CV.UI.ImageViewer.Show(displayImg);
+                          Emgu.CV.WinForms.ImageViewer.Show(displayImg);
                        }
                     }
                  }
@@ -3275,7 +3275,7 @@ namespace Emgu.CV.Test
                     image[p] = new Bgr(Color.Red);
                  }
               }
-              //Emgu.CV.UI.ImageViewer.Show(image);
+              //Emgu.CV.WinForms.ImageViewer.Show(image);
            }
         }
 
@@ -3304,7 +3304,7 @@ namespace Emgu.CV.Test
                           }
                        }
                        CvInvoke.Rectangle(img, result, new MCvScalar(0, 0, 255));
-                       //Emgu.CV.UI.ImageViewer.Show(img);
+                       //Emgu.CV.WinForms.ImageViewer.Show(img);
 
                     }
                  }
@@ -3411,7 +3411,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestGLImageView()
         {
-           Emgu.CV.UI.GLView.GLImageViewer viewer = new UI.GLView.GLImageViewer();
+           Emgu.CV.WinForms.GLView.GLImageViewer viewer = new UI.GLView.GLImageViewer();
            //viewer.ShowDialog();
         }
 #endif
@@ -3712,7 +3712,7 @@ namespace Emgu.CV.Test
                 UMat m2 = new UMat();
                 tmp.CopyTo(m2);
                 Mat m3 = EmguAssert.LoadMat("测试.jpg");
-                //Emgu.CV.UI.ImageViewer.Show(m2);
+                //Emgu.CV.WinForms.ImageViewer.Show(m2);
             }
         }
 
@@ -4473,7 +4473,7 @@ namespace Emgu.CV.Test
                 ss.GetLabelContourMask(contours);
                 CvInvoke.CvtColor(contours, contoursBgr, ColorConversion.Gray2Bgr);
                 CvInvoke.BitwiseOr(image, contoursBgr, image);
-                //Emgu.CV.UI.ImageViewer.Show(image);
+                //Emgu.CV.WinForms.ImageViewer.Show(image);
             }
         }
 
@@ -4576,7 +4576,7 @@ namespace Emgu.CV.Test
                 /*
                 for (int i = 0; i < channels.Length; i++)
                 {
-                   Emgu.CV.UI.ImageViewer.Show(channels[i]);
+                   Emgu.CV.WinForms.ImageViewer.Show(channels[i]);
                 }*/
 
                 try
@@ -4614,7 +4614,7 @@ namespace Emgu.CV.Test
                         if (tmp != null)
                             tmp.Dispose();
                 }
-                //Emgu.CV.UI.ImageViewer.Show(image);
+                //Emgu.CV.WinForms.ImageViewer.Show(image);
 
             }
 

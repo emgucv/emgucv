@@ -7,7 +7,7 @@ using System;
 using System.Windows.Forms;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Emgu.CV;
-using Emgu.CV.UI;
+using Emgu.CV.WinForms;
 using System.Diagnostics;
 
 [assembly: DebuggerVisualizer(

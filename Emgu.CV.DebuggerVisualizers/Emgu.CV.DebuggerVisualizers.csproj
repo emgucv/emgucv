@@ -134,7 +134,7 @@
       <Name>Emgu.CV</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.Shared.projitems" Label="Shared" />
+  <Import Project="..\Emgu.CV.WinForms\Emgu.CV.WinForms.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <RuntimeInformationDll1>$(OutputPath)System.Runtime.InteropServices.RuntimeInformation.dll</RuntimeInformationDll1>

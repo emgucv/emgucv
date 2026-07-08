@@ -51,7 +51,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Wpf", "..\..\Emgu.CV.Wpf\Emgu.CV.Wpf.csproj", "{99D395E7-BCE3-4447-A43E-626DF2721A29}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.WindowsUI", "..\..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.csproj", "{475B8A11-E215-46C9-B5F7-17EF8BEE7273}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.WinForms", "..\..\Emgu.CV.WinForms\Emgu.CV.WinForms\Emgu.CV.WinForms.csproj", "{475B8A11-E215-46C9-B5F7-17EF8BEE7273}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildInfo.Console", "..\..\Emgu.CV.Example\BuildInfo.Console\BuildInfo.Console.csproj", "{3F332C2E-39CB-4490-A947-A59E8A0AD654}"
 EndProject
@@ -383,7 +383,7 @@ Global
 		..\..\Emgu.CV.Runtime\Mac\Emgu.CV.Runtime.Mac.projitems*{3f332c2e-39cb-4490-a947-a59e8a0ad654}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Ubuntu\Emgu.CV.Runtime.Ubuntu.projitems*{3f332c2e-39cb-4490-a947-a59e8a0ad654}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{3f332c2e-39cb-4490-a947-a59e8a0ad654}*SharedItemsImports = 5
-		..\..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.Shared.projitems*{475b8a11-e215-46c9-b5f7-17ef8bee7273}*SharedItemsImports = 5
+		..\..\Emgu.CV.WinForms\Emgu.CV.WinForms.Shared.projitems*{475b8a11-e215-46c9-b5f7-17ef8bee7273}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.projitems*{47cf52b9-ab6d-4bf6-a791-1ac4d2ccd140}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{5f062e7d-b078-4f68-bf4a-f431dfc51002}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{5f6b97f8-7ea6-4b5d-9a5d-f5581505c303}*SharedItemsImports = 4

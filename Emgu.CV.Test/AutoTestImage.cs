@@ -22,7 +22,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Superres;
 
 #if !(__IOS__ || NETFX_CORE || __ANDROID__ || NETCOREAPP)
-using Emgu.CV.UI;
+using Emgu.CV.WinForms;
 #endif
 using Emgu.CV.Util;
 using Emgu.Util;
@@ -126,7 +126,7 @@ namespace Emgu.CV.Test
                              Trace.WriteLine(String.Format("Sobel completed in {0} milliseconds. (OpenCL: {1})", watch.ElapsedMilliseconds, CvInvoke.UseOpenCL));
                              uresult.CopyTo(result, null);
                          }
-                         //Emgu.CV.UI.ImageViewer.Show(result);
+                         //Emgu.CV.WinForms.ImageViewer.Show(result);
                      });
         }
 
@@ -411,7 +411,7 @@ namespace Emgu.CV.Test
             Mat imgJpg = new Mat();
             CvInvoke.Imdecode(data, ImreadModes.ColorBgr, imgJpg);
 
-            //Emgu.CV.UI.ImageViewer.Show(imgJpg);
+            //Emgu.CV.WinForms.ImageViewer.Show(imgJpg);
 
             Mat imgPng = new Mat();
             data = GetBytesFromFile(EmguAssert.GetFile("pedestrian.png"));
@@ -422,7 +422,7 @@ namespace Emgu.CV.Test
             using (VectorOfByte vSpan = new VectorOfByte(span))
                 CvInvoke.Imdecode((IInputArray)vSpan, ImreadModes.ColorBgr, imgSpan);
             EmguAssert.IsTrue(imgPng.Equals(imgSpan));
-            //Emgu.CV.UI.ImageViewer.Show(imgPng);
+            //Emgu.CV.WinForms.ImageViewer.Show(imgPng);
         }
 
 
@@ -596,7 +596,7 @@ namespace Emgu.CV.Test
 
             Image<Gray, float> absDiff = new Image<Gray, float>(convoluted.Size);
             CvInvoke.AbsDiff(laplace, convoluted, absDiff);
-            //Emgu.CV.UI.ImageViewer.Show(absDiff.Convert<Gray, byte>());
+            //Emgu.CV.WinForms.ImageViewer.Show(absDiff.Convert<Gray, byte>());
             EmguAssert.IsTrue(laplace.Equals(convoluted));
 
 
@@ -983,7 +983,7 @@ namespace Emgu.CV.Test
         {
             Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("lena.jpg");
             image._EqualizeHist();
-            //Emgu.CV.UI.ImageViewer.Show(image);
+            //Emgu.CV.WinForms.ImageViewer.Show(image);
         }
 
         [TestAttribute]
@@ -1081,7 +1081,7 @@ namespace Emgu.CV.Test
                 }
             }
 
-            //Emgu.CV.UI.ImageViewer.Show(res);
+            //Emgu.CV.WinForms.ImageViewer.Show(res);
         }
 
         public void TestContour2()
@@ -1322,7 +1322,7 @@ namespace Emgu.CV.Test
 
                                             using (Image<Bgr, Byte> res = imageRGB.InPaint(mask, 50))
                                             {
-                                                //Emgu.CV.UI.ImageViewer.Show(res);
+                                                //Emgu.CV.WinForms.ImageViewer.Show(res);
                                             }
                                         }
                                         applied = true;
@@ -1507,7 +1507,7 @@ namespace Emgu.CV.Test
             Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
             Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
             CvInvoke.ApplyColorMap(image, result, CvEnum.ColorMapType.Hot);
-            //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+            //Emgu.CV.WinForms.ImageViewer.Show(image.ConcateHorizontal(result));
         }
 
         [TestAttribute]
@@ -1516,7 +1516,7 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("pedestrian.png");
             Image<Gray, Byte> result = new Image<Gray, byte>(image.Size);
             CvInvoke.CLAHE(image, 4, new Size(8, 8), result);
-            //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+            //Emgu.CV.WinForms.ImageViewer.Show(image.ConcateHorizontal(result));
         }
 
         [TestAttribute]
@@ -1525,7 +1525,7 @@ namespace Emgu.CV.Test
             Image<Gray, Byte> image = EmguAssert.LoadImage<Gray, Byte>("pedestrian.png");
             Image<Gray, Byte> result = new Image<Gray, byte>(image.Size);
             CvInvoke.FastNlMeansDenoising(image, result, 3f, 7, 21);
-            //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+            //Emgu.CV.WinForms.ImageViewer.Show(image.ConcateHorizontal(result));
         }
 
         [TestAttribute]
@@ -1534,7 +1534,7 @@ namespace Emgu.CV.Test
             Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png");
             Image<Bgr, Byte> result = new Image<Bgr, byte>(image.Size);
             CvInvoke.FastNlMeansDenoisingColored(image, result, 3f, 10, 7, 21);
-            //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+            //Emgu.CV.WinForms.ImageViewer.Show(image.ConcateHorizontal(result));
         }
 
  
@@ -1662,7 +1662,7 @@ namespace Emgu.CV.Test
 
             Mat result = new Mat();
             CvInvoke.HConcat(img, MorphologyClosing(img, 10), result);
-            //Emgu.CV.UI.ImageViewer.Show(result, "Left: original, Right: merged");
+            //Emgu.CV.WinForms.ImageViewer.Show(result, "Left: original, Right: merged");
         }
 
         public static Mat MorphologyClosing(Mat img, int radius)

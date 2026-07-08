@@ -1,4 +1,4 @@
-namespace Emgu.CV.UI
+namespace Emgu.CV.WinForms
 {
    /// <summary>
    /// The control to display image properties
@@ -36,10 +36,10 @@ namespace Emgu.CV.UI
          this.fpsTextBox = new System.Windows.Forms.TextBox();
          this.tabControl1 = new System.Windows.Forms.TabControl();
          this.tabPage1 = new System.Windows.Forms.TabPage();
-         this.cSharpOperationView = new Emgu.CV.UI.OperationsView();
+         this.cSharpOperationView = new Emgu.CV.WinForms.OperationsView();
          this.tabPage2 = new System.Windows.Forms.TabPage();
          this.splitter1 = new System.Windows.Forms.Splitter();
-         this.cPlusPlusOperationView = new Emgu.CV.UI.OperationsView();
+         this.cPlusPlusOperationView = new Emgu.CV.WinForms.OperationsView();
          this.removeAllFilterButton = new System.Windows.Forms.Button();
          this.removeFilterButton = new System.Windows.Forms.Button();
          this.showHistogramButton = new System.Windows.Forms.Button();

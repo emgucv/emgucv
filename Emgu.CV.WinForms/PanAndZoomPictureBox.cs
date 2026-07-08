@@ -8,7 +8,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.ComponentModel;
 
-namespace Emgu.CV.UI
+namespace Emgu.CV.WinForms
 {
    /// <summary>
    /// A picture box with pan and zoom functionality

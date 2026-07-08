@@ -125,7 +125,7 @@ namespace Emgu.CV.Test
 
             EmguAssert.IsTrue(nonZeroPixelCount == 0);
 
-            //Emgu.CV.UI.ImageViewer.Show(absDiff);
+            //Emgu.CV.WinForms.ImageViewer.Show(absDiff);
         }
 
         [TestAttribute]

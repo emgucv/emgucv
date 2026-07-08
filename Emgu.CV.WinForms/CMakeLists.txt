@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 # --------------------------------------------------------
 
-ADD_SUBDIRECTORY(Emgu.CV.WindowsUI)
+ADD_SUBDIRECTORY(Emgu.CV.WinForms)
 
 INSTALL(
   DIRECTORY

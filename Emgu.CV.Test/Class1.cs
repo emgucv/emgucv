@@ -28,7 +28,7 @@ using Emgu.CV.VideoStab;
 
 #if !NETCOREAPP
 using System.Windows.Forms;
-using Emgu.CV.UI;
+using Emgu.CV.WinForms;
 #endif
 
 #if VS_TEST
@@ -66,7 +66,7 @@ namespace Emgu.CV.Test
             Mat m = new Mat(323, 241, CvEnum.DepthType.Cv8U, 3);
             m.SetTo(new MCvScalar());
 
-            Emgu.CV.UI.ImageViewer.Show(m);
+            Emgu.CV.WinForms.ImageViewer.Show(m);
 
         }
 
@@ -208,7 +208,7 @@ namespace Emgu.CV.Test
                 //Draw "Hello, world." on the image using the specific font
                 img.Draw("Hello, world", new Point(10, 80), CvEnum.HersheyFonts.Complex, 1.0, new Bgr(0, 255, 0));
 
-                //Show the image using ImageViewer from Emgu.CV.UI
+                //Show the image using ImageViewer from Emgu.CV.WinForms
                 ImageViewer.Show(img, "Test Window");
             }
         }

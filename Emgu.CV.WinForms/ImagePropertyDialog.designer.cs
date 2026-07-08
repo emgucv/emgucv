@@ -1,4 +1,4 @@
-namespace Emgu.CV.UI
+namespace Emgu.CV.WinForms
 {
     partial class ImagePropertyDialog
     {
@@ -29,7 +29,7 @@ namespace Emgu.CV.UI
         private void InitializeComponent()
         {
            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImagePropertyDialog));
-           this.imagePropertyControl = new Emgu.CV.UI.ImageProperty();
+           this.imagePropertyControl = new Emgu.CV.WinForms.ImageProperty();
            this.SuspendLayout();
            // 
            // imageProperty1

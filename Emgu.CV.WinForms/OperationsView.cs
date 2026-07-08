@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using System.Collections.Generic;
 using Emgu.Util.TypeEnum;
 
-namespace Emgu.CV.UI
+namespace Emgu.CV.WinForms
 {
    /// <summary>
    /// A user control to display the operations

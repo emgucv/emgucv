@@ -44,10 +44,10 @@ namespace CameraCapture
             this.label2 = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
-            this.captureImageBox = new Emgu.CV.UI.ImageBox();
-            this.grayscaleImageBox = new Emgu.CV.UI.ImageBox();
-            this.smoothedGrayscaleImageBox = new Emgu.CV.UI.ImageBox();
-            this.cannyImageBox = new Emgu.CV.UI.ImageBox();
+            this.captureImageBox = new Emgu.CV.WinForms.ImageBox();
+            this.grayscaleImageBox = new Emgu.CV.WinForms.ImageBox();
+            this.smoothedGrayscaleImageBox = new Emgu.CV.WinForms.ImageBox();
+            this.cannyImageBox = new Emgu.CV.WinForms.ImageBox();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -330,10 +330,10 @@ namespace CameraCapture
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private Emgu.CV.UI.ImageBox captureImageBox;
-        private Emgu.CV.UI.ImageBox grayscaleImageBox;
-        private Emgu.CV.UI.ImageBox smoothedGrayscaleImageBox;
-        private Emgu.CV.UI.ImageBox cannyImageBox;
+        private Emgu.CV.WinForms.ImageBox captureImageBox;
+        private Emgu.CV.WinForms.ImageBox grayscaleImageBox;
+        private Emgu.CV.WinForms.ImageBox smoothedGrayscaleImageBox;
+        private Emgu.CV.WinForms.ImageBox cannyImageBox;
     }
 }
 

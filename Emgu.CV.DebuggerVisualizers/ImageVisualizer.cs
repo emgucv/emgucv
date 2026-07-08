@@ -5,7 +5,7 @@
 using System;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Emgu.CV;
-using Emgu.CV.UI;
+using Emgu.CV.WinForms;
 using System.Diagnostics;
 
 /*

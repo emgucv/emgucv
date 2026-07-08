@@ -1,4 +1,4 @@
-﻿using Emgu.CV.UI;
+﻿using Emgu.CV.WinForms;
 
 namespace TFInterop
 {
@@ -126,7 +126,7 @@ namespace TFInterop
 
         #endregion
 
-        private Emgu.CV.UI.ImageBox pictureBox;
+        private Emgu.CV.WinForms.ImageBox pictureBox;
         private System.Windows.Forms.Label messageLabel;
         private System.Windows.Forms.TextBox fileNameTextBox;
         private System.Windows.Forms.Button openFileButton;

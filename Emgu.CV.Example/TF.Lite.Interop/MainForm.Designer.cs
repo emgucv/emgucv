@@ -36,7 +36,7 @@ namespace CVInterop.Lite.Net
             this.label2 = new System.Windows.Forms.Label();
             this.cameraButton = new System.Windows.Forms.Button();
             this.messageLabel = new System.Windows.Forms.Label();
-            this.imageBox = new Emgu.CV.UI.ImageBox();
+            this.imageBox = new Emgu.CV.WinForms.ImageBox();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             this.SuspendLayout();
             // 
@@ -131,7 +131,7 @@ namespace CVInterop.Lite.Net
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button cameraButton;
         private System.Windows.Forms.Label messageLabel;
-        private Emgu.CV.UI.ImageBox imageBox;
+        private Emgu.CV.WinForms.ImageBox imageBox;
     }
 }
 

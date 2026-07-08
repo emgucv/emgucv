@@ -16,7 +16,7 @@ using System.Linq;
 using Emgu.CV.Plot;
 using Emgu.CV.Util;
 
-namespace Emgu.CV.UI
+namespace Emgu.CV.WinForms
 {
     /// <summary>
     /// The control that is used to display histogram

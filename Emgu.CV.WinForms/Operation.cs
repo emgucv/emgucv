@@ -8,7 +8,7 @@ using Emgu.Util;
 using Emgu.Util.TypeEnum;
 using Emgu.CV.Reflection;
 
-namespace Emgu.CV.UI
+namespace Emgu.CV.WinForms
 {
    /// <summary>
    /// An operation contains the MethodInfo and the methods parameters. It provides a way to invoke a specific method with the specific parameters. 

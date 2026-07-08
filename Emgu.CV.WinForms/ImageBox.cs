@@ -11,7 +11,7 @@ using System.Reflection;
 using Emgu.CV;
 using Emgu.CV.Structure;
 
-namespace Emgu.CV.UI
+namespace Emgu.CV.WinForms
 {
     /// <summary>
     /// An image box is a user control that is similar to picture box, but display Emgu CV IImage and provides enhenced functionalities.
@@ -76,7 +76,7 @@ namespace Emgu.CV.UI
         /// </summary>
         [Bindable(false)]
         [Category("Design")]
-        [DefaultValue(Emgu.CV.UI.ImageBox.FunctionalModeOption.Everything)]
+        [DefaultValue(Emgu.CV.WinForms.ImageBox.FunctionalModeOption.Everything)]
         public FunctionalModeOption FunctionalMode
         {
             get { return _functionalMode; }

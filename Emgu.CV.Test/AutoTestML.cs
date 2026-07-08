@@ -166,7 +166,7 @@ namespace Emgu.CV.Test
                 //img.Draw(new CircleF(p2, 2.0f), new Bgr(100, 255, 100), -1);
             }
 
-            //Emgu.CV.UI.ImageViewer.Show(img);
+            //Emgu.CV.WinForms.ImageViewer.Show(img);
         }
 
         /*
@@ -428,7 +428,7 @@ namespace Emgu.CV.Test
                 
             }
 
-            //Emgu.CV.UI.ImageViewer.Show(img);
+            //Emgu.CV.WinForms.ImageViewer.Show(img);
         }
 
         #endregion
@@ -540,7 +540,7 @@ namespace Emgu.CV.Test
                 img.Draw(new CircleF(p3, 2.0f), colors[2], -1);
             }*/
 
-            //Emgu.CV.UI.ImageViewer.Show(img);
+            //Emgu.CV.WinForms.ImageViewer.Show(img);
         }
 
         /*
@@ -626,7 +626,7 @@ namespace Emgu.CV.Test
               img.Draw(new CircleF(p3, 2.0f), colors[2], -1);
            }
 
-           //Emgu.CV.UI.ImageViewer.Show(img);
+           //Emgu.CV.WinForms.ImageViewer.Show(img);
         }*/
 
         
@@ -1004,7 +1004,7 @@ namespace Emgu.CV.Test
                 //img.Draw(new CircleF(p2, 2), new Bgr(100, 255, 100), -1);
             }
 
-            //Emgu.CV.UI.ImageViewer.Show(img);
+            //Emgu.CV.WinForms.ImageViewer.Show(img);
         }
 #endif
 
@@ -1068,7 +1068,7 @@ namespace Emgu.CV.Test
                 //image.Draw(new CircleF(p, 1.0f), );
             }
 
-            //Emgu.CV.UI.ImageViewer.Show(image);
+            //Emgu.CV.WinForms.ImageViewer.Show(image);
         }
 
         [Test]

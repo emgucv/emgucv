@@ -14,7 +14,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System.Diagnostics;
 using Emgu.CV.CvEnum;
-using Emgu.CV.UI;
+using Emgu.CV.WinForms;
 
 namespace Stitching
 {

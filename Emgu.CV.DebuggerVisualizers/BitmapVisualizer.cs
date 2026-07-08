@@ -6,7 +6,7 @@ using System;
 using System.Drawing;
 using Microsoft.VisualStudio.DebuggerVisualizers;
 using Emgu.CV;
-using Emgu.CV.UI;
+using Emgu.CV.WinForms;
 using Emgu.CV.Structure;
 using System.Diagnostics;
 using System.Security.Cryptography;

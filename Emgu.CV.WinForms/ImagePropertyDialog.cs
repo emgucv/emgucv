@@ -5,7 +5,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Emgu.CV.UI
+namespace Emgu.CV.WinForms
 {
    /// <summary>
    /// A dialog to display the property of an image

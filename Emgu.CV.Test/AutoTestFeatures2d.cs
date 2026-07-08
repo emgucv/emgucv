@@ -462,7 +462,7 @@ namespace Emgu.CV.Test
                         */
                         success = true;
                     }
-                    //Emgu.CV.UI.ImageViewer.Show(res);
+                    //Emgu.CV.WinForms.ImageViewer.Show(res);
                     return success;
                 }
 

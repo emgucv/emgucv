@@ -31,7 +31,7 @@ namespace FacialMouseControl
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.flipHorizontalButton = new System.Windows.Forms.Button();
-            this.imageBox1 = new Emgu.CV.UI.ImageBox();
+            this.imageBox1 = new Emgu.CV.WinForms.ImageBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -82,7 +82,7 @@ namespace FacialMouseControl
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button flipHorizontalButton;
-        private Emgu.CV.UI.ImageBox imageBox1;
+        private Emgu.CV.WinForms.ImageBox imageBox1;
     }
 }
 

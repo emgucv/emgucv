@@ -13,7 +13,7 @@ using Emgu.Util.TypeEnum;
 using Emgu.CV.Structure;
 using System.Text;
 
-namespace Emgu.CV.UI
+namespace Emgu.CV.WinForms
 {
     internal partial class ImageProperty : UserControl
     {

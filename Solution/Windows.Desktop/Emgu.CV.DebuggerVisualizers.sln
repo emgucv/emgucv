@@ -14,11 +14,11 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.Runtime.Windows", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV", "..\..\Emgu.CV\NetStandard\Emgu.CV.csproj", "{2B33F85D-23AF-4EF4-B97F-FBF65F4E6E87}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.WindowsUI", "..\..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.csproj", "{A1D21757-67D1-4FF8-8FCC-07AF6FFDB81E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.WinForms", "..\..\Emgu.CV.WinForms\Emgu.CV.WinForms\Emgu.CV.WinForms.csproj", "{A1D21757-67D1-4FF8-8FCC-07AF6FFDB81E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DebuggerVisualizer", "..\..\DebuggerVisualizer\DebuggerVisualizer.csproj", "{84EAAF81-6597-4A3B-9F2A-F8E5CB4E0370}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.WindowsUI.Shared", "..\..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.Shared.shproj", "{AC06F404-0A97-4142-A021-572D686E231F}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.CV.WinForms.Shared", "..\..\Emgu.CV.WinForms\Emgu.CV.WinForms.Shared.shproj", "{AC06F404-0A97-4142-A021-572D686E231F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.Bitmap", "..\..\Emgu.CV.Bitmap\Emgu.CV.Bitmap.csproj", "{9A584C07-9FDF-4868-8F9C-47ABB18B20FC}"
 EndProject
@@ -136,8 +136,8 @@ Global
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
-		..\..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.Shared.projitems*{a1d21757-67d1-4ff8-8fcc-07af6ffdb81e}*SharedItemsImports = 5
-		..\..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.Shared.projitems*{ac06f404-0a97-4142-a021-572d686e231f}*SharedItemsImports = 13
+		..\..\Emgu.CV.WinForms\Emgu.CV.WinForms.Shared.projitems*{a1d21757-67d1-4ff8-8fcc-07af6ffdb81e}*SharedItemsImports = 5
+		..\..\Emgu.CV.WinForms\Emgu.CV.WinForms.Shared.projitems*{ac06f404-0a97-4142-a021-572d686e231f}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{adc3c8e5-ebcd-4d3c-b3a4-20cfe0e42fc1}*SharedItemsImports = 13
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution

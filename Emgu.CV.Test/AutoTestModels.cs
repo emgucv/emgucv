@@ -34,7 +34,7 @@ using Emgu.CV.Cuda;
 using Emgu.CV.Mcc;
 using Emgu.CV.Models;
 using Emgu.CV.Tiff;
-//using Emgu.CV.UI;
+//using Emgu.CV.WinForms;
 using Emgu.CV.Util;
 using Emgu.CV.VideoStab;
 using Emgu.CV.XFeatures2D;

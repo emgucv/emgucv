@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using Emgu.CV.Reflection;
 using Emgu.CV.Structure;
 
-namespace Emgu.CV.UI
+namespace Emgu.CV.WinForms
 {
     /// <summary>
     /// The dialog to ask user for parameters to the specific method

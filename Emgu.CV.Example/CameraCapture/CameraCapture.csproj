@@ -159,9 +159,9 @@
       <Project>{d2cd55f9-3a62-4911-819f-27389117122d}</Project>
       <Name>Emgu.CV.Models</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.csproj">
+    <ProjectReference Include="..\..\Emgu.CV.WinForms\Emgu.CV.WinForms\Emgu.CV.WinForms.csproj">
       <Project>{e3469cb8-15f3-4704-83e5-37d23f356d01}</Project>
-      <Name>Emgu.CV.WindowsUI</Name>
+      <Name>Emgu.CV.WinForms</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj">
       <Project>{2b29ed44-b158-4bf4-8d0c-284cf1602513}</Project>

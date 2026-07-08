@@ -32,7 +32,7 @@
          this.splitContainer2 = new System.Windows.Forms.SplitContainer();
          this.selectImagesButton = new System.Windows.Forms.Button();
          this.sourceImageDataGridView = new System.Windows.Forms.DataGridView();
-         this.resultImageBox = new Emgu.CV.UI.ImageBox();
+         this.resultImageBox = new Emgu.CV.WinForms.ImageBox();
          this.ThumbnailColumn = new System.Windows.Forms.DataGridViewImageColumn();
          this.FileNameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
          this.label1 = new System.Windows.Forms.Label();
@@ -166,7 +166,7 @@
       private System.Windows.Forms.SplitContainer splitContainer2;
       private System.Windows.Forms.Button selectImagesButton;
       private System.Windows.Forms.DataGridView sourceImageDataGridView;
-      private Emgu.CV.UI.ImageBox resultImageBox;
+      private Emgu.CV.WinForms.ImageBox resultImageBox;
       private System.Windows.Forms.DataGridViewImageColumn ThumbnailColumn;
       private System.Windows.Forms.DataGridViewTextBoxColumn FileNameColumn;
       private System.Windows.Forms.Label label1;

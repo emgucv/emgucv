@@ -1,4 +1,4 @@
-namespace Emgu.CV.UI
+namespace Emgu.CV.WinForms
 {
    partial class ImageBox
    {

@@ -19,7 +19,7 @@ using Emgu.CV.XFeatures2D;
 using System.Runtime.InteropServices;
 
 #if !NETCOREAPP
-using Emgu.CV.UI;
+using Emgu.CV.WinForms;
 #endif
 
 #if VS_TEST
@@ -445,7 +445,7 @@ namespace Emgu.CV.Test
                 Mat result = new Mat();
                 clahe.Apply(cudaImage, cudaResult, null);
                 cudaResult.Download(result);
-                //Emgu.CV.UI.ImageViewer.Show(image.ConcateHorizontal(result));
+                //Emgu.CV.WinForms.ImageViewer.Show(image.ConcateHorizontal(result));
             }
 
         }
@@ -973,7 +973,7 @@ namespace Emgu.CV.Test
             GpuMat gpuBilaterial = new GpuMat();
             CudaInvoke.BilateralFilter(cudaImage, gpuBilaterial, 7, 5, 5, CvEnum.BorderType.Default, null);
 
-            //Emgu.CV.UI.ImageViewer.Show(gray.ConcateHorizontal(gpuBilaterial.ToImage()));
+            //Emgu.CV.WinForms.ImageViewer.Show(gray.ConcateHorizontal(gpuBilaterial.ToImage()));
 
         }
 
@@ -1082,7 +1082,7 @@ namespace Emgu.CV.Test
                     //foreach (SoftCascadeDetector.Detection detection in detections)
                     //   image.Draw(detection.BoundingBox, new Bgr(Color.Red), 1);
 
-                    //Emgu.CV.UI.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
+                    //Emgu.CV.WinForms.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
                  }
               }
            }

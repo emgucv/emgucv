@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Emgu.CV.UI.Properties {
+namespace Emgu.CV.WinForms.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Emgu.CV.UI.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Emgu.CV.UI.Properties.StringTable", typeof(StringTable).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Emgu.CV.WinForms.Properties.StringTable", typeof(StringTable).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

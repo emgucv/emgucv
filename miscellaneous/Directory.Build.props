@@ -22,7 +22,7 @@
         <NamespaceSummaryItem name="Emgu.CV.Properties" isDocumented="False" xmlns="" />
         <NamespaceSummaryItem name="Emgu.CV.Reflection" isDocumented="True" xmlns="">Code that use reflection to get image information from Emgu CV objects</NamespaceSummaryItem>
         <NamespaceSummaryItem name="Emgu.CV.Structure" isDocumented="True" xmlns="">Wrapped OpenCV structures</NamespaceSummaryItem>
-        <NamespaceSummaryItem name="Emgu.CV.UI" isDocumented="True" xmlns="">User interface (ImageBox) for displaying Image object.</NamespaceSummaryItem>
+        <NamespaceSummaryItem name="Emgu.CV.WinForms" isDocumented="True" xmlns="">User interface (ImageBox) for displaying Image object.</NamespaceSummaryItem>
         <NamespaceSummaryItem name="Emgu.CV.VideoSurveillance" isDocumented="True" xmlns="">Background/Foreground segmentation and Blob tracking</NamespaceSummaryItem>
         <NamespaceSummaryItem name="Emgu.Reflection" isDocumented="True" xmlns="">Contains functions that use reflection to create menu for ImageBox</NamespaceSummaryItem>
         <NamespaceSummaryItem name="Emgu.Util" isDocumented="True" xmlns="">A collection of utilities used by Emgu projects</NamespaceSummaryItem>
