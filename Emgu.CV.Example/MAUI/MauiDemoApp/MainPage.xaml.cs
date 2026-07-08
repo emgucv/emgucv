@@ -48,9 +48,6 @@ namespace MauiDemoApp
             Button yoloButton = new Button();
             yoloButton.Text = "Yolo (DNN module)";
 
-            Button stopSignDetectionButton = new Button();
-            stopSignDetectionButton.Text = "Stop Sign Detection (DNN module)";
-
             Button licensePlateRecognitionButton = new Button();
             licensePlateRecognitionButton.Text = "License Plate Recognition (DNN Module)";
 
@@ -65,7 +62,6 @@ namespace MauiDemoApp
                 featureDetectionButton,
                 shapeDetectionButton,
                 maskRcnnButton,
-                stopSignDetectionButton,
                 yoloButton,
                 licensePlateRecognitionButton,
                 superresButton
@@ -179,25 +175,6 @@ namespace MauiDemoApp
                     "This model is trained on MSRA-TD500, so it can detect both English and Chinese text instances.");
                 this.Navigation.PushAsync(sceneTextDetectionPage);
             };
-            stopSignDetectionButton.Clicked += (sender, args) =>
-            {
-                MaskRcnn model = new MaskRcnn();
-                model.ObjectsOfInterest = new string[] { "stop sign" };
-                ProcessAndRenderPage stopSignDetectionPage = new ProcessAndRenderPage(
-                    model,
-                    "Mask-rcnn Detection",
-                    "stop-sign.jpg",
-                    "Stop sign detection using Mask RCNN");
-                Picker p = stopSignDetectionPage.Picker;
-                p.IsVisible = true;
-                p.Title = "Preferred DNN backend & target";
-
-                foreach (String option in GetDnnBackends())
-                {
-                    p.Items.Add(option);
-                }
-                this.Navigation.PushAsync(stopSignDetectionPage);
-            };
             yoloButton.Clicked += (sender, args) =>
             {
                 ProcessAndRenderPage yoloPage = new ProcessAndRenderPage(
@@ -257,7 +234,6 @@ namespace MauiDemoApp
 
             maskRcnnButton.IsVisible = haveDNN;
             //faceLandmarkDetectionButton.IsVisible = haveDNN;
-            stopSignDetectionButton.IsVisible = haveDNN;
             yoloButton.IsVisible = haveDNN;
             superresButton.IsVisible = haveDNN;
             sceneTextDetectionButton.IsVisible = haveDNN && haveFreetype;
