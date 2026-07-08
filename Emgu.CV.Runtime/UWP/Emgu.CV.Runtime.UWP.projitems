@@ -9,6 +9,12 @@
     <Import_RootNamespace>Emgu.CV</Import_RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
+    <!-- Legacy UAP (.NET Native) projects report TargetPlatformIdentifier=='UAP'. Modern SDK-style
+         projects set UseUwp=true instead, and only report TargetPlatformIdentifier=='Windows' once
+         Microsoft.NET.TargetFrameworkInference.targets runs, which happens after this file (imported
+         from the project body) is evaluated. So key off UseUwp instead, which the project sets
+         directly and is therefore already resolved at this point. -->
+    <EmguCVIsUwpTarget Condition="'$(TargetPlatformIdentifier)'=='UAP' OR '$(UseUwp)'=='true'">true</EmguCVIsUwpTarget>
     <EmguCVUWPBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</EmguCVUWPBinaryDir>
 	<EmguCVUWPX86NativeRuntimeFolder>runtimes\win10-x86\native</EmguCVUWPX86NativeRuntimeFolder>
 	<EmguCVUWPX64NativeRuntimeFolder>runtimes\win10-x64\native</EmguCVUWPX64NativeRuntimeFolder>
@@ -17,7 +23,7 @@
   </PropertyGroup>
   <Choose>
     <!-- Windows 10 UWP (32bit) -->
-    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x86'">
+    <When Condition="'$(EmguCVIsUwpTarget)'=='true' AND '$(Platform)'=='x86'">
       <PropertyGroup>
         <EmguCVLinkTarget>Windows 10 UWP (32bit)</EmguCVLinkTarget>
         <EmguCVNativeFileUwpX86>$(EmguCVUWPBinaryDir)\$(EmguCVUWPX86NativeRuntimeFolder)\cvextern.dll</EmguCVNativeFileUwpX86>
@@ -32,7 +38,7 @@
       </ItemGroup>
     </When>
     <!-- Windows 10 UWP (64bit) -->
-    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='x64'">
+    <When Condition="'$(EmguCVIsUwpTarget)'=='true' AND '$(Platform)'=='x64'">
       <PropertyGroup>
         <EmguCVLinkTarget>Windows 10 UWP (64bit)</EmguCVLinkTarget>
         <EmguCVNativeFileUwpX64>$(EmguCVUWPBinaryDir)\$(EmguCVUWPX64NativeRuntimeFolder)\cvextern.dll</EmguCVNativeFileUwpX64>
@@ -47,7 +53,7 @@
       </ItemGroup>
     </When>
     <!-- Windows 10 UWP (ARM) -->
-    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='ARM'">
+    <When Condition="'$(EmguCVIsUwpTarget)'=='true' AND '$(Platform)'=='ARM'">
       <PropertyGroup>
         <EmguCVLinkTarget>Windows 10 UWP (ARM)</EmguCVLinkTarget>
         <EmguCVNativeFileUwpArm>$(EmguCVUWPBinaryDir)\$(EmguCVUWPArmNativeRuntimeFolder)\cvextern.dll</EmguCVNativeFileUwpArm>
@@ -62,7 +68,7 @@
       </ItemGroup>
     </When>
 	<!-- Windows 10 UWP (ARM64) -->
-    <When Condition="'$(TargetPlatformIdentifier)'=='UAP' AND '$(Platform)'=='ARM64'">
+    <When Condition="'$(EmguCVIsUwpTarget)'=='true' AND '$(Platform)'=='ARM64'">
       <PropertyGroup>
         <EmguCVLinkTarget>Windows 10 UWP (ARM64)</EmguCVLinkTarget>
         <EmguCVNativeFileUwpArm64>$(EmguCVUWPBinaryDir)\$(EmguCVUWPArm64NativeRuntimeFolder)\cvextern.dll</EmguCVNativeFileUwpArm64>
