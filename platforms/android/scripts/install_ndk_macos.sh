@@ -6,7 +6,7 @@
 #
 # Prerequisites:
 #   Homebrew — https://brew.sh
-#   cmake and ninja (installed below if missing)
+#   cmake, ninja and a JDK (installed below if missing)
 
 set -e
 
@@ -33,6 +33,26 @@ fi
 if ! command -v ninja &>/dev/null; then
     echo "Installing ninja..."
     brew install ninja
+fi
+
+# ---- Java (JDK) — required by sdkmanager ----
+# NOTE: macOS ships a /usr/bin/java stub even when no JDK is installed, so
+# `command -v java` is unreliable. Detect a real JDK via java_home or the
+# Homebrew openjdk keg instead.
+OPENJDK_PREFIX="$(brew --prefix openjdk 2>/dev/null || true)"
+if ! /usr/libexec/java_home &>/dev/null 2>&1 && [ ! -x "$OPENJDK_PREFIX/bin/java" ]; then
+    echo "Installing OpenJDK (required by sdkmanager)..."
+    brew install openjdk
+    OPENJDK_PREFIX="$(brew --prefix openjdk 2>/dev/null || true)"
+fi
+
+# Point JAVA_HOME/PATH at a real JDK. Homebrew's openjdk is keg-only, so add it
+# explicitly if there is no system-registered JDK.
+if /usr/libexec/java_home &>/dev/null 2>&1; then
+    export JAVA_HOME="$(/usr/libexec/java_home)"
+elif [ -x "$OPENJDK_PREFIX/bin/java" ]; then
+    export JAVA_HOME="$OPENJDK_PREFIX/libexec/openjdk.jdk/Contents/Home"
+    export PATH="$OPENJDK_PREFIX/bin:$PATH"
 fi
 
 # ---- Android command-line tools ----
@@ -88,6 +108,9 @@ echo ""
 echo "  export ANDROID_HOME=\"$ANDROID_HOME\""
 echo "  export ANDROID_NDK=\"$ANDROID_NDK\""
 echo "  export PATH=\"\$ANDROID_HOME/cmdline-tools/latest/bin:\$PATH\""
+if [ -n "$JAVA_HOME" ]; then
+    echo "  export JAVA_HOME=\"$JAVA_HOME\""
+fi
 echo ""
 echo "Then reload your shell:"
 echo "  source ~/.zshrc"
