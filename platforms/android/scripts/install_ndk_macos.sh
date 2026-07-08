@@ -6,7 +6,7 @@
 #
 # Prerequisites:
 #   Homebrew — https://brew.sh
-#   cmake and ninja (installed below if missing)
+#   cmake, ninja and JDK 17 (installed below if missing)
 
 set -e
 
@@ -33,6 +33,24 @@ fi
 if ! command -v ninja &>/dev/null; then
     echo "Installing ninja..."
     brew install ninja
+fi
+
+# ---- Java (JDK 17) — required by sdkmanager and the .NET Android build ----
+# Pin JDK 17: sdkmanager works with any JDK, but the .NET Android (MAUI) build
+# breaks on newer JDKs (21+/26) because its version detection fails, so install
+# openjdk@17 specifically. (macOS also ships a /usr/bin/java stub even with no
+# JDK, so `command -v java` is unreliable; check the Homebrew keg directly.)
+JDK_PREFIX="$(brew --prefix openjdk@17 2>/dev/null || true)"
+if [ ! -x "$JDK_PREFIX/bin/java" ]; then
+    echo "Installing OpenJDK 17 (required by sdkmanager and the .NET Android build)..."
+    brew install openjdk@17
+    JDK_PREFIX="$(brew --prefix openjdk@17 2>/dev/null || true)"
+fi
+
+# openjdk@17 is keg-only, so point JAVA_HOME/PATH at it explicitly.
+if [ -x "$JDK_PREFIX/bin/java" ]; then
+    export JAVA_HOME="$JDK_PREFIX/libexec/openjdk.jdk/Contents/Home"
+    export PATH="$JDK_PREFIX/bin:$PATH"
 fi
 
 # ---- Android command-line tools ----
@@ -88,6 +106,9 @@ echo ""
 echo "  export ANDROID_HOME=\"$ANDROID_HOME\""
 echo "  export ANDROID_NDK=\"$ANDROID_NDK\""
 echo "  export PATH=\"\$ANDROID_HOME/cmdline-tools/latest/bin:\$PATH\""
+if [ -n "$JAVA_HOME" ]; then
+    echo "  export JAVA_HOME=\"$JAVA_HOME\""
+fi
 echo ""
 echo "Then reload your shell:"
 echo "  source ~/.zshrc"
