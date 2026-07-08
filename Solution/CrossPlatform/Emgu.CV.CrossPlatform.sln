@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32505.173
+# Visual Studio Version 18
+VisualStudioVersion = 18.7.11903.348
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Emgu.Util", "..\..\Emgu.Util\Emgu.Util.shproj", "{98561642-5EC3-4244-BAF9-6876D9BA5527}"
 EndProject
@@ -56,6 +56,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emgu.CV.runtime.maui", "..\..\Emgu.CV.Runtime\Maui\UI\Emgu.CV.runtime.maui.csproj", "{BE859AC6-A900-4C7A-BBB8-5133E37248A9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DebuggerVisualizer", "..\..\DebuggerVisualizer\DebuggerVisualizer.csproj", "{2F5F3311-2BD1-4507-9E81-29AD5926D4A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelloWorld.WinUI", "..\..\Emgu.CV.Example\HelloWorld.WinUI\HelloWorld.WinUI.csproj", "{B528104D-5607-AAB6-7331-2ABDA9CEF78B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1290,6 +1292,90 @@ Global
 		{2F5F3311-2BD1-4507-9E81-29AD5926D4A7}.Release|x86.ActiveCfg = Release|Any CPU
 		{2F5F3311-2BD1-4507-9E81-29AD5926D4A7}.Release|x86.Build.0 = Release|Any CPU
 		{2F5F3311-2BD1-4507-9E81-29AD5926D4A7}.Release|x86.Deploy.0 = Release|Any CPU
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|Any CPU.ActiveCfg = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|Any CPU.Build.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|Any CPU.Deploy.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|ARM.ActiveCfg = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|ARM.Build.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|ARM.Deploy.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|ARM64.ActiveCfg = Release|ARM64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|ARM64.Build.0 = Release|ARM64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|ARM64.Deploy.0 = Release|ARM64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|iPhone.ActiveCfg = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|iPhone.Build.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|iPhone.Deploy.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|iPhoneSimulator.Build.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|iPhoneSimulator.Deploy.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|x64.ActiveCfg = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|x64.Build.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|x64.Deploy.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|x86.ActiveCfg = Release|x86
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|x86.Build.0 = Release|x86
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Ad-Hoc|x86.Deploy.0 = Release|x86
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|Any CPU.ActiveCfg = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|Any CPU.Build.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|Any CPU.Deploy.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|ARM.ActiveCfg = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|ARM.Build.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|ARM.Deploy.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|ARM64.ActiveCfg = Release|ARM64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|ARM64.Build.0 = Release|ARM64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|ARM64.Deploy.0 = Release|ARM64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|iPhone.ActiveCfg = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|iPhone.Build.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|iPhone.Deploy.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|iPhoneSimulator.ActiveCfg = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|iPhoneSimulator.Build.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|iPhoneSimulator.Deploy.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|x64.ActiveCfg = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|x64.Build.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|x64.Deploy.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|x86.ActiveCfg = Release|x86
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|x86.Build.0 = Release|x86
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.AppStore|x86.Deploy.0 = Release|x86
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|Any CPU.Build.0 = Debug|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|Any CPU.Deploy.0 = Debug|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|ARM.ActiveCfg = Debug|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|ARM.Build.0 = Debug|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|ARM.Deploy.0 = Debug|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|ARM64.Build.0 = Debug|ARM64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|ARM64.Deploy.0 = Debug|ARM64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|iPhone.ActiveCfg = Debug|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|iPhone.Build.0 = Debug|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|iPhone.Deploy.0 = Debug|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|iPhoneSimulator.ActiveCfg = Debug|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|iPhoneSimulator.Build.0 = Debug|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|iPhoneSimulator.Deploy.0 = Debug|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|x64.ActiveCfg = Debug|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|x64.Build.0 = Debug|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|x64.Deploy.0 = Debug|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|x86.ActiveCfg = Debug|x86
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|x86.Build.0 = Debug|x86
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Debug|x86.Deploy.0 = Debug|x86
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|Any CPU.ActiveCfg = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|Any CPU.Build.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|Any CPU.Deploy.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|ARM.ActiveCfg = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|ARM.Build.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|ARM.Deploy.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|ARM64.ActiveCfg = Release|ARM64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|ARM64.Build.0 = Release|ARM64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|ARM64.Deploy.0 = Release|ARM64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|iPhone.ActiveCfg = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|iPhone.Build.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|iPhone.Deploy.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|iPhoneSimulator.ActiveCfg = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|iPhoneSimulator.Build.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|iPhoneSimulator.Deploy.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|x64.ActiveCfg = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|x64.Build.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|x64.Deploy.0 = Release|x64
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|x86.ActiveCfg = Release|x86
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|x86.Build.0 = Release|x86
+		{B528104D-5607-AAB6-7331-2ABDA9CEF78B}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1319,9 +1405,10 @@ Global
 		..\..\Emgu.CV.Cuda\Emgu.CV.Cuda.projitems*{7b22bb32-c867-45a7-ac53-5bda820db91c}*SharedItemsImports = 13
 		..\..\Emgu.CV.OCR\Emgu.CV.OCR.projitems*{7bc723cb-1678-415f-a65f-4027f8758a6f}*SharedItemsImports = 13
 		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{978b8f58-57a8-49b6-b25b-60fd820e39c1}*SharedItemsImports = 5
-		..\..\Emgu.CV.Runtime\UWP\Emgu.CV.Runtime.UWP.projitems*{98476854-23f3-4116-8711-7ae17190a90f}*SharedItemsImports = 4
+		..\..\Emgu.CV.Runtime\UWP\Emgu.CV.Runtime.UWP.projitems*{98476854-23f3-4116-8711-7ae17190a90f}*SharedItemsImports = 5
 		..\..\Emgu.Util\Emgu.Util.projitems*{98561642-5ec3-4244-baf9-6876d9ba5527}*SharedItemsImports = 13
 		..\..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.Shared.projitems*{ac06f404-0a97-4142-a021-572d686e231f}*SharedItemsImports = 13
+		..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems*{b528104d-5607-aab6-7331-2abda9cef78b}*SharedItemsImports = 5
 		..\..\Emgu.CV.Models\Emgu.CV.Models.Shared.projitems*{d2cd55f9-3a62-4911-819f-27389117122d}*SharedItemsImports = 5
 		..\..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.Shared.projitems*{e3469cb8-15f3-4704-83e5-37d23f356d01}*SharedItemsImports = 5
 		..\..\Emgu.CV.Runtime\Debian\Emgu.CV.Runtime.Debian.projitems*{f37d160b-f54e-4289-8b05-df1825b37c56}*SharedItemsImports = 5

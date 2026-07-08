@@ -8,11 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <!--
-        This is the main content area of your application.
-        Add your UI elements here — for example, controls, layouts, and data-bound views.
-        Use 'dotnet new winui-page' to create additional pages and navigate to them via
-        the Frame in MainWindow (RootFrame).
-    -->
-    <Grid />
+    <Grid>
+        <Image x:Name="imageControl" HorizontalAlignment="Left" Height="480" Margin="10,10,0,0" VerticalAlignment="Top" Width="640"/>
+    </Grid>
 </Page>

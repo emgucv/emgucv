@@ -16,6 +16,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\Emgu.CV.NativeImage\WriteableBitmapExtension.WinUI.cs">
+      <Link>WriteableBitmapExtension.WinUI.cs</Link>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
+  </ItemGroup>
+
+  <Import Project="..\..\Emgu.CV.Runtime\Windows\Emgu.CV.Runtime.Windows.projitems" Label="Shared" />
+
+  <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
