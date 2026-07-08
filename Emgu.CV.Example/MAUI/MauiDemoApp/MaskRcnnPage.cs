@@ -162,7 +162,9 @@ namespace MauiDemoApp
             var previewFrame = new Border
             {
                 BackgroundColor = ImageBackground,
-                Stroke = Colors.Transparent,
+                Stroke = RowBorder,
+                StrokeThickness = 1,
+                Padding = new Thickness(10),
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(16) },
                 Content = _previewImage
             };
@@ -257,8 +259,8 @@ namespace MauiDemoApp
 
             var content = new VerticalStackLayout
             {
-                Spacing = 22,
-                Padding = new Thickness(20, 16, 20, 32),
+                Spacing = 18,
+                Padding = new Thickness(20, 16, 20, 28),
                 Children = { header, inputCard, buttonStack, resultsCard }
             };
 
