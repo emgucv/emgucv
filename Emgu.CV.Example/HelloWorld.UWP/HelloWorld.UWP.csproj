@@ -52,8 +52,8 @@
     <Compile Include="..\..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\..\Emgu.CV.NativeImage\WriteableBitmapExtension.cs">
-      <Link>WriteableBitmapExtension.cs</Link>
+    <Compile Include="..\..\Emgu.CV.NativeImage\WriteableBitmapExtension.UWP.cs">
+      <Link>WriteableBitmapExtension.UWP.cs</Link>
     </Compile>
   </ItemGroup>
 

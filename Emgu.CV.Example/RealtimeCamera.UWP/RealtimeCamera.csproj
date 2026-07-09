@@ -98,8 +98,8 @@
     <Compile Include="..\..\Emgu.CV.NativeImage\WinrtInvoke.cs">
       <Link>WinrtInvoke.cs</Link>
     </Compile>
-    <Compile Include="..\..\Emgu.CV.NativeImage\WriteableBitmapExtension.cs">
-      <Link>WriteableBitmapExtension.cs</Link>
+    <Compile Include="..\..\Emgu.CV.NativeImage\WriteableBitmapExtension.UWP.cs">
+      <Link>WriteableBitmapExtension.UWP.cs</Link>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
