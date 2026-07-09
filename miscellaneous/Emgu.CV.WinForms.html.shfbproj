@@ -15,8 +15,8 @@
     <RootNamespace>Documentation</RootNamespace>
     <Name>Documentation</Name>
     <!-- SHFB properties -->
-    <OutputPath>..\UI_Help\</OutputPath>
-    <HtmlHelpName>Emgu.CV.UI.Documentation</HtmlHelpName>
+    <OutputPath>..\WinForms_Help\</OutputPath>
+    <HtmlHelpName>Emgu.CV.WinForms.Documentation</HtmlHelpName>
     <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace, TypeParameter</MissingTags>
     <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected, EditorBrowsableNever, NonBrowsable</VisibleItems>
     <HtmlHelp1xCompilerPath>
@@ -35,7 +35,7 @@
     <HelpTitle>Emgu CV Library Documentation</HelpTitle>
     <PresentationStyle>VS2013</PresentationStyle>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI\Emgu.CV.WindowsUI.csproj" />
+      <DocumentationSource sourceFile="..\Emgu.CV.WinForms\Emgu.CV.WinForms\Emgu.CV.WinForms.csproj" />
     </DocumentationSources>
     <PlugInConfigurations>
     </PlugInConfigurations>

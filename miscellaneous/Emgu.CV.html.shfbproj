@@ -42,7 +42,7 @@
         <configuration>
           <currentProject label=".Net Standard" version="2.0" ripOldApis="False" />
           <versions>
-            <version label=".Net Framework" version="4.6.1" helpFileProject="Emgu.CV.UI.html.shfbproj" />
+            <version label=".Net Framework" version="4.6.1" helpFileProject="Emgu.CV.WinForms.html.shfbproj" />
           </versions>
         </configuration>
       </PlugInConfig>
