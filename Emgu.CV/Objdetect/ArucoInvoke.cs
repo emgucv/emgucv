@@ -581,9 +581,12 @@ namespace Emgu.CV.Aruco
         /// List of detected marker corners of the board.
         /// For cv::Board and cv::GridBoard the method expects VectorOfVectorOfPointF or VectorOfMat with Aruco marker corners.
         /// For cv::CharucoBoard the method expects VectorOfPointF or Mat with ChAruco corners (chess board corners matched with Aruco markers)</param>
-        /// <param name="detectedIds"></param>
-        /// <param name="objPoints"></param>
-        /// <param name="imgPoints"></param>
+        /// <param name="detectedIds">
+        /// List of identifiers for each marker in detectedCorners.
+        /// For cv::Board and cv::GridBoard the method expects VectorOfInt or Mat with Aruco marker ids.
+        /// For cv::CharucoBoard the method expects VectorOfInt or Mat with ChAruco corner ids</param>
+        /// <param name="objPoints">Output vector of marker points in the board coordinate space corresponding to the detected markers</param>
+        /// <param name="imgPoints">Output vector of marker points in the image coordinate space corresponding to the detected markers</param>
         public static void MatchImagePoints(
             this IBoard board, 
             IInputArrayOfArrays detectedCorners, 
