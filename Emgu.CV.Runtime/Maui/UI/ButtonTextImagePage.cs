@@ -173,7 +173,7 @@ namespace Emgu.CV.Platform.Maui.UI
             MessageLabel.FontFamily = bodyFont;
             MessageLabel.FontSize = 14;
             MessageLabel.TextColor = secondaryText;
-            MessageLabel.HorizontalTextAlignment = TextAlignment.Center;
+            MessageLabel.HorizontalTextAlignment = Microsoft.Maui.TextAlignment.Center;
             MessageLabel.HorizontalOptions = LayoutOptions.Center;
 
             _mainLayout.Spacing = 14;
