@@ -6,8 +6,7 @@
 #
 # Prerequisites:
 #   Homebrew — https://brew.sh
-#   cmake, ninja and a JDK (installed below if missing)
-
+#   cmake, ninja and JDK 17 (installed below if missing)
 set -e
 
 NDK_VERSION="28.0.12916984"
@@ -35,24 +34,22 @@ if ! command -v ninja &>/dev/null; then
     brew install ninja
 fi
 
-# ---- Java (JDK) — required by sdkmanager ----
-# NOTE: macOS ships a /usr/bin/java stub even when no JDK is installed, so
-# `command -v java` is unreliable. Detect a real JDK via java_home or the
-# Homebrew openjdk keg instead.
-OPENJDK_PREFIX="$(brew --prefix openjdk 2>/dev/null || true)"
-if ! /usr/libexec/java_home &>/dev/null 2>&1 && [ ! -x "$OPENJDK_PREFIX/bin/java" ]; then
-    echo "Installing OpenJDK (required by sdkmanager)..."
-    brew install openjdk
-    OPENJDK_PREFIX="$(brew --prefix openjdk 2>/dev/null || true)"
+# ---- Java (JDK 17) — required by sdkmanager and the .NET Android build ----
+# Pin JDK 17: sdkmanager works with any JDK, but the .NET Android (MAUI) build
+# breaks on newer JDKs (21+/26) because its version detection fails, so install
+# openjdk@17 specifically. (macOS also ships a /usr/bin/java stub even with no
+# JDK, so `command -v java` is unreliable; check the Homebrew keg directly.)
+JDK_PREFIX="$(brew --prefix openjdk@17 2>/dev/null || true)"
+if [ ! -x "$JDK_PREFIX/bin/java" ]; then
+    echo "Installing OpenJDK 17 (required by sdkmanager and the .NET Android build)..."
+    brew install openjdk@17
+    JDK_PREFIX="$(brew --prefix openjdk@17 2>/dev/null || true)"
 fi
 
-# Point JAVA_HOME/PATH at a real JDK. Homebrew's openjdk is keg-only, so add it
-# explicitly if there is no system-registered JDK.
-if /usr/libexec/java_home &>/dev/null 2>&1; then
-    export JAVA_HOME="$(/usr/libexec/java_home)"
-elif [ -x "$OPENJDK_PREFIX/bin/java" ]; then
-    export JAVA_HOME="$OPENJDK_PREFIX/libexec/openjdk.jdk/Contents/Home"
-    export PATH="$OPENJDK_PREFIX/bin:$PATH"
+# openjdk@17 is keg-only, so point JAVA_HOME/PATH at it explicitly.
+if [ -x "$JDK_PREFIX/bin/java" ]; then
+    export JAVA_HOME="$JDK_PREFIX/libexec/openjdk.jdk/Contents/Home"
+    export PATH="$JDK_PREFIX/bin:$PATH"
 fi
 
 # ---- Android command-line tools ----
