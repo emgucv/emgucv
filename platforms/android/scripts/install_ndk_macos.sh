@@ -7,7 +7,6 @@
 # Prerequisites:
 #   Homebrew — https://brew.sh
 #   cmake, ninja and JDK 17 (installed below if missing)
-
 set -e
 
 NDK_VERSION="28.0.12916984"
