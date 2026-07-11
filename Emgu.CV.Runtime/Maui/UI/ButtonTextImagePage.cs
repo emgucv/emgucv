@@ -472,6 +472,19 @@ namespace Emgu.CV.Platform.Maui.UI
             return this.MessageLabel;
         }
 
+#if __IOS__
+        /// <summary>
+        /// Set the message to be displayed. Overrides the AvCaptureSessionPage no-op so
+        /// capture session errors (e.g. "Capture device not found.") reach the message label.
+        /// </summary>
+        /// <param name="message">The message to be displayed</param>
+        /// <param name="heightRequest">Not used by this page.</param>
+        public override void SetMessage(String message, int heightRequest = 60)
+        {
+            SetMessage(message);
+        }
+#endif
+
         /// <summary>
         /// Set the message to be displayed
         /// </summary>
@@ -483,6 +496,9 @@ namespace Emgu.CV.Platform.Maui.UI
                 {
                     Label label = GetLabel();
                     label.Text = message;
+                    //The label may have been hidden by pages created without a description
+                    //text. Make sure a non-empty message is actually visible.
+                    label.IsVisible = !String.IsNullOrEmpty(message);
 
                     label.LineBreakMode = LineBreakMode.WordWrap;
                     //label.WidthRequest = this.Width;

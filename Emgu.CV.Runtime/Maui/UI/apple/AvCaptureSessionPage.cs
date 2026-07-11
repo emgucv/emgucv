@@ -179,6 +179,9 @@ namespace Emgu.Util
         /// </summary>
         public void StopCaptureSession()
         {
+            if (session == null)
+                //Capture session was never created, e.g. no capture device was found.
+                return;
             session.StopRunning();
             session.Dispose();
             session = null;
