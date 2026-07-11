@@ -25,27 +25,316 @@ namespace Emgu.CV.Models
     /// the Gemma2 language model ([image_features | text_embeds] -> logits).
     /// All three networks run on the new dnn engine.
     ///
-    /// The models are ~15 GB across ~300 files and the official tokenizer
-    /// descends from a gated huggingface repository, so this class does not
-    /// download them. The model folder passed to the constructor must contain:
-    ///   vision_model.onnx                 - SigLIP vision encoder
-    ///   embedding.onnx, embedding.weight  - embedding + external weights
-    ///   gemma2_3b.onnx, onnx__MatMul_*,
-    ///   onnx__Mul_*                       - Gemma2 + external weights
-    ///   config.json, tokenizer.json       - OpenCV-format Gemma tokenizer
-    /// ONNX models: https://huggingface.co/nklskyoy/paligemma2-3b-pt-224-onnx
-    ///
-    /// config.json must be { "method": "SentencePiece" }: that tokenizer method
-    /// prepends the &lt;bos&gt; token on encode like the HuggingFace Gemma
-    /// tokenizer does; without &lt;bos&gt; the model generates a degenerate
-    /// response. tokenizer.json is the standard Gemma-2 tokenizer (e.g. from an
-    /// ungated mirror such as https://huggingface.co/unsloth/gemma-2-2b).
+    /// Init downloads the model files (~15 GB across ~300 files) into the model
+    /// folder: the ONNX models from
+    /// https://huggingface.co/nklskyoy/paligemma2-3b-pt-224-onnx and the
+    /// standard Gemma-2 tokenizer.json from an ungated mirror of the gated
+    /// PaliGemma2 repository. Files already present in the folder are not
+    /// downloaded again, so a pre-populated folder (e.g. an absolute path
+    /// passed to the constructor) is loaded as-is.
     /// </summary>
     public class VlmPaliGemma2 : DisposableObject
     {
         private const int EosId = 1;
 
-        private readonly String _modelFolder;
+        private const String BaseUrl = "https://huggingface.co/nklskyoy/paligemma2-3b-pt-224-onnx/resolve/main/";
+
+        /// <summary>
+        /// The external data files referenced by gemma2_3b.onnx; they must reside next to it.
+        /// </summary>
+        private static readonly String[] GemmaExternalDataFiles = new String[]
+        {
+            "onnx__MatMul_8880",
+            "onnx__MatMul_8887",
+            "onnx__MatMul_8888",
+            "onnx__MatMul_8911",
+            "onnx__MatMul_8916",
+            "onnx__MatMul_8917",
+            "onnx__MatMul_8918",
+            "onnx__MatMul_8923",
+            "onnx__MatMul_8930",
+            "onnx__MatMul_8931",
+            "onnx__MatMul_8954",
+            "onnx__MatMul_8959",
+            "onnx__MatMul_8960",
+            "onnx__MatMul_8961",
+            "onnx__MatMul_8966",
+            "onnx__MatMul_8973",
+            "onnx__MatMul_8974",
+            "onnx__MatMul_8997",
+            "onnx__MatMul_9002",
+            "onnx__MatMul_9003",
+            "onnx__MatMul_9004",
+            "onnx__MatMul_9009",
+            "onnx__MatMul_9016",
+            "onnx__MatMul_9017",
+            "onnx__MatMul_9040",
+            "onnx__MatMul_9045",
+            "onnx__MatMul_9046",
+            "onnx__MatMul_9047",
+            "onnx__MatMul_9052",
+            "onnx__MatMul_9059",
+            "onnx__MatMul_9060",
+            "onnx__MatMul_9083",
+            "onnx__MatMul_9088",
+            "onnx__MatMul_9089",
+            "onnx__MatMul_9090",
+            "onnx__MatMul_9095",
+            "onnx__MatMul_9102",
+            "onnx__MatMul_9103",
+            "onnx__MatMul_9126",
+            "onnx__MatMul_9131",
+            "onnx__MatMul_9132",
+            "onnx__MatMul_9133",
+            "onnx__MatMul_9138",
+            "onnx__MatMul_9145",
+            "onnx__MatMul_9146",
+            "onnx__MatMul_9169",
+            "onnx__MatMul_9174",
+            "onnx__MatMul_9175",
+            "onnx__MatMul_9176",
+            "onnx__MatMul_9181",
+            "onnx__MatMul_9188",
+            "onnx__MatMul_9189",
+            "onnx__MatMul_9212",
+            "onnx__MatMul_9217",
+            "onnx__MatMul_9218",
+            "onnx__MatMul_9219",
+            "onnx__MatMul_9224",
+            "onnx__MatMul_9231",
+            "onnx__MatMul_9232",
+            "onnx__MatMul_9255",
+            "onnx__MatMul_9260",
+            "onnx__MatMul_9261",
+            "onnx__MatMul_9262",
+            "onnx__MatMul_9267",
+            "onnx__MatMul_9274",
+            "onnx__MatMul_9275",
+            "onnx__MatMul_9298",
+            "onnx__MatMul_9303",
+            "onnx__MatMul_9304",
+            "onnx__MatMul_9305",
+            "onnx__MatMul_9310",
+            "onnx__MatMul_9317",
+            "onnx__MatMul_9318",
+            "onnx__MatMul_9341",
+            "onnx__MatMul_9346",
+            "onnx__MatMul_9347",
+            "onnx__MatMul_9348",
+            "onnx__MatMul_9353",
+            "onnx__MatMul_9360",
+            "onnx__MatMul_9361",
+            "onnx__MatMul_9384",
+            "onnx__MatMul_9389",
+            "onnx__MatMul_9390",
+            "onnx__MatMul_9391",
+            "onnx__MatMul_9396",
+            "onnx__MatMul_9403",
+            "onnx__MatMul_9404",
+            "onnx__MatMul_9427",
+            "onnx__MatMul_9432",
+            "onnx__MatMul_9433",
+            "onnx__MatMul_9434",
+            "onnx__MatMul_9439",
+            "onnx__MatMul_9446",
+            "onnx__MatMul_9447",
+            "onnx__MatMul_9470",
+            "onnx__MatMul_9475",
+            "onnx__MatMul_9476",
+            "onnx__MatMul_9477",
+            "onnx__MatMul_9482",
+            "onnx__MatMul_9489",
+            "onnx__MatMul_9490",
+            "onnx__MatMul_9513",
+            "onnx__MatMul_9518",
+            "onnx__MatMul_9519",
+            "onnx__MatMul_9520",
+            "onnx__MatMul_9525",
+            "onnx__MatMul_9532",
+            "onnx__MatMul_9533",
+            "onnx__MatMul_9556",
+            "onnx__MatMul_9561",
+            "onnx__MatMul_9562",
+            "onnx__MatMul_9563",
+            "onnx__MatMul_9568",
+            "onnx__MatMul_9575",
+            "onnx__MatMul_9576",
+            "onnx__MatMul_9599",
+            "onnx__MatMul_9604",
+            "onnx__MatMul_9605",
+            "onnx__MatMul_9606",
+            "onnx__MatMul_9611",
+            "onnx__MatMul_9618",
+            "onnx__MatMul_9619",
+            "onnx__MatMul_9642",
+            "onnx__MatMul_9647",
+            "onnx__MatMul_9648",
+            "onnx__MatMul_9649",
+            "onnx__MatMul_9654",
+            "onnx__MatMul_9661",
+            "onnx__MatMul_9662",
+            "onnx__MatMul_9685",
+            "onnx__MatMul_9690",
+            "onnx__MatMul_9691",
+            "onnx__MatMul_9692",
+            "onnx__MatMul_9697",
+            "onnx__MatMul_9704",
+            "onnx__MatMul_9705",
+            "onnx__MatMul_9728",
+            "onnx__MatMul_9733",
+            "onnx__MatMul_9734",
+            "onnx__MatMul_9735",
+            "onnx__MatMul_9740",
+            "onnx__MatMul_9747",
+            "onnx__MatMul_9748",
+            "onnx__MatMul_9771",
+            "onnx__MatMul_9776",
+            "onnx__MatMul_9777",
+            "onnx__MatMul_9778",
+            "onnx__MatMul_9783",
+            "onnx__MatMul_9790",
+            "onnx__MatMul_9791",
+            "onnx__MatMul_9814",
+            "onnx__MatMul_9819",
+            "onnx__MatMul_9820",
+            "onnx__MatMul_9821",
+            "onnx__MatMul_9826",
+            "onnx__MatMul_9833",
+            "onnx__MatMul_9834",
+            "onnx__MatMul_9857",
+            "onnx__MatMul_9862",
+            "onnx__MatMul_9863",
+            "onnx__MatMul_9864",
+            "onnx__MatMul_9869",
+            "onnx__MatMul_9876",
+            "onnx__MatMul_9877",
+            "onnx__MatMul_9900",
+            "onnx__MatMul_9905",
+            "onnx__MatMul_9906",
+            "onnx__MatMul_9907",
+            "onnx__MatMul_9912",
+            "onnx__MatMul_9919",
+            "onnx__MatMul_9920",
+            "onnx__MatMul_9943",
+            "onnx__MatMul_9948",
+            "onnx__MatMul_9949",
+            "onnx__MatMul_9950",
+            "onnx__MatMul_9955",
+            "onnx__MatMul_9962",
+            "onnx__MatMul_9963",
+            "onnx__MatMul_9986",
+            "onnx__MatMul_9991",
+            "onnx__MatMul_9992",
+            "onnx__MatMul_9993",
+            "onnx__MatMul_9998",
+            "onnx__Mul_8879",
+            "onnx__Mul_8913",
+            "onnx__Mul_8915",
+            "onnx__Mul_8920",
+            "onnx__Mul_8922",
+            "onnx__Mul_8956",
+            "onnx__Mul_8958",
+            "onnx__Mul_8963",
+            "onnx__Mul_8965",
+            "onnx__Mul_8999",
+            "onnx__Mul_9001",
+            "onnx__Mul_9006",
+            "onnx__Mul_9008",
+            "onnx__Mul_9042",
+            "onnx__Mul_9044",
+            "onnx__Mul_9049",
+            "onnx__Mul_9051",
+            "onnx__Mul_9085",
+            "onnx__Mul_9087",
+            "onnx__Mul_9092",
+            "onnx__Mul_9094",
+            "onnx__Mul_9128",
+            "onnx__Mul_9130",
+            "onnx__Mul_9135",
+            "onnx__Mul_9137",
+            "onnx__Mul_9171",
+            "onnx__Mul_9173",
+            "onnx__Mul_9178",
+            "onnx__Mul_9180",
+            "onnx__Mul_9214",
+            "onnx__Mul_9216",
+            "onnx__Mul_9221",
+            "onnx__Mul_9223",
+            "onnx__Mul_9257",
+            "onnx__Mul_9259",
+            "onnx__Mul_9264",
+            "onnx__Mul_9266",
+            "onnx__Mul_9300",
+            "onnx__Mul_9302",
+            "onnx__Mul_9307",
+            "onnx__Mul_9309",
+            "onnx__Mul_9343",
+            "onnx__Mul_9345",
+            "onnx__Mul_9350",
+            "onnx__Mul_9352",
+            "onnx__Mul_9386",
+            "onnx__Mul_9388",
+            "onnx__Mul_9393",
+            "onnx__Mul_9395",
+            "onnx__Mul_9429",
+            "onnx__Mul_9431",
+            "onnx__Mul_9436",
+            "onnx__Mul_9438",
+            "onnx__Mul_9472",
+            "onnx__Mul_9474",
+            "onnx__Mul_9479",
+            "onnx__Mul_9481",
+            "onnx__Mul_9515",
+            "onnx__Mul_9517",
+            "onnx__Mul_9522",
+            "onnx__Mul_9524",
+            "onnx__Mul_9558",
+            "onnx__Mul_9560",
+            "onnx__Mul_9565",
+            "onnx__Mul_9567",
+            "onnx__Mul_9601",
+            "onnx__Mul_9603",
+            "onnx__Mul_9608",
+            "onnx__Mul_9610",
+            "onnx__Mul_9644",
+            "onnx__Mul_9646",
+            "onnx__Mul_9651",
+            "onnx__Mul_9653",
+            "onnx__Mul_9687",
+            "onnx__Mul_9689",
+            "onnx__Mul_9694",
+            "onnx__Mul_9696",
+            "onnx__Mul_9730",
+            "onnx__Mul_9732",
+            "onnx__Mul_9737",
+            "onnx__Mul_9739",
+            "onnx__Mul_9773",
+            "onnx__Mul_9775",
+            "onnx__Mul_9780",
+            "onnx__Mul_9782",
+            "onnx__Mul_9816",
+            "onnx__Mul_9818",
+            "onnx__Mul_9823",
+            "onnx__Mul_9825",
+            "onnx__Mul_9859",
+            "onnx__Mul_9861",
+            "onnx__Mul_9866",
+            "onnx__Mul_9868",
+            "onnx__Mul_9902",
+            "onnx__Mul_9904",
+            "onnx__Mul_9909",
+            "onnx__Mul_9911",
+            "onnx__Mul_9945",
+            "onnx__Mul_9947",
+            "onnx__Mul_9952",
+            "onnx__Mul_9954",
+            "onnx__Mul_9988",
+            "onnx__Mul_9990",
+            "onnx__Mul_9995",
+            "onnx__Mul_9997",
+        };
+
+        private readonly String _modelFolderName;
 
         private Tokenizer _tokenizer = null;
         private Net _siglipNet = null;
@@ -55,10 +344,10 @@ namespace Emgu.CV.Models
         /// <summary>
         /// Create a PaliGemma2 vision-language model.
         /// </summary>
-        /// <param name="modelFolder">The folder containing the ONNX models and the tokenizer files. See the class summary for the expected content.</param>
-        public VlmPaliGemma2(String modelFolder)
+        /// <param name="modelFolderName">The subfolder name where the model will be downloaded to. An absolute path can also be used; files already present in the folder are not downloaded again, so a pre-populated folder is loaded as-is.</param>
+        public VlmPaliGemma2(String modelFolderName = null)
         {
-            _modelFolder = modelFolder;
+            _modelFolderName = modelFolderName ?? Path.Combine("emgu", "paligemma2_3b_pt_224_onnx");
         }
 
         /// <summary>
@@ -72,35 +361,77 @@ namespace Emgu.CV.Models
             }
         }
 
-        private void LoadModels()
+        private void LoadModels(String modelFolder)
         {
+            //The tokenizer config is tiny and fixed, so it is written locally
+            //instead of downloaded. The "SentencePiece" method prepends the
+            //<bos> token on encode like the HuggingFace Gemma tokenizer does;
+            //without <bos> the model generates a degenerate response.
+            String configPath = Path.Combine(modelFolder, "config.json");
+            if (!File.Exists(configPath))
+                File.WriteAllText(configPath, "{ \"method\": \"SentencePiece\" }");
+
             if (_tokenizer == null)
-                _tokenizer = Tokenizer.Load(Path.Combine(_modelFolder, "config.json"));
+                _tokenizer = Tokenizer.Load(configPath);
             if (_siglipNet == null)
-                _siglipNet = DnnInvoke.ReadNetFromONNX(Path.Combine(_modelFolder, "vision_model.onnx"), EngineType.New);
+                _siglipNet = DnnInvoke.ReadNetFromONNX(Path.Combine(modelFolder, "vision_model.onnx"), EngineType.New);
             if (_embedNet == null)
-                _embedNet = DnnInvoke.ReadNetFromONNX(Path.Combine(_modelFolder, "embedding.onnx"), EngineType.New);
+                _embedNet = DnnInvoke.ReadNetFromONNX(Path.Combine(modelFolder, "embedding.onnx"), EngineType.New);
             if (_gemmaNet == null)
-                _gemmaNet = DnnInvoke.ReadNetFromONNX(Path.Combine(_modelFolder, "gemma2_3b.onnx"), EngineType.New);
+                _gemmaNet = DnnInvoke.ReadNetFromONNX(Path.Combine(modelFolder, "gemma2_3b.onnx"), EngineType.New);
+        }
+
+        private FileDownloadManager CreateDownloadManager()
+        {
+            FileDownloadManager manager = new FileDownloadManager();
+
+            //The Gemma-2 tokenizer from an ungated mirror of the gated
+            //PaliGemma2 repository.
+            manager.AddFile(
+                "https://huggingface.co/unsloth/gemma-2-2b/resolve/main/tokenizer.json",
+                _modelFolderName,
+                "3F289BC05132635A8BC7ACA7AA21255EFD5E18F3710F43E3CDB96BCD41BE4922");
+
+            manager.AddFile(BaseUrl + "siglip/onnx/vision_model.onnx", _modelFolderName);
+            manager.AddFile(BaseUrl + "embedding/onnx/embedding.onnx", _modelFolderName);
+            manager.AddFile(BaseUrl + "embedding/onnx/embedding.weight", _modelFolderName);
+            manager.AddFile(BaseUrl + "gemma/onnx/gemma2_3b.onnx", _modelFolderName);
+            foreach (String externalDataFile in GemmaExternalDataFiles)
+                manager.AddFile(BaseUrl + "gemma/onnx/" + externalDataFile, _modelFolderName);
+
+            return manager;
         }
 
         /// <summary>
-        /// Initialize the model by loading the tokenizer and the three ONNX
-        /// networks from the model folder. No file is downloaded; the model
-        /// folder must already contain all the files.
+        /// Download the model files (~15 GB, skipping the files already present
+        /// in the model folder) and load the tokenizer and the three ONNX
+        /// networks.
         /// </summary>
-        /// <param name="onDownloadProgressChanged">Not used, present for signature consistency with the other models.</param>
+        /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <returns>Async task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
-            LoadModels();
-            yield return null;
+            if (!Initialized)
+            {
+                FileDownloadManager manager = CreateDownloadManager();
+                manager.OnDownloadProgressChanged += onDownloadProgressChanged;
+                yield return manager.Download();
+                if (manager.AllFilesDownloaded)
+                    LoadModels(Path.GetDirectoryName(manager.Files[0].LocalFile));
+            }
         }
 #else
         public async Task Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
         {
-            await Task.Run(() => LoadModels());
+            if (!Initialized)
+            {
+                FileDownloadManager manager = CreateDownloadManager();
+                manager.OnDownloadProgressChanged += onDownloadProgressChanged;
+                await manager.Download();
+                if (manager.AllFilesDownloaded)
+                    await Task.Run(() => LoadModels(Path.GetDirectoryName(manager.Files[0].LocalFile)));
+            }
         }
 #endif
 

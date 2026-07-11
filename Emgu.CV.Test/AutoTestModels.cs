@@ -168,24 +168,17 @@ namespace Emgu.CV.Test
         public async Task TestVlmPaliGemma2()
         {
             //PaliGemma2 vision-language inference, the C# equivalent of
-            //opencv/samples/dnn/vlm_inference.py. The models are ~15 GB across
-            //~300 files and the official tokenizer is gated, so this test does
-            //not download them. Set the EMGU_CV_PALIGEMMA2_MODEL_DIR environment
-            //variable to the local model folder to run this test; see the
-            //VlmPaliGemma2 class summary for the expected folder content.
-            //With the dog416.png test image and the "cap en\n" prompt the model
-            //responds "dog and bike".
+            //opencv/samples/dnn/vlm_inference.py. Init downloads the models
+            //(~15 GB) on the first run. Optionally set the
+            //EMGU_CV_PALIGEMMA2_MODEL_DIR environment variable to reuse an
+            //already populated model folder. With the dog416.png test image and
+            //the "cap en\n" prompt the model responds "dog and bike".
             String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_PALIGEMMA2_MODEL_DIR");
-            if (String.IsNullOrEmpty(modelDir))
-            {
-                Console.WriteLine("TestVlmPaliGemma2 skipped: set the EMGU_CV_PALIGEMMA2_MODEL_DIR environment variable to the model folder to run this test.");
-                return;
-            }
 
             using (Mat image = EmguAssert.LoadMat("dog416.png"))
             using (VlmPaliGemma2 vlm = new VlmPaliGemma2(modelDir))
             {
-                await vlm.Init();
+                await vlm.Init(DownloadManager_OnDownloadProgressChanged);
                 EmguAssert.IsTrue(vlm.Initialized, "Failed to initialize the PaliGemma2 model.");
 
                 String response = vlm.Generate(image, "cap en\n");
