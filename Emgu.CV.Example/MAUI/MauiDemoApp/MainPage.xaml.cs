@@ -214,18 +214,20 @@ namespace MauiDemoApp
                 Picker p = superresPage.Picker;
                 p.Title = "Super resolution version";
                 p.IsVisible = true;
-                p.Items.Add("EdsrX2");
-                p.Items.Add("EdsrX3");
-                p.Items.Add("EdsrX4");
-                p.Items.Add("EspcnX2");
-                p.Items.Add("EspcnX3");
-                p.Items.Add("EspcnX4");
-                p.Items.Add("FsrcnnX2");
-                p.Items.Add("FsrcnnX3");
-                p.Items.Add("FsrcnnX4");
-                p.Items.Add("LapsrnX2");
-                p.Items.Add("LapsrnX4");
-                p.Items.Add("LapsrnX8");
+                //The model name must be the first token; the text after it is a
+                //description (Superres.Init only parses the leading token).
+                p.Items.Add("EdsrX2 - 2x, best quality, slowest, large download");
+                p.Items.Add("EdsrX3 - 3x, best quality, slowest, large download");
+                p.Items.Add("EdsrX4 - 4x, best quality, slowest, large download");
+                p.Items.Add("EspcnX2 - 2x, fast, small model");
+                p.Items.Add("EspcnX3 - 3x, fast, small model");
+                p.Items.Add("EspcnX4 - 4x, fast, small model");
+                p.Items.Add("FsrcnnX2 - 2x, fastest, tiny model");
+                p.Items.Add("FsrcnnX3 - 3x, fastest, tiny model");
+                p.Items.Add("FsrcnnX4 - 4x, fastest, tiny model");
+                p.Items.Add("LapsrnX2 - 2x, balanced speed and quality");
+                p.Items.Add("LapsrnX4 - 4x, balanced speed and quality");
+                p.Items.Add("LapsrnX8 - 8x, balanced speed and quality");
 
 
                 this.Navigation.PushAsync(superresPage);

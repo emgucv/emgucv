@@ -327,6 +327,12 @@ namespace Emgu.CV.Models
             if (initOptions != null && ((initOptions as String) != null))
             {
                 String versionStr = initOptions as String;
+                //The UI may append a description after the model name
+                //(e.g. "EdsrX2 - 2x, best quality, slowest"); only the
+                //leading token is the model name.
+                int separatorIdx = versionStr.IndexOf(' ');
+                if (separatorIdx > 0)
+                    versionStr = versionStr.Substring(0, separatorIdx);
                 if (versionStr.Equals("EdsrX2"))
                     v = SuperresVersion.EdsrX2;
                 else if (versionStr.Equals("EdsrX3"))
