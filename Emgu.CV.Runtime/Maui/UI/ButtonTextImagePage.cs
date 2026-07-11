@@ -422,12 +422,28 @@ namespace Emgu.CV.Platform.Maui.UI
                     }
                     else
                     {
-                        var takePhotoResult = await MediaPicker.CapturePhotoAsync();
+                        try
+                        {
+                            var takePhotoResult = await MediaPicker.CapturePhotoAsync();
 
-                        if (takePhotoResult == null) //canceled
+                            if (takePhotoResult == null) //canceled
+                                return null;
+                            using (Stream stream = await takePhotoResult.OpenReadAsync())
+                                mats[i] = await ReadStream(stream);
+                        }
+                        catch (FeatureNotSupportedException)
+                        {
+                            //e.g. no camera is available on this device
+                            SetMessage("Capturing photo from camera is not supported on this device.");
                             return null;
-                        using (Stream stream = await takePhotoResult.OpenReadAsync())
-                            mats[i] = await ReadStream(stream);
+                        }
+                        catch (Exception e)
+                        {
+                            //The exception would otherwise be lost in the async void
+                            //button click handler, leaving the user with no feedback.
+                            SetMessage(String.Format("Failed to capture photo: {0}", e.Message));
+                            return null;
+                        }
                     }
                 }
                 else if (action.Equals("Camera"))
