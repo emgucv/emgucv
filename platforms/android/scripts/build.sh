@@ -112,6 +112,16 @@ BASE_CMAKE_FLAGS=(
     "-DCMAKE_C_FLAGS:STRING=-std=c11"
     "-DCMAKE_CXX_FLAGS_RELEASE:STRING=-g0 -O3"
     "-DCMAKE_C_FLAGS_RELEASE:STRING=-g0 -O3"
+    # Disable KleidiCV (ARM's optimized HAL, on by default for arm64 in
+    # OpenCV 5.0). It is the only component that compiles objects with
+    # -march=armv8-a+sve2, and under the whole-program (LTO) build that
+    # SVE2 codegen leaks into libwebp's WebPGetColorPalette. SVE is absent
+    # on the Android emulator and most real devices, so those instructions
+    # make libcvextern.so crash with SIGILL. Turning KleidiCV off removes
+    # every +sve2 object, so no SVE can be emitted anywhere. (Note:
+    # CPU_BASELINE_DISABLE=SVE does NOT help here — the SVE comes from
+    # KleidiCV/LTO, not OpenCV's own CPU baseline/dispatch.)
+    "-DWITH_KLEIDICV=OFF"
     "-DCMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,--gc-sections, -Wl,--exclude-libs,All"
     "-DCMAKE_POLICY_DEFAULT_CMP0069=NEW"
     "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=ON"
