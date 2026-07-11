@@ -74,6 +74,27 @@ namespace Emgu.CV.Models
         }
 
         /// <summary>
+        /// Draw the detected object on the image
+        /// </summary>
+        /// <param name="image">The image to draw on</param>
+        /// <param name="color">The color to draw the rectangle around the detected object</param>
+        /// <param name="fontFace">The TrueType/OpenType font used to draw the label.</param>
+        /// <param name="fontSize">The font size (in pixels) used to draw the label.</param>
+        public virtual void Render(IInputOutputArray image, MCvScalar color, FontFace fontFace, int fontSize = 16)
+        {
+            CvInvoke.Rectangle(image, this.Region, color, 2);
+            String label = String.Format("{0}: {1}", this.Label == null ? this.ClassId.ToString() : this.Label,
+                this.Confident);
+            CvInvoke.PutText(
+                image,
+                label,
+                this.Region.Location,
+                color,
+                fontFace,
+                fontSize);
+        }
+
+        /// <summary>
         /// Get a rectangle using the 4 fraction number of network output and size of the image
         /// </summary>
         /// <param name="left">A [0-1.0] value that indicates the left side of the rectangle. </param>

@@ -52,7 +52,7 @@ namespace Emgu.CV.Models
 
         private TextRecognitionModel _ocr = null;
 
-        private FreetypeNotoSansCJK _freetype = null;
+        private FontFace _fontFace = null;
 
         /// <summary>
         /// Return true if the model is initialized
@@ -65,7 +65,7 @@ namespace Emgu.CV.Models
                     return false;
                 if (_ocr == null)
                     return false;
-                if (_freetype == null)
+                if (_fontFace == null)
                     return false;
                 return true;
             }
@@ -90,28 +90,25 @@ namespace Emgu.CV.Models
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE  || UNITY_WEBGL
             yield return InitTextDetector(onDownloadProgressChanged);
             yield return InitTextRecognizer(onDownloadProgressChanged);
-            yield return InitFreetype(onDownloadProgressChanged);
 #else
             await InitTextDetector(onDownloadProgressChanged);
             await InitTextRecognizer(onDownloadProgressChanged);
-            await InitFreetype(onDownloadProgressChanged);
 #endif
+            InitFontFace();
         }
 
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-        private IEnumerator InitFreetype(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
-#else
-        private async Task InitFreetype(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
-#endif
+        private void InitFontFace()
         {
-            if (_freetype == null)
+            if (_fontFace == null)
             {
-                _freetype = new FreetypeNotoSansCJK(_modelFolderName);
-#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-                yield return _freetype.Init(onDownloadProgressChanged);
-#else
-                await _freetype.Init(onDownloadProgressChanged);
-#endif
+                //Use the fonts embedded in the imgproc module instead of the optional
+                //freetype contrib module, so scene text rendering also works on
+                //platforms built without freetype2/harfbuzz (e.g. iOS / MacCatalyst).
+                //Prefer the built-in Unicode font ("uni", WenQuanYi Micro Hei) since
+                //the OCR vocabulary contains CJK characters; fall back to the default
+                //embedded font if the native library was built without WITH_UNIFONT.
+                _fontFace = new FontFace();
+                _fontFace.Set("uni");
             }
         }
 
@@ -285,7 +282,7 @@ namespace Emgu.CV.Models
         public void Render(IInputOutputArray image, DetectedObject[] sceneTexts)
         {
             foreach (var detected in sceneTexts)
-                detected.Render(image, RenderColor, _freetype);
+                detected.Render(image, RenderColor, _fontFace);
             /*
             foreach (SceneText st in sceneTexts)
             {
@@ -331,10 +328,10 @@ namespace Emgu.CV.Models
                 _ocr = null;
             }
 
-            if (_freetype != null)
+            if (_fontFace != null)
             {
-                _freetype.Dispose();
-                _freetype = null;
+                _fontFace.Dispose();
+                _fontFace = null;
             }
         }
 

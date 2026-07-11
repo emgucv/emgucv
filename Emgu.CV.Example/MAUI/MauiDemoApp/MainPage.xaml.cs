@@ -236,7 +236,9 @@ namespace MauiDemoApp
             //faceLandmarkDetectionButton.IsVisible = haveDNN;
             yoloButton.IsVisible = haveDNN;
             superresButton.IsVisible = haveDNN;
-            sceneTextDetectionButton.IsVisible = haveDNN && haveFreetype;
+            //Scene text rendering uses the FontFace class from the imgproc module,
+            //no longer requires the freetype contrib module.
+            sceneTextDetectionButton.IsVisible = haveDNN;
             //licensePlateRecognitionButton.IsVisible = hasInferenceEngine;
             licensePlateRecognitionButton.IsVisible = false;
             featureDetectionButton.IsVisible = haveFeatures;
