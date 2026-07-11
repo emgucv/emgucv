@@ -152,10 +152,17 @@ After the MacCatalyst C++ binary is built, build then launch the MAUI demo app d
 
 ```bash
 dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-maccatalyst
-open "Emgu.CV.Example/MAUI/MauiDemoApp/bin/Debug/net10.0-maccatalyst/maccatalyst-arm64/Emgu CV MAUI Demo.app"
+open "Emgu.CV.Example/MAUI/MauiDemoApp/bin/Debug/net10.0-maccatalyst/maccatalyst-arm64/Emgu.app"
 ```
 
 Note: `-t:Run` does not work reliably for MacCatalyst — build and `open` separately instead.
+
+If the build fails with "This version of .NET for MacCatalyst requires Xcode
+X.Y. The current version of Xcode is X.Z", the installed Xcode is newer than
+the version the .NET MacCatalyst SDK expects (the check is an exact
+major.minor match). Skip the check by adding `-p:ValidateXcodeVersion=false`
+to the build command — this is the SDK's own opt-out for that validation and
+does not require changing workloads or Xcode.
 
 ### MAUI Demo App (iOS Simulator)
 
