@@ -41,8 +41,10 @@ namespace cv
 		class TextDetectionModel_DB {};
 
 		class TextRecognitionModel {};
-		
+
 		class KeypointsModel {};
+
+		class Tokenizer {};
 	}
 }
 #endif
@@ -234,6 +236,11 @@ CVAPI(void) cveDnnSegmentationModelSegment(
 	cv::dnn::SegmentationModel* segmentationModel,
 	cv::_InputArray* frame,
 	cv::_OutputArray* mask);
+
+CVAPI(cv::dnn::Tokenizer*) cveDnnTokenizerLoad(cv::String* modelConfig);
+CVAPI(void) cveDnnTokenizerRelease(cv::dnn::Tokenizer** tokenizer);
+CVAPI(void) cveDnnTokenizerEncode(cv::dnn::Tokenizer* tokenizer, cv::String* text, std::vector<int>* ids);
+CVAPI(void) cveDnnTokenizerDecode(cv::dnn::Tokenizer* tokenizer, std::vector<int>* tokens, cv::String* text);
 
 //CVAPI(bool) cveDnnHaveCUDA();
 #endif

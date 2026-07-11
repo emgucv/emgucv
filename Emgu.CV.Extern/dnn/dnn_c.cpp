@@ -880,6 +880,43 @@ void cveDnnSegmentationModelSegment(
 #endif
 }
 
+cv::dnn::Tokenizer* cveDnnTokenizerLoad(cv::String* modelConfig)
+{
+#ifdef HAVE_OPENCV_DNN
+	return new cv::dnn::Tokenizer(cv::dnn::Tokenizer::load(*modelConfig));
+#else
+	throw_no_dnn();
+#endif
+}
+
+void cveDnnTokenizerRelease(cv::dnn::Tokenizer** tokenizer)
+{
+#ifdef HAVE_OPENCV_DNN
+	delete* tokenizer;
+	*tokenizer = 0;
+#else
+	throw_no_dnn();
+#endif
+}
+
+void cveDnnTokenizerEncode(cv::dnn::Tokenizer* tokenizer, cv::String* text, std::vector<int>* ids)
+{
+#ifdef HAVE_OPENCV_DNN
+	*ids = tokenizer->encode(*text);
+#else
+	throw_no_dnn();
+#endif
+}
+
+void cveDnnTokenizerDecode(cv::dnn::Tokenizer* tokenizer, std::vector<int>* tokens, cv::String* text)
+{
+#ifdef HAVE_OPENCV_DNN
+	*text = tokenizer->decode(*tokens);
+#else
+	throw_no_dnn();
+#endif
+}
+
 /*
 bool cveDnnHaveCUDA()
 {
@@ -887,6 +924,6 @@ bool cveDnnHaveCUDA()
 	return cv::dnn::haveCUDA();
 #else
 	throw_no_dnn();
-#endif	
+#endif
 }
 */
