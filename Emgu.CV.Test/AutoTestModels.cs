@@ -138,6 +138,33 @@ namespace Emgu.CV.Test
 #endif
 #endif
         [Test]
+        public async Task TestGpt2Tokenizer()
+        {
+            using (Gpt2Tokenizer tokenizer = new Gpt2Tokenizer())
+            {
+                await tokenizer.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(tokenizer.Initialized, "Failed to initialize the GPT-2 tokenizer.");
+
+                String text = "hello world";
+                int[] ids = tokenizer.Encode(text);
+                //Known GPT-2 BPE ids for "hello" and " world"
+                EmguAssert.AreEqual(2, ids.Length, "Unexpected token count.");
+                EmguAssert.AreEqual(31373, ids[0], "Unexpected token id for 'hello'.");
+                EmguAssert.AreEqual(995, ids[1], "Unexpected token id for ' world'.");
+
+                String decoded = tokenizer.Decode(ids);
+                EmguAssert.AreEqual(text, decoded, "Encode/Decode round trip failed.");
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
         public async Task TestPedestrianDetector()
         {
             using (Mat m = EmguAssert.LoadMat("pedestrian.png"))
