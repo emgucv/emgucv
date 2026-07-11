@@ -439,7 +439,7 @@ namespace MauiDemoApp
                 if (t.Contains("feature matching")) return "";                   // compare
                 if (t.Contains("super resolution")) return "";                   // auto_fix_high
                 if (t.Contains("3d")) return "";                                 // view_in_ar
-                if (t.Contains("free type")) return "";                          // font_download
+                if (t.Contains("unicode")) return "";                          // font_download
                 if (t.Contains("video")) return "";                             // videocam
                 return "";                                                       // widgets
             };
@@ -454,7 +454,7 @@ namespace MauiDemoApp
                 string t = (text ?? "").ToLowerInvariant();
                 if (t.Contains("video")) return 2;
                 if (t.Contains("hello") || t.Contains("planar") || t.Contains("feature matching")
-                    || t.Contains("super resolution") || t.Contains("3d") || t.Contains("free type"))
+                    || t.Contains("super resolution") || t.Contains("3d") || t.Contains("unicode"))
                     return 1;
                 return 0;
             };
