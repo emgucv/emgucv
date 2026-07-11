@@ -70,7 +70,6 @@ namespace MauiDemoApp
             var openCVConfigDict = CvInvoke.ConfigDict;
             bool haveViz = (openCVConfigDict["HAVE_OPENCV_VIZ"] != 0);
             bool haveDNN = (openCVConfigDict["HAVE_OPENCV_DNN"] != 0);
-            bool haveFreetype = (openCVConfigDict["HAVE_OPENCV_FREETYPE"] != 0);
             bool haveFace = (openCVConfigDict["HAVE_OPENCV_FACE"] != 0);
             bool haveWechatQRCode = (openCVConfigDict["HAVE_OPENCV_WECHAT_QRCODE"] != 0);
             //bool haveBarcode = (openCVConfigDict["HAVE_OPENCV_BARCODE"] != 0);
@@ -397,16 +396,17 @@ namespace MauiDemoApp
                 };
             }
 
-            if (haveFreetype)
             {
-                Button freetypeButton = new Button();
-                freetypeButton.Text = "Free Type";
+                //FontFace rendering is always available (imgproc module); the page
+                //offers the freetype module as an additional option when present.
+                Button unicodeRenderingButton = new Button();
+                unicodeRenderingButton.Text = "Unicode Rendering";
 
-                buttonList.Add(freetypeButton);
+                buttonList.Add(unicodeRenderingButton);
 
-                freetypeButton.Clicked += (sender, args) =>
+                unicodeRenderingButton.Clicked += (sender, args) =>
                 {
-                    this.Navigation.PushAsync(new FreetypePage());
+                    this.Navigation.PushAsync(new UnicodeRenderingPage());
                 };
             }
             
