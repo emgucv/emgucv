@@ -285,35 +285,30 @@ namespace MauiDemoApp
             if (haveObjdetect)
             {
                 Button faceDetectionButton = new Button();
-                faceDetectionButton.Text = "Face Detection (CascadeClassifier)";
+                faceDetectionButton.Text = "Face Detection";
                 buttonList.Add(faceDetectionButton);
 
                 faceDetectionButton.Clicked += (sender, args) =>
                 {
-                    ProcessAndRenderPage faceAndEyeDetectorPage = new ProcessAndRenderPage(
-                        new CascadeFaceAndEyeDetector(),
-                        "Face and eye detection (Cascade classifier)",
+                    ProcessAndRenderPage faceDetectionPage = new ProcessAndRenderPage(
+                        new FaceDetectionModel(),
+                        "Face Detection",
                         "lena.jpg",
-                        "Cascade classifier");
-                    this.Navigation.PushAsync(faceAndEyeDetectorPage);
+                        "");
+                    Picker p = faceDetectionPage.Picker;
+                    p.Title = "Face detector";
+                    //Only offer the detectors whose required modules are
+                    //available. Yunet (objdetect + dnn) is the preferred
+                    //default, followed by the cascade classifier (objdetect).
+                    if (haveDNN)
+                        p.Items.Add(FaceDetectionModel.Yunet);
+                    p.Items.Add(FaceDetectionModel.CascadeClassifier);
+                    if (haveFace && haveDNN)
+                        p.Items.Add(FaceDetectionModel.FaceLandmark);
+                    p.SelectedIndex = 0;
+                    p.IsVisible = p.Items.Count > 1;
+                    this.Navigation.PushAsync(faceDetectionPage);
                 };
-
-                if (haveDNN)
-                {
-                    Button faceDetectionYNButton = new Button();
-                    faceDetectionYNButton.Text = "FaceDetection Yunet";
-                    buttonList.Add(faceDetectionYNButton);
-
-                    faceDetectionYNButton.Clicked += (sender, args) =>
-                    {
-                        ProcessAndRenderPage faceDetectionYNPage = new ProcessAndRenderPage(
-                            new FaceDetectorYNModel(),
-                            "Face detection Yunet",
-                            "lena.jpg",
-                            "Face detection (Yunet)");
-                        this.Navigation.PushAsync(faceDetectionYNPage);
-                    };
-                }
 
                 Button pedestrianDetectionButton = new Button();
                 pedestrianDetectionButton.Text = "Pedestrian Detection";
@@ -332,21 +327,6 @@ namespace MauiDemoApp
             }
 
             
-            if (haveFace && haveDNN)
-            {
-                Button faceLandmarkDetectionButton = new Button();
-                faceLandmarkDetectionButton.Text = "Face Landmark Detection (DNN Module)";
-                buttonList.Add(faceLandmarkDetectionButton);
-                faceLandmarkDetectionButton.Clicked += (sender, args) =>
-                {
-                    ProcessAndRenderPage faceLandmarkDetectionPage = new ProcessAndRenderPage(
-                        new FaceAndLandmarkDetector(),
-                        "Perform Face Landmark Detection",
-                        "lena.jpg",
-                        "");
-                    this.Navigation.PushAsync(faceLandmarkDetectionPage);
-                };
-            }
 
             
             if (haveWechatQRCode && haveObjdetect
