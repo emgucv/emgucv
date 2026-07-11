@@ -110,8 +110,25 @@ namespace Emgu.CV.Platform.Maui.UI
                        ImageView.Image = uiimage;
                        if (oldImage != null)
                           oldImage.Dispose ();
-                       if ((uiimage != null) && (ImageView.Frame.Size != uiimage.Size))
-                          ImageView.Frame = new CGRect (CGPoint.Empty, uiimage.Size);
+                       if (uiimage == null)
+                       {
+                          this.IsVisible = false;
+                       }
+                       else
+                       {
+                          // Setting the native UIImageView.Image does not invalidate the
+                          // cross-platform measure: without a Source the MAUI Image measures
+                          // as zero-sized and the layout arranges it invisible. Request the
+                          // image size at the MAUI level so the layout allocates space.
+                          this.IsVisible = true;
+                          if (this.Width > 0)
+                             this.WidthRequest = Math.Min(this.Width, (double)uiimage.Size.Width);
+                          else
+                             this.WidthRequest = uiimage.Size.Width;
+                          this.HeightRequest = uiimage.Size.Height;
+                          if (ImageView.Frame.Size != uiimage.Size)
+                             ImageView.Frame = new CGRect (CGPoint.Empty, uiimage.Size);
+                       }
                     });
             }
 
