@@ -330,9 +330,9 @@ namespace MauiDemoApp
 
             
             if (haveWechatQRCode && haveObjdetect
-              //TODO: WeChatQRCode detector doesn't work on iOS, probably a bug in iOS
-              //Will need to figure out why.
-              && (Microsoft.Maui.Devices.DeviceInfo.Platform != DevicePlatform.iOS)
+              //The WeChatQRCode detector now works on iOS since the model was
+              //switched from Caffe to ONNX (2026-06), so the previous
+              //iOS-only exclusion (added 2022) has been removed.
               )
             {
                 Button barcodeQrcodeDetectionButton = new Button();
