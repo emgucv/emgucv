@@ -261,7 +261,25 @@ namespace MauiDemoApp
                     ocrPage.HasCameraOption = false;
                     this.Navigation.PushAsync(ocrPage);
                 };
-            } 
+            }
+
+            if (haveDNN)
+            {
+                Button paddleOcrButton = new Button();
+                paddleOcrButton.Text = "PaddleOCR";
+                buttonList.Add(paddleOcrButton);
+
+                paddleOcrButton.Clicked += (sender, args) =>
+                {
+                    ProcessAndRenderPage paddleOcrPage = new ProcessAndRenderPage(
+                        new PaddleOCR(),
+                        "PaddleOCR",
+                        "cars_license_plate.png",
+                        "PP-OCRv4 text detection and recognition");
+                    this.Navigation.PushAsync(paddleOcrPage);
+                };
+            }
+
 
             if (haveVideo && haveCamera)
             {
