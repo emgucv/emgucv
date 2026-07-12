@@ -195,6 +195,46 @@ namespace Emgu.CV.Test
 #endif
 #endif
         [Test]
+        public async Task TestPaddleOCR()
+        {
+            using (Mat image = new Mat(200, 700, DepthType.Cv8U, 3))
+            {
+                image.SetTo(new MCvScalar(255, 255, 255));
+                using (FontFace font = new FontFace("sans"))
+                    CvInvoke.PutText(image, "HELLO WORLD 123", new Point(50, 120), new MCvScalar(0, 0, 0), font, 60);
+
+                using (Emgu.CV.Models.PaddleOCR ocr = new Emgu.CV.Models.PaddleOCR())
+                {
+                    await ocr.Init(DownloadManager_OnDownloadProgressChanged);
+                    EmguAssert.IsTrue(ocr.Initialized, "Failed to initialize the PaddleOCR model.");
+
+                    var results = ocr.Recognize(image);
+                    StringBuilder allText = new StringBuilder();
+                    foreach (var result in results)
+                    {
+                        Console.WriteLine(String.Format("PaddleOCR: '{0}' (confidence {1:F3})", result.Text, result.Confidence));
+                        allText.Append(result.Text);
+                    }
+
+                    String recognized = allText.ToString().Replace(" ", "").ToUpperInvariant();
+                    EmguAssert.IsTrue(recognized.Contains("HELLO"), String.Format("Expected 'HELLO' in the recognized text, got: '{0}'", allText));
+                    EmguAssert.IsTrue(recognized.Contains("WORLD"), String.Format("Expected 'WORLD' in the recognized text, got: '{0}'", allText));
+                    EmguAssert.IsTrue(recognized.Contains("123"), String.Format("Expected '123' in the recognized text, got: '{0}'", allText));
+
+                    String message = ocr.ProcessAndRender(image, image);
+                    Console.WriteLine(message);
+                }
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
         public async Task TestPedestrianDetector()
         {
             using (Mat m = EmguAssert.LoadMat("pedestrian.png"))
