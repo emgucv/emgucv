@@ -296,6 +296,48 @@ namespace Emgu.CV.Test
 #endif
 #endif
         [Test]
+        public async Task TestDinov2()
+        {
+            //DINOv2 visual similarity embeddings. Init downloads the model
+            //(~85 MB) on the first run. Optionally set the
+            //EMGU_CV_DINOV2_MODEL_DIR environment variable to reuse an already
+            //populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_DINOV2_MODEL_DIR");
+
+            using (Emgu.CV.Models.Dinov2 dino = new Emgu.CV.Models.Dinov2(modelDir))
+            {
+                await dino.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(dino.Initialized, "Failed to initialize the DINOv2 model.");
+
+                //A cropped view of the same scene must embed closer to the
+                //original than a completely different image.
+                using (Mat dog = EmguAssert.LoadMat("dog416.png"))
+                using (Mat unrelated = EmguAssert.LoadMat("lena.jpg"))
+                using (Mat dogCropped = new Mat(dog, new Rectangle(20, 20, dog.Width - 40, dog.Height - 40)))
+                {
+                    float[] dogEmbedding = dino.EmbedImage(dog);
+                    float[] croppedEmbedding = dino.EmbedImage(dogCropped);
+                    float[] unrelatedEmbedding = dino.EmbedImage(unrelated);
+
+                    double croppedSimilarity = Emgu.CV.Models.Dinov2.CosineSimilarity(dogEmbedding, croppedEmbedding);
+                    double unrelatedSimilarity = Emgu.CV.Models.Dinov2.CosineSimilarity(dogEmbedding, unrelatedEmbedding);
+                    Console.WriteLine(String.Format("DINOv2 similarity: cropped={0:F4}, unrelated={1:F4}", croppedSimilarity, unrelatedSimilarity));
+                    EmguAssert.IsTrue(croppedSimilarity > unrelatedSimilarity,
+                        "Expected the cropped view to be more similar to the original image than an unrelated image.");
+                    EmguAssert.IsTrue(croppedSimilarity > 0.5,
+                        String.Format("Expected a high similarity for the cropped view, got {0:F4}", croppedSimilarity));
+                }
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
         public async Task TestDnnKVCache()
         {
             //Smoke test for the Net KV-cache API: enable, reset and disable the
