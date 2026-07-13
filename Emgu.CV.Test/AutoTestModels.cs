@@ -243,6 +243,59 @@ namespace Emgu.CV.Test
 #endif
 #endif
         [Test]
+        public async Task TestSiglip()
+        {
+            //SigLIP joint text/image embeddings. Init downloads the model
+            //(~780 MB) on the first run. Optionally set the
+            //EMGU_CV_SIGLIP_MODEL_DIR environment variable to reuse an already
+            //populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_SIGLIP_MODEL_DIR");
+
+            using (Emgu.CV.Models.Siglip siglip = new Emgu.CV.Models.Siglip(modelDir))
+            {
+                await siglip.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(siglip.Initialized, "Failed to initialize the SigLIP model.");
+
+                //Tokenizer exactness against the huggingface SiglipTokenizer
+                //reference (the fixed 64 token sequence is padded with </s>=1).
+                int[] dogIds = siglip.Tokenize("a photo of a dog");
+                int[] expectedDog = new int[] { 262, 266, 1304, 267, 262, 266, 1571, 1 };
+                EmguAssert.IsTrue(
+                    dogIds.Length == 64
+                    && dogIds.Take(expectedDog.Length).SequenceEqual(expectedDog)
+                    && dogIds.Skip(expectedDog.Length).All(id => id == 1),
+                    String.Format("Unexpected token ids for 'a photo of a dog': [{0}]", String.Join(",", dogIds.Take(12))));
+                int[] helloIds = siglip.Tokenize("Hello, World! 123");
+                int[] expectedHello = new int[] { 14647, 459, 17061, 1 };
+                EmguAssert.IsTrue(
+                    helloIds.Take(expectedHello.Length).SequenceEqual(expectedHello),
+                    String.Format("Unexpected token ids for 'Hello, World! 123': [{0}]", String.Join(",", helloIds.Take(8))));
+
+                //Zero-shot: the dog416.png image (a dog and a bike) must be
+                //closer to the matching caption than to an unrelated one.
+                using (Mat image = EmguAssert.LoadMat("dog416.png"))
+                {
+                    float[] imageEmbedding = siglip.EmbedImage(image);
+                    float[] dogEmbedding = siglip.EmbedText("a photo of a dog");
+                    float[] cityEmbedding = siglip.EmbedText("a photo of a city at night");
+
+                    double dogSimilarity = Emgu.CV.Models.Siglip.CosineSimilarity(imageEmbedding, dogEmbedding);
+                    double citySimilarity = Emgu.CV.Models.Siglip.CosineSimilarity(imageEmbedding, cityEmbedding);
+                    Console.WriteLine(String.Format("SigLIP similarity: dog={0:F4}, city={1:F4}", dogSimilarity, citySimilarity));
+                    EmguAssert.IsTrue(dogSimilarity > citySimilarity,
+                        "Expected the dog image to be more similar to the dog caption than to the city caption.");
+                }
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
         public async Task TestDnnKVCache()
         {
             //Smoke test for the Net KV-cache API: enable, reset and disable the
