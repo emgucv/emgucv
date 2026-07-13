@@ -195,6 +195,54 @@ namespace Emgu.CV.Test
 #endif
 #endif
         [Test]
+        public async Task TestClip()
+        {
+            //CLIP ViT-B/32 joint text/image embeddings. Init downloads the
+            //model (~580 MB) on the first run. Optionally set the
+            //EMGU_CV_CLIP_MODEL_DIR environment variable to reuse an already
+            //populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_CLIP_MODEL_DIR");
+
+            using (Emgu.CV.Models.Clip clip = new Emgu.CV.Models.Clip(modelDir))
+            {
+                await clip.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(clip.Initialized, "Failed to initialize the CLIP model.");
+
+                //Tokenizer exactness against the huggingface CLIPTokenizer reference
+                int[] catIds = clip.Tokenize("a photo of a cat");
+                EmguAssert.IsTrue(
+                    catIds.SequenceEqual(new int[] { 49406, 320, 1125, 539, 320, 2368, 49407 }),
+                    String.Format("Unexpected token ids for 'a photo of a cat': [{0}]", String.Join(",", catIds)));
+                int[] helloIds = clip.Tokenize("Hello, World! 123");
+                EmguAssert.IsTrue(
+                    helloIds.SequenceEqual(new int[] { 49406, 3306, 267, 1002, 256, 272, 273, 274, 49407 }),
+                    String.Format("Unexpected token ids for 'Hello, World! 123': [{0}]", String.Join(",", helloIds)));
+
+                //Zero-shot: the dog416.png image (a dog and a bike) must be
+                //closer to the matching caption than to an unrelated one.
+                using (Mat image = EmguAssert.LoadMat("dog416.png"))
+                {
+                    float[] imageEmbedding = clip.EmbedImage(image);
+                    float[] dogEmbedding = clip.EmbedText("a photo of a dog");
+                    float[] cityEmbedding = clip.EmbedText("a photo of a city at night");
+
+                    double dogSimilarity = Emgu.CV.Models.Clip.CosineSimilarity(imageEmbedding, dogEmbedding);
+                    double citySimilarity = Emgu.CV.Models.Clip.CosineSimilarity(imageEmbedding, cityEmbedding);
+                    Console.WriteLine(String.Format("CLIP similarity: dog={0:F4}, city={1:F4}", dogSimilarity, citySimilarity));
+                    EmguAssert.IsTrue(dogSimilarity > citySimilarity,
+                        "Expected the dog image to be more similar to the dog caption than to the city caption.");
+                }
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
         public async Task TestDnnKVCache()
         {
             //Smoke test for the Net KV-cache API: enable, reset and disable the
