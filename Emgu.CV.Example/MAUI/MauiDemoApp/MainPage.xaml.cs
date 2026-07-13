@@ -245,6 +245,18 @@ namespace MauiDemoApp
                 };
             }
 
+            if (haveDNN)
+            {
+                Button smolVlm2Button = new Button();
+                smolVlm2Button.Text = "Chat with Image (SmolVLM2)";
+                buttonList.Add(smolVlm2Button);
+
+                smolVlm2Button.Clicked += (sender, args) =>
+                {
+                    this.Navigation.PushAsync(new SmolVlm2Page());
+                };
+            }
+
             maskRcnnButton.IsVisible = haveDNN;
             //faceLandmarkDetectionButton.IsVisible = haveDNN;
             yoloButton.IsVisible = haveDNN;
@@ -469,6 +481,7 @@ namespace MauiDemoApp
                 if (t.Contains("feature matching")) return "";                   // compare
                 if (t.Contains("super resolution")) return "";                   // auto_fix_high
                 if (t.Contains("3d")) return "";                                 // view_in_ar
+                if (t.Contains("smolvlm")) return "";                          // text_fields (VLM)
                 if (t.Contains("qwen")) return "";                             // text_fields (LLM)
                 if (t.Contains("unicode")) return "";                          // font_download
                 if (t.Contains("video")) return "";                             // videocam
@@ -486,7 +499,7 @@ namespace MauiDemoApp
                 if (t.Contains("video")) return 2;
                 if (t.Contains("hello") || t.Contains("planar") || t.Contains("feature matching")
                     || t.Contains("super resolution") || t.Contains("3d") || t.Contains("unicode")
-                    || t.Contains("qwen"))
+                    || t.Contains("qwen") || t.Contains("smolvlm"))
                     return 1;
                 return 0;
             };
