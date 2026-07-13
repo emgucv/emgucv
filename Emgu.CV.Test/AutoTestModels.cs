@@ -532,6 +532,37 @@ namespace Emgu.CV.Test
 #endif
 #endif
         [Test]
+        public async Task TestQwen3()
+        {
+            //Qwen3 0.6B text generation with KV-cached autoregressive decoding
+            //in the non-thinking mode. Init downloads the model (~2.9 GB) on
+            //the first run. Optionally set the EMGU_CV_QWEN3_MODEL_DIR
+            //environment variable to reuse an already populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_QWEN3_MODEL_DIR");
+
+            using (Qwen3 llm = new Qwen3(modelDir))
+            {
+                await llm.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(llm.Initialized, "Failed to initialize the Qwen3 model.");
+
+                String response = llm.Generate("What is OpenCV? Answer in one sentence.", 48);
+                Console.WriteLine(String.Format("Qwen3 response: {0}", response));
+                EmguAssert.IsTrue(!String.IsNullOrWhiteSpace(response), "The language model generated an empty response.");
+                EmguAssert.IsTrue(!response.Contains("<think>"), "Expected the non-thinking mode, but the response contains a think block.");
+
+                //Multi-turn chat memory. (A "my name" probe is not used here:
+                //Qwen3 0.6B in the non-thinking mode misreads it as a question
+                //about the assistant's own name, in torch as well.)
+                llm.ResetChat();
+                String turn1 = llm.Chat("My favorite color is turquoise.", 32);
+                Console.WriteLine(String.Format("Qwen3 chat turn 1: {0}", turn1));
+                String turn2 = llm.Chat("What is my favorite color?", 32);
+                Console.WriteLine(String.Format("Qwen3 chat turn 2: {0}", turn2));
+                EmguAssert.IsTrue(turn2.ToLowerInvariant().Contains("turquoise"), String.Format("Expected the chat session to remember the color, got: '{0}'", turn2));
+            }
+        }
+
+        [Test]
         public async Task TestDnnKVCache()
         {
             //Smoke test for the Net KV-cache API: enable, reset and disable the
