@@ -243,6 +243,34 @@ namespace Emgu.CV.Test
 #endif
 #endif
         [Test]
+        public async Task TestQwen25()
+        {
+            //Qwen2.5 0.5B text generation with KV-cached autoregressive
+            //decoding, the C# equivalent of opencv/samples/dnn/qwen_inference.py.
+            //Init downloads the model (~2.4 GB) on the first run. Optionally set
+            //the EMGU_CV_QWEN25_MODEL_DIR environment variable to reuse an
+            //already populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_QWEN25_MODEL_DIR");
+
+            using (Qwen25 llm = new Qwen25(modelDir))
+            {
+                await llm.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(llm.Initialized, "Failed to initialize the Qwen2.5 model.");
+
+                String response = llm.Generate("What is OpenCV? Answer in one sentence.", 48);
+                Console.WriteLine(String.Format("Qwen2.5 response: {0}", response));
+                EmguAssert.IsTrue(!String.IsNullOrWhiteSpace(response), "The language model generated an empty response.");
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
         public async Task TestPaddleOCR()
         {
             using (Mat image = new Mat(200, 700, DepthType.Cv8U, 3))
