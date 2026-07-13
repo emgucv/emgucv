@@ -169,6 +169,33 @@ void cveDnnNetForward3(cv::dnn::Net* net, cv::_OutputArray* outputBlobs, std::ve
 	throw_no_dnn();
 #endif
 }
+void cveDnnNetEnableKVCache(cv::dnn::Net* net)
+{
+#ifdef HAVE_OPENCV_DNN
+	net->enableKVCache();
+#else
+	throw_no_dnn();
+#endif
+}
+
+void cveDnnNetDisableKVCache(cv::dnn::Net* net)
+{
+#ifdef HAVE_OPENCV_DNN
+	net->disableKVCache();
+#else
+	throw_no_dnn();
+#endif
+}
+
+void cveDnnNetResetKVCache(cv::dnn::Net* net)
+{
+#ifdef HAVE_OPENCV_DNN
+	net->resetKVCache();
+#else
+	throw_no_dnn();
+#endif
+}
+
 void cveDnnNetRelease(cv::dnn::Net** net)
 {
 #ifdef HAVE_OPENCV_DNN

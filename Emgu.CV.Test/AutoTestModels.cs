@@ -195,6 +195,54 @@ namespace Emgu.CV.Test
 #endif
 #endif
         [Test]
+        public async Task TestDnnKVCache()
+        {
+            //Smoke test for the Net KV-cache API: enable, reset and disable the
+            //cache around forward passes. The model used here has no attention
+            //layers, so the cache is functionally a no-op; the test validates
+            //the API plumbing (see the gemma3/qwen dnn samples in OpenCV for
+            //cached autoregressive generation with attention models).
+            FileDownloadManager manager = new FileDownloadManager();
+            manager.AddFile(
+                "https://emgu-public.s3.amazonaws.com/paddleocr/ch_PP-OCRv4_det_infer.onnx",
+                Path.Combine("emgu", "paddleocr"),
+                "D2A7720D45A54257208B1E13E36A8479894CB74155A5EFE29462512D42F49DA9");
+            manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
+            await manager.Download();
+            EmguAssert.IsTrue(manager.AllFilesDownloaded, "Failed to download the test model.");
+
+            using (Net net = DnnInvoke.ReadNetFromONNX(manager.Files[0].LocalFile, Emgu.CV.Dnn.EngineType.New))
+            using (Mat image = new Mat(64, 64, DepthType.Cv8U, 3))
+            {
+                image.SetTo(new MCvScalar(128, 128, 128));
+                using (Mat blob = DnnInvoke.BlobFromImage(image, 1.0 / 255))
+                {
+                    net.EnableKVCache();
+                    net.SetInput(blob);
+                    using (Mat result = net.Forward())
+                        EmguAssert.IsTrue(!result.IsEmpty, "Forward with KV-cache enabled returned an empty result.");
+
+                    net.ResetKVCache();
+                    net.SetInput(blob);
+                    using (Mat result = net.Forward())
+                        EmguAssert.IsTrue(!result.IsEmpty, "Forward after KV-cache reset returned an empty result.");
+
+                    net.DisableKVCache();
+                    net.SetInput(blob);
+                    using (Mat result = net.Forward())
+                        EmguAssert.IsTrue(!result.IsEmpty, "Forward with KV-cache disabled returned an empty result.");
+                }
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
         public async Task TestPaddleOCR()
         {
             using (Mat image = new Mat(200, 700, DepthType.Cv8U, 3))
