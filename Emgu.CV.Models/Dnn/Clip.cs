@@ -85,12 +85,12 @@ namespace Emgu.CV.Models
                 FileDownloadManager manager = new FileDownloadManager();
 
                 manager.AddFile(
-                    "https://huggingface.co/openai/clip-vit-base-patch32/resolve/main/vocab.json",
+                    "https://emgu-public.s3.amazonaws.com/clip_vit_base_patch32_onnx/vocab.json",
                     _modelFolderName,
                     "5047B556CE86CCAF6AA22B3FFCCFC52D391EA4ACCDAB9C2F2407DA5B742D4363");
 
                 manager.AddFile(
-                    "https://huggingface.co/openai/clip-vit-base-patch32/resolve/main/merges.txt",
+                    "https://emgu-public.s3.amazonaws.com/clip_vit_base_patch32_onnx/merges.txt",
                     _modelFolderName,
                     "9FD691F7C8039210E0FCED15865466C65820D09B63988B0174BFE25DE299051A");
 
