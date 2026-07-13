@@ -338,6 +338,51 @@ namespace Emgu.CV.Test
 #endif
 #endif
         [Test]
+        public async Task TestMiniLM()
+        {
+            //all-MiniLM-L6-v2 sentence embeddings. Init downloads the model
+            //(~87 MB) on the first run. Optionally set the
+            //EMGU_CV_MINILM_MODEL_DIR environment variable to reuse an already
+            //populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_MINILM_MODEL_DIR");
+
+            using (Emgu.CV.Models.MiniLM minilm = new Emgu.CV.Models.MiniLM(modelDir))
+            {
+                await minilm.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(minilm.Initialized, "Failed to initialize the MiniLM model.");
+
+                //Tokenizer exactness against the huggingface BertTokenizer reference
+                int[] catIds = minilm.Tokenize("The cat sits on the mat.");
+                EmguAssert.IsTrue(
+                    catIds.SequenceEqual(new int[] { 101, 1996, 4937, 7719, 2006, 1996, 13523, 1012, 102 }),
+                    String.Format("Unexpected token ids for 'The cat sits on the mat.': [{0}]", String.Join(",", catIds)));
+                int[] subwordIds = minilm.Tokenize("unbelievable preprocessing");
+                EmguAssert.IsTrue(
+                    subwordIds.SequenceEqual(new int[] { 101, 23653, 17463, 3217, 9623, 7741, 102 }),
+                    String.Format("Unexpected token ids for 'unbelievable preprocessing': [{0}]", String.Join(",", subwordIds)));
+
+                //Semantic similarity: a paraphrase must be closer than an
+                //unrelated sentence.
+                float[] reference = minilm.EmbedText("The cat sits on the mat.");
+                float[] paraphrase = minilm.EmbedText("A kitten is resting on a rug.");
+                float[] unrelated = minilm.EmbedText("Quantum computers use superposition to perform calculations.");
+
+                double paraphraseSimilarity = Emgu.CV.Models.MiniLM.CosineSimilarity(reference, paraphrase);
+                double unrelatedSimilarity = Emgu.CV.Models.MiniLM.CosineSimilarity(reference, unrelated);
+                Console.WriteLine(String.Format("MiniLM similarity: paraphrase={0:F4}, unrelated={1:F4}", paraphraseSimilarity, unrelatedSimilarity));
+                EmguAssert.IsTrue(paraphraseSimilarity > unrelatedSimilarity,
+                    "Expected the paraphrase to be more similar than the unrelated sentence.");
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
         public async Task TestDnnKVCache()
         {
             //Smoke test for the Net KV-cache API: enable, reset and disable the
