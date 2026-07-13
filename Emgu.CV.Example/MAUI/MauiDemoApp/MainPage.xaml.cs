@@ -233,6 +233,18 @@ namespace MauiDemoApp
                 this.Navigation.PushAsync(superresPage);
             };
 
+            if (haveDNN)
+            {
+                Button qwen25Button = new Button();
+                qwen25Button.Text = "Qwen2.5 (LLM)";
+                buttonList.Add(qwen25Button);
+
+                qwen25Button.Clicked += (sender, args) =>
+                {
+                    this.Navigation.PushAsync(new Qwen25Page());
+                };
+            }
+
             maskRcnnButton.IsVisible = haveDNN;
             //faceLandmarkDetectionButton.IsVisible = haveDNN;
             yoloButton.IsVisible = haveDNN;
@@ -457,6 +469,7 @@ namespace MauiDemoApp
                 if (t.Contains("feature matching")) return "";                   // compare
                 if (t.Contains("super resolution")) return "";                   // auto_fix_high
                 if (t.Contains("3d")) return "";                                 // view_in_ar
+                if (t.Contains("qwen")) return "";                             // text_fields (LLM)
                 if (t.Contains("unicode")) return "";                          // font_download
                 if (t.Contains("video")) return "";                             // videocam
                 return "";                                                       // widgets
@@ -472,7 +485,8 @@ namespace MauiDemoApp
                 string t = (text ?? "").ToLowerInvariant();
                 if (t.Contains("video")) return 2;
                 if (t.Contains("hello") || t.Contains("planar") || t.Contains("feature matching")
-                    || t.Contains("super resolution") || t.Contains("3d") || t.Contains("unicode"))
+                    || t.Contains("super resolution") || t.Contains("3d") || t.Contains("unicode")
+                    || t.Contains("qwen"))
                     return 1;
                 return 0;
             };
