@@ -131,17 +131,17 @@ namespace Emgu.CV.Models
                 FileDownloadManager manager = new FileDownloadManager();
 
                 manager.AddFile(
-                    "https://huggingface.co/SWHL/RapidOCR/resolve/main/PP-OCRv4/ch_PP-OCRv4_det_infer.onnx",
+                    "https://emgu-public.s3.amazonaws.com/paddleocr/ch_PP-OCRv4_det_infer.onnx",
                     _modelFolderName,
                     "D2A7720D45A54257208B1E13E36A8479894CB74155A5EFE29462512D42F49DA9");
 
                 manager.AddFile(
-                    "https://huggingface.co/SWHL/RapidOCR/resolve/main/PP-OCRv4/ch_PP-OCRv4_rec_infer.onnx",
+                    "https://emgu-public.s3.amazonaws.com/paddleocr/ch_PP-OCRv4_rec_infer.onnx",
                     _modelFolderName,
                     "48FC40F24F6D2A207A2B1091D3437EB3CC3EB6B676DC3EF9C37384005483683B");
 
                 manager.AddFile(
-                    "https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/release/2.7/ppocr/utils/ppocr_keys_v1.txt",
+                    "https://emgu-public.s3.amazonaws.com/paddleocr/ppocr_keys_v1.txt",
                     _modelFolderName,
                     "28B2362AD4AB2DC38769AA72FEB535E3A9DDB3FD2A7585A05920E6393B1DC7F7");
 
