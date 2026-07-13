@@ -260,6 +260,15 @@ namespace Emgu.CV.Test
                 String response = llm.Generate("What is OpenCV? Answer in one sentence.", 48);
                 Console.WriteLine(String.Format("Qwen2.5 response: {0}", response));
                 EmguAssert.IsTrue(!String.IsNullOrWhiteSpace(response), "The language model generated an empty response.");
+
+                //Multi-turn chat: the conversation history is kept in the
+                //KV-cache, the second turn must remember the first one.
+                llm.ResetChat();
+                String turn1 = llm.Chat("Hello, my name is Canming.", 32);
+                Console.WriteLine(String.Format("Qwen2.5 chat turn 1: {0}", turn1));
+                String turn2 = llm.Chat("What is my name?", 32);
+                Console.WriteLine(String.Format("Qwen2.5 chat turn 2: {0}", turn2));
+                EmguAssert.IsTrue(turn2.Contains("Canming"), String.Format("Expected the chat session to remember the name, got: '{0}'", turn2));
             }
         }
 

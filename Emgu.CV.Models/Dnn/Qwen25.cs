@@ -147,11 +147,11 @@ namespace Emgu.CV.Models
             return result;
         }
 
-        private static long[] Sequence(int count)
+        private static long[] Sequence(int start, int count)
         {
             long[] result = new long[count];
             for (int i = 0; i < count; i++)
-                result[i] = i;
+                result[i] = start + i;
             return result;
         }
 
@@ -179,36 +179,75 @@ namespace Emgu.CV.Models
         }
 
         /// <summary>
-        /// Generate a response to the given user prompt using greedy decoding.
+        /// The number of tokens whose key/values currently reside in the KV-cache.
         /// </summary>
-        /// <param name="prompt">The user prompt, e.g. "What is OpenCV?". It is wrapped in the ChatML format automatically.</param>
+        private int _cachedTokens = 0;
+
+        /// <summary>
+        /// The full ChatML transcript of the chat session as token ids.
+        /// </summary>
+        private List<long> _transcript = new List<long>();
+
+        /// <summary>
+        /// Reset the chat session, clearing the conversation history and the KV-cache.
+        /// </summary>
+        public void ResetChat()
+        {
+            _cachedTokens = 0;
+            _transcript.Clear();
+            if (_net != null)
+                _net.ResetKVCache();
+        }
+
+        /// <summary>
+        /// Feed a chunk of tokens into the network (populating the KV-cache) and
+        /// return the argmax token id predicted after the last token.
+        /// </summary>
+        private int ForwardChunk(long[] tokens)
+        {
+            SetInt64Input(tokens, "input_ids");
+            SetInt64Input(Ones(_cachedTokens + tokens.Length), "attention_mask");
+            SetInt64Input(Sequence(_cachedTokens, tokens.Length), "position_ids");
+            int newId = ForwardArgmax();
+            _cachedTokens += tokens.Length;
+            return newId;
+        }
+
+        /// <summary>
+        /// Send a user message to the chat session and generate the response
+        /// using greedy decoding. The model remembers the previous turns of the
+        /// session: the full conversation transcript is re-prefilled in a single
+        /// forward pass at the start of each turn (the dnn KV-cache does not yet
+        /// support appending multiple tokens to a non-empty cache, so the cache
+        /// cannot be carried across turns), and the response tokens are then
+        /// generated one at a time with the KV-cache. Use ResetChat to start a
+        /// new conversation.
+        /// </summary>
+        /// <param name="userMessage">The user message.</param>
         /// <param name="maxNewTokens">Maximum number of new tokens to generate.</param>
         /// <returns>The generated response text.</returns>
-        public String Generate(String prompt, int maxNewTokens = 64)
+        public String Chat(String userMessage, int maxNewTokens = 64)
         {
             if (!Initialized)
                 throw new InvalidOperationException("The model is not initialized. Call Init first.");
 
-            //Qwen2.5 ChatML format
-            String chatPrompt = "<|im_start|>user\n" + prompt + "<|im_end|>\n<|im_start|>assistant\n";
+            //Qwen2.5 ChatML format. The first turn opens the conversation; the
+            //following turns continue after the previous assistant response.
+            String turn = (_transcript.Count == 0)
+                ? "<|im_start|>user\n" + userMessage + "<|im_end|>\n<|im_start|>assistant\n"
+                : "\n<|im_start|>user\n" + userMessage + "<|im_end|>\n<|im_start|>assistant\n";
 
-            int[] encoded = _tokenizer.Encode(chatPrompt);
-            long[] inputIds = new long[encoded.Length];
-            for (int i = 0; i < encoded.Length; i++)
-                inputIds[i] = encoded[i];
-            int promptLength = inputIds.Length;
+            foreach (int id in _tokenizer.Encode(turn))
+                _transcript.Add(id);
+
+            //Prefill: process the full transcript in one pass into a fresh
+            //KV-cache.
+            _net.EnableKVCache();
+            _net.ResetKVCache();
+            _cachedTokens = 0;
+            int newId = ForwardChunk(_transcript.ToArray());
 
             List<int> generated = new List<int>();
-
-            _net.EnableKVCache();
-            //Discard the state of any previous Generate call.
-            _net.ResetKVCache();
-
-            //Prefill: process the full prompt once to populate the KV-cache.
-            SetInt64Input(inputIds, "input_ids");
-            SetInt64Input(Ones(promptLength), "attention_mask");
-            SetInt64Input(Sequence(promptLength), "position_ids");
-            int newId = ForwardArgmax();
             generated.Add(newId);
 
             //Generate: feed one new token per step; the dnn module routes the
@@ -218,18 +257,34 @@ namespace Emgu.CV.Models
                 if (newId == EosId || newId == ImEndId)
                     break;
 
-                int currentLength = promptLength + generated.Count;
-                SetInt64Input(new long[] { newId }, "input_ids");
-                SetInt64Input(Ones(currentLength), "attention_mask");
-                SetInt64Input(new long[] { currentLength - 1 }, "position_ids");
-                newId = ForwardArgmax();
+                newId = ForwardChunk(new long[] { newId });
                 generated.Add(newId);
             }
 
             if (generated.Count > 0 && (generated[generated.Count - 1] == EosId || generated[generated.Count - 1] == ImEndId))
                 generated.RemoveAt(generated.Count - 1);
 
+            //Append the assistant response to the transcript, closing the turn
+            //with <|im_end|>.
+            foreach (int id in generated)
+                _transcript.Add(id);
+            _transcript.Add(ImEndId);
+
             return _tokenizer.Decode(generated.ToArray());
+        }
+
+        /// <summary>
+        /// Generate a response to a single user prompt using greedy decoding.
+        /// Any ongoing chat session is discarded; this is equivalent to
+        /// ResetChat followed by the first Chat turn.
+        /// </summary>
+        /// <param name="prompt">The user prompt, e.g. "What is OpenCV?". It is wrapped in the ChatML format automatically.</param>
+        /// <param name="maxNewTokens">Maximum number of new tokens to generate.</param>
+        /// <returns>The generated response text.</returns>
+        public String Generate(String prompt, int maxNewTokens = 64)
+        {
+            ResetChat();
+            return Chat(prompt, maxNewTokens);
         }
 
         /// <summary>
@@ -237,6 +292,9 @@ namespace Emgu.CV.Models
         /// </summary>
         public void Clear()
         {
+            _cachedTokens = 0;
+            _transcript.Clear();
+
             if (_tokenizer != null)
             {
                 _tokenizer.Dispose();
