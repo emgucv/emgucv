@@ -383,6 +383,56 @@ namespace Emgu.CV.Test
 #endif
 #endif
         [Test]
+        public async Task TestMultilingualE5()
+        {
+            //multilingual-e5-small sentence embeddings. Init downloads the
+            //model (~450 MB) on the first run. Optionally set the
+            //EMGU_CV_E5_MODEL_DIR environment variable to reuse an already
+            //populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_E5_MODEL_DIR");
+
+            using (Emgu.CV.Models.MultilingualE5 e5 = new Emgu.CV.Models.MultilingualE5(modelDir))
+            {
+                await e5.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(e5.Initialized, "Failed to initialize the multilingual E5 model.");
+
+                //Tokenizer exactness against the huggingface XLMRobertaTokenizer
+                //reference, including a non-latin script and accents.
+                int[] catIds = e5.Tokenize("query: The cat sits on the mat.");
+                EmguAssert.IsTrue(
+                    catIds.SequenceEqual(new int[] { 0, 41, 1294, 12, 581, 7515, 1661, 7, 98, 70, 2589, 5, 2 }),
+                    String.Format("Unexpected token ids for the english sentence: [{0}]", String.Join(",", catIds)));
+                int[] chineseIds = e5.Tokenize("query: 猫坐在垫子上。");
+                EmguAssert.IsTrue(
+                    chineseIds.SequenceEqual(new int[] { 0, 41, 1294, 12, 6, 35076, 48533, 174564, 1344, 575, 30, 2 }),
+                    String.Format("Unexpected token ids for the chinese sentence: [{0}]", String.Join(",", chineseIds)));
+                int[] accentIds = e5.Tokenize("query: café naïve résumé");
+                EmguAssert.IsTrue(
+                    accentIds.SequenceEqual(new int[] { 0, 41, 1294, 12, 26216, 24, 9392, 272, 233482, 2 }),
+                    String.Format("Unexpected token ids for the accented text: [{0}]", String.Join(",", accentIds)));
+
+                //Cross-lingual semantics: the german translation must be closer
+                //to the english sentence than an unrelated english sentence.
+                float[] english = e5.EmbedText("The cat sits on the mat.");
+                float[] german = e5.EmbedText("Die Katze sitzt auf der Matte.");
+                float[] unrelated = e5.EmbedText("Quantum computers use superposition.");
+
+                double germanSimilarity = Emgu.CV.Models.MultilingualE5.CosineSimilarity(english, german);
+                double unrelatedSimilarity = Emgu.CV.Models.MultilingualE5.CosineSimilarity(english, unrelated);
+                Console.WriteLine(String.Format("E5 similarity: german={0:F4}, unrelated={1:F4}", germanSimilarity, unrelatedSimilarity));
+                EmguAssert.IsTrue(germanSimilarity > unrelatedSimilarity,
+                    "Expected the german translation to be more similar than the unrelated sentence.");
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
         public async Task TestDnnKVCache()
         {
             //Smoke test for the Net KV-cache API: enable, reset and disable the
