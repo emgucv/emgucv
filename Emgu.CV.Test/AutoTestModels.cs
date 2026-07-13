@@ -491,6 +491,47 @@ namespace Emgu.CV.Test
 #endif
 #endif
         [Test]
+        public async Task TestSmolVlm2()
+        {
+            //SmolVLM2 vision-language inference with KV-cached decoding. Init
+            //downloads the model (~1.1 GB) on the first run. Optionally set the
+            //EMGU_CV_SMOLVLM2_MODEL_DIR environment variable to reuse an
+            //already populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_SMOLVLM2_MODEL_DIR");
+
+            using (Mat image = EmguAssert.LoadMat("dog416.png"))
+            using (Emgu.CV.Models.SmolVlm2 vlm = new Emgu.CV.Models.SmolVlm2(modelDir))
+            {
+                await vlm.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(vlm.Initialized, "Failed to initialize the SmolVLM2 model.");
+
+                //Tokenizer exactness against the huggingface GPT2TokenizerFast
+                //reference, including the individual digit splitting.
+                int[] helloIds = vlm.Tokenize("Hello, World! 123");
+                EmguAssert.IsTrue(
+                    helloIds.SequenceEqual(new int[] { 19556, 28, 2260, 17, 216, 33, 34, 35 }),
+                    String.Format("Unexpected token ids for 'Hello, World! 123': [{0}]", String.Join(",", helloIds)));
+                int[] priceIds = vlm.Tokenize("The price is $19.99");
+                EmguAssert.IsTrue(
+                    priceIds.SequenceEqual(new int[] { 504, 4319, 314, 1885, 33, 41, 30, 41, 41 }),
+                    String.Format("Unexpected token ids for 'The price is $19.99': [{0}]", String.Join(",", priceIds)));
+
+                String response = vlm.Generate(image, "Describe this image briefly.", 48);
+                Console.WriteLine(String.Format("SmolVLM2 response: {0}", response));
+                EmguAssert.IsTrue(!String.IsNullOrWhiteSpace(response), "The vision language model generated an empty response.");
+                EmguAssert.IsTrue(response.ToLowerInvariant().Contains("dog"),
+                    String.Format("Expected the response to mention the dog, got: '{0}'", response));
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
         public async Task TestDnnKVCache()
         {
             //Smoke test for the Net KV-cache API: enable, reset and disable the
