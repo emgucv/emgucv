@@ -18,15 +18,16 @@ using Emgu.Util;
 namespace Emgu.CV.Models
 {
     /// <summary>
-    /// Qwen3 0.6B instruction-tuned language model running on the dnn module.
+    /// Qwen3 instruction-tuned language model (0.6B or 1.7B) running on the
+    /// dnn module.
     /// Text is generated autoregressively with the KV-cache enabled: the
     /// prompt is prefilled once and each following forward pass only processes
     /// the newly generated token. The model is used in the non-thinking mode:
     /// an empty think block is inserted at the start of every assistant turn.
     ///
-    /// The ONNX model (~2.9 GB, fp32) is the raw
-    /// `optimum-cli export onnx --model Qwen/Qwen3-0.6B
-    /// --task causal-lm-with-past` export (Apache-2.0). Note that graph
+    /// The ONNX models (fp32, ~2.9 GB for 0.6B and ~7.6 GB for 1.7B) are the
+    /// raw `optimum-cli export onnx --task causal-lm-with-past` exports
+    /// (Apache-2.0). Note that graph
     /// optimized exports contain onnxruntime contrib operations that the dnn
     /// module does not support; only the raw export can be loaded.
     /// </summary>
@@ -41,7 +42,22 @@ namespace Emgu.CV.Models
         //appended as constant ids.
         private static readonly int[] EmptyThinkBlock = new int[] { 151667, 271, 151668, 271 };
 
-        private String _modelFolderName = Path.Combine("emgu", "qwen3_0.6b_onnx");
+        /// <summary>
+        /// The Qwen3 model version.
+        /// </summary>
+        public enum Qwen3Version
+        {
+            /// <summary>
+            /// Qwen3 0.6B: ~2.9 GB download, the fastest variant (~150 ms per token on an Apple Silicon CPU).
+            /// </summary>
+            Qwen3_0_6B,
+            /// <summary>
+            /// Qwen3 1.7B: ~7.6 GB download, better response quality at a slower generation speed.
+            /// </summary>
+            Qwen3_1_7B
+        }
+
+        private String _modelFolderName = null;
 
         private Tokenizer _tokenizer = null;
         private Net _net = null;
@@ -73,29 +89,53 @@ namespace Emgu.CV.Models
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <returns>Async task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-        public IEnumerator Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        public IEnumerator Init(
+            Qwen3Version version = Qwen3Version.Qwen3_0_6B,
+            FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
-        public async Task Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
+        public async Task Init(
+            Qwen3Version version = Qwen3Version.Qwen3_0_6B,
+            FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #endif
         {
             if (!Initialized)
             {
+                String folder = _modelFolderName ?? Path.Combine(
+                    "emgu",
+                    version == Qwen3Version.Qwen3_1_7B ? "qwen3_1.7b_onnx" : "qwen3_0.6b_onnx");
+
                 FileDownloadManager manager = new FileDownloadManager();
 
+                //The tokenizer is identical for all the qwen3 model sizes.
                 manager.AddFile(
                     "https://emgu-public.s3.amazonaws.com/qwen3_0.6b_onnx/tokenizer.json",
-                    _modelFolderName,
+                    folder,
                     "AEB13307A71ACD8FE81861D94AD54AB689DF773318809EED3CBE794B4492DAE4");
 
-                manager.AddFile(
-                    "https://emgu-public.s3.amazonaws.com/qwen3_0.6b_onnx/model.onnx",
-                    _modelFolderName,
-                    "D7D521EE92156D0DA75C22A04463824B79B754D995335EA65E3EBDB10C4C1F28");
+                if (version == Qwen3Version.Qwen3_1_7B)
+                {
+                    manager.AddFile(
+                        "https://emgu-public.s3.amazonaws.com/qwen3_1.7b_onnx/model.onnx",
+                        folder,
+                        "70A4E2C9A71E08A3AD2A2D11F26184D982CC3D836964F128508C4C068714DEFE");
 
-                manager.AddFile(
-                    "https://emgu-public.s3.amazonaws.com/qwen3_0.6b_onnx/model.onnx_data",
-                    _modelFolderName,
-                    "AA3AFC2DFA63B532D10E7DFA02F6584BD1B03CC2359098FE39F026D43616B477");
+                    manager.AddFile(
+                        "https://emgu-public.s3.amazonaws.com/qwen3_1.7b_onnx/model.onnx_data",
+                        folder,
+                        "99A641B868EC75006BA984424ABC658250B3B0A9B7E33607EA587BC5F6E877FD");
+                }
+                else
+                {
+                    manager.AddFile(
+                        "https://emgu-public.s3.amazonaws.com/qwen3_0.6b_onnx/model.onnx",
+                        folder,
+                        "D7D521EE92156D0DA75C22A04463824B79B754D995335EA65E3EBDB10C4C1F28");
+
+                    manager.AddFile(
+                        "https://emgu-public.s3.amazonaws.com/qwen3_0.6b_onnx/model.onnx_data",
+                        folder,
+                        "AA3AFC2DFA63B532D10E7DFA02F6584BD1B03CC2359098FE39F026D43616B477");
+                }
 
                 manager.OnDownloadProgressChanged += onDownloadProgressChanged;
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL

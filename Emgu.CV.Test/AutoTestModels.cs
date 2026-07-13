@@ -542,7 +542,7 @@ namespace Emgu.CV.Test
 
             using (Qwen3 llm = new Qwen3(modelDir))
             {
-                await llm.Init(DownloadManager_OnDownloadProgressChanged);
+                await llm.Init(Qwen3.Qwen3Version.Qwen3_0_6B, DownloadManager_OnDownloadProgressChanged);
                 EmguAssert.IsTrue(llm.Initialized, "Failed to initialize the Qwen3 model.");
 
                 String response = llm.Generate("What is OpenCV? Answer in one sentence.", 48);
@@ -603,6 +603,35 @@ namespace Emgu.CV.Test
             }
         }
 
+        [Test]
+        public async Task TestQwen3Large()
+        {
+            //The Qwen3 1.7B variant (~7.6 GB download). Optionally set the
+            //EMGU_CV_QWEN3_LARGE_MODEL_DIR environment variable to reuse an
+            //already populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_QWEN3_LARGE_MODEL_DIR");
+
+            using (Qwen3 llm = new Qwen3(modelDir))
+            {
+                await llm.Init(Qwen3.Qwen3Version.Qwen3_1_7B, DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(llm.Initialized, "Failed to initialize the Qwen3 1.7B model.");
+
+                var watch = Stopwatch.StartNew();
+                String response = llm.Generate("What is OpenCV? Answer in one sentence.", 48);
+                watch.Stop();
+                Console.WriteLine(String.Format("Qwen3 1.7B response ({0} ms): {1}", watch.ElapsedMilliseconds, response));
+                EmguAssert.IsTrue(!String.IsNullOrWhiteSpace(response), "The language model generated an empty response.");
+                EmguAssert.IsTrue(!response.Contains("<think>"), "Expected the non-thinking mode, but the response contains a think block.");
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
 #if !TEST_MODELS
 #if VS_TEST
         [Ignore()]
