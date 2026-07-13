@@ -433,6 +433,64 @@ namespace Emgu.CV.Test
 #endif
 #endif
         [Test]
+        public async Task TestSiglip2()
+        {
+            //SigLIP 2 joint multilingual text / image embeddings. Init
+            //downloads the model (~1.4 GB) on the first run. Optionally set the
+            //EMGU_CV_SIGLIP2_MODEL_DIR environment variable to reuse an already
+            //populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_SIGLIP2_MODEL_DIR");
+
+            using (Emgu.CV.Models.Siglip2 siglip2 = new Emgu.CV.Models.Siglip2(modelDir))
+            {
+                await siglip2.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(siglip2.Initialized, "Failed to initialize the SigLIP 2 model.");
+
+                //Tokenizer exactness against the huggingface GemmaTokenizerFast
+                //reference (fixed 64 token sequence, eos=1 terminated, 0 padded).
+                int[] dogIds = siglip2.Tokenize("a photo of a dog");
+                int[] expectedDog = new int[] { 235250, 2686, 576, 476, 5929, 1 };
+                EmguAssert.IsTrue(
+                    dogIds.Length == 64
+                    && dogIds.Take(expectedDog.Length).SequenceEqual(expectedDog)
+                    && dogIds.Skip(expectedDog.Length).All(id => id == 0),
+                    String.Format("Unexpected token ids for 'a photo of a dog': [{0}]", String.Join(",", dogIds.Take(10))));
+                int[] helloIds = siglip2.Tokenize("Hello, World! 123");
+                int[] expectedHello = new int[] { 4521, 235269, 3855, 235341, 235248, 235274, 235284, 235304, 1 };
+                EmguAssert.IsTrue(
+                    helloIds.Take(expectedHello.Length).SequenceEqual(expectedHello),
+                    String.Format("Unexpected token ids for 'Hello, World! 123': [{0}]", String.Join(",", helloIds.Take(12))));
+
+                //Zero-shot: the dog416.png image (a dog and a bike) must be
+                //closer to the matching caption than to an unrelated one, and
+                //the german caption must work as well (multilingual text tower).
+                using (Mat image = EmguAssert.LoadMat("dog416.png"))
+                {
+                    float[] imageEmbedding = siglip2.EmbedImage(image);
+                    float[] dogEmbedding = siglip2.EmbedText("a photo of a dog");
+                    float[] germanDogEmbedding = siglip2.EmbedText("ein Foto von einem Hund");
+                    float[] cityEmbedding = siglip2.EmbedText("a photo of a city at night");
+
+                    double dogSimilarity = Emgu.CV.Models.Siglip2.CosineSimilarity(imageEmbedding, dogEmbedding);
+                    double germanDogSimilarity = Emgu.CV.Models.Siglip2.CosineSimilarity(imageEmbedding, germanDogEmbedding);
+                    double citySimilarity = Emgu.CV.Models.Siglip2.CosineSimilarity(imageEmbedding, cityEmbedding);
+                    Console.WriteLine(String.Format("SigLIP2 similarity: dog={0:F4}, german dog={1:F4}, city={2:F4}", dogSimilarity, germanDogSimilarity, citySimilarity));
+                    EmguAssert.IsTrue(dogSimilarity > citySimilarity,
+                        "Expected the dog image to be more similar to the dog caption than to the city caption.");
+                    EmguAssert.IsTrue(germanDogSimilarity > citySimilarity,
+                        "Expected the dog image to be more similar to the german dog caption than to the city caption.");
+                }
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
         public async Task TestDnnKVCache()
         {
             //Smoke test for the Net KV-cache API: enable, reset and disable the
