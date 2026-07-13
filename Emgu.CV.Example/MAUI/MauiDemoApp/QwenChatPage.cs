@@ -14,21 +14,34 @@ using Emgu.Util;
 namespace MauiDemoApp
 {
     /// <summary>
-    /// Chat demo using the Qwen2.5 0.5B language model running on the dnn
-    /// module. The conversation history is kept in the KV-cache, so each turn
-    /// only processes the newly typed message and the model remembers the
-    /// previous turns of the session.
+    /// Chat demo using a Qwen language model running on the dnn module. The
+    /// model can be selected in the picker; the conversation history is kept
+    /// per session and each turn re-prefills the transcript with KV-cached
+    /// generation for the response.
     /// </summary>
-    public class Qwen25Page : ButtonTextImagePage
+    public class QwenChatPage : ButtonTextImagePage
     {
-        private Qwen25 _model = new Qwen25();
+        private const String OptionQwen3Small = "Qwen3 0.6B - fast, default";
+        private const String OptionQwen3Large = "Qwen3 1.7B - better answers, slower, 7.6 GB";
+        private const String OptionQwen25 = "Qwen2.5 0.5B";
+
+        private IDisposable _model = null;
+        private String _modelOption = null;
         private Editor _promptEditor;
         private List<View> _bubbles = new List<View>();
 
-        public Qwen25Page()
+        public QwenChatPage()
             : base(new Microsoft.Maui.Controls.Button[] { new Microsoft.Maui.Controls.Button() })
         {
-            this.Title = "Qwen2.5 Chat";
+            this.Title = "Qwen Chat";
+
+            var picker = this.Picker;
+            picker.Title = "Model";
+            picker.Items.Add(OptionQwen3Small);
+            picker.Items.Add(OptionQwen3Large);
+            picker.Items.Add(OptionQwen25);
+            picker.SelectedIndex = 0;
+            picker.IsVisible = true;
 
             _promptEditor = new Editor();
             _promptEditor.Placeholder = "Type a message...";
@@ -57,24 +70,49 @@ namespace MauiDemoApp
 
                 sendButton.IsEnabled = false;
                 newChatButton.IsEnabled = false;
+                picker.IsEnabled = false;
                 try
                 {
-                    if (!_model.Initialized)
+                    String option = picker.Items[picker.SelectedIndex];
+
+                    //Switching the model starts a fresh conversation.
+                    if (_model != null && option != _modelOption)
                     {
-                        SetMessage("Initializing the model, this downloads ~2.4 GB on the first run...");
-                        await _model.Init(DownloadManager_OnDownloadProgressChanged);
-                        if (!_model.Initialized)
+                        _model.Dispose();
+                        _model = null;
+                        ClearBubbles();
+                    }
+
+                    if (_model == null)
+                    {
+                        SetMessage("Initializing the model, the first run downloads the model files...");
+                        if (option == OptionQwen25)
                         {
-                            SetMessage("Failed to initialize the Qwen2.5 model.");
+                            Qwen25 qwen25 = new Qwen25();
+                            await qwen25.Init(DownloadManager_OnDownloadProgressChanged);
+                            _model = qwen25.Initialized ? qwen25 : null;
+                        }
+                        else
+                        {
+                            Qwen3 qwen3 = new Qwen3();
+                            await qwen3.Init(
+                                option == OptionQwen3Large ? Qwen3.Qwen3Version.Qwen3_1_7B : Qwen3.Qwen3Version.Qwen3_0_6B,
+                                DownloadManager_OnDownloadProgressChanged);
+                            _model = qwen3.Initialized ? qwen3 : null;
+                        }
+                        if (_model == null)
+                        {
+                            SetMessage("Failed to initialize the model.");
                             return;
                         }
+                        _modelOption = option;
                     }
 
                     _promptEditor.Text = String.Empty;
                     AddBubble(prompt, true);
                     SetMessage("Generating...");
 
-                    String response = await Task.Run(() => _model.Chat(prompt, 128));
+                    String response = await Task.Run(() => Chat(prompt, 128));
                     AddBubble(response, false);
                     SetMessage(null);
                 }
@@ -86,17 +124,40 @@ namespace MauiDemoApp
                 {
                     sendButton.IsEnabled = true;
                     newChatButton.IsEnabled = true;
+                    picker.IsEnabled = true;
                 }
             };
 
             newChatButton.Clicked += (sender, args) =>
             {
-                _model.ResetChat();
-                foreach (View bubble in _bubbles)
-                    MainLayout.Children.Remove(bubble);
-                _bubbles.Clear();
+                ResetChat();
+                ClearBubbles();
                 SetMessage(null);
             };
+        }
+
+        private String Chat(String prompt, int maxNewTokens)
+        {
+            if (_model is Qwen3 qwen3)
+                return qwen3.Chat(prompt, maxNewTokens);
+            if (_model is Qwen25 qwen25)
+                return qwen25.Chat(prompt, maxNewTokens);
+            throw new InvalidOperationException("The model is not initialized.");
+        }
+
+        private void ResetChat()
+        {
+            if (_model is Qwen3 qwen3)
+                qwen3.ResetChat();
+            else if (_model is Qwen25 qwen25)
+                qwen25.ResetChat();
+        }
+
+        private void ClearBubbles()
+        {
+            foreach (View bubble in _bubbles)
+                MainLayout.Children.Remove(bubble);
+            _bubbles.Clear();
         }
 
         /// <summary>

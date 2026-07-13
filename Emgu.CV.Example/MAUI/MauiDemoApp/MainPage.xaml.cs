@@ -235,13 +235,13 @@ namespace MauiDemoApp
 
             if (haveDNN)
             {
-                Button qwen25Button = new Button();
-                qwen25Button.Text = "Qwen2.5 (LLM)";
-                buttonList.Add(qwen25Button);
+                Button qwenChatButton = new Button();
+                qwenChatButton.Text = "Qwen Chat (LLM)";
+                buttonList.Add(qwenChatButton);
 
-                qwen25Button.Clicked += (sender, args) =>
+                qwenChatButton.Clicked += (sender, args) =>
                 {
-                    this.Navigation.PushAsync(new Qwen25Page());
+                    this.Navigation.PushAsync(new QwenChatPage());
                 };
             }
 
