@@ -194,7 +194,8 @@ namespace MauiDemoApp
                             if (!String.IsNullOrWhiteSpace(o.Label))
                                 items.Add(o.Label);
                         return (MaskRcnnPage.Encode(annotated), (IReadOnlyList<string>)items);
-                    }));
+                    },
+                    about: "Finds text anywhere in a photo — signs, labels, plates — and reads it, even at odd angles."));
             };
             yoloButton.Clicked += (sender, args) =>
             {
@@ -216,7 +217,8 @@ namespace MauiDemoApp
                         "Yolo11N", "Yolo11S", "Yolo11M", "Yolo11L", "Yolo11X",
                         "YoloV10N", "YoloV10S", "YoloV10M", "YoloV10B", "YoloV10L", "YoloV10X",
                         "YoloV8N",
-                    }));
+                    },
+                    about: "Fast, general-purpose object detection: one neural network finds and labels every object in a single pass — hence \"You Only Look Once.\""));
             };
 
             superresButton.Clicked += (sender, args) =>
@@ -249,7 +251,8 @@ namespace MauiDemoApp
                         "LapsrnX4 - 4x, balanced speed and quality",
                         "LapsrnX8 - 8x, balanced speed and quality",
                     },
-                    hasCamera: false));
+                    hasCamera: false,
+                    about: "Uses a neural network to upscale and sharpen an image, reconstructing fine detail (2×–8×)."));
             };
 
             if (haveDNN)
@@ -305,7 +308,8 @@ namespace MauiDemoApp
                         {
                             new ModelShowcasePage.Sample("test_image.png", "Document", MaskRcnnPage.GlyphImage),
                         },
-                        hasCamera: false));
+                        hasCamera: false,
+                        about: "Classic document OCR — reads printed text from an image into editable text."));
                 };
             }
 
@@ -344,7 +348,8 @@ namespace MauiDemoApp
                                     items.Add(r.Text);
                             }
                             return (MaskRcnnPage.Encode(annotated), (IReadOnlyList<string>)items);
-                        }));
+                        },
+                        about: "A newer, more accurate OCR engine (PP-OCRv4) that finds and reads text — strong on dense and multilingual text."));
                 };
             }
 
@@ -363,7 +368,8 @@ namespace MauiDemoApp
                         demoGlyph("video"),
                         () => new VideoSurveillanceModel(),
                         null,
-                        hasCamera: true));
+                        hasCamera: true,
+                        about: "Learns the static background from the camera, then flags and tracks anything that moves."));
                 };
             }
 
@@ -397,7 +403,8 @@ namespace MauiDemoApp
                             new ModelShowcasePage.Sample("pedestrian.png", "People", MaskRcnnPage.GlyphImage),
                         },
                         pickerTitle: "Face detector",
-                        pickerOptions: detectors.ToArray()));
+                        pickerOptions: detectors.ToArray(),
+                        about: "Finds faces in a photo; pick the engine — Yunet, a Haar cascade, or one that also marks facial landmarks."));
                 };
 
                 Button pedestrianDetectionButton = new Button();
@@ -414,7 +421,8 @@ namespace MauiDemoApp
                         new[]
                         {
                             new ModelShowcasePage.Sample("pedestrian.png", "Street", MaskRcnnPage.GlyphImage),
-                        }));
+                        },
+                        about: "Detects people using HOG — a classic, lightweight person-finder for surveillance and counting."));
                 };
 
             }
@@ -441,7 +449,8 @@ namespace MauiDemoApp
                         new[]
                         {
                             new ModelShowcasePage.Sample("qrcode_barcode.png", "QR & barcode", MaskRcnnPage.GlyphImage),
-                        }));
+                        },
+                        about: "Detects and decodes barcodes and QR codes, returning the value they encode."));
                 };
             }
 

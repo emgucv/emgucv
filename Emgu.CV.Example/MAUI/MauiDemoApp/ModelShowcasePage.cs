@@ -63,6 +63,10 @@ namespace MauiDemoApp
         // generic message string.
         private readonly Func<IProcessAndRenderModel, Mat, (byte[] png, IReadOnlyList<string> items)> _customProcess;
 
+        // Optional "About this module" description, shown as one paragraph in a
+        // collapsible card at the bottom of the page.
+        private readonly string _about;
+
         private IProcessAndRenderModel _model;
         private Mat _currentImage;
         private Mat _renderBuffer;
@@ -114,10 +118,12 @@ namespace MauiDemoApp
             string pickerTitle = null,
             string[] pickerOptions = null,
             bool hasCamera = true,
-            Func<IProcessAndRenderModel, Mat, (byte[] png, IReadOnlyList<string> items)> customProcess = null)
+            Func<IProcessAndRenderModel, Mat, (byte[] png, IReadOnlyList<string> items)> customProcess = null,
+            string about = null)
         {
             _modelFactory = modelFactory;
             _customProcess = customProcess;
+            _about = about;
             _samples = samples ?? Array.Empty<Sample>();
             _pickerTitle = pickerTitle;
             _pickerOptions = pickerOptions;
@@ -327,6 +333,10 @@ namespace MauiDemoApp
                 Content = new VerticalStackLayout { Spacing = 12, Children = { resultsHeader, _emptyState, _resultsBody } }
             };
             pageChildren.Children.Add(resultsCard);
+
+            // ---------- About this module (collapsible) ----------
+            if (!string.IsNullOrWhiteSpace(_about))
+                pageChildren.Children.Add(BuildAboutCard(_about));
 
             // ---------- Loading overlay ----------
             _loadingIndicator = new ActivityIndicator { IsRunning = false, Color = MaskRcnnPage.Accent, WidthRequest = 44, HeightRequest = 44, HorizontalOptions = LayoutOptions.Center };
@@ -778,6 +788,41 @@ namespace MauiDemoApp
             t.Tapped += (s, e) => onTap();
             cb.GestureRecognizers.Add(t);
             return cb;
+        }
+
+        // ---------- About this module (collapsible one-paragraph card) ----------
+        // Static + self-contained (its own toggle state is captured in the tap
+        // closure) so the bespoke pages (Mask R-CNN, Shape Detection) can reuse it.
+        internal static View BuildAboutCard(string about)
+        {
+            var titleLabel = new Label { Text = "About this module", FontFamily = MaskRcnnPage.TitleFont, FontSize = 17, TextColor = MaskRcnnPage.PrimaryText, VerticalOptions = LayoutOptions.Center };
+            var chevron = MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphChevronRight, MaskRcnnPage.SecondaryText, 22);
+
+            var headerRow = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
+            headerRow.Add(titleLabel, 0, 0);
+            headerRow.Add(chevron, 1, 0);
+
+            var details = new VerticalStackLayout { IsVisible = false, Margin = new Thickness(0, 12, 0, 2) };
+            details.Children.Add(new Label { Text = about, FontFamily = MaskRcnnPage.BodyFont, FontSize = 15, TextColor = MaskRcnnPage.SecondaryText });
+
+            bool expanded = false;
+            var tap = new TapGestureRecognizer();
+            tap.Tapped += async (s, e) =>
+            {
+                expanded = !expanded;
+                details.IsVisible = expanded;
+                await chevron.RotateTo(expanded ? 90 : 0, 180, Easing.CubicOut);
+            };
+            headerRow.GestureRecognizers.Add(tap);
+
+            return new Border
+            {
+                BackgroundColor = MaskRcnnPage.CardBackground,
+                Stroke = Colors.Transparent,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
+                Padding = new Thickness(16),
+                Content = new VerticalStackLayout { Children = { headerRow, details } }
+            };
         }
 
         private Border PillButton(string glyph, string text, EventHandler onTap)
