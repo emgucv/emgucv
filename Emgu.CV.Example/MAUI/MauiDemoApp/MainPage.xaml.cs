@@ -317,12 +317,34 @@ namespace MauiDemoApp
 
                 paddleOcrButton.Clicked += (sender, args) =>
                 {
-                    ProcessAndRenderPage paddleOcrPage = new ProcessAndRenderPage(
-                        new PaddleOCR(),
+                    this.Navigation.PushAsync(new ModelShowcasePage(
                         "PaddleOCR",
-                        "cars_license_plate.png",
-                        "PP-OCRv4 text detection and recognition");
-                    this.Navigation.PushAsync(paddleOcrPage);
+                        "Detect and read text with PP-OCRv4.",
+                        demoGlyph("ocr"),
+                        () => new PaddleOCR(),
+                        new[]
+                        {
+                            new ModelShowcasePage.Sample("cars_license_plate.png", "License plate", MaskRcnnPage.GlyphImage),
+                            new ModelShowcasePage.Sample("test_image.png", "Document", MaskRcnnPage.GlyphImage),
+                        },
+                        customProcess: (model, input) =>
+                        {
+                            // PP-OCRv4 detects + reads text: draw the regions and
+                            // list the recognized text in the Results card.
+                            var paddle = (PaddleOCR)model;
+                            PaddleOCR.OcrResult[] results = paddle.Recognize(input);
+                            using Mat annotated = input.Clone();
+                            var items = new List<string>();
+                            foreach (PaddleOCR.OcrResult r in results)
+                            {
+                                System.Drawing.Point[] corners = Array.ConvertAll(r.Region, System.Drawing.Point.Round);
+                                using (var vp = new Emgu.CV.Util.VectorOfPoint(corners))
+                                    CvInvoke.Polylines(annotated, vp, true, new Emgu.CV.Structure.MCvScalar(0, 0, 255), 2);
+                                if (!String.IsNullOrWhiteSpace(r.Text))
+                                    items.Add(r.Text);
+                            }
+                            return (MaskRcnnPage.Encode(annotated), (IReadOnlyList<string>)items);
+                        }));
                 };
             }
 
