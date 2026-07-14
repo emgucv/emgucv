@@ -261,7 +261,11 @@ namespace MauiDemoApp
             {
                 Spacing = 18,
                 Padding = new Thickness(20, 16, 20, 28),
-                Children = { header, inputCard, buttonStack, resultsCard }
+                Children =
+                {
+                    header, inputCard, buttonStack, resultsCard,
+                    ModelShowcasePage.BuildAboutCard("Detects objects and traces the exact outline (mask) of each one, with a label and confidence score.")
+                }
             };
 
             // ---------- Loading overlay ----------
