@@ -210,6 +210,35 @@ namespace Emgu.CV.Dnn
         }
 
         /// <summary>
+        /// Enables the KV-Cache for all the attention layers. During autoregressive
+        /// generation the cached key/value tensors of the previous tokens are reused,
+        /// so each forward pass only needs to be fed the new token instead of the full
+        /// growing sequence. Requires a model with fused attention layers loaded with
+        /// the new dnn engine (e.g. an ONNX export with past key values).
+        /// </summary>
+        public void EnableKVCache()
+        {
+            DnnInvoke.cveDnnNetEnableKVCache(_ptr);
+        }
+
+        /// <summary>
+        /// Disables the KV-Cache for all the attention layers.
+        /// </summary>
+        public void DisableKVCache()
+        {
+            DnnInvoke.cveDnnNetDisableKVCache(_ptr);
+        }
+
+        /// <summary>
+        /// Resets the KV-Cache for all the attention layers. Call this before starting
+        /// the generation of a new, unrelated sequence.
+        /// </summary>
+        public void ResetKVCache()
+        {
+            DnnInvoke.cveDnnNetResetKVCache(_ptr);
+        }
+
+        /// <summary>
         /// Connects output of the first layer to input of the second layer.
         /// </summary>
         /// <param name="outPin">Descriptor of the first layer output.</param>
@@ -308,6 +337,15 @@ namespace Emgu.CV.Dnn
         internal static extern void cveDnnNetDump(IntPtr net, IntPtr dnnString);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnNetDumpToFile(IntPtr net, IntPtr path);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnNetEnableKVCache(IntPtr net);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnNetDisableKVCache(IntPtr net);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnNetResetKVCache(IntPtr net);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnNetConnect(IntPtr net, IntPtr outPin, IntPtr inPin);

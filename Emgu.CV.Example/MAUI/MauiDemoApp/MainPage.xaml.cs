@@ -252,6 +252,30 @@ namespace MauiDemoApp
                     hasCamera: false));
             };
 
+            if (haveDNN)
+            {
+                Button qwenChatButton = new Button();
+                qwenChatButton.Text = "Qwen Chat (LLM)";
+                buttonList.Add(qwenChatButton);
+
+                qwenChatButton.Clicked += (sender, args) =>
+                {
+                    this.Navigation.PushAsync(new QwenChatPage());
+                };
+            }
+
+            if (haveDNN)
+            {
+                Button smolVlm2Button = new Button();
+                smolVlm2Button.Text = "Chat with Image (SmolVLM2)";
+                buttonList.Add(smolVlm2Button);
+
+                smolVlm2Button.Clicked += (sender, args) =>
+                {
+                    this.Navigation.PushAsync(new SmolVlm2Page());
+                };
+            }
+
             maskRcnnButton.IsVisible = haveDNN;
             //faceLandmarkDetectionButton.IsVisible = haveDNN;
             yoloButton.IsVisible = haveDNN;
@@ -283,7 +307,25 @@ namespace MauiDemoApp
                         },
                         hasCamera: false));
                 };
-            } 
+            }
+
+            if (haveDNN)
+            {
+                Button paddleOcrButton = new Button();
+                paddleOcrButton.Text = "PaddleOCR";
+                buttonList.Add(paddleOcrButton);
+
+                paddleOcrButton.Clicked += (sender, args) =>
+                {
+                    ProcessAndRenderPage paddleOcrPage = new ProcessAndRenderPage(
+                        new PaddleOCR(),
+                        "PaddleOCR",
+                        "cars_license_plate.png",
+                        "PP-OCRv4 text detection and recognition");
+                    this.Navigation.PushAsync(paddleOcrPage);
+                };
+            }
+
 
             if (haveVideo && haveCamera)
             {
@@ -467,6 +509,8 @@ namespace MauiDemoApp
                 if (t.Contains("feature matching")) return "";                   // compare
                 if (t.Contains("super resolution")) return "";                   // auto_fix_high
                 if (t.Contains("3d")) return "";                                 // view_in_ar
+                if (t.Contains("smolvlm")) return "";                          // text_fields (VLM)
+                if (t.Contains("qwen")) return "";                             // text_fields (LLM)
                 if (t.Contains("unicode")) return "";                          // font_download
                 if (t.Contains("video")) return "";                             // videocam
                 return "";                                                       // widgets
@@ -482,7 +526,8 @@ namespace MauiDemoApp
                 string t = (text ?? "").ToLowerInvariant();
                 if (t.Contains("video")) return 2;
                 if (t.Contains("hello") || t.Contains("planar") || t.Contains("feature matching")
-                    || t.Contains("super resolution") || t.Contains("3d") || t.Contains("unicode"))
+                    || t.Contains("super resolution") || t.Contains("3d") || t.Contains("unicode")
+                    || t.Contains("qwen") || t.Contains("smolvlm"))
                     return 1;
                 return 0;
             };

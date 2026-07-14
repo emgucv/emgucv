@@ -195,6 +195,528 @@ namespace Emgu.CV.Test
 #endif
 #endif
         [Test]
+        public async Task TestClip()
+        {
+            //CLIP ViT-B/32 joint text/image embeddings. Init downloads the
+            //model (~580 MB) on the first run. Optionally set the
+            //EMGU_CV_CLIP_MODEL_DIR environment variable to reuse an already
+            //populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_CLIP_MODEL_DIR");
+
+            using (Emgu.CV.Models.Clip clip = new Emgu.CV.Models.Clip(modelDir))
+            {
+                await clip.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(clip.Initialized, "Failed to initialize the CLIP model.");
+
+                //Tokenizer exactness against the huggingface CLIPTokenizer reference
+                int[] catIds = clip.Tokenize("a photo of a cat");
+                EmguAssert.IsTrue(
+                    catIds.SequenceEqual(new int[] { 49406, 320, 1125, 539, 320, 2368, 49407 }),
+                    String.Format("Unexpected token ids for 'a photo of a cat': [{0}]", String.Join(",", catIds)));
+                int[] helloIds = clip.Tokenize("Hello, World! 123");
+                EmguAssert.IsTrue(
+                    helloIds.SequenceEqual(new int[] { 49406, 3306, 267, 1002, 256, 272, 273, 274, 49407 }),
+                    String.Format("Unexpected token ids for 'Hello, World! 123': [{0}]", String.Join(",", helloIds)));
+
+                //Zero-shot: the dog416.png image (a dog and a bike) must be
+                //closer to the matching caption than to an unrelated one.
+                using (Mat image = EmguAssert.LoadMat("dog416.png"))
+                {
+                    float[] imageEmbedding = clip.EmbedImage(image);
+                    float[] dogEmbedding = clip.EmbedText("a photo of a dog");
+                    float[] cityEmbedding = clip.EmbedText("a photo of a city at night");
+
+                    double dogSimilarity = Emgu.CV.Models.Clip.CosineSimilarity(imageEmbedding, dogEmbedding);
+                    double citySimilarity = Emgu.CV.Models.Clip.CosineSimilarity(imageEmbedding, cityEmbedding);
+                    Console.WriteLine(String.Format("CLIP similarity: dog={0:F4}, city={1:F4}", dogSimilarity, citySimilarity));
+                    EmguAssert.IsTrue(dogSimilarity > citySimilarity,
+                        "Expected the dog image to be more similar to the dog caption than to the city caption.");
+                }
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestSiglip()
+        {
+            //SigLIP joint text/image embeddings. Init downloads the model
+            //(~780 MB) on the first run. Optionally set the
+            //EMGU_CV_SIGLIP_MODEL_DIR environment variable to reuse an already
+            //populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_SIGLIP_MODEL_DIR");
+
+            using (Emgu.CV.Models.Siglip siglip = new Emgu.CV.Models.Siglip(modelDir))
+            {
+                await siglip.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(siglip.Initialized, "Failed to initialize the SigLIP model.");
+
+                //Tokenizer exactness against the huggingface SiglipTokenizer
+                //reference (the fixed 64 token sequence is padded with </s>=1).
+                int[] dogIds = siglip.Tokenize("a photo of a dog");
+                int[] expectedDog = new int[] { 262, 266, 1304, 267, 262, 266, 1571, 1 };
+                EmguAssert.IsTrue(
+                    dogIds.Length == 64
+                    && dogIds.Take(expectedDog.Length).SequenceEqual(expectedDog)
+                    && dogIds.Skip(expectedDog.Length).All(id => id == 1),
+                    String.Format("Unexpected token ids for 'a photo of a dog': [{0}]", String.Join(",", dogIds.Take(12))));
+                int[] helloIds = siglip.Tokenize("Hello, World! 123");
+                int[] expectedHello = new int[] { 14647, 459, 17061, 1 };
+                EmguAssert.IsTrue(
+                    helloIds.Take(expectedHello.Length).SequenceEqual(expectedHello),
+                    String.Format("Unexpected token ids for 'Hello, World! 123': [{0}]", String.Join(",", helloIds.Take(8))));
+
+                //Zero-shot: the dog416.png image (a dog and a bike) must be
+                //closer to the matching caption than to an unrelated one.
+                using (Mat image = EmguAssert.LoadMat("dog416.png"))
+                {
+                    float[] imageEmbedding = siglip.EmbedImage(image);
+                    float[] dogEmbedding = siglip.EmbedText("a photo of a dog");
+                    float[] cityEmbedding = siglip.EmbedText("a photo of a city at night");
+
+                    double dogSimilarity = Emgu.CV.Models.Siglip.CosineSimilarity(imageEmbedding, dogEmbedding);
+                    double citySimilarity = Emgu.CV.Models.Siglip.CosineSimilarity(imageEmbedding, cityEmbedding);
+                    Console.WriteLine(String.Format("SigLIP similarity: dog={0:F4}, city={1:F4}", dogSimilarity, citySimilarity));
+                    EmguAssert.IsTrue(dogSimilarity > citySimilarity,
+                        "Expected the dog image to be more similar to the dog caption than to the city caption.");
+                }
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestDinov2()
+        {
+            //DINOv2 visual similarity embeddings. Init downloads the model
+            //(~85 MB) on the first run. Optionally set the
+            //EMGU_CV_DINOV2_MODEL_DIR environment variable to reuse an already
+            //populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_DINOV2_MODEL_DIR");
+
+            using (Emgu.CV.Models.Dinov2 dino = new Emgu.CV.Models.Dinov2(modelDir))
+            {
+                await dino.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(dino.Initialized, "Failed to initialize the DINOv2 model.");
+
+                //A cropped view of the same scene must embed closer to the
+                //original than a completely different image.
+                using (Mat dog = EmguAssert.LoadMat("dog416.png"))
+                using (Mat unrelated = EmguAssert.LoadMat("lena.jpg"))
+                using (Mat dogCropped = new Mat(dog, new Rectangle(20, 20, dog.Width - 40, dog.Height - 40)))
+                {
+                    float[] dogEmbedding = dino.EmbedImage(dog);
+                    float[] croppedEmbedding = dino.EmbedImage(dogCropped);
+                    float[] unrelatedEmbedding = dino.EmbedImage(unrelated);
+
+                    double croppedSimilarity = Emgu.CV.Models.Dinov2.CosineSimilarity(dogEmbedding, croppedEmbedding);
+                    double unrelatedSimilarity = Emgu.CV.Models.Dinov2.CosineSimilarity(dogEmbedding, unrelatedEmbedding);
+                    Console.WriteLine(String.Format("DINOv2 similarity: cropped={0:F4}, unrelated={1:F4}", croppedSimilarity, unrelatedSimilarity));
+                    EmguAssert.IsTrue(croppedSimilarity > unrelatedSimilarity,
+                        "Expected the cropped view to be more similar to the original image than an unrelated image.");
+                    EmguAssert.IsTrue(croppedSimilarity > 0.5,
+                        String.Format("Expected a high similarity for the cropped view, got {0:F4}", croppedSimilarity));
+                }
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestMiniLM()
+        {
+            //all-MiniLM-L6-v2 sentence embeddings. Init downloads the model
+            //(~87 MB) on the first run. Optionally set the
+            //EMGU_CV_MINILM_MODEL_DIR environment variable to reuse an already
+            //populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_MINILM_MODEL_DIR");
+
+            using (Emgu.CV.Models.MiniLM minilm = new Emgu.CV.Models.MiniLM(modelDir))
+            {
+                await minilm.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(minilm.Initialized, "Failed to initialize the MiniLM model.");
+
+                //Tokenizer exactness against the huggingface BertTokenizer reference
+                int[] catIds = minilm.Tokenize("The cat sits on the mat.");
+                EmguAssert.IsTrue(
+                    catIds.SequenceEqual(new int[] { 101, 1996, 4937, 7719, 2006, 1996, 13523, 1012, 102 }),
+                    String.Format("Unexpected token ids for 'The cat sits on the mat.': [{0}]", String.Join(",", catIds)));
+                int[] subwordIds = minilm.Tokenize("unbelievable preprocessing");
+                EmguAssert.IsTrue(
+                    subwordIds.SequenceEqual(new int[] { 101, 23653, 17463, 3217, 9623, 7741, 102 }),
+                    String.Format("Unexpected token ids for 'unbelievable preprocessing': [{0}]", String.Join(",", subwordIds)));
+
+                //Semantic similarity: a paraphrase must be closer than an
+                //unrelated sentence.
+                float[] reference = minilm.EmbedText("The cat sits on the mat.");
+                float[] paraphrase = minilm.EmbedText("A kitten is resting on a rug.");
+                float[] unrelated = minilm.EmbedText("Quantum computers use superposition to perform calculations.");
+
+                double paraphraseSimilarity = Emgu.CV.Models.MiniLM.CosineSimilarity(reference, paraphrase);
+                double unrelatedSimilarity = Emgu.CV.Models.MiniLM.CosineSimilarity(reference, unrelated);
+                Console.WriteLine(String.Format("MiniLM similarity: paraphrase={0:F4}, unrelated={1:F4}", paraphraseSimilarity, unrelatedSimilarity));
+                EmguAssert.IsTrue(paraphraseSimilarity > unrelatedSimilarity,
+                    "Expected the paraphrase to be more similar than the unrelated sentence.");
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestMultilingualE5()
+        {
+            //multilingual-e5-small sentence embeddings. Init downloads the
+            //model (~450 MB) on the first run. Optionally set the
+            //EMGU_CV_E5_MODEL_DIR environment variable to reuse an already
+            //populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_E5_MODEL_DIR");
+
+            using (Emgu.CV.Models.MultilingualE5 e5 = new Emgu.CV.Models.MultilingualE5(modelDir))
+            {
+                await e5.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(e5.Initialized, "Failed to initialize the multilingual E5 model.");
+
+                //Tokenizer exactness against the huggingface XLMRobertaTokenizer
+                //reference, including a non-latin script and accents.
+                int[] catIds = e5.Tokenize("query: The cat sits on the mat.");
+                EmguAssert.IsTrue(
+                    catIds.SequenceEqual(new int[] { 0, 41, 1294, 12, 581, 7515, 1661, 7, 98, 70, 2589, 5, 2 }),
+                    String.Format("Unexpected token ids for the english sentence: [{0}]", String.Join(",", catIds)));
+                int[] chineseIds = e5.Tokenize("query: 猫坐在垫子上。");
+                EmguAssert.IsTrue(
+                    chineseIds.SequenceEqual(new int[] { 0, 41, 1294, 12, 6, 35076, 48533, 174564, 1344, 575, 30, 2 }),
+                    String.Format("Unexpected token ids for the chinese sentence: [{0}]", String.Join(",", chineseIds)));
+                int[] accentIds = e5.Tokenize("query: café naïve résumé");
+                EmguAssert.IsTrue(
+                    accentIds.SequenceEqual(new int[] { 0, 41, 1294, 12, 26216, 24, 9392, 272, 233482, 2 }),
+                    String.Format("Unexpected token ids for the accented text: [{0}]", String.Join(",", accentIds)));
+
+                //Cross-lingual semantics: the german translation must be closer
+                //to the english sentence than an unrelated english sentence.
+                float[] english = e5.EmbedText("The cat sits on the mat.");
+                float[] german = e5.EmbedText("Die Katze sitzt auf der Matte.");
+                float[] unrelated = e5.EmbedText("Quantum computers use superposition.");
+
+                double germanSimilarity = Emgu.CV.Models.MultilingualE5.CosineSimilarity(english, german);
+                double unrelatedSimilarity = Emgu.CV.Models.MultilingualE5.CosineSimilarity(english, unrelated);
+                Console.WriteLine(String.Format("E5 similarity: german={0:F4}, unrelated={1:F4}", germanSimilarity, unrelatedSimilarity));
+                EmguAssert.IsTrue(germanSimilarity > unrelatedSimilarity,
+                    "Expected the german translation to be more similar than the unrelated sentence.");
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestSiglip2()
+        {
+            //SigLIP 2 joint multilingual text / image embeddings. Init
+            //downloads the model (~1.4 GB) on the first run. Optionally set the
+            //EMGU_CV_SIGLIP2_MODEL_DIR environment variable to reuse an already
+            //populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_SIGLIP2_MODEL_DIR");
+
+            using (Emgu.CV.Models.Siglip2 siglip2 = new Emgu.CV.Models.Siglip2(modelDir))
+            {
+                await siglip2.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(siglip2.Initialized, "Failed to initialize the SigLIP 2 model.");
+
+                //Tokenizer exactness against the huggingface GemmaTokenizerFast
+                //reference (fixed 64 token sequence, eos=1 terminated, 0 padded).
+                int[] dogIds = siglip2.Tokenize("a photo of a dog");
+                int[] expectedDog = new int[] { 235250, 2686, 576, 476, 5929, 1 };
+                EmguAssert.IsTrue(
+                    dogIds.Length == 64
+                    && dogIds.Take(expectedDog.Length).SequenceEqual(expectedDog)
+                    && dogIds.Skip(expectedDog.Length).All(id => id == 0),
+                    String.Format("Unexpected token ids for 'a photo of a dog': [{0}]", String.Join(",", dogIds.Take(10))));
+                int[] helloIds = siglip2.Tokenize("Hello, World! 123");
+                int[] expectedHello = new int[] { 4521, 235269, 3855, 235341, 235248, 235274, 235284, 235304, 1 };
+                EmguAssert.IsTrue(
+                    helloIds.Take(expectedHello.Length).SequenceEqual(expectedHello),
+                    String.Format("Unexpected token ids for 'Hello, World! 123': [{0}]", String.Join(",", helloIds.Take(12))));
+
+                //Zero-shot: the dog416.png image (a dog and a bike) must be
+                //closer to the matching caption than to an unrelated one, and
+                //the german caption must work as well (multilingual text tower).
+                using (Mat image = EmguAssert.LoadMat("dog416.png"))
+                {
+                    float[] imageEmbedding = siglip2.EmbedImage(image);
+                    float[] dogEmbedding = siglip2.EmbedText("a photo of a dog");
+                    float[] germanDogEmbedding = siglip2.EmbedText("ein Foto von einem Hund");
+                    float[] cityEmbedding = siglip2.EmbedText("a photo of a city at night");
+
+                    double dogSimilarity = Emgu.CV.Models.Siglip2.CosineSimilarity(imageEmbedding, dogEmbedding);
+                    double germanDogSimilarity = Emgu.CV.Models.Siglip2.CosineSimilarity(imageEmbedding, germanDogEmbedding);
+                    double citySimilarity = Emgu.CV.Models.Siglip2.CosineSimilarity(imageEmbedding, cityEmbedding);
+                    Console.WriteLine(String.Format("SigLIP2 similarity: dog={0:F4}, german dog={1:F4}, city={2:F4}", dogSimilarity, germanDogSimilarity, citySimilarity));
+                    EmguAssert.IsTrue(dogSimilarity > citySimilarity,
+                        "Expected the dog image to be more similar to the dog caption than to the city caption.");
+                    EmguAssert.IsTrue(germanDogSimilarity > citySimilarity,
+                        "Expected the dog image to be more similar to the german dog caption than to the city caption.");
+                }
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestSmolVlm2()
+        {
+            //SmolVLM2 vision-language inference with KV-cached decoding. Init
+            //downloads the model (~1.1 GB) on the first run. Optionally set the
+            //EMGU_CV_SMOLVLM2_MODEL_DIR environment variable to reuse an
+            //already populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_SMOLVLM2_MODEL_DIR");
+
+            using (Mat image = EmguAssert.LoadMat("dog416.png"))
+            using (Emgu.CV.Models.SmolVlm2 vlm = new Emgu.CV.Models.SmolVlm2(modelDir))
+            {
+                await vlm.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(vlm.Initialized, "Failed to initialize the SmolVLM2 model.");
+
+                //Tokenizer exactness against the huggingface GPT2TokenizerFast
+                //reference, including the individual digit splitting.
+                int[] helloIds = vlm.Tokenize("Hello, World! 123");
+                EmguAssert.IsTrue(
+                    helloIds.SequenceEqual(new int[] { 19556, 28, 2260, 17, 216, 33, 34, 35 }),
+                    String.Format("Unexpected token ids for 'Hello, World! 123': [{0}]", String.Join(",", helloIds)));
+                int[] priceIds = vlm.Tokenize("The price is $19.99");
+                EmguAssert.IsTrue(
+                    priceIds.SequenceEqual(new int[] { 504, 4319, 314, 1885, 33, 41, 30, 41, 41 }),
+                    String.Format("Unexpected token ids for 'The price is $19.99': [{0}]", String.Join(",", priceIds)));
+
+                String response = vlm.Generate(image, "Describe this image briefly.", 48);
+                Console.WriteLine(String.Format("SmolVLM2 response: {0}", response));
+                EmguAssert.IsTrue(!String.IsNullOrWhiteSpace(response), "The vision language model generated an empty response.");
+                EmguAssert.IsTrue(response.ToLowerInvariant().Contains("dog"),
+                    String.Format("Expected the response to mention the dog, got: '{0}'", response));
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestQwen3()
+        {
+            //Qwen3 0.6B text generation with KV-cached autoregressive decoding
+            //in the non-thinking mode. Init downloads the model (~2.9 GB) on
+            //the first run. Optionally set the EMGU_CV_QWEN3_MODEL_DIR
+            //environment variable to reuse an already populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_QWEN3_MODEL_DIR");
+
+            using (Qwen3 llm = new Qwen3(modelDir))
+            {
+                await llm.Init(Qwen3.Qwen3Version.Qwen3_0_6B, DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(llm.Initialized, "Failed to initialize the Qwen3 model.");
+
+                String response = llm.Generate("What is OpenCV? Answer in one sentence.", 48);
+                Console.WriteLine(String.Format("Qwen3 response: {0}", response));
+                EmguAssert.IsTrue(!String.IsNullOrWhiteSpace(response), "The language model generated an empty response.");
+                EmguAssert.IsTrue(!response.Contains("<think>"), "Expected the non-thinking mode, but the response contains a think block.");
+
+                //Multi-turn chat memory. (A "my name" probe is not used here:
+                //Qwen3 0.6B in the non-thinking mode misreads it as a question
+                //about the assistant's own name, in torch as well.)
+                llm.ResetChat();
+                String turn1 = llm.Chat("My favorite color is turquoise.", 32);
+                Console.WriteLine(String.Format("Qwen3 chat turn 1: {0}", turn1));
+                String turn2 = llm.Chat("What is my favorite color?", 32);
+                Console.WriteLine(String.Format("Qwen3 chat turn 2: {0}", turn2));
+                EmguAssert.IsTrue(turn2.ToLowerInvariant().Contains("turquoise"), String.Format("Expected the chat session to remember the color, got: '{0}'", turn2));
+            }
+        }
+
+        [Test]
+        public async Task TestDnnKVCache()
+        {
+            //Smoke test for the Net KV-cache API: enable, reset and disable the
+            //cache around forward passes. The model used here has no attention
+            //layers, so the cache is functionally a no-op; the test validates
+            //the API plumbing (see the gemma3/qwen dnn samples in OpenCV for
+            //cached autoregressive generation with attention models).
+            FileDownloadManager manager = new FileDownloadManager();
+            manager.AddFile(
+                "https://emgu-public.s3.amazonaws.com/paddleocr/ch_PP-OCRv4_det_infer.onnx",
+                Path.Combine("emgu", "paddleocr"),
+                "D2A7720D45A54257208B1E13E36A8479894CB74155A5EFE29462512D42F49DA9");
+            manager.OnDownloadProgressChanged += DownloadManager_OnDownloadProgressChanged;
+            await manager.Download();
+            EmguAssert.IsTrue(manager.AllFilesDownloaded, "Failed to download the test model.");
+
+            using (Net net = DnnInvoke.ReadNetFromONNX(manager.Files[0].LocalFile, Emgu.CV.Dnn.EngineType.New))
+            using (Mat image = new Mat(64, 64, DepthType.Cv8U, 3))
+            {
+                image.SetTo(new MCvScalar(128, 128, 128));
+                using (Mat blob = DnnInvoke.BlobFromImage(image, 1.0 / 255))
+                {
+                    net.EnableKVCache();
+                    net.SetInput(blob);
+                    using (Mat result = net.Forward())
+                        EmguAssert.IsTrue(!result.IsEmpty, "Forward with KV-cache enabled returned an empty result.");
+
+                    net.ResetKVCache();
+                    net.SetInput(blob);
+                    using (Mat result = net.Forward())
+                        EmguAssert.IsTrue(!result.IsEmpty, "Forward after KV-cache reset returned an empty result.");
+
+                    net.DisableKVCache();
+                    net.SetInput(blob);
+                    using (Mat result = net.Forward())
+                        EmguAssert.IsTrue(!result.IsEmpty, "Forward with KV-cache disabled returned an empty result.");
+                }
+            }
+        }
+
+        [Test]
+        public async Task TestQwen3Large()
+        {
+            //The Qwen3 1.7B variant (~7.6 GB download). Optionally set the
+            //EMGU_CV_QWEN3_LARGE_MODEL_DIR environment variable to reuse an
+            //already populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_QWEN3_LARGE_MODEL_DIR");
+
+            using (Qwen3 llm = new Qwen3(modelDir))
+            {
+                await llm.Init(Qwen3.Qwen3Version.Qwen3_1_7B, DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(llm.Initialized, "Failed to initialize the Qwen3 1.7B model.");
+
+                var watch = Stopwatch.StartNew();
+                String response = llm.Generate("What is OpenCV? Answer in one sentence.", 48);
+                watch.Stop();
+                Console.WriteLine(String.Format("Qwen3 1.7B response ({0} ms): {1}", watch.ElapsedMilliseconds, response));
+                EmguAssert.IsTrue(!String.IsNullOrWhiteSpace(response), "The language model generated an empty response.");
+                EmguAssert.IsTrue(!response.Contains("<think>"), "Expected the non-thinking mode, but the response contains a think block.");
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestQwen25()
+        {
+            //Qwen2.5 0.5B text generation with KV-cached autoregressive
+            //decoding, the C# equivalent of opencv/samples/dnn/qwen_inference.py.
+            //Init downloads the model (~2.4 GB) on the first run. Optionally set
+            //the EMGU_CV_QWEN25_MODEL_DIR environment variable to reuse an
+            //already populated model folder.
+            String modelDir = Environment.GetEnvironmentVariable("EMGU_CV_QWEN25_MODEL_DIR");
+
+            using (Qwen25 llm = new Qwen25(modelDir))
+            {
+                await llm.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(llm.Initialized, "Failed to initialize the Qwen2.5 model.");
+
+                String response = llm.Generate("What is OpenCV? Answer in one sentence.", 48);
+                Console.WriteLine(String.Format("Qwen2.5 response: {0}", response));
+                EmguAssert.IsTrue(!String.IsNullOrWhiteSpace(response), "The language model generated an empty response.");
+
+                //Multi-turn chat: the conversation history is kept in the
+                //KV-cache, the second turn must remember the first one.
+                llm.ResetChat();
+                String turn1 = llm.Chat("Hello, my name is Canming.", 32);
+                Console.WriteLine(String.Format("Qwen2.5 chat turn 1: {0}", turn1));
+                String turn2 = llm.Chat("What is my name?", 32);
+                Console.WriteLine(String.Format("Qwen2.5 chat turn 2: {0}", turn2));
+                EmguAssert.IsTrue(turn2.Contains("Canming"), String.Format("Expected the chat session to remember the name, got: '{0}'", turn2));
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestPaddleOCR()
+        {
+            using (Mat image = new Mat(200, 700, DepthType.Cv8U, 3))
+            {
+                image.SetTo(new MCvScalar(255, 255, 255));
+                using (FontFace font = new FontFace("sans"))
+                    CvInvoke.PutText(image, "HELLO WORLD 123", new Point(50, 120), new MCvScalar(0, 0, 0), font, 60);
+
+                using (Emgu.CV.Models.PaddleOCR ocr = new Emgu.CV.Models.PaddleOCR())
+                {
+                    await ocr.Init(DownloadManager_OnDownloadProgressChanged);
+                    EmguAssert.IsTrue(ocr.Initialized, "Failed to initialize the PaddleOCR model.");
+
+                    var results = ocr.Recognize(image);
+                    StringBuilder allText = new StringBuilder();
+                    foreach (var result in results)
+                    {
+                        Console.WriteLine(String.Format("PaddleOCR: '{0}' (confidence {1:F3})", result.Text, result.Confidence));
+                        allText.Append(result.Text);
+                    }
+
+                    String recognized = allText.ToString().Replace(" ", "").ToUpperInvariant();
+                    EmguAssert.IsTrue(recognized.Contains("HELLO"), String.Format("Expected 'HELLO' in the recognized text, got: '{0}'", allText));
+                    EmguAssert.IsTrue(recognized.Contains("WORLD"), String.Format("Expected 'WORLD' in the recognized text, got: '{0}'", allText));
+                    EmguAssert.IsTrue(recognized.Contains("123"), String.Format("Expected '123' in the recognized text, got: '{0}'", allText));
+
+                    String message = ocr.ProcessAndRender(image, image);
+                    Console.WriteLine(message);
+                }
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
         public async Task TestPedestrianDetector()
         {
             using (Mat m = EmguAssert.LoadMat("pedestrian.png"))

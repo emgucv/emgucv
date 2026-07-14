@@ -74,6 +74,9 @@ CVAPI(void) cveDnnNetSetInput(cv::dnn::Net* net, cv::_InputArray* blob, cv::Stri
 CVAPI(void) cveDnnNetForward(cv::dnn::Net* net, cv::String* outputName, cv::Mat* output);
 CVAPI(void) cveDnnNetForward2(cv::dnn::Net* net, cv::_OutputArray* outputBlobs, cv::String* outputName);
 CVAPI(void) cveDnnNetForward3(cv::dnn::Net* net, cv::_OutputArray* outputBlobs,	std::vector<cv::String>* outBlobNames);
+CVAPI(void) cveDnnNetEnableKVCache(cv::dnn::Net* net);
+CVAPI(void) cveDnnNetDisableKVCache(cv::dnn::Net* net);
+CVAPI(void) cveDnnNetResetKVCache(cv::dnn::Net* net);
 CVAPI(void) cveDnnNetRelease(cv::dnn::Net** net);
 
 CVAPI(void) cveDnnNetGetUnconnectedOutLayers(cv::dnn::Net* net, std::vector<int>* layerIds);
