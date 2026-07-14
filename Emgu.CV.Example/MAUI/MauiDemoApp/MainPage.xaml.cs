@@ -96,6 +96,10 @@ namespace MauiDemoApp
 
             bool haveCamera = true;
 
+            // Forward-declared here so the button Clicked handlers (which run
+            // after construction) can capture it; it is assigned further below.
+            Func<string, string> demoGlyph = null;
+
             /*
             if (haveOptFlow && haveCamera)
             {
@@ -167,70 +171,85 @@ namespace MauiDemoApp
 
             sceneTextDetectionButton.Clicked += (sender, args) =>
             {
-                ProcessAndRenderPage sceneTextDetectionPage = new ProcessAndRenderPage(
-                    new SceneTextDetector(),
-                    "Perform Scene Text Detection",
-                    "cars_license_plate.png",
-                    "This model is trained on MSRA-TD500, so it can detect both English and Chinese text instances.");
-                this.Navigation.PushAsync(sceneTextDetectionPage);
+                this.Navigation.PushAsync(new ModelShowcasePage(
+                    "Scene Text",
+                    "Find and read English and Chinese text in a photo.",
+                    demoGlyph("scene text"),
+                    () => new SceneTextDetector(),
+                    new[]
+                    {
+                        new ModelShowcasePage.Sample("cars_license_plate.png", "License plate", MaskRcnnPage.GlyphImage),
+                        new ModelShowcasePage.Sample("test_image.png", "Document", MaskRcnnPage.GlyphImage),
+                    },
+                    customProcess: (model, input) =>
+                    {
+                        // Scene text recognizes the words (DetectedObject.Label);
+                        // list them in the Results card, not just on the image.
+                        var std = (SceneTextDetector)model;
+                        DetectedObject[] objs = std.Detect(input);
+                        using Mat annotated = input.Clone();
+                        std.Render(annotated, objs);
+                        var items = new List<string>();
+                        foreach (DetectedObject o in objs)
+                            if (!String.IsNullOrWhiteSpace(o.Label))
+                                items.Add(o.Label);
+                        return (MaskRcnnPage.Encode(annotated), (IReadOnlyList<string>)items);
+                    }));
             };
             yoloButton.Clicked += (sender, args) =>
             {
-                ProcessAndRenderPage yoloPage = new ProcessAndRenderPage(
-                    new Yolo(),
-                    "Yolo Detection",
-                    "dog416.png",
-                    "");
-                Picker p = yoloPage.Picker;
-                p.Title = "Yolo model version";
-                p.IsVisible = true;
-                p.Items.Add("Yolo12N");
-                p.Items.Add("Yolo12S");
-                p.Items.Add("Yolo12M");
-                p.Items.Add("Yolo12L");
-                p.Items.Add("Yolo12X");
-                p.Items.Add("Yolo11N");
-                p.Items.Add("Yolo11S");
-                p.Items.Add("Yolo11M");
-                p.Items.Add("Yolo11L");
-                p.Items.Add("Yolo11X");
-                p.Items.Add("YoloV10N");
-                p.Items.Add("YoloV10S");
-                p.Items.Add("YoloV10M");
-                p.Items.Add("YoloV10B");
-                p.Items.Add("YoloV10L");
-                p.Items.Add("YoloV10X");
-                p.Items.Add("YoloV8N");
-                this.Navigation.PushAsync(yoloPage);
+                this.Navigation.PushAsync(new ModelShowcasePage(
+                    "YOLO",
+                    "Detect and label objects in a photo.",
+                    demoGlyph("yolo"),
+                    () => new Yolo(),
+                    new[]
+                    {
+                        new ModelShowcasePage.Sample("dog416.png", "Dog & bike", MaskRcnnPage.GlyphImage),
+                        new ModelShowcasePage.Sample("pedestrian.png", "Street", MaskRcnnPage.GlyphImage),
+                        new ModelShowcasePage.Sample("cars_license_plate.png", "Cars", MaskRcnnPage.GlyphImage),
+                    },
+                    pickerTitle: "Model version",
+                    pickerOptions: new[]
+                    {
+                        "Yolo12N", "Yolo12S", "Yolo12M", "Yolo12L", "Yolo12X",
+                        "Yolo11N", "Yolo11S", "Yolo11M", "Yolo11L", "Yolo11X",
+                        "YoloV10N", "YoloV10S", "YoloV10M", "YoloV10B", "YoloV10L", "YoloV10X",
+                        "YoloV8N",
+                    }));
             };
 
             superresButton.Clicked += (sender, args) =>
             {
-                ProcessAndRenderPage superresPage = new ProcessAndRenderPage(
-                    new Superres(),
-                    "Super resolution",
-                    "dog416.png",
-                    "");
-                Picker p = superresPage.Picker;
-                p.Title = "Super resolution version";
-                p.IsVisible = true;
-                //The model name must be the first token; the text after it is a
-                //description (Superres.Init only parses the leading token).
-                p.Items.Add("EdsrX2 - 2x, best quality, slowest, large download");
-                p.Items.Add("EdsrX3 - 3x, best quality, slowest, large download");
-                p.Items.Add("EdsrX4 - 4x, best quality, slowest, large download");
-                p.Items.Add("EspcnX2 - 2x, fast, small model");
-                p.Items.Add("EspcnX3 - 3x, fast, small model");
-                p.Items.Add("EspcnX4 - 4x, fast, small model");
-                p.Items.Add("FsrcnnX2 - 2x, fastest, tiny model");
-                p.Items.Add("FsrcnnX3 - 3x, fastest, tiny model");
-                p.Items.Add("FsrcnnX4 - 4x, fastest, tiny model");
-                p.Items.Add("LapsrnX2 - 2x, balanced speed and quality");
-                p.Items.Add("LapsrnX4 - 4x, balanced speed and quality");
-                p.Items.Add("LapsrnX8 - 8x, balanced speed and quality");
-
-
-                this.Navigation.PushAsync(superresPage);
+                // The model name must be the first token; the text after it is a
+                // description (Superres.Init only parses the leading token).
+                this.Navigation.PushAsync(new ModelShowcasePage(
+                    "Super Resolution",
+                    "Upscale a photo with a neural network.",
+                    demoGlyph("super resolution"),
+                    () => new Superres(),
+                    new[]
+                    {
+                        new ModelShowcasePage.Sample("dog416.png", "Dog & bike", MaskRcnnPage.GlyphImage),
+                        new ModelShowcasePage.Sample("lena.jpg", "Portrait", MaskRcnnPage.GlyphImage),
+                    },
+                    pickerTitle: "Super resolution version",
+                    pickerOptions: new[]
+                    {
+                        "EdsrX2 - 2x, best quality, slowest, large download",
+                        "EdsrX3 - 3x, best quality, slowest, large download",
+                        "EdsrX4 - 4x, best quality, slowest, large download",
+                        "EspcnX2 - 2x, fast, small model",
+                        "EspcnX3 - 3x, fast, small model",
+                        "EspcnX4 - 4x, fast, small model",
+                        "FsrcnnX2 - 2x, fastest, tiny model",
+                        "FsrcnnX3 - 3x, fastest, tiny model",
+                        "FsrcnnX4 - 4x, fastest, tiny model",
+                        "LapsrnX2 - 2x, balanced speed and quality",
+                        "LapsrnX4 - 4x, balanced speed and quality",
+                        "LapsrnX8 - 8x, balanced speed and quality",
+                    },
+                    hasCamera: false));
             };
 
             maskRcnnButton.IsVisible = haveDNN;
@@ -253,13 +272,16 @@ namespace MauiDemoApp
 
                 ocrButton.Clicked += (sender, args) =>
                 {
-                    ProcessAndRenderPage ocrPage = new ProcessAndRenderPage(
-                        new TesseractModel(),
-                        "Perform Text Detection",
-                        "test_image.png",
-                        "");
-                    ocrPage.HasCameraOption = false;
-                    this.Navigation.PushAsync(ocrPage);
+                    this.Navigation.PushAsync(new ModelShowcasePage(
+                        "Tesseract OCR",
+                        "Read printed text from an image.",
+                        demoGlyph("ocr"),
+                        () => new TesseractModel(),
+                        new[]
+                        {
+                            new ModelShowcasePage.Sample("test_image.png", "Document", MaskRcnnPage.GlyphImage),
+                        },
+                        hasCamera: false));
                 };
             } 
 
@@ -271,13 +293,13 @@ namespace MauiDemoApp
 
                 videoSurveillanceButton.Clicked += (sender, args) =>
                 {
-                    ProcessAndRenderPage videoPage = new ProcessAndRenderPage(
-                        new VideoSurveillanceModel(),
-                        "Open Camera",
+                    this.Navigation.PushAsync(new ModelShowcasePage(
+                        "Video Surveillance",
+                        "Track moving foreground objects from the camera.",
+                        demoGlyph("video"),
+                        () => new VideoSurveillanceModel(),
                         null,
-                        "");
-                    videoPage.HasCameraOption = true;
-                    this.Navigation.PushAsync(videoPage);
+                        hasCamera: true));
                 };
             }
 
@@ -290,24 +312,28 @@ namespace MauiDemoApp
 
                 faceDetectionButton.Clicked += (sender, args) =>
                 {
-                    ProcessAndRenderPage faceDetectionPage = new ProcessAndRenderPage(
-                        new FaceDetectionModel(),
-                        "Face Detection",
-                        "lena.jpg",
-                        "");
-                    Picker p = faceDetectionPage.Picker;
-                    p.Title = "Face detector";
-                    //Only offer the detectors whose required modules are
-                    //available. Yunet (objdetect + dnn) is the preferred
-                    //default, followed by the cascade classifier (objdetect).
+                    // Only offer the detectors whose required modules are
+                    // available. Yunet (objdetect + dnn) is the preferred
+                    // default, followed by the cascade classifier (objdetect).
+                    var detectors = new List<string>();
                     if (haveDNN)
-                        p.Items.Add(FaceDetectionModel.Yunet);
-                    p.Items.Add(FaceDetectionModel.CascadeClassifier);
+                        detectors.Add(FaceDetectionModel.Yunet);
+                    detectors.Add(FaceDetectionModel.CascadeClassifier);
                     if (haveFace && haveDNN)
-                        p.Items.Add(FaceDetectionModel.FaceLandmark);
-                    p.SelectedIndex = 0;
-                    p.IsVisible = p.Items.Count > 1;
-                    this.Navigation.PushAsync(faceDetectionPage);
+                        detectors.Add(FaceDetectionModel.FaceLandmark);
+
+                    this.Navigation.PushAsync(new ModelShowcasePage(
+                        "Face Detection",
+                        "Find faces in a photo.",
+                        demoGlyph("face"),
+                        () => new FaceDetectionModel(),
+                        new[]
+                        {
+                            new ModelShowcasePage.Sample("lena.jpg", "Portrait", MaskRcnnPage.GlyphImage),
+                            new ModelShowcasePage.Sample("pedestrian.png", "People", MaskRcnnPage.GlyphImage),
+                        },
+                        pickerTitle: "Face detector",
+                        pickerOptions: detectors.ToArray()));
                 };
 
                 Button pedestrianDetectionButton = new Button();
@@ -316,12 +342,15 @@ namespace MauiDemoApp
 
                 pedestrianDetectionButton.Clicked += (sender, args) =>
                 {
-                    ProcessAndRenderPage pedestrianDetectorPage = new ProcessAndRenderPage(
-                        new PedestrianDetector(),
-                        "Pedestrian detection",
-                        "pedestrian.png",
-                        "HOG pedestrian detection");
-                    this.Navigation.PushAsync(pedestrianDetectorPage);
+                    this.Navigation.PushAsync(new ModelShowcasePage(
+                        "Pedestrian Detection",
+                        "Detect people in a photo with HOG.",
+                        demoGlyph("pedestrian"),
+                        () => new PedestrianDetector(),
+                        new[]
+                        {
+                            new ModelShowcasePage.Sample("pedestrian.png", "Street", MaskRcnnPage.GlyphImage),
+                        }));
                 };
 
             }
@@ -340,16 +369,15 @@ namespace MauiDemoApp
                 buttonList.Add(barcodeQrcodeDetectionButton);
                 barcodeQrcodeDetectionButton.Clicked += (sender, args) =>
                 {
-                    BarcodeDetectorModel barcodeDetector = new BarcodeDetectorModel();
-                    WeChatQRCodeDetector qrcodeDetector = new WeChatQRCodeDetector();
-                    CombinedModel combinedModel = new CombinedModel(barcodeDetector, qrcodeDetector);
-
-                    ProcessAndRenderPage barcodeQrcodeDetectionPage = new ProcessAndRenderPage(
-                        combinedModel,
-                        "Perform Barcode and QRCode Detection",
-                        "qrcode_barcode.png",
-                        "");
-                    this.Navigation.PushAsync(barcodeQrcodeDetectionPage);
+                    this.Navigation.PushAsync(new ModelShowcasePage(
+                        "Barcode & QRCode",
+                        "Detect and decode barcodes and QR codes.",
+                        demoGlyph("barcode"),
+                        () => new CombinedModel(new BarcodeDetectorModel(), new WeChatQRCodeDetector()),
+                        new[]
+                        {
+                            new ModelShowcasePage.Sample("qrcode_barcode.png", "QR & barcode", MaskRcnnPage.GlyphImage),
+                        }));
                 };
             }
 
@@ -419,7 +447,7 @@ namespace MauiDemoApp
                 HorizontalOptions = LayoutOptions.Center
             };
 
-            Func<string, string> demoGlyph = (text) =>
+            demoGlyph = (text) =>
             {
                 string t = (text ?? "").ToLowerInvariant();
                 if (t.Contains("shape")) return "";                              // crop_free
