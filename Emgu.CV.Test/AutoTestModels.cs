@@ -632,13 +632,6 @@ namespace Emgu.CV.Test
         [Ignore("Ignore from test run by default.")]
 #endif
 #endif
-#if !TEST_MODELS
-#if VS_TEST
-        [Ignore()]
-#else
-        [Ignore("Ignore from test run by default.")]
-#endif
-#endif
         [Test]
         public async Task TestQwen25()
         {

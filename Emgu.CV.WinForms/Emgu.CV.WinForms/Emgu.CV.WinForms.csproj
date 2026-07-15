@@ -8,7 +8,7 @@
     <AssemblyOriginatorKeyFile>..\..\Emgu.CV.snk</AssemblyOriginatorKeyFile>
 	<OpenCVBinaryDir>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\..\libs))</OpenCVBinaryDir>
 	<OutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\$(Configuration)\</OutputPath>
-	<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	<GenerateResourceUsePreserializedResources Condition="'$(TargetFramework)' == 'net472'">true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
 

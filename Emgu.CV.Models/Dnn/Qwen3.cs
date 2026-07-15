@@ -86,6 +86,7 @@ namespace Emgu.CV.Models
         /// <summary>
         /// Download and initialize the Qwen3 model and its tokenizer.
         /// </summary>
+        /// <param name="version">The version of the Qwen3 model to use</param>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
         /// <returns>Async task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL

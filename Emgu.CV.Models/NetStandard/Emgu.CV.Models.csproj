@@ -9,7 +9,7 @@
 		<Configurations>Release;Debug</Configurations>
 		<Platforms>AnyCPU;x64</Platforms>
 		<BaseOutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\</BaseOutputPath>
-		<DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 	</PropertyGroup>
 
 <!--
