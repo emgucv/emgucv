@@ -273,7 +273,11 @@ namespace MauiDemoApp
             {
                 Spacing = 18,
                 Padding = new Thickness(20, 16, 20, 28),
-                Children = { header, sampleCard, _detectButton, resultsCard, pipelineCard }
+                Children =
+                {
+                    header, sampleCard, _detectButton, resultsCard, pipelineCard,
+                    ModelShowcasePage.BuildAboutCard("Finds geometric shapes — triangles, rectangles, circles — in an image using classic contour analysis (no AI model).")
+                }
             };
 
             // ---------- Loading overlay (spinner shown while busy) ----------
