@@ -159,20 +159,16 @@ namespace Emgu.CV.Models
 
                     _tokenizer = Tokenizer.Load(configPath);
 
-                    //Prefer the ONNX Runtime engine with the CUDA execution provider
-                    //when both are available in this build; otherwise fall back to
-                    //the classic dnn engine.
-                    bool useOrtCuda = CvInvoke.HaveOnnxRuntime && Emgu.CV.Cuda.CudaInvoke.HasCuda;
-                    EngineType engine = useOrtCuda ? EngineType.Ort : EngineType.New;
-
+                    //Note: EngineType.Ort is not used here even when ONNX Runtime and
+                    //CUDA are both available: OpenCV's ORT engine does not yet support
+                    //the KV-cache (EnableKVCache/ResetKVCache are no-ops on that path),
+                    //which this "causal-lm-with-past" export requires.
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-                    _net = DnnInvoke.ReadNetFromONNX(Path.Combine(modelFolder, "model.onnx"), engine);
+                    _net = DnnInvoke.ReadNetFromONNX(Path.Combine(modelFolder, "model.onnx"), EngineType.New);
 #else
                     String modelPath = Path.Combine(modelFolder, "model.onnx");
-                    _net = await Task.Run(() => DnnInvoke.ReadNetFromONNX(modelPath, engine));
+                    _net = await Task.Run(() => DnnInvoke.ReadNetFromONNX(modelPath, EngineType.New));
 #endif
-                    if (useOrtCuda)
-                        _net.SetPreferableTarget(Target.Cuda);
                 }
             }
         }
