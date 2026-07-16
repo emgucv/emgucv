@@ -121,13 +121,13 @@ namespace MauiDemoApp
 
             helloWorldButton.Clicked += (sender, args) =>
             {
-                this.Navigation.PushAsync(new HelloWorldPage());
+                this.Navigation.PushAsync(new HelloWorldPage(demoGlyph("hello")));
             };
 
             
             planarSubdivisionButton.Clicked += (sender, args) =>
             {
-                this.Navigation.PushAsync(new PlanarSubdivisionPage());
+                this.Navigation.PushAsync(new PlanarSubdivisionPage(demoGlyph("planar")));
             };
 
 
@@ -140,7 +140,7 @@ namespace MauiDemoApp
             
             featureDetectionButton.Clicked += (sender, args) =>
             {
-                this.Navigation.PushAsync(new FeatureMatchingPage());
+                this.Navigation.PushAsync(new FeatureMatchingPage(demoGlyph("feature matching")));
             };
 
             
@@ -489,7 +489,7 @@ namespace MauiDemoApp
 
                 unicodeRenderingButton.Clicked += (sender, args) =>
                 {
-                    this.Navigation.PushAsync(new UnicodeRenderingPage());
+                    this.Navigation.PushAsync(new UnicodeRenderingPage(demoGlyph("unicode")));
                 };
             }
             
