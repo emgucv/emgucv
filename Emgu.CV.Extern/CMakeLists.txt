@@ -3787,6 +3787,14 @@ ENDIF()
 #ENDIF()
 ############################### GPU END ################################
 
+############################### ONNX RUNTIME DLL DEPLOY START ##############################
+IF(HAVE_ONNXRUNTIME AND ONNXRT_ROOT_DIR)
+  FILE(GLOB CVEXTERN_ONNXRUNTIME_DEPENDENCY_DLLS "${ONNXRT_ROOT_DIR}/lib/onnxruntime*.dll")
+  MESSAGE(STATUS "CVEXTERN_ONNXRUNTIME_DEPENDENCY_DLLS: ${CVEXTERN_ONNXRUNTIME_DEPENDENCY_DLLS}")
+  LIST(APPEND CVEXTERN_DEPENDENCY_DLLS ${CVEXTERN_ONNXRUNTIME_DEPENDENCY_DLLS})
+ENDIF()
+############################### ONNX RUNTIME DLL DEPLOY END ################################
+
 ############################### OpenCL START ##############################
 #IF(WITH_OPENCL)
 #  MESSAGE(STATUS "Building cvextern with OPENCL")
