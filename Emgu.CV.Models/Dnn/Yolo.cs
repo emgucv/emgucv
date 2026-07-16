@@ -154,6 +154,17 @@ namespace Emgu.CV.Models
         }
 
         /// <summary>
+        /// Return true if the given version is one of the YOLOv10 "no_post_process" exports,
+        /// which declare 0 ONNX graph outputs and must be fetched by internal tensor name.
+        /// </summary>
+        private static bool IsV10(YoloVersion version)
+        {
+            return version == YoloVersion.YoloV10N || version == YoloVersion.YoloV10S ||
+                   version == YoloVersion.YoloV10M || version == YoloVersion.YoloV10B ||
+                   version == YoloVersion.YoloV10L || version == YoloVersion.YoloV10X;
+        }
+
+        /// <summary>
         /// Download and initialize the yolo model
         /// </summary>
         /// <param name="version">The model version</param>
@@ -297,7 +308,19 @@ namespace Emgu.CV.Models
                 {
                     try
                     {
-                        _yoloNet = DnnInvoke.ReadNetFromONNX(manager.Files[0].LocalFile);
+                        //YOLO is a single-pass detector (no KV-cache), so it does not
+                        //hit the KV-cache limitation of OpenCV's ORT engine and can use
+                        //the ONNX Runtime CUDA execution provider when available. This
+                        //does not apply to the V10 "no_post_process" exports: those graphs
+                        //declare zero ONNX outputs (the result is fetched by internal
+                        //tensor name instead, see Detect below), which OpenCV's ORT engine
+                        //requires and rejects with an assertion failure during Net loading.
+                        bool useOrtCuda = CvInvoke.HaveOnnxRuntime && Emgu.CV.Cuda.CudaInvoke.HasCuda && !IsV10(version);
+                        _yoloNet = DnnInvoke.ReadNetFromONNX(
+                            manager.Files[0].LocalFile,
+                            useOrtCuda ? EngineType.Ort : EngineType.Auto);
+                        if (useOrtCuda)
+                            _yoloNet.SetPreferableTarget(Target.Cuda);
                         _labels = File.ReadAllLines(manager.Files[1].LocalFile);
                         _versionUsed = version;
                     }
@@ -335,9 +358,7 @@ namespace Emgu.CV.Models
                 _yoloNet.SetInput(blob);
                 // V10 models exported without NMS have 0 declared ONNX outputs; retrieve by
                 // internal tensor name. V8 and YOLO11 declare output0 in the ONNX graph.
-                bool isV10 = _versionUsed == YoloVersion.YoloV10N || _versionUsed == YoloVersion.YoloV10S ||
-                             _versionUsed == YoloVersion.YoloV10M || _versionUsed == YoloVersion.YoloV10B ||
-                             _versionUsed == YoloVersion.YoloV10L || _versionUsed == YoloVersion.YoloV10X;
+                bool isV10 = IsV10(_versionUsed);
                 string outputTensorName = isV10 ? "/model.23/Concat_5_output_0" : "output0";
                 using (Mat output = _yoloNet.Forward(outputTensorName))
                 {
