@@ -179,6 +179,23 @@ namespace MauiDemoApp
                 LineBreakMode = LineBreakMode.WordWrap
             };
 
+            var timestampLabel = new Label
+            {
+                Text = DateTime.Now.ToString("t"),
+                TextColor = isUser
+                    ? Microsoft.Maui.Graphics.Color.FromArgb("#D7E1FF")
+                    : Microsoft.Maui.Graphics.Color.FromArgb("#8A8FA3"),
+                FontFamily = "InterRegular",
+                FontSize = 11,
+                HorizontalOptions = isUser ? LayoutOptions.End : LayoutOptions.Start
+            };
+
+            var bubbleContent = new VerticalStackLayout
+            {
+                Spacing = 2,
+                Children = { label, timestampLabel }
+            };
+
             var bubble = new Border
             {
                 BackgroundColor = isUser
@@ -190,7 +207,7 @@ namespace MauiDemoApp
                 StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(12) },
                 HorizontalOptions = isUser ? LayoutOptions.End : LayoutOptions.Start,
                 MaximumWidthRequest = 460,
-                Content = label
+                Content = bubbleContent
             };
 
             //Insert the bubble above the (status) message label so the
