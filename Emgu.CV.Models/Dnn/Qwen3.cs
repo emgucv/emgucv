@@ -158,12 +158,21 @@ namespace Emgu.CV.Models
                         File.WriteAllText(configPath, "{ \"method\": \"BPE\", \"model_type\": \"qwen2.5\" }");
 
                     _tokenizer = Tokenizer.Load(configPath);
+
+                    //Prefer the ONNX Runtime engine with the CUDA execution provider
+                    //when both are available in this build; otherwise fall back to
+                    //the classic dnn engine.
+                    bool useOrtCuda = CvInvoke.HaveOnnxRuntime && Emgu.CV.Cuda.CudaInvoke.HasCuda;
+                    EngineType engine = useOrtCuda ? EngineType.Ort : EngineType.New;
+
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-                    _net = DnnInvoke.ReadNetFromONNX(Path.Combine(modelFolder, "model.onnx"), EngineType.New);
+                    _net = DnnInvoke.ReadNetFromONNX(Path.Combine(modelFolder, "model.onnx"), engine);
 #else
                     String modelPath = Path.Combine(modelFolder, "model.onnx");
-                    _net = await Task.Run(() => DnnInvoke.ReadNetFromONNX(modelPath, EngineType.New));
+                    _net = await Task.Run(() => DnnInvoke.ReadNetFromONNX(modelPath, engine));
 #endif
+                    if (useOrtCuda)
+                        _net.SetPreferableTarget(Target.Cuda);
                 }
             }
         }
