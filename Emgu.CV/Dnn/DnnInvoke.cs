@@ -31,7 +31,11 @@ namespace Emgu.CV.Dnn
         /// <summary>
         /// Try to use the new engine and then fall back to the classic version.
         /// </summary>
-        Auto = 3     
+        Auto = 3,
+        /// <summary>
+        /// Try to use the ONNX Runtime wrapper (ONNX only, requires build with WITH_ONNXRUNTIME=ON).
+        /// </summary>
+        Ort = 4
     };
 
     /// <summary>
@@ -642,6 +646,22 @@ namespace Emgu.CV.Dnn
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveDnnGetAvailableBackends(IntPtr backends, IntPtr targets);
+
+        /// <summary>
+        /// Get the list of ONNX Runtime execution providers available in this build.
+        /// </summary>
+        /// <returns>The list of ONNX Runtime execution provider names (e.g. "CPUExecutionProvider", "CUDAExecutionProvider"). Returns an empty array if this build of cvextern was compiled without ONNX Runtime support.</returns>
+        public static String[] GetAvailableOnnxProviders()
+        {
+            using (VectorOfCvString providers = new VectorOfCvString())
+            {
+                cveDnnGetAvailableOnnxProviders(providers);
+                return providers.ToArray();
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveDnnGetAvailableOnnxProviders(IntPtr providers);
 
         /// <summary>
         /// Enables detailed logging of the DNN model loading with CV DNN API. Diagnostic mode provides detailed logging of the model loading stage to explore

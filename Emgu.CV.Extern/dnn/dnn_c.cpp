@@ -6,6 +6,9 @@
 
 #include "dnn_c.h"
 
+#ifdef HAVE_ONNXRUNTIME
+#include <onnxruntime_cxx_api.h>
+#endif
 
 
 cv::dnn::Net* cveReadNetFromTensorflow(cv::String* model, cv::String* config)
@@ -442,6 +445,18 @@ void cveDnnGetAvailableBackends(std::vector<int>* backends, std::vector<int>* ta
 	}
 #else
 	throw_no_dnn();
+#endif
+}
+
+void cveDnnGetAvailableOnnxProviders(std::vector<cv::String>* providers)
+{
+	providers->clear();
+#ifdef HAVE_ONNXRUNTIME
+	std::vector<std::string> result = Ort::GetAvailableProviders();
+	for (std::vector<std::string>::iterator iter = result.begin(); iter != result.end(); iter++)
+	{
+		providers->push_back(cv::String(*iter));
+	}
 #endif
 }
 

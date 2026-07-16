@@ -3285,6 +3285,16 @@ IF(WIN32 AND CV_ICC)
   STRING(REGEX REPLACE "/Qipo" "" CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE})
 ENDIF()
 
+############################### ONNX RUNTIME START ##############################
+IF(HAVE_ONNXRUNTIME)
+  MESSAGE(STATUS "CVEXTERN: using ONNX Runtime")
+  add_definitions(-DHAVE_ONNXRUNTIME)
+  IF(ONNX_INCLUDE_DIR)
+    include_directories(${ONNX_INCLUDE_DIR})
+  ENDIF()
+ENDIF()
+############################### ONNX RUNTIME END ################################
+
 ############################### IPP START ##############################
 #IF(WITH_IPP)
 #  include(${OPENCV_SUBFOLDER}/cmake/OpenCVFindIPP.cmake)
@@ -4065,9 +4075,13 @@ if(WITH_JPEG AND BUILD_JPEG)
 endif()
 
 # Add the required libraries for linking:
-target_link_libraries(${the_target} 
-  ${OPENCV_LINKER_LIBS} 
+target_link_libraries(${the_target}
+  ${OPENCV_LINKER_LIBS}
   ${ZLIB_LIBRARY})
+
+IF(HAVE_ONNXRUNTIME AND ONNX_LIBRARIES)
+  target_link_libraries(${the_target} ${ONNX_LIBRARIES})
+ENDIF()
   #  xtiff 
   #${CVBLOB_LIBRARY})
 

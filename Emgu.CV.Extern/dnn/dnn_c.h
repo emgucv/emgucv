@@ -149,6 +149,7 @@ CVAPI(void) cveDnnSoftNMSBoxes(
 	int method);
 
 CVAPI(void) cveDnnGetAvailableBackends(std::vector<int>* backends, std::vector<int>* targets);
+CVAPI(void) cveDnnGetAvailableOnnxProviders(std::vector<cv::String>* providers);
 CVAPI(void) cveDnnEnableModelDiagnostics(bool isDiagnosticsMode);
 
 CVAPI(cv::dnn::TextDetectionModel_DB*) cveDnnTextDetectionModelDbCreate1(cv::String* model, cv::String* config, cv::dnn::TextDetectionModel** textDetectionModel, cv::dnn::Model** baseModel);

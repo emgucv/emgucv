@@ -61,6 +61,18 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveGetConfigDict(IntPtr names, IntPtr values);
 
+        /// <summary>
+        /// Check if this build of cvextern was compiled with ONNX Runtime support.
+        /// </summary>
+        public static bool HaveOnnxRuntime
+        {
+            get
+            {
+                double value;
+                return ConfigDict.TryGetValue("HAVE_ONNXRUNTIME", out value) && value != 0;
+            }
+        }
+
         /*
 
         /// <summary>
