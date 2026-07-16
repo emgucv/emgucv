@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>${EMGU_ONNXRUNTIME_NUGET_ID}</id>
+	  <title>Native x64 ONNX Runtime dependency for EMGU CV</title>
+    <version>${EMGU_ONNXRUNTIME_VERSION}</version>
+    <authors>${CPACK_PACKAGE_VENDOR}</authors>
+    <owners>${CPACK_PACKAGE_VENDOR}</owners>
+    <license type="file">LICENSE.txt</license>
+    <projectUrl>${NUGET_EMGU_URL}</projectUrl>
+	  <icon>nuget_icon.png</icon>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	  <summary>This package provides the native ONNX Runtime dependency</summary>
+    <description>This package provides the native ONNX Runtime dependency for EMGU software libraries, including the CUDA and TensorRT execution provider libraries when the build includes GPU support.</description>
+    <releaseNotes>This is the ${EMGU_ONNXRUNTIME_VERSION} release of ONNX Runtime.</releaseNotes>
+	  <readme>docs/README.md</readme>
+    <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved</copyright>
+    <tags>native emgu onnx onnxruntime</tags>
+  </metadata>
+  <files>
+	  <file src="..\..\..\libs\runtimes\win-x64\native\onnxruntime*.dll" target="runtimes\win-x64\native" />
+	  <file src="..\..\..\miscellaneous\nuget_icon.png" target="" />
+	  <file src="LICENSE.txt" target="" />
+	  <file src="README.md" target="docs\" />
+  </files>
+</package>
