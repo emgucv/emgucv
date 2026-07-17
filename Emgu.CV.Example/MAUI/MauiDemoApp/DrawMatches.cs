@@ -92,6 +92,15 @@ namespace FeatureMatchingExample
         /// <returns>The model image and observed image, the matched features and homography projection.</returns>
         public static Mat Draw(Mat modelImage, Mat observedImage, Feature2D featureDetectorExtractor, out long matchTime)
         {
+            return Draw(modelImage, observedImage, featureDetectorExtractor, out matchTime, out _, out _);
+        }
+
+        /// <summary>
+        /// Same as <see cref="Draw(Mat, Mat, Feature2D, out long)"/> but also reports the number of
+        /// inlier matches and whether the object was located (a homography was found).
+        /// </summary>
+        public static Mat Draw(Mat modelImage, Mat observedImage, Feature2D featureDetectorExtractor, out long matchTime, out int matchCount, out bool objectLocated)
+        {
             Mat homography;
             VectorOfKeyPoint modelKeyPoints;
             VectorOfKeyPoint observedKeyPoints;
@@ -100,6 +109,9 @@ namespace FeatureMatchingExample
                 Mat mask;
                 FindMatch(modelImage, observedImage, featureDetectorExtractor, out matchTime, out modelKeyPoints, out observedKeyPoints, matches,
                    out mask, out homography);
+
+                matchCount = mask == null ? 0 : CvInvoke.CountNonZero(mask);
+                objectLocated = homography != null;
 
                 //Draw the matched keypoints
                 Mat result = new Mat();
