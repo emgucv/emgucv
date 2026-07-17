@@ -429,7 +429,12 @@ namespace Emgu.CV
             if (_needDispose && _ptr != IntPtr.Zero)
             {
                 Stop();
-                CvInvoke.cveVideoCaptureRelease2(ref _ptr);
+                //The grab thread calls into the native capture; freeing the native
+                //object while it is still inside a grab causes an access violation
+                //(issue #347). If the thread is stuck in a native call and does not
+                //exit within the timeout, leak this capture instead of crashing.
+                if (WaitForCaptureTask(_disposeCaptureTaskTimeout))
+                    CvInvoke.cveVideoCaptureRelease2(ref _ptr);
             }
 #endif
         }
@@ -528,7 +533,11 @@ namespace Emgu.CV
             }
         }
 
-        private Task _captureTask = null; 
+        private Task _captureTask = null;
+
+        //Long enough for a blocking grab on a slow backend (e.g. rtsp) to return,
+        //but bounded so a hung backend cannot block the finalizer thread forever.
+        private const int _disposeCaptureTaskTimeout = 5000;
 
         /// <summary>
         /// Start the grab process in a separate thread. Once started, use the ImageGrabbed event handler and RetrieveGrayFrame/RetrieveBgrFrame to obtain the images.
@@ -574,11 +583,34 @@ namespace Emgu.CV
                if (_grabState == GrabState.Running)
                 _grabState = GrabState.Stopping;
 
-            if (_captureTask != null)
+            WaitForCaptureTask(100);
+        }
+
+        /// <summary>
+        /// Wait for the grab task to terminate.
+        /// </summary>
+        /// <param name="millisecondsTimeout">The number of milliseconds to wait.</param>
+        /// <returns>True if the grab task has terminated (or was never started), false if it is still running after the timeout.</returns>
+        private bool WaitForCaptureTask(int millisecondsTimeout)
+        {
+            Task captureTask = _captureTask;
+            if (captureTask == null)
+                return true;
+
+            bool completed;
+            try
             {
-                _captureTask.Wait(100);
-                _captureTask = null;
+                completed = captureTask.Wait(millisecondsTimeout);
             }
+            catch (AggregateException)
+            {
+                //The grab thread threw; the task has still terminated.
+                completed = true;
+            }
+
+            if (completed)
+                _captureTask = null;
+            return completed;
         }
         #endregion
 
