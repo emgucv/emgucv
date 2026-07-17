@@ -31,7 +31,15 @@ namespace Emgu.CV
             /// <summary>
             /// Run the full-scale two-pass dynamic programming algorithm. It will consume O(W*H*numDisparities) bytes, which is large for 640x480 stereo and huge for HD-size pictures.
             /// </summary>
-            HH = 1
+            HH = 1,
+            /// <summary>
+            /// Run the single-pass three-direction algorithm.
+            /// </summary>
+            SGBM3Way = 2,
+            /// <summary>
+            /// A better variant of HH, with 4th direction with reduced memory consumption.
+            /// </summary>
+            HH4 = 3
         }
 
         private IntPtr _stereoMatcherPtr;

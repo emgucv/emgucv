@@ -125,9 +125,13 @@ namespace Emgu.CV
             /// </summary>
             Winrt = 1410,
             /// <summary>
-            /// Intel Perceptual Computing SDK
+            /// RealSense (former Intel Perceptual Computing SDK)
             /// </summary>
             IntelPerc = 1500,
+            /// <summary>
+            /// Synonym for IntelPerc
+            /// </summary>
+            Realsense = IntelPerc,
             /// <summary>
             /// OpenNI2 (for Kinect)
             /// </summary>
@@ -136,6 +140,10 @@ namespace Emgu.CV
             /// OpenNI2 (for Asus Xtion and Occipital Structure sensors)
             /// </summary>
             Openni2Asus = 1610,
+            /// <summary>
+            /// OpenNI2 (for Orbbec Astra)
+            /// </summary>
+            Openni2Astra = 1620,
             /// <summary>
             /// gPhoto2 connection
             /// </summary>
@@ -168,6 +176,14 @@ namespace Emgu.CV
             /// XINE engine (Linux)
             /// </summary>
             Xine = 2400,
+            /// <summary>
+            /// uEye Camera API
+            /// </summary>
+            Ueye = 2500,
+            /// <summary>
+            /// For Orbbec 3D-Sensor device/module (Astra+, Femto, Astra2, Gemini2, Gemini2L, Gemini2XL, Gemini330, Femto Mega)
+            /// </summary>
+            Obsensor = 2600,
         }
 
         AutoResetEvent _pauseEvent = new AutoResetEvent(false);

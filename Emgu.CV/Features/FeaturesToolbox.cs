@@ -160,6 +160,11 @@ namespace Emgu.CV.Features
             Default = 0,
 
             /// <summary>
+            /// Output image matrix will not be created (Mat::create). Matches will be drawn on existing content of output image.
+            /// </summary>
+            DrawOverOutImg = 1,
+
+            /// <summary>
             /// Single keypoints will not be drawn.
             /// </summary>
             NotDrawSinglePoints = 2,

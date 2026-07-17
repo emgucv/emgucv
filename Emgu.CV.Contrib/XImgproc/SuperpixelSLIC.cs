@@ -33,7 +33,11 @@ namespace Emgu.CV.XImgproc
             /// <summary>
             /// SLICO will choose an adaptive compactness factor.
             /// </summary>
-            SLICO = 101
+            SLICO = 101,
+            /// <summary>
+            /// MSLIC will optimize using manifold methods resulting in more content-sensitive superpixels.
+            /// </summary>
+            MSLIC = 102
         }
 
         /// <summary>

@@ -22,8 +22,12 @@ namespace Emgu.CV.Flann
       /// </summary>
       Gonzales = 1,
       /// <summary>
-      /// 
+      ///
       /// </summary>
-      Kmeanspp = 2
+      Kmeanspp = 2,
+      /// <summary>
+      /// Groupwise
+      /// </summary>
+      Groupwise = 3
    }
 }

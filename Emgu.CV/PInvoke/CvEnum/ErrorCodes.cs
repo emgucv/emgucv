@@ -194,7 +194,43 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Bad memory block
         /// </summary>
-        StsBadMemBlock = -214
+        StsBadMemBlock = -214,
+        /// <summary>
+        /// Assertion failed
+        /// </summary>
+        StsAssert = -215,
+        /// <summary>
+        /// No CUDA support
+        /// </summary>
+        GpuNotSupported = -216,
+        /// <summary>
+        /// GPU API call error
+        /// </summary>
+        GpuApiCallError = -217,
+        /// <summary>
+        /// No OpenGL support
+        /// </summary>
+        OpenGlNotSupported = -218,
+        /// <summary>
+        /// OpenGL API call error
+        /// </summary>
+        OpenGlApiCallError = -219,
+        /// <summary>
+        /// OpenCL API call error
+        /// </summary>
+        OpenCLApiCallError = -220,
+        /// <summary>
+        /// OpenCL double not supported
+        /// </summary>
+        OpenCLDoubleNotSupported = -221,
+        /// <summary>
+        /// OpenCL initialization error
+        /// </summary>
+        OpenCLInitError = -222,
+        /// <summary>
+        /// OpenCL no AMD Blas/Fft
+        /// </summary>
+        OpenCLNoAMDBlasFft = -223
     }
 
 }

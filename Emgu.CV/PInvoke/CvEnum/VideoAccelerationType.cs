@@ -36,7 +36,12 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// libmfx (Intel MediaSDK/oneVPL)
         /// </summary>
-        Mfx = 4,  
+        Mfx = 4,
+
+        /// <summary>
+        /// Raspberry Pi V4
+        /// </summary>
+        Drm = 5,
     }
 
 }

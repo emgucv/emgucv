@@ -42,7 +42,11 @@ namespace Emgu.CV.Dai
             /// <summary>
             /// Represents a resolution of 480p.
             /// </summary>
-            The480P
+            The480P,
+            /// <summary>
+            /// Represents a resolution of 1200p.
+            /// </summary>
+            The1200P
         };
 
         private IntPtr _nodePtr;

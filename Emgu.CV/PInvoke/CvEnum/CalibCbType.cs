@@ -39,7 +39,19 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Up sample input image to improve sub-pixel accuracy due to aliasing effects. This should be used if an accurate camera calibration is required.
         /// </summary>
-        Accuracy = 32
+        Accuracy = 32,
+        /// <summary>
+        /// The detected pattern is allowed to be larger than patternSize (see description).
+        /// </summary>
+        Larger = 64,
+        /// <summary>
+        /// The detected pattern must have a marker (see description). This should be used if an accurate camera calibration is required.
+        /// </summary>
+        Marker = 128,
+        /// <summary>
+        /// All other flags are ignored. The input image is taken as is.
+        /// </summary>
+        Plain = 256
     }
 
 }

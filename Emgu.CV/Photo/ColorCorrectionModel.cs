@@ -200,11 +200,11 @@ namespace Emgu.CV.Ccm
             /// <summary>
             /// non-RGB color space
             /// </summary>
-            XyzD65_10,
+            XyzD50_2,
             /// <summary>
             /// non-RGB color space
             /// </summary>
-            XyzD50_2,
+            XyzD65_10,
             /// <summary>
             /// non-RGB color space
             /// </summary>
@@ -247,12 +247,12 @@ namespace Emgu.CV.Ccm
             LabD65_2,
             /// <summary>
             /// non-RGB color space
-            /// </summary>                                       
-            LabD65_10,
+            /// </summary>
+            LabD50_2,
             /// <summary>
             /// non-RGB color space
             /// </summary>
-            LabD50_2,
+            LabD65_10,
             /// <summary>
             /// non-RGB color space
             /// </summary>

@@ -209,7 +209,7 @@ namespace Emgu.CV.CvEnum
         ///</summary>
         Bgr2Hsv = 40,
         /// <summary>
-        /// Convert RGB colot to HSV color
+        /// Convert RGB color to HSV color
         /// </summary>
         Rgb2Hsv = 41,
         ///<summary>
@@ -238,11 +238,11 @@ namespace Emgu.CV.CvEnum
         BayerGr2Bgr = 49,
 
         /// <summary>
-        /// Convert Bayer BG color to BGR color
+        /// Convert Bayer BG color to RGB color
         /// </summary>
         BayerBg2Rgb = BayerRg2Bgr,
         /// <summary>
-        /// Convert Bayer RG color to BGR color
+        /// Convert Bayer GB color to RGB color
         /// </summary>
         BayerGb2Rgb = BayerGr2Bgr,
         /// <summary>
@@ -705,7 +705,7 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Yuv2RgbaUyvy = 111,
         /// <summary>
-        /// Convert YUV (VYUY) to BGRA
+        /// Convert YUV (UYVY) to BGRA
         /// </summary>
         Yuv2BgraUyvy = 112,
         //YUV2RGBA_VYUY = 113,
@@ -1021,9 +1021,125 @@ namespace Emgu.CV.CvEnum
         BayerGr2Rgba = BayerGb2Bgra,
 
         /// <summary>
+        /// Convert RGB to YUV (UYVY), YUV is 4:2:2 and interleaved as U/Y1/V/Y2
+        /// </summary>
+        Rgb2YuvUyvy = 143,
+        /// <summary>
+        /// Convert BGR to YUV (UYVY), YUV is 4:2:2 and interleaved as U/Y1/V/Y2
+        /// </summary>
+        Bgr2YuvUyvy = 144,
+        /// <summary>
+        /// Convert RGB to YUV (Y422)
+        /// </summary>
+        Rgb2YuvY422 = Rgb2YuvUyvy,
+        /// <summary>
+        /// Convert BGR to YUV (Y422)
+        /// </summary>
+        Bgr2YuvY422 = Bgr2YuvUyvy,
+        /// <summary>
+        /// Convert RGB to YUV (UYNV)
+        /// </summary>
+        Rgb2YuvUynv = Rgb2YuvUyvy,
+        /// <summary>
+        /// Convert BGR to YUV (UYNV)
+        /// </summary>
+        Bgr2YuvUynv = Bgr2YuvUyvy,
+
+        /// <summary>
+        /// Convert RGBA to YUV (UYVY), YUV is 4:2:2 and interleaved as U/Y1/V/Y2
+        /// </summary>
+        Rgba2YuvUyvy = 145,
+        /// <summary>
+        /// Convert BGRA to YUV (UYVY), YUV is 4:2:2 and interleaved as U/Y1/V/Y2
+        /// </summary>
+        Bgra2YuvUyvy = 146,
+        /// <summary>
+        /// Convert RGBA to YUV (Y422)
+        /// </summary>
+        Rgba2YuvY422 = Rgba2YuvUyvy,
+        /// <summary>
+        /// Convert BGRA to YUV (Y422)
+        /// </summary>
+        Bgra2YuvY422 = Bgra2YuvUyvy,
+        /// <summary>
+        /// Convert RGBA to YUV (UYNV)
+        /// </summary>
+        Rgba2YuvUynv = Rgba2YuvUyvy,
+        /// <summary>
+        /// Convert BGRA to YUV (UYNV)
+        /// </summary>
+        Bgra2YuvUynv = Bgra2YuvUyvy,
+
+        /// <summary>
+        /// Convert RGB to YUV (YUY2), YUV is 4:2:2 and interleaved as Y1/U/Y2/V
+        /// </summary>
+        Rgb2YuvYuy2 = 147,
+        /// <summary>
+        /// Convert BGR to YUV (YUY2), YUV is 4:2:2 and interleaved as Y1/U/Y2/V
+        /// </summary>
+        Bgr2YuvYuy2 = 148,
+        /// <summary>
+        /// Convert RGB to YUV (YVYU), YUV is 4:2:2 and interleaved as Y1/V/Y2/U
+        /// </summary>
+        Rgb2YuvYvyu = 149,
+        /// <summary>
+        /// Convert BGR to YUV (YVYU), YUV is 4:2:2 and interleaved as Y1/V/Y2/U
+        /// </summary>
+        Bgr2YuvYvyu = 150,
+        /// <summary>
+        /// Convert RGB to YUV (YUYV)
+        /// </summary>
+        Rgb2YuvYuyv = Rgb2YuvYuy2,
+        /// <summary>
+        /// Convert BGR to YUV (YUYV)
+        /// </summary>
+        Bgr2YuvYuyv = Bgr2YuvYuy2,
+        /// <summary>
+        /// Convert RGB to YUV (YUNV)
+        /// </summary>
+        Rgb2YuvYunv = Rgb2YuvYuy2,
+        /// <summary>
+        /// Convert BGR to YUV (YUNV)
+        /// </summary>
+        Bgr2YuvYunv = Bgr2YuvYuy2,
+
+        /// <summary>
+        /// Convert RGBA to YUV (YUY2), YUV is 4:2:2 and interleaved as Y1/U/Y2/V
+        /// </summary>
+        Rgba2YuvYuy2 = 151,
+        /// <summary>
+        /// Convert BGRA to YUV (YUY2), YUV is 4:2:2 and interleaved as Y1/U/Y2/V
+        /// </summary>
+        Bgra2YuvYuy2 = 152,
+        /// <summary>
+        /// Convert RGBA to YUV (YVYU), YUV is 4:2:2 and interleaved as Y1/V/Y2/U
+        /// </summary>
+        Rgba2YuvYvyu = 153,
+        /// <summary>
+        /// Convert BGRA to YUV (YVYU), YUV is 4:2:2 and interleaved as Y1/V/Y2/U
+        /// </summary>
+        Bgra2YuvYvyu = 154,
+        /// <summary>
+        /// Convert RGBA to YUV (YUYV)
+        /// </summary>
+        Rgba2YuvYuyv = Rgba2YuvYuy2,
+        /// <summary>
+        /// Convert BGRA to YUV (YUYV)
+        /// </summary>
+        Bgra2YuvYuyv = Bgra2YuvYuy2,
+        /// <summary>
+        /// Convert RGBA to YUV (YUNV)
+        /// </summary>
+        Rgba2YuvYunv = Rgba2YuvYuy2,
+        /// <summary>
+        /// Convert BGRA to YUV (YUNV)
+        /// </summary>
+        Bgra2YuvYunv = Bgra2YuvYuy2,
+
+        /// <summary>
         /// The max number, do not use
         /// </summary>
-        ColorCvtMax = 143
+        ColorCvtMax = 155
     }
 
 }

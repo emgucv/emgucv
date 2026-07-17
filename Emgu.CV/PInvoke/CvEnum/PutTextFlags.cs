@@ -17,7 +17,7 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         AlignLeft = 0,
         /// <summary>
-        /// Center the text at the origin
+        /// Center the text at the origin. Not implemented yet.
         /// </summary>
         AlignCenter = 1,
         /// <summary>

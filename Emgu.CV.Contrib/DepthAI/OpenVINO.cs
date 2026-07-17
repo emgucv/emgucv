@@ -52,7 +52,15 @@ namespace Emgu.CV.Dai
             /// <summary>
             /// Represents OpenVINO version 2021.4.
             /// </summary>
-            Version2021_4
+            Version2021_4,
+            /// <summary>
+            /// Represents OpenVINO version 2022.1.
+            /// </summary>
+            Version2022_1,
+            /// <summary>
+            /// Represents a universal, version-agnostic OpenVINO blob.
+            /// </summary>
+            VersionUniversal
         }
     }
 

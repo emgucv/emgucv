@@ -26,6 +26,34 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// RHO algorithm
         /// </summary>
-        RHO = 16
+        RHO = 16,
+        /// <summary>
+        /// USAC algorithm, default settings
+        /// </summary>
+        UsacDefault = 32,
+        /// <summary>
+        /// USAC, parallel version
+        /// </summary>
+        UsacParallel = 33,
+        /// <summary>
+        /// USAC, fundamental matrix 8 points
+        /// </summary>
+        UsacFm8Pts = 34,
+        /// <summary>
+        /// USAC, fast settings
+        /// </summary>
+        UsacFast = 35,
+        /// <summary>
+        /// USAC, accurate settings
+        /// </summary>
+        UsacAccurate = 36,
+        /// <summary>
+        /// USAC, sorted points, runs PROSAC
+        /// </summary>
+        UsacProsac = 37,
+        /// <summary>
+        /// USAC, runs MAGSAC++
+        /// </summary>
+        UsacMagsac = 38
     }
 }

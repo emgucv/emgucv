@@ -151,6 +151,11 @@ namespace Emgu.CV.Aruco
             /// 6x6 bits, minimum hamming distance between any two codes = 11, 587 codes
             /// </summary>
             DictAprilTag36h11,
+
+            /// <summary>
+            /// 6x6 bits, minimum hamming distance between any two codes = 12, 250 codes
+            /// </summary>
+            DictArucoMip36h12,
         }
 
         /// <summary>

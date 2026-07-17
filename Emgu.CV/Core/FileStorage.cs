@@ -63,6 +63,10 @@ namespace Emgu.CV
             /// </summary>
             FormatJson = (3 << 3),
             /// <summary>
+            /// Legacy YAML 1.0 format (strict headers, booleans as ints)
+            /// </summary>
+            FormatYaml1_0 = (4 << 3),
+            /// <summary>
             /// Write rawdata in Base64 by default. (consider using WriteBase64)
             /// </summary>
             Base64 = 64,
