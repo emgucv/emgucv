@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>${EMGU_CUDA_NVRTC_NUGET_ID}</id>
+	  <title>Native x64 NVRTC component for CUDA</title>
+    <version>${EMGU_CUDA_NVRTC_VERSION}</version>
+    <authors>${CPACK_PACKAGE_VENDOR}</authors>
+    <owners>${CPACK_PACKAGE_VENDOR}</owners>
+    <license type="file">EULA.txt</license>
+    <projectUrl>${NUGET_EMGU_URL}</projectUrl>
+	  <icon>nuget_icon.png</icon>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+	  <summary>This package provides the native NVRTC (CUDA runtime compilation) component for CUDA</summary>
+    <description>This package provides the native NVRTC (CUDA runtime compilation) component for CUDA, used by cuDNN's runtime-fusion engine to JIT-compile fused kernels.</description>
+    <releaseNotes>This is the ${EMGU_CUDA_NVRTC_VERSION} release of the CUDA NVRTC component.</releaseNotes>
+	  <readme>docs/README.md</readme>
+    <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved</copyright>
+    <tags>native emgu cuda nvrtc</tags>
+  </metadata>
+  <files>
+	  <file src="..\..\..\libs\runtimes\win-x64\native\nvrtc*.dll" target="runtimes\win-x64\native" />
+	  <file src="..\..\..\miscellaneous\nuget_icon.png" target="" />
+	  <file src="EULA.txt" target="" />
+	  <file src="README.md" target="docs\" />
+  </files>
+</package>

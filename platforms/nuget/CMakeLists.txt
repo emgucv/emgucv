@@ -18,6 +18,7 @@ ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.dnn.cnn")
 ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.dnn.engines")
 ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.dnn.ops")
 ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.dnn.adv")
+ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.nvrtc")
 
 ADD_SUBDIRECTORY("Emgu.runtime.windows.onnxruntime")
 
