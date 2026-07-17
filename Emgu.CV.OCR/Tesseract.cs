@@ -85,20 +85,6 @@ namespace Emgu.CV.OCR
             }
         }
 
-        /// <summary>
-        /// If compiled with OpenCL AND an available OpenCL
-        /// device is deemed faster than serial code, then
-        /// "device" is populated with the cl_device_id
-        /// and returns sizeof(cl_device_id)
-        /// otherwise *device=nullptr and returns 0.
-        /// </summary>
-        /// <param name="device">Pointer to the opencl device</param>
-        /// <returns>0 if no device found. sizeof(cl_device_id) if device is found.</returns>
-        public int GetOpenCLDevice(ref IntPtr device)
-        {
-            return OcrInvoke.cveTessBaseAPIGetOpenCLDevice(_ptr, ref device);
-        }
-
         /*
         /// <summary>
         /// Create an tesseract OCR engine.

@@ -167,31 +167,15 @@ IF (NOT MSVC)
   ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccutil tesseract_viewer)
 ENDIF()
 
-#opencl
-PROJECT(tesseract_opencl)
-file(GLOB tesseract_opencl_srcs "${TESSERACT_SRC_DIR}/opencl/*.cpp")
-file(GLOB tesseract_opencl_hdrs "${TESSERACT_SRC_DIR}/opencl/*.h")
-source_group("Src" FILES ${tesseract_opencl_srcs})
-source_group("Include" FILES ${tesseract_opencl_hdrs})
+# tesseract >= 5.5 removed src/opencl and the target with it.
+# The definitions and include directories below used to be set up by that
+# target's section and apply to every target that follows.
 add_definitions(-DHAVE_LIBLEPT)
 IF(MSVC)
   add_definitions(-D__MSW32__ -W0)
-
-  IF(TESSERACT_OPENCL)
-    add_definitions(-DUSE_OPENCL)
-    #include_directories("${OPENCV_SUBFOLDER}/3rdparty/libtiff")
-    include_directories("${CMAKE_SOURCE_DIR}/lib/opencl-icd-1.2.11.0/icd/inc")
-  ENDIF()
   #include_directories("${TESSERACT_SRC_DIR}/vs2010/include")
 ENDIF()
 include_directories("${TESSERACT_SRC_DIR}/ccutil" "${TESSERACT_SRC_DIR}/viewer" "${LEPTONICA_DIR}")
-add_library(${PROJECT_NAME} STATIC ${tesseract_opencl_srcs} ${tesseract_opencl_hdrs})
-
-SET_TESSERACT_PROJECT_PROPERTY(${PROJECT_NAME})
-
-IF (NOT MSVC)
-  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccutil tesseract_viewer libleptonica)
-ENDIF()
 
 #ccstruct
 PROJECT(tesseract_ccstruct)
@@ -203,13 +187,13 @@ source_group("Include" FILES ${tesseract_ccstruct_hdrs})
 #  add_definitions(-D__MSW32__ -W0)
 #  include_directories("${TESSERACT_SRC_DIR}/vs2010/include" "${TESSERACT_SRC_DIR}/vs2010/port")
 #ENDIF()
-include_directories("${TESSERACT_SRC_DIR}/ccutil" "${TESSERACT_SRC_DIR}/viewer" "${TESSERACT_SRC_DIR}/cutil" "${TESSERACT_SRC_DIR}/opencl" "${LEPTONICA_DIR}")
+include_directories("${TESSERACT_SRC_DIR}/ccutil" "${TESSERACT_SRC_DIR}/viewer" "${TESSERACT_SRC_DIR}/cutil" "${LEPTONICA_DIR}")
 add_library(${PROJECT_NAME} STATIC ${tesseract_ccstruct_srcs} ${tesseract_ccstruct_hdrs})
 
 SET_TESSERACT_PROJECT_PROPERTY(${PROJECT_NAME})
 
 IF (NOT MSVC)
-  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccutil tesseract_cutil tesseract_viewer tesseract_opencl libleptonica)
+  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccutil tesseract_cutil tesseract_viewer libleptonica)
 ENDIF()
 
 #dict
@@ -222,11 +206,11 @@ IF(MSVC)
   add_definitions(-D__MSW32__ -W0)
   include_directories("${TESSERACT_SRC_DIR}/vs2010/include")
 ENDIF()
-include_directories("${TESSERACT_SRC_DIR}/cutil" "${TESSERACT_SRC_DIR}/ccstruct" "${TESSERACT_SRC_DIR}/ccutil" "${TESSERACT_SRC_DIR}/viewer" "${TESSERACT_SRC_DIR}/opencl")
+include_directories("${TESSERACT_SRC_DIR}/cutil" "${TESSERACT_SRC_DIR}/ccstruct" "${TESSERACT_SRC_DIR}/ccutil" "${TESSERACT_SRC_DIR}/viewer")
 add_library(${PROJECT_NAME} STATIC ${tesseract_dict_srcs} ${tesseract_dict_hdrs})
 SET_TESSERACT_PROJECT_PROPERTY(${PROJECT_NAME})
 IF (NOT MSVC)
-  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl)
+  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer)
 ENDIF()
 
 #classify
@@ -239,11 +223,11 @@ IF(MSVC)
   add_definitions(-D__MSW32__ -W0)
   include_directories("${TESSERACT_SRC_DIR}/vs2010/include")
 ENDIF()
-include_directories("${TESSERACT_SRC_DIR}/cutil" "${TESSERACT_SRC_DIR}/ccstruct" "${TESSERACT_SRC_DIR}/ccutil" "${TESSERACT_SRC_DIR}/viewer" "${TESSERACT_SRC_DIR}/opencl" "${TESSERACT_SRC_DIR}/dict")
+include_directories("${TESSERACT_SRC_DIR}/cutil" "${TESSERACT_SRC_DIR}/ccstruct" "${TESSERACT_SRC_DIR}/ccutil" "${TESSERACT_SRC_DIR}/viewer" "${TESSERACT_SRC_DIR}/dict")
 add_library(${PROJECT_NAME} STATIC ${tesseract_classify_srcs} ${tesseract_classify_hdrs})
 SET_TESSERACT_PROJECT_PROPERTY(${PROJECT_NAME})
 IF (NOT MSVC)
-  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict)
+  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_dict)
 ENDIF()
 
 #wordrec
@@ -256,13 +240,13 @@ IF(MSVC)
   add_definitions(-D__MSW32__ -W0)
   include_directories("${TESSERACT_SRC_DIR}/vs2010/include")
 ENDIF()
-include_directories("${TESSERACT_SRC_DIR}/cutil" "${TESSERACT_SRC_DIR}/ccstruct" "${TESSERACT_SRC_DIR}/ccutil" "${TESSERACT_SRC_DIR}/viewer" "${TESSERACT_SRC_DIR}/opencl" "${TESSERACT_SRC_DIR}/dict" "${TESSERACT_SRC_DIR}/classify")
+include_directories("${TESSERACT_SRC_DIR}/cutil" "${TESSERACT_SRC_DIR}/ccstruct" "${TESSERACT_SRC_DIR}/ccutil" "${TESSERACT_SRC_DIR}/viewer" "${TESSERACT_SRC_DIR}/dict" "${TESSERACT_SRC_DIR}/classify")
 add_library(${PROJECT_NAME} STATIC ${tesseract_wordrec_srcs} ${tesseract_wordrec_hdrs})
 
 SET_TESSERACT_PROJECT_PROPERTY(${PROJECT_NAME})
 
 IF (NOT MSVC)
-  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify)
+  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_dict tesseract_classify)
 ENDIF()
 
 #textord
@@ -276,13 +260,13 @@ IF(MSVC)
   add_definitions(-D__MSW32__ -W0)
   include_directories("${TESSERACT_SRC_DIR}/vs2010/include")
 ENDIF()
-include_directories("${TESSERACT_SRC_DIR}/cutil" "${TESSERACT_SRC_DIR}/ccstruct" "${TESSERACT_SRC_DIR}/ccutil" "${TESSERACT_SRC_DIR}/viewer" "${TESSERACT_SRC_DIR}/opencl" "${TESSERACT_SRC_DIR}/dict" "${TESSERACT_SRC_DIR}/classify" "${LEPTONICA_DIR}" "${TESSERACT_SRC_DIR}/ccmain" "${TESSERACT_SRC_DIR}/wordrec")
+include_directories("${TESSERACT_SRC_DIR}/cutil" "${TESSERACT_SRC_DIR}/ccstruct" "${TESSERACT_SRC_DIR}/ccutil" "${TESSERACT_SRC_DIR}/viewer" "${TESSERACT_SRC_DIR}/dict" "${TESSERACT_SRC_DIR}/classify" "${LEPTONICA_DIR}" "${TESSERACT_SRC_DIR}/ccmain" "${TESSERACT_SRC_DIR}/wordrec")
 add_library(${PROJECT_NAME} STATIC ${tesseract_textord_srcs} ${tesseract_textord_hdrs})
 
 SET_TESSERACT_PROJECT_PROPERTY(${PROJECT_NAME})
 
 IF (NOT MSVC)
-  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify libleptonica tesseract_wordrec)
+  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_dict tesseract_classify libleptonica tesseract_wordrec)
 ENDIF()
 
 #arch
@@ -416,13 +400,13 @@ add_definitions(-DUSE_STD_NAMESPACE -DHAVE_LIBLEPT)
 #  add_definitions(-D__MSW32__ -W0)
 #  include_directories("${TESSERACT_SRC_DIR}/vs2010/include" "${TESSERACT_SRC_DIR}/vs2010/port")
 #ENDIF()
-include_directories("${TESSERACT_SRC_DIR}/cutil" "${TESSERACT_SRC_DIR}/ccstruct" "${TESSERACT_SRC_DIR}/ccutil" "${TESSERACT_SRC_DIR}/viewer" "${TESSERACT_SRC_DIR}/opencl" "${TESSERACT_SRC_DIR}/dict" "${TESSERACT_SRC_DIR}/classify" "${LEPTONICA_DIR}" "${TESSERACT_SRC_DIR}/wordrec" "${TESSERACT_SRC_DIR}/textord" "${TESSERACT_SRC_DIR}/lstm")
+include_directories("${TESSERACT_SRC_DIR}/cutil" "${TESSERACT_SRC_DIR}/ccstruct" "${TESSERACT_SRC_DIR}/ccutil" "${TESSERACT_SRC_DIR}/viewer" "${TESSERACT_SRC_DIR}/dict" "${TESSERACT_SRC_DIR}/classify" "${LEPTONICA_DIR}" "${TESSERACT_SRC_DIR}/wordrec" "${TESSERACT_SRC_DIR}/textord" "${TESSERACT_SRC_DIR}/lstm")
 add_library(${PROJECT_NAME} STATIC ${tesseract_ccmain_srcs} ${tesseract_ccmain_hdrs})
 
 SET_TESSERACT_PROJECT_PROPERTY(${PROJECT_NAME})
 
 IF (NOT MSVC)
-  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify libleptonica tesseract_wordrec tesseract_textord tesseract_lstm)
+  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_dict tesseract_classify libleptonica tesseract_wordrec tesseract_textord tesseract_lstm)
 ENDIF()
 
 #api
@@ -444,7 +428,7 @@ add_definitions(-DUSE_STD_NAMESPACE -DHAVE_LIBLEPT)
 #  add_definitions(-D__MSW32__ -W0)
 #  include_directories("${TESSERACT_SRC_DIR}/vs2008/include" "${TESSERACT_SRC_DIR}/vs2008/port")
 #ENDIF()
-include_directories("${TESSERACT_SRC_DIR}/cutil" "${TESSERACT_SRC_DIR}/ccstruct" "${TESSERACT_SRC_DIR}/ccutil" "${TESSERACT_SRC_DIR}/viewer" "${TESSERACT_SRC_DIR}/opencl" "${TESSERACT_SRC_DIR}/dict" "${TESSERACT_SRC_DIR}/classify" "${LEPTONICA_DIR}" "${TESSERACT_SRC_DIR}/ccmain" "${TESSERACT_SRC_DIR}/wordrec" "${TESSERACT_SRC_DIR}/textord")
+include_directories("${TESSERACT_SRC_DIR}/cutil" "${TESSERACT_SRC_DIR}/ccstruct" "${TESSERACT_SRC_DIR}/ccutil" "${TESSERACT_SRC_DIR}/viewer" "${TESSERACT_SRC_DIR}/dict" "${TESSERACT_SRC_DIR}/classify" "${LEPTONICA_DIR}" "${TESSERACT_SRC_DIR}/ccmain" "${TESSERACT_SRC_DIR}/wordrec" "${TESSERACT_SRC_DIR}/textord")
 SET_SOURCE_FILES_PROPERTIES(${PROJECT_SOURCE_DIR}/${TESSERACT_SRC_DIR}/api/baseapi.cpp  PROPERTIES COMPILE_DEFINITIONS PACKAGE_VERSION="${PACKAGE_VERSION}")
 SET_SOURCE_FILES_PROPERTIES(${PROJECT_SOURCE_DIR}/${TESSERACT_SRC_DIR}/api/renderer.cpp  PROPERTIES COMPILE_DEFINITIONS PACKAGE_VERSION="${PACKAGE_VERSION}")
 
@@ -459,7 +443,7 @@ ENDIF()
 SET_TESSERACT_PROJECT_PROPERTY(${PROJECT_NAME})
 
 IF(NOT MSVC)
-  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccmain tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_opencl tesseract_dict tesseract_classify libleptonica tesseract_wordrec tesseract_textord)
+  ADD_DEPENDENCIES(${PROJECT_NAME} tesseract_ccmain tesseract_cutil tesseract_ccstruct tesseract_ccutil tesseract_viewer tesseract_dict tesseract_classify libleptonica tesseract_wordrec tesseract_textord)
 ENDIF()
 
 

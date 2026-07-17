@@ -107,9 +107,6 @@ namespace Emgu.CV.OCR
         internal static extern PageSegMode cveTessBaseAPIGetPageSegMode(IntPtr ocr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int cveTessBaseAPIGetOpenCLDevice(IntPtr ocr, ref IntPtr device);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveTessBaseAPIAnalyseLayout(
             IntPtr ocr,
             [MarshalAs(CvInvoke.BoolMarshalType)]

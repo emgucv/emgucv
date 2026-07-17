@@ -130,8 +130,6 @@ CVAPI(void) cveTessBaseAPISetPageSegMode(EmguTesseract* ocr, tesseract::PageSegM
 
 CVAPI(tesseract::PageSegMode) cveTessBaseAPIGetPageSegMode(EmguTesseract* ocr);
 
-CVAPI(int) cveTessBaseAPIGetOpenCLDevice(EmguTesseract* ocr, void **device);
-
 CVAPI(tesseract::PageIterator*) cveTessBaseAPIAnalyseLayout(EmguTesseract* ocr, bool mergeSimilarWords);
 
 CVAPI(void) cveTessPageIteratorGetOrientation(tesseract::PageIterator* iterator, tesseract::Orientation* orientation, tesseract::WritingDirection* writingDirection, tesseract::TextlineOrder* order, float* deskewAngle);

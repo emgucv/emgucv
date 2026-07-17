@@ -3400,7 +3400,7 @@ SET(LEPT_ROOT_DIR "${PROJECT_SOURCE_DIR}/tesseract/libtesseract/leptonica/lepton
         "${TESSERACT_OCR_ROOT_DIR}/src/ccstruct" 
         "${LEPT_ROOT_DIR}/src" 
         "${PROJECT_SOURCE_DIR}/tesseract")
-      SET(TESSERACT_PROJECTS tesseract_api tesseract_ccmain tesseract_lstm tesseract_textord tesseract_arch tesseract_wordrec tesseract_classify tesseract_dict tesseract_ccstruct tesseract_opencl tesseract_cutil tesseract_viewer tesseract_ccutil libleptonica)
+      SET(TESSERACT_PROJECTS tesseract_api tesseract_ccmain tesseract_lstm tesseract_textord tesseract_arch tesseract_wordrec tesseract_classify tesseract_dict tesseract_ccstruct tesseract_cutil tesseract_viewer tesseract_ccutil libleptonica)
     ENDIF()
 	
 	IF (ANDROID)

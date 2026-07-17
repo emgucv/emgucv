@@ -254,15 +254,6 @@ tesseract::PageSegMode cveTessBaseAPIGetPageSegMode(EmguTesseract* ocr)
 #endif
 }
 
-int cveTessBaseAPIGetOpenCLDevice(EmguTesseract* ocr, void **device)
-{
-#ifdef HAVE_EMGUCV_TESSERACT
-	return static_cast<int>(ocr->getOpenCLDevice(device));
-#else
-	throw_no_tesseract();
-#endif
-}
-
 tesseract::PageIterator* cveTessBaseAPIAnalyseLayout(EmguTesseract* ocr, bool mergeSimilarWords)
 {
 #ifdef HAVE_EMGUCV_TESSERACT
