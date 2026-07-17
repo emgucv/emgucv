@@ -6,7 +6,7 @@
     },
     "MauiDemoApp": {
       "commandName": "Project",
-      "nativeDebugging": true
+      "debugEngines": "managed,native"
     }
   }
 }
