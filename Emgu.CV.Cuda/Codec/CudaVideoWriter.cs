@@ -42,7 +42,7 @@ namespace Emgu.CV.Cuda
             /// </summary>
             Gray = 3,
             /// <summary>
-            /// Nvidia color format - equivalent to YUV - Semi-Planar YUV [Y plane followed by interleaved UV plane], can be used with both VideoReader and VideoWriter.
+            /// Nvidia Buffer Format - Semi-Planar YUV [Y plane followed by interleaved UV plane]. VideoWriter only. Deprecated for use with VideoReader, use NvYuvSurfaceFormat instead.
             /// </summary>
             NvNv12 = 4,
             /// <summary>
@@ -54,21 +54,33 @@ namespace Emgu.CV.Cuda
             /// </summary>
             Rgba = 6,
             /// <summary>
-            /// Nvidia Buffer Format - Planar YUV [Y plane followed by V and U planes], use with VideoReader, can only be used with VideoWriter.
+            /// Nvidia YUV Surface Format output by the Nvidia decoder. VideoReader only.
+            /// </summary>
+            NvYuvSurfaceFormat = 7,
+            /// <summary>
+            /// Nvidia Buffer Format - Planar YUV [Y plane followed by V and U planes], can only be used with VideoWriter.
             /// </summary>
             NvYv12 = 8,
             /// <summary>
-            /// Nvidia Buffer Format - Planar YUV [Y plane followed by U and V planes], use with VideoReader, can only be used with VideoWriter.
+            /// Nvidia Buffer Format - Planar YUV [Y plane followed by U and V planes], can only be used with VideoWriter.
             /// </summary>
             NvIyuv = 9,
             /// <summary>
-            /// Nvidia Buffer Format - Planar YUV [Y plane followed by U and V planes], use with VideoReader, can only be used with VideoWriter.
+            /// Nvidia Buffer Format - Planar YUV [Y plane followed by U and V planes], can only be used with VideoWriter.
             /// </summary>
             NvYuv444 = 10,
             /// <summary>
             /// Nvidia Buffer Format - 8 bit Packed A8Y8U8V8. This is a word-ordered format where a pixel is represented by a 32-bit word with V in the lowest 8 bits, U in the next 8 bits, Y in the 8 bits after that and A in the highest 8 bits, can only be used with VideoWriter.
             /// </summary>
-            NvAyuv = 11, 
+            NvAyuv = 11,
+            /// <summary>
+            /// Nvidia Buffer Format - 10 bit Semi-Planar YUV [Y plane followed by interleaved UV plane]. Each pixel of size 2 bytes. Most significant 10 bits contain pixel data. VideoWriter only.
+            /// </summary>
+            NvYuv420_10Bit = 12,
+            /// <summary>
+            /// Nvidia Buffer Format - 10 bit Planar YUV444 [Y plane followed by U and V planes]. Each pixel of size 2 bytes. Most significant 10 bits contain pixel data. VideoWriter only.
+            /// </summary>
+            NvYuv444_10Bit = 13,
 
         }
 

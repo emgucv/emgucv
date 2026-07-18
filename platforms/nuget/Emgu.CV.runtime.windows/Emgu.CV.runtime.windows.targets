@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    .NET Framework projects do not apply the nuget "runtimes" asset convention,
+    so without this file the native libraries never reach the output folder
+    (issue #983). Files are copied preserving the runtimes\win-<arch>\native
+    layout that Emgu.CV probes at run time, so an AnyCPU process picks the
+    matching architecture. This file is only imported by .NET Framework
+    consumers: it is shipped under build\net461 and buildTransitive\net461.
+  -->
+  <ItemGroup Condition="'$(PlatformTarget)' == 'x64' Or '$(PlatformTarget)' == 'AnyCPU' Or '$(PlatformTarget)' == ''">
+    <None Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\*.*">
+      <Link>runtimes\win-x64\native\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </None>
+  </ItemGroup>
+  <ItemGroup Condition="'$(PlatformTarget)' == 'x86' Or '$(PlatformTarget)' == 'AnyCPU' Or '$(PlatformTarget)' == ''">
+    <None Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\native\*.*">
+      <Link>runtimes\win-x86\native\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </None>
+  </ItemGroup>
+  <ItemGroup Condition="'$(PlatformTarget)' == 'ARM64' Or '$(PlatformTarget)' == 'AnyCPU' Or '$(PlatformTarget)' == ''">
+    <None Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-arm64\native\*.*">
+      <Link>runtimes\win-arm64\native\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </None>
+  </ItemGroup>
+</Project>

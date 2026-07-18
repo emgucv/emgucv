@@ -26,21 +26,13 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         P3P = 2,
         /// <summary>
-        /// A Direct Least-Squares (DLS) Method for PnP
-        /// </summary>
-        Dls = 3,
-        /// <summary>
-        /// Exhaustive Linearization for Robust Camera Pose and Focal Length Estimation
-        /// </summary>
-        UPnP = 4,
-        /// <summary>
         /// An Efficient Algebraic Solution to the Perspective-Three-Point Problem
         /// </summary>
-        AP3P = 5,
+        AP3P = 3,
         /// <summary>
         /// Infinitesimal Plane-Based Pose Estimation. Object points must be coplanar.
         /// </summary>
-        IPPE = 6,
+        IPPE = 4,
         /// <summary>
         /// Infinitesimal Plane-Based Pose Estimation. This is a special case suitable for marker pose estimation.
         ///  4 coplanar object points must be defined in the following order:
@@ -49,12 +41,12 @@ namespace Emgu.CV.CvEnum
         ///   - point 2: [ squareLength / 2, -squareLength / 2, 0]
         ///   - point 3: [-squareLength / 2, -squareLength / 2, 0]
         /// </summary>
-        IPPESquare = 7,
+        IPPESquare = 5,
 
         /// <summary>
         /// SQPnP: A Consistently Fast and Globally OptimalSolution to the Perspective-n-Point Problem
         /// </summary>
-        SQPNP
+        SQPNP = 6
 
     }
 }

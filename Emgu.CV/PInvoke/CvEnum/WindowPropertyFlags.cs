@@ -35,6 +35,11 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// property to toggle normal window being topmost or not
         /// </summary>
-        TopMost = 5 
+        TopMost = 5,
+
+        /// <summary>
+        /// enable or disable VSYNC (in OpenGL mode)
+        /// </summary>
+        VSync = 6
     }
 }

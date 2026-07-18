@@ -30,7 +30,11 @@ namespace Emgu.CV
             /// <summary>
             /// Edge-preserving interpolation
             /// </summary>
-            Epic = 1,    
+            Epic = 1,
+            /// <summary>
+            /// SLIC based robust interpolation
+            /// </summary>
+            Ric = 2,
         };
 
         private IntPtr _algorithm;

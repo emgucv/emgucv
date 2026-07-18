@@ -14,7 +14,7 @@ namespace Emgu.CV.CvEnum
     public enum ImreadModes
     {
         /// <summary>
-        /// If set, return the loaded image as is (with alpha channel, otherwise it gets cropped).
+        /// If set, return the loaded image as is (with alpha channel, otherwise it gets cropped). Ignore EXIF orientation.
         /// </summary>
         Unchanged = -1,
 

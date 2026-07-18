@@ -24,7 +24,7 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         ChainApproxSimple = 2,
         /// <summary>
-        /// 
+        /// apply one of the flavors of Teh-Chin chain approximation algorithm
         /// </summary>
         ChainApproxTc89L1 = 3,
         /// <summary>

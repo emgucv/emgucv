@@ -24,7 +24,7 @@ namespace Emgu.CV.OCR
     public enum OcrEngineMode
     {
         /// <summary>
-        /// Run Tesseract only - fastest
+        /// Run Tesseract only - fastest. Deprecated.
         /// </summary>
         TesseractOnly,
         /// <summary>
@@ -32,7 +32,7 @@ namespace Emgu.CV.OCR
         /// </summary>
         LstmOnly,
         /// <summary>
-        /// Run the LSTM recognizer, but allow fallback to Tesseract when things get difficult.
+        /// Run the LSTM recognizer, but allow fallback to Tesseract when things get difficult. Deprecated.
         /// </summary>
         TesseractLstmCombined,
         /// <summary>

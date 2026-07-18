@@ -53,7 +53,11 @@ namespace Emgu.CV.Stitching
             /// <summary>
             /// Vertical
             /// </summary>
-            Vert
+            Vert,
+            /// <summary>
+            /// Auto
+            /// </summary>
+            Auto
         }
 
         /// <summary>

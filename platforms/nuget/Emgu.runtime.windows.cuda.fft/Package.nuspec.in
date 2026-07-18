@@ -18,6 +18,9 @@
     <tags>native emgu cuda fft</tags>
   </metadata>
   <files>
+	<file src="Emgu.runtime.windows.cuda.fft.targets" target="build\net461\${EMGU_CUFFT_NUGET_ID}.targets" />
+	<file src="Emgu.runtime.windows.cuda.fft.targets" target="buildTransitive\net461\${EMGU_CUFFT_NUGET_ID}.targets" />
+
 	  <file src="..\..\..\libs\runtimes\win-x64\native\cufft*.dll" target="runtimes\win-x64\native" />
 	  <file src="..\..\..\miscellaneous\nuget_icon.png" target="" />
 	  <file src="EULA.txt" target="" />

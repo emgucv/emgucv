@@ -19,7 +19,7 @@ namespace Emgu.CV.ML.MlEnum
         /// <summary>
         /// Each training sample occupies a column of samples
         /// </summary>
-        ColSample = 0,
+        ColSample = 1,
         
     }
 

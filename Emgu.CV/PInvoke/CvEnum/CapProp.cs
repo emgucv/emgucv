@@ -92,7 +92,7 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Exposure = 15,
         /// <summary>
-        /// Boolean flags indicating whether images should be converted to RGB.
+        /// Boolean flags indicating whether images should be converted to BGR.
         /// </summary>
         ConvertRgb = 16,
         /// <summary>
@@ -221,11 +221,11 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         Bitrate = 47,
         /// <summary>
-        /// (read-only) Frame rotation defined by stream meta (applicable for FFmpeg back-end only)
+        /// (read-only) Frame rotation defined by stream meta (applicable for FFmpeg and AVFoundation back-ends only)
         /// </summary>
         OrientationMeta = 48,
         /// <summary>
-        /// if true - rotates output frames of CvCapture considering video file's metadata  (applicable for FFmpeg back-end only) (https://github.com/opencv/opencv/issues/15499)
+        /// if true - rotates output frames of CvCapture considering video file's metadata  (applicable for FFmpeg and AVFoundation back-ends only) (https://github.com/opencv/opencv/issues/15499)
         /// </summary>
         OrientationAuto = 49,
         /// <summary>
@@ -242,11 +242,11 @@ namespace Emgu.CV.CvEnum
         HwAccelerationUseOpencl = 52,
 
         /// <summary>
-        /// (open-only) Timeout in milliseconds for opening a video capture (applicable for FFmpeg back-end only)
+        /// (open-only) Timeout in milliseconds for opening a video capture (applicable for FFmpeg and GStreamer back-ends only)
         /// </summary>
         OpenTimeoutMsec = 53,
         /// <summary>
-        /// (open-only) Timeout in milliseconds for reading from a video capture (applicable for FFmpeg back-end only)
+        /// (open-only) Timeout in milliseconds for reading from a video capture (applicable for FFmpeg and GStreamer back-ends only)
         /// </summary>
         ReadTimeoutMsec = 54,
         /// <summary>
@@ -1195,9 +1195,13 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         IntelpercImageGenerator = 1 << 28,
         /// <summary>
+        /// Intelperc IR Generator
+        /// </summary>
+        IntelpercIRGenerator = 1 << 27,
+        /// <summary>
         /// Intelperc Generators Mask
         /// </summary>
-        IntelpercGeneratorsMask = IntelpercDepthGenerator + IntelpercImageGenerator,
+        IntelpercGeneratorsMask = IntelpercDepthGenerator + IntelpercImageGenerator + IntelpercIRGenerator,
 
         /// <summary>
         /// Capture only preview from liveview mode.

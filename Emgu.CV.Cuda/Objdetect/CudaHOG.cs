@@ -24,13 +24,13 @@ namespace Emgu.CV.Cuda
         public enum DescrFormat
         {
             /// <summary>
-            /// Row by row
-            /// </summary>
-            RowByRow,
-            /// <summary>
             /// Col by col
             /// </summary>
-            ColByCol
+            ColByCol = 0,
+            /// <summary>
+            /// Row by row
+            /// </summary>
+            RowByRow = 1
         }
 
         /// <summary>

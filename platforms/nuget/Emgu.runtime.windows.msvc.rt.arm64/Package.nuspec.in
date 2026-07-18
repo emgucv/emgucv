@@ -20,6 +20,9 @@
     <tags>native emgu msvc</tags>
   </metadata>
   <files>
+	<file src="Emgu.runtime.windows.msvc.rt.arm64.targets" target="build\net461\${EMGU_WINDOWS_MSVCRT_ARM64_NUGET_ID}.targets" />
+	<file src="Emgu.runtime.windows.msvc.rt.arm64.targets" target="buildTransitive\net461\${EMGU_WINDOWS_MSVCRT_ARM64_NUGET_ID}.targets" />
+
 	<file src="..\..\..\libs\runtimes\win-arm64\native\concrt*.dll" target="runtimes\win-arm64\native" />
 	<file src="..\..\..\libs\runtimes\win-arm64\native\msvcp*.dll" target="runtimes\win-arm64\native" />
 	<file src="..\..\..\libs\runtimes\win-arm64\native\vcruntime*.dll" target="runtimes\win-arm64\native" />

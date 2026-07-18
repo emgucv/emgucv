@@ -94,6 +94,10 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Turbo
         /// </summary>
-        Turbo = 20
+        Turbo = 20,
+        /// <summary>
+        /// Deepgreen
+        /// </summary>
+        Deepgreen = 21
     }
 }

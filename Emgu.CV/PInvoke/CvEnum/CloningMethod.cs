@@ -23,7 +23,19 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Monochrome transfer
         /// </summary>
-        MonochromeTransfer = 3
+        MonochromeTransfer = 3,
+        /// <summary>
+        /// Enhanced normal seamless cloning. Similar to Normal, but with an advanced approach to ROI calculation: processes a larger source region by considering the entire mask area instead of only the bounding rectangle of non-zero pixels.
+        /// </summary>
+        NormalWide = 9,
+        /// <summary>
+        /// Enhanced mixed seamless cloning. Similar to Mixed, but with an advanced approach to ROI calculation: processes a larger source region by considering the entire mask area instead of only the bounding rectangle of non-zero pixels.
+        /// </summary>
+        MixedWide = 10,
+        /// <summary>
+        /// Enhanced monochrome transfer cloning. Similar to MonochromeTransfer, but with an advanced approach to ROI calculation: processes a larger source region by considering the entire mask area instead of only the bounding rectangle of non-zero pixels.
+        /// </summary>
+        MonochromeTransferWide = 11
     }
 
 }

@@ -12,6 +12,10 @@ namespace Emgu.CV.CvEnum
     public enum SolveLPResult
     {
         /// <summary>
+        /// Problem is feasible, but the solver lost the solution due to floating-point arithmetic errors
+        /// </summary>
+        Lost = -3,
+        /// <summary>
         /// Problem is unbounded (target function can achieve arbitrary high values)
         /// </summary>
         Unbounded = -2,

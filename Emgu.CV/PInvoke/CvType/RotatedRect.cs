@@ -24,7 +24,7 @@ namespace Emgu.CV.Structure
         /// </summary>
         public SizeF Size;
         /// <summary>
-        /// The rotation angle. When the angle is 0, 90, 180, 270 etc., the rectangle becomes an up-right rectangle.
+        /// The rotation angle in degrees. When the angle is 0, 90, 180, 270 etc., the rectangle becomes an up-right rectangle.
         /// </summary>
         public float Angle;
 
@@ -33,7 +33,7 @@ namespace Emgu.CV.Structure
         /// </summary>
         /// <param name="center">The rectangle mass center</param>
         /// <param name="size">Width and height of the rectangle</param>
-        /// <param name="angle">The rotation angle. When the angle is 0, 90, 180, 270 etc., the rectangle becomes an up-right rectangle.</param>
+        /// <param name="angle">The rotation angle in degrees. When the angle is 0, 90, 180, 270 etc., the rectangle becomes an up-right rectangle.</param>
         public RotatedRect(PointF center, SizeF size, float angle)
         {
             this.Center = center;

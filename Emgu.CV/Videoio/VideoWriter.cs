@@ -198,6 +198,11 @@ namespace Emgu.CV
         public enum WriterProperty
         {
             /// <summary>
+            /// Returned by VideoWriter::get if the requested property is unknown or unsupported
+            /// </summary>
+            Unknown = -1,
+
+            /// <summary>
             /// Current quality (0..100%) of the encoded videostream. Can be adjusted dynamically in some codecs.
             /// </summary>
             Quality = 1,
@@ -233,7 +238,42 @@ namespace Emgu.CV
             /// <summary>
             /// (**open-only**) If non-zero, create new OpenCL context and bind it to current thread. The OpenCL context created with Video Acceleration context attached it (if not attached yet) for optimized GPU data copy between cv::UMat and HW accelerated encoder.
             /// </summary>
-            HwAccelerationUseOpencl = 8, 
+            HwAccelerationUseOpencl = 8,
+
+            /// <summary>
+            /// (**open-only**) Set to non-zero to enable encapsulation of an encoded raw video stream. FFMpeg backend only.
+            /// </summary>
+            RawVideo = 9,
+
+            /// <summary>
+            /// (**open-only**) Set the key frame interval using raw video encapsulation (RawVideo != 0). Defaults to 1 when not set. FFmpeg back-end only.
+            /// </summary>
+            KeyInterval = 10,
+
+            /// <summary>
+            /// Set to non-zero to signal that the following frames are key frames or zero if not, when encapsulating raw video (RawVideo != 0). FFmpeg back-end only.
+            /// </summary>
+            KeyFlag = 11,
+
+            /// <summary>
+            /// Specifies the frame presentation timestamp for each frame using the FPS time base. FFmpeg back-end only.
+            /// </summary>
+            Pts = 12,
+
+            /// <summary>
+            /// Specifies the maximum difference between presentation (pts) and decompression timestamps (dts) using the FPS time base. FFmpeg back-end only.
+            /// </summary>
+            DtsDelay = 13,
+
+            /// <summary>
+            /// (**open-only**) GStreamer backend only. Pixel format for the encoding profile. Default is "I420". Other values: "NV12", "BGRx".
+            /// </summary>
+            ColorSpace = 14,
+
+            /// <summary>
+            /// (**open-only**) FFmpeg backend only. Defines that input frames contain alpha channel.
+            /// </summary>
+            EnableAlpha = 15,
         }
     }
 

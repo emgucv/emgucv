@@ -38,7 +38,9 @@ namespace Emgu.CV.XFeatures2D
             /// Generate points in a regular grid.
             /// </summary>
             Regular,
+            /// <summary>
             /// Generate points with normal (gaussian) distribution.
+            /// </summary>
             Normal
         }
 

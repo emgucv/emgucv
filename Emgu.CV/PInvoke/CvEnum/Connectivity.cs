@@ -7,7 +7,7 @@ using System;
 namespace Emgu.CV.CvEnum
 {
     /// <summary>
-    /// The type for cvSampleLine
+    /// Pixel connectivity, used e.g. by FloodFill and cvSampleLine
     /// </summary>
     public enum Connectivity
     {

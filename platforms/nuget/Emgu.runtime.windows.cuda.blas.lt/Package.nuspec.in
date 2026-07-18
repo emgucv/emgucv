@@ -21,6 +21,9 @@
     <tags>native emgu cuda</tags>
   </metadata>
   <files>
+	<file src="Emgu.runtime.windows.cuda.blas.lt.targets" target="build\net461\${EMGU_CUDA_BLAS_LT_NUGET_ID}.targets" />
+	<file src="Emgu.runtime.windows.cuda.blas.lt.targets" target="buildTransitive\net461\${EMGU_CUDA_BLAS_LT_NUGET_ID}.targets" />
+
 	  <file src="..\..\..\libs\runtimes\win-x64\native\cublasLt*.dll" target="runtimes\win-x64\native" />
 	  <file src="..\..\..\miscellaneous\nuget_icon.png" target="" />		
 	  <file src="EULA.txt" target="CUDA_EULA.txt" />

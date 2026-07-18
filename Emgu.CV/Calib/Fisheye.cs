@@ -152,35 +152,35 @@ namespace Emgu.CV
             /// <summary>
             /// Extrinsic will be recomputed after each iteration of intrinsic optimization.
             /// </summary>
-            RecomputeExtrinsic = 2,
+            RecomputeExtrinsic = 1 << 23,
             /// <summary>
             /// The functions will check validity of condition number.
             /// </summary>
-            CheckCond = 4,
+            CheckCond = 1 << 24,
             /// <summary>
             /// Skew coefficient (alpha) is set to zero and stay zero.
             /// </summary>
-            FixSkew = 8,
+            FixSkew = 1 << 25,
             /// <summary>
             /// Selected distortion coefficients are set to zeros and stay zero.
             /// </summary>
-            FixK1 = 16,
+            FixK1 = 0x00020,
             /// <summary>
             /// Selected distortion coefficients are set to zeros and stay zero.
             /// </summary>
-            FixK2 = 32,
+            FixK2 = 0x00040,
             /// <summary>
             /// Selected distortion coefficients are set to zeros and stay zero.
             /// </summary>
-            FixK3 = 64,
+            FixK3 = 0x00080,
             /// <summary>
             /// Selected distortion coefficients are set to zeros and stay zero.
             /// </summary>
-            FixK4 = 128,
+            FixK4 = 0x00800,
             /// <summary>
             /// Fix intrinsic
             /// </summary>
-            FixIntrinsic = 256
+            FixIntrinsic = 0x00100
         }
 
         /// <summary>

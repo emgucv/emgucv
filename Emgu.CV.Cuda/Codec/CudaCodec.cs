@@ -65,6 +65,10 @@ namespace Emgu.CV.Cuda
             /// </summary>
             VP9,
             /// <summary>
+            /// AV1
+            /// </summary>
+            AV1,
+            /// <summary>
             /// Number of codecs
             /// </summary>
             NumCodecs,

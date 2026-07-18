@@ -604,10 +604,27 @@ namespace Emgu.Util
             }
             else
             {
+                int mode;
+                if (Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS
+                    || Platform.OperationSystem == Emgu.Util.Platform.OS.MacCatalyst
+                    || Platform.OperationSystem == Emgu.Util.Platform.OS.IOS)
+                {
+                    mode = 0x00102; // Apple flag values: 0x00002 == RTLD_NOW, 0x00100 == RTLD_FIRST
+                }
+                else
+                {
+                    // 0x00002 == RTLD_NOW; scope stays RTLD_LOCAL (the default).
+                    // On Linux/Android 0x00100 is RTLD_GLOBAL, which would place this
+                    // library's symbols - and those of its whole dependency chain,
+                    // e.g. libproj's libsqlite3 - into the global scope, where they
+                    // interpose other native libraries' PLT self-calls, such as the
+                    // libe_sqlite3 bundled with EF Core (issue #1027).
+                    mode = 0x00002;
+                }
                 IntPtr handler;
                 try
                 {
-                    handler = Dlopen(dllname, 0x00102); // 0x00002 == RTLD_NOW, 0x00100 = RTL_GLOBAL
+                    handler = Dlopen(dllname, mode);
                     if (handler == IntPtr.Zero)
                     {
                         System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen to load {0}", dllname));
@@ -616,7 +633,7 @@ namespace Emgu.Util
                 catch
                 {
                     System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen from libdl.so to load {0}, will try using libdl.so.2 instead", dllname));
-                    handler = Dlopen2(dllname, 0x00102); // 0x00002 == RTLD_NOW, 0x00100 = RTL_GLOBAL
+                    handler = Dlopen2(dllname, mode);
                     if (handler == IntPtr.Zero)
                     {
                         System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen from libdl.so.2 to load {0}", dllname));

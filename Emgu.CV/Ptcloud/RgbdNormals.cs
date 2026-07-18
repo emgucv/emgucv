@@ -37,7 +37,11 @@ namespace Emgu.CV
             /// <summary>
             /// SRI
             /// </summary>
-            Sri = 2
+            Sri = 2,
+            /// <summary>
+            /// Cross product
+            /// </summary>
+            CrossProduct = 3
         }
 
         /// <summary>

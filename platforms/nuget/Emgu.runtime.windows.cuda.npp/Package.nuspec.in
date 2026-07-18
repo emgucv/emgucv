@@ -21,6 +21,9 @@
     <tags>native emgu cuda</tags>
   </metadata>
   <files>
+	<file src="Emgu.runtime.windows.cuda.npp.targets" target="build\net461\${EMGU_NPP_NUGET_ID}.targets" />
+	<file src="Emgu.runtime.windows.cuda.npp.targets" target="buildTransitive\net461\${EMGU_NPP_NUGET_ID}.targets" />
+
 	<file src="..\..\..\libs\runtimes\win-x64\native\npp*.dll" target="runtimes\win-x64\native" />
 	<file src="..\..\..\miscellaneous\nuget_icon.png" target="" />		
 	<file src="EULA.txt" target="" />
