@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    .NET Framework projects do not apply the nuget "runtimes" asset convention,
+    so without this file the MSVC runtime libraries never reach the output
+    folder (issue #983). Only imported by .NET Framework consumers via
+    build\net461 and buildTransitive\net461.
+  -->
+  <ItemGroup Condition="'$(PlatformTarget)' == 'x86' Or '$(PlatformTarget)' == 'AnyCPU' Or '$(PlatformTarget)' == ''">
+    <None Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\native\*.*">
+      <Link>runtimes\win-x86\native\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Visible>false</Visible>
+    </None>
+  </ItemGroup>
+</Project>
