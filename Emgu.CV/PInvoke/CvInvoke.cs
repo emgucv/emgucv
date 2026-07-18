@@ -98,6 +98,15 @@ namespace Emgu.CV
 
                 if (Platform.OperationSystem == Emgu.Util.Platform.OS.MacOS)
                 {
+                    switch (RuntimeInformation.ProcessArchitecture)
+                    {
+                        case Architecture.X64:
+                            subfolderOptions.Add(Path.Combine("runtimes", "osx-x64", "native"));
+                            break;
+                        case Architecture.Arm64:
+                            subfolderOptions.Add(Path.Combine("runtimes", "osx-arm64", "native"));
+                            break;
+                    }
                     subfolderOptions.Add(Path.Combine("runtimes", "osx", "native"));
                 }
                 else if (Platform.OperationSystem == Emgu.Util.Platform.OS.Linux)

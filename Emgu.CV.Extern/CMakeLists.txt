@@ -4512,6 +4512,21 @@ ELSEIF (APPLE)
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
     COMMENT "Copying MacOS build information from ${OPENCV_BUILD_INFO_VERSION_STRING} to ${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc")
+
+  # Each architecture build also writes its build information next to the thin
+  # per-architecture binary, so the packaged .inc always matches the dylib it
+  # sits beside (issue #978).
+  IF("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm64")
+    SET(EMGUCV_OSX_RID "osx-arm64")
+  ELSE()
+    SET(EMGUCV_OSX_RID "osx-x64")
+  ENDIF()
+  add_custom_command(TARGET ${the_target}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/libs/runtimes/${EMGUCV_OSX_RID}/native
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${OPENCV_BUILD_INFO_VERSION_STRING} ${CMAKE_SOURCE_DIR}/libs/runtimes/${EMGUCV_OSX_RID}/native/${EMGUCV_ARCH}_version_string.inc
+    WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
+    COMMENT "Copying MacOS build information to libs/runtimes/${EMGUCV_OSX_RID}/native/${EMGUCV_ARCH}_version_string.inc")
   
     #INSTALL(FILES
 	#	"${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}/../${EMGUCV_ARCH}_version_string.inc"
@@ -4556,6 +4571,15 @@ ELSEIF (APPLE)
 	POST_BUILD
 	COMMAND chmod a+x ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../${CVEXTERN_DEPENDENCY_DLL_NAME}${CVEXTERN_DEPENDENCY_DLL_EXT}
 	COMMENT "Add execute permission to ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../${CVEXTERN_DEPENDENCY_DLL_NAME}${CVEXTERN_DEPENDENCY_DLL_EXT}")
+      # Thin per-architecture copies under runtimes/osx-<arch>/native. The nuget
+      # packages ship these instead of the universal binary so that a published
+      # application only carries its own architecture (issue #978).
+      add_custom_command(TARGET ${the_target}
+	POST_BUILD
+	COMMAND bash -c "[ ! -f '${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${CVEXTERN_DEPENDENCY_DLL_NAME}_arm64${CVEXTERN_DEPENDENCY_DLL_EXT}' ] || ( mkdir -p '${UNMANAGED_LIBRARY_OUTPUT_PATH}/../../../osx-arm64/native' && cp -f '${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${CVEXTERN_DEPENDENCY_DLL_NAME}_arm64${CVEXTERN_DEPENDENCY_DLL_EXT}' '${UNMANAGED_LIBRARY_OUTPUT_PATH}/../../../osx-arm64/native/${CVEXTERN_DEPENDENCY_DLL_NAME}${CVEXTERN_DEPENDENCY_DLL_EXT}' && chmod a+x '${UNMANAGED_LIBRARY_OUTPUT_PATH}/../../../osx-arm64/native/${CVEXTERN_DEPENDENCY_DLL_NAME}${CVEXTERN_DEPENDENCY_DLL_EXT}' )"
+	COMMAND bash -c "[ ! -f '${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${CVEXTERN_DEPENDENCY_DLL_NAME}_x86_64${CVEXTERN_DEPENDENCY_DLL_EXT}' ] || ( mkdir -p '${UNMANAGED_LIBRARY_OUTPUT_PATH}/../../../osx-x64/native' && cp -f '${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${CVEXTERN_DEPENDENCY_DLL_NAME}_x86_64${CVEXTERN_DEPENDENCY_DLL_EXT}' '${UNMANAGED_LIBRARY_OUTPUT_PATH}/../../../osx-x64/native/${CVEXTERN_DEPENDENCY_DLL_NAME}${CVEXTERN_DEPENDENCY_DLL_EXT}' && chmod a+x '${UNMANAGED_LIBRARY_OUTPUT_PATH}/../../../osx-x64/native/${CVEXTERN_DEPENDENCY_DLL_NAME}${CVEXTERN_DEPENDENCY_DLL_EXT}' )"
+	VERBATIM
+	COMMENT "Populating thin per-architecture copies under runtimes/osx-<arch>/native")
     ELSE()
       add_custom_command(TARGET ${the_target}
 	POST_BUILD
