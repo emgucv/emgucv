@@ -52,9 +52,6 @@ namespace Emgu.CV.Test
                 await tm.Init(AutoTestModels.DownloadManager_OnDownloadProgressChanged);
                 Tesseract ocr = tm.Model;
                 ocr.SetVariable("tessedit_char_whitelist", "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz,");
-                IntPtr oclDevice = new IntPtr();
-                int deviceId = ocr.GetOpenCLDevice(ref oclDevice);
-
                 img.SetTo(new MCvScalar(0, 0, 0));
                 String message = "Hello, World";
                 CvInvoke.PutText(img, message, new Point(50, 100), CvEnum.HersheyFonts.Simplex, 1.0, new MCvScalar(255));

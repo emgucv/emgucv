@@ -96,6 +96,12 @@ if(LEPT_USE_TIFF)
 endif()
 
 include_directories(${OPENCV_SUBFOLDER}/3rdparty/zlib)
+include_directories(${CMAKE_BINARY_DIR}/opencv/3rdparty/zlib)
+# Leptonica's environ.h only defaults HAVE_LIBZ to 1 for desktop builds; with
+# ANDROID_BUILD or OS_IOS defined the flate codec silently compiles to stubs,
+# which makes Tesseract's PDF renderer fail (AddImage returns false, issue
+# #989). zlib is always available from the OpenCV 3rdparty build.
+add_definitions(-DHAVE_LIBZ=1)
 
 add_library(${the_target} STATIC ${lepton_srcs} ${lepton_hdrs})
 
