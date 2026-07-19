@@ -391,7 +391,7 @@ namespace Emgu.CV.Models
 
                                     using (Mat rectData = new Mat(transposed, new Range(i, i + 1), new Range(0, 4)))
                                     {
-                                        float[] data = rectData.GetData(jagged: false) as float[];
+                                        float[] data = rectData.GetData(multiDimensional: false) as float[];
 
                                         Rectangle rect;
                                         if (isV10)

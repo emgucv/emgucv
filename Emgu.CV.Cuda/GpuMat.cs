@@ -205,16 +205,16 @@ namespace Emgu.CV.Cuda
         /// <summary>
         /// Get a copy of the data values as an array
         /// </summary>
-        /// <param name="jagged">If true, a jagged array will returned. Otherwise it will return a regular array.</param>
-        /// <returns>a copy of the data values as an array</returns>
-        public Array GetData(bool jagged = true)
+        /// <param name="multiDimensional">If true, a multi-dimensional array is returned, shaped [rows, cols] with a trailing [channels] dimension for multi-channel data (e.g. byte[,,] for a color image). If false, a flat one-dimensional array is returned.</param>
+        /// <returns>A copy of the data values as an array</returns>
+        public Array GetData(bool multiDimensional = true)
         {
             if (IsEmpty)
                 return null;
             using (Mat m = new Mat())
             {
                 Download(m);
-                return m.GetData(jagged);
+                return m.GetData(multiDimensional);
             }
         }
 
