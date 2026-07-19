@@ -63,7 +63,7 @@ else
     #    VTK_OPTION=( -DVTK_DIR:String="$PWD" )
     #    cd ../..
     VTK_OPTION=( -DWITH_VTK:BOOL=TRUE )
-    CONTRIB_OPTION=( -DOPENCV_EXTRA_MODULES_PATH=$TOP_FOLDER/opencv_contrib/modules )
+    CONTRIB_OPTION=( -DWITH_GSTREAMER:BOOL=TRUE -DOPENCV_EXTRA_MODULES_PATH=$TOP_FOLDER/opencv_contrib/modules )
 fi
 
 
