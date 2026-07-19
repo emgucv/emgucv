@@ -229,6 +229,29 @@ void cveArucoGridBoardRelease(cv::Ptr<cv::aruco::GridBoard>** sharedPtr)
 #endif
 }
 
+cv::aruco::Board* cveArucoBoardCreate(
+	cv::_InputArray* objPoints, cv::aruco::Dictionary* dictionary, cv::_InputArray* ids,
+	cv::Ptr<cv::aruco::Board>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_OBJDETECT
+	cv::aruco::Board* ptr = new cv::aruco::Board(*objPoints, *dictionary, *ids);
+	*sharedPtr = new cv::Ptr<cv::aruco::Board>(ptr, [](cv::aruco::Board* b) { delete b; });
+	return ptr;
+#else
+	throw_no_objdetect();
+#endif
+}
+
+void cveArucoBoardRelease(cv::Ptr<cv::aruco::Board>** sharedPtr)
+{
+#ifdef HAVE_OPENCV_OBJDETECT
+	delete *sharedPtr;
+	*sharedPtr = 0;
+#else
+	throw_no_objdetect();
+#endif
+}
+
 cv::aruco::CharucoBoard* cveCharucoBoardCreate(
     int squaresX, 
 	int squaresY, 

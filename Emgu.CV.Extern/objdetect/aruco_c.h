@@ -84,6 +84,11 @@ CVAPI(cv::aruco::GridBoard*) cveArucoGridBoardCreate(
 	cv::aruco::Dictionary* dictionary, cv::_InputArray* ids, cv::aruco::Board** boardPtr, cv::Ptr<cv::aruco::GridBoard>** sharedPtr);
 CVAPI(void) cveArucoGridBoardRelease(cv::Ptr<cv::aruco::GridBoard>** sharedPtr);
 
+CVAPI(cv::aruco::Board*) cveArucoBoardCreate(
+	cv::_InputArray* objPoints, cv::aruco::Dictionary* dictionary, cv::_InputArray* ids,
+	cv::Ptr<cv::aruco::Board>** sharedPtr);
+CVAPI(void) cveArucoBoardRelease(cv::Ptr<cv::aruco::Board>** sharedPtr);
+
 CVAPI(void) cveArucoBoardGenerateImage(
 	cv::aruco::Board* gridBoard, 
 	cv::Size* outSize, 

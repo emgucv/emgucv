@@ -3855,6 +3855,30 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestArucoCustomBoard()
+        {
+            using (Aruco.Dictionary dictionary = new Dictionary(Dictionary.PredefinedDictionaryName.Dict4X4_50))
+            using (Mat corners = new Mat(4, 1, DepthType.Cv32F, 3))
+            using (VectorOfMat objPoints = new VectorOfMat(corners))
+            using (VectorOfInt ids = new VectorOfInt(new[] { 7 }))
+            {
+                //One marker, 4 corners at custom 3D positions (clockwise from top-left)
+                float[] pts = {
+                    0.0f, 0.0f, 0.05f,
+                    0.1f, 0.0f, 0.05f,
+                    0.1f, 0.1f, 0.05f,
+                    0.0f, 0.1f, 0.05f };
+                corners.SetTo(pts);
+
+                using (ArucoBoard board = new ArucoBoard(objPoints, dictionary, ids))
+                {
+                    EmguAssert.IsTrue(board.Ptr != IntPtr.Zero);
+                    EmguAssert.IsTrue(board.BoardPtr != IntPtr.Zero);
+                }
+            }
+        }
+
+        [Test]
         public void TestArucoCreateBoard()
         {
             Emgu.CV.Aruco.DetectorParameters p = DetectorParameters.GetDefault();
