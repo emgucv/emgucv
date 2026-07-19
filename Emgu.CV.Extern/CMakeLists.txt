@@ -1579,6 +1579,54 @@ ENDIF()
 	""
 	""
 	${HAVE_opencv_features})
+  CREATE_OCV_CLASS_PROPERTY(
+    "features/FastFeatureDetector_property"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Features/FastFeatureDetector.g.cs"
+    "cv::FastFeatureDetector"
+    "FastFeatureDetector"
+    "Threshold;NonmaxSuppression;Type"
+    "int;bool;cv::FastFeatureDetector::DetectorType"
+    "prop;prop;prop"
+    "Threshold;NonmaxSuppression;Type"
+    "int;bool;FastFeatureDetector.DetectorType"
+    "Threshold on difference between intensity of the central pixel and pixels of a circle around this pixel;
+    If true, non-maximum suppression is applied to detected corners (keypoints);
+    The neighborhood type"
+    "Emgu.CV.Features"
+    "FeaturesInvoke"
+    "FastFeatureDetector"
+	""
+    "#include \"features_c.h\""
+	""
+	""
+	${HAVE_opencv_features})
+  CREATE_OCV_CLASS_PROPERTY(
+    "features/ORB_property"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Features/ORB.g.cs"
+    "cv::ORB"
+    "ORB"
+    "MaxFeatures;ScaleFactor;NLevels;EdgeThreshold;FirstLevel;WTA_K;ScoreType;PatchSize;FastThreshold"
+    "int;double;int;int;int;int;cv::ORB::ScoreType;int;int"
+    "prop;prop;prop;prop;prop;prop;prop;prop;prop"
+    "MaxFeatures;ScaleFactor;NLevels;EdgeThreshold;FirstLevel;WTAK;Score;PatchSize;FastThreshold"
+    "int;double;int;int;int;int;ORB.ScoreType;int;int"
+    "The maximum number of features to retain;
+    Pyramid decimation ratio, greater than 1;
+    The number of pyramid levels;
+    The size of the border where the features are not detected;
+    The level of pyramid to put source image to;
+    The number of points that produce each element of the oriented BRIEF descriptor;
+    The type of score used to rank features;
+    The size of the patch used by the oriented BRIEF descriptor;
+    The fast threshold"
+    "Emgu.CV.Features"
+    "FeaturesInvoke"
+    "ORB"
+	""
+    "#include \"features_c.h\""
+	""
+	""
+	${HAVE_opencv_features})
 
 ############################### features code gen END ################################
 

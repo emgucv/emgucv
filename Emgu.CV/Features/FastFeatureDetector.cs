@@ -17,7 +17,7 @@ namespace Emgu.CV.Features
     /// See Detects corners using FAST algorithm by E. Rosten ("Machine learning for high-speed corner
     /// detection, 2006).
     /// </summary>
-    public class FastFeatureDetector : Feature2D
+    public partial class FastFeatureDetector : Feature2D
     {
 
         /// <summary>

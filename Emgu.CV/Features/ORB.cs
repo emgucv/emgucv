@@ -15,7 +15,7 @@ namespace Emgu.CV.Features
     /// <summary>
     /// Wrapped ORB detector
     /// </summary>
-    public class ORB : Feature2D
+    public partial class ORB : Feature2D
     {
 
         /// <summary>

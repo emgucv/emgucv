@@ -3855,6 +3855,34 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestFeature2DProperties()
+        {
+            using (FastFeatureDetector fast = new FastFeatureDetector())
+            {
+                fast.Threshold = 25;
+                EmguAssert.AreEqual(25, fast.Threshold);
+                fast.NonmaxSuppression = false;
+                EmguAssert.IsFalse(fast.NonmaxSuppression);
+                fast.Type = FastFeatureDetector.DetectorType.Type5_8;
+                EmguAssert.AreEqual(FastFeatureDetector.DetectorType.Type5_8, fast.Type);
+            }
+
+            using (ORB orb = new ORB())
+            {
+                orb.MaxFeatures = 250;
+                EmguAssert.AreEqual(250, orb.MaxFeatures);
+                orb.ScaleFactor = 1.5;
+                EmguAssert.IsTrue(Math.Abs(orb.ScaleFactor - 1.5) < 1e-6);
+                orb.NLevels = 4;
+                EmguAssert.AreEqual(4, orb.NLevels);
+                orb.FastThreshold = 15;
+                EmguAssert.AreEqual(15, orb.FastThreshold);
+                orb.Score = ORB.ScoreType.Fast;
+                EmguAssert.AreEqual(ORB.ScoreType.Fast, orb.Score);
+            }
+        }
+
+        [Test]
         public void TestArucoCustomBoard()
         {
             using (Aruco.Dictionary dictionary = new Dictionary(Dictionary.PredefinedDictionaryName.Dict4X4_50))
