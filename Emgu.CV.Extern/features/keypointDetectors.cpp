@@ -239,7 +239,7 @@ void cveDrawMatchedFeatures2(
 		std::vector< std::vector< char > > matchesVec;
 		
 		for (std::vector< std::vector< unsigned char > >::iterator it = matchesMask->begin();
-			it != matchesMask->begin();
+			it != matchesMask->end();
 			++it)
 		{
 			std::vector< char > charVec;

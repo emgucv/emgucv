@@ -48,8 +48,8 @@ namespace Emgu.CV.Features
         /// <param name="modelKeypoints">The keypoints in the model image</param>
         /// <param name="observedImage">The observed image</param>
         /// <param name="observedKeyPoints">The keypoints in the observed image</param>
-        /// <param name="matchColor">The color for the match correspondence lines</param>
-        /// <param name="singlePointColor">The color for highlighting the keypoints</param>
+        /// <param name="matchColor">The color used for both the matched keypoints and their correspondence lines. Matched keypoints are always drawn in this color; use Emgu.CV.Structure.MCvScalar with all values set to -1 for random colors per match.</param>
+        /// <param name="singlePointColor">The color of the keypoints that have no match (single points). Matched keypoints are drawn in the matchColor, per OpenCV's drawMatches design.</param>
         /// <param name="mask">The mask for the matches. Use null for all matches.</param>
         /// <param name="flags">The drawing type</param>
         /// <param name="result">The image where model and observed image is displayed side by side. Matches are drawn as indicated by the flag</param>
@@ -89,8 +89,8 @@ namespace Emgu.CV.Features
         /// <param name="modelKeypoints">The keypoints in the model image</param>
         /// <param name="observedImage">The observed image</param>
         /// <param name="observedKeyPoints">The keypoints in the observed image</param>
-        /// <param name="matchColor">The color for the match correspondence lines</param>
-        /// <param name="singlePointColor">The color for highlighting the keypoints</param>
+        /// <param name="matchColor">The color used for both the matched keypoints and their correspondence lines. Matched keypoints are always drawn in this color; use Emgu.CV.Structure.MCvScalar with all values set to -1 for random colors per match.</param>
+        /// <param name="singlePointColor">The color of the keypoints that have no match (single points). Matched keypoints are drawn in the matchColor, per OpenCV's drawMatches design.</param>
         /// <param name="mask">The mask for the matches. Use null for all matches.</param>
         /// <param name="flags">The drawing type</param>
         /// <param name="result">The image where model and observed image is displayed side by side. Matches are drawn as indicated by the flag</param>
@@ -121,8 +121,8 @@ namespace Emgu.CV.Features
         /// <param name="modelKeypoints">The keypoints in the model image</param>
         /// <param name="observedImage">The observed image</param>
         /// <param name="observedKeyPoints">The keypoints in the observed image</param>
-        /// <param name="matchColor">The color for the match correspondence lines</param>
-        /// <param name="singlePointColor">The color for highlighting the keypoints</param>
+        /// <param name="matchColor">The color used for both the matched keypoints and their correspondence lines. Matched keypoints are always drawn in this color; use Emgu.CV.Structure.MCvScalar with all values set to -1 for random colors per match.</param>
+        /// <param name="singlePointColor">The color of the keypoints that have no match (single points). Matched keypoints are drawn in the matchColor, per OpenCV's drawMatches design.</param>
         /// <param name="mask">The mask for the matches. Use null for all matches.</param>
         /// <param name="flags">The drawing type</param>
         /// <param name="result">The image where model and observed image is displayed side by side. Matches are drawn as indicated by the flag</param>
