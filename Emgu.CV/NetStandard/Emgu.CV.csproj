@@ -32,6 +32,8 @@
     <!-- <PackageReference Include="System.Runtime" Version="4.3.1" /> -->
 		<!-- <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" /> -->
 		<PackageReference Include="System.Text.Json" Version="10.0.9" />
+		<!-- Span<T> for the netstandard2.0 build; newer TFMs have it built in. -->
+		<PackageReference Include="System.Memory" Version="4.6.3" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
 	</ItemGroup>
 	<!--
   <Target Name="DeployBinary" AfterTargets="AfterBuild">

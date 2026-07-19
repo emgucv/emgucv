@@ -323,6 +323,30 @@ namespace Emgu.CV
             }
         }
 
+#if UNSAFE_ALLOWED
+        /// <summary>
+        /// Decode image stored in the buffer, without copying the buffer
+        /// </summary>
+        /// <param name="buf">The buffer. The memory is pinned for the duration of the call and is not copied.</param>
+        /// <param name="loadType">The image loading type</param>
+        /// <param name="dst">The output placeholder for the decoded matrix.</param>
+        public static void Imdecode(ReadOnlySpan<byte> buf, CvEnum.ImreadModes loadType, Mat dst)
+        {
+            if (buf.IsEmpty)
+                throw new ArgumentException("The buffer must not be empty.", nameof(buf));
+            unsafe
+            {
+                fixed (byte* ptr = buf)
+                {
+                    using (Mat header = new Mat(1, buf.Length, CvEnum.DepthType.Cv8U, 1, (IntPtr)ptr, buf.Length))
+                    {
+                        Imdecode(header, loadType, dst);
+                    }
+                }
+            }
+        }
+#endif
+
         /// <summary>
         /// Decode image stored in the buffer
         /// </summary>
