@@ -633,10 +633,24 @@ namespace Emgu.Util
                 catch
                 {
                     System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen from libdl.so to load {0}, will try using libdl.so.2 instead", dllname));
-                    handler = Dlopen2(dllname, mode);
-                    if (handler == IntPtr.Zero)
+                    try
                     {
-                        System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen from libdl.so.2 to load {0}", dllname));
+                        handler = Dlopen2(dllname, mode);
+                        if (handler == IntPtr.Zero)
+                        {
+                            System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen from libdl.so.2 to load {0}", dllname));
+                        }
+                    }
+                    catch
+                    {
+                        // glibc >= 2.34 exports dlopen from libc itself; some
+                        // distributions may not ship a libdl at all (issue #958).
+                        System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen from libdl.so.2 to load {0}, will try using libc.so.6 instead", dllname));
+                        handler = Dlopen3(dllname, mode);
+                        if (handler == IntPtr.Zero)
+                        {
+                            System.Diagnostics.Trace.WriteLine(String.Format("Failed to use dlopen from libc.so.6 to load {0}", dllname));
+                        }
                     }
                 }
 
@@ -678,6 +692,11 @@ namespace Emgu.Util
 
         [DllImport("libdl.so.2", EntryPoint = "dlopen")]
         private static extern IntPtr Dlopen2(
+            [MarshalAs(UnmanagedType.LPStr)]
+            String dllname, int mode);
+
+        [DllImport("libc.so.6", EntryPoint = "dlopen")]
+        private static extern IntPtr Dlopen3(
             [MarshalAs(UnmanagedType.LPStr)]
             String dllname, int mode);
 
