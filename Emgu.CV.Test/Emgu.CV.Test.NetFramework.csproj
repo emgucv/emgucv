@@ -81,7 +81,8 @@
     </Compile>
     <Compile Include="AutoTestCalibration.cs" />
     <Compile Include="AutoTestCuda.cs" />
-    <Compile Include="AutoTestFeatures2d.cs" />
+    <Compile Include="AutoTestFeatures.cs" />
+    <Compile Include="AutoTestXFeatures2D.cs" />
     <Compile Include="AutoTestMat.cs" />
     <Compile Include="AutoTestMatrix.cs" />
     <Compile Include="AutoTestOcr.cs" />

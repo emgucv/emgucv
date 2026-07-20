@@ -98,8 +98,11 @@
     <Compile Include="..\..\Emgu.CV.NativeImage\WriteableBitmapExtension.UWP.cs">
       <Link>WriteableBitmapExtension.UWP.cs</Link>
     </Compile>
-    <Compile Include="..\AutoTestFeatures2d.cs">
-      <Link>AutoTestFeatures2d.cs</Link>
+    <Compile Include="..\AutoTestFeatures.cs">
+      <Link>AutoTestFeatures.cs</Link>
+    </Compile>
+    <Compile Include="..\AutoTestXFeatures2D.cs">
+      <Link>AutoTestXFeatures2D.cs</Link>
     </Compile>
     <Compile Include="..\AutoTestImage.cs">
       <Link>AutoTestImage.cs</Link>

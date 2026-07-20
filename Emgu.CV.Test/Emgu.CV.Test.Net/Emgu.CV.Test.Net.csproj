@@ -12,7 +12,8 @@
   <ItemGroup>
     <Compile Include="..\AutoTestCalibration.cs" Link="AutoTestCalibration.cs" />
     <Compile Include="..\AutoTestCuda.cs" Link="AutoTestCuda.cs" />
-    <Compile Include="..\AutoTestFeatures2d.cs" Link="AutoTestFeatures2d.cs" />
+    <Compile Include="..\AutoTestFeatures.cs" Link="AutoTestFeatures.cs" />
+    <Compile Include="..\AutoTestXFeatures2D.cs" Link="AutoTestXFeatures2D.cs" />
     <Compile Include="..\AutoTestImage.cs" Link="AutoTestImage.cs" />
     <Compile Include="..\AutoTestMat.cs" Link="AutoTestMat.cs" />
     <Compile Include="..\AutoTestMatrix.cs" Link="AutoTestMatrix.cs" />
