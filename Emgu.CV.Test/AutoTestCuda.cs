@@ -1298,7 +1298,7 @@ namespace Emgu.CV.Test
 
         public GpuMat[] OpticalFlowImage()
         {
-            Mat[] images = AutoTestVarious.OpticalFlowImage();
+            Mat[] images = AutoTestOpticalFlow.OpticalFlowImage();
             GpuMat[] gmats = new GpuMat[images.Length];
             for (int i = 0; i < images.Length; i++)
             {

@@ -25,6 +25,14 @@
     <Compile Include="..\AutoTestQuaternions.cs" Link="AutoTestQuaternions.cs" />
     <Compile Include="..\AutoTestSanity.cs" Link="AutoTestSanity.cs" />
     <Compile Include="..\AutoTestUMat.cs" Link="AutoTestUMat.cs" />
+    <Compile Include="..\AutoTestAruco.cs" Link="AutoTestAruco.cs" />
+    <Compile Include="..\AutoTestDnn.cs" Link="AutoTestDnn.cs" />
+    <Compile Include="..\AutoTestFlann.cs" Link="AutoTestFlann.cs" />
+    <Compile Include="..\AutoTestOpticalFlow.cs" Link="AutoTestOpticalFlow.cs" />
+    <Compile Include="..\AutoTestPtcloud.cs" Link="AutoTestPtcloud.cs" />
+    <Compile Include="..\AutoTestStitching.cs" Link="AutoTestStitching.cs" />
+    <Compile Include="..\AutoTestStructuredLight.cs" Link="AutoTestStructuredLight.cs" />
+    <Compile Include="..\AutoTestText.cs" Link="AutoTestText.cs" />
     <Compile Include="..\AutoTestVarious.cs" Link="AutoTestVarious.cs" />
     <Compile Include="..\Class1.cs" Link="Class1.cs" />
     <Compile Include="..\EmguAssert.cs" Link="EmguAssert.cs" />
