@@ -544,6 +544,34 @@ bool cveSolvePnPRansac(cv::_InputArray* objectPoints, cv::_InputArray* imagePoin
 #endif
 }
 
+void cveUsacParamsGetDefault(cv::UsacParams* usacParams)
+{
+#ifdef HAVE_OPENCV_CALIB
+	cv::UsacParams p;
+	memcpy(usacParams, &p, sizeof(cv::UsacParams));
+#else
+	throw_no_calib();
+#endif
+}
+
+bool cveSolvePnPRansacUsac(
+	cv::_InputArray* objectPoints, cv::_InputArray* imagePoints,
+	cv::_InputOutputArray* cameraMatrix, cv::_InputArray* distCoeffs,
+	cv::_OutputArray* rvec, cv::_OutputArray* tvec, cv::_OutputArray* inliers,
+	cv::UsacParams* usacParams)
+{
+#ifdef HAVE_OPENCV_CALIB
+	return cv::solvePnPRansac(
+		*objectPoints, *imagePoints, *cameraMatrix,
+		distCoeffs ? *distCoeffs : static_cast<cv::InputArray>(cv::noArray()),
+		*rvec, *tvec,
+		inliers ? *inliers : static_cast<cv::OutputArray>(cv::noArray()),
+		*usacParams);
+#else
+	throw_no_calib();
+#endif
+}
+
 int cveSolveP3P(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_OutputArray* rvecs, cv::_OutputArray* tvecs, int flags)
 {
 #ifdef HAVE_OPENCV_CALIB

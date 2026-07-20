@@ -203,6 +203,14 @@ CVAPI(bool) cveSolvePnP(cv::_InputArray* objectPoints, cv::_InputArray* imagePoi
 
 CVAPI(bool) cveSolvePnPRansac(cv::_InputArray* objectPoints, cv::_InputArray* imagePoints, cv::_InputArray* cameraMatrix, cv::_InputArray* distCoeffs, cv::_OutputArray* rvec, cv::_OutputArray* tvec, bool useExtrinsicGuess, int iterationsCount, float reprojectionError, double confident, cv::_OutputArray* inliers, int flags);
 
+CVAPI(void) cveUsacParamsGetDefault(cv::UsacParams* usacParams);
+
+CVAPI(bool) cveSolvePnPRansacUsac(
+	cv::_InputArray* objectPoints, cv::_InputArray* imagePoints,
+	cv::_InputOutputArray* cameraMatrix, cv::_InputArray* distCoeffs,
+	cv::_OutputArray* rvec, cv::_OutputArray* tvec, cv::_OutputArray* inliers,
+	cv::UsacParams* usacParams);
+
 CVAPI(int) cveSolveP3P(
 	cv::_InputArray* objectPoints,
 	cv::_InputArray* imagePoints,

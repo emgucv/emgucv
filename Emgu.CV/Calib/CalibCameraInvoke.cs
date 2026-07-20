@@ -383,6 +383,52 @@ namespace Emgu.CV
            CvEnum.SolvePnpMethod flags);
 
         /// <summary>
+        /// Finds an object pose from 3D-2D point correspondences using the USAC framework for robust estimation.
+        /// </summary>
+        /// <param name="objectPoints">Array of object points in the object coordinate space, 3xN/Nx3 1-channel or 1xN/Nx1 3-channel, where N is the number of points.</param>
+        /// <param name="imagePoints">Array of corresponding image points, 2xN/Nx2 1-channel or 1xN/Nx1 2-channel, where N is the number of points.</param>
+        /// <param name="cameraMatrix">Input camera matrix. May be refined by the estimation.</param>
+        /// <param name="distCoeffs">Input vector of distortion coefficients. If null, the zero distortion coefficients are assumed.</param>
+        /// <param name="rvec">Output rotation vector</param>
+        /// <param name="tvec">Output translation vector</param>
+        /// <param name="inliers">Output vector that contains indices of inliers in objectPoints and imagePoints.</param>
+        /// <param name="parameters">The USAC parameters. Use UsacParams.GetDefault() for the default configuration.</param>
+        /// <returns>True if successful</returns>
+        public static bool SolvePnPRansac(
+           IInputArray objectPoints,
+           IInputArray imagePoints,
+           IInputOutputArray cameraMatrix,
+           IInputArray distCoeffs,
+           IOutputArray rvec,
+           IOutputArray tvec,
+           IOutputArray inliers,
+           ref UsacParams parameters)
+        {
+            using (InputArray iaObjectPoints = objectPoints.GetInputArray())
+            using (InputArray iaImagePoints = imagePoints.GetInputArray())
+            using (InputOutputArray ioaCameraMatrix = cameraMatrix.GetInputOutputArray())
+            using (InputArray iaDistortionCoeffs = distCoeffs == null ? InputArray.GetEmpty() : distCoeffs.GetInputArray())
+            using (OutputArray oaRotationVector = rvec.GetOutputArray())
+            using (OutputArray oaTranslationVector = tvec.GetOutputArray())
+            using (OutputArray oaInliers = inliers == null ? OutputArray.GetEmpty() : inliers.GetOutputArray())
+                return cveSolvePnPRansacUsac(
+                   iaObjectPoints, iaImagePoints, ioaCameraMatrix, iaDistortionCoeffs,
+                   oaRotationVector, oaTranslationVector, oaInliers, ref parameters);
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveSolvePnPRansacUsac(
+           IntPtr objectPoints,
+           IntPtr imagePoints,
+           IntPtr cameraMatrix,
+           IntPtr distCoeffs,
+           IntPtr rvec,
+           IntPtr tvec,
+           IntPtr inliers,
+           ref UsacParams parameters);
+
+        /// <summary>
         /// Finds an object pose from 3 3D-2D point correspondences.
         /// </summary>
         /// <param name="objectPoints">Array of object points in the object coordinate space, 3x3 1-channel or 1x3/3x1 3-channel. VectorOfPoint3f can be also passed here.</param>
