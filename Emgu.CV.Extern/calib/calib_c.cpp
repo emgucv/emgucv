@@ -652,6 +652,46 @@ void cveDecomposeEssentialMat(cv::_InputArray* e, cv::_OutputArray* r1, cv::_Out
 #endif
 }
 
+int cveRecoverPose(
+	cv::_InputArray* E,
+	cv::_InputArray* points1,
+	cv::_InputArray* points2,
+	cv::_InputArray* cameraMatrix,
+	cv::_OutputArray* R,
+	cv::_OutputArray* t,
+	cv::_InputOutputArray* mask)
+{
+#ifdef HAVE_OPENCV_CALIB
+	return cv::recoverPose(
+		*E, *points1, *points2, *cameraMatrix, *R, *t,
+		mask ? *mask : static_cast<cv::InputOutputArray>(cv::noArray()));
+#else
+	throw_no_calib();
+#endif
+}
+
+int cveRecoverPoseWithDistanceThresh(
+	cv::_InputArray* E,
+	cv::_InputArray* points1,
+	cv::_InputArray* points2,
+	cv::_InputArray* cameraMatrix,
+	cv::_OutputArray* R,
+	cv::_OutputArray* t,
+	double distanceThresh,
+	cv::_InputOutputArray* mask,
+	cv::_OutputArray* triangulatedPoints)
+{
+#ifdef HAVE_OPENCV_CALIB
+	return cv::recoverPose(
+		*E, *points1, *points2, *cameraMatrix, *R, *t,
+		distanceThresh,
+		mask ? *mask : static_cast<cv::InputOutputArray>(cv::noArray()),
+		triangulatedPoints ? *triangulatedPoints : static_cast<cv::OutputArray>(cv::noArray()));
+#else
+	throw_no_calib();
+#endif
+}
+
 int cveDecomposeHomographyMat(cv::_InputArray* h, cv::_InputArray* k, cv::_OutputArray* rotations, cv::_OutputArray* translations, cv::_OutputArray* normals)
 {
 #ifdef HAVE_OPENCV_CALIB

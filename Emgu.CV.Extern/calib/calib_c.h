@@ -267,6 +267,26 @@ CVAPI(void) cveFindEssentialMat(
 
 CVAPI(void) cveDecomposeEssentialMat(cv::_InputArray* e, cv::_OutputArray* r1, cv::_OutputArray* r2, cv::_OutputArray* t);
 
+CVAPI(int) cveRecoverPose(
+	cv::_InputArray* E,
+	cv::_InputArray* points1,
+	cv::_InputArray* points2,
+	cv::_InputArray* cameraMatrix,
+	cv::_OutputArray* R,
+	cv::_OutputArray* t,
+	cv::_InputOutputArray* mask);
+
+CVAPI(int) cveRecoverPoseWithDistanceThresh(
+	cv::_InputArray* E,
+	cv::_InputArray* points1,
+	cv::_InputArray* points2,
+	cv::_InputArray* cameraMatrix,
+	cv::_OutputArray* R,
+	cv::_OutputArray* t,
+	double distanceThresh,
+	cv::_InputOutputArray* mask,
+	cv::_OutputArray* triangulatedPoints);
+
 CVAPI(int) cveDecomposeHomographyMat(
 	cv::_InputArray* h,
 	cv::_InputArray* k,

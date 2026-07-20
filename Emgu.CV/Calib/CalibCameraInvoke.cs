@@ -650,6 +650,101 @@ namespace Emgu.CV
             IntPtr t);
 
         /// <summary>
+        /// Recovers the relative camera rotation and translation from an essential matrix and the
+        /// corresponding points in two images, using a chirality check. Returns the number of inliers
+        /// that pass the check.
+        /// </summary>
+        /// <param name="E">The input essential matrix.</param>
+        /// <param name="points1">Array of N 2D points from the first image (float or double).</param>
+        /// <param name="points2">Array of N 2D points from the second image (same size/format as points1).</param>
+        /// <param name="cameraMatrix">3×3 camera intrinsic matrix (both cameras must share the same matrix).</param>
+        /// <param name="R">Output rotation matrix (3×3).</param>
+        /// <param name="t">Output translation vector (unit length; scale is ambiguous).</param>
+        /// <param name="mask">Optional input/output inlier mask. On input, marks valid correspondences;
+        /// on output, marks correspondences that also pass the chirality check.</param>
+        /// <returns>Number of inliers that passed the chirality check.</returns>
+        public static int RecoverPose(
+            IInputArray E,
+            IInputArray points1,
+            IInputArray points2,
+            IInputArray cameraMatrix,
+            IOutputArray R,
+            IOutputArray t,
+            IInputOutputArray mask = null)
+        {
+            using (InputArray iaE = E.GetInputArray())
+            using (InputArray iaP1 = points1.GetInputArray())
+            using (InputArray iaP2 = points2.GetInputArray())
+            using (InputArray iaCam = cameraMatrix.GetInputArray())
+            using (OutputArray oaR = R.GetOutputArray())
+            using (OutputArray oaT = t.GetOutputArray())
+            using (InputOutputArray ioaMask = mask == null ? InputOutputArray.GetEmpty() : mask.GetInputOutputArray())
+            {
+                return cveRecoverPose(iaE, iaP1, iaP2, iaCam, oaR, oaT, ioaMask);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern int cveRecoverPose(
+            IntPtr E,
+            IntPtr points1,
+            IntPtr points2,
+            IntPtr cameraMatrix,
+            IntPtr R,
+            IntPtr t,
+            IntPtr mask);
+
+        /// <summary>
+        /// Recovers the relative camera rotation and translation from an essential matrix and
+        /// corresponding points, filtering by a distance threshold. Returns the number of inliers.
+        /// </summary>
+        /// <param name="E">The input essential matrix.</param>
+        /// <param name="points1">Array of N 2D points from the first image.</param>
+        /// <param name="points2">Array of N 2D points from the second image.</param>
+        /// <param name="cameraMatrix">3×3 camera intrinsic matrix.</param>
+        /// <param name="R">Output rotation matrix (3×3).</param>
+        /// <param name="t">Output translation vector (unit length).</param>
+        /// <param name="distanceThresh">Distance threshold used to filter out far-away (near-infinite) points.</param>
+        /// <param name="mask">Optional input/output inlier mask.</param>
+        /// <param name="triangulatedPoints">Optional output of 4D homogeneous triangulated points.</param>
+        /// <returns>Number of inliers that passed the chirality and distance checks.</returns>
+        public static int RecoverPoseWithDistanceThresh(
+            IInputArray E,
+            IInputArray points1,
+            IInputArray points2,
+            IInputArray cameraMatrix,
+            IOutputArray R,
+            IOutputArray t,
+            double distanceThresh,
+            IInputOutputArray mask = null,
+            IOutputArray triangulatedPoints = null)
+        {
+            using (InputArray iaE = E.GetInputArray())
+            using (InputArray iaP1 = points1.GetInputArray())
+            using (InputArray iaP2 = points2.GetInputArray())
+            using (InputArray iaCam = cameraMatrix.GetInputArray())
+            using (OutputArray oaR = R.GetOutputArray())
+            using (OutputArray oaT = t.GetOutputArray())
+            using (InputOutputArray ioaMask = mask == null ? InputOutputArray.GetEmpty() : mask.GetInputOutputArray())
+            using (OutputArray oaTri = triangulatedPoints == null ? OutputArray.GetEmpty() : triangulatedPoints.GetOutputArray())
+            {
+                return cveRecoverPoseWithDistanceThresh(iaE, iaP1, iaP2, iaCam, oaR, oaT, distanceThresh, ioaMask, oaTri);
+            }
+        }
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern int cveRecoverPoseWithDistanceThresh(
+            IntPtr E,
+            IntPtr points1,
+            IntPtr points2,
+            IntPtr cameraMatrix,
+            IntPtr R,
+            IntPtr t,
+            double distanceThresh,
+            IntPtr mask,
+            IntPtr triangulatedPoints);
+
+        /// <summary>
         /// Decompose a homography matrix to rotation(s), translation(s) and plane normal(s).
         /// </summary>
         /// <param name="h">The input homography matrix between two images.</param>
