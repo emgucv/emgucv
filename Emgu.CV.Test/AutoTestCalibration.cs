@@ -180,5 +180,87 @@ namespace Emgu.CV.Test
                 //UI.ImageViewer.Show(circlesGridImage);
             }
         }
+
+        private static void BuildSyntheticEssentialMatPoints(out float[] raw1, out float[] raw2)
+        {
+            // 5×5 grid of points at Z=5, camera 2 translated 1 unit along X
+            const double f = 600.0, cx = 320.0, cy = 240.0, tx = 1.0, Z = 5.0;
+            const int n = 25;
+            raw1 = new float[n * 2];
+            raw2 = new float[n * 2];
+            int idx = 0;
+            for (int r = -2; r <= 2; r++)
+            {
+                for (int c = -2; c <= 2; c++)
+                {
+                    raw1[idx * 2]     = (float)(f * c / Z + cx);
+                    raw1[idx * 2 + 1] = (float)(f * r / Z + cy);
+                    raw2[idx * 2]     = (float)(f * (c - tx) / Z + cx);
+                    raw2[idx * 2 + 1] = (float)(f * r / Z + cy);
+                    idx++;
+                }
+            }
+        }
+
+        [Test]
+        public void TestRecoverPose()
+        {
+            const double f = 600.0, cx = 320.0, cy = 240.0;
+            using Mat K = new Mat(3, 3, DepthType.Cv64F, 1);
+            K.SetTo(new double[] { f, 0, cx, 0, f, cy, 0, 0, 1 });
+
+            BuildSyntheticEssentialMatPoints(out float[] raw1, out float[] raw2);
+            int n = raw1.Length / 2;
+            using Mat p1 = new Mat(n, 1, DepthType.Cv32F, 2);
+            using Mat p2 = new Mat(n, 1, DepthType.Cv32F, 2);
+            p1.SetTo(raw1);
+            p2.SetTo(raw2);
+
+            using Mat mask = new Mat();
+            using Mat E = CvInvoke.FindEssentialMat(p1, p2, K, CvEnum.FmType.Ransac, 0.999, 1.0, 1000, mask);
+            EmguAssert.IsFalse(E.IsEmpty);
+
+            using Mat R = new Mat();
+            using Mat t = new Mat();
+            int inliers = CvInvoke.RecoverPose(E, p1, p2, K, R, t, mask);
+
+            EmguAssert.IsTrue(inliers > 0);
+            EmguAssert.AreEqual(3, R.Rows);
+            EmguAssert.AreEqual(3, R.Cols);
+            EmguAssert.AreEqual(3, t.Rows);
+
+            // Translation vector must be unit length
+            double[] tArr = new double[3];
+            t.CopyTo(tArr);
+            double tNorm = Math.Sqrt(tArr[0] * tArr[0] + tArr[1] * tArr[1] + tArr[2] * tArr[2]);
+            EmguAssert.IsTrue(Math.Abs(tNorm - 1.0) < 0.01);
+        }
+
+        [Test]
+        public void TestRecoverPoseWithDistanceThresh()
+        {
+            const double f = 600.0, cx = 320.0, cy = 240.0;
+            using Mat K = new Mat(3, 3, DepthType.Cv64F, 1);
+            K.SetTo(new double[] { f, 0, cx, 0, f, cy, 0, 0, 1 });
+
+            BuildSyntheticEssentialMatPoints(out float[] raw1, out float[] raw2);
+            int n = raw1.Length / 2;
+            using Mat p1 = new Mat(n, 1, DepthType.Cv32F, 2);
+            using Mat p2 = new Mat(n, 1, DepthType.Cv32F, 2);
+            p1.SetTo(raw1);
+            p2.SetTo(raw2);
+
+            using Mat mask = new Mat();
+            using Mat E = CvInvoke.FindEssentialMat(p1, p2, K, CvEnum.FmType.Ransac, 0.999, 1.0, 1000, mask);
+
+            using Mat R = new Mat();
+            using Mat t = new Mat();
+            using Mat triangulated = new Mat();
+            int inliers = CvInvoke.RecoverPoseWithDistanceThresh(
+                E, p1, p2, K, R, t, 100.0, mask, triangulated);
+
+            EmguAssert.IsTrue(inliers > 0);
+            EmguAssert.IsFalse(triangulated.IsEmpty);
+        }
     }
 }
