@@ -162,3 +162,80 @@ void cveOctreeRelease(cv::Ptr<cv::Octree>** sharedPtr)
 	throw_no_ptcloud();
 #endif
 }
+
+void cveDepthTo3d(cv::_InputArray* depth, cv::_InputArray* K, cv::_OutputArray* points3d, cv::_InputArray* mask)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	cv::depthTo3d(*depth, *K, *points3d, mask ? *mask : static_cast<cv::InputArray>(cv::noArray()));
+#else
+	throw_no_ptcloud();
+#endif
+}
+
+void cveDepthTo3dSparse(cv::_InputArray* depth, cv::_InputArray* inK, cv::_InputArray* inPoints, cv::_OutputArray* points3d)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	cv::depthTo3dSparse(*depth, *inK, *inPoints, *points3d);
+#else
+	throw_no_ptcloud();
+#endif
+}
+
+void cveRescaleDepth(cv::_InputArray* in, int type, cv::_OutputArray* out, double depthFactor)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	cv::rescaleDepth(*in, type, *out, depthFactor);
+#else
+	throw_no_ptcloud();
+#endif
+}
+
+void cveRegisterDepth(
+	cv::_InputArray* unregisteredCameraMatrix,
+	cv::_InputArray* registeredCameraMatrix,
+	cv::_InputArray* registeredDistCoeffs,
+	cv::_InputArray* Rt,
+	cv::_InputArray* unregisteredDepth,
+	CvSize* outputImagePlaneSize,
+	cv::_OutputArray* registeredDepth,
+	bool depthDilation)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	cv::registerDepth(
+		*unregisteredCameraMatrix,
+		*registeredCameraMatrix,
+		*registeredDistCoeffs,
+		*Rt,
+		*unregisteredDepth,
+		cv::Size(outputImagePlaneSize->width, outputImagePlaneSize->height),
+		*registeredDepth,
+		depthDilation);
+#else
+	throw_no_ptcloud();
+#endif
+}
+
+void cveWarpFrame(
+	cv::_InputArray* depth,
+	cv::_InputArray* image,
+	cv::_InputArray* mask,
+	cv::_InputArray* Rt,
+	cv::_InputArray* cameraMatrix,
+	cv::_OutputArray* warpedDepth,
+	cv::_OutputArray* warpedImage,
+	cv::_OutputArray* warpedMask)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	cv::warpFrame(
+		*depth,
+		image ? *image : static_cast<cv::InputArray>(cv::noArray()),
+		mask ? *mask : static_cast<cv::InputArray>(cv::noArray()),
+		*Rt,
+		*cameraMatrix,
+		warpedDepth ? *warpedDepth : static_cast<cv::OutputArray>(cv::noArray()),
+		warpedImage ? *warpedImage : static_cast<cv::OutputArray>(cv::noArray()),
+		warpedMask ? *warpedMask : static_cast<cv::OutputArray>(cv::noArray()));
+#else
+	throw_no_ptcloud();
+#endif
+}

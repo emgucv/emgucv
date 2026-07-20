@@ -60,4 +60,26 @@ CVAPI(void) cveSaveMesh(
 	cv::_InputArray* colors,
 	cv::_InputArray* texCoords);
 
+CVAPI(void) cveDepthTo3d(cv::_InputArray* depth, cv::_InputArray* K, cv::_OutputArray* points3d, cv::_InputArray* mask);
+CVAPI(void) cveDepthTo3dSparse(cv::_InputArray* depth, cv::_InputArray* inK, cv::_InputArray* inPoints, cv::_OutputArray* points3d);
+CVAPI(void) cveRescaleDepth(cv::_InputArray* in, int type, cv::_OutputArray* out, double depthFactor);
+CVAPI(void) cveRegisterDepth(
+	cv::_InputArray* unregisteredCameraMatrix,
+	cv::_InputArray* registeredCameraMatrix,
+	cv::_InputArray* registeredDistCoeffs,
+	cv::_InputArray* Rt,
+	cv::_InputArray* unregisteredDepth,
+	CvSize* outputImagePlaneSize,
+	cv::_OutputArray* registeredDepth,
+	bool depthDilation);
+CVAPI(void) cveWarpFrame(
+	cv::_InputArray* depth,
+	cv::_InputArray* image,
+	cv::_InputArray* mask,
+	cv::_InputArray* Rt,
+	cv::_InputArray* cameraMatrix,
+	cv::_OutputArray* warpedDepth,
+	cv::_OutputArray* warpedImage,
+	cv::_OutputArray* warpedMask);
+
 #endif
