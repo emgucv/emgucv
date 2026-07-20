@@ -159,12 +159,14 @@ namespace Emgu.CV.Test
             {
                 CvInvoke.BitwiseNot(m1, m2);
 
+#if UNSAFE_ALLOWED
                 var span = m1.GetSpan<byte>();
                 for (int i = 0; i < span.Length; i++)
                 {
                     span[i] = (byte)((byte)255 - (byte)(span[i]));
                 }
                 EmguAssert.IsTrue(m1.Equals(m2));
+#endif
             }
 
             handle.Free();

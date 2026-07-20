@@ -5,6 +5,8 @@
     <!-- Opt in to the model-downloading tests (AutoTestOcr, AutoTestModels) with
          dotnet test -p:TestModels=true -->
     <DefineConstants Condition="'$(TestModels)'=='true'">$(DefineConstants);TEST_MODELS</DefineConstants>
+    <DefineConstants>$(DefineConstants);UNSAFE_ALLOWED</DefineConstants>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

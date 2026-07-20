@@ -4413,6 +4413,7 @@ namespace Emgu.CV.Test
         [Test]
         public void TestSpan()
         {
+#if UNSAFE_ALLOWED
             using (Mat mat1 = new Mat(1000, 1000, DepthType.Cv8U, 3))
             {
                 mat1.SetTo(new MCvScalar(1,1,1));
@@ -4439,6 +4440,7 @@ namespace Emgu.CV.Test
                     EmguAssert.IsTrue(sum == mat3.Width * mat3.Height * mat1.NumberOfChannels);
                 }
             }
+#endif
         }
         
         /*
