@@ -806,5 +806,47 @@ namespace Emgu.CV.Test
                 }
             }
         }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestFaceRecognizerSF()
+        {
+            using (FaceDetectorYNModel detector = new FaceDetectorYNModel())
+            using (FaceRecognizerSFModel recognizer = new FaceRecognizerSFModel())
+            using (Mat img1 = EmguAssert.LoadMat("lena.jpg"))
+            {
+                await detector.Init(AutoTestModels.DownloadManager_OnDownloadProgressChanged);
+                await recognizer.Init(AutoTestModels.DownloadManager_OnDownloadProgressChanged);
+
+                // Detect faces in the reference image
+                Mat faces1 = new Mat();
+                detector.Detect(img1, faces1);
+                EmguAssert.IsTrue(faces1.Rows > 0, "No face detected in reference image");
+
+                using (Mat row1 = faces1.Row(0))
+                {
+                    // Same face against itself — cosine score must be above threshold
+                    double scoreSame = recognizer.Match(img1, row1, img1, row1, FaceRecognizerSF.DisType.Cosine);
+                    EmguAssert.IsTrue(scoreSame >= 0.363, $"Self-match cosine score too low: {scoreSame}");
+
+                    // Extract feature and round-trip through MatchFeatures
+                    using (Mat feature1 = new Mat())
+                    using (Mat feature2 = new Mat())
+                    {
+                        recognizer.Feature(img1, row1, feature1);
+                        recognizer.Feature(img1, row1, feature2);
+                        double scoreFeature = recognizer.MatchFeatures(feature1, feature2, FaceRecognizerSF.DisType.Cosine);
+                        EmguAssert.IsTrue(Math.Abs(scoreSame - scoreFeature) < 1e-4,
+                            "MatchFeatures result differs from Match");
+                    }
+                }
+            }
+        }
     }
 }
