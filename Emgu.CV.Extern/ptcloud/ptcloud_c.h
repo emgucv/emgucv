@@ -69,7 +69,7 @@ CVAPI(void) cveRegisterDepth(
 	cv::_InputArray* registeredDistCoeffs,
 	cv::_InputArray* Rt,
 	cv::_InputArray* unregisteredDepth,
-	CvSize* outputImagePlaneSize,
+	cv::Size* outputImagePlaneSize,
 	cv::_OutputArray* registeredDepth,
 	bool depthDilation);
 CVAPI(void) cveWarpFrame(
