@@ -5,8 +5,14 @@
     so without this file the native libraries never reach the output folder
     (issue #983). Files are copied preserving the runtimes\win-<arch>\native
     layout that Emgu.CV probes at run time, so an AnyCPU process picks the
-    matching architecture. This file is only imported by .NET Framework
-    consumers: it is shipped under build\net461 and buildTransitive\net461.
+    matching architecture. This file is shipped under build\net461 and
+    buildTransitive\net461 for .NET Framework consumers, and also under
+    build\net6.0-windows7.0 and buildTransitive\net6.0-windows7.0 (the OS
+    version suffix is required by NuGet for net5.0+ Windows-specific TFMs,
+    see NU1012) so that SDK-style projects targeting net6.0-windows or later
+    (net10.0-windows10.0.19041, etc.) resolve a same-family asset group
+    instead of falling back to the net461 group, which otherwise triggers
+    NuGet warning NU1701.
   -->
   <ItemGroup Condition="'$(PlatformTarget)' == 'x64' Or '$(PlatformTarget)' == 'AnyCPU' Or '$(PlatformTarget)' == ''">
     <None Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\*.*">

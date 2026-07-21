@@ -29,6 +29,8 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
     <file src="..\..\..\${EMGUCV_LICENSE_FILE}" target="" />
     <file src="Emgu.CV.runtime.windows.targets" target="build\net461\${EMGUCV_WINDOWS_NUGET_ID}.targets" />
     <file src="Emgu.CV.runtime.windows.targets" target="buildTransitive\net461\${EMGUCV_WINDOWS_NUGET_ID}.targets" />
+    <file src="Emgu.CV.runtime.windows.targets" target="build\net6.0-windows7.0\${EMGUCV_WINDOWS_NUGET_ID}.targets" />
+    <file src="Emgu.CV.runtime.windows.targets" target="buildTransitive\net6.0-windows7.0\${EMGUCV_WINDOWS_NUGET_ID}.targets" />
     ${EMGUCV_WINDOWS_NUGET_FILE_LIST}
   </files>
 </package>
