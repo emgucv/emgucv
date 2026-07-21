@@ -93,9 +93,10 @@ namespace Emgu.CV
         {
             if (tryDataSharing)
             {
-                if (srcColorType == typeof(Gray) && srcDepthType == typeof(Byte))
+                if (srcColorType == typeof(Gray) && srcDepthType == typeof(Byte)
+                    && (step & 3) == 0)
                 {
-                    //Grayscale of Bytes
+                    //Grayscale of Bytes — GDI+ requires stride to be a multiple of 4
                     Bitmap bmpGray = new Bitmap(
                         size.Width,
                         size.Height,
