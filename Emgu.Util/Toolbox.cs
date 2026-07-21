@@ -10,6 +10,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 
@@ -477,7 +478,18 @@ namespace Emgu.Util
             {
                 foreach (Assembly assembly in assemblies)
                 {
-                    foreach (Type t in assembly.GetTypes())
+                    Type[] assemblyTypes;
+                    try
+                    {
+                        assemblyTypes = assembly.GetTypes();
+                    }
+                    catch (System.Reflection.ReflectionTypeLoadException ex)
+                    {
+                        // Some types couldn't be loaded (e.g. a dependent assembly is missing).
+                        // Use whatever types were loaded successfully.
+                        assemblyTypes = ex.Types.Where(t => t != null).ToArray();
+                    }
+                    foreach (Type t in assemblyTypes)
                     {
                         if (typeof(T).IsAssignableFrom(t) && typeof(T) != t)
                         {
