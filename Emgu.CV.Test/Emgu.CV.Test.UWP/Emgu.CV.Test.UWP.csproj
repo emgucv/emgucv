@@ -101,6 +101,33 @@
     <Compile Include="..\AutoTestFeatures.cs">
       <Link>AutoTestFeatures.cs</Link>
     </Compile>
+    <Compile Include="..\AutoTestFace.cs">
+      <Link>AutoTestFace.cs</Link>
+    </Compile>
+    <Compile Include="..\AutoTestFreetype.cs">
+      <Link>AutoTestFreetype.cs</Link>
+    </Compile>
+    <Compile Include="..\AutoTestImgproc.cs">
+      <Link>AutoTestImgproc.cs</Link>
+    </Compile>
+    <Compile Include="..\AutoTestObjDetect.cs">
+      <Link>AutoTestObjDetect.cs</Link>
+    </Compile>
+    <Compile Include="..\AutoTestPhoto.cs">
+      <Link>AutoTestPhoto.cs</Link>
+    </Compile>
+    <Compile Include="..\AutoTestRetina.cs">
+      <Link>AutoTestRetina.cs</Link>
+    </Compile>
+    <Compile Include="..\AutoTestSerialization.cs">
+      <Link>AutoTestSerialization.cs</Link>
+    </Compile>
+    <Compile Include="..\AutoTestStereo.cs">
+      <Link>AutoTestStereo.cs</Link>
+    </Compile>
+    <Compile Include="..\AutoTestVideoIO.cs">
+      <Link>AutoTestVideoIO.cs</Link>
+    </Compile>
     <Compile Include="..\AutoTestXFeatures2D.cs">
       <Link>AutoTestXFeatures2D.cs</Link>
     </Compile>

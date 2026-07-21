@@ -98,6 +98,23 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AutoTestImage.cs" />
     <Compile Include="AutoTestML.cs" />
+    <Compile Include="AutoTestAruco.cs" />
+    <Compile Include="AutoTestDnn.cs" />
+    <Compile Include="AutoTestFace.cs" />
+    <Compile Include="AutoTestFlann.cs" />
+    <Compile Include="AutoTestFreetype.cs" />
+    <Compile Include="AutoTestImgproc.cs" />
+    <Compile Include="AutoTestObjDetect.cs" />
+    <Compile Include="AutoTestOpticalFlow.cs" />
+    <Compile Include="AutoTestPhoto.cs" />
+    <Compile Include="AutoTestPtcloud.cs" />
+    <Compile Include="AutoTestRetina.cs" />
+    <Compile Include="AutoTestSerialization.cs" />
+    <Compile Include="AutoTestStereo.cs" />
+    <Compile Include="AutoTestStitching.cs" />
+    <Compile Include="AutoTestStructuredLight.cs" />
+    <Compile Include="AutoTestText.cs" />
+    <Compile Include="AutoTestVideoIO.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\opencv\data\haarcascades\haarcascade_eye.xml">

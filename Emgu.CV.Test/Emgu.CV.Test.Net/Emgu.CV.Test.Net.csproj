@@ -28,12 +28,21 @@
     <Compile Include="..\AutoTestUMat.cs" Link="AutoTestUMat.cs" />
     <Compile Include="..\AutoTestAruco.cs" Link="AutoTestAruco.cs" />
     <Compile Include="..\AutoTestDnn.cs" Link="AutoTestDnn.cs" />
+    <Compile Include="..\AutoTestFace.cs" Link="AutoTestFace.cs" />
     <Compile Include="..\AutoTestFlann.cs" Link="AutoTestFlann.cs" />
+    <Compile Include="..\AutoTestFreetype.cs" Link="AutoTestFreetype.cs" />
+    <Compile Include="..\AutoTestImgproc.cs" Link="AutoTestImgproc.cs" />
+    <Compile Include="..\AutoTestObjDetect.cs" Link="AutoTestObjDetect.cs" />
     <Compile Include="..\AutoTestOpticalFlow.cs" Link="AutoTestOpticalFlow.cs" />
+    <Compile Include="..\AutoTestPhoto.cs" Link="AutoTestPhoto.cs" />
     <Compile Include="..\AutoTestPtcloud.cs" Link="AutoTestPtcloud.cs" />
+    <Compile Include="..\AutoTestRetina.cs" Link="AutoTestRetina.cs" />
+    <Compile Include="..\AutoTestSerialization.cs" Link="AutoTestSerialization.cs" />
+    <Compile Include="..\AutoTestStereo.cs" Link="AutoTestStereo.cs" />
     <Compile Include="..\AutoTestStitching.cs" Link="AutoTestStitching.cs" />
     <Compile Include="..\AutoTestStructuredLight.cs" Link="AutoTestStructuredLight.cs" />
     <Compile Include="..\AutoTestText.cs" Link="AutoTestText.cs" />
+    <Compile Include="..\AutoTestVideoIO.cs" Link="AutoTestVideoIO.cs" />
     <Compile Include="..\AutoTestVarious.cs" Link="AutoTestVarious.cs" />
     <Compile Include="..\Class1.cs" Link="Class1.cs" />
     <Compile Include="..\EmguAssert.cs" Link="EmguAssert.cs" />

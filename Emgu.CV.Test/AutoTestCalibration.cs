@@ -262,5 +262,70 @@ namespace Emgu.CV.Test
             EmguAssert.IsTrue(inliers > 0);
             EmguAssert.IsFalse(triangulated.IsEmpty);
         }
+
+        [Test]
+        public void TestProjectPoints()
+        {
+            Mat cameraMatrix = new Mat(3, 3, DepthType.Cv64F, 1);
+            CvInvoke.SetIdentity(cameraMatrix, new MCvScalar(1));
+
+            Mat distortionCoeff = new Mat(8, 1, DepthType.Cv64F, 1);
+            distortionCoeff.SetTo(new MCvScalar());
+
+            VectorOfDouble rotationVector = new VectorOfDouble(new double[] { 0, 0, 0 });
+            VectorOfDouble translationVector = new VectorOfDouble(new double[] { 0, 0, 0 });
+
+            MCvPoint3D32f point = new MCvPoint3D32f(12, 32, 9);
+
+            PointF[] points = CvInvoke.ProjectPoints(
+               new MCvPoint3D32f[] { point },
+               rotationVector,
+               translationVector,
+               cameraMatrix,
+               distortionCoeff);
+        }
+
+        [Test]
+        public void TestSolvePnPRansacUsac()
+        {
+            //3D points on a grid at two depths
+            MCvPoint3D32f[] objectPts = new MCvPoint3D32f[20];
+            int idx = 0;
+            for (int i = 0; i < 5; i++)
+                for (int j = 0; j < 4; j++)
+                    objectPts[idx++] = new MCvPoint3D32f(i * 0.1f, j * 0.1f, (i + j) % 2 == 0 ? 0.0f : 0.05f);
+
+            using (Mat cameraMatrix = new Mat(3, 3, DepthType.Cv64F, 1))
+            using (VectorOfPoint3D32F vp3 = new VectorOfPoint3D32F(objectPts))
+            using (Mat rvecTruth = new Mat(3, 1, DepthType.Cv64F, 1))
+            using (Mat tvecTruth = new Mat(3, 1, DepthType.Cv64F, 1))
+            using (VectorOfPointF imagePts = new VectorOfPointF())
+            {
+                double[] k = { 800, 0, 320, 0, 800, 240, 0, 0, 1 };
+                cameraMatrix.SetTo(k);
+                rvecTruth.SetTo(new double[] { 0.1, -0.2, 0.05 });
+                tvecTruth.SetTo(new double[] { 0.05, -0.1, 1.5 });
+
+                CvInvoke.ProjectPoints(vp3, rvecTruth, tvecTruth, cameraMatrix, null, imagePts);
+
+                UsacParams usacParams = UsacParams.GetDefault();
+                EmguAssert.IsTrue(usacParams.MaxIterations > 0, "default UsacParams should be populated");
+
+                using (Mat rvec = new Mat())
+                using (Mat tvec = new Mat())
+                using (VectorOfInt inliers = new VectorOfInt())
+                {
+                    bool success = CvInvoke.SolvePnPRansac(
+                        vp3, imagePts, cameraMatrix, null, rvec, tvec, inliers, ref usacParams);
+                    EmguAssert.IsTrue(success, "SolvePnPRansac (USAC) failed");
+                    EmguAssert.IsTrue(inliers.Size >= objectPts.Length - 2, "most points should be inliers");
+
+                    double[] rv = (double[])rvec.GetData(multiDimensional: false);
+                    double[] tv = (double[])tvec.GetData(multiDimensional: false);
+                    EmguAssert.IsTrue(Math.Abs(rv[0] - 0.1) < 1e-3 && Math.Abs(rv[1] + 0.2) < 1e-3 && Math.Abs(rv[2] - 0.05) < 1e-3, "rvec mismatch");
+                    EmguAssert.IsTrue(Math.Abs(tv[0] - 0.05) < 1e-3 && Math.Abs(tv[1] + 0.1) < 1e-3 && Math.Abs(tv[2] - 1.5) < 1e-3, "tvec mismatch");
+                }
+            }
+        }
     }
 }
