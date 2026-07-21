@@ -313,7 +313,7 @@ namespace Emgu.CV
         /// coordinate space. Due to its duality, this tuple is equivalent to the position of the calibration pattern with respect to the
         /// camera coordinate space.
         /// </param>
-        /// <param name="translationVectors">Output vector of translation vectors estimated for each pattern view, see parameter describtion above.</param>
+        /// <param name="translationVectors">Output vector of translation vectors estimated for each pattern view, see parameter description above.</param>
         /// <param name="flags">Different flags</param>
         /// <param name="termCriteria">The termination criteria</param>
         /// <returns>The final reprojection error</returns>
