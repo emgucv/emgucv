@@ -37,6 +37,15 @@ namespace Emgu.CV.VideoStab
         }
 
         /// <summary>
+        /// Set the motion estimator used by this stabilizer.
+        /// </summary>
+        /// <param name="estimator">A keypoint-based motion estimator.</param>
+        public void SetMotionEstimator(KeypointBasedMotionEstimator estimator)
+        {
+            VideoStabInvoke.cveStabilizerBaseSetMotionEstimator(_stabilizerBase, estimator.ImageMotionEstimatorBasePtr);
+        }
+
+        /// <summary>
         /// Release the unmanaged memory
         /// </summary>
         protected override void DisposeObject()

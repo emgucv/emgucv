@@ -103,6 +103,9 @@ namespace cv {
 	namespace videostab {
 		class StabilizerBase {};
 		class ImageMotionEstimatorBase {};
+		class MotionEstimatorBase {};
+		class MotionEstimatorRansacL2 {};
+		class KeypointBasedMotionEstimator {};
 		class OnePassStabilizer {};
 		class TwoPassStabilizer {};
 		class MotionFilterBase {};
@@ -128,6 +131,12 @@ CVAPI(void) cveTwoPassStabilizerRelease(cv::videostab::TwoPassStabilizer** stabi
 
 CVAPI(cv::videostab::GaussianMotionFilter*) cveGaussianMotionFilterCreate(int radius, float stdev);
 CVAPI(void) cveGaussianMotionFilterRelease(cv::videostab::GaussianMotionFilter** filter);
+
+CVAPI(cv::videostab::MotionEstimatorRansacL2*) cveMotionEstimatorRansacL2Create(int motionModel, cv::videostab::MotionEstimatorBase** motionEstimatorBase);
+CVAPI(void) cveMotionEstimatorRansacL2Release(cv::videostab::MotionEstimatorRansacL2** estimator);
+
+CVAPI(cv::videostab::KeypointBasedMotionEstimator*) cveKeypointBasedMotionEstimatorCreate(cv::videostab::MotionEstimatorBase* estimator, cv::videostab::ImageMotionEstimatorBase** imageMotionEstimatorBase);
+CVAPI(void) cveKeypointBasedMotionEstimatorRelease(cv::videostab::KeypointBasedMotionEstimator** estimator);
 
 CVAPI(float) cveCalcBlurriness(cv::Mat* frame);
 

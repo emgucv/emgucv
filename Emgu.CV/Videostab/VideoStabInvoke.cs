@@ -64,9 +64,19 @@ namespace Emgu.CV.VideoStab
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveGaussianMotionFilterRelease(ref IntPtr filter);
 
-        /*
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void StabilizerBaseSetMotionEstimator(IntPtr stabilizer, IntPtr motionEstimator);
-        */
+        internal static extern void cveStabilizerBaseSetMotionEstimator(IntPtr stabilizer, IntPtr motionEstimator);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveMotionEstimatorRansacL2Create(int motionModel, ref IntPtr motionEstimatorBase);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveMotionEstimatorRansacL2Release(ref IntPtr estimator);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern IntPtr cveKeypointBasedMotionEstimatorCreate(IntPtr estimator, ref IntPtr imageMotionEstimatorBase);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveKeypointBasedMotionEstimatorRelease(ref IntPtr estimator);
     }
 }

@@ -133,6 +133,49 @@ void cveGaussianMotionFilterRelease(cv::videostab::GaussianMotionFilter** filter
 #endif
 }
 
+cv::videostab::MotionEstimatorRansacL2* cveMotionEstimatorRansacL2Create(int motionModel, cv::videostab::MotionEstimatorBase** motionEstimatorBase)
+{
+#ifdef HAVE_OPENCV_VIDEOSTAB
+	cv::videostab::MotionEstimatorRansacL2* estimator = new cv::videostab::MotionEstimatorRansacL2(static_cast<cv::videostab::MotionModel>(motionModel));
+	*motionEstimatorBase = dynamic_cast<cv::videostab::MotionEstimatorBase*>(estimator);
+	return estimator;
+#else
+	throw_no_videostab();
+#endif
+}
+
+void cveMotionEstimatorRansacL2Release(cv::videostab::MotionEstimatorRansacL2** estimator)
+{
+#ifdef HAVE_OPENCV_VIDEOSTAB
+	delete* estimator;
+	*estimator = 0;
+#else
+	throw_no_videostab();
+#endif
+}
+
+cv::videostab::KeypointBasedMotionEstimator* cveKeypointBasedMotionEstimatorCreate(cv::videostab::MotionEstimatorBase* estimator, cv::videostab::ImageMotionEstimatorBase** imageMotionEstimatorBase)
+{
+#ifdef HAVE_OPENCV_VIDEOSTAB
+	cv::Ptr<cv::videostab::MotionEstimatorBase> ptr(estimator, [](cv::videostab::MotionEstimatorBase*) {});
+	cv::videostab::KeypointBasedMotionEstimator* kbme = new cv::videostab::KeypointBasedMotionEstimator(ptr);
+	*imageMotionEstimatorBase = dynamic_cast<cv::videostab::ImageMotionEstimatorBase*>(kbme);
+	return kbme;
+#else
+	throw_no_videostab();
+#endif
+}
+
+void cveKeypointBasedMotionEstimatorRelease(cv::videostab::KeypointBasedMotionEstimator** estimator)
+{
+#ifdef HAVE_OPENCV_VIDEOSTAB
+	delete* estimator;
+	*estimator = 0;
+#else
+	throw_no_videostab();
+#endif
+}
+
 float cveCalcBlurriness(cv::Mat* frame)
 {
 #ifdef HAVE_OPENCV_VIDEOSTAB

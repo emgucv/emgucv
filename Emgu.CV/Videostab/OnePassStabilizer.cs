@@ -40,11 +40,14 @@ namespace Emgu.CV.VideoStab
             VideoStabInvoke.cveOnePassStabilizerSetMotionFilter(_ptr, motionFilter);
         }
 
-        /*
-        public void SetMotionEstimator(PyrLkRobustMotionEstimator estimator)
+        /// <summary>
+        /// Set the motion estimator used by this stabilizer.
+        /// </summary>
+        /// <param name="estimator">A keypoint-based motion estimator.</param>
+        public void SetMotionEstimator(KeypointBasedMotionEstimator estimator)
         {
-           VideoStabInvoke.StabilizerBaseSetMotionEstimator(_stabilizerBase, estimator);
-        }*/
+            VideoStabInvoke.cveStabilizerBaseSetMotionEstimator(_stabilizerBase, estimator.ImageMotionEstimatorBasePtr);
+        }
 
         /// <summary>
         /// Release the unmanaged memory associated with the stabilizer

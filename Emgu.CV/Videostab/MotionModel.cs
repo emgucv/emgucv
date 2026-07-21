@@ -1,22 +1,31 @@
-﻿//----------------------------------------------------------------------------
-//  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.       
+//----------------------------------------------------------------------------
+//  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
-/*
 using System;
-using System.Collections.Generic;
 
 namespace Emgu.CV.VideoStab
 {
-   
-   public enum MotionModel
-   {
-      TRANSLATION = 0,
-      TRANSLATION_AND_SCALE = 1,
-      LINEAR_SIMILARITY = 2,
-      AFFINE = 3,
-      HOMOGRAPHY = 4,
-      UNKNOWN = 5
-   }
+    /// <summary>
+    /// Describes the motion model used by video stabilization estimators.
+    /// </summary>
+    public enum MotionModel
+    {
+        /// <summary>Pure translation (2 DOF)</summary>
+        Translation = 0,
+        /// <summary>Translation and uniform scale (3 DOF)</summary>
+        TranslationAndScale = 1,
+        /// <summary>Rotation only (1 DOF)</summary>
+        Rotation = 2,
+        /// <summary>Rotation and translation (3 DOF)</summary>
+        Rigid = 3,
+        /// <summary>Rotation, translation, and uniform scale (4 DOF)</summary>
+        Similarity = 4,
+        /// <summary>Full affine (6 DOF)</summary>
+        Affine = 5,
+        /// <summary>Perspective homography (8 DOF)</summary>
+        Homography = 6,
+        /// <summary>Unknown motion model</summary>
+        Unknown = 7
+    }
 }
-*/
