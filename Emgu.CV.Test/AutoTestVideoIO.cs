@@ -444,5 +444,53 @@ namespace Emgu.CV.Test
             }
         }
 #endif
+
+#if !NETFX_CORE
+        [Test]
+        public static void TestMotionEstimatorRansacL2Create()
+        {
+            foreach (MotionModel model in new[] {
+                MotionModel.Translation,
+                MotionModel.Affine,
+                MotionModel.Homography })
+            {
+                using (var estimator = new MotionEstimatorRansacL2(model))
+                {
+                    EmguAssert.IsTrue(estimator.Ptr != IntPtr.Zero,
+                        $"MotionEstimatorRansacL2 with model {model} returned null pointer");
+                }
+            }
+        }
+
+        [Test]
+        public static void TestKeypointBasedMotionEstimatorCreate()
+        {
+            using (var ransac = new MotionEstimatorRansacL2(MotionModel.Affine))
+            using (var estimator = new KeypointBasedMotionEstimator(ransac))
+            {
+                EmguAssert.IsTrue(estimator.Ptr != IntPtr.Zero,
+                    "KeypointBasedMotionEstimator returned null pointer");
+            }
+        }
+
+        [Test]
+        public static void TestOnePassVideoStabilizerWithRansacEstimator()
+        {
+            using (VideoCapture capture = new VideoCapture(EmguAssert.GetFile("tree.avi")))
+            using (var framesource = new CaptureFrameSource(capture))
+            using (var ransac = new MotionEstimatorRansacL2(MotionModel.Affine))
+            using (var estimator = new KeypointBasedMotionEstimator(ransac))
+            using (var stabilizer = new OnePassStabilizer(framesource))
+            using (Mat frame = new Mat())
+            {
+                stabilizer.SetMotionEstimator(estimator);
+                int frameCount = 0;
+                while (stabilizer.NextFrame(frame))
+                    frameCount++;
+                EmguAssert.IsTrue(frameCount > 0,
+                    "OnePassStabilizer with RANSAC estimator did not return any frames");
+            }
+        }
+#endif
     }
 }
