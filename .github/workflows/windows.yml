@@ -73,7 +73,7 @@ jobs:
       uses: microsoft/setup-msbuild@v3
     - name: Initialize CodeQL
       id: init_codeql
-      uses: github/codeql-action/init@v3
+      uses: github/codeql-action/init@v4
       with:
         languages: csharp
     - name: Build solution
@@ -87,4 +87,4 @@ jobs:
           -t:Restore,Build
     - name: Perform CodeQL Analysis
       id: analyze_codeql
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@v4
