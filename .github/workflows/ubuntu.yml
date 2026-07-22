@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: [self-hosted, linux, x64]
+    runs-on: ubuntu-24.04
 
     # one day time out
     timeout-minutes: 1440
@@ -26,7 +26,7 @@ jobs:
     - name: Build Emgu CV package binary
       run: make package
       working-directory: ${{ github.workspace }}/platforms/ubuntu/24.04/build/
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: emgucv-ubuntu-zip-package
         path: ${{ github.workspace }}/platforms/ubuntu/24.04/build/*.zip

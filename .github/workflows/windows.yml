@@ -9,8 +9,7 @@ on:
 jobs:
   build:
 
-    # runs-on: windows-latest
-    runs-on: [self-hosted, Windows]
+    runs-on: windows-latest
 
     # two days time out
     timeout-minutes: 2880
@@ -25,7 +24,7 @@ jobs:
       id: setup_dotnet
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '9.x'
+        dotnet-version: '10.x'
     - name: Install dotnet workload 
       id: install_dotnet_workload
       run: dotnet workload install maui maccatalyst
