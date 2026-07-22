@@ -24,12 +24,12 @@ jobs:
     - name: Install dotnet workload 
       run: dotnet workload install maui maccatalyst
     - name: Build Emgu CV native binary
-      run: ./configure_x86_64
+      run: ./configure_arm64
       working-directory: ./platforms/macos/
     - name: Build Emgu CV package (unsigned)
       run: make package
-      working-directory: ./platforms/macos/build_x86_64/
+      working-directory: ./platforms/macos/build_arm64/
     - uses: actions/upload-artifact@v4
       with:
         name: emgucv-macos-zip-package
-        path: ${{ github.workspace }}/platforms/macos/build/*.zip
+        path: ${{ github.workspace }}/platforms/macos/build_arm64/*.zip
