@@ -115,15 +115,15 @@ namespace Emgu.CV.WinForms
 
             if ((selectedRectangle.Width / _zoomScale) > 2 && (selectedRectangle.Height / _zoomScale) > 2)
             {
-               int h = Math.Min(horizontalScrollBar.Maximum, horizontalScrollBar.Value + (int)(selectedRectangle.Location.X / _zoomScale));
-               int v = Math.Min(verticalScrollBar.Maximum, verticalScrollBar.Value + (int)(selectedRectangle.Location.Y / _zoomScale));
+               int h = horizontalScrollBar.Value + (int)(selectedRectangle.Location.X / _zoomScale);
+               int v = verticalScrollBar.Value + (int)(selectedRectangle.Location.Y / _zoomScale);
 
                _zoomScale = _zoomScale * size.Width / selectedRectangle.Width;
 
                SetScrollBarVisibilityAndMaxMin();
 
-               horizontalScrollBar.Value = h;
-               verticalScrollBar.Value = v;
+               horizontalScrollBar.Value = Math.Min(horizontalScrollBar.Maximum, Math.Max(0, h));
+               verticalScrollBar.Value = Math.Min(verticalScrollBar.Maximum, Math.Max(0, v));
 
                Invalidate();
             }
