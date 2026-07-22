@@ -17,12 +17,12 @@ jobs:
     steps:
     - name: Checkout repository
       id: checkout_repo
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         submodules: true
     - name: Setup dotnet
       id: setup_dotnet
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: '10.x'
     - name: Install dotnet workload 
@@ -43,7 +43,7 @@ jobs:
     #  with:
     #    name: emgucv-windows-nsis-build-log
     #    path: ${{ github.workspace }}\build_x86_64\_CPack_Packages\win64\NSIS\*.log
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: emgucv-windows-zip-package
         path: ${{ github.workspace }}\build_x86_64\*.zip
@@ -70,7 +70,7 @@ jobs:
     #    path: ${{ github.workspace }}\build_x64\*.zip
     - name: Add Visual Studio MSBuild to PATH
       id: msbuild_path
-      uses: microsoft/setup-msbuild@v1.1
+      uses: microsoft/setup-msbuild@v3
     - name: Initialize CodeQL
       id: init_codeql
       uses: github/codeql-action/init@v3

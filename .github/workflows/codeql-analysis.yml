@@ -22,11 +22,11 @@ jobs:
     steps:
       - name: Add Visual Studio MSBuild to PATH
         id: msbuild_path
-        uses: microsoft/setup-msbuild@v1.1
+        uses: microsoft/setup-msbuild@v3
 
       - name: Checkout repository
         id: checkout_repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           submodules: true
