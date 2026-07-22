@@ -2,9 +2,9 @@ name: Windows Build
 
 on:
   push:
-    branches: [ master, EMGUCV_5_0 ]
+    branches: [ EMGUCV_5_0 ]
   pull_request:
-    branches: [ master, EMGUCV_5_0 ]
+    branches: [ EMGUCV_5_0 ]
 
 jobs:
   build:
