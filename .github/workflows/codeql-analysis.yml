@@ -2,7 +2,9 @@ name: CodeQL Analysis
 
 on:
   push:
+    branches: [ EMGUCV_5_0 ]
   pull_request:
+    branches: [ EMGUCV_5_0 ]
   workflow_dispatch:
   schedule:
     - cron: '0 8 * * *'
