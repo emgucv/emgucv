@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections;
-using System.Drawing;
 using System.IO;
 using System.Threading.Tasks;
 using Emgu.CV;
@@ -14,40 +13,33 @@ using Emgu.Util;
 namespace Emgu.CV.Models
 {
     /// <summary>
-    /// ALIKED deep learning feature extractor with automatic ONNX model download.
-    /// Inherits from <see cref="ALIKED"/> and adds an <see cref="Init"/> method that
-    /// downloads the model before creating the native object.
+    /// LightGlue descriptor matcher with automatic ONNX model download.
+    /// Inherits from <see cref="LightGlueMatcher"/> and adds an <see cref="Init"/> method
+    /// that downloads the model before creating the native object.
     /// </summary>
-    public class AlikedModel : ALIKED
+    public class LightGlueMatcherModel : LightGlueMatcher
     {
-        private readonly String _modelFolderName = Path.Combine("emgu", "aliked");
+        private readonly String _modelFolderName = Path.Combine("emgu", "lightglue");
 
-        private readonly Size _inputSize;
-        private readonly bool _normalizeDescriptors;
-        private readonly Emgu.CV.Dnn.EngineType _engine;
+        private readonly float _scoreThreshold;
         private readonly Emgu.CV.Dnn.Backend _backend;
         private readonly Emgu.CV.Dnn.Target _target;
 
         /// <summary>
-        /// Create an AlikedModel instance. Parameters mirror those of <see cref="ALIKED"/>;
-        /// the native object is not created until <see cref="Init"/> is called.
+        /// Create a LightGlueMatcherModel instance. Parameters mirror those of
+        /// <see cref="LightGlueMatcher"/>; the native object is not created until
+        /// <see cref="Init"/> is called.
         /// </summary>
-        /// <param name="inputSize">Input image size for the network. Use an empty size (the default) for the network's default of 640×640.</param>
-        /// <param name="normalizeDescriptors">Whether to L2-normalize descriptors.</param>
-        /// <param name="engine">DNN engine type.</param>
+        /// <param name="scoreThreshold">Match confidence threshold.</param>
         /// <param name="backend">DNN backend.</param>
         /// <param name="target">DNN target.</param>
-        public AlikedModel(
-            Size inputSize = new Size(),
-            bool normalizeDescriptors = true,
-            Emgu.CV.Dnn.EngineType engine = Emgu.CV.Dnn.EngineType.New,
+        public LightGlueMatcherModel(
+            float scoreThreshold = 0.0f,
             Emgu.CV.Dnn.Backend backend = Emgu.CV.Dnn.Backend.Default,
             Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu)
             : base()
         {
-            _inputSize = inputSize;
-            _normalizeDescriptors = normalizeDescriptors;
-            _engine = engine;
+            _scoreThreshold = scoreThreshold;
             _backend = backend;
             _target = target;
         }
@@ -58,7 +50,7 @@ namespace Emgu.CV.Models
         public bool Initialized => _ptr != IntPtr.Zero;
 
         /// <summary>
-        /// Download the ALIKED ONNX model and initialise the native feature extractor.
+        /// Download the LightGlue ONNX model and initialise the native matcher.
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback invoked during file download.</param>
         /// <param name="initOptions">Reserved; pass null.</param>
@@ -73,7 +65,7 @@ namespace Emgu.CV.Models
                 FileDownloadManager manager = new FileDownloadManager();
 
                 manager.AddFile(
-                    "https://raw.githubusercontent.com/YangGuanyuhan/lightglue_opencv_project/main/model/aliked-n16rot-top1k-640.onnx",
+                    "https://raw.githubusercontent.com/YangGuanyuhan/lightglue_opencv_project/main/model/aliked_lightglue.onnx",
                     _modelFolderName);
 
                 if (onDownloadProgressChanged != null)
@@ -89,9 +81,7 @@ namespace Emgu.CV.Models
                 {
                     InitFromModelPath(
                         manager.Files[0].LocalFile,
-                        _inputSize,
-                        _normalizeDescriptors,
-                        _engine,
+                        _scoreThreshold,
                         _backend,
                         _target);
                 }

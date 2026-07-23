@@ -77,6 +77,32 @@ namespace Emgu.CV.Features
         }
 
         /// <summary>
+        /// Protected constructor for subclasses that defer native initialization (e.g. until a
+        /// model file has been downloaded). The native ALIKED object is not created; subclasses
+        /// must call <see cref="InitFromModelPath"/> before using any Feature2D methods.
+        /// </summary>
+        protected ALIKED() { }
+
+        /// <summary>
+        /// Initialise the native ALIKED object from a model file path. Intended for subclasses
+        /// that deferred construction via the protected parameterless constructor.
+        /// </summary>
+        protected void InitFromModelPath(
+            String modelPath,
+            Size inputSize = new Size(),
+            bool normalizeDescriptors = true,
+            Emgu.CV.Dnn.EngineType engine = Emgu.CV.Dnn.EngineType.New,
+            Emgu.CV.Dnn.Backend backend = Emgu.CV.Dnn.Backend.Default,
+            Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu)
+        {
+            using (CvString csModelPath = new CvString(modelPath))
+                _ptr = FeaturesInvoke.cveALIKEDCreate(
+                    csModelPath, ref inputSize, normalizeDescriptors,
+                    engine, backend, target,
+                    ref _feature2D, ref _sharedPtr);
+        }
+
+        /// <summary>
         /// Release the unmanaged resources associated with this object
         /// </summary>
         protected override void DisposeObject()

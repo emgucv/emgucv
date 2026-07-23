@@ -92,6 +92,29 @@ namespace Emgu.CV.Features
         }
 
         /// <summary>
+        /// Protected constructor for subclasses that defer native initialization (e.g. until a
+        /// model file has been downloaded). The native LightGlueMatcher object is not created;
+        /// subclasses must call <see cref="InitFromModelPath"/> before using any matcher methods.
+        /// </summary>
+        protected LightGlueMatcher() { }
+
+        /// <summary>
+        /// Initialise the native LightGlueMatcher object from a model file path. Intended for
+        /// subclasses that deferred construction via the protected parameterless constructor.
+        /// </summary>
+        protected void InitFromModelPath(
+            String modelPath,
+            float scoreThreshold = 0.0f,
+            Emgu.CV.Dnn.Backend backend = Emgu.CV.Dnn.Backend.Default,
+            Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu)
+        {
+            using (CvString csModelPath = new CvString(modelPath))
+                _ptr = FeaturesInvoke.cveLightGlueMatcherCreate(
+                    csModelPath, scoreThreshold, backend, target,
+                    ref _descriptorMatcherPtr, ref _sharedPtr);
+        }
+
+        /// <summary>
         /// Release the unmanaged resources associated with this object
         /// </summary>
         protected override void DisposeObject()
