@@ -848,5 +848,110 @@ namespace Emgu.CV.Test
                 }
             }
         }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestAlikedModel()
+        {
+            using (AlikedModel aliked = new AlikedModel())
+            using (Mat img = EmguAssert.LoadMat("box.png", ImreadModes.Grayscale))
+            using (VectorOfKeyPoint keypoints = new VectorOfKeyPoint())
+            using (Mat descriptors = new Mat())
+            {
+                await aliked.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(aliked.Initialized, "AlikedModel failed to initialize");
+                aliked.DetectAndCompute(img, null, keypoints, descriptors, false);
+                EmguAssert.IsTrue(keypoints.Size > 0, "AlikedModel should detect keypoints");
+                EmguAssert.IsTrue(descriptors.Rows == keypoints.Size, "One descriptor per keypoint expected");
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestDiskModel()
+        {
+            using (DiskModel disk = new DiskModel())
+            using (Mat img = EmguAssert.LoadMat("box.png", ImreadModes.Grayscale))
+            using (VectorOfKeyPoint keypoints = new VectorOfKeyPoint())
+            using (Mat descriptors = new Mat())
+            {
+                await disk.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(disk.Initialized, "DiskModel failed to initialize");
+                disk.DetectAndCompute(img, null, keypoints, descriptors, false);
+                EmguAssert.IsTrue(keypoints.Size > 0, "DiskModel should detect keypoints");
+                EmguAssert.IsTrue(descriptors.Rows == keypoints.Size, "One descriptor per keypoint expected");
+            }
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestLightGlueMatcherModel()
+        {
+            using (AlikedModel aliked = new AlikedModel())
+            using (LightGlueMatcherModel lightGlue = new LightGlueMatcherModel())
+            using (Mat img1 = EmguAssert.LoadMat("box.png", ImreadModes.Grayscale))
+            using (Mat img2 = EmguAssert.LoadMat("box_in_scene.png", ImreadModes.Grayscale))
+            {
+                await aliked.Init(DownloadManager_OnDownloadProgressChanged);
+                await lightGlue.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(aliked.Initialized, "AlikedModel failed to initialize");
+                EmguAssert.IsTrue(lightGlue.Initialized, "LightGlueMatcherModel failed to initialize");
+
+                MKeyPoint[] kpts1, kpts2;
+                using (Mat desc1 = new Mat())
+                using (Mat desc2 = new Mat())
+                using (VectorOfKeyPoint vkp1 = new VectorOfKeyPoint())
+                using (VectorOfKeyPoint vkp2 = new VectorOfKeyPoint())
+                {
+                    aliked.DetectAndCompute(img1, null, vkp1, desc1, false);
+                    aliked.DetectAndCompute(img2, null, vkp2, desc2, false);
+                    kpts1 = vkp1.ToArray();
+                    kpts2 = vkp2.ToArray();
+
+                    EmguAssert.IsTrue(kpts1.Length > 0, "No keypoints detected in image 1");
+                    EmguAssert.IsTrue(kpts2.Length > 0, "No keypoints detected in image 2");
+
+                    using (Mat kptsMat1 = KeyPointsToMat(kpts1))
+                    using (Mat kptsMat2 = KeyPointsToMat(kpts2))
+                    using (VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch())
+                    {
+                        lightGlue.SetPairInfo(kptsMat1, kptsMat2, img1.Size, img2.Size);
+                        lightGlue.KnnMatch(desc1, desc2, matches, 1);
+                        EmguAssert.IsTrue(matches.Size > 0, "LightGlueMatcher should return matches");
+                    }
+                }
+            }
+        }
+
+        private static Mat KeyPointsToMat(MKeyPoint[] keypoints)
+        {
+            Mat m = new Mat(keypoints.Length, 2, CvEnum.DepthType.Cv32F, 1);
+            float[] data = new float[keypoints.Length * 2];
+            for (int i = 0; i < keypoints.Length; i++)
+            {
+                data[i * 2] = keypoints[i].Point.X;
+                data[i * 2 + 1] = keypoints[i].Point.Y;
+            }
+            m.SetTo(data);
+            return m;
+        }
     }
 }
