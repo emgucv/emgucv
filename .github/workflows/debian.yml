@@ -16,6 +16,9 @@ jobs:
     # one day time out
     timeout-minutes: 1440
 
+    env:
+      DEBIAN_FRONTEND: noninteractive
+
     steps:
     - name: Install git
       run: apt-get update -y && apt-get install -y git
@@ -48,6 +51,9 @@ jobs:
 
     # one day time out
     timeout-minutes: 1440
+
+    env:
+      DEBIAN_FRONTEND: noninteractive
 
     steps:
     - name: Install git
