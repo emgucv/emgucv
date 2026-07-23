@@ -29,6 +29,9 @@ jobs:
       run: |
         apt-get install -y sudo
         bash platforms/debian/trixie/apt_install_dependency
+    - uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: '10.x'
     - name: Build Emgu CV native binary
       run: ./cmake_configure full package
       working-directory: platforms/debian/trixie/
@@ -65,6 +68,9 @@ jobs:
       run: |
         apt-get install -y sudo
         bash platforms/debian/trixie/apt_install_dependency
+    - uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: '10.x'
     - name: Build Emgu CV native binary
       run: ./cmake_configure full package
       working-directory: platforms/debian/trixie/
