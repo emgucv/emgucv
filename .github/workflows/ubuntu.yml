@@ -21,15 +21,15 @@ jobs:
     #- name: Check out submodules
     #  run: git submodule update --init --recursive
     - name: Build Emgu CV native binary
-      run: ./cmake_configure
+      run: ./cmake_configure full package
       working-directory: ${{ github.workspace }}/platforms/ubuntu/26.04
-    - name: Build Emgu CV package binary
-      run: make package
-      working-directory: ${{ github.workspace }}/platforms/ubuntu/26.04/build/
-    - uses: actions/upload-artifact@v7
-      with:
-        name: emgucv-ubuntu-zip-package
-        path: ${{ github.workspace }}/platforms/ubuntu/26.04/build/*.zip
+    #- name: Build Emgu CV package binary
+    #  run: make package
+    #  working-directory: ${{ github.workspace }}/platforms/ubuntu/26.04/build/
+    #- uses: actions/upload-artifact@v7
+    #  with:
+    #    name: emgucv-ubuntu-zip-package
+    #    path: ${{ github.workspace }}/platforms/ubuntu/26.04/build/*.zip
     - uses: actions/upload-artifact@v7
       with:
         name: emgucv-ubuntu-nuget-package
