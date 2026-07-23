@@ -1,0 +1,31 @@
+\" TITLE: applygeo Man Pages
+\" AUTHOR: Bas Couwenberg <sebastic@debian.org>
+\"
+.TH APPLYGEO "1" "August 2016" "libgeotiff 1.4.1" "libgeotiff Manual Pages"
+.SH NAME
+applygeo \- apply georeferencing to an existing file
+
+.SH SYNOPSIS
+.B applygeo
+\fIfile.geo\fR \fIfile.tiff\fR
+.SH DESCRIPTION
+
+.PP
+.B applygeo
+is a utility for applying georeferencing to an existing file.
+
+.SH OPTIONS
+.TP 6
+\fIfile.geo\fR
+file containing projection (eg. from listgeo)
+.TP 6
+\fIfile.tiff\fR
+TIFF file into which the projection is written
+
+.SH AUTHORS
+jeskynar <jeskynar@hotmail.com> and Frank Warmerdam <warmerdam@pobox.com>.
+
+.SH "SEE ALSO"
+.BR geotifcp (1)
+.BR listgeo (1)
+

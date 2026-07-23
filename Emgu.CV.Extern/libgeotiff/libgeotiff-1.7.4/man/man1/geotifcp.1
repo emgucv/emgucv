@@ -1,0 +1,156 @@
+\" TITLE: libgeotiff Man Pages
+\" AUTHOR: Bas Couwenberg <sebastic@debian.org>
+\"
+.if \n(.g .ds T< \\FC
+.if \n(.g .ds T> \\F[\n[.fam]]
+
+.TH GEOTIFCP "1" "August 2016" "libgeotiff 1.4.1" "libgeotiff Manual Pages"
+.SH NAME
+geotifcp \- Copy TIFF with updated GeoTIFF Metadata
+
+.SH SYNOPSIS
+.B geotifcp
+[\fIoptions\fR] [\fB-e\fR \fIesri_worldfile\fR] [\fB-g\fR \fImetadata\fR] \fIinput\fR \fIoutput\fR
+.SH DESCRIPTION
+
+.PP
+\fBgeotifcp\fR is identical in function to the LIBTIFF
+program \fBtiffcp\fR, with the additional feature that if
+the "\*(T<\fB\-g\fR\*(T>" option is used the GeoTIFF information from
+the file will be installed into the output file.
+The "\*(T<\fB\-e\fR\*(T> \fIworldfile\fR" option
+will override the tiepoint and scale information from the metadata file
+based on the contents of the ESRI worldfile.
+.PP
+If the "\*(T<\fB\-g\fR\*(T>" option is not used the geotiff information
+from the source file is preserved in the new output file.
+.PP
+"\fBgeotifcp\fR" inherits all the other file-transformation
+capabilities of the \fBtiffcp\fR program; for help on the
+additional parameters give the command:
+
+.nf
+\*(T<
+% geotifcp \-h
+\*(T>
+.fi
+.PP
+The metadata format is the same as is described in the
+\fBlistgeo\fR(1)
+program.
+Normally metadata files for use with \fBgeotifcp\fR are
+generated from a similar file with \fBlistgeo\fR,
+and then modified by hand as required.
+
+.SH OPTIONS
+.TP
+\*(T<\fB\-g\fR\*(T> \fIfile\fR
+install GeoTIFF metadata from \fIfile\fR
+.TP
+\*(T<\fB\-4\fR\*(T> \fIproj4_str\fR
+install GeoTIFF metadata from proj4 string
+.TP
+\*(T<\fB\-e\fR\*(T> \fIfile\fR
+install positioning info from ESRI Worldfile
+\fIfile\fR
+.TP
+\*(T<\fB\-a\fR\*(T>
+append to output instead of overwriting
+.TP
+\*(T<\fB\-8\fR\*(T>
+write BigTIFF instead of default ClassicTIFF
+.TP
+\*(T<\fB\-o\fR\*(T> \fIoffset\fR
+set initial directory offset
+.TP
+\*(T<\fB\-p\fR\*(T> \*(T<contig\*(T>
+pack samples contiguously (e.g. RGBRGB...)
+.TP
+\*(T<\fB\-p\fR\*(T> \*(T<separate\*(T>
+store samples separately (e.g. RRR...GGG...BBB...)
+.TP
+\*(T<\fB\-s\fR\*(T>
+write output in strips
+.TP
+\*(T<\fB\-t\fR\*(T>
+write output in tiles
+.TP
+\*(T<\fB\-i\fR\*(T>
+ignore read errors
+.TP
+\*(T<\fB\-d\fR\*(T>
+truncate 8 bitspersample to 4bitspersample
+.TP
+\*(T<\fB\-r\fR\*(T> \fI#\fR
+make each strip have no more than \fI#\fR rows
+.TP
+\*(T<\fB\-w\fR\*(T> \fI#\fR
+set output tile width (pixels)
+.TP
+\*(T<\fB\-l\fR\*(T> \fI#\fR
+set output tile length (pixels)
+.TP
+\*(T<\fB\-f\fR\*(T> \*(T<lsb2msb\*(T>
+force lsb-to-msb FillOrder for output
+.TP
+\*(T<\fB\-f\fR\*(T> \*(T<msb2lsb\*(T>
+force msb-to-lsb FillOrder for output
+.TP
+\*(T<\fB\-c\fR\*(T> lzw[:opts]
+compress output with Lempel-Ziv & Welch encoding
+.TP
+\*(T<\fB\-c\fR\*(T> zip[:opts]
+compress output with deflate encoding
+.TP
+\*(T<\fB\-c\fR\*(T> jpeg[:opts]
+compress output with JPEG encoding
+.TP
+\*(T<\fB\-c\fR\*(T> packbits
+compress output with packbits encoding
+.TP
+\*(T<\fB\-c\fR\*(T> g3[:opts]
+compress output with CCITT Group 3 encoding
+.TP
+\*(T<\fB\-c\fR\*(T> g4
+compress output with CCITT Group 4 encoding
+.TP
+\*(T<\fB\-c\fR\*(T> none
+use no compression algorithm on output
+.PP
+Group 3 options:
+.TP
+\*(T<\fB1d\fR\*(T>
+use default CCITT Group 3 1D-encoding
+.TP
+\*(T<\fB2d\fR\*(T>
+use optional CCITT Group 3 2D-encoding
+.TP
+\*(T<\fBfill\fR\*(T>
+byte-align EOL codes
+.PP
+For example, \*(T<\fB\-c\fR\*(T> g3:2d:fill to get G3-2D-encoded data
+with byte-aligned EOLs
+.PP
+JPEG options:
+.TP
+\*(T<\fB#\fR\*(T>
+set compression quality level (0-100, default 75)
+.TP
+\*(T<\fBr\fR\*(T>
+output color image as RGB rather than YCbCr
+.PP
+For example, \*(T<\fB\-c\fR\*(T> jpeg:r:50 to get JPEG-encoded RGB data
+with 50% comp. quality
+.PP
+LZW and deflate options:
+.TP
+\*(T<\fB#\fR\*(T>
+set predictor value
+.PP
+For example, \*(T<\fB\-c\fR\*(T> lzw:2 to get LZW-encoded data with
+horizontal differencing
+
+.SH "SEE ALSO"
+.BR applygeo (1)
+.BR listgeo (1)
+

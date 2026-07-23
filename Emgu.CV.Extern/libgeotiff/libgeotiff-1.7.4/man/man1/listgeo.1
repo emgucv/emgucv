@@ -1,0 +1,51 @@
+\" TITLE: libgeotiff Man Pages
+\" AUTHOR: Marco Cecchetti <mrc.ildp@gmail.com>
+\"
+.TH LISTGEO "1" "October 2008" "libgeotiff 1.2.5" "libgeotiff Manual Pages"
+.SH NAME
+listgeo \- dump geotiff metadata
+
+.SH SYNOPSIS
+.B listgeo
+[\-tfw] [\-no_norm] [\-proj4] [\-t \fIDIR\fP] file
+.SH DESCRIPTION
+
+.PP
+The program listgeo takes a GeoTIFF file as input and dumps to the standard
+output a GeoTIFF "metadata" file, which is human readable, and may also be
+used as input to other programs which use the "GTIFImport" routine, such as
+geotifcp.
+
+.SH OPTIONS
+listgeo accepts the following options:
+.TP 6
+.B \-d
+report lat/long corners in decimal degrees instead of DMS
+.TP 6
+.B \-tfw
+Generate a .tfw (ESRI TIFF World) file for the target file
+.TP 6
+.B \-no-norm
+Don't report 'normalized' parameter values
+.TP 6
+.B \-proj4
+Report PROJ.4 equivelent projection definition
+.TP 6
+.B \-t \fIDIR\fP
+force to look in \fIDIR\fP for EPSG_CVS files, overriding default behaviour
+
+.SH OTHER INFO
+This program is distributed with libgeotiff software. The home page is located
+at https://trac.osgeo.org/geotiff/. Here you can find links about other
+related projects. A mailing list about libgeotiff development is currenctly
+active at geotiff@lists.maptools.org.
+
+.SH AUTHORS
+Niles Ritter, Frank Warmerdam <warmerdam@pobox.com>,
+Derrick J. Brashear <shadow@dementia.org>
+and many others contributors.
+
+.SH "SEE ALSO"
+.BR geotifcp (1)
+.BR applygeo (1)
+

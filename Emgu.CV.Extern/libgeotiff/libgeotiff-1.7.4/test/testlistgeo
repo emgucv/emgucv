@@ -1,0 +1,274 @@
+:
+# Test listgeo
+
+TEST_CLI_DIR=`dirname $0`
+DATA_DIR=`dirname $0`/data
+
+EXE=$1
+
+usage()
+{
+    echo "Usage: ${0} <path to 'listgeo' program>" 
+    echo
+    exit 1
+}
+
+if test -z "${EXE}"; then
+    EXE=../bin/listgeo
+fi
+
+if test ! -x ${EXE}; then
+    echo "*** ERROR: Can not find '${EXE}' program!"
+    exit 1
+fi
+
+echo "============================================"
+echo "Running ${0} using ${EXE}:"
+echo "============================================"
+
+OUT=testlistgeo_out
+
+rm -f ${OUT}
+
+echo "Testing listgeo byte.tif" >> ${OUT}
+$EXE ${DATA_DIR}/byte.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo byte_v11.tif" >> ${OUT}
+$EXE ${DATA_DIR}/byte_v11.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo pcs_32064.tif" >> ${OUT}
+$EXE ${DATA_DIR}/pcs_32064.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo GeogPrimeMeridianGeoKey.tif" >> ${OUT}
+$EXE ${DATA_DIR}/GeogPrimeMeridianGeoKey.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo GeogGeodeticDatumGeoKey.tif" >> ${OUT}
+$EXE ${DATA_DIR}/GeogGeodeticDatumGeoKey.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo GeogAngularUnitsGeoKey_9114.tif" >> ${OUT}
+$EXE ${DATA_DIR}/GeogAngularUnitsGeoKey_9114.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjLinearUnitsGeoKey_9036.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjLinearUnitsGeoKey_9036.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_28191_cassini_soldner.tif" >> ${OUT}
+$EXE -no_corners ${DATA_DIR}/ProjectedCSTypeGeoKey_28191_cassini_soldner.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo cassini_soldner.tif" >> ${OUT}
+$EXE -no_corners ${DATA_DIR}/cassini_soldner.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_27200_new_zealand_mapping_grid.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_27200_new_zealand_mapping_grid.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo new_zealand_mapping_grid.tif" >> ${OUT}
+$EXE ${DATA_DIR}/new_zealand_mapping_grid.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_29101_polyconic.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_29101_polyconic.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo polyconic.tif" >> ${OUT}
+$EXE ${DATA_DIR}/polyconic.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_6808_hotine_oblique_mercator_variant_a.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_6808_hotine_oblique_mercator_variant_a.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo hotine_oblique_mercator_variant_a.tif" >> ${OUT}
+$EXE ${DATA_DIR}/hotine_oblique_mercator_variant_a.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_8065_hotine_oblique_mercator_variant_b.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_8065_hotine_oblique_mercator_variant_b.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo hotine_oblique_mercator_variant_b.tif" >> ${OUT}
+$EXE ${DATA_DIR}/hotine_oblique_mercator_variant_b.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_8441_oblique_mercator_laborde.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_8441_oblique_mercator_laborde.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo oblique_mercator_laborde.tif" >> ${OUT}
+$EXE ${DATA_DIR}/oblique_mercator_laborde.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_5456_lcc1sp.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_5456_lcc1sp.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo lcc1sp.tif" >> ${OUT}
+$EXE ${DATA_DIR}/lcc1sp.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_5329_mercator1sp.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_5329_mercator1sp.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo mercator1sp.tif" >> ${OUT}
+$EXE ${DATA_DIR}/mercator1sp.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_5641_mercator2sp.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_5641_mercator2sp.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo mercator2sp.tif" >> ${OUT}
+$EXE ${DATA_DIR}/mercator2sp.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_5588_oblique_stereographic.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_5588_oblique_stereographic.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo oblique_stereographic.tif" >> ${OUT}
+$EXE ${DATA_DIR}/oblique_stereographic.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_5482_polar_stereographic_variant_a.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_5482_polar_stereographic_variant_a.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo polar_stereographic_variant_a.tif" >> ${OUT}
+$EXE ${DATA_DIR}/polar_stereographic_variant_a.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_3032_polar_stereographic_variant_b.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_3032_polar_stereographic_variant_b.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo polar_stereographic_variant_b.tif" >> ${OUT}
+$EXE ${DATA_DIR}/polar_stereographic_variant_b.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_3814_transverse_mercator.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_3814_transverse_mercator.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo transverse_mercator.tif" >> ${OUT}
+$EXE ${DATA_DIR}/transverse_mercator.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_2046_transverse_mercator_south_oriented.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_2046_transverse_mercator_south_oriented.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo transverse_mercator_south_oriented.tif" >> ${OUT}
+$EXE ${DATA_DIR}/transverse_mercator_south_oriented.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_3812_lcc2sp.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_3812_lcc2sp.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo lcc2sp.tif" >> ${OUT}
+$EXE ${DATA_DIR}/lcc2sp.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_3083_albers_equal_area.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_3083_albers_equal_area.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo albers_equal_area.tif" >> ${OUT}
+$EXE ${DATA_DIR}/albers_equal_area.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_3035_lambert_azimuthal_equal_area.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_3035_lambert_azimuthal_equal_area.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo lambert_azimuthal_equal_area.tif" >> ${OUT}
+$EXE ${DATA_DIR}/lambert_azimuthal_equal_area.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_3410_lambert_cylindrical_equal_area.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_3410_lambert_cylindrical_equal_area.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo lambert_cylindrical_equal_area.tif" >> ${OUT}
+$EXE ${DATA_DIR}/lambert_cylindrical_equal_area.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo ProjectedCSTypeGeoKey_4087_equidistant_cylindrical.tif" >> ${OUT}
+$EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_4087_equidistant_cylindrical.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo equidistant_cylindrical.tif" >> ${OUT}
+$EXE ${DATA_DIR}/equidistant_cylindrical.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo pixel_is_point_wgs84.tif" >> ${OUT}
+$EXE ${DATA_DIR}/pixel_is_point_wgs84.tif >>${OUT}
+echo "" >>${OUT}
+
+# Normalize for results depending on the exact version of PROJ / EPSG database
+sed "s/ETRS89-extended/ETRS89/g" < ${OUT} > ${OUT}.tmp
+mv ${OUT}.tmp ${OUT}
+
+sed "s/Projection = 15914 (BLM zone 14N (US survey .*))/Projection = 15914 (BLM zone 14N)/g" < ${OUT} > ${OUT}.tmp
+mv ${OUT}.tmp ${OUT}
+sed "s/Projection = 6753 (Oregon Columbia River West zone (.*))/Projection = 6753 (Oregon Columbia River West zone)/" < ${OUT} > ${OUT}.tmp
+mv ${OUT}.tmp ${OUT}
+sed "s/ProjCenterLongGeoKey: 46.437229 ( 46d26'14.02\"E)/ProjCenterLongGeoKey: 46.437229 ( 46d26'14.03\"E)/" < ${OUT} > ${OUT}.tmp
+mv ${OUT}.tmp ${OUT}
+
+sed "s/ETRS89-extended/ETRS89/g" < ${TEST_CLI_DIR}/testlistgeo_out.dist > testlistgeo_out.dist.normalized
+
+sed "s/GCS: 4053\/Unspecified datum based upon the International 1924 Authalic Sphere/GCS: 10346\/NSIDC Authalic Sphere/g" < ${OUT} > ${OUT}.tmp
+mv ${OUT}.tmp ${OUT}
+sed "s/Datum: 6053\/Not specified (based on International 1924 Authalic Sphere)/Datum: 1360\/NSIDC International 1924 Authalic Sphere/g" < ${OUT} > ${OUT}.tmp
+mv ${OUT}.tmp ${OUT}
+
+sed "s/GCS: 4053\/Unspecified datum based upon the International 1924 Authalic Sphere/GCS: 10346\/NSIDC Authalic Sphere/g" < testlistgeo_out.dist.normalized > testlistgeo_out.dist.normalized.tmp
+mv testlistgeo_out.dist.normalized.tmp testlistgeo_out.dist.normalized
+sed "s/Datum: 6053\/Not specified (based on International 1924 Authalic Sphere)/Datum: 1360\/NSIDC International 1924 Authalic Sphere/g" < testlistgeo_out.dist.normalized > testlistgeo_out.dist.normalized.tmp
+mv testlistgeo_out.dist.normalized.tmp testlistgeo_out.dist.normalized
+
+sed "s/Projection = 15914 (BLM zone 14N (US survey .*))/Projection = 15914 (BLM zone 14N)/" < testlistgeo_out.dist.normalized > testlistgeo_out.dist.normalized.tmp
+mv testlistgeo_out.dist.normalized.tmp testlistgeo_out.dist.normalized
+sed "s/Projection = 6753 (Oregon Columbia River West zone (.*))/Projection = 6753 (Oregon Columbia River West zone)/" < testlistgeo_out.dist.normalized > testlistgeo_out.dist.normalized.tmp
+mv testlistgeo_out.dist.normalized.tmp testlistgeo_out.dist.normalized
+sed "s/ProjCenterLongGeoKey: 46.437229 ( 46d26'14.02\"E)/ProjCenterLongGeoKey: 46.437229 ( 46d26'14.03\"E)/" < testlistgeo_out.dist.normalized > testlistgeo_out.dist.normalized.tmp
+mv testlistgeo_out.dist.normalized.tmp testlistgeo_out.dist.normalized
+
+echo "Testing listgeo epsg_27563_only_pcs_code.tif" >> ${OUT}
+$EXE ${DATA_DIR}/epsg_27563_only_pcs_code.tif >>${OUT}
+echo "" >>${OUT}
+
+echo "Testing listgeo epsg_27563_allgeokeys.tif" >> ${OUT}
+$EXE ${DATA_DIR}/epsg_27563_allgeokeys.tif >>${OUT}
+echo "" >>${OUT}
+
+# do 'diff' with distribution results
+# after cleaning for avoid spurios result due 
+# to different build dir
+sed -e "s/Testing listgeo .*test/Testing listgeo ..\/test/"  -i ${OUT}
+echo "diff ${OUT} with testlistgeo_out.dist"
+diff -u ${OUT} testlistgeo_out.dist.normalized
+if [ $? -ne 0 ] ; then
+    echo  ""
+    echo "PROBLEMS HAVE OCCURRED"
+    echo "test file ${OUT} saved"
+    echo
+    exit 100
+else
+    echo "TEST OK"
+    echo "test file ${OUT} removed"
+    echo
+    rm testlistgeo_out.dist.normalized
+    /bin/rm -f ${OUT}
+    exit 0
+fi

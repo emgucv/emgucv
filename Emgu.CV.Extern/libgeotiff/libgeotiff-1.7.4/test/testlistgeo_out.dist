@@ -1,0 +1,2115 @@
+Testing listgeo byte.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,21): "NAD27 / UTM zone 11N"
+      ProjectedCSTypeGeoKey (Short,1): PCS_NAD27_UTM_zone_11N
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 26711 (NAD27 / UTM zone 11N)
+Projection = 16011 (UTM zone 11N)
+Projection Method: CT_TransverseMercator
+   ProjNatOriginLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: -117.000000 (117d 0' 0.00"W)
+   ProjScaleAtNatOriginGeoKey: 0.999600
+   ProjFalseEastingGeoKey: 500000.000000 m
+   ProjFalseNorthingGeoKey: 0.000000 m
+GCS: 4267/NAD27
+Datum: 6267/North American Datum 1927
+Ellipsoid: 7008/Clarke 1866 (6378206.40,6356583.80)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (117d38'28.21"W, 33d54' 8.47"N)
+Lower Left    (  440720.000, 3750120.000)  (117d38'27.92"W, 33d53'29.51"N)
+Upper Right   (  441920.000, 3751320.000)  (117d37'41.48"W, 33d54' 8.71"N)
+Lower Right   (  441920.000, 3750120.000)  (117d37'41.20"W, 33d53'29.75"N)
+Center        (  441320.000, 3750720.000)  (117d38' 4.70"W, 33d53'49.11"N)
+
+Testing listgeo byte_v11.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.1
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,21): "NAD27 / UTM zone 11N"
+      ProjectedCRSGeoKey (Short,1): Code-26711 (NAD27 / UTM zone 11N)
+      ProjLinearUnitsGeoKey (Short,1): Code-9001 (metre)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 26711 (NAD27 / UTM zone 11N)
+Projection = 16011 (UTM zone 11N)
+Projection Method: CT_TransverseMercator
+   ProjNatOriginLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: -117.000000 (117d 0' 0.00"W)
+   ProjScaleAtNatOriginGeoKey: 0.999600
+   ProjFalseEastingGeoKey: 500000.000000 m
+   ProjFalseNorthingGeoKey: 0.000000 m
+GCS: 4267/NAD27
+Datum: 6267/North American Datum 1927
+Ellipsoid: 7008/Clarke 1866 (6378206.40,6356583.80)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (117d38'28.21"W, 33d54' 8.47"N)
+Lower Left    (  440720.000, 3750120.000)  (117d38'27.92"W, 33d53'29.51"N)
+Upper Right   (  441920.000, 3751320.000)  (117d37'41.48"W, 33d54' 8.71"N)
+Lower Right   (  441920.000, 3750120.000)  (117d37'41.20"W, 33d53'29.75"N)
+Center        (  441320.000, 3750720.000)  (117d38' 4.70"W, 33d53'49.11"N)
+
+Testing listgeo pcs_32064.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,23): "NAD27 / BLM 14N (ftUS)"
+      GeogCitationGeoKey (Ascii,6): "NAD27"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      ProjectedCSTypeGeoKey (Short,1): Code-32064 (NAD27 / BLM 14N (ftUS))
+      ProjLinearUnitsGeoKey (Short,1): Linear_Foot_US_Survey
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 32064 (NAD27 / BLM 14N (ftUS))
+Projection = 15914 (BLM zone 14N (US survey feet))
+Projection Method: CT_TransverseMercator
+   ProjNatOriginLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: -99.000000 ( 99d 0' 0.00"W)
+   ProjScaleAtNatOriginGeoKey: 0.999600
+   ProjFalseEastingGeoKey: 500000.001016 m
+   ProjFalseNorthingGeoKey: 0.000000 m
+GCS: 4267/NAD27
+Datum: 6267/North American Datum 1927
+Ellipsoid: 7008/Clarke 1866 (6378206.40,6356583.80)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9003/US survey foot (0.304801m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (102d20'17.15"W, 10d19'37.13"N)
+Lower Left    (  440720.000, 3751260.000)  (102d20'17.15"W, 10d19'36.54"N)
+Upper Right   (  440780.000, 3751320.000)  (102d20'16.55"W, 10d19'37.14"N)
+Lower Right   (  440780.000, 3751260.000)  (102d20'16.55"W, 10d19'36.54"N)
+Center        (  440750.000, 3751290.000)  (102d20'16.85"W, 10d19'36.84"N)
+
+Testing listgeo GeogPrimeMeridianGeoKey.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         130               32                0                
+      ModelPixelScaleTag (1,3):
+         1                 1                 0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeGeographic
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,16): "Just An Example"
+      GeographicTypeGeoKey (Short,1): User-Defined
+      GeogCitationGeoKey (Ascii,24): "Everest Ellipsoid Used."
+      GeogGeodeticDatumGeoKey (Short,1): User-Defined
+      GeogPrimeMeridianGeoKey (Short,1): PM_Paris
+      GeogLinearUnitsGeoKey (Short,1): Linear_Meter
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogEllipsoidGeoKey (Short,1): Ellipse_Everest_1830_1967_Definition
+      GeogSemiMajorAxisGeoKey (Double,1): 6377298.556      
+      GeogInvFlatteningGeoKey (Double,1): 300.8017         
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Ellipsoid: 7016/Everest 1830 (1967 Definition) (6377298.56,6356097.55)
+Prime Meridian: 8903/Paris (2.337229/  2d20'14.03"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (130d 0' 0.00"E, 32d 0' 0.00"N)
+Lower Left    (130d 0' 0.00"E, 31d 0' 0.00"N)
+Upper Right   (131d 0' 0.00"E, 32d 0' 0.00"N)
+Lower Right   (131d 0' 0.00"E, 31d 0' 0.00"N)
+Center        (130d30' 0.00"E, 31d30' 0.00"N)
+
+Testing listgeo GeogGeodeticDatumGeoKey.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         130               32                0                
+      ModelPixelScaleTag (1,3):
+         1                 1                 0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeGeographic
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GeographicTypeGeoKey (Short,1): User-Defined
+      GeogGeodeticDatumGeoKey (Short,1): Code-6742 (Geodetic Datum of Malaysia 2000)
+      GeogLinearUnitsGeoKey (Short,1): Linear_Meter
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Datum: 6742/Geodetic Datum of Malaysia 2000
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (130d 0' 0.00"E, 32d 0' 0.00"N)
+Lower Left    (130d 0' 0.00"E, 31d 0' 0.00"N)
+Upper Right   (131d 0' 0.00"E, 32d 0' 0.00"N)
+Lower Right   (131d 0' 0.00"E, 31d 0' 0.00"N)
+Center        (130d30' 0.00"E, 31d30' 0.00"N)
+
+Testing listgeo GeogAngularUnitsGeoKey_9114.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         130               32                0                
+      ModelPixelScaleTag (1,3):
+         1                 1                 0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeGeographic
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GeographicTypeGeoKey (Short,1): User-Defined
+      GeogGeodeticDatumGeoKey (Short,1): Code-6742 (Geodetic Datum of Malaysia 2000)
+      GeogLinearUnitsGeoKey (Short,1): Linear_Meter
+      GeogAngularUnitsGeoKey (Short,1): Code-9114 (mil_6400)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Datum: 6742/Geodetic Datum of Malaysia 2000
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (130d 0' 0.00"E, 32d 0' 0.00"N)
+Lower Left    (130d 0' 0.00"E, 31d 0' 0.00"N)
+Upper Right   (131d 0' 0.00"E, 32d 0' 0.00"N)
+Lower Right   (131d 0' 0.00"E, 31d 0' 0.00"N)
+Center        (130d30' 0.00"E, 31d30' 0.00"N)
+
+Testing listgeo ProjLinearUnitsGeoKey_9036.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,23): "NAD27 / BLM 14N (ftUS)"
+      GeogCitationGeoKey (Ascii,6): "NAD27"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      ProjectedCSTypeGeoKey (Short,1): Code-32064 (NAD27 / BLM 14N (ftUS))
+      ProjLinearUnitsGeoKey (Short,1): Code-9036 (kilometre)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 32064 (NAD27 / BLM 14N (ftUS))
+Projection = 15914 (BLM zone 14N (US survey feet))
+Projection Method: CT_TransverseMercator
+   ProjNatOriginLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: -99.000000 ( 99d 0' 0.00"W)
+   ProjScaleAtNatOriginGeoKey: 0.999600
+   ProjFalseEastingGeoKey: 500000.001016 m
+   ProjFalseNorthingGeoKey: 0.000000 m
+GCS: 4267/NAD27
+Datum: 6267/North American Datum 1927
+Ellipsoid: 7008/Clarke 1866 (6378206.40,6356583.80)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9036/kilometre (1000.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (invalid)
+Lower Left    (  440720.000, 3751260.000)  (invalid)
+Upper Right   (  440780.000, 3751320.000)  (invalid)
+Lower Right   (  440780.000, 3751260.000)  (invalid)
+Center        (  440750.000, 3751290.000)  (invalid)
+
+Testing listgeo ProjectedCSTypeGeoKey_28191_cassini_soldner.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-28191 (Palestine 1923 / Palestine Grid)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 28191 (Palestine 1923 / Palestine Grid)
+Projection = 18201 (Palestine Grid)
+Projection Method: CT_CassiniSoldner
+   ProjNatOriginLatGeoKey: 31.734097 ( 31d44' 2.75"N)
+   ProjNatOriginLongGeoKey: 35.212081 ( 35d12'43.49"E)
+   ProjFalseEastingGeoKey: 170251.555000 m
+   ProjFalseNorthingGeoKey: 126867.909000 m
+GCS: 4281/Palestine 1923
+Datum: 6281/Palestine 1923
+Ellipsoid: 7010/Clarke 1880 (Benoit) (6378300.79,6356566.43)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Testing listgeo cassini_soldner.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,8): "unnamed"
+      GeographicTypeGeoKey (Short,1): User-Defined
+      GeogCitationGeoKey (Ascii,83): "GCS Name = unnamed ellipse|Datum = unknown|Ellipsoid = unnamed|Primem = Greenwich|"
+      GeogGeodeticDatumGeoKey (Short,1): User-Defined
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogEllipsoidGeoKey (Short,1): User-Defined
+      GeogSemiMajorAxisGeoKey (Double,1): 6378300.789      
+      GeogInvFlatteningGeoKey (Double,1): 293.46631553898  
+      GeogPrimeMeridianLongGeoKey (Double,1): 0                
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_CassiniSoldner
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjNatOriginLongGeoKey (Double,1): 35.2120805555556 
+      ProjNatOriginLatGeoKey (Double,1): 31.7340969444444 
+      ProjFalseEastingGeoKey (Double,1): 170251.555       
+      ProjFalseNorthingGeoKey (Double,1): 126867.909       
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_CassiniSoldner
+   ProjNatOriginLatGeoKey: 31.734097 ( 31d44' 2.75"N)
+   ProjNatOriginLongGeoKey: 35.212081 ( 35d12'43.49"E)
+   ProjScaleAtNatOriginGeoKey: 1.000000
+   ProjFalseEastingGeoKey: 170251.555000 m
+   ProjFalseNorthingGeoKey: 126867.909000 m
+Projection Linear Units: 9001/metre (1.000000m)
+
+Testing listgeo ProjectedCSTypeGeoKey_27200_new_zealand_mapping_grid.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): PCS_GD49_NZ_Map_Grid
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 27200 (NZGD49 / New Zealand Map Grid)
+Projection = 19917 (New Zealand Map Grid)
+Projection Method: CT_NewZealandMapGrid
+   ProjNatOriginLatGeoKey: -41.000000 ( 41d 0' 0.00"S)
+   ProjNatOriginLongGeoKey: 173.000000 (173d 0' 0.00"E)
+   ProjFalseEastingGeoKey: 2510000.000000 m
+   ProjFalseNorthingGeoKey: 6023150.000000 m
+GCS: 4272/NZGD49
+Datum: 6272/New Zealand Geodetic Datum 1949
+Ellipsoid: 7022/International 1924 (6378388.00,6356911.95)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (143d59'58.89"E, 55d42'40.66"S)
+Lower Left    (  440720.000, 3751260.000)  (143d59'58.39"E, 55d42'41.52"S)
+Upper Right   (  440780.000, 3751320.000)  (144d 0' 0.42"E, 55d42'40.94"S)
+Lower Right   (  440780.000, 3751260.000)  (143d59'59.92"E, 55d42'41.81"S)
+Center        (  440750.000, 3751290.000)  (143d59'59.40"E, 55d42'41.23"S)
+
+Testing listgeo new_zealand_mapping_grid.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,8): "unknown"
+      GeographicTypeGeoKey (Short,1): User-Defined
+      GeogCitationGeoKey (Ascii,39): "GCS Name = unknown|Primem = Greenwich|"
+      GeogGeodeticDatumGeoKey (Short,1): Datum_New_Zealand_Geodetic_Datum_1949
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378388          
+      GeogInvFlatteningGeoKey (Double,1): 297              
+      GeogPrimeMeridianLongGeoKey (Double,1): 0                
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_NewZealandMapGrid
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjNatOriginLongGeoKey (Double,1): 173              
+      ProjNatOriginLatGeoKey (Double,1): -41              
+      ProjFalseEastingGeoKey (Double,1): 2510000          
+      ProjFalseNorthingGeoKey (Double,1): 6023150          
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_NewZealandMapGrid
+   ProjCenterLatGeoKey: -41.000000 ( 41d 0' 0.00"S)
+   ProjCenterLongGeoKey: 173.000000 (173d 0' 0.00"E)
+   ProjFalseEastingGeoKey: 2510000.000000 m
+   ProjFalseNorthingGeoKey: 6023150.000000 m
+Datum: 6272/New Zealand Geodetic Datum 1949
+Ellipsoid: 7022/International 1924 (6378388.00,6356911.95)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (143d59'58.89"E, 55d42'40.66"S)
+Lower Left    (  440720.000, 3751260.000)  (143d59'58.39"E, 55d42'41.52"S)
+Upper Right   (  440780.000, 3751320.000)  (144d 0' 0.42"E, 55d42'40.94"S)
+Lower Right   (  440780.000, 3751260.000)  (143d59'59.92"E, 55d42'41.81"S)
+Center        (  440750.000, 3751290.000)  (143d59'59.40"E, 55d42'41.23"S)
+
+Testing listgeo ProjectedCSTypeGeoKey_29101_polyconic.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-29101 (SAD69 / Brazil Polyconic)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 29101 (SAD69 / Brazil Polyconic)
+Projection = 19941 (Brazil Polyconic)
+Projection Method: CT_Polyconic
+   ProjNatOriginLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: -54.000000 ( 54d 0' 0.00"W)
+   ProjFalseEastingGeoKey: 5000000.000000 m
+   ProjFalseNorthingGeoKey: 10000000.000000 m
+GCS: 4618/SAD69
+Datum: 6618/South American Datum 1969
+Ellipsoid: 7050/GRS 1967 Modified (6378160.00,6356774.72)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (113d19' 8.06"W, 41d40' 0.55"S)
+Lower Left    (  440720.000, 3751260.000)  (113d19' 9.60"W, 41d40' 1.72"S)
+Upper Right   (  440780.000, 3751320.000)  (113d19' 5.97"W, 41d40' 1.51"S)
+Lower Right   (  440780.000, 3751260.000)  (113d19' 7.51"W, 41d40' 2.67"S)
+Center        (  440750.000, 3751290.000)  (113d19' 7.78"W, 41d40' 1.61"S)
+
+Testing listgeo polyconic.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,25): "SAD69 / Brazil Polyconic"
+      GeographicTypeGeoKey (Short,1): Code-4618 (SAD69)
+      GeogCitationGeoKey (Ascii,6): "SAD69"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378160          
+      GeogInvFlatteningGeoKey (Double,1): 298.25           
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_Polyconic
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjNatOriginLongGeoKey (Double,1): -54              
+      ProjNatOriginLatGeoKey (Double,1): 0                
+      ProjFalseEastingGeoKey (Double,1): 5000000          
+      ProjFalseNorthingGeoKey (Double,1): 10000000         
+      ProjScaleAtNatOriginGeoKey (Double,1): 1                
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_Polyconic
+   ProjNatOriginLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: -54.000000 ( 54d 0' 0.00"W)
+   ProjScaleAtNatOriginGeoKey: 1.000000
+   ProjFalseEastingGeoKey: 5000000.000000 m
+   ProjFalseNorthingGeoKey: 10000000.000000 m
+GCS: 4618/SAD69
+Datum: 6618/South American Datum 1969
+Ellipsoid: 7050/GRS 1967 Modified (6378160.00,6356774.72)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (113d19' 8.06"W, 41d40' 0.55"S)
+Lower Left    (  440720.000, 3751260.000)  (113d19' 9.60"W, 41d40' 1.72"S)
+Upper Right   (  440780.000, 3751320.000)  (113d19' 5.97"W, 41d40' 1.51"S)
+Lower Right   (  440780.000, 3751260.000)  (113d19' 7.51"W, 41d40' 2.67"S)
+Center        (  440750.000, 3751290.000)  (113d19' 7.78"W, 41d40' 1.61"S)
+
+Testing listgeo ProjectedCSTypeGeoKey_6808_hotine_oblique_mercator_variant_a.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-6808 (NAD83(CORS96) / Oregon Columbia River West zone (m))
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 6808 (NAD83(CORS96) / Oregon Columbia River West zone (m))
+Projection = 6753 (Oregon Columbia River West zone (meters))
+Projection Method: CT_ObliqueMercator
+   ProjCenterLatGeoKey: 45.916667 ( 45d55' 0.00"N)
+   ProjCenterLongGeoKey: -123.000000 (123d 0' 0.00"W)
+   ProjAzimuthAngleGeoKey: 295.000000 (295d 0' 0.00"N)
+   ProjRectifiedGridAngleGeoKey: 295.000000 (295d 0' 0.00"N)
+   ProjScaleAtCenterGeoKey: 1.000000
+   ProjFalseEastingGeoKey: 7000000.000000 m
+   ProjFalseNorthingGeoKey: -3000000.000000 m
+GCS: 6783/NAD83(CORS96)
+Datum: 1133/NAD83 (Continuously Operating Reference Station 1996)
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (108d21'24.58"E, 42d37'41.03"N)
+Lower Left    (  440720.000, 3751260.000)  (108d21'26.88"E, 42d37'40.94"N)
+Upper Right   (  440780.000, 3751320.000)  (108d21'24.71"E, 42d37'42.73"N)
+Lower Right   (  440780.000, 3751260.000)  (108d21'27.01"E, 42d37'42.64"N)
+Center        (  440750.000, 3751290.000)  (108d21'25.79"E, 42d37'41.83"N)
+
+Testing listgeo hotine_oblique_mercator_variant_a.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,52): "NAD83(CORS96) / Oregon Columbia River West zone (m)"
+      GeographicTypeGeoKey (Short,1): Code-6783 (NAD83(CORS96))
+      GeogCitationGeoKey (Ascii,14): "NAD83(CORS96)"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378137          
+      GeogInvFlatteningGeoKey (Double,1): 298.257222101    
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_ObliqueMercator
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjFalseEastingGeoKey (Double,1): 7000000          
+      ProjFalseNorthingGeoKey (Double,1): -3000000         
+      ProjCenterLongGeoKey (Double,1): -123             
+      ProjCenterLatGeoKey (Double,1): 45.9166666666667 
+      ProjScaleAtCenterGeoKey (Double,1): 1                
+      ProjAzimuthAngleGeoKey (Double,1): 295              
+      ProjRectifiedGridAngleGeoKey (Double,1): 295              
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_ObliqueMercator
+   ProjCenterLatGeoKey: 45.916667 ( 45d55' 0.00"N)
+   ProjCenterLongGeoKey: -123.000000 (123d 0' 0.00"W)
+   ProjAzimuthAngleGeoKey: 295.000000 (295d 0' 0.00"N)
+   ProjRectifiedGridAngleGeoKey: 295.000000 (295d 0' 0.00"N)
+   ProjScaleAtCenterGeoKey: 1.000000
+   ProjFalseEastingGeoKey: 7000000.000000 m
+   ProjFalseNorthingGeoKey: -3000000.000000 m
+GCS: 6783/NAD83(CORS96)
+Datum: 1133/NAD83 (Continuously Operating Reference Station 1996)
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (108d21'24.58"E, 42d37'41.03"N)
+Lower Left    (  440720.000, 3751260.000)  (108d21'26.88"E, 42d37'40.94"N)
+Upper Right   (  440780.000, 3751320.000)  (108d21'24.71"E, 42d37'42.73"N)
+Lower Right   (  440780.000, 3751260.000)  (108d21'27.01"E, 42d37'42.64"N)
+Center        (  440750.000, 3751290.000)  (108d21'25.79"E, 42d37'41.83"N)
+
+Testing listgeo ProjectedCSTypeGeoKey_8065_hotine_oblique_mercator_variant_b.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-8065 (NAD83(2011) / PCCS zone 1 (ft))
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 8065 (NAD83(2011) / PCCS zone 1 (ft))
+Projection = 8061 (Pima County zone 1 East (ft))
+Projection Method: CT_HotineObliqueMercatorAzimuthCenter
+   ProjCenterLatGeoKey: 32.250000 ( 32d15' 0.00"N)
+   ProjCenterLongGeoKey: -111.400000 (111d24' 0.00"W)
+   ProjAzimuthAngleGeoKey: 45.000000 ( 45d 0' 0.00"N)
+   ProjRectifiedGridAngleGeoKey: 45.000000 ( 45d 0' 0.00"N)
+   ProjScaleAtCenterGeoKey: 1.000110
+   ProjFalseEastingGeoKey: 48768.000000 m
+   ProjFalseNorthingGeoKey: 243840.000000 m
+GCS: 6318/NAD83(2011)
+Datum: 1116/NAD83 (National Spatial Reference System 2011)
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9002/foot (0.304800m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (110d24'54.42"W, 40d20'32.45"N)
+Lower Left    (  440720.000, 3751260.000)  (110d24'54.42"W, 40d20'31.86"N)
+Upper Right   (  440780.000, 3751320.000)  (110d24'53.64"W, 40d20'32.45"N)
+Lower Right   (  440780.000, 3751260.000)  (110d24'53.65"W, 40d20'31.86"N)
+Center        (  440750.000, 3751290.000)  (110d24'54.03"W, 40d20'32.15"N)
+
+Testing listgeo hotine_oblique_mercator_variant_b.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,31): "NAD83(2011) / PCCS zone 1 (ft)"
+      GeographicTypeGeoKey (Short,1): Code-6318 (NAD83(2011))
+      GeogCitationGeoKey (Ascii,12): "NAD83(2011)"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378137          
+      GeogInvFlatteningGeoKey (Double,1): 298.257222101    
+      Unknown-3059 (Short,1): Unknown-1
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_HotineObliqueMercatorAzimuthCenter
+      ProjLinearUnitsGeoKey (Short,1): Linear_Foot
+      ProjFalseEastingGeoKey (Double,1): 160000           
+      ProjFalseNorthingGeoKey (Double,1): 800000           
+      ProjCenterLongGeoKey (Double,1): -111.4           
+      ProjCenterLatGeoKey (Double,1): 32.25            
+      ProjScaleAtCenterGeoKey (Double,1): 1.00011          
+      ProjAzimuthAngleGeoKey (Double,1): 45               
+      ProjRectifiedGridAngleGeoKey (Double,1): 45               
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_HotineObliqueMercatorAzimuthCenter
+   ProjCenterLatGeoKey: 32.250000 ( 32d15' 0.00"N)
+   ProjCenterLongGeoKey: -111.400000 (111d24' 0.00"W)
+   ProjAzimuthAngleGeoKey: 45.000000 ( 45d 0' 0.00"N)
+   ProjRectifiedGridAngleGeoKey: 45.000000 ( 45d 0' 0.00"N)
+   ProjScaleAtCenterGeoKey: 1.000110
+   ProjFalseEastingGeoKey: 48768.000000 m
+   ProjFalseNorthingGeoKey: 243840.000000 m
+GCS: 6318/NAD83(2011)
+Datum: 1116/NAD83 (National Spatial Reference System 2011)
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9002/foot (0.304800m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (110d24'54.42"W, 40d20'32.45"N)
+Lower Left    (  440720.000, 3751260.000)  (110d24'54.42"W, 40d20'31.86"N)
+Upper Right   (  440780.000, 3751320.000)  (110d24'53.64"W, 40d20'32.45"N)
+Lower Right   (  440780.000, 3751260.000)  (110d24'53.65"W, 40d20'31.86"N)
+Center        (  440750.000, 3751290.000)  (110d24'54.03"W, 40d20'32.15"N)
+
+Testing listgeo ProjectedCSTypeGeoKey_8441_oblique_mercator_laborde.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-8441 (Tananarive / Laborde Grid)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 8441 (Tananarive / Laborde Grid)
+Projection = 8440 (Laborde Grid (Greenwich))
+Projection Method: CT_ObliqueMercator_Laborde
+   ProjCenterLatGeoKey: -18.900000 ( 18d54' 0.00"S)
+   ProjCenterLongGeoKey: 46.437229 ( 46d26'14.02"E)
+   ProjAzimuthAngleGeoKey: 18.900000 ( 18d54' 0.00"N)
+   ProjScaleAtCenterGeoKey: 0.999500
+   ProjFalseEastingGeoKey: 400000.000000 m
+   ProjFalseNorthingGeoKey: 800000.000000 m
+GCS: 4297/Tananarive
+Datum: 6297/Tananarive 1925
+Ellipsoid: 7022/International 1924 (6378388.00,6356911.95)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 46d30'50.44"E,  7d41'54.99"N)
+Lower Left    (  440720.000, 3751260.000)  ( 46d30'50.50"E,  7d41'53.06"N)
+Upper Right   (  440780.000, 3751320.000)  ( 46d30'52.38"E,  7d41'55.05"N)
+Lower Right   (  440780.000, 3751260.000)  ( 46d30'52.44"E,  7d41'53.12"N)
+Center        (  440750.000, 3751290.000)  ( 46d30'51.44"E,  7d41'54.06"N)
+
+Testing listgeo oblique_mercator_laborde.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,26): "Tananarive / Laborde Grid"
+      GeographicTypeGeoKey (Short,1): GCS_Tananarive
+      GeogCitationGeoKey (Ascii,11): "Tananarive"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378388          
+      GeogInvFlatteningGeoKey (Double,1): 297              
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_ObliqueMercator_Laborde
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjFalseEastingGeoKey (Double,1): 400000           
+      ProjFalseNorthingGeoKey (Double,1): 800000           
+      ProjCenterLongGeoKey (Double,1): 46.4372291666667 
+      ProjCenterLatGeoKey (Double,1): -18.9            
+      ProjScaleAtCenterGeoKey (Double,1): 0.9995           
+      ProjAzimuthAngleGeoKey (Double,1): 18.9             
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_ObliqueMercator_Laborde
+   ProjCenterLatGeoKey: -18.900000 ( 18d54' 0.00"S)
+   ProjCenterLongGeoKey: 46.437229 ( 46d26'14.03"E)
+   ProjAzimuthAngleGeoKey: 18.900000 ( 18d54' 0.00"N)
+   ProjScaleAtCenterGeoKey: 0.999500
+   ProjFalseEastingGeoKey: 400000.000000 m
+   ProjFalseNorthingGeoKey: 800000.000000 m
+GCS: 4297/Tananarive
+Datum: 6297/Tananarive 1925
+Ellipsoid: 7022/International 1924 (6378388.00,6356911.95)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 46d30'50.44"E,  7d41'54.99"N)
+Lower Left    (  440720.000, 3751260.000)  ( 46d30'50.50"E,  7d41'53.06"N)
+Upper Right   (  440780.000, 3751320.000)  ( 46d30'52.38"E,  7d41'55.05"N)
+Lower Right   (  440780.000, 3751260.000)  ( 46d30'52.44"E,  7d41'53.12"N)
+Center        (  440750.000, 3751290.000)  ( 46d30'51.44"E,  7d41'54.06"N)
+
+Testing listgeo ProjectedCSTypeGeoKey_5456_lcc1sp.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-5456 (Ocotepeque 1935 / Costa Rica Norte)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 5456 (Ocotepeque 1935 / Costa Rica Norte)
+Projection = 5390 (Costa Rica Norte)
+Projection Method: CT_LambertConfConic_1SP
+   ProjNatOriginLatGeoKey: 10.466667 ( 10d28' 0.00"N)
+   ProjNatOriginLongGeoKey: -84.333333 ( 84d20' 0.00"W)
+   ProjScaleAtNatOriginGeoKey: 0.999957
+   ProjFalseEastingGeoKey: 500000.000000 m
+   ProjFalseNorthingGeoKey: 271820.522000 m
+GCS: 5451/Ocotepeque 1935
+Datum: 1070/Ocotepeque 1935
+Ellipsoid: 7008/Clarke 1866 (6378206.40,6356583.80)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 84d56' 7.81"W, 40d22'42.48"N)
+Lower Left    (  440720.000, 3751260.000)  ( 84d56' 7.81"W, 40d22'40.80"N)
+Upper Right   (  440780.000, 3751320.000)  ( 84d56' 5.62"W, 40d22'42.48"N)
+Lower Right   (  440780.000, 3751260.000)  ( 84d56' 5.62"W, 40d22'40.80"N)
+Center        (  440750.000, 3751290.000)  ( 84d56' 6.72"W, 40d22'41.64"N)
+
+Testing listgeo lcc1sp.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,35): "Ocotepeque 1935 / Costa Rica Norte"
+      GeographicTypeGeoKey (Short,1): Code-5451 (Ocotepeque 1935)
+      GeogCitationGeoKey (Ascii,16): "Ocotepeque 1935"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378206.4        
+      GeogInvFlatteningGeoKey (Double,1): 294.978698213898 
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_LambertConfConic_1SP
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjNatOriginLongGeoKey (Double,1): -84.3333333333333
+      ProjNatOriginLatGeoKey (Double,1): 10.4666666666667 
+      ProjFalseEastingGeoKey (Double,1): 500000           
+      ProjFalseNorthingGeoKey (Double,1): 271820.522       
+      ProjScaleAtNatOriginGeoKey (Double,1): 0.99995696       
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_LambertConfConic_1SP
+   ProjNatOriginLatGeoKey: 10.466667 ( 10d28' 0.00"N)
+   ProjNatOriginLongGeoKey: -84.333333 ( 84d20' 0.00"W)
+   ProjScaleAtNatOriginGeoKey: 0.999957
+   ProjFalseEastingGeoKey: 500000.000000 m
+   ProjFalseNorthingGeoKey: 271820.522000 m
+GCS: 5451/Ocotepeque 1935
+Datum: 1070/Ocotepeque 1935
+Ellipsoid: 7008/Clarke 1866 (6378206.40,6356583.80)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 84d56' 7.81"W, 40d22'42.48"N)
+Lower Left    (  440720.000, 3751260.000)  ( 84d56' 7.81"W, 40d22'40.80"N)
+Upper Right   (  440780.000, 3751320.000)  ( 84d56' 5.62"W, 40d22'42.48"N)
+Lower Right   (  440780.000, 3751260.000)  ( 84d56' 5.62"W, 40d22'40.80"N)
+Center        (  440750.000, 3751290.000)  ( 84d56' 6.72"W, 40d22'41.64"N)
+
+Testing listgeo ProjectedCSTypeGeoKey_5329_mercator1sp.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-5329 (Segara (Jakarta) / NEIEZ)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 5329 (Segara (Jakarta) / NEIEZ)
+Projection = 5328 (Netherlands East Indies Equatorial Zone (Jkt))
+Projection Method: CT_Mercator
+   ProjNatOriginLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: 3.192281 (  3d11'32.21"E)
+   ProjScaleAtNatOriginGeoKey: 0.997000
+   ProjFalseEastingGeoKey: 3900000.000000 m
+   ProjFalseNorthingGeoKey: 900000.000000 m
+GCS: 4820/Segara (Jakarta)
+Datum: 6820/Gunung Segara (Jakarta)
+Ellipsoid: 7004/Bessel 1841 (6377397.16,6356078.96)
+Prime Meridian: 8908/Jakarta (106.807719/106d48'27.79"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 27d53'11.64"W, 24d57' 0.31"N)
+Lower Left    (  440720.000, 3751260.000)  ( 27d53'11.64"W, 24d56'58.54"N)
+Upper Right   (  440780.000, 3751320.000)  ( 27d53' 9.70"W, 24d57' 0.31"N)
+Lower Right   (  440780.000, 3751260.000)  ( 27d53' 9.70"W, 24d56'58.54"N)
+Center        (  440750.000, 3751290.000)  ( 27d53'10.67"W, 24d56'59.43"N)
+
+Testing listgeo mercator1sp.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,25): "Segara (Jakarta) / NEIEZ"
+      GeographicTypeGeoKey (Short,1): Code-4820 (Segara (Jakarta))
+      GeogCitationGeoKey (Ascii,17): "Segara (Jakarta)"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6377397.155      
+      GeogInvFlatteningGeoKey (Double,1): 299.1528128      
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_Mercator
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjNatOriginLongGeoKey (Double,1): 3.19228055555556 
+      ProjNatOriginLatGeoKey (Double,1): 0                
+      ProjFalseEastingGeoKey (Double,1): 3900000          
+      ProjFalseNorthingGeoKey (Double,1): 900000           
+      ProjScaleAtNatOriginGeoKey (Double,1): 0.997            
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_Mercator
+   ProjNatOriginLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: 3.192281 (  3d11'32.21"E)
+   ProjScaleAtNatOriginGeoKey: 0.997000
+   ProjFalseEastingGeoKey: 3900000.000000 m
+   ProjFalseNorthingGeoKey: 900000.000000 m
+GCS: 4820/Segara (Jakarta)
+Datum: 6820/Gunung Segara (Jakarta)
+Ellipsoid: 7004/Bessel 1841 (6377397.16,6356078.96)
+Prime Meridian: 8908/Jakarta (106.807719/106d48'27.79"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 27d53'11.64"W, 24d57' 0.31"N)
+Lower Left    (  440720.000, 3751260.000)  ( 27d53'11.64"W, 24d56'58.54"N)
+Upper Right   (  440780.000, 3751320.000)  ( 27d53' 9.70"W, 24d57' 0.31"N)
+Lower Right   (  440780.000, 3751260.000)  ( 27d53' 9.70"W, 24d56'58.54"N)
+Center        (  440750.000, 3751290.000)  ( 27d53'10.67"W, 24d56'59.43"N)
+
+Testing listgeo ProjectedCSTypeGeoKey_5641_mercator2sp.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-5641 (SIRGAS 2000 / Brazil Mercator)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 5641 (SIRGAS 2000 / Brazil Mercator)
+Projection = 5640 (Petrobras Mercator)
+Projection Method: CT_Mercator
+   ProjNatOriginLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: -43.000000 ( 43d 0' 0.00"W)
+   ProjStdParallel1GeoKey: -2.000000 (  2d 0' 0.00"S)
+   ProjFalseEastingGeoKey: 5000000.000000 m
+   ProjFalseNorthingGeoKey: 10000000.000000 m
+GCS: 4674/SIRGAS 2000
+Datum: 6674/Sistema de Referencia Geocentrico para las AmericaS 2000
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 83d58'53.42"W, 49d 3'29.83"S)
+Lower Left    (  440720.000, 3751260.000)  ( 83d58'53.42"W, 49d 3'31.11"S)
+Upper Right   (  440780.000, 3751320.000)  ( 83d58'51.48"W, 49d 3'29.83"S)
+Lower Right   (  440780.000, 3751260.000)  ( 83d58'51.48"W, 49d 3'31.11"S)
+Center        (  440750.000, 3751290.000)  ( 83d58'52.45"W, 49d 3'30.47"S)
+
+Testing listgeo mercator2sp.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,30): "SIRGAS 2000 / Brazil Mercator"
+      GeographicTypeGeoKey (Short,1): Code-4674 (SIRGAS 2000)
+      GeogCitationGeoKey (Ascii,12): "SIRGAS 2000"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378137          
+      GeogInvFlatteningGeoKey (Double,1): 298.257222101    
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_Mercator
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjStdParallel1GeoKey (Double,1): -2               
+      ProjNatOriginLongGeoKey (Double,1): -43              
+      ProjNatOriginLatGeoKey (Double,1): 0                
+      ProjFalseEastingGeoKey (Double,1): 5000000          
+      ProjFalseNorthingGeoKey (Double,1): 10000000         
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_Mercator
+   ProjNatOriginLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: -43.000000 ( 43d 0' 0.00"W)
+   ProjStdParallel1GeoKey: -2.000000 (  2d 0' 0.00"S)
+   ProjFalseEastingGeoKey: 5000000.000000 m
+   ProjFalseNorthingGeoKey: 10000000.000000 m
+GCS: 4674/SIRGAS 2000
+Datum: 6674/Sistema de Referencia Geocentrico para las AmericaS 2000
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 83d58'53.42"W, 49d 3'29.83"S)
+Lower Left    (  440720.000, 3751260.000)  ( 83d58'53.42"W, 49d 3'31.11"S)
+Upper Right   (  440780.000, 3751320.000)  ( 83d58'51.48"W, 49d 3'29.83"S)
+Lower Right   (  440780.000, 3751260.000)  ( 83d58'51.48"W, 49d 3'31.11"S)
+Center        (  440750.000, 3751290.000)  ( 83d58'52.45"W, 49d 3'30.47"S)
+
+Testing listgeo ProjectedCSTypeGeoKey_5588_oblique_stereographic.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-5588 (NAD27 / New Brunswick Stereographic (NAD27))
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 5588 (NAD27 / New Brunswick Stereographic (NAD27))
+Projection = 5587 (New Brunswick Stereographic (NAD27))
+Projection Method: CT_ObliqueStereographic
+   ProjNatOriginLatGeoKey: 46.500000 ( 46d30' 0.00"N)
+   ProjNatOriginLongGeoKey: -66.500000 ( 66d30' 0.00"W)
+   ProjScaleAtNatOriginGeoKey: 0.999912
+   ProjFalseEastingGeoKey: 304800.000000 m
+   ProjFalseNorthingGeoKey: 304800.000000 m
+GCS: 4267/NAD27
+Datum: 6267/North American Datum 1927
+Ellipsoid: 7008/Clarke 1866 (6378206.40,6356583.80)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9002/foot (0.304800m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 69d 5'16.12"W, 54d 0' 2.70"N)
+Lower Left    (  440720.000, 3751260.000)  ( 69d 5'16.09"W, 54d 0' 2.12"N)
+Upper Right   (  440780.000, 3751320.000)  ( 69d 5'15.13"W, 54d 0' 2.72"N)
+Lower Right   (  440780.000, 3751260.000)  ( 69d 5'15.09"W, 54d 0' 2.14"N)
+Center        (  440750.000, 3751290.000)  ( 69d 5'15.61"W, 54d 0' 2.42"N)
+
+Testing listgeo oblique_stereographic.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,44): "NAD27 / New Brunswick Stereographic (NAD27)"
+      GeographicTypeGeoKey (Short,1): GCS_NAD27
+      GeogCitationGeoKey (Ascii,6): "NAD27"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378206.4        
+      GeogInvFlatteningGeoKey (Double,1): 294.978698213898 
+      Unknown-3059 (Short,1): Unknown-1
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_ObliqueStereographic
+      ProjLinearUnitsGeoKey (Short,1): Linear_Foot
+      ProjNatOriginLongGeoKey (Double,1): -66.5            
+      ProjNatOriginLatGeoKey (Double,1): 46.5             
+      ProjFalseEastingGeoKey (Double,1): 1000000          
+      ProjFalseNorthingGeoKey (Double,1): 1000000          
+      ProjScaleAtNatOriginGeoKey (Double,1): 0.999912         
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_ObliqueStereographic
+   ProjNatOriginLatGeoKey: 46.500000 ( 46d30' 0.00"N)
+   ProjNatOriginLongGeoKey: -66.500000 ( 66d30' 0.00"W)
+   ProjScaleAtNatOriginGeoKey: 0.999912
+   ProjFalseEastingGeoKey: 304800.000000 m
+   ProjFalseNorthingGeoKey: 304800.000000 m
+GCS: 4267/NAD27
+Datum: 6267/North American Datum 1927
+Ellipsoid: 7008/Clarke 1866 (6378206.40,6356583.80)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9002/foot (0.304800m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 69d 5'16.12"W, 54d 0' 2.70"N)
+Lower Left    (  440720.000, 3751260.000)  ( 69d 5'16.09"W, 54d 0' 2.12"N)
+Upper Right   (  440780.000, 3751320.000)  ( 69d 5'15.13"W, 54d 0' 2.72"N)
+Lower Right   (  440780.000, 3751260.000)  ( 69d 5'15.09"W, 54d 0' 2.14"N)
+Center        (  440750.000, 3751290.000)  ( 69d 5'15.61"W, 54d 0' 2.42"N)
+
+Testing listgeo ProjectedCSTypeGeoKey_5482_polar_stereographic_variant_a.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-5482 (RSRGD2000 / RSPS2000)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 5482 (RSRGD2000 / RSPS2000)
+Projection = 5478 (Ross Sea Polar Stereographic 2000)
+Projection Method: CT_PolarStereographic
+   ProjNatOriginLatGeoKey: -90.000000 ( 90d 0' 0.00"S)
+   ProjStraightVertPoleLongGeoKey: 180.000000 (180d 0' 0.00"E)
+   ProjScaleAtNatOriginGeoKey: 0.994000
+   ProjFalseEastingGeoKey: 5000000.000000 m
+   ProjFalseNorthingGeoKey: 1000000.000000 m
+GCS: 4764/RSRGD2000
+Datum: 6764/Ross Sea Region Geodetic Datum 2000
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (121d 6'32.72"E, 44d29'35.28"S)
+Lower Left    (  440720.000, 3751260.000)  (121d 6'30.73"E, 44d29'36.14"S)
+Upper Right   (  440780.000, 3751320.000)  (121d 6'33.92"E, 44d29'36.70"S)
+Lower Right   (  440780.000, 3751260.000)  (121d 6'31.93"E, 44d29'37.56"S)
+Center        (  440750.000, 3751290.000)  (121d 6'32.32"E, 44d29'36.42"S)
+
+Testing listgeo polar_stereographic_variant_a.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,21): "RSRGD2000 / RSPS2000"
+      GeographicTypeGeoKey (Short,1): Code-4764 (RSRGD2000)
+      GeogCitationGeoKey (Ascii,10): "RSRGD2000"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378137          
+      GeogInvFlatteningGeoKey (Double,1): 298.257222101    
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_PolarStereographic
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjNatOriginLatGeoKey (Double,1): -90              
+      ProjFalseEastingGeoKey (Double,1): 5000000          
+      ProjFalseNorthingGeoKey (Double,1): 1000000          
+      ProjScaleAtNatOriginGeoKey (Double,1): 0.994            
+      ProjStraightVertPoleLongGeoKey (Double,1): 180              
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_PolarStereographic
+   ProjNatOriginLatGeoKey: -90.000000 ( 90d 0' 0.00"S)
+   ProjStraightVertPoleLongGeoKey: 180.000000 (180d 0' 0.00"E)
+   ProjScaleAtNatOriginGeoKey: 0.994000
+   ProjFalseEastingGeoKey: 5000000.000000 m
+   ProjFalseNorthingGeoKey: 1000000.000000 m
+GCS: 4764/RSRGD2000
+Datum: 6764/Ross Sea Region Geodetic Datum 2000
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (121d 6'32.72"E, 44d29'35.28"S)
+Lower Left    (  440720.000, 3751260.000)  (121d 6'30.73"E, 44d29'36.14"S)
+Upper Right   (  440780.000, 3751320.000)  (121d 6'33.92"E, 44d29'36.70"S)
+Lower Right   (  440780.000, 3751260.000)  (121d 6'31.93"E, 44d29'37.56"S)
+Center        (  440750.000, 3751290.000)  (121d 6'32.32"E, 44d29'36.42"S)
+
+Testing listgeo ProjectedCSTypeGeoKey_3032_polar_stereographic_variant_b.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-3032 (WGS 84 / Australian Antarctic Polar Stereographic)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 3032 (WGS 84 / Australian Antarctic Polar Stereographic)
+Projection = 19993 (Australian Antarctic Polar Stereographic)
+Projection Method: CT_PolarStereographic
+   ProjNatOriginLatGeoKey: -71.000000 ( 71d 0' 0.00"S)
+   ProjStraightVertPoleLongGeoKey: 70.000000 ( 70d 0' 0.00"E)
+   ProjScaleAtNatOriginGeoKey: 1.000000
+   ProjFalseEastingGeoKey: 6000000.000000 m
+   ProjFalseNorthingGeoKey: 6000000.000000 m
+GCS: 4326/WGS 84
+Datum: 6326/World Geodetic System 1984
+Ellipsoid: 7030/WGS 84 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 42d 1'22.44"W, 38d27' 1.75"S)
+Lower Left    (  440720.000, 3751260.000)  ( 42d 1'24.35"W, 38d27' 1.15"S)
+Upper Right   (  440780.000, 3751320.000)  ( 42d 1'23.21"W, 38d27' 3.26"S)
+Lower Right   (  440780.000, 3751260.000)  ( 42d 1'25.13"W, 38d27' 2.65"S)
+Center        (  440750.000, 3751290.000)  ( 42d 1'23.78"W, 38d27' 2.20"S)
+
+Testing listgeo polar_stereographic_variant_b.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,50): "WGS 84 / Australian Antarctic Polar Stereographic"
+      GeographicTypeGeoKey (Short,1): GCS_WGS_84
+      GeogCitationGeoKey (Ascii,7): "WGS 84"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378137          
+      GeogInvFlatteningGeoKey (Double,1): 298.257223563    
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_PolarStereographic
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjNatOriginLatGeoKey (Double,1): -71              
+      ProjFalseEastingGeoKey (Double,1): 6000000          
+      ProjFalseNorthingGeoKey (Double,1): 6000000          
+      ProjScaleAtNatOriginGeoKey (Double,1): 1                
+      ProjStraightVertPoleLongGeoKey (Double,1): 70               
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_PolarStereographic
+   ProjNatOriginLatGeoKey: -71.000000 ( 71d 0' 0.00"S)
+   ProjStraightVertPoleLongGeoKey: 70.000000 ( 70d 0' 0.00"E)
+   ProjScaleAtNatOriginGeoKey: 1.000000
+   ProjFalseEastingGeoKey: 6000000.000000 m
+   ProjFalseNorthingGeoKey: 6000000.000000 m
+GCS: 4326/WGS 84
+Datum: 6326/World Geodetic System 1984
+Ellipsoid: 7030/WGS 84 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 42d 1'22.44"W, 38d27' 1.75"S)
+Lower Left    (  440720.000, 3751260.000)  ( 42d 1'24.35"W, 38d27' 1.15"S)
+Upper Right   (  440780.000, 3751320.000)  ( 42d 1'23.21"W, 38d27' 3.26"S)
+Lower Right   (  440780.000, 3751260.000)  ( 42d 1'25.13"W, 38d27' 2.65"S)
+Center        (  440750.000, 3751290.000)  ( 42d 1'23.78"W, 38d27' 2.20"S)
+
+Testing listgeo ProjectedCSTypeGeoKey_3814_transverse_mercator.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-3814 (NAD83 / Mississippi TM)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 3814 (NAD83 / Mississippi TM)
+Projection = 3813 (Mississippi Transverse Mercator)
+Projection Method: CT_TransverseMercator
+   ProjNatOriginLatGeoKey: 32.500000 ( 32d30' 0.00"N)
+   ProjNatOriginLongGeoKey: -89.750000 ( 89d45' 0.00"W)
+   ProjScaleAtNatOriginGeoKey: 0.999834
+   ProjFalseEastingGeoKey: 500000.000000 m
+   ProjFalseNorthingGeoKey: 1300000.000000 m
+GCS: 4269/NAD83
+Datum: 6269/North American Datum 1983
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 90d39'59.68"W, 54d33'48.58"N)
+Lower Left    (  440720.000, 3751260.000)  ( 90d39'59.64"W, 54d33'46.64"N)
+Upper Right   (  440780.000, 3751320.000)  ( 90d39'56.34"W, 54d33'48.60"N)
+Lower Right   (  440780.000, 3751260.000)  ( 90d39'56.30"W, 54d33'46.66"N)
+Center        (  440750.000, 3751290.000)  ( 90d39'57.99"W, 54d33'47.62"N)
+
+Testing listgeo transverse_mercator.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,23): "NAD83 / Mississippi TM"
+      GeographicTypeGeoKey (Short,1): GCS_NAD83
+      GeogCitationGeoKey (Ascii,6): "NAD83"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378137          
+      GeogInvFlatteningGeoKey (Double,1): 298.257222101    
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_TransverseMercator
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjNatOriginLongGeoKey (Double,1): -89.75           
+      ProjNatOriginLatGeoKey (Double,1): 32.5             
+      ProjFalseEastingGeoKey (Double,1): 500000           
+      ProjFalseNorthingGeoKey (Double,1): 1300000          
+      ProjScaleAtNatOriginGeoKey (Double,1): 0.9998335        
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_TransverseMercator
+   ProjNatOriginLatGeoKey: 32.500000 ( 32d30' 0.00"N)
+   ProjNatOriginLongGeoKey: -89.750000 ( 89d45' 0.00"W)
+   ProjScaleAtNatOriginGeoKey: 0.999834
+   ProjFalseEastingGeoKey: 500000.000000 m
+   ProjFalseNorthingGeoKey: 1300000.000000 m
+GCS: 4269/NAD83
+Datum: 6269/North American Datum 1983
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 90d39'59.68"W, 54d33'48.58"N)
+Lower Left    (  440720.000, 3751260.000)  ( 90d39'59.64"W, 54d33'46.64"N)
+Upper Right   (  440780.000, 3751320.000)  ( 90d39'56.34"W, 54d33'48.60"N)
+Lower Right   (  440780.000, 3751260.000)  ( 90d39'56.30"W, 54d33'46.66"N)
+Center        (  440750.000, 3751290.000)  ( 90d39'57.99"W, 54d33'47.62"N)
+
+Testing listgeo ProjectedCSTypeGeoKey_2046_transverse_mercator_south_oriented.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-2046 (Hartebeesthoek94 / Lo15)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 2046 (Hartebeesthoek94 / Lo15)
+Projection = 17515 (South African Survey Grid zone 15)
+Projection Method: CT_TransvMercator_SouthOrientated
+   ProjNatOriginLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: 15.000000 ( 15d 0' 0.00"E)
+   ProjScaleAtNatOriginGeoKey: 1.000000
+   ProjFalseEastingGeoKey: 0.000000 m
+   ProjFalseNorthingGeoKey: 0.000000 m
+GCS: 4148/Hartebeesthoek94
+Datum: 6148/Hartebeesthoek94
+Ellipsoid: 7030/WGS 84 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)
+Lower Left    (  440720.000, 3751260.000)
+Upper Right   (  440780.000, 3751320.000)
+Lower Right   (  440780.000, 3751260.000)
+Center        (  440750.000, 3751290.000)
+
+Testing listgeo transverse_mercator_south_oriented.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,24): "Hartebeesthoek94 / Lo15"
+      GeographicTypeGeoKey (Short,1): Code-4148 (Hartebeesthoek94)
+      GeogCitationGeoKey (Ascii,17): "Hartebeesthoek94"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378137          
+      GeogInvFlatteningGeoKey (Double,1): 298.257223563    
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_TransvMercator_SouthOrientated
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjNatOriginLongGeoKey (Double,1): 15               
+      ProjNatOriginLatGeoKey (Double,1): 0                
+      ProjFalseEastingGeoKey (Double,1): 0                
+      ProjFalseNorthingGeoKey (Double,1): 0                
+      ProjScaleAtNatOriginGeoKey (Double,1): 1                
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_TransvMercator_SouthOrientated
+   ProjNatOriginLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: 15.000000 ( 15d 0' 0.00"E)
+   ProjScaleAtNatOriginGeoKey: 1.000000
+   ProjFalseEastingGeoKey: 0.000000 m
+   ProjFalseNorthingGeoKey: 0.000000 m
+GCS: 4148/Hartebeesthoek94
+Datum: 6148/Hartebeesthoek94
+Ellipsoid: 7030/WGS 84 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)
+Lower Left    (  440720.000, 3751260.000)
+Upper Right   (  440780.000, 3751320.000)
+Lower Right   (  440780.000, 3751260.000)
+Center        (  440750.000, 3751290.000)
+
+Testing listgeo ProjectedCSTypeGeoKey_3812_lcc2sp.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-3812 (ETRS89 / Belgian Lambert 2008)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 3812 (ETRS89 / Belgian Lambert 2008)
+Projection = 3811 (Belgian Lambert 2008)
+Projection Method: CT_LambertConfConic_2SP
+   ProjFalseOriginLatGeoKey: 50.797815 ( 50d47'52.13"N)
+   ProjFalseOriginLongGeoKey: 4.359216 (  4d21'33.18"E)
+   ProjStdParallel1GeoKey: 49.833333 ( 49d50' 0.00"N)
+   ProjStdParallel2GeoKey: 51.166667 ( 51d10' 0.00"N)
+   ProjFalseEastingGeoKey: 649328.000000 m
+   ProjFalseNorthingGeoKey: 665262.000000 m
+GCS: 4258/ETRS89
+Datum: 6258/European Terrestrial Reference System 1989
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (  2d49'38.80"W, 77d 7'27.62"N)
+Lower Left    (  440720.000, 3751260.000)  (  2d49'38.09"W, 77d 7'25.97"N)
+Upper Right   (  440780.000, 3751320.000)  (  2d49'31.41"W, 77d 7'27.78"N)
+Lower Right   (  440780.000, 3751260.000)  (  2d49'30.69"W, 77d 7'26.13"N)
+Center        (  440750.000, 3751290.000)  (  2d49'34.75"W, 77d 7'26.87"N)
+
+Testing listgeo lcc2sp.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,30): "ETRS89 / Belgian Lambert 2008"
+      GeographicTypeGeoKey (Short,1): GCS_EUREF89
+      GeogCitationGeoKey (Ascii,7): "ETRS89"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378137          
+      GeogInvFlatteningGeoKey (Double,1): 298.257222101    
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_LambertConfConic_2SP
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjStdParallel1GeoKey (Double,1): 49.8333333333333 
+      ProjStdParallel2GeoKey (Double,1): 51.1666666666667 
+      ProjFalseOriginLongGeoKey (Double,1): 4.35921583333333 
+      ProjFalseOriginLatGeoKey (Double,1): 50.797815        
+      ProjFalseOriginEastingGeoKey (Double,1): 649328           
+      ProjFalseOriginNorthingGeoKey (Double,1): 665262           
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_LambertConfConic_2SP
+   ProjFalseOriginLatGeoKey: 50.797815 ( 50d47'52.13"N)
+   ProjFalseOriginLongGeoKey: 4.359216 (  4d21'33.18"E)
+   ProjStdParallel1GeoKey: 49.833333 ( 49d50' 0.00"N)
+   ProjStdParallel2GeoKey: 51.166667 ( 51d10' 0.00"N)
+   ProjFalseEastingGeoKey: 649328.000000 m
+   ProjFalseNorthingGeoKey: 665262.000000 m
+GCS: 4258/ETRS89
+Datum: 6258/European Terrestrial Reference System 1989
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (  2d49'38.80"W, 77d 7'27.62"N)
+Lower Left    (  440720.000, 3751260.000)  (  2d49'38.09"W, 77d 7'25.97"N)
+Upper Right   (  440780.000, 3751320.000)  (  2d49'31.41"W, 77d 7'27.78"N)
+Lower Right   (  440780.000, 3751260.000)  (  2d49'30.69"W, 77d 7'26.13"N)
+Center        (  440750.000, 3751290.000)  (  2d49'34.75"W, 77d 7'26.87"N)
+
+Testing listgeo ProjectedCSTypeGeoKey_3083_albers_equal_area.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-3083 (NAD83 / Texas Centric Albers Equal Area)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 3083 (NAD83 / Texas Centric Albers Equal Area)
+Projection = 14254 (Texas Centric Albers Equal Area)
+Projection Method: CT_AlbersEqualArea
+   ProjStdParallel1GeoKey: 27.500000 ( 27d30' 0.00"N)
+   ProjStdParallel2GeoKey: 35.000000 ( 35d 0' 0.00"N)
+   ProjNatOriginLatGeoKey: 18.000000 ( 18d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: -100.000000 (100d 0' 0.00"W)
+   ProjFalseEastingGeoKey: 1500000.000000 m
+   ProjFalseNorthingGeoKey: 6000000.000000 m
+GCS: 4269/NAD83
+Datum: 6269/North American Datum 1983
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (108d13'30.29"W,  4d19'52.00"S)
+Lower Left    (  440720.000, 3751260.000)  (108d13'30.16"W,  4d19'54.26"S)
+Upper Right   (  440780.000, 3751320.000)  (108d13'28.61"W,  4d19'51.83"S)
+Lower Right   (  440780.000, 3751260.000)  (108d13'28.49"W,  4d19'54.09"S)
+Center        (  440750.000, 3751290.000)  (108d13'29.39"W,  4d19'53.05"S)
+
+Testing listgeo albers_equal_area.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,40): "NAD83 / Texas Centric Albers Equal Area"
+      GeographicTypeGeoKey (Short,1): GCS_NAD83
+      GeogCitationGeoKey (Ascii,6): "NAD83"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378137          
+      GeogInvFlatteningGeoKey (Double,1): 298.257222101    
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_AlbersEqualArea
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjStdParallel1GeoKey (Double,1): 27.5             
+      ProjStdParallel2GeoKey (Double,1): 35               
+      ProjNatOriginLongGeoKey (Double,1): -100             
+      ProjNatOriginLatGeoKey (Double,1): 18               
+      ProjFalseEastingGeoKey (Double,1): 1500000          
+      ProjFalseNorthingGeoKey (Double,1): 6000000          
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_AlbersEqualArea
+   ProjStdParallel1GeoKey: 27.500000 ( 27d30' 0.00"N)
+   ProjStdParallel2GeoKey: 35.000000 ( 35d 0' 0.00"N)
+   ProjNatOriginLatGeoKey: 18.000000 ( 18d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: -100.000000 (100d 0' 0.00"W)
+   ProjFalseEastingGeoKey: 1500000.000000 m
+   ProjFalseNorthingGeoKey: 6000000.000000 m
+GCS: 4269/NAD83
+Datum: 6269/North American Datum 1983
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (108d13'30.29"W,  4d19'52.00"S)
+Lower Left    (  440720.000, 3751260.000)  (108d13'30.16"W,  4d19'54.26"S)
+Upper Right   (  440780.000, 3751320.000)  (108d13'28.61"W,  4d19'51.83"S)
+Lower Right   (  440780.000, 3751260.000)  (108d13'28.49"W,  4d19'54.09"S)
+Center        (  440750.000, 3751290.000)  (108d13'29.39"W,  4d19'53.05"S)
+
+Testing listgeo ProjectedCSTypeGeoKey_3035_lambert_azimuthal_equal_area.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-3035 (ETRS89-extended / LAEA Europe)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 3035 (ETRS89-extended / LAEA Europe)
+Projection = 19986 (Europe Equal Area 2001)
+Projection Method: CT_LambertAzimEqualArea
+   ProjCenterLatGeoKey: 52.000000 ( 52d 0' 0.00"N)
+   ProjCenterLongGeoKey: 10.000000 ( 10d 0' 0.00"E)
+   ProjFalseEastingGeoKey: 4321000.000000 m
+   ProjFalseNorthingGeoKey: 3210000.000000 m
+GCS: 4258/ETRS89
+Datum: 6258/European Terrestrial Reference System 1989
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 42d57'55.53"W, 43d35'56.15"N)
+Lower Left    (  440720.000, 3751260.000)  ( 42d57'53.84"W, 43d35'54.75"N)
+Upper Right   (  440780.000, 3751320.000)  ( 42d57'53.38"W, 43d35'57.45"N)
+Lower Right   (  440780.000, 3751260.000)  ( 42d57'51.69"W, 43d35'56.06"N)
+Center        (  440750.000, 3751290.000)  ( 42d57'53.61"W, 43d35'56.10"N)
+
+Testing listgeo lambert_azimuthal_equal_area.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,21): "ETRS89 / LAEA Europe"
+      GeographicTypeGeoKey (Short,1): GCS_EUREF89
+      GeogCitationGeoKey (Ascii,7): "ETRS89"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378137          
+      GeogInvFlatteningGeoKey (Double,1): 298.257222101    
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_LambertAzimEqualArea
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjFalseEastingGeoKey (Double,1): 4321000          
+      ProjFalseNorthingGeoKey (Double,1): 3210000          
+      ProjCenterLongGeoKey (Double,1): 10               
+      ProjCenterLatGeoKey (Double,1): 52               
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_LambertAzimEqualArea
+   ProjCenterLatGeoKey: 52.000000 ( 52d 0' 0.00"N)
+   ProjCenterLongGeoKey: 10.000000 ( 10d 0' 0.00"E)
+   ProjFalseEastingGeoKey: 4321000.000000 m
+   ProjFalseNorthingGeoKey: 3210000.000000 m
+GCS: 4258/ETRS89
+Datum: 6258/European Terrestrial Reference System 1989
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  ( 42d57'55.53"W, 43d35'56.15"N)
+Lower Left    (  440720.000, 3751260.000)  ( 42d57'53.84"W, 43d35'54.75"N)
+Upper Right   (  440780.000, 3751320.000)  ( 42d57'53.38"W, 43d35'57.45"N)
+Lower Right   (  440780.000, 3751260.000)  ( 42d57'51.69"W, 43d35'56.06"N)
+Center        (  440750.000, 3751290.000)  ( 42d57'53.61"W, 43d35'56.10"N)
+
+Testing listgeo ProjectedCSTypeGeoKey_3410_lambert_cylindrical_equal_area.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-3410 (NSIDC EASE-Grid Global)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 3410 (NSIDC EASE-Grid Global)
+Projection = 19869 (US NSIDC Equal Area global projection)
+Projection Method: CT_CylindricalEqualArea
+   ProjStdParallel1GeoKey: 30.000000 ( 30d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: 0.000000 (  0d 0' 0.00"E)
+   ProjFalseEastingGeoKey: 0.000000 m
+   ProjFalseNorthingGeoKey: 0.000000 m
+GCS: 4053/Unspecified datum based upon the International 1924 Authalic Sphere
+Datum: 6053/Not specified (based on International 1924 Authalic Sphere)
+Ellipsoid: 7057/International 1924 Authalic Sphere (6371228.00,6371228.00)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (  4d34'35.33"E, 30d39'27.66"N)
+Lower Left    (  440720.000, 3751260.000)  (  4d34'35.33"E, 30d39'25.71"N)
+Upper Right   (  440780.000, 3751320.000)  (  4d34'37.57"E, 30d39'27.66"N)
+Lower Right   (  440780.000, 3751260.000)  (  4d34'37.57"E, 30d39'25.71"N)
+Center        (  440750.000, 3751290.000)  (  4d34'36.45"E, 30d39'26.68"N)
+
+Testing listgeo lambert_cylindrical_equal_area.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,23): "NSIDC EASE-Grid Global"
+      GeographicTypeGeoKey (Short,1): Code-4053 (Unspecified datum based upon the International 1924 Authalic Sphere)
+      GeogCitationGeoKey (Ascii,68): "Unspecified datum based upon the International 1924 Authalic Sphere"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6371228          
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_CylindricalEqualArea
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjStdParallel1GeoKey (Double,1): 30               
+      ProjNatOriginLongGeoKey (Double,1): 0                
+      ProjFalseEastingGeoKey (Double,1): 0                
+      ProjFalseNorthingGeoKey (Double,1): 0                
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_CylindricalEqualArea
+   ProjStdParallel1GeoKey: 30.000000 ( 30d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: 0.000000 (  0d 0' 0.00"E)
+   ProjFalseEastingGeoKey: 0.000000 m
+   ProjFalseNorthingGeoKey: 0.000000 m
+GCS: 4053/Unspecified datum based upon the International 1924 Authalic Sphere
+Datum: 6053/Not specified (based on International 1924 Authalic Sphere)
+Ellipsoid: 7057/International 1924 Authalic Sphere (6371228.00,6371228.00)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (  4d34'35.33"E, 30d39'27.66"N)
+Lower Left    (  440720.000, 3751260.000)  (  4d34'35.33"E, 30d39'25.71"N)
+Upper Right   (  440780.000, 3751320.000)  (  4d34'37.57"E, 30d39'27.66"N)
+Lower Right   (  440780.000, 3751260.000)  (  4d34'37.57"E, 30d39'25.71"N)
+Center        (  440750.000, 3751290.000)  (  4d34'36.45"E, 30d39'26.68"N)
+
+Testing listgeo ProjectedCSTypeGeoKey_4087_equidistant_cylindrical.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-4087 (WGS 84 / World Equidistant Cylindrical)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 4087 (WGS 84 / World Equidistant Cylindrical)
+Projection = 4085 (World Equidistant Cylindrical)
+Projection Method: CT_Equirectangular
+   ProjCenterLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjCenterLongGeoKey: 0.000000 (  0d 0' 0.00"E)
+   ProjStdParallel1GeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjFalseEastingGeoKey: 0.000000 m
+   ProjFalseNorthingGeoKey: 0.000000 m
+GCS: 4326/WGS 84
+Datum: 6326/World Geodetic System 1984
+Ellipsoid: 7030/WGS 84 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (  3d57'32.60"E, 33d41'55.25"N)
+Lower Left    (  440720.000, 3751260.000)  (  3d57'32.60"E, 33d41'53.31"N)
+Upper Right   (  440780.000, 3751320.000)  (  3d57'34.54"E, 33d41'55.25"N)
+Lower Right   (  440780.000, 3751260.000)  (  3d57'34.54"E, 33d41'53.31"N)
+Center        (  440750.000, 3751290.000)  (  3d57'33.57"E, 33d41'54.28"N)
+
+Testing listgeo equidistant_cylindrical.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,39): "WGS 84 / World Equidistant Cylindrical"
+      GeographicTypeGeoKey (Short,1): GCS_WGS_84
+      GeogCitationGeoKey (Ascii,7): "WGS 84"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378137          
+      GeogInvFlatteningGeoKey (Double,1): 298.257223563    
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_Equirectangular
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjStdParallel1GeoKey (Double,1): 0                
+      ProjFalseEastingGeoKey (Double,1): 0                
+      ProjFalseNorthingGeoKey (Double,1): 0                
+      ProjCenterLongGeoKey (Double,1): 0                
+      ProjCenterLatGeoKey (Double,1): 0                
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_Equirectangular
+   ProjCenterLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjCenterLongGeoKey: 0.000000 (  0d 0' 0.00"E)
+   ProjStdParallel1GeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjFalseEastingGeoKey: 0.000000 m
+   ProjFalseNorthingGeoKey: 0.000000 m
+GCS: 4326/WGS 84
+Datum: 6326/World Geodetic System 1984
+Ellipsoid: 7030/WGS 84 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (  3d57'32.60"E, 33d41'55.25"N)
+Lower Left    (  440720.000, 3751260.000)  (  3d57'32.60"E, 33d41'53.31"N)
+Upper Right   (  440780.000, 3751320.000)  (  3d57'34.54"E, 33d41'55.25"N)
+Lower Right   (  440780.000, 3751260.000)  (  3d57'34.54"E, 33d41'53.31"N)
+Center        (  440750.000, 3751290.000)  (  3d57'33.57"E, 33d41'54.28"N)
+
+Testing listgeo pixel_is_point_wgs84.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         -1                53                0                
+      ModelPixelScaleTag (1,3):
+         2                 2                 0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeGeographic
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsPoint
+      GeographicTypeGeoKey (Short,1): GCS_WGS_84
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+GCS: 4326/WGS 84
+Datum: 6326/World Geodetic System 1984
+Ellipsoid: 7030/WGS 84 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: User-Defined (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  2d 0' 0.00"W, 54d 0' 0.00"N)
+Lower Left    (  2d 0' 0.00"W, 50d 0' 0.00"N)
+Upper Right   (  2d 0' 0.00"E, 54d 0' 0.00"N)
+Lower Right   (  2d 0' 0.00"E, 50d 0' 0.00"N)
+Center        (  0d 0' 0.00"E, 52d 0' 0.00"N)
+
+Testing listgeo epsg_27563_only_pcs_code.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         827294.141443773  523985.644431661  0                
+      ModelPixelScaleTag (1,3):
+         0.500636999995913 0.500637000001734 0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,33): "NTF (Paris) / Lambert Sud France"
+      GeogCitationGeoKey (Ascii,12): "NTF (Paris)"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Grad
+      ProjectedCSTypeGeoKey (Short,1): Code-27563 (NTF (Paris) / Lambert Sud France)
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 27563 (NTF (Paris) / Lambert Sud France)
+Projection = 18093 (Lambert Sud France)
+Projection Method: CT_LambertConfConic_1SP
+   ProjNatOriginLatGeoKey: 44.100000 ( 44d 6' 0.00"N)
+   ProjNatOriginLongGeoKey: 0.000000 (  0d 0' 0.00"E)
+   ProjScaleAtNatOriginGeoKey: 0.999877
+   ProjFalseEastingGeoKey: 600000.000000 m
+   ProjFalseNorthingGeoKey: 200000.000000 m
+GCS: 4807/NTF (Paris)
+Datum: 6807/Nouvelle Triangulation Francaise (Paris)
+Ellipsoid: 7011/Clarke 1880 (IGN) (6378249.20,6356515.00)
+Prime Meridian: 8903/Paris (2.337229/  2d20'14.03"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  827294.141,  523985.644)  (  2d59' 3.48"E, 46d58'37.71"N)
+Lower Left    (  827294.141,  523980.638)  (  2d59' 3.47"E, 46d58'37.54"N)
+Upper Right   (  827299.148,  523985.644)  (  2d59' 3.71"E, 46d58'37.70"N)
+Lower Right   (  827299.148,  523980.638)  (  2d59' 3.71"E, 46d58'37.54"N)
+Center        (  827296.645,  523983.141)  (  2d59' 3.59"E, 46d58'37.62"N)
+
+Testing listgeo epsg_27563_allgeokeys.tif
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         827294.141443773  523985.644431661  0                
+      ModelPixelScaleTag (1,3):
+         0.500636999995913 0.500637000001734 0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,33): "NTF (Paris) / Lambert Sud France"
+      GeographicTypeGeoKey (Short,1): GCS_NTF_Paris
+      GeogCitationGeoKey (Ascii,12): "NTF (Paris)"
+      GeogGeodeticDatumGeoKey (Short,1): Code-6807 (Nouvelle Triangulation Francaise (Paris))
+      GeogPrimeMeridianGeoKey (Short,1): PM_Paris
+      GeogAngularUnitsGeoKey (Short,1): Angular_Grad
+      GeogAngularUnitSizeGeoKey (Double,1): 0.0157079632679489
+      GeogEllipsoidGeoKey (Short,1): Ellipse_Clarke_1880_IGN
+      GeogSemiMajorAxisGeoKey (Double,1): 6378249.2        
+      GeogInvFlatteningGeoKey (Double,1): 293.466021293627 
+      GeogPrimeMeridianLongGeoKey (Double,1): 2.5969213        
+      GeogTOWGS84GeoKey (Double,7): -168             -60              320              
+0                0                0                
+0                
+      ProjectedCSTypeGeoKey (Short,1): Code-27563 (NTF (Paris) / Lambert Sud France)
+      PCSCitationGeoKey (Ascii,33): "NTF (Paris) / Lambert Sud France"
+      ProjectionGeoKey (Short,1): Code-18093 (Lambert Sud France)
+      ProjCoordTransGeoKey (Short,1): CT_LambertConfConic_1SP
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjLinearUnitSizeGeoKey (Double,1): 1                
+      ProjNatOriginLongGeoKey (Double,1): 0                
+      ProjNatOriginLatGeoKey (Double,1): 49               
+      ProjFalseEastingGeoKey (Double,1): 600000           
+      ProjFalseNorthingGeoKey (Double,1): 200000           
+      ProjScaleAtNatOriginGeoKey (Double,1): 0.999877499      
+      VerticalUnitsGeoKey (Short,1): Linear_Meter
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 27563 (NTF (Paris) / Lambert Sud France)
+Projection = 18093 (Lambert Sud France)
+Projection Method: CT_LambertConfConic_1SP
+   ProjNatOriginLatGeoKey: 44.100000 ( 44d 6' 0.00"N)
+   ProjNatOriginLongGeoKey: 0.000000 (  0d 0' 0.00"E)
+   ProjScaleAtNatOriginGeoKey: 0.999877
+   ProjFalseEastingGeoKey: 600000.000000 m
+   ProjFalseNorthingGeoKey: 200000.000000 m
+GCS: 4807/NTF (Paris)
+Datum: 6807/Nouvelle Triangulation Francaise (Paris)
+Ellipsoid: 7011/Clarke 1880 (IGN) (6378249.20,6356515.00)
+Prime Meridian: 8903/Paris (2.337229/  2d20'14.03"E)
+TOWGS84: -168,-60,320,0,0,0,0
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  827294.141,  523985.644)  (  2d59' 3.48"E, 46d58'37.71"N)
+Lower Left    (  827294.141,  523980.638)  (  2d59' 3.47"E, 46d58'37.54"N)
+Upper Right   (  827299.148,  523985.644)  (  2d59' 3.71"E, 46d58'37.70"N)
+Lower Right   (  827299.148,  523980.638)  (  2d59' 3.71"E, 46d58'37.54"N)
+Center        (  827296.645,  523983.141)  (  2d59' 3.59"E, 46d58'37.62"N)
+

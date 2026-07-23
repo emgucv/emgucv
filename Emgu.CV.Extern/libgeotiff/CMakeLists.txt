@@ -107,6 +107,7 @@ INCLUDE(CheckIncludeFiles)
 CHECK_INCLUDE_FILES(stdio.h HAVE_STDIO_H)
 CHECK_INCLUDE_FILES(stdlib.h HAVE_STDLIB_H)
 CHECK_INCLUDE_FILES(string.h HAVE_STRING_H)
+CHECK_INCLUDE_FILES(strings.h GEOTIFF_HAVE_STRINGS_H)
 
 ###############################################################################
 # User-defined build settings
@@ -297,7 +298,6 @@ SET(GEOTIFF_DATA_DIR ${GEOTIFF_DATA_SUBDIR})
 
 SET(GEOTIFF_LIB_SOURCES
     "${LIBGEOTIFF_DIR}/cpl_serv.c"
-    "${LIBGEOTIFF_DIR}/cpl_csv.c"
     "${LIBGEOTIFF_DIR}/geo_extra.c"
     "${LIBGEOTIFF_DIR}/geo_free.c"
     "${LIBGEOTIFF_DIR}/geo_get.c"
@@ -307,6 +307,7 @@ SET(GEOTIFF_LIB_SOURCES
     "${LIBGEOTIFF_DIR}/geo_print.c"
     "${LIBGEOTIFF_DIR}/geo_set.c"
     "${LIBGEOTIFF_DIR}/geo_simpletags.c"
+    "${LIBGEOTIFF_DIR}/geo_strtod.c"
     "${LIBGEOTIFF_DIR}/geo_tiffp.c"
     "${LIBGEOTIFF_DIR}/geo_trans.c"
     "${LIBGEOTIFF_DIR}/geo_write.c"

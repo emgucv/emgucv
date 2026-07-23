@@ -4027,7 +4027,7 @@ IF(EMGU_CV_WITH_TIFF)
     # ----------------------------------------------------------------------------
     #  Build libgeotiff 
     # ----------------------------------------------------------------------------
-    SET(LIBGEOTIFF_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libgeotiff/libgeotiff-1.4.0")
+    SET(LIBGEOTIFF_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libgeotiff/libgeotiff-1.7.4")
     ADD_SUBDIRECTORY(libgeotiff)
     #MESSAGE(STATUS "CURRENT Binary DIR: ${CMAKE_CURRENT_BINARY_DIR}")
     SET(GEOTIFF_INCLUDE_DIR ${TIFF_INCLUDE_DIR} ${LIBGEOTIFF_DIR} "${LIBGEOTIFF_DIR}/libxtiff")

@@ -1,0 +1,55 @@
+# Configure @PROJECT_NAME@
+#
+# Set
+#  @PROJECT_NAME@_FOUND = 1
+#  @PROJECT_NAME@_INCLUDE_DIRS = /usr/local/include
+#  @PROJECT_NAME@_LIBRARY_DIRS = /usr/local/lib
+#  @PROJECT_NAME@_BINARY_DIRS = /usr/local/bin
+#  @PROJECT_NAME@_VERSION = 1.4.1 (for example)
+
+# For compatibility with FindGeoTIFF.cmake, also set
+# @PROJECT_NAME_UPPER@_FOUND
+# @PROJECT_NAME_UPPER@_INCLUDE_DIR
+# @PROJECT_NAME_UPPER@_LIBRARY
+# @PROJECT_NAME_UPPER@_LIBRARIES
+
+# Tell the user project where to find our headers and libraries
+get_filename_component (_DIR ${CMAKE_CURRENT_LIST_FILE} PATH)
+get_filename_component (_ROOT "${_DIR}/@PROJECT_ROOT_DIR@" ABSOLUTE)
+set (@PROJECT_NAME@_INCLUDE_DIRS "${_ROOT}/include")
+set (@PROJECT_NAME@_LIBRARY_DIRS "${_ROOT}/lib")
+set (@PROJECT_NAME@_BINARY_DIRS "${_ROOT}/bin")
+unset (_ROOT)
+unset (_DIR)
+
+include(CMakeFindDependencyMacro)
+@CONFIG_PUBLIC_DEPENDENCIES@
+set (@PROJECT_NAME@_LIBRARIES @GEOTIFF_LIBRARY_TARGET@)
+if("@BUILD_SHARED_LIBS@")
+  set (@PROJECT_NAME@_SHARED_LIBRARIES ${@PROJECT_NAME@_LIBRARIES})
+else()
+  set (@PROJECT_NAME@_STATIC_LIBRARIES ${@PROJECT_NAME@_LIBRARIES})
+@CONFIG_PRIVATE_DEPENDENCIES@
+endif()
+
+if(NOT @PROJECT_NAME@_FIND_QUIETLY)
+  message (STATUS "Reading ${CMAKE_CURRENT_LIST_FILE}")
+  # @PROJECT_NAME@_VERSION is set by version file
+  message (STATUS
+    "@PROJECT_NAME@ configuration, version ${@PROJECT_NAME@_VERSION}")
+  message (STATUS "  include directory: \${@PROJECT_NAME@_INCLUDE_DIRS}")
+  if("@BUILD_SHARED_LIBS@")
+    message (STATUS "  \${@PROJECT_NAME@_LIBRARIES} set to shared library")
+  else()
+    message (STATUS "  \${@PROJECT_NAME@_LIBRARIES} set to static libraries")
+  endif()
+endif()
+
+# Read in the exported definition of the library
+include ("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME_LOWER@-depends.cmake")
+
+# For compatibility with FindGeoTIFF.cmake
+set (@PROJECT_NAME_UPPER@_FOUND 1)
+set (@PROJECT_NAME_UPPER@_LIBRARIES ${@PROJECT_NAME@_LIBRARIES})
+set (@PROJECT_NAME_UPPER@_INCLUDE_DIR ${@PROJECT_NAME@_INCLUDE_DIRS})
+set (@PROJECT_NAME_UPPER@_LIBRARY ${@PROJECT_NAME@_LIBRARIES})

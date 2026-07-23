@@ -1,0 +1,171 @@
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,40): "NAD83 / Texas Centric Albers Equal Area"
+      GeographicTypeGeoKey (Short,1): GCS_NAD83
+      GeogCitationGeoKey (Ascii,6): "NAD83"
+      GeogAngularUnitsGeoKey (Short,1): Angular_Degree
+      GeogSemiMajorAxisGeoKey (Double,1): 6378137          
+      GeogInvFlatteningGeoKey (Double,1): 298.257222101    
+      ProjectedCSTypeGeoKey (Short,1): User-Defined
+      ProjectionGeoKey (Short,1): User-Defined
+      ProjCoordTransGeoKey (Short,1): CT_AlbersEqualArea
+      ProjLinearUnitsGeoKey (Short,1): Linear_Meter
+      ProjStdParallel1GeoKey (Double,1): 27.5             
+      ProjStdParallel2GeoKey (Double,1): 35               
+      ProjNatOriginLongGeoKey (Double,1): -100             
+      ProjNatOriginLatGeoKey (Double,1): 18               
+      ProjFalseEastingGeoKey (Double,1): 1500000          
+      ProjFalseNorthingGeoKey (Double,1): 6000000          
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+Projection Method: CT_AlbersEqualArea
+   ProjStdParallel1GeoKey: 27.500000 ( 27d30' 0.00"N)
+   ProjStdParallel2GeoKey: 35.000000 ( 35d 0' 0.00"N)
+   ProjNatOriginLatGeoKey: 18.000000 ( 18d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: -100.000000 (100d 0' 0.00"W)
+   ProjFalseEastingGeoKey: 1500000.000000 m
+   ProjFalseNorthingGeoKey: 6000000.000000 m
+GCS: 4269/NAD83
+Datum: 6269/North American Datum 1983
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (108d13'30.29"W,  4d19'52.00"S)
+Lower Left    (  440720.000, 3750120.000)  (108d13'27.80"W,  4d20'37.24"S)
+Upper Right   (  441920.000, 3751320.000)  (108d12'56.86"W,  4d19'48.63"S)
+Lower Right   (  441920.000, 3750120.000)  (108d12'54.38"W,  4d20'33.88"S)
+Center        (  441320.000, 3750720.000)  (108d13'12.33"W,  4d20'12.94"S)
+
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.0
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      ProjectedCSTypeGeoKey (Short,1): Code-3083 (NAD83 / Texas Centric Albers Equal Area)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 3083 (NAD83 / Texas Centric Albers Equal Area)
+Projection = 14254 (Texas Centric Albers Equal Area)
+Projection Method: CT_AlbersEqualArea
+   ProjStdParallel1GeoKey: 27.500000 ( 27d30' 0.00"N)
+   ProjStdParallel2GeoKey: 35.000000 ( 35d 0' 0.00"N)
+   ProjNatOriginLatGeoKey: 18.000000 ( 18d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: -100.000000 (100d 0' 0.00"W)
+   ProjFalseEastingGeoKey: 1500000.000000 m
+   ProjFalseNorthingGeoKey: 6000000.000000 m
+GCS: 4269/NAD83
+Datum: 6269/North American Datum 1983
+Ellipsoid: 7019/GRS 1980 (6378137.00,6356752.31)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (108d13'30.29"W,  4d19'52.00"S)
+Lower Left    (  440720.000, 3750120.000)  (108d13'27.80"W,  4d20'37.24"S)
+Upper Right   (  441920.000, 3751320.000)  (108d12'56.86"W,  4d19'48.63"S)
+Lower Right   (  441920.000, 3750120.000)  (108d12'54.38"W,  4d20'33.88"S)
+Center        (  441320.000, 3750720.000)  (108d13'12.33"W,  4d20'12.94"S)
+
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.1
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,21): "NAD27 / UTM zone 11N"
+      ProjectedCRSGeoKey (Short,1): Code-26711 (NAD27 / UTM zone 11N)
+      ProjLinearUnitsGeoKey (Short,1): Code-9001 (metre)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 26711 (NAD27 / UTM zone 11N)
+Projection = 16011 (UTM zone 11N)
+Projection Method: CT_TransverseMercator
+   ProjNatOriginLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: -117.000000 (117d 0' 0.00"W)
+   ProjScaleAtNatOriginGeoKey: 0.999600
+   ProjFalseEastingGeoKey: 500000.000000 m
+   ProjFalseNorthingGeoKey: 0.000000 m
+GCS: 4267/NAD27
+Datum: 6267/North American Datum 1927
+Ellipsoid: 7008/Clarke 1866 (6378206.40,6356583.80)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (117d38'28.21"W, 33d54' 8.47"N)
+Lower Left    (  440720.000, 3750120.000)  (117d38'27.92"W, 33d53'29.51"N)
+Upper Right   (  441920.000, 3751320.000)  (117d37'41.48"W, 33d54' 8.71"N)
+Lower Right   (  441920.000, 3750120.000)  (117d37'41.20"W, 33d53'29.75"N)
+Center        (  441320.000, 3750720.000)  (117d38' 4.70"W, 33d53'49.11"N)
+
+Geotiff_Information:
+   Version: 1
+   Key_Revision: 1.1
+   Tagged_Information:
+      ModelTiepointTag (2,3):
+         0                 0                 0                
+         440720            3751320           0                
+      ModelPixelScaleTag (1,3):
+         60                60                0                
+      End_Of_Tags.
+   Keyed_Information:
+      GTModelTypeGeoKey (Short,1): ModelTypeProjected
+      GTRasterTypeGeoKey (Short,1): RasterPixelIsArea
+      GTCitationGeoKey (Ascii,21): "NAD27 / UTM zone 11N"
+      ProjectedCRSGeoKey (Short,1): Code-26711 (NAD27 / UTM zone 11N)
+      ProjLinearUnitsGeoKey (Short,1): Code-9001 (metre)
+      End_Of_Keys.
+   End_Of_Geotiff.
+
+PCS = 26711 (NAD27 / UTM zone 11N)
+Projection = 16011 (UTM zone 11N)
+Projection Method: CT_TransverseMercator
+   ProjNatOriginLatGeoKey: 0.000000 (  0d 0' 0.00"N)
+   ProjNatOriginLongGeoKey: -117.000000 (117d 0' 0.00"W)
+   ProjScaleAtNatOriginGeoKey: 0.999600
+   ProjFalseEastingGeoKey: 500000.000000 m
+   ProjFalseNorthingGeoKey: 0.000000 m
+GCS: 4267/NAD27
+Datum: 6267/North American Datum 1927
+Ellipsoid: 7008/Clarke 1866 (6378206.40,6356583.80)
+Prime Meridian: 8901/Greenwich (0.000000/  0d 0' 0.00"E)
+Projection Linear Units: 9001/metre (1.000000m)
+
+Corner Coordinates:
+Upper Left    (  440720.000, 3751320.000)  (117d38'28.21"W, 33d54' 8.47"N)
+Lower Left    (  440720.000, 3750120.000)  (117d38'27.92"W, 33d53'29.51"N)
+Upper Right   (  441920.000, 3751320.000)  (117d37'41.48"W, 33d54' 8.71"N)
+Lower Right   (  441920.000, 3750120.000)  (117d37'41.20"W, 33d53'29.75"N)
+Center        (  441320.000, 3750720.000)  (117d38' 4.70"W, 33d53'49.11"N)
+

@@ -1,0 +1,84 @@
+:
+# Test geotifcp
+
+TEST_CLI_DIR=`dirname $0`
+DATA_DIR=`dirname $0`/data
+
+EXE=$1
+LISTGEO_EXE=$2
+
+usage()
+{
+    echo "Usage: ${0} <path to 'geotifcp' program> <path to 'listgeo' program>" 
+    echo
+    exit 1
+}
+
+if test -z "${EXE}"; then
+    EXE=../bin/geotifcp
+    LISTGEO_EXE=../bin/listgeo
+fi
+
+if test ! -x ${EXE}; then
+    echo "*** ERROR: Can not find '${EXE}' program!"
+    exit 1
+fi
+
+if test ! -x ${LISTGEO_EXE}; then
+    echo "*** ERROR: Can not find '${LISTGEO_EXE}' program!"
+    exit 1
+fi
+
+echo "============================================"
+echo "Running ${0} using ${EXE}:"
+echo "============================================"
+
+
+OUT=testgeotifcp_out
+
+rm -f ${OUT}
+
+$LISTGEO_EXE ${DATA_DIR}/albers_equal_area.tif > tmp_albers_equal_area.txt
+$EXE -g tmp_albers_equal_area.txt ${DATA_DIR}/byte.tif tmp_albers_equal_area.tif
+$LISTGEO_EXE tmp_albers_equal_area.tif >> ${OUT}
+rm -f tmp_albers_equal_area.txt
+rm -f tmp_albers_equal_area.tif
+echo "" >> ${OUT}
+
+$LISTGEO_EXE ${DATA_DIR}/ProjectedCSTypeGeoKey_3083_albers_equal_area.tif > tmp_ProjectedCSTypeGeoKey_3083_albers_equal_area.txt
+$EXE -g tmp_ProjectedCSTypeGeoKey_3083_albers_equal_area.txt ${DATA_DIR}/byte.tif tmp_ProjectedCSTypeGeoKey_3083_albers_equal_area.tif
+$LISTGEO_EXE tmp_ProjectedCSTypeGeoKey_3083_albers_equal_area.tif >> ${OUT}
+rm -f tmp_ProjectedCSTypeGeoKey_3083_albers_equal_area.txt
+rm -f tmp_ProjectedCSTypeGeoKey_3083_albers_equal_area.tif
+echo "" >> ${OUT}
+
+# Test copying a GeoTIFF v1.1 file
+$LISTGEO_EXE ${DATA_DIR}/byte_v11.tif > tmp_byte_v11.txt
+$EXE -g tmp_byte_v11.txt ${DATA_DIR}/byte.tif tmp_byte_v11.tif
+$LISTGEO_EXE tmp_byte_v11.tif >> ${OUT}
+rm -f tmp_byte_v11.txt
+rm -f tmp_byte_v11.tif
+echo "" >> ${OUT}
+
+# Test changing the version number
+$EXE -v 1:1:1 ${DATA_DIR}/byte.tif tmp_byte_v11.tif
+$LISTGEO_EXE tmp_byte_v11.tif >> ${OUT}
+rm -f tmp_byte_v11.tif
+echo "" >> ${OUT}
+
+# do 'diff' with distribution results
+echo "diff ${OUT} with testgeotifcp_out.dist"
+diff -u ${OUT} ${TEST_CLI_DIR}/testgeotifcp_out.dist
+if [ $? -ne 0 ] ; then
+    echo  ""
+    echo "PROBLEMS HAVE OCCURRED"
+    echo "test file ${OUT} saved"
+    echo
+    exit 100
+else
+    echo "TEST OK"
+    echo "test file ${OUT} removed"
+    echo
+    /bin/rm -f ${OUT}
+    exit 0
+fi
