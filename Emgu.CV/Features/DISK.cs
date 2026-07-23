@@ -77,6 +77,32 @@ namespace Emgu.CV.Features
         }
 
         /// <summary>
+        /// Protected constructor for subclasses that defer native initialization (e.g. until a
+        /// model file has been downloaded). The native DISK object is not created; subclasses
+        /// must call <see cref="InitFromModelPath"/> before using any Feature2D methods.
+        /// </summary>
+        protected DISK() { }
+
+        /// <summary>
+        /// Initialise the native DISK object from a model file path. Intended for subclasses
+        /// that deferred construction via the protected parameterless constructor.
+        /// </summary>
+        protected void InitFromModelPath(
+            String modelPath,
+            int maxKeypoints = -1,
+            float scoreThreshold = 0.0f,
+            Size imageSize = new Size(),
+            Emgu.CV.Dnn.Backend backend = Emgu.CV.Dnn.Backend.Default,
+            Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu)
+        {
+            using (CvString csModelPath = new CvString(modelPath))
+                _ptr = FeaturesInvoke.cveDISKCreate(
+                    csModelPath, maxKeypoints, scoreThreshold,
+                    ref imageSize, backend, target,
+                    ref _feature2D, ref _sharedPtr);
+        }
+
+        /// <summary>
         /// Release the unmanaged resources associated with this object
         /// </summary>
         protected override void DisposeObject()
