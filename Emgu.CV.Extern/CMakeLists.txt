@@ -4023,15 +4023,48 @@ IF(EMGU_CV_WITH_TIFF)
     MESSAGE(STATUS "CVEXTERN: GEOTIFF found. INCLUDE DIR: ${GEOTIFF_INCLUDE_DIR}")
   ENDIF()
   IF (NOT GEOTIFF_FOUND)
-    MESSAGE(STATUS "CVEXTERN: GEOTIFF not found. Building from source")
+    MESSAGE(STATUS "CVEXTERN: GEOTIFF not found. Building PROJ and libgeotiff from source")
     # ----------------------------------------------------------------------------
-    #  Build libgeotiff 
+    #  Build PROJ (required by libgeotiff 1.7.4)
     # ----------------------------------------------------------------------------
-    SET(LIBGEOTIFF_DIR "${CMAKE_CURRENT_SOURCE_DIR}/libgeotiff/libgeotiff-1.7.4")
+    include(FetchContent)
+    FetchContent_Declare(
+        proj_src
+        URL "https://download.osgeo.org/proj/proj-9.5.1.tar.gz"
+        URL_HASH SHA256=a8395f9696338ffd46b0feb603edbb730fad6746fba77753c77f7f997345e3d3
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+        PATCH_COMMAND ${CMAKE_COMMAND}
+            -DPROJ_SRC_DIR=<SOURCE_DIR>
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/patch_proj_uninstall.cmake"
+    )
+    set(_save_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
+    set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+    set(BUILD_TESTING     OFF CACHE BOOL "" FORCE)
+    set(BUILD_APPS        OFF CACHE BOOL "" FORCE)
+    set(ENABLE_CURL       OFF CACHE BOOL "" FORCE)
+    set(ENABLE_TIFF       OFF CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(proj_src)
+    set(BUILD_SHARED_LIBS ${_save_BUILD_SHARED_LIBS} CACHE BOOL "" FORCE)
+    # ----------------------------------------------------------------------------
+    #  Download libgeotiff source and build via our custom CMakeLists.txt
+    # ----------------------------------------------------------------------------
+    FetchContent_Declare(
+        libgeotiff_src
+        URL "https://github.com/OSGeo/libgeotiff/releases/download/1.7.4/libgeotiff-1.7.4.tar.gz"
+        URL_HASH SHA256=c598d04fdf2ba25c4352844dafa81dde3f7fd968daa7ad131228cd91e9d3dc47
+        DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+    )
+    if(POLICY CMP0169)
+        cmake_policy(SET CMP0169 OLD)
+    endif()
+    FetchContent_GetProperties(libgeotiff_src)
+    if(NOT libgeotiff_src_POPULATED)
+        FetchContent_Populate(libgeotiff_src)
+    endif()
+    SET(LIBGEOTIFF_DIR "${libgeotiff_src_SOURCE_DIR}")
     ADD_SUBDIRECTORY(libgeotiff)
-    #MESSAGE(STATUS "CURRENT Binary DIR: ${CMAKE_CURRENT_BINARY_DIR}")
     SET(GEOTIFF_INCLUDE_DIR ${TIFF_INCLUDE_DIR} ${LIBGEOTIFF_DIR} "${LIBGEOTIFF_DIR}/libxtiff")
-    SET(GEOTIFF_LIBRARY geotiff_archive xtiff)
+    SET(GEOTIFF_LIBRARY geotiff_archive xtiff proj)
   ENDIF()
   ADD_DEFINITIONS(-DEMGU_CV_WITH_TIFF)
   INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})

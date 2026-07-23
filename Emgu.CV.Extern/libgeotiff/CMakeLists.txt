@@ -37,7 +37,7 @@ SET(CMAKE_COLOR_MAKEFILE ON)
 MARK_AS_ADVANCED(CMAKE_VERBOSE_MAKEFILE)
 
 # Path to additional CMake modules
-SET(CMAKE_MODULE_PATH ${LIBGEOTIFF_DIR}/../cmake ${CMAKE_MODULE_PATH})
+SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 INCLUDE_DIRECTORIES("${LIBGEOTIFF_DIR}")
 
@@ -140,23 +140,18 @@ ADD_DEFINITIONS(-DHAVE_TIFF=1)
 
 INCLUDE_DIRECTORIES("${LIBGEOTIFF_DIR}/libxtiff")
 
-# PROJ.4 support - optional, default=ON
-SET(WITH_PROJ4 TRUE CACHE BOOL "Choose if PROJ.4 support should be built")
-
-IF(WITH_PROJ4)
+# PROJ support — use the FetchContent-provided target when available, otherwise
+# fall back to a system PROJ4 installation.
+IF(TARGET proj)
+    MESSAGE(STATUS "GeoTIFF: using PROJ target from FetchContent")
+    ADD_DEFINITIONS(-DHAVE_LIBPROJ=1)
+    # Include directories are propagated automatically via target_link_libraries below.
+ELSE()
     FIND_PACKAGE(PROJ4)
-
     IF(PROJ4_FOUND)
+        MESSAGE(STATUS "GeoTIFF: using system PROJ4")
         ADD_DEFINITIONS(-DHAVE_LIBPROJ=1)
         INCLUDE_DIRECTORIES(${PROJ4_INCLUDE_DIR})
-
-        IF(EXISTS "${PROJ4_INCLUDE_DIR}/projects.h")
-            MESSAGE(STATUS "Looking for projects.h header from PROJ.4 library - found")
-            ADD_DEFINITIONS(-DHAVE_PROJECTS_H=1)
-            INCLUDE_DIRECTORIES(${PROJ4_INCLUDE_DIR_2})
-        ELSE()
-            MESSAGE(FATAL_ERROR "Looking for projects.h from PROJ.4 library - not found")
-        ENDIF()
     ENDIF()
 ENDIF()
 
@@ -184,7 +179,7 @@ ADD_DEFINITIONS(-DHAVE_JPEG=${HAVE_JPEG})
 
 MESSAGE(STATUS "Generating geo_config.h header")
 
-CONFIGURE_FILE(${LIBGEOTIFF_DIR}/../cmake/geo_config.h.in
+CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/cmake/geo_config.h.in
     ${LIBGEOTIFF_DIR}/geo_config.h)
 
 MESSAGE(STATUS "Generating geo_config.h header - done")
@@ -320,13 +315,15 @@ SET(GEOTIFF_LIB_SOURCES
     "${LIBGEOTIFF_DIR}/geo_get.c"
     "${LIBGEOTIFF_DIR}/geo_names.c"
     "${LIBGEOTIFF_DIR}/geo_new.c"
+    "${LIBGEOTIFF_DIR}/geo_normalize.c"
     "${LIBGEOTIFF_DIR}/geo_print.c"
     "${LIBGEOTIFF_DIR}/geo_set.c"
     "${LIBGEOTIFF_DIR}/geo_simpletags.c"
     "${LIBGEOTIFF_DIR}/geo_strtod.c"
     "${LIBGEOTIFF_DIR}/geo_tiffp.c"
     "${LIBGEOTIFF_DIR}/geo_trans.c"
-    "${LIBGEOTIFF_DIR}/geo_write.c")
+    "${LIBGEOTIFF_DIR}/geo_write.c"
+    "${LIBGEOTIFF_DIR}/geotiff_proj4.c")
 
 IF (GEOTIFF_ENABLE_INCODE_EPSG)
     SET(GEOTIFF_LIB_CSV_SOURCES
@@ -349,6 +346,10 @@ IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${GEOTIFF_ARCHIVE_TARGET} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
 set_target_properties(${GEOTIFF_ARCHIVE_TARGET} PROPERTIES FOLDER "3rdparty")
+
+IF(TARGET proj)
+    target_link_libraries(${GEOTIFF_ARCHIVE_TARGET} PRIVATE proj)
+ENDIF()
 
 # Shared libgeotiff library
 #ADD_LIBRARY(${GEOTIFF_LIBRARY_TARGET} SHARED
