@@ -27,7 +27,7 @@ jobs:
         submodules: true
     - name: Install build dependencies
       run: |
-        apt-get install -y sudo
+        apt-get install -y sudo curl
         bash platforms/debian/trixie/apt_install_dependency
     - uses: actions/setup-dotnet@v6
       with:
@@ -66,7 +66,7 @@ jobs:
         submodules: true
     - name: Install build dependencies
       run: |
-        apt-get install -y sudo
+        apt-get install -y sudo curl
         bash platforms/debian/trixie/apt_install_dependency
     - uses: actions/setup-dotnet@v6
       with:
