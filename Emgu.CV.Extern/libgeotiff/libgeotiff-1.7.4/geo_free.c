@@ -15,7 +15,9 @@
 #include "geo_tiffp.h" /* external TIFF interface */
 #include "geo_keyp.h"  /* private interface       */
 
+#ifdef HAVE_LIBPROJ
 #include "proj.h"
+#endif
 
 /**********************************************************************
  *
@@ -59,7 +61,9 @@ void GTIFFree(GTIF* gtif)
 
     if (gtif->own_pj_context)
     {
+#ifdef HAVE_LIBPROJ
         proj_context_destroy(gtif->pj_context);
+#endif
     }
 
     _GTIFFree (gtif);

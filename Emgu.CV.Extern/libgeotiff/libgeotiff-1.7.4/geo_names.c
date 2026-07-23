@@ -18,7 +18,9 @@
 #include "geo_tiffp.h" /* for tag names */
 #include "geo_keyp.h"
 
+#ifdef HAVE_LIBPROJ
 #include "proj.h"
+#endif
 
 static const KeyInfo _formatInfo[] =  {
    {TYPE_BYTE,    "Byte"},
@@ -134,6 +136,7 @@ char *GTIFValueName(geokey_t key, int value)
    return (char*) FindName(FindTable(key), value);
 }
 
+#ifdef HAVE_LIBPROJ
 static void GetNameFromDatabase(GTIF* gtif,
                                 const char* pszCode,
                                 PJ_CATEGORY category,
@@ -159,6 +162,7 @@ static void GetNameFromDatabase(GTIF* gtif,
         pszOut[0] = 0;
     }
 }
+#endif
 
 const char *GTIFValueNameEx(GTIF* gtif, geokey_t key, int value)
 {
@@ -196,6 +200,7 @@ const char *GTIFValueNameEx(GTIF* gtif, geokey_t key, int value)
     {
         sprintf(gtif->szTmpBufferForGTIFValueNameEx,"Unknown-%d", value );
 
+#ifdef HAVE_LIBPROJ
         if( gtif->pj_context == NULL )
         {
             gtif->pj_context = proj_context_create();
@@ -273,6 +278,7 @@ const char *GTIFValueNameEx(GTIF* gtif, geokey_t key, int value)
             }
 
         }
+#endif
 
         return gtif->szTmpBufferForGTIFValueNameEx;
     }

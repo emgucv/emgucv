@@ -112,7 +112,7 @@ namespace Emgu.CV.Tiff
             int sizeOfElement = image.ElementSize;
             int tileRowSizeInBytes = TileRowSizeInBytes;
 
-            int width = TileRowSizeInBytes / (image.ElementSize * image.NumberOfChannels);
+            int width = TileRowSizeInBytes / image.ElementSize;
             Size tileSize = new Size(width, TileSizeInBytes / tileRowSizeInBytes);
             Size imageSize = originalROI.Equals(Rectangle.Empty) ? image.Size : originalROI.Size;
 

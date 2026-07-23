@@ -15,7 +15,11 @@
 
 #include <stdlib.h> /* for size_t */
 
+#ifdef HAVE_LIBPROJ
 #include "proj.h"
+#else
+typedef struct pj_ctx PJ_CONTEXT;
+#endif
 
 /*
  * This structure contains the internal program

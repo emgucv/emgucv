@@ -189,6 +189,23 @@ CONFIGURE_FILE(${LIBGEOTIFF_DIR}/../cmake/geo_config.h.in
 
 MESSAGE(STATUS "Generating geo_config.h header - done")
 
+###############################################################################
+# Generate geotiff.h from template
+
+SET(LIBGEOTIFF_MAJOR_VERSION 1)
+SET(LIBGEOTIFF_MINOR_VERSION 7)
+SET(LIBGEOTIFF_PATCH_VERSION 4)
+SET(LIBGEOTIFF_REV_VERSION 0)
+SET(LIBGEOTIFF_STRING_VERSION "1.7.4")
+SET(LIBGEOTIFF_VERSION "1740")
+
+MESSAGE(STATUS "Generating geotiff.h header")
+
+CONFIGURE_FILE(${LIBGEOTIFF_DIR}/geotiff.h.in
+    ${LIBGEOTIFF_DIR}/geotiff.h @ONLY)
+
+MESSAGE(STATUS "Generating geotiff.h header - done")
+
 
 ###############################################################################
 # Installation settings
@@ -303,15 +320,13 @@ SET(GEOTIFF_LIB_SOURCES
     "${LIBGEOTIFF_DIR}/geo_get.c"
     "${LIBGEOTIFF_DIR}/geo_names.c"
     "${LIBGEOTIFF_DIR}/geo_new.c"
-    "${LIBGEOTIFF_DIR}/geo_normalize.c"
     "${LIBGEOTIFF_DIR}/geo_print.c"
     "${LIBGEOTIFF_DIR}/geo_set.c"
     "${LIBGEOTIFF_DIR}/geo_simpletags.c"
     "${LIBGEOTIFF_DIR}/geo_strtod.c"
     "${LIBGEOTIFF_DIR}/geo_tiffp.c"
     "${LIBGEOTIFF_DIR}/geo_trans.c"
-    "${LIBGEOTIFF_DIR}/geo_write.c"
-    "${LIBGEOTIFF_DIR}/geotiff_proj4.c")
+    "${LIBGEOTIFF_DIR}/geo_write.c")
 
 IF (GEOTIFF_ENABLE_INCODE_EPSG)
     SET(GEOTIFF_LIB_CSV_SOURCES
