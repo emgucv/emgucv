@@ -1,0 +1,75 @@
+name: Debian Trixie Build
+
+on:
+  push:
+    branches: [ EMGUCV_5_0 ]
+  pull_request:
+    branches: [ EMGUCV_5_0 ]
+
+jobs:
+
+  build-x64:
+    name: Debian Trixie x64
+    runs-on: ubuntu-26.04
+    container: debian:13
+
+    # one day time out
+    timeout-minutes: 1440
+
+    steps:
+    - name: Install git
+      run: apt-get update -y && apt-get install -y git
+    - uses: actions/checkout@v7
+      with:
+        submodules: true
+    - name: Install build dependencies
+      run: |
+        apt-get install -y sudo
+        bash platforms/debian/trixie/apt_install_dependency
+    - name: Build Emgu CV native binary
+      run: ./cmake_configure
+      working-directory: platforms/debian/trixie/
+    - name: Build Emgu CV package
+      run: make package
+      working-directory: platforms/debian/trixie/build/
+    - uses: actions/upload-artifact@v7
+      with:
+        name: emgucv-debian-trixie-x64-zip-package
+        path: platforms/debian/trixie/build/*.zip
+    - uses: actions/upload-artifact@v7
+      with:
+        name: emgucv-debian-trixie-x64-nuget-package
+        path: platforms/nuget/*.nupkg
+
+  build-arm64:
+    name: Debian Trixie arm64
+    runs-on: ubuntu-26.04-arm
+    container: debian:13
+
+    # one day time out
+    timeout-minutes: 1440
+
+    steps:
+    - name: Install git
+      run: apt-get update -y && apt-get install -y git
+    - uses: actions/checkout@v7
+      with:
+        submodules: true
+    - name: Install build dependencies
+      run: |
+        apt-get install -y sudo
+        bash platforms/debian/trixie/apt_install_dependency
+    - name: Build Emgu CV native binary
+      run: ./cmake_configure
+      working-directory: platforms/debian/trixie/
+    - name: Build Emgu CV package
+      run: make package
+      working-directory: platforms/debian/trixie/build/
+    - uses: actions/upload-artifact@v7
+      with:
+        name: emgucv-debian-trixie-arm64-zip-package
+        path: platforms/debian/trixie/build/*.zip
+    - uses: actions/upload-artifact@v7
+      with:
+        name: emgucv-debian-trixie-arm64-nuget-package
+        path: platforms/nuget/*.nupkg
