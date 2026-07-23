@@ -5,6 +5,10 @@
 sudo apt install -y build-essential libtiff-dev libgeotiff-dev libpng-dev libgtk-4-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
   libavcodec-dev libswscale-dev libavformat-dev libopenexr-dev libdc1394-dev libv4l-dev \
   libeigen3-dev libopengl-dev cmake-curses-gui freeglut3-dev git libvtk9-dev qt6-base-dev \
-  mono-runtime mono-complete dotnet-sdk-10.0
+  mono-runtime mono-complete
+
+# dotnet-sdk-10.0 is not in the standard Debian repos.
+# Install it via the Microsoft package feed:
+# https://learn.microsoft.com/dotnet/core/install/linux-debian
   
 #  libmono-system-net-http4.0-cil libmono-system-io-compression4.0-cil
