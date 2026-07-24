@@ -91,12 +91,36 @@ if [ "$CV_CONTRIB_OPTION" != "" ]; then
 
     if [ "$2" == "openvino" ]; then
 	cd openvino
+	# NOTE: OpenVINO's CPU plugin uses the ARM Compute Library (ACL) which
+	# is built by scons. Install scons before running this script:
+	#   brew install scons
+	# The cmake-based ACL alternative (ENABLE_ARM_COMPUTE_CMAKE=ON) does not
+	# work here because docs/snippets and template_extension sub-projects call
+	# find_package(OpenVINO) during the build phase, which conflicts with the
+	# cmake-based ACL add_subdirectory already in use by the main project.
 	mkdir -p $BUILD_FOLDER
 	cd $BUILD_FOLDER
-	cmake $BUILD_ARCH $OSX_SYSROOT_OPTION -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" ../
-	cmake --build . --config Release --target install --parallel
-	CMAKE_FIND_ROOT_FOLDER=$CMAKE_FIND_ROOT_FOLDER\;$INSTALL_FOLDER/runtime/cmake
-	OPENVINO_OPTION=-DWITH_OPENVINO:BOOL=TRUE\ -DOpenVINO_DIR:STRING=$OPENVINO_INSTALL_FOLDER
+	cmake $BUILD_ARCH $OSX_SYSROOT_OPTION \
+	    -DBUILD_SHARED_LIBS:BOOL=OFF \
+	    -DCMAKE_BUILD_TYPE:STRING="Release" \
+	    -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" \
+	    -DENABLE_INTEL_GPU:BOOL=OFF \
+	    -DENABLE_INTEL_NPU:BOOL=OFF \
+	    -DENABLE_TESTS:BOOL=OFF \
+	    -DENABLE_SAMPLES:BOOL=OFF \
+	    -DENABLE_JS:BOOL=OFF \
+	    -DENABLE_OV_ONNX_FRONTEND:BOOL=OFF \
+	    -DENABLE_OV_TF_FRONTEND:BOOL=OFF \
+	    -DENABLE_OV_TF_LITE_FRONTEND:BOOL=OFF \
+	    -DENABLE_OV_PADDLE_FRONTEND:BOOL=OFF \
+	    -DENABLE_OV_PYTORCH_FRONTEND:BOOL=OFF \
+	    -DENABLE_OV_JAX_FRONTEND:BOOL=OFF \
+	    ../
+	cmake --build . --config Release --target install
+	OPENVINO_INSTALL_DIR=$INSTALL_FOLDER/runtime/cmake
+	TBB_OPENVINO_DIR=$INSTALL_FOLDER/runtime/3rdparty/tbb/lib/cmake/TBB
+	CMAKE_FIND_ROOT_FOLDER="$CMAKE_FIND_ROOT_FOLDER;$OPENVINO_INSTALL_DIR"
+	OPENVINO_OPTION="-DWITH_OPENVINO:BOOL=TRUE -DOPENCV_DNN_OPENVINO:BOOL=TRUE -DOpenVINO_DIR:STRING=$OPENVINO_INSTALL_DIR -DTBB_DIR:STRING=$TBB_OPENVINO_DIR"
 	cd ../..
     fi
     
