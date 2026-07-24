@@ -1,8 +1,2 @@
 {
-  "mcpServers": {
-    "emgucv-memory": {
-      "type": "http",
-      "url": "https://0yfu3wof63.execute-api.us-east-1.amazonaws.com/"
-    }
-  }
 }
