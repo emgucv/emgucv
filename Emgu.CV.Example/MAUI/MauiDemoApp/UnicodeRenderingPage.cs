@@ -143,7 +143,7 @@ namespace MauiDemoApp
             catch (Exception ex)
             {
                 _status.Text = "Error";
-                await DisplayAlert("Unicode Rendering", ex.Message, "OK");
+                await DisplayAlertAsync("Unicode Rendering", ex.Message, "OK");
             }
             finally
             {
