@@ -26,7 +26,7 @@
                     Page? page = Shell.Current;
                     if (page == null)
                         return System.Threading.Tasks.Task.FromResult(true);
-                    return page.DisplayAlert(
+                    return page.DisplayAlertAsync(
                         "Download model?",
                         $"This feature needs to download about {size} of model files (uses internet data). Download now?",
                         "Download", "Cancel");
