@@ -773,11 +773,99 @@ SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% ^
 :END_WITH_ARM
 
 
+REM PROJ (built from source to satisfy Emgu.CV.Extern's unconditional GeoTIFF
+REM dependency) requires a "sqlite3" executable plus the SQLite3 dev library
+REM and header. These are not guaranteed to be installed on the build machine.
+REM If missing, build a standalone (unmangled) sqlite3 from the sqlite3.c
+REM amalgamation already vendored by the vtk submodule
+REM (vtk/ThirdParty/sqlite/vtksqlite), and point CMake at it via
+REM SQLite3_ROOT/PATH. Skipped entirely if a system sqlite3 is already on
+REM PATH, or if the vtk submodule isn't checked out.
+where sqlite3.exe >nul 2>nul
+IF NOT ERRORLEVEL 1 GOTO END_CHECK_SQLITE3
+
+SET LOCAL_SQLITE3_DIR=%cd%\_local_sqlite3
+SET VTK_SQLITE_SRC_DIR=%ROOT_SRC_FOLDER%\vtk\ThirdParty\sqlite\vtksqlite
+
+IF EXIST "%LOCAL_SQLITE3_DIR%\bin\sqlite3.exe" GOTO USE_LOCAL_SQLITE3
+IF NOT EXIST "%VTK_SQLITE_SRC_DIR%\sqlite3.c" GOTO END_CHECK_SQLITE3
+
+ECHO sqlite3 not found on this machine. Building a standalone copy from the vendored VTK sqlite3 amalgamation, needed by PROJ/GeoTIFF.
+
+REM The DEVENV variable set above already holds a quoted "...devenv.com"
+REM path. Derive the matching vcvars script via substring substitution on
+REM that existing, already-quoted variable instead of building a fresh path
+REM from the raw installationPath-style variables computed earlier (those
+REM are unquoted and can contain "Program Files (x86)", which is unsafe to
+REM splice into a fresh SET target).
+REM
+REM Use plain %1 (no trailing percent) rather than this file's usual %1%
+REM style here: combining the redundant trailing "%" of %1% with a
+REM %VAR:search=replace% substitution on the same line confuses CMD's
+REM percent-pairing and corrupts the rest of the line. %1% is fine
+REM everywhere else in this file since nowhere else pairs it with a
+REM substitution expansion on the same line.
+SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvars64.bat%
+IF "%1"=="x86" SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvars32.bat%
+IF "%1"=="arm" SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvarsamd64_arm.bat%
+IF "%1"=="arm64" SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvarsamd64_arm64.bat%
+
+REM DEVENV may instead be an MSBuild.exe fallback path on BuildTools-only
+REM installs, which won't match the substitution above. Bail out gracefully
+REM (skip the standalone-sqlite3 build, letting the original PROJ/CMake
+REM error surface as before this fix) rather than calling a bogus path.
+IF NOT EXIST %SQLITE_VCVARS_SCRIPT% GOTO END_CHECK_SQLITE3
+
+mkdir "%LOCAL_SQLITE3_DIR%\src" 2>nul
+mkdir "%LOCAL_SQLITE3_DIR%\include" 2>nul
+mkdir "%LOCAL_SQLITE3_DIR%\lib" 2>nul
+mkdir "%LOCAL_SQLITE3_DIR%\bin" 2>nul
+
+copy /Y "%VTK_SQLITE_SRC_DIR%\sqlite3.c" "%LOCAL_SQLITE3_DIR%\src\" >nul
+copy /Y "%VTK_SQLITE_SRC_DIR%\sqlite3.h" "%LOCAL_SQLITE3_DIR%\src\" >nul
+copy /Y "%VTK_SQLITE_SRC_DIR%\shell.c" "%LOCAL_SQLITE3_DIR%\src\" >nul
+copy /Y "%VTK_SQLITE_SRC_DIR%\sqlite3.h" "%LOCAL_SQLITE3_DIR%\include\" >nul
+
+REM sqlite3.c/sqlite3.h #include two CMake-generated headers in VTK's real
+REM build: vtk_sqlite_mangle.h (renames every sqlite3_* symbol so VTK's copy
+REM can't clash with others in the same process) and vtksqlite_export.h (the
+REM dllexport/import macro). Provide no-op stand-ins so the amalgamation
+REM compiles standalone with normal, unmangled sqlite3_* symbol names.
+ECHO #ifndef vtk_sqlite_mangle_h> "%LOCAL_SQLITE3_DIR%\src\vtk_sqlite_mangle.h"
+ECHO #define vtk_sqlite_mangle_h>> "%LOCAL_SQLITE3_DIR%\src\vtk_sqlite_mangle.h"
+ECHO #endif>> "%LOCAL_SQLITE3_DIR%\src\vtk_sqlite_mangle.h"
+
+ECHO #ifndef VTKSQLITE_EXPORT_H> "%LOCAL_SQLITE3_DIR%\src\vtksqlite_export.h"
+ECHO #define VTKSQLITE_EXPORT_H>> "%LOCAL_SQLITE3_DIR%\src\vtksqlite_export.h"
+ECHO #define SQLITE_API>> "%LOCAL_SQLITE3_DIR%\src\vtksqlite_export.h"
+ECHO #define VTKSQLITE_DEPRECATED>> "%LOCAL_SQLITE3_DIR%\src\vtksqlite_export.h"
+ECHO #define VTKSQLITE_NO_EXPORT>> "%LOCAL_SQLITE3_DIR%\src\vtksqlite_export.h"
+ECHO #endif>> "%LOCAL_SQLITE3_DIR%\src\vtksqlite_export.h"
+
+copy /Y "%LOCAL_SQLITE3_DIR%\src\vtk_sqlite_mangle.h" "%LOCAL_SQLITE3_DIR%\include\" >nul
+copy /Y "%LOCAL_SQLITE3_DIR%\src\vtksqlite_export.h" "%LOCAL_SQLITE3_DIR%\include\" >nul
+
+REM Nested double quotes inside a single "cmd /c "..."" string are unreliable
+REM in batch, so drive the compile steps through a small generated helper
+REM script instead of one inline nested-quoted command line.
+ECHO @call %SQLITE_VCVARS_SCRIPT%> "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
+ECHO cd /d "%LOCAL_SQLITE3_DIR%\src">> "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
+ECHO cl /nologo /c /O2 /DSQLITE_THREADSAFE=1 /DSQLITE_ENABLE_COLUMN_METADATA sqlite3.c>> "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
+ECHO lib /nologo sqlite3.obj /OUT:"%LOCAL_SQLITE3_DIR%\lib\sqlite3.lib">> "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
+ECHO cl /nologo /O2 /DSQLITE_THREADSAFE=1 /Fe:"%LOCAL_SQLITE3_DIR%\bin\sqlite3.exe" shell.c sqlite3.c>> "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
+call "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
+
+:USE_LOCAL_SQLITE3
+SET SQLite3_ROOT=%LOCAL_SQLITE3_DIR%
+SET PATH=%LOCAL_SQLITE3_DIR%\bin;%PATH%
+:END_CHECK_SQLITE3
+
+
 :RUN_CMAKE
 @echo on
 
 
-%CMAKE% %EMGU_CV_CMAKE_CONFIG_FLAGS% ..\ 
+%CMAKE% %EMGU_CV_CMAKE_CONFIG_FLAGS% ..\
 
 :BUILD
 IF NOT "%7%"=="build" GOTO END
