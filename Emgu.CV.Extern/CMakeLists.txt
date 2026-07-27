@@ -4191,6 +4191,23 @@ IF(DEFINED EMGUCV_PLATFORM_TOOLSET)
   set_target_properties(${the_target} PROPERTIES PLATFORM_TOOLSET ${EMGUCV_PLATFORM_TOOLSET})
 ENDIF()
 
+# OpenCV sets /DELAYLOAD flags inside its own subdirectory scope via
+# ocv_register_modules(), but cmake does not propagate CMAKE_SHARED_LINKER_FLAGS
+# changes from a subdirectory back to the parent scope. Replicate the same logic
+# here using target_link_options() so cvextern.dll also delay-loads OpenCV DLLs.
+if(MSVC AND BUILD_SHARED_LIBS AND ENABLE_DELAYLOAD AND NOT BUILD_opencv_world)
+  set(_cvextern_delay_flags "/IGNORE:4199")
+  foreach(_mod ${OPENCV_MODULES_BUILD})
+    if(NOT _mod STREQUAL "opencv_core" AND NOT _mod MATCHES "bindings_generator|python")
+      list(APPEND _cvextern_delay_flags
+        "/DELAYLOAD:${_mod}${OPENCV_VERSION_MAJOR}${OPENCV_VERSION_MINOR}${OPENCV_VERSION_PATCH}.dll")
+    endif()
+  endforeach()
+  target_link_libraries(${the_target} PRIVATE delayimp)
+  target_link_options(${the_target} PRIVATE ${_cvextern_delay_flags})
+  message(STATUS "cvextern: DELAYLOAD enabled for ${OPENCV_VERSION_MAJOR}${OPENCV_VERSION_MINOR}${OPENCV_VERSION_PATCH} OpenCV modules")
+endif()
+
 #IF(WITH_IPP)
 #  target_link_libraries(${the_target} ippdc_l)
 #ENDIF()  
