@@ -857,16 +857,25 @@ try {
     }
 
     # --- Run CMake configure -------------------------------------------------
-    # Derive the matching vcvars script from the already-resolved DevEnvPath
-    # (e.g. "...\Common7\IDE\devenv.com" -> "...\VC\Auxiliary\Build\vcvars64.bat")
-    # rather than building a fresh path from raw installationPath variables.
-    $vcVarsName = 'vcvars64.bat'
-    if ($Arch -eq 'x86') { $vcVarsName = 'vcvars32.bat' }
-    if ($Arch -eq 'arm') { $vcVarsName = 'vcvarsamd64_arm.bat' }
-    if ($Arch -eq 'arm64') { $vcVarsName = 'vcvarsamd64_arm64.bat' }
-    $vcVarsScript = $vsEnv.DevEnvPath -replace 'Common7\\IDE\\devenv\.com', "VC\Auxiliary\Build\$vcVarsName"
+    # sqlite3.exe (built below via Set-Sqlite3Fallback, if needed) is a
+    # build-time tool that PROJ's CMake configure step directly *executes*
+    # to generate proj.db -- it must run on THIS machine, not wherever
+    # -Arch cross-compiles to. Using a target-arch vcvars script here (e.g.
+    # vcvarsamd64_arm64.bat for -Arch arm64) would produce a sqlite3.exe
+    # that can't launch on a non-ARM64 host, since that script's compiler
+    # targets ARM64 output regardless of what CPU is actually running it.
+    # Derive a vcvars script matching the actual host OS architecture
+    # instead, via the same DevEnvPath-substitution technique (avoids
+    # building a fresh path from raw installationPath variables).
+    $hostVcVarsName = 'vcvars64.bat'
+    switch ([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) {
+        'X86' { $hostVcVarsName = 'vcvars32.bat' }
+        'Arm64' { $hostVcVarsName = 'vcvarsarm64.bat' }
+        default { $hostVcVarsName = 'vcvars64.bat' }
+    }
+    $hostVcVarsScript = $vsEnv.DevEnvPath -replace 'Common7\\IDE\\devenv\.com', "VC\Auxiliary\Build\$hostVcVarsName"
 
-    Set-Sqlite3Fallback -BuildFolder $buildFolder -RootSrcFolder $repoRoot -VcVarsScript $vcVarsScript
+    Set-Sqlite3Fallback -BuildFolder $buildFolder -RootSrcFolder $repoRoot -VcVarsScript $hostVcVarsScript
 
     Invoke-Native -FilePath $vsEnv.CMakeExe -ArgumentList ($emguFlags.ToArray() + @('..'))
 
