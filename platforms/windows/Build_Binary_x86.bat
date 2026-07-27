@@ -805,10 +805,20 @@ REM %VAR:search=replace% substitution on the same line confuses CMD's
 REM percent-pairing and corrupts the rest of the line. Plain %1 (used
 REM throughout this file) is unaffected -- only the %1% form is unsafe,
 REM and only when paired with a substitution on the same line.
+REM
+REM sqlite3.exe is executed directly by CMake (PROJ's generate_proj_db.cmake)
+REM during configure to generate proj.db -- it must run on THIS machine, not
+REM wherever %1 (the -Arch cross-compilation target) is aimed at. Select the
+REM vcvars script from the host's own architecture instead of %1.
+REM PROCESSOR_ARCHITEW6432 is only set when this process is itself running
+REM under WOW64 (i.e. a 32-bit cmd.exe on a 64-bit host); it then holds the
+REM true host arch, whereas PROCESSOR_ARCHITECTURE would misreport "x86".
+SET HOST_ARCH=%PROCESSOR_ARCHITECTURE%
+IF DEFINED PROCESSOR_ARCHITEW6432 SET HOST_ARCH=%PROCESSOR_ARCHITEW6432%
+
 SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvars64.bat%
-IF "%1"=="x86" SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvars32.bat%
-IF "%1"=="arm" SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvarsamd64_arm.bat%
-IF "%1"=="arm64" SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvarsamd64_arm64.bat%
+IF "%HOST_ARCH%"=="x86" SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvars32.bat%
+IF "%HOST_ARCH%"=="ARM64" SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvarsarm64.bat%
 
 REM DEVENV may instead be an MSBuild.exe fallback path on BuildTools-only
 REM installs, which won't match the substitution above. Bail out gracefully
