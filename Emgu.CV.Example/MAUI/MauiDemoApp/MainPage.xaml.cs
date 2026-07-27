@@ -548,17 +548,21 @@ namespace MauiDemoApp
             };
 
             // ---------- Sort the demo buttons into broad groups ----------
-            string[] categoryNames = { "Detection", "Image & 3D", "Video" };
+            string[] categoryNames = { "Detection", "Image & 3D", "Video", "LLM" };
             string[] pillGlyphs = { "", "", "" }; // crop_free, view_in_ar, smart_display // crop_free, view_in_ar, smart_display
-            var categoryDemos = new List<Button>[] { new List<Button>(), new List<Button>(), new List<Button>() };
+            // Extend the pill glyphs for the new LLM tab. Reuse the existing three by
+            // index (so the glyph characters don't have to be retyped) and give LLM the
+            // qwen glyph.
+            pillGlyphs = new string[] { pillGlyphs[0], pillGlyphs[1], pillGlyphs[2], demoGlyph("qwen") };
+            var categoryDemos = new List<Button>[] { new List<Button>(), new List<Button>(), new List<Button>(), new List<Button>() };
 
             Func<string, int> categorize = (text) =>
             {
                 string t = (text ?? "").ToLowerInvariant();
+                if (t.Contains("qwen") || t.Contains("smolvlm")) return 3;   // LLM
                 if (t.Contains("video")) return 2;
                 if (t.Contains("hello") || t.Contains("planar") || t.Contains("feature matching")
-                    || t.Contains("super resolution") || t.Contains("3d") || t.Contains("unicode")
-                    || t.Contains("qwen") || t.Contains("smolvlm"))
+                    || t.Contains("super resolution") || t.Contains("3d") || t.Contains("unicode"))
                     return 1;
                 return 0;
             };

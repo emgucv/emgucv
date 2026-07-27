@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -177,7 +178,7 @@ namespace MauiDemoApp
             string name;
             if (choice == "library")
             {
-                FileResult file = await MediaPicker.Default.PickPhotoAsync();
+                FileResult file = (await MediaPicker.Default.PickPhotosAsync())?.FirstOrDefault();
                 if (file == null)
                     return;
                 SetBusy(true, "Loading photo…");
@@ -195,7 +196,7 @@ namespace MauiDemoApp
             }
             if (m == null)
             {
-                await DisplayAlert("Feature Matching", "That image could not be loaded.", "OK");
+                await DisplayAlertAsync("Feature Matching", "That image could not be loaded.", "OK");
                 return;
             }
 
@@ -238,7 +239,7 @@ namespace MauiDemoApp
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Feature Matching", ex.Message, "OK");
+                await DisplayAlertAsync("Feature Matching", ex.Message, "OK");
             }
             finally
             {
@@ -276,6 +277,18 @@ namespace MauiDemoApp
             Mat m = new Mat();
             CvInvoke.Imdecode(bytes, ImreadModes.ColorBgr, m);
             if (m.IsEmpty) { m.Dispose(); return null; }
+            // Full-resolution phone photos (12MP+) can exhaust memory when run
+            // through SIFT/KAZE and crash the native side. Cap the longest side.
+            const int maxSide = 1600;
+            int longest = Math.Max(m.Width, m.Height);
+            if (longest > maxSide)
+            {
+                double scale = (double)maxSide / longest;
+                Mat resized = new Mat();
+                CvInvoke.Resize(m, resized, System.Drawing.Size.Empty, scale, scale, Inter.Area);
+                m.Dispose();
+                return resized;
+            }
             return m;
         }
     }
