@@ -849,6 +849,11 @@ try {
         }
         $emguFlags.AddRange([string[]]$ippBuildFlags)
         $emguFlags.Add("-DCPU_DISPATCH:STRING=$cpuDispatchFlags")
+        # MLAS x86 assembly kernels (SgemmKernelSse2.S) require GNU as, which the
+        # Visual Studio generator cannot invoke for .S files — the .obj is never
+        # produced and the DNN link fails. Disable MLAS for 32-bit x86 Windows;
+        # the DNN module falls back to its built-in SGEMM.
+        if ($Arch -eq 'x86') { $emguFlags.Add('-DWITH_MLAS:BOOL=FALSE') }
     }
 
     # --- Run CMake configure -------------------------------------------------
