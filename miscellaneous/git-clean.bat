@@ -71,12 +71,12 @@ IF NOT "%1%"=="--keep_binary" GOTO CLEAN_ALL
 
 :KEEP_BINARY
 move libs opencv\
-git clean -d -f -x "." 
+git clean -d -f -x -e ".mcp.json" -e ".claude/settings.local.json" "."
 move opencv\libs .\
 GOTO END_OF_CLEAN
 
 :CLEAN_ALL
-git clean -d -f -x "." 
+git clean -d -f -x -e ".mcp.json" -e ".claude/settings.local.json" "."
 
 :END_OF_CLEAN
 

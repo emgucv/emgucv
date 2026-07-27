@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -440,7 +441,7 @@ namespace MauiDemoApp
             {
                 FileResult file = action == "camera"
                     ? await MediaPicker.Default.CapturePhotoAsync()
-                    : await MediaPicker.Default.PickPhotoAsync();
+                    : (await MediaPicker.Default.PickPhotosAsync())?.FirstOrDefault();
                 if (file == null)
                     return;
 
@@ -454,7 +455,7 @@ namespace MauiDemoApp
                 if (m.IsEmpty)
                 {
                     m.Dispose();
-                    await DisplayAlert("Photo", "That file could not be read as an image.", "OK");
+                    await DisplayAlertAsync("Photo", "That file could not be read as an image.", "OK");
                     return;
                 }
                 SetCurrentImage(MaskRcnnPage.Downscale(m, 1024));
@@ -462,7 +463,7 @@ namespace MauiDemoApp
             catch (Exception ex)
             {
                 SetBusy(false);
-                await DisplayAlert("Could not load photo", ex.Message, "OK");
+                await DisplayAlertAsync("Could not load photo", ex.Message, "OK");
             }
         }
 
@@ -530,8 +531,8 @@ namespace MauiDemoApp
             _sheetScrim.Opacity = 0;
             _sheetCard.TranslationY = 700;
             _ = Task.WhenAll(
-                _sheetScrim.FadeTo(1, 220, Easing.CubicOut),
-                _sheetCard.TranslateTo(0, 0, 260, Easing.CubicOut));
+                _sheetScrim.FadeToAsync(1, 220, Easing.CubicOut),
+                _sheetCard.TranslateToAsync(0, 0, 260, Easing.CubicOut));
             return _sheetTcs.Task;
         }
 
@@ -541,8 +542,8 @@ namespace MauiDemoApp
                 return;
             _sheetAnimating = true;
             await Task.WhenAll(
-                _sheetScrim.FadeTo(0, 180, Easing.CubicIn),
-                _sheetCard.TranslateTo(0, 700, 220, Easing.CubicIn));
+                _sheetScrim.FadeToAsync(0, 180, Easing.CubicIn),
+                _sheetCard.TranslateToAsync(0, 700, 220, Easing.CubicIn));
             _sheetOverlay.IsVisible = false;
             _sheetAnimating = false;
             _sheetTcs?.TrySetResult(value);
@@ -811,7 +812,7 @@ namespace MauiDemoApp
             {
                 expanded = !expanded;
                 details.IsVisible = expanded;
-                await chevron.RotateTo(expanded ? 90 : 0, 180, Easing.CubicOut);
+                await chevron.RotateToAsync(expanded ? 90 : 0, 180, Easing.CubicOut);
             };
             headerRow.GestureRecognizers.Add(tap);
 
@@ -878,7 +879,7 @@ namespace MauiDemoApp
             _pickerSelection = pickerSelection;
 
             BackgroundColor = MaskRcnnPage.PageBackground;
-            On<Microsoft.Maui.Controls.PlatformConfiguration.iOS>().SetUseSafeArea(true);
+            this.SafeAreaEdges = Microsoft.Maui.SafeAreaEdges.All;
             AllowAvCaptureSession = true;
             outputRecorder.BufferReceived += OnCameraFrame;
 

@@ -144,13 +144,57 @@ namespace Emgu.Util
         }
 #else
         /// <summary>
-        /// Download the files. 
+        /// Optional confirmation invoked before any file is downloaded. It receives the
+        /// estimated total number of bytes still to download (files not already present);
+        /// return false to abort the download. When null (the default) downloads proceed
+        /// without asking, so existing behaviour is unchanged. Lets a UI prompt the user
+        /// before large model downloads.
+        /// </summary>
+        public static Func<long, Task<bool>> DownloadConfirmation = null;
+
+        /// <summary>
+        /// Download the files.
         /// </summary>
         /// <param name="retry">The number of retries.</param>
         /// <returns>The async Task</returns>
         public async Task Download(int retry = 1)
         {
-            await Download( _files.ToArray(), retry, this.OnDownloadProgressChanged);
+            DownloadableFile[] files = _files.ToArray();
+
+            var confirm = DownloadConfirmation;
+            if (confirm != null)
+            {
+                long total = 0;
+                bool anyPending = false;
+                foreach (DownloadableFile f in files)
+                {
+                    if (f.Url != null && !f.IsLocalFileValid)
+                    {
+                        anyPending = true;
+                        total += await GetRemoteSizeAsync(f.Url);
+                    }
+                }
+                if (anyPending && !await confirm(total))
+                    throw new OperationCanceledException("Download cancelled by the user.");
+            }
+
+            await Download(files, retry, this.OnDownloadProgressChanged);
+        }
+
+        // HEAD the url to read its Content-Length (0 if unavailable). Follows redirects.
+        private static async Task<long> GetRemoteSizeAsync(String url)
+        {
+            try
+            {
+                using (var http = new System.Net.Http.HttpClient())
+                using (var req = new System.Net.Http.HttpRequestMessage(System.Net.Http.HttpMethod.Head, url))
+                using (var resp = await http.SendAsync(req, System.Net.Http.HttpCompletionOption.ResponseHeadersRead))
+                    return resp.Content.Headers.ContentLength ?? 0;
+            }
+            catch
+            {
+                return 0;
+            }
         }
 
         private static async Task Download(

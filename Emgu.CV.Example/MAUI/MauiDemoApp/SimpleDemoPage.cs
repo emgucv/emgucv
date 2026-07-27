@@ -145,8 +145,8 @@ namespace MauiDemoApp
             _sheetScrim.Opacity = 0;
             _sheetCard.TranslationY = 700;
             _ = System.Threading.Tasks.Task.WhenAll(
-                _sheetScrim.FadeTo(1, 220, Easing.CubicOut),
-                _sheetCard.TranslateTo(0, 0, 260, Easing.CubicOut));
+                _sheetScrim.FadeToAsync(1, 220, Easing.CubicOut),
+                _sheetCard.TranslateToAsync(0, 0, 260, Easing.CubicOut));
             return _sheetTcs.Task;
         }
 
@@ -208,8 +208,8 @@ namespace MauiDemoApp
                 return;
             _sheetAnimating = true;
             await System.Threading.Tasks.Task.WhenAll(
-                _sheetScrim.FadeTo(0, 180, Easing.CubicIn),
-                _sheetCard.TranslateTo(0, 700, 220, Easing.CubicIn));
+                _sheetScrim.FadeToAsync(0, 180, Easing.CubicIn),
+                _sheetCard.TranslateToAsync(0, 700, 220, Easing.CubicIn));
             _sheetOverlay.IsVisible = false;
             _sheetAnimating = false;
             _sheetTcs?.TrySetResult(value);

@@ -1,33 +1,33 @@
 REM @echo off
 
 REM POSSIBLE OPTIONS: 
-REM %1%: "x86_64", "x86", "arm", "arm64"
-REM %2%: "gpu", build with CUDA
-REM %2%: "core", build only the core components
-REM %2%: "mini", build only the minimum components (fewer components than "core" option above)
-REM %3%: "intel_inf", build with intel compiler and using OpenVino
-REM %3%: "intel", build with intel compiler
-REM %3%: "inf", build with OpenVino 
-REM %3%: "WindowsStore10", target UWP 
-REM %3%: "vs2015", force to build with vs_2015, it may no longer work as of 2020
-REM %3%: "vs2022", force to build with vs_2022
-REM %3%: "commercial", use to enable optimization with targeting 32-bit architecture
-REM %4%: "nonfree", build the nonfree module
-REM %4%: "openni", build the openni module
-REM %4%: "depthai", build the openni module
-REM %5%: "doc", this flag indicates if we should build the documentation
-REM %6%: "package", this flag indicates if we should build the ".zip" and ".exe" package
-REM %7%: "build", if set to "build", the script will also build the target
-REM %8%: "nuget", this flag indicates if we should build the nuget package
-REM %9%: Use this field for the CUDA_ARCH_BIN_OPTION if you want to specify it manually. e.g. "6.1"
+REM %1: "x86_64", "x86", "arm", "arm64"
+REM %2: "gpu", build with CUDA
+REM %2: "core", build only the core components
+REM %2: "mini", build only the minimum components (fewer components than "core" option above)
+REM %3: "intel_inf", build with intel compiler and using OpenVino
+REM %3: "intel", build with intel compiler
+REM %3: "inf", build with OpenVino 
+REM %3: "WindowsStore10", target UWP 
+REM %3: "vs2015", force to build with vs_2015, it may no longer work as of 2020
+REM %3: "vs2022", force to build with vs_2022
+REM %3: "commercial", use to enable optimization with targeting 32-bit architecture
+REM %4: "nonfree", build the nonfree module
+REM %4: "openni", build the openni module
+REM %4: "depthai", build the openni module
+REM %5: "doc", this flag indicates if we should build the documentation
+REM %6: "package", this flag indicates if we should build the ".zip" and ".exe" package
+REM %7: "build", if set to "build", the script will also build the target
+REM %8: "nuget", this flag indicates if we should build the nuget package
+REM %9: Use this field for the CUDA_ARCH_BIN_OPTION if you want to specify it manually. e.g. "6.1"
 
-SET BUILD_FOLDER=build_%1%
+SET BUILD_FOLDER=build_%1
 SET BUILD_TOOLS_FOLDER=C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools
 
-IF "%1%"=="x86" GOTO ENV_x86
-IF "%1%"=="x86_64" GOTO ENV_x64
-IF "%1%"=="arm" GOTO ENV_ARM
-IF "%1%"=="arm64" GOTO ENV_ARM64
+IF "%1"=="x86" GOTO ENV_x86
+IF "%1"=="x86_64" GOTO ENV_x64
+IF "%1"=="arm" GOTO ENV_ARM
+IF "%1"=="arm64" GOTO ENV_ARM64
 
 GOTO ENV_END
 
@@ -72,20 +72,20 @@ IF NOT EXIST %BUILD_FOLDER% mkdir %BUILD_FOLDER%
 cd %BUILD_FOLDER%
 
 SET NETFX_CORE=""
-IF "%3%"=="WindowsPhone81" SET NETFX_CORE="TRUE" 
-IF "%3%"=="WindowsStore81" SET NETFX_CORE="TRUE"
-IF "%3%"=="WindowsStore10" SET NETFX_CORE="TRUE"
+IF "%3"=="WindowsPhone81" SET NETFX_CORE="TRUE" 
+IF "%3"=="WindowsStore81" SET NETFX_CORE="TRUE"
+IF "%3"=="WindowsStore10" SET NETFX_CORE="TRUE"
 
 SET OS_MODE=
-IF "%1%"=="x86_64" SET OS_MODE= Win64
-IF "%1%"=="arm" SET OS_MODE= ARM
-IF "%1%"=="arm64" SET OS_MODE= ARM64
+IF "%1"=="x86_64" SET OS_MODE= Win64
+IF "%1"=="arm" SET OS_MODE= ARM
+IF "%1"=="arm64" SET OS_MODE= ARM64
 
 SET BUILD_ARCH=
-IF "%1%"=="x86_64" SET BUILD_ARCH=-A x64
-IF "%1%"=="x86" SET BUILD_ARCH=-A Win32
-IF "%1%"=="arm" SET BUILD_ARCH=-A ARM
-IF "%1%"=="arm64" SET BUILD_ARCH=-A ARM64
+IF "%1"=="x86_64" SET BUILD_ARCH=-A x64
+IF "%1"=="x86" SET BUILD_ARCH=-A Win32
+IF "%1"=="arm" SET BUILD_ARCH=-A ARM
+IF "%1"=="arm64" SET BUILD_ARCH=-A ARM64
 
 SET PROGRAMFILES_DIR_X86=%programfiles(x86)%
 if NOT EXIST "%PROGRAMFILES_DIR_X86%" SET PROGRAMFILES_DIR_X86=%programfiles%
@@ -124,7 +124,7 @@ IF EXIST "%MSBUILD_BUILDTOOLS%" SET DEVENV="%MSBUILD_BUILDTOOLS%"
 IF EXIST %VS2005% SET DEVENV=%VS2005% 
 IF EXIST %VS2008% SET DEVENV=%VS2008%
 IF EXIST %VS2010% SET DEVENV=%VS2010%
-IF "%4%"=="openni" GOTO SET_BUILD_TYPE
+IF "%4"=="openni" GOTO SET_BUILD_TYPE
 IF EXIST %VS2012% SET DEVENV=%VS2012%
 IF EXIST %VS2013% SET DEVENV=%VS2013%
 IF EXIST %VS2015% SET DEVENV=%VS2015%
@@ -137,40 +137,40 @@ IF EXIST "%PROGRAMW6432%\CMake\bin\cmake.exe" SET CMAKE="%PROGRAMW6432%\CMake\bi
 IF EXIST "%PROGRAMW6432%\CMake\bin\cmake.exe" SET CMAKE="%PROGRAMW6432%\CMake\bin\cmake.exe"
 IF EXIST "%VS2022_DIR%\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" SET CMAKE="%VS2022_DIR%\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"
 REM IF cuda is enabled, do not use CMAKE from VS2026. It will only generate solution for VS2026
-REM IF "%2%"=="gpu" GOTO END_FIND_CMAKE
-IF "%3%"=="vs2022" GOTO END_FIND_CMAKE
+REM IF "%2"=="gpu" GOTO END_FIND_CMAKE
+IF "%3"=="vs2022" GOTO END_FIND_CMAKE
 IF EXIST "%VS2026_DIR%\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" SET CMAKE="%VS2026_DIR%\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe"
 :END_FIND_CMAKE
 IF EXIST "CMakeCache.txt" del CMakeCache.txt
 
 
 REM CUDA 8.5 only support VS2015, if we target GPU we will stop checking for newer version of Visual Studio
-REM IF "%2%"=="gpu" GOTO SET_BUILD_TYPE
+REM IF "%2"=="gpu" GOTO SET_BUILD_TYPE
 
 REM For windows phone or store 81 build we should use VS2015
-IF "%3%"=="WindowsPhone81" GOTO SET_BUILD_TYPE
+IF "%3"=="WindowsPhone81" GOTO SET_BUILD_TYPE
 
 REM Only check for VS2017 if there are no other suitable Visual Studio installation
 REM We may default to VS2017 once CUDA 9 supports VS2017
 REM IF EXIST %DEVENV% GOTO SET_BUILD_TYPE
 
-IF "%3%"=="vs2015" GOTO SET_BUILD_TYPE
+IF "%3"=="vs2015" GOTO SET_BUILD_TYPE
 
 IF EXIST %VS2017% SET DEVENV=%VS2017%
 REM CUDA 9 only support VS2017, if we target GPU we will stop checking for newer version of Visual Studio
 
 REM Intel compiler is not compatible with VS2019 16.2, if we are compiling with Intel compiler, skip VS2019
-REM IF "%3%"=="intel" GOTO SET_BUILD_TYPE
-REM IF "%3%"=="intel_inf" GOTO SET_BUILD_TYPE
+REM IF "%3"=="intel" GOTO SET_BUILD_TYPE
+REM IF "%3"=="intel_inf" GOTO SET_BUILD_TYPE
 
 IF EXIST %VS2019% SET DEVENV=%VS2019%
 
 IF EXIST %VS2022% SET DEVENV=%VS2022%
 
-IF "%3%"=="vs2022" GOTO SET_BUILD_TYPE
+IF "%3"=="vs2022" GOTO SET_BUILD_TYPE
 
 REM DO NOT USE VS2026 if we are building for CUDA
-REM IF "%2%"=="gpu" GOTO SET_BUILD_TYPE
+REM IF "%2"=="gpu" GOTO SET_BUILD_TYPE
 
 IF EXIST %VS2026% SET DEVENV=%VS2026%
 
@@ -211,7 +211,7 @@ SET VTK_INSTALL_DIR=%INSTALL_FOLDER:\=/%/lib/cmake/vtk-9.6
 SET GENERAL_CMAKE_CONFIG_FLAGS=%GENERAL_CMAKE_CONFIG_FLAGS% -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="%INSTALL_FOLDER:\=/%" -DCMAKE_FIND_ROOT_PATH:STRING="%INSTALL_FOLDER:\=/%;%OPENVINO_INSTALL_DIR%;%TBB_INSTALL_DIR%;%VTK_INSTALL_DIR%"
 REM -DCMAKE_CXX_STANDARD:STRING=17
  
-IF NOT "%3%"=="WindowsStore10" GOTO END_CONFIG_WINDOWS_STORE_10_GENERAL_CMAKE_CONFIG_FLAGS
+IF NOT "%3"=="WindowsStore10" GOTO END_CONFIG_WINDOWS_STORE_10_GENERAL_CMAKE_CONFIG_FLAGS
 SET GENERAL_CMAKE_CONFIG_FLAGS=%GENERAL_CMAKE_CONFIG_FLAGS% -DCMAKE_SYSTEM_NAME:String="WindowsStore" 
 IF %DEVENV%==%VS2017% SET GENERAL_CMAKE_CONFIG_FLAGS=%GENERAL_CMAKE_CONFIG_FLAGS% -DCMAKE_SYSTEM_VERSION:String="10.0.14393.0"
 IF %DEVENV%==%VS2019% SET GENERAL_CMAKE_CONFIG_FLAGS=%GENERAL_CMAKE_CONFIG_FLAGS% -DCMAKE_SYSTEM_VERSION:String="10.0.18362.0"
@@ -247,15 +247,15 @@ REM SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% ^
 REM -DDISABLE_FORCE_DEBUG_POSTFIX:BOOL=TRUE 
 
 REM Setup the contrib modules
-IF "%2%"=="mini" GOTO CONFIG_MINI
-IF "%2%"=="core" GOTO CONFIG_CORE
+IF "%2"=="mini" GOTO CONFIG_MINI
+IF "%2"=="core" GOTO CONFIG_CORE
 
 :CONFIG_FULL
 cd ..
 
 REM Don't build freetype or HDF for ARM. 
-IF "%1%"=="arm" GOTO END_BUILD_HDF
-IF "%1%"=="arm64" GOTO END_BUILD_HDF
+IF "%1"=="arm" GOTO END_BUILD_HDF
+IF "%1"=="arm64" GOTO END_BUILD_HDF
 
 :BUILD_FREETYPE
 cd 3rdParty
@@ -286,8 +286,8 @@ cd ..
 REM SET HARFBUZZ_DIR=%cd%\harfbuzz\%BUILD_FOLDER%
 REM SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% -DHarfbuzz_DIR:STRING=%HARFBUZZ_DIR%
 
-IF "%3%"=="WindowsStore10" GOTO END_BUILD_HDF
-REM IF NOT "%3%"=="WindowsStore10"  GOTO BUILD_HDF
+IF "%3"=="WindowsStore10" GOTO END_BUILD_HDF
+REM IF NOT "%3"=="WindowsStore10"  GOTO BUILD_HDF
 REM SET HDF5_WIN_STORE10_FLAGS=-DH5_LDOUBLE_TO_LONG_SPECIAL_RUN:STRING="FAILED_TO_RUN" -DH5_LDOUBLE_TO_LONG_SPECIAL_RUN__TRYRUN_OUTPUT:STRING=""
 REM SET HDF5_WIN_STORE10_FLAGS=%HDF5_WIN_STORE10_FLAGS% -DH5_LONG_TO_LDOUBLE_SPECIAL_RUN:STRING="FAILED_TO_RUN" -DH5_LONG_TO_LDOUBLE_SPECIAL_RUN__TRYRUN_OUTPUT:STRING=""
 REM SET HDF5_WIN_STORE10_FLAGS=%HDF5_WIN_STORE10_FLAGS% -DH5_LDOUBLE_TO_LLONG_ACCURATE_RUN:STRING="FAILED_TO_RUN" -DH5_LDOUBLE_TO_LLONG_ACCURATE_RUN__TRYRUN_OUTPUT:STRING=""
@@ -311,11 +311,11 @@ SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% -DEMGU_CV_WITH_TESSE
 
 
 IF %NETFX_CORE%=="TRUE" GOTO END_BUILD_VTK
-IF "%1%"=="arm" GOTO END_BUILD_VTK
-IF "%1%"=="arm64" GOTO END_BUILD_VTK
+IF "%1"=="arm" GOTO END_BUILD_VTK
+IF "%1"=="arm64" GOTO END_BUILD_VTK
 
-IF "%3%"=="inf" GOTO BUILD_VTK
-IF "%3%"=="intel_inf" GOTO BUILD_VTK
+IF "%3"=="inf" GOTO BUILD_VTK
+IF "%3"=="intel_inf" GOTO BUILD_VTK
 
 GOTO END_BUILD_VTK
 
@@ -354,11 +354,11 @@ SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% %DEPTHAI_BUILD_FLAG%
 SET BUILD_TYPE=OPEN_SOURCE
 
 REM GPU performance test on windows cause compilation error, skipping it now
-IF "%2%"=="gpu" GOTO NO_PERFORMANCE_TEST
+IF "%2"=="gpu" GOTO NO_PERFORMANCE_TEST
 
 REM Intel compiler performance test on windows cause compilation error, skipping it now
-IF "%3%"=="intel" GOTO NO_PERFORMANCE_TEST
-IF "%3%"=="intel_inf" GOTO NO_PERFORMANCE_TEST
+IF "%3"=="intel" GOTO NO_PERFORMANCE_TEST
+IF "%3"=="intel_inf" GOTO NO_PERFORMANCE_TEST
 
 REM NETFX_CORE performance test cause compilation issue, skipping it now
 IF %NETFX_CORE%=="" GOTO WITH_PERFORMANCE_TEST
@@ -380,7 +380,7 @@ SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% ^
 
 
 
-IF NOT "%4%"=="openni" GOTO END_OF_OPENNI
+IF NOT "%4"=="openni" GOTO END_OF_OPENNI
 :WITH_OPENNI
 SET OPENNI_LIB_DIR=%OPEN_NI_LIB%
 IF "%OS_MODE%"==" Win64" SET OPENNI_LIB_DIR=%OPEN_NI_LIB64%
@@ -394,13 +394,13 @@ IF EXIST "%OPENNI_LIB_DIR%" SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG
 -DOPENNI_PRIME_SENSOR_MODULE_BIN_DIR:String="%OPENNI_PS_BIN_DIR:\=/%"
 :END_OF_OPENNI
 
-IF NOT "%4%"=="nonfree" GOTO END_OF_NONFREE
+IF NOT "%4"=="nonfree" GOTO END_OF_NONFREE
 :WITH_NONFREE
 SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% ^
 -DOPENCV_ENABLE_NONFREE:BOOL=TRUE 
 :END_OF_NONFREE
 
-IF NOT "%4%"=="depthai" GOTO END_OF_DEPTHAI
+IF NOT "%4"=="depthai" GOTO END_OF_DEPTHAI
 :WITH_DEPTHAI
 REM SET ENV variable to fix Hunter build error.
 SET CMAKE_POLICY_VERSION_MINIMUM=3.10 
@@ -410,9 +410,9 @@ SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% ^
 :END_OF_DEPTHAI
 
 
-IF "%5%"=="doc" ^
+IF "%5"=="doc" ^
 SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% -DEMGU_CV_DOCUMENTATION_BUILD:BOOL=TRUE 
-REM IF "%5%"=="htmldoc" ^
+REM IF "%5"=="htmldoc" ^
 REM SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% -DEMGU_CV_DOCUMENTATION_BUILD:BOOL=TRUE 
 
 cd ..
@@ -435,7 +435,7 @@ cd %BUILD_FOLDER%
 
 
 
-IF NOT "%2%"=="gpu" GOTO WITHOUT_GPU
+IF NOT "%2"=="gpu" GOTO WITHOUT_GPU
 REM IF %DEVENV%==%VS2012% GOTO END_OF_GPU
 REM IF %DEVENV%==%VS2013% GOTO END_OF_GPU
 
@@ -525,7 +525,7 @@ SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% -DCUDA_HOST_COMPILER
 
 REM :END_FIND_CL
 
-IF NOT "%9%"=="" GOTO GPU_ARCH_BIN_SPECIFIED
+IF NOT "%9"=="" GOTO GPU_ARCH_BIN_SPECIFIED
 SET CUDA_ARCH_BIN_OPTION=""
 IF EXIST "%CUDA_SDK_DIR%" SET CUDA_ARCH_BIN_OPTION="5.2 6.1 7.5"
 IF "%CUDA_SDK_DIR%" == "%CUDA_PATH_V8_0%" SET CUDA_ARCH_BIN_OPTION="6.0 6.1"
@@ -550,7 +550,7 @@ IF "%CUDA_SDK_DIR%" == "%CUDA_PATH_V13_2%" SET CUDA_ARCH_BIN_OPTION="7.5 8.0 8.6
 GOTO END_GPU_ARCH_BIN
 
 :GPU_ARCH_BIN_SPECIFIED
-SET CUDA_ARCH_BIN_OPTION="%9%" 
+SET CUDA_ARCH_BIN_OPTION="%9" 
 
 :END_GPU_ARCH_BIN
 
@@ -579,8 +579,8 @@ SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% ^
 
 :END_OF_GPU
 
-IF "%3%"=="inf" GOTO WITH_OPENVINO
-IF "%3%"=="intel_inf" GOTO WITH_OPENVINO
+IF "%3"=="inf" GOTO WITH_OPENVINO
+IF "%3"=="intel_inf" GOTO WITH_OPENVINO
 
 GOTO WITHOUT_OPENVINO
 
@@ -634,12 +634,12 @@ SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% -DWITH_OPENVINO:BOOL
 :END_OF_OPENVINO
 
 
-IF "%3%"=="intel" GOTO INTEL_COMPILER
-IF "%3%"=="intel_inf" GOTO INTEL_COMPILER
+IF "%3"=="intel" GOTO INTEL_COMPILER
+IF "%3"=="intel_inf" GOTO INTEL_COMPILER
 
 :NOT_INTEL_COMPILER
 
-IF "%3%"=="commercial" SET BUILD_TYPE=COMMERCIAL
+IF "%3"=="commercial" SET BUILD_TYPE=COMMERCIAL
 
 SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% -DWITH_LAPACK:BOOL=FALSE 
 GOTO VISUAL_STUDIO
@@ -679,7 +679,7 @@ IF EXIST "%INTEL_DIR%" SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAG
 -DCV_ICC:BOOL=TRUE
 
 REM -DMKL_ROOT_DIR:String="%INTEL_MKL_ROOT:\=/%" 
-REM IF NOT "%2%"=="gpu" GOTO END_OF_INTEL_GPU
+REM IF NOT "%2"=="gpu" GOTO END_OF_INTEL_GPU
 REM SET CUDA_HOST_COMPILER=%VS110COMNTOOLS%..\..\VC\bin
 REM IF "%OS_MODE%"==" Win64" SET CUDA_HOST_COMPILER=%CUDA_HOST_COMPILER%\amd64
 REM IF EXIST %VS2012% SET EMGU_CV_CMAKE_CONFIG_FLAGS=-DCUDA_HOST_COMPILER:String="%CUDA_HOST_COMPILER%" %EMGU_CV_CMAKE_CONFIG_FLAGS%
@@ -696,7 +696,7 @@ GOTO CONFIG_ARM
 
 SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% %IPP_BUILD_FLAGS% 
  
-IF "%3%"=="WindowsStore10" GOTO CONFIGURE_WINDOWS_STORE_10
+IF "%3"=="WindowsStore10" GOTO CONFIGURE_WINDOWS_STORE_10
 
 REM Windows Desktop Build
 SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% ^
@@ -725,8 +725,8 @@ SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% ^
 
 :CONFIG_ARM
 
-IF "%1%"=="arm" GOTO WITH_ARM
-IF "%1%"=="arm64" GOTO WITH_ARM
+IF "%1"=="arm" GOTO WITH_ARM
+IF "%1"=="arm64" GOTO WITH_ARM
 
 :WITHOUT_ARM
 SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% -DEMGU_ENABLE_SSE:BOOL=TRUE 
@@ -737,8 +737,8 @@ IF "%BUILD_TYPE%"=="COMMERCIAL" GOTO CONFIGURE_COMMERCIAL
 GOTO CONFIGURE_OPENSOURCE
 :CONFIGURE_COMMERCIAL
 SET IPP_BUILD_FLAGS=-DWITH_IPP:BOOL=TRUE
-IF "%1%"=="x86" SET CPU_DISPATCH_FLAGS=SSE4_1;SSE4_2
-IF "%1%"=="x86_64" SET CPU_DISPATCH_FLAGS=SSE4_1;SSE4_2;AVX;AVX2;AVX512F
+IF "%1"=="x86" SET CPU_DISPATCH_FLAGS=SSE4_1;SSE4_2
+IF "%1"=="x86_64" SET CPU_DISPATCH_FLAGS=SSE4_1;SSE4_2;AVX;AVX2;AVX512F
 GOTO END_CONFIG_COMMERCIAL_OR_OPENSOURCE
 :CONFIGURE_OPENSOURCE
 SET IPP_BUILD_FLAGS=-DWITH_IPP:BOOL=FALSE 
@@ -773,23 +773,111 @@ SET EMGU_CV_CMAKE_CONFIG_FLAGS=%EMGU_CV_CMAKE_CONFIG_FLAGS% ^
 :END_WITH_ARM
 
 
+REM PROJ (built from source to satisfy Emgu.CV.Extern's unconditional GeoTIFF
+REM dependency) requires a "sqlite3" executable plus the SQLite3 dev library
+REM and header. These are not guaranteed to be installed on the build machine.
+REM If missing, build a standalone (unmangled) sqlite3 from the sqlite3.c
+REM amalgamation already vendored by the vtk submodule
+REM (vtk/ThirdParty/sqlite/vtksqlite), and point CMake at it via
+REM SQLite3_ROOT/PATH. Skipped entirely if a system sqlite3 is already on
+REM PATH, or if the vtk submodule isn't checked out.
+where sqlite3.exe >nul 2>nul
+IF NOT ERRORLEVEL 1 GOTO END_CHECK_SQLITE3
+
+SET LOCAL_SQLITE3_DIR=%cd%\_local_sqlite3
+SET VTK_SQLITE_SRC_DIR=%ROOT_SRC_FOLDER%\vtk\ThirdParty\sqlite\vtksqlite
+
+IF EXIST "%LOCAL_SQLITE3_DIR%\bin\sqlite3.exe" GOTO USE_LOCAL_SQLITE3
+IF NOT EXIST "%VTK_SQLITE_SRC_DIR%\sqlite3.c" GOTO END_CHECK_SQLITE3
+
+ECHO sqlite3 not found on this machine. Building a standalone copy from the vendored VTK sqlite3 amalgamation, needed by PROJ/GeoTIFF.
+
+REM The DEVENV variable set above already holds a quoted "...devenv.com"
+REM path. Derive the matching vcvars script via substring substitution on
+REM that existing, already-quoted variable instead of building a fresh path
+REM from the raw installationPath-style variables computed earlier (those
+REM are unquoted and can contain "Program Files (x86)", which is unsafe to
+REM splice into a fresh SET target).
+REM
+REM Caution for future edits: combining a redundant trailing "%" on a
+REM positional parameter (i.e. writing %1% instead of %1) with a
+REM %VAR:search=replace% substitution on the same line confuses CMD's
+REM percent-pairing and corrupts the rest of the line. Plain %1 (used
+REM throughout this file) is unaffected -- only the %1% form is unsafe,
+REM and only when paired with a substitution on the same line.
+SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvars64.bat%
+IF "%1"=="x86" SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvars32.bat%
+IF "%1"=="arm" SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvarsamd64_arm.bat%
+IF "%1"=="arm64" SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvarsamd64_arm64.bat%
+
+REM DEVENV may instead be an MSBuild.exe fallback path on BuildTools-only
+REM installs, which won't match the substitution above. Bail out gracefully
+REM (skip the standalone-sqlite3 build, letting the original PROJ/CMake
+REM error surface as before this fix) rather than calling a bogus path.
+IF NOT EXIST %SQLITE_VCVARS_SCRIPT% GOTO END_CHECK_SQLITE3
+
+mkdir "%LOCAL_SQLITE3_DIR%\src" 2>nul
+mkdir "%LOCAL_SQLITE3_DIR%\include" 2>nul
+mkdir "%LOCAL_SQLITE3_DIR%\lib" 2>nul
+mkdir "%LOCAL_SQLITE3_DIR%\bin" 2>nul
+
+copy /Y "%VTK_SQLITE_SRC_DIR%\sqlite3.c" "%LOCAL_SQLITE3_DIR%\src\" >nul
+copy /Y "%VTK_SQLITE_SRC_DIR%\sqlite3.h" "%LOCAL_SQLITE3_DIR%\src\" >nul
+copy /Y "%VTK_SQLITE_SRC_DIR%\shell.c" "%LOCAL_SQLITE3_DIR%\src\" >nul
+copy /Y "%VTK_SQLITE_SRC_DIR%\sqlite3.h" "%LOCAL_SQLITE3_DIR%\include\" >nul
+
+REM sqlite3.c/sqlite3.h #include two CMake-generated headers in VTK's real
+REM build: vtk_sqlite_mangle.h (renames every sqlite3_* symbol so VTK's copy
+REM can't clash with others in the same process) and vtksqlite_export.h (the
+REM dllexport/import macro). Provide no-op stand-ins so the amalgamation
+REM compiles standalone with normal, unmangled sqlite3_* symbol names.
+ECHO #ifndef vtk_sqlite_mangle_h> "%LOCAL_SQLITE3_DIR%\src\vtk_sqlite_mangle.h"
+ECHO #define vtk_sqlite_mangle_h>> "%LOCAL_SQLITE3_DIR%\src\vtk_sqlite_mangle.h"
+ECHO #endif>> "%LOCAL_SQLITE3_DIR%\src\vtk_sqlite_mangle.h"
+
+ECHO #ifndef VTKSQLITE_EXPORT_H> "%LOCAL_SQLITE3_DIR%\src\vtksqlite_export.h"
+ECHO #define VTKSQLITE_EXPORT_H>> "%LOCAL_SQLITE3_DIR%\src\vtksqlite_export.h"
+ECHO #define SQLITE_API>> "%LOCAL_SQLITE3_DIR%\src\vtksqlite_export.h"
+ECHO #define VTKSQLITE_DEPRECATED>> "%LOCAL_SQLITE3_DIR%\src\vtksqlite_export.h"
+ECHO #define VTKSQLITE_NO_EXPORT>> "%LOCAL_SQLITE3_DIR%\src\vtksqlite_export.h"
+ECHO #endif>> "%LOCAL_SQLITE3_DIR%\src\vtksqlite_export.h"
+
+copy /Y "%LOCAL_SQLITE3_DIR%\src\vtk_sqlite_mangle.h" "%LOCAL_SQLITE3_DIR%\include\" >nul
+copy /Y "%LOCAL_SQLITE3_DIR%\src\vtksqlite_export.h" "%LOCAL_SQLITE3_DIR%\include\" >nul
+
+REM Nested double quotes inside a single "cmd /c "..."" string are unreliable
+REM in batch, so drive the compile steps through a small generated helper
+REM script instead of one inline nested-quoted command line.
+ECHO @call %SQLITE_VCVARS_SCRIPT%> "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
+ECHO cd /d "%LOCAL_SQLITE3_DIR%\src">> "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
+ECHO cl /nologo /c /O2 /DSQLITE_THREADSAFE=1 /DSQLITE_ENABLE_COLUMN_METADATA sqlite3.c>> "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
+ECHO lib /nologo sqlite3.obj /OUT:"%LOCAL_SQLITE3_DIR%\lib\sqlite3.lib">> "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
+ECHO cl /nologo /O2 /DSQLITE_THREADSAFE=1 /Fe:"%LOCAL_SQLITE3_DIR%\bin\sqlite3.exe" shell.c sqlite3.c>> "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
+call "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
+
+:USE_LOCAL_SQLITE3
+SET SQLite3_ROOT=%LOCAL_SQLITE3_DIR%
+SET PATH=%LOCAL_SQLITE3_DIR%\bin;%PATH%
+:END_CHECK_SQLITE3
+
+
 :RUN_CMAKE
 @echo on
 
 
-%CMAKE% %EMGU_CV_CMAKE_CONFIG_FLAGS% ..\ 
+%CMAKE% %EMGU_CV_CMAKE_CONFIG_FLAGS% ..\
 
 :BUILD
-IF NOT "%7%"=="build" GOTO END
+IF NOT "%7"=="build" GOTO END
 
 SET CMAKE_BUILD_TARGET=cvextern
-IF NOT "%6%"=="package" GOTO CHECK_DOC_BUILD
+IF NOT "%6"=="package" GOTO CHECK_DOC_BUILD
 SET CMAKE_BUILD_TARGET=%CMAKE_BUILD_TARGET% PACKAGE
 :CHECK_DOC_BUILD
-IF NOT "%5%"=="doc" GOTO CHECK_NUGET_BUILD
+IF NOT "%5"=="doc" GOTO CHECK_NUGET_BUILD
 SET CMAKE_BUILD_TARGET=%CMAKE_BUILD_TARGET% Emgu.CV.Document
 :CHECK_NUGET_BUILD
-IF NOT "%8%"=="nuget" GOTO END_SET_BUILD_TARGET
+IF NOT "%8"=="nuget" GOTO END_SET_BUILD_TARGET
 SET CMAKE_BUILD_TARGET=%CMAKE_BUILD_TARGET% Emgu.CV.runtime.windows.nuget
 :END_SET_BUILD_TARGET
 REM echo CMAKE_BUILD_TARGET=%CMAKE_BUILD_TARGET% Emgu.CV.nuget
@@ -798,7 +886,7 @@ REM Don't build with parallel at this time. Multiple Example demo projects build
 REM %CMAKE% --build . --config Release --parallel --target %CMAKE_BUILD_TARGET%
 %CMAKE% --build . --config Release --target %CMAKE_BUILD_TARGET%
 
-REM IF "%2%"=="gpu" ^
+REM IF "%2"=="gpu" ^
 REM call %DEVENV% %BUILD_TYPE% emgucv.sln /project Emgu.CV.CUDA.nuget 
 
 :END

@@ -69,5 +69,5 @@ cd ..
 
 cd ..
 
-git clean -d -f -x "." 
+git clean -d -f -x -e ".mcp.json" -e ".claude/settings.local.json" "."
 
