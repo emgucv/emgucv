@@ -1095,9 +1095,14 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
    ${CS_CLASS_SOURCE}
 }
 ${CS_COMPILATION_CONDITION_CLOSE}")
-  SET(C_SOURCE "${C_COMPILATION_CONDITION_OPEN} 
-  ${C_SOURCE} 
-  ${C_COMPILATION_CONDITION_OPEN}")
+  IF (NOT ("${c_compilation_condition}" STREQUAL ""))
+    SET(C_HEADER_SOURCE "${C_COMPILATION_CONDITION_OPEN}
+${C_HEADER_SOURCE}
+${C_COMPILATION_CONDITION_CLOSE}")
+  ENDIF()
+  SET(C_SOURCE "${C_COMPILATION_CONDITION_OPEN}
+  ${C_SOURCE}
+  ${C_COMPILATION_CONDITION_CLOSE}")
   #MESSAGE(STATUS "-------------------- CS_CLASS_SOURCE: ${CS_CLASS_SOURCE}")
   WRITE_IF_DIFFERENT("${csfname}" "${CS_SOURCE}")
   WRITE_IF_DIFFERENT("${PROJECT_SOURCE_DIR}/${fname}.h" "${C_HEADER_SOURCE}")
@@ -1598,7 +1603,7 @@ ENDIF()
 	""
     "#include \"features_c.h\""
 	""
-	""
+	"HAVE_OPENCV_FEATURES"
 	${HAVE_opencv_features})
   CREATE_OCV_CLASS_PROPERTY(
     "features/ORB_property"
@@ -1625,7 +1630,7 @@ ENDIF()
 	""
     "#include \"features_c.h\""
 	""
-	""
+	"HAVE_OPENCV_FEATURES"
 	${HAVE_opencv_features})
 
 ############################### features code gen END ################################

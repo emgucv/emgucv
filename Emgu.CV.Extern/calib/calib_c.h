@@ -21,6 +21,7 @@ static inline CV_NORETURN void throw_no_calib() { CV_Error(cv::Error::StsBadFunc
 
 namespace cv {
 	class Feature2D {};
+	struct UsacParams {};
 }
 
 #endif
