@@ -1,0 +1,16 @@
+{
+  "name": "emgucv-windows-sqlite3",
+  "version-string": "1.0.0",
+  "builtin-baseline": "b1e15efef6758eaa0beb0a8732cfa66f6a68a81d",
+  "dependencies": [
+    "sqlite3"
+  ],
+  "features": {
+    "sqlite3-tool": {
+      "description": "Build the sqlite3 CLI shell (sqlite3.exe), needed as a build-time tool by PROJ's CMake configure step",
+      "dependencies": [
+        { "name": "sqlite3", "features": ["tool"] }
+      ]
+    }
+  }
+}

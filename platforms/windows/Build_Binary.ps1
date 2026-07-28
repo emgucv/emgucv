@@ -285,66 +285,53 @@ function Resolve-VisualStudioEnvironment {
 # PROJ (built from source to satisfy Emgu.CV.Extern's unconditional GeoTIFF
 # dependency) needs a sqlite3 executable plus the SQLite3 dev library/header,
 # which aren't guaranteed to be installed. If an existing vcpkg install is
-# detected (VCPKG_ROOT, or vcpkg.exe on PATH), it is used opportunistically
-# for whichever of the two is still missing. Anything vcpkg doesn't resolve
-# falls back to compiling a standalone copy from the sqlite3.c amalgamation
-# already vendored by the vtk submodule, using no-op stand-ins for VTK's
-# symbol-mangling/export headers so it compiles with normal, unmangled
-# sqlite3_* symbol names.
+# detected, it is used opportunistically (manifest mode, against the fixed
+# vcpkg-manifest\vcpkg.json alongside this script) for whichever of the two
+# is still missing. Anything vcpkg doesn't resolve falls back to compiling a
+# standalone copy from the sqlite3.c amalgamation already vendored by the
+# vtk submodule, using no-op stand-ins for VTK's symbol-mangling/export
+# headers so it compiles with normal, unmangled sqlite3_* symbol names.
 # ---------------------------------------------------------------------------
 
 function Get-VcpkgRoot {
     <#
-    Detects an existing, classic-mode-capable vcpkg install, in order:
+    Detects an existing vcpkg install, in order:
       1. VS-bundled vcpkg under <VS install dir>\VC\vcpkg, newest VS first
          (VS2026, VS2022, VS2019, VS2017, then Build Tools-only installs) --
          preferred since it's the copy Visual Studio itself keeps updated
-         and version-matched to the installed toolset.
+         and version-matched to the installed toolset. This copy is
+         permanently classic-mode-incapable by design (VS's installer
+         doesn't want its own package installs mutating files under
+         Program Files), but that's irrelevant here: manifest mode (what
+         this script uses) works fine against it.
       2. VCPKG_ROOT (the standard convention used by vcpkg's own docs and
          most CI actions), for an explicit, user-chosen install.
       3. VCPKG_INSTALLATION_ROOT (what GitHub-hosted Windows runner images
          set instead -- vcpkg is preinstalled there at C:\vcpkg, but not
          under VCPKG_ROOT and not necessarily on PATH).
       4. vcpkg.exe on PATH, as a last resort.
-
-    Every candidate is required to have a local ports\ directory. Recent
-    Visual Studio releases bundle a manifest-mode-only vcpkg with no local
-    ports tree at all (confirmed on VS "18": `vcpkg install pkg:triplet`
-    fails outright with "this vcpkg instance requires a manifest" /
-    "does not have a classic mode instance", not merely a missing flag --
-    there is no way to make that binary do a classic install), which would
-    otherwise be silently preferred over a perfectly good classic-mode
-    install found later in this same list.
-
     Returns $null if none of these resolve -- vcpkg use is opportunistic,
     never required.
     #>
     param([Parameter(Mandatory = $true)]$VsEnv)
 
-    function Test-ClassicVcpkg([string]$Dir) {
-        return (Test-Path (Join-Path $Dir 'vcpkg.exe')) -and (Test-Path (Join-Path $Dir 'ports'))
-    }
-
     foreach ($vsDir in @($VsEnv.Vs2026Dir, $VsEnv.Vs2022Dir, $VsEnv.Vs2019Dir, $VsEnv.Vs2017Dir, $VsEnv.VsBuildToolsDir)) {
         if ($vsDir) {
             $vsVcpkgDir = Join-Path $vsDir 'VC\vcpkg'
-            if (Test-ClassicVcpkg $vsVcpkgDir) {
+            if (Test-Path (Join-Path $vsVcpkgDir 'vcpkg.exe')) {
                 return $vsVcpkgDir
             }
         }
     }
-    if ($env:VCPKG_ROOT -and (Test-ClassicVcpkg $env:VCPKG_ROOT)) {
+    if ($env:VCPKG_ROOT -and (Test-Path (Join-Path $env:VCPKG_ROOT 'vcpkg.exe'))) {
         return $env:VCPKG_ROOT
     }
-    if ($env:VCPKG_INSTALLATION_ROOT -and (Test-ClassicVcpkg $env:VCPKG_INSTALLATION_ROOT)) {
+    if ($env:VCPKG_INSTALLATION_ROOT -and (Test-Path (Join-Path $env:VCPKG_INSTALLATION_ROOT 'vcpkg.exe'))) {
         return $env:VCPKG_INSTALLATION_ROOT
     }
     $vcpkgCmd = Get-Command vcpkg.exe -ErrorAction SilentlyContinue
     if ($vcpkgCmd) {
-        $pathVcpkgDir = Split-Path $vcpkgCmd.Source -Parent
-        if (Test-ClassicVcpkg $pathVcpkgDir) {
-            return $pathVcpkgDir
-        }
+        return Split-Path $vcpkgCmd.Source -Parent
     }
     return $null
 }
@@ -383,24 +370,52 @@ function Get-VcpkgHostTriplet {
     }
 }
 
-function Install-VcpkgPackage {
+function Install-VcpkgManifestPackage {
     <#
-    Runs `vcpkg install --classic`, non-fatally: vcpkg is a best-effort
-    optimization here, not a requirement, so a failure (network, package
-    unavailable, etc.) just falls through to the from-source build instead
-    of aborting the whole script the way Invoke-Native's throw-on-failure
-    would. -classic is explicit here since Get-VcpkgRoot only ever selects
-    installs it already verified are classic-mode-capable (a local ports\
-    tree), but being explicit costs nothing and matches vcpkg's own
-    recommended practice for scripted classic-mode use.
+    Installs from this repo's fixed sqlite3 manifest
+    (platforms\windows\vcpkg-manifest\vcpkg.json) in manifest mode,
+    non-fatally: vcpkg is a best-effort optimization here, not a
+    requirement, so a failure (network, package unavailable, etc.) just
+    falls through to the from-source build instead of aborting the whole
+    script the way Invoke-Native's throw-on-failure would.
+
+    Manifest mode -- rather than classic mode -- pins sqlite3 to an exact
+    version via the manifest's builtin-baseline, so the resolved version
+    doesn't silently drift between machines/time the way classic mode's
+    "whatever that vcpkg install's local ports tree currently has" would,
+    and it works against every vcpkg distribution, including the
+    manifest-mode-only copy Visual Studio bundles.
+
+    Installs into $ManifestRoot\vcpkg_installed_<Triplet>\<Triplet>\ -- one
+    completely separate --x-install-root per triplet, not a single shared
+    one. A shared install root is NOT safe here: manifest mode treats the
+    whole install root as one desired-state set for the *current*
+    invocation and prunes anything else in it, so installing the exe's
+    host triplet into the same root as the lib's target triplet actually
+    deletes the lib's already-installed files (reproduced directly: the
+    second `vcpkg install` logged "will be removed: sqlite3:<lib
+    triplet>", and the lib/header were confirmed gone from disk
+    afterwards). Separate roots avoid this entirely, at the cost of losing
+    reuse *across* triplets -- reuse for repeated builds of the *same*
+    triplet is unaffected, since each root's own contents persist normally
+    between calls.
     #>
     param(
         [Parameter(Mandatory = $true)][string]$VcpkgRoot,
-        [Parameter(Mandatory = $true)][string]$PackageSpec
+        [Parameter(Mandatory = $true)][string]$ManifestRoot,
+        [Parameter(Mandatory = $true)][string]$Triplet,
+        [string]$Feature = ''
     )
-    & (Join-Path $VcpkgRoot 'vcpkg.exe') install $PackageSpec --classic | Out-Host
+    $vcpkgArgs = @(
+        'install',
+        '--triplet', $Triplet,
+        '--x-manifest-root', $ManifestRoot,
+        '--x-install-root', (Join-Path $ManifestRoot "vcpkg_installed_$Triplet")
+    )
+    if ($Feature) { $vcpkgArgs += "--x-feature=$Feature" }
+    & (Join-Path $VcpkgRoot 'vcpkg.exe') @vcpkgArgs | Out-Host
     if ($LASTEXITCODE -ne 0) {
-        Write-Warning "vcpkg install $PackageSpec failed (exit $LASTEXITCODE); falling back to building sqlite3 from source."
+        Write-Warning "vcpkg install (triplet $Triplet) failed (exit $LASTEXITCODE); falling back to building sqlite3 from source."
     }
 }
 
@@ -448,13 +463,14 @@ function Set-Sqlite3Fallback {
     # --- vcpkg (opportunistic; never required) --------------------------------
     $vcpkgRoot = Get-VcpkgRoot -VsEnv $VsEnv
     if ($vcpkgRoot) {
+        $manifestRoot = Join-Path $PSScriptRoot 'vcpkg-manifest'
         if ($needLib) {
             $targetTriplet = Get-VcpkgStaticTriplet -VcVarsAllArg $LibVcVarsAllArg
             if ($targetTriplet) {
-                Install-VcpkgPackage -VcpkgRoot $vcpkgRoot -PackageSpec "sqlite3:$targetTriplet"
-                $vcpkgTripletDir = Join-Path $vcpkgRoot "installed\$targetTriplet"
+                Install-VcpkgManifestPackage -VcpkgRoot $vcpkgRoot -ManifestRoot $manifestRoot -Triplet $targetTriplet
+                $vcpkgTripletDir = Join-Path $manifestRoot "vcpkg_installed_$targetTriplet\$targetTriplet"
                 if ((Test-Path (Join-Path $vcpkgTripletDir 'lib\sqlite3.lib')) -and (Test-Path (Join-Path $vcpkgTripletDir 'include\sqlite3.h'))) {
-                    Write-Host "sqlite3 dev library resolved via vcpkg ($targetTriplet)."
+                    Write-Host "sqlite3 dev library resolved via vcpkg manifest mode ($targetTriplet)."
                     $sqlite3Root = $vcpkgTripletDir
                     $needLib = $false
                 }
@@ -462,10 +478,10 @@ function Set-Sqlite3Fallback {
         }
         if ($needExe) {
             $hostTriplet = Get-VcpkgHostTriplet
-            Install-VcpkgPackage -VcpkgRoot $vcpkgRoot -PackageSpec "sqlite3[tool]:$hostTriplet"
-            $vcpkgToolsDir = Join-Path $vcpkgRoot "installed\$hostTriplet\tools"
+            Install-VcpkgManifestPackage -VcpkgRoot $vcpkgRoot -ManifestRoot $manifestRoot -Triplet $hostTriplet -Feature 'sqlite3-tool'
+            $vcpkgToolsDir = Join-Path $manifestRoot "vcpkg_installed_$hostTriplet\$hostTriplet\tools"
             if (Test-Path (Join-Path $vcpkgToolsDir 'sqlite3.exe')) {
-                Write-Host "sqlite3.exe resolved via vcpkg ($hostTriplet)."
+                Write-Host "sqlite3.exe resolved via vcpkg manifest mode ($hostTriplet)."
                 $sqlite3BinDir = $vcpkgToolsDir
                 $needExe = $false
             }
