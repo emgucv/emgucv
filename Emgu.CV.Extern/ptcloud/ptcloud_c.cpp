@@ -111,6 +111,96 @@ bool cveOdometryCompute2(cv::Odometry* odometry, cv::_InputArray* srcDepthFrame,
 #endif
 }
 
+cv::OdometryFrame* cveOdometryFrameCreate(
+	cv::_InputArray* depth,
+	cv::_InputArray* image,
+	cv::_InputArray* mask,
+	cv::_InputArray* normals)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	return new cv::OdometryFrame(
+		depth ? *depth : static_cast<cv::InputArray>(cv::noArray()),
+		image ? *image : static_cast<cv::InputArray>(cv::noArray()),
+		mask ? *mask : static_cast<cv::InputArray>(cv::noArray()),
+		normals ? *normals : static_cast<cv::InputArray>(cv::noArray()));
+#else
+	throw_no_ptcloud();
+#endif
+}
+void cveOdometryFrameRelease(cv::OdometryFrame** ptr)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	delete *ptr;
+	*ptr = nullptr;
+#else
+	throw_no_ptcloud();
+#endif
+}
+void cveOdometryFrameGetImage(cv::OdometryFrame* frame, cv::_OutputArray* image)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	frame->getImage(*image);
+#else
+	throw_no_ptcloud();
+#endif
+}
+void cveOdometryFrameGetGrayImage(cv::OdometryFrame* frame, cv::_OutputArray* image)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	frame->getGrayImage(*image);
+#else
+	throw_no_ptcloud();
+#endif
+}
+void cveOdometryFrameGetDepth(cv::OdometryFrame* frame, cv::_OutputArray* depth)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	frame->getDepth(*depth);
+#else
+	throw_no_ptcloud();
+#endif
+}
+void cveOdometryFrameGetProcessedDepth(cv::OdometryFrame* frame, cv::_OutputArray* depth)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	frame->getProcessedDepth(*depth);
+#else
+	throw_no_ptcloud();
+#endif
+}
+void cveOdometryFrameGetMask(cv::OdometryFrame* frame, cv::_OutputArray* mask)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	frame->getMask(*mask);
+#else
+	throw_no_ptcloud();
+#endif
+}
+void cveOdometryFrameGetNormals(cv::OdometryFrame* frame, cv::_OutputArray* normals)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	frame->getNormals(*normals);
+#else
+	throw_no_ptcloud();
+#endif
+}
+int cveOdometryFrameGetPyramidLevels(cv::OdometryFrame* frame)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	return frame->getPyramidLevels();
+#else
+	throw_no_ptcloud();
+#endif
+}
+void cveOdometryFrameGetPyramidAt(cv::OdometryFrame* frame, cv::_OutputArray* img, int pyrType, size_t level)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	frame->getPyramidAt(*img, static_cast<cv::OdometryFramePyramidType>(pyrType), level);
+#else
+	throw_no_ptcloud();
+#endif
+}
+
 cv::RgbdNormals* cveRgbdNormalsCreate(int rows, int cols, int depth, cv::_InputArray* K, int window_size, int method, cv::Algorithm** algorithm, cv::Ptr<cv::RgbdNormals>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_PTCLOUD
@@ -539,6 +629,14 @@ void cveVolumeIntegrateColor(cv::Volume* volume, cv::_InputArray* depth, cv::_In
 {
 #ifdef HAVE_OPENCV_PTCLOUD
 	volume->integrate(*depth, *image, *pose);
+#else
+	throw_no_ptcloud();
+#endif
+}
+void cveVolumeIntegrateFrame(cv::Volume* volume, cv::OdometryFrame* frame, cv::_InputArray* pose)
+{
+#ifdef HAVE_OPENCV_PTCLOUD
+	volume->integrate(*frame, *pose);
 #else
 	throw_no_ptcloud();
 #endif

@@ -83,6 +83,18 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// Integrates the input data, from a precalculated <see cref="OdometryFrame"/>, into the volume.
+        /// Camera intrinsics are taken from the volume's settings.
+        /// </summary>
+        /// <param name="frame">The frame from which to take depth (and, for ColorTSDF, color) data.</param>
+        /// <param name="pose">The pose of the camera in global coordinates.</param>
+        public void IntegrateFrame(OdometryFrame frame, IInputArray pose)
+        {
+            using (InputArray iaPose = pose.GetInputArray())
+                CvInvoke.cveVolumeIntegrateFrame(_ptr, frame, iaPose);
+        }
+
+        /// <summary>
         /// Renders the volume's contents into an image. The resulting points and normals are in the camera's
         /// coordinate system. Rendered image size and camera intrinsics are taken from the volume's settings.
         /// </summary>
@@ -267,6 +279,8 @@ namespace Emgu.CV
         internal static extern void cveVolumeIntegrate(IntPtr volume, IntPtr depth, IntPtr pose);
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveVolumeIntegrateColor(IntPtr volume, IntPtr depth, IntPtr image, IntPtr pose);
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveVolumeIntegrateFrame(IntPtr volume, IntPtr frame, IntPtr pose);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveVolumeRaycast(IntPtr volume, IntPtr cameraPose, IntPtr points, IntPtr normals);

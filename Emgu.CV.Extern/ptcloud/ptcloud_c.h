@@ -22,6 +22,20 @@ namespace cv {
 	class Odometry {};
 	class RgbdNormals {};
 	class Octree {};
+	class OdometryFrame {};
+	enum OdometryFramePyramidType
+	{
+		PYR_IMAGE = 0,
+		PYR_DEPTH = 1,
+		PYR_MASK = 2,
+		PYR_CLOUD = 3,
+		PYR_DIX = 4,
+		PYR_DIY = 5,
+		PYR_TEXMASK = 6,
+		PYR_NORM = 7,
+		PYR_NORMMASK = 8,
+		N_PYRAMIDS
+	};
 	enum class VolumeType
 	{
 		TSDF = 0,
@@ -37,6 +51,21 @@ CVAPI(cv::Odometry*) cveOdometryCreate(int odometryType);
 CVAPI(void) cveOdometryRelease(cv::Odometry** ptr);
 CVAPI(bool) cveOdometryCompute1(cv::Odometry* odometry, cv::_InputArray* srcFrame, cv::_InputArray* dstFrame, cv::_OutputArray* rt);
 CVAPI(bool) cveOdometryCompute2(cv::Odometry* odometry, cv::_InputArray* srcDepthFrame, cv::_InputArray* srcRGBFrame, cv::_InputArray* dstDepthFrame, cv::_InputArray* dstRGBFrame, cv::_OutputArray* rt);
+
+CVAPI(cv::OdometryFrame*) cveOdometryFrameCreate(
+	cv::_InputArray* depth,
+	cv::_InputArray* image,
+	cv::_InputArray* mask,
+	cv::_InputArray* normals);
+CVAPI(void) cveOdometryFrameRelease(cv::OdometryFrame** ptr);
+CVAPI(void) cveOdometryFrameGetImage(cv::OdometryFrame* frame, cv::_OutputArray* image);
+CVAPI(void) cveOdometryFrameGetGrayImage(cv::OdometryFrame* frame, cv::_OutputArray* image);
+CVAPI(void) cveOdometryFrameGetDepth(cv::OdometryFrame* frame, cv::_OutputArray* depth);
+CVAPI(void) cveOdometryFrameGetProcessedDepth(cv::OdometryFrame* frame, cv::_OutputArray* depth);
+CVAPI(void) cveOdometryFrameGetMask(cv::OdometryFrame* frame, cv::_OutputArray* mask);
+CVAPI(void) cveOdometryFrameGetNormals(cv::OdometryFrame* frame, cv::_OutputArray* normals);
+CVAPI(int) cveOdometryFrameGetPyramidLevels(cv::OdometryFrame* frame);
+CVAPI(void) cveOdometryFrameGetPyramidAt(cv::OdometryFrame* frame, cv::_OutputArray* img, int pyrType, size_t level);
 
 CVAPI(cv::RgbdNormals*) cveRgbdNormalsCreate(int rows, int cols, int depth, cv::_InputArray* K, int window_size, int method, cv::Algorithm** algorithm, cv::Ptr<cv::RgbdNormals>** sharedPtr);
 CVAPI(void) cveRgbdNormalsRelease(cv::Ptr<cv::RgbdNormals>** sharedPtr);
@@ -148,6 +177,7 @@ CVAPI(void) cveVolumeRelease(cv::Volume** volume);
 
 CVAPI(void) cveVolumeIntegrate(cv::Volume* volume, cv::_InputArray* depth, cv::_InputArray* pose);
 CVAPI(void) cveVolumeIntegrateColor(cv::Volume* volume, cv::_InputArray* depth, cv::_InputArray* image, cv::_InputArray* pose);
+CVAPI(void) cveVolumeIntegrateFrame(cv::Volume* volume, cv::OdometryFrame* frame, cv::_InputArray* pose);
 
 CVAPI(void) cveVolumeRaycast(
 	cv::Volume* volume,
