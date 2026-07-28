@@ -319,14 +319,6 @@ MACRO(BUILD_NUGET_PACKAGE target csproj_file nuspec_file output_dir working_dir)
 	  WORKING_DIRECTORY "${working_dir}"
 	  COMMENT "Building ${target} with command: ${NUGET_EXECUTABLE} pack \"${nuspec_file}\" -OutputDirectory \"${output_dir}\""
 	)
-  ELSEIF(NUGET_FOUND AND MONO_FOUND)
-	#Use mono with nuget.exe to create the nuget package
-  	ADD_CUSTOM_TARGET(
-	  ${target} ALL
-	  COMMAND "${MONO_EXECUTABLE}" "${NUGET_EXECUTABLE}" pack "${nuspec_file}" -OutputDirectory "${output_dir}"
-	  WORKING_DIRECTORY "${working_dir}"
-	  COMMENT "Building ${target} with command: ${MONO_EXECUTABLE} ${NUGET_EXECUTABLE} pack \"${nuspec_file}\" -OutputDirectory \"${output_dir}\""
-	)
   ELSEIF(DOTNET_FOUND)
 	IF(APPLE AND ("${EMGUCV_ARCH}" STREQUAL "x64"))
 	  SET(MAC_FRESH_SHELL_PREFIX env -i zsh)
@@ -337,6 +329,14 @@ MACRO(BUILD_NUGET_PACKAGE target csproj_file nuspec_file output_dir working_dir)
 	  COMMAND ${DOTNET_EXECUTABLE} pack "${csproj_file}" -p:NuspecFile="${nuspec_file}" -p:NuspecBasePath="${working_dir}" --no-build -o "${output_dir}"
 	  WORKING_DIRECTORY "${working_dir}"
 	  COMMENT "Building ${target} with command: ${DOTNET_EXECUTABLE} pack \"${csproj_file}\" -p:NuspecFile=\"${nuspec_file}\" -p:NuspecBasePath=\"${working_dir}\" --no-build -o \"${output_dir}\""
+	)
+  ELSEIF(NUGET_FOUND AND MONO_FOUND)
+	#Use mono with nuget.exe to create the nuget package
+  	ADD_CUSTOM_TARGET(
+	  ${target} ALL
+	  COMMAND "${MONO_EXECUTABLE}" "${NUGET_EXECUTABLE}" pack "${nuspec_file}" -OutputDirectory "${output_dir}"
+	  WORKING_DIRECTORY "${working_dir}"
+	  COMMENT "Building ${target} with command: ${MONO_EXECUTABLE} ${NUGET_EXECUTABLE} pack \"${nuspec_file}\" -OutputDirectory \"${output_dir}\""
 	)
   ELSE()
 	MESSAGE(FATAL_ERROR "DOTNET_EXECUTABLE not found!")
