@@ -787,7 +787,7 @@ IF NOT ERRORLEVEL 1 GOTO END_CHECK_SQLITE3
 SET LOCAL_SQLITE3_DIR=%cd%\_local_sqlite3
 SET VTK_SQLITE_SRC_DIR=%ROOT_SRC_FOLDER%\vtk\ThirdParty\sqlite\vtksqlite
 
-IF EXIST "%LOCAL_SQLITE3_DIR%\bin\sqlite3.exe" GOTO USE_LOCAL_SQLITE3
+IF EXIST "%LOCAL_SQLITE3_DIR%\bin\sqlite3.exe" IF EXIST "%LOCAL_SQLITE3_DIR%\lib\sqlite3.lib" GOTO USE_LOCAL_SQLITE3
 IF NOT EXIST "%VTK_SQLITE_SRC_DIR%\sqlite3.c" GOTO END_CHECK_SQLITE3
 
 ECHO sqlite3 not found on this machine. Building a standalone copy from the vendored VTK sqlite3 amalgamation, needed by PROJ/GeoTIFF.
@@ -820,11 +820,27 @@ SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvar
 IF "%HOST_ARCH%"=="x86" SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvars32.bat%
 IF "%HOST_ARCH%"=="ARM64" SET SQLITE_VCVARS_SCRIPT=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvarsarm64.bat%
 
+REM sqlite3.lib, unlike sqlite3.exe above, is statically linked into PROJ
+REM (and therefore into cvextern.dll itself), so it must match %1 (the
+REM -Arch build target), not the host. Use vcvarsall.bat with the target
+REM arch so cl/lib produce object code for %1 regardless of which
+REM architecture this machine's CPU actually is. Building both sqlite3.lib
+REM and sqlite3.exe from the same host-arch vcvars call, as this used to do,
+REM silently produces a sqlite3.lib with the wrong machine type whenever %1
+REM differs from the host (e.g. %1=x86 on an x64 host), which cvextern's
+REM linker fails on with LNK2019 for every sqlite3_* symbol.
+SET SQLITE_LIB_VCVARSALL=%DEVENV:Common7\IDE\devenv.com=VC\Auxiliary\Build\vcvarsall.bat%
+SET SQLITE_LIB_VCVARSALL_ARG=amd64
+IF "%1"=="x86" SET SQLITE_LIB_VCVARSALL_ARG=x86
+IF "%1"=="arm" SET SQLITE_LIB_VCVARSALL_ARG=arm
+IF "%1"=="arm64" SET SQLITE_LIB_VCVARSALL_ARG=arm64
+
 REM DEVENV may instead be an MSBuild.exe fallback path on BuildTools-only
 REM installs, which won't match the substitution above. Bail out gracefully
 REM (skip the standalone-sqlite3 build, letting the original PROJ/CMake
 REM error surface as before this fix) rather than calling a bogus path.
 IF NOT EXIST %SQLITE_VCVARS_SCRIPT% GOTO END_CHECK_SQLITE3
+IF NOT EXIST %SQLITE_LIB_VCVARSALL% GOTO END_CHECK_SQLITE3
 
 mkdir "%LOCAL_SQLITE3_DIR%\src" 2>nul
 mkdir "%LOCAL_SQLITE3_DIR%\include" 2>nul
@@ -856,14 +872,22 @@ copy /Y "%LOCAL_SQLITE3_DIR%\src\vtk_sqlite_mangle.h" "%LOCAL_SQLITE3_DIR%\inclu
 copy /Y "%LOCAL_SQLITE3_DIR%\src\vtksqlite_export.h" "%LOCAL_SQLITE3_DIR%\include\" >nul
 
 REM Nested double quotes inside a single "cmd /c "..."" string are unreliable
-REM in batch, so drive the compile steps through a small generated helper
-REM script instead of one inline nested-quoted command line.
-ECHO @call %SQLITE_VCVARS_SCRIPT%> "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
-ECHO cd /d "%LOCAL_SQLITE3_DIR%\src">> "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
-ECHO cl /nologo /c /O2 /DSQLITE_THREADSAFE=1 /DSQLITE_ENABLE_COLUMN_METADATA sqlite3.c>> "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
-ECHO lib /nologo sqlite3.obj /OUT:"%LOCAL_SQLITE3_DIR%\lib\sqlite3.lib">> "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
-ECHO cl /nologo /O2 /DSQLITE_THREADSAFE=1 /Fe:"%LOCAL_SQLITE3_DIR%\bin\sqlite3.exe" shell.c sqlite3.c>> "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
-call "%LOCAL_SQLITE3_DIR%\build_sqlite3.bat"
+REM in batch, so drive the compile steps through small generated helper
+REM scripts instead of one inline nested-quoted command line. The lib and
+REM exe builds run as two separate nested cmd.exe calls (via separate helper
+REM scripts) rather than one script calling both vcvars in sequence, so the
+REM two builds' PATH/LIB/INCLUDE -- which target different architectures --
+REM can't contaminate each other.
+ECHO @call "%SQLITE_LIB_VCVARSALL%" %SQLITE_LIB_VCVARSALL_ARG%> "%LOCAL_SQLITE3_DIR%\build_sqlite3_lib.bat"
+ECHO cd /d "%LOCAL_SQLITE3_DIR%\src">> "%LOCAL_SQLITE3_DIR%\build_sqlite3_lib.bat"
+ECHO cl /nologo /c /O2 /DSQLITE_THREADSAFE=1 /DSQLITE_ENABLE_COLUMN_METADATA sqlite3.c>> "%LOCAL_SQLITE3_DIR%\build_sqlite3_lib.bat"
+ECHO lib /nologo sqlite3.obj /OUT:"%LOCAL_SQLITE3_DIR%\lib\sqlite3.lib">> "%LOCAL_SQLITE3_DIR%\build_sqlite3_lib.bat"
+call "%LOCAL_SQLITE3_DIR%\build_sqlite3_lib.bat"
+
+ECHO @call %SQLITE_VCVARS_SCRIPT%> "%LOCAL_SQLITE3_DIR%\build_sqlite3_exe.bat"
+ECHO cd /d "%LOCAL_SQLITE3_DIR%\src">> "%LOCAL_SQLITE3_DIR%\build_sqlite3_exe.bat"
+ECHO cl /nologo /O2 /DSQLITE_THREADSAFE=1 /Fe:"%LOCAL_SQLITE3_DIR%\bin\sqlite3.exe" shell.c sqlite3.c>> "%LOCAL_SQLITE3_DIR%\build_sqlite3_exe.bat"
+call "%LOCAL_SQLITE3_DIR%\build_sqlite3_exe.bat"
 
 :USE_LOCAL_SQLITE3
 SET SQLite3_ROOT=%LOCAL_SQLITE3_DIR%

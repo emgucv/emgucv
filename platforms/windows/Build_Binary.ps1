@@ -298,7 +298,9 @@ function Set-Sqlite3Fallback {
     param(
         [Parameter(Mandatory = $true)][string]$BuildFolder,
         [Parameter(Mandatory = $true)][string]$RootSrcFolder,
-        [Parameter(Mandatory = $true)][string]$VcVarsScript
+        [Parameter(Mandatory = $true)][string]$ExeVcVarsScript,
+        [Parameter(Mandatory = $true)][string]$LibVcVarsAllScript,
+        [Parameter(Mandatory = $true)][string]$LibVcVarsAllArg
     )
 
     $existing = Get-Command sqlite3.exe -ErrorAction SilentlyContinue
@@ -307,7 +309,7 @@ function Set-Sqlite3Fallback {
     $localDir = Join-Path $BuildFolder '_local_sqlite3'
     $vtkSqliteSrcDir = Join-Path $RootSrcFolder 'vtk\ThirdParty\sqlite\vtksqlite'
 
-    if (Test-Path (Join-Path $localDir 'bin\sqlite3.exe')) {
+    if ((Test-Path (Join-Path $localDir 'bin\sqlite3.exe')) -and (Test-Path (Join-Path $localDir 'lib\sqlite3.lib'))) {
         Set-Sqlite3EnvVars -LocalDir $localDir
         return
     }
@@ -315,8 +317,12 @@ function Set-Sqlite3Fallback {
         Write-Warning "sqlite3 not found and vtk submodule source is missing; PROJ's configure step may fail."
         return
     }
-    if (-not (Test-Path $VcVarsScript)) {
-        Write-Warning "sqlite3 not found and no vcvars script could be resolved for this toolchain; PROJ's configure step may fail."
+    if (-not (Test-Path $ExeVcVarsScript)) {
+        Write-Warning "sqlite3 not found and no host vcvars script could be resolved for this toolchain; PROJ's configure step may fail."
+        return
+    }
+    if (-not (Test-Path $LibVcVarsAllScript)) {
+        Write-Warning "sqlite3 not found and no vcvarsall.bat could be resolved for this toolchain; PROJ's configure step may fail."
         return
     }
 
@@ -356,19 +362,39 @@ function Set-Sqlite3Fallback {
     Copy-Item (Join-Path $srcDir 'vtk_sqlite_mangle.h') $includeDir -Force
     Copy-Item (Join-Path $srcDir 'vtksqlite_export.h') $includeDir -Force
 
-    # Run the actual compile inside a nested cmd.exe /c so the vcvars-set
+    # Run each compile inside its own nested cmd.exe /c so the vcvars-set
     # environment (cl.exe/lib.exe on PATH) doesn't leak into this script's
-    # own process environment.
-    $buildScript = Join-Path $localDir 'build_sqlite3.bat'
+    # own process environment, and so the two builds below -- which target
+    # different architectures -- don't contaminate each other's PATH/LIB/INCLUDE.
+    #
+    # sqlite3.lib is statically linked into PROJ, and therefore into
+    # cvextern.dll itself, so it must match the -Arch build target.
+    # sqlite3.exe is only a build-time tool that PROJ's CMake configure step
+    # directly *executes* to generate proj.db, so it must run on THIS
+    # machine and therefore must match the host OS architecture instead.
+    # Building both from the same (host-arch) vcvars call, as this used to
+    # do, silently produces a sqlite3.lib with the wrong machine type
+    # whenever -Arch differs from the host (e.g. -Arch x86 on an x64 host),
+    # which cvextern's linker fails on with LNK2019 for every sqlite3_*
+    # symbol.
+    $libBuildScript = Join-Path $localDir 'build_sqlite3_lib.bat'
     @"
-@call "$VcVarsScript"
+@call "$LibVcVarsAllScript" $LibVcVarsAllArg
 cd /d "$srcDir"
 cl /nologo /c /O2 /DSQLITE_THREADSAFE=1 /DSQLITE_ENABLE_COLUMN_METADATA sqlite3.c
 lib /nologo sqlite3.obj /OUT:"$libDir\sqlite3.lib"
-cl /nologo /O2 /DSQLITE_THREADSAFE=1 /Fe:"$binDir\sqlite3.exe" shell.c sqlite3.c
-"@ | Set-Content $buildScript -Encoding ASCII
+"@ | Set-Content $libBuildScript -Encoding ASCII
 
-    Invoke-Native -FilePath "$env:windir\System32\cmd.exe" -ArgumentList '/c', $buildScript
+    Invoke-Native -FilePath "$env:windir\System32\cmd.exe" -ArgumentList '/c', $libBuildScript
+
+    $exeBuildScript = Join-Path $localDir 'build_sqlite3_exe.bat'
+    @"
+@call "$ExeVcVarsScript"
+cd /d "$srcDir"
+cl /nologo /O2 /DSQLITE_THREADSAFE=1 /Fe:"$binDir\sqlite3.exe" shell.c sqlite3.c
+"@ | Set-Content $exeBuildScript -Encoding ASCII
+
+    Invoke-Native -FilePath "$env:windir\System32\cmd.exe" -ArgumentList '/c', $exeBuildScript
 
     Set-Sqlite3EnvVars -LocalDir $localDir
 }
@@ -870,7 +896,22 @@ try {
     }
     $hostVcVarsScript = $vsEnv.DevEnvPath -replace 'Common7\\IDE\\devenv\.com', "VC\Auxiliary\Build\$hostVcVarsName"
 
-    Set-Sqlite3Fallback -BuildFolder $buildFolder -RootSrcFolder $repoRoot -VcVarsScript $hostVcVarsScript
+    # sqlite3.lib, unlike sqlite3.exe above, is statically linked into PROJ
+    # (and thus into cvextern.dll), so it must match -Arch, not the host.
+    # Use vcvarsall.bat with the target arch so cl/lib produce object code
+    # for -Arch regardless of which architecture this machine's CPU is.
+    $libVcVarsAllArg = 'amd64'
+    switch ($Arch) {
+        'x86' { $libVcVarsAllArg = 'x86' }
+        'x86_64' { $libVcVarsAllArg = 'amd64' }
+        'arm' { $libVcVarsAllArg = 'arm' }
+        'arm64' { $libVcVarsAllArg = 'arm64' }
+    }
+    $libVcVarsAllScript = $vsEnv.DevEnvPath -replace 'Common7\\IDE\\devenv\.com', 'VC\Auxiliary\Build\vcvarsall.bat'
+
+    Set-Sqlite3Fallback -BuildFolder $buildFolder -RootSrcFolder $repoRoot `
+        -ExeVcVarsScript $hostVcVarsScript `
+        -LibVcVarsAllScript $libVcVarsAllScript -LibVcVarsAllArg $libVcVarsAllArg
 
     Invoke-Native -FilePath $vsEnv.CMakeExe -ArgumentList ($emguFlags.ToArray() + @('..'))
 
