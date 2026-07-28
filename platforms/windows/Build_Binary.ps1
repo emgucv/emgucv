@@ -27,6 +27,14 @@
 
 .PARAMETER Cuda
     Build with CUDA support. Was the other meaning of %2 ("gpu") in the .bat.
+    Implies -OnnxRuntime with the ONNX Runtime CUDA execution provider,
+    when the CUDA SDK is actually found.
+
+.PARAMETER OnnxRuntime
+    Build with the ONNX Runtime DNN engine (WITH_ONNXRUNTIME). New option,
+    had no .bat equivalent. Independent of -Cuda: with -Cuda it also
+    downloads the GPU-enabled ONNX Runtime package; without it, ONNX
+    Runtime's CPU execution provider is used.
 
 .PARAMETER CudaArchBin
     Manually specify CUDA_ARCH_BIN_OPTION, e.g. "8.6". Was %9 in the .bat.
@@ -62,6 +70,8 @@ param(
     [switch]$Cuda,
 
     [string]$CudaArchBin = '',
+
+    [switch]$OnnxRuntime,
 
     [ValidateSet('None', 'Intel', 'IntelOpenVino', 'OpenVino', 'WindowsStore10',
         'WindowsPhone81', 'WindowsStore81', 'VS2015', 'VS2022', 'Commercial')]
@@ -744,10 +754,12 @@ try {
     }
 
     # --- CUDA ---------------------------------------------------------------
+    $cudaSdkFound = $false
     if ($Cuda) {
         $cudaHostCompiler = Find-CudaHostCompiler -VsEnv $vsEnv
         $cudaSdkDir = Find-CudaSdkDir
         if (Test-Path $cudaSdkDir) {
+            $cudaSdkFound = $true
             $cudaArchBinOption = Get-CudaArchBinOption -CudaSdkDir $cudaSdkDir -Override $CudaArchBin
             $emguFlags.Add('-DCUDA_64_BIT_DEVICE_CODE:BOOL=TRUE')
             $emguFlags.Add('-DWITH_CUDA:BOOL=TRUE')
@@ -761,8 +773,6 @@ try {
             $emguFlags.Add('-DBUILD_opencv_world:BOOL=TRUE')
             $emguFlags.Add('-DCUDA_NVCC_FLAGS:STRING=--expt-relaxed-constexpr --std=c++17')
             $emguFlags.Add('-DCMAKE_CXX_STANDARD:STRING=17')
-            $emguFlags.Add('-DWITH_ONNXRUNTIME:BOOL=ON')
-            $emguFlags.Add('-DDOWNLOAD_ONNXRUNTIME_GPU:BOOL=ON')
             if ($cudaHostCompiler) { $emguFlags.Add("-DCUDA_HOST_COMPILER:String=$(ConvertTo-ForwardSlash $cudaHostCompiler)") }
             $nvcuvidHeader = Join-Path $cudaSdkDir 'include\nvcuvid.h'
             if (Test-Path $nvcuvidHeader) { $emguFlags.Add('-DWITH_NVCUVID:BOOL=TRUE') }
@@ -771,6 +781,14 @@ try {
     else {
         $emguFlags.Add('-DWITH_CUDA:BOOL=FALSE')
         $emguFlags.Add('-DBUILD_SHARED_LIBS:BOOL=FALSE')
+    }
+
+    # --- ONNX Runtime -----------------------------------------------------------
+    if ($OnnxRuntime -or $cudaSdkFound) {
+        $emguFlags.Add('-DWITH_ONNXRUNTIME:BOOL=ON')
+        if ($cudaSdkFound) {
+            $emguFlags.Add('-DDOWNLOAD_ONNXRUNTIME_GPU:BOOL=ON')
+        }
     }
 
     # --- OpenVINO -------------------------------------------------------------
