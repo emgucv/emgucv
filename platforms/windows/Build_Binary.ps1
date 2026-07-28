@@ -299,35 +299,45 @@ function Set-Sqlite3Fallback {
         [Parameter(Mandatory = $true)][string]$LibVcVarsAllArg
     )
 
-    $existing = Get-Command sqlite3.exe -ErrorAction SilentlyContinue
-    if ($existing) { return }
-
     $localDir = Join-Path $BuildFolder '_local_sqlite3'
     $vtkSqliteSrcDir = Join-Path $RootSrcFolder 'vtk\ThirdParty\sqlite\vtksqlite'
+    $srcDir = Join-Path $localDir 'src'
+    $includeDir = Join-Path $localDir 'include'
+    $libDir = Join-Path $localDir 'lib'
+    $binDir = Join-Path $localDir 'bin'
+    $localLib = Join-Path $libDir 'sqlite3.lib'
+    $localExe = Join-Path $binDir 'sqlite3.exe'
 
-    if ((Test-Path (Join-Path $localDir 'bin\sqlite3.exe')) -and (Test-Path (Join-Path $localDir 'lib\sqlite3.lib'))) {
-        Set-Sqlite3EnvVars -LocalDir $localDir
+    # sqlite3.exe is only a build-time tool that PROJ's CMake configure step
+    # directly *executes* to generate proj.db, so any sqlite3.exe already on
+    # PATH satisfies this need regardless of where it came from.
+    $needExe = (-not (Get-Command sqlite3.exe -ErrorAction SilentlyContinue)) -and (-not (Test-Path $localExe))
+    # sqlite3.lib is statically linked into PROJ, and therefore into
+    # cvextern.dll itself, so it must specifically match -Arch. A system
+    # sqlite3.exe on PATH says nothing about whether a matching dev
+    # lib/header exists too, so this is checked independently -- an
+    # exe-only system install must not skip building the lib.
+    $needLib = -not (Test-Path $localLib)
+
+    if (-not $needExe -and -not $needLib) {
+        if (Test-Path $localLib) { Set-Sqlite3EnvVars -LocalDir $localDir }
         return
     }
     if (-not (Test-Path (Join-Path $vtkSqliteSrcDir 'sqlite3.c'))) {
         Write-Warning "sqlite3 not found and vtk submodule source is missing; PROJ's configure step may fail."
         return
     }
-    if (-not (Test-Path $ExeVcVarsScript)) {
-        Write-Warning "sqlite3 not found and no host vcvars script could be resolved for this toolchain; PROJ's configure step may fail."
+    if ($needExe -and -not (Test-Path $ExeVcVarsScript)) {
+        Write-Warning "sqlite3.exe not found and no host vcvars script could be resolved for this toolchain; PROJ's configure step may fail."
         return
     }
-    if (-not (Test-Path $LibVcVarsAllScript)) {
-        Write-Warning "sqlite3 not found and no vcvarsall script could be resolved for this toolchain; PROJ's configure step may fail."
+    if ($needLib -and -not (Test-Path $LibVcVarsAllScript)) {
+        Write-Warning "sqlite3.lib not found and no vcvarsall script could be resolved for this toolchain; PROJ's configure step may fail."
         return
     }
 
-    Write-Host "sqlite3 not found on this machine. Building a standalone copy from the vendored VTK sqlite3 amalgamation, needed by PROJ/GeoTIFF."
+    Write-Host "Building the missing sqlite3 piece(s) from the vendored VTK sqlite3 amalgamation, needed by PROJ/GeoTIFF."
 
-    $srcDir = Join-Path $localDir 'src'
-    $includeDir = Join-Path $localDir 'include'
-    $libDir = Join-Path $localDir 'lib'
-    $binDir = Join-Path $localDir 'bin'
     New-Item -ItemType Directory -Force -Path $srcDir, $includeDir, $libDir, $binDir | Out-Null
 
     Copy-Item (Join-Path $vtkSqliteSrcDir 'sqlite3.c') $srcDir -Force
@@ -373,24 +383,28 @@ function Set-Sqlite3Fallback {
     # whenever -Arch differs from the host (e.g. -Arch x86 on an x64 host),
     # which cvextern's linker fails on with LNK2019 for every sqlite3_*
     # symbol.
-    $libBuildScript = Join-Path $localDir 'build_sqlite3_lib.bat'
-    @"
+    if ($needLib) {
+        $libBuildScript = Join-Path $localDir 'build_sqlite3_lib.bat'
+        @"
 @call "$LibVcVarsAllScript" $LibVcVarsAllArg
 cd /d "$srcDir"
 cl /nologo /c /O2 /DSQLITE_THREADSAFE=1 /DSQLITE_ENABLE_COLUMN_METADATA sqlite3.c
 lib /nologo sqlite3.obj /OUT:"$libDir\sqlite3.lib"
 "@ | Set-Content $libBuildScript -Encoding ASCII
 
-    Invoke-Native -FilePath "$env:windir\System32\cmd.exe" -ArgumentList '/c', $libBuildScript
+        Invoke-Native -FilePath "$env:windir\System32\cmd.exe" -ArgumentList '/c', $libBuildScript
+    }
 
-    $exeBuildScript = Join-Path $localDir 'build_sqlite3_exe.bat'
-    @"
+    if ($needExe) {
+        $exeBuildScript = Join-Path $localDir 'build_sqlite3_exe.bat'
+        @"
 @call "$ExeVcVarsScript"
 cd /d "$srcDir"
 cl /nologo /O2 /DSQLITE_THREADSAFE=1 /Fe:"$binDir\sqlite3.exe" shell.c sqlite3.c
 "@ | Set-Content $exeBuildScript -Encoding ASCII
 
-    Invoke-Native -FilePath "$env:windir\System32\cmd.exe" -ArgumentList '/c', $exeBuildScript
+        Invoke-Native -FilePath "$env:windir\System32\cmd.exe" -ArgumentList '/c', $exeBuildScript
+    }
 
     Set-Sqlite3EnvVars -LocalDir $localDir
 }
