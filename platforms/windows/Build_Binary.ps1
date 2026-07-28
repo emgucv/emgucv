@@ -295,7 +295,7 @@ function Resolve-VisualStudioEnvironment {
 
 function Get-VcpkgRoot {
     <#
-    Detects an existing vcpkg install, in order:
+    Detects an existing, classic-mode-capable vcpkg install, in order:
       1. VS-bundled vcpkg under <VS install dir>\VC\vcpkg, newest VS first
          (VS2026, VS2022, VS2019, VS2017, then Build Tools-only installs) --
          preferred since it's the copy Visual Studio itself keeps updated
@@ -306,44 +306,71 @@ function Get-VcpkgRoot {
          set instead -- vcpkg is preinstalled there at C:\vcpkg, but not
          under VCPKG_ROOT and not necessarily on PATH).
       4. vcpkg.exe on PATH, as a last resort.
+
+    Every candidate is required to have a local ports\ directory. Recent
+    Visual Studio releases bundle a manifest-mode-only vcpkg with no local
+    ports tree at all (confirmed on VS "18": `vcpkg install pkg:triplet`
+    fails outright with "this vcpkg instance requires a manifest" /
+    "does not have a classic mode instance", not merely a missing flag --
+    there is no way to make that binary do a classic install), which would
+    otherwise be silently preferred over a perfectly good classic-mode
+    install found later in this same list.
+
     Returns $null if none of these resolve -- vcpkg use is opportunistic,
     never required.
     #>
     param([Parameter(Mandatory = $true)]$VsEnv)
 
+    function Test-ClassicVcpkg([string]$Dir) {
+        return (Test-Path (Join-Path $Dir 'vcpkg.exe')) -and (Test-Path (Join-Path $Dir 'ports'))
+    }
+
     foreach ($vsDir in @($VsEnv.Vs2026Dir, $VsEnv.Vs2022Dir, $VsEnv.Vs2019Dir, $VsEnv.Vs2017Dir, $VsEnv.VsBuildToolsDir)) {
         if ($vsDir) {
             $vsVcpkgDir = Join-Path $vsDir 'VC\vcpkg'
-            if (Test-Path (Join-Path $vsVcpkgDir 'vcpkg.exe')) {
+            if (Test-ClassicVcpkg $vsVcpkgDir) {
                 return $vsVcpkgDir
             }
         }
     }
-    if ($env:VCPKG_ROOT -and (Test-Path (Join-Path $env:VCPKG_ROOT 'vcpkg.exe'))) {
+    if ($env:VCPKG_ROOT -and (Test-ClassicVcpkg $env:VCPKG_ROOT)) {
         return $env:VCPKG_ROOT
     }
-    if ($env:VCPKG_INSTALLATION_ROOT -and (Test-Path (Join-Path $env:VCPKG_INSTALLATION_ROOT 'vcpkg.exe'))) {
+    if ($env:VCPKG_INSTALLATION_ROOT -and (Test-ClassicVcpkg $env:VCPKG_INSTALLATION_ROOT)) {
         return $env:VCPKG_INSTALLATION_ROOT
     }
     $vcpkgCmd = Get-Command vcpkg.exe -ErrorAction SilentlyContinue
     if ($vcpkgCmd) {
-        return Split-Path $vcpkgCmd.Source -Parent
+        $pathVcpkgDir = Split-Path $vcpkgCmd.Source -Parent
+        if (Test-ClassicVcpkg $pathVcpkgDir) {
+            return $pathVcpkgDir
+        }
     }
     return $null
 }
 
-function Get-VcpkgTriplet {
+function Get-VcpkgStaticTriplet {
     <#
     Maps a vcvarsall.bat-style arch arg (x86/amd64/arm/arm64, as already
-    computed for $LibVcVarsAllArg) to the matching vcpkg triplet name.
+    computed for $LibVcVarsAllArg) to the matching *-windows-static-md
+    vcpkg triplet: a true static .lib (not a DLL + import lib, since
+    sqlite3.lib here is statically linked into PROJ/cvextern) built against
+    the dynamic CRT (/MD) to match cl.exe's own default linkage -- and thus
+    the from-source build this replaces -- rather than the plain
+    *-windows-static triplets, which switch to the static CRT (/MT) and
+    would otherwise introduce a CRT-linkage mismatch against the rest of
+    cvextern's (dynamic-CRT) objects.
+
+    Returns $null for 'arm': no arm-windows-static-md triplet exists in
+    vcpkg (only the dynamic-CRT arm-windows-static), so 32-bit ARM always
+    falls back to the from-source build for the lib.
     #>
     param([Parameter(Mandatory = $true)][string]$VcVarsAllArg)
     switch ($VcVarsAllArg) {
-        'x86' { return 'x86-windows' }
-        'amd64' { return 'x64-windows' }
-        'arm' { return 'arm-windows' }
-        'arm64' { return 'arm64-windows' }
-        default { return 'x64-windows' }
+        'x86' { return 'x86-windows-static-md' }
+        'amd64' { return 'x64-windows-static-md' }
+        'arm64' { return 'arm64-windows-static-md' }
+        default { return $null }
     }
 }
 
@@ -358,16 +385,20 @@ function Get-VcpkgHostTriplet {
 
 function Install-VcpkgPackage {
     <#
-    Runs `vcpkg install`, non-fatally: vcpkg is a best-effort optimization
-    here, not a requirement, so a failure (network, package unavailable,
-    etc.) just falls through to the from-source build instead of aborting
-    the whole script the way Invoke-Native's throw-on-failure would.
+    Runs `vcpkg install --classic`, non-fatally: vcpkg is a best-effort
+    optimization here, not a requirement, so a failure (network, package
+    unavailable, etc.) just falls through to the from-source build instead
+    of aborting the whole script the way Invoke-Native's throw-on-failure
+    would. -classic is explicit here since Get-VcpkgRoot only ever selects
+    installs it already verified are classic-mode-capable (a local ports\
+    tree), but being explicit costs nothing and matches vcpkg's own
+    recommended practice for scripted classic-mode use.
     #>
     param(
         [Parameter(Mandatory = $true)][string]$VcpkgRoot,
         [Parameter(Mandatory = $true)][string]$PackageSpec
     )
-    & (Join-Path $VcpkgRoot 'vcpkg.exe') install $PackageSpec | Out-Host
+    & (Join-Path $VcpkgRoot 'vcpkg.exe') install $PackageSpec --classic | Out-Host
     if ($LASTEXITCODE -ne 0) {
         Write-Warning "vcpkg install $PackageSpec failed (exit $LASTEXITCODE); falling back to building sqlite3 from source."
     }
@@ -418,13 +449,15 @@ function Set-Sqlite3Fallback {
     $vcpkgRoot = Get-VcpkgRoot -VsEnv $VsEnv
     if ($vcpkgRoot) {
         if ($needLib) {
-            $targetTriplet = Get-VcpkgTriplet -VcVarsAllArg $LibVcVarsAllArg
-            Install-VcpkgPackage -VcpkgRoot $vcpkgRoot -PackageSpec "sqlite3:$targetTriplet"
-            $vcpkgTripletDir = Join-Path $vcpkgRoot "installed\$targetTriplet"
-            if ((Test-Path (Join-Path $vcpkgTripletDir 'lib\sqlite3.lib')) -and (Test-Path (Join-Path $vcpkgTripletDir 'include\sqlite3.h'))) {
-                Write-Host "sqlite3 dev library resolved via vcpkg ($targetTriplet)."
-                $sqlite3Root = $vcpkgTripletDir
-                $needLib = $false
+            $targetTriplet = Get-VcpkgStaticTriplet -VcVarsAllArg $LibVcVarsAllArg
+            if ($targetTriplet) {
+                Install-VcpkgPackage -VcpkgRoot $vcpkgRoot -PackageSpec "sqlite3:$targetTriplet"
+                $vcpkgTripletDir = Join-Path $vcpkgRoot "installed\$targetTriplet"
+                if ((Test-Path (Join-Path $vcpkgTripletDir 'lib\sqlite3.lib')) -and (Test-Path (Join-Path $vcpkgTripletDir 'include\sqlite3.h'))) {
+                    Write-Host "sqlite3 dev library resolved via vcpkg ($targetTriplet)."
+                    $sqlite3Root = $vcpkgTripletDir
+                    $needLib = $false
+                }
             }
         }
         if ($needExe) {
