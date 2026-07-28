@@ -284,11 +284,94 @@ function Resolve-VisualStudioEnvironment {
 #
 # PROJ (built from source to satisfy Emgu.CV.Extern's unconditional GeoTIFF
 # dependency) needs a sqlite3 executable plus the SQLite3 dev library/header,
-# which aren't guaranteed to be installed. If missing, compile a standalone
-# copy from the sqlite3.c amalgamation already vendored by the vtk submodule,
-# using no-op stand-ins for VTK's symbol-mangling/export headers so it
-# compiles with normal, unmangled sqlite3_* symbol names.
+# which aren't guaranteed to be installed. If an existing vcpkg install is
+# detected (VCPKG_ROOT, or vcpkg.exe on PATH), it is used opportunistically
+# for whichever of the two is still missing. Anything vcpkg doesn't resolve
+# falls back to compiling a standalone copy from the sqlite3.c amalgamation
+# already vendored by the vtk submodule, using no-op stand-ins for VTK's
+# symbol-mangling/export headers so it compiles with normal, unmangled
+# sqlite3_* symbol names.
 # ---------------------------------------------------------------------------
+
+function Get-VcpkgRoot {
+    <#
+    Detects an existing vcpkg install, in order:
+      1. VS-bundled vcpkg under <VS install dir>\VC\vcpkg, newest VS first
+         (VS2026, VS2022, VS2019, VS2017, then Build Tools-only installs) --
+         preferred since it's the copy Visual Studio itself keeps updated
+         and version-matched to the installed toolset.
+      2. VCPKG_ROOT (the standard convention used by vcpkg's own docs and
+         most CI actions), for an explicit, user-chosen install.
+      3. VCPKG_INSTALLATION_ROOT (what GitHub-hosted Windows runner images
+         set instead -- vcpkg is preinstalled there at C:\vcpkg, but not
+         under VCPKG_ROOT and not necessarily on PATH).
+      4. vcpkg.exe on PATH, as a last resort.
+    Returns $null if none of these resolve -- vcpkg use is opportunistic,
+    never required.
+    #>
+    param([Parameter(Mandatory = $true)]$VsEnv)
+
+    foreach ($vsDir in @($VsEnv.Vs2026Dir, $VsEnv.Vs2022Dir, $VsEnv.Vs2019Dir, $VsEnv.Vs2017Dir, $VsEnv.VsBuildToolsDir)) {
+        if ($vsDir) {
+            $vsVcpkgDir = Join-Path $vsDir 'VC\vcpkg'
+            if (Test-Path (Join-Path $vsVcpkgDir 'vcpkg.exe')) {
+                return $vsVcpkgDir
+            }
+        }
+    }
+    if ($env:VCPKG_ROOT -and (Test-Path (Join-Path $env:VCPKG_ROOT 'vcpkg.exe'))) {
+        return $env:VCPKG_ROOT
+    }
+    if ($env:VCPKG_INSTALLATION_ROOT -and (Test-Path (Join-Path $env:VCPKG_INSTALLATION_ROOT 'vcpkg.exe'))) {
+        return $env:VCPKG_INSTALLATION_ROOT
+    }
+    $vcpkgCmd = Get-Command vcpkg.exe -ErrorAction SilentlyContinue
+    if ($vcpkgCmd) {
+        return Split-Path $vcpkgCmd.Source -Parent
+    }
+    return $null
+}
+
+function Get-VcpkgTriplet {
+    <#
+    Maps a vcvarsall.bat-style arch arg (x86/amd64/arm/arm64, as already
+    computed for $LibVcVarsAllArg) to the matching vcpkg triplet name.
+    #>
+    param([Parameter(Mandatory = $true)][string]$VcVarsAllArg)
+    switch ($VcVarsAllArg) {
+        'x86' { return 'x86-windows' }
+        'amd64' { return 'x64-windows' }
+        'arm' { return 'arm-windows' }
+        'arm64' { return 'arm64-windows' }
+        default { return 'x64-windows' }
+    }
+}
+
+function Get-VcpkgHostTriplet {
+    <# The vcpkg triplet matching this machine's actual OS architecture. #>
+    switch ([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) {
+        'X86' { return 'x86-windows' }
+        'Arm64' { return 'arm64-windows' }
+        default { return 'x64-windows' }
+    }
+}
+
+function Install-VcpkgPackage {
+    <#
+    Runs `vcpkg install`, non-fatally: vcpkg is a best-effort optimization
+    here, not a requirement, so a failure (network, package unavailable,
+    etc.) just falls through to the from-source build instead of aborting
+    the whole script the way Invoke-Native's throw-on-failure would.
+    #>
+    param(
+        [Parameter(Mandatory = $true)][string]$VcpkgRoot,
+        [Parameter(Mandatory = $true)][string]$PackageSpec
+    )
+    & (Join-Path $VcpkgRoot 'vcpkg.exe') install $PackageSpec | Out-Host
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "vcpkg install $PackageSpec failed (exit $LASTEXITCODE); falling back to building sqlite3 from source."
+    }
+}
 
 function Set-Sqlite3Fallback {
     param(
@@ -296,7 +379,8 @@ function Set-Sqlite3Fallback {
         [Parameter(Mandatory = $true)][string]$RootSrcFolder,
         [Parameter(Mandatory = $true)][string]$ExeVcVarsScript,
         [Parameter(Mandatory = $true)][string]$LibVcVarsAllScript,
-        [Parameter(Mandatory = $true)][string]$LibVcVarsAllArg
+        [Parameter(Mandatory = $true)][string]$LibVcVarsAllArg,
+        [Parameter(Mandatory = $true)]$VsEnv
     )
 
     $localDir = Join-Path $BuildFolder '_local_sqlite3'
@@ -320,7 +404,43 @@ function Set-Sqlite3Fallback {
     $needLib = -not (Test-Path $localLib)
 
     if (-not $needExe -and -not $needLib) {
-        if (Test-Path $localLib) { Set-Sqlite3EnvVars -LocalDir $localDir }
+        if (Test-Path $localLib) { Set-Sqlite3EnvVars -Root $localDir -BinDir $binDir }
+        return
+    }
+
+    # Values ultimately used to set SQLite3_ROOT / PATH. Default to the local
+    # from-source build's output paths; overridden below per-piece whenever
+    # vcpkg supplies that piece instead.
+    $sqlite3Root = $localDir
+    $sqlite3BinDir = $binDir
+
+    # --- vcpkg (opportunistic; never required) --------------------------------
+    $vcpkgRoot = Get-VcpkgRoot -VsEnv $VsEnv
+    if ($vcpkgRoot) {
+        if ($needLib) {
+            $targetTriplet = Get-VcpkgTriplet -VcVarsAllArg $LibVcVarsAllArg
+            Install-VcpkgPackage -VcpkgRoot $vcpkgRoot -PackageSpec "sqlite3:$targetTriplet"
+            $vcpkgTripletDir = Join-Path $vcpkgRoot "installed\$targetTriplet"
+            if ((Test-Path (Join-Path $vcpkgTripletDir 'lib\sqlite3.lib')) -and (Test-Path (Join-Path $vcpkgTripletDir 'include\sqlite3.h'))) {
+                Write-Host "sqlite3 dev library resolved via vcpkg ($targetTriplet)."
+                $sqlite3Root = $vcpkgTripletDir
+                $needLib = $false
+            }
+        }
+        if ($needExe) {
+            $hostTriplet = Get-VcpkgHostTriplet
+            Install-VcpkgPackage -VcpkgRoot $vcpkgRoot -PackageSpec "sqlite3[tool]:$hostTriplet"
+            $vcpkgToolsDir = Join-Path $vcpkgRoot "installed\$hostTriplet\tools"
+            if (Test-Path (Join-Path $vcpkgToolsDir 'sqlite3.exe')) {
+                Write-Host "sqlite3.exe resolved via vcpkg ($hostTriplet)."
+                $sqlite3BinDir = $vcpkgToolsDir
+                $needExe = $false
+            }
+        }
+    }
+
+    if (-not $needExe -and -not $needLib) {
+        Set-Sqlite3EnvVars -Root $sqlite3Root -BinDir $sqlite3BinDir
         return
     }
     if (-not (Test-Path (Join-Path $vtkSqliteSrcDir 'sqlite3.c'))) {
@@ -406,13 +526,23 @@ cl /nologo /O2 /DSQLITE_THREADSAFE=1 /Fe:"$binDir\sqlite3.exe" shell.c sqlite3.c
         Invoke-Native -FilePath "$env:windir\System32\cmd.exe" -ArgumentList '/c', $exeBuildScript
     }
 
-    Set-Sqlite3EnvVars -LocalDir $localDir
+    Set-Sqlite3EnvVars -Root $sqlite3Root -BinDir $sqlite3BinDir
 }
 
 function Set-Sqlite3EnvVars {
-    param([Parameter(Mandatory = $true)][string]$LocalDir)
-    $env:SQLite3_ROOT = $LocalDir
-    $env:PATH = "$LocalDir\bin;$env:PATH"
+    <#
+    Root is a directory containing include/ + lib/ (either $localDir from the
+    from-source build, or a vcpkg installed/<triplet> directory -- both use
+    that same layout, which is exactly what CMake's find_package(SQLite3)
+    hint variable expects). BinDir is wherever sqlite3.exe actually lives,
+    prepended to PATH so PROJ's CMake configure step can invoke it.
+    #>
+    param(
+        [Parameter(Mandatory = $true)][string]$Root,
+        [Parameter(Mandatory = $true)][string]$BinDir
+    )
+    $env:SQLite3_ROOT = $Root
+    $env:PATH = "$BinDir;$env:PATH"
 }
 
 # ---------------------------------------------------------------------------
@@ -926,7 +1056,8 @@ try {
 
     Set-Sqlite3Fallback -BuildFolder $buildFolder -RootSrcFolder $repoRoot `
         -ExeVcVarsScript $hostVcVarsScript `
-        -LibVcVarsAllScript $libVcVarsAllScript -LibVcVarsAllArg $libVcVarsAllArg
+        -LibVcVarsAllScript $libVcVarsAllScript -LibVcVarsAllArg $libVcVarsAllArg `
+        -VsEnv $vsEnv
 
     Invoke-Native -FilePath $vsEnv.CMakeExe -ArgumentList ($emguFlags.ToArray() + @('..'))
 
