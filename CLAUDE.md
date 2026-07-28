@@ -4,11 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Windows Shell Note
 
-On this machine, `cmd.exe` in PATH may resolve to the msys64 version, which cannot run Windows batch files (`.bat`) correctly. **Always use the full path `C:\Windows\System32\cmd.exe`** when invoking cmd.exe from PowerShell or Bash tools. Example:
+On this machine, `cmd.exe` in PATH may resolve to the msys64 version, which cannot run Windows batch files (`.bat`) correctly. **Always use the full path `C:\Windows\System32\cmd.exe`** when invoking cmd.exe from PowerShell or Bash tools. Example (for genuine remaining `.bat` files, e.g. `platforms/windows/docker/Docker_Build_Helper.bat`):
 
 ```powershell
-& "C:\Windows\System32\cmd.exe" /c "E:\repo\emgucv_5.0\platforms\windows\Build_Binary_x86-64_inf_doc.bat"
+& "C:\Windows\System32\cmd.exe" /c "cd /d E:\repo\emgucv_5.0\platforms\windows\docker && Docker_Build_Helper.bat"
 ```
+
+Note: from **Git Bash**, avoid `cmd.exe /c "..."` entirely — Bash's MSYS path-mangling layer rewrites the bare `/c` flag into a Windows drive path (`C:\`), silently corrupting the invocation into an interactive shell that immediately exits on EOF with no output or error. Use the PowerShell tool for `cmd.exe`/`.bat` invocations instead.
+
+All Windows native-build scripts (`platforms/windows/Build_Binary*.ps1`) are now PowerShell — invoke them directly (`& .\Build_Binary.ps1 -Arch x86_64 ...`), no `cmd.exe` wrapper needed. The legacy `.bat` equivalents have been removed.
 
 ## Project Overview
 
