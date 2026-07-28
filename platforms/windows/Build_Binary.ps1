@@ -3,33 +3,33 @@
     Configures (and optionally builds) the Emgu CV native C++ layer on Windows.
 
 .DESCRIPTION
-    PowerShell port of Build_Binary_x86.bat. Build_Binary_x86.bat is left
-    completely untouched -- this script is being validated in parallel
-    before any wrapper scripts, CI, or Docker builds are repointed to it.
-    See the migration plan for the full inventory of what still calls the
-    .bat and is deliberately not touched by this file.
-
     Targets Windows PowerShell 5.1 syntax (no ternary/null-coalescing/etc.)
     so it runs without any extra install on a stock Windows machine.
 
-    Unlike the .bat, every external command's exit code is checked and a
-    failure throws immediately instead of silently continuing into a broken
-    partial build.
+    Every external command's exit code is checked and a failure throws
+    immediately instead of silently continuing into a broken partial build.
 
 .PARAMETER Arch
-    Target architecture. Was positional %1 in the .bat.
+    Target architecture.
 
 .PARAMETER ComponentSet
-    Which OpenCV/Emgu CV component set to build. Was folded into %2 in the
-    .bat (which used the same slot for this AND the -Cuda flag below --
-    split into two parameters here since nothing in the current wrapper
-    scripts ever combines Core/Mini with CUDA anyway).
+    Which OpenCV/Emgu CV component set to build.
 
 .PARAMETER Cuda
-    Build with CUDA support. Was the other meaning of %2 ("gpu") in the .bat.
+    Build with CUDA support. Does not by itself enable WITH_ONNXRUNTIME;
+    combined with -OnnxRuntime (and the CUDA SDK actually found) it
+    additionally downloads the GPU-enabled ONNX Runtime package instead of
+    the CPU one.
+
+.PARAMETER OnnxRuntime
+    Build with the ONNX Runtime DNN engine (WITH_ONNXRUNTIME). Purely
+    opt-in: -Cuda alone does not enable it. Alone, ONNX Runtime's CPU
+    execution provider is used; combined with -Cuda (and the CUDA SDK
+    actually found), the GPU-enabled ONNX Runtime package is downloaded
+    instead.
 
 .PARAMETER CudaArchBin
-    Manually specify CUDA_ARCH_BIN_OPTION, e.g. "8.6". Was %9 in the .bat.
+    Manually specify CUDA_ARCH_BIN_OPTION, e.g. "8.6".
 
 .PARAMETER OnnxRuntime
     Build with ONNX Runtime (CPU) support via WITH_ONNXRUNTIME/DOWNLOAD_ONNXRUNTIME.
@@ -37,23 +37,22 @@
     Runtime package unconditionally.
 
 .PARAMETER Toolchain
-    Compiler / VS-version / UWP selection. Was %3 in the .bat.
+    Compiler / VS-version / UWP selection.
 
 .PARAMETER ExtraModules
-    Optional extra module to enable. Was %4 in the .bat.
+    Optional extra module to enable.
 
 .PARAMETER Documentation
-    Build the documentation target. Was %5=="doc" in the .bat.
+    Build the documentation target.
 
 .PARAMETER Package
-    Build the .zip/.exe package target. Was %6=="package" in the .bat.
+    Build the .zip/.exe package target.
 
 .PARAMETER Build
-    Actually build (not just configure) after running CMake. Was
-    %7=="build" in the .bat.
+    Actually build (not just configure) after running CMake.
 
 .PARAMETER Nuget
-    Build the NuGet package target. Was %8=="nuget" in the .bat.
+    Build the NuGet package target.
 #>
 [CmdletBinding()]
 param(
@@ -91,10 +90,8 @@ $ErrorActionPreference = 'Stop'
 
 function Invoke-Native {
     <#
-    Runs an external command and throws if it exits non-zero. The .bat this
-    replaces never checked exit codes and would silently continue on
-    failure; this is the one deliberate, happy-path-preserving behavior
-    change (see script synopsis).
+    Runs an external command and throws if it exits non-zero, instead of
+    silently continuing on failure into a broken partial build.
 
     Piped through Out-Host rather than left as bare `& $FilePath @Args`:
     PowerShell treats an external command's stdout as pipeline output, so
@@ -124,13 +121,10 @@ function ConvertTo-ForwardSlash {
 # ---------------------------------------------------------------------------
 # Visual Studio / CMake toolchain detection
 #
-# Ports the vswhere-based cascade from Build_Binary_x86.bat, including this
-# session's fix: derive tool paths from the already-resolved DevEnvPath via
-# ordinary string replacement, not by re-splicing a raw, unquoted
-# installationPath (the source of the "Program Files (x86)" parsing bugs
-# that motivated the .bat fix in the first place). PowerShell's -replace
-# doesn't have the .bat's %-expansion-before-parsing hazard, so this is
-# purely for behavioral fidelity, not because the hazard exists here too.
+# A vswhere-based cascade. Tool paths are derived from the already-resolved
+# DevEnvPath via ordinary string replacement, not by re-splicing a raw,
+# unquoted installationPath (which can contain "Program Files (x86)",
+# unsafe to splice into a fresh path).
 # ---------------------------------------------------------------------------
 
 function Resolve-VisualStudioEnvironment {
@@ -170,7 +164,7 @@ function Resolve-VisualStudioEnvironment {
     $vs2026 = DevEnvPath $vs2026Dir
 
     # Legacy VS2005-2015 (COMNTOOLS environment variables). Dead on any
-    # modern machine, but ported for fidelity with the .bat.
+    # modern machine, kept for fallback fidelity on very old build hosts.
     function LegacyDevEnvPath([string]$EnvVarName) {
         $toolsDir = [Environment]::GetEnvironmentVariable($EnvVarName)
         if ([string]::IsNullOrEmpty($toolsDir)) { return '' }
@@ -191,9 +185,9 @@ function Resolve-VisualStudioEnvironment {
     $msbuildBuildTools = ''
     if (Test-Path (Join-Path $buildToolsFolder 'MSBuild\Current\Bin\MSBuild.exe')) { $msbuildBuildTools = Join-Path $buildToolsFolder 'MSBuild\Current\Bin\MSBuild.exe' }
 
-    # DEVENV resolution cascade -- mirrors the .bat's fallthrough order
-    # exactly: later checks overwrite earlier ones unless a short-circuit
-    # (openni / WindowsPhone81 / vs2015 / vs2022) stops the cascade early.
+    # DEVENV resolution cascade: later checks overwrite earlier ones unless a
+    # short-circuit (openni / WindowsPhone81 / vs2015 / vs2022) stops the
+    # cascade early.
     $devEnvKind = ''
     $devEnvPath = ''
     if ($msbuild35) { $devEnvKind = 'MSBuild35'; $devEnvPath = $msbuild35 }
@@ -291,15 +285,144 @@ function Resolve-VisualStudioEnvironment {
 }
 
 # ---------------------------------------------------------------------------
-# sqlite3 fallback (ported from this session's Build_Binary_x86.bat fix)
+# sqlite3 fallback
 #
 # PROJ (built from source to satisfy Emgu.CV.Extern's unconditional GeoTIFF
 # dependency) needs a sqlite3 executable plus the SQLite3 dev library/header,
-# which aren't guaranteed to be installed. If missing, compile a standalone
-# copy from the sqlite3.c amalgamation already vendored by the vtk submodule,
-# using no-op stand-ins for VTK's symbol-mangling/export headers so it
-# compiles with normal, unmangled sqlite3_* symbol names.
+# which aren't guaranteed to be installed. If an existing vcpkg install is
+# detected, it is used opportunistically (manifest mode, against the fixed
+# vcpkg-manifest\vcpkg.json alongside this script) for whichever of the two
+# is still missing. Anything vcpkg doesn't resolve falls back to compiling a
+# standalone copy from the sqlite3.c amalgamation already vendored by the
+# vtk submodule, using no-op stand-ins for VTK's symbol-mangling/export
+# headers so it compiles with normal, unmangled sqlite3_* symbol names.
 # ---------------------------------------------------------------------------
+
+function Get-VcpkgRoot {
+    <#
+    Detects an existing vcpkg install, in order:
+      1. VS-bundled vcpkg under <VS install dir>\VC\vcpkg, newest VS first
+         (VS2026, VS2022, VS2019, VS2017, then Build Tools-only installs) --
+         preferred since it's the copy Visual Studio itself keeps updated
+         and version-matched to the installed toolset. This copy is
+         permanently classic-mode-incapable by design (VS's installer
+         doesn't want its own package installs mutating files under
+         Program Files), but that's irrelevant here: manifest mode (what
+         this script uses) works fine against it.
+      2. VCPKG_ROOT (the standard convention used by vcpkg's own docs and
+         most CI actions), for an explicit, user-chosen install.
+      3. VCPKG_INSTALLATION_ROOT (what GitHub-hosted Windows runner images
+         set instead -- vcpkg is preinstalled there at C:\vcpkg, but not
+         under VCPKG_ROOT and not necessarily on PATH).
+      4. vcpkg.exe on PATH, as a last resort.
+    Returns $null if none of these resolve -- vcpkg use is opportunistic,
+    never required.
+    #>
+    param([Parameter(Mandatory = $true)]$VsEnv)
+
+    foreach ($vsDir in @($VsEnv.Vs2026Dir, $VsEnv.Vs2022Dir, $VsEnv.Vs2019Dir, $VsEnv.Vs2017Dir, $VsEnv.VsBuildToolsDir)) {
+        if ($vsDir) {
+            $vsVcpkgDir = Join-Path $vsDir 'VC\vcpkg'
+            if (Test-Path (Join-Path $vsVcpkgDir 'vcpkg.exe')) {
+                return $vsVcpkgDir
+            }
+        }
+    }
+    if ($env:VCPKG_ROOT -and (Test-Path (Join-Path $env:VCPKG_ROOT 'vcpkg.exe'))) {
+        return $env:VCPKG_ROOT
+    }
+    if ($env:VCPKG_INSTALLATION_ROOT -and (Test-Path (Join-Path $env:VCPKG_INSTALLATION_ROOT 'vcpkg.exe'))) {
+        return $env:VCPKG_INSTALLATION_ROOT
+    }
+    $vcpkgCmd = Get-Command vcpkg.exe -ErrorAction SilentlyContinue
+    if ($vcpkgCmd) {
+        return Split-Path $vcpkgCmd.Source -Parent
+    }
+    return $null
+}
+
+function Get-VcpkgStaticTriplet {
+    <#
+    Maps a vcvarsall.bat-style arch arg (x86/amd64/arm/arm64, as already
+    computed for $LibVcVarsAllArg) to the matching *-windows-static-md
+    vcpkg triplet: a true static .lib (not a DLL + import lib, since
+    sqlite3.lib here is statically linked into PROJ/cvextern) built against
+    the dynamic CRT (/MD) to match cl.exe's own default linkage -- and thus
+    the from-source build this replaces -- rather than the plain
+    *-windows-static triplets, which switch to the static CRT (/MT) and
+    would otherwise introduce a CRT-linkage mismatch against the rest of
+    cvextern's (dynamic-CRT) objects.
+
+    Returns $null for 'arm': no arm-windows-static-md triplet exists in
+    vcpkg (only the dynamic-CRT arm-windows-static), so 32-bit ARM always
+    falls back to the from-source build for the lib.
+    #>
+    param([Parameter(Mandatory = $true)][string]$VcVarsAllArg)
+    switch ($VcVarsAllArg) {
+        'x86' { return 'x86-windows-static-md' }
+        'amd64' { return 'x64-windows-static-md' }
+        'arm64' { return 'arm64-windows-static-md' }
+        default { return $null }
+    }
+}
+
+function Get-VcpkgHostTriplet {
+    <# The vcpkg triplet matching this machine's actual OS architecture. #>
+    switch ([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture) {
+        'X86' { return 'x86-windows' }
+        'Arm64' { return 'arm64-windows' }
+        default { return 'x64-windows' }
+    }
+}
+
+function Install-VcpkgManifestPackage {
+    <#
+    Installs from this repo's fixed sqlite3 manifest
+    (platforms\windows\vcpkg-manifest\vcpkg.json) in manifest mode,
+    non-fatally: vcpkg is a best-effort optimization here, not a
+    requirement, so a failure (network, package unavailable, etc.) just
+    falls through to the from-source build instead of aborting the whole
+    script the way Invoke-Native's throw-on-failure would.
+
+    Manifest mode -- rather than classic mode -- pins sqlite3 to an exact
+    version via the manifest's builtin-baseline, so the resolved version
+    doesn't silently drift between machines/time the way classic mode's
+    "whatever that vcpkg install's local ports tree currently has" would,
+    and it works against every vcpkg distribution, including the
+    manifest-mode-only copy Visual Studio bundles.
+
+    Installs into $ManifestRoot\vcpkg_installed_<Triplet>\<Triplet>\ -- one
+    completely separate --x-install-root per triplet, not a single shared
+    one. A shared install root is NOT safe here: manifest mode treats the
+    whole install root as one desired-state set for the *current*
+    invocation and prunes anything else in it, so installing the exe's
+    host triplet into the same root as the lib's target triplet actually
+    deletes the lib's already-installed files (reproduced directly: the
+    second `vcpkg install` logged "will be removed: sqlite3:<lib
+    triplet>", and the lib/header were confirmed gone from disk
+    afterwards). Separate roots avoid this entirely, at the cost of losing
+    reuse *across* triplets -- reuse for repeated builds of the *same*
+    triplet is unaffected, since each root's own contents persist normally
+    between calls.
+    #>
+    param(
+        [Parameter(Mandatory = $true)][string]$VcpkgRoot,
+        [Parameter(Mandatory = $true)][string]$ManifestRoot,
+        [Parameter(Mandatory = $true)][string]$Triplet,
+        [string]$Feature = ''
+    )
+    $vcpkgArgs = @(
+        'install',
+        '--triplet', $Triplet,
+        '--x-manifest-root', $ManifestRoot,
+        '--x-install-root', (Join-Path $ManifestRoot "vcpkg_installed_$Triplet")
+    )
+    if ($Feature) { $vcpkgArgs += "--x-feature=$Feature" }
+    & (Join-Path $VcpkgRoot 'vcpkg.exe') @vcpkgArgs | Out-Host
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "vcpkg install (triplet $Triplet) failed (exit $LASTEXITCODE); falling back to building sqlite3 from source."
+    }
+}
 
 function Set-Sqlite3Fallback {
     param(
@@ -307,38 +430,88 @@ function Set-Sqlite3Fallback {
         [Parameter(Mandatory = $true)][string]$RootSrcFolder,
         [Parameter(Mandatory = $true)][string]$ExeVcVarsScript,
         [Parameter(Mandatory = $true)][string]$LibVcVarsAllScript,
-        [Parameter(Mandatory = $true)][string]$LibVcVarsAllArg
+        [Parameter(Mandatory = $true)][string]$LibVcVarsAllArg,
+        [Parameter(Mandatory = $true)]$VsEnv
     )
-
-    $existing = Get-Command sqlite3.exe -ErrorAction SilentlyContinue
-    if ($existing) { return }
 
     $localDir = Join-Path $BuildFolder '_local_sqlite3'
     $vtkSqliteSrcDir = Join-Path $RootSrcFolder 'vtk\ThirdParty\sqlite\vtksqlite'
+    $srcDir = Join-Path $localDir 'src'
+    $includeDir = Join-Path $localDir 'include'
+    $libDir = Join-Path $localDir 'lib'
+    $binDir = Join-Path $localDir 'bin'
+    $localLib = Join-Path $libDir 'sqlite3.lib'
+    $localExe = Join-Path $binDir 'sqlite3.exe'
 
-    if ((Test-Path (Join-Path $localDir 'bin\sqlite3.exe')) -and (Test-Path (Join-Path $localDir 'lib\sqlite3.lib'))) {
-        Set-Sqlite3EnvVars -LocalDir $localDir
+    # sqlite3.exe is only a build-time tool that PROJ's CMake configure step
+    # directly *executes* to generate proj.db, so any sqlite3.exe already on
+    # PATH satisfies this need regardless of where it came from.
+    $needExe = (-not (Get-Command sqlite3.exe -ErrorAction SilentlyContinue)) -and (-not (Test-Path $localExe))
+    # sqlite3.lib is statically linked into PROJ, and therefore into
+    # cvextern.dll itself, so it must specifically match -Arch. A system
+    # sqlite3.exe on PATH says nothing about whether a matching dev
+    # lib/header exists too, so this is checked independently -- an
+    # exe-only system install must not skip building the lib.
+    $needLib = -not (Test-Path $localLib)
+
+    if (-not $needExe -and -not $needLib) {
+        if (Test-Path $localLib) { Set-Sqlite3EnvVars -Root $localDir -BinDir $binDir }
+        return
+    }
+
+    # Values ultimately used to set SQLite3_ROOT / PATH. Default to the local
+    # from-source build's output paths; overridden below per-piece whenever
+    # vcpkg supplies that piece instead.
+    $sqlite3Root = $localDir
+    $sqlite3BinDir = $binDir
+
+    # --- vcpkg (opportunistic; never required) --------------------------------
+    $vcpkgRoot = Get-VcpkgRoot -VsEnv $VsEnv
+    if ($vcpkgRoot) {
+        $manifestRoot = Join-Path $PSScriptRoot 'vcpkg-manifest'
+        if ($needLib) {
+            $targetTriplet = Get-VcpkgStaticTriplet -VcVarsAllArg $LibVcVarsAllArg
+            if ($targetTriplet) {
+                Install-VcpkgManifestPackage -VcpkgRoot $vcpkgRoot -ManifestRoot $manifestRoot -Triplet $targetTriplet
+                $vcpkgTripletDir = Join-Path $manifestRoot "vcpkg_installed_$targetTriplet\$targetTriplet"
+                if ((Test-Path (Join-Path $vcpkgTripletDir 'lib\sqlite3.lib')) -and (Test-Path (Join-Path $vcpkgTripletDir 'include\sqlite3.h'))) {
+                    Write-Host "sqlite3 dev library resolved via vcpkg manifest mode ($targetTriplet)."
+                    $sqlite3Root = $vcpkgTripletDir
+                    $needLib = $false
+                }
+            }
+        }
+        if ($needExe) {
+            $hostTriplet = Get-VcpkgHostTriplet
+            Install-VcpkgManifestPackage -VcpkgRoot $vcpkgRoot -ManifestRoot $manifestRoot -Triplet $hostTriplet -Feature 'sqlite3-tool'
+            $vcpkgToolsDir = Join-Path $manifestRoot "vcpkg_installed_$hostTriplet\$hostTriplet\tools"
+            if (Test-Path (Join-Path $vcpkgToolsDir 'sqlite3.exe')) {
+                Write-Host "sqlite3.exe resolved via vcpkg manifest mode ($hostTriplet)."
+                $sqlite3BinDir = $vcpkgToolsDir
+                $needExe = $false
+            }
+        }
+    }
+
+    if (-not $needExe -and -not $needLib) {
+        Set-Sqlite3EnvVars -Root $sqlite3Root -BinDir $sqlite3BinDir
         return
     }
     if (-not (Test-Path (Join-Path $vtkSqliteSrcDir 'sqlite3.c'))) {
         Write-Warning "sqlite3 not found and vtk submodule source is missing; PROJ's configure step may fail."
         return
     }
-    if (-not (Test-Path $ExeVcVarsScript)) {
-        Write-Warning "sqlite3 not found and no host vcvars script could be resolved for this toolchain; PROJ's configure step may fail."
+    if ($needExe -and -not (Test-Path $ExeVcVarsScript)) {
+        Write-Warning "sqlite3.exe not found and no host vcvars script could be resolved for this toolchain; PROJ's configure step may fail."
         return
     }
-    if (-not (Test-Path $LibVcVarsAllScript)) {
-        Write-Warning "sqlite3 not found and no vcvarsall.bat could be resolved for this toolchain; PROJ's configure step may fail."
+    if ($needLib -and -not (Test-Path $LibVcVarsAllScript)) {
+        Write-Warning "sqlite3.lib not found and no vcvarsall script could be resolved for this toolchain; PROJ's configure step may fail."
         return
     }
 
-    Write-Host "sqlite3 not found on this machine. Building a standalone copy from the vendored VTK sqlite3 amalgamation, needed by PROJ/GeoTIFF."
+    Write-Host "Building the missing sqlite3 piece(s) from the vendored VTK sqlite3 amalgamation, needed by PROJ/GeoTIFF."
 
-    $srcDir = Join-Path $localDir 'src'
-    $includeDir = Join-Path $localDir 'include'
-    $libDir = Join-Path $localDir 'lib'
-    $binDir = Join-Path $localDir 'bin'
     New-Item -ItemType Directory -Force -Path $srcDir, $includeDir, $libDir, $binDir | Out-Null
 
     Copy-Item (Join-Path $vtkSqliteSrcDir 'sqlite3.c') $srcDir -Force
@@ -384,32 +557,46 @@ function Set-Sqlite3Fallback {
     # whenever -Arch differs from the host (e.g. -Arch x86 on an x64 host),
     # which cvextern's linker fails on with LNK2019 for every sqlite3_*
     # symbol.
-    $libBuildScript = Join-Path $localDir 'build_sqlite3_lib.bat'
-    @"
+    if ($needLib) {
+        $libBuildScript = Join-Path $localDir 'build_sqlite3_lib.bat'
+        @"
 @call "$LibVcVarsAllScript" $LibVcVarsAllArg
 cd /d "$srcDir"
 cl /nologo /c /O2 /DSQLITE_THREADSAFE=1 /DSQLITE_ENABLE_COLUMN_METADATA sqlite3.c
 lib /nologo sqlite3.obj /OUT:"$libDir\sqlite3.lib"
 "@ | Set-Content $libBuildScript -Encoding ASCII
 
-    Invoke-Native -FilePath "$env:windir\System32\cmd.exe" -ArgumentList '/c', $libBuildScript
+        Invoke-Native -FilePath "$env:windir\System32\cmd.exe" -ArgumentList '/c', $libBuildScript
+    }
 
-    $exeBuildScript = Join-Path $localDir 'build_sqlite3_exe.bat'
-    @"
+    if ($needExe) {
+        $exeBuildScript = Join-Path $localDir 'build_sqlite3_exe.bat'
+        @"
 @call "$ExeVcVarsScript"
 cd /d "$srcDir"
 cl /nologo /O2 /DSQLITE_THREADSAFE=1 /Fe:"$binDir\sqlite3.exe" shell.c sqlite3.c
 "@ | Set-Content $exeBuildScript -Encoding ASCII
 
-    Invoke-Native -FilePath "$env:windir\System32\cmd.exe" -ArgumentList '/c', $exeBuildScript
+        Invoke-Native -FilePath "$env:windir\System32\cmd.exe" -ArgumentList '/c', $exeBuildScript
+    }
 
-    Set-Sqlite3EnvVars -LocalDir $localDir
+    Set-Sqlite3EnvVars -Root $sqlite3Root -BinDir $sqlite3BinDir
 }
 
 function Set-Sqlite3EnvVars {
-    param([Parameter(Mandatory = $true)][string]$LocalDir)
-    $env:SQLite3_ROOT = $LocalDir
-    $env:PATH = "$LocalDir\bin;$env:PATH"
+    <#
+    Root is a directory containing include/ + lib/ (either $localDir from the
+    from-source build, or a vcpkg installed/<triplet> directory -- both use
+    that same layout, which is exactly what CMake's find_package(SQLite3)
+    hint variable expects). BinDir is wherever sqlite3.exe actually lives,
+    prepended to PATH so PROJ's CMake configure step can invoke it.
+    #>
+    param(
+        [Parameter(Mandatory = $true)][string]$Root,
+        [Parameter(Mandatory = $true)][string]$BinDir
+    )
+    $env:SQLite3_ROOT = $Root
+    $env:PATH = "$BinDir;$env:PATH"
 }
 
 # ---------------------------------------------------------------------------
@@ -420,7 +607,7 @@ function Build-ThirdPartyDependency {
     <#
     Configures + installs one of freetype2/harfbuzz/hdf5/eigen -- the four
     dependencies that all follow the same "mkdir; cmake -G ...; cmake
-    --build --target INSTALL" pattern in the .bat.
+    --build --target INSTALL" pattern.
     #>
     param(
         [Parameter(Mandatory = $true)][string]$SourceDir,
@@ -485,8 +672,8 @@ function Build-OpenVino {
     $buildDir = Join-Path $openVinoDir $BuildFolderName
 
     # Apply the VS2022-compatibility patch only the first time this build
-    # folder is created, matching the .bat's own guard against re-applying
-    # an already-applied patch on subsequent runs.
+    # folder is created, to avoid re-applying an already-applied patch on
+    # subsequent runs.
     if (-not (Test-Path $buildDir)) {
         Push-Location $openVinoDir
         try {
@@ -518,7 +705,6 @@ function Get-CudaArchBinOption {
 
     if (-not (Test-Path $CudaSdkDir)) { return '' }
 
-    # Table ported verbatim from Build_Binary_x86.bat lines ~529-548.
     $table = [ordered]@{
         'v8.0'  = '6.0 6.1'
         'v9.0'  = '6.0 6.1 7.0'
@@ -545,8 +731,8 @@ function Get-CudaArchBinOption {
 }
 
 function Find-CudaSdkDir {
-    # Prefers CUDA 13.2, then walks the same version list as the .bat,
-    # newest first, checking CUDA_PATH_V<version> environment variables.
+    # Prefers CUDA 13.2, then walks the version list newest first, checking
+    # CUDA_PATH_V<version> environment variables.
     $versions = @(
         '13_2', '13_1', '13_0', '12_9', '12_8', '12_6', '12_0',
         '11_8', '11_6', '11_3', '11_1', '11_0',
@@ -577,6 +763,52 @@ function Find-CudaHostCompiler {
     Sort-Object Name -Descending | Select-Object -First 1
     if (-not $msvcDir) { return $null }
     return (Join-Path $msvcDir.FullName 'bin\Hostx64\x64\cl.exe')
+}
+
+function Sync-SharedArchLibs {
+    <#
+    xtiff.lib and libleptonica.lib build to a single, non-arch-suffixed
+    shared location (libs\Release\), unlike every other native output in
+    this repo (which is arch-suffixed under libs\runtimes\win-<arch>\...).
+    Building a different -Arch silently overwrites them for that arch,
+    breaking any OTHER already-built arch's cvextern link with LNK4272
+    ("machine type conflict") + LNK1120 (unresolved externals) -- hit
+    manually, in both directions (x86 overwriting x64's copies and vice
+    versa), before this function existed.
+
+    A small marker file records which -Arch last (re)built them; if it
+    doesn't match the current -Arch, the stale files are deleted and
+    xtiff/libleptonica are rebuilt for this -Arch (via the same --target
+    repeated-flag form already used elsewhere in this script for
+    multi-target builds) before cvextern links against them.
+
+    The delete-first step matters: simply re-invoking the build is NOT
+    enough to force a fresh link. MSBuild's up-to-date check is based on
+    *this build tree's own* intermediate object timestamps, which haven't
+    changed just because a completely different -Arch's build tree
+    overwrote the shared output file afterwards -- so without deleting
+    that file first, MSBuild considers the target already up to date and
+    silently skips the relink, leaving the stale (wrong-architecture)
+    file in place. Reproduced directly: an in-place rebuild attempt
+    reported success ("xtiff.vcxproj -> ...\xtiff.lib") but the file's
+    own timestamp never changed, and the subsequent cvextern link still
+    failed with the same LNK4272/LNK1120 as before.
+    #>
+    param(
+        [Parameter(Mandatory = $true)][string]$RepoRoot,
+        [Parameter(Mandatory = $true)][string]$Arch,
+        [Parameter(Mandatory = $true)][string]$CMakeExe
+    )
+    $markerFile = Join-Path $RepoRoot 'libs\Release\.arch-marker'
+    $lastArch = if (Test-Path $markerFile) { (Get-Content $markerFile -Raw).Trim() } else { $null }
+    if ($lastArch -eq $Arch) { return }
+
+    Write-Host "libs\Release\xtiff.lib / libleptonica.lib were last built for '$lastArch', rebuilding for '$Arch' before linking cvextern..."
+    $xtiffLib = Join-Path $RepoRoot 'libs\Release\xtiff.lib'
+    $leptonicaLib = Join-Path $RepoRoot 'libs\Release\libleptonica.lib'
+    Remove-Item $xtiffLib, $leptonicaLib -Force -ErrorAction SilentlyContinue
+    Invoke-Native -FilePath $CMakeExe -ArgumentList '--build', '.', '--config', 'Release', '--target', 'xtiff', '--target', 'libleptonica'
+    Set-Content -Path $markerFile -Value $Arch -Encoding ASCII -NoNewline
 }
 
 # ---------------------------------------------------------------------------
@@ -729,7 +961,7 @@ try {
     # current wrapper-script inventory uses. Flag here rather than silently
     # no-op if it's ever requested.
     if ($ExtraModules -eq 'OpenNI') {
-        throw "OpenNI is not ported to this script (unused by any current wrapper script; requires the discontinued OpenNI SDK). Use Build_Binary_x86.bat if you need it."
+        throw "OpenNI is not supported by this script (unused by any current wrapper script; requires the discontinued OpenNI SDK)."
     }
 
     if ($Documentation) { $emguFlags.Add('-DEMGU_CV_DOCUMENTATION_BUILD:BOOL=TRUE') }
@@ -751,10 +983,12 @@ try {
     }
 
     # --- CUDA ---------------------------------------------------------------
+    $cudaSdkFound = $false
     if ($Cuda) {
         $cudaHostCompiler = Find-CudaHostCompiler -VsEnv $vsEnv
         $cudaSdkDir = Find-CudaSdkDir
         if (Test-Path $cudaSdkDir) {
+            $cudaSdkFound = $true
             $cudaArchBinOption = Get-CudaArchBinOption -CudaSdkDir $cudaSdkDir -Override $CudaArchBin
             $emguFlags.Add('-DCUDA_64_BIT_DEVICE_CODE:BOOL=TRUE')
             $emguFlags.Add('-DWITH_CUDA:BOOL=TRUE')
@@ -768,8 +1002,6 @@ try {
             $emguFlags.Add('-DBUILD_opencv_world:BOOL=TRUE')
             $emguFlags.Add('-DCUDA_NVCC_FLAGS:STRING=--expt-relaxed-constexpr --std=c++17')
             $emguFlags.Add('-DCMAKE_CXX_STANDARD:STRING=17')
-            $emguFlags.Add('-DWITH_ONNXRUNTIME:BOOL=ON')
-            $emguFlags.Add('-DDOWNLOAD_ONNXRUNTIME_GPU:BOOL=ON')
             if ($cudaHostCompiler) { $emguFlags.Add("-DCUDA_HOST_COMPILER:String=$(ConvertTo-ForwardSlash $cudaHostCompiler)") }
             $nvcuvidHeader = Join-Path $cudaSdkDir 'include\nvcuvid.h'
             if (Test-Path $nvcuvidHeader) { $emguFlags.Add('-DWITH_NVCUVID:BOOL=TRUE') }
@@ -781,6 +1013,14 @@ try {
         if ($OnnxRuntime) {
             $emguFlags.Add('-DWITH_ONNXRUNTIME:BOOL=ON')
             $emguFlags.Add('-DDOWNLOAD_ONNXRUNTIME:BOOL=ON')
+        }
+    }
+
+    # --- ONNX Runtime -----------------------------------------------------------
+    if ($OnnxRuntime) {
+        $emguFlags.Add('-DWITH_ONNXRUNTIME:BOOL=ON')
+        if ($cudaSdkFound) {
+            $emguFlags.Add('-DDOWNLOAD_ONNXRUNTIME_GPU:BOOL=ON')
         }
     }
 
@@ -856,9 +1096,7 @@ try {
     }
 
     # --- ARM vs. x86/x64 CPU dispatch/IPP -------------------------------------
-    # Applies regardless of Intel vs. plain-Visual-Studio toolchain above --
-    # in the .bat both paths converge on the same :CONFIG_ARM section via
-    # GOTO before this point.
+    # Applies regardless of Intel vs. plain-Visual-Studio toolchain above.
     if ($Arch -in @('arm', 'arm64')) {
         if ($buildType -eq 'COMMERCIAL') {
             $emguFlags.Add('-DCV_ENABLE_INTRINSICS:BOOL=ON')
@@ -893,7 +1131,7 @@ try {
     # build-time tool that PROJ's CMake configure step directly *executes*
     # to generate proj.db -- it must run on THIS machine, not wherever
     # -Arch cross-compiles to. Using a target-arch vcvars script here (e.g.
-    # vcvarsamd64_arm64.bat for -Arch arm64) would produce a sqlite3.exe
+    # vcvarsamd64_arm64 for -Arch arm64) would produce a sqlite3.exe
     # that can't launch on a non-ARM64 host, since that script's compiler
     # targets ARM64 output regardless of what CPU is actually running it.
     # Derive a vcvars script matching the actual host OS architecture
@@ -909,8 +1147,8 @@ try {
 
     # sqlite3.lib, unlike sqlite3.exe above, is statically linked into PROJ
     # (and thus into cvextern.dll), so it must match -Arch, not the host.
-    # Use vcvarsall.bat with the target arch so cl/lib produce object code
-    # for -Arch regardless of which architecture this machine's CPU is.
+    # Use the vcvarsall script with the target arch so cl/lib produce object
+    # code for -Arch regardless of which architecture this machine's CPU is.
     $libVcVarsAllArg = 'amd64'
     switch ($Arch) {
         'x86' { $libVcVarsAllArg = 'x86' }
@@ -922,12 +1160,15 @@ try {
 
     Set-Sqlite3Fallback -BuildFolder $buildFolder -RootSrcFolder $repoRoot `
         -ExeVcVarsScript $hostVcVarsScript `
-        -LibVcVarsAllScript $libVcVarsAllScript -LibVcVarsAllArg $libVcVarsAllArg
+        -LibVcVarsAllScript $libVcVarsAllScript -LibVcVarsAllArg $libVcVarsAllArg `
+        -VsEnv $vsEnv
 
     Invoke-Native -FilePath $vsEnv.CMakeExe -ArgumentList ($emguFlags.ToArray() + @('..'))
 
     # --- Optional build/package/doc/nuget targets ----------------------------
     if ($Build) {
+        Sync-SharedArchLibs -RepoRoot $repoRoot -Arch $Arch -CMakeExe $vsEnv.CMakeExe
+
         $targets = New-Object System.Collections.Generic.List[string]
         $targets.Add('cvextern')
         if ($Package) { $targets.Add('PACKAGE') }
@@ -935,8 +1176,7 @@ try {
         if ($Nuget) { $targets.Add('Emgu.CV.runtime.windows.nuget') }
 
         # One combined invocation with all target names after a single
-        # --target, matching the .bat's %CMAKE_BUILD_TARGET% (a single
-        # space-separated string), not one invocation per target.
+        # --target, not one invocation per target.
         Invoke-Native -FilePath $vsEnv.CMakeExe -ArgumentList (@('--build', '.', '--config', 'Release', '--target') + $targets.ToArray())
     }
 }

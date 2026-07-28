@@ -13,6 +13,8 @@
 
 #ifdef HAVE_OPENCV_PTCLOUD
 #include "opencv2/ptcloud.hpp"
+#include "opencv2/ptcloud/volume.hpp"
+#include "opencv2/ptcloud/volume_settings.hpp"
 #else
 static inline CV_NORETURN void throw_no_ptcloud() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without ptcloud support. To use this module, please switch to the full Emgu CV runtime."); }
 
@@ -20,6 +22,28 @@ namespace cv {
 	class Odometry {};
 	class RgbdNormals {};
 	class Octree {};
+	class OdometryFrame {};
+	enum OdometryFramePyramidType
+	{
+		PYR_IMAGE = 0,
+		PYR_DEPTH = 1,
+		PYR_MASK = 2,
+		PYR_CLOUD = 3,
+		PYR_DIX = 4,
+		PYR_DIY = 5,
+		PYR_TEXMASK = 6,
+		PYR_NORM = 7,
+		PYR_NORMMASK = 8,
+		N_PYRAMIDS
+	};
+	enum class VolumeType
+	{
+		TSDF = 0,
+		HashTSDF = 1,
+		ColorTSDF = 2
+	};
+	class VolumeSettings {};
+	class Volume {};
 }
 #endif
 
@@ -27,6 +51,21 @@ CVAPI(cv::Odometry*) cveOdometryCreate(int odometryType);
 CVAPI(void) cveOdometryRelease(cv::Odometry** ptr);
 CVAPI(bool) cveOdometryCompute1(cv::Odometry* odometry, cv::_InputArray* srcFrame, cv::_InputArray* dstFrame, cv::_OutputArray* rt);
 CVAPI(bool) cveOdometryCompute2(cv::Odometry* odometry, cv::_InputArray* srcDepthFrame, cv::_InputArray* srcRGBFrame, cv::_InputArray* dstDepthFrame, cv::_InputArray* dstRGBFrame, cv::_OutputArray* rt);
+
+CVAPI(cv::OdometryFrame*) cveOdometryFrameCreate(
+	cv::_InputArray* depth,
+	cv::_InputArray* image,
+	cv::_InputArray* mask,
+	cv::_InputArray* normals);
+CVAPI(void) cveOdometryFrameRelease(cv::OdometryFrame** ptr);
+CVAPI(void) cveOdometryFrameGetImage(cv::OdometryFrame* frame, cv::_OutputArray* image);
+CVAPI(void) cveOdometryFrameGetGrayImage(cv::OdometryFrame* frame, cv::_OutputArray* image);
+CVAPI(void) cveOdometryFrameGetDepth(cv::OdometryFrame* frame, cv::_OutputArray* depth);
+CVAPI(void) cveOdometryFrameGetProcessedDepth(cv::OdometryFrame* frame, cv::_OutputArray* depth);
+CVAPI(void) cveOdometryFrameGetMask(cv::OdometryFrame* frame, cv::_OutputArray* mask);
+CVAPI(void) cveOdometryFrameGetNormals(cv::OdometryFrame* frame, cv::_OutputArray* normals);
+CVAPI(int) cveOdometryFrameGetPyramidLevels(cv::OdometryFrame* frame);
+CVAPI(void) cveOdometryFrameGetPyramidAt(cv::OdometryFrame* frame, cv::_OutputArray* img, int pyrType, size_t level);
 
 CVAPI(cv::RgbdNormals*) cveRgbdNormalsCreate(int rows, int cols, int depth, cv::_InputArray* K, int window_size, int method, cv::Algorithm** algorithm, cv::Ptr<cv::RgbdNormals>** sharedPtr);
 CVAPI(void) cveRgbdNormalsRelease(cv::Ptr<cv::RgbdNormals>** sharedPtr);
@@ -81,5 +120,110 @@ CVAPI(void) cveWarpFrame(
 	cv::_OutputArray* warpedDepth,
 	cv::_OutputArray* warpedImage,
 	cv::_OutputArray* warpedMask);
+
+//----------------------------------------------------------------------------
+// VolumeSettings
+//----------------------------------------------------------------------------
+CVAPI(cv::VolumeSettings*) cveVolumeSettingsCreate(int volumeType);
+CVAPI(void) cveVolumeSettingsRelease(cv::VolumeSettings** settings);
+
+CVAPI(void) cveVolumeSettingsSetIntegrateWidth(cv::VolumeSettings* settings, int val);
+CVAPI(int) cveVolumeSettingsGetIntegrateWidth(cv::VolumeSettings* settings);
+CVAPI(void) cveVolumeSettingsSetIntegrateHeight(cv::VolumeSettings* settings, int val);
+CVAPI(int) cveVolumeSettingsGetIntegrateHeight(cv::VolumeSettings* settings);
+
+CVAPI(void) cveVolumeSettingsSetRaycastWidth(cv::VolumeSettings* settings, int val);
+CVAPI(int) cveVolumeSettingsGetRaycastWidth(cv::VolumeSettings* settings);
+CVAPI(void) cveVolumeSettingsSetRaycastHeight(cv::VolumeSettings* settings, int val);
+CVAPI(int) cveVolumeSettingsGetRaycastHeight(cv::VolumeSettings* settings);
+
+CVAPI(void) cveVolumeSettingsSetDepthFactor(cv::VolumeSettings* settings, float val);
+CVAPI(float) cveVolumeSettingsGetDepthFactor(cv::VolumeSettings* settings);
+
+CVAPI(void) cveVolumeSettingsSetVoxelSize(cv::VolumeSettings* settings, float val);
+CVAPI(float) cveVolumeSettingsGetVoxelSize(cv::VolumeSettings* settings);
+
+CVAPI(void) cveVolumeSettingsSetTsdfTruncateDistance(cv::VolumeSettings* settings, float val);
+CVAPI(float) cveVolumeSettingsGetTsdfTruncateDistance(cv::VolumeSettings* settings);
+
+CVAPI(void) cveVolumeSettingsSetMaxDepth(cv::VolumeSettings* settings, float val);
+CVAPI(float) cveVolumeSettingsGetMaxDepth(cv::VolumeSettings* settings);
+
+CVAPI(void) cveVolumeSettingsSetMaxWeight(cv::VolumeSettings* settings, int val);
+CVAPI(int) cveVolumeSettingsGetMaxWeight(cv::VolumeSettings* settings);
+
+CVAPI(void) cveVolumeSettingsSetRaycastStepFactor(cv::VolumeSettings* settings, float val);
+CVAPI(float) cveVolumeSettingsGetRaycastStepFactor(cv::VolumeSettings* settings);
+
+CVAPI(void) cveVolumeSettingsSetVolumePose(cv::VolumeSettings* settings, cv::_InputArray* val);
+CVAPI(void) cveVolumeSettingsGetVolumePose(cv::VolumeSettings* settings, cv::_OutputArray* val);
+
+CVAPI(void) cveVolumeSettingsSetVolumeResolution(cv::VolumeSettings* settings, cv::_InputArray* val);
+CVAPI(void) cveVolumeSettingsGetVolumeResolution(cv::VolumeSettings* settings, cv::_OutputArray* val);
+
+CVAPI(void) cveVolumeSettingsGetVolumeStrides(cv::VolumeSettings* settings, cv::_OutputArray* val);
+
+CVAPI(void) cveVolumeSettingsSetCameraIntegrateIntrinsics(cv::VolumeSettings* settings, cv::_InputArray* val);
+CVAPI(void) cveVolumeSettingsGetCameraIntegrateIntrinsics(cv::VolumeSettings* settings, cv::_OutputArray* val);
+
+CVAPI(void) cveVolumeSettingsSetCameraRaycastIntrinsics(cv::VolumeSettings* settings, cv::_InputArray* val);
+CVAPI(void) cveVolumeSettingsGetCameraRaycastIntrinsics(cv::VolumeSettings* settings, cv::_OutputArray* val);
+
+//----------------------------------------------------------------------------
+// Volume
+//----------------------------------------------------------------------------
+CVAPI(cv::Volume*) cveVolumeCreate(int volumeType, cv::VolumeSettings* settings);
+CVAPI(void) cveVolumeRelease(cv::Volume** volume);
+
+CVAPI(void) cveVolumeIntegrate(cv::Volume* volume, cv::_InputArray* depth, cv::_InputArray* pose);
+CVAPI(void) cveVolumeIntegrateColor(cv::Volume* volume, cv::_InputArray* depth, cv::_InputArray* image, cv::_InputArray* pose);
+CVAPI(void) cveVolumeIntegrateFrame(cv::Volume* volume, cv::OdometryFrame* frame, cv::_InputArray* pose);
+
+CVAPI(void) cveVolumeRaycast(
+	cv::Volume* volume,
+	cv::_InputArray* cameraPose,
+	cv::_OutputArray* points,
+	cv::_OutputArray* normals);
+CVAPI(void) cveVolumeRaycastColor(
+	cv::Volume* volume,
+	cv::_InputArray* cameraPose,
+	cv::_OutputArray* points,
+	cv::_OutputArray* normals,
+	cv::_OutputArray* colors);
+CVAPI(void) cveVolumeRaycastEx(
+	cv::Volume* volume,
+	cv::_InputArray* cameraPose,
+	int height,
+	int width,
+	cv::_InputArray* k,
+	cv::_OutputArray* points,
+	cv::_OutputArray* normals);
+CVAPI(void) cveVolumeRaycastExColor(
+	cv::Volume* volume,
+	cv::_InputArray* cameraPose,
+	int height,
+	int width,
+	cv::_InputArray* k,
+	cv::_OutputArray* points,
+	cv::_OutputArray* normals,
+	cv::_OutputArray* colors);
+
+CVAPI(void) cveVolumeFetchNormals(cv::Volume* volume, cv::_InputArray* points, cv::_OutputArray* normals);
+CVAPI(void) cveVolumeFetchPointsNormals(cv::Volume* volume, cv::_OutputArray* points, cv::_OutputArray* normals);
+CVAPI(void) cveVolumeFetchPointsNormalsColors(
+	cv::Volume* volume,
+	cv::_OutputArray* points,
+	cv::_OutputArray* normals,
+	cv::_OutputArray* colors);
+
+CVAPI(void) cveVolumeReset(cv::Volume* volume);
+
+CVAPI(int) cveVolumeGetVisibleBlocks(cv::Volume* volume);
+CVAPI(size_t) cveVolumeGetTotalVolumeUnits(cv::Volume* volume);
+
+CVAPI(void) cveVolumeGetBoundingBox(cv::Volume* volume, cv::_OutputArray* bb, int precision);
+
+CVAPI(void) cveVolumeSetEnableGrowth(cv::Volume* volume, bool v);
+CVAPI(bool) cveVolumeGetEnableGrowth(cv::Volume* volume);
 
 #endif
