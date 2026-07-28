@@ -31,6 +31,11 @@
 .PARAMETER CudaArchBin
     Manually specify CUDA_ARCH_BIN_OPTION, e.g. "8.6". Was %9 in the .bat.
 
+.PARAMETER OnnxRuntime
+    Build with ONNX Runtime (CPU) support via WITH_ONNXRUNTIME/DOWNLOAD_ONNXRUNTIME.
+    Ignored when -Cuda is set, which already enables the GPU-enabled ONNX
+    Runtime package unconditionally.
+
 .PARAMETER Toolchain
     Compiler / VS-version / UWP selection. Was %3 in the .bat.
 
@@ -62,6 +67,8 @@ param(
     [switch]$Cuda,
 
     [string]$CudaArchBin = '',
+
+    [switch]$OnnxRuntime,
 
     [ValidateSet('None', 'Intel', 'IntelOpenVino', 'OpenVino', 'WindowsStore10',
         'WindowsPhone81', 'WindowsStore81', 'VS2015', 'VS2022', 'Commercial')]
@@ -771,6 +778,10 @@ try {
     else {
         $emguFlags.Add('-DWITH_CUDA:BOOL=FALSE')
         $emguFlags.Add('-DBUILD_SHARED_LIBS:BOOL=FALSE')
+        if ($OnnxRuntime) {
+            $emguFlags.Add('-DWITH_ONNXRUNTIME:BOOL=ON')
+            $emguFlags.Add('-DDOWNLOAD_ONNXRUNTIME:BOOL=ON')
+        }
     }
 
     # --- OpenVINO -------------------------------------------------------------
