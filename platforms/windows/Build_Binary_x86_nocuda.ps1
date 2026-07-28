@@ -1,5 +1,5 @@
 <#
 .SYNOPSIS
-    PowerShell equivalent of Build_Binary_x86_nocuda.bat.
+    Build x86 without CUDA.
 #>
 & "$PSScriptRoot\Build_Binary.ps1" -Arch x86

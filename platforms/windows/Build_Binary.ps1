@@ -3,60 +3,51 @@
     Configures (and optionally builds) the Emgu CV native C++ layer on Windows.
 
 .DESCRIPTION
-    PowerShell port of Build_Binary_x86.bat. Build_Binary_x86.bat is left
-    completely untouched -- this script is being validated in parallel
-    before any wrapper scripts, CI, or Docker builds are repointed to it.
-    See the migration plan for the full inventory of what still calls the
-    .bat and is deliberately not touched by this file.
-
     Targets Windows PowerShell 5.1 syntax (no ternary/null-coalescing/etc.)
     so it runs without any extra install on a stock Windows machine.
 
-    Unlike the .bat, every external command's exit code is checked and a
-    failure throws immediately instead of silently continuing into a broken
-    partial build.
+    Every external command's exit code is checked and a failure throws
+    immediately instead of silently continuing into a broken partial build.
 
 .PARAMETER Arch
-    Target architecture. Was positional %1 in the .bat.
+    Target architecture.
 
 .PARAMETER ComponentSet
-    Which OpenCV/Emgu CV component set to build. Was folded into %2 in the
-    .bat (which used the same slot for this AND the -Cuda flag below --
-    split into two parameters here since nothing in the current wrapper
-    scripts ever combines Core/Mini with CUDA anyway).
+    Which OpenCV/Emgu CV component set to build.
 
 .PARAMETER Cuda
-    Build with CUDA support. Was the other meaning of %2 ("gpu") in the .bat.
-    Implies -OnnxRuntime with the ONNX Runtime CUDA execution provider,
-    when the CUDA SDK is actually found.
+    Build with CUDA support. Does not by itself enable WITH_ONNXRUNTIME;
+    combined with -OnnxRuntime (and the CUDA SDK actually found) it
+    additionally downloads the GPU-enabled ONNX Runtime package instead of
+    the CPU one.
 
 .PARAMETER OnnxRuntime
-    Build with the ONNX Runtime DNN engine (WITH_ONNXRUNTIME). New option,
-    had no .bat equivalent. Independent of -Cuda: with -Cuda it also
-    downloads the GPU-enabled ONNX Runtime package; without it, ONNX
-    Runtime's CPU execution provider is used.
+    Build with the ONNX Runtime DNN engine (WITH_ONNXRUNTIME). Purely
+    opt-in: -Cuda alone does not enable it. Alone, ONNX Runtime's CPU
+    execution provider is used; combined with -Cuda (and the CUDA SDK
+    actually found), the GPU-enabled ONNX Runtime package is downloaded
+    instead.
 
 .PARAMETER CudaArchBin
-    Manually specify CUDA_ARCH_BIN_OPTION, e.g. "8.6". Was %9 in the .bat.
+    Manually specify CUDA_ARCH_BIN_OPTION, e.g. "8.6".
 
 .PARAMETER Toolchain
-    Compiler / VS-version / UWP selection. Was %3 in the .bat.
+    Compiler / VS-version / UWP selection.
 
 .PARAMETER ExtraModules
-    Optional extra module to enable. Was %4 in the .bat.
+    Optional extra module to enable.
 
 .PARAMETER Documentation
-    Build the documentation target. Was %5=="doc" in the .bat.
+    Build the documentation target.
 
 .PARAMETER Package
-    Build the .zip/.exe package target. Was %6=="package" in the .bat.
+    Build the .zip/.exe package target.
 
 .PARAMETER Build
-    Actually build (not just configure) after running CMake. Was
-    %7=="build" in the .bat.
+    Actually build (not just configure) after running CMake.
 
 .PARAMETER Nuget
-    Build the NuGet package target. Was %8=="nuget" in the .bat.
+    Build the NuGet package target.
 #>
 [CmdletBinding()]
 param(
@@ -94,10 +85,8 @@ $ErrorActionPreference = 'Stop'
 
 function Invoke-Native {
     <#
-    Runs an external command and throws if it exits non-zero. The .bat this
-    replaces never checked exit codes and would silently continue on
-    failure; this is the one deliberate, happy-path-preserving behavior
-    change (see script synopsis).
+    Runs an external command and throws if it exits non-zero, instead of
+    silently continuing on failure into a broken partial build.
 
     Piped through Out-Host rather than left as bare `& $FilePath @Args`:
     PowerShell treats an external command's stdout as pipeline output, so
@@ -127,13 +116,10 @@ function ConvertTo-ForwardSlash {
 # ---------------------------------------------------------------------------
 # Visual Studio / CMake toolchain detection
 #
-# Ports the vswhere-based cascade from Build_Binary_x86.bat, including this
-# session's fix: derive tool paths from the already-resolved DevEnvPath via
-# ordinary string replacement, not by re-splicing a raw, unquoted
-# installationPath (the source of the "Program Files (x86)" parsing bugs
-# that motivated the .bat fix in the first place). PowerShell's -replace
-# doesn't have the .bat's %-expansion-before-parsing hazard, so this is
-# purely for behavioral fidelity, not because the hazard exists here too.
+# A vswhere-based cascade. Tool paths are derived from the already-resolved
+# DevEnvPath via ordinary string replacement, not by re-splicing a raw,
+# unquoted installationPath (which can contain "Program Files (x86)",
+# unsafe to splice into a fresh path).
 # ---------------------------------------------------------------------------
 
 function Resolve-VisualStudioEnvironment {
@@ -173,7 +159,7 @@ function Resolve-VisualStudioEnvironment {
     $vs2026 = DevEnvPath $vs2026Dir
 
     # Legacy VS2005-2015 (COMNTOOLS environment variables). Dead on any
-    # modern machine, but ported for fidelity with the .bat.
+    # modern machine, kept for fallback fidelity on very old build hosts.
     function LegacyDevEnvPath([string]$EnvVarName) {
         $toolsDir = [Environment]::GetEnvironmentVariable($EnvVarName)
         if ([string]::IsNullOrEmpty($toolsDir)) { return '' }
@@ -194,9 +180,9 @@ function Resolve-VisualStudioEnvironment {
     $msbuildBuildTools = ''
     if (Test-Path (Join-Path $buildToolsFolder 'MSBuild\Current\Bin\MSBuild.exe')) { $msbuildBuildTools = Join-Path $buildToolsFolder 'MSBuild\Current\Bin\MSBuild.exe' }
 
-    # DEVENV resolution cascade -- mirrors the .bat's fallthrough order
-    # exactly: later checks overwrite earlier ones unless a short-circuit
-    # (openni / WindowsPhone81 / vs2015 / vs2022) stops the cascade early.
+    # DEVENV resolution cascade: later checks overwrite earlier ones unless a
+    # short-circuit (openni / WindowsPhone81 / vs2015 / vs2022) stops the
+    # cascade early.
     $devEnvKind = ''
     $devEnvPath = ''
     if ($msbuild35) { $devEnvKind = 'MSBuild35'; $devEnvPath = $msbuild35 }
@@ -294,7 +280,7 @@ function Resolve-VisualStudioEnvironment {
 }
 
 # ---------------------------------------------------------------------------
-# sqlite3 fallback (ported from this session's Build_Binary_x86.bat fix)
+# sqlite3 fallback
 #
 # PROJ (built from source to satisfy Emgu.CV.Extern's unconditional GeoTIFF
 # dependency) needs a sqlite3 executable plus the SQLite3 dev library/header,
@@ -332,7 +318,7 @@ function Set-Sqlite3Fallback {
         return
     }
     if (-not (Test-Path $LibVcVarsAllScript)) {
-        Write-Warning "sqlite3 not found and no vcvarsall.bat could be resolved for this toolchain; PROJ's configure step may fail."
+        Write-Warning "sqlite3 not found and no vcvarsall script could be resolved for this toolchain; PROJ's configure step may fail."
         return
     }
 
@@ -423,7 +409,7 @@ function Build-ThirdPartyDependency {
     <#
     Configures + installs one of freetype2/harfbuzz/hdf5/eigen -- the four
     dependencies that all follow the same "mkdir; cmake -G ...; cmake
-    --build --target INSTALL" pattern in the .bat.
+    --build --target INSTALL" pattern.
     #>
     param(
         [Parameter(Mandatory = $true)][string]$SourceDir,
@@ -488,8 +474,8 @@ function Build-OpenVino {
     $buildDir = Join-Path $openVinoDir $BuildFolderName
 
     # Apply the VS2022-compatibility patch only the first time this build
-    # folder is created, matching the .bat's own guard against re-applying
-    # an already-applied patch on subsequent runs.
+    # folder is created, to avoid re-applying an already-applied patch on
+    # subsequent runs.
     if (-not (Test-Path $buildDir)) {
         Push-Location $openVinoDir
         try {
@@ -521,7 +507,6 @@ function Get-CudaArchBinOption {
 
     if (-not (Test-Path $CudaSdkDir)) { return '' }
 
-    # Table ported verbatim from Build_Binary_x86.bat lines ~529-548.
     $table = [ordered]@{
         'v8.0'  = '6.0 6.1'
         'v9.0'  = '6.0 6.1 7.0'
@@ -548,8 +533,8 @@ function Get-CudaArchBinOption {
 }
 
 function Find-CudaSdkDir {
-    # Prefers CUDA 13.2, then walks the same version list as the .bat,
-    # newest first, checking CUDA_PATH_V<version> environment variables.
+    # Prefers CUDA 13.2, then walks the version list newest first, checking
+    # CUDA_PATH_V<version> environment variables.
     $versions = @(
         '13_2', '13_1', '13_0', '12_9', '12_8', '12_6', '12_0',
         '11_8', '11_6', '11_3', '11_1', '11_0',
@@ -732,7 +717,7 @@ try {
     # current wrapper-script inventory uses. Flag here rather than silently
     # no-op if it's ever requested.
     if ($ExtraModules -eq 'OpenNI') {
-        throw "OpenNI is not ported to this script (unused by any current wrapper script; requires the discontinued OpenNI SDK). Use Build_Binary_x86.bat if you need it."
+        throw "OpenNI is not supported by this script (unused by any current wrapper script; requires the discontinued OpenNI SDK)."
     }
 
     if ($Documentation) { $emguFlags.Add('-DEMGU_CV_DOCUMENTATION_BUILD:BOOL=TRUE') }
@@ -784,7 +769,7 @@ try {
     }
 
     # --- ONNX Runtime -----------------------------------------------------------
-    if ($OnnxRuntime -or $cudaSdkFound) {
+    if ($OnnxRuntime) {
         $emguFlags.Add('-DWITH_ONNXRUNTIME:BOOL=ON')
         if ($cudaSdkFound) {
             $emguFlags.Add('-DDOWNLOAD_ONNXRUNTIME_GPU:BOOL=ON')
@@ -863,9 +848,7 @@ try {
     }
 
     # --- ARM vs. x86/x64 CPU dispatch/IPP -------------------------------------
-    # Applies regardless of Intel vs. plain-Visual-Studio toolchain above --
-    # in the .bat both paths converge on the same :CONFIG_ARM section via
-    # GOTO before this point.
+    # Applies regardless of Intel vs. plain-Visual-Studio toolchain above.
     if ($Arch -in @('arm', 'arm64')) {
         if ($buildType -eq 'COMMERCIAL') {
             $emguFlags.Add('-DCV_ENABLE_INTRINSICS:BOOL=ON')
@@ -900,7 +883,7 @@ try {
     # build-time tool that PROJ's CMake configure step directly *executes*
     # to generate proj.db -- it must run on THIS machine, not wherever
     # -Arch cross-compiles to. Using a target-arch vcvars script here (e.g.
-    # vcvarsamd64_arm64.bat for -Arch arm64) would produce a sqlite3.exe
+    # vcvarsamd64_arm64 for -Arch arm64) would produce a sqlite3.exe
     # that can't launch on a non-ARM64 host, since that script's compiler
     # targets ARM64 output regardless of what CPU is actually running it.
     # Derive a vcvars script matching the actual host OS architecture
@@ -916,8 +899,8 @@ try {
 
     # sqlite3.lib, unlike sqlite3.exe above, is statically linked into PROJ
     # (and thus into cvextern.dll), so it must match -Arch, not the host.
-    # Use vcvarsall.bat with the target arch so cl/lib produce object code
-    # for -Arch regardless of which architecture this machine's CPU is.
+    # Use the vcvarsall script with the target arch so cl/lib produce object
+    # code for -Arch regardless of which architecture this machine's CPU is.
     $libVcVarsAllArg = 'amd64'
     switch ($Arch) {
         'x86' { $libVcVarsAllArg = 'x86' }
@@ -942,8 +925,7 @@ try {
         if ($Nuget) { $targets.Add('Emgu.CV.runtime.windows.nuget') }
 
         # One combined invocation with all target names after a single
-        # --target, matching the .bat's %CMAKE_BUILD_TARGET% (a single
-        # space-separated string), not one invocation per target.
+        # --target, not one invocation per target.
         Invoke-Native -FilePath $vsEnv.CMakeExe -ArgumentList (@('--build', '.', '--config', 'Release', '--target') + $targets.ToArray())
     }
 }
