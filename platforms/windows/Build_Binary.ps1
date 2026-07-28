@@ -760,6 +760,52 @@ function Find-CudaHostCompiler {
     return (Join-Path $msvcDir.FullName 'bin\Hostx64\x64\cl.exe')
 }
 
+function Sync-SharedArchLibs {
+    <#
+    xtiff.lib and libleptonica.lib build to a single, non-arch-suffixed
+    shared location (libs\Release\), unlike every other native output in
+    this repo (which is arch-suffixed under libs\runtimes\win-<arch>\...).
+    Building a different -Arch silently overwrites them for that arch,
+    breaking any OTHER already-built arch's cvextern link with LNK4272
+    ("machine type conflict") + LNK1120 (unresolved externals) -- hit
+    manually, in both directions (x86 overwriting x64's copies and vice
+    versa), before this function existed.
+
+    A small marker file records which -Arch last (re)built them; if it
+    doesn't match the current -Arch, the stale files are deleted and
+    xtiff/libleptonica are rebuilt for this -Arch (via the same --target
+    repeated-flag form already used elsewhere in this script for
+    multi-target builds) before cvextern links against them.
+
+    The delete-first step matters: simply re-invoking the build is NOT
+    enough to force a fresh link. MSBuild's up-to-date check is based on
+    *this build tree's own* intermediate object timestamps, which haven't
+    changed just because a completely different -Arch's build tree
+    overwrote the shared output file afterwards -- so without deleting
+    that file first, MSBuild considers the target already up to date and
+    silently skips the relink, leaving the stale (wrong-architecture)
+    file in place. Reproduced directly: an in-place rebuild attempt
+    reported success ("xtiff.vcxproj -> ...\xtiff.lib") but the file's
+    own timestamp never changed, and the subsequent cvextern link still
+    failed with the same LNK4272/LNK1120 as before.
+    #>
+    param(
+        [Parameter(Mandatory = $true)][string]$RepoRoot,
+        [Parameter(Mandatory = $true)][string]$Arch,
+        [Parameter(Mandatory = $true)][string]$CMakeExe
+    )
+    $markerFile = Join-Path $RepoRoot 'libs\Release\.arch-marker'
+    $lastArch = if (Test-Path $markerFile) { (Get-Content $markerFile -Raw).Trim() } else { $null }
+    if ($lastArch -eq $Arch) { return }
+
+    Write-Host "libs\Release\xtiff.lib / libleptonica.lib were last built for '$lastArch', rebuilding for '$Arch' before linking cvextern..."
+    $xtiffLib = Join-Path $RepoRoot 'libs\Release\xtiff.lib'
+    $leptonicaLib = Join-Path $RepoRoot 'libs\Release\libleptonica.lib'
+    Remove-Item $xtiffLib, $leptonicaLib -Force -ErrorAction SilentlyContinue
+    Invoke-Native -FilePath $CMakeExe -ArgumentList '--build', '.', '--config', 'Release', '--target', 'xtiff', '--target', 'libleptonica'
+    Set-Content -Path $markerFile -Value $Arch -Encoding ASCII -NoNewline
+}
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -1112,6 +1158,8 @@ try {
 
     # --- Optional build/package/doc/nuget targets ----------------------------
     if ($Build) {
+        Sync-SharedArchLibs -RepoRoot $repoRoot -Arch $Arch -CMakeExe $vsEnv.CMakeExe
+
         $targets = New-Object System.Collections.Generic.List[string]
         $targets.Add('cvextern')
         if ($Package) { $targets.Add('PACKAGE') }
