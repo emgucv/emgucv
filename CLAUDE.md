@@ -60,20 +60,23 @@ cd android_arm64-v8a
 cmake .
 ```
 
-To configure from scratch, run from **`platforms/android/scripts/`**:
-```bash
+To configure from scratch on Windows, run from **`platforms/android/scripts/`** (PowerShell; the legacy `build.cmd`/`wincfg.cmd`/etc. `.bat`/`.cmd` files have been removed):
+```powershell
 cd platforms/android/scripts
-build.cmd [abi] [variant] [toolchain]
+.\build.ps1 -Abi <abi> -Variant <variant> -AndroidToolchain <toolchain>
 ```
+(positional args also work: `.\build.ps1 arm64-v8a mini`). On macOS/Linux, use `./build.sh [abi] [variant] [toolchain]` instead.
 
-**ABI (`%1`):** `arm64-v8a`, `x86_64`, `x86`, or `armeabi-v7a`
+**Abi:** `arm64-v8a`, `x86_64`, `x86`, or `armeabi-v7a`
 
-**Variant (`%2`):**
+**Variant:**
 - *(empty)* — full build with `opencv_contrib` + Tesseract
 - `core` — core OpenCV only, no Tesseract/Freetype
 - `mini` — minimal subset (strips dnn, ml, calib, video, etc.)
 
-Requires environment variables `ANDROID_NDK`, `CMAKE`, and `MAKE` to be set. Output lands in `android_<abi>/`, and binaries are copied to `libs/android/<abi>/`.
+Requires environment variables `ANDROID_NDK`, `CMAKE`, and `MAKE` to be set — `build.ps1` auto-detects these via `wincfg.ps1` (dot-sourced) if not already set. Output lands in `android_<abi>/`, and binaries are copied to `libs/android/<abi>/`.
+
+Other scripts in `platforms/android/scripts/` (all PowerShell): `build_all.ps1` / `rebuild_all.ps1` rebuild all four ABIs and merge them into a single `libemgucv-android.zip` (legacy jni/ant-era packaging, predates the MAUI runtime nuget flow above); `remove_from_path.ps1` is a small PATH-cleanup helper used by `rebuild_all.ps1`.
 
 ### Native C++ (iOS / Xcode)
 The iOS build uses shell scripts in `platforms/ios/`. Run from within **`platforms/ios/`**:
