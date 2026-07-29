@@ -796,17 +796,30 @@ function Sync-SharedArchLibs {
     param(
         [Parameter(Mandatory = $true)][string]$RepoRoot,
         [Parameter(Mandatory = $true)][string]$Arch,
-        [Parameter(Mandatory = $true)][string]$CMakeExe
+        [Parameter(Mandatory = $true)][string]$CMakeExe,
+        [Parameter(Mandatory = $true)][string]$BuildFolder
     )
     $markerFile = Join-Path $RepoRoot 'libs\Release\.arch-marker'
     $lastArch = if (Test-Path $markerFile) { (Get-Content $markerFile -Raw).Trim() } else { $null }
     if ($lastArch -eq $Arch) { return }
 
-    Write-Host "libs\Release\xtiff.lib / libleptonica.lib were last built for '$lastArch', rebuilding for '$Arch' before linking cvextern..."
-    $xtiffLib = Join-Path $RepoRoot 'libs\Release\xtiff.lib'
-    $leptonicaLib = Join-Path $RepoRoot 'libs\Release\libleptonica.lib'
-    Remove-Item $xtiffLib, $leptonicaLib -Force -ErrorAction SilentlyContinue
-    Invoke-Native -FilePath $CMakeExe -ArgumentList '--build', '.', '--config', 'Release', '--target', 'xtiff', '--target', 'libleptonica'
+    # Build only the targets that were actually generated for this configuration.
+    # e.g. UWP/WindowsStore10 builds have leptonica HAVE_LIBTIFF=FALSE so xtiff
+    # is never added to the cmake project and xtiff.vcxproj does not exist.
+    $targetArgs = New-Object System.Collections.Generic.List[string]
+    if (Get-ChildItem -Path $BuildFolder -Recurse -Filter 'xtiff.vcxproj' -ErrorAction SilentlyContinue) {
+        Remove-Item (Join-Path $RepoRoot 'libs\Release\xtiff.lib') -Force -ErrorAction SilentlyContinue
+        $targetArgs.AddRange([string[]]@('--target', 'xtiff'))
+    }
+    if (Get-ChildItem -Path $BuildFolder -Recurse -Filter 'libleptonica.vcxproj' -ErrorAction SilentlyContinue) {
+        Remove-Item (Join-Path $RepoRoot 'libs\Release\libleptonica.lib') -Force -ErrorAction SilentlyContinue
+        $targetArgs.AddRange([string[]]@('--target', 'libleptonica'))
+    }
+
+    if ($targetArgs.Count -gt 0) {
+        Write-Host "libs\Release\xtiff.lib / libleptonica.lib were last built for '$lastArch', rebuilding for '$Arch' before linking cvextern..."
+        Invoke-Native -FilePath $CMakeExe -ArgumentList (@('--build', '.', '--config', 'Release') + $targetArgs.ToArray())
+    }
     Set-Content -Path $markerFile -Value $Arch -Encoding ASCII -NoNewline
 }
 
@@ -1175,7 +1188,7 @@ try {
 
     # --- Optional build/package/doc/nuget targets ----------------------------
     if ($Build) {
-        Sync-SharedArchLibs -RepoRoot $repoRoot -Arch $Arch -CMakeExe $vsEnv.CMakeExe
+        Sync-SharedArchLibs -RepoRoot $repoRoot -Arch $Arch -CMakeExe $vsEnv.CMakeExe -BuildFolder $buildFolder
 
         $targets = New-Object System.Collections.Generic.List[string]
         $targets.Add('cvextern')
