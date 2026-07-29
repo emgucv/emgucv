@@ -45,7 +45,7 @@ INSTALL_PREFIX_OPTION=( -DCMAKE_INSTALL_PREFIX=$INSTALL_FOLDER )
 # line, and build.sh invokes xcodebuild directly, so Xcode fell back to the SDK
 # default (e.g. minos 26.2) and clang emitted iOS16+-only objc_release_x*
 # thunks that crash on iOS 15 at launch (issue #1016).
-CMAKE_COMMON_OPTION=( -DIPHONEOS_DEPLOYMENT_TARGET:STRING="$IPHONEOS_DEPLOYMENT_TARGET" -DCMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET:STRING="$IPHONEOS_DEPLOYMENT_TARGET" -DIOS_ARCH="$3" -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD="c++23" -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY="libc++" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DBUILD_opencv_js_bindings_generator:BOOL=FALSE -DBUILD_opencv_python_tests:BOOL=FALSE -DBUILD_opencv_freetype:BOOL=FALSE )
+CMAKE_COMMON_OPTION=( -DIPHONEOS_DEPLOYMENT_TARGET:STRING="$IPHONEOS_DEPLOYMENT_TARGET" -DCMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET:STRING="$IPHONEOS_DEPLOYMENT_TARGET" -DIOS_ARCH="$3" -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD="c++23" -DCMAKE_XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY="libc++" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DBUILD_opencv_js_bindings_generator:BOOL=FALSE -DBUILD_opencv_python_tests:BOOL=FALSE -DBUILD_opencv_freetype:BOOL=FALSE -DWITH_OPENCL:BOOL=FALSE )
 
 if [ "$2" == "catalyst" ]; then
     #CV_CONTRIB_OPTION+=( -DBUILD_JPEG:BOOL=FALSE -DBUILD_OPENJPEG:BOOL=FALSE -DWITH_JPEG:BOOL=FALSE )
@@ -56,6 +56,14 @@ if [ "$2" == "catalyst" ]; then
         CMAKE_COMMON_OPTION+=( -DWITH_KLEIDICV:BOOL=FALSE )
     fi
 else
+    # On arm64, cmake's CPU_BASELINE=DETECT promotes NEON_FP16 into the baseline
+    # (since Apple arm64 has it by default). The baseline flags don't include
+    # -march=armv8.2-a+fp16, so vfmaq_f16 (always_inline, requires fullfp16)
+    # fails. Fix: pin baseline to NEON so NEON_FP16 stays in dispatch, where it
+    # gets compiled with the proper -march=armv8.2-a+fp16 flags.
+    if [ "$3" == "arm64" ]; then
+        CMAKE_COMMON_OPTION+=( -DCPU_BASELINE=NEON )
+    fi
     pushd $CURRENT_SCRIPT_DIR/../../eigen
     mkdir -p build_$3
     cd build_$3
@@ -106,6 +114,8 @@ fi
 
 cmake \
     -GXcode \
+    -S "$CURRENT_SCRIPT_DIR/../.." \
+    -B "." \
     ${CV_TOOLCHAIN_OPTION[@]} \
     ${CV_OPTIMIZATION_OPTION[@]} \
     ${CV_CONTRIB_OPTION[@]} \
@@ -119,5 +129,5 @@ cmake \
     -DBUILD_opencv_apps:BOOL=FALSE \
     -DBUILD_opencv_java_bindings_generator:BOOL=FALSE \
     -DBUILD_opencv_python_bindings_generator:BOOL=FALSE \
-    ${@:4} $CURRENT_SCRIPT_DIR/../.. 
+    ${@:4}
 
