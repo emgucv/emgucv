@@ -70,7 +70,7 @@ param(
     [switch]$OnnxRuntime,
 
     [ValidateSet('None', 'Intel', 'IntelOpenVino', 'OpenVino', 'WindowsStore10',
-        'WindowsPhone81', 'WindowsStore81', 'VS2015', 'VS2022', 'Commercial')]
+        'VS2015', 'VS2022', 'Commercial')]
     [string]$Toolchain = 'None',
 
     [ValidateSet('None', 'NonFree', 'OpenNI', 'DepthAI')]
@@ -186,8 +186,7 @@ function Resolve-VisualStudioEnvironment {
     if (Test-Path (Join-Path $buildToolsFolder 'MSBuild\Current\Bin\MSBuild.exe')) { $msbuildBuildTools = Join-Path $buildToolsFolder 'MSBuild\Current\Bin\MSBuild.exe' }
 
     # DEVENV resolution cascade: later checks overwrite earlier ones unless a
-    # short-circuit (openni / WindowsPhone81 / vs2015 / vs2022) stops the
-    # cascade early.
+    # short-circuit (openni / vs2015 / vs2022) stops the cascade early.
     $devEnvKind = ''
     $devEnvPath = ''
     if ($msbuild35) { $devEnvKind = 'MSBuild35'; $devEnvPath = $msbuild35 }
@@ -205,7 +204,7 @@ function Resolve-VisualStudioEnvironment {
         if ($vs2013 -and (Test-Path $vs2013)) { $devEnvKind = 'VS2013'; $devEnvPath = $vs2013 }
         if ($vs2015 -and (Test-Path $vs2015)) { $devEnvKind = 'VS2015'; $devEnvPath = $vs2015 }
 
-        $pinnedEarly = ($Toolchain -eq 'WindowsPhone81') -or ($Toolchain -eq 'VS2015')
+        $pinnedEarly = ($Toolchain -eq 'VS2015')
         if (-not $pinnedEarly) {
             if ($vs2017Dir -and (Test-Path $vs2017)) { $devEnvKind = 'VS2017'; $devEnvPath = $vs2017 }
             if ($vs2019Dir -and (Test-Path $vs2019)) { $devEnvKind = 'VS2019'; $devEnvPath = $vs2019 }
@@ -816,11 +815,20 @@ function Sync-SharedArchLibs {
 # ---------------------------------------------------------------------------
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..')
-$buildFolderName = "build_$Arch"
+$isUwp = $Toolchain -eq 'WindowsStore10'
+
+# UWP builds get their own build_uwp_<Arch> tree, separate from the desktop
+# build_<Arch> tree for the same -Arch. They share nothing reusable anyway:
+# CMAKE_SYSTEM_NAME=WindowsStore invalidates most of a desktop configure's
+# cached state, so reconfiguring the SAME tree back and forth between
+# desktop and UWP for one -Arch forced a slow, mostly-from-scratch
+# reconfigure+rebuild every time. The final cvextern.dll output doesn't
+# collide either way (CMakeLists.txt already branches on CMAKE_SYSTEM_NAME
+# to pick libs/runtimes/win10-<Arch>/native vs win-<Arch>/native) -- this
+# is purely about not fighting over the same intermediate build tree.
+$buildFolderName = if ($isUwp) { "build_uwp_$Arch" } else { "build_$Arch" }
 $buildFolder = Join-Path $repoRoot $buildFolderName
 New-Item -ItemType Directory -Force -Path $buildFolder | Out-Null
-
-$isUwp = $Toolchain -in @('WindowsStore10', 'WindowsPhone81', 'WindowsStore81')
 
 $vsEnv = Resolve-VisualStudioEnvironment -Arch $Arch -Toolchain $Toolchain -ExtraModules $ExtraModules
 Write-Host "Using $($vsEnv.DevEnvKind): $($vsEnv.DevEnvPath)"
