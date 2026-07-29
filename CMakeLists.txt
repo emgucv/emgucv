@@ -1054,6 +1054,14 @@ SET(ENTRYPOINT_MODULES_STRING "")
 
 IF(MSVC)
   set(ENABLE_SOLUTION_FOLDERS ON CACHE BOOL "Solution folder in Visual Studio")
+  # Prevent Strawberry Perl's MinGW pthread libraries (present on GitHub Actions
+  # windows-latest runners) from being detected by find_package(Threads).
+  # check_library_exists skips its probe when the result variable is already
+  # defined; setting these to "" (falsy-but-defined) keeps CMAKE_THREAD_LIBS_INIT
+  # empty so Threads::Threads gets no INTERFACE_LINK_LIBRARIES and pthread.lib
+  # never appears in cvextern's linker inputs.
+  set(CMAKE_HAVE_PTHREADS_CREATE "" CACHE INTERNAL "" FORCE)
+  set(CMAKE_HAVE_PTHREAD_CREATE   "" CACHE INTERNAL "" FORCE)
 ENDIF()
 ADD_SUBDIRECTORY(${OPENCV_SUBFOLDER})
 
