@@ -1054,14 +1054,32 @@ SET(ENTRYPOINT_MODULES_STRING "")
 
 IF(MSVC)
   set(ENABLE_SOLUTION_FOLDERS ON CACHE BOOL "Solution folder in Visual Studio")
-  # Prevent Strawberry Perl's MinGW pthread libraries (present on GitHub Actions
-  # windows-latest runners) from being detected by find_package(Threads).
-  # check_library_exists skips its probe when the result variable is already
-  # defined; setting these to "" (falsy-but-defined) keeps CMAKE_THREAD_LIBS_INIT
-  # empty so Threads::Threads gets no INTERFACE_LINK_LIBRARIES and pthread.lib
-  # never appears in cvextern's linker inputs.
+  # On GitHub Actions windows-latest runners, Strawberry Perl ships MinGW's
+  # libpthread.a to C:/Strawberry/c/lib/. find_package(Threads) finds it and
+  # sets CMAKE_THREAD_LIBS_INIT="-lpthread" / CMAKE_USE_PTHREADS_INIT=1.
+  # This causes every cmake target that links Threads::Threads (abseil, openjpeg,
+  # depthai, ...) to propagate pthread.lib into cvextern's link line → LNK1181.
+  #
+  # Fix: create stub targets BEFORE any subdirectory can call find_package(Threads).
+  #
+  #  - "Threads::Threads" INTERFACE IMPORTED GLOBAL: FindThreads.cmake only creates
+  #    this target when (NOT TARGET Threads::Threads), so our empty stub prevents
+  #    it from ever setting INTERFACE_LINK_LIBRARIES = "-lpthread".
+  #
+  #  - "pthread" INTERFACE: intercepts the raw string "pthread" when code calls
+  #    target_link_libraries(X PRIVATE pthread) — cmake sees a known target and
+  #    treats it as a no-op, so "pthread.lib" never reaches the linker.
+  #
+  # Also pre-set the check_library_exists cache variables so the probe is skipped.
+  if(NOT TARGET Threads::Threads)
+    add_library(Threads::Threads INTERFACE IMPORTED GLOBAL)
+  endif()
+  if(NOT TARGET pthread)
+    add_library(pthread INTERFACE)
+  endif()
   set(CMAKE_HAVE_PTHREADS_CREATE "" CACHE INTERNAL "" FORCE)
   set(CMAKE_HAVE_PTHREAD_CREATE   "" CACHE INTERNAL "" FORCE)
+  set(Threads_FOUND TRUE CACHE BOOL "" FORCE)
 ENDIF()
 ADD_SUBDIRECTORY(${OPENCV_SUBFOLDER})
 
