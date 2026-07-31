@@ -1603,7 +1603,7 @@ ENDIF()
 	""
     "#include \"features_c.h\""
 	""
-	"HAVE_OPENCV_FEATURES"
+	""
 	${HAVE_opencv_features})
   CREATE_OCV_CLASS_PROPERTY(
     "features/ORB_property"
@@ -1630,7 +1630,7 @@ ENDIF()
 	""
     "#include \"features_c.h\""
 	""
-	"HAVE_OPENCV_FEATURES"
+	""
 	${HAVE_opencv_features})
 
 ############################### features code gen END ################################
