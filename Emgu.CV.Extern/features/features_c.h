@@ -33,10 +33,18 @@ namespace cv
 static inline CV_NORETURN void throw_no_features() { CV_Error(cv::Error::StsBadFunc, "The library is compiled without features support. To use this module, please switch to the full Emgu CV runtime."); }
 
 namespace cv {
-	class ORB {};
+	class ORB
+	{
+	public:
+		enum ScoreType { HARRIS_SCORE = 0, FAST_SCORE = 1 };
+	};
 	class Feature2D {};
 	class BRISK {};
-	class FastFeatureDetector {};
+	class FastFeatureDetector
+	{
+	public:
+		enum DetectorType { TYPE_5_8 = 0, TYPE_7_12 = 1, TYPE_9_16 = 2 };
+	};
 	class GFTTDetector {};
 	class MSER {};
 	class SimpleBlobDetector
