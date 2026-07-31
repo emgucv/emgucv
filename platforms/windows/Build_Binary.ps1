@@ -53,6 +53,10 @@
 
 .PARAMETER Nuget
     Build the NuGet package target.
+
+.PARAMETER PerfTests
+    Build OpenCV performance tests (opencv_ts + opencv_perf_*). Off by default.
+    Pass -PerfTests to enable; UWP builds always skip perf tests regardless.
 #>
 [CmdletBinding()]
 param(
@@ -79,7 +83,8 @@ param(
     [switch]$Documentation,
     [switch]$Package,
     [switch]$Build,
-    [switch]$Nuget
+    [switch]$Nuget,
+    [switch]$PerfTests
 )
 
 $ErrorActionPreference = 'Stop'
@@ -957,9 +962,8 @@ try {
     }
 
     # --- Performance tests ------------------------------------------------
-    # Disabled for CUDA, Intel compiler, and UWP builds (compilation errors
-    # in those configurations), enabled otherwise.
-    $skipPerfTests = $Cuda -or ($Toolchain -in @('Intel', 'IntelOpenVino')) -or $isUwp
+    # Built only when -PerfTests is explicitly passed and not a UWP build.
+    $skipPerfTests = (-not $PerfTests) -or $isUwp
     if ($skipPerfTests) {
         $emguFlags.Add('-DBUILD_opencv_ts:BOOL=OFF')
         $emguFlags.Add('-DBUILD_PERF_TESTS:BOOL=OFF')
