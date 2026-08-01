@@ -53,7 +53,7 @@ jobs:
         Write-Host "Process arch: $([System.Runtime.InteropServices.RuntimeInformation]::ProcessArchitecture)"
         Get-ChildItem "${{ github.workspace }}\libs\runtimes\win-x64\native\" -ErrorAction SilentlyContinue | Select-Object Name
     - name: Run a test program
-      run: dotnet run --arch x64
+      run: dotnet run --arch x64 -p:EmguCVSkipMobileTargets=true
       working-directory: ${{ github.workspace }}\Emgu.CV.Example\BuildInfo.Console\
     #- name: Run Unit Test
     #  run: dotnet test --blame-crash
