@@ -31,6 +31,7 @@ LICENSE.txt
 emgucv.version.txt
 Emgu.CV/README.txt
 **/docs/
+Emgu.CV.Runtime/WebAssembly/Emgu.CV.runtime*.webassembly.targets
 
 # --- standard dotnet build output ---
 bin/
