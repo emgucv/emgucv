@@ -23,7 +23,6 @@ Emgu.CV.Extern/**/*_property.cpp
 Emgu.CV.Extern/vector_*.cpp
 Emgu.CV.Extern/vector_*.h
 Emgu.CV.Extern/version.rc
-/Emgu.CV.CUDA/
 
 # --- CMake-generated project/version metadata ---
 Directory.Build.props
@@ -32,3 +31,8 @@ LICENSE.txt
 emgucv.version.txt
 Emgu.CV/README.txt
 **/docs/
+
+# --- standard dotnet build output ---
+bin/
+obj/
+Emgu.CV.Bitmap/Emgu.CV.Bitmap.xml
