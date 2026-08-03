@@ -28,6 +28,39 @@ IF ( (TARGET Emgu.CV)
 	   <file src=\"..\\..\\..\\libs\\runtimes\\win-arm64\\native\\version_string.inc\" target=\"docs\\build_info_arm64.inc\" />")
   ENDIF()
 
+  #Build the RID list actually included in this package, for the README's publish section.
+  #This keeps the documented RIDs in sync with whichever architectures were
+  #actually built (HAVE_WINDESKTOP_X86/X64/ARM64), instead of hard-coding all three.
+  SET(EMGUCV_WINDOWS_RID_LIST "")
+  IF(HAVE_WINDESKTOP_X64)
+    LIST(APPEND EMGUCV_WINDOWS_RID_LIST "win-x64")
+  ENDIF()
+  IF(HAVE_WINDESKTOP_X86)
+    LIST(APPEND EMGUCV_WINDOWS_RID_LIST "win-x86")
+  ENDIF()
+  IF(HAVE_WINDESKTOP_ARM64)
+    LIST(APPEND EMGUCV_WINDOWS_RID_LIST "win-arm64")
+  ENDIF()
+  LIST(GET EMGUCV_WINDOWS_RID_LIST 0 EMGUCV_WINDOWS_PRIMARY_RID)
+  LIST(LENGTH EMGUCV_WINDOWS_RID_LIST EMGUCV_WINDOWS_RID_COUNT)
+  IF(EMGUCV_WINDOWS_RID_COUNT GREATER 1)
+    SET(EMGUCV_WINDOWS_RID_PLURAL_S "s")
+  ELSE()
+    SET(EMGUCV_WINDOWS_RID_PLURAL_S "")
+  ENDIF()
+  #Wrap each RID in backticks for the markdown code-span style used elsewhere in this doc
+  SET(EMGUCV_WINDOWS_RID_LIST_MD "")
+  FOREACH(EMGUCV_WINDOWS_RID_ITEM ${EMGUCV_WINDOWS_RID_LIST})
+    LIST(APPEND EMGUCV_WINDOWS_RID_LIST_MD "`${EMGUCV_WINDOWS_RID_ITEM}`")
+  ENDFOREACH()
+  LIST(JOIN EMGUCV_WINDOWS_RID_LIST_MD ", " EMGUCV_WINDOWS_RID_LIST_TEXT)
+
+  IF(WITH_CUDA)
+    SET(EMGUCV_WINDOWS_CUDA_RID_NOTE "\n\nNote: this CUDA-enabled release only includes the `${EMGUCV_WINDOWS_PRIMARY_RID}` native binary; other architectures are not available in this release.")
+  ELSE()
+    SET(EMGUCV_WINDOWS_CUDA_RID_NOTE "")
+  ENDIF()
+
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
   

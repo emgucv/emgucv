@@ -21,10 +21,8 @@ If you have issues getting the pacakge installed for your project, and your proj
 ## Publishing with `dotnet publish -r <rid>`
 
 This package ships its native binaries under the standard, portable
-`win-x64`, `win-x86`, and `win-arm64` RIDs, so `dotnet publish -r win-x64`
-(or `win-x86`/`win-arm64`) works without any extra configuration -- unlike
-the Ubuntu and RHEL runtime packages, which require `UseRidGraph` and an
-exact `RuntimeIdentifier` match because they use distro-specific RIDs.
-
-Note: releases built with CUDA support enabled only include the `win-x64`
-native binary; `win-x86` and `win-arm64` are not available in those releases.
+${EMGUCV_WINDOWS_RID_LIST_TEXT} RID${EMGUCV_WINDOWS_RID_PLURAL_S}, so
+`dotnet publish -r ${EMGUCV_WINDOWS_PRIMARY_RID}` works without any extra
+configuration -- unlike the Ubuntu and RHEL runtime packages, which require
+`UseRidGraph` and an exact `RuntimeIdentifier` match because they use
+distro-specific RIDs.${EMGUCV_WINDOWS_CUDA_RID_NOTE}
