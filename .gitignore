@@ -10,7 +10,11 @@ android_*/
 platforms/*/build/
 platforms/*/*/build/
 platforms/emscripten/wasm-cache/
-platforms/nuget/
+platforms/nuget/*.nupkg
+platforms/nuget/**/*.nupkg
+platforms/nuget/**/*.props
+platforms/nuget/**/Package.nuspec
+platforms/nuget/**/README.md
 libs/
 
 # --- CMake-generated C# / native glue (do not edit manually) ---
