@@ -14,3 +14,9 @@ If you are targeting .Net Framework, please read this first:
 
 If you have issues getting the pacakge installed for your project, and your project use packages.config to manage nuget packages, the following instructions will help:
 <${NUGET_EMGU_URL}/wiki/index.php/Download_And_Installation#Upgrade_from_packages.config_to_package_reference>
+
+## Publishing with `dotnet publish -r <rid>`
+
+This package ships its native binary under the standard, portable `win-x64`
+RID only (CUDA is not supported on Windows x86 or arm64), so
+`dotnet publish -r win-x64` works without any extra configuration.
