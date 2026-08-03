@@ -21,7 +21,8 @@ If you have issues getting the pacakge installed for your project, and your proj
 ## Publishing with `dotnet publish -r <rid>`
 
 This package ships its native binaries under the standard, portable
-`osx-x64` and `osx-arm64` RIDs, so `dotnet publish -r osx-x64` (or
-`osx-arm64`) works without any extra configuration -- unlike the Ubuntu and
-RHEL runtime packages, which require `UseRidGraph` and an exact
-`RuntimeIdentifier` match because they use distro-specific RIDs.
+${EMGUCV_MACOS_RID_LIST_TEXT} RID${EMGUCV_MACOS_RID_PLURAL_S}, so
+`dotnet publish -r ${EMGUCV_MACOS_PRIMARY_RID}` works without any extra
+configuration -- unlike the Ubuntu and RHEL runtime packages, which require
+`UseRidGraph` and an exact `RuntimeIdentifier` match because they use
+distro-specific RIDs.
