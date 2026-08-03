@@ -31,6 +31,5 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
     <file src="..\..\..\miscellaneous\nuget_icon.png" target="" />
     <file src="..\..\..\${EMGUCV_LICENSE_FILE}" target="" />
     <file src="docs\README.md" target="docs" />
-    <file src="${EMGUCV_MACOS_NUGET_ID}.props" target="build" />
   </files>
 </package>
