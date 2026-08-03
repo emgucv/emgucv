@@ -25,3 +25,6 @@ This package ships its native binaries under the standard, portable
 (or `win-x86`/`win-arm64`) works without any extra configuration -- unlike
 the Ubuntu and RHEL runtime packages, which require `UseRidGraph` and an
 exact `RuntimeIdentifier` match because they use distro-specific RIDs.
+
+Note: releases built with CUDA support enabled only include the `win-x64`
+native binary; `win-x86` and `win-arm64` are not available in those releases.
