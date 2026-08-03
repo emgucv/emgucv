@@ -26,15 +26,16 @@ of the build.
 If you publish with an explicit runtime identifier, e.g.
 
 ```
-dotnet publish -r ubuntu-x64
+dotnet publish -r ${EMGUCV_UBUNTU_PRIMARY_RID}
 ```
 
 you additionally need to add the following to your own `.csproj` (or a
-`Directory.Build.props`):
+`Directory.Build.props`), using whichever of this package's RIDs
+(${EMGUCV_UBUNTU_RID_LIST_TEXT}) matches your target architecture:
 
 ```xml
 <PropertyGroup>
-  <RuntimeIdentifier>ubuntu-x64</RuntimeIdentifier>
+  <RuntimeIdentifier>${EMGUCV_UBUNTU_PRIMARY_RID}</RuntimeIdentifier>
   <UseRidGraph>true</UseRidGraph>
 </PropertyGroup>
 ```
@@ -43,11 +44,13 @@ This is required because NuGet's runtime-asset selection for a publish-time
 RID happens during restore, before any package's own build props are
 imported -- so a package cannot set this property for you in that scenario.
 
-Note that the `RuntimeIdentifier` value is the plain `ubuntu-x64`, **not**
-the versioned package name (e.g. `ubuntu-24.04-x64`). The version in the
-package name only tells you which native binary to install (matching your
-target Ubuntu release); the `RuntimeIdentifier` your project targets stays
-`ubuntu-x64` regardless of which versioned package you reference.
+Note: the `RuntimeIdentifier` used above (${EMGUCV_UBUNTU_RID_LIST_TEXT}) is
+the plain RID to target -- **not** the versioned package name (e.g.
+`ubuntu-24.04-x64`). The version in the package name only tells you which
+native binary to install (matching your target Ubuntu release); the
+`RuntimeIdentifier` your project targets stays the plain form, e.g.
+`${EMGUCV_UBUNTU_PRIMARY_RID}`, regardless of which versioned package you
+reference.
 
 Publishing to a generic RID (`dotnet publish -r linux-x64`) is not supported
 by this package: publish-time asset selection can only narrow from a generic
