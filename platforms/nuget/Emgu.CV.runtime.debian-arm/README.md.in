@@ -10,3 +10,10 @@ For online documentation please visit
 Release note can be found at
 <${NUGET_EMGU_URL}/wiki/index.php/Version_History#Emgu.CV-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}>
 
+## Publishing with `dotnet publish -r <rid>`
+
+This package ships its native binary under the standard, portable `linux-arm`
+RID, so `dotnet publish -r linux-arm` works without any extra configuration
+-- unlike the Ubuntu runtime packages, which require `UseRidGraph` and an
+exact `RuntimeIdentifier` match because they use an Ubuntu-specific RID.
+
