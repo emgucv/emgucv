@@ -890,6 +890,8 @@ namespace MauiDemoApp
 
             _feed = new Image { Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Fill, VerticalOptions = LayoutOptions.Fill };
 
+            // Floating exit control (white on a translucent pill) so the video
+            // can run edge-to-edge with no chrome bar stealing vertical space.
             var exitRow = new HorizontalStackLayout
             {
                 Spacing = 2,
@@ -897,9 +899,20 @@ namespace MauiDemoApp
                 HorizontalOptions = LayoutOptions.Start,
                 Children =
                 {
-                    MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphChevronLeft, MaskRcnnPage.Accent, 24),
-                    new Label { Text = "Exit", FontFamily = MaskRcnnPage.TitleFont, FontSize = 17, TextColor = MaskRcnnPage.Accent, VerticalOptions = LayoutOptions.Center }
+                    MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphChevronLeft, Colors.White, 24),
+                    new Label { Text = "Exit", FontFamily = MaskRcnnPage.TitleFont, FontSize = 17, TextColor = Colors.White, VerticalOptions = LayoutOptions.Center }
                 }
+            };
+            var exitPill = new Border
+            {
+                BackgroundColor = Color.FromArgb("#E01A1C2E"),
+                Stroke = Colors.Transparent,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(18) },
+                Padding = new Thickness(14, 8, 18, 8),
+                Margin = new Thickness(12, 12, 0, 0),
+                HorizontalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.Start,
+                Content = exitRow
             };
             var exitTap = new TapGestureRecognizer();
             exitTap.Tapped += async (s, e) =>
@@ -907,18 +920,7 @@ namespace MauiDemoApp
                 _running = false;
                 await Navigation.PopModalAsync();
             };
-            exitRow.GestureRecognizers.Add(exitTap);
-
-            var titleLabel = new Label { Text = title, FontFamily = MaskRcnnPage.TitleFont, FontSize = 18, TextColor = MaskRcnnPage.PrimaryText, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
-
-            var topBar = new Grid
-            {
-                Padding = new Thickness(16, 8, 16, 10),
-                ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) }
-            };
-            topBar.Add(titleLabel, 0, 0);
-            Grid.SetColumnSpan(titleLabel, 3);
-            topBar.Add(exitRow, 0, 0);
+            exitPill.GestureRecognizers.Add(exitTap);
 
             var dot = new Border { WidthRequest = 10, HeightRequest = 10, BackgroundColor = Color.FromArgb("#2BE07A"), Stroke = Colors.Transparent, StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(5) }, VerticalOptions = LayoutOptions.Center };
             var scanningTitle = new Label { Text = "Scanning…", FontFamily = MaskRcnnPage.TitleFont, FontSize = 15, TextColor = Colors.White };
@@ -943,26 +945,15 @@ namespace MauiDemoApp
                 }
             };
 
-            var feedCard = new Border
-            {
-                BackgroundColor = Colors.Black,
-                Stroke = MaskRcnnPage.RowBorder,
-                StrokeThickness = 1,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(24) },
-                Margin = new Thickness(16, 4, 16, 20),
-                Content = new Grid { Children = { _feed, pill } }
-            };
-
             _spinner = new ActivityIndicator { IsRunning = false, Color = MaskRcnnPage.Accent, WidthRequest = 44, HeightRequest = 44, HorizontalOptions = LayoutOptions.Center };
             _loadingLabel = new Label { Text = "Starting camera…", FontFamily = MaskRcnnPage.BodyFont, FontSize = 15, TextColor = MaskRcnnPage.PrimaryText, HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center };
             var loadingBox = new VerticalStackLayout { Spacing = 14, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, Children = { _spinner, _loadingLabel } };
             _overlay = new Grid { BackgroundColor = Color.FromArgb("#F5EEF1F8"), Children = { loadingBox } };
 
-            var root = new Grid { RowDefinitions = { new RowDefinition(GridLength.Auto), new RowDefinition(GridLength.Star) } };
-            root.Add(topBar, 0, 0);
-            root.Add(feedCard, 0, 1);
-
-            Content = new Grid { Children = { root, _overlay } };
+            // Edge-to-edge: the feed fills the whole page (theme background behind
+            // it), with the exit control and scanning pill floating on top — no
+            // chrome bar or card margin stealing space from the video.
+            Content = new Grid { BackgroundColor = MaskRcnnPage.PageBackground, Children = { _feed, exitPill, pill, _overlay } };
         }
 
         protected override async void OnAppearing()
