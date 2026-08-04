@@ -255,7 +255,17 @@ namespace Emgu.CV.Models
                 }
 
                 //foregroundMaskBgr.CopyTo(imageOut);
-                CvInvoke.HConcat(_frameCopy, _foregroundMaskBgr, imageOut);
+                // Stack the tracked frame above the foreground mask, separated by
+                // a thin white divider so the two panes read as distinct. Vertical
+                // (not horizontal) concat keeps each pane usefully sized on a
+                // portrait phone, where a double-wide image would shrink to a thin
+                // strip.
+                int dividerHeight = Math.Max(2, _frameCopy.Height / 120);
+                using (Mat divider = new Mat(dividerHeight, _frameCopy.Width, _frameCopy.Depth, _frameCopy.NumberOfChannels))
+                {
+                    divider.SetTo(new MCvScalar(255.0, 255.0, 255.0));
+                    CvInvoke.VConcat(new Mat[] { _frameCopy, divider, _foregroundMaskBgr }, imageOut);
+                }
 
             }
             watch.Stop();
