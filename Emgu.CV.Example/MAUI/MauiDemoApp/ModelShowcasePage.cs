@@ -333,7 +333,12 @@ namespace MauiDemoApp
                 Padding = new Thickness(16),
                 Content = new VerticalStackLayout { Spacing = 12, Children = { resultsHeader, _emptyState, _resultsBody } }
             };
-            pageChildren.Children.Add(resultsCard);
+            // The Results card only ever populates on the still-image path; for
+            // camera-only modules the live feed opens on its own full-screen page,
+            // so this card would sit permanently on "No results yet". Only show it
+            // when there's a still-image flow to report into.
+            if (_hasStillImage)
+                pageChildren.Children.Add(resultsCard);
 
             // ---------- About this module (collapsible) ----------
             if (!string.IsNullOrWhiteSpace(_about))
