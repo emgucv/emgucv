@@ -877,11 +877,15 @@ namespace MauiDemoApp
         private bool _started;
         private Mat _frame;
         private Mat _renderMat;
+        private readonly IMultiPaneModel _paneModel;
+        private View _splitControls;
+        private View _collapseControl;
 
         public ModelShowcaseLivePage(string title, Func<IProcessAndRenderModel> modelFactory, string pickerSelection)
         {
             _model = modelFactory();
             _pickerSelection = pickerSelection;
+            _paneModel = _model as IMultiPaneModel;
 
             BackgroundColor = MaskRcnnPage.PageBackground;
             this.SafeAreaEdges = Microsoft.Maui.SafeAreaEdges.All;
@@ -951,9 +955,111 @@ namespace MauiDemoApp
             _overlay = new Grid { BackgroundColor = Color.FromArgb("#F5EEF1F8"), Children = { loadingBox } };
 
             // Edge-to-edge: the feed fills the whole page (theme background behind
-            // it), with the exit control and scanning pill floating on top — no
-            // chrome bar or card margin stealing space from the video.
-            Content = new Grid { BackgroundColor = MaskRcnnPage.PageBackground, Children = { _feed, exitPill, pill, _overlay } };
+            // it), with the exit control and floating pills on top — no chrome bar
+            // or card margin stealing space from the video.
+            var layers = new Grid { BackgroundColor = MaskRcnnPage.PageBackground };
+            layers.Children.Add(_feed);
+            layers.Children.Add(exitPill);
+            layers.Children.Add(pill);
+            // When the model exposes stacked panes (e.g. Video Surveillance),
+            // overlay a per-pane expand control so either pane can go full-screen.
+            if (_paneModel != null)
+            {
+                BuildPaneControls();
+                layers.Children.Add(_splitControls);
+                layers.Children.Add(_collapseControl);
+            }
+            layers.Children.Add(_overlay);
+            Content = layers;
+        }
+
+        private void BuildPaneControls()
+        {
+            var names = _paneModel.PaneNames;
+
+            // A translucent pill that pops a pane full-screen when tapped, laid
+            // into row `index` of a 2-row grid so it sits over that pane.
+            Func<int, string, View> expandPill = (index, name) =>
+            {
+                var row = new HorizontalStackLayout
+                {
+                    Spacing = 4,
+                    Children =
+                    {
+                        new Label { Text = name, FontFamily = MaskRcnnPage.TitleFont, FontSize = 14, TextColor = Colors.White, VerticalOptions = LayoutOptions.Center },
+                        MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphChevronRight, Colors.White, 18)
+                    }
+                };
+                var border = new Border
+                {
+                    BackgroundColor = Color.FromArgb("#E01A1C2E"),
+                    Stroke = Colors.Transparent,
+                    StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(16) },
+                    Padding = new Thickness(12, 6, 10, 6),
+                    HorizontalOptions = LayoutOptions.End,
+                    VerticalOptions = LayoutOptions.Start,
+                    Margin = new Thickness(0, 12, 12, 0),
+                    Content = row
+                };
+                var tap = new TapGestureRecognizer();
+                tap.Tapped += (s, e) => SetFocusedPane(index);
+                border.GestureRecognizers.Add(tap);
+                return border;
+            };
+
+            // The grid spans the whole screen to align a pill over each pane, but
+            // must not swallow taps meant for the controls beneath it (e.g. Exit);
+            // pass empty-area touches through while keeping the pills tappable.
+            var splitGrid = new Grid
+            {
+                RowDefinitions = { new RowDefinition(GridLength.Star), new RowDefinition(GridLength.Star) },
+                InputTransparent = true,
+                CascadeInputTransparent = false
+            };
+            for (int i = 0; i < names.Length && i < 2; i++)
+            {
+                var p = expandPill(i, names[i]);
+                Grid.SetRow(p, i);
+                splitGrid.Children.Add(p);
+            }
+            _splitControls = splitGrid;
+
+            var collapseRow = new HorizontalStackLayout
+            {
+                Spacing = 2,
+                Children =
+                {
+                    MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphChevronLeft, Colors.White, 20),
+                    new Label { Text = "Split", FontFamily = MaskRcnnPage.TitleFont, FontSize = 15, TextColor = Colors.White, VerticalOptions = LayoutOptions.Center }
+                }
+            };
+            var collapseBorder = new Border
+            {
+                BackgroundColor = Color.FromArgb("#E01A1C2E"),
+                Stroke = Colors.Transparent,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(16) },
+                Padding = new Thickness(10, 6, 14, 6),
+                HorizontalOptions = LayoutOptions.End,
+                VerticalOptions = LayoutOptions.Start,
+                Margin = new Thickness(0, 12, 12, 0),
+                IsVisible = false,
+                Content = collapseRow
+            };
+            var ctap = new TapGestureRecognizer();
+            ctap.Tapped += (s, e) => SetFocusedPane(-1);
+            collapseBorder.GestureRecognizers.Add(ctap);
+            _collapseControl = collapseBorder;
+        }
+
+        private void SetFocusedPane(int index)
+        {
+            if (_paneModel == null)
+                return;
+            _paneModel.FocusedPane = index;
+            // Split preview crops to fill; a focused single pane shows uncropped.
+            _feed.Aspect = index < 0 ? Aspect.AspectFill : Aspect.AspectFit;
+            _splitControls.IsVisible = index < 0;
+            _collapseControl.IsVisible = index >= 0;
         }
 
         protected override async void OnAppearing()

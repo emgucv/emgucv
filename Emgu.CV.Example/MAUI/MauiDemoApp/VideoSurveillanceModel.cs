@@ -18,9 +18,35 @@ using System.Diagnostics;
 
 namespace Emgu.CV.Models
 {
-
-    public class VideoSurveillanceModel : DisposableObject, IProcessAndRenderModel
+    /// <summary>
+    /// Optional capability for a model that renders several stacked panes and can
+    /// focus a single pane full-screen. A hosting page can offer per-pane expand
+    /// controls when the model implements this.
+    /// </summary>
+    public interface IMultiPaneModel
     {
+        /// <summary>Pane labels, top to bottom.</summary>
+        string[] PaneNames { get; }
+
+        /// <summary>-1 shows all panes stacked; otherwise the pane index shown full-screen.</summary>
+        int FocusedPane { get; set; }
+    }
+
+    public class VideoSurveillanceModel : DisposableObject, IProcessAndRenderModel, IMultiPaneModel
+    {
+        // -1 shows both panes stacked; 0 = camera only, 1 = motion mask only.
+        private int _focusedPane = -1;
+
+        /// <summary>Pane labels, top to bottom, for the multi-pane host UI.</summary>
+        public string[] PaneNames => new[] { "Camera", "Motion" };
+
+        /// <summary>Which pane to show full-screen (-1 = both stacked).</summary>
+        public int FocusedPane
+        {
+            get => _focusedPane;
+            set => _focusedPane = value;
+        }
+
         /// <summary>
         /// The rendering method
         /// </summary>
@@ -255,16 +281,29 @@ namespace Emgu.CV.Models
                 }
 
                 //foregroundMaskBgr.CopyTo(imageOut);
-                // Stack the tracked frame above the foreground mask, separated by
-                // a thin white divider so the two panes read as distinct. Vertical
-                // (not horizontal) concat keeps each pane usefully sized on a
-                // portrait phone, where a double-wide image would shrink to a thin
-                // strip.
-                int dividerHeight = Math.Max(2, _frameCopy.Height / 120);
-                using (Mat divider = new Mat(dividerHeight, _frameCopy.Width, _frameCopy.Depth, _frameCopy.NumberOfChannels))
+                if (_focusedPane == 0)
                 {
-                    divider.SetTo(new MCvScalar(255.0, 255.0, 255.0));
-                    CvInvoke.VConcat(new Mat[] { _frameCopy, divider, _foregroundMaskBgr }, imageOut);
+                    // Camera pane only, full-screen.
+                    _frameCopy.CopyTo(imageOut);
+                }
+                else if (_focusedPane == 1)
+                {
+                    // Motion (foreground mask) pane only, full-screen.
+                    _foregroundMaskBgr.CopyTo(imageOut);
+                }
+                else
+                {
+                    // Stack the tracked frame above the foreground mask, separated
+                    // by a thin white divider so the two panes read as distinct.
+                    // Vertical (not horizontal) concat keeps each pane usefully
+                    // sized on a portrait phone, where a double-wide image would
+                    // shrink to a thin strip.
+                    int dividerHeight = Math.Max(2, _frameCopy.Height / 120);
+                    using (Mat divider = new Mat(dividerHeight, _frameCopy.Width, _frameCopy.Depth, _frameCopy.NumberOfChannels))
+                    {
+                        divider.SetTo(new MCvScalar(255.0, 255.0, 255.0));
+                        CvInvoke.VConcat(new Mat[] { _frameCopy, divider, _foregroundMaskBgr }, imageOut);
+                    }
                 }
 
             }
