@@ -773,15 +773,51 @@ namespace MauiDemoApp
                     ((FontImageSource)categoryIcons[i].Source).Color = sel ? Colors.White : primaryText;
                 }
 
-                sectionTitle.Text = categoryNames[idx] + " Modules";
-
                 string q = (searchEntry.Text ?? "").Trim().ToLowerInvariant();
+                bool searching = q.Length > 0;
+
+                // While searching, the module grouping is irrelevant: hide the
+                // category carousel and section heading and just list every
+                // matching module by name, across all categories.
+                carousel.IsVisible = !searching;
+                sectionHeader.IsVisible = !searching;
+
                 demoStack.Children.Clear();
-                foreach (var (row, name) in categoryRows[idx])
+
+                if (!searching)
                 {
-                    row.IsVisible = q.Length == 0 || name.ToLowerInvariant().Contains(q);
-                    demoStack.Children.Add(row);
+                    sectionTitle.Text = categoryNames[idx] + " Modules";
+                    foreach (var (row, name) in categoryRows[idx])
+                    {
+                        row.IsVisible = true;
+                        demoStack.Children.Add(row);
+                    }
+                    return;
                 }
+
+                int matches = 0;
+                for (int c = 0; c < categoryRows.Length; c++)
+                {
+                    foreach (var (row, name) in categoryRows[c])
+                    {
+                        if (!name.ToLowerInvariant().Contains(q))
+                            continue;
+                        row.IsVisible = true;
+                        demoStack.Children.Add(row);
+                        matches++;
+                    }
+                }
+
+                if (matches == 0)
+                    demoStack.Children.Add(new Label
+                    {
+                        Text = "No matching modules",
+                        FontFamily = bodyFont,
+                        FontSize = 15,
+                        TextColor = secondaryText,
+                        HorizontalOptions = LayoutOptions.Center,
+                        Margin = new Thickness(0, 20)
+                    });
             };
 
             searchEntry.TextChanged += (s, e) => selectCategory(currentCategory);
