@@ -17,3 +17,12 @@ If you are targeting .Net Framework, please read this first:
 
 If you have issues getting the pacakge installed for your project, and your project use packages.config to manage nuget packages, the following instructions will help:
 <${NUGET_EMGU_URL}/wiki/index.php/Download_And_Installation#Upgrade_from_packages.config_to_package_reference>
+
+## Publishing with `dotnet publish -r <rid>`
+
+This package ships its native binaries under the standard, portable
+${EMGUCV_MACOS_RID_LIST_TEXT} RID${EMGUCV_MACOS_RID_PLURAL_S}, so
+`dotnet publish -r ${EMGUCV_MACOS_PRIMARY_RID}` works without any extra
+configuration -- unlike the Ubuntu and RHEL runtime packages, which require
+`UseRidGraph` and an exact `RuntimeIdentifier` match because they use
+distro-specific RIDs.

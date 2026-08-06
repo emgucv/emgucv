@@ -1,3 +1,43 @@
 .claude/settings.local.json
 .claude/settings.local.json.bak
 .mcp.json
+
+# --- CMake-generated build trees ---
+# See CLAUDE.md "Cleaning the Repository" / miscellaneous/git-clean for the
+# full rationale: these are recreated by the platform cmake_configure script.
+build_x86_64/
+android_*/
+platforms/*/build/
+platforms/*/*/build/
+platforms/emscripten/wasm-cache/
+platforms/nuget/*.nupkg
+platforms/nuget/**/*.nupkg
+platforms/nuget/**/*.props
+platforms/nuget/**/Package.nuspec
+platforms/nuget/**/README.md
+libs/
+
+# --- CMake-generated C# / native glue (do not edit manually) ---
+**/*.g.cs
+**/Util/VectorOf*.cs
+**/VectorOf*.cs
+Emgu.CV/PInvoke/CvInvokeEntryPoints.cs
+Emgu.CV.Extern/**/*_property.h
+Emgu.CV.Extern/**/*_property.cpp
+Emgu.CV.Extern/vector_*.cpp
+Emgu.CV.Extern/vector_*.h
+Emgu.CV.Extern/version.rc
+
+# --- CMake-generated project/version metadata ---
+Directory.Build.props
+CommonAssemblyInfo.cs
+LICENSE.txt
+emgucv.version.txt
+Emgu.CV/README.txt
+**/docs/
+Emgu.CV.Runtime/WebAssembly/Emgu.CV.runtime*.webassembly.targets
+
+# --- standard dotnet build output ---
+bin/
+obj/
+Emgu.CV.Bitmap/Emgu.CV.Bitmap.xml

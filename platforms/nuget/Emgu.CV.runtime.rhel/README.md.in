@@ -10,3 +10,41 @@ For online documentation please visit
 Release note can be found at
 <${NUGET_EMGU_URL}/wiki/index.php/Version_History#Emgu.CV-${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}>
 
+## Publishing with `dotnet publish -r <rid>`
+
+The native binary in this package is built against RHEL-specific library
+versions, so it is intentionally *not* published under a portable RID such
+as `linux-x64` -- doing so would let it install on other distros where it
+would fail at runtime instead of at install/build time.
+
+For a normal build or `dotnet run` (no explicit `-r`), no extra configuration
+is needed: this package's own `build\*.props` sets `<UseRidGraph>true</UseRidGraph>`
+automatically, and the native library is copied to your output folder as part
+of the build.
+
+If you publish with an explicit runtime identifier, e.g.
+
+```
+dotnet publish -r rhel-x64
+```
+
+you additionally need to add the following to your own `.csproj` (or a
+`Directory.Build.props`), matching the RID to your target architecture
+(`rhel-x64`, `rhel-x86`, or `rhel-arm64`):
+
+```xml
+<PropertyGroup>
+  <RuntimeIdentifier>rhel-x64</RuntimeIdentifier>
+  <UseRidGraph>true</UseRidGraph>
+</PropertyGroup>
+```
+
+This is required because NuGet's runtime-asset selection for a publish-time
+RID happens during restore, before any package's own build props are
+imported -- so a package cannot set this property for you in that scenario.
+
+Publishing to a generic RID (`dotnet publish -r linux-x64`) is not supported
+by this package: publish-time asset selection can only narrow from a generic
+RID to a more specific one, not the other way around, and this package
+deliberately does not ship its native binary under a generic RID.
+

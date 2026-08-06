@@ -1331,7 +1331,7 @@ ENDMACRO()
 
   CREATE_OCV_CLASS_PROPERTY( 
     "core/stream_property" 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.CUDA/Stream.g.cs"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/Stream.g.cs"
     "cv::cuda::Stream" 
     "Stream" 
     "cudaPtr" 
