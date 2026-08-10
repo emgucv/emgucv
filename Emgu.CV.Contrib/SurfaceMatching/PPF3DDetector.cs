@@ -165,6 +165,6 @@ namespace Emgu.CV.PpfMatch3d
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int cveComputeNormalsPC3d(IntPtr pc, IntPtr pcNormals, int numNeighbors, bool flipViewpoint, IntPtr viewpoint);
+        internal static extern int cveComputeNormalsPC3d(IntPtr pc, IntPtr pcNormals, int numNeighbors, [MarshalAs(CvInvoke.BoolMarshalType)] bool flipViewpoint, IntPtr viewpoint);
     }
 }

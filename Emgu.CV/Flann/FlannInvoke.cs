@@ -40,7 +40,7 @@ namespace Emgu.CV.Flann
             int knn,
             int checks,
             float eps,
-            [MarshalAs(UnmanagedType.Bool)]
+            [MarshalAs(CvInvoke.BoolMarshalType)]
             bool sorted);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -53,7 +53,7 @@ namespace Emgu.CV.Flann
             int maxResults,
             int checks,
             float eps,
-            [MarshalAs(UnmanagedType.Bool)]
+            [MarshalAs(CvInvoke.BoolMarshalType)]
             bool sorted);
 
 

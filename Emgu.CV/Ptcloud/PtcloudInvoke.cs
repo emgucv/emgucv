@@ -253,7 +253,7 @@ namespace Emgu.CV
             IntPtr unregisteredDepth,
             ref System.Drawing.Size outputImagePlaneSize,
             IntPtr registeredDepth,
-            [MarshalAs(UnmanagedType.U1)] bool depthDilation);
+            [MarshalAs(CvInvoke.BoolMarshalType)] bool depthDilation);
 
         /// <summary>
         /// Warps a depth (and optionally RGB) image by reprojecting it into 3D, applying a rigid-body

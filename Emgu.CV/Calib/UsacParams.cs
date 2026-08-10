@@ -136,7 +136,7 @@ namespace Emgu.CV
         /// <summary>
         /// If true, the estimation runs in parallel
         /// </summary>
-        [MarshalAs(UnmanagedType.U1)]
+        [MarshalAs(CvInvoke.BoolMarshalType)]
         public bool IsParallel;
         /// <summary>
         /// The number of local optimization iterations

@@ -111,18 +111,19 @@ namespace Emgu.CV
         /// <param name="cloud">The point cloud</param>
         /// <param name="colors">The color</param>
         /// <param name="normals">The normals</param>
-        public static void WriteCloud(String file, IInputArray cloud, IInputArray colors = null, IInputArray normals = null)
+        /// <param name="binary">If true, write the point cloud in binary format; otherwise, write in ASCII format.</param>
+        public static void WriteCloud(String file, IInputArray cloud, IInputArray colors = null, IInputArray normals = null, bool binary = false)
         {
             using (CvString cs = new CvString(file))
             using (InputArray iaCloud = cloud.GetInputArray())
             using (InputArray iaColors = colors == null ? InputArray.GetEmpty() : colors.GetInputArray())
             using (InputArray iaNormals = normals == null ? InputArray.GetEmpty() : normals.GetInputArray())
             {
-                cveWriteCloud(cs, iaCloud, iaColors, iaNormals);
+                cveWriteCloud(cs, iaCloud, iaColors, iaNormals, binary);
             }
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveWriteCloud(IntPtr file, IntPtr cloud, IntPtr colors, IntPtr normals);
+        private static extern void cveWriteCloud(IntPtr file, IntPtr cloud, IntPtr colors, IntPtr normals, [MarshalAs(CvInvoke.BoolMarshalType)] bool binary);
 
     }
 }

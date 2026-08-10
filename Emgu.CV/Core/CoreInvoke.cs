@@ -3240,7 +3240,7 @@ namespace Emgu.CV
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        private static extern bool cveSetParallelForBackend(IntPtr backendName, bool propagateNumThreads);
+        private static extern bool cveSetParallelForBackend(IntPtr backendName, [MarshalAs(CvInvoke.BoolMarshalType)] bool propagateNumThreads);
 
         /// <summary>
         /// Get a list of the available parallel backends.

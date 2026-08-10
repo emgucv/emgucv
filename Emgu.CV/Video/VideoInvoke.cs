@@ -94,9 +94,11 @@ namespace Emgu.CV
             IntPtr pyramid,
             ref Size winSize,
             int maxLevel,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
             bool withDerivatives,
             CvEnum.BorderType pyrBorder,
             CvEnum.BorderType derivBorder,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
             bool tryReuseInputImage);
 
         #region motion history
