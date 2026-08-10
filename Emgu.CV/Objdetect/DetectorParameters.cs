@@ -84,6 +84,12 @@ namespace Emgu.CV.Aruco
         /// </summary>
         public double MinMarkerDistanceRate;
         /// <summary>
+        /// minimum average distance between the corners of the two markers in group to add them to the list of
+        /// candidates. The average distance between the corners of the two markers is calculated relative to its
+        /// module size (default 0.21).
+        /// </summary>
+        public float MinGroupDistance;
+        /// <summary>
         /// Corner refinement method
         /// </summary>
         public RefinementMethod CornerRefinementMethod;
@@ -91,6 +97,10 @@ namespace Emgu.CV.Aruco
         /// window size for the corner refinement process (in pixels) (default 5).
         /// </summary>
         public int CornerRefinementWinSize;
+        /// <summary>
+        /// Dynamic window size for corner refinement relative to Aruco module size (default 0.3).
+        /// </summary>
+        public float RelativeCornerRefinmentWinSize;
         /// <summary>
         /// maximum number of iterations for stop criteria of the corner refinement process (default 30).
         /// </summary>
@@ -186,6 +196,12 @@ namespace Emgu.CV.Aruco
         /// MinMarkerLengthRatioOriginalImg, use default value of 0.0
         /// </summary>
         public float MinMarkerLengthRatioOriginalImg;
+
+        /// <summary>
+        /// range [0,1], define the acceptable threshold when comparing the detected marker to the dictionary
+        /// during marker identification.
+        /// </summary>
+        public float ValidBitIdThreshold;
 
         /// <summary>
         /// Get the detector parameters with default values
