@@ -72,8 +72,8 @@
       <PropertyGroup>
         <EmguCVLinkTarget>Windows 10 UWP (ARM64)</EmguCVLinkTarget>
         <EmguCVNativeFileUwpArm64>$(EmguCVUWPBinaryDir)\$(EmguCVUWPArm64NativeRuntimeFolder)\cvextern.dll</EmguCVNativeFileUwpArm64>
-        <EmguCVUwpErrorMessage Condition="!Exists('$(EmguCVNativeFileUwpArm64)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFileUwpArm) </EmguCVUwpErrorMessage>
-        <EmguCVUwpDeployMessage Condition="Exists('$(EmguCVNativeFileUwpArm64)')">$(EmguCVUwpDeployMessage)UWP_arm </EmguCVUwpDeployMessage>
+        <EmguCVUwpErrorMessage Condition="!Exists('$(EmguCVNativeFileUwpArm64)')"> This package do not contain necessary binary for $(EmguCVLinkTarget). Missing $(EmguCVNativeFileUwpArm64) </EmguCVUwpErrorMessage>
+        <EmguCVUwpDeployMessage Condition="Exists('$(EmguCVNativeFileUwpArm64)')">$(EmguCVUwpDeployMessage)UWP_arm64 </EmguCVUwpDeployMessage>
       </PropertyGroup>
       <ItemGroup>
         <Content Include="$(EmguCVNativeFileUwpArm64)" Condition="Exists('$(EmguCVNativeFileUwpArm64)')">
