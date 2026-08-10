@@ -3,6 +3,7 @@
 # --------------------------------------------------------
 
 SET(EMGUCV_MAUI_MACOS_NUGET_FILE_LIST "")
+SET(EMGUCV_MAUI_MACOS_NUGET_TITLE "Emgu CV for MAUI MacCatalyst Native Runtime")
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md)
