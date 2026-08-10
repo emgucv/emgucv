@@ -26,11 +26,7 @@ IF(HAVE_RHEL_X64 OR HAVE_RHEL_X86 OR HAVE_RHEL_ARM64)
   #Build the RID list actually included in this package, for the README's publish section.
   #HAVE_RHEL_X86/X64/ARM64 already account for "already built OR currently
   #building this arch" (see CHECK_BINARY_EXIST in the root CMakeLists.txt),
-  #so no extra fallback is needed here, unlike the macOS package. Note that
-  #only HAVE_RHEL_X64 is currently wired up to CHECK_BINARY_EXIST in the
-  #root CMakeLists.txt -- HAVE_RHEL_X86/ARM64 are referenced but never
-  #actually set, so in practice this list will only ever contain rhel-x64
-  #until that gap is addressed.
+  #so no extra fallback is needed here, unlike the macOS package.
   SET(EMGUCV_RHEL_RID_LIST "")
   IF(HAVE_RHEL_X64)
     LIST(APPEND EMGUCV_RHEL_RID_LIST "rhel-x64")
