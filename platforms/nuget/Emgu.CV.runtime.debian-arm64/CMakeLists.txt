@@ -27,7 +27,6 @@ IF(HAVE_LINUX_ARM64)
       <file src=\"..\\..\\..\\libs\\runtimes\\linux-arm64\\native\\*_version_string.inc\" target=\"docs\" />
       <file src=\"..\\..\\..\\libs\\runtimes\\linux-arm64\\native\\*.so\" target=\"runtimes\\linux-arm64\\native\" />")
 	  
-  CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/${EMGUCV_DEBIAN_ARM64_NUGET_ID}.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
   
@@ -42,19 +41,17 @@ IF(HAVE_LINUX_ARM64)
 	) 
 
   TARGET_SOURCES(${PROJECT_NAME} PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}/${EMGUCV_DEBIAN_ARM64_NUGET_ID}.props"
 	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in"
 	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec"
 	"${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
 	"${CMAKE_CURRENT_SOURCE_DIR}/README.md"
   )
 
-  source_group("Template" FILES 
+  source_group("Template" FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in"
 	"${CMAKE_CURRENT_SOURCE_DIR}/README.md.in")
-	
-  source_group("Nuget" FILES 
-    "${CMAKE_CURRENT_SOURCE_DIR}/${EMGUCV_DEBIAN_ARM64_NUGET_ID}.props"
+
+  source_group("Nuget" FILES
 	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec"
 	"${CMAKE_CURRENT_SOURCE_DIR}/README.md"
   )
