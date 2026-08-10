@@ -64,7 +64,7 @@
       <Frameworks>Foundation Accelerate CoreFoundation CoreGraphics AssetsLibrary AVFoundation CoreImage CoreMedia CoreVideo QuartzCore ImageIO UIKit CoreText</Frameworks>
       
     </NativeReference>
-    <NativeReference Condition="'$(UseEmguCVNativeIOSFrameworkSimulatorArm64)'=='true'" Include="$(EmguCVNativeIOSBinarySimulatorArm64)">
+    <NativeReference Condition="'$(UseEmguCVNativeIOSBinarySimulatorArm64)'=='true'" Include="$(EmguCVNativeIOSBinarySimulatorArm64)">
       <Kind>Static</Kind>
       <SmartLink>True</SmartLink>
       <ForceLoad>True</ForceLoad>
