@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>${EMGU_CUDA_NVRTC_NUGET_ID}</id>
-	  <title>Native x64 NVRTC component for CUDA</title>
+	  <title>${EMGU_CUDA_NVRTC_NUGET_TITLE}</title>
     <version>${EMGU_CUDA_NVRTC_VERSION}</version>
     <authors>${CPACK_PACKAGE_VENDOR}</authors>
     <owners>${CPACK_PACKAGE_VENDOR}</owners>

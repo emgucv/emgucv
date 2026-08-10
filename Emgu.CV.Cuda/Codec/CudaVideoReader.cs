@@ -67,6 +67,76 @@ namespace Emgu.CV.Cuda
         }
 
         /// <summary>
+        /// Video surface formats output by the decoder.
+        /// </summary>
+        public enum SurfaceFormat
+        {
+            /// <summary>
+            /// Semi-Planar YUV [Y plane followed by interleaved UV plane]
+            /// </summary>
+            Nv12 = 0,
+            /// <summary>
+            /// 16 bit Semi-Planar YUV [Y plane followed by interleaved UV plane]. Can be used for 10 bit(6LSB bits 0), 12 bit (4LSB bits 0)
+            /// </summary>
+            P016 = 1,
+            /// <summary>
+            /// Planar YUV [Y plane followed by U and V planes]
+            /// </summary>
+            Yuv444 = 2,
+            /// <summary>
+            /// 16 bit Planar YUV [Y plane followed by U and V planes]. Can be used for 10 bit(6LSB bits 0), 12 bit (4LSB bits 0)
+            /// </summary>
+            Yuv444_16Bit = 3
+        }
+
+        /// <summary>
+        /// Video Signal Description Color Primaries
+        /// </summary>
+        public enum ColorSpaceStandard
+        {
+            /// <summary>
+            /// ITU-R BT.709 standard for high-definition television.
+            /// </summary>
+            Bt709 = 1,
+            /// <summary>
+            /// Unspecified color space standard.
+            /// </summary>
+            Unspecified = 2,
+            /// <summary>
+            /// Reserved for future use.
+            /// </summary>
+            Reserved = 3,
+            /// <summary>
+            /// FCC color space standard.
+            /// </summary>
+            Fcc = 4,
+            /// <summary>
+            /// ITU-R BT.470, used for older analog television systems.
+            /// </summary>
+            Bt470 = 5,
+            /// <summary>
+            /// ITU-R BT.601, used for standard definition television.
+            /// </summary>
+            Bt601 = 6,
+            /// <summary>
+            /// SMPTE 240M, used for early HDTV systems.
+            /// </summary>
+            Smpte240M = 7,
+            /// <summary>
+            /// YCgCo color space, used in some video compression algorithms.
+            /// </summary>
+            YCgCo = 8,
+            /// <summary>
+            /// ITU-R BT.2020, used for ultra-high-definition television.
+            /// </summary>
+            Bt2020 = 9,
+            /// <summary>
+            /// ITU-R BT.2020 Constant Luminance, used for ultra-high-definition television.
+            /// </summary>
+            Bt2020C = 10
+        }
+
+        /// <summary>
         /// Struct providing information about video file format.
         /// </summary>
         public struct FormatInfo
@@ -82,9 +152,19 @@ namespace Emgu.CV.Cuda
             public ChromaFormat ChromaFormat;
 
             /// <summary>
+            /// Surface format of the decoded frame.
+            /// </summary>
+            public SurfaceFormat SurfaceFormat;
+
+            /// <summary>
             /// Number of bit depth - 8
             /// </summary>
             public int NBitDepthMinus8;
+
+            /// <summary>
+            /// Number of chroma bit depth - 8
+            /// </summary>
+            public int NBitDepthChromaMinus8;
 
             /// <summary>
             /// Coded sequence width in pixels
@@ -156,6 +236,35 @@ namespace Emgu.CV.Cuda
             /// Region of interest in the output frame containing the decoded frame.
             /// </summary>
             public Rectangle TargetRoi;
+
+            /// <summary>
+            /// Output value indicating if the black level, luma and chroma of the source are represented using the
+            /// full or limited range (AKA TV or "analogue" range) of values as defined in Annex E of the ITU-T Specification.
+            /// </summary>
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            public bool VideoFullRangeFlag;
+
+            /// <summary>
+            /// Video Signal Description Color Primaries of the VideoReader source (section E.2.1 VUI parameters
+            /// semantics of H265 spec file)
+            /// </summary>
+            public ColorSpaceStandard ColorSpaceStandard;
+
+            /// <summary>
+            /// Flag requesting histogram output if supported. Exception will be thrown when requested but not supported.
+            /// </summary>
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            public bool EnableHistogram;
+
+            /// <summary>
+            /// Bit depth of histogram bins if histogram output is requested and supported.
+            /// </summary>
+            public int NCounterBitDepth;
+
+            /// <summary>
+            /// Max number of histogram bins if histogram output is requested and supported.
+            /// </summary>
+            public int NMaxHistogramBins;
         }
 
         /// <summary>

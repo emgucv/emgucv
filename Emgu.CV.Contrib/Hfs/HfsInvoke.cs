@@ -43,7 +43,7 @@ namespace Emgu.CV.Hfs
         internal static extern void cveHfsSegmentRelease(ref IntPtr hfsSegmentPtr);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveHfsPerformSegment(IntPtr hfsSegment, IntPtr src, IntPtr dst, bool ifDraw, bool useGpu);
+        internal static extern void cveHfsPerformSegment(IntPtr hfsSegment, IntPtr src, IntPtr dst, [MarshalAs(CvInvoke.BoolMarshalType)] bool ifDraw, [MarshalAs(CvInvoke.BoolMarshalType)] bool useGpu);
 
     }
 }

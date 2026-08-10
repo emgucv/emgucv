@@ -214,23 +214,6 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern CvEnum.LogLevel cveGetLogLevel();
 
-        /*
-        /// <summary>
-        /// initializes CvMat header so that it points to the same data as the original array but has different shape - different number of channels, different number of rows or both
-        /// </summary>
-        /// <param name="arr">Input array</param>
-        /// <param name="header">Output header to be filled</param>
-        /// <param name="newCn">New number of channels. new_cn = 0 means that number of channels remains unchanged</param>
-        /// <param name="newRows">New number of rows. new_rows = 0 means that number of rows remains unchanged unless it needs to be changed according to new_cn value. destination array to be changed</param>
-        /// <returns>The CvMat header</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveReshape")]
-        public static extern IntPtr cvReshape(
-            IntPtr arr,
-            IntPtr header,
-            int newCn,
-            int newRows);
-        */
-        
         /// <summary>
         /// Fills the destination array with source array tiled:
         /// dst(i,j)=src(i mod rows(src), j mod cols(src))So the destination array may be as larger as well as smaller than the source array
@@ -1757,45 +1740,6 @@ namespace Emgu.CV
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveLUT(IntPtr src, IntPtr lut, IntPtr dst);
 
-        /*
-        /// <summary>
-        /// This function has several different purposes and thus has several synonyms. It copies one array to another with optional scaling, which is performed first, and/or optional type conversion, performed after:
-        /// dst(I)=src(I)*scale + (shift,shift,...)
-        /// All the channels of multi-channel arrays are processed independently.
-        /// The type conversion is done with rounding and saturation, that is if a result of scaling + conversion can not be represented exactly by a value of destination array element type, it is set to the nearest representable value on the real axis.
-        /// In case of scale=1, shift=0 no prescaling is done. This is a specially optimized case and it has the appropriate cvConvert synonym. If source and destination array types have equal types, this is also a special case that can be used to scale and shift a matrix or an image and that fits to cvScale synonym.
-        /// </summary>
-        /// <param name="src">Source array</param>
-        /// <param name="dst">Destination array</param>
-        /// <param name="scale">Scale factor</param>
-        /// <param name="shift">Value added to the scaled source array elements</param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveConvertScale")]
-        public static extern void cvConvertScale(IntPtr src, IntPtr dst, double scale, double shift);
-
-        /// <summary>
-        /// This function has several different purposes and thus has several synonyms. It copies one array to another with optional scaling, which is performed first, and/or optional type conversion, performed after:
-        /// dst(I)=src(I)*scale + (shift,shift,...)
-        /// All the channels of multi-channel arrays are processed independently.
-        /// The type conversion is done with rounding and saturation, that is if a result of scaling + conversion can not be represented exactly by a value of destination array element type, it is set to the nearest representable value on the real axis.
-        /// In case of scale=1, shift=0 no prescaling is done. This is a specially optimized case and it has the appropriate cvConvert synonym. If source and destination array types have equal types, this is also a special case that can be used to scale and shift a matrix or an image and that fits to cvScale synonym.
-        /// </summary>
-        /// <param name="src">Source array</param>
-        /// <param name="dst">Destination array</param>
-        /// <param name="scale">Scale factor</param>
-        /// <param name="shift">Value added to the scaled source array elements</param>
-        [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cvConvertScale")]
-        public static extern void cvCvtScale(IntPtr src, IntPtr dst, double scale, double shift);
-
-        /// <summary>
-        /// Same as cvConvertScale(src, dest, 1, 0);
-        /// </summary>
-        /// <param name="src">Source array</param>
-        /// <param name="dest">Destination array</param>
-        public static void cvConvert(IntPtr src, IntPtr dest)
-        {
-           cvConvertScale(src, dest, 1, 0);
-        }*/
-
         /// <summary>
         /// Similar to cvCvtScale but it stores absolute values of the conversion results:
         /// dst(I)=abs(src(I)*scale + (shift,shift,...))
@@ -1943,15 +1887,6 @@ namespace Emgu.CV
 
         #endregion
 
-        /*
-        /// <summary>
-        /// Releases the header and the image data.
-        /// </summary>
-        /// <param name="image">Double pointer to the header of the deallocated image</param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveReleaseImage")]
-        public static extern void cvReleaseImage(ref IntPtr image);
-        */
-        
         /// <summary>
         /// Draws contours outlines or filled contours.
         /// </summary>
@@ -3138,52 +3073,6 @@ namespace Emgu.CV
 
         #endregion
 
-        /*
-        /// <summary>
-        /// Fills output variables with low-level information about the array data. All output parameters are optional, so some of the pointers may be set to NULL. If the array is IplImage with ROI set, parameters of ROI are returned. 
-        /// </summary>
-        /// <param name="arr">Array header</param>
-        /// <param name="data">Output pointer to the whole image origin or ROI origin if ROI is set</param>
-        /// <param name="step">Output full row length in bytes</param>
-        /// <param name="roiSize">Output ROI size</param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetRawData")]
-        public static extern void cvGetRawData(IntPtr arr, out IntPtr data, out int step, out Size roiSize);
-
-        /// <summary>
-        /// Returns matrix header for the input array that can be matrix - CvMat, image - IplImage or multi-dimensional dense array - CvMatND* (latter case is allowed only if allowND != 0) . In the case of matrix the function simply returns the input pointer. In the case of IplImage* or CvMatND* it initializes header structure with parameters of the current image ROI and returns pointer to this temporary structure. Because COI is not supported by CvMat, it is returned separately. 
-        /// </summary>
-        /// <param name="arr">Input array</param>
-        /// <param name="header">Pointer to CvMat structure used as a temporary buffer</param>
-        /// <param name="coi">Optional output parameter for storing COI</param>
-        /// <param name="allowNd">If non-zero, the function accepts multi-dimensional dense arrays (CvMatND*) and returns 2D (if CvMatND has two dimensions) or 1D matrix (when CvMatND has 1 dimension or more than 2 dimensions). The array must be continuous</param>
-        /// <returns>Returns matrix header for the input array</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetMat")]
-        public static extern IntPtr cvGetMat(IntPtr arr, IntPtr header, out int coi, int allowNd);
-
-        /// <summary>
-        /// Returns image header for the input array that can be matrix - CvMat*, or image - IplImage*.
-        /// </summary>
-        /// <param name="arr">Input array. </param>
-        /// <param name="imageHeader">Pointer to IplImage structure used as a temporary buffer.</param>
-        /// <returns>Returns image header for the input array</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetImage")]
-        public static extern IntPtr cvGetImage(IntPtr arr, IntPtr imageHeader);
-
-        /// <summary>
-        /// Checks that every array element is neither NaN nor Infinity. If CV_CHECK_RANGE is set, it also checks that every element is greater than or equal to minVal and less than maxVal. 
-        /// </summary>
-        /// <param name="arr">The array to check.</param>
-        /// <param name="flags">The operation flags, CHECK_NAN_INFINITY or combination of
-        /// CHECK_RANGE - if set, the function checks that every value of array is within [minVal,maxVal) range, otherwise it just checks that every element is neither NaN nor Infinity.
-        /// CHECK_QUIET - if set, the function does not raises an error if an element is invalid or out of range 
-        /// </param>
-        /// <param name="minVal">The inclusive lower boundary of valid values range. It is used only if CHECK_RANGE is set.</param>
-        /// <param name="maxVal">The exclusive upper boundary of valid values range. It is used only if CHECK_RANGE is set.</param>
-        /// <returns>Returns nonzero if the check succeeded, i.e. all elements are valid and within the range, and zero otherwise. In the latter case if CV_CHECK_QUIET flag is not set, the function raises runtime error.</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveCheckArr")]
-        public static extern int cvCheckArr(IntPtr arr, CvEnum.CheckType flags, double minVal, double maxVal);
-        */
-        
 #if !UNITY_IOS
         /// <summary>
         /// Get or set the number of threads that are used by parallelized OpenCV functions
@@ -3240,7 +3129,7 @@ namespace Emgu.CV
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        private static extern bool cveSetParallelForBackend(IntPtr backendName, bool propagateNumThreads);
+        private static extern bool cveSetParallelForBackend(IntPtr backendName, [MarshalAs(CvInvoke.BoolMarshalType)] bool propagateNumThreads);
 
         /// <summary>
         /// Get a list of the available parallel backends.

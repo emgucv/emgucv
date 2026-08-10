@@ -285,18 +285,6 @@ CVAPI(void) cveSetUseOpenVX(bool flag);
 
 CVAPI(void) cveGetBuildInformation(cv::String* buildInformation);
 
-/*
-CVAPI(void) cveGetRawData(CvArr* arr, uchar** data, int* step, CvSize* roiSize);
-CVAPI(CvMat*) cveGetMat(CvArr* arr, CvMat* header, int* coi, int allowNd);
-CVAPI(IplImage*) cveGetImage(CvArr* arr, IplImage* imageHeader);
-
-CVAPI(int) cveCheckArr(CvArr* arr, int flags, double minVal, double maxVal);
-CVAPI(CvMat*) cveReshape(CvArr* arr, CvMat* header, int newCn, int newRows);
-//CVAPI(CvMat*) cveGetDiag(CvArr* arr, CvMat* submat, int diag);
-CVAPI(void) cveConvertScale(CvArr* arr, CvArr* dst, double scale, double shift);  
-CVAPI(void) cveReleaseImage(IplImage** image);
-*/
-
 CVAPI(void) cveSVDecomp(cv::_InputArray* src, cv::_OutputArray* w, cv::_OutputArray* u, cv::_OutputArray* vt, int flags);
 CVAPI(void) cveSVBackSubst(cv::_InputArray* w, cv::_InputArray* u, cv::_InputArray* vt, cv::_InputArray* rhs, cv::_OutputArray* dst);
 

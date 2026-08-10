@@ -34,7 +34,11 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Alternative Chi-Square
         /// </summary>
-        ChisqrAlt = 4
+        ChisqrAlt = 4,
+        /// <summary>
+        /// Kullback-Leibler divergence
+        /// </summary>
+        KlDiv = 5
     }
 
 }

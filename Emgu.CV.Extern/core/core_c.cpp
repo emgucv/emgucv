@@ -997,47 +997,6 @@ void cveGetBuildInformation(cv::String* buildInformation)
 	*buildInformation = cv::getBuildInformation();
 }
 
-/*
-void cveGetRawData(CvArr* arr, uchar** data, int* step, CvSize* roiSize)
-{
-	cvGetRawData(arr, data, step, roiSize);
-}
-CvMat* cveGetMat(CvArr* arr, CvMat* header, int* coi, int allowNd)
-{
-	return cvGetMat(arr, header, coi, allowNd);
-}
-IplImage* cveGetImage(CvArr* arr, IplImage* imageHeader)
-{
-	return cvGetImage(arr, imageHeader);
-}
-
-int cveCheckArr(CvArr* arr, int flags, double minVal, double maxVal)
-{
-	return cvCheckArr(arr, flags, minVal, maxVal);
-}
-
-CvMat* cveReshape(CvArr* arr, CvMat* header, int newCn, int newRows)
-{
-	return cvReshape(arr, header, newCn, newRows);
-}
-
-CvMat* cveGetDiag(CvArr* arr, CvMat* submat, int diag)
-{
-	return cvGetDiag(arr, submat, diag);
-}
-
-
-void cveConvertScale(CvArr* arr, CvArr* dst, double scale, double shift)
-{
-	cvConvertScale(arr, dst, scale, shift);
-}
-
-void cveReleaseImage(IplImage** image)
-{
-	cvReleaseImage(image);
-}
-*/
-
 void cveSVDecomp(cv::_InputArray* src, cv::_OutputArray* w, cv::_OutputArray* u, cv::_OutputArray* vt, int flags)
 {
 	cv::SVDecomp(*src, *w, *u, *vt, flags);

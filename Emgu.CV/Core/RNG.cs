@@ -168,7 +168,7 @@ namespace Emgu.CV
 
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void cveRngFill(IntPtr rng, IntPtr mat, RNG.DistType distType, IntPtr a, IntPtr b, bool saturateRange);
+        internal static extern void cveRngFill(IntPtr rng, IntPtr mat, RNG.DistType distType, IntPtr a, IntPtr b, [MarshalAs(CvInvoke.BoolMarshalType)] bool saturateRange);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern double cveRngGaussian(IntPtr rng, double sigma);

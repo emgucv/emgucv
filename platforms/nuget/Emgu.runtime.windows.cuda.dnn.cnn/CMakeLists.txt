@@ -13,9 +13,9 @@ PROJECT(Emgu.runtime.windows.cuda.dnn.cnn.nuget)
 
   BUILD_NUGET_PACKAGE(
     ${PROJECT_NAME} 
-	"${EMGU_CV_SOURCE_DIR}/Emgu.CV/NetStandard/Emgu.CV.csproj" #csproj_file 
-	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" #nuspec_file 
-	"${CMAKE_CURRENT_SOURCE_DIR}/../" #output_dir 
+	"${EMGU_CV_SOURCE_DIR}/Emgu.CV/NetStandard/Emgu.CV.csproj" #csproj_file
+	"${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" #nuspec_file
+	"${NUGET_OUTPUT_DIR}" #output_dir
 	"${CMAKE_CURRENT_SOURCE_DIR}" #working_dir
 	) 
 
@@ -36,7 +36,7 @@ PROJECT(Emgu.runtime.windows.cuda.dnn.cnn.nuget)
   )
 
   IF (EMGU_NUGET_SIGN_FOUND)
-    EMGU_SIGN_NUGET(${PROJECT_NAME} "${NUGET_OUTPUT_DIR}/${EMGU_CUDNN_CNN_INFER_NUGET_ID}.${EMGU_CUDNN_VERSION}.nupkg")
+    EMGU_SIGN_NUGET(${PROJECT_NAME} "${NUGET_OUTPUT_DIR}/${EMGU_CUDNN_CNN_NUGET_ID}.${EMGU_CUDNN_VERSION}.nupkg")
   ENDIF()
 
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.runtime.windows.cuda.dnn.nuget)

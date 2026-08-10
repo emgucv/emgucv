@@ -53,8 +53,8 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
         <PackagePath>docs\</PackagePath>
       </None>
 	</ItemGroup>
-	<ItemGroup Condition="Exists('$(EmguCVProjectRoot)\libs\android\arm64-v8a\armeabi-v7a_version_string.inc')">
-	  <None Include="$(EmguCVProjectRoot)\libs\android\arm64-v8a\armeabi-v7a_version_string.inc">
+	<ItemGroup Condition="Exists('$(EmguCVProjectRoot)\libs\android\armeabi-v7a\armeabi-v7a_version_string.inc')">
+	  <None Include="$(EmguCVProjectRoot)\libs\android\armeabi-v7a\armeabi-v7a_version_string.inc">
         <Pack>True</Pack>
         <PackagePath>docs\</PackagePath>
       </None>

@@ -830,7 +830,7 @@ namespace Emgu.CV
         internal static extern void cveVideoCaptureRelease2(ref IntPtr capture);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveVideoCaptureRead(IntPtr capture, IntPtr frame);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -840,18 +840,18 @@ namespace Emgu.CV
         internal static extern void cveVideoCaptureReadToUMat(IntPtr capture, IntPtr umat);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveVideoCaptureGrab(IntPtr capture);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveVideoCaptureRetrieve(IntPtr capture, IntPtr image, int flag);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern double cveVideoCaptureGet(IntPtr capture, CvEnum.CapProp prop);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveVideoCaptureSet(IntPtr capture, CvEnum.CapProp propertyId, double value);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -861,7 +861,7 @@ namespace Emgu.CV
         internal static extern void cveGetBackendName(int api, IntPtr name);
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolToIntMarshalType)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveVideoCaptureWaitAny(IntPtr streams, IntPtr readyIndex, int timeoutNs);
 
         /// <summary>

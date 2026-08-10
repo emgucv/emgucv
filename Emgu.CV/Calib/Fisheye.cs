@@ -121,6 +121,7 @@ namespace Emgu.CV
             IntPtr distCoeffs,
             IntPtr rvec,
             IntPtr tvec,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
             bool useExtrinsicGuess,
             int iterationsCount,
             float reprojectionError,
