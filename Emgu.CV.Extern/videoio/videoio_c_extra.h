@@ -61,13 +61,6 @@ namespace cv {
 	}
 }
 
-/*
-CVAPI(void) OpenniGetColorPoints(
-                                 CvCapture* capture, // must be an openni capture
-                                 std::vector<ColorPoint>* points, // sequence of ColorPoint
-                                 IplImage* mask // CV_8UC1
-                                 );*/
-
 CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromDevice(int device, int apiPreference, std::vector< int >* params);
 CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromFile(cv::String* fileName, int apiPreference, std::vector< int >* params);
 

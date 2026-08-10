@@ -997,66 +997,6 @@ namespace Emgu.CV
             return new RangeF((float)minVal, (float)maxVal);
         }
 
-        /*
-        /// <summary>
-        /// Convert this Mat to Image
-        /// </summary>
-        /// <typeparam name="TColor">The type of Color</typeparam>
-        /// <typeparam name="TDepth">The type of Depth</typeparam>
-        /// <param name="tryShareData">If true, we will try to see if we can create an Image object that shared the pixel memory with this Mat.</param>
-        /// <returns>The image</returns>
-        public Image<TColor, TDepth> ToImage<TColor, TDepth>(bool tryShareData = false)
-           where TColor : struct, IColor
-           where TDepth : new()
-        {
-            TColor c = new TColor();
-
-            int numberOfChannels = NumberOfChannels;
-            if (typeof(TDepth) == CvInvoke.GetDepthType(this.Depth) && c.Dimension == numberOfChannels)
-            {
-                //same color, same depth
-                if (tryShareData)
-                    return new Image<TColor, TDepth>(MatInvoke.cveMatToIplImage(Ptr));
-                else
-                {
-                    Image<TColor, TDepth> img = new Image<TColor, TDepth>(Size);
-                    CopyTo(img);
-                    return img;
-                }
-            }
-            else if (typeof(TDepth) != CvInvoke.GetDepthType(this.Depth) && c.Dimension == numberOfChannels)
-            {
-                //different depth, same color
-                Image<TColor, TDepth> result = new Image<TColor, TDepth>(Size);
-                ConvertTo(result, CvInvoke.GetDepthType(typeof(TDepth)));
-                return result;
-            }
-            else if (typeof(TDepth) == CvInvoke.GetDepthType(this.Depth) && c.Dimension != numberOfChannels)
-            {
-                //same depth, different color
-                Image<TColor, TDepth> result = new Image<TColor, TDepth>(Size);
-                CvInvoke.CvtColor(
-                   this, result,
-                   numberOfChannels == 1 ? typeof(Gray) :
-                   numberOfChannels == 3 ? typeof(Bgr) :
-                   typeof(Bgra),
-                   typeof(TColor));
-
-                return result;
-            }
-            else
-            {
-                //different color, different depth
-                using (Mat tmp = new Mat())
-                {
-                    ConvertTo(tmp, CvInvoke.GetDepthType(typeof(TDepth)));
-                    return tmp.ToImage<TColor, TDepth>();
-                }
-
-            }
-        }
-        */
-
         internal static DepthType GetDepthTypeFromArray(Array data)
         {
             int dimension = data.Rank;
@@ -1900,11 +1840,6 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveMatReshape2(IntPtr mat, int cn, int newndims, IntPtr newsz);
 
-        /*
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveMatToIplImage(IntPtr mat);
-        */
-        
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern double cveMatDot(IntPtr mat, IntPtr m);
 

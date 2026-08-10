@@ -143,27 +143,6 @@ cv::xfeatures2d::BriefDescriptorExtractor* cveBriefDescriptorExtractorCreate(int
 #endif
 }
 
-/*
-int CvBriefDescriptorExtractorGetDescriptorSize(cv::BriefDescriptorExtractor* extractor)
-{
-   return extractor->descriptorSize();
-}
-
-void CvBriefDescriptorComputeDescriptors(cv::BriefDescriptorExtractor* extractor, IplImage* image, std::vector<cv::KeyPoint>* keypoints, cv::Mat* descriptors)
-{
-   if (keypoints->size() <= 0) return;
-   cv::Mat img = cv::cvarrToMat(image);
-   if (img.channels() == 1)
-   {
-	 extractor->compute(img, *keypoints, *descriptors);
-   } else //opponent brief
-   {
-	  cv::Ptr<cv::DescriptorExtractor> briefExtractor = new cv::BriefDescriptorExtractor(extractor->descriptorSize());
-	  cv::OpponentColorDescriptorExtractor colorDescriptorExtractor(briefExtractor);
-	  colorDescriptorExtractor.compute(img, *keypoints, *descriptors);
-   }
-}*/
-
 void cveBriefDescriptorExtractorRelease(cv::Ptr<cv::xfeatures2d::BriefDescriptorExtractor>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_XFEATURES2D

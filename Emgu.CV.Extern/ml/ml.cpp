@@ -77,11 +77,6 @@ cv::ml::NormalBayesClassifier* cveNormalBayesClassifierDefaultCreate(cv::ml::Sta
 	throw_no_ml();
 #endif
 }
-/*
-cv::ml::NormalBayesClassifier* CvNormalBayesClassifierCreate( CvMat* _train_data, CvMat* _responses, CvMat* _var_idx, CvMat* _sample_idx )
-{
-   return new cv::ml::NormalBayesClassifier(_train_data, _responses, _var_idx, _sample_idx);
-}*/
 void cveNormalBayesClassifierRelease(cv::ml::NormalBayesClassifier** classifier, cv::Ptr<cv::ml::NormalBayesClassifier>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_ML
@@ -216,32 +211,7 @@ void cveEMRelease(cv::ml::EM** model, cv::Ptr<cv::ml::EM>** sharedPtr)
 	throw_no_ml();
 #endif
 }
-/*
-bool CvEMTrain(cv::EM* model, cv::_InputArray* samples, cv::_OutputArray* logLikelihoods, cv::_OutputArray* labels, cv::_OutputArray* probs)
-{
-   return model->train(
-	  *samples,
-	  logLikelihoods? *logLikelihoods : (cv::OutputArray) cv::noArray(),
-	  labels ? *labels : (cv::OutputArray) cv::noArray(),
-	  probs ? *probs : (cv::OutputArray) cv::noArray() );
-}
-
-*/
-
 //SVM
-/*
-cv::ml::SVM::Params* CvSVMParamsCreate(
-   int svmType, int kernelType, double degree, double gamma, double coef0,
-   double con, double nu, double p, cv::Mat* classWeights, CvTermCriteria* termCrit)
-{
-   return new cv::ml::SVM::Params(svmType, kernelType, degree, gamma, coef0, con, nu, p, classWeights ? *classWeights : cv::Mat(), *termCrit );
-}
-void CvSVMParamsRelease(cv::ml::SVM::Params** p)
-{
-   delete *p;
-   *p = 0;
-}*/
-
 cv::ml::SVM* cveSVMDefaultCreate(cv::ml::StatModel** model, cv::Algorithm** algorithm, cv::Ptr<cv::ml::SVM>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_ML
@@ -430,30 +400,6 @@ void cveRTreesRelease(cv::ml::RTrees** model, cv::Ptr<cv::ml::RTrees>** sharedPt
 #endif
 }
 
-/*
-int CvRTreesGetTreeCount(CvRTrees* model) { return model->get_tree_count(); }
-CvMat* CvRTreesGetVarImportance(CvRTrees* model) { return (CvMat*) model->get_var_importance(); }
-*/
-//Extreme Random Tree
-//CvERTrees* CvERTreesCreate() { return new CvERTrees(); }
-//void CvERTreesRelease(CvERTrees** model) { delete *model; *model = 0; }
-
-//CvBoost
-//cv::ml::Boost::Params* CvBoostParamsCreate(
-//   int boostType, int weakCount, double weightTrimRate,
-//   int maxDepth, bool useSurrogates, cv::Mat* priors)
-//{ 
-//   return new cv::ml::Boost::Params(
-//      boostType, weakCount, weightTrimRate,
-//      maxDepth, useSurrogates, 
-//      priors ? *priors : cv::Mat()); 
-//}
-//void CvBoostParamsRelease(cv::ml::Boost::Params** params) 
-//{ 
-//   delete *params; 
-//   *params = 0; 
-//}
-
 cv::ml::Boost* cveBoostCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm, cv::Ptr<cv::ml::Boost>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_ML
@@ -476,76 +422,7 @@ void cveBoostRelease(cv::ml::Boost** model, cv::Ptr<cv::ml::Boost>** sharedPtr)
 	throw_no_ml();
 #endif
 }
-/*
-bool CvBoostTrain(CvBoost* model, CvMat* _train_data, int _tflag,
-   CvMat* _responses, CvMat* _var_idx,
-   CvMat* _sample_idx, CvMat* _var_type,
-   CvMat* _missing_mask,
-   CvBoostParams* params,
-   bool update )
-{ return model->train(_train_data, _tflag, _responses, _var_idx,
-_sample_idx, _var_type, _missing_mask, *params, update); }
-
-float CvBoostPredict(CvBoost* model, CvMat* _sample, CvMat* _missing,
-   CvMat* weak_responses, CvSlice* slice,
-   bool raw_mode)
-{ return model->predict(_sample, _missing, weak_responses, *slice, raw_mode); }
-*/
-
-//CvGBTrees
-/*
-void CvGBTreesParamsGetDefault(CvGBTreesParams* params)
-{
-   CvGBTreesParams p;
-   memcpy(params, &p, sizeof(CvGBTreesParams));
-}
-CvGBTrees* CvGBTreesCreate()
-{
-   return new CvGBTrees();
-}
-void CvGBTreesRelease( CvGBTrees** model)
-{
-   delete * model;
-   *model = 0;
-}
-
-bool CvGBTreesTrain(CvGBTrees* model, const CvMat* trainData, int tflag,
-   const CvMat* responses, const CvMat* varIdx,
-   const CvMat* sampleIdx, const CvMat* varType,
-   const CvMat* missingDataMask,
-   CvGBTreesParams* params,
-   bool update)
-{
-   return model->train(trainData, tflag, responses, varIdx, sampleIdx, varType, missingDataMask, *params, update);
-}
-float CvGBTreesPredict(CvGBTrees* model, CvMat* _sample, CvMat* _missing,
-   CvMat* weak_responses, CvSlice* slice,
-   bool raw_mode)
-{
-   return model->predict(_sample, _missing, weak_responses, *slice, raw_mode);
-}
-*/
-
-
-
 //LogisticRegression
-/*
-cv::ml::LogisticRegression::Params* cveLogisticRegressionParamsCreate(
-   double learning_rate,
-   int iters,
-   int method,
-   int normalization,
-   int reg,
-   int batch_size)
-{
-   return new cv::ml::LogisticRegression::Params(learning_rate, iters, method, normalization, reg, batch_size);
-}
-void cveLogisticRegressionParamsRelease(cv::ml::LogisticRegression::Params** params)
-{
-   delete *params;
-   *params = 0;
-}
-*/
 cv::ml::LogisticRegression* cveLogisticRegressionCreate(cv::ml::StatModel** statModel, cv::Algorithm** algorithm, cv::Ptr<cv::ml::LogisticRegression>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_ML

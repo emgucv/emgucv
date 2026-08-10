@@ -271,16 +271,6 @@ cv::aruco::CharucoBoard* cveCharucoBoardCreate(
 #endif
 }
 
-/*
-void cveCharucoBoardDraw(cv::aruco::CharucoBoard* charucoBoard, CvSize* outSize, cv::_OutputArray* img, int marginSize, int borderBits)
-{
-#ifdef HAVE_OPENCV_OBJDETECT
-   charucoBoard->draw(*outSize, *img, marginSize, borderBits);
-#else
-	throw_no_objdetect();
-#endif
-}*/
-
 void cveCharucoBoardRelease(cv::aruco::CharucoBoard** charucoBoard, cv::Ptr<cv::aruco::CharucoBoard>** sharedPtr)
 {
 #ifdef HAVE_OPENCV_OBJDETECT

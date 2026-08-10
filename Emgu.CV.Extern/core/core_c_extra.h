@@ -227,61 +227,8 @@ CVAPI(void) cveFileNodeIteratorNext(cv::FileNodeIterator* iterator);
 CVAPI(cv::FileNode*) cveFileNodeIteratorGetFileNode(cv::FileNodeIterator* iterator);
 CVAPI(void) cveFileNodeIteratorRelease(cv::FileNodeIterator** iterator);
 
-/*
-CVAPI(IplImage*) cveCreateImage(CvSize* size, int depth, int channels);
-CVAPI(IplImage*) cveCreateImageHeader(CvSize* size, int depth, int channels);
-CVAPI(IplImage*) cveInitImageHeader(IplImage* image, CvSize* size, int depth, int channels, int origin, int align);
-CVAPI(void) cveSetData(CvArr* arr, void* data, int step);
-CVAPI(void) cveReleaseImageHeader(IplImage** image);
-CVAPI(void) cveSetImageCOI(IplImage* image, int coi);
-CVAPI(int) cveGetImageCOI(IplImage* image);
-CVAPI(void) cveResetImageROI(IplImage* image);
-CVAPI(void) cveSetImageROI(IplImage* image, CvRect* rect);
-CVAPI(void) cveGetImageROI(IplImage* image, CvRect* rect);
-*/
-
-/*
-CVAPI(CvMat*) cveInitMatHeader(CvMat* mat, int rows, int cols, int type, void* data, int step);
-CVAPI(CvMat*) cveCreateMat(int rows, int cols, int type);
-CVAPI(CvMatND*) cveInitMatNDHeader(CvMatND* mat, int dims, int* sizes, int type, void* data);
-CVAPI(void) cveReleaseMat(CvMat** mat);
-
-CVAPI(CvSparseMat*) cveCreateSparseMat(int dim, int* sizes, int type);
-CVAPI(void) cveReleaseSparseMat(CvSparseMat** mat);
-
-CVAPI(void) cveSet2D(CvArr* arr, int idx0, int idx1, CvScalar* value);
-CVAPI(CvMat*) cveGetSubRect(CvArr* arr, CvMat* submat, CvRect* rect);
-CVAPI(CvMat*) cveGetRows(CvArr* arr, CvMat* submat, int startRow, int endRow, int deltaRow);
-CVAPI(CvMat*) cveGetCols(CvArr* arr, CvMat* submat, int startCol, int endCol);
-*/
-
-/*
-CVAPI(void) cveGetSize(CvArr* arr, int* width, int* height);
-
-CVAPI(void) cveCopy(CvArr* src, CvArr* dst, CvArr* mask);
-CVAPI(void) cveRange(CvArr* mat, double start, double end);
-
-CVAPI(void) cveSetReal1D(CvArr* arr, int idx0, double value);
-CVAPI(void) cveSetReal2D(CvArr* arr, int idx0, int idx1, double value);
-CVAPI(void) cveSetReal3D(CvArr* arr, int idx0, int idx1, int idx2, double value);
-CVAPI(void) cveSetRealND(CvArr* arr, int* idx, double value);
-CVAPI(void) cveGet1D(CvArr* arr, int idx0, CvScalar* value);
-CVAPI(void) cveGet2D(CvArr* arr, int idx0, int idx1, CvScalar* value);
-CVAPI(void) cveGet3D(CvArr* arr, int idx0, int idx1, int idx2, CvScalar* value);
-CVAPI(double) cveGetReal1D(CvArr* arr, int idx0);
-CVAPI(double) cveGetReal2D(CvArr* arr, int idx0, int idx1);
-CVAPI(double) cveGetReal3D(CvArr* arr, int idx0, int idx1, int idx2);
-CVAPI(void) cveClearND(CvArr* arr, int* idx);
-*/
-
 CVAPI(bool) cveUseOptimized();
 CVAPI(void) cveSetUseOptimized(bool onoff);
-
-/*
-CVAPI(bool) cveHaveOpenVX();
-CVAPI(bool) cveUseOpenVX();
-CVAPI(void) cveSetUseOpenVX(bool flag);
-*/
 
 CVAPI(void) cveGetBuildInformation(cv::String* buildInformation);
 

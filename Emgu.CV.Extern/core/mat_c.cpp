@@ -143,25 +143,6 @@ void cveMatCopyTo(cv::Mat* mat, cv::_OutputArray* m, cv::_InputArray* mask)
 		mat->copyTo(*m);
 }
 
-/*
-cv::Mat* cveArrToMat(CvArr* cvArray, bool copyData, bool allowND, int coiMode)
-{
-	cv::Mat* mat = new cv::Mat();
-	cv::Mat tmp = cv::cvarrToMat(cvArray, copyData, allowND, coiMode);
-	cv::swap(*mat, tmp);
-	return mat;
-}
-
-IplImage* cveMatToIplImage(cv::Mat* m)
-{
-	IplImage* result = new IplImage();
-	CV_Assert(m->dims <= 2);
-	cvInitImageHeader(result, cvSize(m->size()), cvIplDepth(m->flags), m->channels());
-	cvSetData(result, m->data, static_cast<int>(m->step[0]));
-	return result;
-}
-*/
-
 int cveMatGetElementSize(cv::Mat* mat)
 {
 	return static_cast<int>(mat->elemSize());

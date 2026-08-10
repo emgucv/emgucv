@@ -105,24 +105,6 @@ void cveHOGDescriptorCompute(
 }
 
 
-/*
-void CvHOGDescriptorDetect(
-   cv::HOGDescriptor* descriptor,
-   CvArr* img,
-   CvSeq* foundLocations,
-   double hitThreshold,
-   CvSize winStride,
-   CvSize padding)
-{
-   cvClearSeq(foundLocations);
-
-   std::vector<cv::Rect> rects;
-   cv::Mat mat = cv::cvarrToMat(img);
-   descriptor->detect(mat, rects, hitThreshold, winStride, padding);
-   if (rects.size() > 0)
-	  cvSeqPushMulti(foundLocations, &rects[0], rects.size());
-}*/
-
 unsigned int cveHOGDescriptorGetDescriptorSize(cv::HOGDescriptor* descriptor)
 {
 #ifdef HAVE_OPENCV_XOBJDETECT

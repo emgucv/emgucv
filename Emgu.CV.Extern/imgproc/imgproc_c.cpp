@@ -6,16 +6,6 @@
 
 #include "imgproc_c.h"
 
-/*
-IplImage* cvGetImageSubRect(IplImage* image, CvRect* rect)
-{
-	IplImage* res = cvCreateImageHeader(cvSize(rect->width, rect->height), image->depth, image->nChannels);
-	CvMat mat;
-	cvGetSubRect(image, &mat, *rect);
-	cvGetImage(&mat, res);
-	return res;
-}*/
-
 //GrabCut
 void cveGrabCut(cv::_InputArray* img, cv::_InputOutputArray* mask, cv::Rect* rect, cv::_InputOutputArray* bgdModel, cv::_InputOutputArray* fgdModel, int iterCount, int flag)
 {
@@ -602,34 +592,6 @@ void cveGetRectSubPix(cv::_InputArray* image, cv::Size* patchSize, cv::Point2f* 
 {
 	cv::getRectSubPix(*image, *patchSize, *center, *patch, patchType);
 }
-
-/*
-int cveSampleLine(const void* _img, CvPoint* pt1, CvPoint* pt2, void* _buffer, int connectivity)
-{
-   return cvSampleLine(_img, *pt1, *pt2, _buffer, connectivity);
-}*/
-
-
-/*
-double cveGetSpatialMoment(CvMoments* moments, int xOrder, int yOrder)
-{
-   return cvGetSpatialMoment(moments, xOrder, yOrder);
-}
-
-double cveGetCentralMoment(CvMoments* moments, int xOrder, int yOrder)
-{
-   return cvGetCentralMoment(moments, xOrder, yOrder);
-}
-
-double cveGetNormalizedCentralMoment(CvMoments* moments, int xOrder, int yOrder)
-{
-   return cvGetNormalizedCentralMoment(moments, xOrder, yOrder);
-}
-
-void cveMaxRect(CvRect* rect1, CvRect* rect2, CvRect* result)
-{
-	*result = cvMaxRect(rect1, rect2);
-}*/
 
 int cveConnectedComponents(cv::_InputArray* image, cv::_OutputArray* labels, int connectivity, int ltype, int ccltype)
 {
