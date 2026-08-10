@@ -1,6 +1,6 @@
 ## About this package
 
-This is the NPP component of CUDA ${EMGU_CUFFT_VERSION}.
+This is the NPP component of CUDA ${EMGU_NPP_VERSION}.
 
 This package provides the native CUDA NPP dependencies for EMGU software libraries.
 
