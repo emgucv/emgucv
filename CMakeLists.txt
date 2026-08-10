@@ -250,6 +250,7 @@ ENDIF()
   
 FIND_PACKAGE(CSharp REQUIRED)
 INCLUDE (CSharpMacros)
+INCLUDE (DebianRuntimeMacros)
 
 IF (NOT (DOTNET_FOUND))
   IF (IS_UBUNTU)
