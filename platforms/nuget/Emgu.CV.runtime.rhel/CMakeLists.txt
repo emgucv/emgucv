@@ -22,13 +22,42 @@ IF(HAVE_RHEL_X64 OR HAVE_RHEL_X86 OR HAVE_RHEL_ARM64)
     SET(EMGUCV_RHEL_NUGET_FILE_LIST "${EMGUCV_RHEL_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\rhel-arm64\\native\\*.so\" target=\"runtimes\\rhel-arm64\\native\" />")
 	SET(EMGUCV_RHEL_NUGET_FILE_LIST "${EMGUCV_RHEL_NUGET_FILE_LIST} <file src=\"..\\..\\..\\libs\\runtimes\\rhel-arm64\\native\\rhel_arm64_version_string.inc\" target=\"docs\\build_info_arm64.inc\" /> ")
   ENDIF()
-	
-  #SET(EMGUCV_RHEL_NUGET_FILE_LIST "${EMGUCV_RHEL_NUGET_FILE_LIST} 
-  #  <file src=\"..\\..\\..\\miscellaneous\\nuget_icon.png\" target=\"icon.png\" />
-  #  <file src=\"..\\..\\..\\${EMGUCV_LICENSE_FILE}\" target=\"\" />
-  #  <file src=\"README.md\" target=\"docs\\\" />
-#	<file src=\"Emgu.CV.runtime.rhel.props\" target=\"build\\\" />")
-  
+
+  #Build the RID list actually included in this package, for the README's publish section.
+  #HAVE_RHEL_X86/X64/ARM64 already account for "already built OR currently
+  #building this arch" (see CHECK_BINARY_EXIST in the root CMakeLists.txt),
+  #so no extra fallback is needed here, unlike the macOS package. Note that
+  #only HAVE_RHEL_X64 is currently wired up to CHECK_BINARY_EXIST in the
+  #root CMakeLists.txt -- HAVE_RHEL_X86/ARM64 are referenced but never
+  #actually set, so in practice this list will only ever contain rhel-x64
+  #until that gap is addressed.
+  SET(EMGUCV_RHEL_RID_LIST "")
+  IF(HAVE_RHEL_X64)
+    LIST(APPEND EMGUCV_RHEL_RID_LIST "rhel-x64")
+  ENDIF()
+  IF(HAVE_RHEL_X86)
+    LIST(APPEND EMGUCV_RHEL_RID_LIST "rhel-x86")
+  ENDIF()
+  IF(HAVE_RHEL_ARM64)
+    LIST(APPEND EMGUCV_RHEL_RID_LIST "rhel-arm64")
+  ENDIF()
+  LIST(LENGTH EMGUCV_RHEL_RID_LIST EMGUCV_RHEL_RID_COUNT)
+  IF(EMGUCV_RHEL_RID_COUNT GREATER 0)
+    LIST(GET EMGUCV_RHEL_RID_LIST 0 EMGUCV_RHEL_PRIMARY_RID)
+  ELSE()
+    SET(EMGUCV_RHEL_PRIMARY_RID "rhel-x64")
+  ENDIF()
+  IF(EMGUCV_RHEL_RID_COUNT GREATER 1)
+    SET(EMGUCV_RHEL_RID_PLURAL_S "s")
+  ELSE()
+    SET(EMGUCV_RHEL_RID_PLURAL_S "")
+  ENDIF()
+  SET(EMGUCV_RHEL_RID_LIST_MD "")
+  FOREACH(EMGUCV_RHEL_RID_ITEM ${EMGUCV_RHEL_RID_LIST})
+    LIST(APPEND EMGUCV_RHEL_RID_LIST_MD "`${EMGUCV_RHEL_RID_ITEM}`")
+  ENDFOREACH()
+  LIST(JOIN EMGUCV_RHEL_RID_LIST_MD " and " EMGUCV_RHEL_RID_LIST_TEXT)
+
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec)
   CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/UseRidGraph.props.in ${CMAKE_CURRENT_SOURCE_DIR}/${EMGUCV_RHEL_NUGET_ID}.props)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/README.md)

@@ -25,16 +25,16 @@ of the build.
 If you publish with an explicit runtime identifier, e.g.
 
 ```
-dotnet publish -r rhel-x64
+dotnet publish -r ${EMGUCV_RHEL_PRIMARY_RID}
 ```
 
 you additionally need to add the following to your own `.csproj` (or a
-`Directory.Build.props`), matching the RID to your target architecture
-(`rhel-x64`, `rhel-x86`, or `rhel-arm64`):
+`Directory.Build.props`), using whichever of this package's RIDs
+(${EMGUCV_RHEL_RID_LIST_TEXT}) matches your target architecture:
 
 ```xml
 <PropertyGroup>
-  <RuntimeIdentifier>rhel-x64</RuntimeIdentifier>
+  <RuntimeIdentifier>${EMGUCV_RHEL_PRIMARY_RID}</RuntimeIdentifier>
   <UseRidGraph>true</UseRidGraph>
 </PropertyGroup>
 ```

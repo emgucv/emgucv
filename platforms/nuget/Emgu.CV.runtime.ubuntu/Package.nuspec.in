@@ -20,7 +20,7 @@ ${NUGET_EMGU_URL}/wiki/files/${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERS
       <dependency id="${EMGUCV_NUGET_ID}" version="${CPACK_PACKAGE_DEPENDENCY_VERSION}" />
     </dependencies>
     <copyright>© ${CPACK_PACKAGE_VENDOR} ${CURRENT_YEAR}. All rights reserved.</copyright>
-    <tags>native opencv emgu emgucv vison ubuntu</tags>
+    <tags>native opencv emgu emgucv vision ubuntu</tags>
   </metadata>
   <files>
     <file src="..\..\..\miscellaneous\nuget_icon.png" target="" />
