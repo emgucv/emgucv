@@ -54,6 +54,7 @@ namespace Emgu.CV
                     iaImg,
                     oaPoints,
                     result);
+                CvInvoke.CheckError();
                 return result.ToArray();
             }
         }
