@@ -33,6 +33,7 @@ namespace Emgu.CV.Dnn
                     csConfig,
                     ref _model);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -45,7 +46,7 @@ namespace Emgu.CV.Dnn
             _ptr = DnnInvoke.cveDnnSegmentationModelCreate2(
                 net,
                 ref _model);
-
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -60,6 +61,7 @@ namespace Emgu.CV.Dnn
             {
                 DnnInvoke.cveDnnSegmentationModelSegment(_ptr, iaFrame, oaMask);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>

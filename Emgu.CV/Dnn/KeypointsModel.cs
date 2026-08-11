@@ -34,6 +34,7 @@ namespace Emgu.CV.Dnn
                     csConfig,
                     ref _model);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace Emgu.CV.Dnn
             _ptr = DnnInvoke.cveDnnKeypointsModelCreate2(
                 net,
                 ref _model);
-
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -65,6 +66,7 @@ namespace Emgu.CV.Dnn
                     iaFrame,
                     vpf,
                     thresh);
+                CvInvoke.CheckError();
                 return vpf.ToArray();
             }
         }

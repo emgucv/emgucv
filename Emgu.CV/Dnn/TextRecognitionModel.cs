@@ -34,6 +34,7 @@ namespace Emgu.CV.Dnn
                     csConfig,
                     ref _model);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace Emgu.CV.Dnn
             _ptr = DnnInvoke.cveDnnTextRecognitionModelCreate2(
                 net,
                 ref _model);
-
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -60,6 +61,7 @@ namespace Emgu.CV.Dnn
                 using (VectorOfCvString vs = new VectorOfCvString())
                 {
                     DnnInvoke.cveDnnTextRecognitionModelGetVocabulary(_ptr, vs);
+                    CvInvoke.CheckError();
                     return vs.ToArray();
                 }
             }
@@ -69,6 +71,7 @@ namespace Emgu.CV.Dnn
                 {
                     DnnInvoke.cveDnnTextRecognitionModelSetVocabulary(_ptr, vs);
                 }
+                CvInvoke.CheckError();
             }
         }
 
@@ -80,6 +83,7 @@ namespace Emgu.CV.Dnn
         public void SetDecodeOptsCTCPrefixBeamSearch(int beamSize, int vocPruneSize)
         {
             DnnInvoke.cveDnnTextRecognitionModelSetDecodeOptsCTCPrefixBeamSearch(_ptr, beamSize, vocPruneSize);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -93,6 +97,7 @@ namespace Emgu.CV.Dnn
             using (InputArray iaFrame = frame.GetInputArray())
             {
                 DnnInvoke.cveDnnTextRecognitionModelRecognize1(_ptr, iaFrame, s);
+                CvInvoke.CheckError();
                 return s.ToString();
             }
         }
@@ -110,6 +115,7 @@ namespace Emgu.CV.Dnn
             using (InputArray iaRoiRects = roiRects.GetInputArray())
             {
                 DnnInvoke.cveDnnTextRecognitionModelRecognize2(_ptr, iaFrame, iaRoiRects, vs);
+                CvInvoke.CheckError();
                 return vs.ToArray();
             }
         }

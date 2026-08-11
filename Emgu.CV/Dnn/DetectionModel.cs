@@ -33,6 +33,7 @@ namespace Emgu.CV.Dnn
                     csConfig,
                     ref _model);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -44,6 +45,7 @@ namespace Emgu.CV.Dnn
             _ptr = DnnInvoke.cveDnnDetectionModelCreate2(
                 net,
                 ref _model);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -74,6 +76,7 @@ namespace Emgu.CV.Dnn
                     confThreshold,
                     nmsThreshold);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
