@@ -1794,11 +1794,6 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveMatGetStep(IntPtr mat);
 
-        /*
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal extern static bool cvMatIsEmpty(IntPtr mat);*/
-
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveMatCreateData(IntPtr mat, int row, int cols, int type);
 

@@ -148,11 +148,6 @@ int cveMatGetElementSize(cv::Mat* mat)
 	return static_cast<int>(mat->elemSize());
 }
 
-//int cveMatGetChannels(cv::Mat* mat)
-//{
-//   return mat->channels();
-//}
-
 uchar* cveMatGetDataPointer(cv::Mat* mat)
 {
 	return mat->data;

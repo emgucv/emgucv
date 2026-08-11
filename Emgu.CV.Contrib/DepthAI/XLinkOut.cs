@@ -62,8 +62,5 @@ namespace Emgu.CV.Dai
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr daiXLinkOutGetInput(IntPtr xlinkOut);
-        /*
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void daiXLinkOutSetStreamName(IntPtr xlinkOut, IntPtr streamName);*/
     }
 }

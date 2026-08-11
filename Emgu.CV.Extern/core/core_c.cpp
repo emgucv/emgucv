@@ -724,11 +724,6 @@ void cveFileNodeGetKeys(cv::FileNode* node, std::vector< cv::String >* keys)
 	for (std::vector< cv::String >::iterator it = kv.begin(); it != kv.end(); ++it)
 		keys->push_back(*it);
 }
-/*
-bool cveFileNodeIsEmpty(cv::FileNode* node)
-{
-	return node->empty();
-}*/
 void cveFileNodeReadString(cv::FileNode* node, cv::String* str, cv::String* defaultStr)
 {
 	cv::read(*node, *str, *defaultStr);

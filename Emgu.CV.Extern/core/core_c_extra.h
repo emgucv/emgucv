@@ -211,7 +211,6 @@ CVAPI(cv::FileNode*) cveFileStorageGetNode(cv::FileStorage* fs, cv::String* node
 CVAPI(int) cveFileNodeGetType(cv::FileNode* node);
 CVAPI(void) cveFileNodeGetName(cv::FileNode* node, cv::String* name);
 CVAPI(void) cveFileNodeGetKeys(cv::FileNode* node, std::vector< cv::String >* keys);
-//CVAPI(bool) cveFileNodeIsEmpty(cv::FileNode* node);
 CVAPI(void) cveFileNodeReadMat(cv::FileNode* node, cv::Mat* mat, cv::Mat* defaultMat);
 CVAPI(void) cveFileNodeReadString(cv::FileNode* node, cv::String* str, cv::String* defaultStr);
 CVAPI(int) cveFileNodeReadInt(cv::FileNode* node, int defaultInt);
