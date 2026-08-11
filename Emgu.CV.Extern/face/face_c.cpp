@@ -331,9 +331,8 @@ bool myDetector(cv::InputArray image, cv::OutputArray faces, void* face_detector
 	return (*(fds->face_detector_func))(&image, &faces);
 }
 #ifdef HAVE_OPENCV_FACE
-// getFaces/setFaceDetector/addTrainingSample/training are only declared on FacemarkTrain,
-// not the base Facemark class (FacemarkKazemi, for instance, derives from Facemark directly
-// and does not implement them).
+// addTrainingSample/training are only declared on FacemarkTrain, not the base Facemark class
+// (FacemarkKazemi, for instance, derives from Facemark directly and does not implement them).
 static cv::face::FacemarkTrain* toFacemarkTrain(cv::face::Facemark* facemark)
 {
 	cv::face::FacemarkTrain* t = dynamic_cast<cv::face::FacemarkTrain*>(facemark);
@@ -341,6 +340,10 @@ static cv::face::FacemarkTrain* toFacemarkTrain(cv::face::Facemark* facemark)
 		CV_Error(cv::Error::StsBadFunc, "This Facemark implementation does not support this operation (not a FacemarkTrain).");
 	return t;
 }
+
+// getFaces/setFaceDetector are declared separately, with identical signatures, on both
+// FacemarkTrain and FacemarkKazemi (they do not share a common virtual base that declares
+// them), so both need to be tried before concluding the implementation doesn't support it.
 #endif
 
 bool cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetector detector)
@@ -351,7 +354,12 @@ bool cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetecto
 	// so it must outlive this call, not be a stack-local.
 	face_detector_pointer* detector_pointer = new face_detector_pointer();
 	detector_pointer->face_detector_func = detector;
-	return toFacemarkTrain(facemark)->setFaceDetector((cv::face::FN_FaceDetector) myDetector, detector_pointer);
+	cv::face::FN_FaceDetector fn = (cv::face::FN_FaceDetector) myDetector;
+	if (cv::face::FacemarkTrain* t = dynamic_cast<cv::face::FacemarkTrain*>(facemark))
+		return t->setFaceDetector(fn, detector_pointer);
+	if (cv::face::FacemarkKazemi* k = dynamic_cast<cv::face::FacemarkKazemi*>(facemark))
+		return k->setFaceDetector(fn, detector_pointer);
+	CV_Error(cv::Error::StsBadFunc, "This Facemark implementation does not support setFaceDetector.");
 #else
 	throw_no_face();
 #endif
@@ -369,7 +377,11 @@ void cveFacemarkLoadModel(cv::face::Facemark* facemark, cv::String* model)
 bool cveFacemarkGetFaces(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_OutputArray* faces)
 {
 #ifdef HAVE_OPENCV_FACE
-	return toFacemarkTrain(facemark)->getFaces(*image, *faces);
+	if (cv::face::FacemarkTrain* t = dynamic_cast<cv::face::FacemarkTrain*>(facemark))
+		return t->getFaces(*image, *faces);
+	if (cv::face::FacemarkKazemi* k = dynamic_cast<cv::face::FacemarkKazemi*>(facemark))
+		return k->getFaces(*image, *faces);
+	CV_Error(cv::Error::StsBadFunc, "This Facemark implementation does not support getFaces.");
 #else
 	throw_no_face();
 #endif
