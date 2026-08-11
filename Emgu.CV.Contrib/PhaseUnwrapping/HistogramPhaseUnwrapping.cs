@@ -63,6 +63,7 @@ namespace Emgu.CV.PhaseUnwrapping
         {
             using (OutputArray oaReliabilityMap = reliabilityMap.GetOutputArray())
                 PhaseUnwrappingInvoke.cveHistogramPhaseUnwrappingGetInverseReliabilityMap(_ptr, oaReliabilityMap);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -82,6 +83,7 @@ namespace Emgu.CV.PhaseUnwrapping
             {
                 PhaseUnwrappingInvoke.cveHistogramPhaseMapUnwrappingUnwrapPhaseMap(_ptr, iaWrappedPhaseMap, oaUnwrappedPhaseMap, iaShadowMask);
             }
+            CvInvoke.CheckError();
         }
     }
 

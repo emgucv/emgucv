@@ -42,11 +42,15 @@ void cveHistogramPhaseUnwrappingRelease(cv::phase_unwrapping::HistogramPhaseUnwr
 
 void cveHistogramPhaseUnwrappingGetInverseReliabilityMap(cv::phase_unwrapping::HistogramPhaseUnwrapping* phase_unwrapping, cv::_OutputArray* reliabilityMap)
 {
-#ifdef HAVE_OPENCV_PHASE_UNWRAPPING
-	phase_unwrapping->getInverseReliabilityMap(*reliabilityMap);
-#else
-	throw_no_phase_unwrapping();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_PHASE_UNWRAPPING
+		phase_unwrapping->getInverseReliabilityMap(*reliabilityMap);
+	#else
+		throw_no_phase_unwrapping();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveHistogramPhaseMapUnwrappingUnwrapPhaseMap(
@@ -55,9 +59,13 @@ void cveHistogramPhaseMapUnwrappingUnwrapPhaseMap(
 	cv::_OutputArray* unwrappedPhaseMap,
 	cv::_InputArray* shadowMask)
 {
-#ifdef HAVE_OPENCV_PHASE_UNWRAPPING
-	phase_unwrapping->unwrapPhaseMap(*wrappedPhaseMap, *unwrappedPhaseMap, shadowMask ? *shadowMask : dynamic_cast<cv::InputArray>(cv::noArray()));
-#else
-	throw_no_phase_unwrapping();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_PHASE_UNWRAPPING
+		phase_unwrapping->unwrapPhaseMap(*wrappedPhaseMap, *unwrappedPhaseMap, shadowMask ? *shadowMask : dynamic_cast<cv::InputArray>(cv::noArray()));
+	#else
+		throw_no_phase_unwrapping();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
