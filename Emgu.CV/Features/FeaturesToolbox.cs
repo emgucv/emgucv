@@ -224,6 +224,7 @@ namespace Emgu.CV.Features
             Mat homography = new Mat();
             bool found = FeaturesInvoke.cveGetHomographyMatrixFromMatchedFeatures(model, observed, matches, mask,
                ransacReprojThreshold, homography);
+            CvInvoke.CheckError();
             if (found)
             {
                 return homography;

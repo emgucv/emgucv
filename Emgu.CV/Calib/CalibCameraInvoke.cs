@@ -30,6 +30,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (OutputArray oaJacobian = jacobian == null ? OutputArray.GetEmpty() : jacobian.GetOutputArray())
                 cveRodrigues(iaSrc, oaDst, oaJacobian);
+            CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -96,6 +97,7 @@ namespace Emgu.CV
             using (OutputArray oaHomography = homography.GetOutputArray())
             using (OutputArray oaMask = mask == null ? OutputArray.GetEmpty() : mask.GetOutputArray())
                 cveFindHomography(iaSrcPoints, iaDstPoints, oaHomography, method, ransacReprojThreshold, oaMask);
+            CvInvoke.CheckError();
             return homography;
         }
 
@@ -138,6 +140,7 @@ namespace Emgu.CV
                     oaQy,
                     oaQz
                 );
+                CvInvoke.CheckError();
                 return results;
             }
         }
@@ -195,6 +198,7 @@ namespace Emgu.CV
                     oaRotMatrixZ,
                     oaEulerAngles);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -234,6 +238,7 @@ namespace Emgu.CV
             using (OutputArray oaJacobian = jacobian == null ? OutputArray.GetEmpty() : jacobian.GetOutputArray())
                 cveProjectPoints(iaObjectPoints, iaRvec, iaTvec, iaCameraMatrix, iaDistCoeffs,
                    oaImagePoints, oaJacobian, aspectRatio);
+            CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -297,7 +302,8 @@ namespace Emgu.CV
             using (InputArray iaDistortionCoeffs = distortionCoeffs.GetInputArray())
             using (OutputArray oaRotationVector = rotationVector.GetOutputArray())
             using (OutputArray oaTranslationVector = translationVector.GetOutputArray())
-                return cveSolvePnP(
+            {
+                bool result = cveSolvePnP(
                    iaObjectPoints,
                    iaImagePoints,
                    iaIntrisicMatrix,
@@ -306,6 +312,9 @@ namespace Emgu.CV
                    oaTranslationVector,
                    useExtrinsicGuess,
                    flags);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -358,11 +367,15 @@ namespace Emgu.CV
             using (OutputArray oaRotationVector = rvec.GetOutputArray())
             using (OutputArray oaTranslationVector = tvec.GetOutputArray())
             using (OutputArray oaInliers = inliers == null ? OutputArray.GetEmpty() : inliers.GetOutputArray())
-                return cveSolvePnPRansac(
+            {
+                bool result = cveSolvePnPRansac(
                    iaObjectPoints, iaImagePoints, iaCameraMatrix, iaDistortionCoeffs,
                    oaRotationVector, oaTranslationVector,
                    useExtrinsicGuess, iterationsCount, reprojectionError, confident,
                    oaInliers, flags);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -411,9 +424,13 @@ namespace Emgu.CV
             using (OutputArray oaRotationVector = rvec.GetOutputArray())
             using (OutputArray oaTranslationVector = tvec.GetOutputArray())
             using (OutputArray oaInliers = inliers == null ? OutputArray.GetEmpty() : inliers.GetOutputArray())
-                return cveSolvePnPRansacUsac(
+            {
+                bool result = cveSolvePnPRansacUsac(
                    iaObjectPoints, iaImagePoints, ioaCameraMatrix, iaDistortionCoeffs,
                    oaRotationVector, oaTranslationVector, oaInliers, ref parameters);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -455,9 +472,10 @@ namespace Emgu.CV
             using (OutputArray oaRotationVectors = rvecs.GetOutputArray())
             using (OutputArray oaTranslationVectors = tvecs.GetOutputArray())
             {
-                return cveSolveP3P(iaObjectPoints, iaImagePoints, iaCameraMatrix, iaDistortionCoeffs, oaRotationVectors,
+                int result = cveSolveP3P(iaObjectPoints, iaImagePoints, iaCameraMatrix, iaDistortionCoeffs, oaRotationVectors,
                     oaTranslationVectors, flags);
-
+                CvInvoke.CheckError();
+                return result;
             }
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -496,6 +514,7 @@ namespace Emgu.CV
             using (InputOutputArray ioaRotationVector = rvec.GetInputOutputArray())
             using (InputOutputArray ioaTranslationVector = tvec.GetInputOutputArray())
                 cveSolvePnPRefineLM(iaObjectPoints, iaImagePoints, iaCameraMatrix, iaDistortionCoeffs, ioaRotationVector, ioaTranslationVector, ref criteria);
+            CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -539,6 +558,7 @@ namespace Emgu.CV
                 cveSolvePnPRefineVVS(iaObjectPoints, iaImagePoints, iaCameraMatrix, iaDistortionCoeffs, ioaRotationVector, ioaTranslationVector,
                     ref criteria, VVSlambda);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -591,7 +611,7 @@ namespace Emgu.CV
             using (OutputArray oaReporjectionError =
                 reprojectionError == null ? OutputArray.GetEmpty() : reprojectionError.GetOutputArray())
             {
-                return cveSolvePnPGeneric(
+                int result = cveSolvePnPGeneric(
                     iaObjectPoints,
                     iaImagePoints,
                     iaCameraMatrix,
@@ -603,6 +623,8 @@ namespace Emgu.CV
                     iaRvec,
                     iaTvec,
                     oaReporjectionError);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -640,6 +662,7 @@ namespace Emgu.CV
             {
                 cveDecomposeEssentialMat(iaE, oaR1, oaR2, oaT);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -680,7 +703,9 @@ namespace Emgu.CV
             using (OutputArray oaT = t.GetOutputArray())
             using (InputOutputArray ioaMask = mask == null ? InputOutputArray.GetEmpty() : mask.GetInputOutputArray())
             {
-                return cveRecoverPose(iaE, iaP1, iaP2, iaCam, oaR, oaT, ioaMask);
+                int result = cveRecoverPose(iaE, iaP1, iaP2, iaCam, oaR, oaT, ioaMask);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -728,7 +753,9 @@ namespace Emgu.CV
             using (InputOutputArray ioaMask = mask == null ? InputOutputArray.GetEmpty() : mask.GetInputOutputArray())
             using (OutputArray oaTri = triangulatedPoints == null ? OutputArray.GetEmpty() : triangulatedPoints.GetOutputArray())
             {
-                return cveRecoverPoseWithDistanceThresh(iaE, iaP1, iaP2, iaCam, oaR, oaT, distanceThresh, ioaMask, oaTri);
+                int result = cveRecoverPoseWithDistanceThresh(iaE, iaP1, iaP2, iaCam, oaR, oaT, distanceThresh, ioaMask, oaTri);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -766,7 +793,9 @@ namespace Emgu.CV
             using (OutputArray oaTranslations = translations.GetOutputArray())
             using (OutputArray oaNormals = normals.GetOutputArray())
             {
-                return cveDecomposeHomographyMat(iaH, iaK, oaRotations, oaTranslations, oaNormals);
+                int result = cveDecomposeHomographyMat(iaH, iaK, oaRotations, oaTranslations, oaNormals);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -797,6 +826,7 @@ namespace Emgu.CV
             using (OutputArray oaF = f.GetOutputArray())
             using (OutputArray oaMask = mask == null ? OutputArray.GetEmpty() : mask.GetOutputArray())
                 cveFindFundamentalMat(iaPoints1, iaPoints2, oaF, method, param1, param2, oaMask);
+            CvInvoke.CheckError();
             return f;
         }
 
@@ -842,6 +872,7 @@ namespace Emgu.CV
                     maxIter,
                     oaMask,
                     essentialMat);
+                CvInvoke.CheckError();
                 return essentialMat;
             }
         }
@@ -877,6 +908,7 @@ namespace Emgu.CV
             using (InputArray iaFundamentalMatrix = fundamentalMatrix.GetInputArray())
             using (OutputArray oaCorrespondentLines = correspondentLines.GetOutputArray())
                 cveComputeCorrespondEpilines(iaPoints, whichImage, iaFundamentalMatrix, oaCorrespondentLines);
+            CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -896,6 +928,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveConvertPointsToHomogeneous(iaSrc, oaDst);
+            CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -912,6 +945,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveConvertPointsFromHomogeneous(iaSrc, oaDst);
+            CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -934,6 +968,7 @@ namespace Emgu.CV
             using (InputArray iaProjPoints2 = projPoints2.GetInputArray())
             using (OutputArray oaPoints4D = points4D.GetOutputArray())
                 cveTriangulatePoints(iaProjMat1, iaProjMat2, iaProjPoints1, iaProjPoints2, oaPoints4D);
+            CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -957,6 +992,7 @@ namespace Emgu.CV
             using (OutputArray oaNewPoints1 = newPoints1.GetOutputArray())
             using (OutputArray oaNewPoints2 = newPoints2.GetOutputArray())
                 cveCorrectMatches(iaF, iaPoints1, iaPoints2, oaNewPoints1, oaNewPoints2);
+            CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1020,7 +1056,11 @@ namespace Emgu.CV
             using (InputArray iaDst = dst.GetInputArray())
             using (OutputArray oaAffineEstimate = affineEstimate.GetOutputArray())
             using (OutputArray oaInliners = inliers.GetOutputArray())
-                return cveEstimateAffine3D(iaSrc, iaDst, oaAffineEstimate, oaInliners, ransacThreshold, confidence);
+            {
+                int result = cveEstimateAffine3D(iaSrc, iaDst, oaAffineEstimate, oaInliners, ransacThreshold, confidence);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1084,6 +1124,7 @@ namespace Emgu.CV
             {
                 cveEstimateAffine2D(iaFrom, iaTo, oaInliners, method, ransacReprojThreshold, maxIters, confidence, refineIters, affine);
             }
+            CvInvoke.CheckError();
             return affine;
         }
 
@@ -1133,6 +1174,7 @@ namespace Emgu.CV
                     affine
                     );
             }
+            CvInvoke.CheckError();
             return affine;
         }
 
@@ -1166,6 +1208,7 @@ namespace Emgu.CV
             using (InputArray iaDistortionCoeffs = distortionCoeffs.GetInputArray())
             using (InputArray iaNewCameraMatrix = newCameraMatrix == null ? InputArray.GetEmpty() : newCameraMatrix.GetInputArray())
                 cveUndistort(iaSrc, oaDst, iaCameraMatrix, iaDistortionCoeffs, iaNewCameraMatrix);
+            CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1213,6 +1256,7 @@ namespace Emgu.CV
                    ref size,
                    CvInvoke.MakeType(depthType, channels),
                    oaMap1, oaMap2);
+            CvInvoke.CheckError();
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveInitUndistortRectifyMap(
@@ -1257,6 +1301,7 @@ namespace Emgu.CV
                    iaDistCoeffs,
                    iaR,
                    iaP);
+            CvInvoke.CheckError();
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveUndistortPoints(
@@ -1279,6 +1324,7 @@ namespace Emgu.CV
             Mat m = new Mat();
             using (InputArray iaCameraMatrix = cameraMatrix.GetInputArray())
                 cveGetDefaultNewCameraMatrix(iaCameraMatrix, ref imgsize, centerPrincipalPoint, m.Ptr);
+            CvInvoke.CheckError();
             return m;
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1311,6 +1357,7 @@ namespace Emgu.CV
             {
                 cveGetOptimalNewCameraMatrix(iaCameraMatrix, iaDistCoeffs, ref imageSize, alpha, ref newImgSize, ref validPixROI, centerPrincipalPoint, m);
             }
+            CvInvoke.CheckError();
             return m;
         }
 
@@ -1350,6 +1397,7 @@ namespace Emgu.CV
             {
                 cveDrawFrameAxes(iaImage, iaCameraMatrix, iaDistCoeffs, iaRvec, iaTvec, length, thickness);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
