@@ -69,12 +69,16 @@ int cveTessBaseAPIRecognize(EmguTesseract* ocr)
 
 void cveTessBaseAPISetImage(EmguTesseract* ocr, cv::_InputArray* mat)
 {
-#ifdef HAVE_EMGUCV_TESSERACT
-	cv::Mat m = mat->getMat();
-	ocr->SetImage(static_cast<const unsigned char*>(m.data), m.size().width, m.size().height, m.elemSize(), m.step);
-#else
-	throw_no_tesseract();
-#endif
+	try
+	{
+	#ifdef HAVE_EMGUCV_TESSERACT
+		cv::Mat m = mat->getMat();
+		ocr->SetImage(static_cast<const unsigned char*>(m.data), m.size().width, m.size().height, m.elemSize(), m.step);
+	#else
+		throw_no_tesseract();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveTessBaseAPISetImagePix(EmguTesseract* ocr, Pix* pix)
@@ -176,9 +180,9 @@ void cveTessBaseAPIExtractResult(EmguTesseract* ocr, std::vector<char>* charSeq,
 	tesseract::ResultIterator* results = ocr->GetIterator();
 	if (!results)
 		return;
-	
+
 	results->Begin();
-	
+
 	int x0, y0, x1, y1;
 
 	do {
@@ -380,68 +384,72 @@ int cveTessResultRendererImageNum(tesseract::TessResultRenderer* resultRenderer)
 
 Pix* cveLeptCreatePixFromMat(cv::Mat* m)
 {
-#ifdef HAVE_EMGUCV_TESSERACT
-	const unsigned char* imagedata = m->data;
-	int width = m->size().width;
-	int height = m->size().height;
-	int bytes_per_pixel = m->channels();
-	int bytes_per_line = m->step;
+	try
+	{
+	#ifdef HAVE_EMGUCV_TESSERACT
+		const unsigned char* imagedata = m->data;
+		int width = m->size().width;
+		int height = m->size().height;
+		int bytes_per_pixel = m->channels();
+		int bytes_per_line = m->step;
 
-	//The following code is based on tesseract's ImageThresholder.SetImage function
-	int bpp = bytes_per_pixel * 8;
-	if (bpp == 0) bpp = 1;
-	Pix* pix = pixCreate(width, height, bpp == 24 ? 32 : bpp);
-	l_uint32* data = pixGetData(pix);
-	int wpl = pixGetWpl(pix);
-	switch (bpp) {
-	case 1:
-		for (int y = 0; y < height; ++y, data += wpl, imagedata += bytes_per_line) {
-			for (int x = 0; x < width; ++x) {
-				if (imagedata[x / 8] & (0x80 >> (x % 8)))
-					CLEAR_DATA_BIT(data, x);
-				else
-					SET_DATA_BIT(data, x);
+		//The following code is based on tesseract's ImageThresholder.SetImage function
+		int bpp = bytes_per_pixel * 8;
+		if (bpp == 0) bpp = 1;
+		Pix* pix = pixCreate(width, height, bpp == 24 ? 32 : bpp);
+		l_uint32* data = pixGetData(pix);
+		int wpl = pixGetWpl(pix);
+		switch (bpp) {
+		case 1:
+			for (int y = 0; y < height; ++y, data += wpl, imagedata += bytes_per_line) {
+				for (int x = 0; x < width; ++x) {
+					if (imagedata[x / 8] & (0x80 >> (x % 8)))
+						CLEAR_DATA_BIT(data, x);
+					else
+						SET_DATA_BIT(data, x);
+				}
 			}
-		}
-		break;
+			break;
 
-	case 8:
-		// Greyscale just copies the bytes in the right order.
-		for (int y = 0; y < height; ++y, data += wpl, imagedata += bytes_per_line) {
-			for (int x = 0; x < width; ++x)
-				SET_DATA_BYTE(data, x, imagedata[x]);
-		}
-		break;
-
-	case 24:
-		// Put the colors in the correct places in the line buffer.
-		for (int y = 0; y < height; ++y, imagedata += bytes_per_line) {
-			for (int x = 0; x < width; ++x, ++data) {
-				SET_DATA_BYTE(data, COLOR_RED, imagedata[3 * x]);
-				SET_DATA_BYTE(data, COLOR_GREEN, imagedata[3 * x + 1]);
-				SET_DATA_BYTE(data, COLOR_BLUE, imagedata[3 * x + 2]);
+		case 8:
+			// Greyscale just copies the bytes in the right order.
+			for (int y = 0; y < height; ++y, data += wpl, imagedata += bytes_per_line) {
+				for (int x = 0; x < width; ++x)
+					SET_DATA_BYTE(data, x, imagedata[x]);
 			}
-		}
-		break;
+			break;
 
-	case 32:
-		// Maintain byte order consistency across different endianness.
-		for (int y = 0; y < height; ++y, imagedata += bytes_per_line, data += wpl) {
-			for (int x = 0; x < width; ++x) {
-				data[x] = (imagedata[x * 4] << 24) | (imagedata[x * 4 + 1] << 16) |
-					(imagedata[x * 4 + 2] << 8) | imagedata[x * 4 + 3];
+		case 24:
+			// Put the colors in the correct places in the line buffer.
+			for (int y = 0; y < height; ++y, imagedata += bytes_per_line) {
+				for (int x = 0; x < width; ++x, ++data) {
+					SET_DATA_BYTE(data, COLOR_RED, imagedata[3 * x]);
+					SET_DATA_BYTE(data, COLOR_GREEN, imagedata[3 * x + 1]);
+					SET_DATA_BYTE(data, COLOR_BLUE, imagedata[3 * x + 2]);
+				}
 			}
-		}
-		break;
+			break;
 
-	default:
-		CV_Error(cv::Error::StsError, "Cannot convert RAW image to Pix\n");
+		case 32:
+			// Maintain byte order consistency across different endianness.
+			for (int y = 0; y < height; ++y, imagedata += bytes_per_line, data += wpl) {
+				for (int x = 0; x < width; ++x) {
+					data[x] = (imagedata[x * 4] << 24) | (imagedata[x * 4 + 1] << 16) |
+						(imagedata[x * 4 + 2] << 8) | imagedata[x * 4 + 3];
+				}
+			}
+			break;
+
+		default:
+			CV_Error(cv::Error::StsError, "Cannot convert RAW image to Pix\n");
+		}
+		pixSetYRes(pix, 300);
+		return pix;
+	#else
+		throw_no_tesseract();
+	#endif
 	}
-	pixSetYRes(pix, 300);
-	return pix;
-#else
-	throw_no_tesseract();
-#endif
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveLeptPixDestroy(Pix** pix)

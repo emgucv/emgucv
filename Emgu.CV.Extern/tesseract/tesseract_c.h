@@ -17,6 +17,7 @@ typedef unsigned __int64 UINT64;
 #include "opencv2/core/core.hpp"
 #include "cvapi_compat.h"
 #include "stdio.h"
+#include "emgu_error.h"
 
 #if HAVE_EMGUCV_TESSERACT
 

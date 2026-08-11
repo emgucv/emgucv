@@ -352,6 +352,7 @@ namespace Emgu.CV.OCR
         {
             using (InputArray iaImage = image.GetInputArray())
                 OcrInvoke.cveTessBaseAPISetImage(_ptr, iaImage);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
