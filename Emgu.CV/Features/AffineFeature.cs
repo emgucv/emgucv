@@ -40,6 +40,7 @@ namespace Emgu.CV.Features
                 rotateStepBase,
                 ref _feature2D,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

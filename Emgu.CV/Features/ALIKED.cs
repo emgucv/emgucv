@@ -43,6 +43,7 @@ namespace Emgu.CV.Features
                     target,
                     ref _feature2D,
                     ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -74,6 +75,7 @@ namespace Emgu.CV.Features
                     target,
                     ref _feature2D,
                     ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -100,6 +102,7 @@ namespace Emgu.CV.Features
                     csModelPath, ref inputSize, normalizeDescriptors,
                     engine, backend, target,
                     ref _feature2D, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

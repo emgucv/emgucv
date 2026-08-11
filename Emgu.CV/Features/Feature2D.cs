@@ -48,7 +48,9 @@ namespace Emgu.CV.Features
 
                 if (_feature2D == IntPtr.Zero)
                     return IntPtr.Zero;
-                return FeaturesInvoke.cveFeature2DGetAlgorithm(_feature2D);
+                IntPtr result = FeaturesInvoke.cveFeature2DGetAlgorithm(_feature2D);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -66,6 +68,7 @@ namespace Emgu.CV.Features
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             using (OutputArray oaDescriptors = descriptors.GetOutputArray())
                 FeaturesInvoke.cveFeature2DDetectAndCompute(_ptr, iaImage, iaMask, keyPoints, oaDescriptors, useProvidedKeyPoints);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -89,6 +92,7 @@ namespace Emgu.CV.Features
             using (InputArray iaImage = image.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 FeaturesInvoke.cveFeature2DDetect(_feature2D, iaImage, keypoints.Ptr, iaMask);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -117,6 +121,7 @@ namespace Emgu.CV.Features
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaDescriptors = descriptors.GetOutputArray())
                 FeaturesInvoke.cveFeature2DCompute(_feature2D, iaImage, keyPoints.Ptr, oaDescriptors);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -129,7 +134,9 @@ namespace Emgu.CV.Features
             {
                 if (_feature2D == IntPtr.Zero)
                     return 0;
-                return FeaturesInvoke.cveFeature2DGetDescriptorSize(_feature2D);
+                int result = FeaturesInvoke.cveFeature2DGetDescriptorSize(_feature2D);
+                CvInvoke.CheckError();
+                return result;
             }
         }
     }

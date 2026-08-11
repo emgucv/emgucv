@@ -39,6 +39,7 @@ namespace Emgu.CV.Features
                     target,
                     ref _descriptorMatcherPtr,
                     ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -64,6 +65,7 @@ namespace Emgu.CV.Features
                     target,
                     ref _descriptorMatcherPtr,
                     ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -81,6 +83,7 @@ namespace Emgu.CV.Features
             using (InputArray iaQueryKpts = queryKpts.GetInputArray())
             using (InputArray iaTrainKpts = trainKpts.GetInputArray())
                 FeaturesInvoke.cveLightGlueMatcherSetPairInfo(_ptr, iaQueryKpts, iaTrainKpts, ref queryImageSize, ref trainImageSize);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -89,6 +92,7 @@ namespace Emgu.CV.Features
         public void ClearPairInfo()
         {
             FeaturesInvoke.cveLightGlueMatcherClearPairInfo(_ptr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -112,6 +116,7 @@ namespace Emgu.CV.Features
                 _ptr = FeaturesInvoke.cveLightGlueMatcherCreate(
                     csModelPath, scoreThreshold, backend, target,
                     ref _descriptorMatcherPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

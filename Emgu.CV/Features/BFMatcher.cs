@@ -77,6 +77,7 @@ namespace Emgu.CV.Features
         public BFMatcher(DistanceType distanceType, bool crossCheck = false)
         {
             _ptr = FeaturesInvoke.cveBFMatcherCreate(distanceType, crossCheck, ref _descriptorMatcherPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

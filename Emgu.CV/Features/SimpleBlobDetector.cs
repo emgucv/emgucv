@@ -29,6 +29,7 @@ namespace Emgu.CV.Features
             {
                 _ptr = FeaturesInvoke.cveSimpleBlobDetectorCreateWithParams(ref _feature2D, parameters, ref _sharedPtr);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -39,7 +40,9 @@ namespace Emgu.CV.Features
         /// </returns>
         public VectorOfVectorOfPoint GetBlobContours()
         {
-            return new VectorOfVectorOfPoint(FeaturesInvoke.cveSimpleBlobDetectorGetBlobContours(_ptr), false);
+            IntPtr contoursPtr = FeaturesInvoke.cveSimpleBlobDetectorGetBlobContours(_ptr);
+            CvInvoke.CheckError();
+            return new VectorOfVectorOfPoint(contoursPtr, false);
         }
 
         /// <summary>
@@ -65,6 +68,7 @@ namespace Emgu.CV.Features
         public SimpleBlobDetectorParams()
         {
             _ptr = FeaturesInvoke.cveSimpleBlobDetectorParamsCreate();
+            CvInvoke.CheckError();
         }
 
         /// <summary>

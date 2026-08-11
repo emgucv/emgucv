@@ -49,6 +49,7 @@ namespace Emgu.CV.Features
         public FastFeatureDetector(int threshold = 10, bool nonmaxSupression = true, DetectorType type = DetectorType.Type9_16)
         {
             _ptr = FeaturesInvoke.cveFASTFeatureDetectorCreate(threshold, nonmaxSupression, type, ref _feature2D, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

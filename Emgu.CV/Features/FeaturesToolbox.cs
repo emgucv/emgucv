@@ -39,6 +39,7 @@ namespace Emgu.CV.Features
             using (InputArray iaImage = image.GetInputArray())
             using (InputOutputArray ioaOutImage = outImage.GetInputOutputArray())
                 FeaturesInvoke.cveDrawKeypoints(iaImage, keypoints, ioaOutImage, ref c, type);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -80,6 +81,7 @@ namespace Emgu.CV.Features
                     ref singlePointColor,
                     mask,
                     flags);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -112,6 +114,7 @@ namespace Emgu.CV.Features
             using (InputOutputArray ioaResult = result.GetInputOutputArray())
                 FeaturesInvoke.cveDrawMatchedFeatures1(iaObservedImage, observedKeyPoints, iaModelImage,
                modelKeypoints, matches, ioaResult, ref matchColor, ref singlePointColor, mask, flags);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -145,6 +148,7 @@ namespace Emgu.CV.Features
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 FeaturesInvoke.cveDrawMatchedFeatures3(iaObservedImage, observedKeyPoints, iaModelImage,
                modelKeypoints, matches, ioaResult, ref matchColor, ref singlePointColor, iaMask, flags);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -194,8 +198,10 @@ namespace Emgu.CV.Features
             double scaleIncrement,
             int rotationBins)
         {
-            return FeaturesInvoke.cveVoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, matches, mask, scaleIncrement,
+            int result = FeaturesInvoke.cveVoteForSizeAndOrientation(modelKeyPoints, observedKeyPoints, matches, mask, scaleIncrement,
                rotationBins);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
