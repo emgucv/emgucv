@@ -75,11 +75,15 @@ void cveHOGDescriptorDetectMultiScale(
 	double finalThreshold,
 	bool useMeanshiftGrouping)
 {
-#ifdef HAVE_OPENCV_XOBJDETECT
-	descriptor->detectMultiScale(*img, *foundLocations, *weights, hitThreshold, *winStride, *padding, scale, finalThreshold, useMeanshiftGrouping);
-#else 
-	throw_no_xobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XOBJDETECT
+		descriptor->detectMultiScale(*img, *foundLocations, *weights, hitThreshold, *winStride, *padding, scale, finalThreshold, useMeanshiftGrouping);
+	#else
+		throw_no_xobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveHOGDescriptorCompute(
@@ -90,18 +94,22 @@ void cveHOGDescriptorCompute(
 	cv::Size* padding,
 	std::vector< cv::Point >* locations)
 {
-#ifdef HAVE_OPENCV_XOBJDETECT
-	std::vector<cv::Point> emptyVec;
+	try
+	{
+	#ifdef HAVE_OPENCV_XOBJDETECT
+		std::vector<cv::Point> emptyVec;
 
-	descriptor->compute(
-		*img,
-		*descriptors,
-		*winStride,
-		*padding,
-		locations ? *locations : emptyVec);
-#else 
-	throw_no_xobjdetect();
-#endif
+		descriptor->compute(
+			*img,
+			*descriptors,
+			*winStride,
+			*padding,
+			locations ? *locations : emptyVec);
+	#else
+		throw_no_xobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 

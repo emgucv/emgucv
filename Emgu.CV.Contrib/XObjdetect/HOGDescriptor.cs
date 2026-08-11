@@ -114,6 +114,7 @@ namespace Emgu.CV
             {
                 XObjdetectInvoke.cveHOGDescriptorDetectMultiScale(_ptr, iaImage, vr, vd, hitThreshold, ref winStride, ref padding, scale,
                    finalThreshold, useMeanshiftGrouping);
+                CvInvoke.CheckError();
 #if UNSAFE_ALLOWED
                 var location = vr.GetSpan();
                 var weight = vd.GetSpan();
@@ -158,6 +159,7 @@ namespace Emgu.CV
                         XObjdetectInvoke.cveHOGDescriptorCompute(_ptr, iaImage, desc, ref winStride, ref padding, vp);
                     }
                 }
+                CvInvoke.CheckError();
                 return desc.ToArray();
             }
         }

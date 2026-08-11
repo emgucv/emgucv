@@ -48,11 +48,15 @@ void cveCascadeClassifierDetectMultiScale(
 	cv::Size* minSize,
 	cv::Size* maxSize)
 {
-#ifdef HAVE_OPENCV_XOBJDETECT
-	classifier->detectMultiScale(*image, *objects, scaleFactor, minNeighbors, flags, *minSize, *maxSize);
-#else 
-	throw_no_xobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XOBJDETECT
+		classifier->detectMultiScale(*image, *objects, scaleFactor, minNeighbors, flags, *minSize, *maxSize);
+	#else
+		throw_no_xobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 bool cveCascadeClassifierIsOldFormatCascade(cv::CascadeClassifier* classifier)
 {

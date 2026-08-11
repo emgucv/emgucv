@@ -42,11 +42,15 @@ void cveWBDetectorTrain(cv::xobjdetect::WBDetector* detector, cv::String* posSam
 }
 void cveWBDetectorDetect(cv::xobjdetect::WBDetector* detector, cv::Mat* img, std::vector<cv::Rect>* bboxes, std::vector<double>* confidences)
 {
-#ifdef HAVE_OPENCV_XOBJDETECT
-	detector->detect(*img, *bboxes, *confidences);
-#else
-	throw_no_xobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XOBJDETECT
+		detector->detect(*img, *bboxes, *confidences);
+	#else
+		throw_no_xobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveWBDetectorRelease(cv::xobjdetect::WBDetector** detector, cv::Ptr<cv::xobjdetect::WBDetector>** sharedPtr)
 {

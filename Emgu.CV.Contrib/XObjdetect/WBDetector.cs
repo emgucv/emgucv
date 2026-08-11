@@ -66,6 +66,7 @@ namespace Emgu.CV.XObjdetect
         public void Detect(Mat image, VectorOfRect bboxes, VectorOfDouble confidences)
         {
             XObjdetectInvoke.cveWBDetectorDetect(_ptr, image, bboxes, confidences);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

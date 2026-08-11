@@ -72,6 +72,7 @@ namespace Emgu.CV
             {
                 XObjdetectInvoke.cveCascadeClassifierDetectMultiScale(_ptr, iaImage, rectangles, scaleFactor, minNeighbors, 0, ref minSize,
                    ref maxSize);
+                CvInvoke.CheckError();
                 return rectangles.ToArray();
             }
         }
