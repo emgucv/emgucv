@@ -50,6 +50,7 @@ namespace Emgu.CV.Reg
             {
                 cveMapWarp(map.MapPtr, iaImg1, oaImg2);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -71,6 +72,7 @@ namespace Emgu.CV.Reg
             {
                 cveMapInverseWarp(map.MapPtr, iaImg1, oaImg2);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

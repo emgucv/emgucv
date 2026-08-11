@@ -50,12 +50,13 @@ namespace Emgu.CV.Reg
             using (InputArray iaImg2 = img2.GetInputArray())
             {
                 ptr = cveMapperCalculate(
-                    mapper.MapperPtr, 
+                    mapper.MapperPtr,
                     iaImg1,
                     iaImg2,
                     init,
                     ref sharedPtr);
             }
+            CvInvoke.CheckError();
 
             return new Map(ptr, sharedPtr);
         }
