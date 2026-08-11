@@ -110,11 +110,15 @@ namespace Emgu.CV
         private static int _pendingLine;
 
         /// <summary>
-        /// True once RedirectError has successfully registered CvErrorHandler as the native
-        /// error callback. CvInvoke's static constructor does not call RedirectError on every
-        /// platform (iOS, MacCatalyst, Blazor/WASM, and Unity WebGL never call it at all), so
-        /// CheckError() uses this to know whether it can rely on the fast [ThreadStatic] path
-        /// or needs to fall back to querying native thread-local storage directly.
+        /// True whenever a non-null native error callback is currently registered -- kept in
+        /// sync by both overloads of RedirectError, whether called from CvInvoke's static
+        /// constructor or directly by user code (e.g. to temporarily swap in
+        /// CvErrorHandlerIgnoreError, or to remove the handler entirely). CvInvoke's static
+        /// constructor does not call RedirectError on every platform to begin with (iOS,
+        /// MacCatalyst, Blazor/WASM, and Unity WebGL never call it at all), so CheckError() uses
+        /// this to know whether it can rely on the fast [ThreadStatic] path -- which only a
+        /// registered callback ever populates -- or needs to fall back to querying native
+        /// thread-local storage directly.
         /// </summary>
         internal static bool CustomErrorHandlerRegistered = false;
 
@@ -219,12 +223,29 @@ namespace Emgu.CV
         /// <summary>
         /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
         /// </summary>
-        /// <param name="errorHandler">The new error handler</param>
+        /// <param name="errorHandler">The new error handler. Pass null to remove the currently registered handler.</param>
         /// <param name="userdata">Arbitrary pointer that is transparently passed to the error handler.</param>
         /// <param name="prevUserdata">Pointer to the previously assigned user data pointer.</param>
         /// <returns>Pointer to the old error handler</returns>
+        /// <remarks>
+        /// Updates CustomErrorHandlerRegistered to match whether errorHandler is null, so
+        /// CheckError() keeps falling back correctly to the native pending-error query (see
+        /// emgu_error.h) if a handler that never populates the [ThreadStatic] fields -- like
+        /// CvErrorHandlerIgnoreError, or none at all -- is redirected to here directly, rather
+        /// than through CvInvoke's static constructor.
+        /// </remarks>
+        public static IntPtr RedirectError(
+            CvErrorCallback errorHandler,
+            IntPtr userdata,
+            IntPtr prevUserdata)
+        {
+            IntPtr result = cveRedirectError(errorHandler, userdata, prevUserdata);
+            CustomErrorHandlerRegistered = errorHandler != null;
+            return result;
+        }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveRedirectError")]
-        public static extern IntPtr RedirectError(
+        private static extern IntPtr cveRedirectError(
             CvErrorCallback errorHandler,
             IntPtr userdata,
             IntPtr prevUserdata);
@@ -232,12 +253,28 @@ namespace Emgu.CV
         /// <summary>
         /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
         /// </summary>
-        /// <param name="errorHandler">Pointer to the new error handler</param>
+        /// <param name="errorHandler">Pointer to the new error handler. Pass IntPtr.Zero to remove the currently registered handler.</param>
         /// <param name="userdata">Arbitrary pointer that is transparently passed to the error handler.</param>
         /// <param name="prevUserdata">Pointer to the previously assigned user data pointer.</param>
         /// <returns>Pointer to the old error handler</returns>
+        /// <remarks>
+        /// Updates CustomErrorHandlerRegistered to match whether errorHandler is IntPtr.Zero, so
+        /// CheckError() keeps falling back correctly to the native pending-error query (see
+        /// emgu_error.h) if the callback is redirected through this raw-pointer overload directly,
+        /// rather than through CvInvoke's static constructor.
+        /// </remarks>
+        public static IntPtr RedirectError(
+            IntPtr errorHandler,
+            IntPtr userdata,
+            IntPtr prevUserdata)
+        {
+            IntPtr result = cveRedirectError(errorHandler, userdata, prevUserdata);
+            CustomErrorHandlerRegistered = errorHandler != IntPtr.Zero;
+            return result;
+        }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveRedirectError")]
-        public static extern IntPtr RedirectError(
+        private static extern IntPtr cveRedirectError(
             IntPtr errorHandler,
             IntPtr userdata,
             IntPtr prevUserdata);
@@ -2694,6 +2731,7 @@ namespace Emgu.CV
         public static void Swap(Mat m1, Mat m2)
         {
             cveSwapMat(m1, m2);
+            CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveSwapMat(IntPtr mat1, IntPtr mat2);

@@ -331,6 +331,7 @@ namespace Emgu.CV
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             MatInvoke.cveMatCopyDataTo(this, handle.AddrOfPinnedObject());
             handle.Free();
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -345,6 +346,7 @@ namespace Emgu.CV
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             MatInvoke.cveMatCopyDataFrom(this, handle.AddrOfPinnedObject());
             handle.Free();
+            CvInvoke.CheckError();
         }
 
         internal bool _needDispose;
@@ -374,6 +376,7 @@ namespace Emgu.CV
         public Mat()
            : this(MatInvoke.cveMatCreate(), true, true)
         {
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -412,6 +415,7 @@ namespace Emgu.CV
         public Mat(int rows, int cols, CvEnum.DepthType type, int channels, IntPtr data, int step)
            : this(MatInvoke.cveMatCreateWithData(rows, cols, CvInvoke.MakeType(type, channels), data, new IntPtr(step)), true, false)
         {
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -424,6 +428,7 @@ namespace Emgu.CV
         public Mat(int[] sizes, CvEnum.DepthType type, IntPtr data, IntPtr[] steps = null)
            : this(MatInvoke.cveMatCreateMultiDimWithData(sizes, type, data, steps), true, false)
         {
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -447,6 +452,7 @@ namespace Emgu.CV
         public Mat(String fileName, CvEnum.ImreadModes loadType = ImreadModes.ColorBgr)
            : this(MatInvoke.cveMatCreate(), true, false)
         {
+            CvInvoke.CheckError();
 
             FileInfo fi = new FileInfo(fileName);
             if (!fi.Exists)
@@ -500,6 +506,7 @@ namespace Emgu.CV
         public Mat(Mat mat, Rectangle roi)
            : this(MatInvoke.cveMatCreateFromRect(mat.Ptr, ref roi), true, true)
         {
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -511,6 +518,7 @@ namespace Emgu.CV
         public Mat(Mat mat, Emgu.CV.Structure.Range rowRange, Emgu.CV.Structure.Range colRange)
            : this(MatInvoke.cveMatCreateFromRange(mat.Ptr, ref rowRange, ref colRange), true, true)
         {
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -521,7 +529,9 @@ namespace Emgu.CV
         /// <returns>The UMat</returns>
         public UMat GetUMat(CvEnum.AccessType access, UMat.Usage usageFlags = UMat.Usage.Default)
         {
-            return new UMat(MatInvoke.cveMatGetUMat(Ptr, access, usageFlags), true);
+            IntPtr ptr = MatInvoke.cveMatGetUMat(Ptr, access, usageFlags);
+            CvInvoke.CheckError();
+            return new UMat(ptr, true);
         }
 
         /// <summary>
@@ -534,6 +544,7 @@ namespace Emgu.CV
         public void Create(int rows, int cols, CvEnum.DepthType type, int channels)
         {
             MatInvoke.cveMatCreateData(_ptr, rows, cols, CvInvoke.MakeType(type, channels));
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -545,6 +556,7 @@ namespace Emgu.CV
             {
                 Size s = new Size();
                 MatInvoke.cveMatGetSize(_ptr, ref s);
+                CvInvoke.CheckError();
                 return s;
             }
         }
@@ -578,7 +590,9 @@ namespace Emgu.CV
         {
             get
             {
-                return MatInvoke.cveMatGetDataPointer(_ptr);
+                IntPtr result = MatInvoke.cveMatGetDataPointer(_ptr);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -596,6 +610,7 @@ namespace Emgu.CV
             GCHandle handle = GCHandle.Alloc(indices, GCHandleType.Pinned);
             IntPtr result = MatInvoke.cveMatGetDataPointer2(Ptr, handle.AddrOfPinnedObject());
             handle.Free();
+            CvInvoke.CheckError();
             return result;
         }
 
@@ -714,7 +729,9 @@ namespace Emgu.CV
         {
             get
             {
-                return (int)MatInvoke.cveMatGetStep(_ptr);
+                int result = (int)MatInvoke.cveMatGetStep(_ptr);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -726,7 +743,9 @@ namespace Emgu.CV
         {
             get
             {
-                return MatInvoke.cveMatGetElementSize(_ptr);
+                int result = MatInvoke.cveMatGetElementSize(_ptr);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -740,6 +759,7 @@ namespace Emgu.CV
             using (OutputArray oaM = m.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 MatInvoke.cveMatCopyTo(Ptr, oaM, iaMask);
+            CvInvoke.CheckError();
         }
 
         internal class MatWithHandle : Mat
@@ -878,6 +898,7 @@ namespace Emgu.CV
         {
             using (OutputArray oaM = m.GetOutputArray())
                 MatInvoke.cveMatConvertTo(Ptr, oaM, rtype, alpha, beta);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -888,7 +909,9 @@ namespace Emgu.CV
         /// <returns>A new mat header that has different shape</returns>
         public Mat Reshape(int cn, int rows = 0)
         {
-            return new Mat(MatInvoke.cveMatReshape(Ptr, cn, rows), true, false);
+            IntPtr ptr = MatInvoke.cveMatReshape(Ptr, cn, rows);
+            CvInvoke.CheckError();
+            return new Mat(ptr, true, false);
         }
 
         /// <summary>
@@ -900,17 +923,17 @@ namespace Emgu.CV
         public Mat Reshape(int cn, int[] newDims)
         {
             GCHandle handle = GCHandle.Alloc(newDims, GCHandleType.Pinned);
+            IntPtr ptr;
             try
             {
-                return new Mat(
-                    MatInvoke.cveMatReshape2(Ptr, cn, newDims.Length, handle.AddrOfPinnedObject()), 
-                    true, 
-                    false);
+                ptr = MatInvoke.cveMatReshape2(Ptr, cn, newDims.Length, handle.AddrOfPinnedObject());
             }
-            finally 
+            finally
             {
                 handle.Free();
             }
+            CvInvoke.CheckError();
+            return new Mat(ptr, true, false);
         }
 
         /// <summary>
@@ -1107,6 +1130,7 @@ namespace Emgu.CV
             //}
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 MatInvoke.cveMatSetToScalar(Ptr, ref value, iaMask);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -1119,6 +1143,7 @@ namespace Emgu.CV
             using (InputArray iaValue = value.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 MatInvoke.cveMatSetTo(Ptr, iaValue, iaMask);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -1133,6 +1158,7 @@ namespace Emgu.CV
         {
             Mat m = new Mat();
             MatInvoke.cveMatEye(rows, cols, CvInvoke.MakeType(type, channels), m.Ptr);
+            CvInvoke.CheckError();
             return m;
         }
 
@@ -1145,6 +1171,7 @@ namespace Emgu.CV
         {
             Mat m = new Mat();
             MatInvoke.cveMatDiag(Ptr, d, m);
+            CvInvoke.CheckError();
             return m;
         }
 
@@ -1156,6 +1183,7 @@ namespace Emgu.CV
         {
             Mat m = new Mat();
             MatInvoke.cveMatT(Ptr, m);
+            CvInvoke.CheckError();
             return m;
         }
 
@@ -1171,6 +1199,7 @@ namespace Emgu.CV
         {
             Mat m = new Mat();
             MatInvoke.cveMatZeros(rows, cols, CvInvoke.MakeType(type, channels), m.Ptr);
+            CvInvoke.CheckError();
             return m;
         }
 
@@ -1186,6 +1215,7 @@ namespace Emgu.CV
         {
             Mat m = new Mat();
             MatInvoke.cveMatOnes(rows, cols, CvInvoke.MakeType(type, channels), m.Ptr);
+            CvInvoke.CheckError();
             return m;
         }
 
@@ -1314,8 +1344,11 @@ namespace Emgu.CV
         /// <returns>The dot-product of two vectors.</returns>
         public double Dot(IInputArray m)
         {
+            double result;
             using (InputArray iaM = m.GetInputArray())
-                return MatInvoke.cveMatDot(Ptr, iaM);
+                result = MatInvoke.cveMatDot(Ptr, iaM);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -1328,6 +1361,7 @@ namespace Emgu.CV
             Mat result = new Mat();
             using (InputArray iaM = m.GetInputArray())
                 MatInvoke.cveMatCross(Ptr, iaM, result);
+            CvInvoke.CheckError();
             return result;
         }
 
@@ -1343,6 +1377,7 @@ namespace Emgu.CV
                 try
                 {
                     MatInvoke.cveMatGetSizeOfDimension(_ptr, handle.AddrOfPinnedObject());
+                    CvInvoke.CheckError();
                 }
                 finally
                 {

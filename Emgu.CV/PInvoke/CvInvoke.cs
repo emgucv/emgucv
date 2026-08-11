@@ -515,9 +515,9 @@ namespace Emgu.CV
                 {
                     try
                     {
-                        //Use the custom error handler
+                        //Use the custom error handler. RedirectError itself updates
+                        //CustomErrorHandlerRegistered based on whether the handler is null.
                         RedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
-                        CustomErrorHandlerRegistered = true;
                     }
                     catch (Exception e)
                     {
