@@ -79,6 +79,7 @@ namespace Emgu.CV.BgSegm
         {
             _ptr = BgSegmInvoke.cveBackgroundSubtractorLSBPCreate(
                 mc, nSamples, LSBPRadius, tlower, tupper, tinc, tdec, rscale, rincdec, noiseRemovalThresholdFacBG, noiseRemovalThresholdFacFG, LSBPthreshold, minCount, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -50,8 +50,9 @@ namespace Emgu.CV.BgSegm
                 maxPixelStability,
                 isParallel,
                 ref _backgroundSubtractorPtr,
-                ref _algorithmPtr, 
+                ref _algorithmPtr,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -41,6 +41,7 @@ namespace Emgu.CV.BgSegm
         public BackgroundSubtractorGMG(int initializationFrames, double decisionThreshold)
         {
             _ptr = BgSegmInvoke.cveBackgroundSubtractorGMGCreate(initializationFrames, decisionThreshold, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
