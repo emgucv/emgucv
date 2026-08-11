@@ -348,81 +348,105 @@ static cv::face::FacemarkTrain* toFacemarkTrain(cv::face::Facemark* facemark)
 
 bool cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetector detector)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FACE
-	// Heap-allocated so it remains valid for the lifetime of the Facemark object;
-	// setFaceDetector stores this pointer and invokes it later from getFaces()/fit(),
-	// so it must outlive this call, not be a stack-local.
-	face_detector_pointer* detector_pointer = new face_detector_pointer();
-	detector_pointer->face_detector_func = detector;
-	cv::face::FN_FaceDetector fn = (cv::face::FN_FaceDetector) myDetector;
-	if (cv::face::FacemarkTrain* t = dynamic_cast<cv::face::FacemarkTrain*>(facemark))
-		return t->setFaceDetector(fn, detector_pointer);
-	if (cv::face::FacemarkKazemi* k = dynamic_cast<cv::face::FacemarkKazemi*>(facemark))
-		return k->setFaceDetector(fn, detector_pointer);
-	CV_Error(cv::Error::StsBadFunc, "This Facemark implementation does not support setFaceDetector.");
+		// Heap-allocated so it remains valid for the lifetime of the Facemark object;
+		// setFaceDetector stores this pointer and invokes it later from getFaces()/fit(),
+		// so it must outlive this call, not be a stack-local.
+		face_detector_pointer* detector_pointer = new face_detector_pointer();
+		detector_pointer->face_detector_func = detector;
+		cv::face::FN_FaceDetector fn = (cv::face::FN_FaceDetector) myDetector;
+		if (cv::face::FacemarkTrain* t = dynamic_cast<cv::face::FacemarkTrain*>(facemark))
+			return t->setFaceDetector(fn, detector_pointer);
+		if (cv::face::FacemarkKazemi* k = dynamic_cast<cv::face::FacemarkKazemi*>(facemark))
+			return k->setFaceDetector(fn, detector_pointer);
+		CV_Error(cv::Error::StsBadFunc, "This Facemark implementation does not support setFaceDetector.");
 #else
-	throw_no_face();
+		throw_no_face();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 void cveFacemarkLoadModel(cv::face::Facemark* facemark, cv::String* model)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FACE
-	facemark->loadModel(*model);
+		facemark->loadModel(*model);
 #else
-	throw_no_face();
+		throw_no_face();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 bool cveFacemarkGetFaces(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_OutputArray* faces)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FACE
-	if (cv::face::FacemarkTrain* t = dynamic_cast<cv::face::FacemarkTrain*>(facemark))
-		return t->getFaces(*image, *faces);
-	if (cv::face::FacemarkKazemi* k = dynamic_cast<cv::face::FacemarkKazemi*>(facemark))
-		return k->getFaces(*image, *faces);
-	CV_Error(cv::Error::StsBadFunc, "This Facemark implementation does not support getFaces.");
+		if (cv::face::FacemarkTrain* t = dynamic_cast<cv::face::FacemarkTrain*>(facemark))
+			return t->getFaces(*image, *faces);
+		if (cv::face::FacemarkKazemi* k = dynamic_cast<cv::face::FacemarkKazemi*>(facemark))
+			return k->getFaces(*image, *faces);
+		CV_Error(cv::Error::StsBadFunc, "This Facemark implementation does not support getFaces.");
 #else
-	throw_no_face();
+		throw_no_face();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 bool cveFacemarkFit(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* faces, cv::_OutputArray* landmarks)
 {
-#ifdef HAVE_OPENCV_FACE
-	// Run fit() into a temporary std::vector<cv::Mat> so that _copyVector2Output
-	// takes its isMatVector() branch (which uses getMatRef — a true reference —
-	// ensuring the write sticks rather than going to a reallocated header copy).
-	std::vector<cv::Mat> tmpLandmarks;
-	bool result = facemark->fit(*image, *faces, tmpLandmarks);
-	if (result)
+	try
 	{
-		auto* pOut = reinterpret_cast<std::vector<std::vector<cv::Point2f>>*>(landmarks->getObj());
-		pOut->resize(tmpLandmarks.size());
-		for (size_t i = 0; i < tmpLandmarks.size(); i++)
-			tmpLandmarks[i].copyTo((*pOut)[i]);
-	}
-	return result;
+#ifdef HAVE_OPENCV_FACE
+		// Run fit() into a temporary std::vector<cv::Mat> so that _copyVector2Output
+		// takes its isMatVector() branch (which uses getMatRef — a true reference —
+		// ensuring the write sticks rather than going to a reallocated header copy).
+		std::vector<cv::Mat> tmpLandmarks;
+		bool result = facemark->fit(*image, *faces, tmpLandmarks);
+		if (result)
+		{
+			auto* pOut = reinterpret_cast<std::vector<std::vector<cv::Point2f>>*>(landmarks->getObj());
+			pOut->resize(tmpLandmarks.size());
+			for (size_t i = 0; i < tmpLandmarks.size(); i++)
+				tmpLandmarks[i].copyTo((*pOut)[i]);
+		}
+		return result;
 #else
-	throw_no_face();
+		throw_no_face();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 bool cveFacemarkAddTrainingSample(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* landmarks)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FACE
-	return toFacemarkTrain(facemark)->addTrainingSample(*image, *landmarks);
+		return toFacemarkTrain(facemark)->addTrainingSample(*image, *landmarks);
 #else
-	throw_no_face();
+		throw_no_face();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 void cveFacemarkTraining(cv::face::Facemark* facemark)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FACE
-	toFacemarkTrain(facemark)->training();
+		toFacemarkTrain(facemark)->training();
 #else
-	throw_no_face();
+		throw_no_face();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveDrawFacemarks(cv::_InputOutputArray* image, cv::_InputArray* points, cv::Scalar* color)
