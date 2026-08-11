@@ -31,6 +31,7 @@ namespace Emgu.CV.IntensityTransform
         public static void LogTransform(Mat input, Mat output)
         {
             cveLogTransform(input, output);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveLogTransform(IntPtr input, IntPtr output);
@@ -44,6 +45,7 @@ namespace Emgu.CV.IntensityTransform
         public static void GammaCorrection(Mat input, Mat output, float gamma)
         {
             cveGammaCorrection(input, output, gamma);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveGammaCorrection(IntPtr input, IntPtr output, float gamma);
@@ -56,6 +58,7 @@ namespace Emgu.CV.IntensityTransform
         public static void Autoscaling(Mat input, Mat output)
         {
             cveAutoscaling(input, output);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveAutoscaling(IntPtr input, IntPtr output);
@@ -72,6 +75,7 @@ namespace Emgu.CV.IntensityTransform
         public static void ContrastStretching(Mat input, Mat output, int r1, int s1, int r2, int s2)
         {
             cveContrastStretching(input, output, r1, s1, r2, s2);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveContrastStretching(IntPtr input, IntPtr output, int r1, int s1, int r2, int s2);
@@ -89,6 +93,7 @@ namespace Emgu.CV.IntensityTransform
             using (InputArray iaInput = input.GetInputArray())
             using (OutputArray oaOutput = output.GetOutputArray())
                 cveBIMEF(iaInput, oaOutput, mu, a, b);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveBIMEF(IntPtr input, IntPtr output, float mu, float a, float b);
@@ -107,6 +112,7 @@ namespace Emgu.CV.IntensityTransform
             using (InputArray iaInput = input.GetInputArray())
             using (OutputArray oaOutput = output.GetOutputArray())
                 cveBIMEF2(iaInput, oaOutput, k, mu, a, b);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveBIMEF2(IntPtr input, IntPtr output, float k, float mu, float a, float b);
