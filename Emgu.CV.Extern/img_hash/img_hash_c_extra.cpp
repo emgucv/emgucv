@@ -8,19 +8,27 @@
 
 void cveImgHashBaseCompute(cv::img_hash::ImgHashBase* imgHash, cv::_InputArray* inputArr, cv::_OutputArray* outputArr)
 {
-#ifdef HAVE_OPENCV_IMG_HASH
-	imgHash->compute(*inputArr, *outputArr);
-#else
-	throw_no_img_hash();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_IMG_HASH
+		imgHash->compute(*inputArr, *outputArr);
+	#else
+		throw_no_img_hash();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 double cveImgHashBaseCompare(cv::img_hash::ImgHashBase* imgHash, cv::_InputArray* hashOne, cv::_InputArray* hashTwo)
 {
-#ifdef HAVE_OPENCV_IMG_HASH
-	return imgHash->compare(*hashOne, *hashTwo);
-#else
-	throw_no_img_hash();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_IMG_HASH
+		return imgHash->compare(*hashOne, *hashTwo);
+	#else
+		throw_no_img_hash();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 //AverageHash
