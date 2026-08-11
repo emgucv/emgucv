@@ -29,6 +29,7 @@ namespace Emgu.CV
             : base(IntPtr.Zero, IntPtr.Zero)
         {
             _ptr = CvInvoke.cveTonemapMantiukCreate(gamma, scale, saturation, ref _tonemapPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

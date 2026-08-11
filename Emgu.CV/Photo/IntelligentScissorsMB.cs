@@ -24,6 +24,7 @@ namespace Emgu.CV
 		public IntelligentScissorsMB()
         {
 			_ptr = CvInvoke.cveIntelligentScissorsMBCreate();
+			CvInvoke.CheckError();
 		}
 
 	    /// <summary>
@@ -43,6 +44,7 @@ namespace Emgu.CV
 				weightNonEdge,
 				weightGradientDirection,
 				weightGradientMagnitude);
+			CvInvoke.CheckError();
 		}
 
 		/// <summary>
@@ -65,6 +67,7 @@ namespace Emgu.CV
 				threshold2,
 				apertureSize,
 				L2gradient);
+			CvInvoke.CheckError();
 		}
 
 		/// <summary>
@@ -77,6 +80,7 @@ namespace Emgu.CV
             {
 				CvInvoke.cveIntelligentScissorsMBApplyImage(_ptr, iaImage);
 			}
+			CvInvoke.CheckError();
         }
 
 		/// <summary>
@@ -86,6 +90,7 @@ namespace Emgu.CV
 		public void BuildMap(Point sourcePt)
 		{
 			CvInvoke.cveIntelligentScissorsMBBuildMap(_ptr, ref sourcePt);
+			CvInvoke.CheckError();
 		}
 
 		/// <summary>
@@ -110,9 +115,10 @@ namespace Emgu.CV
 					_ptr,
 					iaNonEdge,
 					iaGradientDirection,
-					iaGradientMagnitude, 
+					iaGradientMagnitude,
 					iaImage);
 			}
+			CvInvoke.CheckError();
         }
 
 		/// <summary>
@@ -135,6 +141,7 @@ namespace Emgu.CV
 					oaContour,
 					backward);
 			}
+			CvInvoke.CheckError();
 		}
 
 		/// <summary>

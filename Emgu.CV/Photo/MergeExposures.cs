@@ -38,6 +38,7 @@ namespace Emgu.CV
             {
                 CvInvoke.cveMergeExposuresProcess(_mergeExposuresPtr, iaSrc, oaDst, iaTimes, iaResponse);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -62,6 +63,7 @@ namespace Emgu.CV
         public MergeDebevec()
         {
             _ptr = CvInvoke.cveMergeDebevecCreate(ref _mergeExposuresPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -97,6 +99,7 @@ namespace Emgu.CV
         public MergeMertens(float contrastWeight = 1.0f, float saturationWeight = 1.0f, float exposureWeight = 0.0f)
         {
             _ptr = CvInvoke.cveMergeMertensCreate(contrastWeight, saturationWeight, exposureWeight, ref _mergeExposuresPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -113,6 +116,7 @@ namespace Emgu.CV
             {
                 CvInvoke.cveMergeExposuresProcess(_mergeExposuresPtr, iaSrc, oaDst, iaTimes, iaResponse);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -142,6 +146,7 @@ namespace Emgu.CV
         public MergeRobertson()
         {
             _ptr = CvInvoke.cveMergeRobertsonCreate(ref _mergeExposuresPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

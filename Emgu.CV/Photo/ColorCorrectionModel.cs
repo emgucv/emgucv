@@ -308,6 +308,7 @@ namespace Emgu.CV.Ccm
         public ColorCorrectionModel(Mat src, ColorChecker color)
         {
             _ptr = CcmInvoke.cveColorCorrectionModelCreate1(src, color);
+            CvInvoke.CheckError();
             _needDispose = true;
         }
 
@@ -320,6 +321,7 @@ namespace Emgu.CV.Ccm
         public ColorCorrectionModel(Mat src, Mat colors, ColorSpace refCs)
         {
             _ptr = CcmInvoke.cveColorCorrectionModelCreate2(src, colors, refCs);
+            CvInvoke.CheckError();
             _needDispose = true;
         }
 
@@ -333,6 +335,7 @@ namespace Emgu.CV.Ccm
         public ColorCorrectionModel(Mat src, Mat colors, ColorSpace refCs, Mat colored)
         {
             _ptr = CcmInvoke.cveColorCorrectionModelCreate3(src, colors, refCs, colored);
+            CvInvoke.CheckError();
             _needDispose = true;
         }
 
@@ -343,6 +346,7 @@ namespace Emgu.CV.Ccm
         public void Compute(Mat result)
         {
             CcmInvoke.cveColorCorrectionModelCompute(_ptr, result);
+            CvInvoke.CheckError();
         }
 
         /*
@@ -371,6 +375,7 @@ namespace Emgu.CV.Ccm
             {
                 CcmInvoke.cveColorCorrectionModelCorrectImage(_ptr, iaSrc, osDst, isLinear);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>

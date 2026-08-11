@@ -59,6 +59,7 @@ namespace Emgu.CV
         {
             _ptr = CvInvoke.cveTonemapCreate(gamma, ref _algorithmPtr, ref _sharedPtr);
             _tonemapPtr = _ptr;
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -73,6 +74,7 @@ namespace Emgu.CV
             {
                 CvInvoke.cveTonemapProcess(_tonemapPtr, iaSrc, oaDst);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
