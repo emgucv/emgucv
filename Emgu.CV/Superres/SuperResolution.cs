@@ -47,6 +47,7 @@ namespace Emgu.CV.Superres
            : base()
         {
             _ptr = SuperresInvoke.cveSuperResolutionCreate(type, frameSource, ref _frameSourcePtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

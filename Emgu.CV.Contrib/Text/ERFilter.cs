@@ -134,6 +134,7 @@ namespace Emgu.CV.Text
         {
             using (CvString s = new CvString(classifierFileName))
                 _ptr = TextInvoke.cveERFilterNM1Create(s, thresholdDelta, minArea, maxArea, minProbability, nonMaxSuppression, minProbabilityDiff, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
     }
@@ -152,6 +153,7 @@ namespace Emgu.CV.Text
         {
             using (CvString s = new CvString(classifierFileName))
                 _ptr = TextInvoke.cveERFilterNM2Create(s, minProbability, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
     }

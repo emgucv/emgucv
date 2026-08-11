@@ -59,49 +59,73 @@ void cvePlot2dRelease(cv::plot::Plot2d** plot, cv::Ptr<cv::plot::Plot2d>** share
 
 void cvePlot2dSetPlotLineColor(cv::plot::Plot2d* plot, cv::Scalar* plotLineColor)
 {
-#ifdef HAVE_OPENCV_PLOT
-   plot->setPlotLineColor(*plotLineColor);
-#else
-	throw_no_plot();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_PLOT
+	   plot->setPlotLineColor(*plotLineColor);
+	#else
+		throw_no_plot();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cvePlot2dSetPlotBackgroundColor(cv::plot::Plot2d* plot, cv::Scalar* plotBackgroundColor)
 {
-#ifdef HAVE_OPENCV_PLOT
-   plot->setPlotBackgroundColor(*plotBackgroundColor);
-#else
-	throw_no_plot();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_PLOT
+	   plot->setPlotBackgroundColor(*plotBackgroundColor);
+	#else
+		throw_no_plot();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cvePlot2dSetPlotAxisColor(cv::plot::Plot2d* plot, cv::Scalar* plotAxisColor)
 {
-#ifdef HAVE_OPENCV_PLOT
-   plot->setPlotAxisColor(*plotAxisColor);
-#else
-	throw_no_plot();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_PLOT
+	   plot->setPlotAxisColor(*plotAxisColor);
+	#else
+		throw_no_plot();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cvePlot2dSetPlotGridColor(cv::plot::Plot2d* plot, cv::Scalar* plotGridColor)
 {
-#ifdef HAVE_OPENCV_PLOT
-   plot->setPlotGridColor(*plotGridColor);
-#else
-	throw_no_plot();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_PLOT
+	   plot->setPlotGridColor(*plotGridColor);
+	#else
+		throw_no_plot();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cvePlot2dSetPlotTextColor(cv::plot::Plot2d* plot, cv::Scalar* plotTextColor)
 {
-#ifdef HAVE_OPENCV_PLOT
-   plot->setPlotTextColor(*plotTextColor);
-#else
-	throw_no_plot();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_PLOT
+	   plot->setPlotTextColor(*plotTextColor);
+	#else
+		throw_no_plot();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cvePlot2dSetPlotSize(cv::plot::Plot2d* plot, int plotSizeWidth, int plotSizeHeight)
 {
-#ifdef HAVE_OPENCV_PLOT
-   plot->setPlotSize(plotSizeWidth, plotSizeHeight);
-#else
-	throw_no_plot();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_PLOT
+	   plot->setPlotSize(plotSizeWidth, plotSizeHeight);
+	#else
+		throw_no_plot();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

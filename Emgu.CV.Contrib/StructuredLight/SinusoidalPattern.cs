@@ -78,8 +78,9 @@ namespace Emgu.CV.StructuredLight
                 setMarkers,
                 markersLocation,
                 ref _sharedPtr,
-                ref _structuredLightPatternPtr, 
+                ref _structuredLightPatternPtr,
                 ref _algorithmPtr);
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/>

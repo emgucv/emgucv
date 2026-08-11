@@ -305,7 +305,9 @@ namespace Emgu.CV
         {
             using (CvString csSuffix = new CvString(suffix))
             {
-                using (CvString result = new CvString(cveTempfile(csSuffix), true))
+                IntPtr ptr = cveTempfile(csSuffix);
+                CvInvoke.CheckError();
+                using (CvString result = new CvString(ptr, true))
                 {
                     return result.ToString();
                 }
@@ -322,11 +324,14 @@ namespace Emgu.CV
         {
             get
             {
-                return cveGetLogLevel();
+                CvEnum.LogLevel result = cveGetLogLevel();
+                CvInvoke.CheckError();
+                return result;
             }
             set
             {
                 cveSetLogLevel(value);
+                CvInvoke.CheckError();
             }
         }
 
@@ -1006,7 +1011,9 @@ namespace Emgu.CV
         /// <returns>The minimum number N that is greater to equal to size0, such that DFT of a vector of size N can be computed fast. In the current implementation N=2^p x 3^q x 5^r for some p, q, r. </returns>
         public static int GetOptimalDFTSize(int vecsize)
         {
-            return cveGetOptimalDFTSize(vecsize);
+            int result = cveGetOptimalDFTSize(vecsize);
+            CvInvoke.CheckError();
+            return result;
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1062,7 +1069,9 @@ namespace Emgu.CV
 
         public static bool ClipLine(Rectangle rectangle, ref Point pt1, ref Point pt2)
         {
-            return cveClipLine(ref rectangle, ref pt1, ref pt2);
+            bool result = cveClipLine(ref rectangle, ref pt1, ref pt2);
+            CvInvoke.CheckError();
+            return result;
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2008,8 +2017,17 @@ namespace Emgu.CV
         /// <remarks>The function can be used to dynamically turn on and off optimized code (code that uses SSE2, AVX, and other instructions on the platforms that support it). It sets a global flag that is further checked by OpenCV functions. Since the flag is not checked in the inner OpenCV loops, it is only safe to call the function on the very top level in your application where you can be sure that no other OpenCV function is currently executed.</remarks>
         public static bool UseOptimized
         {
-            get { return cveUseOptimized(); }
-            set { cveSetUseOptimized(value); }
+            get
+            {
+                bool result = cveUseOptimized();
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                cveSetUseOptimized(value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -2023,6 +2041,7 @@ namespace Emgu.CV
                 using (CvString bi = new CvString())
                 {
                     cveGetBuildInformation(bi);
+                    CvInvoke.CheckError();
                     return bi.ToString();
                 }
 
@@ -2557,8 +2576,17 @@ namespace Emgu.CV
         /// <remarks>When the argument is zero or negative, and at the beginning of the program, the number of threads is set to the number of processors in the system, as returned by the function omp_get_num_procs() from OpenMP runtime. </remarks>
         public static int NumThreads
         {
-            get { return cveGetNumThreads(); }
-            set { cveSetNumThreads(value); }
+            get
+            {
+                int result = cveGetNumThreads();
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                cveSetNumThreads(value);
+                CvInvoke.CheckError();
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2573,7 +2601,12 @@ namespace Emgu.CV
         /// </summary>
         public static int ThreadNum
         {
-            get { return cveGetThreadNum(); }
+            get
+            {
+                int result = cveGetThreadNum();
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2584,7 +2617,12 @@ namespace Emgu.CV
         /// </summary>
         public static int NumberOfCPUs
         {
-            get { return cveGetNumberOfCPUs(); }
+            get
+            {
+                int result = cveGetNumberOfCPUs();
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2601,7 +2639,11 @@ namespace Emgu.CV
         public static bool SetParallelForBackend(String backendName, bool propagateNumThreads = true)
         {
             using (CvString csBackendName = new CvString(backendName))
-                return cveSetParallelForBackend(csBackendName, propagateNumThreads);
+            {
+                bool result = cveSetParallelForBackend(csBackendName, propagateNumThreads);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2618,6 +2660,7 @@ namespace Emgu.CV
                 using (VectorOfCvString backendNames = new VectorOfCvString())
                 {
                     cveGetParallelBackends(backendNames);
+                    CvInvoke.CheckError();
                     return backendNames.ToArray();
                 }
             }

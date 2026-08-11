@@ -31,6 +31,7 @@ namespace Emgu.CV.Stereo
                     ref monoImgSize,
                     csParamFilePath,
                     ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

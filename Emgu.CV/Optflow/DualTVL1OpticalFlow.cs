@@ -28,6 +28,7 @@ namespace Emgu.CV
         public DualTVL1OpticalFlow()
         {
             _ptr = CvInvoke.cveDenseOpticalFlowCreateDualTVL1(ref _denseOpticalFlow, ref _algorithm, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

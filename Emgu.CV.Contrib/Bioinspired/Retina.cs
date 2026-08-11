@@ -59,6 +59,7 @@ namespace Emgu.CV.Bioinspired
         public Retina(Size inputSize, bool colorMode = true, ColorSamplingMethod colorSamplingMethod = ColorSamplingMethod.ColorBayer, bool useRetinaLogSampling = false, double reductionFactor = 1.0, double samplingStrength = 10.0)
         {
             _ptr = BioinspiredInvoke.cveRetinaCreate(ref inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -70,11 +71,13 @@ namespace Emgu.CV.Bioinspired
             {
                 RetinaParameters p = new RetinaParameters();
                 BioinspiredInvoke.cveRetinaGetParameters(_ptr, ref p);
+                CvInvoke.CheckError();
                 return p;
             }
             set
             {
                 BioinspiredInvoke.cveRetinaSetParameters(_ptr, ref value);
+                CvInvoke.CheckError();
             }
         }
 
@@ -123,6 +126,7 @@ namespace Emgu.CV.Bioinspired
         public void ClearBuffers()
         {
             BioinspiredInvoke.cveRetinaClearBuffers(_ptr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

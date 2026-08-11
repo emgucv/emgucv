@@ -473,6 +473,7 @@ namespace Emgu.CV.Rapid
         public static void ClearState(this ITracker tracker)
         {
             cveTrackerClearState(tracker.TrackerPtr);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

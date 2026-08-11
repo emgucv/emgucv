@@ -20,6 +20,7 @@ namespace Emgu.CV
         public static void GroupRectangles(VectorOfRect rectList, int groupThreshold, double eps = 0.2)
         {
             cveGroupRectangles1(rectList, groupThreshold, eps);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveGroupRectangles1(IntPtr rectList, int groupThreshold, double eps = 0.2);
@@ -34,6 +35,7 @@ namespace Emgu.CV
         public static void GroupRectangles(VectorOfRect rectList, VectorOfInt weights, int groupThreshold, double eps = 0.2)
         {
             cveGroupRectangles2(rectList, weights, groupThreshold, eps);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveGroupRectangles2(IntPtr rectList, IntPtr weights, int groupThreshold, double eps = 0.2);
@@ -49,6 +51,7 @@ namespace Emgu.CV
         public static void GroupRectangles(VectorOfRect rectList, int groupThreshold, double eps, VectorOfInt weights, VectorOfDouble levelWeights)
         {
             cveGroupRectangles3(rectList, groupThreshold, eps, weights, levelWeights);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveGroupRectangles3(IntPtr rectList, int groupThreshold, double eps, IntPtr weights, IntPtr levelWeights);
@@ -64,6 +67,7 @@ namespace Emgu.CV
         public static void GroupRectangles(VectorOfRect rectList, VectorOfInt rejectLevels, VectorOfDouble levelWeights, int groupThreshold, double eps = 0.2)
         {
             cveGroupRectangles4(rectList, rejectLevels, levelWeights, groupThreshold, eps);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveGroupRectangles4(IntPtr rectList, IntPtr rejectLevels, IntPtr levelWeights, int groupThreshold, double eps);
@@ -79,6 +83,7 @@ namespace Emgu.CV
         public static void GroupRectanglesMeanshift(VectorOfRect rectList, VectorOfDouble foundWeights, VectorOfDouble foundScales, double detectThreshold, Size winDetSize)
         {
             cveGroupRectanglesMeanshift(rectList, foundWeights, foundScales, detectThreshold, ref winDetSize);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveGroupRectanglesMeanshift(IntPtr rectList, IntPtr foundWeights, IntPtr foundScales, double detectThreshold, ref Size winDetSize);

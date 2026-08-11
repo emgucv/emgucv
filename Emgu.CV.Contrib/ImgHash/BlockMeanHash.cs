@@ -44,6 +44,7 @@ namespace Emgu.CV.ImgHash
         public BlockMeanHash(Mode mode = Mode.HashMode0)
         {
             _ptr = ImgHashInvoke.cveBlockMeanHashCreate(ref _imgHashBase, mode, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

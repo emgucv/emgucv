@@ -51,19 +51,23 @@ cv::structured_light::GrayCodePattern* cveGrayCodePatternCreate(
     cv::structured_light::StructuredLightPattern** structuredLightPattern,
     cv::Algorithm** algorithm)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    cv::structured_light::GrayCodePattern::Params p;
-    p.width = width;
-    p.height = height;
-    cv::Ptr<cv::structured_light::GrayCodePattern> pattern = cv::structured_light::GrayCodePattern::create(p);
-    *sharedPtr = new cv::Ptr<cv::structured_light::GrayCodePattern>(pattern);
-    cv::structured_light::GrayCodePattern* patternPtr = (*sharedPtr)->get();
-    *structuredLightPattern = dynamic_cast<cv::structured_light::StructuredLightPattern*>(patternPtr);
-    *algorithm = dynamic_cast<cv::Algorithm*>(patternPtr);
-    return patternPtr;
-#else
-    throw_no_structured_light();
-#endif
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        cv::structured_light::GrayCodePattern::Params p;
+        p.width = width;
+        p.height = height;
+        cv::Ptr<cv::structured_light::GrayCodePattern> pattern = cv::structured_light::GrayCodePattern::create(p);
+        *sharedPtr = new cv::Ptr<cv::structured_light::GrayCodePattern>(pattern);
+        cv::structured_light::GrayCodePattern* patternPtr = (*sharedPtr)->get();
+        *structuredLightPattern = dynamic_cast<cv::structured_light::StructuredLightPattern*>(patternPtr);
+        *algorithm = dynamic_cast<cv::Algorithm*>(patternPtr);
+        return patternPtr;
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveGrayCodePatternRelease(cv::Ptr<cv::structured_light::GrayCodePattern>** sharedPtr)
 {
@@ -118,28 +122,32 @@ cv::structured_light::SinusoidalPattern* cveSinusoidalPatternCreate(
     cv::structured_light::StructuredLightPattern** structuredLightPattern,
     cv::Algorithm** algorithm)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    cv::Ptr<cv::structured_light::SinusoidalPattern::Params> p =
-        cv::makePtr<cv::structured_light::SinusoidalPattern::Params>();
-    p->width = width;
-    p->height = height;
-    p->nbrOfPeriods = nbrOfPeriods;
-    p->shiftValue = shiftValue;
-    p->methodId = methodId;
-    p->nbrOfPixelsBetweenMarkers = nbrOfPixelsBetweenMarkers;
-    p->horizontal = horizontal;
-    p->setMarkers = setMarkers;
-    if (markersLocation)
-        p->markersLocation = *markersLocation;
-    cv::Ptr<cv::structured_light::SinusoidalPattern> pattern = cv::structured_light::SinusoidalPattern::create(p);
-    *sharedPtr = new cv::Ptr<cv::structured_light::SinusoidalPattern>(pattern);
-    cv::structured_light::SinusoidalPattern* patternPtr = (*sharedPtr)->get();
-    *structuredLightPattern = dynamic_cast<cv::structured_light::StructuredLightPattern*>(patternPtr);
-    *algorithm = dynamic_cast<cv::Algorithm*>(patternPtr);
-    return patternPtr;
-#else
-    throw_no_structured_light();
-#endif
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        cv::Ptr<cv::structured_light::SinusoidalPattern::Params> p =
+            cv::makePtr<cv::structured_light::SinusoidalPattern::Params>();
+        p->width = width;
+        p->height = height;
+        p->nbrOfPeriods = nbrOfPeriods;
+        p->shiftValue = shiftValue;
+        p->methodId = methodId;
+        p->nbrOfPixelsBetweenMarkers = nbrOfPixelsBetweenMarkers;
+        p->horizontal = horizontal;
+        p->setMarkers = setMarkers;
+        if (markersLocation)
+            p->markersLocation = *markersLocation;
+        cv::Ptr<cv::structured_light::SinusoidalPattern> pattern = cv::structured_light::SinusoidalPattern::create(p);
+        *sharedPtr = new cv::Ptr<cv::structured_light::SinusoidalPattern>(pattern);
+        cv::structured_light::SinusoidalPattern* patternPtr = (*sharedPtr)->get();
+        *structuredLightPattern = dynamic_cast<cv::structured_light::StructuredLightPattern*>(patternPtr);
+        *algorithm = dynamic_cast<cv::Algorithm*>(patternPtr);
+        return patternPtr;
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveSinusoidalPatternRelease(cv::Ptr<cv::structured_light::SinusoidalPattern>** sharedPtr)
 {

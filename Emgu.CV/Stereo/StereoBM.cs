@@ -23,6 +23,7 @@ namespace Emgu.CV
       public StereoBM(int numberOfDisparities = 0, int blockSize = 21)
       {
          _ptr = CvInvoke.cveStereoBMCreate(numberOfDisparities, blockSize, ref _sharedPtr);
+         CvInvoke.CheckError();
       }
 
       /// <summary>

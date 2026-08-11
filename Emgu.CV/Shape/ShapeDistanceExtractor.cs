@@ -93,6 +93,7 @@ namespace Emgu.CV.Shape
            int iterations = 3)
         {
             _ptr = ShapeInvoke.cveShapeContextDistanceExtractorCreate(nAngularBins, nRadialBins, innerRadius, outerRadius, iterations, comparer, transformer.ShapeTransformerPtr, ref _shapeDistanceExtractorPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -121,6 +122,7 @@ namespace Emgu.CV.Shape
         public HausdorffDistanceExtractor(CvEnum.DistType distanceFlag = CvEnum.DistType.L2, float rankProp = 0.6f)
         {
             _ptr = ShapeInvoke.cveHausdorffDistanceExtractorCreate(distanceFlag, rankProp, ref _shapeDistanceExtractorPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

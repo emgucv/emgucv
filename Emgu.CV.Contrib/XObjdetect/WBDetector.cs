@@ -23,6 +23,7 @@ namespace Emgu.CV.XObjdetect
         public WBDetector()
         {
             _ptr = XObjdetectInvoke.cveWBDetectorCreate(ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -32,6 +33,7 @@ namespace Emgu.CV.XObjdetect
         public void Read(FileNode node)
         {
             XObjdetectInvoke.cveWBDetectorRead(_ptr, node);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -41,6 +43,7 @@ namespace Emgu.CV.XObjdetect
         public void Write(FileStorage fs)
         {
             XObjdetectInvoke.cveWBDetectorWrite(_ptr, fs);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -54,6 +57,7 @@ namespace Emgu.CV.XObjdetect
             using (CvString csNegImgs = new CvString(negImgs))
             {
                 XObjdetectInvoke.cveWBDetectorTrain(_ptr, csPosSamples, csNegImgs);
+                CvInvoke.CheckError();
             }
         }
 

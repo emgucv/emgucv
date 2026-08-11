@@ -25,6 +25,7 @@ namespace Emgu.CV.Flann
         public LinearIndexParams()
         {
             _ptr = FlannInvoke.cveLinearIndexParamsCreate(ref _indexParamPtr);
+            CvInvoke.CheckError();
         }
 
         IntPtr IIndexParams.IndexParamPtr
@@ -59,6 +60,7 @@ namespace Emgu.CV.Flann
         public KdTreeIndexParams(int trees = 4)
         {
             _ptr = FlannInvoke.cveKDTreeIndexParamsCreate(ref _indexParamPtr, trees);
+            CvInvoke.CheckError();
         }
 
         IntPtr IIndexParams.IndexParamPtr
@@ -95,6 +97,7 @@ namespace Emgu.CV.Flann
         public LshIndexParams(int tableNumber, int keySize, int multiProbeLevel)
         {
             _ptr = FlannInvoke.cveLshIndexParamsCreate(ref _indexParamPtr, tableNumber, keySize, multiProbeLevel);
+            CvInvoke.CheckError();
         }
 
         IntPtr IIndexParams.IndexParamPtr
@@ -132,6 +135,7 @@ namespace Emgu.CV.Flann
         public KMeansIndexParams(int branching = 32, int iterations = 11, Flann.CenterInitType centersInit = CenterInitType.Random, float cbIndex = 0.2f)
         {
             _ptr = FlannInvoke.cveKMeansIndexParamsCreate(ref _indexParamPtr, branching, iterations, centersInit, cbIndex);
+            CvInvoke.CheckError();
         }
 
         IntPtr IIndexParams.IndexParamPtr
@@ -170,6 +174,7 @@ namespace Emgu.CV.Flann
         public CompositeIndexParams(int trees = 4, int branching = 32, int iterations = 11, Flann.CenterInitType centersInit = CenterInitType.Random, float cbIndex = 0.2f)
         {
             _ptr = FlannInvoke.cveCompositeIndexParamsCreate(ref _indexParamPtr, trees, branching, iterations, centersInit, cbIndex);
+            CvInvoke.CheckError();
         }
 
         IntPtr IIndexParams.IndexParamPtr
@@ -207,6 +212,7 @@ namespace Emgu.CV.Flann
         public AutotunedIndexParams(float targetPrecision = 0.8f, float buildWeight = 0.01f, float memoryWeight = 0, float sampleFraction = 0.1f)
         {
             _ptr = FlannInvoke.cveAutotunedIndexParamsCreate(ref _indexParamPtr, targetPrecision, buildWeight, memoryWeight, sampleFraction);
+            CvInvoke.CheckError();
         }
 
         IntPtr IIndexParams.IndexParamPtr
@@ -248,6 +254,7 @@ namespace Emgu.CV.Flann
             int leafSize = 100)
         {
             _ptr = FlannInvoke.cveHierarchicalClusteringIndexParamsCreate(ref _indexParamPtr, branching, centersInit, trees, leafSize);
+            CvInvoke.CheckError();
         }
 
         IntPtr IIndexParams.IndexParamPtr
@@ -284,6 +291,7 @@ namespace Emgu.CV.Flann
         public SearchParams(int checks = 32, float eps = 0, bool sorted = true)
         {
             _ptr = FlannInvoke.cveSearchParamsCreate(ref _indexParamPtr, checks, eps, sorted);
+            CvInvoke.CheckError();
         }
 
         IntPtr IIndexParams.IndexParamPtr

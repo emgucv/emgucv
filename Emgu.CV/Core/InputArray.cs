@@ -173,7 +173,9 @@ namespace Emgu.CV
             {
                 if (_ptr == IntPtr.Zero)
                     return true;
-                return CvInvoke.cveInputArrayIsEmpty(_ptr);
+                bool result = CvInvoke.cveInputArrayIsEmpty(_ptr);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 

@@ -30,6 +30,7 @@ namespace Emgu.CV.ImgHash
         public MarrHildrethHash(float alpha = 2.0f, float scale = 1.0f)
         {
             _ptr = ImgHashInvoke.cveMarrHildrethHashCreate(ref _imgHashBase, alpha, scale, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

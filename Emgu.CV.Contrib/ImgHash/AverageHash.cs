@@ -29,6 +29,7 @@ namespace Emgu.CV.ImgHash
         public AverageHash()
         {
             _ptr = ImgHashInvoke.cveAverageHashCreate(ref _imgHashBase, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

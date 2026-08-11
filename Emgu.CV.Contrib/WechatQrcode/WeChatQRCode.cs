@@ -33,6 +33,7 @@ namespace Emgu.CV
                 _ptr = WeChatQRCodeInvoke.cveWeChatQRCodeCreate(
                     csDetectorModelPath,
                     csSuperResolutionModelPath);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

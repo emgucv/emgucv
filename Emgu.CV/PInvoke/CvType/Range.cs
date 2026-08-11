@@ -17,6 +17,7 @@ namespace Emgu.CV.Structure
         static Range()
         {
             CvInvoke.cveGetRangeAll(ref _all);
+            CvInvoke.CheckError();
         }
 
         private static Range _all = new Range();

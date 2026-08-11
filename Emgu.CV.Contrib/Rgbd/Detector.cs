@@ -28,6 +28,7 @@ namespace Emgu.CV.Linemod
         public void Read(FileNode fn)
         {
             LinemodInvoke.cveLinemodDetectorRead(_ptr, fn);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -37,6 +38,7 @@ namespace Emgu.CV.Linemod
         public void Write(FileStorage fs)
         {
             LinemodInvoke.cveLinemodDetectorWrite(_ptr, fs);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -109,6 +111,7 @@ namespace Emgu.CV.Linemod
                 using (VectorOfCvString vcs = new VectorOfCvString())
                 {
                     LinemodInvoke.cveLinemodDetectorGetClassIds(_ptr, vcs);
+                    CvInvoke.CheckError();
                     return vcs.ToArray();
                 }
             }
@@ -121,7 +124,9 @@ namespace Emgu.CV.Linemod
         /// <returns>Sampling step T</returns>
         public int GetT(int pyramidLevel)
         {
-            return LinemodInvoke.cveLinemodDetectorGetT(_ptr, pyramidLevel);
+            int result = LinemodInvoke.cveLinemodDetectorGetT(_ptr, pyramidLevel);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -136,6 +141,7 @@ namespace Emgu.CV.Linemod
                 using (VectorOfIntPtr vp = new VectorOfIntPtr())
                 {
                     LinemodInvoke.cveLinemodDetectorGetModalities(_ptr, vp);
+                    CvInvoke.CheckError();
                     IntPtr[] vpArr = vp.ToArray();
                     Modality[] results = new Modality[vpArr.Length];
                     for (int i = 0; i < vpArr.Length; i++)
@@ -173,6 +179,7 @@ namespace Emgu.CV.Linemod
         public LineDetector()
         {
             _ptr = LinemodInvoke.cveLinemodLineDetectorCreate(ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
     }
@@ -188,6 +195,7 @@ namespace Emgu.CV.Linemod
         public LinemodDetector()
         {
             _ptr = LinemodInvoke.cveLinemodLinemodDetectorCreate(ref _sharedPtr);
+            CvInvoke.CheckError();
         }
     }
 

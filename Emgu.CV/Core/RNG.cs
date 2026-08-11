@@ -40,6 +40,7 @@ namespace Emgu.CV
         public RNG()
         {
             _ptr = CvInvoke.cveRngCreate();
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -49,6 +50,7 @@ namespace Emgu.CV
         public RNG(UInt64 state)
         {
             _ptr = CvInvoke.cveRngCreateWithSeed(state);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -80,6 +82,7 @@ namespace Emgu.CV
             using (InputOutputArray ioaMat = mat.GetInputOutputArray())
             {
                 CvInvoke.cveRngFill(_ptr, ioaMat, distType, iaA, iaB, saturateRange);
+                CvInvoke.CheckError();
             }
         }
 
@@ -112,7 +115,9 @@ namespace Emgu.CV
         /// <returns>Returns the next random number from the Gaussian distribution N(0,sigma) . That is, the mean value of the returned random numbers is zero and the standard deviation is the specified sigma .</returns>
         public double Gaussian(double sigma)
         {
-            return CvInvoke.cveRngGaussian(_ptr, sigma);
+            double result = CvInvoke.cveRngGaussian(_ptr, sigma);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -121,7 +126,9 @@ namespace Emgu.CV
         /// <returns>The next 32-bit random number</returns>
         public UInt32 Next()
         {
-            return CvInvoke.cveRngNext(_ptr);
+            UInt32 result = CvInvoke.cveRngNext(_ptr);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -132,7 +139,9 @@ namespace Emgu.CV
         /// <returns>Uniformly distributed integer random number from [a,b) range</returns>
         public int Uniform(int a, int b)
         {
-            return CvInvoke.cveRngUniformInt(_ptr, a, b);
+            int result = CvInvoke.cveRngUniformInt(_ptr, a, b);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -143,7 +152,9 @@ namespace Emgu.CV
         /// <returns>Uniformly distributed random float number from [a,b) range</returns>
         public float Uniform(float a, float b)
         {
-            return CvInvoke.cveRngUniformFloat(_ptr, a, b);
+            float result = CvInvoke.cveRngUniformFloat(_ptr, a, b);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -154,7 +165,9 @@ namespace Emgu.CV
         /// <returns>Uniformly distributed random double number from [a,b) range</returns>
         public double Uniform(double a, double b)
         {
-            return CvInvoke.cveRngUniformDouble(_ptr, a, b);
+            double result = CvInvoke.cveRngUniformDouble(_ptr, a, b);
+            CvInvoke.CheckError();
+            return result;
         }
     }
 

@@ -35,6 +35,7 @@ namespace Emgu.CV.Linemod
         public Match()
         {
             _ptr = LinemodInvoke.cveLinemodMatchCreate();
+            CvInvoke.CheckError();
             _needDispose = true;
         }
 

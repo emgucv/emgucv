@@ -41,6 +41,7 @@ namespace Emgu.CV.StructuredLight
                 ref _sharedPtr,
                 ref _structuredLightPatternPtr,
                 ref _algorithmPtr);
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/>        

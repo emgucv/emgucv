@@ -28,6 +28,7 @@ namespace Emgu.CV.ImgHash
         public ColorMomentHash()
         {
             _ptr = ImgHashInvoke.cveColorMomentHashCreate(ref _imgHashBase, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -182,11 +182,15 @@ float cveTrackerCompute(
 
 void cveTrackerClearState(cv::rapid::Tracker* tracker)
 {
-#ifdef HAVE_OPENCV_RAPID
-	tracker->clearState();
-#else
-	throw_no_rapid();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_RAPID
+		tracker->clearState();
+	#else
+		throw_no_rapid();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::rapid::Rapid* cveRapidCreate(cv::_InputArray* pts3d, cv::_InputArray* tris, cv::rapid::Tracker** tracker, cv::Algorithm** algorithm, cv::Ptr<cv::rapid::Rapid>** sharedPtr)

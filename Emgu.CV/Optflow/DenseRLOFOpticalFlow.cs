@@ -77,9 +77,10 @@ namespace Emgu.CV
                 usePostProc,
                 fgsLambda,
                 fgsSigma,
-                ref _denseOpticalFlow, 
-                ref _algorithm, 
+                ref _denseOpticalFlow,
+                ref _algorithm,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

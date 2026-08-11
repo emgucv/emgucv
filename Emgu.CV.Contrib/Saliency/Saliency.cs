@@ -72,6 +72,7 @@ namespace Emgu.CV.Saliency
         {
             _ptr = SaliencyInvoke.cveStaticSaliencySpectralResidualCreate(ref _staticSaliencyPtr, ref _saliencyPtr,
                 ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -133,6 +134,7 @@ namespace Emgu.CV.Saliency
         {
             _ptr = SaliencyInvoke.cveStaticSaliencyFineGrainedCreate(ref _staticSaliencyPtr, ref _saliencyPtr,
                 ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -193,6 +195,7 @@ namespace Emgu.CV.Saliency
         {
             _ptr = SaliencyInvoke.cveMotionSaliencyBinWangApr2014Create(ref _motionSaliencyPtr, ref _saliencyPtr,
                 ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -251,10 +254,11 @@ namespace Emgu.CV.Saliency
         public ObjectnessBING()
         {
             _ptr = SaliencyInvoke.cveObjectnessBINGCreate(
-                ref _objectnessPtr, 
+                ref _objectnessPtr,
                 ref _saliencyPtr,
-                ref _algorithmPtr, 
+                ref _algorithmPtr,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -304,6 +308,7 @@ namespace Emgu.CV.Saliency
             using (VectorOfFloat vector = new VectorOfFloat())
             {
                 SaliencyInvoke.cveObjectnessBINGGetObjectnessValues(_ptr, vector);
+                CvInvoke.CheckError();
                 return vector.ToArray();
             }
         }
@@ -317,6 +322,7 @@ namespace Emgu.CV.Saliency
             using (CvString trainingPathStr = new CvString(trainingPath))
             {
                 SaliencyInvoke.cveObjectnessBINGSetTrainingPath(_ptr, trainingPathStr);
+                CvInvoke.CheckError();
             }
         }
     }

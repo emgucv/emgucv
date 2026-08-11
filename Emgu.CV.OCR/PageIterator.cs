@@ -40,6 +40,7 @@ namespace Emgu.CV.OCR
                 TextlineOrder tp = TextlineOrder.TopToBottom;
                 float deskewAngle = 0;
                 OcrInvoke.cveTessPageIteratorGetOrientation(_ptr, ref po, ref wd, ref tp, ref deskewAngle);
+                CvInvoke.CheckError();
                 o.PageOrientation = po;
                 o.WritingDirection = wd;
                 o.TextlineOrder = tp;
@@ -61,6 +62,7 @@ namespace Emgu.CV.OCR
             int y2 = 0;
 
             bool found = OcrInvoke.cveTessPageIteratorGetBaseLine(_ptr, level, ref x1, ref y1, ref x2, ref y2);
+            CvInvoke.CheckError();
             if (!found)
                 return null;
             else

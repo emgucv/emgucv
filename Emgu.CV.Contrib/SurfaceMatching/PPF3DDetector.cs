@@ -31,6 +31,7 @@ namespace Emgu.CV.PpfMatch3d
             double numAngles = 30)
         {
             _ptr = PpfMatch3dInvoke.cvePPF3DDetectorCreate(relativeSamplingStep, relativeDistanceStep, numAngles);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

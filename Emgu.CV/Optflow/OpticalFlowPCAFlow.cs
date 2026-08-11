@@ -24,6 +24,7 @@ namespace Emgu.CV
         public OpticalFlowPCAFlow()
         {
             _ptr = CvInvoke.cveOptFlowPCAFlowCreate(ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

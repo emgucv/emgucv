@@ -72,16 +72,20 @@ cv::quality::QualityBRISQUE* cveQualityBRISQUECreate(
 	cv::Algorithm** algorithm,
 	cv::Ptr<cv::quality::QualityBRISQUE>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_QUALITY
-	cv::Ptr<cv::quality::QualityBRISQUE> quality = cv::quality::QualityBRISQUE::create(*modelFilePath, *rangeFilePath);
-	*sharedPtr = new cv::Ptr<cv::quality::QualityBRISQUE>(quality);
-	cv::quality::QualityBRISQUE* ptr = (*sharedPtr)->get();
-	*qualityBase = dynamic_cast<cv::quality::QualityBase*>(ptr);
-	*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
-	return ptr;
+		cv::Ptr<cv::quality::QualityBRISQUE> quality = cv::quality::QualityBRISQUE::create(*modelFilePath, *rangeFilePath);
+		*sharedPtr = new cv::Ptr<cv::quality::QualityBRISQUE>(quality);
+		cv::quality::QualityBRISQUE* ptr = (*sharedPtr)->get();
+		*qualityBase = dynamic_cast<cv::quality::QualityBase*>(ptr);
+		*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
+		return ptr;
 #else
-	throw_no_quality();
+		throw_no_quality();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveQualityBRISQUERelease(cv::Ptr<cv::quality::QualityBRISQUE>** sharedPtr)

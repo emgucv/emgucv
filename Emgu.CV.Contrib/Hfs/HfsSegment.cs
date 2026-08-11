@@ -56,6 +56,7 @@ namespace Emgu.CV.Hfs
                 numSlicIter,
                 ref _algorithmPtr,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -37,6 +37,7 @@ namespace Emgu.CV.Linemod
 		{
             using (CvString csModalityType = new CvString(modalityType))
                 _ptr = LinemodInvoke.cveLinemodModalityCreate(csModalityType, ref _sharedPtr);
+            CvInvoke.CheckError();
 		}
 
         /// <summary>

@@ -64,6 +64,7 @@ namespace Emgu.CV.Plot
         public void SetPlotLineColor(MCvScalar plotLineColor)
         {
             PlotInvoke.cvePlot2dSetPlotLineColor(_ptr, ref plotLineColor);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -73,6 +74,7 @@ namespace Emgu.CV.Plot
         public void SetPlotBackgroundColor(MCvScalar plotBackgroundColor)
         {
             PlotInvoke.cvePlot2dSetPlotBackgroundColor(_ptr, ref plotBackgroundColor);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -82,6 +84,7 @@ namespace Emgu.CV.Plot
         public void SetPlotAxisColor(MCvScalar plotAxisColor)
         {
             PlotInvoke.cvePlot2dSetPlotAxisColor(_ptr, ref plotAxisColor);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -91,6 +94,7 @@ namespace Emgu.CV.Plot
         public void SetPlotGridColor(MCvScalar plotGridColor)
         {
             PlotInvoke.cvePlot2dSetPlotGridColor(_ptr, ref plotGridColor);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -100,6 +104,7 @@ namespace Emgu.CV.Plot
         public void SetPlotTextColor(MCvScalar plotTextColor)
         {
             PlotInvoke.cvePlot2dSetPlotTextColor(_ptr, ref plotTextColor);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -110,6 +115,7 @@ namespace Emgu.CV.Plot
         public void SetPlotSize(int width, int height)
         {
             PlotInvoke.cvePlot2dSetPlotSize(_ptr, width, height);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

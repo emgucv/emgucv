@@ -44,6 +44,7 @@ namespace Emgu.CV.PhaseUnwrapping
                 nbrOfSmallBins,
                 nbrOfLargeBins,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

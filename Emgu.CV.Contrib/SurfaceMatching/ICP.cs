@@ -63,6 +63,7 @@ namespace Emgu.CV.PpfMatch3d
                 numLevels,
                 sampleType,
                 numMaxCorr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

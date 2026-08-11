@@ -41,6 +41,7 @@ namespace Emgu.CV.Shape
         public ThinPlateSplineShapeTransformer(double regularizationParameter = 0)
         {
             _ptr = ShapeInvoke.cveThinPlateSplineShapeTransformerCreate(regularizationParameter, ref _shapeTransformerPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -82,6 +83,7 @@ namespace Emgu.CV.Shape
         public AffineTransformer(bool fullAffine)
         {
             _ptr = ShapeInvoke.cveAffineTransformerCreate(fullAffine, ref _shapeTransformerPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

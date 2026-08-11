@@ -25,6 +25,7 @@ namespace Emgu.CV.LineDescriptor
         public BinaryDescriptor()
         {
             _ptr = LineDescriptorInvoke.cveLineDescriptorBinaryDescriptorCreate(ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

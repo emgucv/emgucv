@@ -26,6 +26,7 @@ namespace Emgu.CV.LineDescriptor
         public LSDDetector()
         {
             _ptr = LineDescriptorInvoke.cveLineDescriptorLSDDetectorCreate(ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

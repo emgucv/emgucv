@@ -9,13 +9,17 @@ cv::wechat_qrcode::WeChatQRCode* cveWeChatQRCodeCreate(
     cv::String* detectorModelPath,
     cv::String* superResolutionModelPath)
 {
+    try
+    {
 #ifdef HAVE_OPENCV_WECHAT_QRCODE
-    return new cv::wechat_qrcode::WeChatQRCode(
-        *detectorModelPath,
-        *superResolutionModelPath);
+        return new cv::wechat_qrcode::WeChatQRCode(
+            *detectorModelPath,
+            *superResolutionModelPath);
 #else
-    throw_no_wechat_qrcode();
+        throw_no_wechat_qrcode();
 #endif
+    }
+    CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveWeChatQRCodeRelease(cv::wechat_qrcode::WeChatQRCode** detector)

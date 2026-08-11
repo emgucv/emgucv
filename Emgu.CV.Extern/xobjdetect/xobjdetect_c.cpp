@@ -8,37 +8,53 @@
 
 cv::xobjdetect::WBDetector* cveWBDetectorCreate(cv::Ptr<cv::xobjdetect::WBDetector>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_XOBJDETECT
-	cv::Ptr<cv::xobjdetect::WBDetector> ptr = cv::xobjdetect::WBDetector::create();
-	*sharedPtr = new cv::Ptr<cv::xobjdetect::WBDetector>(ptr);
-	return ptr.get();
-#else
-	throw_no_xobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XOBJDETECT
+		cv::Ptr<cv::xobjdetect::WBDetector> ptr = cv::xobjdetect::WBDetector::create();
+		*sharedPtr = new cv::Ptr<cv::xobjdetect::WBDetector>(ptr);
+		return ptr.get();
+	#else
+		throw_no_xobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveWBDetectorRead(cv::xobjdetect::WBDetector* detector, cv::FileNode* node)
 {
-#ifdef HAVE_OPENCV_XOBJDETECT
-	detector->read(*node);
-#else
-	throw_no_xobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XOBJDETECT
+		detector->read(*node);
+	#else
+		throw_no_xobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveWBDetectorWrite(cv::xobjdetect::WBDetector* detector, cv::FileStorage* fs)
 {
-#ifdef HAVE_OPENCV_XOBJDETECT
-	detector->write(*fs);
-#else
-	throw_no_xobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XOBJDETECT
+		detector->write(*fs);
+	#else
+		throw_no_xobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveWBDetectorTrain(cv::xobjdetect::WBDetector* detector, cv::String* posSamples, cv::String* negImgs)
 {
-#ifdef HAVE_OPENCV_XOBJDETECT
-	detector->train(*posSamples, *negImgs);
-#else
-	throw_no_xobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XOBJDETECT
+		detector->train(*posSamples, *negImgs);
+	#else
+		throw_no_xobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveWBDetectorDetect(cv::xobjdetect::WBDetector* detector, cv::Mat* img, std::vector<cv::Rect>* bboxes, std::vector<double>* confidences)
 {

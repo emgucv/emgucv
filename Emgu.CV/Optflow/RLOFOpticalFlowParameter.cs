@@ -53,6 +53,7 @@ namespace Emgu.CV
         public RLOFOpticalFlowParameter()
         {
             _ptr = CvInvoke.cveRLOFOpticalFlowParameterCreate();
+            CvInvoke.CheckError();
         }
 
         /// <summary>

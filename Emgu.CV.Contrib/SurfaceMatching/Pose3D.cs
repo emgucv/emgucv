@@ -27,6 +27,7 @@ namespace Emgu.CV.PpfMatch3d
         public Pose3D()
         {
             _ptr = PpfMatch3dInvoke.cvePose3DCreate();
+            CvInvoke.CheckError();
             _needDispose = true;
         }
 
@@ -64,11 +65,13 @@ namespace Emgu.CV.PpfMatch3d
             {
                 MCvPoint3D64f translation = new MCvPoint3D64f();
                 PpfMatch3dInvoke.cvePose3DGetT(_ptr, ref translation);
+                CvInvoke.CheckError();
                 return translation;
             }
             set
             {
                 PpfMatch3dInvoke.cvePose3DSetT(_ptr, ref value);
+                CvInvoke.CheckError();
             }
         }
 
@@ -81,11 +84,13 @@ namespace Emgu.CV.PpfMatch3d
             {
                 MCvScalar q = new MCvScalar();
                 PpfMatch3dInvoke.cvePose3DGetQ(_ptr, ref q);
+                CvInvoke.CheckError();
                 return q;
             }
             set
             {
                 PpfMatch3dInvoke.cvePose3DSetQ(_ptr, ref value);
+                CvInvoke.CheckError();
             }
         }
     }

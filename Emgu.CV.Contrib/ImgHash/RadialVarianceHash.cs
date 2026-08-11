@@ -30,6 +30,7 @@ namespace Emgu.CV.ImgHash
         public RadialVarianceHash(double sigma = 1, int numOfAngleLine = 180)
         {
             _ptr = ImgHashInvoke.cveRadialVarianceHashCreate(ref _imgHashBase, sigma, numOfAngleLine, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

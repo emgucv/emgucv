@@ -14,11 +14,15 @@ cv::ppf_match_3d::ICP* cveICPCreate(
 	int sampleType,
 	int numMaxCorr)
 {
-#ifdef HAVE_OPENCV_SURFACE_MATCHING
-	return new cv::ppf_match_3d::ICP(iterations, tolerance, rejectionScale, numLevels, sampleType, numMaxCorr);
-#else
-	throw_no_surface_matching();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_SURFACE_MATCHING
+		return new cv::ppf_match_3d::ICP(iterations, tolerance, rejectionScale, numLevels, sampleType, numMaxCorr);
+	#else
+		throw_no_surface_matching();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 int cveICPRegisterModelToScene(cv::ppf_match_3d::ICP* icp, cv::Mat* srcPC, cv::Mat* dstPC, double* residual, cv::Mat* pose)
@@ -73,11 +77,15 @@ void cveICPRelease(cv::ppf_match_3d::ICP** icp)
 
 cv::ppf_match_3d::Pose3D* cvePose3DCreate()
 {
-#ifdef HAVE_OPENCV_SURFACE_MATCHING
-	return new cv::ppf_match_3d::Pose3D();
-#else
-	throw_no_surface_matching();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_SURFACE_MATCHING
+		return new cv::ppf_match_3d::Pose3D();
+	#else
+		throw_no_surface_matching();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cvePose3DUpdatePose(cv::ppf_match_3d::Pose3D* pose3d, cv::Mat* pose)
 {
@@ -103,61 +111,81 @@ void cvePose3DRelease(cv::ppf_match_3d::Pose3D** pose3d)
 }
 void cvePose3DGetT(cv::ppf_match_3d::Pose3D* pose3d, cv::Point3d* t)
 {
-#ifdef HAVE_OPENCV_SURFACE_MATCHING
-	cv::Vec3d translation = pose3d->t;
-	t->x = translation[0];
-	t->y = translation[1];
-	t->z = translation[2];
-#else
-	throw_no_surface_matching();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_SURFACE_MATCHING
+		cv::Vec3d translation = pose3d->t;
+		t->x = translation[0];
+		t->y = translation[1];
+		t->z = translation[2];
+	#else
+		throw_no_surface_matching();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cvePose3DSetT(cv::ppf_match_3d::Pose3D* pose3d, cv::Point3d* t)
 {
-#ifdef HAVE_OPENCV_SURFACE_MATCHING
-	cv::Vec3d translation;
-	translation[0] = t->x;
-	translation[1] = t->y;
-	translation[2] = t->z;
-	pose3d->t = translation;
-#else
-	throw_no_surface_matching();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_SURFACE_MATCHING
+		cv::Vec3d translation;
+		translation[0] = t->x;
+		translation[1] = t->y;
+		translation[2] = t->z;
+		pose3d->t = translation;
+	#else
+		throw_no_surface_matching();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cvePose3DGetQ(cv::ppf_match_3d::Pose3D* pose3d, cv::Scalar* q)
 {
-#ifdef HAVE_OPENCV_SURFACE_MATCHING
-	cv::Vec4d quat = pose3d->q;
-	q->val[0] = quat[0];
-	q->val[1] = quat[1];
-	q->val[2] = quat[2];
-	q->val[3] = quat[3];
-#else
-	throw_no_surface_matching();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_SURFACE_MATCHING
+		cv::Vec4d quat = pose3d->q;
+		q->val[0] = quat[0];
+		q->val[1] = quat[1];
+		q->val[2] = quat[2];
+		q->val[3] = quat[3];
+	#else
+		throw_no_surface_matching();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cvePose3DSetQ(cv::ppf_match_3d::Pose3D* pose3d, cv::Scalar* q)
 {
-#ifdef HAVE_OPENCV_SURFACE_MATCHING
-	cv::Vec4d quat;
-	quat[0] = q->val[0];
-	quat[1] = q->val[1];
-	quat[2] = q->val[2];
-	quat[2] = q->val[2];
-	pose3d->q = quat;
-#else
-	throw_no_surface_matching();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_SURFACE_MATCHING
+		cv::Vec4d quat;
+		quat[0] = q->val[0];
+		quat[1] = q->val[1];
+		quat[2] = q->val[2];
+		quat[2] = q->val[2];
+		pose3d->q = quat;
+	#else
+		throw_no_surface_matching();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::ppf_match_3d::PPF3DDetector* cvePPF3DDetectorCreate(double relativeSamplingStep, double relativeDistanceStep, double numAngles)
 {
-#ifdef HAVE_OPENCV_SURFACE_MATCHING
-	return new cv::ppf_match_3d::PPF3DDetector(relativeSamplingStep, relativeDistanceStep, numAngles);
-#else
-	throw_no_surface_matching();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_SURFACE_MATCHING
+		return new cv::ppf_match_3d::PPF3DDetector(relativeSamplingStep, relativeDistanceStep, numAngles);
+	#else
+		throw_no_surface_matching();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cvePPF3DDetectorTrainModel(cv::ppf_match_3d::PPF3DDetector* detector, cv::Mat* model)
 {

@@ -41,6 +41,7 @@ namespace Emgu.CV
                 using (VectorOfDouble vd = new VectorOfDouble())
                 {
                     cveGetConfigDict(vs, vd);
+                    CvInvoke.CheckError();
 
                     String[] keys = vs.ToArray();
                     double[] values = vd.ToArray();

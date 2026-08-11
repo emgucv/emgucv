@@ -23,6 +23,7 @@ namespace Emgu.CV
         public CascadeClassifier()
         {
             _ptr = XObjdetectInvoke.cveCascadeClassifierCreate();
+            CvInvoke.CheckError();
         }
 
         /// <summary>Create a CascadeClassifier from the specific file</summary>
@@ -35,6 +36,7 @@ namespace Emgu.CV
                 throw new FileNotFoundException(String.Format("File '{0}' not found", fileName));
             using (CvString s = new CvString(fileName))
                 _ptr = XObjdetectInvoke.cveCascadeClassifierCreateFromFile(s);
+            CvInvoke.CheckError();
 
             if (_ptr == IntPtr.Zero)
             {
@@ -49,7 +51,9 @@ namespace Emgu.CV
         /// <returns>True if the classifier can be imported.</returns>
         public bool Read(FileNode node)
         {
-            return XObjdetectInvoke.cveCascadeClassifierRead(_ptr, node);
+            bool result = XObjdetectInvoke.cveCascadeClassifierRead(_ptr, node);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -82,7 +86,12 @@ namespace Emgu.CV
         /// </summary>
         public bool IsOldFormatCascade
         {
-            get { return XObjdetectInvoke.cveCascadeClassifierIsOldFormatCascade(_ptr); }
+            get
+            {
+                bool result = XObjdetectInvoke.cveCascadeClassifierIsOldFormatCascade(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -94,6 +103,7 @@ namespace Emgu.CV
             {
                 Size s = new Size();
                 XObjdetectInvoke.cveCascadeClassifierGetOriginalWindowSize(_ptr, ref s);
+                CvInvoke.CheckError();
                 return s;
             }
         }

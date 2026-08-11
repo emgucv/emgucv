@@ -5,13 +5,17 @@ cv::stereo::QuasiDenseStereo* cveQuasiDenseStereoCreate(
 	cv::String* paramFilepath,
 	cv::Ptr<cv::stereo::QuasiDenseStereo>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_XSTEREO
-	cv::Ptr<cv::stereo::QuasiDenseStereo> qds = cv::stereo::QuasiDenseStereo::create(*monoImgSize, *paramFilepath);
-	*sharedPtr = new cv::Ptr<cv::stereo::QuasiDenseStereo>(qds);
-	return (*sharedPtr)->get();
-#else
-	throw_no_xstereo();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XSTEREO
+		cv::Ptr<cv::stereo::QuasiDenseStereo> qds = cv::stereo::QuasiDenseStereo::create(*monoImgSize, *paramFilepath);
+		*sharedPtr = new cv::Ptr<cv::stereo::QuasiDenseStereo>(qds);
+		return (*sharedPtr)->get();
+	#else
+		throw_no_xstereo();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveQuasiDenseStereoRelease(cv::Ptr<cv::stereo::QuasiDenseStereo>** sharedPtr)

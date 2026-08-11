@@ -111,6 +111,7 @@ namespace Emgu.CV
             {
                 CvInvoke.cveFileNodeReadMat(_ptr, mat, defaultMat);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -121,7 +122,12 @@ namespace Emgu.CV
         /// </value>
         public Type NodeType
         {
-            get { return (Type)CvInvoke.cveFileNodeGetType(_ptr); }
+            get
+            {
+                Type result = (Type)CvInvoke.cveFileNodeGetType(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -136,6 +142,7 @@ namespace Emgu.CV
                 using (CvString csName = new CvString())
                 {
                     CvInvoke.cveFileNodeGetName(_ptr, csName);
+                    CvInvoke.CheckError();
                     return csName.ToString();
                 }
             }
@@ -177,6 +184,7 @@ namespace Emgu.CV
             using (CvString ds = new CvString(defaultString))
             {
                 CvInvoke.cveFileNodeReadString(_ptr, s, ds);
+                CvInvoke.CheckError();
                 return s.ToString();
             }
         }
@@ -188,7 +196,9 @@ namespace Emgu.CV
         /// <returns>The int from the node.</returns>
         public int ReadInt(int defaultInt = int.MinValue)
         {
-            return CvInvoke.cveFileNodeReadInt(_ptr, defaultInt);
+            int result = CvInvoke.cveFileNodeReadInt(_ptr, defaultInt);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -198,7 +208,9 @@ namespace Emgu.CV
         /// <returns>The int from the node.</returns>
         public Int64 ReadInt64(Int64 defaultInt = int.MinValue)
         {
-            return CvInvoke.cveFileNodeReadInt64(_ptr, defaultInt);
+            Int64 result = CvInvoke.cveFileNodeReadInt64(_ptr, defaultInt);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -208,7 +220,9 @@ namespace Emgu.CV
         /// <returns>The float from the node.</returns>
         public float ReadFloat(float defaultFloat = float.MinValue)
         {
-            return CvInvoke.cveFileNodeReadFloat(_ptr, defaultFloat);
+            float result = CvInvoke.cveFileNodeReadFloat(_ptr, defaultFloat);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -218,7 +232,9 @@ namespace Emgu.CV
         /// <returns>The double from the node.</returns>
         public double ReadDouble(double defaultDouble = Double.MinValue)
         {
-            return CvInvoke.cveFileNodeReadDouble(_ptr, defaultDouble);
+            double result = CvInvoke.cveFileNodeReadDouble(_ptr, defaultDouble);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>

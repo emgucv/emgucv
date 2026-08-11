@@ -49,6 +49,7 @@ namespace Emgu.CV.Shape
         public NormHistogramCostExtractor(CvEnum.DistType flag = CvEnum.DistType.L2, int nDummies = 25, float defaultCost = 0.2f)
         {
             _ptr = ShapeInvoke.cveNormHistogramCostExtractorCreate(flag, nDummies, defaultCost, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
     }
 
@@ -66,6 +67,7 @@ namespace Emgu.CV.Shape
         public EMDHistogramCostExtractor(CvEnum.DistType flag = CvEnum.DistType.L2, int nDummies = 25, float defaultCost = 0.2f)
         {
             _ptr = ShapeInvoke.cveEMDHistogramCostExtractorCreate(flag, nDummies, defaultCost, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
     }
 
@@ -82,6 +84,7 @@ namespace Emgu.CV.Shape
         public ChiHistogramCostExtractor(int nDummies = 25, float defaultCost = 0.2f)
         {
             _ptr = ShapeInvoke.cveChiHistogramCostExtractorCreate(nDummies, defaultCost, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
     }
 
@@ -98,6 +101,7 @@ namespace Emgu.CV.Shape
         public EMDL1HistogramCostExtractor(int nDummies = 25, float defaultCost = 0.2f)
         {
             _ptr = ShapeInvoke.cveEMDL1HistogramCostExtractorCreate(nDummies, defaultCost, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
     }
 

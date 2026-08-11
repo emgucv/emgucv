@@ -9,15 +9,19 @@ cv::StereoSGBM* cveStereoSGBMCreate(
 	int mode, cv::StereoMatcher** stereoMatcher,
 	cv::Ptr<cv::StereoSGBM>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_STEREO
-	cv::Ptr<cv::StereoSGBM> ptr = cv::StereoSGBM::create(minDisparity, numDisparities, blockSize, P1, P2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, mode);
-	*sharedPtr = new cv::Ptr<cv::StereoSGBM>(ptr);
-	cv::StereoSGBM* result = ptr.get();
-	*stereoMatcher = dynamic_cast<cv::StereoMatcher*>(result);
-	return result;
-#else
-	throw_no_stereo();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_STEREO
+		cv::Ptr<cv::StereoSGBM> ptr = cv::StereoSGBM::create(minDisparity, numDisparities, blockSize, P1, P2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, mode);
+		*sharedPtr = new cv::Ptr<cv::StereoSGBM>(ptr);
+		cv::StereoSGBM* result = ptr.get();
+		*stereoMatcher = dynamic_cast<cv::StereoMatcher*>(result);
+		return result;
+	#else
+		throw_no_stereo();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveStereoSGBMRelease(cv::Ptr<cv::StereoSGBM>** sharedPtr)
 {
@@ -32,13 +36,17 @@ void cveStereoSGBMRelease(cv::Ptr<cv::StereoSGBM>** sharedPtr)
 //StereoBM
 cv::StereoMatcher* cveStereoBMCreate(int numberOfDisparities, int blockSize, cv::Ptr<cv::StereoMatcher>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_STEREO
-	cv::Ptr<cv::StereoMatcher> ptr = cv::StereoBM::create(numberOfDisparities, blockSize);
-	*sharedPtr = new cv::Ptr<cv::StereoMatcher>(ptr);
-	return ptr.get();
-#else
-	throw_no_stereo();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_STEREO
+		cv::Ptr<cv::StereoMatcher> ptr = cv::StereoBM::create(numberOfDisparities, blockSize);
+		*sharedPtr = new cv::Ptr<cv::StereoMatcher>(ptr);
+		return ptr.get();
+	#else
+		throw_no_stereo();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 //StereoMatcher

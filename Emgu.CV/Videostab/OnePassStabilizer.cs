@@ -29,6 +29,7 @@ namespace Emgu.CV.VideoStab
         {
             _baseFrameSource = baseFrameSource;
             _ptr = VideoStabInvoke.cveOnePassStabilizerCreate(baseFrameSource.FrameSourcePtr, ref _stabilizerBase, ref FrameSourcePtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -38,6 +39,7 @@ namespace Emgu.CV.VideoStab
         public void SetMotionFilter(GaussianMotionFilter motionFilter)
         {
             VideoStabInvoke.cveOnePassStabilizerSetMotionFilter(_ptr, motionFilter);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -47,6 +49,7 @@ namespace Emgu.CV.VideoStab
         public void SetMotionEstimator(KeypointBasedMotionEstimator estimator)
         {
             VideoStabInvoke.cveStabilizerBaseSetMotionEstimator(_stabilizerBase, estimator.ImageMotionEstimatorBasePtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

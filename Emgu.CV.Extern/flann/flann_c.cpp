@@ -8,13 +8,17 @@
 
 cv::flann::LinearIndexParams* cveLinearIndexParamsCreate(cv::flann::IndexParams** ip)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	cv::flann::LinearIndexParams* p = new cv::flann::LinearIndexParams();
-	*ip = dynamic_cast<cv::flann::IndexParams*>(p);
-	return p;
+		cv::flann::LinearIndexParams* p = new cv::flann::LinearIndexParams();
+		*ip = dynamic_cast<cv::flann::IndexParams*>(p);
+		return p;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveLinearIndexParamsRelease(cv::flann::LinearIndexParams** p)
 {
@@ -28,13 +32,17 @@ void cveLinearIndexParamsRelease(cv::flann::LinearIndexParams** p)
 
 cv::flann::KDTreeIndexParams* cveKDTreeIndexParamsCreate(cv::flann::IndexParams** ip, int trees)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	cv::flann::KDTreeIndexParams* p = new cv::flann::KDTreeIndexParams(trees);
-	*ip = dynamic_cast<cv::flann::IndexParams*>(p);
-	return p;
+		cv::flann::KDTreeIndexParams* p = new cv::flann::KDTreeIndexParams(trees);
+		*ip = dynamic_cast<cv::flann::IndexParams*>(p);
+		return p;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveKDTreeIndexParamsRelease(cv::flann::KDTreeIndexParams** p)
 {
@@ -48,13 +56,17 @@ void cveKDTreeIndexParamsRelease(cv::flann::KDTreeIndexParams** p)
 
 cv::flann::LshIndexParams* cveLshIndexParamsCreate(cv::flann::IndexParams** ip, int tableNumber, int keySize, int multiProbeLevel)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	cv::flann::LshIndexParams* p = new cv::flann::LshIndexParams(tableNumber, keySize, multiProbeLevel);
-	*ip = dynamic_cast<cv::flann::IndexParams*>(p);
-	return p;
+		cv::flann::LshIndexParams* p = new cv::flann::LshIndexParams(tableNumber, keySize, multiProbeLevel);
+		*ip = dynamic_cast<cv::flann::IndexParams*>(p);
+		return p;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveLshIndexParamsRelease(cv::flann::LshIndexParams** p)
 {
@@ -68,13 +80,17 @@ void cveLshIndexParamsRelease(cv::flann::LshIndexParams** p)
 
 cv::flann::KMeansIndexParams* cveKMeansIndexParamsCreate(cv::flann::IndexParams** ip, int branching, int iterations, cvflann::flann_centers_init_t centersInit, float cbIndex)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	cv::flann::KMeansIndexParams* p = new cv::flann::KMeansIndexParams(branching, iterations, centersInit, cbIndex);
-	*ip = dynamic_cast<cv::flann::IndexParams*> (p);
-	return p;
+		cv::flann::KMeansIndexParams* p = new cv::flann::KMeansIndexParams(branching, iterations, centersInit, cbIndex);
+		*ip = dynamic_cast<cv::flann::IndexParams*> (p);
+		return p;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveKMeansIndexParamsRelease(cv::flann::KMeansIndexParams** p)
 {
@@ -88,13 +104,17 @@ void cveKMeansIndexParamsRelease(cv::flann::KMeansIndexParams** p)
 
 cv::flann::CompositeIndexParams* cveCompositeIndexParamsCreate(cv::flann::IndexParams** ip, int trees, int branching, int iterations, cvflann::flann_centers_init_t centersInit, float cbIndex)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	cv::flann::CompositeIndexParams* p = new cv::flann::CompositeIndexParams(trees, branching, iterations, centersInit, cbIndex);
-	*ip = dynamic_cast<cv::flann::IndexParams*>(p);
-	return p;
+		cv::flann::CompositeIndexParams* p = new cv::flann::CompositeIndexParams(trees, branching, iterations, centersInit, cbIndex);
+		*ip = dynamic_cast<cv::flann::IndexParams*>(p);
+		return p;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveCompositeIndexParamsRelease(cv::flann::CompositeIndexParams** p)
 {
@@ -108,13 +128,17 @@ void cveCompositeIndexParamsRelease(cv::flann::CompositeIndexParams** p)
 
 cv::flann::AutotunedIndexParams* cveAutotunedIndexParamsCreate(cv::flann::IndexParams** ip, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	cv::flann::AutotunedIndexParams* p = new cv::flann::AutotunedIndexParams(targetPrecision, buildWeight, memoryWeight, sampleFraction);
-	*ip = dynamic_cast<cv::flann::IndexParams*>(p);
-	return p;
+		cv::flann::AutotunedIndexParams* p = new cv::flann::AutotunedIndexParams(targetPrecision, buildWeight, memoryWeight, sampleFraction);
+		*ip = dynamic_cast<cv::flann::IndexParams*>(p);
+		return p;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveAutotunedIndexParamsRelease(cv::flann::AutotunedIndexParams** p)
 {
@@ -128,13 +152,17 @@ void cveAutotunedIndexParamsRelease(cv::flann::AutotunedIndexParams** p)
 
 cv::flann::HierarchicalClusteringIndexParams* cveHierarchicalClusteringIndexParamsCreate(cv::flann::IndexParams** ip, int branching, cvflann::flann_centers_init_t centersInit, int trees, int leafSize)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	cv::flann::HierarchicalClusteringIndexParams* p = new cv::flann::HierarchicalClusteringIndexParams(branching, centersInit, trees, leafSize);
-	*ip = dynamic_cast<cv::flann::IndexParams*>(p);
-	return p;
+		cv::flann::HierarchicalClusteringIndexParams* p = new cv::flann::HierarchicalClusteringIndexParams(branching, centersInit, trees, leafSize);
+		*ip = dynamic_cast<cv::flann::IndexParams*>(p);
+		return p;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveHierarchicalClusteringIndexParamsRelease(cv::flann::HierarchicalClusteringIndexParams** p)
 {
@@ -148,13 +176,17 @@ void cveHierarchicalClusteringIndexParamsRelease(cv::flann::HierarchicalClusteri
 
 cv::flann::SearchParams* cveSearchParamsCreate(cv::flann::IndexParams** ip, int checks, float eps, bool sorted)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	cv::flann::SearchParams* p = new cv::flann::SearchParams(checks, eps, sorted);
-	*ip = dynamic_cast<cv::flann::IndexParams*>(p);
-	return p;
+		cv::flann::SearchParams* p = new cv::flann::SearchParams(checks, eps, sorted);
+		*ip = dynamic_cast<cv::flann::IndexParams*>(p);
+		return p;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveSearchParamsRelease(cv::flann::SearchParams** p)
 {

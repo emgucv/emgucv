@@ -93,6 +93,7 @@ namespace Emgu.CV
             using (CvString src = new CvString(source))
             {
                 _ptr = CvInvoke.cveFileStorageCreate(src, flags, enc);
+                CvInvoke.CheckError();
             }
         }
 
@@ -105,6 +106,7 @@ namespace Emgu.CV
         {
             using (CvString cs = new CvString(nodeName))
                 CvInvoke.cveFileStorageWriteMat(_ptr, cs, m);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -116,6 +118,7 @@ namespace Emgu.CV
         {
             using (CvString cs = new CvString(nodeName))
                 CvInvoke.cveFileStorageWriteInt(_ptr, cs, value);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -127,6 +130,7 @@ namespace Emgu.CV
         {
             using (CvString cs = new CvString(nodeName))
                 CvInvoke.cveFileStorageWriteInt64(_ptr, cs, value);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -138,6 +142,7 @@ namespace Emgu.CV
         {
             using (CvString cs = new CvString(nodeName))
                 CvInvoke.cveFileStorageWriteFloat(_ptr, cs, value);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -149,6 +154,7 @@ namespace Emgu.CV
         {
             using (CvString cs = new CvString(nodeName))
                 CvInvoke.cveFileStorageWriteDouble(_ptr, cs, value);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -161,6 +167,7 @@ namespace Emgu.CV
             using (CvString cs = new CvString(nodeName))
             using (CvString vs = new CvString(value))
                 CvInvoke.cveFileStorageWriteString(_ptr, cs, vs);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -171,7 +178,12 @@ namespace Emgu.CV
         /// </value>
         public bool IsOpened
         {
-            get { return CvInvoke.cveFileStorageIsOpened(_ptr); }
+            get
+            {
+                bool result = CvInvoke.cveFileStorageIsOpened(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -185,6 +197,7 @@ namespace Emgu.CV
             using (CvString s = new CvString())
             {
                 CvInvoke.cveFileStorageReleaseAndGetString(_ptr, s);
+                CvInvoke.CheckError();
                 return s.ToString();
             }
         }
@@ -197,7 +210,9 @@ namespace Emgu.CV
         /// <returns> The top-level mapping</returns>
         public FileNode GetRoot(int streamIdx = 0)
         {
-            return new FileNode(CvInvoke.cveFileStorageRoot(_ptr, streamIdx));
+            IntPtr ptr = CvInvoke.cveFileStorageRoot(_ptr, streamIdx);
+            CvInvoke.CheckError();
+            return new FileNode(ptr);
         }
 
         /// <summary>
@@ -206,7 +221,9 @@ namespace Emgu.CV
         /// <returns>The first element of the top-level mapping.</returns>
         public FileNode GetFirstTopLevelNode()
         {
-            return new FileNode(CvInvoke.cveFileStorageGetFirstTopLevelNode(_ptr));
+            IntPtr ptr = CvInvoke.cveFileStorageGetFirstTopLevelNode(_ptr);
+            CvInvoke.CheckError();
+            return new FileNode(ptr);
         }
 
         /// <summary>
@@ -218,7 +235,9 @@ namespace Emgu.CV
         {
             using (CvString nn = new CvString(nodeName))
             {
-                return new FileNode(CvInvoke.cveFileStorageGetNode(_ptr, nn));
+                IntPtr ptr = CvInvoke.cveFileStorageGetNode(_ptr, nn);
+                CvInvoke.CheckError();
+                return new FileNode(ptr);
             }
         }
 
@@ -250,9 +269,10 @@ namespace Emgu.CV
         /// <param name="value">The string value to insert.</param>
         public void Insert(string value)
         {
-            using(CvString s = new CvString(value))
+            using (CvString s = new CvString(value))
                 CvInvoke.cveFileStorageInsertString(this, s);
-            
+            CvInvoke.CheckError();
+
         }
     }
 

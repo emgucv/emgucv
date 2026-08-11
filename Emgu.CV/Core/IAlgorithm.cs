@@ -96,6 +96,7 @@ namespace Emgu.CV
         public static void Clear(this IAlgorithm algorithm)
         {
             CvInvoke.cveAlgorithmClear(algorithm.AlgorithmPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -105,7 +106,9 @@ namespace Emgu.CV
         /// <returns>Returns true if the Algorithm is empty. e.g. in the very beginning or after unsuccessful read.</returns>
         public static bool IsEmpty(this IAlgorithm algorithm)
         {
-            return CvInvoke.cveAlgorithmEmpty(algorithm.AlgorithmPtr);
+            bool result = CvInvoke.cveAlgorithmEmpty(algorithm.AlgorithmPtr);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -156,6 +159,7 @@ namespace Emgu.CV
             using (CvString s = new CvString())
             {
                 CvInvoke.cveAlgorithmGetDefaultName(algorithm.AlgorithmPtr, s);
+                CvInvoke.CheckError();
                 return s.ToString();
             }
         }

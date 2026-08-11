@@ -8,25 +8,33 @@
 
 cv::superres::FrameSource* cveSuperresCreateFrameSourceVideo(cv::String* fileName, bool useGpu, cv::Ptr<cv::superres::FrameSource>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_SUPERRES
-	cv::Ptr<cv::superres::FrameSource> ptr = useGpu ?
-		cv::superres::createFrameSource_Video_CUDA(*fileName)
-		: cv::superres::createFrameSource_Video(*fileName);
-	*sharedPtr = new cv::Ptr<cv::superres::FrameSource>(ptr);
-	return ptr.get();
-#else
-	throw_no_superres();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_SUPERRES
+		cv::Ptr<cv::superres::FrameSource> ptr = useGpu ?
+			cv::superres::createFrameSource_Video_CUDA(*fileName)
+			: cv::superres::createFrameSource_Video(*fileName);
+		*sharedPtr = new cv::Ptr<cv::superres::FrameSource>(ptr);
+		return ptr.get();
+	#else
+		throw_no_superres();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 cv::superres::FrameSource* cveSuperresCreateFrameSourceCamera(int deviceId, cv::Ptr<cv::superres::FrameSource>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_SUPERRES
-	cv::Ptr<cv::superres::FrameSource> ptr = cv::superres::createFrameSource_Camera(deviceId);
-	*sharedPtr = new cv::Ptr<cv::superres::FrameSource>(ptr);
-	return ptr.get();
-#else
-	throw_no_superres();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_SUPERRES
+		cv::Ptr<cv::superres::FrameSource> ptr = cv::superres::createFrameSource_Camera(deviceId);
+		*sharedPtr = new cv::Ptr<cv::superres::FrameSource>(ptr);
+		return ptr.get();
+	#else
+		throw_no_superres();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveSuperresFrameSourceRelease(cv::Ptr<cv::superres::FrameSource>** sharedPtr)
 {
@@ -52,24 +60,28 @@ void cveSuperresFrameSourceNextFrame(cv::superres::FrameSource* frameSource, cv:
 
 cv::superres::SuperResolution* cveSuperResolutionCreate(int type, cv::superres::FrameSource* frameSource, cv::superres::FrameSource** frameSourceOut, cv::Ptr<cv::superres::SuperResolution>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_SUPERRES
-	cv::Ptr<cv::superres::SuperResolution> ptr =
-		(type == 1) ? cv::superres::createSuperResolution_BTVL1_CUDA() :
-		//((type == 2) ? cv::superres::createSuperResolution_BTVL1_OCL() :
-		cv::superres::createSuperResolution_BTVL1();
+	try
+	{
+	#ifdef HAVE_OPENCV_SUPERRES
+		cv::Ptr<cv::superres::SuperResolution> ptr =
+			(type == 1) ? cv::superres::createSuperResolution_BTVL1_CUDA() :
+			//((type == 2) ? cv::superres::createSuperResolution_BTVL1_OCL() :
+			cv::superres::createSuperResolution_BTVL1();
 
-	cv::Ptr<cv::superres::FrameSource> fsPtr(frameSource, [](cv::superres::FrameSource*) {});
+		cv::Ptr<cv::superres::FrameSource> fsPtr(frameSource, [](cv::superres::FrameSource*) {});
 
-	ptr->setInput(fsPtr);
-	//cv::Mat tmp;
-	//ptr->nextFrame(tmp);
-	*frameSourceOut = dynamic_cast<cv::superres::FrameSource*>(ptr.get());
+		ptr->setInput(fsPtr);
+		//cv::Mat tmp;
+		//ptr->nextFrame(tmp);
+		*frameSourceOut = dynamic_cast<cv::superres::FrameSource*>(ptr.get());
 
-	*sharedPtr = new cv::Ptr<cv::superres::SuperResolution>(ptr);
-	return ptr.get();
-#else
-	throw_no_superres();
-#endif
+		*sharedPtr = new cv::Ptr<cv::superres::SuperResolution>(ptr);
+		return ptr.get();
+	#else
+		throw_no_superres();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveSuperResolutionRelease(cv::Ptr<cv::superres::SuperResolution>** sharedPtr)
 {

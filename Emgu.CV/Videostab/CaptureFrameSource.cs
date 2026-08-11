@@ -24,6 +24,7 @@ namespace Emgu.CV.VideoStab
         public CaptureFrameSource(VideoCapture capture)
         {
             _ptr = VideoStabInvoke.cveVideostabCaptureFrameSourceCreate(capture, ref FrameSourcePtr);
+            CvInvoke.CheckError();
             CaptureSource = capture.CaptureSource;
         }
 

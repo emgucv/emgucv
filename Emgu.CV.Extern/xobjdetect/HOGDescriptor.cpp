@@ -8,21 +8,29 @@
 
 void cveHOGDescriptorPeopleDetectorCreate(std::vector<float>* seq)
 {
-#ifdef HAVE_OPENCV_XOBJDETECT
-	std::vector<float> v = cv::HOGDescriptor::getDefaultPeopleDetector();
-	seq->resize(v.size());
-	memcpy(&(*seq)[0], &v[0], sizeof(float) * seq->size());
-#else 
-	throw_no_xobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XOBJDETECT
+		std::vector<float> v = cv::HOGDescriptor::getDefaultPeopleDetector();
+		seq->resize(v.size());
+		memcpy(&(*seq)[0], &v[0], sizeof(float) * seq->size());
+	#else
+		throw_no_xobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 cv::HOGDescriptor* cveHOGDescriptorCreateDefault()
 {
-#ifdef HAVE_OPENCV_XOBJDETECT
-	return new cv::HOGDescriptor;
-#else 
-	throw_no_xobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XOBJDETECT
+		return new cv::HOGDescriptor;
+	#else
+		throw_no_xobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 cv::HOGDescriptor* cveHOGDescriptorCreate(
@@ -37,20 +45,28 @@ cv::HOGDescriptor* cveHOGDescriptorCreate(
 	double _L2HysThreshold,
 	bool _gammaCorrection)
 {
-#ifdef HAVE_OPENCV_XOBJDETECT
-	return new cv::HOGDescriptor(*_winSize, *_blockSize, *_blockStride, *_cellSize, _nbins, _derivAperture, _winSigma, static_cast<cv::HOGDescriptor::HistogramNormType>(_histogramNormType), _L2HysThreshold, _gammaCorrection);
-#else 
-	throw_no_xobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XOBJDETECT
+		return new cv::HOGDescriptor(*_winSize, *_blockSize, *_blockStride, *_cellSize, _nbins, _derivAperture, _winSigma, static_cast<cv::HOGDescriptor::HistogramNormType>(_histogramNormType), _L2HysThreshold, _gammaCorrection);
+	#else
+		throw_no_xobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveHOGSetSVMDetector(cv::HOGDescriptor* descriptor, std::vector<float>* vector)
 {
-#ifdef HAVE_OPENCV_XOBJDETECT
-	descriptor->setSVMDetector(*vector);
-#else 
-	throw_no_xobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XOBJDETECT
+		descriptor->setSVMDetector(*vector);
+	#else
+		throw_no_xobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveHOGDescriptorRelease(cv::HOGDescriptor** descriptor)
@@ -115,9 +131,13 @@ void cveHOGDescriptorCompute(
 
 unsigned int cveHOGDescriptorGetDescriptorSize(cv::HOGDescriptor* descriptor)
 {
-#ifdef HAVE_OPENCV_XOBJDETECT
-	return static_cast<unsigned int>(descriptor->getDescriptorSize());
-#else 
-	throw_no_xobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XOBJDETECT
+		return static_cast<unsigned int>(descriptor->getDescriptorSize());
+	#else
+		throw_no_xobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }

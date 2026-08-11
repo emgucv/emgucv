@@ -39,6 +39,7 @@ namespace Emgu.CV.Text
                         _ptr = TextInvoke.cveTextDetectorCNNCreate2(csModelArchFilename, csModelWeightsFilename, vs,
                             ref _sharedPtr);
                 }
+                CvInvoke.CheckError();
             }
 
         }
