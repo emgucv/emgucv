@@ -51,7 +51,11 @@ namespace Emgu.CV.Shape
         {
             using (InputArray iaContour1 = contour1.GetInputArray())
             using (InputArray iaContour2 = contour2.GetInputArray())
-                return ShapeInvoke.cveShapeDistanceExtractorComputeDistance(_shapeDistanceExtractorPtr, iaContour1, iaContour2);
+            {
+                float result = ShapeInvoke.cveShapeDistanceExtractorComputeDistance(_shapeDistanceExtractorPtr, iaContour1, iaContour2);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>

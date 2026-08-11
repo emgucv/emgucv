@@ -141,6 +141,7 @@ namespace Emgu.CV.Shape
                     iaTargetShape,
                     matches);
             }
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveShapeTransformerEstimateTransformation(
@@ -164,10 +165,12 @@ namespace Emgu.CV.Shape
             using (InputArray iaInput = input.GetInputArray())
             using (OutputArray oaOutput = output == null ? OutputArray.GetEmpty() : output.GetOutputArray())
             {
-                return cveShapeTransformerApplyTransformation(
+                float result = cveShapeTransformerApplyTransformation(
                     transformer.ShapeTransformerPtr,
                     iaInput,
                     oaOutput);
+                CvInvoke.CheckError();
+                return result;
             }
         }
             
@@ -199,12 +202,13 @@ namespace Emgu.CV.Shape
             {
                 cveShapeTransformerWarpImage(
                     transformer.ShapeTransformerPtr,
-                    iaTransformingImage, 
+                    iaTransformingImage,
                     oaOutput,
                     flags,
-                    boarderMode, 
+                    boarderMode,
                     ref borderValue);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

@@ -110,11 +110,15 @@ void cveShapeTransformerEstimateTransformation(
 	cv::_InputArray* targetShape,
 	std::vector<cv::DMatch>* matches)
 {
-#ifdef HAVE_OPENCV_SHAPE
-	transformer->estimateTransformation(*transformingShape, *targetShape, *matches);
-#else
-	throw_no_shape();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_SHAPE
+		transformer->estimateTransformation(*transformingShape, *targetShape, *matches);
+	#else
+		throw_no_shape();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 float cveShapeTransformerApplyTransformation(
@@ -122,11 +126,15 @@ float cveShapeTransformerApplyTransformation(
 	cv::_InputArray* input,
 	cv::_OutputArray* output)
 {
-#ifdef HAVE_OPENCV_SHAPE
-	return transformer->applyTransformation(*input, output ? *output : static_cast<cv::OutputArray>(cv::noArray()));
-#else
-	throw_no_shape();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_SHAPE
+		return transformer->applyTransformation(*input, output ? *output : static_cast<cv::OutputArray>(cv::noArray()));
+	#else
+		throw_no_shape();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveShapeTransformerWarpImage(
@@ -137,20 +145,28 @@ void cveShapeTransformerWarpImage(
 	int borderMode,
 	cv::Scalar* borderValue)
 {
-#ifdef HAVE_OPENCV_SHAPE
-	transformer->warpImage(*transformingImage, *output, flags, borderMode, *borderValue);
-#else
-	throw_no_shape();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_SHAPE
+		transformer->warpImage(*transformingImage, *output, flags, borderMode, *borderValue);
+	#else
+		throw_no_shape();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 float cveShapeDistanceExtractorComputeDistance(cv::ShapeDistanceExtractor* extractor, cv::_InputArray* contour1, cv::_InputArray* contour2)
 {
-#ifdef HAVE_OPENCV_SHAPE
-	return extractor->computeDistance(*contour1, *contour2);
-#else
-	throw_no_shape();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_SHAPE
+		return extractor->computeDistance(*contour1, *contour2);
+	#else
+		throw_no_shape();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 cv::ShapeContextDistanceExtractor* cveShapeContextDistanceExtractorCreate(
