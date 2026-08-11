@@ -49,8 +49,11 @@ namespace Emgu.CV
         /// <returns>True if the specified image can be decoded by OpenCV.</returns>
         public static bool HaveImageReader(String fileName)
         {
+            bool result;
             using (CvString csFileName = new CvString(fileName))
-                return cveHaveImageReader(csFileName);
+                result = cveHaveImageReader(csFileName);
+            CheckError();
+            return result;
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -64,8 +67,11 @@ namespace Emgu.CV
         /// <returns>True if an image with the specified filename can be encoded by OpenCV.</returns>
         public static bool HaveImageWriter(String fileName)
         {
+            bool result;
             using (CvString csFileName = new CvString(fileName))
-                return cveHaveImageWriter(csFileName);
+                result = cveHaveImageWriter(csFileName);
+            CheckError();
+            return result;
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -86,7 +92,9 @@ namespace Emgu.CV
             using (InputArray iaImages = images.GetInputArray())
             {
                 PushParameters(vec, parameters);
-                return cveImwritemulti(strFilename, iaImages, vec);
+                bool result = cveImwritemulti(strFilename, iaImages, vec);
+                CheckError();
+                return result;
             }
         }
 
@@ -106,7 +114,9 @@ namespace Emgu.CV
             using (VectorOfMat vm = new VectorOfMat())
             using (CvString strFilename = new CvString(filename))
             {
-                if (!cveImreadmulti(strFilename, vm, flags))
+                bool success = cveImreadmulti(strFilename, vm, flags);
+                CheckError();
+                if (!success)
                     return null;
                 Mat[] result = new Mat[vm.Size];
 
@@ -157,6 +167,7 @@ namespace Emgu.CV
                     readMode,
                     result
                     );
+                CheckError();
             }
             return result;
         }
@@ -222,7 +233,11 @@ namespace Emgu.CV
                     }
                     else
                         using (InputArray iaImage = image.GetInputArray())
-                            return cveImwrite(s, iaImage, vec);
+                        {
+                            bool result = cveImwrite(s, iaImage, vec);
+                            CheckError();
+                            return result;
+                        }
                 }
             }
         }
@@ -289,12 +304,14 @@ namespace Emgu.CV
                     using (InputArray iaImage = image.GetInputArray())
                     {
                         PushParameters(vec, parameters);
-                        return cveImwriteWithMetadata(
+                        bool result = cveImwriteWithMetadata(
                             s,
                             iaImage,
                             metadataTypes,
                             iaMetaData,
                             vec);
+                        CheckError();
+                        return result;
                     }
                 }
             }
@@ -371,6 +388,7 @@ namespace Emgu.CV
         {
             using (InputArray iaBuffer = buf.GetInputArray())
                 cveImdecode(iaBuffer, loadType, dst);
+            CheckError();
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveImdecode(IntPtr buf, CvEnum.ImreadModes loadType, IntPtr dst);
@@ -411,7 +429,9 @@ namespace Emgu.CV
         {
             using (var iaBuf = buf.GetInputArray())
             {
-                return cveImdecodemulti(iaBuf, (int) loadType, mats, ref range);
+                bool result = cveImdecodemulti(iaBuf, (int) loadType, mats, ref range);
+                CheckError();
+                return result;
             }
         }
         
@@ -447,6 +467,7 @@ namespace Emgu.CV
                     readMode,
                     image
                     );
+                CheckError();
             }
         }
 
@@ -490,7 +511,11 @@ namespace Emgu.CV
             {
                 PushParameters(p, parameters);
                 using (InputArray iaImage = image.GetInputArray())
-                    return cveImencode(extStr, iaImage, buf, p);
+                {
+                    bool result = cveImencode(extStr, iaImage, buf, p);
+                    CheckError();
+                    return result;
+                }
             }
         }
 
@@ -523,13 +548,15 @@ namespace Emgu.CV
             using (InputArray iaMetaData = metaData.GetInputArray())
             {
                 PushParameters(p, parameters);
-                return cveImencodeWithMetadata(
-                    extStr, 
+                bool result = cveImencodeWithMetadata(
+                    extStr,
                     iaImage,
-                    metadataTypes, 
+                    metadataTypes,
                     iaMetaData,
-                    buf, 
+                    buf,
                     p);
+                CheckError();
+                return result;
             }
         }
 
@@ -582,7 +609,9 @@ namespace Emgu.CV
             using (var paramVec = new VectorOfInt())
             {
                 PushParameters(paramVec, parameters);
-                return cveImencodemulti(extPtr, imgsPtr, buf, paramVec);
+                bool result = cveImencodemulti(extPtr, imgsPtr, buf, paramVec);
+                CheckError();
+                return result;
             }
         }
         
@@ -600,8 +629,11 @@ namespace Emgu.CV
         /// <returns>Returns true if the file was successfully loaded and frames were extracted; returns false otherwise.</returns>
         public static bool ImreadAnimation(String fileName, Animation animation, int start = 0, int count = Int16.MaxValue)
         {
+            bool result;
             using (CvString csFileName = new CvString(fileName))
-                return cveImreadAnimation(csFileName, animation, start, count);
+                result = cveImreadAnimation(csFileName, animation, start, count);
+            CheckError();
+            return result;
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -624,7 +656,9 @@ namespace Emgu.CV
         {
             using (InputArray iaBuf = buf.GetInputArray())
             {
-                return cveImdecodeAnimation(iaBuf, animation, start, count);
+                bool result = cveImdecodeAnimation(iaBuf, animation, start, count);
+                CheckError();
+                return result;
             }
         }
 
@@ -648,7 +682,9 @@ namespace Emgu.CV
         {
             using (CvString csFileName = new CvString(fileName))
             {
-                return cveImwriteAnimation(csFileName, animation, parameters);
+                bool result = cveImwriteAnimation(csFileName, animation, parameters);
+                CheckError();
+                return result;
             }
         }
 
@@ -674,11 +710,13 @@ namespace Emgu.CV
                 using(VectorOfInt p = new VectorOfInt())
             {
                 PushParameters(p, parameters);
-                return cveImencodeAnimation(
+                bool result = cveImencodeAnimation(
                     csExt,
                     animation,
                     buf,
                     p);
+                CheckError();
+                return result;
             }
         }
         

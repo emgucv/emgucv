@@ -476,6 +476,7 @@ namespace Emgu.CV
             using (CvString s = new CvString(fileName))
             {
                 CvInvoke.cveImread(s, loadType, this);
+                CvInvoke.CheckError();
 
                 if (this.IsEmpty) //failed to load in the first attempt
                 {
