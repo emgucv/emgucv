@@ -26,6 +26,7 @@ namespace Emgu.CV.Stitching
         public MultiBandBlender(bool tryGpu = true, int numBands = 5, CvEnum.DepthType weightType = CvEnum.DepthType.Cv32F)
         {
             _ptr = StitchingInvoke.cveMultiBandBlenderCreate(tryGpu ? 1 : 0, numBands, weightType, ref _blenderPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

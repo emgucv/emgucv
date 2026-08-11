@@ -12,6 +12,7 @@
 //#include "cvapi_compat.h"
 
 #include "features_c.h"
+#include "emgu_error.h"
 
 #ifdef HAVE_OPENCV_STITCHING
 

@@ -53,6 +53,7 @@ namespace Emgu.CV.Stitching
             using (OutputArray oaYmap = ymap.GetOutputArray())
             {
                 StitchingInvoke.cveRotationWarperBuildMaps(_rotationWarper, ref srcSize, iaK, iaR, oaXmap, oaYmap, ref result);
+                CvInvoke.CheckError();
                 return result;
             }
         }
@@ -76,6 +77,7 @@ namespace Emgu.CV.Stitching
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 StitchingInvoke.cveRotationWarperWarp(_rotationWarper, iaSrc, iaK, iaR, interpMode, borderMode, oaDst, ref corner);
+                CvInvoke.CheckError();
                 return corner;
             }
         }
@@ -93,6 +95,7 @@ namespace Emgu.CV.Stitching
         public DetailPlaneWarper(float scale)
         {
             _ptr = StitchingInvoke.cveDetailPlaneWarperCreate(scale, ref _rotationWarper);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -121,6 +124,7 @@ namespace Emgu.CV.Stitching
         public DetailCylindricalWarper(float scale)
         {
             _ptr = StitchingInvoke.cveDetailCylindricalWarperCreate(scale, ref _rotationWarper);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -148,6 +152,7 @@ namespace Emgu.CV.Stitching
         public DetailSphericalWarper(float scale)
         {
             _ptr = StitchingInvoke.cveDetailSphericalWarperCreate(scale, ref _rotationWarper);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -175,6 +180,7 @@ namespace Emgu.CV.Stitching
         public DetailFisheyeWarper(float scale)
         {
             _ptr = StitchingInvoke.cveDetailFisheyeWarperCreate(scale, ref _rotationWarper);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -202,6 +208,7 @@ namespace Emgu.CV.Stitching
         public DetailStereographicWarper(float scale)
         {
             _ptr = StitchingInvoke.cveDetailStereographicWarperCreate(scale, ref _rotationWarper);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -229,6 +236,7 @@ namespace Emgu.CV.Stitching
         public DetailCompressedRectilinearWarper(float scale)
         {
             _ptr = StitchingInvoke.cveDetailCompressedRectilinearWarperCreate(scale, ref _rotationWarper);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -256,6 +264,7 @@ namespace Emgu.CV.Stitching
         public DetailPaniniWarper(float scale)
         {
             _ptr = StitchingInvoke.cveDetailPaniniWarperCreate(scale, ref _rotationWarper);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -283,6 +292,7 @@ namespace Emgu.CV.Stitching
         public DetailPaniniPortraitWarper(float scale)
         {
             _ptr = StitchingInvoke.cveDetailPaniniPortraitWarperCreate(scale, ref _rotationWarper);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -310,6 +320,7 @@ namespace Emgu.CV.Stitching
         public DetailMercatorWarper(float scale)
         {
             _ptr = StitchingInvoke.cveDetailMercatorWarperCreate(scale, ref _rotationWarper);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -337,6 +348,7 @@ namespace Emgu.CV.Stitching
         public DetailTransverseMercatorWarper(float scale)
         {
             _ptr = StitchingInvoke.cveDetailTransverseMercatorWarperCreate(scale, ref _rotationWarper);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -364,6 +376,7 @@ namespace Emgu.CV.Stitching
         public DetailPlaneWarperGpu(float scale)
         {
             _ptr = StitchingInvoke.cveDetailPlaneWarperGpuCreate(scale, ref _rotationWarper);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -392,6 +405,7 @@ namespace Emgu.CV.Stitching
         public DetailCylindricalWarperGpu(float scale)
         {
             _ptr = StitchingInvoke.cveDetailCylindricalWarperGpuCreate(scale, ref _rotationWarper);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -419,6 +433,7 @@ namespace Emgu.CV.Stitching
         public DetailSphericalWarperGpu(float scale)
         {
             _ptr = StitchingInvoke.cveDetailSphericalWarperGpuCreate(scale, ref _rotationWarper);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

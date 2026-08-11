@@ -33,6 +33,7 @@ namespace Emgu.CV.Stitching
         {
             _ptr = ptr;
             _needDispose = needDispose;
+            CvInvoke.CheckError();
         }
 
 
@@ -57,6 +58,7 @@ namespace Emgu.CV.Stitching
             using (OutputArray ioM = m.GetOutputArray())
             {
                 StitchingInvoke.cveCameraParamsGetK(_ptr, ioM);
+                CvInvoke.CheckError();
                 return m;
             }
         }

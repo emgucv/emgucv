@@ -51,6 +51,7 @@ namespace Emgu.CV.Stitching
             {
                 StitchingInvoke.cveBlenderPrepare(_blenderPtr, vpCorners, vsSizes);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -60,6 +61,7 @@ namespace Emgu.CV.Stitching
         public void Prepare(Rectangle dstRoi)
         {
             StitchingInvoke.cveBlenderPrepare2(_blenderPtr, ref dstRoi);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -75,6 +77,7 @@ namespace Emgu.CV.Stitching
             {
                 StitchingInvoke.cveBlenderFeed(_blenderPtr, iaImg, iaMask, ref tl);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -89,6 +92,7 @@ namespace Emgu.CV.Stitching
             {
                 StitchingInvoke.cveBlenderBlend(_blenderPtr, ioaDst, ioaDstMask);
             }
+            CvInvoke.CheckError();
         }
     }
 

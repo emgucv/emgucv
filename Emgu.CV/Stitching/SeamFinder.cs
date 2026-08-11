@@ -52,6 +52,7 @@ namespace Emgu.CV.Stitching
         public NoSeamFinder()
         {
             _ptr = StitchingInvoke.cveNoSeamFinderCreate(ref _seamFinderPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -101,6 +102,7 @@ namespace Emgu.CV.Stitching
         public VoronoiSeamFinder()
         {
             _ptr = StitchingInvoke.cveVoronoiSeamFinderCreate(ref _seamFinderPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -143,6 +145,7 @@ namespace Emgu.CV.Stitching
         public DpSeamFinder(CostFunction costFunc= CostFunction.Color)
         {
             _ptr = StitchingInvoke.cveDpSeamFinderCreate(costFunc, ref _seamFinderPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -190,6 +193,7 @@ namespace Emgu.CV.Stitching
             float badRegionPenalty = 1.0f)
         {
             _ptr = StitchingInvoke.cveGraphCutSeamFinderCreate(costFunc, terminalCost, badRegionPenalty, ref _seamFinderPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -85,6 +85,7 @@ namespace Emgu.CV.Stitching
         public Stitcher(Mode mode = Mode.Panorama)
         {
             _ptr = StitchingInvoke.cveStitcherCreate(mode, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -97,7 +98,11 @@ namespace Emgu.CV.Stitching
         {
             using (InputArray iaImages = images.GetInputArray())
             using (OutputArray oaPano = pano.GetOutputArray())
-                return StitchingInvoke.cveStitcherStitch(_ptr, iaImages, oaPano);
+            {
+                Status result = StitchingInvoke.cveStitcherStitch(_ptr, iaImages, oaPano);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -111,7 +116,9 @@ namespace Emgu.CV.Stitching
             using (InputArray iaImages = images.GetInputArray())
             using (InputArray iaMasks = masks == null ? InputArray.GetEmpty() : masks.GetInputArray())
             {
-                return StitchingInvoke.cveStitcherEstimateTransform(_ptr, iaImages, iaMasks);
+                Stitcher.Status result = StitchingInvoke.cveStitcherEstimateTransform(_ptr, iaImages, iaMasks);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -124,7 +131,9 @@ namespace Emgu.CV.Stitching
         {
             using (OutputArray oaPano = pano.GetOutputArray())
             {
-                return StitchingInvoke.cveStitcherComposePanorama1(_ptr, oaPano);
+                Stitcher.Status result = StitchingInvoke.cveStitcherComposePanorama1(_ptr, oaPano);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -138,7 +147,11 @@ namespace Emgu.CV.Stitching
         {
             using (InputArray iaImages = images.GetInputArray())
             using (OutputArray oaPano = pano.GetOutputArray())
-                return StitchingInvoke.cveStitcherComposePanorama2(_ptr, iaImages, oaPano);
+            {
+                Stitcher.Status result = StitchingInvoke.cveStitcherComposePanorama2(_ptr, iaImages, oaPano);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -148,6 +161,7 @@ namespace Emgu.CV.Stitching
         public void SetFeaturesFinder(Features.Feature2D finder)
         {
             StitchingInvoke.cveStitcherSetFeaturesFinder(_ptr, finder.Feature2DPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -157,6 +171,7 @@ namespace Emgu.CV.Stitching
         public void SetExposureCompensator(ExposureCompensator exposureCompensator)
         {
             StitchingInvoke.cveStitcherSetExposureCompensator(_ptr, exposureCompensator.ExposureCompensatorPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -166,6 +181,7 @@ namespace Emgu.CV.Stitching
         public void SetBundleAdjusterCompensator(BundleAdjusterBase bundleAdjuster)
         {
             StitchingInvoke.cveStitcherSetBundleAdjuster(_ptr, bundleAdjuster.BundleAdjusterPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -175,6 +191,7 @@ namespace Emgu.CV.Stitching
         public void SetSeamFinder(SeamFinder seamFinder)
         {
             StitchingInvoke.cveStitcherSetSeamFinder(_ptr, seamFinder.SeamFinderPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -184,6 +201,7 @@ namespace Emgu.CV.Stitching
         public void SetEstimator(Estimator estimator)
         {
             StitchingInvoke.cveStitcherSetEstimator(_ptr, estimator.EstimatorPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -193,6 +211,7 @@ namespace Emgu.CV.Stitching
         public void SetFeaturesMatcher(FeaturesMatcher featuresMatcher)
         {
             StitchingInvoke.cveStitcherSetFeaturesMatcher(_ptr, featuresMatcher.FeaturesMatcherPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -202,6 +221,7 @@ namespace Emgu.CV.Stitching
         public void SetWarper(WarperCreator warperCreator)
         {
             StitchingInvoke.cveStitcherSetWarper(_ptr, warperCreator.WarperCreatorPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -211,6 +231,7 @@ namespace Emgu.CV.Stitching
         public void SetBlender(Blender blender)
         {
             StitchingInvoke.cveStitcherSetBlender(_ptr, blender.BlenderPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -218,8 +239,17 @@ namespace Emgu.CV.Stitching
         /// </summary>
         public bool WaveCorrection
         {
-            get { return StitchingInvoke.cveStitcherGetWaveCorrection(_ptr); }
-            set { StitchingInvoke.cveStitcherSetWaveCorrection(_ptr, value); }
+            get
+            {
+                bool result = StitchingInvoke.cveStitcherGetWaveCorrection(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                StitchingInvoke.cveStitcherSetWaveCorrection(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -227,8 +257,17 @@ namespace Emgu.CV.Stitching
         /// </summary>
         public WaveCorrectionType WaveCorrectionKind
         {
-            get { return StitchingInvoke.cveStitcherGetWaveCorrectionKind(_ptr); }
-            set { StitchingInvoke.cveStitcherSetWaveCorrectionKind(_ptr, value); }
+            get
+            {
+                WaveCorrectionType result = StitchingInvoke.cveStitcherGetWaveCorrectionKind(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                StitchingInvoke.cveStitcherSetWaveCorrectionKind(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -236,8 +275,17 @@ namespace Emgu.CV.Stitching
         /// </summary>
         public double PanoConfidenceThresh
         {
-            get { return StitchingInvoke.cveStitcherGetPanoConfidenceThresh(_ptr); }
-            set { StitchingInvoke.cveStitcherSetPanoConfidenceThresh(_ptr, value); }
+            get
+            {
+                double result = StitchingInvoke.cveStitcherGetPanoConfidenceThresh(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                StitchingInvoke.cveStitcherSetPanoConfidenceThresh(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -245,8 +293,17 @@ namespace Emgu.CV.Stitching
         /// </summary>
         public double CompositingResol
         {
-            get { return StitchingInvoke.cveStitcherGetCompositingResol(_ptr); }
-            set { StitchingInvoke.cveStitcherSetCompositingResol(_ptr, value); }
+            get
+            {
+                double result = StitchingInvoke.cveStitcherGetCompositingResol(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                StitchingInvoke.cveStitcherSetCompositingResol(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -254,8 +311,17 @@ namespace Emgu.CV.Stitching
         /// </summary>
         public double SeamEstimationResol
         {
-            get { return StitchingInvoke.cveStitcherGetSeamEstimationResol(_ptr); }
-            set { StitchingInvoke.cveStitcherSetSeamEstimationResol(_ptr, value); }
+            get
+            {
+                double result = StitchingInvoke.cveStitcherGetSeamEstimationResol(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                StitchingInvoke.cveStitcherSetSeamEstimationResol(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -263,8 +329,17 @@ namespace Emgu.CV.Stitching
         /// </summary>
         public double RegistrationResol
         {
-            get { return StitchingInvoke.cveStitcherGetRegistrationResol(_ptr); }
-            set { StitchingInvoke.cveStitcherSetRegistrationResol(_ptr, value); }
+            get
+            {
+                double result = StitchingInvoke.cveStitcherGetRegistrationResol(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                StitchingInvoke.cveStitcherSetRegistrationResol(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -272,8 +347,17 @@ namespace Emgu.CV.Stitching
         /// </summary>
         public CvEnum.Inter InterpolationFlags
         {
-            get { return StitchingInvoke.cveStitcherGetInterpolationFlags(_ptr); }
-            set { StitchingInvoke.cveStitcherSetInterpolationFlags(_ptr, value); }
+            get
+            {
+                CvEnum.Inter result = StitchingInvoke.cveStitcherGetInterpolationFlags(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                StitchingInvoke.cveStitcherSetInterpolationFlags(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -284,6 +368,7 @@ namespace Emgu.CV.Stitching
         {
             VectorOfCameraParams vcp = new VectorOfCameraParams();
             StitchingInvoke.cveStitcherCameras(_ptr, vcp);
+            CvInvoke.CheckError();
             return vcp;
         }
 
@@ -296,6 +381,7 @@ namespace Emgu.CV.Stitching
             using (VectorOfInt vc = new VectorOfInt())
             {
                 StitchingInvoke.cveStitcherComponent(_ptr, vc);
+                CvInvoke.CheckError();
                 return vc.ToArray();
             }
         }
@@ -309,6 +395,7 @@ namespace Emgu.CV.Stitching
             UMat result = new UMat();
             using (OutputArray oaResult = result.GetOutputArray())
                 StitchingInvoke.cveStitcherGetResultMask(_ptr, oaResult);
+            CvInvoke.CheckError();
             return result;
         }
 
@@ -326,14 +413,17 @@ namespace Emgu.CV.Stitching
         {
             using (InputArray iaImages = images.GetInputArray())
             {
+                Stitcher.Status result;
                 if (component == null)
                 {
-                    return StitchingInvoke.cveStitcherSetTransform(_ptr, iaImages, cameras, IntPtr.Zero);
+                    result = StitchingInvoke.cveStitcherSetTransform(_ptr, iaImages, cameras, IntPtr.Zero);
                 } else
                     using (VectorOfInt viComponent = new VectorOfInt(component))
                     {
-                        return StitchingInvoke.cveStitcherSetTransform(_ptr, iaImages, cameras, viComponent);
+                        result = StitchingInvoke.cveStitcherSetTransform(_ptr, iaImages, cameras, viComponent);
                     }
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
