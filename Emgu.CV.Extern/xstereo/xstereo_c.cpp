@@ -26,19 +26,27 @@ void cveQuasiDenseStereoRelease(cv::Ptr<cv::stereo::QuasiDenseStereo>** sharedPt
 
 void cveQuasiDenseStereoProcess(cv::stereo::QuasiDenseStereo* stereo, cv::Mat* imgLeft, cv::Mat* imgRight)
 {
-#ifdef HAVE_OPENCV_XSTEREO
-	stereo->process(*imgLeft, *imgRight);
-#else
-	throw_no_xstereo();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XSTEREO
+		stereo->process(*imgLeft, *imgRight);
+	#else
+		throw_no_xstereo();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveQuasiDenseStereoGetDisparity(cv::stereo::QuasiDenseStereo* stereo, cv::Mat* disparity)
 {
-#ifdef HAVE_OPENCV_XSTEREO
-	cv::Mat d = stereo->getDisparity();
-	cv::swap(d, *disparity);
-#else
-	throw_no_xstereo();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XSTEREO
+		cv::Mat d = stereo->getDisparity();
+		cv::swap(d, *disparity);
+	#else
+		throw_no_xstereo();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
