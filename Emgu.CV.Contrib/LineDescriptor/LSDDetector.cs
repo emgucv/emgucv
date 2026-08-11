@@ -39,6 +39,7 @@ namespace Emgu.CV.LineDescriptor
         public void Detect(Mat image, VectorOfKeyLine keylines, int scale, int numOctaves, Mat mask = null)
         {
             LineDescriptorInvoke.cveLineDescriptorLSDDetectorDetect(_ptr, image, keylines, scale, numOctaves, mask);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
