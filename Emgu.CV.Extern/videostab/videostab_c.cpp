@@ -29,16 +29,20 @@ void cveVideostabCaptureFrameSourceRelease(CaptureFrameSource** captureFrameSour
 
 bool cveVideostabFrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, cv::Mat* nextFrame)
 {
-#ifdef HAVE_OPENCV_VIDEOSTAB
-	cv::Mat mat = frameSource->nextFrame();
-	if (mat.empty())
-		return false;
+	try
+	{
+	#ifdef HAVE_OPENCV_VIDEOSTAB
+		cv::Mat mat = frameSource->nextFrame();
+		if (mat.empty())
+			return false;
 
-	cv::swap(mat, *nextFrame);
-	return true;
-#else
-	throw_no_videostab();
-#endif
+		cv::swap(mat, *nextFrame);
+		return true;
+	#else
+		throw_no_videostab();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 
@@ -178,9 +182,13 @@ void cveKeypointBasedMotionEstimatorRelease(cv::videostab::KeypointBasedMotionEs
 
 float cveCalcBlurriness(cv::Mat* frame)
 {
-#ifdef HAVE_OPENCV_VIDEOSTAB
-	return cv::videostab::calcBlurriness(*frame);
-#else
-	throw_no_videostab();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_VIDEOSTAB
+		return cv::videostab::calcBlurriness(*frame);
+	#else
+		throw_no_videostab();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }

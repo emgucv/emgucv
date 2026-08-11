@@ -46,7 +46,9 @@ namespace Emgu.CV.VideoStab
         public Mat NextFrame()
         {
             Mat frame = new Mat();
-            if (VideoStabInvoke.cveVideostabFrameSourceGetNextFrame(FrameSourcePtr, frame))
+            bool hasFrame = VideoStabInvoke.cveVideostabFrameSourceGetNextFrame(FrameSourcePtr, frame);
+            CvInvoke.CheckError();
+            if (hasFrame)
             {
                 return frame;
             }
@@ -64,7 +66,9 @@ namespace Emgu.CV.VideoStab
         /// <returns>True if there are more frames</returns>
         public bool NextFrame(Mat frame)
         {
-            return VideoStabInvoke.cveVideostabFrameSourceGetNextFrame(FrameSourcePtr, frame);
+            bool result = VideoStabInvoke.cveVideostabFrameSourceGetNextFrame(FrameSourcePtr, frame);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>

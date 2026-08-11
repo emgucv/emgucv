@@ -27,7 +27,9 @@ namespace Emgu.CV.VideoStab
         /// <returns>The blurriness measure</returns>
         public static float CalcBlurriness(Mat frame)
         {
-            return cveCalcBlurriness(frame);
+            float result = cveCalcBlurriness(frame);
+            CvInvoke.CheckError();
+            return result;
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

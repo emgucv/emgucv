@@ -12,6 +12,7 @@
 #include "opencv2/opencv_modules.hpp"
 #include "opencv2/core.hpp"
 #include "cvapi_compat.h"
+#include "emgu_error.h"
 
 #ifdef HAVE_OPENCV_VIDEOSTAB
 #include "opencv2/videostab/stabilizer.hpp"
