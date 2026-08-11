@@ -44,6 +44,7 @@ namespace Emgu.CV
         public BackgroundSubtractorMOG2(int history = 500, float varThreshold = 16, bool shadowDetection = true)
         {
             _ptr = CvInvoke.cveBackgroundSubtractorMOG2Create(history, varThreshold, shadowDetection, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

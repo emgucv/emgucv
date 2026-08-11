@@ -50,6 +50,7 @@ namespace Emgu.CV
         public DISOpticalFlow(Preset preset = Preset.Fast)
         {
             _ptr = CvInvoke.cveDISOpticalFlowCreate(preset, ref _denseFlowPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

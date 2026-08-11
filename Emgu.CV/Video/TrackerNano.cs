@@ -45,6 +45,7 @@ namespace Emgu.CV
                     target,
                     ref _trackerPtr,
                     ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

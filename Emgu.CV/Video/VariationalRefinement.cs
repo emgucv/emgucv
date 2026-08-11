@@ -27,6 +27,7 @@ namespace Emgu.CV
         public VariationalRefinement()
         {
             _ptr = CvInvoke.cveVariationalRefinementCreate(ref _denseFlowPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

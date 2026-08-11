@@ -26,6 +26,7 @@ namespace Emgu.CV
       public KalmanFilter(int dynamParams, int measureParams, int controlParams, DepthType type = DepthType.Cv32F)
       {
          _ptr = CvInvoke.cveKalmanFilterCreate(dynamParams, measureParams, controlParams, type);
+         CvInvoke.CheckError();
       }
 
       /// <summary>
@@ -35,7 +36,9 @@ namespace Emgu.CV
       /// <returns>The predicted state. </returns>
       public Mat Predict(Mat control = null)
       {
-         return new Mat(CvInvoke.cveKalmanFilterPredict(_ptr, control), false);
+         IntPtr ptr = CvInvoke.cveKalmanFilterPredict(_ptr, control);
+         CvInvoke.CheckError();
+         return new Mat(ptr, false);
       }
 
       /// <summary>
@@ -45,7 +48,9 @@ namespace Emgu.CV
       /// <returns>The updated predicted state</returns>
       public Mat Correct(Mat measurement)
       {
-         return new Mat(CvInvoke.cveKalmanFilterCorrect(_ptr, measurement), false);
+         IntPtr ptr = CvInvoke.cveKalmanFilterCorrect(_ptr, measurement);
+         CvInvoke.CheckError();
+         return new Mat(ptr, false);
       }
 
       /// <summary>

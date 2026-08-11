@@ -29,6 +29,7 @@ namespace Emgu.CV
             {
                 cveCamShift(iaProbImage, ref window, ref criteria, ref box);
             }
+            CheckError();
             return box;
         }
 
@@ -51,8 +52,11 @@ namespace Emgu.CV
            ref Rectangle window,
            MCvTermCriteria criteria)
         {
+            int result;
             using (InputArray iaProbImage = probImage.GetInputArray())
-                return cveMeanShift(iaProbImage, ref window, ref criteria);
+                result = cveMeanShift(iaProbImage, ref window, ref criteria);
+            CheckError();
+            return result;
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern int cveMeanShift(
@@ -82,11 +86,14 @@ namespace Emgu.CV
             CvEnum.BorderType derivBorder = CvEnum.BorderType.Constant,
             bool tryReuseInputImage = true)
         {
+            int result;
             using (InputArray iaImage = img.GetInputArray())
             using (OutputArray oaPyramid = pyramid.GetOutputArray())
             {
-                return cveBuildOpticalFlowPyramid(iaImage, oaPyramid, ref winSize, maxLevel, withDerivatives, pyrBorder, derivBorder, tryReuseInputImage);
+                result = cveBuildOpticalFlowPyramid(iaImage, oaPyramid, ref winSize, maxLevel, withDerivatives, pyrBorder, derivBorder, tryReuseInputImage);
             }
+            CheckError();
+            return result;
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern int cveBuildOpticalFlowPyramid(
@@ -300,6 +307,7 @@ namespace Emgu.CV
             using (OutputArray oaStatus = status.GetOutputArray())
             using (OutputArray oaErr = err.GetOutputArray())
                 cveCalcOpticalFlowPyrLK(iaPrevImg, iaNextImg, iaPrevPts, ioaNextPts, oaStatus, oaErr, ref winSize, maxLevel, ref criteria, flags, minEigThreshold);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -386,6 +394,7 @@ namespace Emgu.CV
             using (InputArray iaNext0 = next0.GetInputArray())
             using (InputOutputArray ioaFlow = flow.GetInputOutputArray())
                 cveCalcOpticalFlowFarneback(iaPrev0, iaNext0, ioaFlow, pyrScale, levels, winSize, iterations, polyN, polySigma, flags);
+            CheckError();
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveCalcOpticalFlowFarneback(
@@ -423,7 +432,9 @@ namespace Emgu.CV
             using (InputOutputArray ioaWarpMatrix = warpMatrix.GetInputOutputArray())
             using (InputArray iaInputMask = inputMask == null ? InputArray.GetEmpty() : inputMask.GetInputArray())
             {
-                return cveFindTransformECC(iaTemplateImage, iaInputImage, ioaWarpMatrix, motionType, ref criteria, iaInputMask);
+                double result = cveFindTransformECC(iaTemplateImage, iaInputImage, ioaWarpMatrix, motionType, ref criteria, iaInputMask);
+                CheckError();
+                return result;
             }
         }
 

@@ -40,6 +40,7 @@ namespace Emgu.CV
         public BackgroundSubtractorKNN(int history, double dist2Threshold, bool detectShadows)
         {
             _ptr = CvInvoke.cveBackgroundSubtractorKNNCreate(history, dist2Threshold, detectShadows, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

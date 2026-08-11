@@ -44,8 +44,9 @@ namespace Emgu.CV
                 flags,
                 minEigThreshold,
                 ref _sparseOpticalFlow,
-                ref _algorithm, 
+                ref _algorithm,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

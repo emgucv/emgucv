@@ -44,6 +44,7 @@ namespace Emgu.CV
             using (InputArray iaI1 = i1.GetInputArray())
             using (InputOutputArray ioaFlow = flow.GetInputOutputArray())
                 CvInvoke.cveDenseOpticalFlowCalc(opticalFlow.DenseOpticalFlowPtr, iaI0, iaI1, ioaFlow);
+            CvInvoke.CheckError();
         }
     }
 
