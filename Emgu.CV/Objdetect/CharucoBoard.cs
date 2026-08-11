@@ -40,6 +40,7 @@ namespace Emgu.CV.Aruco
            Dictionary dictionary)
         {
             _ptr = ArucoInvoke.cveCharucoBoardCreate(squaresX, squaresY, squareLength, markerLength, dictionary, ref _boardPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

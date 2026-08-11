@@ -48,6 +48,7 @@ namespace Emgu.CV
                 _ptr = ObjdetectInvoke.cveBarcodeDetectorCreate(
                     csSrModelPath,
                     ref _graphicalCodeDetectorPtr);
+            CvInvoke.CheckError();
         }
 
 

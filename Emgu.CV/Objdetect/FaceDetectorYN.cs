@@ -50,11 +50,12 @@ namespace Emgu.CV
                     scoreThreshold,
                     nmsThreshold,
                     topK,
-                    backendId, 
+                    backendId,
                     targetId,
                     ref _sharedPtr
                 );
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -65,9 +66,12 @@ namespace Emgu.CV
         /// <returns>1 if detection is successful, 0 otherwise.</returns>
         public int Detect(IInputArray image, IOutputArray faces)
         {
+            int result;
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaFaces = faces.GetOutputArray())
-                return ObjdetectInvoke.cveFaceDetectorYNDetect(_ptr, iaImage, oaFaces);
+                result = ObjdetectInvoke.cveFaceDetectorYNDetect(_ptr, iaImage, oaFaces);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>

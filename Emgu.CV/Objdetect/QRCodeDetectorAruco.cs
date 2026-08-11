@@ -34,6 +34,7 @@ namespace Emgu.CV
         public QRCodeDetectorAruco()
         {
             _ptr = ObjdetectInvoke.cveQRCodeDetectorArucoCreate(ref _graphicalCodeDetectorPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

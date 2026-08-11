@@ -142,10 +142,11 @@ namespace Emgu.CV
         {
             _ptr = ObjdetectInvoke.cveQRCodeEncoderCreate(
                 ref _sharedPtr,
-                version, 
+                version,
                 correctionLevel,
                 mode,
                 structureNumber);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -173,6 +174,7 @@ namespace Emgu.CV
             {
                 ObjdetectInvoke.cveQRCodeEncoderEncode(_ptr, csEncodedInfo, oaQrcode);
             }
+            CvInvoke.CheckError();
         }
 
     }

@@ -43,6 +43,7 @@ namespace Emgu.CV.Aruco
 			bool checkMarkers = true)
         {
             _ptr = ObjdetectInvoke.cveCharucoParametersCreate(minMarkers, tryRefineMarkers, checkMarkers);
+            CvInvoke.CheckError();
         }
 
     

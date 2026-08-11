@@ -8,80 +8,112 @@
 
 cv::mcc::CChecker* cveCCheckerCreate(cv::Ptr<cv::mcc::CChecker>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::Ptr<cv::mcc::CChecker> checker = cv::mcc::CChecker::create();
-	*sharedPtr = new cv::Ptr<cv::mcc::CChecker>(checker);
-	return (*sharedPtr)->get();
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::Ptr<cv::mcc::CChecker> checker = cv::mcc::CChecker::create();
+		*sharedPtr = new cv::Ptr<cv::mcc::CChecker>(checker);
+		return (*sharedPtr)->get();
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveCCheckerGetBox(cv::mcc::CChecker* checker, std::vector< cv::Point2f >* box)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	std::vector<cv::Point2f> pts = checker->getBox();
-	*box = pts;
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		std::vector<cv::Point2f> pts = checker->getBox();
+		*box = pts;
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveCCheckerSetBox(cv::mcc::CChecker* checker, std::vector< cv::Point2f >* box)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	checker->setBox(*box);
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		checker->setBox(*box);
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCCheckerGetCenter(cv::mcc::CChecker* checker, cv::Point2f* center)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::Point2f p = checker->getCenter();
-	center->x = p.x;
-	center->y = p.y;
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::Point2f p = checker->getCenter();
+		center->x = p.x;
+		center->y = p.y;
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveCCheckerSetCenter(cv::mcc::CChecker* checker, cv::Point2f* center)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::Point2f p = *center;
-	checker->setCenter(p);
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::Point2f p = *center;
+		checker->setCenter(p);
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCCheckerRelease(cv::Ptr<cv::mcc::CChecker>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	delete* sharedPtr;
-	*sharedPtr = 0;
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		delete* sharedPtr;
+		*sharedPtr = 0;
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCCheckerGetChartsRGB(cv::mcc::CChecker* checker, cv::_OutputArray* chartsRgb)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::Mat m = checker->getChartsRGB();
-	m.copyTo(*chartsRgb);
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::Mat m = checker->getChartsRGB();
+		m.copyTo(*chartsRgb);
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCCheckerSetChartsRGB(cv::mcc::CChecker* checker, cv::Mat* chartsRgb)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	checker->setChartsRGB(*chartsRgb);
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		checker->setChartsRGB(*chartsRgb);
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 /*
@@ -126,14 +158,18 @@ void cveCCheckerDrawRelease(cv::Ptr<cv::mcc::CCheckerDraw>** sharedPtr)
 
 cv::mcc::CCheckerDetector* cveCCheckerDetectorCreate(cv::Algorithm** algorithm, cv::Ptr<cv::mcc::CCheckerDetector>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::Ptr<cv::mcc::CCheckerDetector> checkerDetector = cv::mcc::CCheckerDetector::create();
-	*sharedPtr = new cv::Ptr<cv::mcc::CCheckerDetector>(checkerDetector);
-	*algorithm = dynamic_cast<cv::Algorithm*>((*sharedPtr)->get());
-	return (*sharedPtr)->get();
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::Ptr<cv::mcc::CCheckerDetector> checkerDetector = cv::mcc::CCheckerDetector::create();
+		*sharedPtr = new cv::Ptr<cv::mcc::CCheckerDetector>(checkerDetector);
+		*algorithm = dynamic_cast<cv::Algorithm*>((*sharedPtr)->get());
+		return (*sharedPtr)->get();
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 bool cveCCheckerDetectorProcess(
@@ -142,17 +178,21 @@ bool cveCCheckerDetectorProcess(
 	std::vector< cv::Rect >* regionOfInterest,
 	int nc)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	if (regionOfInterest) {
-		return detector->process(*image, *regionOfInterest, nc);
-	}
-	else
+	try
 	{
-		return detector->process(*image, nc);
+	#ifdef HAVE_OPENCV_OBJDETECT
+		if (regionOfInterest) {
+			return detector->process(*image, *regionOfInterest, nc);
+		}
+		else
+		{
+			return detector->process(*image, nc);
+		}
+	#else
+		throw_no_objdetect();
+	#endif
 	}
-#else
-	throw_no_objdetect();
-#endif
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 
@@ -163,51 +203,72 @@ void cveCCheckerDetectorDraw(
 	cv::Scalar* color,
 	int thickness)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	std::vector< cv::Ptr<cv::mcc::CChecker> > checkers;
-	cv::Ptr< cv::mcc::CChecker > checkerPtr(pChecker, [](cv::mcc::CChecker* p) {});
-	checkers.push_back(checkerPtr);
-	detector->draw(checkers, *img, *color, thickness);
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		std::vector< cv::Ptr<cv::mcc::CChecker> > checkers;
+		cv::Ptr< cv::mcc::CChecker > checkerPtr(pChecker, [](cv::mcc::CChecker* p) {});
+		checkers.push_back(checkerPtr);
+		detector->draw(checkers, *img, *color, thickness);
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 
 cv::mcc::CChecker* cveCCheckerDetectorGetBestColorChecker(cv::mcc::CCheckerDetector* detector)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::Ptr<cv::mcc::CChecker> ptr = detector->getBestColorChecker();
-	return ptr.get();
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::Ptr<cv::mcc::CChecker> ptr = detector->getBestColorChecker();
+		return ptr.get();
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveCCheckerDetectorRelease(cv::Ptr<cv::mcc::CCheckerDetector>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	delete* sharedPtr;
-	*sharedPtr = 0;
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		delete* sharedPtr;
+		*sharedPtr = 0;
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::mcc::DetectorParametersMCC* cveDetectorParametersMCCCreate()
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	return new cv::mcc::DetectorParametersMCC();
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		return new cv::mcc::DetectorParametersMCC();
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveDetectorParametersMCCRelease(cv::mcc::DetectorParametersMCC** parameters)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	delete* parameters;
-	*parameters = 0;
-#else
-	throw_no_objdetect();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		delete* parameters;
+		*parameters = 0;
+	#else
+		throw_no_objdetect();
+	#endif	
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
+
 

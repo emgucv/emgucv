@@ -8,35 +8,47 @@
 
 void cveArucoDictionaryGenerateImageMarker(cv::aruco::Dictionary* dict, int id, int sizePixels, cv::_OutputArray* _img, int borderBits)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	dict->generateImageMarker(id, sizePixels, *_img, borderBits);
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		dict->generateImageMarker(id, sizePixels, *_img, borderBits);
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::aruco::Dictionary* cveArucoGetPredefinedDictionary(int name, cv::Ptr<cv::aruco::Dictionary>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::aruco::Dictionary dict = cv::aruco::getPredefinedDictionary(name);
-	cv::Ptr<cv::aruco::Dictionary> ptr = cv::makePtr<cv::aruco::Dictionary>();
-	*ptr = dict;
-	*sharedPtr = new cv::Ptr<cv::aruco::Dictionary>(ptr);
-	return ptr.get();
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::aruco::Dictionary dict = cv::aruco::getPredefinedDictionary(name);
+		cv::Ptr<cv::aruco::Dictionary> ptr = cv::makePtr<cv::aruco::Dictionary>();
+		*ptr = dict;
+		*sharedPtr = new cv::Ptr<cv::aruco::Dictionary>(ptr);
+		return ptr.get();
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 cv::aruco::Dictionary* cveArucoDictionaryCreate(cv::Ptr<cv::aruco::Dictionary>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::Ptr<cv::aruco::Dictionary> ptr = cv::makePtr<cv::aruco::Dictionary>();
-	*sharedPtr = new cv::Ptr<cv::aruco::Dictionary>(ptr);
-	return ptr.get();
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::Ptr<cv::aruco::Dictionary> ptr = cv::makePtr<cv::aruco::Dictionary>();
+		*sharedPtr = new cv::Ptr<cv::aruco::Dictionary>(ptr);
+		return ptr.get();
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 cv::aruco::Dictionary* cveArucoExtendDictionary(
@@ -46,26 +58,34 @@ cv::aruco::Dictionary* cveArucoExtendDictionary(
 	int randomSeed,
 	cv::Ptr<cv::aruco::Dictionary>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::aruco::Dictionary dict = cv::aruco::extendDictionary(nMarkers, markerSize, *(baseDictionary->get()), randomSeed);
-	cv::Ptr<cv::aruco::Dictionary> ptr = cv::makePtr<cv::aruco::Dictionary>();
-	*ptr = dict;
-	*sharedPtr = new cv::Ptr<cv::aruco::Dictionary>(ptr);
-	return ptr.get();
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::aruco::Dictionary dict = cv::aruco::extendDictionary(nMarkers, markerSize, *(baseDictionary->get()), randomSeed);
+		cv::Ptr<cv::aruco::Dictionary> ptr = cv::makePtr<cv::aruco::Dictionary>();
+		*ptr = dict;
+		*sharedPtr = new cv::Ptr<cv::aruco::Dictionary>(ptr);
+		return ptr.get();
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveArucoDictionaryRelease(cv::aruco::Dictionary** dict, cv::Ptr<cv::aruco::Dictionary>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	delete *sharedPtr;
-	*dict = 0;
-	*sharedPtr = 0;
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		delete *sharedPtr;
+		*dict = 0;
+		*sharedPtr = 0;
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 /*
@@ -95,25 +115,33 @@ cv::aruco::ArucoDetector* cveArucoDetectorCreate(
 	cv::aruco::RefineParameters* refineParams,
 	cv::Algorithm** algorithm)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::aruco::ArucoDetector* detector = new cv::aruco::ArucoDetector(
-		*dictionary,
-		detectorParams ? *detectorParams : cv::aruco::DetectorParameters(),
-		refineParams ? *refineParams : cv::aruco::RefineParameters());
-	*algorithm = dynamic_cast<cv::Algorithm*>(detector);
-	return detector;
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::aruco::ArucoDetector* detector = new cv::aruco::ArucoDetector(
+			*dictionary,
+			detectorParams ? *detectorParams : cv::aruco::DetectorParameters(),
+			refineParams ? *refineParams : cv::aruco::RefineParameters());
+		*algorithm = dynamic_cast<cv::Algorithm*>(detector);
+		return detector;
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveArucoDetectorRelease(cv::aruco::ArucoDetector** arucoDetector)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	delete* arucoDetector;
-	*arucoDetector = 0;
-#else
-	throw_no_objdetect();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		delete* arucoDetector;
+		*arucoDetector = 0;
+	#else
+		throw_no_objdetect();
+	#endif	
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveArucoDetectorDetectMarkers(
@@ -123,15 +151,19 @@ void cveArucoDetectorDetectMarkers(
 	cv::_OutputArray* ids,
 	cv::_OutputArray* rejectedImgPoints)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	detector->detectMarkers(
-		*image,
-		*corners,
-		*ids,
-		rejectedImgPoints ? *rejectedImgPoints : static_cast<cv::OutputArrayOfArrays>(cv::noArray()));
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		detector->detectMarkers(
+			*image,
+			*corners,
+			*ids,
+			rejectedImgPoints ? *rejectedImgPoints : static_cast<cv::OutputArrayOfArrays>(cv::noArray()));
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveArucoDetectorRefineDetectedMarkers(
@@ -145,16 +177,20 @@ void cveArucoDetectorRefineDetectedMarkers(
 	cv::_InputArray* distCoeffs,
 	cv::_OutputArray* recoveredIdxs)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	detector->refineDetectedMarkers(
-		*image, 
-		*board, *detectedCorners, *detectedIds, *rejectedCorners,
-		cameraMatrix ? *cameraMatrix : static_cast<cv::InputArray>(cv::noArray()),
-		distCoeffs ? *distCoeffs : static_cast<cv::InputArray>(cv::noArray()),
-		recoveredIdxs ? *recoveredIdxs : static_cast<cv::OutputArray>(cv::noArray()));
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		detector->refineDetectedMarkers(
+			*image, 
+			*board, *detectedCorners, *detectedIds, *rejectedCorners,
+			cameraMatrix ? *cameraMatrix : static_cast<cv::InputArray>(cv::noArray()),
+			distCoeffs ? *distCoeffs : static_cast<cv::InputArray>(cv::noArray()),
+			recoveredIdxs ? *recoveredIdxs : static_cast<cv::OutputArray>(cv::noArray()));
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 /*
@@ -174,20 +210,24 @@ cv::aruco::GridBoard* cveArucoGridBoardCreate(
    int markersX, int markersY, float markerLength, float markerSeparation,
    cv::aruco::Dictionary* dictionary, cv::_InputArray* ids, cv::aruco::Board** boardPtr, cv::Ptr<cv::aruco::GridBoard>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
 
-	cv::aruco::GridBoard* ptr = new cv::aruco::GridBoard(
-		cv::Size(markersX, markersY), 
-		markerLength, 
-		markerSeparation, 
-		*dictionary,
-		ids ? *ids : static_cast<cv::InputArray>(cv::noArray()));
-	*boardPtr = dynamic_cast<cv::aruco::Board*>(ptr);
-	*sharedPtr = new cv::Ptr<cv::aruco::GridBoard>(ptr, [](cv::aruco::GridBoard* b) { delete b; });
-	return ptr;
-#else
-	throw_no_objdetect();
-#endif
+		cv::aruco::GridBoard* ptr = new cv::aruco::GridBoard(
+			cv::Size(markersX, markersY), 
+			markerLength, 
+			markerSeparation, 
+			*dictionary,
+			ids ? *ids : static_cast<cv::InputArray>(cv::noArray()));
+		*boardPtr = dynamic_cast<cv::aruco::Board*>(ptr);
+		*sharedPtr = new cv::Ptr<cv::aruco::GridBoard>(ptr, [](cv::aruco::GridBoard* b) { delete b; });
+		return ptr;
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 
@@ -198,11 +238,15 @@ void cveArucoBoardGenerateImage(
 	int marginSize, 
 	int borderBits)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-   board->generateImage(*outSize, *img, marginSize, borderBits);
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+	   board->generateImage(*outSize, *img, marginSize, borderBits);
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveArucoBoardMatchImagePoints(
@@ -212,44 +256,60 @@ void cveArucoBoardMatchImagePoints(
 	cv::_OutputArray* objPoints,
 	cv::_OutputArray* imgPoints)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	board->matchImagePoints(*detectedCorners, *detectedIds, *objPoints, *imgPoints);
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		board->matchImagePoints(*detectedCorners, *detectedIds, *objPoints, *imgPoints);
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveArucoGridBoardRelease(cv::Ptr<cv::aruco::GridBoard>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-   delete *sharedPtr;
-   *sharedPtr = 0;
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+	   delete *sharedPtr;
+	   *sharedPtr = 0;
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::aruco::Board* cveArucoBoardCreate(
 	cv::_InputArray* objPoints, cv::aruco::Dictionary* dictionary, cv::_InputArray* ids,
 	cv::Ptr<cv::aruco::Board>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::aruco::Board* ptr = new cv::aruco::Board(*objPoints, *dictionary, *ids);
-	*sharedPtr = new cv::Ptr<cv::aruco::Board>(ptr, [](cv::aruco::Board* b) { delete b; });
-	return ptr;
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::aruco::Board* ptr = new cv::aruco::Board(*objPoints, *dictionary, *ids);
+		*sharedPtr = new cv::Ptr<cv::aruco::Board>(ptr, [](cv::aruco::Board* b) { delete b; });
+		return ptr;
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveArucoBoardRelease(cv::Ptr<cv::aruco::Board>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	delete *sharedPtr;
-	*sharedPtr = 0;
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		delete *sharedPtr;
+		*sharedPtr = 0;
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::aruco::CharucoBoard* cveCharucoBoardCreate(
@@ -261,25 +321,33 @@ cv::aruco::CharucoBoard* cveCharucoBoardCreate(
 	cv::aruco::Board** boardPtr, 
 	cv::Ptr<cv::aruco::CharucoBoard>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::aruco::CharucoBoard* ptr = new cv::aruco::CharucoBoard(cv::Size(squaresX, squaresY), squareLength, markerLength, *dictionary, cv::noArray());
-	*boardPtr = dynamic_cast<cv::aruco::Board*>(ptr);
-	*sharedPtr = new cv::Ptr<cv::aruco::CharucoBoard>(ptr, [](cv::aruco::CharucoBoard* b) {delete b; });
-	return ptr;
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::aruco::CharucoBoard* ptr = new cv::aruco::CharucoBoard(cv::Size(squaresX, squaresY), squareLength, markerLength, *dictionary, cv::noArray());
+		*boardPtr = dynamic_cast<cv::aruco::Board*>(ptr);
+		*sharedPtr = new cv::Ptr<cv::aruco::CharucoBoard>(ptr, [](cv::aruco::CharucoBoard* b) {delete b; });
+		return ptr;
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveCharucoBoardRelease(cv::aruco::CharucoBoard** charucoBoard, cv::Ptr<cv::aruco::CharucoBoard>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-   delete *sharedPtr;
-   *charucoBoard = 0;
-   *sharedPtr = 0;
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+	   delete *sharedPtr;
+	   *charucoBoard = 0;
+	   *sharedPtr = 0;
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::aruco::CharucoParameters* cveCharucoParametersCreate(
@@ -287,20 +355,28 @@ cv::aruco::CharucoParameters* cveCharucoParametersCreate(
 	bool tryRefineMarkers,
 	bool checkMarkers)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::aruco::CharucoParameters* p = new cv::aruco::CharucoParameters();
-	p->minMarkers = minMarkers;
-	p->tryRefineMarkers = tryRefineMarkers;
-	p->checkMarkers = checkMarkers;
-	return p;
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::aruco::CharucoParameters* p = new cv::aruco::CharucoParameters();
+		p->minMarkers = minMarkers;
+		p->tryRefineMarkers = tryRefineMarkers;
+		p->checkMarkers = checkMarkers;
+		return p;
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveCharucoParametersRelease(cv::aruco::CharucoParameters** charucoParameters)
 {
-	delete* charucoParameters;
-	*charucoParameters = 0;
+	try
+	{
+		delete* charucoParameters;
+		*charucoParameters = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::aruco::CharucoDetector* cveCharucoDetectorCreate(
@@ -310,26 +386,34 @@ cv::aruco::CharucoDetector* cveCharucoDetectorCreate(
 	cv::aruco::RefineParameters* refineParams,
 	cv::Algorithm** algorithm)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::aruco::CharucoDetector* detector = new cv::aruco::CharucoDetector(
-		*board, 
-		*charucoParams,
-		*detectorParams,
-		*refineParams);
-	*algorithm = dynamic_cast<cv::Algorithm*>(detector);
-	return detector;
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::aruco::CharucoDetector* detector = new cv::aruco::CharucoDetector(
+			*board, 
+			*charucoParams,
+			*detectorParams,
+			*refineParams);
+		*algorithm = dynamic_cast<cv::Algorithm*>(detector);
+		return detector;
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveCharucoDetectorRelease(cv::aruco::CharucoDetector** detector)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	delete* detector;
-	*detector = 0;
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		delete* detector;
+		*detector = 0;
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCharucoDetectorDetectDiamonds(
@@ -340,16 +424,20 @@ void cveCharucoDetectorDetectDiamonds(
 	cv::_InputOutputArray* markerCorners,
 	cv::_InputOutputArray* markerIds)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	detector->detectDiamonds(
-		*image, 
-		*diamondCorners,
-		*diamondIds,
-		*markerCorners, 
-		*markerIds);
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		detector->detectDiamonds(
+			*image, 
+			*diamondCorners,
+			*diamondIds,
+			*markerCorners, 
+			*markerIds);
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCharucoDetectorDetectBoard(
@@ -360,27 +448,35 @@ void cveCharucoDetectorDetectBoard(
 	cv::_InputOutputArray* markerCorners,
 	cv::_InputOutputArray* markerIds)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	detector->detectBoard(
-		*image,
-		*charucoCorners,
-		*charucoIds,
-		markerCorners? *markerCorners : static_cast<cv::InputOutputArrayOfArrays>(cv::noArray()),
-		markerIds? *markerIds: static_cast<cv::InputOutputArray>(cv::noArray()));
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		detector->detectBoard(
+			*image,
+			*charucoCorners,
+			*charucoIds,
+			markerCorners? *markerCorners : static_cast<cv::InputOutputArrayOfArrays>(cv::noArray()),
+			markerIds? *markerIds: static_cast<cv::InputOutputArray>(cv::noArray()));
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveArucoDrawDetectedMarkers(
    cv::_InputOutputArray* image, cv::_InputArray* corners,
    cv::_InputArray* ids, cv::Scalar* borderColor)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-   cv::aruco::drawDetectedMarkers(*image, *corners, ids ? *ids : static_cast<cv::InputArray>(cv::noArray()), *borderColor);
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+	   cv::aruco::drawDetectedMarkers(*image, *corners, ids ? *ids : static_cast<cv::InputArray>(cv::noArray()), *borderColor);
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 /*
@@ -449,12 +545,16 @@ double cveArucoCalibrateCameraCharuco(
 
 void cveArucoDetectorParametersGetDefault(cv::aruco::DetectorParameters* parameters)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-   cv::aruco::DetectorParameters p;
-   memcpy(parameters, &p, sizeof(cv::aruco::DetectorParameters));
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+	   cv::aruco::DetectorParameters p;
+	   memcpy(parameters, &p, sizeof(cv::aruco::DetectorParameters));
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 /*
@@ -491,15 +591,19 @@ void cveArucoDrawDetectedCornersCharuco(
 	cv::_InputArray* charucoIds,
 	cv::Scalar* cornerColor)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::aruco::drawDetectedCornersCharuco(
-		*image, 
-		*charucoCorners, 
-		charucoIds ? *charucoIds : static_cast<cv::InputArray>(cv::noArray()), 
-		*cornerColor);
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::aruco::drawDetectedCornersCharuco(
+			*image, 
+			*charucoCorners, 
+			charucoIds ? *charucoIds : static_cast<cv::InputArray>(cv::noArray()), 
+			*cornerColor);
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 /*
@@ -536,11 +640,15 @@ void cveArucoDrawDetectedDiamonds(
 	cv::_InputArray* diamondIds,
 	cv::Scalar* borderColor)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	cv::aruco::drawDetectedDiamonds(*image, *diamondCorners, *diamondIds, *borderColor);
-#else
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		cv::aruco::drawDetectedDiamonds(*image, *diamondCorners, *diamondIds, *borderColor);
+	#else
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 /*

@@ -52,6 +52,7 @@ namespace Emgu.CV.Aruco
                 ref detectorParams,
                 ref refineParams,
                 ref _algorithmPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -79,6 +80,7 @@ namespace Emgu.CV.Aruco
                     oaIds,
                     oaRejectedImgPoints);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -115,15 +117,16 @@ namespace Emgu.CV.Aruco
             {
                 ObjdetectInvoke.cveArucoDetectorRefineDetectedMarkers(
                     _ptr,
-                    iaImage, 
-                    board.BoardPtr, 
-                    ioaDetectedCorners, 
-                    ioaDetectedIds, 
+                    iaImage,
+                    board.BoardPtr,
+                    ioaDetectedCorners,
+                    ioaDetectedIds,
                     ioaRejectedCorners,
-                   iaCameraMatrix, 
+                   iaCameraMatrix,
                     iaDistCoeffs,
                     oaRecovervedIdx);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
