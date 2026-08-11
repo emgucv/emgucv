@@ -70,6 +70,7 @@ namespace Emgu.CV.Text
             using (VectorOfFloat vf = new VectorOfFloat())
             {
                 TextInvoke.cveTextDetectorCNNDetect(_ptr, iaImage, vr, vf);
+                CvInvoke.CheckError();
                 Rectangle[] bboxes = vr.ToArray();
                 float[] confidents = vf.ToArray();
                 TextRegion[] regions = new TextRegion[bboxes.Length];
