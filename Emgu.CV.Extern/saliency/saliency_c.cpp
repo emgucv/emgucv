@@ -107,20 +107,28 @@ void cveObjectnessBINGRelease(cv::saliency::ObjectnessBING** saliency, cv::Ptr<c
 
 bool cveSaliencyComputeSaliency(cv::saliency::Saliency* saliency, cv::_InputArray* image, cv::_OutputArray* saliencyMap)
 {
-#ifdef HAVE_OPENCV_SALIENCY
-	return saliency->computeSaliency(*image, *saliencyMap);
-#else
-	throw_no_saliency();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_SALIENCY
+		return saliency->computeSaliency(*image, *saliencyMap);
+	#else
+		throw_no_saliency();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 bool cveStaticSaliencyComputeBinaryMap(cv::saliency::StaticSaliency* saliency, cv::_InputArray* saliencyMap, cv::_OutputArray* binaryMap)
 {
-#ifdef HAVE_OPENCV_SALIENCY
-	return saliency->computeBinaryMap(*saliencyMap, *binaryMap);
-#else
-	throw_no_saliency();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_SALIENCY
+		return saliency->computeBinaryMap(*saliencyMap, *binaryMap);
+	#else
+		throw_no_saliency();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 bool cveSaliencyMotionInit(cv::saliency::Saliency* saliency)

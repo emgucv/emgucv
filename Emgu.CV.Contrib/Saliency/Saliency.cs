@@ -363,7 +363,9 @@ namespace Emgu.CV.Saliency
             using (var ia = image.GetInputArray())
             using (var oa = saliencyMap.GetOutputArray())
             {
-                return cveSaliencyComputeSaliency(saliency.SaliencyPtr, ia, oa);
+                bool result = cveSaliencyComputeSaliency(saliency.SaliencyPtr, ia, oa);
+                CvInvoke.CheckError();
+                return result;
             }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -381,7 +383,11 @@ namespace Emgu.CV.Saliency
         {
             using (InputArray iaSaliencyMap = saliencyMap.GetInputArray())
             using (OutputArray oaBinaryMap = binaryMap.GetOutputArray())
-                return cveStaticSaliencyComputeBinaryMap(saliency.StaticSaliencyPtr, iaSaliencyMap, oaBinaryMap);
+            {
+                bool result = cveStaticSaliencyComputeBinaryMap(saliency.StaticSaliencyPtr, iaSaliencyMap, oaBinaryMap);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
