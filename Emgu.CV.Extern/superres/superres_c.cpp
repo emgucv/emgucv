@@ -39,11 +39,15 @@ void cveSuperresFrameSourceRelease(cv::Ptr<cv::superres::FrameSource>** sharedPt
 }
 void cveSuperresFrameSourceNextFrame(cv::superres::FrameSource* frameSource, cv::_OutputArray* frame)
 {
-#ifdef HAVE_OPENCV_SUPERRES
-	frameSource->nextFrame(*frame);
-#else
-	throw_no_superres();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_SUPERRES
+		frameSource->nextFrame(*frame);
+	#else
+		throw_no_superres();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::superres::SuperResolution* cveSuperResolutionCreate(int type, cv::superres::FrameSource* frameSource, cv::superres::FrameSource** frameSourceOut, cv::Ptr<cv::superres::SuperResolution>** sharedPtr)

@@ -67,7 +67,7 @@ namespace Emgu.CV.Superres
         {
             using (OutputArray oaFrame = frame.GetOutputArray())
                 SuperresInvoke.cveSuperresFrameSourceNextFrame(FrameSourcePtr, oaFrame);
-
+            CvInvoke.CheckError();
         }
 
         /// <summary>
