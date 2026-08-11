@@ -9,11 +9,15 @@
 
 bool cveStructuredLightPatternGenerate(cv::structured_light::StructuredLightPattern* structuredLight, cv::_OutputArray* patternImages)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    return structuredLight->generate(*patternImages);
-#else
-    throw_no_structured_light();
-#endif
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        return structuredLight->generate(*patternImages);
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS(false)
 }
 
 bool cveStructuredLightPatternDecode(
@@ -24,16 +28,20 @@ bool cveStructuredLightPatternDecode(
     cv::_InputArray* whiteImages,
     int flags)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    return structuredLight->decode(
-        *patternImages, 
-        *disparityMap, 
-        blackImages ? *blackImages : static_cast<cv::InputArray>(cv::noArray()),
-        whiteImages ? *whiteImages : static_cast<cv::InputArray>(cv::noArray()), 
-        flags);
-#else
-    throw_no_structured_light();
-#endif
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        return structuredLight->decode(
+            *patternImages,
+            *disparityMap,
+            blackImages ? *blackImages : static_cast<cv::InputArray>(cv::noArray()),
+            whiteImages ? *whiteImages : static_cast<cv::InputArray>(cv::noArray()),
+            flags);
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS(false)
 }
 
 cv::structured_light::GrayCodePattern* cveGrayCodePatternCreate(
@@ -68,24 +76,32 @@ void cveGrayCodePatternRelease(cv::Ptr<cv::structured_light::GrayCodePattern>** 
 }
 void cveGrayCodePatternGetImagesForShadowMasks(cv::structured_light::GrayCodePattern* grayCodePattern, cv::_InputOutputArray* blackImage, cv::_InputOutputArray* whiteImage)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    grayCodePattern->getImagesForShadowMasks(*blackImage, *whiteImage);
-#else
-    throw_no_structured_light();
-#endif	
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        grayCodePattern->getImagesForShadowMasks(*blackImage, *whiteImage);
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 bool cveGrayCodePatternGetProjPixel(cv::structured_light::GrayCodePattern* grayCodePattern, cv::_InputArray* patternImages, int x, int y, cv::Point* projPix)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    cv::Point p;
-    bool result = grayCodePattern->getProjPixel(*patternImages, x, y, p);
-    projPix->x = p.x;
-    projPix->y = p.y;
-    return result;
-#else
-    throw_no_structured_light();
-#endif		
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        cv::Point p;
+        bool result = grayCodePattern->getProjPixel(*patternImages, x, y, p);
+        projPix->x = p.x;
+        projPix->y = p.y;
+        return result;
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS(false)
 }
 
 cv::structured_light::SinusoidalPattern* cveSinusoidalPatternCreate(
@@ -141,15 +157,19 @@ void cveSinusoidalPatternComputePhaseMap(
     cv::_OutputArray* shadowMask,
     cv::_InputArray* fundamental)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    pattern->computePhaseMap(
-        *patternImages,
-        *wrappedPhaseMap,
-        shadowMask ? *shadowMask : static_cast<cv::OutputArray>(cv::noArray()),
-        fundamental ? *fundamental : static_cast<cv::InputArray>(cv::noArray()));
-#else
-    throw_no_structured_light();
-#endif
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        pattern->computePhaseMap(
+            *patternImages,
+            *wrappedPhaseMap,
+            shadowMask ? *shadowMask : static_cast<cv::OutputArray>(cv::noArray()),
+            fundamental ? *fundamental : static_cast<cv::InputArray>(cv::noArray()));
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveSinusoidalPatternUnwrapPhaseMap(
@@ -159,15 +179,19 @@ void cveSinusoidalPatternUnwrapPhaseMap(
     cv::Size* camSize,
     cv::_InputArray* shadowMask)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    pattern->unwrapPhaseMap(
-        *wrappedPhaseMap,
-        *unwrappedPhaseMap,
-        *camSize,
-        shadowMask ? *shadowMask : static_cast<cv::InputArray>(cv::noArray()));
-#else
-    throw_no_structured_light();
-#endif
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        pattern->unwrapPhaseMap(
+            *wrappedPhaseMap,
+            *unwrappedPhaseMap,
+            *camSize,
+            shadowMask ? *shadowMask : static_cast<cv::InputArray>(cv::noArray()));
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 

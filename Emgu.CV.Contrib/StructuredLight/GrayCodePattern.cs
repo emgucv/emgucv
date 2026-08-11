@@ -70,6 +70,7 @@ namespace Emgu.CV.StructuredLight
             {
                 StructuredLightInvoke.cveGrayCodePatternGetImagesForShadowMasks(_ptr, ioaBlackImage, ioaWhiteImage);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -86,6 +87,7 @@ namespace Emgu.CV.StructuredLight
                 Point projPix = new Point();
                 bool found =
                     StructuredLightInvoke.cveGrayCodePatternGetProjPixel(_ptr, iaPatternImages, x, y, ref projPix);
+                CvInvoke.CheckError();
                 if (!found)
                     return null;
                 return projPix;

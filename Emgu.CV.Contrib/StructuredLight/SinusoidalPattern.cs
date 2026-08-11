@@ -122,6 +122,7 @@ namespace Emgu.CV.StructuredLight
                     oaShadowMask,
                     iaFundamental);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -148,6 +149,7 @@ namespace Emgu.CV.StructuredLight
                     ref camSize,
                     iaShadowMask);
             }
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/>
