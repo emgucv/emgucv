@@ -55,8 +55,9 @@ namespace Emgu.CV.XFeatures2D
                 scaleFactor, 
                 nScales, 
                 computeOrientation,
-                ref _feature2D, 
+                ref _feature2D,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

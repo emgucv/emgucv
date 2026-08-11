@@ -53,6 +53,7 @@ namespace Emgu.CV.XFeatures2D
         public PCTSignatures(int initSampleCount = 2000, int initSeedCount = 400, PointDistributionType pointDistribution = PointDistributionType.Uniform)
         {
             _ptr = XFeatures2DInvoke.cvePCTSignaturesCreate(initSampleCount, initSeedCount, pointDistribution, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -63,6 +64,7 @@ namespace Emgu.CV.XFeatures2D
         public PCTSignatures(VectorOfPointF initSamplingPoints, int initSeedCount)
         {
             _ptr = XFeatures2DInvoke.cvePCTSignaturesCreate2(initSamplingPoints, initSeedCount, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -73,6 +75,7 @@ namespace Emgu.CV.XFeatures2D
         public PCTSignatures(VectorOfPointF initSamplingPoints, VectorOfInt initClusterSeedIndexes)
         {
             _ptr = XFeatures2DInvoke.cvePCTSignaturesCreate3(initSamplingPoints, initClusterSeedIndexes, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -99,6 +102,7 @@ namespace Emgu.CV.XFeatures2D
             {
                 XFeatures2DInvoke.cvePCTSignaturesComputeSignature(_ptr, iaImage, oaSignature);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -120,6 +124,7 @@ namespace Emgu.CV.XFeatures2D
             using (InputArray iaSignature = signature.GetInputArray())
             using (OutputArray oaResult = result.GetOutputArray())
                 XFeatures2DInvoke.cvePCTSignaturesDrawSignature(iaSource, iaSignature, oaResult, radiusToShorterSideRatio, borderThickness);
+            CvInvoke.CheckError();
         }
     }
 

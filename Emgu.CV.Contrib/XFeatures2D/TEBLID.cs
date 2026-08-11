@@ -42,6 +42,7 @@ namespace Emgu.CV.XFeatures2D
                 size,
                 ref _feature2D,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

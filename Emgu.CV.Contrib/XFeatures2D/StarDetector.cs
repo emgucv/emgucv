@@ -47,6 +47,7 @@ namespace Emgu.CV.XFeatures2D
                 maxSize, responseThreshold, lineThresholdProjected,
                 lineThresholdBinarized, suppressNonmaxSize, ref _feature2D,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

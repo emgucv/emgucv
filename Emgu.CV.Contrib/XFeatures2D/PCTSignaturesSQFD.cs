@@ -88,6 +88,7 @@ namespace Emgu.CV.XFeatures2D
             float similarityParameter = 1.0f)
         {
             _ptr = XFeatures2DInvoke.cvePCTSignaturesSQFDCreate(distanceFunction, similarityFunction, similarityParameter, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -100,7 +101,11 @@ namespace Emgu.CV.XFeatures2D
         {
             using (InputArray iaSignature0 = signature0.GetInputArray())
             using (InputArray iaSignature1 = signature1.GetInputArray())
-                return XFeatures2DInvoke.cvePCTSignaturesSQFDComputeQuadraticFormDistance(_ptr, iaSignature0, iaSignature1);
+            {
+                float result = XFeatures2DInvoke.cvePCTSignaturesSQFDComputeQuadraticFormDistance(_ptr, iaSignature0, iaSignature1);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -116,6 +121,7 @@ namespace Emgu.CV.XFeatures2D
         {
             XFeatures2DInvoke.cvePCTSignaturesSQFDComputeQuadraticFormDistances(_ptr, sourceSignature, imageSignatures,
                 distances);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

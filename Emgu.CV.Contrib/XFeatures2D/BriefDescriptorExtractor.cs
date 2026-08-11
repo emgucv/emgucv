@@ -27,6 +27,7 @@ namespace Emgu.CV.XFeatures2D
         public BriefDescriptorExtractor(int descriptorSize = 32)
         {
             _ptr = XFeatures2DInvoke.cveBriefDescriptorExtractorCreate(descriptorSize, ref _feature2D, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

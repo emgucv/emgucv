@@ -33,6 +33,7 @@ namespace Emgu.CV.XFeatures2D
       public BOWImgDescriptorExtractor(Feature2D descriptorExtractor, DescriptorMatcher descriptorMatcher)
       {
          _ptr = XFeatures2DInvoke.cveBOWImgDescriptorExtractorCreate(descriptorExtractor.Feature2DPtr, descriptorMatcher);
+         CvInvoke.CheckError();
       }
 
       /// <summary>
@@ -42,6 +43,7 @@ namespace Emgu.CV.XFeatures2D
       public void SetVocabulary(Mat vocabulary)
       {
           XFeatures2DInvoke.cveBOWImgDescriptorExtractorSetVocabulary(_ptr, vocabulary);
+          CvInvoke.CheckError();
       }
 
       /// <summary>
@@ -54,6 +56,7 @@ namespace Emgu.CV.XFeatures2D
       {
          using (InputArray iaImage = image.GetInputArray())
              XFeatures2DInvoke.cveBOWImgDescriptorExtractorCompute(_ptr, iaImage, keypoints, imgDescriptors);
+         CvInvoke.CheckError();
       }
 
       /// <summary>

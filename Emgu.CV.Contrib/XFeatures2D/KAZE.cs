@@ -61,6 +61,7 @@ namespace Emgu.CV.XFeatures2D
             _ptr = XFeatures2DInvoke.cveKAZEDetectorCreate(
                 extended, upright, threshold, octaves, sublevels, diffusivity,
                 ref _feature2D, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
