@@ -63,15 +63,18 @@ namespace Emgu.CV
         /// <returns>If 0, signal the process to continue</returns>
         /// <remarks>
         /// This callback runs inside native code, as the target of a reverse P/Invoke call made
-        /// from cv::error() (see opencv/modules/core/src/system.cpp). It must never throw: cv::error()
-        /// unconditionally throws its own C++ exception right after this callback returns (it ignores
-        /// this callback's return value), and if a managed exception were thrown from here instead, it
-        /// would need to unwind across that native call frame to reach any C# try/catch -- something the
-        /// .NET runtime treats as fatal and fails the whole process for, rather than something catchable.
-        /// The native side is expected to catch the resulting C++ exception locally (see
-        /// CVAPI_CATCH_CV_ERRORS in Emgu.CV.Extern/emgu_error.h) and record it for retrieval via
-        /// CheckError(), which throws the equivalent CvException safely, entirely in managed code, once
-        /// the native call has actually returned.
+        /// from cv::error() (see opencv/modules/core/src/system.cpp) -- or, for exceptions that never
+        /// reach cv::error() (a plain std::exception, say), invoked directly by the CVAPI_CATCH_CV_ERRORS
+        /// macros (Emgu.CV.Extern/emgu_error.h). It must never throw: cv::error() unconditionally throws
+        /// its own C++ exception right after this callback returns (it ignores this callback's return
+        /// value), and if a managed exception were thrown from here instead, it would need to unwind
+        /// across that native call frame to reach any C# try/catch -- something the .NET runtime treats
+        /// as fatal and fails the whole process for, rather than something catchable. So this callback
+        /// only records the error, in these [ThreadStatic] fields, and CheckError() throws the equivalent
+        /// CvException from them safely, entirely in managed code, once the native call has actually
+        /// returned -- while the C++ exception itself is caught and discarded locally, on the native
+        /// side, by those same CVAPI_CATCH_CV_ERRORS macros, so it never unwinds across the P/Invoke
+        /// return boundary.
         /// </remarks>
 #if UNITY_WSA || UNITY_ANDROID || UNITY_STANDALONE
         [AOT.MonoPInvokeCallback(typeof(CvErrorCallback))]
@@ -84,37 +87,42 @@ namespace Emgu.CV
             int line,
             IntPtr userData)
         {
-            //SetErrStatus(Emgu.CV.CvEnum.ErrorCodes.StsOk); //clear the error status
+            _hasPendingError = true;
+            _pendingStatus = status;
+            _pendingFuncName = Marshal.PtrToStringAnsi(funcName);
+            _pendingErrMsg = Marshal.PtrToStringAnsi(errMsg);
+            _pendingFileName = Marshal.PtrToStringAnsi(fileName);
+            _pendingLine = line;
             return 0; //signal the process to continue
         }
 
+        [ThreadStatic]
+        private static bool _hasPendingError;
+        [ThreadStatic]
+        private static int _pendingStatus;
+        [ThreadStatic]
+        private static String _pendingFuncName;
+        [ThreadStatic]
+        private static String _pendingErrMsg;
+        [ThreadStatic]
+        private static String _pendingFileName;
+        [ThreadStatic]
+        private static int _pendingLine;
+
         /// <summary>
-        /// Check whether a native call left a pending error behind (recorded via
-        /// CVAPI_CATCH_CV_ERRORS on the native side), and if so, throw it as a CvException.
-        /// Call this after any P/Invoke that can reach a CV_Error(...) call natively.
+        /// Check whether a native call left a pending error behind (recorded by CvErrorHandler,
+        /// which the native CVAPI_CATCH_CV_ERRORS macros ensure always runs for a caught native
+        /// error), and if so, throw it as a CvException. Call this after any P/Invoke that can
+        /// reach a CV_Error(...) call, or any other native exception, natively.
         /// </summary>
         public static void CheckError()
         {
-            int status = 0, line = 0;
-            using (CvString funcName = new CvString())
-            using (CvString errMsg = new CvString())
-            using (CvString fileName = new CvString())
+            if (_hasPendingError)
             {
-                if (cveCheckPendingError(ref status, funcName, errMsg, fileName, ref line))
-                {
-                    throw new CvException(status, funcName.ToString(), errMsg.ToString(), fileName.ToString(), line);
-                }
+                _hasPendingError = false;
+                throw new CvException(_pendingStatus, _pendingFuncName, _pendingErrMsg, _pendingFileName, _pendingLine);
             }
         }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        private static extern bool cveCheckPendingError(
-            ref int status,
-            IntPtr funcName,
-            IntPtr errMsg,
-            IntPtr fileName,
-            ref int line);
 
         /// <summary>
         /// Define an error callback that can be registered using RedirectError function

@@ -21,64 +21,55 @@
 // locally -- via the CVAPI_CATCH_CV_ERRORS macro below -- so it never
 // unwinds across the P/Invoke return boundary into managed code.
 //
-// The caught exception's details are recorded here, in thread-local
-// storage, so the managed caller can retrieve and rethrow it (as a
-// catchable CvException, entirely in managed code) after the native call
-// returns normally. See CvInvoke.CheckError() on the C# side.
-struct EmguPendingError
-{
-	bool hasError;
-	int status;
-	char funcName[256];
-	char errMsg[1024];
-	char fileName[256];
-	int line;
-};
+// CvErrorHandler already receives the full error details as parameters
+// (status/func/message/file/line), so it records them directly into
+// managed [ThreadStatic] fields and CheckError() reads them back with no
+// extra native call. That path only fires for errors that went through
+// cv::error(), though (i.e. cv::Exception) -- a plain std::exception (or
+// anything else) thrown directly by third-party code never reaches
+// cv::error(), so the callback never fires for it automatically. The catch
+// macros below invoke the same registered callback themselves in that case
+// -- via the pointer cveRedirectError() stashes here -- so C# still learns
+// about the error either way.
+extern cv::ErrorCallback emguErrorCallback;
+extern void* emguErrorCallbackUserData;
 
-#if defined(_MSC_VER)
-#define EMGU_THREAD_LOCAL __declspec(thread)
-#else
-#define EMGU_THREAD_LOCAL __thread
-#endif
-
-extern EMGU_THREAD_LOCAL EmguPendingError emguPendingError;
-
-void emguRecordError(int status, const char* funcName, const char* errMsg, const char* fileName, int line);
-
-// Retrieve and clear the pending error for the current thread, if any.
-// Returns true and fills in the out params if there was one.
-CVAPI(bool) cveCheckPendingError(int* status, cv::String* funcName, cv::String* errMsg, cv::String* fileName, int* line);
+void emguSetErrorCallback(cv::ErrorCallback callback, void* userdata);
 
 #define CVAPI_CATCH_CV_ERRORS(returnValueOnError) \
-	catch (const cv::Exception& e) \
+	catch (const cv::Exception&) \
 	{ \
-		emguRecordError((int) e.code, e.func.c_str(), e.err.c_str(), e.file.c_str(), e.line); \
+		/* cv::error() already invoked emguErrorCallback with full details */ \
+		/* before throwing this -- just stop the unwind here. */ \
 		return returnValueOnError; \
 	} \
 	catch (const std::exception& e) \
 	{ \
-		emguRecordError((int) cv::Error::StsError, "", e.what(), "", 0); \
+		if (emguErrorCallback) \
+			emguErrorCallback((int) cv::Error::StsError, "", e.what(), "", 0, emguErrorCallbackUserData); \
 		return returnValueOnError; \
 	} \
 	catch (...) \
 	{ \
-		emguRecordError((int) cv::Error::StsError, "", "Unknown exception", "", 0); \
+		if (emguErrorCallback) \
+			emguErrorCallback((int) cv::Error::StsError, "", "Unknown exception", "", 0, emguErrorCallbackUserData); \
 		return returnValueOnError; \
 	}
 
 // Same as CVAPI_CATCH_CV_ERRORS, for functions that return void.
 #define CVAPI_CATCH_CV_ERRORS_VOID \
-	catch (const cv::Exception& e) \
+	catch (const cv::Exception&) \
 	{ \
-		emguRecordError((int) e.code, e.func.c_str(), e.err.c_str(), e.file.c_str(), e.line); \
 	} \
 	catch (const std::exception& e) \
 	{ \
-		emguRecordError((int) cv::Error::StsError, "", e.what(), "", 0); \
+		if (emguErrorCallback) \
+			emguErrorCallback((int) cv::Error::StsError, "", e.what(), "", 0, emguErrorCallbackUserData); \
 	} \
 	catch (...) \
 	{ \
-		emguRecordError((int) cv::Error::StsError, "", "Unknown exception", "", 0); \
+		if (emguErrorCallback) \
+			emguErrorCallback((int) cv::Error::StsError, "", "Unknown exception", "", 0, emguErrorCallbackUserData); \
 	}
 
 #endif

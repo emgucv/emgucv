@@ -13,6 +13,11 @@ bool cveSetBreakOnError(bool flag)
 
 cv::ErrorCallback cveRedirectError(cv::ErrorCallback errorHandler, void* userdata, void** prevUserdata)
 {
+	// Also keep our own copy of the registered callback, so the
+	// CVAPI_CATCH_CV_ERRORS macros (emgu_error.h) can invoke it directly for
+	// exceptions that don't go through cv::error() (which invokes it
+	// automatically, but only for cv::Exception).
+	emguSetErrorCallback(errorHandler, userdata);
 	return cv::redirectError(errorHandler, userdata, prevUserdata);
 }
 
