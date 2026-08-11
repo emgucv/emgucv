@@ -29,6 +29,7 @@ namespace Emgu.CV.Legacy
         public TrackerTLD()
         {
             _ptr = TrackingInvoke.cveTrackerTLDCreate(ref _trackerPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

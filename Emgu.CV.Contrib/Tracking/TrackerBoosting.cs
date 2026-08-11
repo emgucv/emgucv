@@ -38,13 +38,14 @@ namespace Emgu.CV.Legacy
             int featureSetNumFeatures = 100*10+50)
         {
             TrackingInvoke.cveTrackerBoostingCreate(
-                numClassifiers, 
-                samplerOverlap, 
-                samplerSearchFactor, 
-                iterationInit, 
-                featureSetNumFeatures, 
-                ref _trackerPtr, 
+                numClassifiers,
+                samplerOverlap,
+                samplerSearchFactor,
+                iterationInit,
+                featureSetNumFeatures,
+                ref _trackerPtr,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
