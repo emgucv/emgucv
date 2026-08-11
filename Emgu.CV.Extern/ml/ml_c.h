@@ -10,6 +10,7 @@
 
 #include "opencv2/core.hpp"
 #include "cvapi_compat.h"
+#include "emgu_error.h"
 #ifdef HAVE_OPENCV_ML
 #include "opencv2/ml/ml.hpp"
 #else

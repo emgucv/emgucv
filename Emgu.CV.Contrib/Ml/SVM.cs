@@ -140,6 +140,7 @@ namespace Emgu.CV.ML
         public SVM()
         {
             _ptr = MlInvoke.cveSVMDefaultCreate(ref _statModelPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -166,6 +167,7 @@ namespace Emgu.CV.ML
         {
             MCvParamGrid grid = new MCvParamGrid();
             MlInvoke.cveSVMGetDefaultGrid(type, ref grid);
+            CvInvoke.CheckError();
             return grid;
         }
 
@@ -214,7 +216,7 @@ namespace Emgu.CV.ML
            MCvParamGrid degreeGrid,
            bool balanced = false)
         {
-            return MlInvoke.cveSVMTrainAuto(
+            bool result = MlInvoke.cveSVMTrainAuto(
                Ptr,
                trainData.Ptr,
                kFold,
@@ -225,6 +227,8 @@ namespace Emgu.CV.ML
                ref coefGrid,
                ref degreeGrid,
                balanced);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -235,6 +239,7 @@ namespace Emgu.CV.ML
         {
             Mat m = new Mat();
             MlInvoke.cveSVMGetSupportVectors(_ptr, m);
+            CvInvoke.CheckError();
             return m;
         }
 

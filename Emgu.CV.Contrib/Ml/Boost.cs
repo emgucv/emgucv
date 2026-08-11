@@ -48,6 +48,7 @@ namespace Emgu.CV.ML
         public Boost()
         {
             _ptr = MlInvoke.cveBoostCreate(ref _statModel, ref _algorithm, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

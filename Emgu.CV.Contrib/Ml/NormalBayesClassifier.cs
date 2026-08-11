@@ -23,6 +23,7 @@ namespace Emgu.CV.ML
         public NormalBayesClassifier()
         {
             _ptr = MlInvoke.cveNormalBayesClassifierDefaultCreate(ref _statModelPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

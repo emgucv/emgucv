@@ -80,6 +80,7 @@ namespace Emgu.CV.ML
         public ANN_MLP()
         {
             _ptr = MlInvoke.cveANN_MLPCreate(ref _statModelPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
 
@@ -114,6 +115,7 @@ namespace Emgu.CV.ML
         {
             using (InputArray iaLayerSizes = layerSizes.GetInputArray())
                 MlInvoke.cveANN_MLPSetLayerSizes(_ptr, iaLayerSizes);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -125,6 +127,7 @@ namespace Emgu.CV.ML
         public void SetActivationFunction(ANN_MLP.AnnMlpActivationFunction function, double param1 = 0, double param2 = 0)
         {
             MlInvoke.cveANN_MLPSetActivationFunction(_ptr, function, param1, param2);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -136,6 +139,7 @@ namespace Emgu.CV.ML
         public void SetTrainMethod(ANN_MLP.AnnMlpTrainMethod method = AnnMlpTrainMethod.Rprop, double param1 = 0, double param2 = 0)
         {
             MlInvoke.cveANN_MLPSetTrainMethod(_ptr, method, param1, param2);
+            CvInvoke.CheckError();
         }
     }
 

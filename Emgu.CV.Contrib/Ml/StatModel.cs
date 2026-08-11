@@ -38,7 +38,9 @@ namespace Emgu.CV.ML
             using (InputArray iaSamples = samples.GetInputArray())
             using (InputArray iaResponses = responses.GetInputArray())
             {
-                return MlInvoke.cveStatModelTrain(model.StatModelPtr, iaSamples, layoutType, iaResponses);
+                bool result = MlInvoke.cveStatModelTrain(model.StatModelPtr, iaSamples, layoutType, iaResponses);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -51,7 +53,9 @@ namespace Emgu.CV.ML
         /// <returns>True if the training is successful.</returns>
         public static bool Train(this IStatModel model, TrainData trainData, int flags = 0)
         {
-            return MlInvoke.cveStatModelTrainWithData(model.StatModelPtr, trainData, flags);
+            bool result = MlInvoke.cveStatModelTrainWithData(model.StatModelPtr, trainData, flags);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -67,7 +71,9 @@ namespace Emgu.CV.ML
             using (InputArray iaSamples = samples.GetInputArray())
             using (OutputArray oaResults = results == null ? OutputArray.GetEmpty() : results.GetOutputArray())
             {
-                return MlInvoke.cveStatModelPredict(model.StatModelPtr, iaSamples, oaResults, flags);
+                float result = MlInvoke.cveStatModelPredict(model.StatModelPtr, iaSamples, oaResults, flags);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 

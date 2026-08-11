@@ -58,6 +58,7 @@ namespace Emgu.CV.ML
         public SVMSGD()
         {
             _ptr = MlInvoke.cveSVMSGDDefaultCreate(ref _statModelPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -70,6 +71,7 @@ namespace Emgu.CV.ML
             Emgu.CV.ML.SVMSGD.MarginType marginType)
         {
             MlInvoke.cveSVMSGDSetOptimalParameters(_ptr, svmsgdType, marginType);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

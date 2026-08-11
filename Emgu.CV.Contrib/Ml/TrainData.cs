@@ -42,6 +42,7 @@ namespace Emgu.CV.ML
                     iaSamples, layoutType, iaResponse, iaVarIdx, iaSampleIdx, iaSampleWeight,
                     iaVarType, ref _sharedPtr);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>

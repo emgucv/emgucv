@@ -39,6 +39,7 @@ namespace Emgu.CV.ML
         public KNearest()
         {
             _ptr = MlInvoke.cveKNearestCreate(ref _statModelPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -76,13 +77,15 @@ namespace Emgu.CV.ML
             using (OutputArray oaNeighborResponses = neighborResponses == null ? OutputArray.GetEmpty() : neighborResponses.GetOutputArray())
             using (OutputArray oaDist = dist == null ? OutputArray.GetEmpty() : dist.GetOutputArray())
             {
-                return MlInvoke.cveKNearestFindNearest(
+                float result = MlInvoke.cveKNearestFindNearest(
                     _ptr,
                     iaSamples,
                     k,
                     oaResults,
                     oaNeighborResponses,
                     oaDist);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 

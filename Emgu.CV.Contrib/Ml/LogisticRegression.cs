@@ -59,6 +59,7 @@ namespace Emgu.CV.ML
         public LogisticRegression()
         {
             _ptr = MlInvoke.cveLogisticRegressionCreate(ref _statModelPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
