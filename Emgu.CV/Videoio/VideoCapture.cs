@@ -388,6 +388,7 @@ namespace Emgu.CV
             {
                 _ptr = CvInvoke.cveVideoCaptureCreateFromDevice(camIndex, captureApi, vectInt);
             }
+            CvInvoke.CheckError();
 
             if (_ptr == IntPtr.Zero)
             {
@@ -410,7 +411,8 @@ namespace Emgu.CV
             {
                 _captureModuleType = CaptureModuleType.Highgui;
                 _ptr = CvInvoke.cveVideoCaptureCreateFromFile(s, captureApi, vectInt);
-                
+                CvInvoke.CheckError();
+
                 if (_ptr == IntPtr.Zero)
                     throw new NullReferenceException(String.Format("Unable to create capture from {0}", fileName));
             }
@@ -454,7 +456,9 @@ namespace Emgu.CV
         /// </remarks>
         public double Get(CvEnum.CapProp index)
         {
-            return CvInvoke.cveVideoCaptureGet(_ptr, index);
+            double result = CvInvoke.cveVideoCaptureGet(_ptr, index);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -466,7 +470,9 @@ namespace Emgu.CV
         /// <remarks>Even if it returns true this doesn't ensure that the property value has been accepted by the capture device.</remarks>
         public bool Set(CvEnum.CapProp property, double value)
         {
-            return CvInvoke.cveVideoCaptureSet(Ptr, property, value);
+            bool result = CvInvoke.cveVideoCaptureSet(Ptr, property, value);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -479,6 +485,7 @@ namespace Emgu.CV
                 return false;
 
             bool grabbed = CvInvoke.cveVideoCaptureGrab(Ptr);
+            CvInvoke.CheckError();
 
             if (grabbed && ImageGrabbed != null)
                 ImageGrabbed(this, EventArgs.Empty);
@@ -627,6 +634,7 @@ namespace Emgu.CV
             {
                 success = CvInvoke.cveVideoCaptureRetrieve(Ptr, oaImage, flag);
             }
+            CvInvoke.CheckError();
             if (success && (FlipType != null))
                 CvInvoke.Flip(image, image, FlipType.Value);
 
@@ -640,8 +648,11 @@ namespace Emgu.CV
         /// <returns>False if no frames has been grabbed</returns>
         public bool Read(IOutputArray m)
         {
+            bool result;
             using (OutputArray oaM = m.GetOutputArray())
-                return CvInvoke.cveVideoCaptureRead(Ptr, oaM);
+                result = CvInvoke.cveVideoCaptureRead(Ptr, oaM);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -652,6 +663,7 @@ namespace Emgu.CV
         public bool Read(Mat mat)
         {
             CvInvoke.cveVideoCaptureReadToMat(_ptr, mat);
+            CvInvoke.CheckError();
             return !mat.IsEmpty;
         }
 
@@ -663,6 +675,7 @@ namespace Emgu.CV
         public bool Read(UMat umat)
         {
             CvInvoke.cveVideoCaptureReadToUMat(_ptr, umat);
+            CvInvoke.CheckError();
             return !umat.IsEmpty;
         }
         
@@ -679,6 +692,7 @@ namespace Emgu.CV
                 using (CvString s = new CvString())
                 {
                     CvInvoke.cveVideoCaptureGetBackendName(Ptr, s);
+                    CvInvoke.CheckError();
                     return s.ToString();
                 }
             }
@@ -695,7 +709,9 @@ namespace Emgu.CV
         /// After this call use VideoCapture::retrieve() to decode and fetch frame data.</remarks>
         public static bool WaitAny(VectorOfVideoCapture streams, VectorOfInt readyIndex, int timeoutNs = 0)
         {
-            return CvInvoke.cveVideoCaptureWaitAny(streams, readyIndex, timeoutNs);
+            bool result = CvInvoke.cveVideoCaptureWaitAny(streams, readyIndex, timeoutNs);
+            CvInvoke.CheckError();
+            return result;
         }
 
         #region implement ICapture
@@ -809,6 +825,7 @@ namespace Emgu.CV
                 using (CvString cvs = new CvString())
                 {
                     CvInvoke.cveGetBackendName(_id, cvs);
+                    CvInvoke.CheckError();
                     return cvs.ToString();
                 }
             }
@@ -874,6 +891,7 @@ namespace Emgu.CV
                 using (VectorOfInt vi = new VectorOfInt())
                 {
                     cveGetBackends(vi);
+                    CheckError();
                     int[] ids = vi.ToArray();
                     Backend[] backends = new Backend[ids.Length];
                     for (int i = 0; i < ids.Length; i++)
@@ -898,6 +916,7 @@ namespace Emgu.CV
                 using (VectorOfInt vi = new VectorOfInt())
                 {
                     cveGetCameraBackends(vi);
+                    CheckError();
                     int[] ids = vi.ToArray();
                     Backend[] backends = new Backend[ids.Length];
                     for (int i = 0; i < ids.Length; i++)
@@ -922,6 +941,7 @@ namespace Emgu.CV
                 using (VectorOfInt vi = new VectorOfInt())
                 {
                     cveGetStreamBackends(vi);
+                    CheckError();
                     int[] ids = vi.ToArray();
                     Backend[] backends = new Backend[ids.Length];
                     for (int i = 0; i < ids.Length; i++)
@@ -946,6 +966,7 @@ namespace Emgu.CV
                 using (VectorOfInt vi = new VectorOfInt())
                 {
                     cveGetWriterBackends(vi);
+                    CheckError();
                     int[] ids = vi.ToArray();
                     Backend[] backends = new Backend[ids.Length];
                     for (int i = 0; i < ids.Length; i++)
