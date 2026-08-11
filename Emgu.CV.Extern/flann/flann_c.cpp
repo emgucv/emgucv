@@ -168,31 +168,43 @@ void cveSearchParamsRelease(cv::flann::SearchParams** p)
 
 cv::flann::Index* cveFlannIndexCreate(cv::_InputArray* features, cv::flann::IndexParams* p, int distType)
 {
-#ifdef HAVE_OPENCV_FLANN
-	return new cv::flann::Index(*features, *p, (cvflann::flann_distance_t)distType);
-#else
-	throw_no_flann();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_FLANN
+		return new cv::flann::Index(*features, *p, (cvflann::flann_distance_t)distType);
+	#else
+		throw_no_flann();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveFlannIndexKnnSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, int knn, int checks, float eps, bool sorted)
 {
-#ifdef HAVE_OPENCV_FLANN
-	cv::flann::SearchParams p(checks, eps, sorted);
-	index->knnSearch(*queries, *indices, *dists, knn, p);
-#else
-	throw_no_flann();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_FLANN
+		cv::flann::SearchParams p(checks, eps, sorted);
+		index->knnSearch(*queries, *indices, *dists, knn, p);
+	#else
+		throw_no_flann();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 int cveFlannIndexRadiusSearch(cv::flann::Index* index, cv::_InputArray* queries, cv::_OutputArray* indices, cv::_OutputArray* dists, double radius, int maxResults, int checks, float eps, bool sorted)
 {
-#ifdef HAVE_OPENCV_FLANN
-	cv::flann::SearchParams p(checks, eps, sorted);
-	return index->radiusSearch(*queries, *indices, *dists, radius, maxResults, p);
-#else
-	throw_no_flann();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_FLANN
+		cv::flann::SearchParams p(checks, eps, sorted);
+		return index->radiusSearch(*queries, *indices, *dists, radius, maxResults, p);
+	#else
+		throw_no_flann();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveFlannIndexRelease(cv::flann::Index** index)
