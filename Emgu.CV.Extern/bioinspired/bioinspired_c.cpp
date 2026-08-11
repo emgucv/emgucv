@@ -28,27 +28,39 @@ void cveRetinaRelease(cv::Ptr<cv::bioinspired::Retina>** sharedPtr)
 }
 void cveRetinaRun(cv::bioinspired::Retina* retina, cv::_InputArray* image)
 {
-#ifdef HAVE_OPENCV_BIOINSPIRED
-	retina->run(*image);
-#else
-	throw_no_bioinspired();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_BIOINSPIRED
+		retina->run(*image);
+	#else
+		throw_no_bioinspired();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveRetinaGetParvo(cv::bioinspired::Retina* retina, cv::_OutputArray* parvo)
 {
-#ifdef HAVE_OPENCV_BIOINSPIRED
-	retina->getParvo(*parvo);
-#else
-	throw_no_bioinspired();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_BIOINSPIRED
+		retina->getParvo(*parvo);
+	#else
+		throw_no_bioinspired();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveRetinaGetMagno(cv::bioinspired::Retina* retina, cv::_OutputArray* magno)
 {
-#ifdef HAVE_OPENCV_BIOINSPIRED
-	retina->getMagno(*magno);
-#else
-	throw_no_bioinspired();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_BIOINSPIRED
+		retina->getMagno(*magno);
+	#else
+		throw_no_bioinspired();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveRetinaClearBuffers(cv::bioinspired::Retina* retina)
 {
@@ -101,11 +113,15 @@ void cveRetinaFastToneMappingApplyFastToneMapping(
 	cv::_InputArray* inputImage,
 	cv::_OutputArray* outputToneMappedImage)
 {
-#ifdef HAVE_OPENCV_BIOINSPIRED
-	toneMapping->applyFastToneMapping(*inputImage, *outputToneMappedImage);
-#else
-	throw_no_bioinspired();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_BIOINSPIRED
+		toneMapping->applyFastToneMapping(*inputImage, *outputToneMappedImage);
+	#else
+		throw_no_bioinspired();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveRetinaFastToneMappingRelease(cv::Ptr<cv::bioinspired::RetinaFastToneMapping>** sharedPtr)
 {

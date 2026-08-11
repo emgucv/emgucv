@@ -42,6 +42,7 @@ namespace Emgu.CV.Bioinspired
             using (InputArray iaInputImage = inputImage.GetInputArray())
             using (OutputArray oaOutputToneMappedImage = outputToneMappedImage.GetOutputArray())
                 BioinspiredInvoke.cveRetinaFastToneMappingApplyFastToneMapping(_ptr, iaInputImage, oaOutputToneMappedImage);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

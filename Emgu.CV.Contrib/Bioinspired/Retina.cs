@@ -86,6 +86,7 @@ namespace Emgu.CV.Bioinspired
         {
             using (InputArray iaImage = image.GetInputArray())
                 BioinspiredInvoke.cveRetinaRun(_ptr, iaImage);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -98,6 +99,7 @@ namespace Emgu.CV.Bioinspired
             {
                 using (OutputArray oaParvo = parvo.GetOutputArray())
                     BioinspiredInvoke.cveRetinaGetParvo(_ptr, oaParvo);
+                CvInvoke.CheckError();
             }
         }
 
@@ -111,6 +113,7 @@ namespace Emgu.CV.Bioinspired
             {
                 using (OutputArray oaMagno = magno.GetOutputArray())
                     BioinspiredInvoke.cveRetinaGetMagno(_ptr, oaMagno);
+                CvInvoke.CheckError();
             }
         }
 
