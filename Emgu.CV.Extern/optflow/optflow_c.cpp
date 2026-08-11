@@ -9,35 +9,51 @@
 
 void cveUpdateMotionHistory(cv::_InputArray* silhouette, cv::_InputOutputArray* mhi, double timestamp, double duration)
 {
-#ifdef HAVE_OPENCV_OPTFLOW
-   cv::motempl::updateMotionHistory(*silhouette, *mhi, timestamp, duration);
-#else
-	throw_no_optflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OPTFLOW
+	   cv::motempl::updateMotionHistory(*silhouette, *mhi, timestamp, duration);
+	#else
+		throw_no_optflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveCalcMotionGradient(cv::_InputArray* mhi, cv::_OutputArray* mask, cv::_OutputArray* orientation, double delta1, double delta2, int apertureSize)
 {
-#ifdef HAVE_OPENCV_OPTFLOW
-   cv::motempl::calcMotionGradient(*mhi, *mask, *orientation, delta1, delta2, apertureSize);
-#else
-	throw_no_optflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OPTFLOW
+	   cv::motempl::calcMotionGradient(*mhi, *mask, *orientation, delta1, delta2, apertureSize);
+	#else
+		throw_no_optflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveCalcGlobalOrientation(cv::_InputArray* orientation, cv::_InputArray* mask, cv::_InputArray* mhi, double timestamp, double duration)
 {
-#ifdef HAVE_OPENCV_OPTFLOW
-   cv::motempl::calcGlobalOrientation(*orientation, *mask, *mhi, timestamp, duration);
-#else
-	throw_no_optflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OPTFLOW
+	   cv::motempl::calcGlobalOrientation(*orientation, *mask, *mhi, timestamp, duration);
+	#else
+		throw_no_optflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveSegmentMotion(cv::_InputArray* mhi, cv::_OutputArray* segmask, std::vector< cv::Rect >* boundingRects, double timestamp, double segThresh)
 {
-#ifdef HAVE_OPENCV_OPTFLOW
-   cv::motempl::segmentMotion(*mhi, *segmask, *boundingRects, timestamp, segThresh);
-#else
-	throw_no_optflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OPTFLOW
+	   cv::motempl::segmentMotion(*mhi, *segmask, *boundingRects, timestamp, segThresh);
+	#else
+		throw_no_optflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::DenseOpticalFlow* cveOptFlowDeepFlowCreate(cv::Algorithm** algorithm, cv::Ptr<cv::DenseOpticalFlow>** sharedPtr)

@@ -125,6 +125,7 @@ namespace Emgu.CV
             using (InputArray iaSilhouette = silhouette.GetInputArray())
             using (InputOutputArray ioaMhi = mhi.GetInputOutputArray())
                 cveUpdateMotionHistory(iaSilhouette, ioaMhi, timestamp, duration);
+            CvInvoke.CheckError();
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveUpdateMotionHistory(
@@ -156,6 +157,7 @@ namespace Emgu.CV
             using (OutputArray oaMask = mask.GetOutputArray())
             using (OutputArray oaOrientation = orientation.GetOutputArray())
                 cveCalcMotionGradient(iaMhi, oaMask, oaOrientation, delta1, delta2, apertureSize);
+            CvInvoke.CheckError();
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveCalcMotionGradient(
@@ -186,6 +188,7 @@ namespace Emgu.CV
             {
                 cveSegmentMotion(iaMhi, oaSegMask, boundingRects, timestamp, segThresh);
             }
+            CvInvoke.CheckError();
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveSegmentMotion(
@@ -214,7 +217,11 @@ namespace Emgu.CV
             using (InputArray iaOrientation = orientation.GetInputArray())
             using (InputArray iaMask = mask.GetInputArray())
             using (InputArray iaMhi = mhi.GetInputArray())
-                return cveCalcGlobalOrientation(iaOrientation, iaMask, iaMhi, timestamp, duration);
+            {
+                double result = cveCalcGlobalOrientation(iaOrientation, iaMask, iaMhi, timestamp, duration);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern double cveCalcGlobalOrientation(IntPtr orientation, IntPtr mask, IntPtr mhi, double timestamp, double duration);
