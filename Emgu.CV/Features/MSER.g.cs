@@ -55,8 +55,8 @@ namespace Emgu.CV.Features
      /// </summary>
      public bool Pass2Only
      {
-        get { return FeaturesInvoke.cveMSERGetPass2Only(_ptr); } 
-        set { FeaturesInvoke.cveMSERSetPass2Only(_ptr, value); }
+        get { bool result = FeaturesInvoke.cveMSERGetPass2Only(_ptr); CvInvoke.CheckError(); return result; }
+        set { FeaturesInvoke.cveMSERSetPass2Only(_ptr, value); CvInvoke.CheckError(); }
      }
      
      /// <summary>
@@ -64,8 +64,8 @@ namespace Emgu.CV.Features
      /// </summary>
      public int Delta
      {
-        get { return FeaturesInvoke.cveMSERGetDelta(_ptr); } 
-        set { FeaturesInvoke.cveMSERSetDelta(_ptr, value); }
+        get { int result = FeaturesInvoke.cveMSERGetDelta(_ptr); CvInvoke.CheckError(); return result; }
+        set { FeaturesInvoke.cveMSERSetDelta(_ptr, value); CvInvoke.CheckError(); }
      }
      
      /// <summary>
@@ -73,8 +73,8 @@ namespace Emgu.CV.Features
      /// </summary>
      public int MinArea
      {
-        get { return FeaturesInvoke.cveMSERGetMinArea(_ptr); } 
-        set { FeaturesInvoke.cveMSERSetMinArea(_ptr, value); }
+        get { int result = FeaturesInvoke.cveMSERGetMinArea(_ptr); CvInvoke.CheckError(); return result; }
+        set { FeaturesInvoke.cveMSERSetMinArea(_ptr, value); CvInvoke.CheckError(); }
      }
      
      /// <summary>
@@ -82,8 +82,8 @@ namespace Emgu.CV.Features
      /// </summary>
      public int MaxArea
      {
-        get { return FeaturesInvoke.cveMSERGetMaxArea(_ptr); } 
-        set { FeaturesInvoke.cveMSERSetMaxArea(_ptr, value); }
+        get { int result = FeaturesInvoke.cveMSERGetMaxArea(_ptr); CvInvoke.CheckError(); return result; }
+        set { FeaturesInvoke.cveMSERSetMaxArea(_ptr, value); CvInvoke.CheckError(); }
      }
      
    }

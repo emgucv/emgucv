@@ -226,7 +226,8 @@ MACRO(CREATE_OCV_CLASS_PROPERTY fname csfname cname_full cname pnames ptypes mty
 #  IF(IS_DUMMY)
 #	SET(C_HEADER_SOURCE "#include \"opencv2/core/core_c.h\"")
 #  ELSE()
-	SET(C_HEADER_SOURCE "${header_additional_include}")
+	SET(C_HEADER_SOURCE "#include \"emgu_error.h\"
+${header_additional_include}")
 #  ENDIF()
 
   SET(C_SOURCE "${source_additional_code} #include \"${fname}.h\"")
@@ -267,6 +268,18 @@ namespace ${cs_namespace}
     LIST(GET PROPERTY_TYPES ${ival} PROPERTY_TYPE)
     LIST(GET MARSHAL_TYPES ${ival} MARSHAL_TYPE)
     LIST(GET CS_PROPERTY_TYPES ${ival} CS_PROPERTY_TYPE)
+
+    # Fallback expression used by CVAPI_CATCH_CV_ERRORS() for functions that return
+    # ${PROPERTY_TYPE} by value: pointer types can't use the "Type()" value-initialization
+    # syntax (it's not valid C++ grammar for a pointer type-id), so those fall back to a
+    # plain 0; everything else (primitives and default-constructible structs/classes) uses
+    # "Type()".
+    STRING(REGEX MATCH "\\*$" PROPERTY_TYPE_IS_POINTER "${PROPERTY_TYPE}")
+    IF(PROPERTY_TYPE_IS_POINTER)
+      SET(PROPERTY_TYPE_FALLBACK "0")
+    ELSE()
+      SET(PROPERTY_TYPE_FALLBACK "${PROPERTY_TYPE}()")
+    ENDIF()
     LIST(GET CS_PROPERTY_DOCS ${ival} CS_DOCUMENTATION )
     STRING(STRIP "${CS_DOCUMENTATION}" CS_DOCUMENTATION )
     
@@ -288,14 +301,14 @@ namespace ${cs_namespace}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj, cv::String* str);  
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj, cv::String* str) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj, cv::String* str) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }   
      ")
 	    ELSE()
 	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { *str = obj->${PROPERTY_NAME}(); }   
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { try { *str = obj->${PROPERTY_NAME}(); } CVAPI_CATCH_CV_ERRORS_VOID }   
      ")
 	    ENDIF()
 	
@@ -313,7 +326,7 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* st
         { 
            using (CvString s = new CvString())
            {  
-              ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr, s); 
+              ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr, s);  CvInvoke.CheckError();
               return s.ToString();
            }
         } 
@@ -325,14 +338,14 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* st
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj);  
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
+${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS(${PROPERTY_TYPE_FALLBACK}) }   
      ")
 		ELSE()
 	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);  
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->${PROPERTY_NAME}(); }   
+${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { try { return obj->${PROPERTY_NAME}(); } CVAPI_CATCH_CV_ERRORS(${PROPERTY_TYPE_FALLBACK}) }   
      ")
 		ENDIF()
 	
@@ -346,7 +359,7 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { 
      /// </summary>
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
      {
-        get { return ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr); } 
+        get { ${CS_PROPERTY_TYPE} result = ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr); CvInvoke.CheckError(); return result; }
      }
      ")
       ENDIF()
@@ -358,8 +371,8 @@ CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* 
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value);     
      ")
 	    SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	    ELSE()
 	    SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
@@ -367,8 +380,8 @@ CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PR
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);     
      ")
         SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { ${PROPERTY_TYPE} p = cvTermCriteria(obj->get${PROPERTY_NAME}()); memcpy(value, &p, sizeof(${PROPERTY_TYPE})); }
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { obj->set${PROPERTY_NAME}( *value ); }     
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { try { ${PROPERTY_TYPE} p = cvTermCriteria(obj->get${PROPERTY_NAME}()); memcpy(value, &p, sizeof(${PROPERTY_TYPE})); } CVAPI_CATCH_CV_ERRORS_VOID }
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { try { obj->set${PROPERTY_NAME}( *value ); } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	    ENDIF()
 	
@@ -385,8 +398,8 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
      /// </summary>
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
      {
-        get { ${CS_PROPERTY_TYPE} v = new ${CS_PROPERTY_TYPE}(); ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, ref v); return v; } 
-        set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, ref value); }
+        get { ${CS_PROPERTY_TYPE} v = new ${CS_PROPERTY_TYPE}(); ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, ref v); CvInvoke.CheckError(); return v; } 
+        set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, ref value); CvInvoke.CheckError(); }
      }
      ")
       ELSEIF("${PROPERTY_TYPE}" STREQUAL "CvSize") #special handling for functions that returns CvSize
@@ -396,8 +409,8 @@ CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* 
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value);     
      ")
 	    SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	    ELSE()
 	    SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
@@ -405,8 +418,8 @@ CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PR
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);     
      ")
         SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { ${PROPERTY_TYPE} p = cvSize(obj->get${PROPERTY_NAME}()); memcpy(value, &p, sizeof(${PROPERTY_TYPE})); }
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { obj->set${PROPERTY_NAME}( *value ); }     
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { try { ${PROPERTY_TYPE} p = cvSize(obj->get${PROPERTY_NAME}()); memcpy(value, &p, sizeof(${PROPERTY_TYPE})); } CVAPI_CATCH_CV_ERRORS_VOID }
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { try { obj->set${PROPERTY_NAME}( *value ); } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	    ENDIF()
 	
@@ -423,8 +436,8 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
      /// </summary>
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
      {
-        get { ${CS_PROPERTY_TYPE} v = new ${CS_PROPERTY_TYPE}(); ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, ref v); return v; } 
-        set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, ref value); }
+        get { ${CS_PROPERTY_TYPE} v = new ${CS_PROPERTY_TYPE}(); ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, ref v); CvInvoke.CheckError(); return v; } 
+        set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, ref value); CvInvoke.CheckError(); }
      }
      ")
      ELSE()
@@ -434,8 +447,8 @@ CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* 
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value);     
      ")
 	    SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	  ELSE()
 	    SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
@@ -443,8 +456,8 @@ CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PR
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);     
      ")
         SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { ${PROPERTY_TYPE} p = obj->get${PROPERTY_NAME}(); memcpy(value, &p, sizeof(${PROPERTY_TYPE})); }
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { obj->set${PROPERTY_NAME}( *value ); }     
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { try { ${PROPERTY_TYPE} p = obj->get${PROPERTY_NAME}(); memcpy(value, &p, sizeof(${PROPERTY_TYPE})); } CVAPI_CATCH_CV_ERRORS_VOID }
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { try { obj->set${PROPERTY_NAME}( *value ); } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	    
 	  ENDIF()
@@ -461,8 +474,8 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
      /// </summary>
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
      {
-        get { ${CS_PROPERTY_TYPE} v = new ${CS_PROPERTY_TYPE}(); ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, ref v); return v; } 
-        set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, ref value); }
+        get { ${CS_PROPERTY_TYPE} v = new ${CS_PROPERTY_TYPE}(); ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, ref v); CvInvoke.CheckError(); return v; } 
+        set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, ref value); CvInvoke.CheckError(); }
      }
      ")
      ENDIF()
@@ -473,14 +486,14 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value);
      ")
          SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }
      ")
 	   ELSE()
          SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);
      ")
          SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { ${PROPERTY_TYPE} p = cvSize(obj->get${PROPERTY_NAME}()); memcpy(value, &p, sizeof(${PROPERTY_TYPE})); }
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { try { ${PROPERTY_TYPE} p = cvSize(obj->get${PROPERTY_NAME}()); memcpy(value, &p, sizeof(${PROPERTY_TYPE})); } CVAPI_CATCH_CV_ERRORS_VOID }
      ")
 	   ENDIF()
       SET(CS_SOURCE "${CS_SOURCE}
@@ -494,7 +507,7 @@ void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
      /// </summary>
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
      {
-        get { ${CS_PROPERTY_TYPE} v = new ${CS_PROPERTY_TYPE}(); ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, ref v); return v; } 
+        get { ${CS_PROPERTY_TYPE} v = new ${CS_PROPERTY_TYPE}(); ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, ref v); CvInvoke.CheckError(); return v; } 
      }
      ")
      ELSE()
@@ -503,14 +516,14 @@ void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value);
      ")
          SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }
      ")
 	   ELSE()
          SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);
      ")
          SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { ${PROPERTY_TYPE} p = obj->get${PROPERTY_NAME}(); memcpy(value, &p, sizeof(${PROPERTY_TYPE})); }
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { try { ${PROPERTY_TYPE} p = obj->get${PROPERTY_NAME}(); memcpy(value, &p, sizeof(${PROPERTY_TYPE})); } CVAPI_CATCH_CV_ERRORS_VOID }
      ")
 	   ENDIF()
       SET(CS_SOURCE "${CS_SOURCE}
@@ -524,7 +537,7 @@ void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
      /// </summary>
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
      {
-        get { ${CS_PROPERTY_TYPE} v = new ${CS_PROPERTY_TYPE}(); ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, ref v); return v; } 
+        get { ${CS_PROPERTY_TYPE} v = new ${CS_PROPERTY_TYPE}(); ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, ref v); CvInvoke.CheckError(); return v; } 
      }
      ")
     ENDIF()
@@ -535,14 +548,14 @@ void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, cv::String* str);  
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, cv::String* str) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, cv::String* str) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }   
      ")
 		ELSE()
 	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { obj->set${PROPERTY_NAME}(*str); }   
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { try { obj->set${PROPERTY_NAME}(*str); } CVAPI_CATCH_CV_ERRORS_VOID }   
      ")
 	    ENDIF()
 	
@@ -559,7 +572,7 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String*
      { 
            using (CvString cvs = new CvString(s))
            {  
-              ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, cvs); 
+              ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, cvs);  CvInvoke.CheckError();
            }   
      }
      ")
@@ -569,14 +582,14 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String*
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value);     
      ")
           SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 		ELSE()
           SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
      ")
           SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { obj->set${PROPERTY_NAME}( value ); }     
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { try { obj->set${PROPERTY_NAME}( value ); } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	    ENDIF()
       
@@ -593,7 +606,7 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
 	 /// <param name=\"value\">The value</param>
      public void Set${CS_FUNCTION_NAME}(${CS_PROPERTY_TYPE} value)
      {
-        ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value); 
+        ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value);  CvInvoke.CheckError();
      }
      ")
 	 ENDIF()
@@ -603,14 +616,14 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj);     
      ")
         SET(C_SOURCE "${C_SOURCE}
-${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS(${PROPERTY_TYPE_FALLBACK}) }     
      ")
 	  ELSE()
 	    SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);     
      ")
         SET(C_SOURCE "${C_SOURCE}
-${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->${PROPERTY_NAME}(); }     
+${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { try { return obj->${PROPERTY_NAME}(); } CVAPI_CATCH_CV_ERRORS(${PROPERTY_TYPE_FALLBACK}) }     
      ")
 	 ENDIF()
       
@@ -627,7 +640,9 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { 
      /// <returns>The result</returns>
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}( )
      {
-        return ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr); 
+        ${CS_PROPERTY_TYPE} result = ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr);
+        CvInvoke.CheckError();
+        return result;
      }
      ")
 	ELSEIF(${MARSHAL_TYPE} STREQUAL "act0")
@@ -636,14 +651,14 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { 
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj);     
      ")
         SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	  ELSE()
 	    SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);     
      ")
         SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { obj->${PROPERTY_NAME}(); }     
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { try { obj->${PROPERTY_NAME}(); } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	 ENDIF()
       
@@ -659,7 +674,7 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { obj->${PROPE
      /// </summary>
      public void ${CS_FUNCTION_NAME}( )
      {
-        ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr); 
+        ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr);  CvInvoke.CheckError();
      }
      ")
     ELSEIF(${MARSHAL_TYPE} STREQUAL "act1")
@@ -668,14 +683,14 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { obj->${PROPE
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value);     
      ")
         SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	  ELSE()
         SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
      ")
         SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { obj->${PROPERTY_NAME}( value ); }     
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { try { obj->${PROPERTY_NAME}( value ); } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	 ENDIF()
       
@@ -692,7 +707,7 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYP
 	 /// <param name=\"value\">The value</param>
      public void ${CS_FUNCTION_NAME}(${CS_PROPERTY_TYPE} value)
      {
-        ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr, value); 
+        ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr, value);  CvInvoke.CheckError();
      }
      ")
     ELSEIF(${MARSHAL_TYPE} STREQUAL "act1obj")
@@ -701,14 +716,14 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYP
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value);     
      ")
         SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* value) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	  ELSE()
         SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value);     
      ")
         SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { obj->${PROPERTY_NAME}( *value ); }     
+void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* value) { try { obj->${PROPERTY_NAME}( *value ); } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	 ENDIF()
       
@@ -725,7 +740,7 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYP
      /// <param name=\"value\">The value</param>
      public void ${CS_FUNCTION_NAME}(${CS_PROPERTY_TYPE} value)
      {
-        ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr, value); 
+        ${cs_invoke_class}.cve${CLASS_NAME}${CS_FUNCTION_NAME}(_ptr, value);  CvInvoke.CheckError();
      }
      ")
     ELSEIF(${MARSHAL_TYPE} STREQUAL "propR")
@@ -735,14 +750,14 @@ void cve${CLASS_NAME}${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYP
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* val);  
      ")
           SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* val) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE}* val) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }   
      ")
 	    ELSE()
           SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* val);  
      ")
           SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* val) { *val = obj->get${PROPERTY_NAME}(); }   
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE}* val) { try { *val = obj->get${PROPERTY_NAME}(); } CVAPI_CATCH_CV_ERRORS_VOID }   
      ")
 	   ENDIF()
       
@@ -760,7 +775,7 @@ void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
         { 
           using (CvString s = new CvString())
           {
-            ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, s);
+            ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, s); CvInvoke.CheckError();
             return s.ToString();
           }
         } 
@@ -773,14 +788,14 @@ void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj);  
      ")
         SET(C_SOURCE "${C_SOURCE}
-${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
+${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS(${PROPERTY_TYPE_FALLBACK}) }   
      ")
 	  ELSE()
         SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);  
      ")
         SET(C_SOURCE "${C_SOURCE}
-${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->get${PROPERTY_NAME}(); }   
+${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { try { return obj->get${PROPERTY_NAME}(); } CVAPI_CATCH_CV_ERRORS(${PROPERTY_TYPE_FALLBACK}) }   
      ")
 	 ENDIF()
       
@@ -794,7 +809,7 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj)
      /// </summary>
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
      {
-        get { return ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); } 
+        get { ${CS_PROPERTY_TYPE} result = ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); CvInvoke.CheckError(); return result; }
      }
      ")
      ENDIF()
@@ -805,14 +820,14 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj)
 CVAPI(${PROPERTY_TYPE}*) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj);
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-${PROPERTY_TYPE}* cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }
+${PROPERTY_TYPE}* cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS(0) }
      ")
 		ELSE()
 	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}*) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-${PROPERTY_TYPE}* cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return &(obj->${PROPERTY_NAME}); }
+${PROPERTY_TYPE}* cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { try { return &(obj->${PROPERTY_NAME}); } CVAPI_CATCH_CV_ERRORS(0) }
      ")
 	    ENDIF()
 	
@@ -827,7 +842,7 @@ ${PROPERTY_TYPE}* cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj
 	 /// <returns>The result</returns>
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
      {
-        get { return new ${CS_PROPERTY_TYPE}( ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr), false); } 
+        get { IntPtr ptr = ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); CvInvoke.CheckError(); return new ${CS_PROPERTY_TYPE}( ptr, false); } 
      }
      ")
 
@@ -839,8 +854,8 @@ CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, cv::String* str);
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, cv::String* str);  
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, cv::String* str) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, cv::String* str) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, cv::String* str) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }   
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, cv::String* str) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }   
      ")
 		ELSE()
 	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
@@ -848,8 +863,8 @@ CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { *str = obj->${PROPERTY_NAME}; }   
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { obj->${PROPERTY_NAME} = *str; }   
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { try { *str = obj->${PROPERTY_NAME}; } CVAPI_CATCH_CV_ERRORS_VOID }   
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { try { obj->${PROPERTY_NAME} = *str; } CVAPI_CATCH_CV_ERRORS_VOID }   
      ")
 		ENDIF()
 	
@@ -869,7 +884,7 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String*
         { 
            using (CvString s = new CvString())
            {  
-              ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, s); 
+              ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, s);  CvInvoke.CheckError();
               return s.ToString();
            }
         } 
@@ -877,7 +892,7 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String*
 		{
 		   using (CvString s = new CvString(value))
            {  
-              ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, s); 
+              ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, s);  CvInvoke.CheckError();
            }
 		}
      }
@@ -890,8 +905,8 @@ CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj);
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value);     
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS(${PROPERTY_TYPE_FALLBACK}) }
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 		ELSE()
 	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
@@ -899,8 +914,8 @@ CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->${PROPERTY_NAME}; }
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { obj->${PROPERTY_NAME} = value; }     
+${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { try { return obj->${PROPERTY_NAME}; } CVAPI_CATCH_CV_ERRORS(${PROPERTY_TYPE_FALLBACK}) }
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { try { obj->${PROPERTY_NAME} = value; } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	    ENDIF()
 	
@@ -918,8 +933,8 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
      /// </summary>
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
      {
-        get { return ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); } 
-        set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value); }
+        get { ${CS_PROPERTY_TYPE} result = ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); CvInvoke.CheckError(); return result; }
+        set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value); CvInvoke.CheckError(); }
      }
      ")
       ENDIF()
@@ -930,14 +945,14 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, cv::String* str);   
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, cv::String* str) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, cv::String* str) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }   
      ")
 		ELSE()
 	      SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);   
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { *str = obj->${PROPERTY_NAME}; }   
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { try { *str = obj->${PROPERTY_NAME}; } CVAPI_CATCH_CV_ERRORS_VOID }   
      ")
 	    ENDIF()
 	
@@ -955,7 +970,7 @@ void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String*
         { 
            using (CvString s = new CvString())
            {  
-              ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, s); 
+              ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, s);  CvInvoke.CheckError();
               return s.ToString();
            }
         }
@@ -967,14 +982,14 @@ void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String*
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj);
      ")
         SET(C_SOURCE "${C_SOURCE}
-${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }
+${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS(${PROPERTY_TYPE_FALLBACK}) }
      ")
 	  ELSE()
         SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
 CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj);
      ")
         SET(C_SOURCE "${C_SOURCE}
-${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->${PROPERTY_NAME}; }
+${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { try { return obj->${PROPERTY_NAME}; } CVAPI_CATCH_CV_ERRORS(${PROPERTY_TYPE_FALLBACK}) }
      ")
 	  ENDIF()
       
@@ -988,7 +1003,7 @@ ${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj)
      /// </summary>
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
      {
-        get { return ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); } 
+        get { ${CS_PROPERTY_TYPE} result = ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); CvInvoke.CheckError(); return result; }
      }
      ")
 	 ENDIF()
@@ -1001,8 +1016,8 @@ CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, cv::String* str);
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, cv::String* str);  
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, cv::String* str) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, cv::String* str) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }   
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj, cv::String* str) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }   
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, cv::String* str) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }   
      ")
 	    ELSE()
           SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
@@ -1010,8 +1025,8 @@ CVAPI(void) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str);  
      ")
 	      SET(C_SOURCE "${C_SOURCE}
-void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { *str = obj->get${PROPERTY_NAME}(); }   
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { obj->set${PROPERTY_NAME}(*str); }   
+void cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { try { *str = obj->get${PROPERTY_NAME}(); } CVAPI_CATCH_CV_ERRORS_VOID }   
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String* str) { try { obj->set${PROPERTY_NAME}(*str); } CVAPI_CATCH_CV_ERRORS_VOID }   
      ")
 	    ENDIF()
 	
@@ -1031,7 +1046,7 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String*
         { 
            using (CvString s = new CvString())
            {  
-              ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, s); 
+              ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr, s);  CvInvoke.CheckError();
               return s.ToString();
            }
         } 
@@ -1039,7 +1054,7 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, cv::String*
         {
            using (CvString s = new CvString(value))
            {  
-              ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, s); 
+              ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, s);  CvInvoke.CheckError();
            }
         }
      }
@@ -1052,8 +1067,8 @@ CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj);
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value);     
      ")
         SET(C_SOURCE "${C_SOURCE}
-${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value) { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} }     
+${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(void* obj) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS(${PROPERTY_TYPE_FALLBACK}) }
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(void* obj, ${PROPERTY_TYPE} value) { try { ${RAISE_FUNCTION_NOT_SUPPORT_CPP} } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	  ELSE()
         SET(C_HEADER_SOURCE "${C_HEADER_SOURCE}
@@ -1061,8 +1076,8 @@ CVAPI(${PROPERTY_TYPE}) cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL
 CVAPI(void) cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value);     
      ")
         SET(C_SOURCE "${C_SOURCE}
-${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { return obj->get${PROPERTY_NAME}(); }
-void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { obj->set${PROPERTY_NAME}( value ); }     
+${PROPERTY_TYPE} cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj) { try { return obj->get${PROPERTY_NAME}(); } CVAPI_CATCH_CV_ERRORS(${PROPERTY_TYPE_FALLBACK}) }
+void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_TYPE} value) { try { obj->set${PROPERTY_NAME}( value ); } CVAPI_CATCH_CV_ERRORS_VOID }     
      ")
 	 ENDIF()
       
@@ -1080,8 +1095,8 @@ void cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(${CLASS_NAME_FULL}* obj, ${PROPERTY_
      /// </summary>
      public ${CS_PROPERTY_TYPE} ${CS_FUNCTION_NAME}
      {
-        get { return ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); } 
-        set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value); }
+        get { ${CS_PROPERTY_TYPE} result = ${cs_invoke_class}.cve${CLASS_NAME}Get${CS_FUNCTION_NAME}(_ptr); CvInvoke.CheckError(); return result; }
+        set { ${cs_invoke_class}.cve${CLASS_NAME}Set${CS_FUNCTION_NAME}(_ptr, value); CvInvoke.CheckError(); }
      }
      ")
      ENDIF()

@@ -36,7 +36,7 @@ namespace Emgu.CV
 	 /// <param name="value">The value</param>
      public void SetEdgeFeatureZeroCrossingParameters(float value)
      {
-        CvInvoke.cveIntelligentScissorsMBSetEdgeFeatureZeroCrossingParameters(_ptr, value); 
+        CvInvoke.cveIntelligentScissorsMBSetEdgeFeatureZeroCrossingParameters(_ptr, value);  CvInvoke.CheckError();
      }
      
      /// <summary>
@@ -45,7 +45,7 @@ namespace Emgu.CV
 	 /// <param name="value">The value</param>
      public void SetGradientMagnitudeMaxLimit(float value)
      {
-        CvInvoke.cveIntelligentScissorsMBSetGradientMagnitudeMaxLimit(_ptr, value); 
+        CvInvoke.cveIntelligentScissorsMBSetGradientMagnitudeMaxLimit(_ptr, value);  CvInvoke.CheckError();
      }
      
    }
