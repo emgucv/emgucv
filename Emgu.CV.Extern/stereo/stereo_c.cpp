@@ -44,11 +44,15 @@ cv::StereoMatcher* cveStereoBMCreate(int numberOfDisparities, int blockSize, cv:
 //StereoMatcher
 void cveStereoMatcherCompute(cv::StereoMatcher* disparitySolver, cv::_InputArray* left, cv::_InputArray* right, cv::_OutputArray* disparity)
 {
-#ifdef HAVE_OPENCV_STEREO
-	disparitySolver->compute(*left, *right, *disparity);
-#else
-	throw_no_stereo();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_STEREO
+		disparitySolver->compute(*left, *right, *disparity);
+	#else
+		throw_no_stereo();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveStereoMatcherRelease(cv::Ptr<cv::StereoMatcher>** sharedPtr)
 {
@@ -62,11 +66,15 @@ void cveStereoMatcherRelease(cv::Ptr<cv::StereoMatcher>** sharedPtr)
 
 bool cveStereoRectifyUncalibrated(cv::_InputArray* points1, cv::_InputArray* points2, cv::_InputArray* f, cv::Size* imgSize, cv::_OutputArray* h1, cv::_OutputArray* h2, double threshold)
 {
-#ifdef HAVE_OPENCV_STEREO
-	return cv::stereoRectifyUncalibrated(*points1, *points2, *f, *imgSize, *h1, *h2, threshold);
-#else
-	throw_no_stereo();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_STEREO
+		return cv::stereoRectifyUncalibrated(*points1, *points2, *f, *imgSize, *h1, *h2, threshold);
+	#else
+		throw_no_stereo();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 void cveStereoRectify(
@@ -79,13 +87,17 @@ void cveStereoRectify(
 	double alpha, cv::Size* newImageSize,
 	cv::Rect* validPixROI1, cv::Rect* validPixROI2)
 {
-#ifdef HAVE_OPENCV_STEREO
-	cv::Rect rect1, rect2;
-	cv::stereoRectify(*cameraMatrix1, *distCoeffs1, *cameraMatrix2, *distCoeffs2, *imageSize, *r, *t, *r1, *r2,
-		*p1, *p2, *q, flags, alpha, *newImageSize, &rect1, &rect2);
-	*validPixROI1 = rect1;
-	*validPixROI2 = rect2;
-#else
-	throw_no_stereo();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_STEREO
+		cv::Rect rect1, rect2;
+		cv::stereoRectify(*cameraMatrix1, *distCoeffs1, *cameraMatrix2, *distCoeffs2, *imageSize, *r, *t, *r1, *r2,
+			*p1, *p2, *q, flags, alpha, *newImageSize, &rect1, &rect2);
+		*validPixROI1 = rect1;
+		*validPixROI2 = rect2;
+	#else
+		throw_no_stereo();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
