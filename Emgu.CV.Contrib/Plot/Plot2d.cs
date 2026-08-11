@@ -30,6 +30,7 @@ namespace Emgu.CV.Plot
         {
             using (InputArray iaData = data.GetInputArray())
                 _ptr = PlotInvoke.cvePlot2dCreateFrom(iaData, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -42,6 +43,7 @@ namespace Emgu.CV.Plot
             using (InputArray iaDataX = dataX.GetInputArray())
             using (InputArray iaDataY = dataY.GetInputArray())
                 _ptr = PlotInvoke.cvePlot2dCreateFromXY(iaDataX, iaDataY, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -52,6 +54,7 @@ namespace Emgu.CV.Plot
         {
             using (OutputArray oaResult = result.GetOutputArray())
                 PlotInvoke.cvePlot2dRender(_ptr, oaResult);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -8,31 +8,43 @@
 
 cv::plot::Plot2d* cvePlot2dCreateFrom(cv::_InputArray* data, cv::Ptr<cv::plot::Plot2d>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_PLOT
-   cv::Ptr<cv::plot::Plot2d> plot = cv::plot::Plot2d::create(*data);
-   *sharedPtr = new cv::Ptr<cv::plot::Plot2d>(plot);
-   return plot.get();
-#else
-	throw_no_plot();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_PLOT
+	   cv::Ptr<cv::plot::Plot2d> plot = cv::plot::Plot2d::create(*data);
+	   *sharedPtr = new cv::Ptr<cv::plot::Plot2d>(plot);
+	   return plot.get();
+	#else
+		throw_no_plot();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 cv::plot::Plot2d* cvePlot2dCreateFromXY(cv::_InputArray* dataX, cv::_InputArray* dataY, cv::Ptr<cv::plot::Plot2d>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_PLOT
-   cv::Ptr<cv::plot::Plot2d> plot = cv::plot::Plot2d::create(*dataX, *dataY);
-   *sharedPtr = new cv::Ptr<cv::plot::Plot2d>(plot);
-   return plot.get();
-#else
-	throw_no_plot();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_PLOT
+	   cv::Ptr<cv::plot::Plot2d> plot = cv::plot::Plot2d::create(*dataX, *dataY);
+	   *sharedPtr = new cv::Ptr<cv::plot::Plot2d>(plot);
+	   return plot.get();
+	#else
+		throw_no_plot();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cvePlot2dRender(cv::plot::Plot2d* plot, cv::_OutputArray* result)
 {
-#ifdef HAVE_OPENCV_PLOT
-   plot->render(*result);
-#else
-	throw_no_plot();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_PLOT
+	   plot->render(*result);
+	#else
+		throw_no_plot();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cvePlot2dRelease(cv::plot::Plot2d** plot, cv::Ptr<cv::plot::Plot2d>** sharedPtr)
 {
