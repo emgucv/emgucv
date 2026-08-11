@@ -8,11 +8,15 @@
 
 void cveWhiteBalancerBalanceWhite(cv::xphoto::WhiteBalancer* whiteBalancer, cv::_InputArray* src, cv::_OutputArray* dst)
 {
-#ifdef HAVE_OPENCV_XPHOTO
-	whiteBalancer->balanceWhite(*src, *dst);
-#else
-	throw_no_xphoto();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XPHOTO
+		whiteBalancer->balanceWhite(*src, *dst);
+	#else
+		throw_no_xphoto();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::xphoto::SimpleWB* cveSimpleWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer, cv::Ptr<cv::xphoto::SimpleWB>** sharedPtr)
@@ -81,29 +85,41 @@ void cveLearningBasedWBRelease(cv::Ptr<cv::xphoto::LearningBasedWB>** sharedPtr)
 
 void cveApplyChannelGains(cv::_InputArray* src, cv::_OutputArray* dst, float gainB, float gainG, float gainR)
 {
-#ifdef HAVE_OPENCV_XPHOTO
-	cv::xphoto::applyChannelGains(*src, *dst, gainB, gainG, gainR);
-#else
-	throw_no_xphoto();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XPHOTO
+		cv::xphoto::applyChannelGains(*src, *dst, gainB, gainG, gainR);
+	#else
+		throw_no_xphoto();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveDctDenoising(const cv::Mat* src, cv::Mat* dst, const double sigma, const int psize)
 {
-#ifdef HAVE_OPENCV_XPHOTO
-   cv::xphoto::dctDenoising(*src, *dst, sigma, psize);
-#else
-	throw_no_xphoto();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XPHOTO
+	   cv::xphoto::dctDenoising(*src, *dst, sigma, psize);
+	#else
+		throw_no_xphoto();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveXInpaint(const cv::Mat* src, const cv::Mat* mask, cv::Mat* dst, const int algorithmType)
 {
-#ifdef HAVE_OPENCV_XPHOTO
-   cv::xphoto::inpaint(*src, *mask, *dst, algorithmType);
-#else
-	throw_no_xphoto();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XPHOTO
+	   cv::xphoto::inpaint(*src, *mask, *dst, algorithmType);
+	#else
+		throw_no_xphoto();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveBm3dDenoising1(
@@ -122,14 +138,18 @@ void cveBm3dDenoising1(
 	int step,
 	int transformType)
 {
-#ifdef HAVE_OPENCV_XPHOTO
-	cv::xphoto::bm3dDenoising(
-		*src, *dstStep1, *dstStep2,
-		h, templateWindowSize, searchWindowSize, blockMatchingStep1, blockMatchingStep2,
-		groupSize, slidingStep, beta, normType, step, transformType);
-#else
-	throw_no_xphoto();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XPHOTO
+		cv::xphoto::bm3dDenoising(
+			*src, *dstStep1, *dstStep2,
+			h, templateWindowSize, searchWindowSize, blockMatchingStep1, blockMatchingStep2,
+			groupSize, slidingStep, beta, normType, step, transformType);
+	#else
+		throw_no_xphoto();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveBm3dDenoising2(
@@ -147,13 +167,17 @@ void cveBm3dDenoising2(
 	int step,
 	int transformType)
 {
-#ifdef HAVE_OPENCV_XPHOTO
-	cv::xphoto::bm3dDenoising(
-		*src, *dst, h, templateWindowSize, searchWindowSize, blockMatchingStep1, blockMatchingStep2,
-		groupSize, slidingStep, beta, normType, step, transformType);
-#else
-	throw_no_xphoto();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XPHOTO
+		cv::xphoto::bm3dDenoising(
+			*src, *dst, h, templateWindowSize, searchWindowSize, blockMatchingStep1, blockMatchingStep2,
+			groupSize, slidingStep, beta, normType, step, transformType);
+	#else
+		throw_no_xphoto();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 
@@ -164,11 +188,15 @@ void cveOilPainting(
 	int dynRatio,
 	int code)
 {
-#ifdef HAVE_OPENCV_XPHOTO
-	cv::xphoto::oilPainting(*src, *dst, size, dynRatio, code);
-#else
-	throw_no_xphoto();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XPHOTO
+		cv::xphoto::oilPainting(*src, *dst, size, dynRatio, code);
+	#else
+		throw_no_xphoto();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 
