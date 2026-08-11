@@ -110,11 +110,31 @@ namespace Emgu.CV
         private static int _pendingLine;
 
         /// <summary>
-        /// Check whether a native call left a pending error behind (recorded by CvErrorHandler,
-        /// which the native CVAPI_CATCH_CV_ERRORS macros ensure always runs for a caught native
-        /// error), and if so, throw it as a CvException. Call this after any P/Invoke that can
-        /// reach a CV_Error(...) call, or any other native exception, natively.
+        /// True once RedirectError has successfully registered CvErrorHandler as the native
+        /// error callback. CvInvoke's static constructor does not call RedirectError on every
+        /// platform (iOS, MacCatalyst, Blazor/WASM, and Unity WebGL never call it at all), so
+        /// CheckError() uses this to know whether it can rely on the fast [ThreadStatic] path
+        /// or needs to fall back to querying native thread-local storage directly.
         /// </summary>
+        internal static bool CustomErrorHandlerRegistered = false;
+
+        /// <summary>
+        /// Check whether a native call left a pending error behind, and if so, throw it as a
+        /// CvException. Call this after any P/Invoke that can reach a CV_Error(...) call, or any
+        /// other native exception, natively.
+        /// </summary>
+        /// <remarks>
+        /// This first checks the [ThreadStatic] fields CvErrorHandler populates -- free, no
+        /// P/Invoke -- which covers every platform where a native error callback is actually
+        /// registered. On the platforms where none is (see CustomErrorHandlerRegistered), the
+        /// native CVAPI_CATCH_CV_ERRORS macros still always record the error into native
+        /// thread-local storage regardless (since they have direct access to the caught
+        /// exception's details, independent of any callback), so this falls back to querying
+        /// that directly: one cheap boolean P/Invoke (cveHasPendingError) to avoid paying for
+        /// string marshaling on the common no-error case, and only the fuller
+        /// cveCheckPendingError call -- with its CvString allocations -- when there is actually
+        /// an error to retrieve.
+        /// </remarks>
         public static void CheckError()
         {
             if (_hasPendingError)
@@ -122,7 +142,33 @@ namespace Emgu.CV
                 _hasPendingError = false;
                 throw new CvException(_pendingStatus, _pendingFuncName, _pendingErrMsg, _pendingFileName, _pendingLine);
             }
+            else if (!CustomErrorHandlerRegistered && cveHasPendingError())
+            {
+                int status = 0, line = 0;
+                using (CvString funcName = new CvString())
+                using (CvString errMsg = new CvString())
+                using (CvString fileName = new CvString())
+                {
+                    if (cveCheckPendingError(ref status, funcName, errMsg, fileName, ref line))
+                    {
+                        throw new CvException(status, funcName.ToString(), errMsg.ToString(), fileName.ToString(), line);
+                    }
+                }
+            }
         }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveHasPendingError();
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveCheckPendingError(
+            ref int status,
+            IntPtr funcName,
+            IntPtr errMsg,
+            IntPtr fileName,
+            ref int line);
 
         /// <summary>
         /// Define an error callback that can be registered using RedirectError function
