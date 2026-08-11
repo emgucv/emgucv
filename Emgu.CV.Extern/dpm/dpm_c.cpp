@@ -30,19 +30,23 @@ DPMDetector* cveDPMDetectorCreate(std::vector<cv::String>* filenames, std::vecto
 
 void cveDPMDetectorDetect(DPMDetector* dpm, cv::Mat* image, std::vector<cv::Rect>* rects, std::vector<float>* scores, std::vector<int>* classIds)
 {
-#ifdef HAVE_OPENCV_DPM
-	std::vector<DPMDetector::ObjectDetection> dobjects = std::vector<DPMDetector::ObjectDetection>();
-	dpm->detect(*image, dobjects);
-
-	for (std::vector<DPMDetector::ObjectDetection>::iterator it = dobjects.begin(); it != dobjects.end(); ++it)
+	try
 	{
-		rects->push_back(it->rect);
-		scores->push_back(it->score);
-		classIds->push_back(it->classID);
+	#ifdef HAVE_OPENCV_DPM
+		std::vector<DPMDetector::ObjectDetection> dobjects = std::vector<DPMDetector::ObjectDetection>();
+		dpm->detect(*image, dobjects);
+
+		for (std::vector<DPMDetector::ObjectDetection>::iterator it = dobjects.begin(); it != dobjects.end(); ++it)
+		{
+			rects->push_back(it->rect);
+			scores->push_back(it->score);
+			classIds->push_back(it->classID);
+		}
+	#else
+		throw_no_dpm();
+	#endif
 	}
-#else
-	throw_no_dpm();
-#endif
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 size_t cveDPMDetectorGetClassCount(DPMDetector* dpm)

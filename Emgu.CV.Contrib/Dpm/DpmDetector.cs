@@ -89,6 +89,7 @@ namespace Emgu.CV.Dpm
             using (Util.VectorOfInt classIds = new Util.VectorOfInt())
             {
                 DpmInvoke.cveDPMDetectorDetect(_ptr, mat, rects, scores, classIds);
+                CvInvoke.CheckError();
                 ObjectDetection[] detections = new ObjectDetection[rects.Size];
                 for (var i = 0; i < detections.Length; i++)
                     detections[i] = new ObjectDetection(rects[i], scores[i], classIds[i]);
