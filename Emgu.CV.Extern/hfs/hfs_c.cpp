@@ -42,17 +42,21 @@ void cveHfsSegmentRelease(cv::Ptr<cv::hfs::HfsSegment>** hfsSegmentPtr)
 
 void cveHfsPerformSegment(cv::hfs::HfsSegment* hfsSegment, cv::_InputArray* src, cv::Mat* dst, bool ifDraw, bool useGpu)
 {
-#ifdef HAVE_OPENCV_HFS
-	if (useGpu)
+	try
 	{
-		cv::Mat m = hfsSegment->performSegmentGpu(*src, ifDraw);
-		cv::swap(m, *dst);
-	} else
-	{
-		cv::Mat m = hfsSegment->performSegmentCpu(*src, ifDraw);
-		cv::swap(m, *dst);
+	#ifdef HAVE_OPENCV_HFS
+		if (useGpu)
+		{
+			cv::Mat m = hfsSegment->performSegmentGpu(*src, ifDraw);
+			cv::swap(m, *dst);
+		} else
+		{
+			cv::Mat m = hfsSegment->performSegmentCpu(*src, ifDraw);
+			cv::swap(m, *dst);
+		}
+	#else
+		throw_no_hfs();
+	#endif
 	}
-#else
-	throw_no_hfs();
-#endif
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
