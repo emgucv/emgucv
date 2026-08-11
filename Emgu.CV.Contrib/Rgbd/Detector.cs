@@ -55,12 +55,14 @@ namespace Emgu.CV.Linemod
         {
             using (CvString csClassId = new CvString(classId))
             {
-                return LinemodInvoke.cveLinemodDetectorAddTemplate(
+                int result = LinemodInvoke.cveLinemodDetectorAddTemplate(
                     _ptr,
                     sources,
                     csClassId,
                     objectMask,
                     ref boundingBox);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -86,7 +88,7 @@ namespace Emgu.CV.Linemod
             {
                 LinemodInvoke.cveLinemodDetectorMatch(
                     _ptr,
-                    sources, 
+                    sources,
                     threshold,
                     matches,
                     classIds,
@@ -94,6 +96,7 @@ namespace Emgu.CV.Linemod
                     masks
                     );
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>

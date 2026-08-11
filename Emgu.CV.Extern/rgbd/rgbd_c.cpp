@@ -55,21 +55,24 @@ int cveLinemodDetectorAddTemplate(
 	cv::Mat* objectMask,
 	cv::Rect* boundingBox)
 {
-#ifdef HAVE_OPENCV_RGBD
-	cv::Rect r;
-	int result = detector->addTemplate(*sources, *classId, *objectMask, &r);
-	if (boundingBox)
+	try
 	{
-		boundingBox->x = r.x;
-		boundingBox->y = r.y;
-		boundingBox->width = r.width;
-		boundingBox->height = r.height;
+	#ifdef HAVE_OPENCV_RGBD
+		cv::Rect r;
+		int result = detector->addTemplate(*sources, *classId, *objectMask, &r);
+		if (boundingBox)
+		{
+			boundingBox->x = r.x;
+			boundingBox->y = r.y;
+			boundingBox->width = r.width;
+			boundingBox->height = r.height;
+		}
+		return result;
+	#else
+		throw_no_rgbd();
+	#endif
 	}
-	return result;
-#else
-	throw_no_rgbd();
-#endif	
-
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveLinemodDetectorGetClassIds(cv::linemod::Detector* detector, std::vector< cv::String >* classIds)
@@ -94,17 +97,21 @@ void cveLinemodDetectorMatch(
 	cv::_OutputArray* quantizedImages,
 	std::vector< cv::Mat >* masks)
 {
-#ifdef HAVE_OPENCV_RGBD
-	detector->match(
-		*sources,
-		threshold,
-		*matches,
-		classIds ? *classIds : std::vector< cv::String >(),
-		quantizedImages ? *quantizedImages : static_cast<cv::OutputArray>(cv::noArray()),
-		masks ? *masks : std::vector< cv::Mat >());
-#else
-	throw_no_rgbd();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_RGBD
+		detector->match(
+			*sources,
+			threshold,
+			*matches,
+			classIds ? *classIds : std::vector< cv::String >(),
+			quantizedImages ? *quantizedImages : static_cast<cv::OutputArray>(cv::noArray()),
+			masks ? *masks : std::vector< cv::Mat >());
+	#else
+		throw_no_rgbd();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 int cveLinemodDetectorGetT(cv::linemod::Detector* detector, int pyramidLevel)
