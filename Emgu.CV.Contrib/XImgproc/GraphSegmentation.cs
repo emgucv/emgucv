@@ -29,6 +29,7 @@ namespace Emgu.CV.XImgproc
         public GraphSegmentation(double sigma = 0.5, float k = 300, int minSize = 100)
         {
             _ptr = XImgprocInvoke.cveGraphSegmentationCreate(sigma, k, minSize, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -41,6 +42,7 @@ namespace Emgu.CV.XImgproc
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 XImgprocInvoke.cveGraphSegmentationProcessImage(_ptr, iaSrc, oaDst);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

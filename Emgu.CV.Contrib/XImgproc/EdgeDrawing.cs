@@ -35,6 +35,7 @@ namespace Emgu.CV.XImgproc
         public EdgeDrawing()
 		{
             _ptr = XImgprocInvoke.cveEdgeDrawingCreate(ref _algorithm, ref _sharedPtr);
+            CvInvoke.CheckError();
 		}
         
 
@@ -57,6 +58,7 @@ namespace Emgu.CV.XImgproc
         {
             using (InputArray iaSrc = src.GetInputArray())
                 XImgprocInvoke.cveEdgeDrawingDetectEdges(_ptr, iaSrc);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -67,6 +69,7 @@ namespace Emgu.CV.XImgproc
         {
             using (OutputArray oaDst = dst.GetOutputArray())
                 XImgprocInvoke.cveEdgeDrawingGetEdgeImage(_ptr, oaDst);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -77,6 +80,7 @@ namespace Emgu.CV.XImgproc
         {
             using (OutputArray oaDst = dst.GetOutputArray())
                 XImgprocInvoke.cveEdgeDrawingGetGradientImage(_ptr, oaDst);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -87,6 +91,7 @@ namespace Emgu.CV.XImgproc
         {
             using (OutputArray oaDst = dst.GetOutputArray())
                 XImgprocInvoke.cveEdgeDrawingDetectLines(_ptr, oaDst);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -97,6 +102,7 @@ namespace Emgu.CV.XImgproc
         {
             using (OutputArray oaDst = dst.GetOutputArray())
                 XImgprocInvoke.cveEdgeDrawingDetectEllipses(_ptr, oaDst);
+            CvInvoke.CheckError();
         }
     }
 

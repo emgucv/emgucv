@@ -29,6 +29,7 @@ namespace Emgu.CV.XImgproc
         public SelectiveSearchSegmentation()
         {
             _ptr = XImgprocInvoke.cveSelectiveSearchSegmentationCreate(ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -39,6 +40,7 @@ namespace Emgu.CV.XImgproc
         {
             using (InputArray iaImage = image.GetInputArray())
                 XImgprocInvoke.cveSelectiveSearchSegmentationSetBaseImage(_ptr, iaImage);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -49,6 +51,7 @@ namespace Emgu.CV.XImgproc
         public void SwitchToSingleStrategy(int k, float sigma)
         {
             XImgprocInvoke.cveSelectiveSearchSegmentationSwitchToSingleStrategy(_ptr, k, sigma);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -60,6 +63,7 @@ namespace Emgu.CV.XImgproc
         public void SwitchToSelectiveSearchFast(int baseK = 150, int incK = 150, float sigma = 0.8f)
         {
             XImgprocInvoke.cveSelectiveSearchSegmentationSwitchToSelectiveSearchFast(_ptr, baseK, incK, sigma);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -71,6 +75,7 @@ namespace Emgu.CV.XImgproc
         public void SwitchToSelectiveSearchQuality(int baseK = 150, int incK = 150, float sigma = 0.8f)
         {
             XImgprocInvoke.cveSelectiveSearchSegmentationSwitchToSelectiveSearchQuality(_ptr, baseK, incK, sigma);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -81,6 +86,7 @@ namespace Emgu.CV.XImgproc
         {
             using (InputArray iaImg = img.GetInputArray())
                 XImgprocInvoke.cveSelectiveSearchSegmentationAddImage(_ptr, iaImg);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -92,6 +98,7 @@ namespace Emgu.CV.XImgproc
             using (VectorOfRect vr = new VectorOfRect())
             {
                 XImgprocInvoke.cveSelectiveSearchSegmentationProcess(_ptr, vr);
+                CvInvoke.CheckError();
                 return vr.ToArray();
             }
         }

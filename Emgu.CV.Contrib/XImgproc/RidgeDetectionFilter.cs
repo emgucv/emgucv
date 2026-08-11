@@ -65,8 +65,9 @@ namespace Emgu.CV.XImgproc
                 scale, 
                 delta, 
                 borderType, 
-                ref _algorithm, 
+                ref _algorithm,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
 		}
 
         /// <summary>
@@ -79,6 +80,7 @@ namespace Emgu.CV.XImgproc
             using (InputArray iaImg = img.GetInputArray())
             using (OutputArray oaOutput = output.GetOutputArray())
                 XImgprocInvoke.cveRidgeDetectionFilterGetRidgeFilteredImage(_ptr, iaImg, oaOutput);
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc />

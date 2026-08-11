@@ -40,6 +40,7 @@ namespace Emgu.CV.XImgproc
                imageWidth, imageHeight, imageChannels,
                numSuperpixels, numLevels, prior,
                histogramBins, doubleStep, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -47,7 +48,12 @@ namespace Emgu.CV.XImgproc
         /// </summary>
         public int NumberOfSuperpixels
         {
-            get { return XImgprocInvoke.cveSuperpixelSEEDSGetNumberOfSuperpixels(_ptr); }
+            get
+            {
+                int result = XImgprocInvoke.cveSuperpixelSEEDSGetNumberOfSuperpixels(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -59,6 +65,7 @@ namespace Emgu.CV.XImgproc
         {
             using (OutputArray oaLabels = labels.GetOutputArray())
                 XImgprocInvoke.cveSuperpixelSEEDSGetLabels(_ptr, oaLabels);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -70,6 +77,7 @@ namespace Emgu.CV.XImgproc
         {
             using (OutputArray oaImage = image.GetOutputArray())
                 XImgprocInvoke.cveSuperpixelSEEDSGetLabelContourMask(_ptr, oaImage, thickLine);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -82,6 +90,7 @@ namespace Emgu.CV.XImgproc
         {
             using (InputArray iaImg = img.GetInputArray())
                 XImgprocInvoke.cveSuperpixelSEEDSIterate(_ptr, iaImg, numIterations);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

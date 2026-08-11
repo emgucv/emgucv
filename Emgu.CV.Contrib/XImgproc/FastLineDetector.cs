@@ -43,6 +43,7 @@ namespace Emgu.CV.XImgproc
                 cannyApertureSize,
                 doMerge,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -58,6 +59,7 @@ namespace Emgu.CV.XImgproc
             {
                 // Process image
                 XImgprocInvoke.cveFastLineDetectorDetect(_ptr, iaImage, oaLines);
+                CvInvoke.CheckError();
 
                 // Convert data in Mat to list of LineSegment2DF objects
                 float[] pointData = new float[matLines.Total.ToInt32() * matLines.ElementSize / 4];
@@ -99,6 +101,7 @@ namespace Emgu.CV.XImgproc
                 using (InputArray iaLines = matLines.GetInputArray())
                 {
                     XImgprocInvoke.cveFastLineDetectorDrawSegments(_ptr, ioaImage, iaLines, drawArrows);
+                    CvInvoke.CheckError();
                 }
             }
         }

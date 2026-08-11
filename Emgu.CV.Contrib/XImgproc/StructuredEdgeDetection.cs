@@ -29,6 +29,7 @@ namespace Emgu.CV.XImgproc
         {
             using (CvString sModel = new CvString(model))
                 _ptr = XImgprocInvoke.cveStructuredEdgeDetectionCreate(sModel, howToGetFeatures, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -41,6 +42,7 @@ namespace Emgu.CV.XImgproc
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 XImgprocInvoke.cveStructuredEdgeDetectionDetectEdges(_ptr, iaSrc, oaDst);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -53,6 +55,7 @@ namespace Emgu.CV.XImgproc
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 XImgprocInvoke.cveStructuredEdgeDetectionComputeOrientation(_ptr, iaSrc, oaDst);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -73,6 +76,7 @@ namespace Emgu.CV.XImgproc
             {
                 XImgprocInvoke.cveStructuredEdgeDetectionEdgesNms(_ptr, iaEdgeImage, iaOrientationImage, oaDst, r, s, m, isParallel);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -100,6 +104,7 @@ namespace Emgu.CV.XImgproc
         public RFFeatureGetter()
         {
             _ptr = XImgprocInvoke.cveRFFeatureGetterCreate(ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -45,10 +45,11 @@ namespace Emgu.CV.XImgproc
         public DisparityWLSFilter(IStereoMatcher matcherLeft)
         {
             _ptr = XImgprocInvoke.cveCreateDisparityWLSFilter(
-                matcherLeft.StereoMatcherPtr, 
+                matcherLeft.StereoMatcherPtr,
                 ref _disparityFilterPtr,
-                ref _algorithm, 
+                ref _algorithm,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -62,6 +63,7 @@ namespace Emgu.CV.XImgproc
                 ref _disparityFilterPtr,
                 ref _algorithm,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -99,6 +101,7 @@ namespace Emgu.CV.XImgproc
         public RightMatcher(IStereoMatcher matcherLeft)
         {
             _ptr = XImgprocInvoke.cveCreateRightMatcher(matcherLeft.StereoMatcherPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

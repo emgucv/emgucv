@@ -52,6 +52,7 @@ namespace Emgu.CV.XImgproc
         {
             using (InputArray iaGuide = guide.GetInputArray())
                 _ptr = XImgprocInvoke.cveDTFilterCreate(iaGuide, sigmaSpatial, sigmaColor, mode, numIters, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace Emgu.CV.XImgproc
             {
                 XImgprocInvoke.cveDTFilterFilter(_ptr, iaSrc, oaDst, dDepth);
             }
-
+            CvInvoke.CheckError();
         }
 
         /// <summary>
