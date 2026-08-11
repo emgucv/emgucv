@@ -43,6 +43,7 @@ namespace Emgu.CV.PpfMatch3d
         public void UpdatePose(Mat pose)
         {
             PpfMatch3dInvoke.cvePose3DUpdatePose(_ptr, pose);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
