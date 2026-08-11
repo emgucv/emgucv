@@ -54,15 +54,6 @@ CVAPI(void) cudaCascadeClassifierDetectMultiScale(cv::cuda::CascadeClassifier* c
 
 CVAPI(void) cudaCascadeClassifierConvert(cv::cuda::CascadeClassifier* classifier, cv::_OutputArray* gpuObjects, std::vector<cv::Rect>* objects);
 
-/*
-CVAPI(double) cudaCascadeClassifierGetScaleFactor(cv::cuda::CascadeClassifier* classifier);
-
-CVAPI(void) cudaCascadeClassifierSetScaleFactor(cv::cuda::CascadeClassifier* classifier, double scaleFactor);
-
-CVAPI(int) cudaCascadeClassifierGetMinNeighbors(cv::cuda::CascadeClassifier* classifier);
-
-CVAPI(void) cudaCascadeClassifierSetMinNeighbors(cv::cuda::CascadeClassifier* classifier, int minNeighbours);
-*/
 CVAPI(void) cudaCascadeClassifierGetMinObjectSize(cv::cuda::CascadeClassifier* classifier, cv::Size* minObjectSize);
 
 CVAPI(void) cudaCascadeClassifierSetMinObjectSize(cv::cuda::CascadeClassifier* classifier, cv::Size* minObjectSize);
@@ -92,29 +83,4 @@ CVAPI(void) cudaHOGDetectMultiScale(
 	std::vector<cv::Rect>* foundLocations,
 	std::vector<double>* confidents);
 
-/*
-CVAPI(double) cudaHOGGetWinSigma(cv::cuda::HOG* descriptor);
-CVAPI(void) cudaHOGSetWinSigma(cv::cuda::HOG* descriptor, double winSigma);
-
-CVAPI(int) cudaHOGGetNumLevels(cv::cuda::HOG* descriptor);
-CVAPI(void) cudaHOGSetNumLevels(cv::cuda::HOG* descriptor, int numLevels);
-
-CVAPI(int) cudaHOGGetGroupThreshold(cv::cuda::HOG* descriptor);
-CVAPI(void) cudaHOGSetGroupThreshold(cv::cuda::HOG* descriptor, int groupThreshold);
-
-CVAPI(double) cudaHOGGetHitThreshold(cv::cuda::HOG* descriptor);
-CVAPI(void) cudaHOGSetHitThreshold(cv::cuda::HOG* descriptor, double hitThreshold);
-
-CVAPI(double) cudaHOGGetScaleFactor(cv::cuda::HOG* descriptor);
-CVAPI(void) cudaHOGSetScaleFactor(cv::cuda::HOG* descriptor, double scaleFactor);
-
-CVAPI(void) cudaHOGGetWinStride(cv::cuda::HOG* descriptor, CvSize* winStride);
-CVAPI(void) cudaHOGSetWinStride(cv::cuda::HOG* descriptor, CvSize* winStride);
-
-CVAPI(bool) cudaHOGGetGammaCorrection(cv::cuda::HOG* descriptor);
-CVAPI(void) cudaHOGSetGammaCorrection(cv::cuda::HOG* descriptor, bool gammaCorrection);
-
-CVAPI(double) cudaHOGGetL2HysThreshold(cv::cuda::HOG* descriptor);
-CVAPI(void) cudaHOGSetL2HysThreshold(cv::cuda::HOG* descriptor, double l2HysThreshold);
-*/
 #endif

@@ -2805,6 +2805,34 @@ ENDIF()
 	""
 	${HAVE_opencv_face})
 
+  CREATE_OCV_CLASS_PROPERTY(
+    "face/facemarkkazemi_params_property"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/Face/FacemarkKazemiParams.g.cs"
+    "cv::face::FacemarkKazemi::Params"
+    "FacemarkKazemiParams"
+    "cascade_depth;tree_depth;num_trees_per_cascade_level;learning_rate;oversampling_amount;num_test_coordinates;lambda;num_test_splits;configfile"
+    "int;int;int;float;int;int;float;int;cv::String"
+    "element;element;element;element;element;element;element;element;element"
+    "CascadeDepth;TreeDepth;NumTreesPerCascadeLevel;LearningRate;OversamplingAmount;NumTestCoordinates;Lambda;NumTestSplits;ConfigFile"
+    "int;int;int;float;int;int;float;int;String"
+    "the depth of cascade used for training;
+	the max height of the regression tree built;
+	number of trees fit per cascade level;
+	the learning rate in gradient boosting, also referred as shrinkage;
+	number of initialisations used to create training samples;
+	number of test coordinates;
+	a value to calculate probability of closeness of two coordinates;
+	number of random test splits generated;
+	the name of the file containing the values of training parameters"
+    "Emgu.CV.Face"
+    "FaceInvoke"
+    "FacemarkKazemiParams"
+	""
+    "#include \"face_c.h\""
+	""
+	""
+	${HAVE_opencv_face})
+
 ############################### face code gen END ##############################
 
 ############################### dnn code gen START ##############################

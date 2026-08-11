@@ -279,31 +279,46 @@ void cveFacemarkLBFRelease(cv::face::FacemarkLBF** facemark, cv::Ptr<cv::face::F
 #endif
 }
 
-/*
 cv::face::FacemarkKazemi::Params* cveFacemarkKazemiParamsCreate()
 {
+#ifdef HAVE_OPENCV_FACE
 	return new cv::face::FacemarkKazemi::Params();
+#else
+	throw_no_face();
+#endif
 }
 void cveFacemarkKazemiParamsRelease(cv::face::FacemarkKazemi::Params** params)
 {
-	delete *params;
+#ifdef HAVE_OPENCV_FACE
+	delete* params;
 	*params = 0;
+#else
+	throw_no_face();
+#endif
 }
 
-cv::face::FacemarkKazemi* cveFacemarkKazemiCreate(cv::face::FacemarkKazemi::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm)
+cv::face::FacemarkKazemi* cveFacemarkKazemiCreate(cv::face::FacemarkKazemi::Params* parameters, cv::face::Facemark** facemark, cv::Algorithm** algorithm, cv::Ptr<cv::face::FacemarkKazemi>** sharedPtr)
 {
+#ifdef HAVE_OPENCV_FACE
 	cv::Ptr<cv::face::FacemarkKazemi> ptr = cv::face::FacemarkKazemi::create(*parameters);
-	ptr.addref();
+	*sharedPtr = new cv::Ptr<cv::face::FacemarkKazemi>(ptr);
 	*facemark = dynamic_cast<cv::face::Facemark*>(ptr.get());
 	*algorithm = dynamic_cast<cv::Algorithm*>(ptr.get());
 	return ptr.get();
+#else
+	throw_no_face();
+#endif
 }
-void cveFacemarkKazemiRelease(cv::face::FacemarkKazemi** facemark)
+void cveFacemarkKazemiRelease(cv::face::FacemarkKazemi** facemark, cv::Ptr<cv::face::FacemarkKazemi>** sharedPtr)
 {
-	delete *facemark;
+#ifdef HAVE_OPENCV_FACE
+	delete* sharedPtr;
 	*facemark = 0;
+	*sharedPtr = 0;
+#else
+	throw_no_face();
+#endif
 }
-
 
 typedef struct
 {
@@ -315,13 +330,32 @@ bool myDetector(cv::InputArray image, cv::OutputArray faces, void* face_detector
 	face_detector_pointer* fds = (face_detector_pointer*)face_detector_struct;
 	return (*(fds->face_detector_func))(&image, &faces);
 }
+#ifdef HAVE_OPENCV_FACE
+// getFaces/setFaceDetector/addTrainingSample/training are only declared on FacemarkTrain,
+// not the base Facemark class (FacemarkKazemi, for instance, derives from Facemark directly
+// and does not implement them).
+static cv::face::FacemarkTrain* toFacemarkTrain(cv::face::Facemark* facemark)
+{
+	cv::face::FacemarkTrain* t = dynamic_cast<cv::face::FacemarkTrain*>(facemark);
+	if (!t)
+		CV_Error(cv::Error::StsBadFunc, "This Facemark implementation does not support this operation (not a FacemarkTrain).");
+	return t;
+}
+#endif
+
 bool cveFacemarkSetFaceDetector(cv::face::Facemark* facemark, CSharp_FaceDetector detector)
 {
-	face_detector_pointer detector_pointer;
-	detector_pointer.face_detector_func = detector;
-	return facemark->setFaceDetector((cv::face::FN_FaceDetector) myDetector, &detector_pointer);
+#ifdef HAVE_OPENCV_FACE
+	// Heap-allocated so it remains valid for the lifetime of the Facemark object;
+	// setFaceDetector stores this pointer and invokes it later from getFaces()/fit(),
+	// so it must outlive this call, not be a stack-local.
+	face_detector_pointer* detector_pointer = new face_detector_pointer();
+	detector_pointer->face_detector_func = detector;
+	return toFacemarkTrain(facemark)->setFaceDetector((cv::face::FN_FaceDetector) myDetector, detector_pointer);
+#else
+	throw_no_face();
+#endif
 }
-*/
 
 void cveFacemarkLoadModel(cv::face::Facemark* facemark, cv::String* model)
 {
@@ -332,12 +366,15 @@ void cveFacemarkLoadModel(cv::face::Facemark* facemark, cv::String* model)
 #endif
 }
 
-/*
 bool cveFacemarkGetFaces(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_OutputArray* faces)
 {
-	return facemark->getFaces(*image, *faces);
+#ifdef HAVE_OPENCV_FACE
+	return toFacemarkTrain(facemark)->getFaces(*image, *faces);
+#else
+	throw_no_face();
+#endif
 }
-*/
+
 bool cveFacemarkFit(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* faces, cv::_OutputArray* landmarks)
 {
 #ifdef HAVE_OPENCV_FACE
@@ -359,16 +396,22 @@ bool cveFacemarkFit(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_I
 #endif
 }
 
-/*
 bool cveFacemarkAddTrainingSample(cv::face::Facemark* facemark, cv::_InputArray* image, cv::_InputArray* landmarks)
 {
-	return facemark->addTrainingSample(*image, *landmarks);
+#ifdef HAVE_OPENCV_FACE
+	return toFacemarkTrain(facemark)->addTrainingSample(*image, *landmarks);
+#else
+	throw_no_face();
+#endif
 }
 void cveFacemarkTraining(cv::face::Facemark* facemark)
 {
-	facemark->training();
+#ifdef HAVE_OPENCV_FACE
+	toFacemarkTrain(facemark)->training();
+#else
+	throw_no_face();
+#endif
 }
-*/
 
 void cveDrawFacemarks(cv::_InputOutputArray* image, cv::_InputArray* points, cv::Scalar* color)
 {

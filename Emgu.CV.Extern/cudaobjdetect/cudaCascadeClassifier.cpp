@@ -55,28 +55,6 @@ void cudaCascadeClassifierConvert(cv::cuda::CascadeClassifier* classifier, cv::_
 	throw_no_cudaobjdetect();
 #endif
 }
-/*
-
-double cudaCascadeClassifierGetScaleFactor(cv::cuda::CascadeClassifier* classifier)
-{
-   return classifier->getScaleFactor();
-}
-
-void cudaCascadeClassifierSetScaleFactor(cv::cuda::CascadeClassifier* classifier, double scaleFactor)
-{
-   classifier->setScaleFactor(scaleFactor); 
-}
-
-int cudaCascadeClassifierGetMinNeighbors(cv::cuda::CascadeClassifier* classifier)
-{
-   return classifier->getMinNeighbors();
-}
-
-void cudaCascadeClassifierSetMinNeighbors(cv::cuda::CascadeClassifier* classifier, int minNeighbours)
-{
-   classifier->setMinNeighbors(minNeighbours); 
-}*/
-
 void cudaCascadeClassifierGetMinObjectSize(cv::cuda::CascadeClassifier* classifier, cv::Size* minObjectSize)
 {
 #ifdef HAVE_OPENCV_CUDAOBJDETECT

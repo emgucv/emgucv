@@ -28,7 +28,6 @@ namespace Emgu.CV.Face
 
     public static partial class FaceInvoke
     {
-        /*
         /// <summary>
         /// Set a user defined face detector for the Facemark algorithm.
         /// </summary>
@@ -53,7 +52,7 @@ namespace Emgu.CV.Face
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal extern static bool cveFacemarkSetFaceDetector(IntPtr facemark, FaceDetectNative detector);
-        */
+
         /// <summary>
         /// A function to load the trained model before the fitting process.
         /// </summary>
@@ -69,7 +68,6 @@ namespace Emgu.CV.Face
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveFacemarkLoadModel(IntPtr facemark, IntPtr model);
 
-        /*
         /// <summary>
         /// Default face detector This function is mainly utilized by the implementation of a Facemark Algorithm.
         /// </summary>
@@ -88,7 +86,6 @@ namespace Emgu.CV.Face
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal extern static bool cveFacemarkGetFaces(IntPtr facemark, IntPtr image, IntPtr faces);
-        */
 
         /// <summary>
         /// Detect facial landmarks from an image.
@@ -128,7 +125,6 @@ namespace Emgu.CV.Face
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDrawFacemarks(IntPtr image, IntPtr points, ref MCvScalar color);
 
-        /*
         /// <summary>
         /// Add one training sample to the trainer.
         /// </summary>
@@ -158,6 +154,5 @@ namespace Emgu.CV.Face
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveFacemarkTraining(IntPtr facemark);
-        */
     }
 }
