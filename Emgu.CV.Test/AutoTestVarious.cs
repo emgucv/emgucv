@@ -1016,23 +1016,6 @@ namespace Emgu.CV.Test
 
         /*
         [Test]
-        public void TestSoftcascade()
-        {
-           using (SoftCascadeDetector detector = new SoftCascadeDetector(EmguAssert.GetFile("inria_caltech-17.01.2013.xml"), 0.4, 5.0, 55, SoftCascadeDetector.RejectionCriteria.Default))
-           using (Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png"))
-           {
-              Stopwatch watch = Stopwatch.StartNew();
-              SoftCascadeDetector.Detection[] detections = detector.Detect(image, null);
-              watch.Stop();
-              foreach (SoftCascadeDetector.Detection detection in detections)
-                 image.Draw(detection.BoundingBox, new Bgr(Color.Red), 1);
-
-              //Emgu.CV.WinForms.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
-           }
-        }*/
-
-        /*
-        [Test]
         public void TestHOGTrain64x128()
         {
             using (Image<Bgr, byte> image = EmguAssert.LoadImage<Bgr, Byte>("lena.jpg"))
