@@ -24,6 +24,7 @@ namespace Emgu.CV.Face
         public FacemarkAAMParams()
         {
             _ptr = FaceInvoke.cveFacemarkAAMParamsCreate();
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -67,6 +68,7 @@ namespace Emgu.CV.Face
         public FacemarkAAM(FacemarkAAMParams parameters)
         {
             _ptr = FaceInvoke.cveFacemarkAAMCreate(parameters, ref _facemarkPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

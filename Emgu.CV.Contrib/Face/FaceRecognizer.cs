@@ -33,6 +33,7 @@ namespace Emgu.CV.Face
             using (InputArray iaImage = images.GetInputArray())
             using (InputArray iaLabels = labels.GetInputArray())
                 FaceInvoke.cveFaceRecognizerTrain(_faceRecognizerPtr, iaImage, iaLabels);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -61,6 +62,7 @@ namespace Emgu.CV.Face
             double distance = -1;
             using (InputArray iaImage = image.GetInputArray())
                 FaceInvoke.cveFaceRecognizerPredict(_faceRecognizerPtr, iaImage, ref label, ref distance);
+            CvInvoke.CheckError();
             return new PredictionResult() { Label = label, Distance = distance };
         }
 
@@ -88,6 +90,7 @@ namespace Emgu.CV.Face
         {
             using (CvString s = new CvString(fileName))
                 FaceInvoke.cveFaceRecognizerWrite(_faceRecognizerPtr, s);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -98,6 +101,7 @@ namespace Emgu.CV.Face
         {
             using (CvString s = new CvString(fileName))
                 FaceInvoke.cveFaceRecognizerRead(_faceRecognizerPtr, s);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -112,6 +116,7 @@ namespace Emgu.CV.Face
             {
                 FaceInvoke.cveFaceRecognizerSetLabelInfo(_faceRecognizerPtr, label, csStrInfo);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -124,6 +129,7 @@ namespace Emgu.CV.Face
             using (CvString csStrInfo = new CvString())
             {
                 FaceInvoke.cveFaceRecognizerGetLabelInfo(_faceRecognizerPtr, label, csStrInfo);
+                CvInvoke.CheckError();
                 return csStrInfo.ToString();
             }
         }

@@ -32,6 +32,7 @@ namespace Emgu.CV.Face
         public MACE(int imgSize)
         {
             _ptr = FaceInvoke.cveMaceCreate(imgSize, ref _sharedPtr, ref _algorithmPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -46,6 +47,7 @@ namespace Emgu.CV.Face
             {
                 _ptr = FaceInvoke.cveMaceCreate2(csFileName, csObjName, ref _sharedPtr, ref _algorithmPtr);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -58,6 +60,7 @@ namespace Emgu.CV.Face
             {
                 FaceInvoke.cveMaceSalt(_ptr, csPassphrase);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -70,6 +73,7 @@ namespace Emgu.CV.Face
             {
                 FaceInvoke.cveMaceTrain(_ptr, iaImages);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -81,7 +85,9 @@ namespace Emgu.CV.Face
         {
             using (InputArray iaQuery = query.GetInputArray())
             {
-                return FaceInvoke.cveMaceSame(_ptr, iaQuery);
+                bool result = FaceInvoke.cveMaceSame(_ptr, iaQuery);
+                CvInvoke.CheckError();
+                return result;
             }
         }
         /// <summary>

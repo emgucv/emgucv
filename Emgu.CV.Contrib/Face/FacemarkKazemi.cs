@@ -24,6 +24,7 @@ namespace Emgu.CV.Face
         public FacemarkKazemiParams()
         {
             _ptr = FaceInvoke.cveFacemarkKazemiParamsCreate();
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -66,6 +67,7 @@ namespace Emgu.CV.Face
         public FacemarkKazemi(FacemarkKazemiParams parameters)
         {
             _ptr = FaceInvoke.cveFacemarkKazemiCreate(parameters, ref _facemarkPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

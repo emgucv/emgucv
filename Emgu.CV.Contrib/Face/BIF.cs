@@ -26,6 +26,7 @@ namespace Emgu.CV.Face
         public BIF(int numBands, int numRotations)
         {
             _ptr = FaceInvoke.cveBIFCreate(numBands, numRotations, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -38,6 +39,7 @@ namespace Emgu.CV.Face
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaFeatures = features.GetOutputArray())
                 FaceInvoke.cveBIFCompute(_ptr, iaImage, oaFeatures);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

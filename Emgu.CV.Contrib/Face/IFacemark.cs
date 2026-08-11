@@ -130,6 +130,7 @@ namespace Emgu.CV.Face
             {
                 cveDrawFacemarks(ioaImage, iaPoints, ref color);
             }
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDrawFacemarks(IntPtr image, IntPtr points, ref MCvScalar color);

@@ -24,6 +24,7 @@ namespace Emgu.CV.Face
         public FacemarkLBFParams()
         {
             _ptr = FaceInvoke.cveFacemarkLBFParamsCreate();
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -66,6 +67,7 @@ namespace Emgu.CV.Face
         public FacemarkLBF(FacemarkLBFParams parameters)
         {
             _ptr = FaceInvoke.cveFacemarkLBFCreate(parameters, ref _facemarkPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -26,6 +26,7 @@ namespace Emgu.CV.Face
         public EigenFaceRecognizer(int numComponents = 0, double threshold = double.MaxValue)
         {
             _ptr = FaceInvoke.cveEigenFaceRecognizerCreate(numComponents, threshold, ref _faceRecognizerPtr, ref _basicFaceRecognizerPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
