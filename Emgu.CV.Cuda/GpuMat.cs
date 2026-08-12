@@ -143,19 +143,6 @@ namespace Emgu.CV.Cuda
         }
 
         /// <summary>
-        /// Get the type of the GpuMat
-        /// </summary>
-        public int Type
-        {
-            get
-            {
-                var result = CudaInvoke.gpuMatGetType(_ptr);
-                CvInvoke.CheckError();
-                return result;
-            }
-        }
-
-        /// <summary>
         /// Pointer to the InputArray
         /// </summary>
         /// <returns>The input array</returns>
@@ -612,13 +599,6 @@ namespace Emgu.CV.Cuda
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void gpuMatGetSize(IntPtr gpuMat, ref Size size);
 
-        /// <summary>
-        /// Get the GpuMat type
-        /// </summary>
-        /// <param name="gpuMat">The GpuMat</param>
-        /// <returns>The GpuMat type</returns>
-        [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int gpuMatGetType(IntPtr gpuMat);
 
         /// <summary>
         /// Create a GpuMat of the specified size

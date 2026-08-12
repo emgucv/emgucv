@@ -282,15 +282,6 @@ cv::cuda::GpuMat* gpuMatCreateContinuous(int rows, int cols, int type)
 	CVAPI_CATCH_CV_ERRORS(0)
 }
 
-bool gpuMatIsContinuous(cv::cuda::GpuMat* gpuMat)
-{
-	try
-	{
-		return gpuMat->isContinuous();
-	}
-	CVAPI_CATCH_CV_ERRORS(false)
-}
-
 cv::cuda::GpuMat* gpuMatGetRegion(cv::cuda::GpuMat* other, cv::Range* rowRange, cv::Range* colRange)
 {
 	try
@@ -326,41 +317,6 @@ void gpuMatGetSize(cv::cuda::GpuMat* gpuMat, cv::Size* size)
 	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
-bool gpuMatIsEmpty(cv::cuda::GpuMat* gpuMat)
-{
-	try
-	{
-		return gpuMat->empty();
-	}
-	CVAPI_CATCH_CV_ERRORS(false)
-}
-
-int gpuMatGetChannels(cv::cuda::GpuMat* gpuMat)
-{
-	try
-	{
-		return gpuMat->channels();
-	}
-	CVAPI_CATCH_CV_ERRORS(0)
-}
-
-int gpuMatGetType(cv::cuda::GpuMat* gpuMat)
-{
-	try
-	{
-		return gpuMat->type();
-	}
-	CVAPI_CATCH_CV_ERRORS(0)
-}
-
-int gpuMatGetDepth(cv::cuda::GpuMat* gpuMat)
-{
-	try
-	{
-		return gpuMat->depth();
-	}
-	CVAPI_CATCH_CV_ERRORS(0)
-}
 
 void gpuMatUpload(cv::cuda::GpuMat* gpuMat, cv::_InputArray* arr, cv::cuda::Stream* stream)
 {

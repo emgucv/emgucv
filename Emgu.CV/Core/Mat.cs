@@ -585,19 +585,6 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Pointer to the beginning of the raw data
-        /// </summary>
-        public IntPtr DataPointer
-        {
-            get
-            {
-                IntPtr result = MatInvoke.cveMatGetDataPointer(_ptr);
-                CvInvoke.CheckError();
-                return result;
-            }
-        }
-
-        /// <summary>
         /// Get a pointer to the raw data given the specific index
         /// </summary>
         /// <param name="index">The index to the Mat data</param>
@@ -1820,9 +1807,6 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern int cveMatGetElementSize(IntPtr mat);
 
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveMatGetDataPointer(IntPtr mat);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveMatGetDataPointer2(IntPtr mat, IntPtr indices);

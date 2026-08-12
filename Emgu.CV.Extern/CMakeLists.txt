@@ -1132,11 +1132,11 @@ ENDMACRO()
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Core/Mat.g.cs"
     "cv::Mat" 
     "Mat" 
-    "isContinuous;isSubmatrix;depth;empty;channels;pop_back;push_back;total;dims" 
-    "bool;bool;int;bool;int;int;cv::Mat;size_t;int" 
-    "val;val;val;val;val;act1;act1obj;val;elementR"
-    "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels;PopBack;PushBack;Total;Dims" 
-    "bool;bool;CvEnum.DepthType;bool;int;int;Mat;IntPtr;int"
+    "isContinuous;isSubmatrix;depth;empty;channels;pop_back;push_back;total;dims;data"
+    "bool;bool;int;bool;int;int;cv::Mat;size_t;int;uchar*"
+    "val;val;val;val;val;act1;act1obj;val;elementR;elementR"
+    "IsContinuous;IsSubmatrix;Depth;IsEmpty;NumberOfChannels;PopBack;PushBack;Total;Dims;DataPointer"
+    "bool;bool;CvEnum.DepthType;bool;int;int;Mat;IntPtr;int;IntPtr"
     "True if the data is continues;
   True if the matrix is a submatrix of another matrix;
   Depth type;
@@ -1145,7 +1145,8 @@ ENDMACRO()
   The method removes one or more rows from the bottom of the matrix;
   Adds elements to the bottom of the matrix;
   The method returns the number of array elements (a number of pixels if the array represents an image);
-  The matrix dimensionality"
+  The matrix dimensionality;
+  Pointer to the beginning of the raw data"
     "Emgu.CV"
     "CvInvoke"
     "Mat"
@@ -1186,10 +1187,10 @@ ENDMACRO()
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Core/InputArray.g.cs"
     "cv::_InputArray" 
     "InputArray" 
-    "isMat;isUMat;isMatVector;isUMatVector;isMatx;kind" 
-    "bool;bool;bool;bool;bool;int" 
+    "isMat;isUMat;isMatVector;isUMatVector;isMatx;kind"
+    "bool;bool;bool;bool;bool;int"
     "val;val;val;val;val;val"
-    "IsMat;IsUMat;IsMatVector;IsUMatVector;IsMatx;Kind" 
+    "IsMat;IsUMat;IsMatVector;IsUMatVector;IsMatx;Kind"
     "bool;bool;bool;bool;bool;InputArray.Type"
     "True if the input array is a Mat;
   True if the input array is an UMat;
@@ -1233,11 +1234,11 @@ ENDMACRO()
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Ocl/Device.g.cs"
     "cv::ocl::Device" 
     "Device" 
-    "isNVidia;isIntel;isAMD;addressBits;linkerAvailable;compilerAvailable;available;maxWorkGroupSize;maxComputeUnits;localMemSize;maxMemAllocSize;deviceVersionMajor;deviceVersionMinor;halfFPConfig;singleFPConfig;doubleFPConfig;hostUnifiedMemory;globalMemSize;image2DMaxWidth;image2DMaxHeight;type;name;version;vendorName;driverVersion;extensions;OpenCLVersion;OpenCL_C_Version" 
-    "bool;bool;bool;int;bool;bool;bool;int;int;int;int;int;int;int;int;int;bool;size_t;int;int;int;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String" 
-    "val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val"
-    "IsNVidia;IsIntel;IsAMD;AddressBits;LinkerAvailable;CompilerAvailable;Available;MaxWorkGroupSize;MaxComputeUnits;LocalMemSize;MaxMemAllocSize;DeviceVersionMajor;DeviceVersionMinor;HalfFPConfig;SingleFPConfig;DoubleFPConfig;HostUnifiedMemory;GlobalMemSize;Image2DMaxWidth;Image2DMaxHeight;Type;Name;Version;VendorName;DriverVersion;Extensions;OpenCLVersion;OpenCLCVersion" 
-    "bool;bool;bool;int;bool;bool;bool;int;int;int;int;int;int;FpConfig;FpConfig;FpConfig;bool;IntPtr;int;int;DeviceType;String;String;String;String;String;String;String"
+    "isNVidia;isIntel;isAMD;addressBits;linkerAvailable;compilerAvailable;available;maxWorkGroupSize;maxComputeUnits;localMemSize;maxMemAllocSize;deviceVersionMajor;deviceVersionMinor;halfFPConfig;singleFPConfig;doubleFPConfig;hostUnifiedMemory;globalMemSize;image2DMaxWidth;image2DMaxHeight;type;name;version;vendorName;driverVersion;extensions;OpenCLVersion;OpenCL_C_Version;ptr;set"
+    "bool;bool;bool;int;bool;bool;bool;int;int;int;int;int;int;int;int;int;bool;size_t;int;int;int;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String;void*;void*"
+    "val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;act1"
+    "IsNVidia;IsIntel;IsAMD;AddressBits;LinkerAvailable;CompilerAvailable;Available;MaxWorkGroupSize;MaxComputeUnits;LocalMemSize;MaxMemAllocSize;DeviceVersionMajor;DeviceVersionMinor;HalfFPConfig;SingleFPConfig;DoubleFPConfig;HostUnifiedMemory;GlobalMemSize;Image2DMaxWidth;Image2DMaxHeight;Type;Name;Version;VendorName;DriverVersion;Extensions;OpenCLVersion;OpenCLCVersion;NativeDevicePointer;Set"
+    "bool;bool;bool;int;bool;bool;bool;int;int;int;int;int;int;FpConfig;FpConfig;FpConfig;bool;IntPtr;int;int;DeviceType;String;String;String;String;String;String;String;IntPtr;IntPtr"
     "Indicates if this is an NVidia device;
   Indicates if this is an Intel device;
   Indicates if this is an AMD device;
@@ -1265,7 +1266,9 @@ ENDMACRO()
   The device driver version;
   The device extensions;
   The device OpenCL version;
-  The device OpenCL C version"
+  The device OpenCL C version;
+  Get the native device pointer;
+  Set the native device pointer"
     "Emgu.CV.Ocl"
     "OclInvoke"
     "Device"
@@ -1324,15 +1327,16 @@ ENDMACRO()
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Cuda/GpuMat.g.cs"
     "cv::cuda::GpuMat" 
     "GpuMat" 
-    "isContinuous;depth;empty;channels" 
-    "bool;int;bool;int" 
-    "val;val;val;val"
-    "IsContinuous;Depth;IsEmpty;NumberOfChannels" 
-    "bool;CvEnum.DepthType;bool;int"
+    "isContinuous;depth;empty;channels;type"
+    "bool;int;bool;int;int"
+    "val;val;val;val;val"
+    "IsContinuous;Depth;IsEmpty;NumberOfChannels;Type"
+    "bool;CvEnum.DepthType;bool;int;int"
     "True if the data is continues;
   Depth type;
   True if the matrix is empty;
-  Number of channels"
+  Number of channels;
+  The type of the GpuMat"
     "Emgu.CV.Cuda"
     "CudaInvoke"
     "GpuMat"
@@ -1371,11 +1375,11 @@ ENDMACRO()
     "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV/Core/FileNode.g.cs"
     "cv::FileNode" 
     "FileNode" 
-    "isNamed;empty;isNone;isSeq;isMap;isInt;isReal;isString" 
-    "bool;bool;bool;bool;bool;bool;bool;bool" 
-    "val;val;val;val;val;val;val;val"
-    "IsNamed;IsEmpty;IsNone;IsSeq;IsMap;IsInt;IsReal;IsString" 
-    "bool;bool;bool;bool;bool;bool;bool;bool"
+    "isNamed;empty;isNone;isSeq;isMap;isInt;isReal;isString;type"
+    "bool;bool;bool;bool;bool;bool;bool;bool;int"
+    "val;val;val;val;val;val;val;val;val"
+    "IsNamed;IsEmpty;IsNone;IsSeq;IsMap;IsInt;IsReal;IsString;NodeType"
+    "bool;bool;bool;bool;bool;bool;bool;bool;FileNode.Type"
     "Returns true if the node has a name;
 	Returns true if the node is empty;
 	Returns true if the node is a \"none\" object;
@@ -1383,7 +1387,8 @@ ENDMACRO()
 	Returns true if the node is a mapping;
 	Returns true if the node is an integer;
 	Returns true if the node is a floating-point number;
-	Returns true if the node is a text string"
+	Returns true if the node is a text string;
+	Gets the type of the node"
     "Emgu.CV"
     "CvInvoke"
     "FileNode"
