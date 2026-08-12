@@ -603,6 +603,13 @@ namespace Emgu.CV.Test
             }
         }
 
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
         [Test]
         public async Task TestQwen3Large()
         {
