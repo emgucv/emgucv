@@ -41,6 +41,13 @@ namespace MauiDemoApp
             _promptEditor.FontFamily = "InterRegular";
             MainLayout.Children.Insert(0, _promptEditor);
 
+            // On iOS/MacCatalyst, dismissing the keyboard via the "Done" accessory
+            // can leave the page ScrollView with the keyboard inset still applied,
+            // which freezes scrolling until the editor is focused again. Clearing
+            // the inset and re-enabling scrolling when the editor loses focus works
+            // around it.
+            _promptEditor.Unfocused += (sender, args) => ResetScrollAfterKeyboard();
+
             var sendButton = this.GetButton();
             sendButton.Text = "Send";
 
@@ -234,6 +241,27 @@ namespace MauiDemoApp
                 SetMessage(String.Format("{0} MB downloaded.", bytesReceived / (1024 * 1024)));
             else
                 SetMessage(String.Format("{0} of {1} MB downloaded ({2}%)", bytesReceived / (1024 * 1024), totalBytesToReceive / (1024 * 1024), progressPercentage));
+        }
+
+        /// <summary>
+        /// Clear the keyboard inset left on the page ScrollView after the keyboard
+        /// is dismissed on iOS/MacCatalyst, which otherwise freezes scrolling until
+        /// the editor is focused again.
+        /// </summary>
+        private void ResetScrollAfterKeyboard()
+        {
+#if __IOS__ || __MACCATALYST__
+            //Run after MAUI's own keyboard-dismiss handling has settled.
+            this.Dispatcher.Dispatch(() =>
+            {
+                if (this.Content?.Handler?.PlatformView is UIKit.UIScrollView scrollView)
+                {
+                    scrollView.ContentInset = UIKit.UIEdgeInsets.Zero;
+                    scrollView.ScrollIndicatorInsets = UIKit.UIEdgeInsets.Zero;
+                    scrollView.ScrollEnabled = true;
+                }
+            });
+#endif
         }
     }
 }
