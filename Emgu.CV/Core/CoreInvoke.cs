@@ -369,6 +369,7 @@ namespace Emgu.CV
             using (InputArray iaMv = mv.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveMerge(iaMv, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -390,6 +391,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (InputOutputArray ioaDst = dst.GetInputOutputArray())
                 cveMixChannels(iaSrc, ioaDst, handle.AddrOfPinnedObject(), fromTo.Length >> 1);
+                CvInvoke.CheckError();
             handle.Free();
         }
 
@@ -411,6 +413,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveExtractChannel(iaSrc, oaDst, coi);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -427,6 +430,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (InputOutputArray oaDst = dst.GetInputOutputArray())
                 cveInsertChannel(iaSrc, oaDst, coi);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -443,6 +447,7 @@ namespace Emgu.CV
         {
             using (InputOutputArray ioaMat = mat.GetInputOutputArray())
                 cveRandShuffle(ioaMat, iterFactor, rng);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -460,6 +465,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveBitwiseNot(iaSrc, oaDst, iaMask);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -479,6 +485,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveMax(iaSrc1, iaSrc2, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -492,7 +499,11 @@ namespace Emgu.CV
         public static bool HasNonZero(IInputArray arr)
         {
             using (InputArray iaArr = arr.GetInputArray())
-                return cveHasNonZero(iaArr);
+            {
+                var result = cveHasNonZero(iaArr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -509,7 +520,11 @@ namespace Emgu.CV
         public static int CountNonZero(IInputArray arr)
         {
             using (InputArray iaArr = arr.GetInputArray())
-                return cveCountNonZero(iaArr);
+            {
+                var result = cveCountNonZero(iaArr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -525,6 +540,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaIdx = idx.GetOutputArray())
                 cveFindNonZero(iaSrc, oaIdx);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -540,7 +556,11 @@ namespace Emgu.CV
         {
             using (InputArray iaSrc1 = src1.GetInputArray())
             using (InputArray iaSrc2 = src2.GetInputArray())
-                return cvePSNR(iaSrc1, iaSrc2);
+            {
+                var result = cvePSNR(iaSrc1, iaSrc2);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -560,6 +580,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveMin(iaSrc1, iaSrc2, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -582,6 +603,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveAdd(iaSrc1, iaSrc2, oaDst, iaMask, dtype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -605,6 +627,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveSubtract(iaSrc1, iaSrc2, oaDst, iaMask, dtype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -629,6 +652,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveDivide(iaSrc1, iaSrc2, oaDst, scale, dtype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -652,6 +676,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveMultiply(iaSrc1, iaSrc2, oaDst, scale, dtype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -674,6 +699,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveBitwiseAnd(iaSrc1, iaSrc2, oaDst, iaMask);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -695,6 +721,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveBitwiseOr(iaSrc1, iaSrc2, oaDst, iaMask);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -716,6 +743,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveBitwiseXor(iaSrc1, iaSrc2, oaDst, iaMask);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -733,6 +761,7 @@ namespace Emgu.CV
         {
             using (InputOutputArray ioaMat = mat.GetInputOutputArray())
                 cveSetIdentity(ioaMat, ref value);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -765,6 +794,7 @@ namespace Emgu.CV
             using (OutputArray oaMagitude = magnitude.GetOutputArray())
             using (OutputArray oaAngle = angle.GetOutputArray())
                 cveCartToPolar(iaX, iaY, oaMagitude, oaAngle, angleInDegrees);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -797,6 +827,7 @@ namespace Emgu.CV
             using (OutputArray oaX = x.GetOutputArray())
             using (OutputArray oaY = y.GetOutputArray())
                 cvePolarToCart(iaMagnitude, iaAngle, oaX, oaY, angleInDegrees);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -828,6 +859,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cvePow(iaSrc, power, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -845,6 +877,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveExp(iaSrc, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -863,6 +896,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveLog(iaSrc, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -883,7 +917,11 @@ namespace Emgu.CV
         {
             using (InputArray iaCoeffs = coeffs.GetInputArray())
             using (OutputArray oaRoots = roots.GetOutputArray())
-                return cveSolveCubic(iaCoeffs, oaRoots);
+            {
+                var result = cveSolveCubic(iaCoeffs, oaRoots);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -900,7 +938,11 @@ namespace Emgu.CV
         {
             using (InputArray iaCoeffs = coeffs.GetInputArray())
             using (OutputArray oaRoots = roots.GetOutputArray())
-                return cveSolvePoly(iaCoeffs, oaRoots, maxiter);
+            {
+                var result = cveSolvePoly(iaCoeffs, oaRoots, maxiter);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -926,7 +968,11 @@ namespace Emgu.CV
             using (InputArray iaSrc1 = src1.GetInputArray())
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
-                return cveSolve(iaSrc1, iaSrc2, oaDst, method);
+            {
+                var result = cveSolve(iaSrc1, iaSrc2, oaDst, method);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -950,6 +996,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveSort(iaSrc, oaDst, flags);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -969,6 +1016,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveSortIdx(iaSrc, oaDst, flags);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -995,6 +1043,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveDft(iaSrc, oaDst, flags, nonzeroRows);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1034,6 +1083,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveMulSpectrums(iaSrc1, iaSrc2, oaDst, flags, conjB);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1052,6 +1102,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveDct(iaSrc, oaDst, flags);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1092,6 +1143,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveAbsDiff(iaSrc1, iaSrc2, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1111,6 +1163,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveScaleAdd(iaSrc1, alpha, iaSrc2, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1135,6 +1188,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveAddWeighted(iaSrc1, alpha, iaSrc2, beta, gamma, oaDst, dtype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1165,6 +1219,7 @@ namespace Emgu.CV
             using (InputArray iaUpper = upper.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveInRange(iaSrc, iaLower, iaUpper, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1188,7 +1243,11 @@ namespace Emgu.CV
             using (InputArray iaArr1 = arr1.GetInputArray())
             using (InputOutputArray iaArr2 = arr2 == null ? InputOutputArray.GetEmpty() : arr2.GetInputOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-                return cveNorm(iaArr1, iaArr2, normType, iaMask);
+            {
+                var result = cveNorm(iaArr1, iaArr2, normType, iaMask);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -1223,6 +1282,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveFlip(iaSrc, oaDst, flipType);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1239,6 +1299,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveFlipND(iaSrc, oaDst, axis);
+                CvInvoke.CheckError();
         }
         
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1256,6 +1317,7 @@ namespace Emgu.CV
             using (InputArray iaShape = shape.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveBroadcast(iaSrc, iaShape, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1272,6 +1334,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveRotate(iaSrc, oaDst, rotateCode);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1316,6 +1379,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaMv = mv.GetOutputArray())
                 cveSplit(iaSrc, oaMv);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1428,6 +1492,7 @@ namespace Emgu.CV
             using (InputArray iaLut = lut.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveLUT(iaSrc, iaLut, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1447,6 +1512,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveConvertScaleAbs(iaSrc, oaDst, scale, shift);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1469,6 +1535,7 @@ namespace Emgu.CV
             using (InputArray iaArr = arr.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveMean(iaArr, iaMask, ref result);
+                CvInvoke.CheckError();
             return result;
         }
 
@@ -1529,6 +1596,7 @@ namespace Emgu.CV
             using (OutputArray oaStdDev = stdDev.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveMeanStdDev(iaArr, oaMean, oaStdDev, iaMask);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1546,6 +1614,7 @@ namespace Emgu.CV
             MCvScalar result = new MCvScalar();
             using (InputArray iaSrc = src.GetInputArray())
                 cveSum(iaSrc, ref result);
+                CvInvoke.CheckError();
             return result;
         }
 
@@ -1572,6 +1641,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveReduce(iaSrc, oaDst, dim, type, dtype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1899,6 +1969,7 @@ namespace Emgu.CV
             using (InputArray iaArr = arr.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveMinMaxLoc(iaArr, ref minVal, ref maxVal, ref minLoc, ref maxLoc, iaMask);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1927,6 +1998,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 cveReduceArgMin(iaSrc, oaDst, axis, lastIndex);
+                CvInvoke.CheckError();
             }
         }
 
@@ -1956,6 +2028,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 cveReduceArgMax(iaSrc, oaDst, axis, lastIndex);
+                CvInvoke.CheckError();
             }
         }
 
@@ -2079,6 +2152,7 @@ namespace Emgu.CV
             using (InputArray iaStddev = stddev.GetInputArray())
             {
                 cveRandn(ioaDst, iaMean, iaStddev);
+                CvInvoke.CheckError();
             }
         }
 
@@ -2113,6 +2187,7 @@ namespace Emgu.CV
             using (InputArray iaHigh = high.GetInputArray())
             {
                 cveRandu(ioaDst, iaLow, iaHigh);
+                CvInvoke.CheckError();
             }
         }
 
@@ -2139,6 +2214,7 @@ namespace Emgu.CV
             using (OutputArray oaEigenVectors =
                 eigenVectors == null ? OutputArray.GetEmpty() : eigenVectors.GetOutputArray())
                 cveEigen(iaSrc, oaEigenValues, oaEigenVectors);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2167,6 +2243,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveNormalize(iaSrc, oaDst, alpha, beta, normType, dType, iaMask);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2205,6 +2282,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
 
                 cveGemm(iaSrc1, iaSrc2, alpha, iaSrc3, beta, oaDst, tAbc);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2230,6 +2308,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaM = m.GetInputArray())
                 cveTransform(iaSrc, oaDst, iaM);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2281,6 +2360,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMat = mat.GetInputArray())
                 cvePerspectiveTransform(iaSrc, oaDst, iaMat);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2308,6 +2388,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaDelta = delta == null ? InputArray.GetEmpty() : delta.GetInputArray())
                 cveMulTransposed(iaSrc, oaDst, aTa, iaDelta, scale, dtype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2329,6 +2410,7 @@ namespace Emgu.CV
             MCvScalar trace = new MCvScalar();
             using (InputArray iaMat = mat.GetInputArray())
                 cveTrace(iaMat, ref trace);
+                CvInvoke.CheckError();
             return trace;
         }
 
@@ -2347,6 +2429,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveTranspose(iaSrc, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2385,7 +2468,11 @@ namespace Emgu.CV
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
-                return cveInvert(iaSrc, oaDst, method);
+            {
+                var result = cveInvert(iaSrc, oaDst, method);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2417,6 +2504,7 @@ namespace Emgu.CV
             using (OutputArray oaV = v.GetOutputArray())
             {
                 cveSVDecomp(iaSrc, oaW, oaU, oaV, flags);
+                CvInvoke.CheckError();
             }
         }
 
@@ -2440,6 +2528,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 cveSVBackSubst(iaW, iaU, iaVt, iaRhs, oaDst);
+                CvInvoke.CheckError();
             }
         }
 
@@ -2465,6 +2554,7 @@ namespace Emgu.CV
             using (OutputArray oaCovar = covar.GetOutputArray())
             using (InputOutputArray ioaMean = mean.GetInputOutputArray())
                 cveCalcCovarMatrix(iaSamples, oaCovar, ioaMean, flags, ctype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2487,7 +2577,11 @@ namespace Emgu.CV
             using (InputArray iaV1 = v1.GetInputArray())
             using (InputArray iaV2 = v2.GetInputArray())
             using (InputArray iaIconvar = iconvar.GetInputArray())
-                return cveMahalanobis(iaV1, iaV2, iaIconvar);
+            {
+                var result = cveMahalanobis(iaV1, iaV2, iaIconvar);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2507,6 +2601,7 @@ namespace Emgu.CV
             using (InputOutputArray ioaMean = mean.GetInputOutputArray())
             using (OutputArray oaEigenvectors = eigenvectors.GetOutputArray())
                 cvePCACompute1(iaData, ioaMean, oaEigenvectors, maxComponents);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2526,6 +2621,7 @@ namespace Emgu.CV
             using (InputOutputArray ioaMean = mean.GetInputOutputArray())
             using (OutputArray oaEigenvectors = eigenvectors.GetOutputArray())
                 cvePCACompute2(iaData, ioaMean, oaEigenvectors, retainedVariance);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2546,6 +2642,7 @@ namespace Emgu.CV
             using (InputArray iaEigenVectors = eigenvectors.GetInputArray())
             using (OutputArray oaResult = result.GetOutputArray())
                 cvePCAProject(iaData, iaMean, iaEigenVectors, oaResult);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2566,6 +2663,7 @@ namespace Emgu.CV
             using (InputArray iaEigenVectors = eigenvectors.GetInputArray())
             using (OutputArray oaResult = result.GetOutputArray())
                 cvePCABackProject(iaData, iaMean, iaEigenVectors, oaResult);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2689,6 +2787,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveCompare(iaSrc1, iaSrc2, oaDst, cmpOp);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2706,6 +2805,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveHConcat(iaSrc1, iaSrc2, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2733,6 +2833,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 cveHConcat2(iaSrcs, oaDst);
+                CvInvoke.CheckError();
             }
         }
 
@@ -2751,6 +2852,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveVConcat(iaSrc1, iaSrc2, oaDst);
+                CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveVConcat(IntPtr src1, IntPtr src2, IntPtr dst);
@@ -2777,6 +2879,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 cveVConcat2(iaSrcs, oaDst);
+                CvInvoke.CheckError();
             }
         }
 
@@ -2975,7 +3078,11 @@ namespace Emgu.CV
             using (InputArray iaData = data.GetInputArray())
             using (OutputArray oaBestLabels = bestLabels.GetOutputArray())
             using (OutputArray oaCenters = centers == null ? OutputArray.GetEmpty() : centers.GetOutputArray())
-                return cveKmeans(iaData, k, oaBestLabels, ref termcrit, attempts, flags, oaCenters);
+            {
+                var result = cveKmeans(iaData, k, oaBestLabels, ref termcrit, attempts, flags, oaCenters);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern double cveKmeans(
@@ -3026,6 +3133,7 @@ namespace Emgu.CV
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveMinMaxIdx(iaSrc, ref minVal, ref maxVal, minHandle.AddrOfPinnedObject(), maxHandle.AddrOfPinnedObject(),
                     iaMask);
+                CvInvoke.CheckError();
             minHandle.Free();
             maxHandle.Free();
         }
@@ -3043,6 +3151,7 @@ namespace Emgu.CV
         {
             using (InputOutputArray ioaA = a.GetInputOutputArray())
                 cvePatchNaNs(ioaA, val);
+                CvInvoke.CheckError();
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cvePatchNaNs(IntPtr a, double val);
@@ -3068,7 +3177,11 @@ namespace Emgu.CV
             double maxVal)
         {
             using (InputArray iaArr = arr.GetInputArray())
-                return cveCheckRange(iaArr, quiet, ref pos, minVal, maxVal);
+            {
+                var result = cveCheckRange(iaArr, quiet, ref pos, minVal, maxVal);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -3092,6 +3205,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveSqrt(iaSrc, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

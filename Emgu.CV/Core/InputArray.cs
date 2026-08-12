@@ -136,6 +136,7 @@ namespace Emgu.CV
         {
             Mat m = new Mat();
             CvInvoke.cveInputArrayGetMat(Ptr, idx, m);
+            CvInvoke.CheckError();
             return m;
         }
 
@@ -148,6 +149,7 @@ namespace Emgu.CV
         {
             UMat m = new UMat();
             CvInvoke.cveInputArrayGetUMat(Ptr, idx, m);
+            CvInvoke.CheckError();
             return m;
         }
 
@@ -160,7 +162,10 @@ namespace Emgu.CV
         {
             Size s = new Size();
             if (_ptr != IntPtr.Zero)
+            {
                 CvInvoke.cveInputArrayGetSize(_ptr, ref s, idx);
+                CvInvoke.CheckError();
+            }
             return s;
         }
 
@@ -188,7 +193,9 @@ namespace Emgu.CV
         {
             if (_ptr == IntPtr.Zero)
                 return DepthType.Default;
-            return CvInvoke.cveInputArrayGetDepth(_ptr, idx);
+            DepthType result = CvInvoke.cveInputArrayGetDepth(_ptr, idx);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -198,7 +205,9 @@ namespace Emgu.CV
         /// <returns>The dimensions</returns>
         public int GetDims(int i = -1)
         {
-            return CvInvoke.cveInputArrayGetDims(_ptr, i);
+            int result = CvInvoke.cveInputArrayGetDims(_ptr, i);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -210,7 +219,9 @@ namespace Emgu.CV
         {
             if (_ptr == IntPtr.Zero)
                 return 0;
-            return CvInvoke.cveInputArrayGetChannels(_ptr, idx);
+            int result = CvInvoke.cveInputArrayGetChannels(_ptr, idx);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -224,6 +235,7 @@ namespace Emgu.CV
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             {
                 CvInvoke.cveInputArrayCopyTo(_ptr, oaArr, iaMask);
+                CvInvoke.CheckError();
             }
         }
 

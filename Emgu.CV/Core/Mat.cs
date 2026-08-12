@@ -1899,15 +1899,19 @@ namespace Emgu.CV
             {
                 if (steps == null)
                 {
-                    return cveMatCreateMultiDimWithData(sizes.Length, sizesHandle.AddrOfPinnedObject(), type, data,
+                    IntPtr result = cveMatCreateMultiDimWithData(sizes.Length, sizesHandle.AddrOfPinnedObject(), type, data,
                        IntPtr.Zero);
+                    CvInvoke.CheckError();
+                    return result;
                 }
                 else
                 {
                     GCHandle stepsHandle = GCHandle.Alloc(steps, GCHandleType.Pinned);
                     try
                     {
-                        return cveMatCreateMultiDimWithData(sizes.Length, sizesHandle.AddrOfPinnedObject(), type, data, stepsHandle.AddrOfPinnedObject());
+                        IntPtr result = cveMatCreateMultiDimWithData(sizes.Length, sizesHandle.AddrOfPinnedObject(), type, data, stepsHandle.AddrOfPinnedObject());
+                        CvInvoke.CheckError();
+                        return result;
                     }
                     finally
                     {
