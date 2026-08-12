@@ -40,7 +40,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 CudaInvoke.cudaCornernessCriteriaCompute(SharedPtr, iaImage, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
     }
 

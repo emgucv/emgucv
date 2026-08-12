@@ -29,6 +29,7 @@ namespace Emgu.CV.Cuda
         public CudaHoughSegmentDetector(float rho, float theta, int minLineLength, int maxLineGap, int maxLines = 4096)
         {
             _ptr = CudaInvoke.cudaHoughSegmentDetectorCreate(rho, theta, minLineLength, maxLineGap, maxLines, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -41,7 +42,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaLines = lines.GetOutputArray())
+            {
                 CudaInvoke.cudaHoughSegmentDetectorDetect(_ptr, iaImage, oaLines, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

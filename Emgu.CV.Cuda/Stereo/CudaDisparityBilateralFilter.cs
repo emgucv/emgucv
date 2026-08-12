@@ -28,6 +28,7 @@ namespace Emgu.CV.Cuda
       public CudaDisparityBilateralFilter(int ndisp = 64, int radius = 3, int iters = 1)
       {
          _ptr = CudaInvoke.cudaDisparityBilateralFilterCreate(ndisp, radius, iters, ref _sharedPtr);
+         CvInvoke.CheckError();
       }
 
       /// <summary>
@@ -42,7 +43,10 @@ namespace Emgu.CV.Cuda
          using (InputArray iaDisparity = disparity.GetInputArray())
          using (InputArray iaImage = image.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
+         {
             CudaInvoke.cudaDisparityBilateralFilterApply(this, iaDisparity, iaImage, oaDst, stream);
+            CvInvoke.CheckError();
+         }
       }
 
       /// <summary>

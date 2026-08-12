@@ -32,6 +32,7 @@ namespace Emgu.CV.Cuda
             _ptr = CudaInvoke.cudaSparsePyrLKOpticalFlowCreate(
                 ref winSize, maxLevel, iters, useInitialFlow,
                 ref _sparseFlow, ref _algorithm, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

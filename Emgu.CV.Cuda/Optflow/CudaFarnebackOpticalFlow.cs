@@ -52,6 +52,7 @@ namespace Emgu.CV.Cuda
                 ref _denseFlow, 
                 ref _algorithm,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -8,12 +8,16 @@
 
 void cudaHOGGetDefaultPeopleDetector(cv::cuda::HOG* descriptor, cv::Mat* detector)
 {
-#ifdef HAVE_OPENCV_CUDAOBJDETECT
-	cv::Mat d = descriptor->getDefaultPeopleDetector();
-	cv::swap(d, *detector);
-#else
-	throw_no_cudaobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOBJDETECT
+		cv::Mat d = descriptor->getDefaultPeopleDetector();
+		cv::swap(d, *detector);
+	#else
+		throw_no_cudaobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::cuda::HOG* cudaHOGCreate(
@@ -24,26 +28,34 @@ cv::cuda::HOG* cudaHOGCreate(
 	int nbins,
 	cv::Ptr<cv::cuda::HOG>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_CUDAOBJDETECT
-	cv::Size _winSize(winSize->width, winSize->height);
-	cv::Size _blockSize(blockSize->width, blockSize->height);
-	cv::Size _blockStride(blockStride->width, blockStride->height);
-	cv::Size _cellSize(cellSize->width, cellSize->height);
-	cv::Ptr<cv::cuda::HOG> ptr = cv::cuda::HOG::create(_winSize, _blockSize, _blockStride, _cellSize, nbins);
-	*sharedPtr = new cv::Ptr<cv::cuda::HOG>(ptr);
-	return ptr.get();
-#else
-	throw_no_cudaobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOBJDETECT
+		cv::Size _winSize(winSize->width, winSize->height);
+		cv::Size _blockSize(blockSize->width, blockSize->height);
+		cv::Size _blockStride(blockStride->width, blockStride->height);
+		cv::Size _cellSize(cellSize->width, cellSize->height);
+		cv::Ptr<cv::cuda::HOG> ptr = cv::cuda::HOG::create(_winSize, _blockSize, _blockStride, _cellSize, nbins);
+		*sharedPtr = new cv::Ptr<cv::cuda::HOG>(ptr);
+		return ptr.get();
+	#else
+		throw_no_cudaobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cudaHOGSetSVMDetector(cv::cuda::HOG* descriptor, cv::_InputArray* detector)
 {
-#ifdef HAVE_OPENCV_CUDAOBJDETECT
-	descriptor->setSVMDetector(*detector);
-#else
-	throw_no_cudaobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOBJDETECT
+		descriptor->setSVMDetector(*detector);
+	#else
+		throw_no_cudaobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaHOGRelease(cv::Ptr<cv::cuda::HOG>** descriptor)
@@ -62,9 +74,13 @@ void cudaHOGDetectMultiScale(
 	std::vector<cv::Rect>* foundLocations,
 	std::vector<double>* confidents)
 {
-#ifdef HAVE_OPENCV_CUDAOBJDETECT
-	descriptor->detectMultiScale(*img, *foundLocations, confidents);
-#else
-	throw_no_cudaobjdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOBJDETECT
+		descriptor->detectMultiScale(*img, *foundLocations, confidents);
+	#else
+		throw_no_cudaobjdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

@@ -32,6 +32,7 @@ namespace Emgu.CV.Cuda
         public CudaDeviceInfo(int deviceId)
         {
             _ptr = CudaInvoke.cudaDeviceInfoCreate(ref deviceId);
+            CvInvoke.CheckError();
             _deviceID = deviceId;
         }
 
@@ -52,6 +53,7 @@ namespace Emgu.CV.Cuda
             {
                 StringBuilder buffer = new StringBuilder(1024);
                 CudaInvoke.cudaDeviceInfoDeviceName(_ptr, buffer, 1024);
+                CvInvoke.CheckError();
                 return buffer.ToString();
             }
         }
@@ -65,6 +67,7 @@ namespace Emgu.CV.Cuda
             {
                 int major = 0, minor = 0;
                 CudaInvoke.cudaDeviceInfoComputeCapability(_ptr, ref major, ref minor);
+                CvInvoke.CheckError();
                 return new Version(major, minor);
             }
         }
@@ -76,7 +79,9 @@ namespace Emgu.CV.Cuda
         {
             get
             {
-                return CudaInvoke.cudaDeviceInfoMultiProcessorCount(_ptr);
+                var result = CudaInvoke.cudaDeviceInfoMultiProcessorCount(_ptr);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -89,6 +94,7 @@ namespace Emgu.CV.Cuda
             {
                 UIntPtr f = new UIntPtr();
                 CudaInvoke.cudaDeviceInfoFreeMemInfo(_ptr, ref f);
+                CvInvoke.CheckError();
                 return f.ToUInt64();
             }
         }
@@ -102,6 +108,7 @@ namespace Emgu.CV.Cuda
             {
                 UIntPtr t = new UIntPtr();
                 CudaInvoke.cudaDeviceInfoTotalMemInfo(_ptr, ref t);
+                CvInvoke.CheckError();
                 return t.ToUInt64();
             }
         }
@@ -113,7 +120,9 @@ namespace Emgu.CV.Cuda
         /// <returns>True if the feature is supported</returns>
         public bool Supports(GpuFeature feature)
         {
-            return CudaInvoke.cudaDeviceInfoSupports(_ptr, feature);
+            var result = CudaInvoke.cudaDeviceInfoSupports(_ptr, feature);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -123,7 +132,9 @@ namespace Emgu.CV.Cuda
         {
             get
             {
-                return CudaInvoke.cudaDeviceInfoIsCompatible(_ptr);
+                var result = CudaInvoke.cudaDeviceInfoIsCompatible(_ptr);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 

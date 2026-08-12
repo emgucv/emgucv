@@ -29,6 +29,7 @@ namespace Emgu.CV.Cuda
         public CudaHoughLinesDetector(float rho, float theta, int threshold, bool doSort = false, int maxLines = 4096)
         {
             _ptr = CudaInvoke.cudaHoughLinesDetectorCreate(rho, theta, threshold, doSort, maxLines, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -43,7 +44,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaLines = lines.GetOutputArray())
+            {
                 CudaInvoke.cudaHoughLinesDetectorDetect(_ptr, iaImage, oaLines, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

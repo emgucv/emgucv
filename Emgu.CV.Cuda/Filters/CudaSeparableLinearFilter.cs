@@ -44,7 +44,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaRowKernel = rowKernel.GetInputArray())
             using (InputArray iaColumnKernel = columnKernel.GetInputArray())
+            {
                 _ptr = CudaInvoke.cudaCreateSeparableLinearFilter(CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), iaRowKernel, iaColumnKernel, ref anchor, rowBorderType, columnBorderType, ref _sharedPtr);
+                CvInvoke.CheckError();
+            }
         }
     }
 

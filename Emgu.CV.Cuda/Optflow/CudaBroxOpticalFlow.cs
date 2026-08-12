@@ -31,6 +31,7 @@ namespace Emgu.CV.Cuda
         public CudaBroxOpticalFlow(double alpha = 0.197, double gamma = 50, double scaleFactor = 0.8, int innerIterations = 5, int outerIterations = 150, int solverIterations = 10)
         {
             _ptr = CudaInvoke.cudaBroxOpticalFlowCreate(alpha, gamma, scaleFactor, innerIterations, outerIterations, solverIterations, ref _denseFlow, ref _algorithm, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

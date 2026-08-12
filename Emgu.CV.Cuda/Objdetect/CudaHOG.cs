@@ -55,6 +55,7 @@ namespace Emgu.CV.Cuda
                ref cellSize,
                nbins,
                ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -65,6 +66,7 @@ namespace Emgu.CV.Cuda
         {
             Mat m = new Mat();
             CudaInvoke.cudaHOGGetDefaultPeopleDetector(_ptr, m);
+            CvInvoke.CheckError();
             return m;
         }
 
@@ -77,6 +79,7 @@ namespace Emgu.CV.Cuda
             using (InputArray iaDetector = detector.GetInputArray())
             {
                 CudaInvoke.cudaHOGSetSVMDetector(_ptr, iaDetector);
+                CvInvoke.CheckError();
             }
         }
 
@@ -116,6 +119,7 @@ namespace Emgu.CV.Cuda
             using (InputArray iaImage = image.GetInputArray())
             {
                 CudaInvoke.cudaHOGDetectMultiScale(_ptr, iaImage, objects, confident);
+                CvInvoke.CheckError();
             }
         }
 

@@ -39,6 +39,7 @@ namespace Emgu.CV.Cuda
           CvEnum.BorderType borderType = BorderType.Default)
       {
          _ptr = CudaInvoke.cudaCreateHarrisCorner(CvInvoke.MakeType(srcDepth, srcChannels), blockSize, kSize, k, borderType, ref _sharedPtr);
+         CvInvoke.CheckError();
       }
    }
 

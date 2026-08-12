@@ -30,6 +30,7 @@ namespace Emgu.CV.Cuda
         public CudaDensePyrLKOpticalFlow(Size winSize, int maxLevel = 3, int iters = 30, bool useInitialFlow = false)
         {
             _ptr = CudaInvoke.cudaDensePyrLKOpticalFlowCreate(ref winSize, maxLevel, iters, useInitialFlow, ref _denseFlow, ref _algorithm, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

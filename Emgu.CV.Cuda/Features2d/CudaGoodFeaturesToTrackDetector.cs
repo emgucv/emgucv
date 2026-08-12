@@ -40,6 +40,7 @@ namespace Emgu.CV.Cuda
             double harrisK = 0.04)
         {
             _ptr = CudaInvoke.cudaGoodFeaturesToTrackDetectorCreate(CvInvoke.MakeType(srcDepth, srcChannels), maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, harrisK, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -54,7 +55,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaCorners = corners.GetOutputArray())
             using (InputArray iaMask = (mask != null ? mask.GetInputArray() : InputArray.GetEmpty()))
+            {
                 CudaInvoke.cudaCornersDetectorDetect(_ptr, iaImage, oaCorners, iaMask, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

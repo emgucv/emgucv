@@ -39,9 +39,12 @@ namespace Emgu.CV.Cuda
          CvEnum.BorderType borderType = BorderType.Default, MCvScalar borderValue = new MCvScalar())
       {
          using (InputArray iaKernel = kernel.GetInputArray())
+         {
             _ptr = CudaInvoke.cudaCreateLinearFilter(
                CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels),
                iaKernel, ref anchor, borderType, ref borderValue, ref _sharedPtr);
+            CvInvoke.CheckError();
+         }
       }
    }
 

@@ -27,6 +27,7 @@ namespace Emgu.CV.Cuda
       public CudaStereoConstantSpaceBP(int ndisp = 128, int iters = 8, int levels = 4, int nrPlane = 4)
       {
          _ptr = CudaInvoke.cudaStereoConstantSpaceBPCreate(ndisp, iters, levels, nrPlane, ref _sharedPtr);
+         CvInvoke.CheckError();
       }
 
       /// <summary>
@@ -41,7 +42,10 @@ namespace Emgu.CV.Cuda
          using (InputArray iaLeft = left.GetInputArray())
          using (InputArray iaRight = right.GetInputArray())
          using (OutputArray oaDisparity = disparity.GetOutputArray())
+         {
             CudaInvoke.cudaStereoConstantSpaceBPFindStereoCorrespondence(_ptr, iaLeft, iaRight, oaDisparity, stream);
+            CvInvoke.CheckError();
+         }
       }
 
       /// <summary>

@@ -42,6 +42,7 @@ namespace Emgu.CV.Cuda
          _ptr = CudaInvoke.cudaCreateGaussianFilter(
             CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), 
             ref ksize, sigma1, sigma2, (int)rowBorderType, (int)columnBorderType, ref _sharedPtr);
+         CvInvoke.CheckError();
       }
    }
 

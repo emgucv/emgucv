@@ -32,6 +32,7 @@ namespace Emgu.CV.Cuda
       public CudaBoxMaxFilter(DepthType srcDepth, int srcChannels, Size ksize, Point anchor, CvEnum.BorderType borderType = BorderType.Default, MCvScalar borderValue = new MCvScalar())
       {
          _ptr = CudaInvoke.cudaCreateBoxMaxFilter(CvInvoke.MakeType(srcDepth, srcChannels), ref ksize, ref anchor, borderType, ref borderValue, ref _sharedPtr);
+         CvInvoke.CheckError();
       }
    }
 

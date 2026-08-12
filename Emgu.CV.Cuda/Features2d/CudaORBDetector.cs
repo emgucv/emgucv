@@ -48,6 +48,7 @@ namespace Emgu.CV.Cuda
             _ptr = CudaInvoke.cveCudaORBCreate(
                numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType, patchSize, fastThreshold, blurForDescriptor,
                ref _feature2D, ref _feature2DAsyncPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
 

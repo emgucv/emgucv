@@ -32,6 +32,7 @@ namespace Emgu.CV.Cuda
       public CudaCannyEdgeDetector(double lowThreshold, double highThreshold, int apertureSize = 3, bool L2gradient = false)
       {
          _ptr = CudaInvoke.cudaCreateCannyEdgeDetector(lowThreshold, highThreshold, apertureSize, L2gradient, ref _sharedPtr);
+         CvInvoke.CheckError();
       }
 
       /// <summary>
@@ -44,7 +45,10 @@ namespace Emgu.CV.Cuda
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaEdges = edges.GetOutputArray())
+         {
             CudaInvoke.cudaCannyEdgeDetectorDetect(_ptr, iaSrc, oaEdges, stream);
+            CvInvoke.CheckError();
+         }
       }
 
       /// <summary>

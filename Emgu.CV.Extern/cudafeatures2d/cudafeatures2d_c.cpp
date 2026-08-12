@@ -8,15 +8,19 @@
 
 cv::cuda::DescriptorMatcher* cveCudaDescriptorMatcherCreateBFMatcher(int distType, cv::Algorithm** algorithm, cv::Ptr<cv::cuda::DescriptorMatcher>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	cv::Ptr<cv::cuda::DescriptorMatcher> ptr = cv::cuda::DescriptorMatcher::createBFMatcher(distType);
-	*sharedPtr = new cv::Ptr<cv::cuda::DescriptorMatcher>(ptr);
-	cv::cuda::DescriptorMatcher* matcher = ptr.get();
-	*algorithm = dynamic_cast<cv::Algorithm*>(matcher);
-	return matcher;
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		cv::Ptr<cv::cuda::DescriptorMatcher> ptr = cv::cuda::DescriptorMatcher::createBFMatcher(distType);
+		*sharedPtr = new cv::Ptr<cv::cuda::DescriptorMatcher>(ptr);
+		cv::cuda::DescriptorMatcher* matcher = ptr.get();
+		*algorithm = dynamic_cast<cv::Algorithm*>(matcher);
+		return matcher;
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveCudaDescriptorMatcherRelease(cv::Ptr<cv::cuda::DescriptorMatcher>** sharedPtr)
@@ -31,44 +35,64 @@ void cveCudaDescriptorMatcherRelease(cv::Ptr<cv::cuda::DescriptorMatcher>** shar
 
 void cveCudaDescriptorMatcherAdd(cv::cuda::DescriptorMatcher* matcher, const std::vector<cv::cuda::GpuMat>* trainDescs)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->add(*trainDescs);
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->add(*trainDescs);
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 bool cveCudaDescriptorMatcherIsMaskSupported(cv::cuda::DescriptorMatcher* matcher)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	return matcher->isMaskSupported();
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		return matcher->isMaskSupported();
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 void cveCudaDescriptorMatcherClear(cv::cuda::DescriptorMatcher* matcher)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	return matcher->clear();
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		return matcher->clear();
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 bool cveCudaDescriptorMatcherEmpty(cv::cuda::DescriptorMatcher* matcher)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	return matcher->empty();
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		return matcher->empty();
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 void cveCudaDescriptorMatcherTrain(cv::cuda::DescriptorMatcher* matcher)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	return matcher->train();
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		return matcher->train();
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveCudaDescriptorMatcherMatch1(
 	cv::cuda::DescriptorMatcher* matcher,
@@ -77,15 +101,19 @@ void cveCudaDescriptorMatcherMatch1(
 	std::vector< cv::DMatch >* matches,
 	cv::_InputArray* mask)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->match(
-		*queryDescriptors,
-		*trainDescriptors,
-		*matches,
-		mask ? *mask : (cv::InputArray) cv::noArray());
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->match(
+			*queryDescriptors,
+			*trainDescriptors,
+			*matches,
+			mask ? *mask : (cv::InputArray) cv::noArray());
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveCudaDescriptorMatcherMatch2(
 	cv::cuda::DescriptorMatcher* matcher,
@@ -93,14 +121,18 @@ void cveCudaDescriptorMatcherMatch2(
 	std::vector< cv::DMatch >* matches,
 	std::vector< cv::cuda::GpuMat >* masks)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->match(
-		*queryDescriptors,
-		*matches,
-		masks ? *masks : std::vector< cv::cuda::GpuMat >());
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->match(
+			*queryDescriptors,
+			*matches,
+			masks ? *masks : std::vector< cv::cuda::GpuMat >());
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaDescriptorMatcherMatchAsync1(
@@ -111,16 +143,20 @@ void cveCudaDescriptorMatcherMatchAsync1(
 	cv::_InputArray* mask,
 	cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->matchAsync(
-		*queryDescriptors,
-		*trainDescriptors,
-		*matches,
-		mask ? *mask : (cv::InputArray) cv::noArray(),
-		stream ? *stream : cv::cuda::Stream::Null());
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->matchAsync(
+			*queryDescriptors,
+			*trainDescriptors,
+			*matches,
+			mask ? *mask : (cv::InputArray) cv::noArray(),
+			stream ? *stream : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaDescriptorMatcherMatchAsync2(
@@ -130,27 +166,35 @@ void cveCudaDescriptorMatcherMatchAsync2(
 	std::vector< cv::cuda::GpuMat >* masks,
 	cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->matchAsync(
-		*queryDescriptors,
-		*matches,
-		masks ? *masks : std::vector< cv::cuda::GpuMat >(),
-		stream ? *stream : cv::cuda::Stream::Null()
-	);
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->matchAsync(
+			*queryDescriptors,
+			*matches,
+			masks ? *masks : std::vector< cv::cuda::GpuMat >(),
+			stream ? *stream : cv::cuda::Stream::Null()
+		);
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveCudaDescriptorMatcherMatchConvert(
 	cv::cuda::DescriptorMatcher* matcher,
 	cv::_InputArray* gpuMatches,
 	std::vector< cv::DMatch >* matches)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->matchConvert(*gpuMatches, *matches);
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->matchConvert(*gpuMatches, *matches);
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaDescriptorMatcherKnnMatch1(
@@ -162,11 +206,15 @@ void cveCudaDescriptorMatcherKnnMatch1(
 	cv::_InputArray* masks,
 	bool compactResult)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->knnMatch(*queryDescs, *trainDescs, *matches, k, masks ? *masks : (cv::_InputArray) cv::noArray(), compactResult);
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->knnMatch(*queryDescs, *trainDescs, *matches, k, masks ? *masks : (cv::_InputArray) cv::noArray(), compactResult);
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaDescriptorMatcherKnnMatch2(
@@ -177,16 +225,20 @@ void cveCudaDescriptorMatcherKnnMatch2(
 	std::vector< cv::cuda::GpuMat >* masks,
 	bool compactResult)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->knnMatch(
-		*queryDescriptors,
-		*matches,
-		k,
-		masks ? *masks : std::vector< cv::cuda::GpuMat >(),
-		compactResult);
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->knnMatch(
+			*queryDescriptors,
+			*matches,
+			k,
+			masks ? *masks : std::vector< cv::cuda::GpuMat >(),
+			compactResult);
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaDescriptorMatcherKnnMatchAsync1(
@@ -198,17 +250,21 @@ void cveCudaDescriptorMatcherKnnMatchAsync1(
 	cv::_InputArray* mask,
 	cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->knnMatchAsync(
-		*queryDescriptors,
-		*trainDescriptors,
-		*matches,
-		k,
-		mask ? *mask : (cv::InputArray) cv::noArray(),
-		stream ? *stream : cv::cuda::Stream::Null());
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->knnMatchAsync(
+			*queryDescriptors,
+			*trainDescriptors,
+			*matches,
+			k,
+			mask ? *mask : (cv::InputArray) cv::noArray(),
+			stream ? *stream : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaDescriptorMatcherKnnMatchAsync2(
@@ -219,17 +275,21 @@ void cveCudaDescriptorMatcherKnnMatchAsync2(
 	std::vector< cv::cuda::GpuMat >* masks,
 	cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->knnMatchAsync(
-		*queryDescriptors,
-		*matches,
-		k,
-		masks ? *masks : std::vector< cv::cuda::GpuMat >(),
-		stream ? *stream : cv::cuda::Stream::Null()
-	);
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->knnMatchAsync(
+			*queryDescriptors,
+			*matches,
+			k,
+			masks ? *masks : std::vector< cv::cuda::GpuMat >(),
+			stream ? *stream : cv::cuda::Stream::Null()
+		);
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaDescriptorMatcherKnnMatchConvert(
@@ -238,11 +298,15 @@ void cveCudaDescriptorMatcherKnnMatchConvert(
 	std::vector< std::vector< cv::DMatch > >* matches,
 	bool compactResult)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->knnMatchConvert(*gpuMatches, *matches, compactResult);
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->knnMatchConvert(*gpuMatches, *matches, compactResult);
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaDescriptorMatcherRadiusMatch1(
@@ -254,17 +318,21 @@ void cveCudaDescriptorMatcherRadiusMatch1(
 	cv::_InputArray* mask,
 	bool compactResult)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->radiusMatch(
-		*queryDescriptors,
-		*trainDescriptors,
-		*matches,
-		maxDistance,
-		mask ? *mask : (cv::InputArray) cv::noArray(),
-		compactResult);
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->radiusMatch(
+			*queryDescriptors,
+			*trainDescriptors,
+			*matches,
+			maxDistance,
+			mask ? *mask : (cv::InputArray) cv::noArray(),
+			compactResult);
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaDescriptorMatcherRadiusMatch2(
@@ -275,16 +343,20 @@ void cveCudaDescriptorMatcherRadiusMatch2(
 	std::vector< cv::cuda::GpuMat >* masks,
 	bool compactResult)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->radiusMatch(
-		*queryDescriptors,
-		*matches,
-		maxDistance,
-		masks ? *masks : std::vector< cv::cuda::GpuMat >(),
-		compactResult);
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->radiusMatch(
+			*queryDescriptors,
+			*matches,
+			maxDistance,
+			masks ? *masks : std::vector< cv::cuda::GpuMat >(),
+			compactResult);
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaDescriptorMatcherRadiusMatchAsync1(
@@ -296,18 +368,22 @@ void cveCudaDescriptorMatcherRadiusMatchAsync1(
 	cv::_InputArray* mask,
 	cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->radiusMatchAsync(
-		*queryDescriptors,
-		*trainDescriptors,
-		*matches,
-		maxDistance,
-		mask ? *mask : (cv::InputArray) cv::noArray(),
-		stream ? *stream : cv::cuda::Stream::Null()
-	);
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->radiusMatchAsync(
+			*queryDescriptors,
+			*trainDescriptors,
+			*matches,
+			maxDistance,
+			mask ? *mask : (cv::InputArray) cv::noArray(),
+			stream ? *stream : cv::cuda::Stream::Null()
+		);
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaDescriptorMatcherRadiusMatchAsync2(
@@ -318,17 +394,21 @@ void cveCudaDescriptorMatcherRadiusMatchAsync2(
 	std::vector< cv::cuda::GpuMat >* masks,
 	cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->radiusMatchAsync(
-		*queryDescriptors,
-		*matches,
-		maxDistance,
-		masks ? *masks : std::vector< cv::cuda::GpuMat >(),
-		stream ? *stream : cv::cuda::Stream::Null()
-	);
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->radiusMatchAsync(
+			*queryDescriptors,
+			*matches,
+			maxDistance,
+			masks ? *masks : std::vector< cv::cuda::GpuMat >(),
+			stream ? *stream : cv::cuda::Stream::Null()
+		);
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaDescriptorMatcherRadiusMatchConvert(
@@ -337,14 +417,18 @@ void cveCudaDescriptorMatcherRadiusMatchConvert(
 	std::vector< std::vector< cv::DMatch > >* matches,
 	bool compactResult)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	matcher->radiusMatchConvert(
-		*gpu_matches,
-		*matches,
-		compactResult);
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		matcher->radiusMatchConvert(
+			*gpu_matches,
+			*matches,
+			compactResult);
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -359,11 +443,15 @@ void cveCudaFeature2dAsyncDetectAsync(
 	cv::_InputArray* mask,
 	cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	feature2d->detectAsync(*image, *keypoints, mask ? *mask : (cv::InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		feature2d->detectAsync(*image, *keypoints, mask ? *mask : (cv::InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaFeature2dAsyncComputeAsync(
@@ -373,11 +461,15 @@ void cveCudaFeature2dAsyncComputeAsync(
 	cv::_OutputArray* descriptors,
 	cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	feature2d->computeAsync(*image, *keypoints, *descriptors, stream ? *stream : cv::cuda::Stream::Null());
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		feature2d->computeAsync(*image, *keypoints, *descriptors, stream ? *stream : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaFeature2dAsyncDetectAndComputeAsync(
@@ -389,11 +481,15 @@ void cveCudaFeature2dAsyncDetectAndComputeAsync(
 	bool useProvidedKeypoints,
 	cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	feature2d->detectAndComputeAsync(*image, mask ? *mask : (cv::InputArray) cv::noArray(), *keypoints, *descriptors, useProvidedKeypoints, stream ? *stream : cv::cuda::Stream::Null());
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		feature2d->detectAndComputeAsync(*image, mask ? *mask : (cv::InputArray) cv::noArray(), *keypoints, *descriptors, useProvidedKeypoints, stream ? *stream : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaFeature2dAsyncConvert(
@@ -401,11 +497,15 @@ void cveCudaFeature2dAsyncConvert(
 	cv::_InputArray* gpu_keypoints,
 	std::vector<cv::KeyPoint>* keypoints)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	feature2d->convert(*gpu_keypoints, *keypoints);
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		feature2d->convert(*gpu_keypoints, *keypoints);
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -419,16 +519,20 @@ cv::cuda::FastFeatureDetector* cveCudaFastFeatureDetectorCreate(
 	cv::Feature2D** feature2D, cv::cuda::Feature2DAsync** feature2dAsync,
 	cv::Ptr<cv::cuda::FastFeatureDetector>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	cv::Ptr<cv::cuda::FastFeatureDetector> ptr = cv::cuda::FastFeatureDetector::create(threshold, nonmaxSupression, type, maxPoints);
-	*sharedPtr = new cv::Ptr<cv::cuda::FastFeatureDetector>(ptr);
-	cv::cuda::FastFeatureDetector* detector = ptr.get();
-	*feature2D = dynamic_cast<cv::Feature2D*>(detector);
-	*feature2dAsync = dynamic_cast<cv::cuda::Feature2DAsync*>(detector);
-	return detector;
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		cv::Ptr<cv::cuda::FastFeatureDetector> ptr = cv::cuda::FastFeatureDetector::create(threshold, nonmaxSupression, type, maxPoints);
+		*sharedPtr = new cv::Ptr<cv::cuda::FastFeatureDetector>(ptr);
+		cv::cuda::FastFeatureDetector* detector = ptr.get();
+		*feature2D = dynamic_cast<cv::Feature2D*>(detector);
+		*feature2dAsync = dynamic_cast<cv::cuda::Feature2DAsync*>(detector);
+		return detector;
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveCudaFastFeatureDetectorRelease(cv::Ptr<cv::cuda::FastFeatureDetector>** sharedPtr)
@@ -451,16 +555,20 @@ cv::cuda::ORB* cveCudaORBCreate(
 	cv::Feature2D** feature2D, cv::cuda::Feature2DAsync** feature2dAsync,
 	cv::Ptr<cv::cuda::ORB>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	cv::Ptr<cv::cuda::ORB> ptr = cv::cuda::ORB::create(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize, fastThreshold, blurForDescriptor);
-	*sharedPtr = new cv::Ptr<cv::cuda::ORB>(ptr);
-	cv::cuda::ORB* detector = ptr.get();
-	*feature2D = dynamic_cast<cv::Feature2D*>(detector);
-	*feature2dAsync = dynamic_cast<cv::cuda::Feature2DAsync*>(detector);
-	return detector;
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		cv::Ptr<cv::cuda::ORB> ptr = cv::cuda::ORB::create(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize, fastThreshold, blurForDescriptor);
+		*sharedPtr = new cv::Ptr<cv::cuda::ORB>(ptr);
+		cv::cuda::ORB* detector = ptr.get();
+		*feature2D = dynamic_cast<cv::Feature2D*>(detector);
+		*feature2dAsync = dynamic_cast<cv::cuda::Feature2DAsync*>(detector);
+		return detector;
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveCudaORBRelease(cv::Ptr<cv::cuda::ORB>** sharedPtr)
@@ -480,33 +588,45 @@ void cveCudaORBRelease(cv::Ptr<cv::cuda::ORB>** sharedPtr)
 //----------------------------------------------------------------------------
 cv::cuda::CornernessCriteria* cudaCreateHarrisCorner(int srcType, int blockSize, int ksize, double k, int borderType, cv::Ptr<cv::cuda::CornernessCriteria>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	cv::Ptr<cv::cuda::CornernessCriteria> ptr = cv::cuda::createHarrisCorner(srcType, blockSize, ksize, k, borderType);
-	*sharedPtr = new cv::Ptr<cv::cuda::CornernessCriteria>(ptr);
-	return (*sharedPtr)->get();
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		cv::Ptr<cv::cuda::CornernessCriteria> ptr = cv::cuda::createHarrisCorner(srcType, blockSize, ksize, k, borderType);
+		*sharedPtr = new cv::Ptr<cv::cuda::CornernessCriteria>(ptr);
+		return (*sharedPtr)->get();
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 cv::cuda::CornernessCriteria* cudaCreateMinEigenValCorner(int srcType, int blockSize, int ksize, int borderType, cv::Ptr<cv::cuda::CornernessCriteria>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	cv::Ptr<cv::cuda::CornernessCriteria> ptr = cv::cuda::createMinEigenValCorner(srcType, blockSize, ksize, borderType);
-	*sharedPtr = new cv::Ptr<cv::cuda::CornernessCriteria>(ptr);
-	return (*sharedPtr)->get();
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		cv::Ptr<cv::cuda::CornernessCriteria> ptr = cv::cuda::createMinEigenValCorner(srcType, blockSize, ksize, borderType);
+		*sharedPtr = new cv::Ptr<cv::cuda::CornernessCriteria>(ptr);
+		return (*sharedPtr)->get();
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cudaCornernessCriteriaCompute(cv::Ptr<cv::cuda::CornernessCriteria>* detector, cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	(*detector)->compute(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		(*detector)->compute(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaCornernessCriteriaRelease(cv::Ptr<cv::cuda::CornernessCriteria>** detector)
@@ -526,21 +646,29 @@ void cudaCornernessCriteriaRelease(cv::Ptr<cv::cuda::CornernessCriteria>** detec
 //----------------------------------------------------------------------------
 cv::cuda::CornersDetector* cudaGoodFeaturesToTrackDetectorCreate(int srcType, int maxCorners, double qualityLevel, double minDistance, int blockSize, bool useHarrisDetector, double harrisK, cv::Ptr<cv::cuda::CornersDetector>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	cv::Ptr<cv::cuda::CornersDetector> detector = cv::cuda::createGoodFeaturesToTrackDetector(srcType, maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, harrisK);
-	*sharedPtr = new cv::Ptr<cv::cuda::CornersDetector>(detector);
-	return (*sharedPtr)->get();
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		cv::Ptr<cv::cuda::CornersDetector> detector = cv::cuda::createGoodFeaturesToTrackDetector(srcType, maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, harrisK);
+		*sharedPtr = new cv::Ptr<cv::cuda::CornersDetector>(detector);
+		return (*sharedPtr)->get();
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cudaCornersDetectorDetect(cv::cuda::CornersDetector* detector, cv::_InputArray* image, cv::_OutputArray* corners, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAFEATURES2D
-	detector->detect(*image, *corners, mask ? *mask : (cv::InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
-#else
-	throw_no_cudafeature2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAFEATURES2D
+		detector->detect(*image, *corners, mask ? *mask : (cv::InputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudafeature2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cudaCornersDetectorRelease(cv::Ptr<cv::cuda::CornersDetector>** detector)
 {

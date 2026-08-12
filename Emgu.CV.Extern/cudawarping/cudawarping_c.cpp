@@ -9,63 +9,91 @@
 
 void cudaPyrDown(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAWARPING
-	cv::cuda::pyrDown(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
-#else
-	throw_no_cudawarping();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAWARPING
+		cv::cuda::pyrDown(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudawarping();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaPyrUp(cv::_InputArray* src, cv::_OutputArray* dst, cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAWARPING
-	cv::cuda::pyrUp(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
-#else
-	throw_no_cudawarping();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAWARPING
+		cv::cuda::pyrUp(*src, *dst, stream ? *stream : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudawarping();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaWarpAffine(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* M, cv::Size* dSize, int flags, int borderMode, cv::Scalar* borderValue, cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAWARPING
-	cv::cuda::warpAffine(*src, *dst, *M, *dSize, flags, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
-#else
-	throw_no_cudawarping();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAWARPING
+		cv::cuda::warpAffine(*src, *dst, *M, *dSize, flags, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudawarping();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaWarpPerspective(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* M, cv::Size* size, int flags, int borderMode, cv::Scalar* borderValue, cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAWARPING
-	cv::cuda::warpPerspective(*src, *dst, *M, *size, flags, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
-#else
-	throw_no_cudawarping();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAWARPING
+		cv::cuda::warpPerspective(*src, *dst, *M, *size, flags, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudawarping();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaRemap(cv::_InputArray* src, cv::_OutputArray* dst, cv::_InputArray* xmap, cv::_InputArray* ymap, int interpolation, int borderMode, cv::Scalar* borderValue, cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAWARPING
-	cv::cuda::remap(*src, *dst, *xmap, *ymap, interpolation, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
-#else
-	throw_no_cudawarping();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAWARPING
+		cv::cuda::remap(*src, *dst, *xmap, *ymap, interpolation, borderMode, *borderValue, stream ? *stream : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudawarping();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaResize(cv::_InputArray* src, cv::_OutputArray* dst, cv::Size* dsize, double fx, double fy, int interpolation, cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAWARPING
-		cv::cuda::resize(*src, *dst, *dsize, fx, fy, interpolation, stream ? *stream : cv::cuda::Stream::Null());
-#else
-	throw_no_cudawarping();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAWARPING
+			cv::cuda::resize(*src, *dst, *dsize, fx, fy, interpolation, stream ? *stream : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudawarping();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaRotate(cv::_InputArray* src, cv::_OutputArray* dst, cv::Size* dSize, double angle, double xShift, double yShift, int interpolation, cv::cuda::Stream* s)
 {
-#ifdef HAVE_OPENCV_CUDAWARPING
-	cv::cuda::rotate(*src, *dst, *dSize, angle, xShift, yShift, interpolation, s ? *s : cv::cuda::Stream::Null());
-#else
-	throw_no_cudawarping();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAWARPING
+		cv::cuda::rotate(*src, *dst, *dSize, angle, xShift, yShift, interpolation, s ? *s : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudawarping();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

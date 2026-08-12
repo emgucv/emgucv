@@ -37,7 +37,10 @@ namespace Emgu.CV.Cuda
          using (InputArray iaI0 = i0.GetInputArray())
          using (InputArray iaI1 = i1.GetInputArray())
          using (InputOutputArray ioaFlow = flow.GetInputOutputArray())
+         {
             cudaDenseOpticalFlowCalc(denseFlow.DenseOpticalFlowPtr, iaI0, iaI1, ioaFlow, (stream == null) ?  IntPtr.Zero : stream.Ptr);
+            CvInvoke.CheckError();
+         }
       }
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

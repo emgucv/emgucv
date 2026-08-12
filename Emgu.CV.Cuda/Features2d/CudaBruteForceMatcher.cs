@@ -41,7 +41,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaQueryDescriptors = queryDescriptors.GetInputArray())
             using (InputArray iaTrainDescriptors = trainDescriptors.GetInputArray())
             using (InputArray iaMask = (mask == null ? InputArray.GetEmpty() : mask.GetInputArray()))
+            {
                 CudaInvoke.cveCudaDescriptorMatcherKnnMatch1(_ptr, iaQueryDescriptors, iaTrainDescriptors, matches, k, iaMask, compactResult);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -68,6 +71,7 @@ namespace Emgu.CV.Cuda
                     k,
                     masks == null ? IntPtr.Zero : masks.Ptr,
                     compactResult);
+                CvInvoke.CheckError();
             }
         }
 
@@ -101,6 +105,7 @@ namespace Emgu.CV.Cuda
                     k,
                     iaMask,
                     stream);
+                CvInvoke.CheckError();
             }
         }
 
@@ -129,6 +134,7 @@ namespace Emgu.CV.Cuda
                     k,
                     masks == null ? IntPtr.Zero : masks.Ptr,
                     stream);
+                CvInvoke.CheckError();
             }
         }
 
@@ -144,12 +150,15 @@ namespace Emgu.CV.Cuda
             bool compactResult = false)
         {
             using (InputArray iaGpuMatches = gpuMatches.GetInputArray())
+            {
                 CudaInvoke.cveCudaDescriptorMatcherKnnMatchConvert(
                     _ptr,
                     iaGpuMatches,
                     matches,
                     compactResult
                     );
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -170,6 +179,7 @@ namespace Emgu.CV.Cuda
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             {
                 CudaInvoke.cveCudaDescriptorMatcherMatch1(_ptr, iaQueryDesccriptor, iaTrainDescriptor, matches, iaMask);
+                CvInvoke.CheckError();
             }
         }
 
@@ -187,6 +197,7 @@ namespace Emgu.CV.Cuda
             using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
             {
                 CudaInvoke.cveCudaDescriptorMatcherMatch2(_ptr, iaQueryDesccriptor, matches, mask == null ? IntPtr.Zero : mask.Ptr);
+                CvInvoke.CheckError();
             }
         }
 
@@ -218,6 +229,7 @@ namespace Emgu.CV.Cuda
                     iaMask,
                     stream
                     );
+                CvInvoke.CheckError();
             }
         }
 
@@ -236,6 +248,7 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaQueryDesccriptor = queryDescriptors.GetInputArray())
             using (OutputArray oaMatches = matches.GetOutputArray())
+            {
                 CudaInvoke.cveCudaDescriptorMatcherMatchAsync2(
                     _ptr,
                     iaQueryDesccriptor,
@@ -243,6 +256,8 @@ namespace Emgu.CV.Cuda
                     masks == null ? IntPtr.Zero : masks.Ptr,
                     stream
                     );
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -260,6 +275,7 @@ namespace Emgu.CV.Cuda
                     _ptr,
                     iaGpuMatches,
                     matches);
+                CvInvoke.CheckError();
             }
         }
 
@@ -283,6 +299,7 @@ namespace Emgu.CV.Cuda
             using (InputArray iaQueryDescriptors = queryDescriptors.GetInputArray())
             using (InputArray iaTrainDescriptors = trainDescriptors.GetInputArray())
             using (InputArray iaMask = (mask == null ? InputArray.GetEmpty() : mask.GetInputArray()))
+            {
                 CudaInvoke.cveCudaDescriptorMatcherRadiusMatch1(
                     _ptr,
                     iaQueryDescriptors,
@@ -291,6 +308,8 @@ namespace Emgu.CV.Cuda
                     maxDistance,
                     iaMask,
                     compactResult);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -309,6 +328,7 @@ namespace Emgu.CV.Cuda
             bool compactResult = false)
         {
             using (InputArray iaQueryDescriptors = queryDescriptors.GetInputArray())
+            {
                 CudaInvoke.cveCudaDescriptorMatcherRadiusMatch2(
                     _ptr,
                     iaQueryDescriptors,
@@ -317,6 +337,8 @@ namespace Emgu.CV.Cuda
                     masks == null ? IntPtr.Zero : masks.Ptr,
                     compactResult
                     );
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -340,6 +362,7 @@ namespace Emgu.CV.Cuda
             using (InputArray iaTrainDescriptors = trainDescriptors.GetInputArray())
             using (OutputArray oaMatches = matches.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 CudaInvoke.cveCudaDescriptorMatcherRadiusMatchAsync1(
                     _ptr,
                     iaQueryDescriptors,
@@ -348,6 +371,8 @@ namespace Emgu.CV.Cuda
                     maxDistance,
                     iaMask,
                     stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -367,6 +392,7 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaQueryDescriptor = queryDescriptors.GetInputArray())
             using (OutputArray oaMatches = matches.GetOutputArray())
+            {
                 CudaInvoke.cveCudaDescriptorMatcherRadiusMatchAsync2(
                     _ptr,
                     iaQueryDescriptor,
@@ -374,6 +400,8 @@ namespace Emgu.CV.Cuda
                     maxDistance,
                     masks == null ? IntPtr.Zero : masks.Ptr,
                     stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -394,6 +422,7 @@ namespace Emgu.CV.Cuda
                     iaGpuMatches,
                     matches,
                     compactResult);
+                CvInvoke.CheckError();
             }
         }
 
@@ -404,7 +433,10 @@ namespace Emgu.CV.Cuda
         public void Add(IInputArray modelDescriptors)
         {
             using (InputArray iaModelDescriptors = modelDescriptors.GetInputArray())
+            {
                 CudaInvoke.cveCudaDescriptorMatcherAdd(_ptr, iaModelDescriptors);
+                CvInvoke.CheckError();
+            }
         }
 
         IntPtr IAlgorithm.AlgorithmPtr
@@ -419,7 +451,9 @@ namespace Emgu.CV.Cuda
         {
             get
             {
-                return CudaInvoke.cveCudaDescriptorMatcherIsMaskSupported(_ptr);
+                var result = CudaInvoke.cveCudaDescriptorMatcherIsMaskSupported(_ptr);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -429,6 +463,7 @@ namespace Emgu.CV.Cuda
         public void Clear()
         {
             CudaInvoke.cveCudaDescriptorMatcherClear(_ptr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -438,7 +473,9 @@ namespace Emgu.CV.Cuda
         {
             get
             {
-                return CudaInvoke.cveCudaDescriptorMatcherEmpty(_ptr);
+                var result = CudaInvoke.cveCudaDescriptorMatcherEmpty(_ptr);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -448,6 +485,7 @@ namespace Emgu.CV.Cuda
         public void Train()
         {
             CudaInvoke.cveCudaDescriptorMatcherTrain(_ptr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -476,6 +514,7 @@ namespace Emgu.CV.Cuda
         public CudaBFMatcher(DistanceType distanceType)
         {
             _ptr = CudaInvoke.cveCudaDescriptorMatcherCreateBFMatcher(distanceType, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
     }

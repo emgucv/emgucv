@@ -46,6 +46,7 @@ namespace Emgu.CV.Cuda
         {
             _ptr = CudaInvoke.cudaOpticalFlowDualTvl1Create(
                 tau, lambda, theta, nscales, warps, epsilon, iterations, scaleStep, gamma, useInitialFlow, ref _denseFlow, ref _algorithm, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
