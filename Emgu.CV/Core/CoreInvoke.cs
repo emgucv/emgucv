@@ -2360,7 +2360,11 @@ namespace Emgu.CV
         public static double Determinant(IInputArray mat)
         {
             using (InputArray iaMat = mat.GetInputArray())
-                return cveDeterminant(iaMat);
+            {
+                double result = cveDeterminant(iaMat);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

@@ -22,8 +22,8 @@ libs/
 **/Util/VectorOf*.cs
 **/VectorOf*.cs
 Emgu.CV/PInvoke/CvInvokeEntryPoints.cs
-Emgu.CV.Extern/**/*_property.h
-Emgu.CV.Extern/**/*_property.cpp
+Emgu.CV.Extern/**/*.g.h
+Emgu.CV.Extern/**/*.g.cpp
 Emgu.CV.Extern/vector_*.cpp
 Emgu.CV.Extern/vector_*.h
 Emgu.CV.Extern/version.rc

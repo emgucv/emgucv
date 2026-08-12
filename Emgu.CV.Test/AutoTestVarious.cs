@@ -164,31 +164,28 @@ namespace Emgu.CV.Test
             level = CvInvoke.LogLevel;
         }
 
-        /*
         [Test]
         public void TestException()
         {
-            //Test seems to crash on Linux system. Skipping test on Linux for now.
-            if (!System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            for (int i = 0; i < 10; i++)
             {
-                for (int i = 0; i < 10; i++)
+                bool exceptionCaught = false;
+                using (Mat mat = new Mat(20, 30, DepthType.Cv8U, 1))
                 {
-                    bool exceptionCaught = false;
-                    Matrix<Byte> mat = new Matrix<byte>(20, 30);
                     try
                     {
-                        double det = mat.Det;
+                        double det = CvInvoke.Determinant(mat);
                     }
                     catch (CvException excpt)
                     {
                         EmguAssert.AreEqual(-215, excpt.Status);
                         exceptionCaught = true;
                     }
-
-                    EmguAssert.IsTrue(exceptionCaught);
                 }
+
+                EmguAssert.IsTrue(exceptionCaught);
             }
-        }*/
+        }
 
         [Test]
         public void TestShapeDistanceExtractor()
