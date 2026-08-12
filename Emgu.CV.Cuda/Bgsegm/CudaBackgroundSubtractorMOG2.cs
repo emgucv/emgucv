@@ -42,6 +42,7 @@ namespace Emgu.CV.Cuda
             bool detectShadows = true)
         {
             _ptr = CudaInvoke.cudaBackgroundSubtractorMOG2Create(history, varThreshold, detectShadows, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -55,7 +56,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaFrame = frame.GetInputArray())
             using (OutputArray oaForgroundMask = fgmask.GetOutputArray())
+            {
                 CudaInvoke.cudaBackgroundSubtractorMOG2Apply(_ptr, iaFrame, oaForgroundMask, learningRate, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

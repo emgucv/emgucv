@@ -41,6 +41,7 @@ namespace Emgu.CV.Cuda
       {
          _ptr = CudaInvoke.cudaCreateSobelFilter(CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), 
             dx, dy, ksize, scale, rowBorderType, columnBorderType, ref _sharedPtr);
+         CvInvoke.CheckError();
       }
    }
 

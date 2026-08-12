@@ -25,6 +25,7 @@ namespace Emgu.CV.Dnn
         public Net()
         {
             _ptr = DnnInvoke.cveDnnNetCreate();
+            CvInvoke.CheckError();
         }
 
         internal Net(IntPtr ptr)
@@ -44,6 +45,7 @@ namespace Emgu.CV.Dnn
             using (CvString nameStr = new CvString(name))
             using (InputArray iaBlob = blob.GetInputArray())
                 DnnInvoke.cveDnnNetSetInput(_ptr, iaBlob, nameStr, scaleFactor, ref mean);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -57,6 +59,7 @@ namespace Emgu.CV.Dnn
             {
                 Mat m = new Mat();
                 DnnInvoke.cveDnnNetForward(_ptr, outputNameStr, m);
+                CvInvoke.CheckError();
                 return m;
             }
         }
@@ -73,6 +76,7 @@ namespace Emgu.CV.Dnn
             {
                 DnnInvoke.cveDnnNetForward2(_ptr, oaOutputBlobs, outputNameStr);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -85,6 +89,7 @@ namespace Emgu.CV.Dnn
             using (OutputArray oaOutputBlobs = outputBlobs.GetOutputArray())
             using (VectorOfCvString vcs = new VectorOfCvString(outBlobNames))
                 DnnInvoke.cveDnnNetForward3(_ptr, oaOutputBlobs, vcs);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -106,7 +111,9 @@ namespace Emgu.CV.Dnn
         {
             get
             {
-                using (VectorOfCvString vs = new VectorOfCvString(DnnInvoke.cveDnnNetGetLayerNames(_ptr), true))
+                IntPtr namesPtr = DnnInvoke.cveDnnNetGetLayerNames(_ptr);
+                CvInvoke.CheckError();
+                using (VectorOfCvString vs = new VectorOfCvString(namesPtr, true))
                 {
                     return vs.ToArray();
                 }
@@ -122,7 +129,9 @@ namespace Emgu.CV.Dnn
         {
             using (CvString csLayerName = new CvString(layerName))
             {
-                return DnnInvoke.cveDnnNetGetLayerId(_ptr, csLayerName);
+                int id = DnnInvoke.cveDnnNetGetLayerId(_ptr, csLayerName);
+                CvInvoke.CheckError();
+                return id;
             }
         }
 
@@ -137,6 +146,7 @@ namespace Emgu.CV.Dnn
             IntPtr ptr;
             using (CvString csLayerName = new CvString(layerName))
                 ptr = DnnInvoke.cveDnnNetGetLayerByName(_ptr, csLayerName, ref sharedPtr);
+            CvInvoke.CheckError();
             return new Layer(sharedPtr, ptr);
         }
 
@@ -149,6 +159,7 @@ namespace Emgu.CV.Dnn
         {
             IntPtr sharedPtr = IntPtr.Zero;
             IntPtr ptr = DnnInvoke.cveDnnNetGetLayerById(_ptr, layerId, ref sharedPtr);
+            CvInvoke.CheckError();
             return new Layer(sharedPtr, ptr);
         }
 
@@ -162,6 +173,7 @@ namespace Emgu.CV.Dnn
                 using (VectorOfInt vi = new VectorOfInt())
                 {
                     DnnInvoke.cveDnnNetGetUnconnectedOutLayers(_ptr, vi);
+                    CvInvoke.CheckError();
                     return vi.ToArray();
                 }
             }
@@ -177,6 +189,7 @@ namespace Emgu.CV.Dnn
                 using (VectorOfCvString vi = new VectorOfCvString())
                 {
                     DnnInvoke.cveDnnNetGetUnconnectedOutLayersNames(_ptr, vi);
+                    CvInvoke.CheckError();
                     return vi.ToArray();
                 }
             }
@@ -195,6 +208,7 @@ namespace Emgu.CV.Dnn
             using (CvString s = new CvString())
             {
                 DnnInvoke.cveDnnNetDump(_ptr, s);
+                CvInvoke.CheckError();
                 return s.ToString();
             }
         }
@@ -207,6 +221,7 @@ namespace Emgu.CV.Dnn
         {
             using (CvString p = new CvString(path))
                 DnnInvoke.cveDnnNetDumpToFile(_ptr, p);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -219,6 +234,7 @@ namespace Emgu.CV.Dnn
         public void EnableKVCache()
         {
             DnnInvoke.cveDnnNetEnableKVCache(_ptr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -227,6 +243,7 @@ namespace Emgu.CV.Dnn
         public void DisableKVCache()
         {
             DnnInvoke.cveDnnNetDisableKVCache(_ptr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -236,6 +253,7 @@ namespace Emgu.CV.Dnn
         public void ResetKVCache()
         {
             DnnInvoke.cveDnnNetResetKVCache(_ptr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -253,6 +271,7 @@ namespace Emgu.CV.Dnn
             {
                 DnnInvoke.cveDnnNetConnect(_ptr, csOutPin, csInPin);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -265,11 +284,19 @@ namespace Emgu.CV.Dnn
         public Int64 GetPerfProfile(VectorOfDouble timings = null)
         {
             if (timings != null)
-                return DnnInvoke.cveDnnNetGetPerfProfile(_ptr, timings);
+            {
+                Int64 result = DnnInvoke.cveDnnNetGetPerfProfile(_ptr, timings);
+                CvInvoke.CheckError();
+                return result;
+            }
             else
             {
                 using (VectorOfDouble vd = new VectorOfDouble())
-                    return DnnInvoke.cveDnnNetGetPerfProfile(_ptr, vd);
+                {
+                    Int64 result = DnnInvoke.cveDnnNetGetPerfProfile(_ptr, vd);
+                    CvInvoke.CheckError();
+                    return result;
+                }
             }
         }
 

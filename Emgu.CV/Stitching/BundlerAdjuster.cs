@@ -52,6 +52,7 @@ namespace Emgu.CV.Stitching
         public NoBundleAdjuster()
         {
             _ptr = StitchingInvoke.cveNoBundleAdjusterCreate(ref _bundleAdjusterPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -81,6 +82,7 @@ namespace Emgu.CV.Stitching
         public BundleAdjusterReproj()
         {
             _ptr = StitchingInvoke.cveBundleAdjusterReprojCreate(ref _bundleAdjusterPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -107,6 +109,7 @@ namespace Emgu.CV.Stitching
         public BundleAdjusterRay()
         {
             _ptr = StitchingInvoke.cveBundleAdjusterRayCreate(ref _bundleAdjusterPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -133,6 +136,7 @@ namespace Emgu.CV.Stitching
         public BundleAdjusterAffine()
         {
             _ptr = StitchingInvoke.cveBundleAdjusterAffineCreate(ref _bundleAdjusterPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -159,6 +163,7 @@ namespace Emgu.CV.Stitching
         public BundleAdjusterAffinePartial()
         {
             _ptr = StitchingInvoke.cveBundleAdjusterAffinePartialCreate(ref _bundleAdjusterPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

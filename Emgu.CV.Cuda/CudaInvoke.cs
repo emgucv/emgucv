@@ -50,6 +50,7 @@ namespace Emgu.CV.Cuda
                     try
                     {
                         _hasCuda = GetCudaEnabledDeviceCount() > 0;
+                        CvInvoke.CheckError();
                     }
                     catch (Exception e)
                     {
@@ -77,6 +78,7 @@ namespace Emgu.CV.Cuda
                 builder.Append(String.Format("Has cuda: true{0}", Environment.NewLine));
 
                 int deviceCount = GetCudaEnabledDeviceCount();
+                CvInvoke.CheckError();
                 builder.Append(String.Format("Cuda devices count: {0}{1}", deviceCount, Environment.NewLine));
 
                 for (int i = 0; i < deviceCount; i++)
@@ -187,7 +189,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaA = a.GetInputArray())
             using (OutputArray oaC = c.GetOutputArray())
+            {
                 cudaLShift(iaA, ref scalar, oaC, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -204,7 +209,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaA = a.GetInputArray())
             using (OutputArray oaC = c.GetOutputArray())
+            {
                 cudaRShift(iaA, ref scalar, oaC, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaRShift(IntPtr a, ref MCvScalar scalar, IntPtr c, IntPtr stream);
@@ -224,7 +232,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaB = b.GetInputArray())
             using (OutputArray oaC = c.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 cudaAdd(iaA, iaB, oaC, iaMask, depthType, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaAdd(IntPtr a, IntPtr b, IntPtr c, IntPtr mask, DepthType depthType, IntPtr stream);
@@ -244,7 +255,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaB = b.GetInputArray())
             using (OutputArray oaC = c.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 cudaSubtract(iaA, iaB, oaC, iaMask, depthType, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaSubtract(IntPtr a, IntPtr b, IntPtr c, IntPtr mask, DepthType depthType, IntPtr stream);
@@ -263,7 +277,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaA = a.GetInputArray())
             using (InputArray iaB = b.GetInputArray())
             using (OutputArray oaC = c.GetOutputArray())
+            {
                 cudaMultiply(iaA, iaB, oaC, scale, depthType, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaMultiply(IntPtr a, IntPtr b, IntPtr c, double scale, DepthType depthType, IntPtr stream);
@@ -282,7 +299,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaA = a.GetInputArray())
             using (InputArray iaB = b.GetInputArray())
             using (OutputArray oaC = c.GetOutputArray())
+            {
                 cudaDivide(iaA, iaB, oaC, scale, depthType, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaDivide(IntPtr a, IntPtr b, IntPtr c, double scale, DepthType depthType, IntPtr stream);
@@ -303,7 +323,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc1 = src1.GetInputArray())
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaAddWeighted(iaSrc1, alpha, iaSrc2, beta, gamma, oaDst, depthType, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaAddWeighted(IntPtr src1, double alpha, IntPtr src2, double beta, double gamma, IntPtr dst, DepthType depthType, IntPtr stream);
@@ -320,7 +343,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaA = a.GetInputArray())
             using (InputArray iaB = b.GetInputArray())
             using (OutputArray oaC = c.GetOutputArray())
+            {
                 cudaAbsdiff(iaA, iaB, oaC, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaAbsdiff(IntPtr a, IntPtr b, IntPtr c, IntPtr stream);
@@ -335,7 +361,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaAbs(iaSrc, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaAbs(IntPtr src, IntPtr dst, IntPtr stream);
@@ -350,7 +379,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaSqr(iaSrc, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaSqr(IntPtr src, IntPtr dst, IntPtr stream);
@@ -365,7 +397,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaSqrt(iaSrc, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaSqrt(IntPtr src, IntPtr dst, IntPtr stream);
@@ -380,7 +415,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaTranspose(iaSrc, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaTranspose(IntPtr src, IntPtr dst, IntPtr stream);
@@ -400,7 +438,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaA = a.GetInputArray())
             using (InputArray iaB = b.GetInputArray())
             using (OutputArray oaC = c.GetOutputArray())
+            {
                 cudaCompare(iaA, iaB, oaC, cmpop, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaCompare(IntPtr a, IntPtr b, IntPtr c, CvEnum.CmpType cmpop, IntPtr stream);
@@ -419,7 +460,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaResize(iaSrc, oaDst, ref dsize, fx, fy, interpolation, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaResize(IntPtr src, IntPtr dst, ref Size dsize, double fx, double fy, CvEnum.Inter interpolation, IntPtr stream);
@@ -433,7 +477,10 @@ namespace Emgu.CV.Cuda
         public static void Split(IInputArray src, VectorOfGpuMat dstArray, Stream stream = null)
         {
             using (InputArray iaSrc = src.GetInputArray())
+            {
                 cudaSplit(iaSrc, dstArray, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaSplit(IntPtr src, IntPtr dstArray, IntPtr stream);
@@ -447,7 +494,10 @@ namespace Emgu.CV.Cuda
         public static void Merge(VectorOfGpuMat srcArr, IOutputArray dst, Stream stream = null)
         {
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaMerge(srcArr, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaMerge(IntPtr srcArr, IntPtr dst, IntPtr stream);
@@ -462,7 +512,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaExp(iaSrc, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaExp(IntPtr src, IntPtr dst, IntPtr stream);
@@ -481,7 +534,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaPow(iaSrc, power, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaPow(IntPtr src, double power, IntPtr dst, IntPtr stream);
@@ -496,7 +552,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaLog(iaSrc, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaLog(IntPtr src, IntPtr dst, IntPtr stream);
@@ -513,7 +572,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaX = x.GetInputArray())
             using (InputArray iaY = y.GetInputArray())
             using (OutputArray oaMagnitude = magnitude.GetOutputArray())
+            {
                 cudaMagnitude(iaX, iaY, oaMagnitude, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaMagnitude(IntPtr x, IntPtr y, IntPtr magnitude, IntPtr stream);
@@ -530,7 +592,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaX = x.GetInputArray())
             using (InputArray iaY = y.GetInputArray())
             using (OutputArray oaMagnitude = magnitude.GetOutputArray())
+            {
                 cudaMagnitudeSqr(iaX, iaY, oaMagnitude, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaMagnitudeSqr(IntPtr x, IntPtr y, IntPtr magnitude, IntPtr stream);
@@ -548,7 +613,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaX = x.GetInputArray())
             using (InputArray iaY = y.GetInputArray())
             using (OutputArray oaAngle = angle.GetOutputArray())
+            {
                 cudaPhase(iaX, iaY, oaAngle, angleInDegrees, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaPhase(
@@ -571,7 +639,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaY = y.GetInputArray())
             using (OutputArray oaMagnitude = magnitude.GetOutputArray())
             using (OutputArray oaAngle = angle.GetOutputArray())
+            {
                 cudaCartToPolar(iaX, iaY, oaMagnitude, oaAngle, angleInDegrees, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaCartToPolar(
@@ -594,7 +665,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaAngle = angle.GetInputArray())
             using (OutputArray oaX = x.GetOutputArray())
             using (OutputArray oaY = y.GetOutputArray())
+            {
                 cudaPolarToCart(iaMagnitude, iaAngle, oaX, oaY, angleInDegrees, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaPolarToCart(
@@ -615,7 +689,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaMat = gpuMat.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 cudaMinMaxLoc(iaMat, ref minVal, ref maxVal, ref minLoc, ref maxLoc, iaMask);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaMinMaxLoc(IntPtr gpuMat, ref double minVal, ref double maxVal, ref Point minLoc, ref Point maxLoc, IntPtr mask);
@@ -637,6 +714,7 @@ namespace Emgu.CV.Cuda
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             {
                 cudaFindMinMaxLoc(iaSrc, oaMinMaxVals, oaLoc, iaMask, stream);
+                CvInvoke.CheckError();
             }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -653,7 +731,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaPyrDown(iaSrc, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaPyrDown(IntPtr src, IntPtr dst, IntPtr stream);
@@ -668,7 +749,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaPyrUp(iaSrc, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaPyrUp(IntPtr src, IntPtr dst, IntPtr stream);
@@ -682,7 +766,10 @@ namespace Emgu.CV.Cuda
         public static void MeanStdDev(IInputArray mtx, ref MCvScalar mean, ref MCvScalar stddev)
         {
             using (InputArray iaMtx = mtx.GetInputArray())
+            {
                 cudaMeanStdDev(iaMtx, ref mean, ref stddev);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaMeanStdDev(IntPtr mtx, ref MCvScalar mean, ref MCvScalar stddev);
@@ -698,7 +785,11 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc1 = src1.GetInputArray())
             using (InputArray iaSrc2 = src2 == null ? InputArray.GetEmpty() : src2.GetInputArray())
-                return cudaNorm2(iaSrc1, iaSrc2, normType);
+            {
+                var result = cudaNorm2(iaSrc1, iaSrc2, normType);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern double cudaNorm2(IntPtr src1, IntPtr src2, Emgu.CV.CvEnum.NormType normType);
@@ -714,7 +805,11 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-                return cudaNorm1(iaSrc, normType, iaMask);
+            {
+                var result = cudaNorm1(iaSrc, normType, iaMask);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern double cudaNorm1(IntPtr src1, Emgu.CV.CvEnum.NormType normType, IntPtr mask);
@@ -733,7 +828,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 cudaCalcNorm(iaSrc, oaDst, normType, iaMask, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaCalcNorm(IntPtr src, IntPtr dst, NormType normType, IntPtr mask, IntPtr stream);
@@ -752,7 +850,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc1 = src1.GetInputArray())
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaCalcNormDiff(iaSrc1, iaSrc2, oaDst, normType, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaCalcNormDiff(IntPtr src1, IntPtr src2, IntPtr dst, NormType normType, IntPtr stream);
@@ -768,7 +869,10 @@ namespace Emgu.CV.Cuda
             MCvScalar result = new MCvScalar();
             using (InputArray iaSrc = src.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 cudaAbsSum(iaSrc, ref result, iaMask);
+                CvInvoke.CheckError();
+            }
             return result;
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -786,7 +890,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 cudaCalcAbsSum(iaSrc, oaDst, iaMask, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaCalcAbsSum(IntPtr src, IntPtr dst, IntPtr mask, IntPtr stream);
@@ -802,7 +909,10 @@ namespace Emgu.CV.Cuda
             MCvScalar result = new MCvScalar();
             using (InputArray iaSrc = src.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 cudaSqrSum(iaSrc, ref result, iaMask);
+                CvInvoke.CheckError();
+            }
             return result;
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -820,7 +930,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 cudaCalcSqrSum(iaSrc, oaDst, iaMask, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaCalcSqrSum(IntPtr src, IntPtr dst, IntPtr mask, IntPtr stream);
@@ -833,7 +946,11 @@ namespace Emgu.CV.Cuda
         public static int CountNonZero(IInputArray src)
         {
             using (InputArray iaSrc = src.GetInputArray())
-                return cudaCountNonZero1(iaSrc);
+            {
+                var result = cudaCountNonZero1(iaSrc);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern int cudaCountNonZero1(IntPtr src);
@@ -848,7 +965,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaCountNonZero2(iaSrc, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaCountNonZero2(IntPtr src, IntPtr dst, IntPtr stream);
@@ -872,6 +992,7 @@ namespace Emgu.CV.Cuda
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             {
                 cudaNormalize(iaSrc, oaDst, alpha, beta, normType, depthType, iaMask, stream);
+                CvInvoke.CheckError();
             }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -891,7 +1012,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaMtx = mtx.GetInputArray())
             using (OutputArray oaVec = vec.GetOutputArray())
+            {
                 cudaReduce(iaMtx, oaVec, dim, reduceOp, dType, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaReduce(IntPtr mtx, IntPtr vec, CvEnum.ReduceDimension dim, CvEnum.ReduceType reduceOp, DepthType dType, IntPtr stream);
@@ -907,7 +1031,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaFlip(iaSrc, oaDst, flipType, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaFlip(IntPtr src, IntPtr dst, CvEnum.FlipType flipMode, IntPtr stream);
@@ -930,7 +1057,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 cudaBitwiseXor(iaSrc1, iaSrc2, oaDst, iaMask, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaBitwiseXor(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
@@ -951,7 +1081,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 cudaBitwiseOr(iaSrc1, iaSrc2, oaDst, iaMask, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaBitwiseOr(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
@@ -972,7 +1105,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 cudaBitwiseAnd(iaSrc1, iaSrc2, oaDst, iaMask, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaBitwiseAnd(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask, IntPtr stream);
@@ -991,7 +1127,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 cudaBitwiseNot(iaSrc, oaDst, iaMask, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaBitwiseNot(IntPtr src, IntPtr dst, IntPtr mask, IntPtr stream);
@@ -1009,7 +1148,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc1 = src1.GetInputArray())
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaMin(iaSrc1, iaSrc2, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaMin(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr stream);
@@ -1026,7 +1168,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc1 = src1.GetInputArray())
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaMax(iaSrc1, iaSrc2, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaMax(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr stream);
@@ -1045,7 +1190,11 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
-                return cudaThreshold(iaSrc, oaDst, threshold, maxValue, thresholdType, stream);
+            {
+                var result = cudaThreshold(iaSrc, oaDst, threshold, maxValue, thresholdType, stream);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern double cudaThreshold(IntPtr src, IntPtr dst, double threshold, double maxValue, CvEnum.ThresholdType thresholdType, IntPtr stream);
@@ -1076,7 +1225,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (InputArray iaSrc3 = src3 == null ? InputArray.GetEmpty() : src3.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaGemm(iaSrc1, iaSrc2, alpha, iaSrc3, beta, oaDst, tABC, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaGemm(
@@ -1105,7 +1257,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaM = M.GetInputArray())
+            {
                 cudaWarpAffine(iaSrc, oaDst, iaM, ref dSize, flags, borderMode, ref borderValue, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaWarpAffine(IntPtr src, IntPtr dst, IntPtr M, ref Size dSize, CvEnum.Inter flags, CvEnum.BorderType borderMode, ref MCvScalar borderValue, IntPtr stream);
@@ -1126,7 +1281,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaM = M.GetInputArray())
+            {
                 cudaWarpPerspective(iaSrc, oaDst, iaM, ref dSize, flags, borderMode, ref borderValue, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaWarpPerspective(IntPtr src, IntPtr dst, IntPtr M, ref Size dSize, CvEnum.Inter flags, CvEnum.BorderType borderMode, ref MCvScalar borderValue, IntPtr stream);
@@ -1148,7 +1306,10 @@ namespace Emgu.CV.Cuda
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaXmap = xmap.GetInputArray())
             using (InputArray iaYmap = ymap.GetInputArray())
+            {
                 cudaRemap(iaSrc, oaDst, iaXmap, iaYmap, interpolation, borderMode, ref borderValue, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaRemap(IntPtr src, IntPtr dst, IntPtr xmap, IntPtr ymap, CvEnum.Inter interpolation, CvEnum.BorderType borderMode, ref MCvScalar borderValue, IntPtr stream);
@@ -1168,7 +1329,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaRotate(iaSrc, oaDst, ref dSize, angle, xShift, yShift, interpolation, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaRotate(IntPtr src, IntPtr dst, ref Size dSize, double angle, double xShift, double yShift, CvEnum.Inter interpolation, IntPtr stream);
@@ -1189,7 +1353,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaCopyMakeBorder(iaSrc, oaDst, top, bottom, left, right, borderType, ref value, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaCopyMakeBorder(IntPtr src, IntPtr dst, int top, int bottom, int left, int right, CvEnum.BorderType borderType, ref MCvScalar value, IntPtr stream);
@@ -1204,7 +1371,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaSum = sum.GetOutputArray())
+            {
                 cudaIntegral(iaSrc, oaSum, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaIntegral(IntPtr src, IntPtr sum, IntPtr stream);
@@ -1219,7 +1389,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaSqsum = sqsum.GetOutputArray())
+            {
                 cudaSqrIntegral(iaSrc, oaSqsum, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaSqrIntegral(IntPtr src, IntPtr sqsum, IntPtr stream);
@@ -1246,7 +1419,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaDft(iaSrc, oaDst, ref dftSize, flags, stream);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaDft(IntPtr src, IntPtr dst, ref Size dftSize, CvEnum.DxtType flags, IntPtr stream);
@@ -1266,7 +1442,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc1 = src1.GetInputArray())
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaMulAndScaleSpectrums(iaSrc1, iaSrc2, oaDst, flags, scale, conjB, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1291,7 +1470,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaSrc1 = src1.GetInputArray())
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 cudaMulSpectrums(iaSrc1, iaSrc2, oaDst, flags, conjB, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1308,6 +1490,7 @@ namespace Emgu.CV.Cuda
         public static void SetGlDevice(int device = 0)
         {
             cudaSetGlDevice(device);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cudaSetGlDevice(int device);
@@ -1325,6 +1508,7 @@ namespace Emgu.CV.Cuda
             using (OutputArray oaDstDisp = dstDisp.GetOutputArray())
             {
                 cudaDrawColorDisp(iaSrcDisp, oaDstDisp, ndisp, stream);
+                CvInvoke.CheckError();
             }
         }
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1364,6 +1548,7 @@ namespace Emgu.CV.Cuda
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 cudaInRange(iaSrc, ref lowerb, ref upperb, oaDst, stream);
+                CvInvoke.CheckError();
             }
         }
 

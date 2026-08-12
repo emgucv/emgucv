@@ -36,6 +36,7 @@ namespace Emgu.CV
          {
             CvInvoke.cveCalibrateCRFProcess(_calibrateCRFPtr, iaSrc, oaDst, iaTimes);
          }
+         CvInvoke.CheckError();
       }
 
       /// <summary>
@@ -63,6 +64,7 @@ namespace Emgu.CV
       public CalibrateDebevec(int samples = 70, float lambda = 10.0f, bool random = false)
       {
          _ptr = CvInvoke.cveCalibrateDebevecCreate(samples, lambda, random, ref _calibrateCRFPtr, ref _sharedPtr);
+         CvInvoke.CheckError();
       }
 
       /// <summary>
@@ -93,6 +95,7 @@ namespace Emgu.CV
       public CalibrateRobertson(int maxIter = 30, float threshold = 0.01f)
       {
          _ptr = CvInvoke.cveCalibrateRobertsonCreate(maxIter, threshold, ref _calibrateCRFPtr, ref _sharedPtr);
+         CvInvoke.CheckError();
       }
 
       /// <summary>

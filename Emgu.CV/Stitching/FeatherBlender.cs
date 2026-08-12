@@ -24,6 +24,7 @@ namespace Emgu.CV.Stitching
         public FeatherBlender(float sharpness = 0.02f)
         {
             _ptr = StitchingInvoke.cveFeatherBlenderCreate(sharpness, ref _blenderPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

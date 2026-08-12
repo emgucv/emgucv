@@ -33,7 +33,9 @@ namespace Emgu.CV.Legacy
         /// <returns>True if successful.</returns>
         public bool Init(Mat image, Rectangle boundingBox)
         {
-            return TrackingInvoke.cveLegacyTrackerInit(_trackerPtr, image, ref boundingBox);
+            bool result = TrackingInvoke.cveLegacyTrackerInit(_trackerPtr, image, ref boundingBox);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -45,7 +47,9 @@ namespace Emgu.CV.Legacy
         public bool Update(Mat image, out Rectangle boundingBox)
         {
             boundingBox = new Rectangle();
-            return TrackingInvoke.cveLegacyTrackerUpdate(_trackerPtr, image, ref boundingBox);
+            bool result = TrackingInvoke.cveLegacyTrackerUpdate(_trackerPtr, image, ref boundingBox);
+            CvInvoke.CheckError();
+            return result;
         }
 
 

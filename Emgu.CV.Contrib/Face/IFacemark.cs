@@ -28,7 +28,6 @@ namespace Emgu.CV.Face
 
     public static partial class FaceInvoke
     {
-        /*
         /// <summary>
         /// Set a user defined face detector for the Facemark algorithm.
         /// </summary>
@@ -37,7 +36,9 @@ namespace Emgu.CV.Face
         /// <returns>True if sucessfull.</returns>
         public static bool SetFaceDetector(this IFacemark facemark, FaceDetectNative faceDetect)
         {
-            return cveFacemarkSetFaceDetector(facemark.FacemarkPtr, faceDetect);
+            bool result = cveFacemarkSetFaceDetector(facemark.FacemarkPtr, faceDetect);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -53,7 +54,7 @@ namespace Emgu.CV.Face
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal extern static bool cveFacemarkSetFaceDetector(IntPtr facemark, FaceDetectNative detector);
-        */
+
         /// <summary>
         /// A function to load the trained model before the fitting process.
         /// </summary>
@@ -65,11 +66,11 @@ namespace Emgu.CV.Face
             {
                 cveFacemarkLoadModel(facemark.FacemarkPtr, cs);
             }
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveFacemarkLoadModel(IntPtr facemark, IntPtr model);
 
-        /*
         /// <summary>
         /// Default face detector This function is mainly utilized by the implementation of a Facemark Algorithm.
         /// </summary>
@@ -79,16 +80,18 @@ namespace Emgu.CV.Face
         /// <returns>True if success</returns>
         public static bool GetFaces(this IFacemark facemark, IInputArray image, IOutputArray faces)
         {
+            bool result;
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaFaces = faces.GetOutputArray())
             {
-                return cveFacemarkGetFaces(facemark.FacemarkPtr, iaImage, oaFaces);
+                result = cveFacemarkGetFaces(facemark.FacemarkPtr, iaImage, oaFaces);
             }
+            CvInvoke.CheckError();
+            return result;
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal extern static bool cveFacemarkGetFaces(IntPtr facemark, IntPtr image, IntPtr faces);
-        */
 
         /// <summary>
         /// Detect facial landmarks from an image.
@@ -100,12 +103,15 @@ namespace Emgu.CV.Face
         /// <returns>True if successful</returns>
         public static bool Fit(this IFacemark facemark, IInputArray image, IInputArray faces, IOutputArray landmarks)
         {
+            bool result;
             using (InputArray iaImage = image.GetInputArray())
             using (InputArray iaFaces = faces.GetInputArray())
             using (OutputArray ioaLandmarks = landmarks.GetOutputArray())
             {
-                return cveFacemarkFit(facemark.FacemarkPtr, iaImage, iaFaces, ioaLandmarks);
+                result = cveFacemarkFit(facemark.FacemarkPtr, iaImage, iaFaces, ioaLandmarks);
             }
+            CvInvoke.CheckError();
+            return result;
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
@@ -124,11 +130,11 @@ namespace Emgu.CV.Face
             {
                 cveDrawFacemarks(ioaImage, iaPoints, ref color);
             }
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDrawFacemarks(IntPtr image, IntPtr points, ref MCvScalar color);
 
-        /*
         /// <summary>
         /// Add one training sample to the trainer.
         /// </summary>
@@ -138,11 +144,14 @@ namespace Emgu.CV.Face
         /// <returns></returns>
         public static bool AddTraningSample(this IFacemark facemark, IInputArray image, IInputArray landmarks)
         {
+            bool result;
             using (InputArray iaImage = image.GetInputArray())
             using (InputArray iaLandmarks = landmarks.GetInputArray())
             {
-                return cveFacemarkAddTrainingSample(facemark.FacemarkPtr, iaImage, iaLandmarks);
+                result = cveFacemarkAddTrainingSample(facemark.FacemarkPtr, iaImage, iaLandmarks);
             }
+            CvInvoke.CheckError();
+            return result;
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
@@ -155,9 +164,9 @@ namespace Emgu.CV.Face
         public static void Training(this IFacemark facemark)
         {
             cveFacemarkTraining(facemark.FacemarkPtr);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal extern static void cveFacemarkTraining(IntPtr facemark);
-        */
     }
 }

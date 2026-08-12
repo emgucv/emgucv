@@ -28,6 +28,7 @@ namespace Emgu.CV.ImgHash
         public PHash()
         {
             _ptr = ImgHashInvoke.cvePHashCreate(ref _imgHashBase, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

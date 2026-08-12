@@ -14,19 +14,23 @@ cv::phase_unwrapping::HistogramPhaseUnwrapping* cveHistogramPhaseUnwrappingCreat
 	int nbrOfLargeBins,
 	cv::Ptr<cv::phase_unwrapping::HistogramPhaseUnwrapping>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_PHASE_UNWRAPPING
-	cv::phase_unwrapping::HistogramPhaseUnwrapping::Params p;
-	p.width = width;
-	p.height = height;
-	p.histThresh = histThresh;
-	p.nbrOfSmallBins = nbrOfSmallBins;
-	p.nbrOfLargeBins = nbrOfLargeBins;
-	cv::Ptr<cv::phase_unwrapping::HistogramPhaseUnwrapping> unwrapping = cv::phase_unwrapping::HistogramPhaseUnwrapping::create(p);
-	*sharedPtr = new cv::Ptr<cv::phase_unwrapping::HistogramPhaseUnwrapping>(unwrapping);
-	return unwrapping.get();
-#else
-	throw_no_phase_unwrapping();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_PHASE_UNWRAPPING
+		cv::phase_unwrapping::HistogramPhaseUnwrapping::Params p;
+		p.width = width;
+		p.height = height;
+		p.histThresh = histThresh;
+		p.nbrOfSmallBins = nbrOfSmallBins;
+		p.nbrOfLargeBins = nbrOfLargeBins;
+		cv::Ptr<cv::phase_unwrapping::HistogramPhaseUnwrapping> unwrapping = cv::phase_unwrapping::HistogramPhaseUnwrapping::create(p);
+		*sharedPtr = new cv::Ptr<cv::phase_unwrapping::HistogramPhaseUnwrapping>(unwrapping);
+		return unwrapping.get();
+	#else
+		throw_no_phase_unwrapping();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveHistogramPhaseUnwrappingRelease(cv::phase_unwrapping::HistogramPhaseUnwrapping** phase_unwrapping, cv::Ptr<cv::phase_unwrapping::HistogramPhaseUnwrapping>** sharedPtr)
@@ -42,11 +46,15 @@ void cveHistogramPhaseUnwrappingRelease(cv::phase_unwrapping::HistogramPhaseUnwr
 
 void cveHistogramPhaseUnwrappingGetInverseReliabilityMap(cv::phase_unwrapping::HistogramPhaseUnwrapping* phase_unwrapping, cv::_OutputArray* reliabilityMap)
 {
-#ifdef HAVE_OPENCV_PHASE_UNWRAPPING
-	phase_unwrapping->getInverseReliabilityMap(*reliabilityMap);
-#else
-	throw_no_phase_unwrapping();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_PHASE_UNWRAPPING
+		phase_unwrapping->getInverseReliabilityMap(*reliabilityMap);
+	#else
+		throw_no_phase_unwrapping();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveHistogramPhaseMapUnwrappingUnwrapPhaseMap(
@@ -55,9 +63,13 @@ void cveHistogramPhaseMapUnwrappingUnwrapPhaseMap(
 	cv::_OutputArray* unwrappedPhaseMap,
 	cv::_InputArray* shadowMask)
 {
-#ifdef HAVE_OPENCV_PHASE_UNWRAPPING
-	phase_unwrapping->unwrapPhaseMap(*wrappedPhaseMap, *unwrappedPhaseMap, shadowMask ? *shadowMask : dynamic_cast<cv::InputArray>(cv::noArray()));
-#else
-	throw_no_phase_unwrapping();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_PHASE_UNWRAPPING
+		phase_unwrapping->unwrapPhaseMap(*wrappedPhaseMap, *unwrappedPhaseMap, shadowMask ? *shadowMask : dynamic_cast<cv::InputArray>(cv::noArray()));
+	#else
+		throw_no_phase_unwrapping();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

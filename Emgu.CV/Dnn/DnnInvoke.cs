@@ -97,7 +97,7 @@ namespace Emgu.CV.Dnn
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaBlob = blob.GetOutputArray())
                 cveDnnBlobFromImage(iaImage, oaBlob, scaleFactor, ref size, ref mean, swapRB, crop, ddepth);
-            
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -167,6 +167,7 @@ namespace Emgu.CV.Dnn
             {
                 cveDnnBlobFromImages(iaImages, oaBlob, scaleFactor, ref size, ref mean, swapRB, crop, ddepth);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -193,6 +194,7 @@ namespace Emgu.CV.Dnn
             {
                 cveDnnImagesFromBlob(blob, oaImages);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -209,7 +211,9 @@ namespace Emgu.CV.Dnn
             using (CvString modelStr = new CvString(model))
             using (CvString configStr = config == null ? new CvString() : new CvString(config))
             {
-                return new Net(cveReadNetFromTensorflow(modelStr, configStr));
+                IntPtr netPtr = cveReadNetFromTensorflow(modelStr, configStr);
+                CvInvoke.CheckError();
+                return new Net(netPtr);
             }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -228,7 +232,9 @@ namespace Emgu.CV.Dnn
             using (CvString configStr = config == null ? new CvString() : new CvString(config))
             using (VectorOfCvString vcs = new VectorOfCvString(extraOutputs))
             {
-                return new Net(cveReadNetFromTensorflow3(modelStr, configStr, vcs));
+                IntPtr netPtr = cveReadNetFromTensorflow3(modelStr, configStr, vcs);
+                CvInvoke.CheckError();
+                return new Net(netPtr);
             }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -247,11 +253,13 @@ namespace Emgu.CV.Dnn
 
             try
             {
-                return new Net(cveReadNetFromTensorflow2(
+                IntPtr netPtr = cveReadNetFromTensorflow2(
                     modelHandle.AddrOfPinnedObject(),
                     model.Length,
                     config == null ? IntPtr.Zero : configHandle.AddrOfPinnedObject(),
-                    config == null ? 0 : config.Length));
+                    config == null ? 0 : config.Length);
+                CvInvoke.CheckError();
+                return new Net(netPtr);
             }
             finally
             {
@@ -282,7 +290,9 @@ namespace Emgu.CV.Dnn
         {
             using (CvString modelStr = new CvString(model))
             {
-                return new Net(cveReadNetFromTFLite(modelStr, engine));
+                IntPtr netPtr = cveReadNetFromTFLite(modelStr, engine);
+                CvInvoke.CheckError();
+                return new Net(netPtr);
             }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -300,10 +310,12 @@ namespace Emgu.CV.Dnn
 
             try
             {
-                return new Net(cveReadNetFromTFLite2(
+                IntPtr netPtr = cveReadNetFromTFLite2(
                     modelHandle.AddrOfPinnedObject(),
                     model.Length,
-                    engine));
+                    engine);
+                CvInvoke.CheckError();
+                return new Net(netPtr);
             }
             finally
             {
@@ -368,7 +380,9 @@ namespace Emgu.CV.Dnn
         {
             using (CvString csOnnxFile = new CvString(onnxFile))
             {
-                return new Net(cveReadNetFromONNX(csOnnxFile, engine));
+                IntPtr netPtr = cveReadNetFromONNX(csOnnxFile, engine);
+                CvInvoke.CheckError();
+                return new Net(netPtr);
             }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -386,15 +400,17 @@ namespace Emgu.CV.Dnn
             
             try
             {
-                return new Net(cveReadNetFromONNX2(
+                IntPtr netPtr = cveReadNetFromONNX2(
                     modelHandle.AddrOfPinnedObject(),
                     model.Length,
-                    engine));
+                    engine);
+                CvInvoke.CheckError();
+                return new Net(netPtr);
             }
             finally
             {
                 modelHandle.Free();
-                
+
             }
 
         }
@@ -413,6 +429,7 @@ namespace Emgu.CV.Dnn
             {
                 cveReadTensorFromONNX(csPath, m);
             }
+            CvInvoke.CheckError();
             return m;
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -441,7 +458,9 @@ namespace Emgu.CV.Dnn
             using (CvString configStr = new CvString(config == null ? String.Empty : config))
             using (CvString frameworkStr = new CvString(framework == null ? String.Empty : framework))
             {
-                return new Net(cveReadNet(modelStr, configStr, frameworkStr, engine));
+                IntPtr netPtr = cveReadNet(modelStr, configStr, frameworkStr, engine);
+                CvInvoke.CheckError();
+                return new Net(netPtr);
             }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -458,7 +477,9 @@ namespace Emgu.CV.Dnn
             using (CvString xmlStr = new CvString(xml))
             using (CvString binStr = new CvString(bin))
             {
-                return new Net(cveReadNetFromModelOptimizer(xmlStr, binStr));
+                IntPtr netPtr = cveReadNetFromModelOptimizer(xmlStr, binStr);
+                CvInvoke.CheckError();
+                return new Net(netPtr);
             }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -475,6 +496,7 @@ namespace Emgu.CV.Dnn
             using (CvString csModel = new CvString(model))
             using (CvString csOutput = new CvString(output))
                 cveDnnWriteTextGraph(csModel, csOutput);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveDnnWriteTextGraph(IntPtr model, IntPtr output);
@@ -514,6 +536,7 @@ namespace Emgu.CV.Dnn
         public static void NMSBoxes(VectorOfRect bboxes, VectorOfFloat scores, float scoreThreshold, float nmsThreshold, VectorOfInt indices, float eta=1.0f, int topK=0)
         {
             cveDnnNMSBoxes(bboxes, scores, scoreThreshold, nmsThreshold, indices, eta, topK);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -560,6 +583,7 @@ namespace Emgu.CV.Dnn
         public static void NMSBoxes(VectorOfRotatedRect bboxes, VectorOfFloat scores, float scoreThreshold, float nmsThreshold, VectorOfInt indices, float eta = 1.0f, int topK = 0)
         {
             cveDnnNMSBoxes2(bboxes, scores, scoreThreshold, nmsThreshold, indices, eta, topK);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -596,6 +620,7 @@ namespace Emgu.CV.Dnn
             SoftNMSMethod method = SoftNMSMethod.Gaussian)
         {
             cveDnnSoftNMSBoxes(bboxes, scores, updatedScores, scoreThreshold, nmsThreshold, indices, topK, sigma, method);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -628,6 +653,7 @@ namespace Emgu.CV.Dnn
                     using (VectorOfInt viTargets = new VectorOfInt())
                     {
                         cveDnnGetAvailableBackends(viBackends, viTargets);
+                        CvInvoke.CheckError();
                         int[] backendArr = viBackends.ToArray();
                         int[] targetArr = viTargets.ToArray();
 
@@ -656,6 +682,7 @@ namespace Emgu.CV.Dnn
             using (VectorOfCvString providers = new VectorOfCvString())
             {
                 cveDnnGetAvailableOnnxProviders(providers);
+                CvInvoke.CheckError();
                 return providers.ToArray();
             }
         }
@@ -673,6 +700,7 @@ namespace Emgu.CV.Dnn
         public static void EnableModelDiagnostics(bool isDiagnosticsMode)
         {
             cveDnnEnableModelDiagnostics(isDiagnosticsMode);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

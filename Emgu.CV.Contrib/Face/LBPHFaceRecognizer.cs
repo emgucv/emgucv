@@ -35,9 +35,10 @@ namespace Emgu.CV.Face
                 neighbors, 
                 gridX, 
                 gridY, 
-                threshold, 
+                threshold,
                 ref _faceRecognizerPtr,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -50,6 +51,7 @@ namespace Emgu.CV.Face
             using (InputArray iaImages = images.GetInputArray())
             using (InputArray iaLabels = labels.GetInputArray())
                 FaceInvoke.cveFaceRecognizerUpdate(_faceRecognizerPtr, iaImages, iaLabels);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -91,6 +93,7 @@ namespace Emgu.CV.Face
             {
                 VectorOfMat histograms = new VectorOfMat();
                 FaceInvoke.cveLBPHFaceRecognizerGetHistograms(_ptr, histograms);
+                CvInvoke.CheckError();
                 return histograms;
             }
         }

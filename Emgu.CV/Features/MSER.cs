@@ -42,8 +42,9 @@ namespace Emgu.CV.Features
                areaThreshold,
                minMargin,
                edgeBlurSize,
-               ref _feature2D, 
+               ref _feature2D,
                ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -66,6 +67,7 @@ namespace Emgu.CV.Features
         {
             using (InputArray iaImage = image.GetInputArray())
                 FeaturesInvoke.cveMserDetectRegions(_ptr, iaImage, msers, bboxes);
+            CvInvoke.CheckError();
         }
     }
 

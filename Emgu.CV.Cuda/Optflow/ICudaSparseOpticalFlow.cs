@@ -43,6 +43,7 @@ namespace Emgu.CV.Cuda
          using (InputOutputArray ioaNextPts = nextPts.GetInputOutputArray())
          using (OutputArray oaStatus = status.GetOutputArray())
          using (OutputArray oaErr = (err == null ? OutputArray.GetEmpty() : err.GetOutputArray()))
+         {
             cudaSparseOpticalFlowCalc(
                 sparseFlow.SparseOpticalFlowPtr, 
                 iaPrevImg, 
@@ -52,6 +53,8 @@ namespace Emgu.CV.Cuda
                 oaStatus, 
                 oaErr, 
                 (stream == null) ? IntPtr.Zero : stream.Ptr);
+            CvInvoke.CheckError();
+         }
       }
 
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

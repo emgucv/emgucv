@@ -31,7 +31,9 @@ namespace Emgu.CV.Dnn
         {
             get
             {
-                return new VectorOfMat(DnnInvoke.cveDnnLayerGetBlobs(_ptr), false);
+                IntPtr blobsPtr = DnnInvoke.cveDnnLayerGetBlobs(_ptr);
+                CvInvoke.CheckError();
+                return new VectorOfMat(blobsPtr, false);
             }
         }
 

@@ -47,6 +47,7 @@ namespace Emgu.CV.ML
         public DTrees()
         {
             _ptr = MlInvoke.cveDTreesCreate(ref _statModelPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

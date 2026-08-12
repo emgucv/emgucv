@@ -39,6 +39,7 @@ namespace Emgu.CV.XFeatures2D
             using (InputArray iaH = H == null ? InputArray.GetEmpty() : H.GetInputArray())
                 _ptr = XFeatures2DInvoke.cveDAISYCreate(radius, qRadius, qTheta, qHist, norm, iaH, interpolation, useOrientation,
                    ref _feature2D, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

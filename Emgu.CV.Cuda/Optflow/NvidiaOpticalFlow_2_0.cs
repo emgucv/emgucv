@@ -144,6 +144,7 @@ namespace Emgu.CV.Cuda
                 ref _nvidiaHWOpticalFlow,
                 ref _algorithm,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
 
@@ -185,6 +186,7 @@ namespace Emgu.CV.Cuda
             using (InputOutputArray ioaFloatFlow = floatFlow.GetInputOutputArray())
             {
                 CudaInvoke.cudaNvidiaOpticalFlow_2_0_ConvertToFloat(_ptr, iaFlow, ioaFloatFlow);
+                CvInvoke.CheckError();
             }
         }
     }

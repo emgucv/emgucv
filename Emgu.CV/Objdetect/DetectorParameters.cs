@@ -211,6 +211,7 @@ namespace Emgu.CV.Aruco
         {
             DetectorParameters p = new DetectorParameters();
             ArucoInvoke.cveArucoDetectorParametersGetDefault(ref p);
+            CvInvoke.CheckError();
             return p;
         }
     }

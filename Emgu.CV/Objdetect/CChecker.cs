@@ -54,6 +54,7 @@ namespace Emgu.CV.Mcc
         public CChecker()
         {
             _ptr = MccInvoke.cveCCheckerCreate(ref _sharedPtr);
+            CvInvoke.CheckError();
             _needDispose = true;
         }
 
@@ -67,6 +68,7 @@ namespace Emgu.CV.Mcc
                 using (VectorOfPointF vp = new VectorOfPointF())
                 {
                     MccInvoke.cveCCheckerGetBox(_ptr, vp);
+                    CvInvoke.CheckError();
                     return vp.ToArray();
                 }
             }
@@ -76,6 +78,7 @@ namespace Emgu.CV.Mcc
                 {
                     MccInvoke.cveCCheckerSetBox(_ptr, vp);
                 }
+                CvInvoke.CheckError();
             }
         }
 
@@ -88,11 +91,13 @@ namespace Emgu.CV.Mcc
             {
                 PointF p = new PointF();
                 MccInvoke.cveCCheckerGetCenter(_ptr, ref p);
+                CvInvoke.CheckError();
                 return p;
             }
             set
             {
                 MccInvoke.cveCCheckerSetCenter(_ptr, ref value);
+                CvInvoke.CheckError();
             }
         }
 
@@ -107,6 +112,7 @@ namespace Emgu.CV.Mcc
             {
                 MccInvoke.cveCCheckerGetChartsRGB(_ptr, oaChartsRgb);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -116,6 +122,7 @@ namespace Emgu.CV.Mcc
         public void SetChartsRGB(Mat chartsRgb)
         {
             MccInvoke.cveCCheckerSetChartsRGB(_ptr, chartsRgb);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

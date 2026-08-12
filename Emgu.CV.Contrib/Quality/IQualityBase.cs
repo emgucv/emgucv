@@ -46,6 +46,7 @@ namespace Emgu.CV.Quality
             MCvScalar score = new MCvScalar();
             using (InputArray iaCmpImgs = cmpImgs.GetInputArray())
                 cveQualityBaseCompute(qualityBase.QualityBasePtr, iaCmpImgs, ref score);
+            CvInvoke.CheckError();
             return score;
         }
 
@@ -63,6 +64,7 @@ namespace Emgu.CV.Quality
         {
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveQualityBaseGetQualityMap(qualityBase.QualityBasePtr, oaDst);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

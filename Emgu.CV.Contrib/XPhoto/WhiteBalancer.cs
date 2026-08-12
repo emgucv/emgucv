@@ -30,6 +30,7 @@ namespace Emgu.CV.XPhoto
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 XPhotoInvoke.cveWhiteBalancerBalanceWhite(_whiteBalancerPtr, iaSrc, oaDst);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -112,6 +112,7 @@ namespace Emgu.CV
                     scaleStep,
                     ref _trackerPtr,
                     ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

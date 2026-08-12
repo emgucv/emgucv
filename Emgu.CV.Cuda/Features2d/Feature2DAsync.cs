@@ -49,7 +49,10 @@ namespace Emgu.CV.Cuda
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
          using (OutputArray oaKeypoints = keyPoints.GetOutputArray())
          using (OutputArray oaDescriptors = descriptors.GetOutputArray())
+         {
             CudaInvoke.cveCudaFeature2dAsyncDetectAndComputeAsync(feature2DAsync.Feature2DAsyncPtr, iaImage, iaMask, oaKeypoints, oaDescriptors, useProvidedKeyPoints, stream);
+            CvInvoke.CheckError();
+         }
 
       }
 
@@ -66,7 +69,10 @@ namespace Emgu.CV.Cuda
          using (InputArray iaImage = image.GetInputArray())
          using (OutputArray oaKeypoints = keypoints.GetOutputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+         {
             CudaInvoke.cveCudaFeature2dAsyncDetectAsync(feature2DAsync.Feature2DAsyncPtr, iaImage, oaKeypoints, iaMask, stream);
+            CvInvoke.CheckError();
+         }
       }
 
       /// <summary>
@@ -84,6 +90,7 @@ namespace Emgu.CV.Cuda
          using (OutputArray oaDescriptors = descriptors.GetOutputArray())
          {
             CudaInvoke.cveCudaFeature2dAsyncComputeAsync(feature2DAsync.Feature2DAsyncPtr, iaImage, oaKeypoints, oaDescriptors, stream);
+            CvInvoke.CheckError();
          }
       }
 
@@ -99,6 +106,7 @@ namespace Emgu.CV.Cuda
          using (InputArray iaGpuKeypoints = gpuKeypoints.GetInputArray())
          {
             CudaInvoke.cveCudaFeature2dAsyncConvert(feature2DAsync.Feature2DAsyncPtr, iaGpuKeypoints, keypoints);
+            CvInvoke.CheckError();
          }
       }
    }

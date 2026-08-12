@@ -24,6 +24,7 @@ namespace Emgu.CV.Cuda
         public Stream()
         {
             _ptr = CudaInvoke.streamCreate();
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -33,6 +34,7 @@ namespace Emgu.CV.Cuda
         public Stream(int flag)
         {
             _ptr = CudaInvoke.streamCreateWithFlag(flag);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -41,6 +43,7 @@ namespace Emgu.CV.Cuda
         public void WaitForCompletion()
         {
             CudaInvoke.streamWaitForCompletion(_ptr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -48,7 +51,12 @@ namespace Emgu.CV.Cuda
         /// </summary>
         public bool Completed
         {
-            get { return CudaInvoke.streamQueryIfComplete(_ptr); }
+            get
+            {
+                var result = CudaInvoke.streamQueryIfComplete(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /*

@@ -62,6 +62,7 @@ namespace Emgu.CV.XPhoto
         public static void DctDenoising(Mat src, Mat dst, double sigma, int psize = 16)
         {
             cveDctDenoising(src, dst, sigma, psize);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -96,6 +97,7 @@ namespace Emgu.CV.XPhoto
         public static void Inpaint(Mat src, Mat mask, Mat dst, InpaintType algorithmType)
         {
             cveXInpaint(src, mask, dst, algorithmType);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -117,6 +119,7 @@ namespace Emgu.CV.XPhoto
             {
                 cveApplyChannelGains(iaSrc, oaDst, gainB, gainG, gainR);
             }
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveApplyChannelGains(IntPtr src, IntPtr dst, float gainB, float gainG, float gainR);
@@ -163,6 +166,7 @@ namespace Emgu.CV.XPhoto
                     h, templateWindowSize, searchWindowSize, blockMatchingStep1, blockMatchingStep2,
                     groupSize, slidingStep, beta, normType, step, transformType);
             }
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveBm3dDenoising1(
@@ -220,6 +224,7 @@ namespace Emgu.CV.XPhoto
                     h, templateWindowSize, searchWindowSize, blockMatchingStep1, blockMatchingStep2,
                     groupSize, slidingStep, beta, normType, step, transformType);
             }
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveBm3dDenoising2(
@@ -252,6 +257,7 @@ namespace Emgu.CV.XPhoto
             {
                 cveOilPainting(iaSrc, oaDst, size, dynRatio, code);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

@@ -34,6 +34,7 @@ namespace Emgu.CV.Dnn
                     ref _textDetectionModel,
                     ref _model);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -46,6 +47,7 @@ namespace Emgu.CV.Dnn
                     net,
                     ref _textDetectionModel,
                     ref _model);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

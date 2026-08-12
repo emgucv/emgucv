@@ -29,6 +29,7 @@ namespace Emgu.CV.Cuda
         public CudaMinEigenValCorner(DepthType srcDepth, int srcChannels, int blockSize, int kSize, CvEnum.BorderType borderType = BorderType.Reflect101)
         {
             _ptr = CudaInvoke.cudaCreateMinEigenValCorner(CvInvoke.MakeType(srcDepth, srcChannels), blockSize, kSize, borderType, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
     }
 

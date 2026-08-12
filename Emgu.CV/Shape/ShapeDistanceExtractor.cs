@@ -51,7 +51,11 @@ namespace Emgu.CV.Shape
         {
             using (InputArray iaContour1 = contour1.GetInputArray())
             using (InputArray iaContour2 = contour2.GetInputArray())
-                return ShapeInvoke.cveShapeDistanceExtractorComputeDistance(_shapeDistanceExtractorPtr, iaContour1, iaContour2);
+            {
+                float result = ShapeInvoke.cveShapeDistanceExtractorComputeDistance(_shapeDistanceExtractorPtr, iaContour1, iaContour2);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -89,6 +93,7 @@ namespace Emgu.CV.Shape
            int iterations = 3)
         {
             _ptr = ShapeInvoke.cveShapeContextDistanceExtractorCreate(nAngularBins, nRadialBins, innerRadius, outerRadius, iterations, comparer, transformer.ShapeTransformerPtr, ref _shapeDistanceExtractorPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -117,6 +122,7 @@ namespace Emgu.CV.Shape
         public HausdorffDistanceExtractor(CvEnum.DistType distanceFlag = CvEnum.DistType.L2, float rankProp = 0.6f)
         {
             _ptr = ShapeInvoke.cveHausdorffDistanceExtractorCreate(distanceFlag, rankProp, ref _shapeDistanceExtractorPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

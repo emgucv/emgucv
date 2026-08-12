@@ -48,6 +48,7 @@ namespace Emgu.CV.Features
         public ORB(int numberOfFeatures = 500, float scaleFactor = 1.2f, int nLevels = 8, int edgeThreshold = 31, int firstLevel = 0, int WTK_A = 2, ScoreType scoreType = ScoreType.Harris, int patchSize = 31, int fastThreshold = 20)
         {
             _ptr = FeaturesInvoke.cveOrbCreate(numberOfFeatures, scaleFactor, nLevels, edgeThreshold, firstLevel, WTK_A, scoreType, patchSize, fastThreshold, ref _feature2D, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -38,6 +38,7 @@ namespace Emgu.CV.XImgproc
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveJointBilateralFilter(iaJoint, iaSrc,
                    oaDst, d, sigmaColor, sigmaSpace, borderType);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveJointBilateralFilter(IntPtr joint, IntPtr src, IntPtr dst, int d, double sigmaColor, double sigmaSpace, CvEnum.BorderType borderType);
@@ -62,6 +63,7 @@ namespace Emgu.CV.XImgproc
             {
                 cveBilateralTextureFilter(iaSrc, oaDst, fr, numIter, sigmaAlpha, sigmaAvg);
             }
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveBilateralTextureFilter(IntPtr src, IntPtr dst, int fr, int numIter, double sigmaAlpha, double sigmaAvg);
@@ -85,6 +87,7 @@ namespace Emgu.CV.XImgproc
             {
                 cveRollingGuidanceFilter(iaSrc, oaDst, d, sigmaColor, sigmaSpace, numOfIter, borderType);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -109,6 +112,7 @@ namespace Emgu.CV.XImgproc
             {
                 cveFastGlobalSmootherFilter(iaGuide, iaSrc, oaDst, lambda, sigmaColor, lambdaAttenuation, numIter);
             }
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveFastGlobalSmootherFilter(IntPtr guide, IntPtr src, IntPtr dst, double lambda, double sigmaColor, double lambdaAttenuation, int numIter);
@@ -127,6 +131,7 @@ namespace Emgu.CV.XImgproc
             {
                 cveL0Smooth(iaSrc, oaDst, lambda, kappa);
             }
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveL0Smooth(IntPtr src, IntPtr dst, double lambda, double kappa);
@@ -147,6 +152,7 @@ namespace Emgu.CV.XImgproc
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveAmFilter(iaJoint, iaSrc, oaDst, sigmaS, sigmaR, adjustOutliers);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveAmFilter(
@@ -174,6 +180,7 @@ namespace Emgu.CV.XImgproc
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveGuidedFilter(iaGuide, iaSrc, oaDst, radius, eps, dDepth);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveGuidedFilter(IntPtr guide, IntPtr src, IntPtr dst, int radius, double eps, DepthType dDepth);
@@ -195,6 +202,7 @@ namespace Emgu.CV.XImgproc
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveDtFilter(iaGuide, iaSrc, oaDst, sigmaSpatial, sigmaColor, mode, numIters);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -217,6 +225,7 @@ namespace Emgu.CV.XImgproc
             {
                 cveNiBlackThreshold(iaSrc, oaDst, maxValue, type, blockSize, delta);
             }
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveNiBlackThreshold(IntPtr src, IntPtr dst, double maxValue, LocalBinarizationMethods type, int blockSize, double delta);
@@ -233,6 +242,7 @@ namespace Emgu.CV.XImgproc
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveCovarianceEstimation(iaSrc, oaDst, windowRows, windowCols);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveCovarianceEstimation(IntPtr src, IntPtr dst, int windowRows, int windowCols);
@@ -259,6 +269,7 @@ namespace Emgu.CV.XImgproc
 
                 cveWeightedMedianFilter(iaJoint, iaSrc, oaDst, r, sigma, weightType, mask == null ? IntPtr.Zero : mask);
             }
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveWeightedMedianFilter(IntPtr joint, IntPtr src, IntPtr dst, int r, double sigma, WMFWeightType weightType, IntPtr mask);
@@ -276,6 +287,7 @@ namespace Emgu.CV.XImgproc
             using (InputArray iaOp = op.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveGradientPaillouY(iaOp, oaDst, alpha, omega);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveGradientPaillouY(IntPtr op, IntPtr dst, double alpha, double omega);
@@ -293,6 +305,7 @@ namespace Emgu.CV.XImgproc
             using (InputArray iaOp = op.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveGradientPaillouX(iaOp, oaDst, alpha, omega);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveGradientPaillouX(IntPtr op, IntPtr dst, double alpha, double omega);
@@ -310,6 +323,7 @@ namespace Emgu.CV.XImgproc
             using (InputArray iaOp = op.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveGradientDericheY(iaOp, oaDst, alphaDerive, alphaMean);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveGradientDericheY(IntPtr op, IntPtr dst, double alphaDerive, double alphaMean);
@@ -327,6 +341,7 @@ namespace Emgu.CV.XImgproc
             using (InputArray iaOp = op.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveGradientDericheX(iaOp, oaDst, alphaDerive, alphaMean);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveGradientDericheX(IntPtr op, IntPtr dst, double alphaDerive, double alphaMean);
@@ -343,6 +358,7 @@ namespace Emgu.CV.XImgproc
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveThinning(iaSrc, oaDst, thinningType);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveThinning(IntPtr src, IntPtr dst, ThinningTypes thinningType);
@@ -360,6 +376,7 @@ namespace Emgu.CV.XImgproc
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveAnisotropicDiffusion(iaSrc, oaDst, alpha, K, niters);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -376,6 +393,7 @@ namespace Emgu.CV.XImgproc
         public static void BrightEdges(Mat original, Mat edgeview, int contrast, int shortrange, int longrange)
         {
             cveBrightEdges(original, edgeview, contrast, shortrange, longrange);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -411,6 +429,7 @@ namespace Emgu.CV.XImgproc
             {
                 cveRadonTransform(iaSrc, oaDst, theta, startAngle, endAngle, crop, norm);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

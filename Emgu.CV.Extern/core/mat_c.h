@@ -33,7 +33,6 @@ CVAPI(void) cveMatCopyTo(cv::Mat* mat, cv::_OutputArray* m, cv::_InputArray* mas
 /*CVAPI(cv::Mat*) cveArrToMat(CvArr* cvArray, bool copyData, bool allowND, int coiMode);
 CVAPI(IplImage*) cveMatToIplImage(cv::Mat* mat);*/
 CVAPI(int) cveMatGetElementSize(cv::Mat* mat);
-//CVAPI(int) cveMatGetChannels(cv::Mat* mat);
 
 CVAPI(uchar*) cveMatGetDataPointer(cv::Mat* mat);
 CVAPI(uchar*) cveMatGetDataPointer2(cv::Mat* mat, int* indices);

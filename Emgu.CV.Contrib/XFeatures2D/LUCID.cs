@@ -31,6 +31,7 @@ namespace Emgu.CV.XFeatures2D
         public LUCID(int lucidKernel = 1, int blurKernel = 2)
         {
             _ptr = XFeatures2DInvoke.cveLUCIDCreate(lucidKernel, blurKernel, ref _feature2D, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

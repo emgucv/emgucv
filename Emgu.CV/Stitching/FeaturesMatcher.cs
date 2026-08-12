@@ -60,11 +60,12 @@ namespace Emgu.CV.Stitching
             int numMatchesThresh2 = 6)
         {
             _ptr = StitchingInvoke.cveBestOf2NearestMatcherCreate(
-                tryUseGpu, 
-                matchConf, 
-                numMatchesThresh1, 
-                numMatchesThresh2, 
+                tryUseGpu,
+                matchConf,
+                numMatchesThresh1,
+                numMatchesThresh2,
                 ref _featuresMatcherPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -105,8 +106,9 @@ namespace Emgu.CV.Stitching
                 tryUseGpu, 
                 matchConf, 
                 numMatchesThresh1, 
-                numMatchesThresh2, 
+                numMatchesThresh2,
                 ref _featuresMatcherPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -146,6 +148,7 @@ namespace Emgu.CV.Stitching
                 matchConf,
                 numMatchesThresh1,
                 ref _featuresMatcherPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

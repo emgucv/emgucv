@@ -20,11 +20,15 @@ void cudaDenseOpticalFlowCalc(
 	cv::_InputOutputArray* flow,
 	cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAOPTFLOW
-	opticalFlow->calc(*I0, *I1, *flow, stream ? *stream : cv::cuda::Stream::Null());
-#else
-	throw_no_cudaoptflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOPTFLOW
+		opticalFlow->calc(*I0, *I1, *flow, stream ? *stream : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudaoptflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -41,11 +45,15 @@ void cudaSparseOpticalFlowCalc(
 	cv::_OutputArray* err,
 	cv::cuda::Stream* stream)
 {
-#ifdef HAVE_OPENCV_CUDAOPTFLOW
-	opticalFlow->calc(*prevImg, *nextImg, *prevPts, *nextPts, status ? *status : (cv::_OutputArray) cv::noArray(), err ? *err : (cv::_OutputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
-#else
-	throw_no_cudaoptflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOPTFLOW
+		opticalFlow->calc(*prevImg, *nextImg, *prevPts, *nextPts, status ? *status : (cv::_OutputArray) cv::noArray(), err ? *err : (cv::_OutputArray) cv::noArray(), stream ? *stream : cv::cuda::Stream::Null());
+	#else
+		throw_no_cudaoptflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaSparsePyrLKOpticalFlowRelease(cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>** flow)
@@ -70,16 +78,20 @@ cv::cuda::BroxOpticalFlow* cudaBroxOpticalFlowCreate(
 	cv::cuda::DenseOpticalFlow** denseFlow, cv::Algorithm** algorithm,
 	cv::Ptr<cv::cuda::BroxOpticalFlow>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_CUDAOPTFLOW
-	cv::Ptr<cv::cuda::BroxOpticalFlow> ptr = cv::cuda::BroxOpticalFlow::create(alpha, gamma, scaleFactor, innerIterations, outerIterations, solverIterations);
-	*sharedPtr = new cv::Ptr<cv::cuda::BroxOpticalFlow>(ptr);
-	cv::cuda::BroxOpticalFlow* flow = ptr.get();
-	*denseFlow = dynamic_cast<cv::cuda::DenseOpticalFlow*>(flow);
-	*algorithm = dynamic_cast<cv::Algorithm*>(flow);
-	return flow;
-#else
-	throw_no_cudaoptflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOPTFLOW
+		cv::Ptr<cv::cuda::BroxOpticalFlow> ptr = cv::cuda::BroxOpticalFlow::create(alpha, gamma, scaleFactor, innerIterations, outerIterations, solverIterations);
+		*sharedPtr = new cv::Ptr<cv::cuda::BroxOpticalFlow>(ptr);
+		cv::cuda::BroxOpticalFlow* flow = ptr.get();
+		*denseFlow = dynamic_cast<cv::cuda::DenseOpticalFlow*>(flow);
+		*algorithm = dynamic_cast<cv::Algorithm*>(flow);
+		return flow;
+	#else
+		throw_no_cudaoptflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cudaBroxOpticalFlowRelease(cv::Ptr<cv::cuda::BroxOpticalFlow>** flow)
@@ -110,24 +122,28 @@ cv::cuda::FarnebackOpticalFlow* cudaFarnebackOpticalFlowCreate(
 	cv::Algorithm** algorithm,
 	cv::Ptr<cv::cuda::FarnebackOpticalFlow>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_CUDAOPTFLOW
-	cv::Ptr<cv::cuda::FarnebackOpticalFlow> ptr = cv::cuda::FarnebackOpticalFlow::create(
-		numLevels,
-		pyrScale,
-		fastPyramids,
-		winSize,
-		numIters,
-		polyN,
-		polySigma,
-		flags);
-	*sharedPtr = new cv::Ptr<cv::cuda::FarnebackOpticalFlow>(ptr);
-	cv::cuda::FarnebackOpticalFlow* flow = ptr.get();
-	*denseFlow = dynamic_cast<cv::cuda::DenseOpticalFlow*>(flow);
-	*algorithm = dynamic_cast<cv::Algorithm*>(flow);
-	return flow;
-#else
-	throw_no_cudaoptflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOPTFLOW
+		cv::Ptr<cv::cuda::FarnebackOpticalFlow> ptr = cv::cuda::FarnebackOpticalFlow::create(
+			numLevels,
+			pyrScale,
+			fastPyramids,
+			winSize,
+			numIters,
+			polyN,
+			polySigma,
+			flags);
+		*sharedPtr = new cv::Ptr<cv::cuda::FarnebackOpticalFlow>(ptr);
+		cv::cuda::FarnebackOpticalFlow* flow = ptr.get();
+		*denseFlow = dynamic_cast<cv::cuda::DenseOpticalFlow*>(flow);
+		*algorithm = dynamic_cast<cv::Algorithm*>(flow);
+		return flow;
+	#else
+		throw_no_cudaoptflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 
@@ -153,16 +169,20 @@ cv::cuda::OpticalFlowDual_TVL1* cudaOpticalFlowDualTvl1Create(
 	cv::Algorithm** algorithm,
 	cv::Ptr<cv::cuda::OpticalFlowDual_TVL1>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_CUDAOPTFLOW
-	cv::Ptr<cv::cuda::OpticalFlowDual_TVL1> ptr = cv::cuda::OpticalFlowDual_TVL1::create(tau, lambda, theta, nscales, warps, epsilon, iterations, scaleStep, gamma, useInitialFlow);
-	*sharedPtr = new cv::Ptr<cv::cuda::OpticalFlowDual_TVL1>(ptr);
-	cv::cuda::OpticalFlowDual_TVL1* flow = ptr.get();
-	*denseFlow = dynamic_cast<cv::cuda::DenseOpticalFlow*>(flow);
-	*algorithm = dynamic_cast<cv::Algorithm*>(flow);
-	return flow;
-#else
-	throw_no_cudaoptflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOPTFLOW
+		cv::Ptr<cv::cuda::OpticalFlowDual_TVL1> ptr = cv::cuda::OpticalFlowDual_TVL1::create(tau, lambda, theta, nscales, warps, epsilon, iterations, scaleStep, gamma, useInitialFlow);
+		*sharedPtr = new cv::Ptr<cv::cuda::OpticalFlowDual_TVL1>(ptr);
+		cv::cuda::OpticalFlowDual_TVL1* flow = ptr.get();
+		*denseFlow = dynamic_cast<cv::cuda::DenseOpticalFlow*>(flow);
+		*algorithm = dynamic_cast<cv::Algorithm*>(flow);
+		return flow;
+	#else
+		throw_no_cudaoptflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 
@@ -190,16 +210,20 @@ cv::cuda::DensePyrLKOpticalFlow* cudaDensePyrLKOpticalFlowCreate(
 	cv::Algorithm** algorithm, 
 	cv::Ptr<cv::cuda::DensePyrLKOpticalFlow>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_CUDAOPTFLOW
-	cv::Ptr<cv::cuda::DensePyrLKOpticalFlow> ptr = cv::cuda::DensePyrLKOpticalFlow::create(*winSize, maxLevel, iters, useInitialFlow);
-	*sharedPtr = new cv::Ptr<cv::cuda::DensePyrLKOpticalFlow>(ptr);
-	cv::cuda::DensePyrLKOpticalFlow* flow = ptr.get();
-	*denseFlow = dynamic_cast<cv::cuda::DenseOpticalFlow*>(flow);
-	*algorithm = dynamic_cast<cv::Algorithm*>(flow);
-	return flow;
-#else
-	throw_no_cudaoptflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOPTFLOW
+		cv::Ptr<cv::cuda::DensePyrLKOpticalFlow> ptr = cv::cuda::DensePyrLKOpticalFlow::create(*winSize, maxLevel, iters, useInitialFlow);
+		*sharedPtr = new cv::Ptr<cv::cuda::DensePyrLKOpticalFlow>(ptr);
+		cv::cuda::DensePyrLKOpticalFlow* flow = ptr.get();
+		*denseFlow = dynamic_cast<cv::cuda::DenseOpticalFlow*>(flow);
+		*algorithm = dynamic_cast<cv::Algorithm*>(flow);
+		return flow;
+	#else
+		throw_no_cudaoptflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cudaDensePyrLKOpticalFlowRelease(cv::Ptr<cv::cuda::DensePyrLKOpticalFlow>** flow)
 {
@@ -225,16 +249,20 @@ cv::cuda::SparsePyrLKOpticalFlow* cudaSparsePyrLKOpticalFlowCreate(
 	cv::Algorithm** algorithm,
 	cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_CUDAOPTFLOW
-	cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow> ptr = cv::cuda::SparsePyrLKOpticalFlow::create(*winSize, maxLevel, iters, useInitialFlow);
-	*sharedPtr = new cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>(ptr);
-	cv::cuda::SparsePyrLKOpticalFlow* flow = ptr.get();
-	*sparseFlow = dynamic_cast<cv::cuda::SparseOpticalFlow*>(flow);
-	*algorithm = dynamic_cast<cv::Algorithm*>(flow);
-	return flow;
-#else
-	throw_no_cudaoptflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOPTFLOW
+		cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow> ptr = cv::cuda::SparsePyrLKOpticalFlow::create(*winSize, maxLevel, iters, useInitialFlow);
+		*sharedPtr = new cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>(ptr);
+		cv::cuda::SparsePyrLKOpticalFlow* flow = ptr.get();
+		*sparseFlow = dynamic_cast<cv::cuda::SparseOpticalFlow*>(flow);
+		*algorithm = dynamic_cast<cv::Algorithm*>(flow);
+		return flow;
+	#else
+		throw_no_cudaoptflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cudaDensePyrLKOpticalFlowRelease(cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>** flow)
@@ -276,24 +304,28 @@ cv::cuda::NvidiaOpticalFlow_1_0* cudaNvidiaOpticalFlow_1_0_Create(
 	cv::Algorithm** algorithm,
 	cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_CUDAOPTFLOW
-	cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0> ptr = cv::cuda::NvidiaOpticalFlow_1_0::create(
-		*imageSize,
-		static_cast<cv::cuda::NvidiaOpticalFlow_1_0::NVIDIA_OF_PERF_LEVEL>(perfPreset),
-		enableTemporalHints,
-		enableExternalHints,
-		enableCostBuffer,
-		gpuId,
-		inputStream ? *inputStream : cv::cuda::Stream::Null(),
-		outputStream ? *outputStream : cv::cuda::Stream::Null());
-	*sharedPtr = new cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0>(ptr);
-	cv::cuda::NvidiaOpticalFlow_1_0* flow = ptr.get();
-	*nHWOpticalFlow = dynamic_cast<cv::cuda::NvidiaHWOpticalFlow*>(flow);
-	*algorithm = dynamic_cast<cv::Algorithm*>(flow);
-	return flow;
-#else
-	throw_no_cudaoptflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOPTFLOW
+		cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0> ptr = cv::cuda::NvidiaOpticalFlow_1_0::create(
+			*imageSize,
+			static_cast<cv::cuda::NvidiaOpticalFlow_1_0::NVIDIA_OF_PERF_LEVEL>(perfPreset),
+			enableTemporalHints,
+			enableExternalHints,
+			enableCostBuffer,
+			gpuId,
+			inputStream ? *inputStream : cv::cuda::Stream::Null(),
+			outputStream ? *outputStream : cv::cuda::Stream::Null());
+		*sharedPtr = new cv::Ptr<cv::cuda::NvidiaOpticalFlow_1_0>(ptr);
+		cv::cuda::NvidiaOpticalFlow_1_0* flow = ptr.get();
+		*nHWOpticalFlow = dynamic_cast<cv::cuda::NvidiaHWOpticalFlow*>(flow);
+		*algorithm = dynamic_cast<cv::Algorithm*>(flow);
+		return flow;
+	#else
+		throw_no_cudaoptflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cudaNvidiaOpticalFlow_1_0_UpSampler(
@@ -303,11 +335,15 @@ void cudaNvidiaOpticalFlow_1_0_UpSampler(
 	int gridSize,
 	cv::_InputOutputArray* upsampledFlow)
 {
-#ifdef HAVE_OPENCV_CUDAOPTFLOW
-	nFlow->upSampler(*flow, *imageSize, gridSize, *upsampledFlow);
-#else
-	throw_no_cudaoptflow();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOPTFLOW
+		nFlow->upSampler(*flow, *imageSize, gridSize, *upsampledFlow);
+	#else
+		throw_no_cudaoptflow();
+	#endif	
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 
@@ -336,36 +372,48 @@ void cudaNvidiaOpticalFlowCalc(
 	cv::_InputArray* hint,
 	cv::_OutputArray* cost)
 {
-#ifdef HAVE_OPENCV_CUDAOPTFLOW
-	nHWOpticalFlow->calc(
-		*inputImage,
-		*referenceImage,
-		*flow,
-		stream ? *stream : cv::cuda::Stream::Null(),
-		hint ? *hint : static_cast<cv::InputArray>(cv::noArray()),
-		cost ? *cost : static_cast<cv::OutputArray>(cv::noArray())
-	);
-#else
-	throw_no_cudaoptflow();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOPTFLOW
+		nHWOpticalFlow->calc(
+			*inputImage,
+			*referenceImage,
+			*flow,
+			stream ? *stream : cv::cuda::Stream::Null(),
+			hint ? *hint : static_cast<cv::InputArray>(cv::noArray()),
+			cost ? *cost : static_cast<cv::OutputArray>(cv::noArray())
+		);
+	#else
+		throw_no_cudaoptflow();
+	#endif	
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaNvidiaOpticalFlowCollectGarbage(cv::cuda::NvidiaHWOpticalFlow* nHWOpticalFlow)
 {
-#ifdef HAVE_OPENCV_CUDAOPTFLOW
-	nHWOpticalFlow->collectGarbage();
-#else
-	throw_no_cudaoptflow();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOPTFLOW
+		nHWOpticalFlow->collectGarbage();
+	#else
+		throw_no_cudaoptflow();
+	#endif	
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 int cudaNvidiaOpticalFlowGetGridSize(cv::cuda::NvidiaHWOpticalFlow* nHWOpticalFlow)
 {
-#ifdef HAVE_OPENCV_CUDAOPTFLOW
-	return nHWOpticalFlow->getGridSize();
-#else
-	throw_no_cudaoptflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOPTFLOW
+		return nHWOpticalFlow->getGridSize();
+	#else
+		throw_no_cudaoptflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 //----------------------------------------------------------------------------
@@ -388,35 +436,43 @@ cv::cuda::NvidiaOpticalFlow_2_0* cudaNvidiaOpticalFlow_2_0_Create(
 	cv::Algorithm** algorithm,
 	cv::Ptr<cv::cuda::NvidiaOpticalFlow_2_0>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_CUDAOPTFLOW
-	cv::Ptr<cv::cuda::NvidiaOpticalFlow_2_0> ptr = cv::cuda::NvidiaOpticalFlow_2_0::create(
-		*imageSize,
-		static_cast<cv::cuda::NvidiaOpticalFlow_2_0::NVIDIA_OF_PERF_LEVEL>(perfPreset),
-		static_cast<cv::cuda::NvidiaOpticalFlow_2_0::NVIDIA_OF_OUTPUT_VECTOR_GRID_SIZE>(outputGridSize),
-		static_cast<cv::cuda::NvidiaOpticalFlow_2_0::NVIDIA_OF_HINT_VECTOR_GRID_SIZE>(hintGridSize),
-		enableTemporalHints,
-		enableExternalHints,
-		enableCostBuffer,
-		gpuId,
-		inputStream? *inputStream : cv::cuda::Stream::Null(),
-		outputStream? *outputStream : cv::cuda::Stream::Null());
-	*sharedPtr = new cv::Ptr<cv::cuda::NvidiaOpticalFlow_2_0>(ptr);
-	cv::cuda::NvidiaOpticalFlow_2_0* flow = ptr.get();
-	*nHWOpticalFlow = dynamic_cast<cv::cuda::NvidiaHWOpticalFlow*>(flow);
-	*algorithm = dynamic_cast<cv::Algorithm*>(flow);
-	return flow;
-#else
-	throw_no_cudaoptflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOPTFLOW
+		cv::Ptr<cv::cuda::NvidiaOpticalFlow_2_0> ptr = cv::cuda::NvidiaOpticalFlow_2_0::create(
+			*imageSize,
+			static_cast<cv::cuda::NvidiaOpticalFlow_2_0::NVIDIA_OF_PERF_LEVEL>(perfPreset),
+			static_cast<cv::cuda::NvidiaOpticalFlow_2_0::NVIDIA_OF_OUTPUT_VECTOR_GRID_SIZE>(outputGridSize),
+			static_cast<cv::cuda::NvidiaOpticalFlow_2_0::NVIDIA_OF_HINT_VECTOR_GRID_SIZE>(hintGridSize),
+			enableTemporalHints,
+			enableExternalHints,
+			enableCostBuffer,
+			gpuId,
+			inputStream? *inputStream : cv::cuda::Stream::Null(),
+			outputStream? *outputStream : cv::cuda::Stream::Null());
+		*sharedPtr = new cv::Ptr<cv::cuda::NvidiaOpticalFlow_2_0>(ptr);
+		cv::cuda::NvidiaOpticalFlow_2_0* flow = ptr.get();
+		*nHWOpticalFlow = dynamic_cast<cv::cuda::NvidiaHWOpticalFlow*>(flow);
+		*algorithm = dynamic_cast<cv::Algorithm*>(flow);
+		return flow;
+	#else
+		throw_no_cudaoptflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cudaNvidiaOpticalFlow_2_0_ConvertToFloat(cv::cuda::NvidiaOpticalFlow_2_0* nvof, cv::_InputArray* flow, cv::_InputOutputArray* floatFlow)
 {
-#ifdef HAVE_OPENCV_CUDAOPTFLOW
-	nvof->convertToFloat(*flow, *floatFlow);
-#else
-	throw_no_cudaoptflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_CUDAOPTFLOW
+		nvof->convertToFloat(*flow, *floatFlow);
+	#else
+		throw_no_cudaoptflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaNvidiaOpticalFlow_2_0_Release(cv::Ptr<cv::cuda::NvidiaOpticalFlow_2_0>** flow)

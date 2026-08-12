@@ -145,7 +145,10 @@ namespace Emgu.CV.Cuda
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
+         {
             cudaCvtColor(iaSrc, oaDst, code, dcn, stream);
+            CvInvoke.CheckError();
+         }
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaCvtColor(IntPtr src, IntPtr dst, CvEnum.ColorConversion code, int dcn, IntPtr stream);
@@ -162,7 +165,10 @@ namespace Emgu.CV.Cuda
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
+         {
             cudaDemosaicing(iaSrc, oaDst, code, dcn, stream);
+            CvInvoke.CheckError();
+         }
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaDemosaicing(IntPtr src, IntPtr dst, DemosaicTypes code, int dcn, IntPtr stream);
@@ -184,7 +190,10 @@ namespace Emgu.CV.Cuda
             throw new ArgumentException("dstOrder must be an int array of size 4");
          GCHandle handle = GCHandle.Alloc(dstOrder, GCHandleType.Pinned);
          using (InputOutputArray ioaSrc = src.GetInputOutputArray())
+         {
             cudaSwapChannels(ioaSrc, handle.AddrOfPinnedObject(), stream);
+            CvInvoke.CheckError();
+         }
 
          handle.Free();
       }
@@ -202,7 +211,10 @@ namespace Emgu.CV.Cuda
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
+         {
             cudaGammaCorrection(iaSrc, oaDst, forward, stream);
+            CvInvoke.CheckError();
+         }
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaGammaCorrection(
@@ -228,6 +240,7 @@ namespace Emgu.CV.Cuda
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                cudaAlphaComp(iaImg1, iaImg2, oaDst, alphaOp, stream);
+               CvInvoke.CheckError();
             }
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -245,6 +258,7 @@ namespace Emgu.CV.Cuda
          using (OutputArray oaHist = hist.GetOutputArray())
          {
             cudaCalcHist(iaSrc, oaHist, stream);
+            CvInvoke.CheckError();
          }
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -260,7 +274,10 @@ namespace Emgu.CV.Cuda
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
+         {
             cudaEqualizeHist(iaSrc, oaDst, stream);
+            CvInvoke.CheckError();
+         }
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaEqualizeHist(IntPtr src, IntPtr dst, IntPtr stream);
@@ -279,7 +296,10 @@ namespace Emgu.CV.Cuda
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaHist = hist.GetOutputArray())
+         {
             cudaHistEven(iaSrc, oaHist, histSize, lowerLevel, upperLevel, stream);
+            CvInvoke.CheckError();
+         }
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaHistEven(IntPtr src, IntPtr hist, int histSize, int lowerLevel, int upperLevel, IntPtr stream);
@@ -296,7 +316,10 @@ namespace Emgu.CV.Cuda
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaHist = hist.GetOutputArray())
          using (InputArray iaLevels = levels.GetInputArray())
+         {
             cudaHistRange(iaSrc, oaHist, iaLevels, stream);
+            CvInvoke.CheckError();
+         }
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaHistRange(IntPtr src, IntPtr hist, IntPtr levels, IntPtr stream);
@@ -318,7 +341,10 @@ namespace Emgu.CV.Cuda
          using (InputArray iaWeights1 = weights1.GetInputArray())
          using (InputArray iaWeights2 = weights2.GetInputArray())
          using (OutputArray oaResult = result.GetOutputArray())
+         {
             cudaBlendLinear(iaImg1, iaImg2, iaWeights1, iaWeights2, oaResult, stream);
+            CvInvoke.CheckError();
+         }
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaBlendLinear(IntPtr img1, IntPtr img2, IntPtr weights1, IntPtr weights2, IntPtr result, IntPtr stream);
@@ -337,7 +363,10 @@ namespace Emgu.CV.Cuda
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
+         {
             cudaBilateralFilter(iaSrc, oaDst, kernelSize, sigmaColor, sigmaSpatial, borderType, stream);
+            CvInvoke.CheckError();
+         }
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaBilateralFilter(IntPtr src, IntPtr dst, int kernelSize, float sigmaColor, float sigmaSpatial, CvEnum.BorderType borderType, IntPtr stream);
@@ -357,7 +386,10 @@ namespace Emgu.CV.Cuda
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
+         {
             cudaMeanShiftFiltering(iaSrc, oaDst, sp, sr, ref criteria, stream);
+            CvInvoke.CheckError();
+         }
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaMeanShiftFiltering(IntPtr src, IntPtr dst, int sp, int sr, ref MCvTermCriteria criteria, IntPtr stream);
@@ -379,7 +411,10 @@ namespace Emgu.CV.Cuda
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDstr = dstr.GetOutputArray())
          using (OutputArray oaDstsp = dstsp.GetOutputArray())
+         {
             cudaMeanShiftProc(iaSrc, oaDstr, oaDstsp, sp, sr, ref criteria, stream);
+            CvInvoke.CheckError();
+         }
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaMeanShiftProc(IntPtr src, IntPtr dstr, IntPtr dstsp, int sp, int sr, ref MCvTermCriteria criteria, IntPtr stream);
@@ -400,7 +435,10 @@ namespace Emgu.CV.Cuda
       {
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
+         {
             cudaMeanShiftSegmentation(iaSrc, oaDst, sp, sr, minSize, ref criteria, stream);
+            CvInvoke.CheckError();
+         }
       }
       [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cudaMeanShiftSegmentation(IntPtr src, IntPtr dst, int sp, int sr, int minsize, ref MCvTermCriteria criteria, IntPtr stream);

@@ -34,6 +34,7 @@ namespace Emgu.CV.Cuda
       public CudaBoxFilter(DepthType srcDepth, int srcChannels, DepthType dstDepth, int dstChannels, Size ksize, Point anchor, CvEnum.BorderType borderType = BorderType.Default, MCvScalar borderValue = new MCvScalar())
       {
          _ptr = CudaInvoke.cudaCreateBoxFilter(CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), ref ksize, ref anchor, borderType, ref borderValue, ref _sharedPtr);
+         CvInvoke.CheckError();
       }
    }
 

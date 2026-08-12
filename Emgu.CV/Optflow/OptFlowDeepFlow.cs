@@ -24,6 +24,7 @@ namespace Emgu.CV
         public OptFlowDeepFlow()
         {
             _ptr = CvInvoke.cveOptFlowDeepFlowCreate(ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

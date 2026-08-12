@@ -40,6 +40,7 @@ namespace Emgu.CV.Cuda
          _ptr = CudaInvoke.cudaCreateLaplacianFilter(
             CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), 
             ksize, scale, borderType, ref borderValue, ref _sharedPtr);
+         CvInvoke.CheckError();
       }
    }
 

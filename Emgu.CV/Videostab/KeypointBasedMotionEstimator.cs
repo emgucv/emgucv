@@ -27,6 +27,7 @@ namespace Emgu.CV.VideoStab
             _ptr = VideoStabInvoke.cveKeypointBasedMotionEstimatorCreate(
                 estimator.MotionEstimatorBasePtr,
                 ref ImageMotionEstimatorBasePtr);
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/>

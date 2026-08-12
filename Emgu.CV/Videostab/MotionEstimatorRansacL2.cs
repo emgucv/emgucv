@@ -22,6 +22,7 @@ namespace Emgu.CV.VideoStab
         public MotionEstimatorRansacL2(MotionModel model = MotionModel.Affine)
         {
             _ptr = VideoStabInvoke.cveMotionEstimatorRansacL2Create((int)model, ref MotionEstimatorBasePtr);
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/>

@@ -63,6 +63,7 @@ namespace Emgu.CV.PpfMatch3d
                 numLevels,
                 sampleType,
                 numMaxCorr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -84,7 +85,9 @@ namespace Emgu.CV.PpfMatch3d
         /// <returns>On successful termination, the function returns 0.</returns>
 		public int RegisterModelToScene(Mat srcPC, Mat dstPC, ref double residual, Mat pose)
 		{
-			return PpfMatch3dInvoke.cveICPRegisterModelToScene(_ptr, srcPC, dstPC, ref residual, pose);
+			int result = PpfMatch3dInvoke.cveICPRegisterModelToScene(_ptr, srcPC, dstPC, ref residual, pose);
+			CvInvoke.CheckError();
+			return result;
         }
 
         /// <summary>
@@ -96,7 +99,9 @@ namespace Emgu.CV.PpfMatch3d
         /// <returns>On successful termination, the function returns 0.</returns>
         public int RegisterModelToScene(Mat srcPC, Mat dstPC, VectorOfPose3D poses)
         {
-            return PpfMatch3dInvoke.cveICPRegisterModelToScene2(_ptr, srcPC, dstPC, poses);
+            int result = PpfMatch3dInvoke.cveICPRegisterModelToScene2(_ptr, srcPC, dstPC, poses);
+            CvInvoke.CheckError();
+            return result;
         }
     }
 

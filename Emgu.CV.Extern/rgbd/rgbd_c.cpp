@@ -10,42 +10,58 @@
 
 cv::linemod::Detector* cveLinemodLineDetectorCreate(cv::Ptr<cv::linemod::Detector>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_RGBD
-	cv::Ptr<cv::linemod::Detector> detector = cv::linemod::getDefaultLINE();
-	*sharedPtr = new cv::Ptr<cv::linemod::Detector>(detector);
-	return (*sharedPtr)->get();
-#else
-	throw_no_rgbd();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_RGBD
+		cv::Ptr<cv::linemod::Detector> detector = cv::linemod::getDefaultLINE();
+		*sharedPtr = new cv::Ptr<cv::linemod::Detector>(detector);
+		return (*sharedPtr)->get();
+	#else
+		throw_no_rgbd();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 cv::linemod::Detector* cveLinemodLinemodDetectorCreate(cv::Ptr<cv::linemod::Detector>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_RGBD
-	cv::Ptr<cv::linemod::Detector> detector = cv::linemod::getDefaultLINEMOD();
-	*sharedPtr = new cv::Ptr<cv::linemod::Detector>(detector);
-	return (*sharedPtr)->get();
-#else
-	throw_no_rgbd();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_RGBD
+		cv::Ptr<cv::linemod::Detector> detector = cv::linemod::getDefaultLINEMOD();
+		*sharedPtr = new cv::Ptr<cv::linemod::Detector>(detector);
+		return (*sharedPtr)->get();
+	#else
+		throw_no_rgbd();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveLinemodDetectorRead(cv::linemod::Detector* detector, cv::FileNode* fn)
 {
-#ifdef HAVE_OPENCV_RGBD
-	detector->read(*fn);
-#else
-	throw_no_rgbd();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_RGBD
+		detector->read(*fn);
+	#else
+		throw_no_rgbd();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveLinemodDetectorWrite(cv::linemod::Detector* detector, cv::FileStorage* fs)
 {
-#ifdef HAVE_OPENCV_RGBD
-	detector->write(*fs);
-#else
-	throw_no_rgbd();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_RGBD
+		detector->write(*fs);
+	#else
+		throw_no_rgbd();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 int cveLinemodDetectorAddTemplate(
@@ -55,34 +71,41 @@ int cveLinemodDetectorAddTemplate(
 	cv::Mat* objectMask,
 	cv::Rect* boundingBox)
 {
-#ifdef HAVE_OPENCV_RGBD
-	cv::Rect r;
-	int result = detector->addTemplate(*sources, *classId, *objectMask, &r);
-	if (boundingBox)
+	try
 	{
-		boundingBox->x = r.x;
-		boundingBox->y = r.y;
-		boundingBox->width = r.width;
-		boundingBox->height = r.height;
+	#ifdef HAVE_OPENCV_RGBD
+		cv::Rect r;
+		int result = detector->addTemplate(*sources, *classId, *objectMask, &r);
+		if (boundingBox)
+		{
+			boundingBox->x = r.x;
+			boundingBox->y = r.y;
+			boundingBox->width = r.width;
+			boundingBox->height = r.height;
+		}
+		return result;
+	#else
+		throw_no_rgbd();
+	#endif
 	}
-	return result;
-#else
-	throw_no_rgbd();
-#endif	
-
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveLinemodDetectorGetClassIds(cv::linemod::Detector* detector, std::vector< cv::String >* classIds)
 {
-#ifdef HAVE_OPENCV_RGBD
-	std::vector< cv::String > ids = detector->classIds();
-	for (std::vector< cv::String >::iterator it = ids.begin(); it != ids.end(); ++it)
+	try
 	{
-		classIds->push_back(*it);
+	#ifdef HAVE_OPENCV_RGBD
+		std::vector< cv::String > ids = detector->classIds();
+		for (std::vector< cv::String >::iterator it = ids.begin(); it != ids.end(); ++it)
+		{
+			classIds->push_back(*it);
+		}
+	#else
+		throw_no_rgbd();
+	#endif
 	}
-#else
-	throw_no_rgbd();
-#endif	
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveLinemodDetectorMatch(
@@ -94,41 +117,53 @@ void cveLinemodDetectorMatch(
 	cv::_OutputArray* quantizedImages,
 	std::vector< cv::Mat >* masks)
 {
-#ifdef HAVE_OPENCV_RGBD
-	detector->match(
-		*sources,
-		threshold,
-		*matches,
-		classIds ? *classIds : std::vector< cv::String >(),
-		quantizedImages ? *quantizedImages : static_cast<cv::OutputArray>(cv::noArray()),
-		masks ? *masks : std::vector< cv::Mat >());
-#else
-	throw_no_rgbd();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_RGBD
+		detector->match(
+			*sources,
+			threshold,
+			*matches,
+			classIds ? *classIds : std::vector< cv::String >(),
+			quantizedImages ? *quantizedImages : static_cast<cv::OutputArray>(cv::noArray()),
+			masks ? *masks : std::vector< cv::Mat >());
+	#else
+		throw_no_rgbd();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 int cveLinemodDetectorGetT(cv::linemod::Detector* detector, int pyramidLevel)
 {
-#ifdef HAVE_OPENCV_RGBD
-	return detector->getT(pyramidLevel);
-#else
-	throw_no_rgbd();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_RGBD
+		return detector->getT(pyramidLevel);
+	#else
+		throw_no_rgbd();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveLinemodDetectorGetModalities(cv::linemod::Detector* detector, std::vector< void* >* vectorOfPtrs)
 {
-#ifdef HAVE_OPENCV_RGBD
-	vectorOfPtrs->clear();
-	const std::vector< cv::Ptr< cv::linemod::Modality > > modalities = detector->getModalities();
-	for (auto it = modalities.begin(); it != modalities.end(); ++it)
+	try
 	{
-		cv::linemod::Modality* p = it->get();
-		vectorOfPtrs->push_back(p);
+	#ifdef HAVE_OPENCV_RGBD
+		vectorOfPtrs->clear();
+		const std::vector< cv::Ptr< cv::linemod::Modality > > modalities = detector->getModalities();
+		for (auto it = modalities.begin(); it != modalities.end(); ++it)
+		{
+			cv::linemod::Modality* p = it->get();
+			vectorOfPtrs->push_back(p);
+		}
+	#else
+		throw_no_rgbd();
+	#endif
 	}
-#else
-	throw_no_rgbd();
-#endif	
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveLinemodDetectorRelease(cv::Ptr<cv::linemod::Detector>** sharedPtr)
@@ -144,12 +179,15 @@ void cveLinemodDetectorRelease(cv::Ptr<cv::linemod::Detector>** sharedPtr)
 
 cv::linemod::Match* cveLinemodMatchCreate()
 {
-#ifdef HAVE_OPENCV_RGBD
-	return new cv::linemod::Match();
-#else
-	throw_no_rgbd();
-#endif	
-
+	try
+	{
+	#ifdef HAVE_OPENCV_RGBD
+		return new cv::linemod::Match();
+	#else
+		throw_no_rgbd();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveLinemodMatchRelease(cv::linemod::Match** match)
 {
@@ -164,14 +202,17 @@ void cveLinemodMatchRelease(cv::linemod::Match** match)
 
 cv::linemod::Modality* cveLinemodModalityCreate(cv::String* modalityType, cv::Ptr<cv::linemod::Modality>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_RGBD
-	cv::Ptr<cv::linemod::Modality> modality = cv::linemod::Modality::create(*modalityType);
-	*sharedPtr = new cv::Ptr<cv::linemod::Modality>(modality);
-	return (*sharedPtr)->get();
-#else
-	throw_no_rgbd();
-#endif	
-
+	try
+	{
+	#ifdef HAVE_OPENCV_RGBD
+		cv::Ptr<cv::linemod::Modality> modality = cv::linemod::Modality::create(*modalityType);
+		*sharedPtr = new cv::Ptr<cv::linemod::Modality>(modality);
+		return (*sharedPtr)->get();
+	#else
+		throw_no_rgbd();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveLinemodModalityRelease(cv::Ptr<cv::linemod::Modality>** sharedPtr)
 {

@@ -23,6 +23,7 @@ namespace Emgu.CV
         {
             using (CvString csFontPathOrName = new CvString(fontPathOrName ?? String.Empty))
                 _ptr = CvInvoke.cveFontFaceCreate(csFontPathOrName);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -32,8 +33,11 @@ namespace Emgu.CV
         /// <returns>True if the font is successfully loaded.</returns>
         public bool Set(String fontPathOrName)
         {
+            bool result;
             using (CvString csFontPathOrName = new CvString(fontPathOrName ?? String.Empty))
-                return CvInvoke.cveFontFaceSet(_ptr, csFontPathOrName);
+                result = CvInvoke.cveFontFaceSet(_ptr, csFontPathOrName);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -46,6 +50,7 @@ namespace Emgu.CV
                 using (CvString csName = new CvString())
                 {
                     CvInvoke.cveFontFaceGetName(_ptr, csName);
+                    CvInvoke.CheckError();
                     return csName.ToString();
                 }
             }
@@ -58,7 +63,9 @@ namespace Emgu.CV
         /// <returns>True if the instance is successfully set.</returns>
         public bool SetInstance(VectorOfInt parameters)
         {
-            return CvInvoke.cveFontFaceSetInstance(_ptr, parameters);
+            bool result = CvInvoke.cveFontFaceSetInstance(_ptr, parameters);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -68,7 +75,9 @@ namespace Emgu.CV
         /// <returns>True if the instance is successfully retrieved.</returns>
         public bool GetInstance(VectorOfInt parameters)
         {
-            return CvInvoke.cveFontFaceGetInstance(_ptr, parameters);
+            bool result = CvInvoke.cveFontFaceGetInstance(_ptr, parameters);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>

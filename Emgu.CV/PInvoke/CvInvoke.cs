@@ -506,16 +506,25 @@ namespace Emgu.CV
 
                 _libraryLoaded = DefaultLoadUnmanagedModules(modules.ToArray());
                 
-                try
+                //Set EMGU_CV_DISABLE_ERROR_HANDLER to skip registering the custom error handler,
+                //to exercise the same CheckError() fallback path used on platforms (iOS,
+                //MacCatalyst, Blazor/WASM, Unity WebGL) that never register one, without
+                //actually running on one of those platforms.
+                String disableErrorHandler = Environment.GetEnvironmentVariable("EMGU_CV_DISABLE_ERROR_HANDLER");
+                if (String.IsNullOrEmpty(disableErrorHandler) || disableErrorHandler == "0")
                 {
-                    //Use the custom error handler
-                    RedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
-                }
-                catch (Exception e)
-                {
-                    System.Diagnostics.Trace.WriteLine(
-                        String.Format("Failed to register error handler using RedirectError : {0}", e.StackTrace));
-                    throw;
+                    try
+                    {
+                        //Use the custom error handler. RedirectError itself updates
+                        //CustomErrorHandlerRegistered based on whether the handler is null.
+                        RedirectError(CvErrorHandlerThrowException, IntPtr.Zero, IntPtr.Zero);
+                    }
+                    catch (Exception e)
+                    {
+                        System.Diagnostics.Trace.WriteLine(
+                            String.Format("Failed to register error handler using RedirectError : {0}", e.StackTrace));
+                        throw;
+                    }
                 }
 
             }

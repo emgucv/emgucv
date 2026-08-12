@@ -57,6 +57,7 @@ namespace Emgu.CV
                     ref _sharedPtr
                 );
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -76,6 +77,7 @@ namespace Emgu.CV
             {
                 ObjdetectInvoke.cveFaceRecognizerSFAlignCrop(_ptr, iaSrcImg, iaFaceBox, oaAlignedImg);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -90,6 +92,7 @@ namespace Emgu.CV
             {
                 ObjdetectInvoke.cveFaceRecognizerSFFeature(_ptr, iaAlignedImg, oaFaceFeature);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -104,16 +107,19 @@ namespace Emgu.CV
             IInputArray faceFeature2,
             DisType disType = DisType.Cosine)
         {
+            double result;
             using (InputArray iaFaceFeature1 = faceFeature1.GetInputArray())
             using (InputArray iaFaceFeature2 = faceFeature2.GetInputArray())
             {
-                return ObjdetectInvoke.cveFaceRecognizerSFMatch(
+                result = ObjdetectInvoke.cveFaceRecognizerSFMatch(
                     _ptr,
                     iaFaceFeature1,
                     iaFaceFeature2,
                     disType
                 );
             }
+            CvInvoke.CheckError();
+            return result;
         }
 
 

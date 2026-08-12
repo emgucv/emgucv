@@ -52,6 +52,7 @@ namespace Emgu.CV.Stitching
         public HomographyBasedEstimator(bool isFocalsEstimated)
         {
             _ptr = StitchingInvoke.cveHomographyBasedEstimatorCreate(isFocalsEstimated, ref _estimatorPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -78,6 +79,7 @@ namespace Emgu.CV.Stitching
         public AffineBasedEstimator()
         {
             _ptr = StitchingInvoke.cveAffineBasedEstimatorCreate(ref _estimatorPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

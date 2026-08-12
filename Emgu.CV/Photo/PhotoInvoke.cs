@@ -24,6 +24,7 @@ namespace Emgu.CV
          using (InputArray iaMask = mask.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
             cveInpaint(iaSrc, iaMask, oaDst, inpaintRadius, flags);
+         CvInvoke.CheckError();
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveInpaint(IntPtr src, IntPtr mask, IntPtr dst, double inpaintRadius, CvEnum.InpaintType flags);
@@ -43,6 +44,7 @@ namespace Emgu.CV
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
             cveFastNlMeansDenoising(iaSrc, oaDst, h, templateWindowSize, searchWindowSize);
+         CvInvoke.CheckError();
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFastNlMeansDenoising(IntPtr src, IntPtr dst, float h, int templateWindowSize, int searchWindowSize);
@@ -64,6 +66,7 @@ namespace Emgu.CV
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
             cveFastNlMeansDenoisingColored(iaSrc, oaDst, h, hColor, templateWindowSize, searchWindowSize);
+         CvInvoke.CheckError();
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveFastNlMeansDenoisingColored(IntPtr src, IntPtr dst, float h, float hColor, int templateWindowSize, int searchWindowSize);
@@ -85,6 +88,7 @@ namespace Emgu.CV
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
             cveEdgePreservingFilter(iaSrc, oaDst, flags, sigmaS, sigmaR);
+         CvInvoke.CheckError();
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveEdgePreservingFilter(IntPtr src, IntPtr dst, CvEnum.EdgePreservingFilterFlag flags, float sigmaS, float sigmaR);
@@ -101,6 +105,7 @@ namespace Emgu.CV
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
             cveDetailEnhance(iaSrc, oaDst, sigmaS, sigmaR);
+         CvInvoke.CheckError();
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDetailEnhance(IntPtr src, IntPtr dst, float sigmaS, float sigmaR);
@@ -120,6 +125,7 @@ namespace Emgu.CV
          using (OutputArray oaDst1 = dst1.GetOutputArray())
          using (OutputArray oaDst2 = dst2.GetOutputArray())
             cvePencilSketch(iaSrc, oaDst1, oaDst2, sigmaS, sigmaR, shadeFactor);
+         CvInvoke.CheckError();
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cvePencilSketch(IntPtr src, IntPtr dst1, IntPtr dst2, float sigmaS, float sigmaR, float shadeFactor);
@@ -136,6 +142,7 @@ namespace Emgu.CV
          using (InputArray iaSrc = src.GetInputArray())
          using (OutputArray oaDst = dst.GetOutputArray())
             cveStylization(iaSrc, oaDst, sigmaS, sigmaR);
+         CvInvoke.CheckError();
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveStylization(IntPtr src, IntPtr dst, float sigmaS, float sigmaR);
@@ -155,6 +162,7 @@ namespace Emgu.CV
          using (OutputArray oaDst = dst.GetOutputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             cveColorChange(iaSrc, iaMask, oaDst, redMul, greenMul, blueMul);
+         CvInvoke.CheckError();
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveColorChange(IntPtr src, IntPtr mask, IntPtr dst, float redMul, float greenMul, float blueMul);
@@ -173,6 +181,7 @@ namespace Emgu.CV
          using (OutputArray oaDst = dst.GetOutputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             cveIlluminationChange(iaSrc, iaMask, oaDst, alpha, beta);
+         CvInvoke.CheckError();
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveIlluminationChange(IntPtr src, IntPtr mask, IntPtr dst, float alpha, float beta);
@@ -192,6 +201,7 @@ namespace Emgu.CV
          using (OutputArray oaDst = dst.GetOutputArray())
          using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             cveTextureFlattening(iaSrc, iaMask, oaDst, lowThreshold, highThreshold, kernelSize);
+         CvInvoke.CheckError();
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveTextureFlattening(IntPtr src, IntPtr mask, IntPtr dst, float lowThreshold, float highThreshold, int kernelSize);
@@ -210,6 +220,7 @@ namespace Emgu.CV
          {
             cveDecolor(iaSrc, oaGrayscale, oaColorBoost);
          }
+         CvInvoke.CheckError();
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDecolor(IntPtr src, IntPtr grayscale, IntPtr colorBoost);
@@ -233,6 +244,7 @@ namespace Emgu.CV
          {
             cveSeamlessClone(iaSrc, iaDst, iaMask, ref p, oaBlend, flags);
          }
+         CvInvoke.CheckError();
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveSeamlessClone(IntPtr src, IntPtr dst, IntPtr mask, ref Point p, IntPtr blend, CvEnum.CloningMethod flags);
@@ -252,6 +264,7 @@ namespace Emgu.CV
           {
               cveDenoiseTVL1(vm, result, lambda, niters);
           }
+          CvInvoke.CheckError();
       }
       [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       private static extern void cveDenoiseTVL1(IntPtr observations, IntPtr result, double lambda, int niters);

@@ -32,7 +32,10 @@ namespace Emgu.CV.Cuda
       public CudaMorphologyFilter(CvEnum.MorphOp op, DepthType srcDepth, int srcChannels, IInputArray kernel, Point anchor, int iterations)
       {
          using (InputArray iaKernel = kernel.GetInputArray())
+         {
             _ptr = CudaInvoke.cudaCreateMorphologyFilter(op, CvInvoke.MakeType(srcDepth, srcChannels), iaKernel, ref anchor, iterations, ref _sharedPtr);
+            CvInvoke.CheckError();
+         }
       }
    }
 

@@ -164,31 +164,28 @@ namespace Emgu.CV.Test
             level = CvInvoke.LogLevel;
         }
 
-        /*
         [Test]
         public void TestException()
         {
-            //Test seems to crash on Linux system. Skipping test on Linux for now.
-            if (!System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            for (int i = 0; i < 10; i++)
             {
-                for (int i = 0; i < 10; i++)
+                bool exceptionCaught = false;
+                using (Mat mat = new Mat(20, 30, DepthType.Cv8U, 1))
                 {
-                    bool exceptionCaught = false;
-                    Matrix<Byte> mat = new Matrix<byte>(20, 30);
                     try
                     {
-                        double det = mat.Det;
+                        double det = CvInvoke.Determinant(mat);
                     }
                     catch (CvException excpt)
                     {
                         EmguAssert.AreEqual(-215, excpt.Status);
                         exceptionCaught = true;
                     }
-
-                    EmguAssert.IsTrue(exceptionCaught);
                 }
+
+                EmguAssert.IsTrue(exceptionCaught);
             }
-        }*/
+        }
 
         [Test]
         public void TestShapeDistanceExtractor()
@@ -1012,23 +1009,6 @@ namespace Emgu.CV.Test
            MemStorage storage = new MemStorage();
            IntPtr comp;
            CvInvoke.cvPyrSegmentation(image, segImage, storage, out comp, 4, 255, 30);
-        }*/
-
-        /*
-        [Test]
-        public void TestSoftcascade()
-        {
-           using (SoftCascadeDetector detector = new SoftCascadeDetector(EmguAssert.GetFile("inria_caltech-17.01.2013.xml"), 0.4, 5.0, 55, SoftCascadeDetector.RejectionCriteria.Default))
-           using (Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png"))
-           {
-              Stopwatch watch = Stopwatch.StartNew();
-              SoftCascadeDetector.Detection[] detections = detector.Detect(image, null);
-              watch.Stop();
-              foreach (SoftCascadeDetector.Detection detection in detections)
-                 image.Draw(detection.BoundingBox, new Bgr(Color.Red), 1);
-
-              //Emgu.CV.WinForms.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
-           }
         }*/
 
         /*

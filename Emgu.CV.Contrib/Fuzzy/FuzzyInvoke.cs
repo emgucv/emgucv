@@ -73,6 +73,7 @@ namespace Emgu.CV.Fuzzy
          {
             cveFtCreateKernel(iaA, iaB, oaKernel, chn);
          }
+         CvInvoke.CheckError();
       }
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveFtCreateKernel(IntPtr A, IntPtr B, IntPtr kernel, int chn);
@@ -88,6 +89,7 @@ namespace Emgu.CV.Fuzzy
       {
          using (OutputArray oaKernel = kernel.GetOutputArray())
             cveFtcreateKernelFromFunction(function, radius, oaKernel, chn);
+         CvInvoke.CheckError();
       }
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveFtcreateKernelFromFunction(Function function, int radius, IntPtr kernel, int chn);
@@ -104,6 +106,7 @@ namespace Emgu.CV.Fuzzy
       public static void Inpaint(Mat image, Mat mask, Mat output, int radius = 2, Function function = Function.Linear, InpaintAlgorithm algorithm = InpaintAlgorithm.OneStep)
       {
          cveFtInpaint(image, mask, output, radius, function, algorithm);
+         CvInvoke.CheckError();
       }
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveFtInpaint(IntPtr image, IntPtr mask, IntPtr output, int radius, Function function, InpaintAlgorithm algorithm);
@@ -117,6 +120,7 @@ namespace Emgu.CV.Fuzzy
       public static void Filter(Mat image, Mat kernel, Mat output)
       {
          cveFtFilter(image, kernel, output);
+         CvInvoke.CheckError();
       }
       [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
       internal static extern void cveFtFilter(IntPtr image, IntPtr kernel, IntPtr output);

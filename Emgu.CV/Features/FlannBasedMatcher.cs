@@ -24,6 +24,7 @@ namespace Emgu.CV.Features
         public FlannBasedMatcher(IIndexParams indexParams, SearchParams search)
         {
             _ptr = FeaturesInvoke.cveFlannBasedMatcherCreate(indexParams.IndexParamPtr, search.Ptr, ref _descriptorMatcherPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

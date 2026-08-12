@@ -1055,39 +1055,6 @@ namespace Emgu.CV.Test
         }
 #endif
 
-        /*
-        [Test]
-        public void TestSoftcascadeCuda()
-        {
-           if (CudaInvoke.HasCuda)
-           {
-              using (CudaDeviceInfo cdi = new CudaDeviceInfo())
-              {
-
-                 using (CudaSoftCascadeDetector detector = new CudaSoftCascadeDetector(EmguAssert.GetFile("inria_caltech-17.01.2013.xml"), 0.4, 5.0, 55, SoftCascadeDetector.RejectionCriteria.Default))
-                 using (Image<Bgr, Byte> image = EmguAssert.LoadImage<Bgr, Byte>("pedestrian.png"))
-                 using (Cuda.CudaImage<Bgr, Byte> gImage = new CudaImage<Bgr, byte>(image))
-                 using (Matrix<int> rois = new Matrix<int>(1, 4))
-                 {
-                    Stopwatch watch = Stopwatch.StartNew();
-
-                    Size s = gImage.Size;
-                    rois.Data[0, 2] = s.Width;
-                    rois.Data[0, 3] = s.Height;
-                    using (GpuMat<int> gRois = new GpuMat<int>(rois))
-                    {
-                       Emgu.CV.Cuda.GpuMat result = detector.Detect(gImage, gRois, null);
-                    }
-                    watch.Stop();
-                    //foreach (SoftCascadeDetector.Detection detection in detections)
-                    //   image.Draw(detection.BoundingBox, new Bgr(Color.Red), 1);
-
-                    //Emgu.CV.WinForms.ImageViewer.Show(image, String.Format("Detection Time: {0}ms", watch.ElapsedMilliseconds));
-                 }
-              }
-           }
-        }*/
-
         [Test]
         public void TestGEMM()
         {

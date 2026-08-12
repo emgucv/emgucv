@@ -52,6 +52,7 @@ namespace Emgu.CV.Stitching
         public PlaneWarper()
         {
             _ptr = StitchingInvoke.cvePlaneWarperCreate(ref _warperCreator);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -79,6 +80,7 @@ namespace Emgu.CV.Stitching
         public CylindricalWarper()
         {
             _ptr = StitchingInvoke.cveCylindricalWarperCreate(ref _warperCreator);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -105,6 +107,7 @@ namespace Emgu.CV.Stitching
         public SphericalWarper()
         {
             _ptr = StitchingInvoke.cveSphericalWarperCreate(ref _warperCreator);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -131,6 +134,7 @@ namespace Emgu.CV.Stitching
         public FisheyeWarper()
         {
             _ptr = StitchingInvoke.cveFisheyeWarperCreate(ref _warperCreator);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -157,6 +161,7 @@ namespace Emgu.CV.Stitching
         public StereographicWarper()
         {
             _ptr = StitchingInvoke.cveStereographicWarperCreate(ref _warperCreator);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -183,6 +188,7 @@ namespace Emgu.CV.Stitching
         public CompressedRectilinearWarper()
         {
             _ptr = StitchingInvoke.cveCompressedRectilinearWarperCreate(ref _warperCreator);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -209,6 +215,7 @@ namespace Emgu.CV.Stitching
         public PaniniWarper()
         {
             _ptr = StitchingInvoke.cvePaniniWarperCreate(ref _warperCreator);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -235,6 +242,7 @@ namespace Emgu.CV.Stitching
         public PaniniPortraitWarper()
         {
             _ptr = StitchingInvoke.cvePaniniPortraitWarperCreate(ref _warperCreator);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -261,6 +269,7 @@ namespace Emgu.CV.Stitching
         public MercatorWarper()
         {
             _ptr = StitchingInvoke.cveMercatorWarperCreate(ref _warperCreator);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -287,6 +296,7 @@ namespace Emgu.CV.Stitching
         public TransverseMercatorWarper()
         {
             _ptr = StitchingInvoke.cveTransverseMercatorWarperCreate(ref _warperCreator);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -313,6 +323,7 @@ namespace Emgu.CV.Stitching
         public PlaneWarperGpu()
         {
             _ptr = StitchingInvoke.cvePlaneWarperGpuCreate(ref _warperCreator);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -340,6 +351,7 @@ namespace Emgu.CV.Stitching
         public CylindricalWarperGpu()
         {
             _ptr = StitchingInvoke.cveCylindricalWarperGpuCreate(ref _warperCreator);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -366,6 +378,7 @@ namespace Emgu.CV.Stitching
         public SphericalWarperGpu()
         {
             _ptr = StitchingInvoke.cveSphericalWarperGpuCreate(ref _warperCreator);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

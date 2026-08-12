@@ -65,9 +65,12 @@ namespace Emgu.CV
         /// <returns>True if a graphical code is found.</returns>
         public static bool Detect(this IGraphicalCodeDetector detector, IInputArray img, IOutputArray points)
         {
+            bool result;
             using (InputArray iaInput = img.GetInputArray())
             using (OutputArray oaPoints = points.GetOutputArray())
-                return cveGraphicalCodeDetectorDetect(detector.GraphicalCodeDetectorPtr, iaInput, oaPoints);
+                result = cveGraphicalCodeDetectorDetect(detector.GraphicalCodeDetectorPtr, iaInput, oaPoints);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -79,9 +82,12 @@ namespace Emgu.CV
         /// <returns>True if a QRCode is found.</returns>
         public static bool DetectMulti(this IGraphicalCodeDetector detector, IInputArray img, IOutputArray points)
         {
+            bool result;
             using (InputArray iaInput = img.GetInputArray())
             using (OutputArray oaPoints = points.GetOutputArray())
-                return cveGraphicalCodeDetectorDetectMulti(detector.GraphicalCodeDetectorPtr, iaInput, oaPoints);
+                result = cveGraphicalCodeDetectorDetectMulti(detector.GraphicalCodeDetectorPtr, iaInput, oaPoints);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -100,6 +106,7 @@ namespace Emgu.CV
             using (CvString decodedInfo = new CvString())
             {
                 cveGraphicalCodeDetectorDecode(detector.GraphicalCodeDetectorPtr, iaImage, iaPoints, oaStraightCode, decodedInfo);
+                CvInvoke.CheckError();
                 return decodedInfo.ToString();
             }
         }
@@ -130,6 +137,7 @@ namespace Emgu.CV
                     iaPoints,
                     decodedInfo,
                     oaStraightCode);
+                CvInvoke.CheckError();
                 if (!success)
                     return Array.Empty<string>();
                 return decodedInfo.ToArray();
@@ -162,6 +170,7 @@ namespace Emgu.CV
                     decodedInfo,
                     oaPoints,
                     oaStraightCode);
+                CvInvoke.CheckError();
                 if (!success)
                     return Array.Empty<GraphicalCode>();
 

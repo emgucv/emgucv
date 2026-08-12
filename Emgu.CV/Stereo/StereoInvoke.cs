@@ -27,6 +27,7 @@ namespace Emgu.CV
             using (InputArray iaRight = right.GetInputArray())
             using (OutputArray oaDisparity = disparity.GetOutputArray())
                 cveStereoMatcherCompute(matcher.StereoMatcherPtr, iaLeft, iaRight, oaDisparity);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -79,7 +80,11 @@ namespace Emgu.CV
             using (InputArray iaF = f.GetInputArray())
             using (OutputArray oaH1 = h1.GetOutputArray())
             using (OutputArray oaH2 = h2.GetOutputArray())
-                return cveStereoRectifyUncalibrated(iaPoints1, iaPoints2, iaF, ref imgSize, oaH1, oaH2, threshold);
+            {
+                bool result = cveStereoRectifyUncalibrated(iaPoints1, iaPoints2, iaF, ref imgSize, oaH1, oaH2, threshold);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -137,6 +142,7 @@ namespace Emgu.CV
                    oaP1, oaP2,
                    oaQ, flags,
                    alpha, ref newImageSize, ref validPixRoi1, ref validPixRoi2);
+            CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

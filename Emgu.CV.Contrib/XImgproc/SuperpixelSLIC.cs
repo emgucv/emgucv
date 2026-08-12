@@ -51,6 +51,7 @@ namespace Emgu.CV.XImgproc
         {
             using (InputArray iaImage = image.GetInputArray())
                 _ptr = XImgprocInvoke.cveSuperpixelSLICCreate(iaImage, algorithm, regionSize, ruler, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -58,7 +59,12 @@ namespace Emgu.CV.XImgproc
         /// </summary>
         public int NumberOfSuperpixels
         {
-            get { return XImgprocInvoke.cveSuperpixelSLICGetNumberOfSuperpixels(_ptr); }
+            get
+            {
+                int result = XImgprocInvoke.cveSuperpixelSLICGetNumberOfSuperpixels(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -69,6 +75,7 @@ namespace Emgu.CV.XImgproc
         {
             using (OutputArray oaLabels = labels.GetOutputArray())
                 XImgprocInvoke.cveSuperpixelSLICGetLabels(_ptr, oaLabels);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -80,6 +87,7 @@ namespace Emgu.CV.XImgproc
         {
             using (OutputArray oaImage = image.GetOutputArray())
                 XImgprocInvoke.cveSuperpixelSLICGetLabelContourMask(_ptr, oaImage, thickLine);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -90,6 +98,7 @@ namespace Emgu.CV.XImgproc
         public void Iterate(int numIterations = 10)
         {
             XImgprocInvoke.cveSuperpixelSLICIterate(_ptr, numIterations);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -104,6 +113,7 @@ namespace Emgu.CV.XImgproc
         public void EnforceLabelConnectivity(int minElementSize = 25)
         {
             XImgprocInvoke.cveSuperpixelSLICEnforceLabelConnectivity(_ptr, minElementSize);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

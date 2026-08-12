@@ -23,30 +23,50 @@ CV_Error(CV_GpuNotSupported, "The library is compiled without GPU support");
 
 int cudaGetCudaEnabledDeviceCount()
 {
-	return cv::cuda::getCudaEnabledDeviceCount();
+	try
+	{
+		return cv::cuda::getCudaEnabledDeviceCount();
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cudaSetDevice(int deviceId)
 {
-	cv::cuda::setDevice(deviceId);
+	try
+	{
+		cv::cuda::setDevice(deviceId);
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 int cudaGetDevice()
 {
-	return cv::cuda::getDevice();
+	try
+	{
+		return cv::cuda::getDevice();
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cudaResetDevice()
 {
-	cv::cuda::resetDevice();
+	try
+	{
+		cv::cuda::resetDevice();
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::cuda::DeviceInfo* cudaDeviceInfoCreate(int* deviceId)
 {
-	if (*deviceId < 0)
-		*deviceId = cv::cuda::getDevice();
+	try
+	{
+		if (*deviceId < 0)
+			*deviceId = cv::cuda::getDevice();
 
-	return new cv::cuda::DeviceInfo(*deviceId);
+		return new cv::cuda::DeviceInfo(*deviceId);
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cudaDeviceInfoRelease(cv::cuda::DeviceInfo** di)
@@ -57,49 +77,85 @@ void cudaDeviceInfoRelease(cv::cuda::DeviceInfo** di)
 
 void cudaDeviceInfoDeviceName(cv::cuda::DeviceInfo* device, char* name, int maxSizeInBytes)
 {
-	std::string dName = device->name();
-	strncpy(name, dName.c_str(), maxSizeInBytes);
+	try
+	{
+		std::string dName = device->name();
+		strncpy(name, dName.c_str(), maxSizeInBytes);
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaDeviceInfoComputeCapability(cv::cuda::DeviceInfo* device, int* major, int* minor)
 {
-	*major = device->majorVersion();
-	*minor = device->minorVersion();
+	try
+	{
+		*major = device->majorVersion();
+		*minor = device->minorVersion();
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 int cudaDeviceInfoMultiProcessorCount(cv::cuda::DeviceInfo* device)
 {
-	return device->multiProcessorCount();
+	try
+	{
+		return device->multiProcessorCount();
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cudaDeviceInfoFreeMemInfo(cv::cuda::DeviceInfo* info, size_t* free)
 {
-	*free = info->freeMemory();
+	try
+	{
+		*free = info->freeMemory();
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaDeviceInfoTotalMemInfo(cv::cuda::DeviceInfo* info, size_t* total)
 {
-	*total = info->totalMemory();
+	try
+	{
+		*total = info->totalMemory();
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 bool cudaDeviceInfoSupports(cv::cuda::DeviceInfo* device, cv::cuda::FeatureSet feature)
 {
-	return device->supports(feature);
+	try
+	{
+		return device->supports(feature);
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 bool cudaDeviceInfoIsCompatible(cv::cuda::DeviceInfo* device)
 {
-	return device->isCompatible();
+	try
+	{
+		return device->isCompatible();
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 void cudaPrintCudaDeviceInfo(int device)
 {
-	cv::cuda::printCudaDeviceInfo(device);
+	try
+	{
+		cv::cuda::printCudaDeviceInfo(device);
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaPrintShortCudaDeviceInfo(int device)
 {
-	cv::cuda::printShortCudaDeviceInfo(device);
+	try
+	{
+		cv::cuda::printShortCudaDeviceInfo(device);
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -110,42 +166,74 @@ void cudaPrintShortCudaDeviceInfo(int device)
 
 bool targetArchsBuildWith(cv::cuda::FeatureSet featureSet)
 {
-	return cv::cuda::TargetArchs::builtWith(featureSet);
+	try
+	{
+		return cv::cuda::TargetArchs::builtWith(featureSet);
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 bool targetArchsHas(int major, int minor)
 {
-	return cv::cuda::TargetArchs::has(major, minor);
+	try
+	{
+		return cv::cuda::TargetArchs::has(major, minor);
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 bool targetArchsHasPtx(int major, int minor)
 {
-	return cv::cuda::TargetArchs::hasPtx(major, minor);
+	try
+	{
+		return cv::cuda::TargetArchs::hasPtx(major, minor);
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 bool targetArchsHasBin(int major, int minor)
 {
-	return cv::cuda::TargetArchs::hasBin(major, minor);
+	try
+	{
+		return cv::cuda::TargetArchs::hasBin(major, minor);
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 bool targetArchsHasEqualOrLessPtx(int major, int minor)
 {
-	return cv::cuda::TargetArchs::hasBin(major, minor);
+	try
+	{
+		return cv::cuda::TargetArchs::hasBin(major, minor);
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 bool targetArchsHasEqualOrGreater(int major, int minor)
 {
-	return cv::cuda::TargetArchs::hasEqualOrGreater(major, minor);
+	try
+	{
+		return cv::cuda::TargetArchs::hasEqualOrGreater(major, minor);
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 bool targetArchsHasEqualOrGreaterPtx(int major, int minor)
 {
-	return cv::cuda::TargetArchs::hasEqualOrGreaterPtx(major, minor);
+	try
+	{
+		return cv::cuda::TargetArchs::hasEqualOrGreaterPtx(major, minor);
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 bool targetArchsHasEqualOrGreaterBin(int major, int minor)
 {
-	return cv::cuda::TargetArchs::hasEqualOrGreaterBin(major, minor);
+	try
+	{
+		return cv::cuda::TargetArchs::hasEqualOrGreaterBin(major, minor);
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 //----------------------------------------------------------------------------
@@ -156,36 +244,60 @@ bool targetArchsHasEqualOrGreaterBin(int major, int minor)
 
 cv::cuda::GpuMat* gpuMatCreateDefault()
 {
-	return new cv::cuda::GpuMat();
+	try
+	{
+		return new cv::cuda::GpuMat();
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 cv::cuda::GpuMat* gpuMatCreateFromData(int rows, int cols, int type, void* data, int step)
 {
-	return new cv::cuda::GpuMat(rows, cols, type, data, step);
+	try
+	{
+		return new cv::cuda::GpuMat(rows, cols, type, data, step);
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void gpuMatCreate(cv::cuda::GpuMat* m, int rows, int cols, int type)
 {
-	m->create(rows, cols, type);
+	try
+	{
+		m->create(rows, cols, type);
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 
 
 cv::cuda::GpuMat* gpuMatCreateContinuous(int rows, int cols, int type)
 {
-	cv::cuda::GpuMat* result = new cv::cuda::GpuMat();
-	cv::cuda::createContinuous(rows, cols, type, *result);
-	return result;
+	try
+	{
+		cv::cuda::GpuMat* result = new cv::cuda::GpuMat();
+		cv::cuda::createContinuous(rows, cols, type, *result);
+		return result;
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 bool gpuMatIsContinuous(cv::cuda::GpuMat* gpuMat)
 {
-	return gpuMat->isContinuous();
+	try
+	{
+		return gpuMat->isContinuous();
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 cv::cuda::GpuMat* gpuMatGetRegion(cv::cuda::GpuMat* other, cv::Range* rowRange, cv::Range* colRange)
 {
-	return new cv::cuda::GpuMat(*other, *rowRange, *colRange);
+	try
+	{
+		return new cv::cuda::GpuMat(*other, *rowRange, *colRange);
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void gpuMatRelease(cv::cuda::GpuMat** mat)
@@ -196,81 +308,133 @@ void gpuMatRelease(cv::cuda::GpuMat** mat)
 
 cv::cuda::GpuMat* gpuMatCreateFromInputArray(cv::_InputArray* arr)
 {
-	return new cv::cuda::GpuMat(*arr);
+	try
+	{
+		return new cv::cuda::GpuMat(*arr);
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void gpuMatGetSize(cv::cuda::GpuMat* gpuMat, cv::Size* size)
 {
-	cv::Size s = gpuMat->size();
-	size->width = s.width;
-	size->height = s.height;
+	try
+	{
+		cv::Size s = gpuMat->size();
+		size->width = s.width;
+		size->height = s.height;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 bool gpuMatIsEmpty(cv::cuda::GpuMat* gpuMat)
 {
-	return gpuMat->empty();
+	try
+	{
+		return gpuMat->empty();
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 int gpuMatGetChannels(cv::cuda::GpuMat* gpuMat)
 {
-	return gpuMat->channels();
+	try
+	{
+		return gpuMat->channels();
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 int gpuMatGetType(cv::cuda::GpuMat* gpuMat)
 {
-	return gpuMat->type();
+	try
+	{
+		return gpuMat->type();
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 int gpuMatGetDepth(cv::cuda::GpuMat* gpuMat)
 {
-	return gpuMat->depth();
+	try
+	{
+		return gpuMat->depth();
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void gpuMatUpload(cv::cuda::GpuMat* gpuMat, cv::_InputArray* arr, cv::cuda::Stream* stream)
 {
-	if (stream)
-		gpuMat->upload(*arr, *stream);
-	else
-		gpuMat->upload(*arr);
+	try
+	{
+		if (stream)
+			gpuMat->upload(*arr, *stream);
+		else
+			gpuMat->upload(*arr);
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void gpuMatDownload(cv::cuda::GpuMat* gpuMat, cv::_OutputArray* arr, cv::cuda::Stream* stream)
 {
-	if (stream)
-		gpuMat->download(*arr, *stream);
-	else
-		gpuMat->download(*arr);
+	try
+	{
+		if (stream)
+			gpuMat->download(*arr, *stream);
+		else
+			gpuMat->download(*arr);
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 
 void gpuMatConvertTo(const cv::cuda::GpuMat* src, cv::_OutputArray* dst, int rtype, double alpha, double beta, cv::cuda::Stream* stream)
 {
-	src->convertTo(*dst, rtype, alpha, beta, stream ? *stream : cv::cuda::Stream::Null());
+	try
+	{
+		src->convertTo(*dst, rtype, alpha, beta, stream ? *stream : cv::cuda::Stream::Null());
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void gpuMatCopyTo(const cv::cuda::GpuMat* src, cv::_OutputArray* dst, const cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
-	if (mask)
-		src->copyTo(*dst, *mask, stream ? *stream : cv::cuda::Stream::Null());
-	else
-		src->copyTo(*dst, stream ? *stream : cv::cuda::Stream::Null());
+	try
+	{
+		if (mask)
+			src->copyTo(*dst, *mask, stream ? *stream : cv::cuda::Stream::Null());
+		else
+			src->copyTo(*dst, stream ? *stream : cv::cuda::Stream::Null());
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void gpuMatSetTo(cv::cuda::GpuMat* mat, const cv::Scalar* s, cv::_InputArray* mask, cv::cuda::Stream* stream)
 {
-	if (mask)
-		mat->setTo(*s, *mask, stream ? *stream : cv::cuda::Stream::Null());
-	else
-		mat->setTo(*s, stream ? *stream : cv::cuda::Stream::Null());
+	try
+	{
+		if (mask)
+			mat->setTo(*s, *mask, stream ? *stream : cv::cuda::Stream::Null());
+		else
+			mat->setTo(*s, stream ? *stream : cv::cuda::Stream::Null());
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void gpuMatReshape(const cv::cuda::GpuMat* src, cv::cuda::GpuMat* dst, int cn, int rows)
 {
-	cv::cuda::GpuMat tmp = src->reshape(cn, rows);
-	dst->swap(tmp);
+	try
+	{
+		cv::cuda::GpuMat tmp = src->reshape(cn, rows);
+		dst->swap(tmp);
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::cuda::GpuMat* gpuMatGetSubRect(const cv::cuda::GpuMat* arr, cv::Rect* rect)
 {
-	return new cv::cuda::GpuMat(*arr, *rect);
+	try
+	{
+		return new cv::cuda::GpuMat(*arr, *rect);
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }

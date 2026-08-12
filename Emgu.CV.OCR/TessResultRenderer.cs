@@ -37,6 +37,7 @@ namespace Emgu.CV.OCR
             using (CvString csDataDir = new CvString(dataDir))
             {
                 _ptr = OcrInvoke.cveTessPDFRendererCreate(csOutputBase, csDataDir, textOnly, ref _tessResultRendererPtr);
+                CvInvoke.CheckError();
             }
         }
 
@@ -106,7 +107,9 @@ namespace Emgu.CV.OCR
         {
             using (CvString csTitle = new CvString(title))
             {
-                return cveTessResultRendererBeginDocument(renderer.TessResultRendererPtr, csTitle);
+                bool result = cveTessResultRendererBeginDocument(renderer.TessResultRendererPtr, csTitle);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -118,7 +121,9 @@ namespace Emgu.CV.OCR
         /// <returns>True if successful</returns>
         public static bool AddImage(this ITessResultRenderer renderer, Tesseract api)
         {
-            return cveTessResultRendererAddImage(renderer.TessResultRendererPtr, api.Ptr);
+            bool result = cveTessResultRendererAddImage(renderer.TessResultRendererPtr, api.Ptr);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -128,7 +133,9 @@ namespace Emgu.CV.OCR
         /// <returns>True if successful</returns>
         public static bool EndDocument(this ITessResultRenderer renderer)
         {
-            return cveTessResultRendererEndDocument(renderer.TessResultRendererPtr);
+            bool result = cveTessResultRendererEndDocument(renderer.TessResultRendererPtr);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -140,7 +147,9 @@ namespace Emgu.CV.OCR
         /// </returns>
         public static bool Happy(this ITessResultRenderer renderer)
         {
-            return cveTessResultRendererHappy(renderer.TessResultRendererPtr);
+            bool result = cveTessResultRendererHappy(renderer.TessResultRendererPtr);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -156,7 +165,9 @@ namespace Emgu.CV.OCR
         /// <returns>The index of the last image given to AddImage</returns>
         public static int ImageNum(this ITessResultRenderer rendered)
         {
-            return cveTessResultRendererImageNum(rendered.TessResultRendererPtr);
+            int result = cveTessResultRendererImageNum(rendered.TessResultRendererPtr);
+            CvInvoke.CheckError();
+            return result;
         }
     }
 }

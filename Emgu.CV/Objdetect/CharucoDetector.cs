@@ -55,6 +55,7 @@ namespace Emgu.CV.Aruco
                 ref detectorParams,
                 ref refineParams,
                 ref _algorithmPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -80,12 +81,13 @@ namespace Emgu.CV.Aruco
             {
                 ObjdetectInvoke.cveCharucoDetectorDetectDiamonds(
                     _ptr,
-                    iaImage,   
-                    oaDiamondCorners, 
+                    iaImage,
+                    oaDiamondCorners,
                     oaDiamondIds,
-                    ioaMarkerCorners, 
+                    ioaMarkerCorners,
                     ioaMarkerIds);
             }
+            CvInvoke.CheckError();
         }
         
 

@@ -32,15 +32,18 @@ namespace Emgu.CV.Superres
                     try
                     {
                         _ptr = SuperresInvoke.cveSuperresCreateFrameSourceVideo(s, true, ref _sharedPtr);
+                        CvInvoke.CheckError();
                     }
                     catch
                     {
                         _ptr = SuperresInvoke.cveSuperresCreateFrameSourceVideo(s, false, ref _sharedPtr);
+                        CvInvoke.CheckError();
                     }
                 }
                 else
                 {
                     _ptr = SuperresInvoke.cveSuperresCreateFrameSourceVideo(s, false, ref _sharedPtr);
+                    CvInvoke.CheckError();
                 }
 
             //_frameSourcePtr = _ptr;
@@ -51,6 +54,7 @@ namespace Emgu.CV.Superres
         public FrameSource(int camIndex)
         {
             _ptr = SuperresInvoke.cveSuperresCreateFrameSourceCamera(camIndex, ref _sharedPtr);
+            CvInvoke.CheckError();
             //_frameSourcePtr = _ptr;
         }
 
@@ -67,7 +71,7 @@ namespace Emgu.CV.Superres
         {
             using (OutputArray oaFrame = frame.GetOutputArray())
                 SuperresInvoke.cveSuperresFrameSourceNextFrame(FrameSourcePtr, oaFrame);
-
+            CvInvoke.CheckError();
         }
 
         /// <summary>

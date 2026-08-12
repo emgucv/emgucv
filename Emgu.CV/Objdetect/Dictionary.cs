@@ -31,6 +31,7 @@ namespace Emgu.CV.Aruco
         {
             //_predefined = true;
             _ptr = ArucoInvoke.cveArucoGetPredefinedDictionary(name, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -40,6 +41,7 @@ namespace Emgu.CV.Aruco
         {
             //_predefined = false;
             _ptr = ArucoInvoke.cveArucoDictionaryCreate(ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -169,6 +171,7 @@ namespace Emgu.CV.Aruco
         {
             using (OutputArray oaImg = img.GetOutputArray())
                 ArucoInvoke.cveArucoDictionaryGenerateImageMarker(_ptr, id, sizePixels, oaImg, borderBits);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

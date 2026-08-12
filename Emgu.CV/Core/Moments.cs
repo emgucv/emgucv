@@ -26,6 +26,7 @@ namespace Emgu.CV
         public Moments()
         {
             _ptr = CvInvoke.cveMomentsCreate();
+            CvInvoke.CheckError();
         }
 
         /// <summary>

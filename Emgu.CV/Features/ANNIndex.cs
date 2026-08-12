@@ -51,6 +51,7 @@ namespace Emgu.CV.Features
         public ANNIndex(int dim, Distance distType = Distance.Euclidean)
         {
             _ptr = FeaturesInvoke.cveANNIndexCreate(dim, distType, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -61,6 +62,7 @@ namespace Emgu.CV.Features
         {
             using (InputArray iaFeatures = features.GetInputArray())
                 FeaturesInvoke.cveANNIndexAddItems(_ptr, iaFeatures);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -70,6 +72,7 @@ namespace Emgu.CV.Features
         public void Build(int trees = -1)
         {
             FeaturesInvoke.cveANNIndexBuild(_ptr, trees);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -86,6 +89,7 @@ namespace Emgu.CV.Features
             using (OutputArray oaIndices = indices.GetOutputArray())
             using (OutputArray oaDists = dists.GetOutputArray())
                 FeaturesInvoke.cveANNIndexKnnSearch(_ptr, iaQuery, oaIndices, oaDists, knn, searchK);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -97,6 +101,7 @@ namespace Emgu.CV.Features
         {
             using (CvString csFileName = new CvString(fileName))
                 FeaturesInvoke.cveANNIndexSave(_ptr, csFileName, prefault);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -108,6 +113,7 @@ namespace Emgu.CV.Features
         {
             using (CvString csFileName = new CvString(fileName))
                 FeaturesInvoke.cveANNIndexLoad(_ptr, csFileName, prefault);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -115,7 +121,12 @@ namespace Emgu.CV.Features
         /// </summary>
         public int TreeNumber
         {
-            get { return FeaturesInvoke.cveANNIndexGetTreeNumber(_ptr); }
+            get
+            {
+                int result = FeaturesInvoke.cveANNIndexGetTreeNumber(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -123,7 +134,12 @@ namespace Emgu.CV.Features
         /// </summary>
         public int ItemNumber
         {
-            get { return FeaturesInvoke.cveANNIndexGetItemNumber(_ptr); }
+            get
+            {
+                int result = FeaturesInvoke.cveANNIndexGetItemNumber(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -134,7 +150,11 @@ namespace Emgu.CV.Features
         public bool SetOnDiskBuild(String fileName)
         {
             using (CvString csFileName = new CvString(fileName))
-                return FeaturesInvoke.cveANNIndexSetOnDiskBuild(_ptr, csFileName);
+            {
+                bool result = FeaturesInvoke.cveANNIndexSetOnDiskBuild(_ptr, csFileName);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -144,6 +164,7 @@ namespace Emgu.CV.Features
         public void SetSeed(int seed)
         {
             FeaturesInvoke.cveANNIndexSetSeed(_ptr, seed);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

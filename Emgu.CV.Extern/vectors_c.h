@@ -111,31 +111,4 @@ CVAPI(void) VectorOfKeyPointFilterByKeypointSize( std::vector<cv::KeyPoint>* key
 
 CVAPI(void) VectorOfKeyPointFilterByPixelsMask( std::vector<cv::KeyPoint>* keypoints, cv::Mat* mask );
 
-/*
-//----------------------------------------------------------------------------
-//
-//  Vector of DataMatrixCode
-//
-//----------------------------------------------------------------------------
-CVAPI(std::vector<CvDataMatrixCode>*) VectorOfDataMatrixCodeCreate();
-
-CVAPI(std::vector<CvDataMatrixCode>*) VectorOfDataMatrixCodeCreateSize(int size);
-
-CVAPI(int) VectorOfDataMatrixCodeGetSize(std::vector<CvDataMatrixCode>* v);
-
-CVAPI(void) VectorOfDataMatrixCodePushMulti(std::vector<CvDataMatrixCode>* v, CvDataMatrixCode* values, int count);
-
-CVAPI(void) VectorOfDataMatrixCodeClear(std::vector<CvDataMatrixCode>* v);
-
-CVAPI(void) VectorOfDataMatrixCodeRelease(std::vector<CvDataMatrixCode>** v);
-
-CVAPI(CvDataMatrixCode*) VectorOfDataMatrixCodeGetStartAddress(std::vector<CvDataMatrixCode>* v);
-
-CVAPI(CvDataMatrixCode*) VectorOfDataMatrixCodeGetItem(std::vector<CvDataMatrixCode>* v, int index);
-
-CVAPI(void) VectorOfDataMatrixCodeFind(std::vector<CvDataMatrixCode>* v, IplImage* image);
-
-CVAPI(void) VectorOfDataMatrixCodeDraw(std::vector<CvDataMatrixCode>* v, IplImage* image);
-*/
-
 #endif

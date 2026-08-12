@@ -10,6 +10,7 @@
 
 #include "opencv2/core.hpp"
 #include "cvapi_compat.h"
+#include "emgu_error.h"
 
 #ifdef HAVE_OPENCV_XOBJDETECT
 #include "opencv2/xobjdetect.hpp"
@@ -69,23 +70,6 @@ CVAPI(void) cveHOGDescriptorCompute(
     cv::Size* winStride,
     cv::Size* padding,
     std::vector< cv::Point >* locations);
-
-/*
-CVAPI(void) cvHOGDescriptorDetect(
-   cv::HOGDescriptor* descriptor,
-   CvArr* img,
-   CvSeq* foundLocations,
-   double hitThreshold,
-   CvSize winStride,
-   CvSize padding)
-{
-   cvClearSeq(foundLocations);
-
-   std::vector<cv::Point> hits;
-   cv::Mat mat = cv::cvarrToMat(img);
-   descriptor->detect(mat, hits, hitThreshold, winStride, padding);
-   cvSeqPushMulti(foundLocations, &hits.front(), hits.size());
-}*/
 
 CVAPI(unsigned int) cveHOGDescriptorGetDescriptorSize(cv::HOGDescriptor* descriptor);
 

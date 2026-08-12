@@ -30,6 +30,7 @@ namespace Emgu.CV.Cuda
         public CudaTemplateMatching(DepthType depthType, int channels, CvEnum.TemplateMatchingType method, Size blockSize = new Size())
         {
             _ptr = CudaInvoke.cudaTemplateMatchingCreate(CvInvoke.MakeType(depthType, channels), method, ref blockSize, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -44,7 +45,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaImage = image.GetInputArray())
             using (InputArray iaTempl = templ.GetInputArray())
             using (OutputArray oaResult = result.GetOutputArray())
+            {
                 CudaInvoke.cudaTemplateMatchingMatch(_ptr, iaImage, iaTempl, oaResult, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

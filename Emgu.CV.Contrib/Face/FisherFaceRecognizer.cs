@@ -26,6 +26,7 @@ namespace Emgu.CV.Face
         public FisherFaceRecognizer(int numComponents = 0, double threshold = double.MaxValue)
         {
             _ptr = FaceInvoke.cveFisherFaceRecognizerCreate(numComponents, threshold, ref _faceRecognizerPtr, ref _basicFaceRecognizerPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

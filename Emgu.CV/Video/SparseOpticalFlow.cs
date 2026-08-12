@@ -61,6 +61,7 @@ namespace Emgu.CV
                     iaPrevPts, ioaNextPts,
                     oaStatus, oaError
                     );
+            CvInvoke.CheckError();
         }
     }
 

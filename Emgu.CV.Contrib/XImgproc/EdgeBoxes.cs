@@ -70,8 +70,9 @@ namespace Emgu.CV.XImgproc
                 minBoxArea,
                 gamma,
                 kappa,
-                ref _algorithm, 
+                ref _algorithm,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
 		}
 
         /// <summary>
@@ -87,6 +88,7 @@ namespace Emgu.CV.XImgproc
             using (VectorOfRect vr = new VectorOfRect())
             {
                 XImgprocInvoke.cveEdgeBoxesGetBoundingBoxes(_ptr, iaEdgeMap, iaOrientationMap, vr);
+                CvInvoke.CheckError();
                 return vr.ToArray();
             }
         }

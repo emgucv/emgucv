@@ -32,6 +32,7 @@ namespace Emgu.CV.OCR
             get
             {
                 IntPtr ptr = OcrInvoke.cveTesseractGetVersion();
+                CvInvoke.CheckError();
                 if (ptr == IntPtr.Zero)
                     return String.Empty;
                 else
@@ -77,6 +78,7 @@ namespace Emgu.CV.OCR
             try
             {
                 _ptr = OcrInvoke.cveTessBaseAPICreate();
+                CvInvoke.CheckError();
             }
             finally
             {
@@ -177,7 +179,9 @@ namespace Emgu.CV.OCR
         /// <returns>0 if the word is invalid, non-zero if valid</returns>
         public int IsValidWord(String word)
         {
-            return OcrInvoke.cveTessBaseAPIIsValidWord(_ptr, word);
+            int result = OcrInvoke.cveTessBaseAPIIsValidWord(_ptr, word);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -188,8 +192,17 @@ namespace Emgu.CV.OCR
         /// </value>
         public PageSegMode PageSegMode
         {
-            get { return OcrInvoke.cveTessBaseAPIGetPageSegMode(_ptr); }
-            set { OcrInvoke.cveTessBaseAPISetPageSegMode(_ptr, value); }
+            get
+            {
+                PageSegMode result = OcrInvoke.cveTessBaseAPIGetPageSegMode(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                OcrInvoke.cveTessBaseAPISetPageSegMode(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -278,6 +291,7 @@ namespace Emgu.CV.OCR
             using (CvString csLanguage = new CvString(language))
             {
                 int initResult = OcrInvoke.cveTessBaseAPIInit(_ptr, csDataPath, csLanguage, mode);
+                CvInvoke.CheckError();
                 if (initResult != 0)
                 {
                     if (dataPath.Equals(String.Empty))
@@ -320,6 +334,7 @@ namespace Emgu.CV.OCR
                 using (CvString csLanguage = new CvString(language))
                 {
                     int initResult = OcrInvoke.cveTessBaseAPIInitRaw(_ptr, handle.AddrOfPinnedObject(), rawTrainedData.Length, csLanguage, mode);
+                    CvInvoke.CheckError();
                     if (initResult != 0)
                     {
                         throw new ArgumentException(
@@ -352,6 +367,7 @@ namespace Emgu.CV.OCR
         {
             using (InputArray iaImage = image.GetInputArray())
                 OcrInvoke.cveTessBaseAPISetImage(_ptr, iaImage);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -361,6 +377,7 @@ namespace Emgu.CV.OCR
         public void SetImage(Pix image)
         {
             OcrInvoke.cveTessBaseAPISetImagePix(_ptr, image);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -370,7 +387,9 @@ namespace Emgu.CV.OCR
         /// <returns>Returns 0 on success.</returns>
         public int Recognize()
         {
-            return OcrInvoke.cveTessBaseAPIRecognize(_ptr);
+            int result = OcrInvoke.cveTessBaseAPIRecognize(_ptr);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -380,7 +399,9 @@ namespace Emgu.CV.OCR
         /// <param name="value">The value to be set</param>
         public void SetVariable(String variableName, String value)
         {
-            if (!OcrInvoke.cveTessBaseAPISetVariable(_ptr, variableName, value))
+            bool success = OcrInvoke.cveTessBaseAPISetVariable(_ptr, variableName, value);
+            CvInvoke.CheckError();
+            if (!success)
             {
                 throw new System.ArgumentException(String.Format("Unable to set {0} to {1}", variableName, value));
             }
@@ -395,6 +416,7 @@ namespace Emgu.CV.OCR
             using (Util.VectorOfByte bytes = new Util.VectorOfByte())
             {
                 OcrInvoke.cveTessBaseAPIGetUTF8Text(_ptr, bytes);
+                CvInvoke.CheckError();
                 return UtfByteVectorToString(bytes);
             }
         }
@@ -411,6 +433,7 @@ namespace Emgu.CV.OCR
             using (Util.VectorOfByte bytes = new Util.VectorOfByte())
             {
                 OcrInvoke.cveTessBaseAPIGetTSVText(_ptr, pageNumber, bytes);
+                CvInvoke.CheckError();
                 return UtfByteVectorToString(bytes);
             }
         }
@@ -425,6 +448,7 @@ namespace Emgu.CV.OCR
             using (Util.VectorOfByte bytes = new Util.VectorOfByte())
             {
                 OcrInvoke.cveTessBaseAPIGetBoxText(_ptr, pageNumber, bytes);
+                CvInvoke.CheckError();
                 return UtfByteVectorToString(bytes);
             }
         }
@@ -439,6 +463,7 @@ namespace Emgu.CV.OCR
             using (Util.VectorOfByte bytes = new Util.VectorOfByte())
             {
                 OcrInvoke.cveTessBaseAPIGetUNLVText(_ptr, bytes);
+                CvInvoke.CheckError();
                 return UtfByteVectorToString(bytes);
             }
         }
@@ -453,6 +478,7 @@ namespace Emgu.CV.OCR
             using (Util.VectorOfByte bytes = new Util.VectorOfByte())
             {
                 OcrInvoke.cveTessBaseAPIGetOsdText(_ptr, pageNumber, bytes);
+                CvInvoke.CheckError();
                 return UtfByteVectorToString(bytes);
             }
         }
@@ -467,6 +493,7 @@ namespace Emgu.CV.OCR
             using (Util.VectorOfByte bytes = new Util.VectorOfByte())
             {
                 OcrInvoke.cveTessBaseAPIGetHOCRText(_ptr, pageNumber, bytes);
+                CvInvoke.CheckError();
                 return UtfByteVectorToString(bytes);
             }
         }
@@ -487,6 +514,7 @@ namespace Emgu.CV.OCR
             using (VectorOfTesseractResult results = new VectorOfTesseractResult())
             {
                 OcrInvoke.cveTessBaseAPIExtractResult(_ptr, textSeq, results);
+                CvInvoke.CheckError();
 
                 byte[] bytes = textSeq.ToArray();
 #if UNSAFE_ALLOWED
@@ -520,6 +548,7 @@ namespace Emgu.CV.OCR
                 using (CvString datapath = new CvString())
                 {
                     OcrInvoke.cveTessBaseAPIGetDatapath(_ptr, datapath);
+                    CvInvoke.CheckError();
                     return datapath.ToString();
                 }
             }
@@ -566,7 +595,7 @@ namespace Emgu.CV.OCR
             using (CvString csFileName = new CvString(filename))
             using (CvString csRetryConfig = new CvString(retryConfig))
             {
-                return OcrInvoke.cveTessBaseAPIProcessPage(
+                bool result = OcrInvoke.cveTessBaseAPIProcessPage(
                     _ptr,
                     pix,
                     pageIndex,
@@ -574,6 +603,8 @@ namespace Emgu.CV.OCR
                     csRetryConfig,
                     timeoutMillisec,
                     renderer.TessResultRendererPtr);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -584,7 +615,9 @@ namespace Emgu.CV.OCR
         /// <returns>Page iterator</returns>
         public PageIterator AnalyseLayout(bool mergeSimilarWords = false)
         {
-            return new PageIterator(OcrInvoke.cveTessBaseAPIAnalyseLayout(_ptr, mergeSimilarWords));
+            IntPtr result = OcrInvoke.cveTessBaseAPIAnalyseLayout(_ptr, mergeSimilarWords);
+            CvInvoke.CheckError();
+            return new PageIterator(result);
         }
 
         /// <summary>
@@ -592,7 +625,12 @@ namespace Emgu.CV.OCR
         /// </summary>
         public OcrEngineMode Oem
         {
-            get { return OcrInvoke.cveTessBaseAPIGetOem(_ptr); }
+            get
+            {
+                OcrEngineMode result = OcrInvoke.cveTessBaseAPIGetOem(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
     }
 }

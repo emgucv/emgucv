@@ -33,6 +33,7 @@ namespace Emgu.CV.Features
         {
             _ptr = FeaturesInvoke.cveSIFTCreate(nFeatures, nOctaveLayers, contrastThreshold, edgeThreshold, sigma,
                ref _feature2D, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

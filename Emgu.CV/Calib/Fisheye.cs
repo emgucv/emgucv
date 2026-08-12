@@ -215,6 +215,7 @@ namespace Emgu.CV
             {
                 CvInvoke.cveFisheyeProjectPoints(iaObjectPoints, oaImagePoints, iaRvec, iaTvec, iaK, iaD, alpha, oaJacobian);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -244,6 +245,7 @@ namespace Emgu.CV
             {
                 CvInvoke.cveFisheyeDistortPoints(iaUndistorted, oaDistorted, iaK, iaD, alpha);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -299,15 +301,16 @@ namespace Emgu.CV
             using (InputArray iaR = R == null ? InputArray.GetEmpty() : R.GetInputArray())
             using (InputArray iaP = P == null ? InputArray.GetEmpty() : P.GetInputArray())
             {
-                                CvInvoke.cveFisheyeUndistortPoints(
-                    iaDistorted, 
-                    oaUndistorted, 
-                    iaK, 
-                    iaD, 
-                    iaR, 
+                CvInvoke.cveFisheyeUndistortPoints(
+                    iaDistorted,
+                    oaUndistorted,
+                    iaK,
+                    iaD,
+                    iaR,
                     iaP,
                     ref criteria);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -347,9 +350,10 @@ namespace Emgu.CV
                     iaP, 
                     ref size, 
                     CvInvoke.MakeType(depthType, channels), 
-                    oaMap1, 
+                    oaMap1,
                     oaMap2);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -372,6 +376,7 @@ namespace Emgu.CV
             {
                 CvInvoke.cveFisheyeUndistortImage(iaDistorted, oaUndistorted, iaK, iaD, iaKnew, ref newSize);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -403,6 +408,7 @@ namespace Emgu.CV
                 CvInvoke.cveFisheyeEstimateNewCameraMatrixForUndistortRectify(iaK, iaD, ref imageSize, iaR, oaP, balance,
                    ref newSize, fovScale);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -444,6 +450,7 @@ namespace Emgu.CV
                 CvInvoke.cveFisheyeStereoRectify(iaK1, iaD1, iaK2, iaD2, ref imageSize, iaR, iaTvec, oaR1, oaR2, oaP1, oaP2,
                    oaQ, flags, ref newImageSize, balance, fovScale);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -470,7 +477,7 @@ namespace Emgu.CV
             using (OutputArray oaRvecs = rvecs.GetOutputArray())
             using (OutputArray oaTvecs = tvecs.GetOutputArray())
             {
-                return CvInvoke.cveFisheyeCalibrate(
+                double result = CvInvoke.cveFisheyeCalibrate(
                     iaObjectPoints,
                     iaImagePoints,
                     ref imageSize,
@@ -480,6 +487,8 @@ namespace Emgu.CV
                     oaTvecs,
                     (int)flags,
                     ref criteria);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -513,7 +522,7 @@ namespace Emgu.CV
             using (OutputArray oaR = R.GetOutputArray())
             using (OutputArray oaT = T.GetOutputArray())
             {
-                return CvInvoke.cveFisheyeStereoCalibrate(
+                double result = CvInvoke.cveFisheyeStereoCalibrate(
                     iaObjectPoints,
                     iaImagePoints1,
                     iaImagePoints2,
@@ -526,6 +535,8 @@ namespace Emgu.CV
                     oaT,
                     (int)flags,
                     ref criteria);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -561,7 +572,8 @@ namespace Emgu.CV
             using (InputArray iaDistortionCoeffs = distortionCoeffs.GetInputArray())
             using (OutputArray oaRotationVector = rotationVector.GetOutputArray())
             using (OutputArray oaTranslationVector = translationVector.GetOutputArray())
-                return CvInvoke.cveFisheyeSolvePnP(
+            {
+                bool result = CvInvoke.cveFisheyeSolvePnP(
                    iaObjectPoints,
                    iaImagePoints,
                    iaIntrisicMatrix,
@@ -571,6 +583,9 @@ namespace Emgu.CV
                    useExtrinsicGuess,
                    flags,
                    ref criteria);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -659,20 +674,24 @@ namespace Emgu.CV
             using (OutputArray oaRotationVector = rvec.GetOutputArray())
             using (OutputArray oaTranslationVector = tvec.GetOutputArray())
             using (OutputArray oaInliers = inliers == null ? OutputArray.GetEmpty() : inliers.GetOutputArray())
-                return CvInvoke.cveFisheyeSolvePnPRansac(
-                   iaObjectPoints, 
-                   iaImagePoints, 
-                   iaCameraMatrix, 
+            {
+                bool result = CvInvoke.cveFisheyeSolvePnPRansac(
+                   iaObjectPoints,
+                   iaImagePoints,
+                   iaCameraMatrix,
                    iaDistortionCoeffs,
-                   oaRotationVector, 
+                   oaRotationVector,
                    oaTranslationVector,
-                   useExtrinsicGuess, 
-                   iterationsCount, 
-                   reprojectionError, 
+                   useExtrinsicGuess,
+                   iterationsCount,
+                   reprojectionError,
                    confident,
-                   oaInliers, 
-                   flags, 
+                   oaInliers,
+                   flags,
                    ref criteria);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
     }
 }

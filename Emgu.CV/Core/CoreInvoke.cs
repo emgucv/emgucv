@@ -61,6 +61,21 @@ namespace Emgu.CV
         /// <param name="line">The line number in the source where error is encountered</param>
         /// <param name="userData">Arbitrary pointer that is transparently passed to the error handler.</param>
         /// <returns>If 0, signal the process to continue</returns>
+        /// <remarks>
+        /// This callback runs inside native code, as the target of a reverse P/Invoke call made
+        /// from cv::error() (see opencv/modules/core/src/system.cpp) -- or, for exceptions that never
+        /// reach cv::error() (a plain std::exception, say), invoked directly by the CVAPI_CATCH_CV_ERRORS
+        /// macros (Emgu.CV.Extern/emgu_error.h). It must never throw: cv::error() unconditionally throws
+        /// its own C++ exception right after this callback returns (it ignores this callback's return
+        /// value), and if a managed exception were thrown from here instead, it would need to unwind
+        /// across that native call frame to reach any C# try/catch -- something the .NET runtime treats
+        /// as fatal and fails the whole process for, rather than something catchable. So this callback
+        /// only records the error, in these [ThreadStatic] fields, and CheckError() throws the equivalent
+        /// CvException from them safely, entirely in managed code, once the native call has actually
+        /// returned -- while the C++ exception itself is caught and discarded locally, on the native
+        /// side, by those same CVAPI_CATCH_CV_ERRORS macros, so it never unwinds across the P/Invoke
+        /// return boundary.
+        /// </remarks>
 #if UNITY_WSA || UNITY_ANDROID || UNITY_STANDALONE
         [AOT.MonoPInvokeCallback(typeof(CvErrorCallback))]
 #endif
@@ -72,19 +87,92 @@ namespace Emgu.CV
             int line,
             IntPtr userData)
         {
-            try
+            _hasPendingError = true;
+            _pendingStatus = status;
+            _pendingFuncName = Marshal.PtrToStringAnsi(funcName);
+            _pendingErrMsg = Marshal.PtrToStringAnsi(errMsg);
+            _pendingFileName = Marshal.PtrToStringAnsi(fileName);
+            _pendingLine = line;
+            return 0; //signal the process to continue
+        }
+
+        [ThreadStatic]
+        private static bool _hasPendingError;
+        [ThreadStatic]
+        private static int _pendingStatus;
+        [ThreadStatic]
+        private static String _pendingFuncName;
+        [ThreadStatic]
+        private static String _pendingErrMsg;
+        [ThreadStatic]
+        private static String _pendingFileName;
+        [ThreadStatic]
+        private static int _pendingLine;
+
+        /// <summary>
+        /// True whenever a non-null native error callback is currently registered -- kept in
+        /// sync by both overloads of RedirectError, whether called from CvInvoke's static
+        /// constructor or directly by user code (e.g. to temporarily swap in
+        /// CvErrorHandlerIgnoreError, or to remove the handler entirely). CvInvoke's static
+        /// constructor does not call RedirectError on every platform to begin with (iOS,
+        /// MacCatalyst, Blazor/WASM, and Unity WebGL never call it at all), so CheckError() uses
+        /// this to know whether it can rely on the fast [ThreadStatic] path -- which only a
+        /// registered callback ever populates -- or needs to fall back to querying native
+        /// thread-local storage directly.
+        /// </summary>
+        internal static bool CustomErrorHandlerRegistered = false;
+
+        /// <summary>
+        /// Check whether a native call left a pending error behind, and if so, throw it as a
+        /// CvException. Call this after any P/Invoke that can reach a CV_Error(...) call, or any
+        /// other native exception, natively.
+        /// </summary>
+        /// <remarks>
+        /// This first checks the [ThreadStatic] fields CvErrorHandler populates -- free, no
+        /// P/Invoke -- which covers every platform where a native error callback is actually
+        /// registered. On the platforms where none is (see CustomErrorHandlerRegistered), the
+        /// native CVAPI_CATCH_CV_ERRORS macros still always record the error into native
+        /// thread-local storage regardless (since they have direct access to the caught
+        /// exception's details, independent of any callback), so this falls back to querying
+        /// that directly: one cheap boolean P/Invoke (cveHasPendingError) to avoid paying for
+        /// string marshaling on the common no-error case, and only the fuller
+        /// cveCheckPendingError call -- with its CvString allocations -- when there is actually
+        /// an error to retrieve.
+        /// </remarks>
+        public static void CheckError()
+        {
+            if (_hasPendingError)
             {
-                //SetErrStatus(Emgu.CV.CvEnum.ErrorCodes.StsOk); //clear the error status
-                return 0; //signal the process to continue
+                _hasPendingError = false;
+                throw new CvException(_pendingStatus, _pendingFuncName, _pendingErrMsg, _pendingFileName, _pendingLine);
             }
-            finally
+            else if (!CustomErrorHandlerRegistered && cveHasPendingError())
             {
-                String funcNameStr = Marshal.PtrToStringAnsi(funcName);
-                String errMsgStr = Marshal.PtrToStringAnsi(errMsg);
-                String fileNameStr = Marshal.PtrToStringAnsi(fileName);
-                throw new CvException(status, funcNameStr, errMsgStr, fileNameStr, line);
+                int status = 0, line = 0;
+                using (CvString funcName = new CvString())
+                using (CvString errMsg = new CvString())
+                using (CvString fileName = new CvString())
+                {
+                    if (cveCheckPendingError(ref status, funcName, errMsg, fileName, ref line))
+                    {
+                        throw new CvException(status, funcName.ToString(), errMsg.ToString(), fileName.ToString(), line);
+                    }
+                }
             }
         }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveHasPendingError();
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        private static extern bool cveCheckPendingError(
+            ref int status,
+            IntPtr funcName,
+            IntPtr errMsg,
+            IntPtr fileName,
+            ref int line);
 
         /// <summary>
         /// Define an error callback that can be registered using RedirectError function
@@ -135,12 +223,29 @@ namespace Emgu.CV
         /// <summary>
         /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
         /// </summary>
-        /// <param name="errorHandler">The new error handler</param>
+        /// <param name="errorHandler">The new error handler. Pass null to remove the currently registered handler.</param>
         /// <param name="userdata">Arbitrary pointer that is transparently passed to the error handler.</param>
         /// <param name="prevUserdata">Pointer to the previously assigned user data pointer.</param>
         /// <returns>Pointer to the old error handler</returns>
+        /// <remarks>
+        /// Updates CustomErrorHandlerRegistered to match whether errorHandler is null, so
+        /// CheckError() keeps falling back correctly to the native pending-error query (see
+        /// emgu_error.h) if a handler that never populates the [ThreadStatic] fields -- like
+        /// CvErrorHandlerIgnoreError, or none at all -- is redirected to here directly, rather
+        /// than through CvInvoke's static constructor.
+        /// </remarks>
+        public static IntPtr RedirectError(
+            CvErrorCallback errorHandler,
+            IntPtr userdata,
+            IntPtr prevUserdata)
+        {
+            IntPtr result = cveRedirectError(errorHandler, userdata, prevUserdata);
+            CustomErrorHandlerRegistered = errorHandler != null;
+            return result;
+        }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveRedirectError")]
-        public static extern IntPtr RedirectError(
+        private static extern IntPtr cveRedirectError(
             CvErrorCallback errorHandler,
             IntPtr userdata,
             IntPtr prevUserdata);
@@ -148,12 +253,28 @@ namespace Emgu.CV
         /// <summary>
         /// Sets a new error handler that can be one of standard handlers or a custom handler that has the certain interface. The handler takes the same parameters as cvError function. If the handler returns non-zero value, the program is terminated, otherwise, it continues. The error handler may check the current error mode with cvGetErrMode to make a decision.
         /// </summary>
-        /// <param name="errorHandler">Pointer to the new error handler</param>
+        /// <param name="errorHandler">Pointer to the new error handler. Pass IntPtr.Zero to remove the currently registered handler.</param>
         /// <param name="userdata">Arbitrary pointer that is transparently passed to the error handler.</param>
         /// <param name="prevUserdata">Pointer to the previously assigned user data pointer.</param>
         /// <returns>Pointer to the old error handler</returns>
+        /// <remarks>
+        /// Updates CustomErrorHandlerRegistered to match whether errorHandler is IntPtr.Zero, so
+        /// CheckError() keeps falling back correctly to the native pending-error query (see
+        /// emgu_error.h) if the callback is redirected through this raw-pointer overload directly,
+        /// rather than through CvInvoke's static constructor.
+        /// </remarks>
+        public static IntPtr RedirectError(
+            IntPtr errorHandler,
+            IntPtr userdata,
+            IntPtr prevUserdata)
+        {
+            IntPtr result = cveRedirectError(errorHandler, userdata, prevUserdata);
+            CustomErrorHandlerRegistered = errorHandler != IntPtr.Zero;
+            return result;
+        }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveRedirectError")]
-        public static extern IntPtr RedirectError(
+        private static extern IntPtr cveRedirectError(
             IntPtr errorHandler,
             IntPtr userdata,
             IntPtr prevUserdata);
@@ -184,7 +305,9 @@ namespace Emgu.CV
         {
             using (CvString csSuffix = new CvString(suffix))
             {
-                using (CvString result = new CvString(cveTempfile(csSuffix), true))
+                IntPtr ptr = cveTempfile(csSuffix);
+                CvInvoke.CheckError();
+                using (CvString result = new CvString(ptr, true))
                 {
                     return result.ToString();
                 }
@@ -201,11 +324,14 @@ namespace Emgu.CV
         {
             get
             {
-                return cveGetLogLevel();
+                CvEnum.LogLevel result = cveGetLogLevel();
+                CvInvoke.CheckError();
+                return result;
             }
             set
             {
                 cveSetLogLevel(value);
+                CvInvoke.CheckError();
             }
         }
 
@@ -227,6 +353,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveRepeat(iaSrc, ny, nx, oaDst);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -242,6 +369,7 @@ namespace Emgu.CV
             using (InputArray iaMv = mv.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveMerge(iaMv, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -263,6 +391,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (InputOutputArray ioaDst = dst.GetInputOutputArray())
                 cveMixChannels(iaSrc, ioaDst, handle.AddrOfPinnedObject(), fromTo.Length >> 1);
+                CvInvoke.CheckError();
             handle.Free();
         }
 
@@ -284,6 +413,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveExtractChannel(iaSrc, oaDst, coi);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -300,6 +430,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (InputOutputArray oaDst = dst.GetInputOutputArray())
                 cveInsertChannel(iaSrc, oaDst, coi);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -316,6 +447,7 @@ namespace Emgu.CV
         {
             using (InputOutputArray ioaMat = mat.GetInputOutputArray())
                 cveRandShuffle(ioaMat, iterFactor, rng);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -333,6 +465,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveBitwiseNot(iaSrc, oaDst, iaMask);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -352,6 +485,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveMax(iaSrc1, iaSrc2, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -365,7 +499,11 @@ namespace Emgu.CV
         public static bool HasNonZero(IInputArray arr)
         {
             using (InputArray iaArr = arr.GetInputArray())
-                return cveHasNonZero(iaArr);
+            {
+                var result = cveHasNonZero(iaArr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -382,7 +520,11 @@ namespace Emgu.CV
         public static int CountNonZero(IInputArray arr)
         {
             using (InputArray iaArr = arr.GetInputArray())
-                return cveCountNonZero(iaArr);
+            {
+                var result = cveCountNonZero(iaArr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -398,6 +540,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaIdx = idx.GetOutputArray())
                 cveFindNonZero(iaSrc, oaIdx);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -413,7 +556,11 @@ namespace Emgu.CV
         {
             using (InputArray iaSrc1 = src1.GetInputArray())
             using (InputArray iaSrc2 = src2.GetInputArray())
-                return cvePSNR(iaSrc1, iaSrc2);
+            {
+                var result = cvePSNR(iaSrc1, iaSrc2);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -433,6 +580,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveMin(iaSrc1, iaSrc2, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -455,6 +603,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveAdd(iaSrc1, iaSrc2, oaDst, iaMask, dtype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -478,6 +627,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveSubtract(iaSrc1, iaSrc2, oaDst, iaMask, dtype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -502,6 +652,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveDivide(iaSrc1, iaSrc2, oaDst, scale, dtype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -525,6 +676,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveMultiply(iaSrc1, iaSrc2, oaDst, scale, dtype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -547,6 +699,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveBitwiseAnd(iaSrc1, iaSrc2, oaDst, iaMask);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -568,6 +721,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveBitwiseOr(iaSrc1, iaSrc2, oaDst, iaMask);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -589,25 +743,13 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveBitwiseXor(iaSrc1, iaSrc2, oaDst, iaMask);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveBitwiseXor(IntPtr src1, IntPtr src2, IntPtr dst, IntPtr mask);
 
         #region Copying and Filling
-        /*
-        /// <summary>
-        /// Copies selected elements from input array to output array:
-        /// dst(I)=src(I) if mask(I)!=0. 
-        /// If any of the passed arrays is of IplImage type, then its ROI and COI fields are used. Both arrays must have the same type, the same number of dimensions and the same size. The function can also copy sparse arrays (mask is not supported in this case).
-        /// </summary>
-        /// <param name="src">The source array</param>
-        /// <param name="des">The destination array</param>
-        /// <param name="mask">Operation mask, 8-bit single channel array; specifies elements of destination array to be changed</param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveCopy")]
-        public static extern void cvCopy(IntPtr src, IntPtr des, IntPtr mask);
-        */
-        
         /// <summary>
         /// Initializes scaled identity matrix:
         /// arr(i,j)=value if i=j,
@@ -619,22 +761,12 @@ namespace Emgu.CV
         {
             using (InputOutputArray ioaMat = mat.GetInputOutputArray())
                 cveSetIdentity(ioaMat, ref value);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveSetIdentity(IntPtr mat, ref MCvScalar value);
 
-        /*
-        /// <summary>
-        /// Initializes the matrix as following:
-        /// arr(i,j)=(end-start)*(i*cols(arr)+j)/(cols(arr)*rows(arr))
-        /// </summary>
-        /// <param name="mat">The matrix to initialize. It should be single-channel 32-bit, integer or floating-point</param>
-        /// <param name="start">The lower inclusive boundary of the range</param>
-        /// <param name="end">The upper exclusive boundary of the range</param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveRange")]
-        public static extern void cvRange(IntPtr mat, double start, double end);
-        */
         #endregion
 
         #region Math Functions
@@ -662,6 +794,7 @@ namespace Emgu.CV
             using (OutputArray oaMagitude = magnitude.GetOutputArray())
             using (OutputArray oaAngle = angle.GetOutputArray())
                 cveCartToPolar(iaX, iaY, oaMagitude, oaAngle, angleInDegrees);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -694,6 +827,7 @@ namespace Emgu.CV
             using (OutputArray oaX = x.GetOutputArray())
             using (OutputArray oaY = y.GetOutputArray())
                 cvePolarToCart(iaMagnitude, iaAngle, oaX, oaY, angleInDegrees);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -725,6 +859,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cvePow(iaSrc, power, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -742,6 +877,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveExp(iaSrc, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -760,6 +896,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveLog(iaSrc, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -780,7 +917,11 @@ namespace Emgu.CV
         {
             using (InputArray iaCoeffs = coeffs.GetInputArray())
             using (OutputArray oaRoots = roots.GetOutputArray())
-                return cveSolveCubic(iaCoeffs, oaRoots);
+            {
+                var result = cveSolveCubic(iaCoeffs, oaRoots);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -797,7 +938,11 @@ namespace Emgu.CV
         {
             using (InputArray iaCoeffs = coeffs.GetInputArray())
             using (OutputArray oaRoots = roots.GetOutputArray())
-                return cveSolvePoly(iaCoeffs, oaRoots, maxiter);
+            {
+                var result = cveSolvePoly(iaCoeffs, oaRoots, maxiter);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -823,7 +968,11 @@ namespace Emgu.CV
             using (InputArray iaSrc1 = src1.GetInputArray())
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
-                return cveSolve(iaSrc1, iaSrc2, oaDst, method);
+            {
+                var result = cveSolve(iaSrc1, iaSrc2, oaDst, method);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -847,6 +996,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveSort(iaSrc, oaDst, flags);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -866,6 +1016,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveSortIdx(iaSrc, oaDst, flags);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -892,6 +1043,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveDft(iaSrc, oaDst, flags, nonzeroRows);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -908,7 +1060,9 @@ namespace Emgu.CV
         /// <returns>The minimum number N that is greater to equal to size0, such that DFT of a vector of size N can be computed fast. In the current implementation N=2^p x 3^q x 5^r for some p, q, r. </returns>
         public static int GetOptimalDFTSize(int vecsize)
         {
-            return cveGetOptimalDFTSize(vecsize);
+            int result = cveGetOptimalDFTSize(vecsize);
+            CvInvoke.CheckError();
+            return result;
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -929,6 +1083,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveMulSpectrums(iaSrc1, iaSrc2, oaDst, flags, conjB);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -947,6 +1102,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveDct(iaSrc, oaDst, flags);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -964,7 +1120,9 @@ namespace Emgu.CV
 
         public static bool ClipLine(Rectangle rectangle, ref Point pt1, ref Point pt2)
         {
-            return cveClipLine(ref rectangle, ref pt1, ref pt2);
+            bool result = cveClipLine(ref rectangle, ref pt1, ref pt2);
+            CvInvoke.CheckError();
+            return result;
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -985,6 +1143,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveAbsDiff(iaSrc1, iaSrc2, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1004,6 +1163,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveScaleAdd(iaSrc1, alpha, iaSrc2, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1028,6 +1188,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveAddWeighted(iaSrc1, alpha, iaSrc2, beta, gamma, oaDst, dtype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1058,6 +1219,7 @@ namespace Emgu.CV
             using (InputArray iaUpper = upper.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveInRange(iaSrc, iaLower, iaUpper, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1081,7 +1243,11 @@ namespace Emgu.CV
             using (InputArray iaArr1 = arr1.GetInputArray())
             using (InputOutputArray iaArr2 = arr2 == null ? InputOutputArray.GetEmpty() : arr2.GetInputOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
-                return cveNorm(iaArr1, iaArr2, normType, iaMask);
+            {
+                var result = cveNorm(iaArr1, iaArr2, normType, iaMask);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -1104,317 +1270,6 @@ namespace Emgu.CV
             Emgu.CV.CvEnum.NormType normType,
             IntPtr mask);
 
-        #region Initialization
-        /*
-        /// <summary>
-        /// Creates the header and allocates data. 
-        /// </summary>
-        /// <param name="size">Image width and height.</param>
-        /// <param name="depth">Bit depth of image elements</param>
-        /// <param name="channels">
-        /// Number of channels per element(pixel). Can be 1, 2, 3 or 4. The channels are interleaved, for example the usual data layout of a color image is:
-        /// b0 g0 r0 b1 g1 r1 ...
-        /// </param>
-        /// <returns>A pointer to IplImage </returns>
-        public static IntPtr cvCreateImage(Size size, CvEnum.IplDepth depth, int channels)
-        {
-            return cveCreateImageHeader(ref size, depth, channels);
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveCreateImage(
-            ref Size size,
-            CvEnum.IplDepth depth,
-            int channels);
-
-
-        /// <summary>
-        /// Allocates, initializes, and returns the structure IplImage.
-        /// </summary>
-        /// <param name="size">Image width and height.</param>
-        /// <param name="depth">Bit depth of image elements</param>
-        /// <param name="channels">
-        /// Number of channels per element(pixel). Can be 1, 2, 3 or 4. The channels are interleaved, for example the usual data layout of a color image is:
-        /// b0 g0 r0 b1 g1 r1 ...
-        /// </param>
-        /// <returns> The structure IplImage</returns>
-        public static IntPtr cvCreateImageHeader(
-            Size size,
-            CvEnum.IplDepth depth,
-            int channels)
-        {
-            return cveCreateImageHeader(ref size, depth, channels);
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveCreateImageHeader(
-            ref Size size,
-            CvEnum.IplDepth depth,
-            int channels);
-
-        /// <summary>
-        /// Initializes the image header structure, pointer to which is passed by the user, and returns the pointer.
-        /// </summary>
-        /// <param name="image">Image header to initialize.</param>
-        /// <param name="size">Image width and height.</param>
-        /// <param name="depth">Image depth </param>
-        /// <param name="channels">Number of channels </param>
-        /// <param name="origin">IPL_ORIGIN_TL or IPL_ORIGIN_BL.</param>
-        /// <param name="align">Alignment for image rows, typically 4 or 8 bytes.</param>
-        /// <returns>Pointer to the image header</returns>
-        public static IntPtr cvInitImageHeader(
-            IntPtr image,
-            Size size,
-            CvEnum.IplDepth depth,
-            int channels,
-            int origin,
-            int align)
-        {
-            return cveInitImageHeader(image, ref size, depth, channels, origin, align);
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveInitImageHeader(
-            IntPtr image,
-            ref Size size,
-            CvEnum.IplDepth depth,
-            int channels,
-            int origin,
-            int align);
-
-        /// <summary>
-        /// Assigns user data to the array header.
-        /// </summary>
-        /// <param name="arr">Array header.</param>
-        /// <param name="data">User data.</param>
-        /// <param name="step">Full row length in bytes.</param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveSetData")]
-        public static extern void cvSetData(IntPtr arr, IntPtr data, int step);
-
-        /// <summary>
-        /// Releases the header.
-        /// </summary>
-        /// <param name="image">Pointer to the deallocated header.</param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention,
-            EntryPoint = "cveReleaseImageHeader")]
-        public static extern void cvReleaseImageHeader(ref IntPtr image);
-
-        /// <summary>
-        /// Initializes already allocated CvMat structure. It can be used to process raw data with OpenCV matrix functions.
-        /// </summary>
-        /// <param name="mat">Pointer to the matrix header to be initialized.</param>
-        /// <param name="rows">Number of rows in the matrix.</param>
-        /// <param name="cols">Number of columns in the matrix.</param>
-        /// <param name="type">Type of the matrix elements.</param>
-        /// <param name="data">Optional data pointer assigned to the matrix header</param>
-        /// <param name="step">Full row width in bytes of the data assigned. By default, the minimal possible step is used, i.e., no gaps is assumed between subsequent rows of the matrix.</param>
-        /// <returns></returns>
-        [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern IntPtr cvInitMatHeader(
-           IntPtr mat,
-           int rows,
-           int cols,
-           CV.CvEnum.DepthType type,
-           IntPtr data,
-           int step);
-
-        /// <summary>
-        /// Initializes already allocated CvMat structure. It can be used to process raw data with OpenCV matrix functions.
-        /// </summary>
-        /// <param name="mat">Pointer to the matrix header to be initialized.</param>
-        /// <param name="rows">Number of rows in the matrix.</param>
-        /// <param name="cols">Number of columns in the matrix.</param>
-        /// <param name="type">Type of the matrix elements.</param>
-        /// <param name="data">Optional data pointer assigned to the matrix header</param>
-        /// <param name="step">Full row width in bytes of the data assigned. By default, the minimal possible step is used, i.e., no gaps is assumed between subsequent rows of the matrix.</param>
-        /// <returns>Pointer to the CvMat</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveInitMatHeader")]
-        public static extern IntPtr cvInitMatHeader(
-            IntPtr mat,
-            int rows,
-            int cols,
-            int type,
-            IntPtr data,
-            int step);
-
-        /// <summary>
-        /// Sets the channel of interest to a given value. Value 0 means that all channels are selected, 1 means that the first channel is selected etc. If ROI is NULL and coi != 0, ROI is allocated.
-        /// </summary>
-        /// <param name="image">Image header</param>
-        /// <param name="coi">Channel of interest starting from 1. If 0, the COI is unset.</param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveSetImageCOI")]
-        public static extern void cvSetImageCOI(IntPtr image, int coi);
-
-        /// <summary>
-        /// Returns channel of interest of the image (it returns 0 if all the channels are selected).
-        /// </summary>
-        /// <param name="image">Image header. </param>
-        /// <returns>channel of interest of the image (it returns 0 if all the channels are selected)</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetImageCOI")]
-        public static extern int cvGetImageCOI(IntPtr image);
-
-        /// <summary>
-        /// Releases image ROI. After that the whole image is considered selected.
-        /// </summary>
-        /// <param name="image">Image header</param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveResetImageROI")]
-        public static extern void cvResetImageROI(IntPtr image);
-
-        /// <summary>
-        /// Sets the image ROI to a given rectangle. If ROI is NULL and the value of the parameter rect is not equal to the whole image, ROI is allocated. 
-        /// </summary>
-        /// <param name="image">Image header.</param>
-        /// <param name="rect">ROI rectangle.</param>
-        public static void cvSetImageROI(IntPtr image, Rectangle rect)
-        {
-            cveSetImageROI(image, ref rect);
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveSetImageROI(IntPtr image, ref Rectangle rect);
-
-
-        /// <summary>
-        /// Returns channel of interest of the image (it returns 0 if all the channels are selected).
-        /// </summary>
-        /// <param name="image">Image header.</param>
-        /// <returns>channel of interest of the image (it returns 0 if all the channels are selected)</returns>
-        public static Rectangle cvGetImageROI(IntPtr image)
-        {
-            Rectangle rect = new Rectangle();
-            cveGetImageROI(image, ref rect);
-            return rect;
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveGetImageROI(IntPtr image, ref Rectangle rect);
-
-        /// <summary>
-        /// Allocates header for the new matrix and underlying data, and returns a pointer to the created matrix. Matrices are stored row by row. All the rows are aligned by 4 bytes. 
-        /// </summary>
-        /// <param name="rows">Number of rows in the matrix.</param>
-        /// <param name="cols">Number of columns in the matrix.</param>
-        /// <param name="type">Type of the matrix elements.</param>
-        /// <returns>A pointer to the created matrix</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveCreateMat")]
-        public static extern IntPtr cvCreateMat(int rows, int cols, CvEnum.DepthType type);
-
-        /// <summary>
-        /// Initializes CvMatND structure allocated by the user
-        /// </summary>
-        /// <param name="mat">Pointer to the array header to be initialized</param>
-        /// <param name="dims">Number of array dimensions</param>
-        /// <param name="sizes">Array of dimension sizes</param>
-        /// <param name="type">Type of array elements</param>
-        /// <param name="data">Optional data pointer assigned to the matrix header</param>
-        /// <returns>Pointer to the array header</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveInitMatNDHeader")]
-        public static extern IntPtr cvInitMatNDHeader(
-            IntPtr mat,
-            int dims,
-            [In] int[] sizes,
-            CV.CvEnum.DepthType type,
-            IntPtr data);
-
-        /// <summary>
-        /// Decrements the matrix data reference counter and releases matrix header
-        /// </summary>
-        /// <param name="mat">Double pointer to the matrix.</param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveReleaseMat")]
-        public static extern void cvReleaseMat(ref IntPtr mat);
-
-        /// <summary>
-        /// The function allocates a multi-dimensional sparse array. Initially the array contain no elements, that is Get or GetReal returns zero for every index
-        /// </summary>
-        /// <param name="dims">Number of array dimensions</param>
-        /// <param name="sizes">Array of dimension sizes</param>
-        /// <param name="type">Type of array elements</param>
-        /// <returns>Pointer to the array header</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveCreateSparseMat")]
-        public static extern IntPtr cvCreateSparseMat(
-            int dims,
-            IntPtr sizes,
-            CV.CvEnum.DepthType type);
-
-        /// <summary>
-        /// The function releases the sparse array and clears the array pointer upon exit.
-        /// </summary>
-        /// <param name="mat">Reference of the pointer to the array</param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveReleaseSparseMat")]
-        public static extern void cvReleaseSparseMat(ref IntPtr mat);
-        */
-        #endregion
-
-        /*
-        /// <summary>
-        /// Assign the new value to the particular element of single-channel array
-        /// </summary>
-        /// <param name="arr">Input array</param>
-        /// <param name="idx0">The first zero-based component of the element index </param>
-        /// <param name="value">The assigned value </param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveSetReal1D")]
-        public static extern void cvSetReal1D(IntPtr arr, int idx0, double value);
-
-        /// <summary>
-        /// Assign the new value to the particular element of single-channel array
-        /// </summary>
-        /// <param name="arr">Input array</param>
-        /// <param name="idx0">The first zero-based component of the element index </param>
-        /// <param name="idx1">The second zero-based component of the element index </param>
-        /// <param name="value">The assigned value </param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveSetReal2D")]
-        public static extern void cvSetReal2D(IntPtr arr, int idx0, int idx1, double value);
-
-        /// <summary>
-        /// Assign the new value to the particular element of single-channel array
-        /// </summary>
-        /// <param name="arr">Input array</param>
-        /// <param name="idx0">The first zero-based component of the element index </param>
-        /// <param name="idx1">The second zero-based component of the element index </param>
-        /// <param name="idx2">The third zero-based component of the element index </param>
-        /// <param name="value">The assigned value </param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveSetReal3D")]
-        public static extern void cvSetReal3D(IntPtr arr, int idx0, int idx1, int idx2, double value);
-
-        /// <summary>
-        /// Assign the new value to the particular element of single-channel array
-        /// </summary>
-        /// <param name="arr">Input array</param>
-        /// <param name="idx">Array of the element indices </param>
-        /// <param name="value">The assigned value </param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveSetRealND")]
-        public static extern void cvSetRealND(
-            IntPtr arr,
-            [In] int[] idx,
-            double value);
-
-        
-        /// <summary>
-        /// Clears (sets to zero) the particular element of dense array or deletes the element of sparse array. If the element does not exists, the function does nothing
-        /// </summary>
-        /// <param name="arr">Input array</param>
-        /// <param name="idx">Array of the element indices </param>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveClearND")]
-        public static extern void cvClearND(
-            IntPtr arr,
-            [In] int[] idx);
-        
-        
-        /// <summary>
-        /// Assign the new value to the particular element of array
-        /// </summary>
-        /// <param name="arr">Input array. </param>
-        /// <param name="idx0">The first zero-based component of the element index</param>
-        /// <param name="idx1">The second zero-based component of the element index</param>
-        /// <param name="value">The assigned value</param>
-        public static void cvSet2D(IntPtr arr, int idx0, int idx1, MCvScalar value)
-        {
-            cveSet2D(arr, idx0, idx1, ref value);
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveSet2D(IntPtr arr, int idx0, int idx1, ref MCvScalar value);
-        */
         
         /// <summary>
         /// Flips the array in one of different 3 ways (row and column indices are 0-based)
@@ -1427,6 +1282,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveFlip(iaSrc, oaDst, flipType);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1443,6 +1299,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveFlipND(iaSrc, oaDst, axis);
+                CvInvoke.CheckError();
         }
         
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1460,6 +1317,7 @@ namespace Emgu.CV
             using (InputArray iaShape = shape.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveBroadcast(iaSrc, iaShape, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1476,104 +1334,12 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveRotate(iaSrc, oaDst, rotateCode);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveRotate(IntPtr src, IntPtr dst, RotateFlags rotateCode);
 
-        #region Accessing Elements and sub-Arrays
-
-        /*
-        /// <summary>
-        /// Returns header, corresponding to a specified rectangle of the input array. In other words, it allows the user to treat a rectangular part of input array as a stand-alone array. ROI is taken into account by the function so the sub-array of ROI is actually extracted.
-        /// </summary>
-        /// <param name="arr">Input array</param>
-        /// <param name="submat">Pointer to the resultant sub-array header.</param>
-        /// <param name="rect">Zero-based coordinates of the rectangle of interest.</param>
-        /// <returns>the resultant sub-array header</returns>
-        public static IntPtr cvGetSubRect(IntPtr arr, IntPtr submat, Rectangle rect)
-        {
-            return cveGetSubRect(arr, submat, ref rect);
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveGetSubRect(IntPtr arr, IntPtr submat, ref Rectangle rect);
-
-        /// <summary>
-        /// Return the header, corresponding to a specified row span of the input array
-        /// </summary>
-        /// <param name="arr">Input array</param>
-        /// <param name="submat">Pointer to the prelocated memory of resulting sub-array header</param>
-        /// <param name="startRow">Zero-based index of the starting row (inclusive) of the span</param>
-        /// <param name="endRow">Zero-based index of the ending row (exclusive) of the span</param>
-        /// <param name="deltaRow">Index step in the row span. That is, the function extracts every delta_row-th row from start_row and up to (but not including) end_row</param>
-        /// <returns>The header, corresponding to a specified row span of the input array</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetRows")]
-        public static extern IntPtr cvGetRows(IntPtr arr, IntPtr submat, int startRow, int endRow, int deltaRow);
-
-        /// <summary>
-        /// Return the header, corresponding to a specified row of the input array
-        /// </summary>
-        /// <param name="arr">Input array</param>
-        /// <param name="submat">Pointer to the prelocate memory of the resulting sub-array header</param>
-        /// <param name="row">Zero-based index of the selected row</param>
-        /// <returns>The header, corresponding to a specified row of the input array</returns>
-        public static IntPtr cvGetRow(IntPtr arr, IntPtr submat, int row)
-        {
-            return cvGetRows(arr, submat, row, row + 1, 1);
-        }
-
-        /// <summary>
-        /// Return the header, corresponding to a specified col span of the input array
-        /// </summary>
-        /// <param name="arr">Input array</param>
-        /// <param name="submat">Pointer to the prelocated memory of the resulting sub-array header</param>
-        /// <param name="startCol">Zero-based index of the selected column</param>
-        /// <param name="endCol">Zero-based index of the ending column (exclusive) of the span</param>
-        /// <returns>The header, corresponding to a specified col span of the input array</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetCols")]
-        public static extern IntPtr cvGetCols(IntPtr arr, IntPtr submat, int startCol, int endCol);
-
-        /// <summary>
-        /// Return the header, corresponding to a specified column of the input array
-        /// </summary>
-        /// <param name="arr">Input array</param>
-        /// <param name="submat">Pointer to the prelocate memory of the resulting sub-array header</param>
-        /// <param name="col">Zero-based index of the selected column</param>
-        /// <returns>The header, corresponding to a specified column of the input array</returns>
-        public static IntPtr cvGetCol(IntPtr arr, IntPtr submat, int col)
-        {
-            return cvGetCols(arr, submat, col, col + 1);
-        }
-        */
-        #endregion
-
-        /*
-        /// <summary>
-        /// returns the header, corresponding to a specified diagonal of the input array
-        /// </summary>
-        /// <param name="arr">Input array</param>
-        /// <param name="submat">Pointer to the resulting sub-array header</param>
-        /// <param name="diag">Array diagonal. Zero corresponds to the main diagonal, -1 corresponds to the diagonal above the main etc., 1 corresponds to the diagonal below the main etc</param>
-        /// <returns>Pointer to the resulting sub-array header</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetDiag")]
-        public static extern IntPtr cvGetDiag(IntPtr arr, IntPtr submat, int diag);
-        
-        /// <summary>
-        /// Returns number of rows (CvSize::height) and number of columns (CvSize::width) of the input matrix or image. In case of image the size of ROI is returned.
-        /// </summary>
-        /// <param name="arr">array header</param>
-        /// <returns>number of rows (CvSize::height) and number of columns (CvSize::width) of the input matrix or image. In case of image the size of ROI is returned.</returns>
-        public static Size cvGetSize(IntPtr arr)
-        {
-            int width = 0, height = 0;
-            cveGetSize(arr, ref width, ref height);
-            return new Size(width, height);
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveGetSize(IntPtr arr, ref int width, ref int height);
-        */
         
         /// <summary>
         /// Draws a simple or filled circle with given center and radius. The circle is clipped by ROI rectangle.
@@ -1590,6 +1356,7 @@ namespace Emgu.CV
         {
             using (InputOutputArray ioaImg = img.GetInputOutputArray())
                 cveCircle(ioaImg, ref center, radius, ref color, thickness, lineType, shift);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1612,24 +1379,11 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaMv = mv.GetOutputArray())
                 cveSplit(iaSrc, oaMv);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveSplit(IntPtr src, IntPtr mv);
-
-        /*
-        /// <summary>
-        /// Divides a multi-channel array into separate single-channel arrays. Two modes are available for the operation. If the source array has N channels then if the first N destination channels are not IntPtr.Zero, all they are extracted from the source array, otherwise if only a single destination channel of the first N is not IntPtr.Zero, this particular channel is extracted, otherwise an error is raised. Rest of destination channels (beyond the first N) must always be IntPtr.Zero. For IplImage cvCopy with COI set can be also used to extract a single channel from the image
-        /// </summary>
-        /// <param name="src">Source array</param>
-        /// <param name="dst0">Destination channels</param>
-        /// <param name="dst1">Destination channels</param>
-        /// <param name="dst2">Destination channels</param>
-        /// <param name="dst3">Destination channels</param>
-        public static void cvCvtPixToPlane(IntPtr src, IntPtr dst0, IntPtr dst1, IntPtr dst2, IntPtr dst3)
-        {
-           cvSplit(src, dst0, dst1, dst2, dst3);
-        }*/
 
         /// <summary>
         /// Draws a simple or thick elliptic arc or fills an ellipse sector. The arc is clipped by ROI rectangle. A piecewise-linear approximation is used for antialiased arcs and thick arcs. All the angles are given in degrees.
@@ -1651,6 +1405,7 @@ namespace Emgu.CV
             using (InputOutputArray ioaImg = img.GetInputOutputArray())
                 cveEllipse1(ioaImg, ref center, ref axes, angle, startAngle, endAngle, ref color, thickness, lineType,
                     shift);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1676,6 +1431,7 @@ namespace Emgu.CV
         {
             using (InputOutputArray ioaImg = img.GetInputOutputArray())
                 cveEllipse2(ioaImg, ref box, ref color, thickness, lineType);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1709,6 +1465,7 @@ namespace Emgu.CV
             {
                 cveDrawMarker(ioImg, ref position, ref color, markerType, markerSize, thickness, lineType);
             }
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1735,6 +1492,7 @@ namespace Emgu.CV
             using (InputArray iaLut = lut.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveLUT(iaSrc, iaLut, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1754,6 +1512,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveConvertScaleAbs(iaSrc, oaDst, scale, shift);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1776,6 +1535,7 @@ namespace Emgu.CV
             using (InputArray iaArr = arr.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveMean(iaArr, iaMask, ref result);
+                CvInvoke.CheckError();
             return result;
         }
 
@@ -1836,6 +1596,7 @@ namespace Emgu.CV
             using (OutputArray oaStdDev = stdDev.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveMeanStdDev(iaArr, oaMean, oaStdDev, iaMask);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1853,6 +1614,7 @@ namespace Emgu.CV
             MCvScalar result = new MCvScalar();
             using (InputArray iaSrc = src.GetInputArray())
                 cveSum(iaSrc, ref result);
+                CvInvoke.CheckError();
             return result;
         }
 
@@ -1879,6 +1641,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveReduce(iaSrc, oaDst, dim, type, dtype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1923,6 +1686,7 @@ namespace Emgu.CV
                     iaHierarchy,
                     maxLevel,
                     ref offset);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1951,6 +1715,7 @@ namespace Emgu.CV
             using (InputOutputArray ioaImg = img.GetInputOutputArray())
             using (InputArray iaPoints = points.GetInputArray())
                 cveFillConvexPoly(ioaImg, iaPoints, ref color, lineType, shift);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1976,6 +1741,7 @@ namespace Emgu.CV
             using (InputOutputArray ioaImg = img.GetInputOutputArray())
             using (InputArray iaPoints = points.GetInputArray())
                 cveFillPoly(ioaImg, iaPoints, ref color, lineType, shift, ref offset);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2009,6 +1775,7 @@ namespace Emgu.CV
             using (CvString s = new CvString(text))
             using (InputOutputArray ioaImg = img.GetInputOutputArray())
                 cvePutText(ioaImg, s, ref org, fontFace, fontScale, ref color, thickness, lineType, bottomLeftOrigin);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2034,6 +1801,7 @@ namespace Emgu.CV
             Size s = new Size();
             using (CvString textStr = new CvString(text))
                 cveGetTextSize(textStr, fontFace, fontScale, thickness, ref baseLine, ref s);
+            CheckError();
             return s;
         }
 
@@ -2069,6 +1837,7 @@ namespace Emgu.CV
             using (CvString s = new CvString(text))
             using (InputOutputArray ioaImg = img.GetInputOutputArray())
                 cvePutTextFontFace(ioaImg, s, ref org, ref color, font, size, weight, flags, ref wrap, ref result);
+            CheckError();
             return result;
         }
 
@@ -2110,6 +1879,7 @@ namespace Emgu.CV
             Rectangle result = new Rectangle();
             using (CvString s = new CvString(text))
                 cveGetTextSizeFontFace(ref imgSize, s, ref org, font, size, weight, flags, ref wrap, ref result);
+            CheckError();
             return result;
         }
 
@@ -2127,48 +1897,6 @@ namespace Emgu.CV
 
         #endregion
 
-        /*
-        /// <summary>
-        /// Copies the entire sequence or subsequence to the specified buffer and returns the pointer to the buffer
-        /// </summary>
-        /// <param name="seq">Sequence</param>
-        /// <param name="elements">Pointer to the destination array that must be large enough. It should be a pointer to data, not a matrix header</param>
-        /// <param name="slice">The sequence part to copy to the array</param>
-        /// <returns>the pointer to the buffer</returns>
-  #if ANDROID
-        public static IntPtr cvCvtSeqToArray(IntPtr seq, IntPtr elements, MCvSlice slice)
-        {
-           return cvCvtSeqToArray(seq, elements, slice.start_index, slice.end_index);
-        }
-
-        [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cvCvtSeqToArray(IntPtr seq, IntPtr elements, int startIndex, int endIndex);
-  #else
-        [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern IntPtr cvCvtSeqToArray(IntPtr seq, IntPtr elements, MCvSlice slice);
-  #endif
-
-        /// <summary>
-        /// Initializes sequence header for array. The sequence header as well as the sequence block are allocated by the user (for example, on stack). No data is copied by the function. The resultant sequence will consists of a single block and have IntPtr.Zero storage pointer, thus, it is possible to read its elements, but the attempts to add elements to the sequence will raise an error in most cases
-        /// </summary>
-        /// <param name="seqType">Type of the created sequence</param>
-        /// <param name="headerSize">Size of the header of the sequence. Parameter sequence must point to the structure of that size or greater size.</param>
-        /// <param name="elemSize">Size of the sequence element</param>
-        /// <param name="elements">Elements that will form a sequence</param>
-        /// <param name="total">Total number of elements in the sequence. The number of array elements must be equal to the value of this parameter</param>
-        /// <param name="seq">Pointer to the local variable that is used as the sequence header. </param>
-        /// <param name="block">Pointer to the local variable that is the header of the single sequence block. </param>
-        /// <returns>Pointer to the local variable that is used as the sequence header</returns>
-        [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern IntPtr cvMakeSeqHeaderForArray(
-           int seqType,
-           int headerSize,
-           int elemSize,
-           IntPtr elements,
-           int total,
-           IntPtr seq,
-           IntPtr block);
-        */
         internal static void MinMax(IInputArray arr, out double[] minValues, out double[] maxValues,
             out Point[] minLocations, out Point[] maxLocations)
         {
@@ -2241,6 +1969,7 @@ namespace Emgu.CV
             using (InputArray iaArr = arr.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveMinMaxLoc(iaArr, ref minVal, ref maxVal, ref minLoc, ref maxLoc, iaMask);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2269,6 +1998,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 cveReduceArgMin(iaSrc, oaDst, axis, lastIndex);
+                CvInvoke.CheckError();
             }
         }
 
@@ -2298,6 +2028,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 cveReduceArgMax(iaSrc, oaDst, axis, lastIndex);
+                CvInvoke.CheckError();
             }
         }
 
@@ -2330,6 +2061,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveCopyMakeBorder(iaSrc, oaDst, top, bottom, left, right, bordertype, ref value);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2339,89 +2071,6 @@ namespace Emgu.CV
             int top, int bottom, int left, int right,
             CvEnum.BorderType bordertype,
             ref MCvScalar value);
-
-        /*
-        /// <summary>
-        /// Return the particular array element
-        /// </summary>
-        /// <param name="arr">Input array. Must have a single channel</param>
-        /// <param name="idx0">The first zero-based component of the element index</param>
-        /// <returns>the particular array element</returns>
-        public static MCvScalar cvGet1D(IntPtr arr, int idx0)
-        {
-            MCvScalar value = new MCvScalar();
-            cveGet1D(arr, idx0, ref value);
-            return value;
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveGet1D(IntPtr arr, int idx0, ref MCvScalar value);
-
-        /// <summary>
-        /// Return the particular array element
-        /// </summary>
-        /// <param name="arr">Input array. Must have a single channel</param>
-        /// <param name="idx0">The first zero-based component of the element index</param>
-        /// <param name="idx1">The second zero-based component of the element index</param>
-        /// <returns>the particular array element</returns>
-        public static MCvScalar cvGet2D(IntPtr arr, int idx0, int idx1)
-        {
-            MCvScalar value = new MCvScalar();
-            cveGet2D(arr, idx0, idx1, ref value);
-            return value;
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveGet2D(IntPtr arr, int idx0, int idx1, ref MCvScalar value);
-
-        /// <summary>
-        /// Return the particular array element
-        /// </summary>
-        /// <param name="arr">Input array. Must have a single channel</param>
-        /// <param name="idx0">The first zero-based component of the element index</param>
-        /// <param name="idx1">The second zero-based component of the element index</param>
-        /// <param name="idx2">The third zero-based component of the element index</param>
-        /// <returns>the particular array element</returns>
-        public static MCvScalar cvGet3D(IntPtr arr, int idx0, int idx1, int idx2)
-        {
-            MCvScalar value = new MCvScalar();
-            cveGet3D(arr, idx0, idx1, idx2, ref value);
-            return value;
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveGet3D(IntPtr arr, int idx0, int idx1, int idx2, ref MCvScalar value);
-
-        /// <summary>
-        /// Return the particular element of single-channel array. If the array has multiple channels, runtime error is raised. Note that cvGet*D function can be used safely for both single-channel and multiple-channel arrays though they are a bit slower.
-        /// </summary>
-        /// <param name="arr">Input array. Must have a single channel</param>
-        /// <param name="idx0">The first zero-based component of the element index </param>
-        /// <returns>the particular element of single-channel array</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetReal1D")]
-        public static extern double cvGetReal1D(IntPtr arr, int idx0);
-
-        /// <summary>
-        /// Return the particular element of single-channel array. If the array has multiple channels, runtime error is raised. Note that cvGet*D function can be used safely for both single-channel and multiple-channel arrays though they are a bit slower.
-        /// </summary>
-        /// <param name="arr">Input array. Must have a single channel</param>
-        /// <param name="idx0">The first zero-based component of the element index </param>
-        /// <param name="idx1">The second zero-based component of the element index</param>
-        /// <returns>the particular element of single-channel array</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetReal2D")]
-        public static extern double cvGetReal2D(IntPtr arr, int idx0, int idx1);
-
-        /// <summary>
-        /// Return the particular element of single-channel array. If the array has multiple channels, runtime error is raised. Note that cvGet*D function can be used safely for both single-channel and multiple-channel arrays though they are a bit slower.
-        /// </summary>
-        /// <param name="arr">Input array. Must have a single channel</param>
-        /// <param name="idx0">The first zero-based component of the element index </param>
-        /// <param name="idx1">The second zero-based component of the element index</param>
-        /// <param name="idx2">The third zero-based component of the element index </param>
-        /// <returns>the particular element of single-channel array</returns>
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention, EntryPoint = "cveGetReal3D")]
-        public static extern double cvGetReal3D(IntPtr arr, int idx0, int idx1, int idx2);
-        */
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
@@ -2441,52 +2090,18 @@ namespace Emgu.CV
         /// <remarks>The function can be used to dynamically turn on and off optimized code (code that uses SSE2, AVX, and other instructions on the platforms that support it). It sets a global flag that is further checked by OpenCV functions. Since the flag is not checked in the inner OpenCV loops, it is only safe to call the function on the very top level in your application where you can be sure that no other OpenCV function is currently executed.</remarks>
         public static bool UseOptimized
         {
-            get { return cveUseOptimized(); }
-            set { cveSetUseOptimized(value); }
+            get
+            {
+                bool result = cveUseOptimized();
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                cveSetUseOptimized(value);
+                CvInvoke.CheckError();
+            }
         }
-
-        /*
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        private static extern bool cveHaveOpenVX();
-
-        /// <summary>
-        /// Check if use of OpenVX is possible.
-        /// </summary>
-        /// <returns>True use of OpenVX is possible.</returns>
-        public static bool HaveOpenVX
-        {
-            get { return cveHaveOpenVX(); }
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        private static extern bool cveUseOpenVX();
-
-
-        /// <summary>
-        /// Check if use of OpenVX is used.
-        /// </summary>
-        /// <returns>True use of OpenVX is used.</returns>
-        public static bool UseOpenVX
-        {
-            get { return cveUseOpenVX(); }
-        }
-
-        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveSetUseOpenVX(
-            [MarshalAs(BoolMarshalType)] 
-            bool flag);
-
-        /// <summary>
-        /// Enable/disable use of OpenVX
-        /// </summary>
-        public static bool UseOpenVX
-        {
-            get { return cveUseOpenVX(); }
-            set { cveSetUseOpenVX(value); }
-        }
-        */
 
         /// <summary>
         /// Returns full configuration time cmake output.
@@ -2499,6 +2114,7 @@ namespace Emgu.CV
                 using (CvString bi = new CvString())
                 {
                     cveGetBuildInformation(bi);
+                    CvInvoke.CheckError();
                     return bi.ToString();
                 }
 
@@ -2536,6 +2152,7 @@ namespace Emgu.CV
             using (InputArray iaStddev = stddev.GetInputArray())
             {
                 cveRandn(ioaDst, iaMean, iaStddev);
+                CvInvoke.CheckError();
             }
         }
 
@@ -2570,50 +2187,14 @@ namespace Emgu.CV
             using (InputArray iaHigh = high.GetInputArray())
             {
                 cveRandu(ioaDst, iaLow, iaHigh);
+                CvInvoke.CheckError();
             }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveRandu(IntPtr dst, IntPtr low, IntPtr high);
 
-        /*
-        /// <summary>
-        /// Fills the destination array with uniformly or normally distributed random numbers.
-        /// </summary>
-        /// <param name="rng">the seed for the random number generator</param>
-        /// <param name="arr">The destination array</param>
-        /// <param name="distType">Distribution type</param>
-        /// <param name="param1">The first parameter of distribution. In case of uniform distribution it is the inclusive lower boundary of random numbers range. In case of normal distribution it is the mean value of random numbers</param>
-        /// <param name="param2">The second parameter of distribution. In case of uniform distribution it is the exclusive upper boundary of random numbers range. In case of normal distribution it is the standard deviation of random numbers</param>
-  #if ANDROID
-        public static void cvRandArr(ref UInt64 rng, IntPtr arr, CvEnum.RandType distType, MCvScalar param1, MCvScalar param2)
-        {
-           cvRandArr(ref rng, arr, distType, param1.V0, param1.V1, param1.V2, param1.V3, param2.V0, param2.V1, param2.V2, param2.V3);
-        }
-
-        [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cvRandArr(
-           ref UInt64 rng, IntPtr arr, CvEnum.RandType dist_type, 
-           double param1v0, double param1v1, double param1v2, double param1v3,
-           double param2v0, double param2v1, double param2v2, double param2v3);
-  #else
-        [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern void cvRandArr(ref UInt64 rng, IntPtr arr, CvEnum.RandType distType, MCvScalar param1, MCvScalar param2);
-  #endif*/
-
         #region Linear Algebra
-
-        /*
-        /// <summary>
-        /// Calculates and returns the Euclidean dot product of two arrays.
-        /// src1 dot src2 = sumI(src1(I)*src2(I))
-        /// In case of multiple channel arrays the results for all channels are accumulated. In particular, cvDotProduct(a,a), where a is a complex vector, will return ||a||2. The function can process multi-dimensional arrays, row by row, layer by layer and so on.
-        /// </summary>
-        /// <param name="src1">The first source array.</param>
-        /// <param name="src2">The second source array</param>
-        /// <returns>the Euclidean dot product of two arrays</returns>
-        [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern double cvDotProduct(IntPtr src1, IntPtr src2);*/
 
         /// <summary>
         /// Computes eigenvalues and eigenvectors of a symmetric matrix
@@ -2633,6 +2214,7 @@ namespace Emgu.CV
             using (OutputArray oaEigenVectors =
                 eigenVectors == null ? OutputArray.GetEmpty() : eigenVectors.GetOutputArray())
                 cveEigen(iaSrc, oaEigenValues, oaEigenVectors);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2661,6 +2243,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveNormalize(iaSrc, oaDst, alpha, beta, normType, dType, iaMask);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2673,16 +2256,6 @@ namespace Emgu.CV
             CvEnum.DepthType dType,
             IntPtr mask);
 
-        /*
-        /// <summary>
-        /// Calculates the cross product of two 3D vectors
-        /// </summary>
-        /// <param name="src1">The first source vector</param>
-        /// <param name="src2">The second source vector</param>
-        /// <param name="dst">The destination vect</param>
-        [DllImport(OpencvCoreLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        public static extern void cvCrossProduct(IntPtr src1, IntPtr src2, IntPtr dst);
-        */
         /// <summary>
         /// Performs generalized matrix multiplication:
         /// dst = alpha*op(src1)*op(src2) + beta*op(src3), where op(X) is X or XT
@@ -2709,6 +2282,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
 
                 cveGemm(iaSrc1, iaSrc2, alpha, iaSrc3, beta, oaDst, tAbc);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2734,6 +2308,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaM = m.GetInputArray())
                 cveTransform(iaSrc, oaDst, iaM);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2785,6 +2360,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMat = mat.GetInputArray())
                 cvePerspectiveTransform(iaSrc, oaDst, iaMat);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2812,6 +2388,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaDelta = delta == null ? InputArray.GetEmpty() : delta.GetInputArray())
                 cveMulTransposed(iaSrc, oaDst, aTa, iaDelta, scale, dtype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2833,6 +2410,7 @@ namespace Emgu.CV
             MCvScalar trace = new MCvScalar();
             using (InputArray iaMat = mat.GetInputArray())
                 cveTrace(iaMat, ref trace);
+                CvInvoke.CheckError();
             return trace;
         }
 
@@ -2851,6 +2429,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveTranspose(iaSrc, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2864,7 +2443,11 @@ namespace Emgu.CV
         public static double Determinant(IInputArray mat)
         {
             using (InputArray iaMat = mat.GetInputArray())
-                return cveDeterminant(iaMat);
+            {
+                double result = cveDeterminant(iaMat);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2885,7 +2468,11 @@ namespace Emgu.CV
         {
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
-                return cveInvert(iaSrc, oaDst, method);
+            {
+                var result = cveInvert(iaSrc, oaDst, method);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2917,6 +2504,7 @@ namespace Emgu.CV
             using (OutputArray oaV = v.GetOutputArray())
             {
                 cveSVDecomp(iaSrc, oaW, oaU, oaV, flags);
+                CvInvoke.CheckError();
             }
         }
 
@@ -2940,6 +2528,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 cveSVBackSubst(iaW, iaU, iaVt, iaRhs, oaDst);
+                CvInvoke.CheckError();
             }
         }
 
@@ -2965,6 +2554,7 @@ namespace Emgu.CV
             using (OutputArray oaCovar = covar.GetOutputArray())
             using (InputOutputArray ioaMean = mean.GetInputOutputArray())
                 cveCalcCovarMatrix(iaSamples, oaCovar, ioaMean, flags, ctype);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2987,7 +2577,11 @@ namespace Emgu.CV
             using (InputArray iaV1 = v1.GetInputArray())
             using (InputArray iaV2 = v2.GetInputArray())
             using (InputArray iaIconvar = iconvar.GetInputArray())
-                return cveMahalanobis(iaV1, iaV2, iaIconvar);
+            {
+                var result = cveMahalanobis(iaV1, iaV2, iaIconvar);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -3007,6 +2601,7 @@ namespace Emgu.CV
             using (InputOutputArray ioaMean = mean.GetInputOutputArray())
             using (OutputArray oaEigenvectors = eigenvectors.GetOutputArray())
                 cvePCACompute1(iaData, ioaMean, oaEigenvectors, maxComponents);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -3026,6 +2621,7 @@ namespace Emgu.CV
             using (InputOutputArray ioaMean = mean.GetInputOutputArray())
             using (OutputArray oaEigenvectors = eigenvectors.GetOutputArray())
                 cvePCACompute2(iaData, ioaMean, oaEigenvectors, retainedVariance);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -3046,6 +2642,7 @@ namespace Emgu.CV
             using (InputArray iaEigenVectors = eigenvectors.GetInputArray())
             using (OutputArray oaResult = result.GetOutputArray())
                 cvePCAProject(iaData, iaMean, iaEigenVectors, oaResult);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -3066,6 +2663,7 @@ namespace Emgu.CV
             using (InputArray iaEigenVectors = eigenvectors.GetInputArray())
             using (OutputArray oaResult = result.GetOutputArray())
                 cvePCABackProject(iaData, iaMean, iaEigenVectors, oaResult);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -3080,8 +2678,17 @@ namespace Emgu.CV
         /// <remarks>When the argument is zero or negative, and at the beginning of the program, the number of threads is set to the number of processors in the system, as returned by the function omp_get_num_procs() from OpenMP runtime. </remarks>
         public static int NumThreads
         {
-            get { return cveGetNumThreads(); }
-            set { cveSetNumThreads(value); }
+            get
+            {
+                int result = cveGetNumThreads();
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                cveSetNumThreads(value);
+                CvInvoke.CheckError();
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -3096,7 +2703,12 @@ namespace Emgu.CV
         /// </summary>
         public static int ThreadNum
         {
-            get { return cveGetThreadNum(); }
+            get
+            {
+                int result = cveGetThreadNum();
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -3107,7 +2719,12 @@ namespace Emgu.CV
         /// </summary>
         public static int NumberOfCPUs
         {
-            get { return cveGetNumberOfCPUs(); }
+            get
+            {
+                int result = cveGetNumberOfCPUs();
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -3124,7 +2741,11 @@ namespace Emgu.CV
         public static bool SetParallelForBackend(String backendName, bool propagateNumThreads = true)
         {
             using (CvString csBackendName = new CvString(backendName))
-                return cveSetParallelForBackend(csBackendName, propagateNumThreads);
+            {
+                bool result = cveSetParallelForBackend(csBackendName, propagateNumThreads);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -3141,6 +2762,7 @@ namespace Emgu.CV
                 using (VectorOfCvString backendNames = new VectorOfCvString())
                 {
                     cveGetParallelBackends(backendNames);
+                    CvInvoke.CheckError();
                     return backendNames.ToArray();
                 }
             }
@@ -3165,33 +2787,12 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveCompare(iaSrc1, iaSrc2, oaDst, cmpOp);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveCompare(IntPtr src1, IntPtr src2, IntPtr dst, CvEnum.CmpType cmpOp);
 
-        /*
-        /// <summary>
-        /// Converts CvMat, IplImage , or CvMatND to Mat.
-        /// </summary>
-        /// <param name="arr">Input CvMat, IplImage , or CvMatND.</param>
-        /// <param name="allowND">When true (default value), CvMatND is converted to 2-dimensional Mat, if it is possible (see the discussion below); if it is not possible, or when the parameter is false, the function will report an error</param>
-        /// <param name="copyData">When false (default value), no data is copied and only the new header is created, in this case, the original array should not be deallocated while the new matrix header is used; if the parameter is true, all the data is copied and you may deallocate the original array right after the conversion.</param>
-        /// <param name="coiMode">Parameter specifying how the IplImage COI (when set) is handled. If coiMode=0 and COI is set, the function reports an error. If coiMode=1 , the function never reports an error. Instead, it returns the header to the whole original image and you will have to check and process COI manually. </param>
-        /// <returns>The Mat header</returns>
-        public static Mat CvArrToMat(IntPtr arr, bool copyData = false, bool allowND = true, int coiMode = 0)
-        {
-            return new Mat(cveArrToMat(arr, copyData, allowND, coiMode), true, false);
-        }
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveArrToMat(
-            IntPtr cvArray,
-            [MarshalAs(CvInvoke.BoolMarshalType)] bool copyData,
-            [MarshalAs(CvInvoke.BoolMarshalType)] bool allowND,
-            int coiMode);
-        */
-        
         /// <summary>
         /// Horizontally concatenate two images
         /// </summary>
@@ -3204,6 +2805,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveHConcat(iaSrc1, iaSrc2, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -3231,6 +2833,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 cveHConcat2(iaSrcs, oaDst);
+                CvInvoke.CheckError();
             }
         }
 
@@ -3249,6 +2852,7 @@ namespace Emgu.CV
             using (InputArray iaSrc2 = src2.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveVConcat(iaSrc1, iaSrc2, oaDst);
+                CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveVConcat(IntPtr src1, IntPtr src2, IntPtr dst);
@@ -3275,6 +2879,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 cveVConcat2(iaSrcs, oaDst);
+                CvInvoke.CheckError();
             }
         }
 
@@ -3289,6 +2894,7 @@ namespace Emgu.CV
         public static void Swap(Mat m1, Mat m2)
         {
             cveSwapMat(m1, m2);
+            CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveSwapMat(IntPtr mat1, IntPtr mat2);
@@ -3472,7 +3078,11 @@ namespace Emgu.CV
             using (InputArray iaData = data.GetInputArray())
             using (OutputArray oaBestLabels = bestLabels.GetOutputArray())
             using (OutputArray oaCenters = centers == null ? OutputArray.GetEmpty() : centers.GetOutputArray())
-                return cveKmeans(iaData, k, oaBestLabels, ref termcrit, attempts, flags, oaCenters);
+            {
+                var result = cveKmeans(iaData, k, oaBestLabels, ref termcrit, attempts, flags, oaCenters);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern double cveKmeans(
@@ -3523,6 +3133,7 @@ namespace Emgu.CV
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 cveMinMaxIdx(iaSrc, ref minVal, ref maxVal, minHandle.AddrOfPinnedObject(), maxHandle.AddrOfPinnedObject(),
                     iaMask);
+                CvInvoke.CheckError();
             minHandle.Free();
             maxHandle.Free();
         }
@@ -3540,6 +3151,7 @@ namespace Emgu.CV
         {
             using (InputOutputArray ioaA = a.GetInputOutputArray())
                 cvePatchNaNs(ioaA, val);
+                CvInvoke.CheckError();
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cvePatchNaNs(IntPtr a, double val);
@@ -3565,7 +3177,11 @@ namespace Emgu.CV
             double maxVal)
         {
             using (InputArray iaArr = arr.GetInputArray())
-                return cveCheckRange(iaArr, quiet, ref pos, minVal, maxVal);
+            {
+                var result = cveCheckRange(iaArr, quiet, ref pos, minVal, maxVal);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -3589,6 +3205,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveSqrt(iaSrc, oaDst);
+                CvInvoke.CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

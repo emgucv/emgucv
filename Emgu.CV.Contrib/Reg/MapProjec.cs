@@ -31,6 +31,7 @@ namespace Emgu.CV.Reg
         {
             using (InputArray iaProjTr = projTr.GetInputArray())
                 _ptr = RegInvoke.cveMapProjecCreate(iaProjTr, ref _mapPtr);
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/> 

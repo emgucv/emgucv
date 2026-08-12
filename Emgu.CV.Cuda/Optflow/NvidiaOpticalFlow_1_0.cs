@@ -80,6 +80,7 @@ namespace Emgu.CV.Cuda
                 ref _nvidiaHWOpticalFlow,
                 ref _algorithm,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -104,6 +105,7 @@ namespace Emgu.CV.Cuda
                     ref imageSize,
                     gridSize,
                     ioaUpsampledFlow);
+                CvInvoke.CheckError();
             }
         }
 

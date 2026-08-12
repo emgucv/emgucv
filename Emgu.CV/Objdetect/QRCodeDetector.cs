@@ -34,6 +34,7 @@ namespace Emgu.CV
         public QRCodeDetector()
         {
             _ptr = ObjdetectInvoke.cveQRCodeDetectorCreate(ref _graphicalCodeDetectorPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -61,6 +62,7 @@ namespace Emgu.CV
             using (CvString decodedInfo = new CvString())
             {
                 ObjdetectInvoke.cveQRCodeDetectorDecodeCurved(_ptr, iaImage, iaPoints, decodedInfo, oaStraightQrcode);
+                CvInvoke.CheckError();
                 return decodedInfo.ToString();
             }
         }
@@ -72,7 +74,9 @@ namespace Emgu.CV
         /// <returns>The kind of encoding for the decoded info from the latest decode or detectAndDecode call.</returns>
         public QRCodeEncoder.ECIEncodings GetEncoding(int codeIdx=0)
         {
-            return ObjdetectInvoke.cveQRCodeDetectorGetEncoding(_ptr, codeIdx);
+            QRCodeEncoder.ECIEncodings result = ObjdetectInvoke.cveQRCodeDetectorGetEncoding(_ptr, codeIdx);
+            CvInvoke.CheckError();
+            return result;
         }
         
     }

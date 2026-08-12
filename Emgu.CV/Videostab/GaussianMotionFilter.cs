@@ -22,6 +22,7 @@ namespace Emgu.CV.VideoStab
       public GaussianMotionFilter(int radius=15, float stdev=-1.0f)
       {
          _ptr = VideoStabInvoke.cveGaussianMotionFilterCreate(radius, stdev);
+         CvInvoke.CheckError();
       }
 
       /// <summary>

@@ -126,6 +126,7 @@ namespace Emgu.CV.Aruco
             {
                 cveArucoDrawDetectedMarkers(ioaImage, iaCorners, iaIds, ref borderColor);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -389,6 +390,7 @@ namespace Emgu.CV.Aruco
             {
                 cveArucoDrawDetectedCornersCharuco(ioaImage, iaCharucoCorners, iaCharucoIds, ref cornerColor);
             }
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveArucoDrawDetectedCornersCharuco(
@@ -472,6 +474,7 @@ namespace Emgu.CV.Aruco
             {
                 cveArucoDrawDetectedDiamonds(ioaImage, iaDiamondCorners, iaDiamondIds, ref borderColor);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -568,6 +571,7 @@ namespace Emgu.CV.Aruco
             {
                 cveArucoBoardGenerateImage(board.BoardPtr, ref outSize, oaImg, marginSize, borderBits);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -600,12 +604,13 @@ namespace Emgu.CV.Aruco
             using (var oaImgPoints = imgPoints.GetOutputArray())
             {
                 cveArucoBoardMatchImagePoints(
-                    board.BoardPtr, 
-                    iaDetectedCorners, 
-                    iaDetectedIds, 
+                    board.BoardPtr,
+                    iaDetectedCorners,
+                    iaDetectedIds,
                     oaObjPoints,
                     oaImgPoints);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

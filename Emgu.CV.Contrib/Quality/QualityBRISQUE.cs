@@ -54,6 +54,7 @@ namespace Emgu.CV.Quality
                     ref _qualityBasePtr,
                     ref _algorithmPtr,
                     ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

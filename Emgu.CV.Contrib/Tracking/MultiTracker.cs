@@ -27,6 +27,7 @@ namespace Emgu.CV.Legacy
         public MultiTracker()
         {
             _ptr = TrackingInvoke.cveMultiTrackerCreate();
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -39,7 +40,11 @@ namespace Emgu.CV.Legacy
         public bool Add(Tracker tracker, IInputArray image, Rectangle boundingBox)
         {
             using (InputArray iaImage = image.GetInputArray())
-                return TrackingInvoke.cveMultiTrackerAdd(_ptr, tracker, iaImage, ref boundingBox);
+            {
+                bool result = TrackingInvoke.cveMultiTrackerAdd(_ptr, tracker, iaImage, ref boundingBox);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -50,7 +55,9 @@ namespace Emgu.CV.Legacy
         /// <returns>True id update success</returns>
         public bool Update(Mat image, VectorOfRect boundingBox)
         {
-            return TrackingInvoke.cveMultiTrackerUpdate(_ptr, image, boundingBox);
+            bool result = TrackingInvoke.cveMultiTrackerUpdate(_ptr, image, boundingBox);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -62,6 +69,7 @@ namespace Emgu.CV.Legacy
             using (VectorOfRect vr = new VectorOfRect())
             {
                 TrackingInvoke.cveMultiTrackerGetObjects(_ptr, vr);
+                CvInvoke.CheckError();
                 return vr.ToArray();
             }
         }

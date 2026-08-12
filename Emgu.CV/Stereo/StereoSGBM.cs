@@ -65,6 +65,7 @@ namespace Emgu.CV
            Mode mode = Mode.SGBM)
         {
             _ptr = CvInvoke.cveStereoSGBMCreate(minDisparity, numDisparities, blockSize, p1, p2, disp12MaxDiff, preFilterCap, uniquenessRatio, speckleWindowSize, speckleRange, mode, ref _stereoMatcherPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -56,6 +56,7 @@ namespace Emgu.CV.Hfs
                 numSlicIter,
                 ref _algorithmPtr,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -91,6 +92,7 @@ namespace Emgu.CV.Hfs
             {
                 Mat m = new Mat();
                 HfsInvoke.cveHfsPerformSegment(_ptr, iaSrc, m, ifDraw, true);
+                CvInvoke.CheckError();
                 return m;
             }
         }
@@ -107,6 +109,7 @@ namespace Emgu.CV.Hfs
             {
                 Mat m = new Mat();
                 HfsInvoke.cveHfsPerformSegment(_ptr, iaSrc, m, ifDraw, false);
+                CvInvoke.CheckError();
                 return m;
             }
         }

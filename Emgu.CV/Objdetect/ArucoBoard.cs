@@ -36,6 +36,7 @@ namespace Emgu.CV.Aruco
             {
                 _ptr = ArucoInvoke.cveArucoBoardCreate(iaObjPoints, dictionary, iaIds, ref _sharedPtr);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>

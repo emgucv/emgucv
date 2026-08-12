@@ -33,6 +33,7 @@ namespace Emgu.CV.XImgproc
         {
             using (InputArray iaImage = image.GetInputArray())
                 _ptr = XImgprocInvoke.cveSuperpixelLSCCreate(iaImage, regionSize, ratio, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -40,7 +41,12 @@ namespace Emgu.CV.XImgproc
         /// </summary>
         public int NumberOfSuperpixels
         {
-            get { return XImgprocInvoke.cveSuperpixelLSCGetNumberOfSuperpixels(_ptr); }
+            get
+            {
+                int result = XImgprocInvoke.cveSuperpixelLSCGetNumberOfSuperpixels(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -52,6 +58,7 @@ namespace Emgu.CV.XImgproc
         {
             using (OutputArray oaLabels = labels.GetOutputArray())
                 XImgprocInvoke.cveSuperpixelLSCGetLabels(_ptr, oaLabels);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -63,6 +70,7 @@ namespace Emgu.CV.XImgproc
         {
             using (OutputArray oaImage = image.GetOutputArray())
                 XImgprocInvoke.cveSuperpixelLSCGetLabelContourMask(_ptr, oaImage, thickLine);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -73,6 +81,22 @@ namespace Emgu.CV.XImgproc
         public void Iterate(int numIterations = 10)
         {
             XImgprocInvoke.cveSuperpixelLSCIterate(_ptr, numIterations);
+            CvInvoke.CheckError();
+        }
+
+        /// <summary>
+        /// The function merge component that is too small, assigning the previously found adjacent label
+        /// to this component. Calling this function may change the final number of superpixels.
+        /// </summary>
+        /// <param name="minElementSize">
+        /// The minimum element size in percents that should be absorbed into a bigger
+        /// superpixel. Given resulted average superpixel size valid value should be in 0-100 range, 25 means
+        /// that less then a quarter sized superpixel should be absorbed, this is default.
+        /// </param>
+        public void EnforceLabelConnectivity(int minElementSize = 25)
+        {
+            XImgprocInvoke.cveSuperpixelLSCEnforceLabelConnectivity(_ptr, minElementSize);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -110,6 +134,9 @@ namespace Emgu.CV.XImgproc
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveSuperpixelLSCIterate(IntPtr lsc, int numIterations);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveSuperpixelLSCEnforceLabelConnectivity(IntPtr lsc, int minElementSize);
     }
 }
 

@@ -28,6 +28,7 @@ namespace Emgu.CV.OCR
         public Pix(Mat mat)
         {
             _ptr = OcrInvoke.cveLeptCreatePixFromMat(mat);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

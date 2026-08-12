@@ -59,6 +59,7 @@ namespace Emgu.CV.BgSegm
             float noiseRemovalThresholdFacFG = 0.0008f)
         {
             _ptr = BgSegmInvoke.cveBackgroundSubtractorGSOCCreate(mc, nSamples, replaceRate, propagationRate, hitsThreshold, alpha, beta, blinkingSupressionDecay, blinkingSupressionMultiplier, noiseRemovalThresholdFacBG, noiseRemovalThresholdFacFG, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

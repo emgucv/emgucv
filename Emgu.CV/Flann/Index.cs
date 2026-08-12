@@ -89,6 +89,7 @@ namespace Emgu.CV.Flann
         {
             using (InputArray iaValues = values.GetInputArray())
                 _ptr = FlannInvoke.cveFlannIndexCreate(iaValues, ip.IndexParamPtr, distType);
+            CvInvoke.CheckError();
         }
 
         /*
@@ -127,6 +128,7 @@ namespace Emgu.CV.Flann
             using (OutputArray oaIndices = indices.GetOutputArray())
             using (OutputArray oaSquareDistances = squareDistances.GetOutputArray())
                 FlannInvoke.cveFlannIndexKnnSearch(_ptr, iaQueries, oaIndices, oaSquareDistances, knn, checks, eps, sorted);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -150,7 +152,11 @@ namespace Emgu.CV.Flann
             using (InputArray iaQueries = queries.GetInputArray())
             using (OutputArray oaIndicies = indices.GetOutputArray())
             using (OutputArray oaSquareDistances = squareDistances.GetOutputArray())
-                return FlannInvoke.cveFlannIndexRadiusSearch(_ptr, iaQueries, oaIndicies, oaSquareDistances, radius, maxResults, checks, eps, sorted);
+            {
+                int result = FlannInvoke.cveFlannIndexRadiusSearch(_ptr, iaQueries, oaIndicies, oaSquareDistances, radius, maxResults, checks, eps, sorted);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>

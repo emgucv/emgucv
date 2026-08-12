@@ -10,6 +10,7 @@
 
 
 #include "vectors_c.h"
+#include "emgu_error.h"
 
 
 #ifdef HAVE_OPENCV_XFEATURES2D

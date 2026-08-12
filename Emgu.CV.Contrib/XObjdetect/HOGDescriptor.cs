@@ -24,6 +24,7 @@ namespace Emgu.CV
         public HOGDescriptor()
         {
             _ptr = XObjdetectInvoke.cveHOGDescriptorCreateDefault();
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -60,6 +61,7 @@ namespace Emgu.CV
                0,
                L2HysThreshold,
                gammaCorrection);
+            CvInvoke.CheckError();
         }
 
 
@@ -72,6 +74,7 @@ namespace Emgu.CV
             using (Util.VectorOfFloat desc = new VectorOfFloat())
             {
                 XObjdetectInvoke.cveHOGDescriptorPeopleDetectorCreate(desc);
+                CvInvoke.CheckError();
                 return desc.ToArray();
             }
         }
@@ -85,6 +88,7 @@ namespace Emgu.CV
             using (VectorOfFloat vec = new VectorOfFloat(detector))
             {
                 XObjdetectInvoke.cveHOGSetSVMDetector(_ptr, vec);
+                CvInvoke.CheckError();
             }
         }
 
@@ -114,6 +118,7 @@ namespace Emgu.CV
             {
                 XObjdetectInvoke.cveHOGDescriptorDetectMultiScale(_ptr, iaImage, vr, vd, hitThreshold, ref winStride, ref padding, scale,
                    finalThreshold, useMeanshiftGrouping);
+                CvInvoke.CheckError();
 #if UNSAFE_ALLOWED
                 var location = vr.GetSpan();
                 var weight = vd.GetSpan();
@@ -158,6 +163,7 @@ namespace Emgu.CV
                         XObjdetectInvoke.cveHOGDescriptorCompute(_ptr, iaImage, desc, ref winStride, ref padding, vp);
                     }
                 }
+                CvInvoke.CheckError();
                 return desc.ToArray();
             }
         }
@@ -176,7 +182,12 @@ namespace Emgu.CV
         /// </summary>
         public uint DescriptorSize
         {
-            get { return XObjdetectInvoke.cveHOGDescriptorGetDescriptorSize(_ptr); }
+            get
+            {
+                uint result = XObjdetectInvoke.cveHOGDescriptorGetDescriptorSize(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
     }
 

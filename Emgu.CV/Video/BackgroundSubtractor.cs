@@ -39,6 +39,7 @@ namespace Emgu.CV
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaFgMask = fgMask.GetOutputArray())
                 CvInvoke.cveBackgroundSubtractorUpdate(subtractor.BackgroundSubtractorPtr, iaImage, oaFgMask, learningRate);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -51,6 +52,7 @@ namespace Emgu.CV
         {
             using (OutputArray oaBackgroundImage = backgroundImage.GetOutputArray())
                 CvInvoke.cveBackgroundSubtractorGetBackgroundImage(subtractor.BackgroundSubtractorPtr, oaBackgroundImage);
+            CvInvoke.CheckError();
         }
     }
 

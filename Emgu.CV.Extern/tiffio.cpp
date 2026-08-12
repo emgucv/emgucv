@@ -8,138 +8,177 @@
 
 TIFF* tiffWriterOpen(char* fileName)
 {
+	try
+	{
 #ifdef EMGU_CV_WITH_TIFF
-	return XTIFFOpen(fileName, "w");
+		return XTIFFOpen(fileName, "w");
 #else
-	throw_no_tiff();
+		throw_no_tiff();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 int tiffTileRowSize(TIFF* pTiff)
 {
+	try
+	{
 #ifdef EMGU_CV_WITH_TIFF
-	return TIFFTileRowSize(pTiff);
+		return TIFFTileRowSize(pTiff);
 #else
-	throw_no_tiff();
+		throw_no_tiff();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 int tiffTileSize(TIFF* pTiff)
 {
+	try
+	{
 #ifdef EMGU_CV_WITH_TIFF
-	return TIFFTileSize(pTiff);
+		return TIFFTileSize(pTiff);
 #else
-	throw_no_tiff();
+		throw_no_tiff();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void tiffWriteImageSize(TIFF* pTiff, cv::Size* imageSize)
 {
+	try
+	{
 #ifdef EMGU_CV_WITH_TIFF
-	TIFFSetField(pTiff, TIFFTAG_IMAGEWIDTH, imageSize->width);
-	TIFFSetField(pTiff, TIFFTAG_IMAGELENGTH, imageSize->height);
+		TIFFSetField(pTiff, TIFFTAG_IMAGEWIDTH, imageSize->width);
+		TIFFSetField(pTiff, TIFFTAG_IMAGELENGTH, imageSize->height);
 #else
-	throw_no_tiff();
+		throw_no_tiff();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void tiffWriteImageInfo(TIFF* pTiff, int bitsPerSample, int samplesPerPixel)
 {
-#ifdef EMGU_CV_WITH_TIFF
-	TIFFSetField(pTiff, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
-	TIFFSetField(pTiff, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
-	TIFFSetField(pTiff, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-
-	TIFFSetField(pTiff, TIFFTAG_BITSPERSAMPLE, bitsPerSample);
-	TIFFSetField(pTiff, TIFFTAG_SAMPLESPERPIXEL, samplesPerPixel);
-
-	TIFFSetField(pTiff, TIFFTAG_PHOTOMETRIC,
-		samplesPerPixel == 1 ? 1 //BlackIsZero. For bilevel and grayscale images: 0 is imaged as black.
-		: 2 //RGB. RGB value of (0,0,0) represents black, and (255,255,255) represents white, assuming 8-bit components. The components are stored in the indicated order: first Red, then Green, then Blue.
-	);
-
-	//for RGBA, define the fourth channel as alpha
-	if (samplesPerPixel == 4)
+	try
 	{
-		uint16 extraSampleType[] = { EXTRASAMPLE_UNASSALPHA };
-		TIFFSetField(pTiff, TIFFTAG_EXTRASAMPLES, 1, extraSampleType);
-	}
+#ifdef EMGU_CV_WITH_TIFF
+		TIFFSetField(pTiff, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
+		TIFFSetField(pTiff, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
+		TIFFSetField(pTiff, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+
+		TIFFSetField(pTiff, TIFFTAG_BITSPERSAMPLE, bitsPerSample);
+		TIFFSetField(pTiff, TIFFTAG_SAMPLESPERPIXEL, samplesPerPixel);
+
+		TIFFSetField(pTiff, TIFFTAG_PHOTOMETRIC,
+			samplesPerPixel == 1 ? 1 //BlackIsZero. For bilevel and grayscale images: 0 is imaged as black.
+			: 2 //RGB. RGB value of (0,0,0) represents black, and (255,255,255) represents white, assuming 8-bit components. The components are stored in the indicated order: first Red, then Green, then Blue.
+		);
+
+		//for RGBA, define the fourth channel as alpha
+		if (samplesPerPixel == 4)
+		{
+			uint16 extraSampleType[] = { EXTRASAMPLE_UNASSALPHA };
+			TIFFSetField(pTiff, TIFFTAG_EXTRASAMPLES, 1, extraSampleType);
+		}
 #else
-	throw_no_tiff();
+		throw_no_tiff();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void tiffWriteImage(TIFF* pTiff, cv::Mat* mat)
 {
-#ifdef EMGU_CV_WITH_TIFF
-	cv::Size imageSize = mat->size();
-	tiffWriteImageSize(pTiff, &imageSize);
-
-	//write scaneline image data
-	for (int row = 0; row < mat->rows; row++)
+	try
 	{
-		TIFFWriteScanline(pTiff, mat->ptr(row), row, 0);
-	}
-	//end writing image data
+#ifdef EMGU_CV_WITH_TIFF
+		cv::Size imageSize = mat->size();
+		tiffWriteImageSize(pTiff, &imageSize);
+
+		//write scaneline image data
+		for (int row = 0; row < mat->rows; row++)
+		{
+			TIFFWriteScanline(pTiff, mat->ptr(row), row, 0);
+		}
+		//end writing image data
 #else
-	throw_no_tiff();
+		throw_no_tiff();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void tiffWriteTile(TIFF* pTiff, int row, int col, cv::Mat* tile)
 {
+	try
+	{
 #ifdef EMGU_CV_WITH_TIFF
 
-	int bufferStride = tile->cols * tile->elemSize();
-	unsigned char* buffer = static_cast<unsigned char*>(malloc(tile->rows * bufferStride));
-	unsigned char* ptr = buffer;
+		int bufferStride = tile->cols * tile->elemSize();
+		unsigned char* buffer = static_cast<unsigned char*>(malloc(tile->rows * bufferStride));
+		unsigned char* ptr = buffer;
 
-	for (int i = 0; i < tile->rows; i++, ptr += bufferStride)
-		memcpy(ptr, tile->ptr(i), bufferStride);
+		for (int i = 0; i < tile->rows; i++, ptr += bufferStride)
+			memcpy(ptr, tile->ptr(i), bufferStride);
 
-	TIFFWriteTile(pTiff, buffer, col, row, 0, 0);
-	free(buffer);
+		TIFFWriteTile(pTiff, buffer, col, row, 0, 0);
+		free(buffer);
 #else
-	throw_no_tiff();
+		throw_no_tiff();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void tiffWriteTileInfo(TIFF* pTiff, cv::Size* tileSize)
 {
+	try
+	{
 #ifdef EMGU_CV_WITH_TIFF
-	TIFFSetField(pTiff, TIFFTAG_TILEWIDTH, tileSize->width);
-	TIFFSetField(pTiff, TIFFTAG_TILELENGTH, tileSize->height);
+		TIFFSetField(pTiff, TIFFTAG_TILEWIDTH, tileSize->width);
+		TIFFSetField(pTiff, TIFFTAG_TILELENGTH, tileSize->height);
 #else
-	throw_no_tiff();
+		throw_no_tiff();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void tiffWriteGeoTag(TIFF* pTiff, double* ModelTiepoint, double* ModelPixelScale)
 {
+	try
+	{
 #ifdef EMGU_CV_WITH_TIFF
-	TIFFSetField(pTiff, GTIFF_TIEPOINTS, 6, ModelTiepoint);
-	TIFFSetField(pTiff, GTIFF_PIXELSCALE, 3, ModelPixelScale);
+		TIFFSetField(pTiff, GTIFF_TIEPOINTS, 6, ModelTiepoint);
+		TIFFSetField(pTiff, GTIFF_PIXELSCALE, 3, ModelPixelScale);
 
-	GTIF* gTiff = GTIFNew(pTiff);
-	GTIFKeySet(gTiff, GTModelTypeGeoKey, TYPE_SHORT, 1, ModelTypeGeographic);
-	GTIFKeySet(gTiff, GTRasterTypeGeoKey, TYPE_SHORT, 1, RasterPixelIsArea);
-	GTIFKeySet(gTiff, GeographicTypeGeoKey, TYPE_SHORT, 1, GCS_WGS_84);
-	GTIFKeySet(gTiff, GeogAngularUnitsGeoKey, TYPE_SHORT, 1, Angular_Degree);
-	GTIFWriteKeys(gTiff);
-	GTIFFree(gTiff);
+		GTIF* gTiff = GTIFNew(pTiff);
+		GTIFKeySet(gTiff, GTModelTypeGeoKey, TYPE_SHORT, 1, ModelTypeGeographic);
+		GTIFKeySet(gTiff, GTRasterTypeGeoKey, TYPE_SHORT, 1, RasterPixelIsArea);
+		GTIFKeySet(gTiff, GeographicTypeGeoKey, TYPE_SHORT, 1, GCS_WGS_84);
+		GTIFKeySet(gTiff, GeogAngularUnitsGeoKey, TYPE_SHORT, 1, Angular_Degree);
+		GTIFWriteKeys(gTiff);
+		GTIFFree(gTiff);
 #else
-	throw_no_tiff();
+		throw_no_tiff();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void tiffWriterClose(TIFF** pTiff)
 {
+	try
+	{
 #ifdef EMGU_CV_WITH_TIFF
-	TIFFWriteDirectory(*pTiff);
-	XTIFFClose(*pTiff);
-	*pTiff = 0;
+		TIFFWriteDirectory(*pTiff);
+		XTIFFClose(*pTiff);
+		*pTiff = 0;
 #else
-	throw_no_tiff();
+		throw_no_tiff();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
-

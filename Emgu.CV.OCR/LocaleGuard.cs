@@ -94,12 +94,14 @@ namespace Emgu.CV.OCR
             if (locale == null)
             {
                 oldLocalePtr = cveStdSetlocale(category, IntPtr.Zero);
+                CvInvoke.CheckError();
                 return oldLocalePtr == IntPtr.Zero ? null : Marshal.PtrToStringAnsi(oldLocalePtr);
             }
             IntPtr localePtr = Marshal.StringToHGlobalAnsi(locale);
             try
             {
                 oldLocalePtr = cveStdSetlocale(category, localePtr);
+                CvInvoke.CheckError();
             }
             finally
             {

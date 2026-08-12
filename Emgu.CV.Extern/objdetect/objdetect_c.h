@@ -10,6 +10,7 @@
 
 #include "opencv2/core.hpp"
 #include "cvapi_compat.h"
+#include "emgu_error.h"
 
 #ifdef HAVE_OPENCV_OBJDETECT
 #include "opencv2/objdetect/objdetect.hpp"

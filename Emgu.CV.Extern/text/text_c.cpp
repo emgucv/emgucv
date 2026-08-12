@@ -17,23 +17,31 @@ cv::text::ERFilter* cveERFilterNM1Create(
 	float minProbabilityDiff,
 	cv::Ptr<cv::text::ERFilter>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_TEXT
-	cv::Ptr<cv::text::ERFilter> filter = cv::text::createERFilterNM1(cv::text::loadClassifierNM1(*classifier), thresholdDelta, minArea, maxArea, minProbability, nonMaxSuppression, minProbabilityDiff);
-	*sharedPtr = new cv::Ptr<cv::text::ERFilter>(filter);
-	return filter.get();
+		cv::Ptr<cv::text::ERFilter> filter = cv::text::createERFilterNM1(cv::text::loadClassifierNM1(*classifier), thresholdDelta, minArea, maxArea, minProbability, nonMaxSuppression, minProbabilityDiff);
+		*sharedPtr = new cv::Ptr<cv::text::ERFilter>(filter);
+		return filter.get();
 #else
-	throw_no_text();
+		throw_no_text();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 cv::text::ERFilter* cveERFilterNM2Create(cv::String* classifier, float minProbability, cv::Ptr<cv::text::ERFilter>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_TEXT
-	cv::Ptr<cv::text::ERFilter> filter = cv::text::createERFilterNM2(cv::text::loadClassifierNM2(*classifier), minProbability);
-	*sharedPtr = new cv::Ptr<cv::text::ERFilter>(filter);
-	return filter.get();
+		cv::Ptr<cv::text::ERFilter> filter = cv::text::createERFilterNM2(cv::text::loadClassifierNM2(*classifier), minProbability);
+		*sharedPtr = new cv::Ptr<cv::text::ERFilter>(filter);
+		return filter.get();
 #else
-	throw_no_text();
+		throw_no_text();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveERFilterRelease(cv::Ptr<cv::text::ERFilter>** sharedPtr)
 {
@@ -46,11 +54,15 @@ void cveERFilterRelease(cv::Ptr<cv::text::ERFilter>** sharedPtr)
 }
 void cveERFilterRun(cv::text::ERFilter* filter, cv::_InputArray* image, std::vector<cv::text::ERStat>* regions)
 {
-#ifdef HAVE_OPENCV_TEXT
-	filter->run(*image, *regions);
-#else
-	throw_no_text();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_TEXT
+		filter->run(*image, *regions);
+	#else
+		throw_no_text();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveERGrouping(
@@ -59,17 +71,21 @@ void cveERGrouping(
 	std::vector< std::vector<cv::Vec2i> >* groups, std::vector<cv::Rect>* group_rects,
 	int method, cv::String* fileName, float minProbability)
 {
-#ifdef HAVE_OPENCV_TEXT
-	std::vector< std::vector< cv::text::ERStat > > statVecs;
-	for (int i = 0; i < count; i++)
+	try
 	{
-		statVecs.push_back(*regions[i]);
-	}
+	#ifdef HAVE_OPENCV_TEXT
+		std::vector< std::vector< cv::text::ERStat > > statVecs;
+		for (int i = 0; i < count; i++)
+		{
+			statVecs.push_back(*regions[i]);
+		}
 
-	cv::text::erGrouping(*image, *channels, statVecs, *groups, *group_rects, method, *fileName, minProbability);
-#else
-	throw_no_text();
-#endif
+		cv::text::erGrouping(*image, *channels, statVecs, *groups, *group_rects, method, *fileName, minProbability);
+	#else
+		throw_no_text();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveMSERsToERStats(
@@ -77,49 +93,69 @@ void cveMSERsToERStats(
 	std::vector< std::vector< cv::Point > >* contours,
 	std::vector< std::vector< cv::text::ERStat> >* regions)
 {
-#ifdef HAVE_OPENCV_TEXT
-	cv::text::MSERsToERStats(*image, *contours, *regions);
-#else
-	throw_no_text();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_TEXT
+		cv::text::MSERsToERStats(*image, *contours, *regions);
+	#else
+		throw_no_text();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveComputeNMChannels(cv::_InputArray* src, cv::_OutputArray* channels, int mode)
 {
-#ifdef HAVE_OPENCV_TEXT
-	cv::text::computeNMChannels(*src, *channels, mode);
-#else
-	throw_no_text();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_TEXT
+		cv::text::computeNMChannels(*src, *channels, mode);
+	#else
+		throw_no_text();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::text::TextDetectorCNN* cveTextDetectorCNNCreate(cv::String* modelArchFilename, cv::String* modelWeightsFilename, cv::Ptr<cv::text::TextDetectorCNN>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_TEXT
-	cv::Ptr<cv::text::TextDetectorCNN> detector = cv::text::TextDetectorCNN::create(*modelArchFilename, *modelWeightsFilename);
-	*sharedPtr = new cv::Ptr<cv::text::TextDetectorCNN>(detector);
-	return detector.get();
+		cv::Ptr<cv::text::TextDetectorCNN> detector = cv::text::TextDetectorCNN::create(*modelArchFilename, *modelWeightsFilename);
+		*sharedPtr = new cv::Ptr<cv::text::TextDetectorCNN>(detector);
+		return detector.get();
 #else
-	throw_no_text();
+		throw_no_text();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 cv::text::TextDetectorCNN* cveTextDetectorCNNCreate2(cv::String* modelArchFilename, cv::String* modelWeightsFilename, std::vector<cv::Size>* detectionSizes, cv::Ptr<cv::text::TextDetectorCNN>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_TEXT
-	cv::Ptr<cv::text::TextDetectorCNN> detector = cv::text::TextDetectorCNN::create(*modelArchFilename, *modelWeightsFilename, *detectionSizes);
-	*sharedPtr = new cv::Ptr<cv::text::TextDetectorCNN>(detector);
-	return detector.get();
+		cv::Ptr<cv::text::TextDetectorCNN> detector = cv::text::TextDetectorCNN::create(*modelArchFilename, *modelWeightsFilename, *detectionSizes);
+		*sharedPtr = new cv::Ptr<cv::text::TextDetectorCNN>(detector);
+		return detector.get();
 #else
-	throw_no_text();
-#endif	
+		throw_no_text();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveTextDetectorCNNDetect(cv::text::TextDetectorCNN* detector, cv::_InputArray* inputImage, std::vector<cv::Rect>* bbox, std::vector<float>* confidence)
 {
-#ifdef HAVE_OPENCV_TEXT
-	detector->detect(*inputImage, *bbox, *confidence);
-#else
-	throw_no_text();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_TEXT
+		detector->detect(*inputImage, *bbox, *confidence);
+	#else
+		throw_no_text();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveTextDetectorCNNRelease(cv::Ptr<cv::text::TextDetectorCNN>** sharedPtr)
 {

@@ -108,5 +108,73 @@ namespace Emgu.CV.Test
             }
 
         }
+
+        [Test]
+        public void TestFacemarkKazemiParams()
+        {
+            using (FacemarkKazemiParams kazemiParams = new FacemarkKazemiParams())
+            {
+                kazemiParams.CascadeDepth = 12;
+                EmguAssert.AreEqual(12, kazemiParams.CascadeDepth);
+
+                kazemiParams.TreeDepth = 5;
+                EmguAssert.AreEqual(5, kazemiParams.TreeDepth);
+
+                kazemiParams.NumTreesPerCascadeLevel = 512;
+                EmguAssert.AreEqual(512, kazemiParams.NumTreesPerCascadeLevel);
+
+                kazemiParams.LearningRate = 0.1f;
+                EmguAssert.AreEqual(0.1f, kazemiParams.LearningRate);
+
+                kazemiParams.OversamplingAmount = 20;
+                EmguAssert.AreEqual(20, kazemiParams.OversamplingAmount);
+
+                kazemiParams.NumTestCoordinates = 400;
+                EmguAssert.AreEqual(400, kazemiParams.NumTestCoordinates);
+
+                kazemiParams.Lambda = 0.1f;
+                EmguAssert.AreEqual(0.1f, kazemiParams.Lambda);
+
+                kazemiParams.NumTestSplits = 20;
+                EmguAssert.AreEqual(20, kazemiParams.NumTestSplits);
+
+                kazemiParams.ConfigFile = "config.xml";
+                EmguAssert.AreEqual("config.xml", kazemiParams.ConfigFile);
+            }
+        }
+
+        [Test]
+        public void TestFacemarkKazemi()
+        {
+            using (FacemarkKazemiParams kazemiParams = new FacemarkKazemiParams())
+            using (FacemarkKazemi kazemi = new FacemarkKazemi(kazemiParams))
+            {
+                EmguAssert.IsFalse(kazemi.FacemarkPtr == IntPtr.Zero);
+                EmguAssert.IsFalse(kazemi.AlgorithmPtr == IntPtr.Zero);
+
+                using (Mat img = new Mat(new Size(100, 100), DepthType.Cv8U, 1))
+                {
+                    CvInvoke.Randu(img, new MCvScalar(0), new MCvScalar(255));
+
+                    //A face detector that reports no faces, so the round-trip can be
+                    //verified without depending on a downloaded cascade/model file.
+                    FaceInvoke.FaceDetectNative detector = delegate (IntPtr input, IntPtr output)
+                    {
+                        return false;
+                    };
+                    bool setDetectorResult = kazemi.SetFaceDetector(detector);
+                    EmguAssert.IsTrue(setDetectorResult);
+
+                    //FacemarkKazemi implements getFaces/setFaceDetector directly rather than
+                    //through FacemarkTrain, so this exercises that fallback path.
+                    using (VectorOfRect faces = new VectorOfRect())
+                    {
+                        bool getFacesResult = kazemi.GetFaces(img, faces);
+                        EmguAssert.IsFalse(getFacesResult);
+                        EmguAssert.AreEqual(0, faces.Size);
+                    }
+                }
+            }
+        }
     }
 }

@@ -28,6 +28,7 @@ namespace Emgu.CV.XFeatures2D
         public Brisk(int thresh = 30, int octaves = 3, float patternScale = 1.0f)
         {
             _ptr = XFeatures2DInvoke.cveBriskCreate(thresh, octaves, patternScale, ref _feature2D, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -52,6 +52,7 @@ namespace Emgu.CV.XImgproc
                 mergeSmall,
                 ref _algorithm,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -62,6 +63,7 @@ namespace Emgu.CV.XImgproc
         {
             using(InputArray iaImg = img.GetInputArray())
                 XImgprocInvoke.cveScanSegmentIterate(_ptr, iaImg);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -72,6 +74,7 @@ namespace Emgu.CV.XImgproc
         {
             using (OutputArray oaLabelsOut = labelsOut.GetOutputArray())
                 XImgprocInvoke.cveScanSegmentGetLabels(_ptr, oaLabelsOut);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -83,6 +86,7 @@ namespace Emgu.CV.XImgproc
         {
             using (OutputArray oaImage = image.GetOutputArray())
                 XImgprocInvoke.cveScanSegmentGetLabelContourMask(_ptr, oaImage, thickLine);
+            CvInvoke.CheckError();
         }
 
 

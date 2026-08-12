@@ -37,6 +37,7 @@ namespace Emgu.CV
         {
             _mat = img;
             _ptr = CvInvoke.cveLineIteratorCreate(img, ref p1, ref p2, connectivity, leftToRight);
+            CvInvoke.CheckError();
         }
 
         #endregion
@@ -46,7 +47,12 @@ namespace Emgu.CV
         /// </summary>
         public IntPtr DataPtr
         {
-            get { return CvInvoke.cveLineIteratorGetDataPointer(_ptr); }
+            get
+            {
+                IntPtr result = CvInvoke.cveLineIteratorGetDataPointer(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -124,6 +130,7 @@ namespace Emgu.CV
             {
                 Point p = new Point();
                 CvInvoke.cveLineIteratorPos(_ptr, ref p);
+                CvInvoke.CheckError();
                 return p;
             }
         }
@@ -134,6 +141,7 @@ namespace Emgu.CV
         public void MoveNext()
         {
             CvInvoke.cveLineIteratorMoveNext(_ptr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -163,6 +171,7 @@ namespace Emgu.CV
         {
             Mat m = new Mat();
             CvInvoke.cveLineIteratorSampleLine(img, ref p1, ref p2, connectivity, leftToRight, m);
+            CvInvoke.CheckError();
             return m;
         }
 }

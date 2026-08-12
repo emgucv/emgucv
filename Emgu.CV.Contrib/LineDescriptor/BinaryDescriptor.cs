@@ -25,6 +25,7 @@ namespace Emgu.CV.LineDescriptor
         public BinaryDescriptor()
         {
             _ptr = LineDescriptorInvoke.cveLineDescriptorBinaryDescriptorCreate(ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -36,6 +37,7 @@ namespace Emgu.CV.LineDescriptor
         public void Detect(Mat image, VectorOfKeyLine keylines, Mat mask = null)
         {
             LineDescriptorInvoke.cveLineDescriptorBinaryDescriptorDetect(_ptr, image, keylines, mask);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -48,6 +50,7 @@ namespace Emgu.CV.LineDescriptor
         public void Compute(Mat image, VectorOfKeyLine keylines, Mat descriptors, bool returnFloatDescr = false)
         {
             LineDescriptorInvoke.cveLineDescriptorBinaryDescriptorCompute(_ptr, image, keylines, descriptors, returnFloatDescr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

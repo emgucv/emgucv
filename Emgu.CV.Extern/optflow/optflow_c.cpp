@@ -9,77 +9,105 @@
 
 void cveUpdateMotionHistory(cv::_InputArray* silhouette, cv::_InputOutputArray* mhi, double timestamp, double duration)
 {
-#ifdef HAVE_OPENCV_OPTFLOW
-   cv::motempl::updateMotionHistory(*silhouette, *mhi, timestamp, duration);
-#else
-	throw_no_optflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OPTFLOW
+	   cv::motempl::updateMotionHistory(*silhouette, *mhi, timestamp, duration);
+	#else
+		throw_no_optflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveCalcMotionGradient(cv::_InputArray* mhi, cv::_OutputArray* mask, cv::_OutputArray* orientation, double delta1, double delta2, int apertureSize)
 {
-#ifdef HAVE_OPENCV_OPTFLOW
-   cv::motempl::calcMotionGradient(*mhi, *mask, *orientation, delta1, delta2, apertureSize);
-#else
-	throw_no_optflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OPTFLOW
+	   cv::motempl::calcMotionGradient(*mhi, *mask, *orientation, delta1, delta2, apertureSize);
+	#else
+		throw_no_optflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveCalcGlobalOrientation(cv::_InputArray* orientation, cv::_InputArray* mask, cv::_InputArray* mhi, double timestamp, double duration)
 {
-#ifdef HAVE_OPENCV_OPTFLOW
-   cv::motempl::calcGlobalOrientation(*orientation, *mask, *mhi, timestamp, duration);
-#else
-	throw_no_optflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OPTFLOW
+	   cv::motempl::calcGlobalOrientation(*orientation, *mask, *mhi, timestamp, duration);
+	#else
+		throw_no_optflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveSegmentMotion(cv::_InputArray* mhi, cv::_OutputArray* segmask, std::vector< cv::Rect >* boundingRects, double timestamp, double segThresh)
 {
-#ifdef HAVE_OPENCV_OPTFLOW
-   cv::motempl::segmentMotion(*mhi, *segmask, *boundingRects, timestamp, segThresh);
-#else
-	throw_no_optflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OPTFLOW
+	   cv::motempl::segmentMotion(*mhi, *segmask, *boundingRects, timestamp, segThresh);
+	#else
+		throw_no_optflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::DenseOpticalFlow* cveOptFlowDeepFlowCreate(cv::Algorithm** algorithm, cv::Ptr<cv::DenseOpticalFlow>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OPTFLOW
-	cv::Ptr<cv::DenseOpticalFlow> ptr = cv::optflow::createOptFlow_DeepFlow();
-	*sharedPtr = new cv::Ptr<cv::DenseOpticalFlow>(ptr);
-	cv::DenseOpticalFlow* flowPtr = (*sharedPtr)->get();
-	*algorithm = dynamic_cast<cv::Algorithm*>(flowPtr);
-	return flowPtr;
-#else
-	throw_no_optflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OPTFLOW
+		cv::Ptr<cv::DenseOpticalFlow> ptr = cv::optflow::createOptFlow_DeepFlow();
+		*sharedPtr = new cv::Ptr<cv::DenseOpticalFlow>(ptr);
+		cv::DenseOpticalFlow* flowPtr = (*sharedPtr)->get();
+		*algorithm = dynamic_cast<cv::Algorithm*>(flowPtr);
+		return flowPtr;
+	#else
+		throw_no_optflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 
 cv::DenseOpticalFlow* cveOptFlowPCAFlowCreate(cv::Algorithm** algorithm, cv::Ptr<cv::DenseOpticalFlow>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OPTFLOW
-	cv::Ptr<cv::DenseOpticalFlow> ptr = cv::optflow::createOptFlow_PCAFlow();
-	*sharedPtr = new cv::Ptr<cv::DenseOpticalFlow>(ptr);
-	cv::DenseOpticalFlow* flowPtr = (*sharedPtr)->get();
-	*algorithm = dynamic_cast<cv::Algorithm*>(flowPtr);
-	return flowPtr;
-#else
-	throw_no_optflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OPTFLOW
+		cv::Ptr<cv::DenseOpticalFlow> ptr = cv::optflow::createOptFlow_PCAFlow();
+		*sharedPtr = new cv::Ptr<cv::DenseOpticalFlow>(ptr);
+		cv::DenseOpticalFlow* flowPtr = (*sharedPtr)->get();
+		*algorithm = dynamic_cast<cv::Algorithm*>(flowPtr);
+		return flowPtr;
+	#else
+		throw_no_optflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 
 cv::optflow::DualTVL1OpticalFlow* cveDenseOpticalFlowCreateDualTVL1(cv::DenseOpticalFlow** denseOpticalFlow, cv::Algorithm** algorithm, cv::Ptr<cv::optflow::DualTVL1OpticalFlow>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OPTFLOW
-	cv::Ptr<cv::optflow::DualTVL1OpticalFlow> dof = cv::optflow::createOptFlow_DualTVL1();
-	*sharedPtr = new cv::Ptr<cv::optflow::DualTVL1OpticalFlow>(dof);
-	cv::optflow::DualTVL1OpticalFlow* ptr = (*sharedPtr)->get();
-	*denseOpticalFlow = dynamic_cast<cv::DenseOpticalFlow*>(ptr);
-	*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
-	return ptr;
-#else
-	throw_no_optflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OPTFLOW
+		cv::Ptr<cv::optflow::DualTVL1OpticalFlow> dof = cv::optflow::createOptFlow_DualTVL1();
+		*sharedPtr = new cv::Ptr<cv::optflow::DualTVL1OpticalFlow>(dof);
+		cv::optflow::DualTVL1OpticalFlow* ptr = (*sharedPtr)->get();
+		*denseOpticalFlow = dynamic_cast<cv::DenseOpticalFlow*>(ptr);
+		*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
+		return ptr;
+	#else
+		throw_no_optflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveDualTVL1OpticalFlowRelease(cv::Ptr<cv::optflow::DualTVL1OpticalFlow>** sharedPtr)
 {
@@ -93,11 +121,15 @@ void cveDualTVL1OpticalFlowRelease(cv::Ptr<cv::optflow::DualTVL1OpticalFlow>** s
 
 cv::optflow::RLOFOpticalFlowParameter* cveRLOFOpticalFlowParameterCreate()
 {
-#ifdef HAVE_OPENCV_OPTFLOW
-	return new cv::optflow::RLOFOpticalFlowParameter();
-#else
-	throw_no_optflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OPTFLOW
+		return new cv::optflow::RLOFOpticalFlowParameter();
+	#else
+		throw_no_optflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveRLOFOpticalFlowParameterRelease(cv::optflow::RLOFOpticalFlowParameter** p)
 {
@@ -124,27 +156,31 @@ cv::optflow::DenseRLOFOpticalFlow* cveDenseRLOFOpticalFlowCreate(
 	cv::Algorithm** algorithm,
 	cv::Ptr<cv::optflow::DenseRLOFOpticalFlow>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OPTFLOW
-	cv::Ptr<cv::optflow::RLOFOpticalFlowParameter> pPtr(rlofParameter, [](cv::optflow::RLOFOpticalFlowParameter* p) {});
-	cv::Ptr<cv::optflow::DenseRLOFOpticalFlow> rlof = cv::optflow::DenseRLOFOpticalFlow::create(
-		pPtr,
-		forwardBackwardThreshold, 
-		*gridStep,
-	 	static_cast<cv::optflow::InterpolationType>(interpType),
-		epicK,
-		epicSigma, 
-		epicLambda, 
-		usePostProc, 
-		fgsLambda,
-		fgsSigma);
-	*sharedPtr = new cv::Ptr<cv::optflow::DenseRLOFOpticalFlow>(rlof);
-	cv::optflow::DenseRLOFOpticalFlow* ptr = (*sharedPtr)->get();
-	*denseOpticalFlow = dynamic_cast<cv::optflow::DenseRLOFOpticalFlow*>(ptr);
-	*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
-	return ptr;
-#else
-	throw_no_optflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OPTFLOW
+		cv::Ptr<cv::optflow::RLOFOpticalFlowParameter> pPtr(rlofParameter, [](cv::optflow::RLOFOpticalFlowParameter* p) {});
+		cv::Ptr<cv::optflow::DenseRLOFOpticalFlow> rlof = cv::optflow::DenseRLOFOpticalFlow::create(
+			pPtr,
+			forwardBackwardThreshold,
+			*gridStep,
+		 	static_cast<cv::optflow::InterpolationType>(interpType),
+			epicK,
+			epicSigma,
+			epicLambda,
+			usePostProc,
+			fgsLambda,
+			fgsSigma);
+		*sharedPtr = new cv::Ptr<cv::optflow::DenseRLOFOpticalFlow>(rlof);
+		cv::optflow::DenseRLOFOpticalFlow* ptr = (*sharedPtr)->get();
+		*denseOpticalFlow = dynamic_cast<cv::optflow::DenseRLOFOpticalFlow*>(ptr);
+		*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
+		return ptr;
+	#else
+		throw_no_optflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveDenseRLOFOpticalFlowRelease(cv::Ptr<cv::optflow::DenseRLOFOpticalFlow>** sharedPtr)
 {
@@ -164,19 +200,23 @@ cv::optflow::SparseRLOFOpticalFlow* cveSparseRLOFOpticalFlowCreate(
 	cv::Algorithm** algorithm,
 	cv::Ptr<cv::optflow::SparseRLOFOpticalFlow>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OPTFLOW
-	cv::Ptr<cv::optflow::RLOFOpticalFlowParameter> pPtr(rlofParameter, [](cv::optflow::RLOFOpticalFlowParameter* p) {});
-	cv::Ptr<cv::optflow::SparseRLOFOpticalFlow> rlof = cv::optflow::SparseRLOFOpticalFlow::create(
-		pPtr,
-		forwardBackwardThreshold);
-	*sharedPtr = new cv::Ptr<cv::optflow::SparseRLOFOpticalFlow>(rlof);
-	cv::optflow::SparseRLOFOpticalFlow* ptr = (*sharedPtr)->get();
-	*sparseOpticalFlow = dynamic_cast<cv::optflow::SparseRLOFOpticalFlow*>(ptr);
-	*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
-	return ptr;
-#else
-	throw_no_optflow();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OPTFLOW
+		cv::Ptr<cv::optflow::RLOFOpticalFlowParameter> pPtr(rlofParameter, [](cv::optflow::RLOFOpticalFlowParameter* p) {});
+		cv::Ptr<cv::optflow::SparseRLOFOpticalFlow> rlof = cv::optflow::SparseRLOFOpticalFlow::create(
+			pPtr,
+			forwardBackwardThreshold);
+		*sharedPtr = new cv::Ptr<cv::optflow::SparseRLOFOpticalFlow>(rlof);
+		cv::optflow::SparseRLOFOpticalFlow* ptr = (*sharedPtr)->get();
+		*sparseOpticalFlow = dynamic_cast<cv::optflow::SparseRLOFOpticalFlow*>(ptr);
+		*algorithm = dynamic_cast<cv::Algorithm*>(ptr);
+		return ptr;
+	#else
+		throw_no_optflow();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveSparseRLOFOpticalFlowRelease(cv::Ptr<cv::optflow::SparseRLOFOpticalFlow>** sharedPtr)

@@ -191,6 +191,7 @@ namespace Emgu.CV
         {
             UsacParams p = new UsacParams();
             CvInvoke.cveUsacParamsGetDefault(ref p);
+            CvInvoke.CheckError();
             return p;
         }
     }

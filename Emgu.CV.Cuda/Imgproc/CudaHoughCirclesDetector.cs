@@ -31,6 +31,7 @@ namespace Emgu.CV.Cuda
         public CudaHoughCirclesDetector(float dp, float minDist, int cannyThreshold, int votesThreshold, int minRadius, int maxRadius, int maxCircles = 4096)
         {
             _ptr = CudaInvoke.cudaHoughCirclesDetectorCreate(dp, minDist, cannyThreshold, votesThreshold, minRadius, maxRadius, maxCircles, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -43,7 +44,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaCircles = circles.GetOutputArray())
+            {
                 CudaInvoke.cudaHoughCirclesDetectorDetect(_ptr, iaImage, oaCircles, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

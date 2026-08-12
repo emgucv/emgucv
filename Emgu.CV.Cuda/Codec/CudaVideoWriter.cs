@@ -98,6 +98,7 @@ namespace Emgu.CV.Cuda
             using (CvString s = new CvString(fileName))
             {
                 _ptr = CudaInvoke.cudaVideoWriterCreate(s, ref frameSize, codec, fps, format, stream, ref _sharedPtr);
+                CvInvoke.CheckError();
             }
         }
 
@@ -109,6 +110,7 @@ namespace Emgu.CV.Cuda
             if (IntPtr.Zero != _sharedPtr)
             {
                 CudaInvoke.cudaVideoWriterDelete(ref _sharedPtr);
+                CvInvoke.CheckError();
                 _ptr = IntPtr.Zero;
             }
         }
@@ -120,7 +122,10 @@ namespace Emgu.CV.Cuda
         public void Write(IInputArray frame)
         {
             using (InputArray iaFrame = frame.GetInputArray())
+            {
                 CudaInvoke.cudaVideoWriterWrite(_ptr, iaFrame);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

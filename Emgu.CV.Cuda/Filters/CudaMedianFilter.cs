@@ -30,6 +30,7 @@ namespace Emgu.CV.Cuda
         public MedianFilter(DepthType srcDepth, int srcChannels, int windowSize, int partition = 128)
       {
          _ptr = CudaInvoke.cudaCreateMedianFilter(CvInvoke.MakeType(srcDepth, srcChannels), windowSize, partition, ref _sharedPtr);
+         CvInvoke.CheckError();
       }
    }
 

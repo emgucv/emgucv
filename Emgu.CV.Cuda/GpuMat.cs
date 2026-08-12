@@ -76,6 +76,7 @@ namespace Emgu.CV.Cuda
         public void Create(int rows, int cols, DepthType depthType, int channels)
         {
             CudaInvoke.gpuMatCreate(Ptr, rows, cols, CvInvoke.MakeType(depthType, channels));
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -106,8 +107,15 @@ namespace Emgu.CV.Cuda
         /// <param name="colRange">The column range.</param>
         /// <param name="rowRange">The row range.</param>
         public GpuMat(GpuMat mat, Emgu.CV.Structure.Range rowRange, Emgu.CV.Structure.Range colRange)
-           : this(CudaInvoke.GetRegion(mat, ref rowRange, ref colRange), true)
+           : this(GetRegionChecked(mat, ref rowRange, ref colRange), true)
         {
+        }
+
+        private static IntPtr GetRegionChecked(GpuMat mat, ref Emgu.CV.Structure.Range rowRange, ref Emgu.CV.Structure.Range colRange)
+        {
+            IntPtr result = CudaInvoke.GetRegion(mat, ref rowRange, ref colRange);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -129,6 +137,7 @@ namespace Emgu.CV.Cuda
             {
                 Size s = new Size();
                 CudaInvoke.gpuMatGetSize(_ptr, ref s);
+                CvInvoke.CheckError();
                 return s;
             }
         }
@@ -138,7 +147,12 @@ namespace Emgu.CV.Cuda
         /// </summary>
         public int Type
         {
-            get { return CudaInvoke.gpuMatGetType(_ptr); }
+            get
+            {
+                var result = CudaInvoke.gpuMatGetType(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -176,7 +190,10 @@ namespace Emgu.CV.Cuda
         public void Upload(IInputArray arr, Stream stream = null)
         {
             using (InputArray iaArr = arr.GetInputArray())
+            {
                 CudaInvoke.gpuMatUpload(_ptr, iaArr, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -188,7 +205,10 @@ namespace Emgu.CV.Cuda
         {
             //Debug.Assert(arr.Size.Equals(Size), "Destination CvArray size does not match source GpuMat size");
             using (OutputArray oaArr = arr.GetOutputArray())
+            {
                 CudaInvoke.gpuMatDownload(_ptr, oaArr, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -228,7 +248,10 @@ namespace Emgu.CV.Cuda
         public void SetTo(MCvScalar value, IInputArray mask = null, Stream stream = null)
         {
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 CudaInvoke.gpuMatSetTo(Ptr, ref value, iaMask, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -241,7 +264,10 @@ namespace Emgu.CV.Cuda
         {
             using (OutputArray oaDst = dst.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 CudaInvoke.gpuMatCopyTo(Ptr, oaDst, iaMask, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -259,7 +285,10 @@ namespace Emgu.CV.Cuda
         public void ConvertTo(IOutputArray dst, CvEnum.DepthType rtype, double scale = 1.0, double shift = 0, Stream stream = null)
         {
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 CudaInvoke.gpuMatConvertTo(Ptr, oaDst, rtype, scale, shift, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -272,6 +301,7 @@ namespace Emgu.CV.Cuda
         {
             GpuMat result = new GpuMat();
             CudaInvoke.gpuMatReshape(Ptr, result, newCn, newRows);
+            CvInvoke.CheckError();
             return result;
         }
 

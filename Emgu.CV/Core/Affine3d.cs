@@ -25,6 +25,7 @@ namespace Emgu.CV
       public Affine3d()
       {
          _ptr = CvInvoke.cveAffine3dCreate();
+         CvInvoke.CheckError();
       }
 
       /// <summary>
@@ -33,7 +34,9 @@ namespace Emgu.CV
       /// <returns>The identity affine 3d matrix</returns>
       public static Affine3d Identity()
       {
-         return new Affine3d(CvInvoke.cveAffine3dGetIdentity());
+         IntPtr ptr = CvInvoke.cveAffine3dGetIdentity();
+         CvInvoke.CheckError();
+         return new Affine3d(ptr);
       }
 
       private Affine3d(IntPtr ptr)
@@ -50,7 +53,9 @@ namespace Emgu.CV
       /// <returns>The rotated Affine3 matrix</returns>
       public Affine3d Rotate(double r0, double r1, double r2)
       {
-         return new Affine3d(CvInvoke.cveAffine3dRotate(_ptr, r0, r1, r2));
+         IntPtr ptr = CvInvoke.cveAffine3dRotate(_ptr, r0, r1, r2);
+         CvInvoke.CheckError();
+         return new Affine3d(ptr);
       }
 
       /// <summary>
@@ -62,7 +67,9 @@ namespace Emgu.CV
       /// <returns>The translated Affine3 matrix</returns>
       public Affine3d Translate(double t0, double t1, double t2)
       {
-         return new Affine3d(CvInvoke.cveAffine3dTranslate(_ptr, t0, t1, t2));
+         IntPtr ptr = CvInvoke.cveAffine3dTranslate(_ptr, t0, t1, t2);
+         CvInvoke.CheckError();
+         return new Affine3d(ptr);
       }
 
       /// <summary>
@@ -75,6 +82,7 @@ namespace Emgu.CV
          GCHandle handle = GCHandle.Alloc(v, GCHandleType.Pinned);
          CvInvoke.cveAffine3dGetValues(_ptr, handle.AddrOfPinnedObject());
          handle.Free();
+         CvInvoke.CheckError();
          return v;
       }
 

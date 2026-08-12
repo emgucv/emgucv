@@ -35,6 +35,7 @@ namespace Emgu.CV.Dnn
             {
                 DnnInvoke.cveDnnTextDetectionModelDetect(_textDetectionModel, iaFrame, detections, confidences);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -49,6 +50,7 @@ namespace Emgu.CV.Dnn
             {
                 DnnInvoke.cveDnnTextDetectionModelDetectTextRectangles(_textDetectionModel, iaFrame, detections, confidences);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>

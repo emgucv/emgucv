@@ -53,6 +53,7 @@ namespace Emgu.CV.Cuda
             using (InputOutputArray ioaFlow = flow.GetInputOutputArray())
             using (InputArray iaHint = (hint == null ? InputArray.GetEmpty() : hint.GetInputArray()))
             using (OutputArray oaCost = (cost == null ? OutputArray.GetEmpty() : cost.GetOutputArray()))
+            {
                 cudaNvidiaOpticalFlowCalc(
                     nvidiaOpticalFlow.NvidiaOpticalFlowPtr,
                     iaInputImage,
@@ -61,6 +62,8 @@ namespace Emgu.CV.Cuda
                     (stream == null) ? IntPtr.Zero : stream.Ptr,
                     iaHint,
                     oaCost);
+                CvInvoke.CheckError();
+            }
         }
 
         [DllImport(CvInvoke.ExternCudaLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

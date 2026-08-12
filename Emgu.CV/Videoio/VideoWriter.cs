@@ -47,6 +47,7 @@ namespace Emgu.CV
         {
             using (CvString s = new CvString(fileName))
                 _ptr = CvInvoke.cveVideoWriterCreate(s, compressionCode, fps, ref size, isColor);
+            CvInvoke.CheckError();
 
             if (_ptr == IntPtr.Zero || IsOpened == false)
                 throw new NullReferenceException("Unable to create VideoWriter. Make sure you have the specific codec installed");
@@ -68,6 +69,7 @@ namespace Emgu.CV
         {
             using (CvString s = new CvString(fileName))
                 _ptr = CvInvoke.cveVideoWriterCreate2(s, apiPreference, compressionCode, fps, ref size, isColor);
+            CvInvoke.CheckError();
 
             if (_ptr == IntPtr.Zero || IsOpened == false)
                 throw new NullReferenceException("Unable to create VideoWriter. Make sure you have the specific codec installed");
@@ -105,6 +107,7 @@ namespace Emgu.CV
             using (CvString s = new CvString(fileName))
             using (VectorOfInt vectInt = ConvertWriterProperties(writerProperties))
                 _ptr = CvInvoke.cveVideoWriterCreate3(s, apiPreference, compressionCode, fps, ref size, vectInt);
+            CvInvoke.CheckError();
 
             if (_ptr == IntPtr.Zero || IsOpened == false)
                 throw new NullReferenceException("Unable to create VideoWriter. Make sure you have the specific codec installed");
@@ -118,6 +121,7 @@ namespace Emgu.CV
         {
             using (InputArray iaFrame = frame.GetInputArray())
                 CvInvoke.cveVideoWriterWrite(_ptr, iaFrame);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -130,7 +134,9 @@ namespace Emgu.CV
         /// <returns>The integer value calculated from the four cc code</returns>
         public static int Fourcc(char c1, char c2, char c3, char c4)
         {
-            return CvInvoke.cveVideoWriterFourcc(c1, c2, c3, c4);
+            int result = CvInvoke.cveVideoWriterFourcc(c1, c2, c3, c4);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -150,7 +156,14 @@ namespace Emgu.CV
         /// </summary>
         public bool IsOpened
         {
-            get { return _ptr != IntPtr.Zero && CvInvoke.cveVideoWriterIsOpened(_ptr); }
+            get
+            {
+                if (_ptr == IntPtr.Zero)
+                    return false;
+                bool result = CvInvoke.cveVideoWriterIsOpened(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -161,7 +174,9 @@ namespace Emgu.CV
         /// <returns>The value of the specific property</returns>
         public bool Set(WriterProperty prop, double value)
         {
-            return CvInvoke.cveVideoWriterSet(_ptr, prop, value);
+            bool result = CvInvoke.cveVideoWriterSet(_ptr, prop, value);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -171,7 +186,9 @@ namespace Emgu.CV
         /// <returns>The value of the specific property</returns>
         public double Get(WriterProperty prop)
         {
-            return CvInvoke.cveVideoWriterGet(_ptr, prop);
+            double result = CvInvoke.cveVideoWriterGet(_ptr, prop);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -187,6 +204,7 @@ namespace Emgu.CV
                 using (CvString s = new CvString())
                 {
                     CvInvoke.cveVideoWriterGetBackendName(Ptr, s);
+                    CvInvoke.CheckError();
                     return s.ToString();
                 }
             }

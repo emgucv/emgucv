@@ -27,7 +27,7 @@ namespace Emgu.CV.Mcc
         public DetectorParametersMCC()
         {
             _ptr = MccInvoke.cveDetectorParametersMCCCreate();
-
+            CvInvoke.CheckError();
         }
 
         /// <summary>

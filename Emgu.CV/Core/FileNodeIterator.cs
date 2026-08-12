@@ -25,6 +25,7 @@ namespace Emgu.CV
         internal FileNodeIterator()
         {
             _ptr = CvInvoke.cveFileNodeIteratorCreate();
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -35,6 +36,7 @@ namespace Emgu.CV
         public FileNodeIterator(FileNode node, bool seekEnd)
         {
             _ptr = CvInvoke.cveFileNodeIteratorCreateFromNode(node, seekEnd);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -44,7 +46,9 @@ namespace Emgu.CV
         /// <returns>True if the current iterator equals to the other</returns>
         public bool Equals(FileNodeIterator iterator)
         {
-            return CvInvoke.cveFileNodeIteratorEqualTo(_ptr, iterator);
+            bool result = CvInvoke.cveFileNodeIteratorEqualTo(_ptr, iterator);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -53,6 +57,7 @@ namespace Emgu.CV
         public void Next()
         {
             CvInvoke.cveFileNodeIteratorNext(_ptr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -61,7 +66,9 @@ namespace Emgu.CV
         /// <returns>The currently observed element</returns>
         public FileNode GetFileNode()
         {
-            return new FileNode(CvInvoke.cveFileNodeIteratorGetFileNode(_ptr));
+            IntPtr ptr = CvInvoke.cveFileNodeIteratorGetFileNode(_ptr);
+            CvInvoke.CheckError();
+            return new FileNode(ptr);
         }
 
         /// <summary>

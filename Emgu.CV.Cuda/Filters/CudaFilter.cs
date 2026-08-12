@@ -41,7 +41,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 CudaInvoke.cudaFilterApply(_ptr, iaImage, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
     }
 

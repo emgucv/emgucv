@@ -33,9 +33,10 @@ namespace Emgu.CV
             _ptr = CvInvoke.cveSparseRLOFOpticalFlowCreate(
                 parameter,
                 forwardBackwardThreshold,
-                ref _sparseOpticalFlow, 
-                ref _algorithm, 
+                ref _sparseOpticalFlow,
+                ref _algorithm,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

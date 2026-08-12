@@ -228,14 +228,6 @@ CVAPI(void) cveDistanceTransform(cv::_InputArray* src, cv::_OutputArray* dst, cv
 CVAPI(void) cveGetRectSubPix(cv::_InputArray* image, cv::Size* patchSize, cv::Point2f* center, cv::_OutputArray* patch, int patchType);
 
 
-//CVAPI(int) cveSampleLine(const void* _img, CvPoint* pt1, CvPoint* pt2, void* _buffer, int connectivity);
-/*
-CVAPI(double) cveGetSpatialMoment(CvMoments* moments, int xOrder, int yOrder);
-CVAPI(double) cveGetCentralMoment(CvMoments* moments, int xOrder, int yOrder);
-CVAPI(double) cveGetNormalizedCentralMoment(CvMoments* moments, int xOrder, int yOrder);
-
-CVAPI(void) cveMaxRect(CvRect* rect1, CvRect* rect2, CvRect* result);
-*/
 CVAPI(int) cveConnectedComponents(cv::_InputArray* image, cv::_OutputArray* labels, int connectivity, int ltype, int ccltype);
 CVAPI(int) cveConnectedComponentsWithStats(cv::_InputArray* image, cv::_OutputArray* labels, cv::_OutputArray* stats, cv::_OutputArray* centroids, int connectivity, int ltype, int ccltype);
 

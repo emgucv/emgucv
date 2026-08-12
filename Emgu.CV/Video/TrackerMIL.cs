@@ -52,6 +52,7 @@ namespace Emgu.CV
                 featureSetNumFeatures,
                 ref _trackerPtr,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

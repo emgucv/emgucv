@@ -43,6 +43,7 @@ namespace Emgu.CV.Cuda
             _ptr = CudaInvoke.cudaCreateScharrFilter(
                 CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels),
                 dx, dy, scale, rowBorderMode, columnBorderMode, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
     }
 

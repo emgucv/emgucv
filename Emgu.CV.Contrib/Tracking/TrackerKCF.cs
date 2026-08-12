@@ -95,6 +95,7 @@ namespace Emgu.CV
                 descNpca,
                 ref _trackerPtr,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

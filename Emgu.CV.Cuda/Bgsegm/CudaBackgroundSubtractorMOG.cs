@@ -43,6 +43,7 @@ namespace Emgu.CV.Cuda
         public CudaBackgroundSubtractorMOG(int history = 200, int nMixtures = 4, double backgroundRatio = 0.7, double noiseSigma = 0)
         {
             _ptr = CudaInvoke.cudaBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -56,7 +57,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaFrame = frame.GetInputArray())
             using (OutputArray oaForegroundMask = foregroundMask.GetOutputArray())
+            {
                 CudaInvoke.cudaBackgroundSubtractorMOGApply(_ptr, iaFrame, oaForegroundMask, learningRate, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

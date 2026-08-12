@@ -37,6 +37,7 @@ namespace Emgu.CV
             {
                 CvInvoke.cveAlignExposuresProcess(_alignExposuresPtr, iaSrc, dst, iaTimes, iaResponse);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -64,6 +65,7 @@ namespace Emgu.CV
         public AlignMTB(int maxBits = 6, int excludeRange = 4, bool cut = true)
         {
             _ptr = CvInvoke.cveAlignMTBCreate(maxBits, excludeRange, cut, ref _alignExposuresPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

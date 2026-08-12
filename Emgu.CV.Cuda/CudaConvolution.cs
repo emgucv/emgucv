@@ -26,6 +26,7 @@ namespace Emgu.CV.Cuda
         public CudaConvolution(Size userBlockSize = new Size())
         {
             _ptr = CudaInvoke.cudaConvolutionCreate(ref userBlockSize, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -48,6 +49,7 @@ namespace Emgu.CV.Cuda
             using (OutputArray oaResult = result.GetOutputArray())
             {
                 CudaInvoke.cudaConvolutionConvolve(_ptr, iaImage, iaTempl, oaResult, ccorr, stream);
+                CvInvoke.CheckError();
             }
         }
 

@@ -10,6 +10,7 @@
 
 #include "cvapi_compat.h"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "emgu_error.h"
 
 #ifdef HAVE_OPENCV_FEATURES
 #include "opencv2/features/features.hpp"

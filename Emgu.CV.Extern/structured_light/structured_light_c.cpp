@@ -9,11 +9,15 @@
 
 bool cveStructuredLightPatternGenerate(cv::structured_light::StructuredLightPattern* structuredLight, cv::_OutputArray* patternImages)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    return structuredLight->generate(*patternImages);
-#else
-    throw_no_structured_light();
-#endif
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        return structuredLight->generate(*patternImages);
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS(false)
 }
 
 bool cveStructuredLightPatternDecode(
@@ -24,16 +28,20 @@ bool cveStructuredLightPatternDecode(
     cv::_InputArray* whiteImages,
     int flags)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    return structuredLight->decode(
-        *patternImages, 
-        *disparityMap, 
-        blackImages ? *blackImages : static_cast<cv::InputArray>(cv::noArray()),
-        whiteImages ? *whiteImages : static_cast<cv::InputArray>(cv::noArray()), 
-        flags);
-#else
-    throw_no_structured_light();
-#endif
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        return structuredLight->decode(
+            *patternImages,
+            *disparityMap,
+            blackImages ? *blackImages : static_cast<cv::InputArray>(cv::noArray()),
+            whiteImages ? *whiteImages : static_cast<cv::InputArray>(cv::noArray()),
+            flags);
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS(false)
 }
 
 cv::structured_light::GrayCodePattern* cveGrayCodePatternCreate(
@@ -43,19 +51,23 @@ cv::structured_light::GrayCodePattern* cveGrayCodePatternCreate(
     cv::structured_light::StructuredLightPattern** structuredLightPattern,
     cv::Algorithm** algorithm)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    cv::structured_light::GrayCodePattern::Params p;
-    p.width = width;
-    p.height = height;
-    cv::Ptr<cv::structured_light::GrayCodePattern> pattern = cv::structured_light::GrayCodePattern::create(p);
-    *sharedPtr = new cv::Ptr<cv::structured_light::GrayCodePattern>(pattern);
-    cv::structured_light::GrayCodePattern* patternPtr = (*sharedPtr)->get();
-    *structuredLightPattern = dynamic_cast<cv::structured_light::StructuredLightPattern*>(patternPtr);
-    *algorithm = dynamic_cast<cv::Algorithm*>(patternPtr);
-    return patternPtr;
-#else
-    throw_no_structured_light();
-#endif
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        cv::structured_light::GrayCodePattern::Params p;
+        p.width = width;
+        p.height = height;
+        cv::Ptr<cv::structured_light::GrayCodePattern> pattern = cv::structured_light::GrayCodePattern::create(p);
+        *sharedPtr = new cv::Ptr<cv::structured_light::GrayCodePattern>(pattern);
+        cv::structured_light::GrayCodePattern* patternPtr = (*sharedPtr)->get();
+        *structuredLightPattern = dynamic_cast<cv::structured_light::StructuredLightPattern*>(patternPtr);
+        *algorithm = dynamic_cast<cv::Algorithm*>(patternPtr);
+        return patternPtr;
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveGrayCodePatternRelease(cv::Ptr<cv::structured_light::GrayCodePattern>** sharedPtr)
 {
@@ -68,24 +80,32 @@ void cveGrayCodePatternRelease(cv::Ptr<cv::structured_light::GrayCodePattern>** 
 }
 void cveGrayCodePatternGetImagesForShadowMasks(cv::structured_light::GrayCodePattern* grayCodePattern, cv::_InputOutputArray* blackImage, cv::_InputOutputArray* whiteImage)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    grayCodePattern->getImagesForShadowMasks(*blackImage, *whiteImage);
-#else
-    throw_no_structured_light();
-#endif	
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        grayCodePattern->getImagesForShadowMasks(*blackImage, *whiteImage);
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 bool cveGrayCodePatternGetProjPixel(cv::structured_light::GrayCodePattern* grayCodePattern, cv::_InputArray* patternImages, int x, int y, cv::Point* projPix)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    cv::Point p;
-    bool result = grayCodePattern->getProjPixel(*patternImages, x, y, p);
-    projPix->x = p.x;
-    projPix->y = p.y;
-    return result;
-#else
-    throw_no_structured_light();
-#endif		
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        cv::Point p;
+        bool result = grayCodePattern->getProjPixel(*patternImages, x, y, p);
+        projPix->x = p.x;
+        projPix->y = p.y;
+        return result;
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS(false)
 }
 
 cv::structured_light::SinusoidalPattern* cveSinusoidalPatternCreate(
@@ -102,28 +122,32 @@ cv::structured_light::SinusoidalPattern* cveSinusoidalPatternCreate(
     cv::structured_light::StructuredLightPattern** structuredLightPattern,
     cv::Algorithm** algorithm)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    cv::Ptr<cv::structured_light::SinusoidalPattern::Params> p =
-        cv::makePtr<cv::structured_light::SinusoidalPattern::Params>();
-    p->width = width;
-    p->height = height;
-    p->nbrOfPeriods = nbrOfPeriods;
-    p->shiftValue = shiftValue;
-    p->methodId = methodId;
-    p->nbrOfPixelsBetweenMarkers = nbrOfPixelsBetweenMarkers;
-    p->horizontal = horizontal;
-    p->setMarkers = setMarkers;
-    if (markersLocation)
-        p->markersLocation = *markersLocation;
-    cv::Ptr<cv::structured_light::SinusoidalPattern> pattern = cv::structured_light::SinusoidalPattern::create(p);
-    *sharedPtr = new cv::Ptr<cv::structured_light::SinusoidalPattern>(pattern);
-    cv::structured_light::SinusoidalPattern* patternPtr = (*sharedPtr)->get();
-    *structuredLightPattern = dynamic_cast<cv::structured_light::StructuredLightPattern*>(patternPtr);
-    *algorithm = dynamic_cast<cv::Algorithm*>(patternPtr);
-    return patternPtr;
-#else
-    throw_no_structured_light();
-#endif
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        cv::Ptr<cv::structured_light::SinusoidalPattern::Params> p =
+            cv::makePtr<cv::structured_light::SinusoidalPattern::Params>();
+        p->width = width;
+        p->height = height;
+        p->nbrOfPeriods = nbrOfPeriods;
+        p->shiftValue = shiftValue;
+        p->methodId = methodId;
+        p->nbrOfPixelsBetweenMarkers = nbrOfPixelsBetweenMarkers;
+        p->horizontal = horizontal;
+        p->setMarkers = setMarkers;
+        if (markersLocation)
+            p->markersLocation = *markersLocation;
+        cv::Ptr<cv::structured_light::SinusoidalPattern> pattern = cv::structured_light::SinusoidalPattern::create(p);
+        *sharedPtr = new cv::Ptr<cv::structured_light::SinusoidalPattern>(pattern);
+        cv::structured_light::SinusoidalPattern* patternPtr = (*sharedPtr)->get();
+        *structuredLightPattern = dynamic_cast<cv::structured_light::StructuredLightPattern*>(patternPtr);
+        *algorithm = dynamic_cast<cv::Algorithm*>(patternPtr);
+        return patternPtr;
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveSinusoidalPatternRelease(cv::Ptr<cv::structured_light::SinusoidalPattern>** sharedPtr)
 {
@@ -141,15 +165,19 @@ void cveSinusoidalPatternComputePhaseMap(
     cv::_OutputArray* shadowMask,
     cv::_InputArray* fundamental)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    pattern->computePhaseMap(
-        *patternImages,
-        *wrappedPhaseMap,
-        shadowMask ? *shadowMask : static_cast<cv::OutputArray>(cv::noArray()),
-        fundamental ? *fundamental : static_cast<cv::InputArray>(cv::noArray()));
-#else
-    throw_no_structured_light();
-#endif
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        pattern->computePhaseMap(
+            *patternImages,
+            *wrappedPhaseMap,
+            shadowMask ? *shadowMask : static_cast<cv::OutputArray>(cv::noArray()),
+            fundamental ? *fundamental : static_cast<cv::InputArray>(cv::noArray()));
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveSinusoidalPatternUnwrapPhaseMap(
@@ -159,15 +187,19 @@ void cveSinusoidalPatternUnwrapPhaseMap(
     cv::Size* camSize,
     cv::_InputArray* shadowMask)
 {
-#ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    pattern->unwrapPhaseMap(
-        *wrappedPhaseMap,
-        *unwrappedPhaseMap,
-        *camSize,
-        shadowMask ? *shadowMask : static_cast<cv::InputArray>(cv::noArray()));
-#else
-    throw_no_structured_light();
-#endif
+    try
+    {
+    #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
+        pattern->unwrapPhaseMap(
+            *wrappedPhaseMap,
+            *unwrappedPhaseMap,
+            *camSize,
+            shadowMask ? *shadowMask : static_cast<cv::InputArray>(cv::noArray()));
+    #else
+        throw_no_structured_light();
+    #endif
+    }
+    CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 

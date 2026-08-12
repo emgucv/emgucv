@@ -10,6 +10,7 @@
 
 #include "opencv2/core.hpp"
 #include "cvapi_compat.h"
+#include "emgu_error.h"
 
 #ifdef HAVE_OPENCV_XFEATURES2D
 #include "opencv2/xfeatures2d.hpp"

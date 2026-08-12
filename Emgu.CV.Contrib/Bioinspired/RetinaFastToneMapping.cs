@@ -26,6 +26,7 @@ namespace Emgu.CV.Bioinspired
         public RetinaFastToneMapping(Size inputSize)
         {
             _ptr = BioinspiredInvoke.cveRetinaFastToneMappingCreate(ref inputSize, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         
@@ -42,6 +43,7 @@ namespace Emgu.CV.Bioinspired
             using (InputArray iaInputImage = inputImage.GetInputArray())
             using (OutputArray oaOutputToneMappedImage = outputToneMappedImage.GetOutputArray())
                 BioinspiredInvoke.cveRetinaFastToneMappingApplyFastToneMapping(_ptr, iaInputImage, oaOutputToneMappedImage);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -56,10 +58,11 @@ namespace Emgu.CV.Bioinspired
             float meanLuminanceModulatorK = 1.0f)
         {
             BioinspiredInvoke.cveRetinaFastToneMappingSetup(
-                _ptr, 
+                _ptr,
                 photoreceptorsNeighborhoodRadius,
                 ganglioncellsNeighborhoodRadius,
                 meanLuminanceModulatorK);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

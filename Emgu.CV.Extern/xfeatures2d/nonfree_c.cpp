@@ -9,25 +9,33 @@
 //SURFDetector
 cv::xfeatures2d::SURF* cveSURFCreate(double hessianThresh, int nOctaves, int nOctaveLayers, bool extended, bool upright, cv::Feature2D** feature2D, cv::Ptr<cv::xfeatures2d::SURF>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_XFEATURES2D
-	cv::Ptr<cv::xfeatures2d::SURF> surfPtr = cv::xfeatures2d::SURF::create(hessianThresh, nOctaves, nOctaveLayers, extended, upright);
-	*sharedPtr = new cv::Ptr<cv::xfeatures2d::SURF>(surfPtr);
-	*feature2D = dynamic_cast<cv::Feature2D*>(surfPtr.get());
+	try
+	{
+	#ifdef HAVE_OPENCV_XFEATURES2D
+		cv::Ptr<cv::xfeatures2d::SURF> surfPtr = cv::xfeatures2d::SURF::create(hessianThresh, nOctaves, nOctaveLayers, extended, upright);
+		*sharedPtr = new cv::Ptr<cv::xfeatures2d::SURF>(surfPtr);
+		*feature2D = dynamic_cast<cv::Feature2D*>(surfPtr.get());
 
-	return surfPtr.get();
-#else
-	throw_no_xfeatures2d();
-#endif
+		return surfPtr.get();
+	#else
+		throw_no_xfeatures2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveSURFRelease(cv::Ptr<cv::xfeatures2d::SURF>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_XFEATURES2D
-	delete* sharedPtr;
-	*sharedPtr = 0;
-#else
-	throw_no_xfeatures2d();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_XFEATURES2D
+		delete* sharedPtr;
+		*sharedPtr = 0;
+	#else
+		throw_no_xfeatures2d();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 /*
@@ -53,3 +61,4 @@ void gpuVibeRelease(cv::cuda::VIBE_GPU** vibe)
    delete *vibe;
    *vibe = 0;
 }*/
+

@@ -28,6 +28,7 @@ namespace Emgu.CV.Mcc
         public CCheckerDetector()
         {
             _ptr = MccInvoke.cveCCheckerDetectorCreate(ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -47,6 +48,7 @@ namespace Emgu.CV.Mcc
             get
             {
                 IntPtr ptr = MccInvoke.cveCCheckerDetectorGetBestColorChecker(_ptr);
+                CvInvoke.CheckError();
                 if (ptr == IntPtr.Zero)
                     return null;
                 return new CChecker(ptr, false);
@@ -79,14 +81,17 @@ namespace Emgu.CV.Mcc
             VectorOfRect regionOfInterest = null,
             int nc = 1)
         {
+            bool result;
             using (InputArray iaImage = image.GetInputArray())
             {
-               return  MccInvoke.cveCCheckerDetectorProcess(
+                result = MccInvoke.cveCCheckerDetectorProcess(
                     _ptr,
                     iaImage,
                     regionOfInterest ?? IntPtr.Zero,
                     nc);
             }
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -114,6 +119,7 @@ namespace Emgu.CV.Mcc
             {
                 MccInvoke.cveCCheckerDetectorDraw(_ptr, pChecker, ioaImg, ref color, thickness);
             }
+            CvInvoke.CheckError();
         }
     }
 

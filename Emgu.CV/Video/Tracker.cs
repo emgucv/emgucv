@@ -33,6 +33,7 @@ namespace Emgu.CV
         {
             using (InputArray iaImage = image.GetInputArray())
                 CvInvoke.cveTrackerInit(_trackerPtr, iaImage, ref boundingBox);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -44,8 +45,11 @@ namespace Emgu.CV
         public bool Update(IInputArray image, out Rectangle boundingBox)
         {
             boundingBox = new Rectangle();
+            bool result;
             using (InputArray iaImage = image.GetInputArray())
-                return CvInvoke.cveTrackerUpdate(_trackerPtr, iaImage, ref boundingBox);
+                result = CvInvoke.cveTrackerUpdate(_trackerPtr, iaImage, ref boundingBox);
+            CvInvoke.CheckError();
+            return result;
         }
 
 

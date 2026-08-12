@@ -39,8 +39,9 @@ namespace Emgu.CV.XFeatures2D
                 maxAreaRelative,
                 scaleFactor,
                 nScales,
-                ref _feature2D, 
+                ref _feature2D,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

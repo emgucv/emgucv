@@ -39,6 +39,7 @@ namespace Emgu.CV
             MCvScalar bgColor=new MCvScalar())
 		{
 			_ptr = CvInvoke.cveAnimationCreate(loopCount, ref bgColor);
+			CvInvoke.CheckError();
 		}
 
         /// <summary>
@@ -48,7 +49,9 @@ namespace Emgu.CV
         {
             get
             {
-                return new VectorOfInt(CvInvoke.cveAnimationGetDurations(_ptr), false);
+                IntPtr result = CvInvoke.cveAnimationGetDurations(_ptr);
+                CvInvoke.CheckError();
+                return new VectorOfInt(result, false);
             }
         }
 
@@ -59,7 +62,9 @@ namespace Emgu.CV
         {
             get
             {
-                return new VectorOfMat(CvInvoke.cveAnimationGetFrames(_ptr), false);
+                IntPtr result = CvInvoke.cveAnimationGetFrames(_ptr);
+                CvInvoke.CheckError();
+                return new VectorOfMat(result, false);
             }
         }
 

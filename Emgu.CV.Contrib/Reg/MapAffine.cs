@@ -35,6 +35,7 @@ namespace Emgu.CV.Reg
             {
                 _ptr = RegInvoke.cveMapAffineCreate(iaLinTr, iaShift, ref _mapPtr);
             }
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/>   

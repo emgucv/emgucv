@@ -331,6 +331,7 @@ namespace Emgu.CV
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             MatInvoke.cveMatCopyDataTo(this, handle.AddrOfPinnedObject());
             handle.Free();
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -345,6 +346,7 @@ namespace Emgu.CV
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             MatInvoke.cveMatCopyDataFrom(this, handle.AddrOfPinnedObject());
             handle.Free();
+            CvInvoke.CheckError();
         }
 
         internal bool _needDispose;
@@ -374,6 +376,7 @@ namespace Emgu.CV
         public Mat()
            : this(MatInvoke.cveMatCreate(), true, true)
         {
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -412,6 +415,7 @@ namespace Emgu.CV
         public Mat(int rows, int cols, CvEnum.DepthType type, int channels, IntPtr data, int step)
            : this(MatInvoke.cveMatCreateWithData(rows, cols, CvInvoke.MakeType(type, channels), data, new IntPtr(step)), true, false)
         {
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -424,6 +428,7 @@ namespace Emgu.CV
         public Mat(int[] sizes, CvEnum.DepthType type, IntPtr data, IntPtr[] steps = null)
            : this(MatInvoke.cveMatCreateMultiDimWithData(sizes, type, data, steps), true, false)
         {
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -447,6 +452,7 @@ namespace Emgu.CV
         public Mat(String fileName, CvEnum.ImreadModes loadType = ImreadModes.ColorBgr)
            : this(MatInvoke.cveMatCreate(), true, false)
         {
+            CvInvoke.CheckError();
 
             FileInfo fi = new FileInfo(fileName);
             if (!fi.Exists)
@@ -470,6 +476,7 @@ namespace Emgu.CV
             using (CvString s = new CvString(fileName))
             {
                 CvInvoke.cveImread(s, loadType, this);
+                CvInvoke.CheckError();
 
                 if (this.IsEmpty) //failed to load in the first attempt
                 {
@@ -500,6 +507,7 @@ namespace Emgu.CV
         public Mat(Mat mat, Rectangle roi)
            : this(MatInvoke.cveMatCreateFromRect(mat.Ptr, ref roi), true, true)
         {
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -511,6 +519,7 @@ namespace Emgu.CV
         public Mat(Mat mat, Emgu.CV.Structure.Range rowRange, Emgu.CV.Structure.Range colRange)
            : this(MatInvoke.cveMatCreateFromRange(mat.Ptr, ref rowRange, ref colRange), true, true)
         {
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -521,7 +530,9 @@ namespace Emgu.CV
         /// <returns>The UMat</returns>
         public UMat GetUMat(CvEnum.AccessType access, UMat.Usage usageFlags = UMat.Usage.Default)
         {
-            return new UMat(MatInvoke.cveMatGetUMat(Ptr, access, usageFlags), true);
+            IntPtr ptr = MatInvoke.cveMatGetUMat(Ptr, access, usageFlags);
+            CvInvoke.CheckError();
+            return new UMat(ptr, true);
         }
 
         /// <summary>
@@ -534,6 +545,7 @@ namespace Emgu.CV
         public void Create(int rows, int cols, CvEnum.DepthType type, int channels)
         {
             MatInvoke.cveMatCreateData(_ptr, rows, cols, CvInvoke.MakeType(type, channels));
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -545,6 +557,7 @@ namespace Emgu.CV
             {
                 Size s = new Size();
                 MatInvoke.cveMatGetSize(_ptr, ref s);
+                CvInvoke.CheckError();
                 return s;
             }
         }
@@ -578,7 +591,9 @@ namespace Emgu.CV
         {
             get
             {
-                return MatInvoke.cveMatGetDataPointer(_ptr);
+                IntPtr result = MatInvoke.cveMatGetDataPointer(_ptr);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -596,6 +611,7 @@ namespace Emgu.CV
             GCHandle handle = GCHandle.Alloc(indices, GCHandleType.Pinned);
             IntPtr result = MatInvoke.cveMatGetDataPointer2(Ptr, handle.AddrOfPinnedObject());
             handle.Free();
+            CvInvoke.CheckError();
             return result;
         }
 
@@ -714,7 +730,9 @@ namespace Emgu.CV
         {
             get
             {
-                return (int)MatInvoke.cveMatGetStep(_ptr);
+                int result = (int)MatInvoke.cveMatGetStep(_ptr);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -726,7 +744,9 @@ namespace Emgu.CV
         {
             get
             {
-                return MatInvoke.cveMatGetElementSize(_ptr);
+                int result = MatInvoke.cveMatGetElementSize(_ptr);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -740,6 +760,7 @@ namespace Emgu.CV
             using (OutputArray oaM = m.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 MatInvoke.cveMatCopyTo(Ptr, oaM, iaMask);
+            CvInvoke.CheckError();
         }
 
         internal class MatWithHandle : Mat
@@ -878,6 +899,7 @@ namespace Emgu.CV
         {
             using (OutputArray oaM = m.GetOutputArray())
                 MatInvoke.cveMatConvertTo(Ptr, oaM, rtype, alpha, beta);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -888,7 +910,9 @@ namespace Emgu.CV
         /// <returns>A new mat header that has different shape</returns>
         public Mat Reshape(int cn, int rows = 0)
         {
-            return new Mat(MatInvoke.cveMatReshape(Ptr, cn, rows), true, false);
+            IntPtr ptr = MatInvoke.cveMatReshape(Ptr, cn, rows);
+            CvInvoke.CheckError();
+            return new Mat(ptr, true, false);
         }
 
         /// <summary>
@@ -900,17 +924,17 @@ namespace Emgu.CV
         public Mat Reshape(int cn, int[] newDims)
         {
             GCHandle handle = GCHandle.Alloc(newDims, GCHandleType.Pinned);
+            IntPtr ptr;
             try
             {
-                return new Mat(
-                    MatInvoke.cveMatReshape2(Ptr, cn, newDims.Length, handle.AddrOfPinnedObject()), 
-                    true, 
-                    false);
+                ptr = MatInvoke.cveMatReshape2(Ptr, cn, newDims.Length, handle.AddrOfPinnedObject());
             }
-            finally 
+            finally
             {
                 handle.Free();
             }
+            CvInvoke.CheckError();
+            return new Mat(ptr, true, false);
         }
 
         /// <summary>
@@ -996,66 +1020,6 @@ namespace Emgu.CV
             }
             return new RangeF((float)minVal, (float)maxVal);
         }
-
-        /*
-        /// <summary>
-        /// Convert this Mat to Image
-        /// </summary>
-        /// <typeparam name="TColor">The type of Color</typeparam>
-        /// <typeparam name="TDepth">The type of Depth</typeparam>
-        /// <param name="tryShareData">If true, we will try to see if we can create an Image object that shared the pixel memory with this Mat.</param>
-        /// <returns>The image</returns>
-        public Image<TColor, TDepth> ToImage<TColor, TDepth>(bool tryShareData = false)
-           where TColor : struct, IColor
-           where TDepth : new()
-        {
-            TColor c = new TColor();
-
-            int numberOfChannels = NumberOfChannels;
-            if (typeof(TDepth) == CvInvoke.GetDepthType(this.Depth) && c.Dimension == numberOfChannels)
-            {
-                //same color, same depth
-                if (tryShareData)
-                    return new Image<TColor, TDepth>(MatInvoke.cveMatToIplImage(Ptr));
-                else
-                {
-                    Image<TColor, TDepth> img = new Image<TColor, TDepth>(Size);
-                    CopyTo(img);
-                    return img;
-                }
-            }
-            else if (typeof(TDepth) != CvInvoke.GetDepthType(this.Depth) && c.Dimension == numberOfChannels)
-            {
-                //different depth, same color
-                Image<TColor, TDepth> result = new Image<TColor, TDepth>(Size);
-                ConvertTo(result, CvInvoke.GetDepthType(typeof(TDepth)));
-                return result;
-            }
-            else if (typeof(TDepth) == CvInvoke.GetDepthType(this.Depth) && c.Dimension != numberOfChannels)
-            {
-                //same depth, different color
-                Image<TColor, TDepth> result = new Image<TColor, TDepth>(Size);
-                CvInvoke.CvtColor(
-                   this, result,
-                   numberOfChannels == 1 ? typeof(Gray) :
-                   numberOfChannels == 3 ? typeof(Bgr) :
-                   typeof(Bgra),
-                   typeof(TColor));
-
-                return result;
-            }
-            else
-            {
-                //different color, different depth
-                using (Mat tmp = new Mat())
-                {
-                    ConvertTo(tmp, CvInvoke.GetDepthType(typeof(TDepth)));
-                    return tmp.ToImage<TColor, TDepth>();
-                }
-
-            }
-        }
-        */
 
         internal static DepthType GetDepthTypeFromArray(Array data)
         {
@@ -1167,6 +1131,7 @@ namespace Emgu.CV
             //}
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 MatInvoke.cveMatSetToScalar(Ptr, ref value, iaMask);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -1179,6 +1144,7 @@ namespace Emgu.CV
             using (InputArray iaValue = value.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
                 MatInvoke.cveMatSetTo(Ptr, iaValue, iaMask);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -1193,6 +1159,7 @@ namespace Emgu.CV
         {
             Mat m = new Mat();
             MatInvoke.cveMatEye(rows, cols, CvInvoke.MakeType(type, channels), m.Ptr);
+            CvInvoke.CheckError();
             return m;
         }
 
@@ -1205,6 +1172,7 @@ namespace Emgu.CV
         {
             Mat m = new Mat();
             MatInvoke.cveMatDiag(Ptr, d, m);
+            CvInvoke.CheckError();
             return m;
         }
 
@@ -1216,6 +1184,7 @@ namespace Emgu.CV
         {
             Mat m = new Mat();
             MatInvoke.cveMatT(Ptr, m);
+            CvInvoke.CheckError();
             return m;
         }
 
@@ -1231,6 +1200,7 @@ namespace Emgu.CV
         {
             Mat m = new Mat();
             MatInvoke.cveMatZeros(rows, cols, CvInvoke.MakeType(type, channels), m.Ptr);
+            CvInvoke.CheckError();
             return m;
         }
 
@@ -1246,6 +1216,7 @@ namespace Emgu.CV
         {
             Mat m = new Mat();
             MatInvoke.cveMatOnes(rows, cols, CvInvoke.MakeType(type, channels), m.Ptr);
+            CvInvoke.CheckError();
             return m;
         }
 
@@ -1374,8 +1345,11 @@ namespace Emgu.CV
         /// <returns>The dot-product of two vectors.</returns>
         public double Dot(IInputArray m)
         {
+            double result;
             using (InputArray iaM = m.GetInputArray())
-                return MatInvoke.cveMatDot(Ptr, iaM);
+                result = MatInvoke.cveMatDot(Ptr, iaM);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -1388,6 +1362,7 @@ namespace Emgu.CV
             Mat result = new Mat();
             using (InputArray iaM = m.GetInputArray())
                 MatInvoke.cveMatCross(Ptr, iaM, result);
+            CvInvoke.CheckError();
             return result;
         }
 
@@ -1403,6 +1378,7 @@ namespace Emgu.CV
                 try
                 {
                     MatInvoke.cveMatGetSizeOfDimension(_ptr, handle.AddrOfPinnedObject());
+                    CvInvoke.CheckError();
                 }
                 finally
                 {
@@ -1854,11 +1830,6 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveMatGetStep(IntPtr mat);
 
-        /*
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        [return: MarshalAs(CvInvoke.BoolMarshalType)]
-        internal extern static bool cvMatIsEmpty(IntPtr mat);*/
-
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveMatCreateData(IntPtr mat, int row, int cols, int type);
 
@@ -1900,11 +1871,6 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr cveMatReshape2(IntPtr mat, int cn, int newndims, IntPtr newsz);
 
-        /*
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr cveMatToIplImage(IntPtr mat);
-        */
-        
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern double cveMatDot(IntPtr mat, IntPtr m);
 
@@ -1933,15 +1899,19 @@ namespace Emgu.CV
             {
                 if (steps == null)
                 {
-                    return cveMatCreateMultiDimWithData(sizes.Length, sizesHandle.AddrOfPinnedObject(), type, data,
+                    IntPtr result = cveMatCreateMultiDimWithData(sizes.Length, sizesHandle.AddrOfPinnedObject(), type, data,
                        IntPtr.Zero);
+                    CvInvoke.CheckError();
+                    return result;
                 }
                 else
                 {
                     GCHandle stepsHandle = GCHandle.Alloc(steps, GCHandleType.Pinned);
                     try
                     {
-                        return cveMatCreateMultiDimWithData(sizes.Length, sizesHandle.AddrOfPinnedObject(), type, data, stepsHandle.AddrOfPinnedObject());
+                        IntPtr result = cveMatCreateMultiDimWithData(sizes.Length, sizesHandle.AddrOfPinnedObject(), type, data, stepsHandle.AddrOfPinnedObject());
+                        CvInvoke.CheckError();
+                        return result;
                     }
                     finally
                     {

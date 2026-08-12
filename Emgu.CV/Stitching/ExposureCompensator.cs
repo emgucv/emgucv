@@ -52,6 +52,7 @@ namespace Emgu.CV.Stitching
         public NoExposureCompensator()
         {
             _ptr = StitchingInvoke.cveNoExposureCompensatorCreate(ref _exposureCompensatorPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -79,6 +80,7 @@ namespace Emgu.CV.Stitching
         public GainCompensator(int nrFeeds)
         {
             _ptr = StitchingInvoke.cveGainCompensatorCreate(nrFeeds, ref _exposureCompensatorPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -106,6 +108,7 @@ namespace Emgu.CV.Stitching
         public ChannelsCompensator(int nrFeeds)
         {
             _ptr = StitchingInvoke.cveChannelsCompensatorCreate(nrFeeds, ref _exposureCompensatorPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -157,6 +160,7 @@ namespace Emgu.CV.Stitching
         {
             _ptr = StitchingInvoke.cveBlocksGainCompensatorCreate(blWidth, blHeight, nrFeeds,
                 ref _exposureCompensatorPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -188,6 +192,7 @@ namespace Emgu.CV.Stitching
         {
             _ptr = StitchingInvoke.cveBlocksChannelsCompensatorCreate(blWidth, blHeight, nrFeeds,
                 ref _exposureCompensatorPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

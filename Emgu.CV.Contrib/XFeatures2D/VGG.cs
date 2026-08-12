@@ -64,6 +64,7 @@ namespace Emgu.CV.XFeatures2D
         {
             _ptr = XFeatures2DInvoke.cveVGGCreate(desc, isigma, imgNormalize, useScaleOrientation, scaleFactor, dscNormalize,
                 ref _feature2D, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

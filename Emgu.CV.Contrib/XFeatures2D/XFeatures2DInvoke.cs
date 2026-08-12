@@ -49,6 +49,7 @@ namespace Emgu.CV.XFeatures2D
             double thresholdFactor = 6.0)
         {
             cveMatchGMS(ref size1, ref size2, keypoints1, keypoints2, matches1to2, matchesGMS, withRotation, withScale, thresholdFactor);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -84,6 +85,7 @@ namespace Emgu.CV.XFeatures2D
                 nn2,
                 matches1to2
                 );
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

@@ -49,6 +49,7 @@ namespace Emgu.CV
                 flags,
                 ref _denseOpticalFlow, ref _algorithm,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -25,7 +25,10 @@ namespace Emgu.CV.Cuda
         public CudaLookUpTable(IInputArray lookUpTable)
         {
             using (InputArray iaLookupTable = lookUpTable.GetInputArray())
+            {
                 _ptr = CudaInvoke.cudaLookUpTableCreate(iaLookupTable, ref _sharedPtr);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -38,7 +41,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 CudaInvoke.cudaLookUpTableTransform(_ptr, iaImage, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

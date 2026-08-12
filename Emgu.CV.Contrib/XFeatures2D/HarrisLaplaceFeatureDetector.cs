@@ -41,8 +41,9 @@ namespace Emgu.CV.XFeatures2D
                 cornThresh,
                 DOGThresh,
                 maxCorners,
-                numLayers, 
+                numLayers,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

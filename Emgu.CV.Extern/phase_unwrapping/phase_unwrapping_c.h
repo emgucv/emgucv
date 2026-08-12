@@ -10,6 +10,7 @@
 
 #include "opencv2/core/core.hpp"
 #include "cvapi_compat.h"
+#include "emgu_error.h"
 
 #ifdef HAVE_OPENCV_PHASE_UNWRAPPING
 #include "opencv2/phase_unwrapping.hpp"

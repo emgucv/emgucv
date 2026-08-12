@@ -51,6 +51,7 @@ namespace Emgu.CV.ImgHash
             {
                 ImgHashInvoke.cveImgHashBaseCompute(_imgHashBase, iaInputArr, oaOutputArr);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -64,7 +65,9 @@ namespace Emgu.CV.ImgHash
             using (InputArray iaHashOne = hashOne.GetInputArray())
             using (InputArray iaHashTwo = hashTwo.GetInputArray())
             {
-                return ImgHashInvoke.cveImgHashBaseCompare(_imgHashBase, iaHashOne, iaHashTwo);
+                double result = ImgHashInvoke.cveImgHashBaseCompare(_imgHashBase, iaHashOne, iaHashTwo);
+                CvInvoke.CheckError();
+                return result;
             }
         }
     }

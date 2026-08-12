@@ -10,6 +10,7 @@
 
 #include "opencv2/core/core.hpp"
 #include "cvapi_compat.h"
+#include "emgu_error.h"
 
 #ifdef HAVE_OPENCV_IMG_HASH
 #include "opencv2/img_hash.hpp"

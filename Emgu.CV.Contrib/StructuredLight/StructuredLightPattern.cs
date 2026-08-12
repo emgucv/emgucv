@@ -60,7 +60,11 @@ namespace Emgu.CV.StructuredLight
             IOutputArrayOfArrays patternImages)
         {
             using (OutputArray oaPatternImages = patternImages.GetOutputArray())
-                return cveStructuredLightPatternGenerate(structuredLightPattern.StructuredLightPatternPtr, oaPatternImages);
+            {
+                bool result = cveStructuredLightPatternGenerate(structuredLightPattern.StructuredLightPatternPtr, oaPatternImages);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -85,7 +89,7 @@ namespace Emgu.CV.StructuredLight
             using (InputArray iaBlackImages = blackImages == null? InputArray.GetEmpty() : blackImages.GetInputArray())
             using (InputArray iaWhiteImages = whiteImages == null? InputArray.GetEmpty() : whiteImages.GetInputArray())
             {
-                return cveStructuredLightPatternDecode(
+                bool result = cveStructuredLightPatternDecode(
                     structuredLightPattern.StructuredLightPatternPtr,
                     patternImages,
                     oaDisparityMap,
@@ -93,6 +97,8 @@ namespace Emgu.CV.StructuredLight
                     iaWhiteImages,
                     flags
                     );
+                CvInvoke.CheckError();
+                return result;
             }
         }
 

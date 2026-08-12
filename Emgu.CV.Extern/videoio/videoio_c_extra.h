@@ -11,6 +11,7 @@
 #include "opencv2/opencv_modules.hpp"
 #include "opencv2/core.hpp"
 #include "cvapi_compat.h"
+#include "emgu_error.h"
 
 #ifdef HAVE_OPENCV_VIDEOIO
 //#include "opencv2/videoio/videoio_c.h"
@@ -60,13 +61,6 @@ namespace cv {
 		struct Type< ColorPoint > { enum { value = CV_MAKETYPE(Depth<uchar>::value, sizeof(ColorPoint)) }; };
 	}
 }
-
-/*
-CVAPI(void) OpenniGetColorPoints(
-                                 CvCapture* capture, // must be an openni capture
-                                 std::vector<ColorPoint>* points, // sequence of ColorPoint
-                                 IplImage* mask // CV_8UC1
-                                 );*/
 
 CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromDevice(int device, int apiPreference, std::vector< int >* params);
 CVAPI(cv::VideoCapture*) cveVideoCaptureCreateFromFile(cv::String* fileName, int apiPreference, std::vector< int >* params);

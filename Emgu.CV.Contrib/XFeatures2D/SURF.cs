@@ -45,6 +45,7 @@ namespace Emgu.CV.XFeatures2D
            bool upright = false)
         {
             _ptr = XFeatures2DInvoke.cveSURFCreate(hessianThresh, nOctaves, nOctaveLayers, extended, upright, ref _feature2D, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

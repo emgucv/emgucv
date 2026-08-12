@@ -34,7 +34,11 @@ namespace Emgu.CV.Dnn
         public static Tokenizer Load(String modelConfig)
         {
             using (CvString csModelConfig = new CvString(modelConfig))
-                return new Tokenizer(DnnInvoke.cveDnnTokenizerLoad(csModelConfig));
+            {
+                IntPtr ptr = DnnInvoke.cveDnnTokenizerLoad(csModelConfig);
+                CvInvoke.CheckError();
+                return new Tokenizer(ptr);
+            }
         }
 
         /// <summary>
@@ -48,6 +52,7 @@ namespace Emgu.CV.Dnn
             using (VectorOfInt viIds = new VectorOfInt())
             {
                 DnnInvoke.cveDnnTokenizerEncode(_ptr, csText, viIds);
+                CvInvoke.CheckError();
                 return viIds.ToArray();
             }
         }
@@ -63,6 +68,7 @@ namespace Emgu.CV.Dnn
             using (CvString csText = new CvString())
             {
                 DnnInvoke.cveDnnTokenizerDecode(_ptr, viTokens, csText);
+                CvInvoke.CheckError();
                 return csText.ToString();
             }
         }

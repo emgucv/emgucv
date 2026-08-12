@@ -35,6 +35,7 @@ namespace Emgu.CV.Cuda
             int maxNKeypoints = 5000)
         {
             _ptr = CudaInvoke.cveCudaFastFeatureDetectorCreate(threshold, nonmaxSupression, type, maxNKeypoints, ref _feature2D, ref _feature2DAsyncPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
 

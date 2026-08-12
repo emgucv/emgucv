@@ -49,6 +49,7 @@ namespace Emgu.CV.ML
         public EM()
         {
             _ptr = MlInvoke.cveEMDefaultCreate(ref _statModel, ref _algorithm, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -81,6 +82,7 @@ namespace Emgu.CV.ML
                 MlInvoke.cveEMTrainE(_ptr, iaSamples, iaMeans0, iaCovs0, iaWeights, oaLogLikelihood, oaLabels,
                    oaProbs, ref _statModel, ref _algorithm);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -110,6 +112,7 @@ namespace Emgu.CV.ML
                 MlInvoke.cveEMTrainM(_ptr, iaSamples, iaProbs0, oaLogLikelihood, oaLabels, oaProbs, ref _statModel, ref _algorithm);
 
             }
+            CvInvoke.CheckError();
         }
 
 
@@ -129,6 +132,7 @@ namespace Emgu.CV.ML
                   iaSamples,
                   ref result,
                   oaProbs);
+            CvInvoke.CheckError();
             return result;
         }
 

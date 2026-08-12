@@ -34,6 +34,7 @@ namespace Emgu.CV.XFeatures2D
             CvEnum.KMeansInitType flags = KMeansInitType.PPCenters)
         {
             _ptr = XFeatures2DInvoke.cveBOWKMeansTrainerCreate(clusterCount, ref termcrit, attempts, flags);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -43,7 +44,9 @@ namespace Emgu.CV.XFeatures2D
         {
             get
             {
-                return XFeatures2DInvoke.cveBOWKMeansTrainerGetDescriptorCount(_ptr);
+                int result = XFeatures2DInvoke.cveBOWKMeansTrainerGetDescriptorCount(_ptr);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -54,6 +57,7 @@ namespace Emgu.CV.XFeatures2D
         public void Add(Mat descriptors)
         {
             XFeatures2DInvoke.cveBOWKMeansTrainerAdd(_ptr, descriptors);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -64,6 +68,7 @@ namespace Emgu.CV.XFeatures2D
         {
             using (OutputArray oaCluster = cluster.GetOutputArray())
                 XFeatures2DInvoke.cveBOWKMeansTrainerCluster(_ptr, oaCluster);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -39,6 +39,7 @@ namespace Emgu.CV.Cuda
             MCvScalar borderValue = new MCvScalar())
         {
             _ptr = CudaInvoke.cudaCreateColumnSumFilter(CvInvoke.MakeType(srcDepth, srcChannels), CvInvoke.MakeType(dstDepth, dstChannels), ksize, anchor, borderType, ref borderValue, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
     }
 

@@ -274,7 +274,10 @@ namespace Emgu.CV.Cuda
         public CudaVideoReader(String fileName)
         {
             using (CvString s = new CvString(fileName))
+            {
                 _ptr = CudaInvoke.cudaVideoReaderCreate(s, ref _sharedPtr);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -285,7 +288,9 @@ namespace Emgu.CV.Cuda
         /// <returns>If no frames has been grabbed (there are no more frames in video file), the methods return false . </returns>
         public bool NextFrame(GpuMat frame, Stream stream = null)
         {
-            return CudaInvoke.cudaVideoReaderNextFrame(_ptr, frame, stream);
+            var result = CudaInvoke.cudaVideoReaderNextFrame(_ptr, frame, stream);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -297,6 +302,7 @@ namespace Emgu.CV.Cuda
             {
                 FormatInfo fi = new FormatInfo();
                 CudaInvoke.cudaVideoReaderFormat(_ptr, ref fi);
+                CvInvoke.CheckError();
                 return fi;
             }
         }

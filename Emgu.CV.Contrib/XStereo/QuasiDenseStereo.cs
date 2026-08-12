@@ -31,6 +31,7 @@ namespace Emgu.CV.Stereo
                     ref monoImgSize,
                     csParamFilePath,
                     ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -55,6 +56,7 @@ namespace Emgu.CV.Stereo
         public void Process(Mat imgLeft, Mat imgRight)
         {
             XStereoInvoke.cveQuasiDenseStereoProcess(_ptr, imgLeft, imgRight);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -65,6 +67,7 @@ namespace Emgu.CV.Stereo
         {
             Mat disparity = new Mat();
             XStereoInvoke.cveQuasiDenseStereoGetDisparity(_ptr, disparity);
+            CvInvoke.CheckError();
             return disparity;
         }
 

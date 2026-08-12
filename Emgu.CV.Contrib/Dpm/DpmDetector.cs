@@ -42,6 +42,7 @@ namespace Emgu.CV.Dpm
                 using (var vfiles = new Util.VectorOfCvString(cfiles))
                 using (var vclasses = new Util.VectorOfCvString(cclasses))
                     _ptr = DpmInvoke.cveDPMDetectorCreate(vfiles, vclasses, ref _sharedPtr);
+                CvInvoke.CheckError();
             }
             finally
             {
@@ -55,7 +56,15 @@ namespace Emgu.CV.Dpm
         /// <summary>
         /// Return true if the detector is empty
         /// </summary>
-        public bool IsEmpty { get { return DpmInvoke.cveDPMDetectorIsEmpty(_ptr); } }
+        public bool IsEmpty
+        {
+            get
+            {
+                bool result = DpmInvoke.cveDPMDetectorIsEmpty(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+        }
 
         /// <summary>
         /// Get the class names
@@ -67,6 +76,7 @@ namespace Emgu.CV.Dpm
                 using (var names = new Util.VectorOfCvString())
                 {
                     DpmInvoke.cveDPMDetectorGetClassNames(_ptr, names);
+                    CvInvoke.CheckError();
                     return names.ToArray();
                 }
             }
@@ -75,7 +85,15 @@ namespace Emgu.CV.Dpm
         /// <summary>
         /// get the number of classes
         /// </summary>
-        public int ClassCount { get { return (int)DpmInvoke.cveDPMDetectorGetClassCount(_ptr).ToUInt32(); } }
+        public int ClassCount
+        {
+            get
+            {
+                UIntPtr result = DpmInvoke.cveDPMDetectorGetClassCount(_ptr);
+                CvInvoke.CheckError();
+                return (int)result.ToUInt32();
+            }
+        }
 
         /// <summary>
         /// Perform detection on the image
@@ -89,6 +107,7 @@ namespace Emgu.CV.Dpm
             using (Util.VectorOfInt classIds = new Util.VectorOfInt())
             {
                 DpmInvoke.cveDPMDetectorDetect(_ptr, mat, rects, scores, classIds);
+                CvInvoke.CheckError();
                 ObjectDetection[] detections = new ObjectDetection[rects.Size];
                 for (var i = 0; i < detections.Length; i++)
                     detections[i] = new ObjectDetection(rects[i], scores[i], classIds[i]);

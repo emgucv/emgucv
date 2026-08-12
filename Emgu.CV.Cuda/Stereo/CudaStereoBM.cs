@@ -39,6 +39,7 @@ namespace Emgu.CV.Cuda
         public CudaStereoBM(int numberOfDisparities = 64, int blockSize = 19)
         {
             _ptr = CudaInvoke.cudaStereoBMCreate(numberOfDisparities, blockSize, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -53,7 +54,10 @@ namespace Emgu.CV.Cuda
             using (InputArray iaLeft = left.GetInputArray())
             using (InputArray iaRight = right.GetInputArray())
             using (OutputArray oaDisparity = disparity.GetOutputArray())
+            {
                 CudaInvoke.cudaStereoBMFindStereoCorrespondence(_ptr, iaLeft, iaRight, oaDisparity, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

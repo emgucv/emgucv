@@ -45,7 +45,7 @@ namespace Emgu.CV.Rapid
             using (InputArray iaPts3d = pts3d.GetInputArray())
             using (InputArray iaTris = tris.GetInputArray())
                 _ptr = RapidInvoke.cveRapidCreate(iaPts3d, iaTris, ref _trackerPtr, ref _algorithmPtr, ref _sharedPtr);
-
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace Emgu.CV.Rapid
             using (InputArray iaPts3d = pts3d.GetInputArray())
             using (InputArray iaTris = tris.GetInputArray())
                 _ptr = RapidInvoke.cveOLSTrackerCreate(iaPts3d, iaTris, histBins, sobelThresh, ref _trackerPtr, ref _algorithmPtr, ref _sharedPtr);
-
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -162,6 +162,7 @@ namespace Emgu.CV.Rapid
             {
                 cveDrawCorrespondencies(ioaBundle, iaCols, iaColors);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -186,6 +187,7 @@ namespace Emgu.CV.Rapid
             {
                 cveDrawSearchLines(ioaImg, iaLocations, ref color);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -217,6 +219,7 @@ namespace Emgu.CV.Rapid
             {
                 cveDrawWireframe(ioaImg, iaPts2d, iaTris, ref color, type, cullBackface);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -263,6 +266,7 @@ namespace Emgu.CV.Rapid
             {
                 cveExtractControlPoints(num, len, iaPts3d, iaRvec, iaTvec, iaK, ref imsize, iaTris, oaCtl2d, oaCtl3d);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -298,6 +302,7 @@ namespace Emgu.CV.Rapid
             using (OutputArray oaBundle = bundle.GetOutputArray())
             using (OutputArray oaSrcLocations = srcLocations.GetOutputArray())
                 cveExtractLineBundle(len, iaCtl2d, iaImg, oaBundle, oaSrcLocations);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -325,6 +330,7 @@ namespace Emgu.CV.Rapid
             {
                 cveFindCorrespondencies(iaBundle, oaCols, oaResponse);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -356,6 +362,7 @@ namespace Emgu.CV.Rapid
             {
                 cveConvertCorrespondencies(iaCols, iaSrcLocations, oaPts2d, ioaPts3d, iaMask);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -397,7 +404,9 @@ namespace Emgu.CV.Rapid
             using (InputOutputArray ioaRvec = rvec.GetInputOutputArray())
             using (InputOutputArray ioaTvec = tvec.GetInputOutputArray())
             {
-                return cveRapid(iaImg, num, len, iaPts3d, iaTris, iaK, ioaRvec, ioaTvec, ref rmsd);
+                float result = cveRapid(iaImg, num, len, iaPts3d, iaTris, iaK, ioaRvec, ioaTvec, ref rmsd);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -440,7 +449,9 @@ namespace Emgu.CV.Rapid
             using (InputOutputArray ioaRvec = rvec.GetInputOutputArray())
             using (InputOutputArray ioaTvec = tvec.GetInputOutputArray())
             {
-                return cveTrackerCompute(tracker.TrackerPtr, iaImg, num, len, iaK, ioaRvec, ioaTvec, ref termcrit);
+                float result = cveTrackerCompute(tracker.TrackerPtr, iaImg, num, len, iaK, ioaRvec, ioaTvec, ref termcrit);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -462,6 +473,7 @@ namespace Emgu.CV.Rapid
         public static void ClearState(this ITracker tracker)
         {
             cveTrackerClearState(tracker.TrackerPtr);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

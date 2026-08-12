@@ -39,6 +39,7 @@ namespace Emgu.CV.Text
                         _ptr = TextInvoke.cveTextDetectorCNNCreate2(csModelArchFilename, csModelWeightsFilename, vs,
                             ref _sharedPtr);
                 }
+                CvInvoke.CheckError();
             }
 
         }
@@ -70,6 +71,7 @@ namespace Emgu.CV.Text
             using (VectorOfFloat vf = new VectorOfFloat())
             {
                 TextInvoke.cveTextDetectorCNNDetect(_ptr, iaImage, vr, vf);
+                CvInvoke.CheckError();
                 Rectangle[] bboxes = vr.ToArray();
                 float[] confidents = vf.ToArray();
                 TextRegion[] regions = new TextRegion[bboxes.Length];

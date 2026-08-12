@@ -12,6 +12,7 @@
 //#include "cvapi_compat.h"
 
 #include "features_c.h"
+#include "emgu_error.h"
 
 #ifdef HAVE_OPENCV_STITCHING
 
@@ -153,36 +154,6 @@ CVAPI(int) cveStitcherSetTransform(
 CVAPI(void) cveStitcherGetResultMask(
 	cv::Stitcher* stitcher,
 	cv::_OutputArray* resultMask);
-
-/*
-#ifdef OPENCV_ENABLE_NONFREE
-CVAPI(cv::detail::SurfFeaturesFinder*) cveSurfFeaturesFinderCreate(
-   double hess_thresh, int num_octaves, int num_layers,
-   int num_octaves_descr, int num_layers_descr, cv::detail::FeaturesFinder** f);
-
-CVAPI(void) cveSurfFeaturesFinderRelease(cv::detail::SurfFeaturesFinder** finder);
-
-CVAPI(cv::detail::SurfFeaturesFinderGpu*) cveSurfFeaturesFinderGpuCreate(
-   double hess_thresh, int num_octaves, int num_layers,
-   int num_octaves_descr, int num_layers_descr, cv::detail::FeaturesFinder** f);
-
-CVAPI(void) cveSurfFeaturesFinderGpuRelease(cv::detail::SurfFeaturesFinderGpu** finder);
-#endif
-
-CVAPI(cv::detail::OrbFeaturesFinder*) cveOrbFeaturesFinderCreate(CvSize* grid_size, int nfeaturea, float scaleFactor, int nlevels, cv::detail::FeaturesFinder** f);
-CVAPI(void) cveOrbFeaturesFinderRelease(cv::detail::OrbFeaturesFinder** finder);
-
-CVAPI(cv::detail::AKAZEFeaturesFinder*) cveAKAZEFeaturesFinderCreate(
-	int descriptorType,
-	int descriptorSize,
-	int descriptorChannels,
-	float threshold,
-	int nOctaves,
-	int nOctaveLayers,
-	int diffusivity,
-	cv::detail::FeaturesFinder** f);
-CVAPI(void) cveAKAZEFeaturesFinderRelease(cv::detail::AKAZEFeaturesFinder** finder);
-*/
 
 CVAPI(void) cveRotationWarperBuildMaps(cv::detail::RotationWarper* warper, cv::Size* srcSize, cv::_InputArray* K, cv::_InputArray* R, cv::_OutputArray* xmap, cv::_OutputArray* ymap, cv::Rect* boundingBox);
 CVAPI(void) cveRotationWarperWarp(cv::detail::RotationWarper* warper, cv::_InputArray* src, cv::_InputArray* K, cv::_InputArray* R, int interpMode, int borderMode, cv::_OutputArray* dst, cv::Point* corner);

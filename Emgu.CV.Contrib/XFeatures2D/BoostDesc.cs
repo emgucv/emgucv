@@ -73,6 +73,7 @@ namespace Emgu.CV.XFeatures2D
             float scalefactor = 6.25f)
         {
             _ptr = XFeatures2DInvoke.cveBoostDescCreate(desc, useScaleOrientation, scalefactor, ref _feature2D, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

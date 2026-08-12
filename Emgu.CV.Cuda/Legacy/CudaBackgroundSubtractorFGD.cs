@@ -67,6 +67,7 @@ namespace Emgu.CV.Cuda
                 T,
                 minArea,
                 ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -79,7 +80,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaFrame = frame.GetInputArray())
             using (OutputArray oaForgroundMask = forgroundMask.GetOutputArray())
+            {
                 CudaInvoke.cudaBackgroundSubtractorFGDApply(_ptr, iaFrame, oaForgroundMask, learningRate);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

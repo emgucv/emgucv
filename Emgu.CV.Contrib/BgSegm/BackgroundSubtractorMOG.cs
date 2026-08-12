@@ -46,6 +46,7 @@ namespace Emgu.CV.BgSegm
             double noiseSigma = 0)
         {
             _ptr = BgSegmInvoke.cveBackgroundSubtractorMOGCreate(history, nMixtures, backgroundRatio, noiseSigma, ref _backgroundSubtractorPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

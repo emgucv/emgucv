@@ -42,6 +42,7 @@ namespace Emgu.CV.Legacy
             double maxMedianLengthOfDisplacementDifference = 10)
         {
             _ptr = TrackingInvoke.cveTrackerMedianFlowCreate(pointsInGrid, ref winSize, maxLevel, ref termCriteria, ref winSizeNCC, maxMedianLengthOfDisplacementDifference, ref _trackerPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

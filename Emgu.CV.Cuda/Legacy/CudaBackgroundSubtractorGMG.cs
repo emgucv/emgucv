@@ -25,6 +25,7 @@ namespace Emgu.CV.Cuda
         public CudaBackgroundSubtractorGMG(int initializationFrames = 120, double decisionThreshold = 0.8)
         {
             _ptr = CudaInvoke.cudaBackgroundSubtractorGMGCreate(initializationFrames, decisionThreshold, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -38,7 +39,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaFrame = frame.GetInputArray())
             using (OutputArray oaForegroundMask = foregroundMask.GetOutputArray())
+            {
                 CudaInvoke.cudaBackgroundSubtractorGMGApply(_ptr, iaFrame, oaForegroundMask, learningRate, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

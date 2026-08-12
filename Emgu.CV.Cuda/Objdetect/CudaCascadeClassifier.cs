@@ -32,7 +32,10 @@ namespace Emgu.CV.Cuda
         {
             Debug.Assert(File.Exists(fileName), String.Format("The Cascade file {0} does not exist.", fileName));
             using (CvString s = new CvString(fileName))
+            {
                 _ptr = CudaInvoke.cudaCascadeClassifierCreate(s, ref _sharedPtr);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -42,6 +45,7 @@ namespace Emgu.CV.Cuda
         public CudaCascadeClassifier(FileStorage fs)
         {
             _ptr = CudaInvoke.cudaCascadeClassifierCreateFromFileStorage(fs, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -54,8 +58,11 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaObjects = objects.GetOutputArray())
+            {
                 CudaInvoke.cudaCascadeClassifierDetectMultiScale(_ptr, iaImage, oaObjects,
                    stream == null ? IntPtr.Zero : stream.Ptr);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -69,6 +76,7 @@ namespace Emgu.CV.Cuda
             using (VectorOfRect vr = new VectorOfRect())
             {
                 CudaInvoke.cudaCascadeClassifierConvert(_ptr, oaObjects, vr);
+                CvInvoke.CheckError();
                 return vr.ToArray();
             }
         }

@@ -33,6 +33,7 @@ namespace Emgu.CV.Dnn
                     csConfig,
                     ref _model);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -44,6 +45,7 @@ namespace Emgu.CV.Dnn
             _ptr = DnnInvoke.cveDnnClassificationModelCreate2(
                 net,
                 ref _model);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -68,6 +70,7 @@ namespace Emgu.CV.Dnn
                     ref classId,
                     ref conf);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -11,11 +11,15 @@ void cveMapWarp(
 	cv::_InputArray* img1,
 	cv::_OutputArray* img2)
 {
-#ifdef HAVE_OPENCV_REG
-	map->warp(*img1, *img2);
-#else
-	throw_no_reg();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_REG
+		map->warp(*img1, *img2);
+	#else
+		throw_no_reg();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveMapInverseWarp(
@@ -23,11 +27,15 @@ void cveMapInverseWarp(
 	cv::_InputArray* img1,
 	cv::_OutputArray* img2)
 {
-#ifdef HAVE_OPENCV_REG
-	map->inverseWarp(*img1, *img2);
-#else
-	throw_no_reg();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_REG
+		map->inverseWarp(*img1, *img2);
+	#else
+		throw_no_reg();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveMapScale(
@@ -72,13 +80,17 @@ void cveMapShiftRelease(cv::reg::MapShift** mapShift)
 
 cv::reg::MapProjec* cveMapProjecCreate(cv::_InputArray* projTr, cv::reg::Map** map)
 {
-#ifdef HAVE_OPENCV_REG
-	cv::reg::MapProjec* ptr = new cv::reg::MapProjec(*projTr);
-	*map = dynamic_cast<cv::reg::Map*>(ptr);
-	return ptr;
-#else
-	throw_no_reg();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_REG
+		cv::reg::MapProjec* ptr = new cv::reg::MapProjec(*projTr);
+		*map = dynamic_cast<cv::reg::Map*>(ptr);
+		return ptr;
+	#else
+		throw_no_reg();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveMapProjecRelease(cv::reg::MapProjec** mapProjec)
@@ -96,13 +108,17 @@ cv::reg::MapAffine* cveMapAffineCreate(
 	cv::_InputArray* shift,
 	cv::reg::Map** map)
 {
-#ifdef HAVE_OPENCV_REG
-	cv::reg::MapAffine* ptr = new cv::reg::MapAffine(*linTr, *shift);
-	*map = dynamic_cast<cv::reg::Map*>(ptr);
-	return ptr;
-#else
-	throw_no_reg();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_REG
+		cv::reg::MapAffine* ptr = new cv::reg::MapAffine(*linTr, *shift);
+		*map = dynamic_cast<cv::reg::Map*>(ptr);
+		return ptr;
+	#else
+		throw_no_reg();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveMapAffineRelease(cv::reg::MapAffine** mapAffine)
 {
@@ -121,21 +137,25 @@ cv::reg::Map* cveMapperCalculate(
 	cv::reg::Map* init,
 	cv::Ptr<cv::reg::Map>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_REG
-	cv::Ptr<cv::reg::Map> newMap;
-	if (init)
+	try
 	{
-		cv::Ptr<cv::reg::Map> p(init, [](cv::reg::Map* ptr) {});
-		newMap = mapper->calculate(*img1, *img2, p);
-	} else
-	{
-		newMap = mapper->calculate(*img1, *img2);
+	#ifdef HAVE_OPENCV_REG
+		cv::Ptr<cv::reg::Map> newMap;
+		if (init)
+		{
+			cv::Ptr<cv::reg::Map> p(init, [](cv::reg::Map* ptr) {});
+			newMap = mapper->calculate(*img1, *img2, p);
+		} else
+		{
+			newMap = mapper->calculate(*img1, *img2);
+		}
+		*sharedPtr = new cv::Ptr<cv::reg::Map>(newMap);
+		return (*sharedPtr)->get();
+	#else
+		throw_no_reg();
+	#endif
 	}
-	*sharedPtr = new cv::Ptr<cv::reg::Map>(newMap);
-	return (*sharedPtr)->get();
-#else
-	throw_no_reg();
-#endif
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 cv::reg::MapperGradAffine* cveMapperGradAffineCreate(cv::reg::Mapper** mapper)

@@ -42,11 +42,12 @@ namespace Emgu.CV.Aruco
             using (InputArray iaIds = (ids == null) ? InputArray.GetEmpty() : ids.GetInputArray())
             {
                 _ptr = ArucoInvoke.cveArucoGridBoardCreate(
-                    markersX, markersY, 
+                    markersX, markersY,
                     markerLength, markerSeparation,
-                    dictionary, iaIds, 
+                    dictionary, iaIds,
                     ref _boardPtr, ref _sharedPtr);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>

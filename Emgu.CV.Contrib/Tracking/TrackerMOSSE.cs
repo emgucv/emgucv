@@ -28,6 +28,7 @@ namespace Emgu.CV.Legacy
         public TrackerMOSSE()
         {
             _ptr = TrackingInvoke.cveTrackerMOSSECreate(ref _trackerPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

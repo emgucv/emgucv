@@ -34,6 +34,7 @@ namespace Emgu.CV.Dnn
             using (CvString csConfig = new CvString(config))
             {
                 _ptr = DnnInvoke.cveModelCreate(csModel, csConfig);
+                CvInvoke.CheckError();
                 _model = _ptr;
             }
         }
@@ -45,6 +46,7 @@ namespace Emgu.CV.Dnn
         public Model(Net network)
         {
             _ptr = DnnInvoke.cveModelCreateFromNet(network);
+            CvInvoke.CheckError();
             _model = _ptr;
         }
 
@@ -60,6 +62,7 @@ namespace Emgu.CV.Dnn
             {
                 DnnInvoke.cveModelPredict(_model, iaFrame, oaOuts);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -74,6 +77,7 @@ namespace Emgu.CV.Dnn
         public void SetInputScale(double scale)
         {
             DnnInvoke.cveModelSetInputScale(_model, scale);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -83,6 +87,7 @@ namespace Emgu.CV.Dnn
         public void SetInputMean(MCvScalar mean)
         {
             DnnInvoke.cveModelSetInputMean(_model, ref mean);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -93,6 +98,7 @@ namespace Emgu.CV.Dnn
         public void SetInputSize(Size size)
         {
             DnnInvoke.cveModelSetInputSize(_model, ref size);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -102,6 +108,7 @@ namespace Emgu.CV.Dnn
         public void SetInputCrop(bool crop)
         {
             DnnInvoke.cveModelSetInputCrop(_model, crop);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -111,6 +118,7 @@ namespace Emgu.CV.Dnn
         public void SetInputSwapRB(bool swapRB)
         {
             DnnInvoke.cveModelSetInputSwapRB(_model, swapRB);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -132,6 +140,7 @@ namespace Emgu.CV.Dnn
         public void SetPreferableBackend(Backend value)
         {
             DnnInvoke.cveModelSetPreferableBackend(_model, value);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -141,6 +150,7 @@ namespace Emgu.CV.Dnn
         public void SetPreferableTarget(Target value)
         {
             DnnInvoke.cveModelSetPreferableTarget(_model, value);
+            CvInvoke.CheckError();
         }
     }
 

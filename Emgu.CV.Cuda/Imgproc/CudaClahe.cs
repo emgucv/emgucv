@@ -27,6 +27,7 @@ namespace Emgu.CV.Cuda
         public CudaClahe(double clipLimit, Size tileGridSize)
         {
             _ptr = CudaInvoke.cudaCLAHECreate(clipLimit, ref tileGridSize, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -39,7 +40,10 @@ namespace Emgu.CV.Cuda
         {
             using (InputArray iaSource = source.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
+            {
                 CudaInvoke.cudaCLAHEApply(_ptr, iaSource, oaDst, stream);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

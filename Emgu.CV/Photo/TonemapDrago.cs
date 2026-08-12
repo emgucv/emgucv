@@ -30,6 +30,7 @@ namespace Emgu.CV
             : base(IntPtr.Zero, IntPtr.Zero)
         {
             _ptr = CvInvoke.cveTonemapDragoCreate(gamma, saturation, bias, ref _tonemapPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

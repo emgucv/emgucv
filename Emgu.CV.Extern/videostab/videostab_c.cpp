@@ -9,13 +9,17 @@
 
 CaptureFrameSource* cveVideostabCaptureFrameSourceCreate(cv::VideoCapture* capture, cv::videostab::IFrameSource** frameSource)
 {
-#ifdef HAVE_OPENCV_VIDEOSTAB
-	CaptureFrameSource* stabilizer = new CaptureFrameSource(capture);
-	*frameSource = dynamic_cast<cv::videostab::IFrameSource*>(stabilizer);
-	return stabilizer;
-#else
-	throw_no_videostab();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_VIDEOSTAB
+		CaptureFrameSource* stabilizer = new CaptureFrameSource(capture);
+		*frameSource = dynamic_cast<cv::videostab::IFrameSource*>(stabilizer);
+		return stabilizer;
+	#else
+		throw_no_videostab();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveVideostabCaptureFrameSourceRelease(CaptureFrameSource** captureFrameSource)
 {
@@ -29,27 +33,35 @@ void cveVideostabCaptureFrameSourceRelease(CaptureFrameSource** captureFrameSour
 
 bool cveVideostabFrameSourceGetNextFrame(cv::videostab::IFrameSource* frameSource, cv::Mat* nextFrame)
 {
-#ifdef HAVE_OPENCV_VIDEOSTAB
-	cv::Mat mat = frameSource->nextFrame();
-	if (mat.empty())
-		return false;
+	try
+	{
+	#ifdef HAVE_OPENCV_VIDEOSTAB
+		cv::Mat mat = frameSource->nextFrame();
+		if (mat.empty())
+			return false;
 
-	cv::swap(mat, *nextFrame);
-	return true;
-#else
-	throw_no_videostab();
-#endif
+		cv::swap(mat, *nextFrame);
+		return true;
+	#else
+		throw_no_videostab();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 
 
 void cveStabilizerBaseSetMotionEstimator(cv::videostab::StabilizerBase* stabilizer, cv::videostab::ImageMotionEstimatorBase* motionEstimator)
 {
-#ifdef HAVE_OPENCV_VIDEOSTAB
-	cv::Ptr<cv::videostab::ImageMotionEstimatorBase> ptr(motionEstimator, [](cv::videostab::ImageMotionEstimatorBase*) {});
-	stabilizer->setMotionEstimator(ptr);
-#else
-	throw_no_videostab();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_VIDEOSTAB
+		cv::Ptr<cv::videostab::ImageMotionEstimatorBase> ptr(motionEstimator, [](cv::videostab::ImageMotionEstimatorBase*) {});
+		stabilizer->setMotionEstimator(ptr);
+	#else
+		throw_no_videostab();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 template<class cvstabilizer> cvstabilizer* StabilizerCreate(cv::videostab::IFrameSource* baseFrameSource, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
@@ -68,21 +80,29 @@ template<class cvstabilizer> cvstabilizer* StabilizerCreate(cv::videostab::IFram
 
 cv::videostab::OnePassStabilizer* cveOnePassStabilizerCreate(cv::videostab::IFrameSource* baseFrameSource, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
 {
-#ifdef HAVE_OPENCV_VIDEOSTAB
-	return StabilizerCreate<cv::videostab::OnePassStabilizer>(baseFrameSource, stabilizerBase, frameSource);
-#else
-	throw_no_videostab();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_VIDEOSTAB
+		return StabilizerCreate<cv::videostab::OnePassStabilizer>(baseFrameSource, stabilizerBase, frameSource);
+	#else
+		throw_no_videostab();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveOnePassStabilizerSetMotionFilter(cv::videostab::OnePassStabilizer* stabilizer, cv::videostab::MotionFilterBase* motionFilter)
 {
-#ifdef HAVE_OPENCV_VIDEOSTAB
-	cv::Ptr<cv::videostab::MotionFilterBase> ptr(motionFilter, [](cv::videostab::MotionFilterBase*) {});
-	stabilizer->setMotionFilter(ptr);
-#else
-	throw_no_videostab();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_VIDEOSTAB
+		cv::Ptr<cv::videostab::MotionFilterBase> ptr(motionFilter, [](cv::videostab::MotionFilterBase*) {});
+		stabilizer->setMotionFilter(ptr);
+	#else
+		throw_no_videostab();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveOnePassStabilizerRelease(cv::videostab::OnePassStabilizer** stabilizer)
@@ -97,11 +117,15 @@ void cveOnePassStabilizerRelease(cv::videostab::OnePassStabilizer** stabilizer)
 
 cv::videostab::TwoPassStabilizer* cveTwoPassStabilizerCreate(cv::videostab::IFrameSource* baseFrameSource, cv::videostab::StabilizerBase** stabilizerBase, cv::videostab::IFrameSource** frameSource)
 {
-#ifdef HAVE_OPENCV_VIDEOSTAB
-	return StabilizerCreate<cv::videostab::TwoPassStabilizer>(baseFrameSource, stabilizerBase, frameSource);
-#else
-	throw_no_videostab();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_VIDEOSTAB
+		return StabilizerCreate<cv::videostab::TwoPassStabilizer>(baseFrameSource, stabilizerBase, frameSource);
+	#else
+		throw_no_videostab();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveTwoPassStabilizerRelease(cv::videostab::TwoPassStabilizer** stabilizer)
@@ -116,11 +140,15 @@ void cveTwoPassStabilizerRelease(cv::videostab::TwoPassStabilizer** stabilizer)
 
 cv::videostab::GaussianMotionFilter* cveGaussianMotionFilterCreate(int radius, float stdev)
 {
-#ifdef HAVE_OPENCV_VIDEOSTAB
-	return new cv::videostab::GaussianMotionFilter(radius, stdev);
-#else
-	throw_no_videostab();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_VIDEOSTAB
+		return new cv::videostab::GaussianMotionFilter(radius, stdev);
+	#else
+		throw_no_videostab();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveGaussianMotionFilterRelease(cv::videostab::GaussianMotionFilter** filter)
@@ -135,13 +163,17 @@ void cveGaussianMotionFilterRelease(cv::videostab::GaussianMotionFilter** filter
 
 cv::videostab::MotionEstimatorRansacL2* cveMotionEstimatorRansacL2Create(int motionModel, cv::videostab::MotionEstimatorBase** motionEstimatorBase)
 {
-#ifdef HAVE_OPENCV_VIDEOSTAB
-	cv::videostab::MotionEstimatorRansacL2* estimator = new cv::videostab::MotionEstimatorRansacL2(static_cast<cv::videostab::MotionModel>(motionModel));
-	*motionEstimatorBase = dynamic_cast<cv::videostab::MotionEstimatorBase*>(estimator);
-	return estimator;
-#else
-	throw_no_videostab();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_VIDEOSTAB
+		cv::videostab::MotionEstimatorRansacL2* estimator = new cv::videostab::MotionEstimatorRansacL2(static_cast<cv::videostab::MotionModel>(motionModel));
+		*motionEstimatorBase = dynamic_cast<cv::videostab::MotionEstimatorBase*>(estimator);
+		return estimator;
+	#else
+		throw_no_videostab();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveMotionEstimatorRansacL2Release(cv::videostab::MotionEstimatorRansacL2** estimator)
@@ -156,14 +188,18 @@ void cveMotionEstimatorRansacL2Release(cv::videostab::MotionEstimatorRansacL2** 
 
 cv::videostab::KeypointBasedMotionEstimator* cveKeypointBasedMotionEstimatorCreate(cv::videostab::MotionEstimatorBase* estimator, cv::videostab::ImageMotionEstimatorBase** imageMotionEstimatorBase)
 {
-#ifdef HAVE_OPENCV_VIDEOSTAB
-	cv::Ptr<cv::videostab::MotionEstimatorBase> ptr(estimator, [](cv::videostab::MotionEstimatorBase*) {});
-	cv::videostab::KeypointBasedMotionEstimator* kbme = new cv::videostab::KeypointBasedMotionEstimator(ptr);
-	*imageMotionEstimatorBase = dynamic_cast<cv::videostab::ImageMotionEstimatorBase*>(kbme);
-	return kbme;
-#else
-	throw_no_videostab();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_VIDEOSTAB
+		cv::Ptr<cv::videostab::MotionEstimatorBase> ptr(estimator, [](cv::videostab::MotionEstimatorBase*) {});
+		cv::videostab::KeypointBasedMotionEstimator* kbme = new cv::videostab::KeypointBasedMotionEstimator(ptr);
+		*imageMotionEstimatorBase = dynamic_cast<cv::videostab::ImageMotionEstimatorBase*>(kbme);
+		return kbme;
+	#else
+		throw_no_videostab();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveKeypointBasedMotionEstimatorRelease(cv::videostab::KeypointBasedMotionEstimator** estimator)
@@ -178,9 +214,13 @@ void cveKeypointBasedMotionEstimatorRelease(cv::videostab::KeypointBasedMotionEs
 
 float cveCalcBlurriness(cv::Mat* frame)
 {
-#ifdef HAVE_OPENCV_VIDEOSTAB
-	return cv::videostab::calcBlurriness(*frame);
-#else
-	throw_no_videostab();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_VIDEOSTAB
+		return cv::videostab::calcBlurriness(*frame);
+	#else
+		throw_no_videostab();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }

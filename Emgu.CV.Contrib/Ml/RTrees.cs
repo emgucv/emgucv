@@ -27,6 +27,7 @@ namespace Emgu.CV.ML
         public RTrees()
         {
             _ptr = MlInvoke.cveRTreesCreate(ref _statModelPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -44,6 +45,7 @@ namespace Emgu.CV.ML
             using (InputArray iaSamples = samples.GetInputArray())
             using (OutputArray oaResults = results.GetOutputArray())
                 MlInvoke.cveRTreesGetVotes(_ptr, iaSamples, oaResults, flags);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

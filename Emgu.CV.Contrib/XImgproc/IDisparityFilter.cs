@@ -63,6 +63,7 @@ namespace Emgu.CV.XImgproc
                     ref roi,
                     iaRightView);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

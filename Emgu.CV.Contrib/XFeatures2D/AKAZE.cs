@@ -65,6 +65,7 @@ namespace Emgu.CV.XFeatures2D
                descriptorType, descriptorSize, descriptorChannels,
                threshold, nOctaves, nOctaveLayers, diffusivity,
                ref _feature2D, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

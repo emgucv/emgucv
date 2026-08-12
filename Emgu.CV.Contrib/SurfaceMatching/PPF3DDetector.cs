@@ -31,6 +31,7 @@ namespace Emgu.CV.PpfMatch3d
             double numAngles = 30)
         {
             _ptr = PpfMatch3dInvoke.cvePPF3DDetectorCreate(relativeSamplingStep, relativeDistanceStep, numAngles);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -41,6 +42,7 @@ namespace Emgu.CV.PpfMatch3d
         public void TrainModel(Mat model)
         {
             PpfMatch3dInvoke.cvePPF3DDetectorTrainModel(_ptr, model);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -57,6 +59,7 @@ namespace Emgu.CV.PpfMatch3d
             double relativeSceneDistance)
         {
             PpfMatch3dInvoke.cvePPF3DDetectorMatch(_ptr, scene, results, relativeSceneSampleStep, relativeSceneDistance);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -99,6 +102,7 @@ namespace Emgu.CV.PpfMatch3d
             {
                 cveLoadPLYSimple(csFileName, withNormals, oaResult);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -116,6 +120,7 @@ namespace Emgu.CV.PpfMatch3d
             {
                 cveTransformPCPose(pc, pose, oaResult);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -141,6 +146,7 @@ namespace Emgu.CV.PpfMatch3d
             {
                 PpfMatch3dInvoke.cveSamplePCByQuantization(pc, vfXrange, vfYrange, vfZrange, sampleStepRelative, weightByCenter, oaResult);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -160,7 +166,9 @@ namespace Emgu.CV.PpfMatch3d
         {
             using (var vfViewpoint = new VectorOfFloat(viewpoint))
             {
-                return PpfMatch3dInvoke.cveComputeNormalsPC3d(pc, pcNormals, numNeighbors, flipViewpoint, vfViewpoint);
+                int result = PpfMatch3dInvoke.cveComputeNormalsPC3d(pc, pcNormals, numNeighbors, flipViewpoint, vfViewpoint);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 

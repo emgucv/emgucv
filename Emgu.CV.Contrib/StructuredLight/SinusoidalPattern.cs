@@ -78,8 +78,9 @@ namespace Emgu.CV.StructuredLight
                 setMarkers,
                 markersLocation,
                 ref _sharedPtr,
-                ref _structuredLightPatternPtr, 
+                ref _structuredLightPatternPtr,
                 ref _algorithmPtr);
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/>
@@ -122,6 +123,7 @@ namespace Emgu.CV.StructuredLight
                     oaShadowMask,
                     iaFundamental);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -148,6 +150,7 @@ namespace Emgu.CV.StructuredLight
                     ref camSize,
                     iaShadowMask);
             }
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/>

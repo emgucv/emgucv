@@ -34,6 +34,7 @@ namespace Emgu.CV.XFeatures2D
         public LATCH(int bytes = 32, bool rotationInvariance = true, int halfSsdSize = 3)
         {
             _ptr = XFeatures2DInvoke.cveLATCHCreate(bytes, rotationInvariance, halfSsdSize, ref _feature2D, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

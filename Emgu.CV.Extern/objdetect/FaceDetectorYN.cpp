@@ -17,38 +17,51 @@ cv::FaceDetectorYN* cveFaceDetectorYNCreate(
     int targetId,
     cv::Ptr<cv::FaceDetectorYN>** sharedPtr)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-    cv::Ptr<cv::FaceDetectorYN> ptr = cv::FaceDetectorYN::create(
-        *model, 
-        *config,
-        *inputSize,
-        scoreThreshold,
-        nmsThreshold,
-        topK,
-        backendId,
-        targetId);
-    *sharedPtr = new cv::Ptr<cv::FaceDetectorYN>(ptr);
-    return (*sharedPtr)->get();
-#else
-        throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+	    cv::Ptr<cv::FaceDetectorYN> ptr = cv::FaceDetectorYN::create(
+	        *model, 
+	        *config,
+	        *inputSize,
+	        scoreThreshold,
+	        nmsThreshold,
+	        topK,
+	        backendId,
+	        targetId);
+	    *sharedPtr = new cv::Ptr<cv::FaceDetectorYN>(ptr);
+	    return (*sharedPtr)->get();
+	#else
+	        throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveFaceDetectorYNRelease(cv::Ptr<cv::FaceDetectorYN>** faceDetector)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-	delete* faceDetector;
-	*faceDetector = 0;
-#else 
-	throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+		delete* faceDetector;
+		*faceDetector = 0;
+	#else 
+		throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 int cveFaceDetectorYNDetect(cv::FaceDetectorYN* faceDetetor, cv::_InputArray* image, cv::_OutputArray* faces)
 {
-#ifdef HAVE_OPENCV_OBJDETECT
-    return faceDetetor->detect(*image, *faces);
-#else 
-    throw_no_objdetect();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_OBJDETECT
+	    return faceDetetor->detect(*image, *faces);
+	#else 
+	    throw_no_objdetect();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
+
 
 
