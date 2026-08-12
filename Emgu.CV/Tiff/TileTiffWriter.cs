@@ -47,7 +47,9 @@ namespace Emgu.CV.Tiff
            : base(fileName)
         {
             TIFFInvoke.tiffWriteImageSize(_ptr, ref imageSize);
+            CvInvoke.CheckError();
             TIFFInvoke.tiffWriteTileInfo(_ptr, ref tileSize);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -59,6 +61,7 @@ namespace Emgu.CV.Tiff
         public void WriteTile(int rowNumber, int colNumber, Mat tile)
         {
             TIFFInvoke.tiffWriteTile(_ptr, rowNumber, colNumber, tile);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -68,18 +71,22 @@ namespace Emgu.CV.Tiff
         {
             get
             {
-                return TIFFInvoke.tiffTileSize(_ptr);
+                int result = TIFFInvoke.tiffTileSize(_ptr);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
         /// <summary>
-        /// Get the number of bytes of a row of data in a tile. 
+        /// Get the number of bytes of a row of data in a tile.
         /// </summary>
         public int TileRowSizeInBytes
         {
             get
             {
-                return TIFFInvoke.tiffTileRowSize(_ptr);
+                int result = TIFFInvoke.tiffTileRowSize(_ptr);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -105,6 +112,7 @@ namespace Emgu.CV.Tiff
             if (!_imageInfoWritten)
             {
                 TIFFInvoke.tiffWriteImageInfo(_ptr, image.ElementSize * 8, image.NumberOfChannels);
+                CvInvoke.CheckError();
                 _imageInfoWritten = true;
             }
 

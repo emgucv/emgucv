@@ -11,6 +11,7 @@
 
 #include "opencv2/core/core.hpp"
 #include "cvapi_compat.h"
+#include "emgu_error.h"
 
 #ifdef EMGU_CV_WITH_TIFF
 #include "geotiff.h"

@@ -62,7 +62,7 @@ namespace Emgu.CV.Tiff
         public TiffWriter(String fileName)
         {
             _ptr = TIFFInvoke.tiffWriterOpen(fileName);
-
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -74,16 +74,19 @@ namespace Emgu.CV.Tiff
             if (!_imageInfoWritten)
             {
                 TIFFInvoke.tiffWriteImageInfo(_ptr, image.ElementSize * 8, image.NumberOfChannels);
+                CvInvoke.CheckError();
                 _imageInfoWritten = true;
             }
 
             if (image.NumberOfChannels == 3 && image.Depth == DepthType.Cv8U)
             {
                 TIFFInvoke.tiffWriteImage(_ptr, image);
+                CvInvoke.CheckError();
             }
             else if (image.NumberOfChannels == 4 && image.Depth == DepthType.Cv8U)
             {
                 TIFFInvoke.tiffWriteImage(_ptr, image);
+                CvInvoke.CheckError();
             }
             else
             {
@@ -107,10 +110,16 @@ namespace Emgu.CV.Tiff
             GCHandle tiepointHandle = GCHandle.Alloc(modelTiepoint, GCHandleType.Pinned);
             GCHandle pixelScaleHandle = GCHandle.Alloc(modelPixelScale, GCHandleType.Pinned);
 
-            TIFFInvoke.tiffWriteGeoTag(_ptr, tiepointHandle.AddrOfPinnedObject(), pixelScaleHandle.AddrOfPinnedObject());
-
-            tiepointHandle.Free();
-            pixelScaleHandle.Free();
+            try
+            {
+                TIFFInvoke.tiffWriteGeoTag(_ptr, tiepointHandle.AddrOfPinnedObject(), pixelScaleHandle.AddrOfPinnedObject());
+                CvInvoke.CheckError();
+            }
+            finally
+            {
+                tiepointHandle.Free();
+                pixelScaleHandle.Free();
+            }
         }
 
         /// <summary>
