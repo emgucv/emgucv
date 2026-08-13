@@ -33,3 +33,10 @@ jobs:
       with:
         name: emgucv-macos-zip-package
         path: ${{ github.workspace }}/platforms/macos/build_arm64/*.zip
+    - name: Build Emgu CV MacCatalyst native binary and package
+      run: ./build_catalyst.sh arm64
+      working-directory: ./platforms/ios/
+    - uses: actions/upload-artifact@v7
+      with:
+        name: emgucv-maccatalyst-zip-package
+        path: ${{ github.workspace }}/platforms/ios/catalyst_arm64/*.zip
