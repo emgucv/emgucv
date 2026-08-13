@@ -391,6 +391,24 @@ MACRO(BUILD_WINDOWS_RUNTIME_NUGET_PACKAGE nuget_id_var nuget_version_var)
   endif()
 ENDMACRO()
 
+# Installs the .shproj/.projitems source files for a shared C# project under
+# Emgu.CV.Runtime/<subdir>, matching the naming convention
+# Emgu.CV.Runtime.<subdir>.shproj / .projitems.
+MACRO(INSTALL_EMGU_CV_RUNTIME_SHARED_PROJECT subdir)
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}/${subdir}
+    DESTINATION Emgu.CV.Runtime
+    COMPONENT emgucv_source
+    FILES_MATCHING
+    PATTERN "Emgu.CV.Runtime.${subdir}.shproj"
+    PATTERN "Emgu.CV.Runtime.${subdir}.projitems"
+    PATTERN ".svn" EXCLUDE
+    PATTERN "obj" EXCLUDE
+    PATTERN "CMakeFiles" EXCLUDE
+    )
+ENDMACRO()
+
 MACRO(COMPILE_CS target target_type source)
   IF(${target_type} STREQUAL "library")
     GET_CS_LIBRARY_TARGET_DIR()

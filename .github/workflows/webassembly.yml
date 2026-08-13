@@ -1,0 +1,85 @@
+name: WebAssembly build.
+
+on:
+  push:
+    branches: [ EMGUCV_5_0 ]
+  pull_request:
+    branches: [ EMGUCV_5_0 ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-26.04
+
+    # one day time out
+    timeout-minutes: 1440
+
+    steps:
+    - name: Checkout repository
+      id: checkout_repo
+      uses: actions/checkout@v7
+      with:
+        submodules: true
+    - name: Setup dotnet
+      id: setup_dotnet
+      uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: '10.x'
+    - name: Install dotnet workload
+      id: install_dotnet_workload
+      run: dotnet workload install wasm-tools
+    - name: Build Emgu CV WebAssembly native binary and nuget package
+      run: ./cmake_configure_dotnet.sh
+      working-directory: ${{ github.workspace }}/platforms/emscripten
+    - uses: actions/upload-artifact@v7
+      with:
+        name: emgucv-webassembly-nuget-package
+        path: ${{ github.workspace }}/platforms/nuget/*.nupkg
+    - name: Build Emgu CV Blazor WebAssembly demo
+      # The Emgu.CV.runtime.webassembly package (built above) is consumed from
+      # the local nuget feed at platforms/nuget via RestoreSources in the
+      # project file. Directory.Build.props for this project is generated as
+      # a side effect of the cmake configure step above, which also
+      # traverses Emgu.CV.Example/HelloWorld.Blazor/CMakeLists.txt.
+      run: dotnet publish Emgu.CV.Example/HelloWorld.Blazor/HelloWorld.Blazor.csproj -c Release -o ${{ github.workspace }}/publish-demo
+      working-directory: ${{ github.workspace }}
+    - name: Prepare demo for GitHub Pages
+      run: |
+        # emgucv/emgucv is a project-page repo, so the site is served under
+        # https://emgucv.github.io/emgucv/ rather than the domain root.
+        sed -i 's#<base href="/" />#<base href="/emgucv/" />#' publish-demo/wwwroot/index.html
+        # GitHub Pages runs Jekyll by default, which ignores _-prefixed
+        # folders such as _framework/ where blazor.webassembly.js lives.
+        touch publish-demo/wwwroot/.nojekyll
+        # SPA fallback so a direct link/refresh doesn't 404.
+        cp publish-demo/wwwroot/index.html publish-demo/wwwroot/404.html
+      working-directory: ${{ github.workspace }}
+    - uses: actions/upload-pages-artifact@v3
+      with:
+        path: ${{ github.workspace }}/publish-demo/wwwroot
+
+  deploy-demo:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/EMGUCV_5_0'
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-26.04
+
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+
+    steps:
+    - name: Deploy Blazor WebAssembly demo to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4

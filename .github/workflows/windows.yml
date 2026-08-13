@@ -52,6 +52,13 @@ jobs:
       with:
         name: emgucv-windows-zip-package
         path: ${{ github.workspace }}\build_x86_64\*.zip
+    - name: Build Emgu CV UWP 64-bit native binary
+      run: .\Build_Binary.ps1 -Arch x86_64 -Toolchain WindowsStore10 -Package -Build -Nuget
+      working-directory: ${{ github.workspace }}\platforms\windows\
+    - uses: actions/upload-artifact@v7
+      with:
+        name: emgucv-windows-uwp-x86_64-zip-package
+        path: ${{ github.workspace }}\build_uwp_x86_64\*.zip
     - name: Diagnostics
       run: |
         Write-Host "OS arch: $([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)"
