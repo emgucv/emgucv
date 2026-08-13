@@ -53,10 +53,8 @@ CVAPI(void) oclPlatformInfoRelease(cv::ocl::PlatformInfo** platformInfo);
 //
 //----------------------------------------------------------------------------
 CVAPI(cv::ocl::Device*) oclDeviceCreate();
-CVAPI(void) oclDeviceSet(cv::ocl::Device* device, void* p);
 CVAPI(const cv::ocl::Device*) oclDeviceGetDefault();
 CVAPI(void) oclDeviceRelease(cv::ocl::Device** device);
-CVAPI(void*) oclDeviceGetPtr(cv::ocl::Device* device);
 
 //----------------------------------------------------------------------------
 //

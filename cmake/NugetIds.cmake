@@ -1,0 +1,323 @@
+# --------------------------------------------------------
+#  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
+#
+#  NuGet package IDs/titles/version strings for every Emgu CV package,
+# including the CUDA/cuDNN/ONNXRuntime dependency id and version wiring.
+#  Included from the root CMakeLists.txt; CMAKE_CURRENT_SOURCE_DIR still
+#  refers to the repository root here (include() does not change it).
+# ----------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------
+#  Generate neget packaging file for Emgu CV project
+# ----------------------------------------------------------------------------
+
+IF( "${OPENCV_EXTRA_MODULES_PATH}" STREQUAL "" )
+  SET(EMGUCV_RUNTIME_EXTRA_TAG ".mini")
+  SET(EMGUCV_MINI_RELEASE_NOTE "This is the mini release that only contains the minimum amount of Open CV modules. For full release that contains all Open CV modules, use a release that is not labeled 'mini'.")
+  MESSAGE(STATUS "BUILD TYPE: mini")
+ELSE()
+  SET(EMGUCV_RUNTIME_EXTRA_TAG "")
+  SET(EMGUCV_MINI_RELEASE_NOTE "")
+  MESSAGE(STATUS "OPENCV_EXTRA_MODULES_PATH: ${OPENCV_EXTRA_MODULES_PATH}")
+ENDIF()
+
+SET(EMGUCV_NUGET_ID "Emgu.CV")
+SET(EMGUCV_BITMAP_NUGET_ID "Emgu.CV.Bitmap")
+SET(EMGUCV_WPF_NUGET_ID "Emgu.CV.Wpf")
+SET(EMGUCV_MODELS_NUGET_ID "Emgu.CV.Models")
+SET(EMGUCV_UI_NUGET_ID "Emgu.CV.WinForms")
+SET(EMGUCV_UI_NUGET_SUMMARY "This package provides Windows Forms UI controls for Emgu CV, such as ImageBox and other image display controls")
+SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime${EMGUCV_RUNTIME_EXTRA_TAG}.windows")
+SET(EMGUCV_WEBASSEMBLY_NUGET_ID "${EMGUCV_NUGET_ID}.runtime${EMGUCV_RUNTIME_EXTRA_TAG}.webassembly")
+SET(EMGU_WINDOWS_MSVCRT_X86_NUGET_ID "Emgu.runtime.windows.msvc.rt.x86")
+SET(EMGU_WINDOWS_MSVCRT_X64_NUGET_ID "Emgu.runtime.windows.msvc.rt.x64")
+SET(EMGU_WINDOWS_MSVCRT_ARM64_NUGET_ID "Emgu.runtime.windows.msvc.rt.arm64")
+SET(EMGU_ZLIBWAPI_ID "Emgu.runtime.windows.zlibwapi.x64")
+SET(EMGU_ZLIBWAPI_VERSION "1.2.3")
+
+SET(NUGET_EMGU_URL "https://www.emgu.com")
+
+IF(WITH_CUDA)
+	SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_WINDOWS_NUGET_ID}.cuda")
+	SET(EMGU_WINDOWS_CUDA_NUGET_ID "Emgu.runtime.windows.cuda")
+	SET(EMGU_CUDART_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.rt")
+	SET(EMGU_CUDA_BLAS_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.blas")
+	SET(EMGU_CUDA_BLAS_LT_NUGET_ID "${EMGU_CUDA_BLAS_NUGET_ID}.lt")
+	SET(EMGU_NPP_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.npp")
+	SET(EMGU_CUFFT_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.fft")
+	SET(EMGU_CUDNN_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.dnn")
+	SET(EMGU_CUDNN_ADV_NUGET_ID "${EMGU_CUDNN_NUGET_ID}.adv")
+	SET(EMGU_CUDNN_CNN_NUGET_ID "${EMGU_CUDNN_NUGET_ID}.cnn")
+	SET(EMGU_CUDNN_ENGINES_NUGET_ID "${EMGU_CUDNN_NUGET_ID}.engines")
+	SET(EMGU_CUDNN_OPS_NUGET_ID "${EMGU_CUDNN_NUGET_ID}.ops")
+	SET(EMGU_CUDA_NVRTC_NUGET_ID "${EMGU_WINDOWS_CUDA_NUGET_ID}.nvrtc")
+ENDIF()
+
+IF(HAVE_ONNXRUNTIME)
+	SET(EMGU_ONNXRUNTIME_NUGET_ID "Emgu.runtime.windows.onnxruntime")
+	SET(EMGU_ONNXRUNTIME_VERSION "${ONNXRUNTIME_VERSION}")
+ENDIF()
+
+IF(HAVE_MAUI_ANDROID)
+  SET(EMGUCV_MAUI_ANDROID_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.maui${EMGUCV_RUNTIME_EXTRA_TAG}.android")
+ENDIF()
+
+IF(HAVE_IOS)
+  SET(EMGUCV_MAUI_IOS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.maui${EMGUCV_RUNTIME_EXTRA_TAG}.ios")
+ENDIF()
+
+IF(HAVE_MAC_CATALYST)
+  SET(EMGUCV_MAUI_MACOS_NUGET_ID "${EMGUCV_NUGET_ID}.runtime.maui${EMGUCV_RUNTIME_EXTRA_TAG}.macos")
+ENDIF()
+
+
+IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
+	MESSAGE(STATUS "Configuring nuget package for commercial only release")
+ELSE()
+	MESSAGE(STATUS "Configuring nuget package for dual license release")
+ENDIF()
+
+IF(WITH_OPENVINO OR WITH_INF_ENGINE)
+  SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_WINDOWS_NUGET_ID}.dldt")
+ENDIF()
+
+IF(HAVE_ONNXRUNTIME)
+  SET(EMGUCV_WINDOWS_NUGET_ID "${EMGUCV_WINDOWS_NUGET_ID}.ort")
+ENDIF()
+
+IF(HAVE_WINDESKTOP_X86)	
+	INSTALL(
+      FILES
+      "libs/runtimes/win-x86/native/version_string.inc"
+      DESTINATION "libs/runtimes/win-x86/native/"
+      COMPONENT emgucv_binary
+      )
+ENDIF()
+IF(HAVE_WINDESKTOP_X64)
+    INSTALL(
+      FILES
+      "libs/runtimes/win-x64/native/version_string.inc"
+      DESTINATION "libs/runtimes/win-x64/native/"
+      COMPONENT emgucv_binary
+      )
+ENDIF()
+IF(HAVE_WINDESKTOP_ARM64)
+	INSTALL(
+      FILES
+      "libs/runtimes/win-arm64/native/version_string.inc"
+      DESTINATION "libs/runtimes/win-arm64/native/"
+      COMPONENT emgucv_binary
+      )
+ENDIF()
+
+SET(EMGUCV_NUGET_FRAMEWORK_REFERENCES "")
+
+# find the System.Text.Json nuget pacakge version
+SET(EMGUCV_PLATFORM_NETSTANDARD_PROJECT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV/NetStandard/Emgu.CV.csproj")
+file(STRINGS "${EMGUCV_PLATFORM_NETSTANDARD_PROJECT_FILE}" EMGUCV_PLATFORM_NETSTANDARD_PROJECT_SYSTEM_TEXT_JSON REGEX "System.Text.Json" )
+string(REGEX REPLACE ".+Version=\"([0-9]+.[0-9]+.[0-9]+)\".*" "\\1" SYSTEM_TEXT_JSON_VERSION "${EMGUCV_PLATFORM_NETSTANDARD_PROJECT_SYSTEM_TEXT_JSON}")
+MESSAGE(STATUS "System.Text.Json = ${SYSTEM_TEXT_JSON_VERSION}")
+# find the System.Drawing.Common nuget package version
+SET(EMGUCV_MODELS_NETSTANDARD_PROJECT_FILE "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Models/NetStandard/Emgu.CV.Models.csproj")
+file(STRINGS "${EMGUCV_MODELS_NETSTANDARD_PROJECT_FILE}" EMGUCV_MODELS_NETSTANDARD_PROJECT_SYSTEM_DRAWING_COMMON REGEX "System.Drawing.Common" )
+string(REGEX REPLACE ".+Version=\"([0-9]+.[0-9]+.[0-9]+)\".*" "\\1" SYSTEM_DRAWING_COMMON_VERSION "${EMGUCV_MODELS_NETSTANDARD_PROJECT_SYSTEM_DRAWING_COMMON}")
+MESSAGE(STATUS "System.Drawing.Common = ${SYSTEM_DRAWING_COMMON_VERSION}")
+
+SET(NUGET_SYSTEM_TEXT_JSON_VERSION "${SYSTEM_TEXT_JSON_VERSION}")
+SET(NUGET_SYSTEM_DRAWING_COMMON_VERSION "${SYSTEM_DRAWING_COMMON_VERSION}")
+
+
+IF (HAVE_WINDESKTOP)
+  #SET(EMGU_WINDOWS_MSVCRT_VERSION ${MSVC_TOOLSET_VERSION})
+  IF(MSVC)
+    SET(EMGU_WINDOWS_MSVCRT_VERSION ${CMAKE_CXX_COMPILER_VERSION})
+	string(REPLACE "." ";" EMGU_WINDOWS_MSVCRT_VERSION_LIST ${EMGU_WINDOWS_MSVCRT_VERSION})
+	list(GET EMGU_WINDOWS_MSVCRT_VERSION_LIST 0 EMGU_WINDOWS_MSVCRT_VERSION_MAJOR)
+	list(GET EMGU_WINDOWS_MSVCRT_VERSION_LIST 1 EMGU_WINDOWS_MSVCRT_VERSION_MINOR)
+	list(GET EMGU_WINDOWS_MSVCRT_VERSION_LIST 2 EMGU_WINDOWS_MSVCRT_VERSION_PATCH)
+	list(GET EMGU_WINDOWS_MSVCRT_VERSION_LIST 3 EMGU_WINDOWS_MSVCRT_VERSION_BUILD)
+	MESSAGE(STATUS "MSVCRT VERSION: ${EMGU_WINDOWS_MSVCRT_VERSION_MAJOR}.${EMGU_WINDOWS_MSVCRT_VERSION_MINOR}.${EMGU_WINDOWS_MSVCRT_VERSION_PATCH}.${EMGU_WINDOWS_MSVCRT_VERSION_BUILD}")
+    SET(EMGU_WINDOWS_MSVCRT_NUGET_VERSION ${EMGU_WINDOWS_MSVCRT_VERSION})
+	IF ("${EMGU_WINDOWS_MSVCRT_VERSION_BUILD}" STREQUAL "0")
+	  SET(EMGU_WINDOWS_MSVCRT_NUGET_VERSION "${EMGU_WINDOWS_MSVCRT_VERSION_MAJOR}.${EMGU_WINDOWS_MSVCRT_VERSION_MINOR}.${EMGU_WINDOWS_MSVCRT_VERSION_PATCH}")
+	ENDIF()
+	MESSAGE(STATUS "MSVCRT NUGET VERSION: ${EMGU_WINDOWS_MSVCRT_NUGET_VERSION}")
+  ENDIF()
+  
+ENDIF()
+
+
+SET(EMGUCV_NUGET_TITLE_ARCH "")
+IF(HAVE_WINDESKTOP_X86)
+ SET(EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH} x86")
+ENDIF()
+IF(HAVE_WINDESKTOP_X64)
+ SET(EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH} x64")
+ENDIF()
+IF(HAVE_WINDESKTOP_ARM64)
+ SET(EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH} arm64")
+ENDIF()
+STRING(STRIP "${EMGUCV_NUGET_TITLE_ARCH}" EMGUCV_NUGET_TITLE_ARCH)
+STRING(REPLACE "x86 x64 arm64" "" EMGUCV_NUGET_TITLE_ARCH "${EMGUCV_NUGET_TITLE_ARCH}")
+
+SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}<dependency id=\"${EMGUCV_NUGET_ID}\" version=\"${NUGET_PACKAGE_DEPENDENCY_VERSION}\" />")
+ 
+SET(EMGUCV_WINDOWS_NUGET_TITLE "EMGU CV ${EMGUCV_NUGET_TITLE_ARCH}")
+STRING(STRIP "${EMGUCV_WINDOWS_NUGET_TITLE}" EMGUCV_WINDOWS_NUGET_TITLE)
+SET(EMGUCV_WINDOWS_NUGET_TITLE "${EMGUCV_WINDOWS_NUGET_TITLE} runtime for windows")
+
+
+SET(EMGUCV_MACOS_NUGET_TITLE "EMGU CV")
+STRING(STRIP "${EMGUCV_MACOS_NUGET_TITLE}" EMGUCV_MACOS_NUGET_TITLE)
+SET(EMGUCV_MACOS_NUGET_TITLE "${EMGUCV_MACOS_NUGET_TITLE} runtime for MacOS")
+
+IF(WITH_CUDA)
+    
+	SET(EMGUCV_WINDOWS_NUGET_TITLE "${EMGUCV_WINDOWS_NUGET_TITLE} with CUDA support")
+	SET(EMGU_CUDA_NUGET_TITLE "Native x64 CUDA dependency for EMGU CV")
+	#SET(EMGU_CUDA_VERSION "${npp_major}.${npp_minor}.${npp_build}")
+	IF ( (${cuda_major}) AND (${cuda_minor}) AND (${npp_build}) )
+	  SET(EMGU_CUDA_VERSION "${cuda_major}.${cuda_minor}.${npp_build}")
+	ELSEIF (${CUDA_VERSION} AND (${npp_build}) )
+	  SET(EMGU_CUDA_VERSION "${CUDA_VERSION}.${npp_build}")
+	ELSEIF (${CUDA_VERSION})
+	  SET(EMGU_CUDA_VERSION "${CUDA_VERSION}")
+	ENDIF()
+		
+	SET(EMGU_CUDART_VERSION "${EMGU_CUDA_VERSION}")
+	SET(EMGU_CUDA_NUGET_DEPENDENCY_STR "${EMGU_CUDA_VERSION}")
+	SET(EMGU_CUFFT_VERSION "${EMGU_CUDA_VERSION}")
+	SET(EMGU_CUFFT_NUGET_TITLE "Native x64 FFT component for CUDA")
+	SET(EMGU_CUDNN_VERSION "${CUDNN_VERSION_MAJOR}.${CUDNN_VERSION_MINOR}.${CUDNN_VERSION_PATCH}")
+	IF ("${EMGU_CUDNN_VERSION}" STREQUAL "")
+		MESSAGE(FATAL_ERROR "FAILED to detect DNN version")
+	ENDIF()
+	SET(EMGU_CUDNN_NUGET_DEPENDENCY_STR "${EMGU_CUDNN_VERSION}")
+	SET(EMGU_CUDNN_NUGET_TITLE "Native x64 DNN component for CUDA")
+	SET(EMGU_CUDNN_CNN_NUGET_TITLE "Native x64 CNN component for CUDA DNN")
+	SET(EMGU_CUDNN_ENGINES_NUGET_TITLE "Native x64 CNN engines component for CUDA DNN")
+	SET(EMGU_CUDNN_OPS_NUGET_TITLE "Native x64 OPS component for CUDA DNN")
+	SET(EMGU_CUDNN_ADV_NUGET_TITLE "Native x64 ADV component for CUDA DNN")
+	#SET(EMGU_CUDNN_CNN_INFER_NUGET_TITLE "Native x64 CNN component for CUDA DNN")
+	#SET(EMGU_CUDNN_CNN_TRAIN_NUGET_TITLE "Native x64 CNN training component for CUDA DNN")
+	SET(EMGU_NPP_VERSION "${EMGU_CUDA_VERSION}")
+	SET(EMGU_CUDA_BLAS_VERSION "${EMGU_CUDA_VERSION}")
+	SET(EMGU_NPP_NUGET_TITLE "Native x64 NPP component for CUDA")
+	SET(EMGU_CUDA_BLAS_NUGET_TITLE "Native x64 blas component for CUDA")
+	SET(EMGU_CUDA_BLAS_LT_NUGET_TITLE "Native x64 blas lt component for CUDA")
+	SET(EMGU_CUDA_NPP_NUGET_DEPENDENCY "<dependency id=\"${EMGU_CUDART_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />")
+	SET(EMGU_CUDA_BLAS_NUGET_DEPENDENCY "<dependency id=\"${EMGU_CUDART_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />")
+	SET(EMGU_CUDA_BLAS_LT_NUGET_DEPENDENCY "<dependency id=\"${EMGU_CUDART_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />")
+	SET(EMGU_CUDA_NVRTC_VERSION "${EMGU_CUDA_VERSION}")
+	SET(EMGU_CUDA_NVRTC_NUGET_TITLE "Native x64 NVRTC component for CUDA")
+	
+	IF(HAVE_WINDESKTOP_X64)
+	    #SET(CUDA_EULA_URL https://docs.nvidia.com/pdf/EULA.pdf)
+		#file(DOWNLOAD ${CUDA_EULA_URL} "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows.cuda.npp/EULA.pdf")
+		#file(DOWNLOAD ${CUDA_EULA_URL} "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Emgu.CV.runtime.windows.cuda.cufft/EULA.pdf")
+		#file(COPY "${CUDA_TOOLKIT_ROOT_DIR}/EULA.txt" DESTINATION "${CMAKE_CURRENT_SOURCE_DIR}/platforms/nuget/Cudnn")
+		SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
+		  <dependency id=\"${EMGU_CUDART_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_CUDA_BLAS_LT_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_CUDA_BLAS_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_NPP_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_CUFFT_NUGET_ID}\" version=\"${EMGU_CUDA_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_CUDNN_ADV_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_CUDNN_CNN_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_CUDNN_ENGINES_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_CUDNN_OPS_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />
+		  <dependency id=\"${EMGU_ZLIBWAPI_ID}\" version=\"${EMGU_ZLIBWAPI_VERSION}\" />
+		  ")
+		IF (WITH_CUDNN)
+		  SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}<dependency id=\"${EMGU_CUDNN_NUGET_ID}\" version=\"${EMGU_CUDNN_NUGET_DEPENDENCY_STR}\" />")
+		  SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}<dependency id=\"${EMGU_CUDA_NVRTC_NUGET_ID}\" version=\"${EMGU_CUDA_NVRTC_VERSION}\" />")
+	    ENDIF()
+	ENDIF()
+	
+	SET(NUGET_PACKAGE_VENDOR "${CPACK_PACKAGE_VENDOR}")
+
+	MESSAGE(STATUS "<<<<<<<<<<<<<<<< npp_major: ${npp_major} >>>>>>>>>>>>>>>>>>>>>> ")
+	MESSAGE(STATUS "<<<<<<<<<<<<<<<< npp_minor: ${npp_minor} >>>>>>>>>>>>>>>>>>>>>> ")
+	MESSAGE(STATUS "<<<<<<<<<<<<<<<< npp_build: ${npp_build} >>>>>>>>>>>>>>>>>>>>>> ")
+	MESSAGE(STATUS "<<<<<<<<<<<<<<<< cuda_major: ${cuda_major} >>>>>>>>>>>>>>>>>>>>>> ")
+	MESSAGE(STATUS "<<<<<<<<<<<<<<<< cuda_minor: ${cuda_minor} >>>>>>>>>>>>>>>>>>>>>> ")
+	MESSAGE(STATUS "<<<<<<<<<<<<<<<< CUDA_VERSION: ${CUDA_VERSION} >>>>>>>>>>>>>>>>>>>>>> ")
+	#MESSAGE(STATUS "<<<<<<<<<<<<<<<< CUDA_VERSION_MAJOR: ${CUDA_VERSION_MAJOR} >>>>>>>>>>>>>>>>>>>>>> ")
+	#MESSAGE(STATUS "<<<<<<<<<<<<<<<< CUDA_VERSION_MINOR: ${CUDA_VERSION_MINOR} >>>>>>>>>>>>>>>>>>>>>> ")
+	#MESSAGE(STATUS "<<<<<<<<<<<<<<<< cuda_build: ${cuda_build} >>>>>>>>>>>>>>>>>>>>>> ")
+    MESSAGE(STATUS "<<<<<<<<<<<<<<<< cudnn_version_major: ${CUDNN_VERSION_MAJOR} >>>>>>>>>>>>>>>>>>>>>> ")
+	MESSAGE(STATUS "<<<<<<<<<<<<<<<< cudnn_version_minor: ${CUDNN_VERSION_MINOR} >>>>>>>>>>>>>>>>>>>>>> ")
+	MESSAGE(STATUS "<<<<<<<<<<<<<<<< cudnn_version_patch: ${CUDNN_VERSION_PATCH} >>>>>>>>>>>>>>>>>>>>>> ")
+	MESSAGE(STATUS "<<<<<<<<<<<<<<<< EMGU_CUDA_VERSION: ${EMGU_CUDA_VERSION} >>>>>>>>>>>>>>>>>>>>>> ")
+
+	#IF ("${npp_major}" STREQUAL "")
+	#  MESSAGE(FATAL_ERROR "CUDA is enabled, but failed to detect npp_major version")
+	#ENDIF()
+	#IF ("${npp_minor}" STREQUAL "")
+	#  MESSAGE(FATAL_ERROR "CUDA is enabled, but failed to detect npp_minor version")
+	#ENDIF()
+	#IF ("${npp_build}" STREQUAL "")
+	#  MESSAGE(FATAL_ERROR "CUDA is enabled, but failed to detect npp_build version")
+	#ENDIF()
+	
+	
+	IF ( (${cuda_major}) AND (${cuda_minor}) )
+	  SET(CUDA_VERSION_NUMERIC_ONLY "${cuda_major}${cuda_minor}")
+	ELSE()
+	  SET(CUDA_VERSION_NUMERIC_ONLY "${npp_major}${npp_minor}")
+	ENDIF()
+
+	IF(WIN32)
+	  IF((${npp_major} GREATER 10) OR (("${npp_major}" STREQUAL "10") AND (${npp_minor} GREATER 0)))
+	    IF (${cuda_major})
+	      SET(CUFFT_POSTFIX "${cuda_major}")
+	    else()
+	      SET(CUFFT_POSTFIX "${npp_major}")
+	    endif()
+	  ELSE()
+	    SET(CUFFT_POSTFIX "${npp_major}${npp_minor}")
+	  ENDIF()
+	ENDIF()
+	
+	#MESSAGE(STATUS "<<<<<<<<<<<<<<<< CUDA_VERSION_NUMERIC_ONLY: ${CUDA_VERSION_NUMERIC_ONLY} >>>>>>>>>>>>>>>>>>>>>> ")
+	
+ENDIF()
+
+IF(HAVE_WINDESKTOP_X86)
+  SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
+	  <dependency id=\"${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}\" version=\"${EMGU_WINDOWS_MSVCRT_NUGET_VERSION}\" />
+	  ")
+ENDIF()
+
+IF(HAVE_WINDESKTOP_X64)
+  SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
+	  <dependency id=\"${EMGU_WINDOWS_MSVCRT_X64_NUGET_ID}\" version=\"${EMGU_WINDOWS_MSVCRT_NUGET_VERSION}\" />
+	  ")
+ENDIF()
+
+IF(HAVE_WINDESKTOP_X64 AND HAVE_ONNXRUNTIME)
+  SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
+	  <dependency id=\"${EMGU_ONNXRUNTIME_NUGET_ID}\" version=\"${EMGU_ONNXRUNTIME_VERSION}\" />
+	  ")
+ENDIF()
+
+IF(HAVE_WINDESKTOP_ARM64)
+  SET(EMGUCV_WINDOWS_NUGET_DEPENDENCY "${EMGUCV_WINDOWS_NUGET_DEPENDENCY}
+	  <dependency id=\"${EMGU_WINDOWS_MSVCRT_ARM64_NUGET_ID}\" version=\"${EMGU_WINDOWS_MSVCRT_NUGET_VERSION}\" />
+	  ")
+ENDIF()
+
+
+SET(EMGUCV_NUGET_TITLE "Emgu CV")
+SET(EMGUCV_NUGET_SUMMARY "Emgu CV is a cross platform .Net wrapper to the OpenCV image processing library.")
+
+IF ("${LICENSE_TYPE}" STREQUAL "Commercial")
+	#SET(EMGUCV_NUGET_TITLE "${EMGUCV_NUGET_TITLE} Commercial Release")
+	#SET(EMGUCV_NUGET_SUMMARY "${EMGUCV_NUGET_SUMMARY} This is the commercial release.")
+	IF(HAVE_MAUI_ANDROID)
+      SET(EMGUCV_MAUI_ANDROID_NUGET_TITLE "${EMGUCV_MAUI_ANDROID_NUGET_TITLE} Commercial Release for MAUI")	  
+	ENDIF()	
+	IF(HAVE_WINSTORE_10)
+	  SET(EMGUCV_UWP_NUGET_TITLE "${EMGUCV_UWP_NUGET_TITLE} Commercial Release")
+	ENDIF()
+ENDIF()

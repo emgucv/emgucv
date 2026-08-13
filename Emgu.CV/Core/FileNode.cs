@@ -115,22 +115,6 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Gets the type of the node.
-        /// </summary>
-        /// <value>
-        /// The type of the node.
-        /// </value>
-        public Type NodeType
-        {
-            get
-            {
-                Type result = (Type)CvInvoke.cveFileNodeGetType(_ptr);
-                CvInvoke.CheckError();
-                return result;
-            }
-        }
-
-        /// <summary>
         /// Get the node name or an empty string if the node is nameless
         /// </summary>
         public String Name
@@ -268,9 +252,6 @@ namespace Emgu.CV
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveFileNodeReadMat(IntPtr node, IntPtr mat, IntPtr defaultMat);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern int cveFileNodeGetType(IntPtr node);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveFileNodeGetName(IntPtr node, IntPtr name);

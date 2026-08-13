@@ -188,14 +188,6 @@ int cveMatGetElementSize(cv::Mat* mat)
 	CVAPI_CATCH_CV_ERRORS(0)
 }
 
-uchar* cveMatGetDataPointer(cv::Mat* mat)
-{
-	try
-	{
-		return mat->data;
-	}
-	CVAPI_CATCH_CV_ERRORS(0)
-}
 uchar* cveMatGetDataPointer2(cv::Mat* mat, int* indices)
 {
 	try

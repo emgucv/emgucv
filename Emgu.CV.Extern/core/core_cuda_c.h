@@ -86,8 +86,6 @@ CVAPI(void) gpuMatCreate(cv::cuda::GpuMat* m, int rows, int cols, int type);
 
 CVAPI(cv::cuda::GpuMat*) gpuMatCreateContinuous(int rows, int cols, int type);
 
-CVAPI(bool) gpuMatIsContinuous(cv::cuda::GpuMat* gpuMat);
-
 CVAPI(cv::cuda::GpuMat*) gpuMatGetRegion(cv::cuda::GpuMat* other, cv::Range* rowRange, cv::Range* colRange);
 
 CVAPI(void) gpuMatRelease(cv::cuda::GpuMat** mat);
@@ -95,14 +93,6 @@ CVAPI(void) gpuMatRelease(cv::cuda::GpuMat** mat);
 CVAPI(cv::cuda::GpuMat*) gpuMatCreateFromInputArray(cv::_InputArray* arr);
 
 CVAPI(void) gpuMatGetSize(cv::cuda::GpuMat* gpuMat, cv::Size* size);
-
-CVAPI(bool) gpuMatIsEmpty(cv::cuda::GpuMat* gpuMat);
-
-CVAPI(int) gpuMatGetChannels(cv::cuda::GpuMat* gpuMat);
-
-CVAPI(int) gpuMatGetType(cv::cuda::GpuMat* gpuMat);
-
-CVAPI(int) gpuMatGetDepth(cv::cuda::GpuMat* gpuMat);
 
 CVAPI(void) gpuMatUpload(cv::cuda::GpuMat* gpuMat, cv::_InputArray* arr, cv::cuda::Stream* stream);
 

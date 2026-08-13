@@ -1205,14 +1205,6 @@ void cveFileNodeReadMat(cv::FileNode* node, cv::Mat* mat, cv::Mat* defaultMat)
 	}
 	CVAPI_CATCH_CV_ERRORS_VOID
 }
-int cveFileNodeGetType(cv::FileNode* node)
-{
-	try
-	{
-		return node->type();
-	}
-	CVAPI_CATCH_CV_ERRORS(0)
-}
 void cveFileNodeGetName(cv::FileNode* node, cv::String* name)
 {
 	try

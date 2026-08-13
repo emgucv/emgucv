@@ -14,22 +14,6 @@ INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../Emgu.CV.Extern/")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/../../")
 
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}")
-#INCLUDE_DIRECTORIES(${TIFF_INCLUDE_DIR})
-#INCLUDE_DIRECTORIES(${ZLIB_INCLUDE_DIR})
-#INCLUDE_DIRECTORIES(${GEOTIFF_INCLUDE_DIR})
-
-############################### IPP START ##############################
-#IF(WITH_IPP)
-#include(${OPENCV_SUBFOLDER}/cmake/OpenCVFindIPP.cmake)
-#  IF (IPP_FOUND)
-#    message(STATUS "CVEXTERN: USING IPP: ${IPP_LIBRARY_DIRS} ")
-#    add_definitions(-DHAVE_IPP)
-#    include_directories(${IPP_INCLUDE_DIRS})
-#    LINK_DIRECTORIES(${IPP_LIBRARY_DIRS})
-#  ENDIF()
-#ENDIF()
-############################### IPP END ################################
-
 ############################### TBB START ##############################
 if (WITH_TBB AND TBB_INCLUDE_DIR AND TBB_LIB_DIR)
   add_definitions(-DHAVE_TBB)
@@ -49,8 +33,6 @@ ENDIF()
 ############################### GPU END ################################
 
 IF(WITH_INF_ENGINE)
-	#SET(INF_ENGINE_LIB_DIRS )
-	#link_directories("${INF_ENGINE_LIB_DIRS}/Release")
 	link_directories("${IE_INCLUDE_DIR}/../lib/intel64/")
 ENDIF()
 
@@ -58,7 +40,6 @@ ENDIF()
 IF(WITH_OPENMP)
   FIND_PACKAGE( OpenMP REQUIRED)
   if(OPENMP_FOUND)
-    #MESSAGE(STATUS " -- Compiling cvextern with OPENMP")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
@@ -112,15 +93,10 @@ FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAME_CANDIDATES})
 ENDFOREACH()
 
 FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAMES}) 
-  #  INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
   MESSAGE(STATUS "CVEXTERN_TEST dependency added:  opencv_${CVEXTERN_OPTIONAL_DEP}")
   ADD_DEPENDENCIES(${the_target} opencv_${CVEXTERN_OPTIONAL_DEP})
   target_link_libraries(${the_target} opencv_${CVEXTERN_OPTIONAL_DEP})
 ENDFOREACH()
-
-#ADD_DEPENDENCIES(${the_target} 
-#  cvextern 
-#)
 
 IF(EMGU_ENABLE_SSE)
   ADD_DEFINITIONS(-D__EMGU_ENABLE_SSE__)
@@ -133,26 +109,7 @@ IF(EMGU_ENABLE_SSE)
 ENDIF()
 
 # Add the required libraries for linking:
-target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS} 
-  #cvextern 
-  #opencv_core opencv_calib3d opencv_features2d opencv_highgui opencv_imgproc opencv_ml opencv_objdetect 
-#  ${ZLIB_LIBRARY} 
-#  ${TIFF_LIBRARY} 
-#  ${GEOTIFF_LIBRARY}
-)
-
-#IF(IS_DEBIAN_ARM_BUILD)
-#  MESSAGE(STATUS "----------------------------- Linking with atomic on arm debian build ---------------------------")
-#  #target_link_libraries(${the_target} atomic)
-#  target_link_libraries(${the_target} -latomic)
-#  target_link_options(${the_target} PRIVATE -latomic)
-#  SET(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} -latomic)
-#ENDIF()
-
-#IF(IS_DEBIAN_ARM64_BUILD)
-#  MESSAGE(STATUS "----------------------------- DISABLE NEON on arm64 debian build ---------------------------")
-#  ADD_DEFINITIONS(-DPNG_ARM_NEON_OPT=0)
-#ENDIF()
+target_link_libraries(${the_target} ${OPENCV_LINKER_LIBS})
 
 if(WITH_PNG AND BUILD_PNG)
   target_link_libraries(${the_target} libpng)

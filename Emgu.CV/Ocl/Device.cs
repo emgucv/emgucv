@@ -60,23 +60,6 @@ namespace Emgu.CV.Ocl
         }
 
         /// <summary>
-        /// Get the native device pointer
-        /// </summary>
-        public IntPtr NativeDevicePointer
-        {
-            get { return OclInvoke.oclDeviceGetPtr(_ptr); }
-        }
-
-        /// <summary>
-        /// Set the native device pointer
-        /// </summary>
-        /// <param name="nativeDevicePointer">The native device pointer</param>
-        public void Set(IntPtr nativeDevicePointer)
-        {
-            OclInvoke.oclDeviceSet(_ptr, nativeDevicePointer);
-        }
-
-        /// <summary>
         /// Get the string representation of this oclDevice
         /// </summary>
         /// <returns>A string representation of this oclDevice</returns>
@@ -171,15 +154,9 @@ namespace Emgu.CV.Ocl
         internal static extern IntPtr oclDeviceCreate();
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern void oclDeviceSet(IntPtr device, IntPtr p);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern IntPtr oclDeviceGetDefault();
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void oclDeviceRelease(ref IntPtr oclDevice);
-
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        internal static extern IntPtr oclDeviceGetPtr(IntPtr device);
     }
 }

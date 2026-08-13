@@ -74,10 +74,6 @@ cv::ocl::Device* oclDeviceCreate()
 {
 	return new cv::ocl::Device();
 }
-void oclDeviceSet(cv::ocl::Device* device, void* p)
-{
-	device->set(p);
-}
 const cv::ocl::Device* oclDeviceGetDefault()
 {
 	return  &cv::ocl::Device::getDefault();
@@ -87,11 +83,6 @@ void oclDeviceRelease(cv::ocl::Device** device)
 	delete* device;
 	*device = 0;
 }
-void* oclDeviceGetPtr(cv::ocl::Device* device)
-{
-	return device->ptr();
-}
-
 
 //----------------------------------------------------------------------------
 //
