@@ -1,0 +1,37 @@
+name: WebAssembly build.
+
+on:
+  push:
+    branches: [ EMGUCV_5_0 ]
+  pull_request:
+    branches: [ EMGUCV_5_0 ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-26.04
+
+    # one day time out
+    timeout-minutes: 1440
+
+    steps:
+    - name: Checkout repository
+      id: checkout_repo
+      uses: actions/checkout@v7
+      with:
+        submodules: true
+    - name: Setup dotnet
+      id: setup_dotnet
+      uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: '10.x'
+    - name: Install dotnet workload
+      id: install_dotnet_workload
+      run: dotnet workload install wasm-tools
+    - name: Build Emgu CV WebAssembly native binary and nuget package
+      run: ./cmake_configure_dotnet.sh
+      working-directory: ${{ github.workspace }}/platforms/emscripten
+    - uses: actions/upload-artifact@v7
+      with:
+        name: emgucv-webassembly-nuget-package
+        path: ${{ github.workspace }}/platforms/nuget/*.nupkg
