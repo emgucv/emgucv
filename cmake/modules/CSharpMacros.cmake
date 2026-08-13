@@ -343,7 +343,53 @@ MACRO(BUILD_NUGET_PACKAGE target csproj_file nuspec_file output_dir working_dir)
   ENDIF()
 ENDMACRO()
 
+# Builds a small Windows-runtime dependency nuget package (a wrapper around a
+# single native DLL that Emgu CV depends on at runtime, e.g. cudart, msvcrt).
+# Handles the boilerplate shared by every platforms/nuget/Emgu.runtime.windows.*
+# package: templating Package.nuspec/README.md, calling BUILD_NUGET_PACKAGE,
+# wiring up source_group, signing, and solution-folder placement.
+#
+# Callers are still responsible for their own outer IF(...) gate, the
+# PROJECT(...) call (this macro uses ${PROJECT_NAME} throughout), and any
+# ADD_DEPENDENCIES calls, since those vary per package.
+MACRO(BUILD_WINDOWS_RUNTIME_NUGET_PACKAGE nuget_id_var nuget_version_var)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec)
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/README.md)
 
+  get_filename_component(NUGET_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR} DIRECTORY)
+
+  BUILD_NUGET_PACKAGE(
+    ${PROJECT_NAME}
+    "${EMGU_CV_SOURCE_DIR}/Emgu.CV/NetStandard/Emgu.CV.csproj"  #csproj_file
+    "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" #nuspec_file
+    "${NUGET_OUTPUT_DIR}" #output_dir
+    "${CMAKE_CURRENT_SOURCE_DIR}" #working_dir
+    )
+
+  TARGET_SOURCES(${PROJECT_NAME} PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec"
+    "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
+  )
+
+  source_group("Template" FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in")
+
+  source_group("Nuget" FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec"
+    "${CMAKE_CURRENT_SOURCE_DIR}/README.md"
+  )
+
+  IF (EMGU_NUGET_SIGN_FOUND)
+    EMGU_SIGN_NUGET(${PROJECT_NAME} "${NUGET_OUTPUT_DIR}/${${nuget_id_var}}.${${nuget_version_var}}.nupkg")
+  ENDIF()
+
+  if(ENABLE_SOLUTION_FOLDERS)
+    set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "nuget")
+  endif()
+ENDMACRO()
 
 MACRO(COMPILE_CS target target_type source)
   IF(${target_type} STREQUAL "library")

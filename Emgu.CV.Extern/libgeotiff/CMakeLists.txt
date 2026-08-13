@@ -25,7 +25,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "3rdparty")
 
 PROJECT(GeoTIFF)
 SET(GEOTIFF_LIB_NAME geotiff)
-#SET(GEOTIFF_LIBRARY_TARGET geotiff_library)
 SET(GEOTIFF_ARCHIVE_TARGET geotiff_archive)
 
 ##############################################################################
@@ -73,10 +72,6 @@ SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${GEOTIFF_BUILD_OUTPUT_DIRECTORY})
         IF(NETFX_CORE)
           MESSAGE(STATUS "Disabling depreciation")
           ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
-          #ADD_DEFINITIONS(/sdl-)
-          #target_compile_options(geotiff_archive PRIVATE -sdl-)
-          #SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -sdl-")
-          #SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -sdl-")
         ENDIF()
 
 IF(WIN32)
@@ -111,21 +106,6 @@ CHECK_INCLUDE_FILES(strings.h GEOTIFF_HAVE_STRINGS_H)
 
 ###############################################################################
 # User-defined build settings
-
-#SET(GEOTIFF_CSV_NAMES area.csv datum.csv gcs.csv pcs.csv)
-#FIND_PATH(GEOTIFF_CSV_DATA_DIR NAMES ${GEOTIFF_CSV_NAMES}
-#    PATHS "${LIBGEOTIFF_DIR}/csv"
-#    DOC "Default location of GeoTIFF CSV files"
-#    NO_DEFAULT_PATH)
-#MESSAGE("LIBGEOTIFF_DIR: ${LIBGEOTIFF_DIR}/csv")
-#MESSAGE("GEOTIFF_CSV_DATA_DIR: ${GEOTIFF_CSV_DATA_DIR}")
-	
-#IF(IS_DIRECTORY ${GEOTIFF_CSV_DATA_DIR} AND EXISTS "${GEOTIFF_CSV_DATA_DIR}/gcs.csv")
-#    MESSAGE(STATUS "Found GeoTIFF CSV files in: ${GEOTIFF_CSV_DATA_DIR}")
-#    ADD_DEFINITIONS(-DCSV_DATA_DIR="${GEOTIFF_CSV_DATA_DIR}")
-#ELSE()
-#    MESSAGE(FATAL_ERROR "Failed to find GeoTIFF CSV files in: ${GEOTIFF_CSV_DATA_DIR}")
-#ENDIF()
 
 # Has the user requested "incode" EPSG tables, overriding the default
 # use of EPSG tables in csv files?
@@ -295,15 +275,6 @@ SET(GEOTIFF_INCLUDE_DIR ${GEOTIFF_INCLUDE_SUBDIR})
 SET(GEOTIFF_DATA_DIR ${GEOTIFF_DATA_SUBDIR})
 
 # Install doc files
-#INSTALL(FILES
-#    AUTHORS ChangeLog COPYING INSTALL LICENSE README README_BIN README.WIN
-#    DESTINATION ${GEOTIFF_DATA_DIR}/doc)
-
-# Install CSV data files
-#INSTALL(FILES ${GEOTIFF_CSV_DATA} DESTINATION ${GEOTIFF_DATA_DIR}/epsg_csv)
-
-# Install header files for development distribution
-#INSTALL(FILES ${GEOTIFF_LIB_HEADERS} DESTINATION ${GEOTIFF_INCLUDE_DIR})
 
 ###############################################################################
 # Build libgeotiff library
@@ -334,7 +305,6 @@ IF (GEOTIFF_ENABLE_INCODE_EPSG)
         csv/prime_meridian.c
         csv/projop_wparm.c
         csv/unit_of_measure.c)
-    #SOURCE_GROUP("CSV Source Files" FILES ${GEOTIFF_LIB_CSV_SOURCES})
 ENDIF()
 
 # Static libgeotiff archive 
@@ -351,29 +321,3 @@ IF(TARGET proj)
     target_link_libraries(${GEOTIFF_ARCHIVE_TARGET} PRIVATE proj)
 ENDIF()
 
-# Shared libgeotiff library
-#ADD_LIBRARY(${GEOTIFF_LIBRARY_TARGET} SHARED
-#    ${GEOTIFF_LIB_SOURCES} ${GEOTIFF_LIB_CSV_SOURCES})
-
-#IF(WIN32 AND MSVC)
-#    SET_TARGET_PROPERTIES(${GEOTIFF_LIBRARY_TARGET} PROPERTIES IMPORT_SUFFIX "_i.lib")
-#ENDIF()
-
-#SET_TARGET_PROPERTIES(${GEOTIFF_LIBRARY_TARGET} PROPERTIES
-#    OUTPUT_NAME ${GEOTIFF_LIB_NAME})
-
-#TARGET_LINK_LIBRARIES(${GEOTIFF_LIBRARY_TARGET}
-#	libtiff
-#	${PROJ4_LIBRARIES}
-#	${ZLIB_LIBRARIES}
-#	${JPEG_LIBRARIES})
-
-#INSTALL(TARGETS ${GEOTIFF_ARCHIVE_TARGET} #${GEOTIFF_LIBRARY_TARGET}
-#    RUNTIME DESTINATION ${GEOTIFF_BIN_DIR}
-#    LIBRARY DESTINATION ${GEOTIFF_LIB_DIR}
-#    ARCHIVE DESTINATION ${GEOTIFF_LIB_DIR})
-
-# Define grouping of source files in PROJECT file (e.g. Visual Studio)
-#SOURCE_GROUP("CMake Files" FILES CMakeLists.txt)
-#SOURCE_GROUP("Header Files" FILES ${GEOTIFF_LIB_HEADERS})
-#SOURCE_GROUP("Source Files" FILES ${GEOTIFF_LIB_SOURCES})

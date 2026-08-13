@@ -8,10 +8,6 @@ IF (TARGET Emgu.CV.Bitmap) # Only build Emgu.CV.Wpf if Emgu.CV.Bitmap target exi
     PROJECT(Emgu.CV.Wpf)
     
 	SET(EXTRA_BUILD_FLAGS "")
-    #IF(WIN32)
-    #  SET(EXTRA_BUILD_FLAGS "/p:Platform=\"Any CPU\"")
-    #ENDIF()
-
     #generate nuget config file for Emgu.CV.Wpf
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
     IF(EMGU_SIGN_FOUND AND WIN32)
@@ -23,11 +19,6 @@ IF (TARGET Emgu.CV.Bitmap) # Only build Emgu.CV.Wpf if Emgu.CV.Bitmap target exi
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md)
 
     BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Wpf.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
-	
-    #IF (EMGU_SIGN_FOUND)
-    #  EMGU_SIGN_BINARY(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/../../libs/${PROJECT_NAME}.dll)
-    #ENDIF()
-
     INSTALL(
       DIRECTORY 
       ${LIBRARY_OUTPUT_PATH}/Build/Emgu.CV.Wpf
@@ -48,7 +39,6 @@ IF (TARGET Emgu.CV.Bitmap) # Only build Emgu.CV.Wpf if Emgu.CV.Bitmap target exi
       PATTERN "Emgu.CV.Wpf.csproj"
 	  PATTERN "Directory.Build.props"
 	  PATTERN "README.md"
-	  #PATTERN "*.png"
 	  PATTERN "*.cs"
       PATTERN ".svn" EXCLUDE
       PATTERN "obj" EXCLUDE
