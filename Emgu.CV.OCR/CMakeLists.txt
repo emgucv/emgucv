@@ -4,21 +4,21 @@
 
 IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
 
-INSTALL(
-  DIRECTORY
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  DESTINATION .
+  INSTALL(
+    DIRECTORY
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    DESTINATION .
     COMPONENT emgucv_source
-  FILES_MATCHING 
-  PATTERN "*.cs"
-  PATTERN "*.shproj"
-  PATTERN "*.projitems"
-  PATTERN "*.resx"
-  #PATTERN "tessdata/eng.*"
-  PATTERN ".svn" EXCLUDE
-  PATTERN "obj" EXCLUDE
-  PATTERN "CMakeFiles" EXCLUDE
-  PATTERN "${PROJECT_NAME}.dir" EXCLUDE
-)
+    FILES_MATCHING
+    PATTERN "*.cs"
+    PATTERN "*.shproj"
+    PATTERN "*.projitems"
+    PATTERN "*.resx"
+    #PATTERN "tessdata/eng.*"
+    PATTERN ".svn" EXCLUDE
+    PATTERN "obj" EXCLUDE
+    PATTERN "CMakeFiles" EXCLUDE
+    PATTERN "${PROJECT_NAME}.dir" EXCLUDE
+    )
 
 ENDIF()

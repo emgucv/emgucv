@@ -4,7 +4,7 @@
 
 IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
   PROJECT(Emgu.CV.Models)
-  
+
   SET(EXTRA_BUILD_FLAGS "")
   #generate nuget config file for Emgu.CV.Models
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
@@ -24,18 +24,18 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
   ELSE()
     MESSAGE(FATAL_ERROR "dotnet command not found, unable to build Emgu.CV.Models project")
   ENDIF()
-  
+
   INSTALL(
-    DIRECTORY 
+    DIRECTORY
     ${EMGU_CV_SOURCE_DIR}/libs/Build/Emgu.CV.Models
     DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}/Build
     COMPONENT emgucv_binary)
-    
-  IF (TARGET Emgu.CV)
-    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV)  
+
+  IF(TARGET Emgu.CV)
+    ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV)
   ENDIF()
-  
-  if(ENABLE_SOLUTION_FOLDERS)
-    set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
-  endif()
+
+  IF(ENABLE_SOLUTION_FOLDERS)
+    SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
+  ENDIF()
 ENDIF()

@@ -47,24 +47,24 @@ IF(HAVE_EMSCRIPTEN)
     "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.webassembly.targets.in"
     "${CMAKE_CURRENT_SOURCE_DIR}/${EMGUCV_WEBASSEMBLY_NUGET_ID}.targets"
     "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime.WebAssembly.csproj"
-  )
+    )
 
-  source_group("Template" FILES
+  SOURCE_GROUP("Template" FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in"
     "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
     "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.webassembly.targets.in"
-  )
+    )
 
-  source_group("Source" FILES
+  SOURCE_GROUP("Source" FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
     "${CMAKE_CURRENT_SOURCE_DIR}/${EMGUCV_WEBASSEMBLY_NUGET_ID}.targets"
     "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.Runtime.WebAssembly.csproj"
     "${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md"
-  )
+    )
 
-  if(ENABLE_SOLUTION_FOLDERS)
-    set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
-  endif()
+  IF(ENABLE_SOLUTION_FOLDERS)
+    SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
+  ENDIF()
 
   ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV)
 
@@ -74,8 +74,8 @@ IF(HAVE_EMSCRIPTEN)
     DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}/Build
     COMPONENT emgucv_binary
     FILES_MATCHING
-      PATTERN "*.dll"
-      PATTERN "*.pdb"
-      PATTERN "*.xml")
+    PATTERN "*.dll"
+    PATTERN "*.pdb"
+    PATTERN "*.xml")
 
 ENDIF()
