@@ -34,6 +34,10 @@ namespace cv {
 		public:
 			struct  Params {};
 		};
+		class FacemarkKazemi {
+		public:
+			struct  Params {};
+		};
 		class MACE {};
 	}
 }
