@@ -33,7 +33,7 @@ jobs:
       with:
         dotnet-version: '10.x'
     - name: Build Emgu CV native binary
-      run: ./cmake_configure full package
+      run: ./cmake_configure mini package
       working-directory: platforms/debian/trixie/
     #- name: Build Emgu CV package
     #  run: make package

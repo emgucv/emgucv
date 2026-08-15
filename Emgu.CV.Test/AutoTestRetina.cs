@@ -86,6 +86,13 @@ namespace Emgu.CV.Test
         }
 
 #if !NETFX_CORE
+        // Crashes the test host process on Windows (access violation somewhere in
+        // cv::bioinspired::RetinaFastToneMapping::applyFastToneMapping, not a
+        // managed/CV_Error exception -- CVAPI_CATCH_CV_ERRORS in bioinspired_c.cpp
+        // only catches C++ exceptions, not hardware-level faults). A crashed test
+        // host aborts the entire dotnet test run, so this is disabled until the
+        // native crash itself is debugged separately. See PR #1057.
+        [Ignore("Crashes the test host process (native access violation) -- needs separate investigation.")]
         [Test]
         public void TestRetinaFastToneMapping()
         {

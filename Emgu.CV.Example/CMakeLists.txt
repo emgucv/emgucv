@@ -3,26 +3,26 @@
 # --------------------------------------------------------
 
 IF(EMGU_CV_EXAMPLE_BUILD)
-   
-  add_subdirectory(MAUI)
+
+  ADD_SUBDIRECTORY(MAUI)
 
   IF(HAVE_EMSCRIPTEN)
-    add_subdirectory(HelloWorld.Blazor)
+    ADD_SUBDIRECTORY(HelloWorld.Blazor)
   ENDIF()
 
   #Windows only demos
-  IF (HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
-    add_subdirectory(CameraCapture)
-    add_subdirectory(Webservice_Host)
-    add_subdirectory(Webservice_Client)
-	add_subdirectory(HelloWorld.WPF)
-    add_subdirectory(OCR)
+  IF(HAVE_WINDESKTOP_X86 OR HAVE_WINDESKTOP_X64)
+    ADD_SUBDIRECTORY(CameraCapture)
+    ADD_SUBDIRECTORY(Webservice_Host)
+    ADD_SUBDIRECTORY(Webservice_Client)
+    ADD_SUBDIRECTORY(HelloWorld.WPF)
+    ADD_SUBDIRECTORY(OCR)
     INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/CameraCapture/"
       DESTINATION Emgu.CV.Example/CameraCapture/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.cs"
       PATTERN "*.csproj"
       PATTERN "*.config"
@@ -36,17 +36,17 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.png"
       PATTERN "*.dll"
       PATTERN "*.json"
-	  PATTERN "*.resx"
+    PATTERN "*.resx"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
-      PATTERN "Release" EXCLUDE  
+      PATTERN "Release" EXCLUDE
       )
     INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.WPF/"
       DESTINATION Emgu.CV.Example/HelloWorld.WPF/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.cs"
       PATTERN "*.csproj"
       PATTERN "*.config"
@@ -61,14 +61,14 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.json"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
-      PATTERN "Release" EXCLUDE  
+      PATTERN "Release" EXCLUDE
       )
-	INSTALL(
+  INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/TF.Interop/"
       DESTINATION Emgu.CV.Example/TF.Interop/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.cs"
       PATTERN "*.csproj"
       PATTERN "*.config"
@@ -84,14 +84,14 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.json"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
-      PATTERN "Release" EXCLUDE  
+      PATTERN "Release" EXCLUDE
       )
-	INSTALL(
+  INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/TF.Lite.Interop/"
       DESTINATION Emgu.CV.Example/TF.Lite.Interop/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.cs"
       PATTERN "*.csproj"
       PATTERN "*.config"
@@ -107,14 +107,14 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.json"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
-      PATTERN "Release" EXCLUDE  
+      PATTERN "Release" EXCLUDE
       )
     INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/OCR/"
       DESTINATION Emgu.CV.Example/OCR/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.cs"
       PATTERN "*.csproj"
       PATTERN "*.config"
@@ -130,16 +130,16 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.json"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
-      PATTERN "Release" EXCLUDE  
+      PATTERN "Release" EXCLUDE
       )
-	INSTALL(
+  INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/Stitching/"
       DESTINATION Emgu.CV.Example/Stitching/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.cs"
-	  PATTERN "*.resx"
+    PATTERN "*.resx"
       PATTERN "*.csproj"
       PATTERN "*.config"
       PATTERN "*.shproj"
@@ -154,16 +154,16 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.json"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
-      PATTERN "Release" EXCLUDE  
+      PATTERN "Release" EXCLUDE
       )
-	INSTALL(
+  INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/Aruco/"
       DESTINATION Emgu.CV.Example/Aruco/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.cs"
-	  PATTERN "*.resx"
+    PATTERN "*.resx"
       PATTERN "*.csproj"
       PATTERN "*.config"
       PATTERN "*.shproj"
@@ -177,14 +177,14 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.json"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
-      PATTERN "Release" EXCLUDE  
+      PATTERN "Release" EXCLUDE
       )
-	INSTALL(
+  INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/Webservice_Client/"
       DESTINATION Emgu.CV.Example/Webservice_Client/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.cs"
       PATTERN "*.csproj"
       PATTERN "*.config"
@@ -198,17 +198,17 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.png"
       PATTERN "*.dll"
       PATTERN "*.json"
-	  PATTERN "*.resx"
+    PATTERN "*.resx"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
-      PATTERN "Release" EXCLUDE  
+      PATTERN "Release" EXCLUDE
       )
-	INSTALL(
+  INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/Webservice_Host/"
       DESTINATION Emgu.CV.Example/Webservice_Host/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.cs"
       PATTERN "*.csproj"
       PATTERN "*.config"
@@ -224,14 +224,14 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.json"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
-      PATTERN "Release" EXCLUDE  
+      PATTERN "Release" EXCLUDE
       )
-	INSTALL(
+  INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/DepthAI/"
       DESTINATION Emgu.CV.Example/DepthAI/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.cs"
       PATTERN "*.csproj"
       PATTERN "*.config"
@@ -247,14 +247,14 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.json"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
-      PATTERN "Release" EXCLUDE  
+      PATTERN "Release" EXCLUDE
       )
-	INSTALL(
+  INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/FaceDetectionVB/"
       DESTINATION Emgu.CV.Example/FaceDetectionVB/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.vb"
       PATTERN "*.config"
       PATTERN "*.vbproj"
@@ -266,29 +266,29 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.jpg"
       PATTERN "*.dll"
       PATTERN "*.json"
-	  PATTERN "*.resx"
+    PATTERN "*.resx"
       PATTERN ".git" EXCLUDE
       PATTERN "Debug" EXCLUDE
-      PATTERN "Release" EXCLUDE  
+      PATTERN "Release" EXCLUDE
       )
   ENDIF()
-  
+
   IF(HAVE_WINSTORE_10)
     INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.UWP/"
       DESTINATION Emgu.CV.Example/HelloWorld.UWP/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.cs"
       PATTERN "Properties/*"
       PATTERN "*.csproj"
       PATTERN "*.appxmanifest"
       PATTERN "*.xaml"
-	  PATTERN "*.xml"
+    PATTERN "*.xml"
       PATTERN "*.json"
       PATTERN "*.pfx"
-      PATTERN "Assets/*.png"  
+      PATTERN "Assets/*.png"
       PATTERN ".git" EXCLUDE
       PATTERN "obj" EXCLUDE
       PATTERN "CMake*" EXCLUDE
@@ -303,16 +303,16 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       "${CMAKE_CURRENT_SOURCE_DIR}/RealtimeCamera.UWP/"
       DESTINATION Emgu.CV.Example/RealtimeCamera.UWP/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.cs"
       PATTERN "Properties/*"
       PATTERN "*.csproj"
       PATTERN "*.appxmanifest"
       PATTERN "*.xaml"
-	  PATTERN "*.xml"
+    PATTERN "*.xml"
       PATTERN "*.json"
       PATTERN "*.pfx"
-      PATTERN "Assets/*.png"  
+      PATTERN "Assets/*.png"
       PATTERN ".git" EXCLUDE
       PATTERN "obj" EXCLUDE
       PATTERN "CMake*" EXCLUDE
@@ -324,17 +324,17 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       )
 
   ENDIF()
-   
-  IF(HAVE_WINDESKTOP OR HAVE_MACOS OR HAVE_LINUX) 
-    add_subdirectory(HelloWorld)
-	add_subdirectory(BuildInfo.Console)
-	add_subdirectory(DynamicImage.Asp.Net)
-	INSTALL(
+
+  IF(HAVE_WINDESKTOP OR HAVE_MACOS OR HAVE_LINUX)
+    ADD_SUBDIRECTORY(HelloWorld)
+    ADD_SUBDIRECTORY(BuildInfo.Console)
+    ADD_SUBDIRECTORY(DynamicImage.Asp.Net)
+  INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld/"
       DESTINATION Emgu.CV.Example/HelloWorld/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.cs"
       PATTERN "*.csproj"
       PATTERN "*.config"
@@ -346,19 +346,19 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.xml"
       PATTERN "*.txt"
       PATTERN "*.png"
-	  PATTERN "*.jpg"
+    PATTERN "*.jpg"
       PATTERN "*.dll"
       PATTERN "*.json"
-	  PATTERN "*.Build.props"
+    PATTERN "*.Build.props"
       PATTERN "bin" EXCLUDE
       PATTERN "obj" EXCLUDE
-      )	
-	INSTALL(
+      )
+  INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/BuildInfo.Console/"
       DESTINATION Emgu.CV.Example/BuildInfo.Console/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.cs"
       PATTERN "*.csproj"
       PATTERN "*.config"
@@ -370,19 +370,19 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.xml"
       PATTERN "*.txt"
       PATTERN "*.png"
-	  PATTERN "*.jpg"
+    PATTERN "*.jpg"
       PATTERN "*.dll"
       PATTERN "*.json"
-	  PATTERN "*.Build.props"
+    PATTERN "*.Build.props"
       PATTERN "bin" EXCLUDE
       PATTERN "obj" EXCLUDE
-      )	
+      )
     INSTALL(
       DIRECTORY
       "${CMAKE_CURRENT_SOURCE_DIR}/DynamicImage.Asp.Net/"
       DESTINATION Emgu.CV.Example/DynamicImage.Asp.Net/
       COMPONENT emgucv_example_source
-      FILES_MATCHING 
+      FILES_MATCHING
       PATTERN "*.cs"
       PATTERN "*.csproj"
       PATTERN "*.config"
@@ -394,14 +394,13 @@ IF(EMGU_CV_EXAMPLE_BUILD)
       PATTERN "*.xml"
       PATTERN "*.txt"
       PATTERN "*.png"
-	  PATTERN "*.jpg"
+    PATTERN "*.jpg"
       PATTERN "*.dll"
       PATTERN "*.json"
-	  PATTERN "*.Build.props"
+    PATTERN "*.Build.props"
       PATTERN "bin" EXCLUDE
       PATTERN "obj" EXCLUDE
-      )	
+      )
   ENDIF()
-  
 
 ENDIF()

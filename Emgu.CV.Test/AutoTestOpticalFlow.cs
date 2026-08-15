@@ -37,7 +37,12 @@ namespace Emgu.CV.Test
             {
                 CvInvoke.Randu(randomObj, new MCvScalar(), new MCvScalar(255));
 
+                // Fill the full frame with noise (not just the moving patch) so
+                // corner-detector-based algorithms (e.g. PCAFlow) always find enough
+                // features to track, regardless of whatever content happened to be
+                // left in the newly-allocated Mat's backing memory.
                 Mat prevImg = new Mat(new Size(300, 200), DepthType.Cv8U, 1);
+                CvInvoke.Randu(prevImg, new MCvScalar(), new MCvScalar(255));
                 Rectangle objectLocation = new Rectangle(75, 75, 50, 50);
                 using (Mat roi = new Mat(prevImg, objectLocation))
                 {
@@ -45,6 +50,7 @@ namespace Emgu.CV.Test
                 }
 
                 Mat currImg = new Mat(new Size(300, 200), DepthType.Cv8U, 1);
+                CvInvoke.Randu(currImg, new MCvScalar(), new MCvScalar(255));
                 objectLocation.Offset(2, 3);
                 using (Mat roi = new Mat(currImg, objectLocation))
                 {

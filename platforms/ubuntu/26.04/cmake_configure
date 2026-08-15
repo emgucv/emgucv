@@ -18,7 +18,14 @@ if [[ $# -gt 0 ]]; then
 fi
 
 if [ "$BUILD_CUDA" = true ]; then
-    CUDA_OPTIONS=( -DWITH_CUDA:BOOL=TRUE -DOPENCV_DNN_CUDA:BOOL=TRUE -DBUILD_SHARED_LIBS:BOOL=TRUE -DOPENCV_CMAKE_CUDA_DEBUG:BOOL=TRUE -DCMAKE_CUDA_ARCHITECTURES:BOOL=TRUE )
+    # CUDA_ARCH_BIN (not CMAKE_CUDA_ARCHITECTURES) is the variable OpenCV's own
+    # CUDA detection (opencv/cmake/OpenCVDetectCUDAUtils.cmake) actually reads.
+    # Pin a single architecture (8.6 / Ampere, matching the Windows
+    # Build_Binary_x86-64_cuda-dev-sm86.ps1 convention) so this CI build compiles
+    # one gencode pass instead of probing/building for every known architecture
+    # from Fermi through Blackwell -- there's no GPU on the runner to build for
+    # anyway, this only validates that the CUDA code compiles.
+    CUDA_OPTIONS=( -DWITH_CUDA:BOOL=TRUE -DOPENCV_DNN_CUDA:BOOL=TRUE -DBUILD_SHARED_LIBS:BOOL=TRUE -DOPENCV_CMAKE_CUDA_DEBUG:BOOL=TRUE -DCUDA_ARCH_BIN:STRING="8.6" )
     export CC=cuda-gcc
     export CXX=cuda-g++
 else

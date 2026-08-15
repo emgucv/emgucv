@@ -1,13 +1,12 @@
 # --------------------------------------------------------
 #  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
-# 
+#
 #  CMake file for cvextern. See root CMakeLists.txt
 #
 # ----------------------------------------------------------------------------
 
-
-project(cvextern)
-set(the_target ${PROJECT_NAME})
+PROJECT(cvextern)
+SET(the_target ${PROJECT_NAME})
 
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/include/opencv")
 INCLUDE_DIRECTORIES("${OPENCV_SUBFOLDER}/modules/core/src/parallel")
@@ -16,72 +15,66 @@ INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/opencv/3rdparty/zlib")
 
 IF(EMGU_CV_WITH_DEPTHAI)
   INCLUDE_DIRECTORIES("${CMAKE_CURRENT_SOURCE_DIR}/depthai-core/include/depthai")
-  add_definitions(-DHAVE_DEPTHAI)
+  ADD_DEFINITIONS(-DHAVE_DEPTHAI)
 ENDIF()
 
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/CodeGenMacros.cmake")
 
-
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/PropertyInvocations.cmake")
-
-
 
 ############################### OPENMP START ##############################
 IF(WITH_OPENMP)
-  FIND_PACKAGE( OpenMP REQUIRED)
-  if(OPENMP_FOUND)
+  FIND_PACKAGE(OpenMP REQUIRED)
+  IF(OPENMP_FOUND)
     MESSAGE(STATUS " -- Compiling cvextern with OPENMP")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
-  endif()
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+  ENDIF()
 ENDIF()
 ############################### OPENMP END ################################
-
 
 SET(OPENCV_MODULES_DIR "${OPENCV_SUBFOLDER}/modules")
 
 INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}")
 INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}")
 
-file(GLOB extern_srcs "${PROJECT_SOURCE_DIR}/*.cpp")
-file(GLOB extern_hdrs "${PROJECT_SOURCE_DIR}/*.h*")
-source_group("Src_extern" FILES ${extern_srcs})
-source_group("Include_extern" FILES ${extern_hdrs})
+FILE(GLOB extern_srcs "${PROJECT_SOURCE_DIR}/*.cpp")
+FILE(GLOB extern_hdrs "${PROJECT_SOURCE_DIR}/*.h*")
+SOURCE_GROUP("Src_extern" FILES ${extern_srcs})
+SOURCE_GROUP("Include_extern" FILES ${extern_hdrs})
 
 FOREACH(CVEXTERN_OPTIONAL_DEP ${OPENCV_MODULE_NAME_CANDIDATES})
   #MESSAGE("Retriveing source folder for project :  opencv_${CVEXTERN_OPTIONAL_DEP}")
   #GET_TARGET_PROPERTY(OPENCV_MODULE_SOURCE_DIR opencv_${CVEXTERN_OPTIONAL_DEP} PROJECT_SOURCE_DIR)
 
-  IF (HAVE_opencv_${CVEXTERN_OPTIONAL_DEP})
-    IF ( (DEFINED opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR) AND (EXISTS ${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include) )
+  IF(HAVE_opencv_${CVEXTERN_OPTIONAL_DEP})
+    IF((DEFINED opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR) AND (EXISTS ${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include))
       INCLUDE_DIRECTORIES("${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
       MESSAGE(STATUS "Include directory for cvextern:  ${opencv_${CVEXTERN_OPTIONAL_DEP}_SOURCE_DIR}/include")
-    ELSEIF (EXISTS "${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
+    ELSEIF(EXISTS "${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
       INCLUDE_DIRECTORIES("${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
       MESSAGE(STATUS "Include directory for cvextern:  ${OPENCV_MODULES_DIR}/${CVEXTERN_OPTIONAL_DEP}/include")
-    ELSEIF (EXISTS "${OPENCV_EXTRA_MODULES_PATH}/${CVEXTERN_OPTIONAL_DEP}/include")
+    ELSEIF(EXISTS "${OPENCV_EXTRA_MODULES_PATH}/${CVEXTERN_OPTIONAL_DEP}/include")
       INCLUDE_DIRECTORIES("${OPENCV_EXTRA_MODULES_PATH}/${CVEXTERN_OPTIONAL_DEP}/include")
       MESSAGE(STATUS "Include directory for cvextern:  ${OPENCV_EXTRA_MODULES_PATH}/${CVEXTERN_OPTIONAL_DEP}/include")
     ENDIF()
   ENDIF()
-  
+
   SET(CVEXTERN_OPTIONAL_DIR "${PROJECT_SOURCE_DIR}/${CVEXTERN_OPTIONAL_DEP}")
   IF(EXISTS "${CVEXTERN_OPTIONAL_DIR}" AND IS_DIRECTORY "${CVEXTERN_OPTIONAL_DIR}")
-    
     INCLUDE_DIRECTORIES("${CVEXTERN_OPTIONAL_DIR}")
-    file(GLOB_RECURSE ${CVEXTERN_OPTIONAL_DEP}_extern_srcs "${CVEXTERN_OPTIONAL_DEP}/*.cpp")
+    FILE(GLOB_RECURSE ${CVEXTERN_OPTIONAL_DEP}_extern_srcs "${CVEXTERN_OPTIONAL_DEP}/*.cpp")
     #MESSAGE("srcs: ${${CVEXTERN_OPTIONAL_DEP}_extern_srcs}")
-    file(GLOB_RECURSE ${CVEXTERN_OPTIONAL_DEP}_extern_hdrs "${CVEXTERN_OPTIONAL_DEP}/*.h*")
-    source_group("Src_${CVEXTERN_OPTIONAL_DEP}" FILES ${${CVEXTERN_OPTIONAL_DEP}_extern_srcs})
-    source_group("Include_${CVEXTERN_OPTIONAL_DEP}" FILES ${${CVEXTERN_OPTIONAL_DEP}_extern_hdrs})
+    FILE(GLOB_RECURSE ${CVEXTERN_OPTIONAL_DEP}_extern_hdrs "${CVEXTERN_OPTIONAL_DEP}/*.h*")
+    SOURCE_GROUP("Src_${CVEXTERN_OPTIONAL_DEP}" FILES ${${CVEXTERN_OPTIONAL_DEP}_extern_srcs})
+    SOURCE_GROUP("Include_${CVEXTERN_OPTIONAL_DEP}" FILES ${${CVEXTERN_OPTIONAL_DEP}_extern_hdrs})
     LIST(APPEND extern_srcs ${${CVEXTERN_OPTIONAL_DEP}_extern_srcs})
     LIST(APPEND extern_hdrs ${${CVEXTERN_OPTIONAL_DEP}_extern_hdrs})
   ENDIF()
 ENDFOREACH()
 
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/DepthAI.cmake")
-
 
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/DependencyDlls.cmake")
 

@@ -27,20 +27,18 @@ ADD_SUBDIRECTORY("Emgu.CV.runtime.uwp")
 
 ADD_SUBDIRECTORY("Emgu.CV.runtime.macos")
 
-add_subdirectory("Emgu.CV.runtime.debian-arm")
-add_subdirectory("Emgu.CV.runtime.debian-arm64")
+ADD_SUBDIRECTORY("Emgu.CV.runtime.debian-arm")
+ADD_SUBDIRECTORY("Emgu.CV.runtime.debian-arm64")
 
-add_subdirectory("Emgu.CV.runtime.ubuntu")
+ADD_SUBDIRECTORY("Emgu.CV.runtime.ubuntu")
 
-add_subdirectory("Emgu.CV.runtime.rhel")
+ADD_SUBDIRECTORY("Emgu.CV.runtime.rhel")
 
 INSTALL(
-      DIRECTORY
-      ${CMAKE_CURRENT_SOURCE_DIR}
-      DESTINATION "platforms/"
-      COMPONENT emgucv_binary
-      FILES_MATCHING 
-      PATTERN "*.nupkg"
+  DIRECTORY
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  DESTINATION "platforms/"
+  COMPONENT emgucv_binary
+  FILES_MATCHING
+  PATTERN "*.nupkg"
 )
-
-

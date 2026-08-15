@@ -67,9 +67,9 @@ jobs:
     - name: Run a test program
       run: dotnet run --arch x64 -p:EmguCVSkipMobileTargets=true
       working-directory: ${{ github.workspace }}\Emgu.CV.Example\BuildInfo.Console\
-    #- name: Run Unit Test
-    #  run: dotnet test --blame-crash
-    #  working-directory: ${{ github.workspace }}\Emgu.CV.Test\Emgu.CV.Test.Netcore\   
+    - name: Run Unit Test
+      run: dotnet test --blame-crash
+      working-directory: ${{ github.workspace }}\Emgu.CV.Test\Emgu.CV.Test.Net\
     #- name: Clean up the non-gpu build
     #  run: .\git-clean.bat 
     #  working-directory: ${{ github.workspace }}\miscellaneous

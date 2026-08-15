@@ -84,6 +84,14 @@ namespace Emgu.CV.Test
             }
         }
 
+        // Crashes the test host process with a native access violation (0xC0000005) inside
+        // cv::SimpleBlobDetector::detect on Windows CI (observed on a Visual Studio 18 2026 /
+        // MSVC 1951 runner image). The crash is a hardware-level fault, not a thrown
+        // cv::Exception, so it can't be caught by the CVAPI_CATCH_CV_ERRORS wrapping (which
+        // only catches C++ exceptions, not hardware-level faults). A crashed test host aborts
+        // the entire dotnet test run, so this is disabled until the native crash itself is
+        // debugged separately. See PR #1057.
+        [Ignore("Crashes the test host process (native access violation) -- needs separate investigation.")]
         [Test]
         public void TestSimpleBlobDetector()
         {

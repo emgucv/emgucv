@@ -21,7 +21,7 @@ IF(HAVE_MAUI)
     DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
     DESTINATION Emgu.CV.Runtime/Maui
     COMPONENT emgucv_source
-    FILES_MATCHING 
+    FILES_MATCHING
     PATTERN "*.cs"
     PATTERN "*.csproj"
     PATTERN "Directory.Build.props"
@@ -33,60 +33,60 @@ IF(HAVE_MAUI)
     PATTERN "CMakeFiles" EXCLUDE
     PATTERN "${PROJECT_NAME}.dir" EXCLUDE
     )
-	
+
   PROJECT(Emgu.CV.runtime.maui)
-    
+
   SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
-  
+
   BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
-  
-    TARGET_SOURCES(${PROJECT_NAME} PRIVATE
-	  "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in"
-	  "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
-	  "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
-	  "${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md"
-      "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.csproj"
-    )
 
-    source_group("Template" FILES 
-	  "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in"
-	  "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
-    )
-	
-    source_group("Source" FILES 
-	  "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
-      "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.csproj"
-	  "${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md"
-    )
+  TARGET_SOURCES(${PROJECT_NAME} PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
+    "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.csproj"
+  )
 
-  if(ENABLE_SOLUTION_FOLDERS)
-      set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
-  endif() 
-  
+  SOURCE_GROUP("Template" FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/README.md.in"
+  )
+
+  SOURCE_GROUP("Source" FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.csproj"
+    "${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md"
+  )
+
+  IF(ENABLE_SOLUTION_FOLDERS)
+    SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES FOLDER "emgu")
+  ENDIF()
+
   ADD_DEPENDENCIES(${PROJECT_NAME} cvextern Emgu.CV)
-  
-  IF (TARGET Emgu.CV.runtime.maui.ios)
+
+  IF(TARGET Emgu.CV.runtime.maui.ios)
     ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.maui.ios)
   ENDIF()
-  
-  IF (TARGET Emgu.CV.runtime.maui.macos)
+
+  IF(TARGET Emgu.CV.runtime.maui.macos)
     ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.maui.macos)
   ENDIF()
-  
-  IF (TARGET Emgu.CV.runtime.maui.android)
+
+  IF(TARGET Emgu.CV.runtime.maui.android)
     ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.maui.android)
   ENDIF()
-  
-  IF (TARGET Emgu.CV.runtime.windows.nuget)
+
+  IF(TARGET Emgu.CV.runtime.windows.nuget)
     ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.windows.nuget)
   ENDIF()
-  
+
   INSTALL(
-    DIRECTORY 
+    DIRECTORY
     ${EMGU_CV_SOURCE_DIR}/libs/Build/Emgu.CV.runtime.maui
     DESTINATION ${CPACK_PACKAGE_CLI_FOLDER}/Build
     COMPONENT emgucv_binary
-	FILES_MATCHING 
+    FILES_MATCHING
       PATTERN "*.dll"
       PATTERN "*.pdb"
       PATTERN "*.xml")
