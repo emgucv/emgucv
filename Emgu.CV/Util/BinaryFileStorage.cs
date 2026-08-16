@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -15,7 +16,11 @@ namespace Emgu.CV.Util
     /// A raw data storage
     /// </summary>
     /// <typeparam name="T">The type of elements in the storage</typeparam>
-    public class BinaryFileStorage<T> : IEnumerable<T>
+    public class BinaryFileStorage<
+#if NET5_0_OR_GREATER
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+#endif
+        T> : IEnumerable<T>
         where T : struct
     {
         private static int _elementSize = Toolbox.SizeOf<T>();

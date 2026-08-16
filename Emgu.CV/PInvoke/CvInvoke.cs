@@ -5,6 +5,7 @@ using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Runtime.InteropServices;
 using Emgu.CV.Structure;
@@ -395,6 +396,9 @@ namespace Emgu.CV
         /// <param name="modules">The names of opencv modules. e.g. "opencv_core.dll" on windows.</param>
         /// <param name="loadDirectory">The path to load the opencv modules. If null, will use the default path.</param>
         /// <returns>True if all the modules has been loaded successfully</returns>
+#if NET5_0_OR_GREATER
+        [RequiresUnreferencedCode("Locating Java.Lang.JavaSystem.LoadLibrary by name via reflection on Xamarin Android is not trim-safe.")]
+#endif
         public static bool DefaultLoadUnmanagedModules(String[] modules, String loadDirectory = null)
         {
             bool libraryLoaded = true;

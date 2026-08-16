@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Emgu.Util;
 using Emgu.CV.Structure;
@@ -22,6 +23,9 @@ namespace Emgu.CV.Reflection
         /// </summary>
         /// <param name="image">The IImage object to be refelected for methods marked with ExposableMethodAttribute</param>
         /// <returns>All the methods that belongs to the IImage and Image class with ExposableMethodAttribute set true</returns>
+#if NET5_0_OR_GREATER
+        [RequiresUnreferencedCode("Reflecting over the runtime type's methods via image.GetType() is not trim-safe.")]
+#endif
         public static IEnumerable<KeyValuePair<String, MethodInfo>> GetImageMethods(IInputArray image)
         {
             if (image != null)
@@ -97,6 +101,9 @@ namespace Emgu.CV.Reflection
         /// <param name="image">The image to obtain pixel value from</param>
         /// <param name="location">The location to sample a pixel</param>
         /// <returns>The color at the specific location</returns>
+#if NET5_0_OR_GREATER
+        [RequiresUnreferencedCode("Reflecting over the runtime type's indexer via image.GetType() is not trim-safe.")]
+#endif
         public static IColor GetPixelColor(IInputArray image, Point location)
         {
             using (InputArray ia = image.GetInputArray())
