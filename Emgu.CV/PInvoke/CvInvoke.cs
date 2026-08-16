@@ -469,6 +469,10 @@ namespace Emgu.CV
         /// <summary>
         /// Static Constructor to setup opencv environment
         /// </summary>
+#if NET5_0_OR_GREATER
+        [UnconditionalSuppressMessage("Trimming", "IL2026",
+            Justification = "DefaultLoadUnmanagedModules is only reached on the else branch below, which is never taken on iOS/MacCatalyst (those platforms return earlier in this constructor since their native libraries are statically linked) - the only platforms this project performs trimming analysis for.")]
+#endif
         static CvInvoke()
         {
 #if UNITY_WEBGL && !UNITY_EDITOR
