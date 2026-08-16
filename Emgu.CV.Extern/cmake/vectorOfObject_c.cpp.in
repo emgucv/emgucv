@@ -27,7 +27,7 @@ std::vector< ${VECTOR_ELEMENT} >* VectorOf${VECTOR_NAME}CreateSize(int size)
 
 int VectorOf${VECTOR_NAME}GetSize(std::vector< ${VECTOR_ELEMENT} >* v)
 {
-   return v->size();
+   return (int) v->size();
 }
 
 

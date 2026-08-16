@@ -27,7 +27,7 @@ std::vector< ${VECTOR_ELEMENT} >* VectorOf${VECTOR_NAME}CreateSize(int size)
 
 int VectorOf${VECTOR_NAME}GetSize(std::vector< ${VECTOR_ELEMENT} >* v)
 {
-   return v->size();
+   return (int) v->size();
 }
 
 void VectorOf${VECTOR_NAME}Push(std::vector< ${VECTOR_ELEMENT} >* v, ${VECTOR_ELEMENT}* value)
@@ -42,7 +42,7 @@ void VectorOf${VECTOR_NAME}PushMulti(std::vector< ${VECTOR_ELEMENT} >* v,  ${VEC
 
 void VectorOf${VECTOR_NAME}PushVector(std::vector< ${VECTOR_ELEMENT} >* v, std::vector< ${VECTOR_ELEMENT} >* other)
 {  
-   VectorOf${VECTOR_NAME}PushMulti(v,  &(*other)[0], other->size());
+   VectorOf${VECTOR_NAME}PushMulti(v,  &(*other)[0], (int) other->size());
 }
 
 void VectorOf${VECTOR_NAME}Clear(std::vector< ${VECTOR_ELEMENT} >* v)

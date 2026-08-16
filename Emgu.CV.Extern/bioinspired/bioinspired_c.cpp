@@ -12,7 +12,7 @@ cv::bioinspired::Retina* cveRetinaCreate(cv::Size* inputSize, const bool colorMo
 	try
 	{
 	#ifdef HAVE_OPENCV_BIOINSPIRED
-		cv::Ptr<cv::bioinspired::Retina> ptr = cv::bioinspired::Retina::create(*inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrength);
+		cv::Ptr<cv::bioinspired::Retina> ptr = cv::bioinspired::Retina::create(*inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, (float) reductionFactor, (float) samplingStrength);
 		*sharedPtr = new cv::Ptr<cv::bioinspired::Retina>(ptr);
 		return ptr.get();
 	#else
