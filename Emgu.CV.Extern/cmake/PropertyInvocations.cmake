@@ -122,10 +122,10 @@
     "cv::ocl::Device" 
     "Device" 
     "isNVidia;isIntel;isAMD;addressBits;linkerAvailable;compilerAvailable;available;maxWorkGroupSize;maxComputeUnits;localMemSize;maxMemAllocSize;deviceVersionMajor;deviceVersionMinor;halfFPConfig;singleFPConfig;doubleFPConfig;hostUnifiedMemory;globalMemSize;image2DMaxWidth;image2DMaxHeight;type;name;version;vendorName;driverVersion;extensions;OpenCLVersion;OpenCL_C_Version;ptr;set"
-    "bool;bool;bool;int;bool;bool;bool;size_t;int;size_t;size_t;int;int;int;int;int;bool;size_t;int;int;int;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String;void*;void*"
+    "bool;bool;bool;int;bool;bool;bool;size_t;int;size_t;size_t;int;int;int;int;int;bool;size_t;size_t;size_t;int;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String;cv::String;void*;void*"
     "val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;val;act1"
     "IsNVidia;IsIntel;IsAMD;AddressBits;LinkerAvailable;CompilerAvailable;Available;MaxWorkGroupSize;MaxComputeUnits;LocalMemSize;MaxMemAllocSize;DeviceVersionMajor;DeviceVersionMinor;HalfFPConfig;SingleFPConfig;DoubleFPConfig;HostUnifiedMemory;GlobalMemSize;Image2DMaxWidth;Image2DMaxHeight;Type;Name;Version;VendorName;DriverVersion;Extensions;OpenCLVersion;OpenCLCVersion;NativeDevicePointer;Set"
-    "bool;bool;bool;int;bool;bool;bool;IntPtr;int;IntPtr;IntPtr;int;int;FpConfig;FpConfig;FpConfig;bool;IntPtr;int;int;DeviceType;String;String;String;String;String;String;String;IntPtr;IntPtr"
+    "bool;bool;bool;int;bool;bool;bool;IntPtr;int;IntPtr;IntPtr;int;int;FpConfig;FpConfig;FpConfig;bool;IntPtr;IntPtr;IntPtr;DeviceType;String;String;String;String;String;String;String;IntPtr;IntPtr"
     "Indicates if this is an NVidia device;
   Indicates if this is an Intel device;
   Indicates if this is an AMD device;
