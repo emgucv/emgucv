@@ -1,0 +1,116 @@
+@page "/yolo"
+@implements IDisposable
+@inject HttpClient Http
+
+<PageTitle>Yolo Object Detection — Emgu CV WebAssembly Demo</PageTitle>
+
+<p><a href="/">&larr; Back</a></p>
+
+<h1>Yolo Object Detection</h1>
+<h2>Object detection running entirely in the browser via WebAssembly</h2>
+
+<p>The first run downloads the Yolo12N ONNX model (a few MB) and caches it in the browser's virtual file system for the rest of the session.</p>
+
+<p>
+    <button @onclick="RunDemo" disabled="@running">
+        @(running ? "Running…" : "Run Yolo Detection")
+    </button>
+</p>
+
+@if (running && !string.IsNullOrEmpty(status))
+{
+    <p>@status</p>
+}
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <pre style="color:red">@error</pre>
+}
+
+@if (!string.IsNullOrEmpty(output))
+{
+    <pre>@output</pre>
+}
+
+@if (!string.IsNullOrEmpty(imageDataUrl))
+{
+    <img src="@imageDataUrl" alt="Detected objects" style="display:block; image-rendering:pixelated; max-width:640px;" />
+}
+
+@code {
+    private const string SampleImageUrl = "sample-images/dog416.png";
+
+    private Emgu.CV.Models.Yolo? yolo;
+    private string status = string.Empty;
+    private string output = string.Empty;
+    private string error = string.Empty;
+    private string imageDataUrl = string.Empty;
+    private bool running = false;
+
+    private async Task RunDemo()
+    {
+        running = true;
+        error = string.Empty;
+        output = string.Empty;
+        imageDataUrl = string.Empty;
+
+        try
+        {
+            if (yolo == null)
+                yolo = new Emgu.CV.Models.Yolo();
+
+            if (!yolo.Initialized)
+            {
+                status = "Downloading model…";
+                StateHasChanged();
+                await yolo.Init(Emgu.CV.Models.Yolo.YoloVersion.Yolo12N, OnDownloadProgress);
+                if (!yolo.Initialized)
+                {
+                    error = "Failed to initialize the Yolo model. Check the browser console for details.";
+                    return;
+                }
+            }
+
+            status = "Loading sample image…";
+            StateHasChanged();
+            byte[] imageBytes = await Http.GetByteArrayAsync(SampleImageUrl);
+
+            status = "Running detection…";
+            StateHasChanged();
+
+            using Mat img = new Mat();
+            CvInvoke.Imdecode(imageBytes, ImreadModes.ColorBgr, img);
+
+            string message = yolo.ProcessAndRender(img, img);
+
+            using Emgu.CV.Util.VectorOfByte outBuf = new Emgu.CV.Util.VectorOfByte();
+            CvInvoke.Imencode(".bmp", img, outBuf);
+            imageDataUrl = "data:image/bmp;base64," + Convert.ToBase64String(outBuf.ToArray());
+
+            output = message;
+        }
+        catch (Exception ex)
+        {
+            error = $"{ex.GetType().Name}: {ex.Message}\n\n{ex.StackTrace}";
+        }
+        finally
+        {
+            running = false;
+            status = string.Empty;
+            StateHasChanged();
+        }
+    }
+
+    private void OnDownloadProgress(long? totalBytesToReceive, long bytesReceived, double? progressPercentage)
+    {
+        status = progressPercentage.HasValue
+            ? $"Downloading model… {progressPercentage:F0}% ({bytesReceived:N0} bytes)"
+            : $"Downloading model… {bytesReceived:N0} bytes";
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        yolo?.Dispose();
+    }
+}

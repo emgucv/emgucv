@@ -80,6 +80,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
+    <ProjectReference Include="..\..\Emgu.CV.Models\NetStandard\Emgu.CV.Models.csproj" />
   </ItemGroup>
 
   <!--
