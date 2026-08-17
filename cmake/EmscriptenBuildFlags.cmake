@@ -15,6 +15,19 @@ IF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
   SET(CMAKE_SHARED_LINKER_FLAGS "-flto ${CMAKE_SHARED_LINKER_FLAGS}")
   #SET(CMAKE_STATIC_LINKER_FLAGS "-flto ${CMAKE_STATIC_LINKER_FLAGS}")
 
+  # Compile with the wasm-native exception-handling ABI (matching the .NET
+  # WASM runtime's own -fwasm-exceptions build) instead of Emscripten's
+  # legacy JS-exception default. Without this, C++ try/catch in cvextern.a
+  # (e.g. CVAPI_CATCH_CV_ERRORS) never fires -- not even a catch(...) around
+  # the exact throw site -- because the throw/catch personality routine
+  # baked into cvextern.a's bitcode at compile time doesn't match the
+  # wasm-native-EH ABI the final consuming project links against. This is a
+  # frontend (compile-time) ABI commitment, unlike SjLj lowering above,
+  # which is a pure backend transform and can stay safely deferred to the
+  # final link.
+  SET(CMAKE_C_FLAGS "-fwasm-exceptions ${CMAKE_C_FLAGS}")
+  SET(CMAKE_CXX_FLAGS "-fwasm-exceptions ${CMAKE_CXX_FLAGS}")
+
   IF(EMGU_CV_EMSCRIPTEN_LLVM_AR_PATH)
     # Use llvm-ar to create LLVM IR bitcode archives.  This defers WASM
     # instruction-selection (including SjLj/EH lowering) to the final
