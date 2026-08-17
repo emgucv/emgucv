@@ -168,12 +168,17 @@ echo "  FROZEN_CACHE: '${FROZEN_CACHE}' (empty = False in Python)"
 # ---------------------------------------------------------------------------
 # Configure
 # ---------------------------------------------------------------------------
-# JPEG is disabled (BUILD_JPEG/WITH_JPEG=FALSE) alongside the already-disabled
-# PNG/TIFF: libjpeg's setjmp/longjmp error handling and C++ exceptions
-# (-fwasm-exceptions, see cmake/EmscriptenBuildFlags.cmake) mixed in the same
-# function (cv::JpegEncoder::write) crash LLVM 19's wasm-ld SelectionDAG
-# instruction selector during the final link -- a real upstream compiler bug,
-# not something fixable from this project's source. BMP remains available.
+# JPEG is disabled (BUILD_JPEG/WITH_JPEG=FALSE): libjpeg's setjmp/longjmp
+# error handling and C++ exceptions (-fwasm-exceptions, see
+# cmake/EmscriptenBuildFlags.cmake) mixed in the same function
+# (cv::JpegEncoder::write) crash LLVM 19's wasm-ld SelectionDAG instruction
+# selector during the final link -- a real upstream compiler bug, not
+# something fixable from this project's source. BMP remains available.
+#
+# PNG (grfmt_png.cpp) uses the identical setjmp(png_jmpbuf(...)) pattern but
+# does NOT hit the same crash -- tested and confirmed working (decode +
+# encode round-trip) with -fwasm-exceptions enabled, so it stays on. TIFF
+# remains disabled/untested; unrelated to this JPEG-specific issue.
 BUILD_DIR="$PWD/$BUILD_DIR_NAME"
 
 mkdir -p "$BUILD_DIR"
@@ -206,8 +211,8 @@ cd "$BUILD_DIR"
     -DWITH_OPENCL:BOOL=OFF \
     -DBUILD_JPEG:BOOL=FALSE \
     -DWITH_JPEG:BOOL=FALSE \
-    -DBUILD_PNG:BOOL=FALSE \
-    -DWITH_PNG:BOOL=FALSE \
+    -DBUILD_PNG:BOOL=TRUE \
+    -DWITH_PNG:BOOL=TRUE \
     -DBUILD_TIFF:BOOL=OFF \
     -DWITH_TIFF:BOOL=OFF \
     -DEMGU_CV_WITH_TIFF:BOOL=OFF \
