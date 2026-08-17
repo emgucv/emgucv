@@ -168,6 +168,12 @@ echo "  FROZEN_CACHE: '${FROZEN_CACHE}' (empty = False in Python)"
 # ---------------------------------------------------------------------------
 # Configure
 # ---------------------------------------------------------------------------
+# JPEG is disabled (BUILD_JPEG/WITH_JPEG=FALSE) alongside the already-disabled
+# PNG/TIFF: libjpeg's setjmp/longjmp error handling and C++ exceptions
+# (-fwasm-exceptions, see cmake/EmscriptenBuildFlags.cmake) mixed in the same
+# function (cv::JpegEncoder::write) crash LLVM 19's wasm-ld SelectionDAG
+# instruction selector during the final link -- a real upstream compiler bug,
+# not something fixable from this project's source. BMP remains available.
 BUILD_DIR="$PWD/$BUILD_DIR_NAME"
 
 mkdir -p "$BUILD_DIR"
@@ -198,7 +204,8 @@ cd "$BUILD_DIR"
     -DBUILD_ITT:BOOL=FALSE \
     -DCV_ENABLE_INTRINSICS:BOOL=FALSE \
     -DWITH_OPENCL:BOOL=OFF \
-    -DBUILD_JPEG:BOOL=TRUE \
+    -DBUILD_JPEG:BOOL=FALSE \
+    -DWITH_JPEG:BOOL=FALSE \
     -DBUILD_PNG:BOOL=FALSE \
     -DWITH_PNG:BOOL=FALSE \
     -DBUILD_TIFF:BOOL=OFF \
