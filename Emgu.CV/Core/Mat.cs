@@ -4,6 +4,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
@@ -449,6 +450,10 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="fileName">The name of the file</param>
         /// <param name="loadType">File loading method</param>
+#if NET5_0_OR_GREATER
+        [UnconditionalSuppressMessage("Trimming", "IL2026",
+            Justification = "NativeMatFileIO.ReadFileToMat is only reached here as a narrow platform-specific (iOS/macOS PNG) or Unicode-path fallback. If reflection-discovered readers are trimmed away, ReadFileToMat simply returns false and this constructor throws a clear ArgumentException instead of behaving unpredictably.")]
+#endif
         public Mat(String fileName, CvEnum.ImreadModes loadType = ImreadModes.ColorBgr)
            : this(MatInvoke.cveMatCreate(), true, false)
         {
@@ -1244,6 +1249,10 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="fileName">The name of the file to be saved to</param>
         /// <remarks>The image format is chosen depending on the filename extension, see cvLoadImage. Only 8-bit single-channel or 3-channel (with 'BGR' channel order) images can be saved using this function. If the format, depth or channel order is different, use cvCvtScale and cvCvtColor to convert it before saving, or use universal cvSave to save the image to XML or YAML format.</remarks>
+#if NET5_0_OR_GREATER
+        [UnconditionalSuppressMessage("Trimming", "IL2026",
+            Justification = "NativeMatFileIO.WriteMatToFile is only reached here as a fallback when CvInvoke.Imwrite fails or throws. If reflection-discovered writers are trimmed away, WriteMatToFile simply returns false and the original exception is rethrown instead of behaving unpredictably.")]
+#endif
         public void Save(string fileName)
         {
             //bool opencvSaveSuccess = true;

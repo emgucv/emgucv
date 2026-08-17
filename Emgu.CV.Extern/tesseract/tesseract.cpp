@@ -93,7 +93,7 @@ void cveTessBaseAPISetImage(EmguTesseract* ocr, cv::_InputArray* mat)
 	{
 	#ifdef HAVE_EMGUCV_TESSERACT
 		cv::Mat m = mat->getMat();
-		ocr->SetImage(static_cast<const unsigned char*>(m.data), m.size().width, m.size().height, m.elemSize(), m.step);
+		ocr->SetImage(static_cast<const unsigned char*>(m.data), m.size().width, m.size().height, (int) m.elemSize(), (int) m.step);
 	#else
 		throw_no_tesseract();
 	#endif

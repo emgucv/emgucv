@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace Emgu.CV
@@ -23,6 +24,9 @@ namespace Emgu.CV
         /// <param name="mat">The Mat to read the file into</param>
         /// <param name="loadType">The image load type.</param>
         /// <returns>True if successful</returns>
+#if NET5_0_OR_GREATER
+        [RequiresUnreferencedCode("Discovering IFileReaderMat implementations by scanning loaded assemblies is not trim-safe.")]
+#endif
         public static bool ReadFileToMat(String fileName, Mat mat, CvEnum.ImreadModes loadType)
         {
             if (_fileReaderMatArr == null)
@@ -52,6 +56,9 @@ namespace Emgu.CV
         /// <param name="fileName">The name of the file</param>
         /// <param name="mat">The Mat to be written</param>
         /// <returns>True if successful</returns>
+#if NET5_0_OR_GREATER
+        [RequiresUnreferencedCode("Discovering IFileWriterMat implementations by scanning loaded assemblies is not trim-safe.")]
+#endif
         public static bool WriteMatToFile(Mat mat, String fileName)
         {
             if (_fileWriterMatArr == null)

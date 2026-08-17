@@ -258,7 +258,7 @@ namespace Emgu.CV.Test
             using (FileStream fs = File.OpenRead(EmguAssert.GetFile("lena.jpg")))
             {
                 byte[] data = new byte[fs.Length];
-                fs.Read(data, 0, (int)fs.Length);
+                fs.ReadExactly(data, 0, (int)fs.Length);
 
                 Mat image = new Mat();
 
@@ -274,7 +274,7 @@ namespace Emgu.CV.Test
             using (FileStream fs = File.OpenRead(EmguAssert.GetFile("lena.jpg")))
             {
                 byte[] data = new byte[fs.Length];
-                fs.Read(data, 0, (int)fs.Length);
+                fs.ReadExactly(data, 0, (int)fs.Length);
 
                 Mat image = new Mat();
 

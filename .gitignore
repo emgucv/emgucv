@@ -10,6 +10,8 @@ android_*/
 platforms/*/build/
 platforms/*/*/build/
 platforms/emscripten/wasm-cache/
+platforms/emscripten/build_dotnet/
+platforms/emscripten/build_dotnet_mini/
 platforms/nuget/*.nupkg
 platforms/nuget/**/*.nupkg
 platforms/nuget/**/*.props

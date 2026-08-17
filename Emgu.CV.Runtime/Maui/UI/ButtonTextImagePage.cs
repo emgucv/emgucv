@@ -367,7 +367,7 @@ namespace Emgu.CV.Platform.Maui.UI
                 }
                 else
                 {
-                    action = await DisplayActionSheet(pickImgString, "Cancel", null, options.ToArray());
+                    action = await DisplayActionSheetAsync(pickImgString, "Cancel", null, options.ToArray());
                     if (
                         action == null //user clicked outside of action sheet
                         || action.Equals("Cancel") // user cancel

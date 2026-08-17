@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Text;
 using Emgu.Util;
@@ -71,7 +72,11 @@ namespace Emgu.CV.Util
     /// A generic version of the DataLogger
     /// </summary>
     /// <typeparam name="T">The supported type includes System.String and System.ValueType</typeparam>
-    public class DataLogger<T> : DisposableObject
+    public class DataLogger<
+#if NET5_0_OR_GREATER
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors)]
+#endif
+        T> : DisposableObject
     {
         private DataLogger _logger;
 

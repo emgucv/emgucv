@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -28,6 +29,9 @@ namespace Emgu.Util
         /// <typeparam name="T">The type of the object to be converted</typeparam>
         /// <param name="sourceObject">The object to be serialized</param>
         /// <returns>An xml document that represents the object</returns>
+#if NET5_0_OR_GREATER
+        [RequiresUnreferencedCode("XmlSerializer requires the members of the serialized type to not be trimmed.")]
+#endif
         public static XDocument XmlSerialize<T>(T sourceObject)
         {
             StringBuilder sb = new StringBuilder();
@@ -44,6 +48,9 @@ namespace Emgu.Util
         /// <param name="sourceObject">The object to be serialized</param>
         /// <param name="knownTypes">Other types that it must known ahead to serialize the object</param>
         /// <returns>An xml document that represents the object</returns>
+#if NET5_0_OR_GREATER
+        [RequiresUnreferencedCode("XmlSerializer requires the members of the serialized type to not be trimmed.")]
+#endif
         public static XDocument XmlSerialize<T>(T sourceObject, Type[] knownTypes)
         {
             StringBuilder sb = new StringBuilder();
@@ -58,6 +65,9 @@ namespace Emgu.Util
         /// <typeparam name="T">The type of the object to be converted to</typeparam>
         /// <param name="document">The xml document</param>
         /// <returns>The object representation as a result of the deserialization of the xml document</returns>
+#if NET5_0_OR_GREATER
+        [RequiresUnreferencedCode("XmlSerializer requires the members of the deserialized type to not be trimmed.")]
+#endif
         public static T XmlDeserialize<T>(XDocument document)
         {
             using (XmlReader reader = document.Root.CreateReader())
@@ -78,6 +88,9 @@ namespace Emgu.Util
         /// <param name="xDoc">The xml document</param>
         /// <param name="knownTypes">Other types that it must known ahead to deserialize the object</param>
         /// <returns>The object representation as a result of the deserialization of the xml document</returns>
+#if NET5_0_OR_GREATER
+        [RequiresUnreferencedCode("XmlSerializer requires the members of the deserialized type to not be trimmed.")]
+#endif
         public static T XmlDeserialize<T>(XDocument xDoc, Type[] knownTypes)
         {
             using (XmlReader reader = xDoc.Root.CreateReader())
@@ -100,6 +113,9 @@ namespace Emgu.Util
         /// <typeparam name="T">The type of the object to be converted to</typeparam>
         /// <param name="xmlString">The xml document as a string</param>
         /// <returns>The object representation as a result of the deserialization of the xml string</returns>
+#if NET5_0_OR_GREATER
+        [RequiresUnreferencedCode("XmlSerializer requires the members of the deserialized type to not be trimmed.")]
+#endif
         public static T XmlStringDeserialize<T>(String xmlString)
         {
             using (StringReader stringReader = new StringReader(xmlString))
@@ -413,6 +429,9 @@ namespace Emgu.Util
         /// Load all the assemblies.
         /// </summary>
         /// <returns>All the assemblies loaded.</returns>
+#if NET5_0_OR_GREATER
+        [RequiresUnreferencedCode("Loading assemblies by walking referenced-assembly metadata is not trim-safe.")]
+#endif
         public static System.Reflection.Assembly[] LoadAllDependentAssemblies()
         {
             try
@@ -470,6 +489,9 @@ namespace Emgu.Util
         /// </summary>
         /// <typeparam name="T">The interface</typeparam>
         /// <returns>The types that implement the specific interface</returns>
+#if NET5_0_OR_GREATER
+        [RequiresUnreferencedCode("Scanning all loaded assemblies for interface implementations is not trim-safe.")]
+#endif
         public static Type[] GetInterfaceImplementationFromAssembly<T>()
         {
             System.Reflection.Assembly[] assemblies = LoadAllDependentAssemblies();

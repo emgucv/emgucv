@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 #if UNITY_ANDROID || UNITY_IOS || UNITY_STANDALONE || UNITY_WSA || UNITY_EDITOR || UNITY_WEBGL
 using UnityEngine;
@@ -24,6 +25,9 @@ namespace Emgu.CV.Reflection
       /// </summary>
       /// <param name="color">The color</param>
       /// <returns>The display color for each channel</returns>
+#if NET5_0_OR_GREATER
+      [RequiresUnreferencedCode("Reflecting over the runtime type's properties via color.GetType() is not trim-safe.")]
+#endif
       public static Color[] GetDisplayColorOfChannels(IColor color)
       {
          List<Color> channelColor = new List<Color>();
@@ -51,6 +55,9 @@ namespace Emgu.CV.Reflection
       /// </summary>
       /// <param name="color">The color</param>
       /// <returns>The names of the channels</returns>
+#if NET5_0_OR_GREATER
+      [RequiresUnreferencedCode("Reflecting over the runtime type's properties via color.GetType() is not trim-safe.")]
+#endif
       public static String[] GetNamesOfChannels(IColor color)
       {
          List<String> channelNames = new List<string>();
