@@ -38,7 +38,9 @@
 }
 
 @code {
-    private const string SampleImageUrl = "sample-images/dog416.png";
+    // BMP: PNG and JPEG codecs aren't compiled into this WASM build (see
+    // platforms/emscripten/cmake_configure_dotnet.sh).
+    private const string SampleImageUrl = "sample-images/dog416.bmp";
 
     private Emgu.CV.Models.Yolo? yolo;
     private string status = string.Empty;
