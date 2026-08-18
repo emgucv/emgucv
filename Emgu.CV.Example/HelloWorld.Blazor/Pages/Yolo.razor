@@ -1,6 +1,7 @@
 @page "/yolo"
 @implements IDisposable
 @inject HttpClient Http
+@using Microsoft.AspNetCore.Components.Forms
 
 <PageTitle>Yolo Object Detection — Emgu CV WebAssembly Demo</PageTitle>
 
@@ -12,8 +13,17 @@
 <p>The first run downloads the Yolo12N ONNX model (a few MB) and caches it in the browser's virtual file system for the rest of the session.</p>
 
 <p>
+    <InputFile OnChange="OnFileSelected" accept="image/*" disabled="@running" />
+</p>
+
+@if (!string.IsNullOrEmpty(selectedFileName))
+{
+    <p>Selected: <strong>@selectedFileName</strong> (@FormatSize(selectedFileSize)) — will be used instead of the bundled sample image. <button @onclick="ClearSelection" disabled="@running">Use sample image instead</button></p>
+}
+
+<p>
     <button @onclick="RunDemo" disabled="@running">
-        @(running ? "Running…" : "Run Yolo Detection")
+        @(running ? "Running…" : (string.IsNullOrEmpty(selectedFileName) ? "Run Yolo Detection (sample image)" : "Run Yolo Detection"))
     </button>
 </p>
 
@@ -38,9 +48,12 @@
 }
 
 @code {
-    // BMP: PNG and JPEG codecs aren't compiled into this WASM build (see
-    // platforms/emscripten/cmake_configure_dotnet.sh).
+    // Bundled sample stays BMP for a zero-download default. User uploads can
+    // be JPEG, PNG, or BMP -- all three codecs are supported in this WASM
+    // build (JPEG is backed by stb_image here instead of libjpeg-turbo, see
+    // platforms/emscripten/JPEG_WASM_CRASH.md).
     private const string SampleImageUrl = "sample-images/dog416.bmp";
+    private const long MaxUploadBytes = 20 * 1024 * 1024; // 20 MB
 
     private Emgu.CV.Models.Yolo? yolo;
     private string status = string.Empty;
@@ -48,6 +61,42 @@
     private string error = string.Empty;
     private string imageDataUrl = string.Empty;
     private bool running = false;
+
+    private byte[]? uploadedImageBytes;
+    private string? selectedFileName;
+    private long selectedFileSize;
+
+    private async Task OnFileSelected(InputFileChangeEventArgs e)
+    {
+        error = string.Empty;
+        IBrowserFile file = e.File;
+        try
+        {
+            using Stream stream = file.OpenReadStream(MaxUploadBytes);
+            using MemoryStream ms = new MemoryStream();
+            await stream.CopyToAsync(ms);
+            uploadedImageBytes = ms.ToArray();
+            selectedFileName = file.Name;
+            selectedFileSize = file.Size;
+        }
+        catch (Exception ex)
+        {
+            error = $"Failed to read '{file.Name}': {ex.Message}";
+            uploadedImageBytes = null;
+            selectedFileName = null;
+        }
+        StateHasChanged();
+    }
+
+    private void ClearSelection()
+    {
+        uploadedImageBytes = null;
+        selectedFileName = null;
+        selectedFileSize = 0;
+    }
+
+    private static string FormatSize(long bytes) =>
+        bytes >= 1024 * 1024 ? $"{bytes / 1024.0 / 1024.0:F1} MB" : $"{bytes / 1024.0:F0} KB";
 
     private async Task RunDemo()
     {
@@ -73,15 +122,30 @@
                 }
             }
 
-            status = "Loading sample image…";
-            StateHasChanged();
-            byte[] imageBytes = await Http.GetByteArrayAsync(SampleImageUrl);
+            byte[] imageBytes;
+            if (uploadedImageBytes != null)
+            {
+                status = "Decoding uploaded image…";
+                StateHasChanged();
+                imageBytes = uploadedImageBytes;
+            }
+            else
+            {
+                status = "Loading sample image…";
+                StateHasChanged();
+                imageBytes = await Http.GetByteArrayAsync(SampleImageUrl);
+            }
 
             status = "Running detection…";
             StateHasChanged();
 
             using Mat img = new Mat();
             CvInvoke.Imdecode(imageBytes, ImreadModes.ColorBgr, img);
+            if (img.IsEmpty)
+            {
+                error = "Could not decode the selected image. Supported formats: JPEG, PNG, BMP.";
+                return;
+            }
 
             string message = yolo.ProcessAndRender(img, img);
 
