@@ -168,17 +168,24 @@ echo "  FROZEN_CACHE: '${FROZEN_CACHE}' (empty = False in Python)"
 # ---------------------------------------------------------------------------
 # Configure
 # ---------------------------------------------------------------------------
-# JPEG is disabled (BUILD_JPEG/WITH_JPEG=FALSE): libjpeg's setjmp/longjmp
-# error handling and C++ exceptions (-fwasm-exceptions, see
-# cmake/EmscriptenBuildFlags.cmake) mixed in the same function
-# (cv::JpegEncoder::write) crash LLVM 19's wasm-ld SelectionDAG instruction
-# selector during the final link -- a real upstream compiler bug, not
-# something fixable from this project's source. BMP remains available.
+# JPEG is enabled, but NOT via libjpeg-turbo: on Emscripten,
+# cmake/OpenCVFindLibsGrfmt.cmake points grfmt_jpeg.cpp at the vendored
+# stb_image/stb_image_write headers (opencv/3rdparty/stb) instead.
+# libjpeg-turbo's setjmp/longjmp error handling and C++ exceptions
+# (-fwasm-exceptions, see cmake/EmscriptenBuildFlags.cmake) mixed in the
+# same function (cv::JpegEncoder::write) crash LLVM 19's wasm-ld
+# SelectionDAG instruction selector during the final link -- a real
+# upstream compiler bug, not something fixable from this project's
+# source. stb_image's plain return-code error handling (no setjmp) avoids
+# that interaction entirely. See platforms/emscripten/JPEG_WASM_CRASH.md
+# for the full investigation. BUILD_JPEG/WITH_JPEG below just need to be
+# TRUE so grfmt_jpeg.cpp compiles; no libjpeg-turbo source is built.
 #
-# PNG (grfmt_png.cpp) uses the identical setjmp(png_jmpbuf(...)) pattern but
-# does NOT hit the same crash -- tested and confirmed working (decode +
-# encode round-trip) with -fwasm-exceptions enabled, so it stays on. TIFF
-# remains disabled/untested; unrelated to this JPEG-specific issue.
+# PNG (grfmt_png.cpp) uses the identical setjmp(png_jmpbuf(...)) pattern
+# via libpng but does NOT hit the same crash -- tested and confirmed
+# working (decode + encode round-trip) with -fwasm-exceptions enabled, so
+# it stays on the normal libpng path. TIFF remains disabled/untested;
+# unrelated to this JPEG-specific issue.
 BUILD_DIR="$PWD/$BUILD_DIR_NAME"
 
 mkdir -p "$BUILD_DIR"
@@ -209,8 +216,8 @@ cd "$BUILD_DIR"
     -DBUILD_ITT:BOOL=FALSE \
     -DCV_ENABLE_INTRINSICS:BOOL=FALSE \
     -DWITH_OPENCL:BOOL=OFF \
-    -DBUILD_JPEG:BOOL=FALSE \
-    -DWITH_JPEG:BOOL=FALSE \
+    -DBUILD_JPEG:BOOL=TRUE \
+    -DWITH_JPEG:BOOL=TRUE \
     -DBUILD_PNG:BOOL=TRUE \
     -DWITH_PNG:BOOL=TRUE \
     -DBUILD_TIFF:BOOL=OFF \
