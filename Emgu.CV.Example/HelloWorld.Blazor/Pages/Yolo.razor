@@ -1,6 +1,9 @@
 @page "/yolo"
-@implements IDisposable
+@implements IAsyncDisposable
 @inject HttpClient Http
+@inject IJSRuntime JS
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.JSInterop
 
 <PageTitle>Yolo Object Detection — Emgu CV WebAssembly Demo</PageTitle>
 
@@ -12,8 +15,26 @@
 <p>The first run downloads the Yolo12N ONNX model (a few MB) and caches it in the browser's virtual file system for the rest of the session.</p>
 
 <p>
-    <button @onclick="RunDemo" disabled="@running">
-        @(running ? "Running…" : "Run Yolo Detection")
+    <InputFile OnChange="OnFileSelected" accept="image/*" disabled="@(running || cameraActive)" />
+    <button @onclick="ToggleCamera" disabled="@running">@(cameraActive ? "Stop Camera" : "Use Camera")</button>
+</p>
+
+<div style="@(cameraActive ? "" : "display:none")">
+    <video @ref="videoElement" style="display:block; max-width:640px; background:#000;" muted autoplay playsinline></video>
+    <p>
+        <button @onclick="CaptureAndDetect" disabled="@running">Capture &amp; Detect</button>
+    </p>
+</div>
+<canvas @ref="canvasElement" style="display:none"></canvas>
+
+@if (!string.IsNullOrEmpty(selectedFileName))
+{
+    <p>Selected: <strong>@selectedFileName</strong> (@FormatSize(selectedFileSize)) — will be used instead of the bundled sample image. <button @onclick="ClearSelection" disabled="@running">Use sample image instead</button></p>
+}
+
+<p>
+    <button @onclick="RunDemo" disabled="@(running || cameraActive)">
+        @(running ? "Running…" : (string.IsNullOrEmpty(selectedFileName) ? "Run Yolo Detection (sample image)" : "Run Yolo Detection"))
     </button>
 </p>
 
@@ -38,9 +59,12 @@
 }
 
 @code {
-    // BMP: PNG and JPEG codecs aren't compiled into this WASM build (see
-    // platforms/emscripten/cmake_configure_dotnet.sh).
+    // Bundled sample stays BMP for a zero-download default. User uploads and
+    // camera snapshots can be JPEG, PNG, or BMP -- all three codecs are
+    // supported in this WASM build (JPEG is backed by stb_image here instead
+    // of libjpeg-turbo, see platforms/emscripten/JPEG_WASM_CRASH.md).
     private const string SampleImageUrl = "sample-images/dog416.bmp";
+    private const long MaxUploadBytes = 20 * 1024 * 1024; // 20 MB
 
     private Emgu.CV.Models.Yolo? yolo;
     private string status = string.Empty;
@@ -48,6 +72,107 @@
     private string error = string.Empty;
     private string imageDataUrl = string.Empty;
     private bool running = false;
+
+    private byte[]? uploadedImageBytes;
+    private string? selectedFileName;
+    private long selectedFileSize;
+
+    private ElementReference videoElement;
+    private ElementReference canvasElement;
+    private IJSObjectReference? cameraModule;
+    private bool cameraActive = false;
+
+    private async Task OnFileSelected(InputFileChangeEventArgs e)
+    {
+        error = string.Empty;
+        IBrowserFile file = e.File;
+        try
+        {
+            using Stream stream = file.OpenReadStream(MaxUploadBytes);
+            using MemoryStream ms = new MemoryStream();
+            await stream.CopyToAsync(ms);
+            uploadedImageBytes = ms.ToArray();
+            selectedFileName = file.Name;
+            selectedFileSize = file.Size;
+        }
+        catch (Exception ex)
+        {
+            error = $"Failed to read '{file.Name}': {ex.Message}";
+            uploadedImageBytes = null;
+            selectedFileName = null;
+        }
+        StateHasChanged();
+    }
+
+    private void ClearSelection()
+    {
+        uploadedImageBytes = null;
+        selectedFileName = null;
+        selectedFileSize = 0;
+    }
+
+    private static string FormatSize(long bytes) =>
+        bytes >= 1024 * 1024 ? $"{bytes / 1024.0 / 1024.0:F1} MB" : $"{bytes / 1024.0:F0} KB";
+
+    private async Task ToggleCamera()
+    {
+        error = string.Empty;
+        if (cameraActive)
+        {
+            await StopCameraAsync();
+            StateHasChanged();
+            return;
+        }
+
+        try
+        {
+            cameraModule ??= await JS.InvokeAsync<IJSObjectReference>("import", "./js/camera.js");
+            await cameraModule.InvokeVoidAsync("startCamera", videoElement);
+            cameraActive = true;
+        }
+        catch (Exception ex)
+        {
+            error = $"Could not access the camera: {ex.Message}";
+            cameraActive = false;
+        }
+        StateHasChanged();
+    }
+
+    private async Task StopCameraAsync()
+    {
+        if (cameraModule != null && cameraActive)
+        {
+            try { await cameraModule.InvokeVoidAsync("stopCamera", videoElement); }
+            catch { /* best effort -- page may be tearing down */ }
+        }
+        cameraActive = false;
+    }
+
+    private async Task CaptureAndDetect()
+    {
+        if (cameraModule == null || !cameraActive)
+            return;
+
+        error = string.Empty;
+        try
+        {
+            byte[] frame = await cameraModule.InvokeAsync<byte[]>("captureFrame", videoElement, canvasElement);
+            uploadedImageBytes = frame;
+            selectedFileName = "Camera snapshot";
+            selectedFileSize = frame.Length;
+        }
+        catch (Exception ex)
+        {
+            error = $"Failed to capture a frame from the camera: {ex.Message}";
+            return;
+        }
+        finally
+        {
+            await StopCameraAsync();
+        }
+
+        await RunDemo();
+    }
 
     private async Task RunDemo()
     {
@@ -73,15 +198,30 @@
                 }
             }
 
-            status = "Loading sample image…";
-            StateHasChanged();
-            byte[] imageBytes = await Http.GetByteArrayAsync(SampleImageUrl);
+            byte[] imageBytes;
+            if (uploadedImageBytes != null)
+            {
+                status = "Decoding image…";
+                StateHasChanged();
+                imageBytes = uploadedImageBytes;
+            }
+            else
+            {
+                status = "Loading sample image…";
+                StateHasChanged();
+                imageBytes = await Http.GetByteArrayAsync(SampleImageUrl);
+            }
 
             status = "Running detection…";
             StateHasChanged();
 
             using Mat img = new Mat();
             CvInvoke.Imdecode(imageBytes, ImreadModes.ColorBgr, img);
+            if (img.IsEmpty)
+            {
+                error = "Could not decode the selected image. Supported formats: JPEG, PNG, BMP.";
+                return;
+            }
 
             string message = yolo.ProcessAndRender(img, img);
 
@@ -111,8 +251,13 @@
         InvokeAsync(StateHasChanged);
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
         yolo?.Dispose();
+        if (cameraModule != null)
+        {
+            try { await StopCameraAsync(); } catch { /* ignore */ }
+            try { await cameraModule.DisposeAsync(); } catch { /* ignore */ }
+        }
     }
 }
