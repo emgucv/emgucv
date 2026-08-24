@@ -291,7 +291,12 @@ namespace Emgu.CV.Models
                 }
 
                 manager.AddFile(
-                    "https://github.com/pjreddie/darknet/raw/master/data/coco.names",
+                    // Not github.com/.../raw/... : that URL 302-redirects here, and
+                    // GitHub's redirect response carries an empty (thus CORS-failing)
+                    // Access-Control-Allow-Origin header, which browsers reject before
+                    // ever reaching this CORS-friendly final URL. Fetching it directly
+                    // skips the redirect and its failing CORS check.
+                    "https://raw.githubusercontent.com/pjreddie/darknet/master/data/coco.names",
                     _modelFolderName,
                     "634A1132EB33F8091D60F2C346ABABE8B905AE08387037AED883953B7329AF84");
 
