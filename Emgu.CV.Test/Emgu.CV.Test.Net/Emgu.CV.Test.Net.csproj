@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\AutoTestAlphamat.cs" Link="AutoTestAlphamat.cs" />
     <Compile Include="..\AutoTestCalibration.cs" Link="AutoTestCalibration.cs" />
     <Compile Include="..\AutoTestCuda.cs" Link="AutoTestCuda.cs" />
     <Compile Include="..\AutoTestFeatures.cs" Link="AutoTestFeatures.cs" />
@@ -179,6 +180,18 @@
     </Content>
     <Content Include="..\..\opencv_contrib\modules\text\samples\trained_classifier_erGrouping.xml">
       <Link>trained_classifier_erGrouping.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_contrib\modules\alphamat\samples\input_images\plant.jpg">
+      <Link>alphamat_plant.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_contrib\modules\alphamat\samples\trimaps\plant.png">
+      <Link>alphamat_plant_trimap.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\..\opencv_contrib\modules\alphamat\samples\output_mattes\plant_result.png">
+      <Link>alphamat_plant_result.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\..\opencv\samples\data\box.png">

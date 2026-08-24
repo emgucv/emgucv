@@ -35,6 +35,7 @@ namespace Emgu.CV.Alphamat
             {
                 cveAlphamatInfoFlow(iaImage, iaTmap, oaResult);
             }
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
