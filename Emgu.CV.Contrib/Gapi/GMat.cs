@@ -34,6 +34,7 @@ namespace Emgu.CV
         public GMat()
             : this(GapiInvoke.cveGMatCreate(), true)
         {
+            CvInvoke.CheckError();
         }
 
         /// <summary>

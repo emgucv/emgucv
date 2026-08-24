@@ -32,6 +32,7 @@
     <Compile Include="..\AutoTestFace.cs" Link="AutoTestFace.cs" />
     <Compile Include="..\AutoTestFlann.cs" Link="AutoTestFlann.cs" />
     <Compile Include="..\AutoTestFreetype.cs" Link="AutoTestFreetype.cs" />
+    <Compile Include="..\AutoTestGapi.cs" Link="AutoTestGapi.cs" />
     <Compile Include="..\AutoTestImgproc.cs" Link="AutoTestImgproc.cs" />
     <Compile Include="..\AutoTestObjDetect.cs" Link="AutoTestObjDetect.cs" />
     <Compile Include="..\AutoTestOpticalFlow.cs" Link="AutoTestOpticalFlow.cs" />

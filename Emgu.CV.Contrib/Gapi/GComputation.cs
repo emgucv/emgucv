@@ -29,6 +29,7 @@ namespace Emgu.CV
         public GComputation(GMat input, GMat output)
         {
             _ptr = GapiInvoke.cveGComputationCreate1(input, output);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -39,6 +40,7 @@ namespace Emgu.CV
         public GComputation(GMat input, GScalar output)
         {
             _ptr = GapiInvoke.cveGComputationCreate2(input, output);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -50,6 +52,7 @@ namespace Emgu.CV
         public GComputation(GMat input1, GMat input2, GMat output)
         {
             _ptr = GapiInvoke.cveGComputationCreate3(input1, input2, output);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -61,6 +64,7 @@ namespace Emgu.CV
         public GComputation(GMat input1, GMat input2, GScalar output)
         {
             _ptr = GapiInvoke.cveGComputationCreate4(input1, input2, output);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -71,6 +75,7 @@ namespace Emgu.CV
         public GComputation(VectorOfGMat inputs, VectorOfGMat outputs)
         {
             _ptr = GapiInvoke.cveGComputationCreate5(inputs, outputs);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -81,6 +86,7 @@ namespace Emgu.CV
         public void Apply(Mat input, Mat output)
         {
             GapiInvoke.cveGComputationApply1(_ptr, input, output);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -92,6 +98,7 @@ namespace Emgu.CV
         {
             MCvScalar result = new MCvScalar();
             GapiInvoke.cveGComputationApply2(_ptr, input, ref result);
+            CvInvoke.CheckError();
             return result;
         }
 
@@ -104,6 +111,7 @@ namespace Emgu.CV
         public void Apply(Mat input1, Mat input2, Mat output)
         {
             GapiInvoke.cveGComputationApply3(_ptr, input1, input2, output);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -116,6 +124,7 @@ namespace Emgu.CV
         {
             MCvScalar result = new MCvScalar();
             GapiInvoke.cveGComputationApply4(_ptr, input1, input2, ref result);
+            CvInvoke.CheckError();
             return result;
         }
 
@@ -127,6 +136,7 @@ namespace Emgu.CV
         public void Apply(VectorOfMat input, VectorOfMat output)
         {
             GapiInvoke.cveGComputationApply5(_ptr, input, output);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

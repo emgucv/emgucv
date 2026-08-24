@@ -42,7 +42,9 @@ namespace Emgu.CV
             double fy = 0, 
             CvEnum.Inter interpolation = Inter.Linear)
         {
-            return new GMat(cveGapiResize(src, ref dsize, fx, fy, interpolation), true);
+            IntPtr ptr = cveGapiResize(src, ref dsize, fx, fy, interpolation);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -55,7 +57,9 @@ namespace Emgu.CV
         /// <returns>Per-element bit-wise inversion of the input matrix</returns>
         public static GMat BitwiseNot(GMat src)
         {
-            return new GMat(cveGapiBitwiseNot(src), true);
+            IntPtr ptr = cveGapiBitwiseNot(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -70,7 +74,9 @@ namespace Emgu.CV
         /// <returns>Per-element sum of two matrices.</returns>
         public static GMat Add(GMat src1, GMat src2, CvEnum.DepthType ddepth = CvEnum.DepthType.Default)
         {
-            return new GMat(cveGapiAdd(src1, src2, ddepth), true);
+            IntPtr ptr = cveGapiAdd(src1, src2, ddepth);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -86,7 +92,9 @@ namespace Emgu.CV
         /// <returns>Per-element sum of matrix and given scalar.</returns>
         public static GMat AddC(GMat src1, GScalar c, CvEnum.DepthType ddepth)
         {
-            return new GMat(cveGapiAddC(src1, c, ddepth), true);
+            IntPtr ptr = cveGapiAddC(src1, c, ddepth);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -105,7 +113,9 @@ namespace Emgu.CV
             GMat src2, 
             CvEnum.DepthType ddepth = DepthType.Default)
         {
-            return new GMat(cveGapiSub(src1, src2, ddepth), true);
+            IntPtr ptr = cveGapiSub(src1, src2, ddepth);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiSub(IntPtr src1, IntPtr src2, CvEnum.DepthType ddepth);
@@ -122,7 +132,9 @@ namespace Emgu.CV
             GScalar c, 
             CvEnum.DepthType ddepth = DepthType.Default)
         {
-            return new GMat(cveGapiSubC(src, c, ddepth), true);
+            IntPtr ptr = cveGapiSubC(src, c, ddepth);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -140,7 +152,9 @@ namespace Emgu.CV
             GMat src, 
             CvEnum.DepthType ddepth = DepthType.Default)
         {
-            return new GMat(cveGapiSubRC(c, src, ddepth), true);
+            IntPtr ptr = cveGapiSubRC(c, src, ddepth);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiSubRC(IntPtr c, IntPtr src1, CvEnum.DepthType ddepth);
@@ -155,7 +169,9 @@ namespace Emgu.CV
         /// <returns>The per-element scaled product of two matrices.</returns>
         public static GMat Mul(GMat src1, GMat src2, double scale, CvEnum.DepthType ddepth)
         {
-            return new GMat(cveGapiMul(src1, src2, scale, ddepth), true);
+            IntPtr ptr = cveGapiMul(src1, src2, scale, ddepth);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiMul(IntPtr src1, IntPtr src2, double scale, CvEnum.DepthType ddepth);
@@ -169,7 +185,9 @@ namespace Emgu.CV
         /// <returns>The per-element scaled product of the matrix and the scale.</returns>
         public static GMat MulC(GMat src1, GScalar c, CvEnum.DepthType ddepth = DepthType.Default)
         {
-            return new GMat(cveGapiMulC(src1, c, ddepth), true);
+            IntPtr ptr = cveGapiMulC(src1, c, ddepth);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiMulC(IntPtr src, IntPtr scale, CvEnum.DepthType ddepth);
@@ -185,7 +203,9 @@ namespace Emgu.CV
         /// <returns>Per-element division of two matrices.</returns>
         public static GMat Div(GMat src1, GMat src2, double scale, CvEnum.DepthType ddepth = DepthType.Default)
         {
-            return new GMat(cveGapiDiv(src1, src2, scale, ddepth), true);
+            IntPtr ptr = cveGapiDiv(src1, src2, scale, ddepth);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiDiv(IntPtr src1, IntPtr src2, double scale, CvEnum.DepthType ddepth);
@@ -200,7 +220,9 @@ namespace Emgu.CV
         /// <returns>Result of the divide operation</returns>
         public static GMat DivC(GMat src1, GScalar divisor, double scale, CvEnum.DepthType ddepth = DepthType.Default)
         {
-            return new GMat(cveGapiDivC(src1, divisor, scale, ddepth), true);
+            IntPtr ptr = cveGapiDivC(src1, divisor, scale, ddepth);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiDivC(IntPtr src, IntPtr divisor, double scale, CvEnum.DepthType ddepth);
@@ -216,7 +238,9 @@ namespace Emgu.CV
         /// <returns>Result of the divide operation</returns>
         public static GMat DivRC(GScalar divisor, GMat src, double scale, CvEnum.DepthType ddepth = DepthType.Default)
         {
-            return new GMat(cveGapiDivRC(divisor, src, scale, ddepth), true);
+            IntPtr ptr = cveGapiDivRC(divisor, src, scale, ddepth);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiDivRC(IntPtr divident, IntPtr src, double scale, CvEnum.DepthType ddepth);
@@ -228,7 +252,9 @@ namespace Emgu.CV
         /// <returns>The mean value of matrix elements, independently for each channel, and return it. </returns>
         public static GScalar Mean(GMat src)
         {
-            return new GScalar(cveGapiMean(src));
+            IntPtr ptr = cveGapiMean(src);
+            CvInvoke.CheckError();
+            return new GScalar(ptr);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -249,6 +275,7 @@ namespace Emgu.CV
             GMat outX = new GMat();
             GMat outY = new GMat();
             cveGapiPolarToCart(magnitude, angle, angleInDegrees, outX, outY);
+            CvInvoke.CheckError();
             return new Tuple<GMat, GMat>(outX, outY);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -275,6 +302,7 @@ namespace Emgu.CV
             GMat outMagnitude = new GMat();
             GMat outAngle = new GMat();
             cveGapiCartToPolar(x, y, angleInDegrees, outMagnitude, outAngle);
+            CvInvoke.CheckError();
             return new Tuple<GMat, GMat>(outMagnitude, outAngle);
         }
 
@@ -296,7 +324,9 @@ namespace Emgu.CV
         /// <returns>Array of vector angles; it has the same size and same type as x.</returns>
         public static GMat Phase(GMat x, GMat y, bool angleInDegrees)
         {
-            return new GMat(cveGapiPhase(x, y, angleInDegrees), true);
+            IntPtr ptr = cveGapiPhase(x, y, angleInDegrees);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiPhase(
@@ -312,7 +342,9 @@ namespace Emgu.CV
         /// <returns>Output array of the same size and type as src.</returns>
         public static GMat Sqrt(GMat src)
         {
-            return new GMat(cveGapiSqrt(src), true);
+            IntPtr ptr = cveGapiSqrt(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiSqrt(IntPtr src);
@@ -325,7 +357,9 @@ namespace Emgu.CV
         /// <returns>When the comparison result is true, the corresponding element of output array is set to 255. Otherwise it is set to 0.</returns>
         public static GMat CmpGT(GMat src1, GMat src2)
         {
-            return new GMat(cveGapiCmpGT(src1, src2), true);
+            IntPtr ptr = cveGapiCmpGT(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiCmpGT(IntPtr src1, IntPtr src2);
@@ -338,7 +372,9 @@ namespace Emgu.CV
         /// <returns>When the comparison result is true, the corresponding element of output array is set to 255. Otherwise it is set to 0.</returns>
         public static GMat CmpGT(GMat src1, GScalar src2)
         {
-            return new GMat(cveGapiCmpGTS(src1, src2), true);
+            IntPtr ptr = cveGapiCmpGTS(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiCmpGTS(IntPtr src1, IntPtr src2);
@@ -351,7 +387,9 @@ namespace Emgu.CV
         /// <returns>When the comparison result is true, the corresponding element of output array is set to 255. Otherwise it is set to 0.</returns>
         public static GMat CmpLT(GMat src1, GMat src2)
         {
-            return new GMat(cveGapiCmpLT(src1, src2), true);
+            IntPtr ptr = cveGapiCmpLT(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiCmpLT(IntPtr src1, IntPtr src2);
@@ -364,7 +402,9 @@ namespace Emgu.CV
         /// <returns>When the comparison result is true, the corresponding element of output array is set to 255. Otherwise it is set to 0.</returns>
         public static GMat CmpLT(GMat src1, GScalar src2)
         {
-            return new GMat(cveGapiCmpLTS(src1, src2), true);
+            IntPtr ptr = cveGapiCmpLTS(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiCmpLTS(IntPtr src1, IntPtr src2);
@@ -377,7 +417,9 @@ namespace Emgu.CV
         /// <returns>When the comparison result is true, the corresponding element of output array is set to 255. Otherwise it is set to 0.</returns>
         public static GMat CmpGE(GMat src1, GMat src2)
         {
-            return new GMat(cveGapiCmpGE(src1, src2), true);
+            IntPtr ptr = cveGapiCmpGE(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiCmpGE(IntPtr src1, IntPtr src2);
@@ -390,7 +432,9 @@ namespace Emgu.CV
         /// <returns>When the comparison result is true, the corresponding element of output array is set to 255. Otherwise it is set to 0.</returns>
         public static GMat CmpGE(GMat src1, GScalar src2)
         {
-            return new GMat(cveGapiCmpGES(src1, src2), true);
+            IntPtr ptr = cveGapiCmpGES(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiCmpGES(IntPtr src1, IntPtr src2);
@@ -403,7 +447,9 @@ namespace Emgu.CV
         /// <returns>When the comparison result is true, the corresponding element of output array is set to 255. Otherwise it is set to 0.</returns>
         public static GMat CmpLE(GMat src1, GMat src2)
         {
-            return new GMat(cveGapiCmpLE(src1, src2), true);
+            IntPtr ptr = cveGapiCmpLE(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiCmpLE(IntPtr src1, IntPtr src2);
@@ -416,7 +462,9 @@ namespace Emgu.CV
         /// <returns>When the comparison result is true, the corresponding element of output array is set to 255. Otherwise it is set to 0.</returns>
         public static GMat CmpLE(GMat src1, GScalar src2)
         {
-            return new GMat(cveGapiCmpLES(src1, src2), true);
+            IntPtr ptr = cveGapiCmpLES(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiCmpLES(IntPtr src1, IntPtr src2);
@@ -429,7 +477,9 @@ namespace Emgu.CV
         /// <returns>When the comparison result is true, the corresponding element of output array is set to 255. Otherwise it is set to 0.</returns>
         public static GMat CmpEQ(GMat src1, GMat src2)
         {
-            return new GMat(cveGapiCmpEQ(src1, src2), true);
+            IntPtr ptr = cveGapiCmpEQ(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiCmpEQ(IntPtr src1, IntPtr src2);
@@ -442,7 +492,9 @@ namespace Emgu.CV
         /// <returns>When the comparison result is true, the corresponding element of output array is set to 255. Otherwise it is set to 0 </returns>
         public static GMat CmpEQ(GMat src1, GScalar src2)
         {
-            return new GMat(cveGapiCmpEQS(src1, src2), true);
+            IntPtr ptr = cveGapiCmpEQS(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiCmpEQS(IntPtr src1, IntPtr src2);
@@ -455,7 +507,9 @@ namespace Emgu.CV
         /// <returns>When the comparison result is true, the corresponding element of output array is set to 255. Otherwise it is set to 0.</returns>
         public static GMat CmpNE(GMat src1, GMat src2)
         {
-            return new GMat(cveGapiCmpNE(src1, src2), true);
+            IntPtr ptr = cveGapiCmpNE(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiCmpNE(IntPtr src1, IntPtr src2);
@@ -468,7 +522,9 @@ namespace Emgu.CV
         /// <returns>When the comparison result is true, the corresponding element of output array is set to 255. Otherwise it is set to 0.</returns>
         public static GMat CmpNE(GMat src1, GScalar src2)
         {
-            return new GMat(cveGapiCmpNES(src1, src2), true);
+            IntPtr ptr = cveGapiCmpNES(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiCmpNES(IntPtr src1, IntPtr src2);
@@ -481,7 +537,9 @@ namespace Emgu.CV
         /// <returns>Bitwise conjunction of the two matrices (src1 &amp; src2)</returns>
         public static GMat BitwiseAnd(GMat src1, GMat src2)
         {
-            return new GMat(cveGapiBitwiseAnd(src1, src2), true);
+            IntPtr ptr = cveGapiBitwiseAnd(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiBitwiseAnd(IntPtr src1, IntPtr src2);
@@ -494,7 +552,9 @@ namespace Emgu.CV
         /// <returns>Bitwise conjunction of a matrix and a scalar</returns>
         public static GMat BitwiseAnd(GMat src1, GScalar src2)
         {
-            return new GMat(cveGapiBitwiseAndS(src1, src2), true);
+            IntPtr ptr = cveGapiBitwiseAndS(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiBitwiseAndS(IntPtr src1, IntPtr src2);
@@ -507,7 +567,9 @@ namespace Emgu.CV
         /// <returns>Per-element bit-wise logical disjunction of two matrices of the same size.</returns>
         public static GMat BitwiseOr(GMat src1, GMat src2)
         {
-            return new GMat(cveGapiBitwiseOr(src1, src2), true);
+            IntPtr ptr = cveGapiBitwiseOr(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiBitwiseOr(IntPtr src1, IntPtr src2);
@@ -520,7 +582,9 @@ namespace Emgu.CV
         /// <returns>Bitwise logical disjunction of a matrix and a scalar</returns>
         public static GMat BitwiseOr(GMat src1, GScalar src2)
         {
-            return new GMat(cveGapiBitwiseOrS(src1, src2), true);
+            IntPtr ptr = cveGapiBitwiseOrS(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiBitwiseOrS(IntPtr src1, IntPtr src2);
@@ -533,7 +597,9 @@ namespace Emgu.CV
         /// <returns>The per-element bit-wise logical "exclusive or" of two matrices of the same size.</returns>
         public static GMat BitwiseXor(GMat src1, GMat src2)
         {
-            return new GMat(cveGapiBitwiseXor(src1, src2), true);
+            IntPtr ptr = cveGapiBitwiseXor(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiBitwiseXor(IntPtr src1, IntPtr src2);
@@ -546,7 +612,9 @@ namespace Emgu.CV
         /// <returns>The per-element bit-wise logical "exclusive or" of a matrix and a scalar.</returns>
         public static GMat BitwiseXor(GMat src1, GScalar src2)
         {
-            return new GMat(cveGapiBitwiseXorS(src1, src2), true);
+            IntPtr ptr = cveGapiBitwiseXorS(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiBitwiseXorS(IntPtr src1, IntPtr src2);
@@ -559,7 +627,9 @@ namespace Emgu.CV
         /// <returns>Result of the mask operation</returns>
         public static GMat Mask(GMat src, GMat mask)
         {
-            return new GMat(cveGapiMask(src, mask), true);
+            IntPtr ptr = cveGapiMask(src, mask);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiMask(IntPtr src, IntPtr mask);
@@ -586,8 +656,7 @@ namespace Emgu.CV
             CvEnum.BorderType borderType = BorderType.Default,
             MCvScalar borderValue = new MCvScalar())
         {
-            return new GMat(
-                cveGapiSepFilter(
+            IntPtr ptr = cveGapiSepFilter(
                     src,
                     ddepth,
                     kernelX,
@@ -595,9 +664,9 @@ namespace Emgu.CV
                     ref anchor,
                     ref delta,
                     borderType,
-                    ref borderValue),
-                true
-            );
+                    ref borderValue);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -632,17 +701,16 @@ namespace Emgu.CV
             MCvScalar borderValue = new MCvScalar()
         )
         {
-            return new GMat(
-                cveGapiFilter2D(
+            IntPtr ptr = cveGapiFilter2D(
                     src,
                     ddepth,
                     kernel,
                     ref anchor,
                     ref delta,
                     borderType,
-                    ref borderValue),
-                true
-            );
+                    ref borderValue);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -675,17 +743,16 @@ namespace Emgu.CV
             CvEnum.BorderType borderType = BorderType.Default,
             MCvScalar borderValue = new MCvScalar())
         {
-            return new GMat(
-                cveGapiBoxFilter(
+            IntPtr ptr = cveGapiBoxFilter(
                     src,
                     dtype,
                     ref ksize,
                     ref anchor,
                     normalize,
                     borderType,
-                    ref borderValue),
-                true
-            );
+                    ref borderValue);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiBoxFilter(
@@ -714,15 +781,14 @@ namespace Emgu.CV
                 CvEnum.BorderType borderType = BorderType.Default,
                 MCvScalar borderValue = new MCvScalar())
         {
-            return new GMat(
-                cveGapiBlur(
+            IntPtr ptr = cveGapiBlur(
                     src,
                     ref ksize,
                     ref anchor,
                     borderType,
-                    ref borderValue),
-                true
-            );
+                    ref borderValue);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiBlur(
@@ -750,16 +816,15 @@ namespace Emgu.CV
             CvEnum.BorderType borderType = BorderType.Default,
             MCvScalar borderValue = new MCvScalar())
         {
-            return new GMat(
-                cveGapiGaussianBlur(
+            IntPtr ptr = cveGapiGaussianBlur(
                     src,
                     ref kSize,
                     sigmaX,
                     sigmaY,
                     borderType,
-                    ref borderValue),
-                true
-            );
+                    ref borderValue);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiGaussianBlur(
@@ -780,13 +845,11 @@ namespace Emgu.CV
             GMat src,
             int kSize)
         {
-            return new GMat(
-                cveGapiMedianBlur(
+            IntPtr ptr = cveGapiMedianBlur(
                     src,
-                    kSize),
-                true
-            );
-
+                    kSize);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiMedianBlur(
@@ -813,16 +876,15 @@ namespace Emgu.CV
             MCvScalar borderValue = new MCvScalar()
             )
         {
-            return new GMat(
-                cveGapiErode(
+            IntPtr ptr = cveGapiErode(
                     src,
                     kernel,
                     ref anchor,
                     iterations,
                     borderType,
-                    ref borderValue),
-                true
-            );
+                    ref borderValue);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiErode(
@@ -847,14 +909,13 @@ namespace Emgu.CV
             CvEnum.BorderType borderType = BorderType.Constant,
             MCvScalar borderValue = new MCvScalar())
         {
-            return new GMat(
-                cveGapiErode3x3(
+            IntPtr ptr = cveGapiErode3x3(
                     src,
                     iterations,
                     borderType,
-                    ref borderValue),
-                true
-            );
+                    ref borderValue);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiErode3x3(
@@ -882,16 +943,15 @@ namespace Emgu.CV
             MCvScalar borderValue = new MCvScalar()
         )
         {
-            return new GMat(
-                cveGapiDilate(
+            IntPtr ptr = cveGapiDilate(
                     src,
                     kernel,
                     ref anchor,
                     iterations,
                     borderType,
-                    ref borderValue),
-                true
-            );
+                    ref borderValue);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiDilate(
@@ -916,14 +976,13 @@ namespace Emgu.CV
             CvEnum.BorderType borderType = BorderType.Constant,
             MCvScalar borderValue = new MCvScalar())
         {
-            return new GMat(
-                cveGapiDilate3x3(
+            IntPtr ptr = cveGapiDilate3x3(
                     src,
                     iterations,
                     borderType,
-                    ref borderValue),
-                true
-            );
+                    ref borderValue);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiDilate3x3(
@@ -952,17 +1011,16 @@ namespace Emgu.CV
             CvEnum.BorderType borderType = BorderType.Constant,
             MCvScalar borderValue = new MCvScalar())
         {
-            return new GMat(
-                cveGapiMorphologyEx(
+            IntPtr ptr = cveGapiMorphologyEx(
                     src,
                     op,
                     kernel,
                     ref anchor,
                     iterations,
                     borderType,
-                    ref borderValue),
-                true
-            );
+                    ref borderValue);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiMorphologyEx(
@@ -998,8 +1056,7 @@ namespace Emgu.CV
             CvEnum.BorderType borderType = BorderType.Default,
             MCvScalar borderValue = new MCvScalar())
         {
-            return new GMat(
-                cveGapiSobel(
+            IntPtr ptr = cveGapiSobel(
                     src,
                     ddepth,
                     dx,
@@ -1008,9 +1065,9 @@ namespace Emgu.CV
                     scale,
                     delta,
                     borderType,
-                    ref borderValue),
-                true
-            );
+                    ref borderValue);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1060,6 +1117,7 @@ namespace Emgu.CV
                 ref borderValue,
                 sobelX,
                 sobelY);
+            CvInvoke.CheckError();
             return new Tuple<GMat, GMat>(sobelX, sobelY);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1093,16 +1151,15 @@ namespace Emgu.CV
             double delta = 0,
             CvEnum.BorderType borderType = BorderType.Default)
         {
-            return new GMat(
-                cveGapiLaplacian(
+            IntPtr ptr = cveGapiLaplacian(
                     src,
                     ddepth,
                     ksize,
                     scale,
                     delta,
-                    borderType),
-                true
-            );
+                    borderType);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1130,15 +1187,14 @@ namespace Emgu.CV
             double sigmaSpace,
             CvEnum.BorderType borderType = BorderType.Default)
         {
-            return new GMat(
-                cveGapiBilateralFilter(
+            IntPtr ptr = cveGapiBilateralFilter(
                     src,
                     d,
                     sigmaColor,
                     sigmaColor,
-                    borderType),
-                true
-            );
+                    borderType);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1165,15 +1221,14 @@ namespace Emgu.CV
             int apertureSize,
             bool L2gradient)
         {
-            return new GMat(
-                cveGapiCanny(
+            IntPtr ptr = cveGapiCanny(
                     image,
                     threshold1,
                     threshold2,
                     apertureSize,
-                    L2gradient),
-                true
-            );
+                    L2gradient);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1192,10 +1247,9 @@ namespace Emgu.CV
         /// <returns>The normalized image</returns>
         public static GMat EqualizeHist(GMat src)
         {
-            return new GMat(
-                cveGapiEqualizeHist(src),
-                true
-            );
+            IntPtr ptr = cveGapiEqualizeHist(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1208,10 +1262,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 3-channel image.</returns>
         public static GMat BGR2RGB(GMat src)
         {
-            return new GMat(
-                cveGapiBGR2RGB(src),
-                true
-            );
+            IntPtr ptr = cveGapiBGR2RGB(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1224,10 +1277,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 1-channel image.</returns>
         public static GMat RGB2Gray(GMat src)
         {
-            return new GMat(
-                cveGapiRGB2Gray1(src),
-                true
-            );
+            IntPtr ptr = cveGapiRGB2Gray1(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1243,10 +1295,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 1-channel image.</returns>
         public static GMat RGB2Gray(GMat src, float rY, float gY, float bY)
         {
-            return new GMat(
-                cveGapiRGB2Gray2(src, rY, gY, bY),
-                true
-            );
+            IntPtr ptr = cveGapiRGB2Gray2(src, rY, gY, bY);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1259,10 +1310,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 1-channel image.</returns>
         public static GMat BGR2Gray(GMat src)
         {
-            return new GMat(
-                cveGapiBGR2Gray(src),
-                true
-            );
+            IntPtr ptr = cveGapiBGR2Gray(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1276,10 +1326,9 @@ namespace Emgu.CV
 
         public static GMat RGB2YUV(GMat src)
         {
-            return new GMat(
-                cveGapiRGB2YUV(src),
-                true
-            );
+            IntPtr ptr = cveGapiRGB2YUV(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1292,10 +1341,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 1-channel image. Width of I420 output image must be the same as width of input image. Height of I420 output image must be equal 3/2 from height of input image.</returns>
         public static GMat BGR2I420(GMat src)
         {
-            return new GMat(
-                cveGapiBGR2I420(src),
-                true
-            );
+            IntPtr ptr = cveGapiBGR2I420(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1309,10 +1357,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 1-channel</returns>
         public static GMat RGB2I420(GMat src)
         {
-            return new GMat(
-                cveGapiRGB2I420(src),
-                true
-            );
+            IntPtr ptr = cveGapiRGB2I420(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1325,10 +1372,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 3-channel</returns>
         public static GMat I4202BGR(GMat src)
         {
-            return new GMat(
-                cveGapiI4202BGR(src),
-                true
-            );
+            IntPtr ptr = cveGapiI4202BGR(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1341,10 +1387,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 3-channel</returns>
         public static GMat I4202RGB(GMat src)
         {
-            return new GMat(
-                cveGapiI4202RGB(src),
-                true
-            );
+            IntPtr ptr = cveGapiI4202RGB(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1357,10 +1402,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 3-channel image</returns>
         public static GMat BGR2LUV(GMat src)
         {
-            return new GMat(
-                cveGapiBGR2LUV(src),
-                true
-            );
+            IntPtr ptr = cveGapiBGR2LUV(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1373,10 +1417,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 3-channel.</returns>
         public static GMat LUV2BGR(GMat src)
         {
-            return new GMat(
-                cveGapiLUV2BGR(src),
-                true
-            );
+            IntPtr ptr = cveGapiLUV2BGR(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1389,10 +1432,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 3-channel.</returns>
         public static GMat YUV2BGR(GMat src)
         {
-            return new GMat(
-                cveGapiYUV2BGR(src),
-                true
-            );
+            IntPtr ptr = cveGapiYUV2BGR(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1405,10 +1447,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 3-channel</returns>
         public static GMat BGR2YUV(GMat src)
         {
-            return new GMat(
-                cveGapiBGR2YUV(src),
-                true
-            );
+            IntPtr ptr = cveGapiBGR2YUV(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1421,10 +1462,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 3-channel</returns>
         public static GMat RGB2Lab(GMat src)
         {
-            return new GMat(
-                cveGapiRGB2Lab(src),
-                true
-            );
+            IntPtr ptr = cveGapiRGB2Lab(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1437,10 +1477,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 3-channel</returns>
         public static GMat YUV2RGB(GMat src)
         {
-            return new GMat(
-                cveGapiYUV2RGB(src),
-                true
-            );
+            IntPtr ptr = cveGapiYUV2RGB(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1454,10 +1493,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 3-channel</returns>
         public static GMat NV12toRGB(GMat srcY, GMat srcUV)
         {
-            return new GMat(
-                cveGapiNV12toRGB(srcY, srcUV),
-                true
-            );
+            IntPtr ptr = cveGapiNV12toRGB(srcY, srcUV);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1471,10 +1509,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 1-channel</returns>
         public static GMat NV12toGray(GMat srcY, GMat srcUV)
         {
-            return new GMat(
-                cveGapiNV12toGray(srcY, srcUV),
-                true
-            );
+            IntPtr ptr = cveGapiNV12toGray(srcY, srcUV);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1488,10 +1525,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 3-channel</returns>
         public static GMat NV12toBGR(GMat srcY, GMat srcUV)
         {
-            return new GMat(
-                cveGapiNV12toBGR(srcY, srcUV),
-                true
-            );
+            IntPtr ptr = cveGapiNV12toBGR(srcY, srcUV);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1504,10 +1540,9 @@ namespace Emgu.CV
         /// <returns>Output 8-bit unsigned 3-channel image</returns>
         public static GMat BayerGR2RGB(GMat src)
         {
-            return new GMat(
-                cveGapiBayerGR2RGB(src),
-                true
-            );
+            IntPtr ptr = cveGapiBayerGR2RGB(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1520,10 +1555,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 3-channel</returns>
         public static GMat RGB2HSV(GMat src)
         {
-            return new GMat(
-                cveGapiRGB2HSV(src),
-                true
-            );
+            IntPtr ptr = cveGapiRGB2HSV(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1536,10 +1570,9 @@ namespace Emgu.CV
         /// <returns>Output image, 8-bit unsigned 2-channel</returns>
         public static GMat RGB2YUV422(GMat src)
         {
-            return new GMat(
-                cveGapiRGB2YUV422(src),
-                true
-            );
+            IntPtr ptr = cveGapiRGB2YUV422(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1554,10 +1587,9 @@ namespace Emgu.CV
         /// <returns>Select result from either first or second of input matrices by given mask.</returns>
         public static GMat Select(GMat src1, GMat src2, GMat mask)
         {
-            return new GMat(
-                cveGapiSelect(src1, src2, mask),
-                true
-            );
+            IntPtr ptr = cveGapiSelect(src1, src2, mask);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1571,10 +1603,9 @@ namespace Emgu.CV
         /// <returns>The per-element minimum of two matrices of the same size, number of channels and depth</returns>
         public static GMat Min(GMat src1, GMat src2)
         {
-            return new GMat(
-                cveGapiMin(src1, src2),
-                true
-            );
+            IntPtr ptr = cveGapiMin(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1588,10 +1619,9 @@ namespace Emgu.CV
         /// <returns>The per-element maximum of two matrices of the same size, number of channels and depth</returns>
         public static GMat Max(GMat src1, GMat src2)
         {
-            return new GMat(
-                cveGapiMax(src1, src2),
-                true
-            );
+            IntPtr ptr = cveGapiMax(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiMax(IntPtr src1, IntPtr src2);
@@ -1604,10 +1634,9 @@ namespace Emgu.CV
         /// <returns>Absolute difference between two matrices of the same size and depth</returns>
         public static GMat AbsDiff(GMat src1, GMat src2)
         {
-            return new GMat(
-                cveGapiAbsDiff(src1, src2),
-                true
-            );
+            IntPtr ptr = cveGapiAbsDiff(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiAbsDiff(IntPtr src1, IntPtr src2);
@@ -1620,10 +1649,9 @@ namespace Emgu.CV
         /// <returns>Absolute difference between matrix elements and given scalar value</returns>
         public static GMat AbsDiffC(GMat src, GScalar c)
         {
-            return new GMat(
-                cveGapiAbsDiffC(src, c),
-                true
-            );
+            IntPtr ptr = cveGapiAbsDiffC(src, c);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiAbsDiffC(IntPtr src, IntPtr c);
@@ -1635,7 +1663,9 @@ namespace Emgu.CV
         /// <returns>Sum of all matrix elements, independently for each channel.</returns>
         public static GScalar Sum(GMat src)
         {
-            return new GScalar(cveGapiSum(src));
+            IntPtr ptr = cveGapiSum(src);
+            CvInvoke.CheckError();
+            return new GScalar(ptr);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiSum(IntPtr src);
@@ -1658,16 +1688,15 @@ namespace Emgu.CV
             double gamma,
             CvEnum.DepthType ddepth)
         {
-            return new GMat(
-                cveGapiAddWeighted(
+            IntPtr ptr = cveGapiAddWeighted(
                     src1,
                     alpha,
                     src2,
                     beta,
                     gamma,
-                    ddepth),
-                true
-            );
+                    ddepth);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1686,7 +1715,9 @@ namespace Emgu.CV
         /// <returns>The absolute L1 norm of a matrix.</returns>
         public static GScalar NormL1(GMat src)
         {
-            return new GScalar(cveGapiNormL1(src));
+            IntPtr ptr = cveGapiNormL1(src);
+            CvInvoke.CheckError();
+            return new GScalar(ptr);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiNormL1(IntPtr src);
@@ -1698,7 +1729,9 @@ namespace Emgu.CV
         /// <returns>The absolute L2 norm of a matrix.</returns>
         public static GScalar NormL2(GMat src)
         {
-            return new GScalar(cveGapiNormL2(src));
+            IntPtr ptr = cveGapiNormL2(src);
+            CvInvoke.CheckError();
+            return new GScalar(ptr);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiNormL2(IntPtr src);
@@ -1710,7 +1743,9 @@ namespace Emgu.CV
         /// <returns>The absolute infinite norm of a matrix.</returns>
         public static GScalar NormInf(GMat src)
         {
-            return new GScalar(cveGapiNormInf(src));
+            IntPtr ptr = cveGapiNormInf(src);
+            CvInvoke.CheckError();
+            return new GScalar(ptr);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiNormInf(IntPtr src);
@@ -1727,6 +1762,7 @@ namespace Emgu.CV
             GMat dst1 = new GMat();
             GMat dst2 = new GMat();
             cveGapiIntegral(src, sdepth, sqdepth, dst1, dst2);
+            CvInvoke.CheckError();
             return new Tuple<GMat, GMat>(dst1, dst2);
         }
 
@@ -1747,10 +1783,9 @@ namespace Emgu.CV
             GScalar maxval,
             CvEnum.ThresholdType type)
         {
-            return new GMat(
-                cveGapiThreshold(src, thresh, maxval, type),
-                true
-            );
+            IntPtr ptr = cveGapiThreshold(src, thresh, maxval, type);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1768,10 +1803,9 @@ namespace Emgu.CV
             GScalar threshLow,
             GScalar threshUp)
         {
-            return new GMat(
-                cveGapiInRange(src, threshLow, threshUp),
-                true
-            );
+            IntPtr ptr = cveGapiInRange(src, threshLow, threshUp);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1788,10 +1822,9 @@ namespace Emgu.CV
         public static GMat Merge4(
             GMat src1, GMat src2, GMat src3, GMat src4)
         {
-            return new GMat(
-                cveGapiMerge4(src1, src2, src3, src4),
-                true
-            );
+            IntPtr ptr = cveGapiMerge4(src1, src2, src3, src4);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiMerge4(IntPtr src1, IntPtr src2, IntPtr src3, IntPtr src4);
@@ -1806,10 +1839,9 @@ namespace Emgu.CV
         public static GMat Merge3(
             GMat src1, GMat src2, GMat src3)
         {
-            return new GMat(
-                cveGapiMerge3(src1, src2, src3),
-                true
-            );
+            IntPtr ptr = cveGapiMerge3(src1, src2, src3);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiMerge3(IntPtr src1, IntPtr src2, IntPtr src3);
@@ -1826,6 +1858,7 @@ namespace Emgu.CV
             GMat dst3 = new GMat();
             GMat dst4 = new GMat();
             cveGapiSplit4(src, dst1, dst2, dst3, dst4);
+            CvInvoke.CheckError();
             return new Tuple<GMat, GMat, GMat, GMat>(dst1, dst2, dst3, dst4);
         }
 
@@ -1844,6 +1877,7 @@ namespace Emgu.CV
             GMat dst3 = new GMat();
 
             cveGapiSplit3(src, dst1, dst2, dst3);
+            CvInvoke.CheckError();
             return new Tuple<GMat, GMat, GMat>(dst1, dst2, dst3);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -1867,10 +1901,9 @@ namespace Emgu.CV
             CvEnum.BorderType borderMode = BorderType.Constant,
             MCvScalar borderValue = new MCvScalar())
         {
-            return new GMat(
-                cveGapiRemap(src, map1, map2, interpolation, borderMode, ref borderValue),
-                true
-            );
+            IntPtr ptr = cveGapiRemap(src, map1, map2, interpolation, borderMode, ref borderValue);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiRemap(
@@ -1891,10 +1924,9 @@ namespace Emgu.CV
             GMat src,
             CvEnum.FlipType flipCode)
         {
-            return new GMat(
-                cveGapiFlip(src, flipCode),
-                true
-            );
+            IntPtr ptr = cveGapiFlip(src, flipCode);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiFlip(IntPtr src, CvEnum.FlipType flipCode);
@@ -1909,10 +1941,9 @@ namespace Emgu.CV
             GMat src,
             Rectangle rect)
         {
-            return new GMat(
-                cveGapiCrop(src, ref rect),
-                true
-            );
+            IntPtr ptr = cveGapiCrop(src, ref rect);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiCrop(IntPtr src, ref Rectangle rect);
@@ -1925,10 +1956,9 @@ namespace Emgu.CV
         /// <returns>The horizontally concatenated matrix</returns>
         public static GMat ConcatHor(GMat src1, GMat src2)
         {
-            return new GMat(
-                cveGapiConcatHor(src1, src2),
-                true
-            );
+            IntPtr ptr = cveGapiConcatHor(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiConcatHor(IntPtr src1, IntPtr src2);
@@ -1940,10 +1970,9 @@ namespace Emgu.CV
         /// <returns>The horizontally concatenated matrix</returns>
         public static GMat ConcatHor(VectorOfGMat v)
         {
-            return new GMat(
-                cveGapiConcatHorV(v),
-                true
-            );
+            IntPtr ptr = cveGapiConcatHorV(v);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiConcatHorV(IntPtr v);
@@ -1956,10 +1985,9 @@ namespace Emgu.CV
         /// <returns>The vertically concatenated matrix</returns>
         public static GMat ConcatVert(GMat src1, GMat src2)
         {
-            return new GMat(
-                cveGapiConcatVert(src1, src2),
-                true
-            );
+            IntPtr ptr = cveGapiConcatVert(src1, src2);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiConcatVert(IntPtr src1, IntPtr src2);
@@ -1971,10 +1999,9 @@ namespace Emgu.CV
         /// <returns>The vertically concatenated matrix</returns>
         public static GMat ConcatVert(VectorOfGMat v)
         {
-            return new GMat(
-                cveGapiConcatVertV(v),
-                true
-            );
+            IntPtr ptr = cveGapiConcatVertV(v);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiConcatVertV(IntPtr v);
@@ -1987,10 +2014,9 @@ namespace Emgu.CV
         /// <returns>A look-up table transform of a matrix.</returns>
         public static GMat LUT(GMat src, Mat lut)
         {
-            return new GMat(
-                cveGapiLUT(src, lut),
-                true
-            );
+            IntPtr ptr = cveGapiLUT(src, lut);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiLUT(IntPtr src, IntPtr lut);
@@ -2009,10 +2035,9 @@ namespace Emgu.CV
             double alpha = 1,
             double beta = 0)
         {
-            return new GMat(
-                cveGapiConvertTo(src, rdepth, alpha, beta),
-                true
-            );
+            IntPtr ptr = cveGapiConvertTo(src, rdepth, alpha, beta);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiConvertTo(
@@ -2037,10 +2062,9 @@ namespace Emgu.CV
             CvEnum.NormType normType = CvEnum.NormType.L2,
             CvEnum.DepthType dType = CvEnum.DepthType.Default)
         {
-            return new GMat(
-                cveGapiNormalize(src, alpha, beta, normType, dType),
-                true
-            );
+            IntPtr ptr = cveGapiNormalize(src, alpha, beta, normType, dType);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiNormalize(
@@ -2070,16 +2094,15 @@ namespace Emgu.CV
             CvEnum.BorderType borderMode = BorderType.Constant,
             MCvScalar borderValue = new MCvScalar())
         {
-            return new GMat(
-                cveGapiWarpPerspective(
+            IntPtr ptr = cveGapiWarpPerspective(
                     src,
                     m,
                     ref dsize,
                     (int)interMethod | (int)warpMethod,
                     borderMode,
-                    ref borderValue),
-                true
-            );
+                    ref borderValue);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiWarpPerspective(
@@ -2110,16 +2133,15 @@ namespace Emgu.CV
             CvEnum.BorderType borderMode = BorderType.Constant,
             MCvScalar borderValue = new MCvScalar())
         {
-            return new GMat(
-                cveGapiWarpAffine(
+            IntPtr ptr = cveGapiWarpAffine(
                     src,
                     m,
                     ref dsize,
                     (int)interMethod | (int)warpMethod,
                     borderMode,
-                    ref borderValue),
-                true
-            );
+                    ref borderValue);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiWarpAffine(
@@ -2138,7 +2160,9 @@ namespace Emgu.CV
         /// <returns>The transposed matrix.</returns>
         public static GMat Transpose(GMat src)
         {
-            return new GMat(cveGapiTranspose(src), true);
+            IntPtr ptr = cveGapiTranspose(src);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiTranspose(IntPtr src);
@@ -2152,7 +2176,9 @@ namespace Emgu.CV
         /// <returns>disparity/depth map for the specified stereo-pair</returns>
         public static GMat Stereo(GMat left, GMat right, StereoOutputFormat of)
         {
-            return new GMat(cveGapiStereo(left, right, of), true);
+            IntPtr ptr = cveGapiStereo(left, right, of);
+            CvInvoke.CheckError();
+            return new GMat(ptr, true);
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveGapiStereo(IntPtr left, IntPtr right, StereoOutputFormat of);

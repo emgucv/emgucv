@@ -32,6 +32,7 @@ namespace Emgu.CV
         public GScalar(MCvScalar value)
         {
             _ptr = GapiInvoke.cveGScalarCreate(ref value);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
