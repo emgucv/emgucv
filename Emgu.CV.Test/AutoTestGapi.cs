@@ -168,7 +168,7 @@ namespace Emgu.CV.Test
             using (Mat input1 = new Mat(new Size(64, 48), DepthType.Cv8U, 1))
             using (Mat input2 = new Mat(new Size(64, 48), DepthType.Cv8U, 1))
             using (VectorOfMat inputVec = new VectorOfMat(input1, input2))
-            using (VectorOfMat outputVec = new VectorOfMat())
+            using (VectorOfMat outputVec = new VectorOfMat(2)) // must be pre-sized to match the computation's 2 declared outputs
             using (Mat expectedAdd = new Mat())
             using (Mat expectedSub = new Mat())
             {
