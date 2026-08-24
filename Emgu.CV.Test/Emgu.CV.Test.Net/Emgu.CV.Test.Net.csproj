@@ -39,6 +39,7 @@
     <Compile Include="..\AutoTestOpticalFlow.cs" Link="AutoTestOpticalFlow.cs" />
     <Compile Include="..\AutoTestPhoto.cs" Link="AutoTestPhoto.cs" />
     <Compile Include="..\AutoTestPtcloud.cs" Link="AutoTestPtcloud.cs" />
+    <Compile Include="..\AutoTestQuality.cs" Link="AutoTestQuality.cs" />
     <Compile Include="..\AutoTestRetina.cs" Link="AutoTestRetina.cs" />
     <Compile Include="..\AutoTestSerialization.cs" Link="AutoTestSerialization.cs" />
     <Compile Include="..\AutoTestStereo.cs" Link="AutoTestStereo.cs" />

@@ -16,7 +16,6 @@ using System.Xml.Linq;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features;
-using Emgu.CV.Quality;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using Emgu.Util;
@@ -277,19 +276,6 @@ namespace Emgu.CV.Test
                     vvm.Push(vm);
                 }
             }
-        }
-
-        [TestAttribute]
-        public void TestQuality()
-        {
-            Mat m1 = EmguAssert.LoadMat("lena.jpg");
-            Mat m2 = new Mat();
-            CvInvoke.GaussianBlur(m1, m2, new Size(5, 5), 3);
-            using (Emgu.CV.Quality.QualityMSE q = new QualityMSE(m1))
-            {
-                MCvScalar quality = q.Compute(m2);
-            }
-
         }
 
         [Test]
