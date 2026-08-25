@@ -9,13 +9,16 @@
 # The two builds must never share an output file -- this script writes to
 # libs/unity-webgl/cvextern.a, distinct from libs/webgl/cvextern.a.
 #
-# Currently mini-only (no opencv_contrib, no dnn/calib/photo/features/video)
-# to fit WebGL's tighter download-size budget -- see the module list below.
+# Defaults to the mini variant (no opencv_contrib, no
+# dnn/calib/photo/features/video) to fit WebGL's tighter download-size
+# budget -- see the module list below. Pass "full" to build with
+# opencv_contrib and the full module set instead.
 #
 # Usage:
 #   cd platforms/unity/webgl
-#   ./cmake_configure_unity.sh                      # auto-detect newest installed Unity Editor
-#   ./cmake_configure_unity.sh 6000.3.22f1           # specific Editor version
+#   ./cmake_configure_unity.sh                      # auto-detect newest installed Unity Editor, mini variant
+#   ./cmake_configure_unity.sh 6000.3.22f1           # specific Editor version, mini variant
+#   ./cmake_configure_unity.sh 6000.3.22f1 full      # specific Editor version, full variant (opencv_contrib)
 
 set -e
 cd "$(dirname "$0")"
@@ -44,8 +47,30 @@ if [ ! -f "$EMDIR/emscripten/emcc" ]; then
     exit 1
 fi
 
+VARIANT="${2:-mini}"
+if [ "$VARIANT" == "full" ]; then
+    CONTRIB_OPTION="-DOPENCV_EXTRA_MODULES_PATH=$REPO_ROOT/opencv_contrib/modules"
+    MODULE_OPTIONS=()
+    BUILD_DIR_NAME="build_unity_full"
+    OUTPUT_SUFFIX="_full"
+else
+    CONTRIB_OPTION="-DOPENCV_EXTRA_MODULES_PATH:STRING="
+    # flann stays enabled: in OpenCV 5, imgproc depends on geometry, which
+    # depends on flann.
+    MODULE_OPTIONS=(
+        -DBUILD_opencv_calib:BOOL=FALSE
+        -DBUILD_opencv_dnn:BOOL=FALSE
+        -DBUILD_opencv_photo:BOOL=FALSE
+        -DBUILD_opencv_features:BOOL=FALSE
+        -DBUILD_opencv_video:BOOL=FALSE
+    )
+    BUILD_DIR_NAME="build_unity"
+    OUTPUT_SUFFIX=""
+fi
+
 echo "Using Unity Editor: $EDITOR_VERSION"
 echo "Using Emscripten SDK: $EMDIR"
+echo "Variant: $VARIANT"
 
 export EM_CONFIG="$EMDIR/.emscripten"
 export PATH="$EMDIR/emscripten:$EMDIR/llvm:$EMDIR/node:$PATH"
@@ -59,18 +84,17 @@ EMSCRIPTEN_TOOLCHAIN="$EMDIR/emscripten/cmake/Modules/Platform/Emscripten.cmake"
 "$EMCC" --version | head -1
 
 # ---------------------------------------------------------------------------
-# Configure -- mini variant (matches platforms/emscripten's "mini" build).
-# flann stays enabled: in OpenCV 5, imgproc depends on geometry, which
-# depends on flann.
+# Configure.
 #
-# PNG is disabled here (unlike the Blazor mini build, which keeps it): Unity's
+# PNG is disabled here regardless of variant (unlike the Blazor mini build,
+# which keeps it): Unity's
 # own WebGL player runtime statically links its own libpng (for
 # Texture2D.LoadImage), and cvextern.a bringing in a second copy causes
 # "wasm-ld: duplicate symbol: png_get_uint_32" etc. at Unity's final link
 # step. Decode PNGs via Texture2D + TextureConvert instead of
 # CvInvoke.Imread/Imwrite on this platform.
 # ---------------------------------------------------------------------------
-BUILD_DIR="$PWD/build_unity"
+BUILD_DIR="$PWD/$BUILD_DIR_NAME"
 mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
 
@@ -87,12 +111,8 @@ cd "$BUILD_DIR"
     -DWITH_IPP:BOOL=FALSE \
     -DWITH_EIGEN:BOOL=TRUE \
     -DEIGEN_INCLUDE_PATH="$REPO_ROOT/eigen" \
-    -DOPENCV_EXTRA_MODULES_PATH:STRING= \
-    -DBUILD_opencv_calib:BOOL=FALSE \
-    -DBUILD_opencv_dnn:BOOL=FALSE \
-    -DBUILD_opencv_photo:BOOL=FALSE \
-    -DBUILD_opencv_features:BOOL=FALSE \
-    -DBUILD_opencv_video:BOOL=FALSE \
+    $CONTRIB_OPTION \
+    "${MODULE_OPTIONS[@]}" \
     -DBUILD_opencv_ts:BOOL=FALSE \
     -DBUILD_opencv_java:BOOL=FALSE \
     -DBUILD_opencv_python2:BOOL=FALSE \
@@ -115,7 +135,7 @@ cd "$BUILD_DIR"
     -DWITH_PTHREADS_PF:BOOL=OFF \
     -DEMGU_CV_WITH_DEPTHAI:BOOL=OFF \
     -DEMGU_CV_EMSCRIPTEN_LLVM_AR_PATH="$LLVM_AR" \
-    -DEMGU_CV_EMSCRIPTEN_OUTPUT_SUFFIX="" \
+    -DEMGU_CV_EMSCRIPTEN_OUTPUT_SUFFIX="$OUTPUT_SUFFIX" \
     -DEMGU_CV_EMSCRIPTEN_OUTPUT_DIR="unity-webgl" \
     -DEMGU_CV_EMSCRIPTEN_WASM_EXCEPTIONS:BOOL=FALSE \
     "$REPO_ROOT"
