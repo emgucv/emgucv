@@ -33,6 +33,7 @@
     <Compile Include="..\AutoTestFace.cs" Link="AutoTestFace.cs" />
     <Compile Include="..\AutoTestFlann.cs" Link="AutoTestFlann.cs" />
     <Compile Include="..\AutoTestFreetype.cs" Link="AutoTestFreetype.cs" />
+    <Compile Include="..\AutoTestFuzzy.cs" Link="AutoTestFuzzy.cs" />
     <Compile Include="..\AutoTestGapi.cs" Link="AutoTestGapi.cs" />
     <Compile Include="..\AutoTestImgHash.cs" Link="AutoTestImgHash.cs" />
     <Compile Include="..\AutoTestImgproc.cs" Link="AutoTestImgproc.cs" />
