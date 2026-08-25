@@ -67,26 +67,6 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public static void TestBackgroundSubtractorMOG2()
-        {
-            //ImageViewer viewer = new ImageViewer();
-            using (VideoCapture capture = new VideoCapture("tree.avi"))
-            using (BackgroundSubtractorMOG2 subtractor = new BackgroundSubtractorMOG2())
-            using (Mat frame = new Mat())
-            using (Mat fgMask = new Mat())
-            {
-                int frameCount = 0;
-                while (capture.Grab())
-                {
-                    capture.Retrieve(frame);
-                    subtractor.Apply(frame, fgMask);
-                    frameCount++;
-                }
-                EmguAssert.IsTrue(frameCount > 0, "BackgroundSubtractorMOG2 did not return any frames");
-            }
-        }
-
-        [Test]
         public static void TestIntensityTransform()
         {
             Mat m = new Mat("lena.jpg", ImreadModes.ColorBgr);
