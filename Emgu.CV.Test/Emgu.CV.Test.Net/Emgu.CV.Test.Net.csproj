@@ -49,6 +49,7 @@
     <Compile Include="..\AutoTestStitching.cs" Link="AutoTestStitching.cs" />
     <Compile Include="..\AutoTestStructuredLight.cs" Link="AutoTestStructuredLight.cs" />
     <Compile Include="..\AutoTestText.cs" Link="AutoTestText.cs" />
+    <Compile Include="..\AutoTestTracking.cs" Link="AutoTestTracking.cs" />
     <Compile Include="..\AutoTestVideo.cs" Link="AutoTestVideo.cs" />
     <Compile Include="..\AutoTestVideoIO.cs" Link="AutoTestVideoIO.cs" />
     <Compile Include="..\AutoTestVarious.cs" Link="AutoTestVarious.cs" />
