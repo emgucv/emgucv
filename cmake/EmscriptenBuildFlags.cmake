@@ -25,8 +25,24 @@ IF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
   # frontend (compile-time) ABI commitment, unlike SjLj lowering above,
   # which is a pure backend transform and can stay safely deferred to the
   # final link.
-  SET(CMAKE_C_FLAGS "-fwasm-exceptions ${CMAKE_C_FLAGS}")
-  SET(CMAKE_CXX_FLAGS "-fwasm-exceptions ${CMAKE_CXX_FLAGS}")
+  #
+  # This is opt-out (EMGU_CV_EMSCRIPTEN_WASM_EXCEPTIONS) for the Unity WebGL
+  # build: Unity's own final link (its GameAssembly.a + bundled runtime
+  # modules) uses Emscripten's legacy JS-exception model
+  # (-sDISABLE_EXCEPTION_CATCHING=0, no -fwasm-exceptions anywhere in
+  # Unity's own emcc invocation), and mixing the two ABIs in one final link
+  # crashes Unity's bundled LLVM 17 wasm-ld with a SIGSEGV inside its
+  # "Expand indirectbr instructions" pass (seen deep in core OpenCV code,
+  # e.g. cv::utils::getConfigurationParameterBool, not anything
+  # module-specific). cvextern.a must match whatever exception ABI the
+  # final consuming project uses -- for Unity that means the legacy model.
+  IF(NOT DEFINED EMGU_CV_EMSCRIPTEN_WASM_EXCEPTIONS)
+    SET(EMGU_CV_EMSCRIPTEN_WASM_EXCEPTIONS TRUE)
+  ENDIF()
+  IF(EMGU_CV_EMSCRIPTEN_WASM_EXCEPTIONS)
+    SET(CMAKE_C_FLAGS "-fwasm-exceptions ${CMAKE_C_FLAGS}")
+    SET(CMAKE_CXX_FLAGS "-fwasm-exceptions ${CMAKE_CXX_FLAGS}")
+  ENDIF()
 
   IF(EMGU_CV_EMSCRIPTEN_LLVM_AR_PATH)
     # Use llvm-ar to create LLVM IR bitcode archives.  This defers WASM

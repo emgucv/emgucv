@@ -9,6 +9,10 @@
 #   OBJ_DIR        - directory containing cvextern object files
 #                    (CMAKE_CURRENT_BINARY_DIR/CMakeFiles/cvextern.dir)
 #   OUTPUT_SUFFIX  - optional suffix for the output filename (e.g. "_mini")
+#   OUTPUT_SUBDIR  - optional subfolder under libs/ (default "webgl"; the
+#                    Unity WebGL build uses "unity-webgl" so it never
+#                    clobbers the .NET/Blazor artifact -- the two are built
+#                    with different, ABI-incompatible Emscripten toolchains)
 #
 # Because we used llvm-ar (EMGU_CV_EMSCRIPTEN_LLVM_AR_PATH) as CMAKE_AR,
 # all *.bc files are LLVM IR archives (llvm-ar format), not WASM relocatable
@@ -26,7 +30,10 @@
 # The final symbol table maps each exported symbol to the first member that
 # defines it, so all needed definitions are found by the LTO linker.
 
-set(OUTPUT_DIR "${SOURCE_DIR}/libs/webgl")
+if(NOT DEFINED OUTPUT_SUBDIR OR OUTPUT_SUBDIR STREQUAL "")
+    set(OUTPUT_SUBDIR "webgl")
+endif()
+set(OUTPUT_DIR "${SOURCE_DIR}/libs/${OUTPUT_SUBDIR}")
 set(OUTPUT_FILE "${OUTPUT_DIR}/cvextern${OUTPUT_SUFFIX}.a")
 
 file(MAKE_DIRECTORY "${OUTPUT_DIR}")
