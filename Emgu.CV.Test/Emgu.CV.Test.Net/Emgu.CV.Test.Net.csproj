@@ -43,6 +43,7 @@
     <Compile Include="..\AutoTestQuality.cs" Link="AutoTestQuality.cs" />
     <Compile Include="..\AutoTestRetina.cs" Link="AutoTestRetina.cs" />
     <Compile Include="..\AutoTestSerialization.cs" Link="AutoTestSerialization.cs" />
+    <Compile Include="..\AutoTestSignal.cs" Link="AutoTestSignal.cs" />
     <Compile Include="..\AutoTestStereo.cs" Link="AutoTestStereo.cs" />
     <Compile Include="..\AutoTestStitching.cs" Link="AutoTestStitching.cs" />
     <Compile Include="..\AutoTestStructuredLight.cs" Link="AutoTestStructuredLight.cs" />
