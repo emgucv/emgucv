@@ -11,7 +11,6 @@ using System.Text;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Dpm;
-using Emgu.CV.Legacy;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 
@@ -107,23 +106,6 @@ namespace Emgu.CV.Test
                 }
             }
 
-        }
-
-        [Test]
-        public void TestTrackerMedianFlow()
-        {
-            using (Mat box = EmguAssert.LoadMat("box.png"))
-            using (MultiTracker multiTracker = new MultiTracker())
-            using (TrackerMedianFlow medianFlowTracker = new TrackerMedianFlow(
-                10,
-                new Size(3, 3),
-                5,
-                new MCvTermCriteria(20, 0.3),
-                new Size(30, 30), 10.0))
-            {
-                bool success = multiTracker.Add(medianFlowTracker, box, new Rectangle(new Point(), box.Size));
-            }
-                
         }
     }
 }
