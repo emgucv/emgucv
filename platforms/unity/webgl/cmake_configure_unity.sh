@@ -89,13 +89,13 @@ EMSCRIPTEN_TOOLCHAIN="$EMDIR/emscripten/cmake/Modules/Platform/Emscripten.cmake"
 # ---------------------------------------------------------------------------
 # Configure.
 #
-# PNG is disabled here regardless of variant (unlike the Blazor mini build,
-# which keeps it): Unity's
-# own WebGL player runtime statically links its own libpng (for
-# Texture2D.LoadImage), and cvextern.a bringing in a second copy causes
-# "wasm-ld: duplicate symbol: png_get_uint_32" etc. at Unity's final link
-# step. Decode PNGs via Texture2D + TextureConvert instead of
-# CvInvoke.Imread/Imwrite on this platform.
+# PNG is enabled, with every libpng public symbol renamed via libpng's own
+# PNG_PREFIX mechanism (EMGU_CV_EMSCRIPTEN_PNG_PREFIX, see
+# cmake/EmscriptenBuildFlags.cmake / Emgu.CV.Extern/cmake/BuildCvExternTarget.cmake).
+# Unity's own WebGL player runtime statically links its own libpng (for
+# Texture2D.LoadImage); without the rename, cvextern.a bringing in a second
+# copy causes "wasm-ld: duplicate symbol: png_get_uint_32" etc. at Unity's
+# final link step.
 # ---------------------------------------------------------------------------
 BUILD_DIR="$PWD/$BUILD_DIR_NAME"
 mkdir -p "$BUILD_DIR"
@@ -128,8 +128,9 @@ cd "$BUILD_DIR"
     -DWITH_OPENCL:BOOL=OFF \
     -DBUILD_JPEG:BOOL=TRUE \
     -DWITH_JPEG:BOOL=TRUE \
-    -DBUILD_PNG:BOOL=FALSE \
-    -DWITH_PNG:BOOL=FALSE \
+    -DBUILD_PNG:BOOL=TRUE \
+    -DWITH_PNG:BOOL=TRUE \
+    -DEMGU_CV_EMSCRIPTEN_PNG_PREFIX:BOOL=TRUE \
     -DBUILD_TIFF:BOOL=OFF \
     -DWITH_TIFF:BOOL=OFF \
     -DEMGU_CV_WITH_TIFF:BOOL=OFF \

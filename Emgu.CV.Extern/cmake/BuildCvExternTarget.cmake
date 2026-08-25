@@ -268,6 +268,20 @@ endif()
 
 if(WITH_PNG AND BUILD_PNG)
   target_link_libraries(${the_target} libpng)
+
+  if(EMGU_CV_EMSCRIPTEN_PNG_PREFIX AND EMGU_CV_PNG_PREFIX_HEADER)
+    if(NOT TARGET libpng)
+      message(FATAL_ERROR "EMGU_CV_EMSCRIPTEN_PNG_PREFIX: target 'libpng' not found")
+    endif()
+    target_compile_options(libpng PRIVATE -DPNG_PREFIX=emgu_ -include "${EMGU_CV_PNG_PREFIX_HEADER}")
+    message(STATUS "EMGU_CV_EMSCRIPTEN_PNG_PREFIX: applied to target libpng")
+
+    if(NOT TARGET opencv_imgcodecs)
+      message(FATAL_ERROR "EMGU_CV_EMSCRIPTEN_PNG_PREFIX: target 'opencv_imgcodecs' not found")
+    endif()
+    target_compile_options(opencv_imgcodecs PRIVATE -DPNG_PREFIX=emgu_ -include "${EMGU_CV_PNG_PREFIX_HEADER}")
+    message(STATUS "EMGU_CV_EMSCRIPTEN_PNG_PREFIX: applied to target opencv_imgcodecs")
+  endif()
 endif()
 
 if(WITH_TIFF AND BUILD_TIFF)
