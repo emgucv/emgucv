@@ -22,6 +22,13 @@ Creating Unity package:
   final link uses the legacy Emscripten JS-exception model, and mixing the two ABIs
   crashes Unity's bundled wasm-ld with a SIGSEGV. Decode images via `Texture2D` +
   `TextureConvert` rather than `CvInvoke.Imread`/`Imwrite` on this platform.
+  The copy checked in here is the **full** variant (opencv_contrib + full module
+  set, ~131 MB) -- run `cmake_configure_unity.sh [editor-version] mini` instead
+  for the smaller ~29 MB variant (no opencv_contrib/dnn/calib/photo/features/video)
+  if download size matters more than module coverage. The full variant needs
+  `PlayerSettings.WebGL.initialMemorySize >= 256MB`, which
+  `Assets/Emgu.CV/Editor/WebGLBuildSettings.cs` applies automatically for any
+  WebGL build in a project that includes this package.
 
 **Verifying a new `cvextern.a` build for WebGL:** open `HelloWorldScene.unity` (uses
 `HelloTexture.cs`, which already exercises `Mat`, `CvInvoke.PutText`, and

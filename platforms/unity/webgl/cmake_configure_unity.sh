@@ -9,16 +9,19 @@
 # The two builds must never share an output file -- this script writes to
 # libs/unity-webgl/cvextern.a, distinct from libs/webgl/cvextern.a.
 #
-# Defaults to the mini variant (no opencv_contrib, no
-# dnn/calib/photo/features/video) to fit WebGL's tighter download-size
-# budget -- see the module list below. Pass "full" to build with
-# opencv_contrib and the full module set instead.
+# Defaults to the full variant (opencv_contrib + the full module set,
+# matching the desktop/mobile default). Pass "mini" for the smaller variant
+# (no opencv_contrib, no dnn/calib/photo/features/video) if WebGL's
+# download-size budget matters more than module coverage -- see the module
+# list below. Requires PlayerSettings.WebGL.initialMemorySize >= 256MB in
+# the consuming Unity project for the full variant (auto-applied by
+# Emgu.CV.Unity/Assets/Emgu.CV/Editor/WebGLBuildSettings.cs).
 #
 # Usage:
 #   cd platforms/unity/webgl
-#   ./cmake_configure_unity.sh                      # auto-detect newest installed Unity Editor, mini variant
-#   ./cmake_configure_unity.sh 6000.3.22f1           # specific Editor version, mini variant
-#   ./cmake_configure_unity.sh 6000.3.22f1 full      # specific Editor version, full variant (opencv_contrib)
+#   ./cmake_configure_unity.sh                      # auto-detect newest installed Unity Editor, full variant
+#   ./cmake_configure_unity.sh 6000.3.22f1           # specific Editor version, full variant
+#   ./cmake_configure_unity.sh 6000.3.22f1 mini      # specific Editor version, mini variant (no opencv_contrib)
 
 set -e
 cd "$(dirname "$0")"
@@ -47,13 +50,8 @@ if [ ! -f "$EMDIR/emscripten/emcc" ]; then
     exit 1
 fi
 
-VARIANT="${2:-mini}"
-if [ "$VARIANT" == "full" ]; then
-    CONTRIB_OPTION="-DOPENCV_EXTRA_MODULES_PATH=$REPO_ROOT/opencv_contrib/modules"
-    MODULE_OPTIONS=()
-    BUILD_DIR_NAME="build_unity_full"
-    OUTPUT_SUFFIX="_full"
-else
+VARIANT="${2:-full}"
+if [ "$VARIANT" == "mini" ]; then
     CONTRIB_OPTION="-DOPENCV_EXTRA_MODULES_PATH:STRING="
     # flann stays enabled: in OpenCV 5, imgproc depends on geometry, which
     # depends on flann.
@@ -64,6 +62,11 @@ else
         -DBUILD_opencv_features:BOOL=FALSE
         -DBUILD_opencv_video:BOOL=FALSE
     )
+    BUILD_DIR_NAME="build_unity_mini"
+    OUTPUT_SUFFIX="_mini"
+else
+    CONTRIB_OPTION="-DOPENCV_EXTRA_MODULES_PATH=$REPO_ROOT/opencv_contrib/modules"
+    MODULE_OPTIONS=()
     BUILD_DIR_NAME="build_unity"
     OUTPUT_SUFFIX=""
 fi

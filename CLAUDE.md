@@ -292,23 +292,24 @@ unity install lts                              # install the target Editor if ne
 unity install-modules -e <version> -m webgl     # WebGL Build Support module
 ```
 
-**Build `cvextern.a`** -- defaults to the mini variant (no opencv_contrib, no
-dnn/calib/photo/features/video, to fit WebGL's tighter download-size budget;
-this is the variant checked into `Emgu.CV.Unity/Assets/Emgu.CV/Plugins/WebGL/`).
-Pass `full` for a build with opencv_contrib and the full module set instead:
+**Build `cvextern.a`** -- defaults to the full variant (opencv_contrib + the
+full module set, matching the desktop/mobile default; this is the variant
+checked into `Emgu.CV.Unity/Assets/Emgu.CV/Plugins/WebGL/`). Pass `mini` for
+a smaller build (no opencv_contrib, no dnn/calib/photo/features/video) if
+WebGL's download-size budget matters more than module coverage:
 ```bash
 cd platforms/unity/webgl
-./cmake_configure_unity.sh [editor-version]         # mini (default), defaults to the newest installed Editor
-./cmake_configure_unity.sh [editor-version] full     # full, with opencv_contrib
+./cmake_configure_unity.sh [editor-version]         # full (default), defaults to the newest installed Editor
+./cmake_configure_unity.sh [editor-version] mini     # mini, no opencv_contrib
 ```
-Output: `libs/unity-webgl/cvextern.a` (mini) or `cvextern_full.a` (full) --
+Output: `libs/unity-webgl/cvextern.a` (full) or `cvextern_mini.a` (mini) --
 kept separate from `libs/webgl/cvextern.a`, the Blazor artifact. The script
 locates the Editor's bundled `emcc`/`llvm-ar` directly (no LLVM/Node shim
 juggling is needed here -- unlike the .NET SDK path, Unity ships `llvm-ar`
 and `llc` directly alongside `emcc`, and its Emscripten cache/sysroot is
 prebuilt and frozen, so no warmup compile is required).
 
-The full variant (~131 MB vs. ~29 MB for mini) also builds and links cleanly
+The full variant (~131 MB vs. ~29 MB for mini) builds and links cleanly
 against Unity's toolchain with no further cvextern-side changes, but its
 larger static data segment (~81 MB) exceeds Unity's default WebGL initial
 heap. The **consuming Unity project**, not cvextern.a, needs a Player
@@ -318,7 +319,12 @@ Editor build script -- note this is `initialMemorySize`
 `PlayerSettings.WebGL.memorySize` (`webGLMemorySize`), which no longer
 controls the linker's `-sINITIAL_MEMORY` in Unity 6 and silently no-ops if
 you set it instead. Symptom if this is missed:
-`wasm-ld: error: initial memory too small, N bytes needed`.
+`wasm-ld: error: initial memory too small, N bytes needed`. This is applied
+automatically for WebGL builds by
+`Emgu.CV.Unity/Assets/Emgu.CV/Editor/WebGLBuildSettings.cs`
+(`IPreprocessBuildWithReport`), which only raises the value if it's below
+256MB -- the mini variant doesn't need this, so it's a no-op if you swap
+back to mini.
 
 Two flags differ from the Blazor mini build, both required to link
 successfully against Unity's own WebGL runtime rather than a bug in cvextern
