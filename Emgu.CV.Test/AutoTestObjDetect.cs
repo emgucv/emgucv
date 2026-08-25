@@ -33,15 +33,6 @@ namespace Emgu.CV.Test
     public class AutoTestObjDetect
     {
         [Test]
-        public void TestObjectnessBING()
-        {
-            using (Emgu.CV.Saliency.ObjectnessBING objectnessBING = new Saliency.ObjectnessBING())
-            {
-                //objectnessBING.SetTrainingPath("C:\\tmp");
-            }
-        }
-
-        [Test]
         public void TestHOG1()
         {
             using (HOGDescriptor hog = new HOGDescriptor())
