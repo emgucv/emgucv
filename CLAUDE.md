@@ -332,11 +332,34 @@ back to mini.
 Two flags differ from the Blazor mini build, both required to link
 successfully against Unity's own WebGL runtime rather than a bug in cvextern
 itself:
-- `WITH_PNG:BOOL=FALSE` -- Unity's own WebGL player runtime statically links
-  its own libpng (for `Texture2D.LoadImage`); a second copy from cvextern.a
-  causes `wasm-ld: error: duplicate symbol: png_get_uint_32` etc. at Unity's
-  final link step. Decode images via `Texture2D` + `TextureConvert` instead
-  of `CvInvoke.Imread`/`Imwrite` on this platform.
+- PNG -- Unity's own WebGL player runtime statically links its own libpng
+  (for `Texture2D.LoadImage`); a second copy from cvextern.a naively linked
+  in causes `wasm-ld: error: duplicate symbol: png_get_uint_32` etc. at
+  Unity's final link step. The **full** variant avoids this via
+  `EMGU_CV_EMSCRIPTEN_PNG_PREFIX:BOOL=TRUE` (alongside
+  `BUILD_PNG`/`WITH_PNG:BOOL=TRUE`): `Emgu.CV.Extern/cmake/generate_png_prefix.py`
+  parses `png.h`'s `PNG_EXPORT`/`PNG_EXPORTA` declarations and generates
+  `pngprefix.h`, defining `#define png_foo emgu_png_foo` for all 218 public
+  libpng symbols; this is force-included (`-DPNG_PREFIX=emgu_ -include
+  pngprefix.h`) on just the `libpng` and `opencv_imgcodecs` targets (see
+  `cmake/EmscriptenBuildFlags.cmake` for generation,
+  `Emgu.CV.Extern/cmake/BuildCvExternTarget.cmake` for the
+  `target_compile_options` application -- it must be scoped to those two
+  targets specifically, since `SET_PROPERTY(DIRECTORY ...)` on a
+  not-yet-`add_subdirectory()`'d path fails in this CMake version). This
+  relies on libpng's own `PNG_PREFIX` mechanism (`pngpriv.h`:
+  `#if defined(PNG_PREFIX) ... #include "pngprefix.h"`), not on
+  `llvm-objcopy --redefine-sym` (confirmed unsupported on WASM objects by
+  Unity's bundled LLVM). Verified end-to-end in a real Unity Editor WebGL
+  build (Safari and Chrome): `Imencode`/`Imdecode` PNG round-trips with an
+  exact pixel match, no link or runtime errors. The **mini** variant still
+  passes `BUILD_PNG:BOOL=FALSE -DWITH_PNG:BOOL=FALSE` (no prefix flag) --
+  the identical PNG_PREFIX change hit an unexplained runtime crash
+  (`Uncaught exception from main loop`, a raw pointer with no message) when
+  tried there, bisected to somewhere at/after the ORB feature-detection
+  step, not the PNG code path itself -- so mini keeps PNG disabled and
+  decodes images via `Texture2D` + `TextureConvert` instead of
+  `CvInvoke.Imread`/`Imwrite`.
 - `EMGU_CV_EMSCRIPTEN_WASM_EXCEPTIONS:BOOL=FALSE` -- Unity's own final link
   (its `GameAssembly.a` plus bundled runtime modules) uses Emscripten's
   legacy JS-exception model (`-sDISABLE_EXCEPTION_CATCHING=0`, no
