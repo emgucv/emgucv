@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <Compile Include="..\AutoTestAlphamat.cs" Link="AutoTestAlphamat.cs" />
+    <Compile Include="..\AutoTestBgSegm.cs" Link="AutoTestBgSegm.cs" />
     <Compile Include="..\AutoTestCalibration.cs" Link="AutoTestCalibration.cs" />
     <Compile Include="..\AutoTestCuda.cs" Link="AutoTestCuda.cs" />
     <Compile Include="..\AutoTestFeatures.cs" Link="AutoTestFeatures.cs" />
