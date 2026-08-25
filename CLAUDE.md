@@ -294,9 +294,12 @@ unity install-modules -e <version> -m webgl     # WebGL Build Support module
 
 **Build `cvextern.a`** -- defaults to the full variant (opencv_contrib + the
 full module set, matching the desktop/mobile default; this is the variant
-checked into `Emgu.CV.Unity/Assets/Emgu.CV/Plugins/WebGL/`). Pass `mini` for
-a smaller build (no opencv_contrib, no dnn/calib/photo/features/video) if
-WebGL's download-size budget matters more than module coverage:
+expected at `Emgu.CV.Unity/Assets/Emgu.CV/Plugins/WebGL/cvextern.a`, though
+like every other platform binary under `Plugins/`, only the `.meta` is
+checked into git -- the binary itself is built locally and copied in by
+hand, see `Emgu.CV.Unity/README.md`). Pass `mini` for a smaller build (no
+opencv_contrib, no dnn/calib/photo/features/video) if WebGL's download-size
+budget matters more than module coverage:
 ```bash
 cd platforms/unity/webgl
 ./cmake_configure_unity.sh [editor-version]         # full (default), defaults to the newest installed Editor

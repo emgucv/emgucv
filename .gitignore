@@ -12,12 +12,21 @@ platforms/*/*/build/
 platforms/emscripten/wasm-cache/
 platforms/emscripten/build_dotnet/
 platforms/emscripten/build_dotnet_mini/
+platforms/unity/webgl/build_unity/
+platforms/unity/webgl/build_unity_mini/
 platforms/nuget/*.nupkg
 platforms/nuget/**/*.nupkg
 platforms/nuget/**/*.props
 platforms/nuget/**/Package.nuspec
 platforms/nuget/**/README.md
 libs/
+
+# --- Unity native plugin binaries: built by platforms/unity/webgl and
+# platform-specific build scripts, then copied in by hand -- like the other
+# per-platform binaries under Emgu.CV.Unity/Assets/Emgu.CV/Plugins/ (Android
+# .so, iOS .a, WSA/x86/x86_64 .dll, macOS .bundle), only the .meta is
+# checked in, not the binary itself. ---
+Emgu.CV.Unity/Assets/Emgu.CV/Plugins/WebGL/cvextern.a
 
 # --- CMake-generated C# / native glue (do not edit manually) ---
 **/*.g.cs
