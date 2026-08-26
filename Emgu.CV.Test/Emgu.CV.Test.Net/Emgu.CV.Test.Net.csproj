@@ -36,6 +36,7 @@
     <Compile Include="..\AutoTestFuzzy.cs" Link="AutoTestFuzzy.cs" />
     <Compile Include="..\AutoTestGapi.cs" Link="AutoTestGapi.cs" />
     <Compile Include="..\AutoTestHdf.cs" Link="AutoTestHdf.cs" />
+    <Compile Include="..\AutoTestHfs.cs" Link="AutoTestHfs.cs" />
     <Compile Include="..\AutoTestImgHash.cs" Link="AutoTestImgHash.cs" />
     <Compile Include="..\AutoTestImgproc.cs" Link="AutoTestImgproc.cs" />
     <Compile Include="..\AutoTestIntensityTransform.cs" Link="AutoTestIntensityTransform.cs" />
