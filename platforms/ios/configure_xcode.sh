@@ -65,8 +65,15 @@ else
         CMAKE_COMMON_OPTION+=( -DCPU_BASELINE=NEON )
     fi
     pushd $CURRENT_SCRIPT_DIR/../../eigen
-    mkdir -p build_$3
-    cd build_$3
+    # Prefixed with ios_$2_ (device/simulator) so this doesn't collide with
+    # platforms/macos's own eigen/build_$arch directories, nor between device
+    # and simulator builds of the same arch here -- all three can target
+    # "arm64" but configure with different CMake generators/toolchain files
+    # (Xcode + iPhoneOS or iPhoneSimulator toolchain here vs. Unix Makefiles
+    # for macOS), and CMake refuses to reconfigure a cache with a different
+    # generator than it was created with.
+    mkdir -p build_ios_${2}_$3
+    cd build_ios_${2}_$3
     EIGEN_DIR=${PWD}
     cmake \
 	-GXcode \
