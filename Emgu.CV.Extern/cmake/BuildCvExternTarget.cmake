@@ -290,6 +290,21 @@ endif()
 
 if(WITH_JPEG AND BUILD_JPEG)
   target_link_libraries(${the_target} libjpeg-turbo)
+
+  if(EMGU_CV_JPEG_PREFIX AND EMGU_CV_JPEG_PREFIX_HEADER)
+    # jpeg12-static/jpeg16-static are separate OBJECT library targets whose
+    # compiled objects get folded into libjpeg-turbo via
+    # $<TARGET_OBJECTS:...> -- target_compile_options on libjpeg-turbo alone
+    # would not reach their own compile step, leaving their j12*/j16*
+    # symbols unrenamed.
+    foreach(_emgu_jpeg_target libjpeg-turbo jpeg12-static jpeg16-static opencv_imgcodecs)
+      if(NOT TARGET ${_emgu_jpeg_target})
+        message(FATAL_ERROR "EMGU_CV_JPEG_PREFIX: target '${_emgu_jpeg_target}' not found")
+      endif()
+      target_compile_options(${_emgu_jpeg_target} PRIVATE -include "${EMGU_CV_JPEG_PREFIX_HEADER}")
+      message(STATUS "EMGU_CV_JPEG_PREFIX: applied to target ${_emgu_jpeg_target}")
+    endforeach()
+  endif()
 endif()
 
 # Add the required libraries for linking:
