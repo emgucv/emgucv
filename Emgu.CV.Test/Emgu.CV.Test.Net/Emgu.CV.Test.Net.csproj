@@ -56,11 +56,13 @@
     <Compile Include="..\AutoTestStereo.cs" Link="AutoTestStereo.cs" />
     <Compile Include="..\AutoTestStitching.cs" Link="AutoTestStitching.cs" />
     <Compile Include="..\AutoTestStructuredLight.cs" Link="AutoTestStructuredLight.cs" />
+    <Compile Include="..\AutoTestSurfaceMatching.cs" Link="AutoTestSurfaceMatching.cs" />
     <Compile Include="..\AutoTestText.cs" Link="AutoTestText.cs" />
     <Compile Include="..\AutoTestTracking.cs" Link="AutoTestTracking.cs" />
     <Compile Include="..\AutoTestVideo.cs" Link="AutoTestVideo.cs" />
     <Compile Include="..\AutoTestVideoIO.cs" Link="AutoTestVideoIO.cs" />
     <Compile Include="..\AutoTestVarious.cs" Link="AutoTestVarious.cs" />
+    <Compile Include="..\AutoTestXStereo.cs" Link="AutoTestXStereo.cs" />
     <Compile Include="..\Class1.cs" Link="Class1.cs" />
     <Compile Include="..\EmguAssert.cs" Link="EmguAssert.cs" />
     <Compile Include="..\Face.cs" Link="Face.cs" />
