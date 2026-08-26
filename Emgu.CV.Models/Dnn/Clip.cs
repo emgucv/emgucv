@@ -332,11 +332,15 @@ namespace Emgu.CV.Models
 
             public ClipBpeTokenizer(String vocabJsonPath, String mergesTxtPath)
             {
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
+                throw new PlatformNotSupportedException("ClipBpeTokenizer requires System.Text.Json, which is not available on this platform.");
+#else
                 using (System.Text.Json.JsonDocument doc = System.Text.Json.JsonDocument.Parse(File.ReadAllText(vocabJsonPath)))
                 {
                     foreach (System.Text.Json.JsonProperty p in doc.RootElement.EnumerateObject())
                         _vocab[p.Name] = p.Value.GetInt32();
                 }
+#endif
 
                 String[] mergeLines = File.ReadAllLines(mergesTxtPath);
                 int rank = 0;

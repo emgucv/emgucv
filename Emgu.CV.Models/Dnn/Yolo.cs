@@ -320,7 +320,11 @@ namespace Emgu.CV.Models
                         //declare zero ONNX outputs (the result is fetched by internal
                         //tensor name instead, see Detect below), which OpenCV's ORT engine
                         //requires and rejects with an assertion failure during Net loading.
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
+                        bool useOrtCuda = false;
+#else
                         bool useOrtCuda = CvInvoke.HaveOnnxRuntime && Emgu.CV.Cuda.CudaInvoke.HasCuda && !IsV10(version);
+#endif
                         _yoloNet = DnnInvoke.ReadNetFromONNX(
                             manager.Files[0].LocalFile,
                             useOrtCuda ? EngineType.Ort : EngineType.Auto);

@@ -412,6 +412,9 @@ namespace Emgu.CV.Models
 
             public SmolLmTokenizer(String tokenizerJsonPath)
             {
+#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
+                throw new PlatformNotSupportedException("SmolLmTokenizer requires System.Text.Json, which is not available on this platform.");
+#else
                 using (FileStream stream = File.OpenRead(tokenizerJsonPath))
                 using (System.Text.Json.JsonDocument doc = System.Text.Json.JsonDocument.Parse(stream))
                 {
@@ -445,6 +448,7 @@ namespace Emgu.CV.Models
                         }
                     }
                 }
+#endif
 
                 _specialsByLength.AddRange(_specialTokens.Keys);
                 _specialsByLength.Sort((a, b) => b.Length.CompareTo(a.Length));
