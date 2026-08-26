@@ -329,6 +329,25 @@ automatically for WebGL builds by
 256MB -- the mini variant doesn't need this, so it's a no-op if you swap
 back to mini.
 
+The same script also raises `PlayerSettings.WebGL.exceptionSupport` from
+`None` to `FullWithStacktrace` if it's still at the Unity default of `None`.
+This one has nothing to do with the module variant -- it bites both mini and
+full. `cvextern.a` is compiled without `-fwasm-exceptions` for Unity (see
+below), matching Unity's own legacy JS-exception model at final link, but
+that model only actually *catches* exceptions when `exceptionSupport` is
+above `None`; at `None` (`-sDISABLE_EXCEPTION_CATCHING=1`), any exception
+thrown inside `cvextern.a` -- including ones OpenCV throws and catches
+internally via `CVAPI_CATCH_CV_ERRORS` -- surfaces instead as an uncaught,
+message-less wasm trap (`Uncaught undefined`, no readable stack past the
+JS/wasm boundary) on the very first native call made, even a trivial `new
+Mat(64, 64, DepthType.Cv8U, 3)`. This is easy to misdiagnose as a memory,
+PNG, or module-availability problem since the failure carries no message and
+is fully deterministic (identical wasm frame numbers on every reload) --
+bisecting down to the first statement of a `MonoBehaviour.Start()` and
+testing an isolated bare-Mat scene against both a from-scratch spike project
+(works) and the real project (doesn't) is what actually separates this from
+those other candidates.
+
 Two flags differ from the Blazor mini build, both required to link
 successfully against Unity's own WebGL runtime rather than a bug in cvextern
 itself:
