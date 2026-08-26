@@ -441,6 +441,21 @@ available under Unity's scripting runtime), and `Yolo.cs` had one unguarded
 both need `#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID ||
 UNITY_STANDALONE || UNITY_WEBGL` guards, or they break compilation of *any*
 Unity build (all platforms, not just WebGL), not a WebGL-specific issue.
+The tokenizers currently just throw `PlatformNotSupportedException` on
+Unity rather than actually working there. **Future work**: the specific
+`JsonDocument`/`JsonElement` pull-parsing API these files use is
+reflection-free and IL2CPP/AOT-safe by design (unlike `JsonSerializer<T>`,
+which needs source-generated contexts under AOT); the real gap is that
+Unity doesn't ship `System.Text.Json` at all under any scripting backend.
+Making it work would mean vendoring the compiled `System.Text.Json.dll`
+(from NuGet) into `Assets/Plugins/`, plus the small transitive dependency
+DLLs older/netstandard2.0-targeting builds need (`System.Buffers`,
+`System.Memory`, `System.Numerics.Vectors`,
+`System.Runtime.CompilerServices.Unsafe`,
+`System.Threading.Tasks.Extensions`) -- none of which are vendored anywhere
+in this Unity integration today -- and smoke-testing specifically on WebGL,
+which is more restrictive about reflection/threading than desktop/mobile
+IL2CPP targets.
 
 **Building and verifying `HelloWorldScene` for WebGL end-to-end**, once the
 source is copied in and `cvextern.a` is dropped into `Plugins/WebGL/`:
