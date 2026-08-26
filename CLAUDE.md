@@ -404,6 +404,71 @@ already emits `ExternLibrary = "__Internal"` for
 `(__IOS__ || UNITY_IPHONE || UNITY_WEBGL) && !UNITY_EDITOR` -- exactly
 Unity WebGL's static-linking P/Invoke model.
 
+**Populating the managed C# source:** the checked-in `Emgu.CV.Unity` project
+ships **no** Emgu.CV managed source at all -- only native-plugin placeholders
+(per the `.meta`-only convention above) and the demo `.unity` scenes /
+`Demo/*.cs` scripts that consume it. Opening the project or building any
+scene fails immediately with `CS0234` errors (`The type or namespace name
+'CvEnum' does not exist in the namespace 'Emgu.CV'`, etc.) until the source
+is copied in. Two shell scripts at the project root do this (run from
+`Emgu.CV.Unity/` on macOS/Linux; `copy_unity_assets.bat`/
+`copy_demo_assets.bat` are the legacy Windows equivalents):
+```bash
+cd Emgu.CV.Unity
+./copy_unity_assets   # Emgu.CV / Emgu.CV.Contrib / Emgu.Util / Emgu.CV.OCR / Emgu.CV.Models source
+./copy_demo_assets    # sample images + haarcascade + DrawMatches.cs for the other demo scenes
+```
+`copy_unity_assets` copies a **curated** subset (not a straight directory
+copy) into `Assets/Emgu.CV/Assets/Scripts/<Module>/` -- notably excluding
+`Emgu.CV/Cvb`, `Emgu.CV/PInvoke/{iOS,Android,Windows.Store}`, and a handful
+of Contrib modules (Aruco, Mcc, Barcode, DepthAI) that are commented out in
+the script itself; edit the script if a build needs one of those.
+`copy_demo_assets` requires ImageMagick's `convert` on `PATH` (`brew install
+imagemagick`) to convert the sample JPEGs to PNGs, and pulls
+`box.png`/`box_in_scene.png` from
+`Emgu.CV.Example/MAUI/MauiDemoApp/Resources/Raw/` and a haarcascade from
+`opencv_contrib/`; it's only needed for `FeatureMatchingScene`/
+`StitchScene`/`FaceDetectionScene`, not `HelloWorldScene`. Neither script's
+output is meant to be committed -- like the native binaries, this is local
+scaffolding regenerated from the scripts, not tracked in git. Two other gaps
+to know about in this managed source, both already fixed in the checked-in
+`Emgu.CV.Models` source but worth remembering if a future model file adds
+new code the same way: `Clip.cs`/`MultilingualE5.cs`/`Siglip.cs`/
+`SmolVlm2.cs`'s private tokenizer classes use `System.Text.Json` (not
+available under Unity's scripting runtime), and `Yolo.cs` had one unguarded
+`Emgu.CV.Cuda.CudaInvoke.HasCuda` reference (Unity projects never compile in
+`Emgu.CV.Cuda`) sitting between two otherwise-correctly-guarded blocks --
+both need `#if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID ||
+UNITY_STANDALONE || UNITY_WEBGL` guards, or they break compilation of *any*
+Unity build (all platforms, not just WebGL), not a WebGL-specific issue.
+
+**Building and verifying `HelloWorldScene` for WebGL end-to-end**, once the
+source is copied in and `cvextern.a` is dropped into `Plugins/WebGL/`:
+1. Open the project in the target Unity Editor version once (via Unity Hub
+   or `unity-cli`) so it compiles the newly-copied scripts and resolves
+   `Packages/manifest.json` -- a plain `-batchmode -quit` launch also works
+   and is faster for CI, but a first-ever open is more reliable for surfacing
+   compile errors from the copy scripts' output before spending time on a
+   full WebGL build.
+2. Build `HelloWorldScene.unity` for the `WebGL` target (via `unity-cli`,
+   see below, or a small `BuildPlayerOptions` script targeting
+   `Assets/Emgu.CV/Demo/HelloWorldScene.unity`). `WebGLBuildSettings.cs`
+   (see above) fires automatically during this build and needs no manual
+   `PlayerSettings` changes.
+3. Serve the output locally (`python3 -m http.server <port>` from the build
+   output directory) and open it in a browser. **Use a fresh, distinctive
+   port for every rebuild** -- Unity's `[UnityCache]` IndexedDB layer and
+   browser service-worker state persist per-origin across reloads, and a
+   reused port (even one that feels "fresh" for the session) can silently
+   serve a stale prior build's `.data`/`.wasm` files instead of the one just
+   produced, with no error indicating this happened.
+4. A clean run logs `EmguCV_SelfTest:...PASS` lines (from `HelloTexture.cs`'s
+   `SelfTest`) to the browser console and renders the text overlay via the
+   scene's `Canvas`/`Image`. An uncaught, message-less `Uncaught undefined`
+   wasm trap instead most likely means `PlayerSettings.WebGL.exceptionSupport`
+   reverted to `None` somehow (see above) -- check for that before suspecting
+   memory or PNG.
+
 **Headless build/verify** via `unity-cli`:
 ```bash
 unity build --target WebGL --execute-method <YourBuildScript.Method> \
