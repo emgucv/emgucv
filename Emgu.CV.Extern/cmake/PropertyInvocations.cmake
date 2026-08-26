@@ -1978,9 +1978,9 @@ ENDIF()
 	${HAVE_opencv_surface_matching})
 
     CREATE_VECTOR_CS(
-        "Pose3D" 
-        "std::vector< cv::ppf_match_3d::Pose3D >" 
-        "Pose3D" "object_not_array" 
+        "Pose3D"
+        "cv::ppf_match_3d::Pose3D"
+        "Pose3D" "object_not_array"
         "${CMAKE_CURRENT_SOURCE_DIR}/../Emgu.CV.Contrib/SurfaceMatching" 
         "Emgu.CV.PpfMatch3d"
         "" 
