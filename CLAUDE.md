@@ -123,34 +123,56 @@ toolchain-specific).
 ### Native C++ (Unity iOS)
 
 Use `./build_unity.sh [target] [variant]` instead of `./build.sh` directly -- same
-targets/variants as above, plus `-DWITH_PNG:BOOL=FALSE -DWITH_JPEG:BOOL=FALSE`. Decode
-images via `Texture2D` + `TextureConvert` instead of `CvInvoke.Imread`/`Imwrite` on this
-platform.
+targets/variants as above, plus `-DWITH_PNG:BOOL=FALSE` (unverified whether it would
+collide the way libpng did for WebGL -- decode PNGs via `Texture2D` + `TextureConvert`
+instead of `CvInvoke.Imread`/`Imwrite` on this platform) and
+`-DBUILD_JPEG:BOOL=TRUE -DWITH_JPEG:BOOL=TRUE -DEMGU_CV_JPEG_PREFIX:BOOL=TRUE`.
 
-PNG stays disabled on the same "haven't verified it's safe" basis as the WebGL
-precaution it was copied from, but **JPEG's exclusion is confirmed necessary, not just
-conservative**: `WITH_JPEG:BOOL=TRUE` builds and links `cvextern` itself cleanly, but the
-final Unity app link (Xcode/Mach-O `ld`, not the cvextern build) reports
-`ld: warning: duplicate symbol '_jpeg_set_colorspace'` (and `_jpeg_quality_scaling`,
-`_jpeg_set_defaults`) against `IronSourceAdQualitySDK` -- one of the ad-mediation Pods
-Unity bundles into a fresh iOS export by default, which statically links its own
-libjpeg. Unlike WebGL's `wasm-ld`, Mach-O's `ld` only *warns* on this and picks one
-definition arbitrarily -- the build still reports `** BUILD SUCCEEDED **`. That silent
-resolution is not actually safe: running the resulting app crashes partway through
-`HelloTexture`'s self-test (right at the JPEG check) with `EXC_BAD_ACCESS` / `SIGBUS` /
-`EXC_ARM_DA_ALIGN ("possible pointer authentication failure")` -- confirmed via the
-actual `.ips` crash report in `~/Library/Logs/DiagnosticReports/`, not just inferred from
-the warning. That's the signature of two incompatible libjpeg builds' internal struct
-layouts getting cross-called after the linker silently picked the wrong one.
+**JPEG needs the prefix flag, not just `WITH_JPEG:BOOL=TRUE`.** A plain
+`WITH_JPEG:BOOL=TRUE` builds and links `cvextern` itself cleanly, but the final Unity app
+link (Xcode/Mach-O `ld`, not the cvextern build) reports `ld: warning: duplicate symbol
+'_jpeg_set_colorspace'` (and others) against **both** `IronSourceAdQualitySDK` (an
+ad-mediation Pod Unity bundles into a fresh iOS export by default) and Unity's own
+`UnityRuntime.framework` -- both statically link their own libjpeg. Unlike WebGL's
+`wasm-ld`, Mach-O's `ld` only *warns* on this and picks one definition arbitrarily -- the
+build still reports `** BUILD SUCCEEDED **`. That silent resolution is not actually
+safe: running the resulting (unprefixed) app crashes partway through `HelloTexture`'s
+self-test, right at the JPEG check, with `EXC_BAD_ACCESS` / `SIGBUS` / `EXC_ARM_DA_ALIGN
+("possible pointer authentication failure")` -- confirmed via the actual `.ips` crash
+report in `~/Library/Logs/DiagnosticReports/`, the signature of two incompatible libjpeg
+builds' internal struct layouts getting cross-called after the linker silently picked
+the wrong one.
 
-Fixing this properly would mean renaming libjpeg-turbo's public symbols the same way
-`EMGU_CV_EMSCRIPTEN_PNG_PREFIX` renames libpng's for WebGL (force-included
-`#define jpeg_foo emgu_jpeg_foo`-style header, scoped to just the `libjpeg-turbo` and
-`opencv_imgcodecs` targets) -- libjpeg-turbo has no built-in prefix mechanism analogous to
-libpng's `PNG_PREFIX`, so this would need a generated header the same way
-`generate_png_prefix.py` generates one for PNG, not an existing library feature to flip
-on. Not yet implemented; `build_unity.sh`'s `WITH_JPEG:BOOL=FALSE` is the correct
-state until it is.
+`EMGU_CV_JPEG_PREFIX` fixes this the way `EMGU_CV_EMSCRIPTEN_PNG_PREFIX` fixes the
+analogous libpng collision for WebGL: `Emgu.CV.Extern/cmake/generate_jpeg_prefix.py`
+generates a force-included rename header (`cmake/JpegPrefix.cmake` triggers generation;
+`BuildCvExternTarget.cmake` applies it to the `libjpeg-turbo`, `jpeg12-static`,
+`jpeg16-static`, and `opencv_imgcodecs` targets). libjpeg-turbo has no built-in prefix
+mechanism analogous to libpng's `PNG_PREFIX`, so getting complete coverage took more than
+scanning `jpeglib.h`'s public API:
+- The generator scans *every* header under libjpeg-turbo's source directory, not just
+  `jpeglib.h`, for the `EXTERN(...)` linkage macro -- libjpeg-turbo uses it both for the
+  true public API and for symbols that only need external linkage between its own `.c`
+  files (`jpegint.h`, `jchuff.h`, `jsimd.h`, etc.).
+- A handful of public data tables (`jpeg_natural_order`, `jpeg_zigzag_order`,
+  `jpeg_aritab`, `jpeg_nbits_table`) are declared with a plain `extern`, not
+  `EXTERN(...)`, since they're not functions -- missed by the first version of this
+  script, caught by actually tracing a real duplicate-symbol report down to its cause.
+- `jsamplecomp.h` -- libjpeg-turbo's 8/12/16-bit sample-depth dispatch layer -- redefines
+  the underscore-prefixed `EXTERN(...)` names (`_jpeg_idct_islow` etc.) to bit-depth-
+  specific final names (`jpeg_idct_islow` / `jpeg12_idct_islow` / `jpeg16_idct_islow`)
+  *after* the generated header is force-included, silently overriding the
+  underscore-name rename for anything routed through it. The right-hand side of those
+  redefinitions is what actually ends up in the compiled object, so those need renaming
+  too, not the underscore names -- also only found by tracing an actual duplicate down to
+  its root rather than assuming the first fix attempt was complete. (`jpegapicomp.h` has
+  a similarly-shaped `#define _jpeg_foo bar` block, but its targets -- `image_width`,
+  `jpeg_width`, etc. -- are struct field access macros, not linker symbols, and are
+  deliberately not scanned.)
+
+Verified end-to-end: a completely clean Xcode app link (zero duplicate-symbol warnings)
+and all 5 `HelloTexture` self-test checks passing on a booted iOS Simulator, including
+the JPEG round-trip, with no crash and no `.ips` crash report generated.
 
 Build all three targets to get complete Unity coverage:
 ```bash
