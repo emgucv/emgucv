@@ -151,13 +151,17 @@ cp -r ../Emgu.CV.Models/Dnn/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/Dn
 
 
 cd Assets/Emgu.CV/Plugins/iOS
-if test -f "../../../../../libs/iOS/libcvextern_iphoneos.a"
+# A single xcframework, not the two flat .a files it's built from: Unity's
+# Xcode project generation links every Plugins/iOS/*.a unconditionally into
+# one target, so having both libcvextern_iphoneos.a and libcvextern_simulator.a
+# present at once makes device and simulator builds each pull in the other's
+# incompatible arch slice ("building for iOS-simulator, but linking in object
+# file ... built for iOS"). An xcframework declares which slice belongs to
+# which platform/environment, so Xcode picks the right one automatically.
+rm -rf libcvextern_ios.xcframework
+if test -d "../../../../../libs/iOS/libcvextern_ios.xcframework"
 then
-  cp -f ../../../../../libs/iOS/libcvextern_iphoneos.a ./
-fi
-if test -f "../../../../../libs/iOS/libcvextern_simulator.a"
-then
-  cp -f ../../../../../libs/iOS/libcvextern_simulator.a ./
+  cp -Rf ../../../../../libs/iOS/libcvextern_ios.xcframework ./
 fi
 cd ..
 if test -d "../../../../platforms/macos/cvextern.bundle"

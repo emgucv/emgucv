@@ -24,9 +24,10 @@ libs/
 # --- Unity native plugin binaries: built by platforms/unity/webgl and
 # platform-specific build scripts, then copied in by hand -- like the other
 # per-platform binaries under Emgu.CV.Unity/Assets/Emgu.CV/Plugins/ (Android
-# .so, iOS .a, WSA/x86/x86_64 .dll, macOS .bundle), only the .meta is
+# .so, iOS .xcframework, WSA/x86/x86_64 .dll, macOS .bundle), only the .meta is
 # checked in, not the binary itself. ---
 Emgu.CV.Unity/Assets/Emgu.CV/Plugins/WebGL/cvextern.a
+Emgu.CV.Unity/Assets/Emgu.CV/Plugins/iOS/libcvextern_ios.xcframework/
 
 # --- CMake-generated C# / native glue (do not edit manually) ---
 **/*.g.cs
