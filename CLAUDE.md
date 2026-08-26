@@ -112,6 +112,93 @@ Prerequisites:
 
 The script calls `configure_xcode.sh` which invokes `cmake -GXcode` with the appropriate iOS toolchain file from `opencv/platforms/ios/cmake/Toolchains/`, then builds with `xcodebuild`. Deployment target is iOS 14.2 for device and simulator.
 
+`eigen`'s own build directories are namespaced `eigen/build_ios_<device|simulator>_<arch>/` (not
+`eigen/build_<arch>/`) specifically so they don't collide with `platforms/macos`'s own
+`eigen/build_<arch>/` (both can target `arm64`, but with different CMake generators --
+Xcode here vs. Unix Makefiles for macOS -- and CMake refuses to reconfigure a cache with
+a different generator than it was created with), nor with each other (device and
+simulator `arm64` builds use different toolchain files/SDKs, and CMake caches are also
+toolchain-specific).
+
+### Native C++ (Unity iOS)
+
+Use `./build_unity.sh [target] [variant]` instead of `./build.sh` directly -- same
+targets/variants as above, plus `-DWITH_PNG:BOOL=FALSE -DWITH_JPEG:BOOL=FALSE` (same
+Unity-runtime-codec-collision precaution as the WebGL build: decode images via
+`Texture2D` + `TextureConvert` instead of `CvInvoke.Imread`/`Imwrite` on this platform).
+Build all three targets to get complete Unity coverage:
+```bash
+cd platforms/ios
+./build_unity.sh device_arm64 core
+./build_unity.sh simulator_arm64 core
+./build_unity.sh simulator_x86_64 core
+```
+This produces `libs/iOS/libcvextern_ios.xcframework` (`ios-arm64` for device,
+`ios-arm64_x86_64-simulator` for simulator, lipo'd together from whichever of the three
+targets have been built) alongside the flat `libcvextern_iphoneos.a`/
+`libcvextern_simulator.a`/`libcvextern_universal.a` files it's assembled from.
+
+**Consuming in Unity: use the xcframework, not the flat `.a` files.**
+`Emgu.CV.Unity/Assets/Emgu.CV/Plugins/iOS/` holds `libcvextern_ios.xcframework` (copied
+in by `copy_unity_assets`, same "only the `.meta` is checked into git" convention as
+every other platform binary here). Do **not** drop `libcvextern_iphoneos.a` and
+`libcvextern_simulator.a` in side by side instead -- Unity's Xcode project generation
+links every `.a` under `Plugins/iOS/` unconditionally into one target, and since both
+files declare an `arm64` slice for genuinely different environments, an `arm64`
+Simulator build ends up linking the device slice too:
+```
+ld: building for 'iOS-simulator', but linking in object file
+(.../libcvextern_iphoneos.a[arm64](cap_avfoundation.o)) built for 'iOS'
+```
+(Confirmed only Simulator builds actually trip this -- device-only `arm64` builds happen
+not to, since `ld`'s arch matching silently prefers the correct slice in that direction.
+It's still wrong to rely on that.) An xcframework's `Info.plist` declares which slice
+belongs to which platform/environment, so Xcode resolves the correct one automatically
+instead.
+
+**Building and verifying a Unity iOS Simulator build end-to-end:**
+1. **Check the target Unity Editor actually ships an `arm64` Simulator runtime** before
+   assuming any of this will run. Unity's own bundled per-platform runtime libraries
+   live under `<Editor>/PlaybackEngines/iOSSupport/Trampoline/{Libraries,Frameworks}/`;
+   check `lipo -info` on `baselib.a` and (for the framework variants under
+   `Frameworks/UnityRuntime-sim-*`) `UnityRuntime.framework/UnityRuntime`. Some Editor
+   releases only ship an `x86_64` Simulator runtime with no `arm64` slice at all (e.g.
+   6000.3.22f1) -- on Apple Silicon, that's a hard blocker: modern Xcode/Simulator no
+   longer installs `x86_64`-only apps at all (confirmed even with Rosetta 2 installed),
+   so there's no way to actually run the result. Other releases (e.g. 6000.5.10f1) ship
+   a real `UnityRuntime-sim-arm64` (and a `UnityRuntime-sim-x64arm64` universal variant),
+   which works. This is an Editor-installation gap, not anything project-side to fix.
+2. Even with a capable Editor, Unity defaults to exporting the `x86_64` Simulator
+   variant. Set `PlayerSettings.iOS.simulatorSdkArchitecture = AppleMobileArchitectureSimulator.ARM64`
+   (and `PlayerSettings.iOS.sdkVersion = iOSSdkVersion.SimulatorSDK`) in the build script
+   before calling `BuildPipeline.BuildPlayer` -- this isn't automated anywhere in the
+   checked-in project today (unlike WebGL's `WebGLBuildSettings.cs`), so any Unity iOS
+   Simulator build needs it set explicitly.
+3. If anything in the compiled source references `WebCamTexture` (core `Emgu.CV`/demo
+   scripts do), also set `PlayerSettings.iOS.cameraUsageDescription` to a non-empty
+   string, or the build fails outright with "Camera Usage Description is empty in
+   Player Settings."
+4. Build the scene to get an Xcode workspace (`BuildTarget.iOS`), then build that
+   workspace for the Simulator SDK. `-destination "platform=iOS Simulator,id=<udid>"`
+   failed to resolve a concrete booted simulator in this environment even though
+   `xcrun simctl list devices` showed it booted; `-sdk iphonesimulator ARCHS=arm64
+   ONLY_ACTIVE_ARCH=NO` (no `-destination` at all) worked reliably instead:
+   ```bash
+   xcodebuild -workspace Unity-iPhone.xcworkspace -scheme Unity-iPhone \
+     -configuration Release -sdk iphonesimulator ARCHS=arm64 ONLY_ACTIVE_ARCH=NO \
+     -derivedDataPath ./DerivedData CODE_SIGNING_ALLOWED=NO build
+   ```
+5. Install and launch on a booted simulator, and stream its console to confirm actual
+   `CvInvoke` calls ran rather than just checking the build succeeded:
+   ```bash
+   xcrun simctl install <udid> path/to/Emgu.CV.UnityDemo.app
+   xcrun simctl launch --console-pty <udid> <bundle-id>
+   ```
+   A clean run logs `EmguCV_SelfTest:...PASS`/`FAIL` lines (from `HelloTexture.cs`'s
+   `SelfTest`) to stdout, matching whatever module/codec configuration that particular
+   `cvextern` build actually has (e.g. JPEG/XImgproc correctly report unavailable on a
+   PNG/JPEG-disabled `core`-variant build -- that's expected, not a regression).
+
 ### Native C++ (MacCatalyst / Xcode)
 Similar to iOS, run from within **`platforms/ios/`**:
 
