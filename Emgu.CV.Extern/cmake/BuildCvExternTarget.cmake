@@ -269,18 +269,31 @@ endif()
 if(WITH_PNG AND BUILD_PNG)
   target_link_libraries(${the_target} libpng)
 
-  if(EMGU_CV_EMSCRIPTEN_PNG_PREFIX AND EMGU_CV_PNG_PREFIX_HEADER)
+  if(EMGU_CV_PNG_PREFIX AND EMGU_CV_PNG_PREFIX_HEADER)
     if(NOT TARGET libpng)
-      message(FATAL_ERROR "EMGU_CV_EMSCRIPTEN_PNG_PREFIX: target 'libpng' not found")
+      message(FATAL_ERROR "EMGU_CV_PNG_PREFIX: target 'libpng' not found")
     endif()
     target_compile_options(libpng PRIVATE -DPNG_PREFIX=emgu_ -include "${EMGU_CV_PNG_PREFIX_HEADER}")
-    message(STATUS "EMGU_CV_EMSCRIPTEN_PNG_PREFIX: applied to target libpng")
+    message(STATUS "EMGU_CV_PNG_PREFIX: applied to target libpng")
 
-    if(NOT TARGET opencv_imgcodecs)
-      message(FATAL_ERROR "EMGU_CV_EMSCRIPTEN_PNG_PREFIX: target 'opencv_imgcodecs' not found")
+    # Tesseract's leptonica dependency (CMake target "libleptonica" --
+    # Emgu.CV.Extern/tesseract/libtesseract/leptonica/CMakeLists.txt's own
+    # PROJECT(libleptonica), not leptonica.git's own unused CMakeLists)
+    # compiles pngio.c whenever WITH_PNG AND BUILD_PNG (no APPLE/ANDROID
+    # guard, unlike its JPEG support which IS guarded off on APPLE/ANDROID
+    # and so never hits this), and links straight to this same internal
+    # libpng target (confirmed via PNG_LIBRARY:INTERNAL=libpng in
+    # CMakeCache.txt) -- but compiles without the PNG_PREFIX macro, so it
+    # calls the plain png_* names. Once libpng's own symbols are renamed,
+    # those plain names no longer exist anywhere in the link, and
+    # iOS/Unity's final link fails with "Undefined symbols ...
+    # _png_create_info_struct" out of pngio.o. Renaming leptonica's calls
+    # the same way keeps it consistent with the renamed libpng it actually
+    # links against.
+    if(TARGET libleptonica)
+      target_compile_options(libleptonica PRIVATE -DPNG_PREFIX=emgu_ -include "${EMGU_CV_PNG_PREFIX_HEADER}")
+      message(STATUS "EMGU_CV_PNG_PREFIX: applied to target libleptonica")
     endif()
-    target_compile_options(opencv_imgcodecs PRIVATE -DPNG_PREFIX=emgu_ -include "${EMGU_CV_PNG_PREFIX_HEADER}")
-    message(STATUS "EMGU_CV_EMSCRIPTEN_PNG_PREFIX: applied to target opencv_imgcodecs")
   endif()
 endif()
 
@@ -296,8 +309,9 @@ if(WITH_JPEG AND BUILD_JPEG)
     # compiled objects get folded into libjpeg-turbo via
     # $<TARGET_OBJECTS:...> -- target_compile_options on libjpeg-turbo alone
     # would not reach their own compile step, leaving their j12*/j16*
-    # symbols unrenamed.
-    foreach(_emgu_jpeg_target libjpeg-turbo jpeg12-static jpeg16-static opencv_imgcodecs)
+    # symbols unrenamed. opencv_imgcodecs is handled separately below,
+    # combined with libpng's header if both are active.
+    foreach(_emgu_jpeg_target libjpeg-turbo jpeg12-static jpeg16-static)
       if(NOT TARGET ${_emgu_jpeg_target})
         message(FATAL_ERROR "EMGU_CV_JPEG_PREFIX: target '${_emgu_jpeg_target}' not found")
       endif()
@@ -305,6 +319,35 @@ if(WITH_JPEG AND BUILD_JPEG)
       message(STATUS "EMGU_CV_JPEG_PREFIX: applied to target ${_emgu_jpeg_target}")
     endforeach()
   endif()
+endif()
+
+# opencv_imgcodecs can need both libpng's and libjpeg-turbo's rename headers
+# force-included at once. CMake mishandles two separate `-include <path>`
+# pairs applied to the same target via separate target_compile_options()
+# calls: confirmed via the actual generated response file that the second
+# pair's -include token goes missing, leaving a bare, unflagged path that
+# clang then misparses as an extra input file ("cannot specify -o when
+# generating multiple output files"). Combining into one generated wrapper
+# header and a single -include sidesteps this, and scales to however many
+# such prefix mechanisms end up active on this target.
+if((EMGU_CV_PNG_PREFIX AND EMGU_CV_PNG_PREFIX_HEADER) OR (EMGU_CV_JPEG_PREFIX AND EMGU_CV_JPEG_PREFIX_HEADER))
+  if(NOT TARGET opencv_imgcodecs)
+    message(FATAL_ERROR "EMGU_CV_PNG_PREFIX/EMGU_CV_JPEG_PREFIX: target 'opencv_imgcodecs' not found")
+  endif()
+  set(_emgu_imgcodecs_prefix_header "${CMAKE_BINARY_DIR}/emgu_imgcodecs_prefix_generated/imgcodecs_prefix.h")
+  set(_emgu_imgcodecs_prefix_content "#ifndef EMGU_IMGCODECS_PREFIX_H\n#define EMGU_IMGCODECS_PREFIX_H\n")
+  set(_emgu_imgcodecs_compile_options "")
+  if(EMGU_CV_PNG_PREFIX AND EMGU_CV_PNG_PREFIX_HEADER)
+    string(APPEND _emgu_imgcodecs_prefix_content "#include \"${EMGU_CV_PNG_PREFIX_HEADER}\"\n")
+    list(APPEND _emgu_imgcodecs_compile_options -DPNG_PREFIX=emgu_)
+  endif()
+  if(EMGU_CV_JPEG_PREFIX AND EMGU_CV_JPEG_PREFIX_HEADER)
+    string(APPEND _emgu_imgcodecs_prefix_content "#include \"${EMGU_CV_JPEG_PREFIX_HEADER}\"\n")
+  endif()
+  string(APPEND _emgu_imgcodecs_prefix_content "#endif\n")
+  file(WRITE "${_emgu_imgcodecs_prefix_header}" "${_emgu_imgcodecs_prefix_content}")
+  target_compile_options(opencv_imgcodecs PRIVATE ${_emgu_imgcodecs_compile_options} -include "${_emgu_imgcodecs_prefix_header}")
+  message(STATUS "EMGU_CV_PNG_PREFIX/EMGU_CV_JPEG_PREFIX: applied combined header to target opencv_imgcodecs")
 endif()
 
 # Add the required libraries for linking:

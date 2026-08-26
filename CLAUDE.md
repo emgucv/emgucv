@@ -123,10 +123,10 @@ toolchain-specific).
 ### Native C++ (Unity iOS)
 
 Use `./build_unity.sh [target] [variant]` instead of `./build.sh` directly -- same
-targets/variants as above, plus `-DWITH_PNG:BOOL=FALSE` (unverified whether it would
-collide the way libpng did for WebGL -- decode PNGs via `Texture2D` + `TextureConvert`
-instead of `CvInvoke.Imread`/`Imwrite` on this platform) and
-`-DBUILD_JPEG:BOOL=TRUE -DWITH_JPEG:BOOL=TRUE -DEMGU_CV_JPEG_PREFIX:BOOL=TRUE`.
+targets/variants as above, plus both PNG and JPEG enabled with their respective
+linkage-visible symbols renamed: `-DBUILD_PNG:BOOL=TRUE -DWITH_PNG:BOOL=TRUE
+-DEMGU_CV_PNG_PREFIX:BOOL=TRUE -DBUILD_JPEG:BOOL=TRUE -DWITH_JPEG:BOOL=TRUE
+-DEMGU_CV_JPEG_PREFIX:BOOL=TRUE`.
 
 **JPEG needs the prefix flag, not just `WITH_JPEG:BOOL=TRUE`.** A plain
 `WITH_JPEG:BOOL=TRUE` builds and links `cvextern` itself cleanly, but the final Unity app
@@ -143,8 +143,9 @@ report in `~/Library/Logs/DiagnosticReports/`, the signature of two incompatible
 builds' internal struct layouts getting cross-called after the linker silently picked
 the wrong one.
 
-`EMGU_CV_JPEG_PREFIX` fixes this the way `EMGU_CV_EMSCRIPTEN_PNG_PREFIX` fixes the
-analogous libpng collision for WebGL: `Emgu.CV.Extern/cmake/generate_jpeg_prefix.py`
+`EMGU_CV_JPEG_PREFIX` fixes this the way `EMGU_CV_PNG_PREFIX` fixes the
+analogous libpng collision for WebGL (and, below, for this same iOS build):
+`Emgu.CV.Extern/cmake/generate_jpeg_prefix.py`
 generates a force-included rename header (`cmake/JpegPrefix.cmake` triggers generation;
 `BuildCvExternTarget.cmake` applies it to the `libjpeg-turbo`, `jpeg12-static`,
 `jpeg16-static`, and `opencv_imgcodecs` targets). libjpeg-turbo has no built-in prefix
@@ -173,6 +174,51 @@ scanning `jpeglib.h`'s public API:
 Verified end-to-end: a completely clean Xcode app link (zero duplicate-symbol warnings)
 and all 5 `HelloTexture` self-test checks passing on a booted iOS Simulator, including
 the JPEG round-trip, with no crash and no `.ips` crash report generated.
+
+**PNG needed the same treatment, plus one extra wrinkle Tesseract's `leptonica`
+dependency introduced.** `EMGU_CV_PNG_PREFIX` (`cmake/PngPrefix.cmake`, platform-neutral
+-- generalized out of what was originally an Emscripten-only
+`EMGU_CV_EMSCRIPTEN_PNG_PREFIX` block) renames libpng's public symbols the same way
+`EMGU_CV_JPEG_PREFIX` renames libjpeg-turbo's, applied to the `libpng` and
+`opencv_imgcodecs` targets in `BuildCvExternTarget.cmake`. Getting it working end-to-end
+took fixing two separate, unrelated bugs, both only surfaced by actually building and
+linking rather than by reasoning about the mechanism in the abstract:
+- **CMake drops a second `-include` flag applied to the same target via a separate
+  `target_compile_options()` call.** `opencv_imgcodecs` needs *both* `pngprefix.h` (from
+  the PNG block) and `jpegprefix.h` (from the JPEG block) force-included when both
+  prefixes are active. Applying them via two separate `target_compile_options(... -include
+  ...)` calls corrupts the generated Xcode response file -- confirmed by reading the
+  actual `.resp` file, whose content ended with `'-DPNG_PREFIX=emgu_'
+  /path/to/jpegprefix.h`: JPEG's path present, but with no `-include` token in front of
+  it, which clang's driver then misparses as an extra input file (`cannot specify -o when
+  generating multiple output files`). Reproduced identically after a full clean rebuild,
+  ruling out stale-cache artifacts. Fixed by generating a small combined wrapper header
+  (`#include`-ing whichever of `pngprefix.h`/`jpegprefix.h` are actually active) and
+  applying it to `opencv_imgcodecs` via a single `-include`, instead of one per prefix.
+- **Tesseract's `leptonica` dependency (CMake target `libleptonica` -- a custom Emgu-authored
+  wrapper `CMakeLists.txt` under `Emgu.CV.Extern/tesseract/libtesseract/leptonica/`, not
+  the vendored `leptonica.git`'s own unused one) independently does its own
+  `find_package(PNG)` and links straight to the same internal `libpng` target (confirmed
+  via `PNG_LIBRARY:INTERNAL=libpng` in `CMakeCache.txt`), but compiles `pngio.c` without
+  the `PNG_PREFIX` macro.** Once libpng's own symbols are renamed, `pngio.c`'s calls to
+  the plain `png_create_info_struct` etc. names have nothing left to resolve to, and the
+  final Unity Xcode link fails with `Undefined symbols for architecture arm64:
+  "_png_create_info_struct", referenced from: ... libcvextern_simulator.a[...](pngio.o)`
+  -- a *missing*-symbol error this time, not a duplicate one, easy to mistake for a
+  different class of problem. (Leptonica's *JPEG* support has no such issue: its own
+  `CMakeLists.txt` guards `LEPT_USE_JPEG` off entirely on `APPLE`/`ANDROID`, so it never
+  calls into libjpeg-turbo on iOS in the first place.) Fixed by applying the same
+  `-DPNG_PREFIX=emgu_ -include pngprefix.h` to the `libleptonica` target too, guarded on
+  `TARGET libleptonica` existing (a first attempt guarded on the wrong target name,
+  `leptonica` -- the vendored project's own name, not this repo's wrapper -- and silently
+  no-op'd with no error, since the guard was a soft `if(TARGET ...)` rather than a hard
+  `FATAL_ERROR`; only caught by grepping the configure log for the expected "applied to
+  target" message and noticing it was missing).
+
+Verified end-to-end the same way as JPEG: a completely clean Xcode app link (zero
+duplicate-symbol *and* zero undefined-symbol warnings) and all 5 `HelloTexture` self-test
+checks passing on a booted iOS Simulator, with no crash and no `.ips` crash report
+generated.
 
 Build all three targets to get complete Unity coverage:
 ```bash
@@ -244,8 +290,9 @@ instead.
    ```
    A clean run logs `EmguCV_SelfTest:...PASS`/`FAIL` lines (from `HelloTexture.cs`'s
    `SelfTest`) to stdout, matching whatever module/codec configuration that particular
-   `cvextern` build actually has (e.g. JPEG/XImgproc correctly report unavailable on a
-   PNG/JPEG-disabled `core`-variant build -- that's expected, not a regression).
+   `cvextern` build actually has -- `build_unity.sh` enables PNG and JPEG uniformly
+   across all three variants (full/core/mini), so a `FAIL`/unavailable report on any of
+   them would indicate a real regression, not an expected variant difference.
 
 ### Native C++ (MacCatalyst / Xcode)
 Similar to iOS, run from within **`platforms/ios/`**:
