@@ -123,9 +123,35 @@ toolchain-specific).
 ### Native C++ (Unity iOS)
 
 Use `./build_unity.sh [target] [variant]` instead of `./build.sh` directly -- same
-targets/variants as above, plus `-DWITH_PNG:BOOL=FALSE -DWITH_JPEG:BOOL=FALSE` (same
-Unity-runtime-codec-collision precaution as the WebGL build: decode images via
-`Texture2D` + `TextureConvert` instead of `CvInvoke.Imread`/`Imwrite` on this platform).
+targets/variants as above, plus `-DWITH_PNG:BOOL=FALSE -DWITH_JPEG:BOOL=FALSE`. Decode
+images via `Texture2D` + `TextureConvert` instead of `CvInvoke.Imread`/`Imwrite` on this
+platform.
+
+PNG stays disabled on the same "haven't verified it's safe" basis as the WebGL
+precaution it was copied from, but **JPEG's exclusion is confirmed necessary, not just
+conservative**: `WITH_JPEG:BOOL=TRUE` builds and links `cvextern` itself cleanly, but the
+final Unity app link (Xcode/Mach-O `ld`, not the cvextern build) reports
+`ld: warning: duplicate symbol '_jpeg_set_colorspace'` (and `_jpeg_quality_scaling`,
+`_jpeg_set_defaults`) against `IronSourceAdQualitySDK` -- one of the ad-mediation Pods
+Unity bundles into a fresh iOS export by default, which statically links its own
+libjpeg. Unlike WebGL's `wasm-ld`, Mach-O's `ld` only *warns* on this and picks one
+definition arbitrarily -- the build still reports `** BUILD SUCCEEDED **`. That silent
+resolution is not actually safe: running the resulting app crashes partway through
+`HelloTexture`'s self-test (right at the JPEG check) with `EXC_BAD_ACCESS` / `SIGBUS` /
+`EXC_ARM_DA_ALIGN ("possible pointer authentication failure")` -- confirmed via the
+actual `.ips` crash report in `~/Library/Logs/DiagnosticReports/`, not just inferred from
+the warning. That's the signature of two incompatible libjpeg builds' internal struct
+layouts getting cross-called after the linker silently picked the wrong one.
+
+Fixing this properly would mean renaming libjpeg-turbo's public symbols the same way
+`EMGU_CV_EMSCRIPTEN_PNG_PREFIX` renames libpng's for WebGL (force-included
+`#define jpeg_foo emgu_jpeg_foo`-style header, scoped to just the `libjpeg-turbo` and
+`opencv_imgcodecs` targets) -- libjpeg-turbo has no built-in prefix mechanism analogous to
+libpng's `PNG_PREFIX`, so this would need a generated header the same way
+`generate_png_prefix.py` generates one for PNG, not an existing library feature to flip
+on. Not yet implemented; `build_unity.sh`'s `WITH_JPEG:BOOL=FALSE` is the correct
+state until it is.
+
 Build all three targets to get complete Unity coverage:
 ```bash
 cd platforms/ios
