@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
 using System;
@@ -28,6 +28,7 @@ namespace Emgu.CV.Hdf
         {
             using (CvString csFileName = new CvString(fileName))
                 _ptr = HdfInvoke.cveHDF5Create(csFileName, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -36,6 +37,7 @@ namespace Emgu.CV.Hdf
         public void Close()
         {
             HdfInvoke.cveHDF5Close(_ptr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -48,6 +50,7 @@ namespace Emgu.CV.Hdf
             {
                 HdfInvoke.cveHDF5GrCreate(_ptr, csGrLabel);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -59,7 +62,9 @@ namespace Emgu.CV.Hdf
         {
             using (CvString csLabel = new CvString(label))
             {
-                return HdfInvoke.cveHDF5HlExists(_ptr, csLabel);
+                bool result = HdfInvoke.cveHDF5HlExists(_ptr, csLabel);
+                CvInvoke.CheckError();
+                return result;
             }
         }
 
@@ -75,6 +80,7 @@ namespace Emgu.CV.Hdf
             {
                 HdfInvoke.cveHDF5DsRead(_ptr, oaArray, csDsLabel);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -89,6 +95,7 @@ namespace Emgu.CV.Hdf
             {
                 HdfInvoke.cveHDF5DsWrite(_ptr, iaArray, csDsLabel);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -107,6 +114,7 @@ namespace Emgu.CV.Hdf
             {
                 HdfInvoke.cveHDF5DsCreate(_ptr, rows, cols, CvInvoke.MakeType(depthType, channels), csDsLabel, compressLevel, dimsChunks);
             }
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -117,7 +125,11 @@ namespace Emgu.CV.Hdf
         public bool AtExists(String atLabel)
         {
             using (CvString csAtLabel = new CvString(atLabel))
-                return HdfInvoke.cveHDF5AtExists(_ptr, csAtLabel);
+            {
+                bool result = HdfInvoke.cveHDF5AtExists(_ptr, csAtLabel);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -128,6 +140,7 @@ namespace Emgu.CV.Hdf
         {
             using (CvString csAtLabel = new CvString(atLabel))
                 HdfInvoke.cveHDF5AtDelete(_ptr, csAtLabel);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -140,6 +153,7 @@ namespace Emgu.CV.Hdf
             int v = 0;
             using (CvString csAtLabel = new CvString(atLabel))
                 HdfInvoke.cveHDF5AtReadInt(_ptr, ref v, csAtLabel);
+            CvInvoke.CheckError();
             return v;
         }
 
@@ -152,6 +166,7 @@ namespace Emgu.CV.Hdf
         {
             using (CvString csAtLabel = new CvString(atLabel))
                 HdfInvoke.cveHDF5AtWriteInt(_ptr, value, csAtLabel);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -164,6 +179,7 @@ namespace Emgu.CV.Hdf
             double v = 0;
             using (CvString csAtLabel = new CvString(atLabel))
                 HdfInvoke.cveHDF5AtReadDouble(_ptr, ref v, csAtLabel);
+            CvInvoke.CheckError();
             return v;
         }
 
@@ -176,6 +192,7 @@ namespace Emgu.CV.Hdf
         {
             using (CvString csAtLabel = new CvString(atLabel))
                 HdfInvoke.cveHDF5AtWriteDouble(_ptr, value, csAtLabel);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -189,6 +206,7 @@ namespace Emgu.CV.Hdf
             using (CvString csAtLabel = new CvString(atLabel))
             {
                 HdfInvoke.cveHDF5AtReadString(_ptr, cvOut, csAtLabel);
+                CvInvoke.CheckError();
                 return cvOut.ToString();
             }
         }
@@ -203,6 +221,7 @@ namespace Emgu.CV.Hdf
             using (CvString csValue = new CvString(value))
             using (CvString csAtLabel = new CvString(atLabel))
                 HdfInvoke.cveHDF5AtWriteString(_ptr, csValue, csAtLabel);
+            CvInvoke.CheckError();
         }
 
 
@@ -216,6 +235,7 @@ namespace Emgu.CV.Hdf
             using (OutputArray oaArray = array.GetOutputArray())
             using (CvString csAtLabel = new CvString(atLabel))
                 HdfInvoke.cveHDF5AtReadArray(_ptr, oaArray, csAtLabel);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -228,6 +248,7 @@ namespace Emgu.CV.Hdf
             using (InputArray iaValue = value.GetInputArray())
             using (CvString csAtLabel = new CvString(atLabel))
                 HdfInvoke.cveHDF5AtWriteArray(_ptr, iaValue, csAtLabel);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -238,13 +259,14 @@ namespace Emgu.CV.Hdf
         /// <param name="offset">Specify the offset location over dataset from where read starts.</param>
         /// <param name="counts">Specify the amount of keypoints from dataset to read.</param>
         public void KpRead(
-            VectorOfKeyPoint keypoints, 
+            VectorOfKeyPoint keypoints,
             String kpLabel,
             int offset = -1,
             int counts = -1)
         {
             using (CvString csKpLabel = new CvString(kpLabel))
                 HdfInvoke.cveHDF5KpRead(_ptr, keypoints, csKpLabel, offset, counts);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -255,13 +277,14 @@ namespace Emgu.CV.Hdf
         /// <param name="offset">Specify the offset location on dataset from where keypoints will be (over)written into dataset.</param>
         /// <param name="counts">Specify the amount of keypoints that will be written into dataset.</param>
         public void KpWrite(
-            VectorOfKeyPoint keypoints, 
+            VectorOfKeyPoint keypoints,
             String atLabel,
             int offset = -1,
             int counts = -1)
         {
             using (CvString csAtLabel = new CvString(atLabel))
                 HdfInvoke.cveHDF5KpWrite(_ptr, keypoints, csAtLabel, offset, counts);
+            CvInvoke.CheckError();
         }
 
 
