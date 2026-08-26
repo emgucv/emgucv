@@ -537,15 +537,15 @@ itself:
   (for `Texture2D.LoadImage`); a second copy from cvextern.a naively linked
   in causes `wasm-ld: error: duplicate symbol: png_get_uint_32` etc. at
   Unity's final link step. The **full** variant avoids this via
-  `EMGU_CV_EMSCRIPTEN_PNG_PREFIX:BOOL=TRUE` (alongside
-  `BUILD_PNG`/`WITH_PNG:BOOL=TRUE`): `Emgu.CV.Extern/cmake/generate_png_prefix.py`
-  parses `png.h`'s `PNG_EXPORT`/`PNG_EXPORTA` declarations and generates
-  `pngprefix.h`, defining `#define png_foo emgu_png_foo` for all 218 public
-  libpng symbols; this is force-included (`-DPNG_PREFIX=emgu_ -include
-  pngprefix.h`) on just the `libpng` and `opencv_imgcodecs` targets (see
-  `cmake/EmscriptenBuildFlags.cmake` for generation,
-  `Emgu.CV.Extern/cmake/BuildCvExternTarget.cmake` for the
-  `target_compile_options` application -- it must be scoped to those two
+  `EMGU_CV_PNG_PREFIX:BOOL=TRUE` (alongside `BUILD_PNG`/`WITH_PNG:BOOL=TRUE`):
+  `Emgu.CV.Extern/cmake/generate_png_prefix.py` parses `png.h`'s
+  `PNG_EXPORT`/`PNG_EXPORTA` declarations and generates `pngprefix.h`,
+  defining `#define png_foo emgu_png_foo` for all 218 public libpng symbols;
+  this is force-included (`-DPNG_PREFIX=emgu_ -include pngprefix.h`) on the
+  `libpng` target and, via a small generated wrapper header combining it with
+  any other active prefix header, on `opencv_imgcodecs` (see
+  `cmake/PngPrefix.cmake` for generation, `Emgu.CV.Extern/cmake/BuildCvExternTarget.cmake`
+  for the `target_compile_options` application -- it must be scoped to those
   targets specifically, since `SET_PROPERTY(DIRECTORY ...)` on a
   not-yet-`add_subdirectory()`'d path fails in this CMake version). This
   relies on libpng's own `PNG_PREFIX` mechanism (`pngpriv.h`:
@@ -561,6 +561,20 @@ itself:
   step, not the PNG code path itself -- so mini keeps PNG disabled and
   decodes images via `Texture2D` + `TextureConvert` instead of
   `CvInvoke.Imread`/`Imwrite`.
+
+  The flag was originally named `EMGU_CV_EMSCRIPTEN_PNG_PREFIX` and its
+  generation logic lived directly in `cmake/EmscriptenBuildFlags.cmake`;
+  both were generalized (renamed to `EMGU_CV_PNG_PREFIX`, generation moved to
+  the platform-neutral `cmake/PngPrefix.cmake`) when the same mechanism was
+  extended to fix an analogous libpng collision in the Unity **iOS** build
+  (see that section above). After the rename, the native `cvextern.a` build
+  for Unity WebGL (`platforms/unity/webgl/cmake_configure_unity.sh`, full
+  variant) was rebuilt from scratch and reconfirmed clean: `EMGU_CV_PNG_PREFIX`
+  generates and applies correctly (`libpng` and, via the combined-header
+  mechanism, `opencv_imgcodecs`), and the build completes with zero errors.
+  This re-verification covers only the native library build, not a full
+  Unity WebGL project link/browser test (`EMGU_CV_WITH_TESSERACT` is off for
+  this build, so the `libleptonica` wrinkle found on iOS doesn't apply here).
 - `EMGU_CV_EMSCRIPTEN_WASM_EXCEPTIONS:BOOL=FALSE` -- Unity's own final link
   (its `GameAssembly.a` plus bundled runtime modules) uses Emscripten's
   legacy JS-exception model (`-sDISABLE_EXCEPTION_CATCHING=0`, no
