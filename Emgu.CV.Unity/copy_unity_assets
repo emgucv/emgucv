@@ -32,12 +32,10 @@ cp ../Emgu.CV.Extern/tesseract/libtesseract/tesseract-ocr.git/LICENSE Assets/Emg
 
 cp ../Emgu.Util/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.Util/
 
-#cp ../Emgu.CV/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Calib Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Stereo Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Color Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Core Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
-#cp -r ../Emgu.CV/Cvb Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Dnn Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Features Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Flann Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
@@ -46,6 +44,8 @@ cp -r ../Emgu.CV/Geometry Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Imgcodecs Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Imgproc Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/HighGUI Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
+# Aruco, MCC (color-checker), and Barcode all live here now -- they were
+# merged from opencv_contrib into core objdetect upstream, not omitted.
 cp -r ../Emgu.CV/Objdetect Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Ocl Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 cp -r ../Emgu.CV/Optflow Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
@@ -70,8 +70,6 @@ cp -r ../Emgu.CV/Videostab Assets/Emgu.CV/Assets/Scripts/Emgu.CV/
 
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Alphamat
 cp -r ../Emgu.CV.Contrib/Alphamat/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Alphamat
-#mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Aruco
-#cp -r ../Emgu.CV.Contrib/Aruco/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Aruco
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/BgSegm
 cp -r ../Emgu.CV.Contrib/BgSegm/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/BgSegm
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Bioinspired
@@ -100,8 +98,6 @@ mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/IntensityTransform
 cp -r ../Emgu.CV.Contrib/IntensityTransform/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/IntensityTransform
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/LineDescriptor
 cp -r ../Emgu.CV.Contrib/LineDescriptor/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/LineDescriptor
-#mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc
-#cp -r ../Emgu.CV.Contrib/Mcc/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Mcc
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Ml
 cp -r ../Emgu.CV.Contrib/Ml/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Ml
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/PhaseUnwrapping
@@ -141,9 +137,9 @@ cp -r ../Emgu.CV.Contrib/XObjdetect/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.C
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XPhoto
 cp -r ../Emgu.CV.Contrib/XPhoto/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/XPhoto
 
-#mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Barcode
-#cp -r ../Emgu.CV.Contrib/Barcode/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/Barcode
-
+# DepthAI stays excluded: EMGU_CV_WITH_DEPTHAI is off for every Unity-relevant
+# native build (macOS, Android, WebGL), so there's no native counterpart to
+# call into on any platform this project targets.
 #mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DepthAI
 #cp -r ../Emgu.CV.Contrib/DepthAI/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Contrib/DepthAI
 
@@ -152,8 +148,6 @@ cp -r ../Emgu.CV.OCR/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.OCR/
 cp -r ../Emgu.CV.Models/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/
 mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/Dnn
 cp -r ../Emgu.CV.Models/Dnn/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/Dnn
-#mkdir -p Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/DepthAI
-#cp -r ../Emgu.CV.Models/DepthAI/*.cs Assets/Emgu.CV/Assets/Scripts/Emgu.CV.Models/DepthAI
 
 
 cd Assets/Emgu.CV/Plugins/iOS
