@@ -18,6 +18,18 @@ namespace Emgu.CV
     /// "wasm-ld: error: initial memory too small" otherwise. This is a no-op if
     /// you swap in the smaller mini variant instead, which doesn't need it.
     /// Only raises the value -- never lowers a project's own deliberate setting.
+    ///
+    /// Also enables WebGL exception support if it is currently "None". cvextern.a
+    /// is compiled without -fwasm-exceptions for this platform (see
+    /// cmake/EmscriptenBuildFlags.cmake's EMGU_CV_EMSCRIPTEN_WASM_EXCEPTIONS),
+    /// matching Unity's own legacy JS-exception model -- but that model only
+    /// actually catches exceptions if PlayerSettings.WebGL.exceptionSupport is
+    /// "Explicit Only" or higher; a new project defaults to "None"
+    /// (DISABLE_EXCEPTION_CATCHING=1), under which ANY exception thrown inside
+    /// cvextern.a -- including ones OpenCV throws and catches internally via
+    /// CVAPI_CATCH_CV_ERRORS -- surfaces instead as an uncaught, message-less
+    /// wasm trap ("Uncaught undefined") on literally the first native call made,
+    /// even a trivial `new Mat(64, 64, DepthType.Cv8U, 3)`.
     /// </summary>
     public class WebGLBuildSettings : IPreprocessBuildWithReport
     {
@@ -36,6 +48,14 @@ namespace Emgu.CV
                 Debug.Log(string.Format(
                     "Emgu CV: raised PlayerSettings.WebGL.initialMemorySize to {0}MB.",
                     MinimumInitialMemorySizeMb));
+            }
+
+            if (PlayerSettings.WebGL.exceptionSupport == WebGLExceptionSupport.None)
+            {
+                PlayerSettings.WebGL.exceptionSupport = WebGLExceptionSupport.FullWithStacktrace;
+                Debug.Log(
+                    "Emgu CV: raised PlayerSettings.WebGL.exceptionSupport from None to FullWithStacktrace " +
+                    "(required for cvextern.a's internal exception handling to work at all on WebGL).");
             }
         }
     }
