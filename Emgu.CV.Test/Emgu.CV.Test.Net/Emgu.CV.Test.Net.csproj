@@ -16,6 +16,7 @@
     <Compile Include="..\AutoTestCuda.cs" Link="AutoTestCuda.cs" />
     <Compile Include="..\AutoTestFeatures.cs" Link="AutoTestFeatures.cs" />
     <Compile Include="..\AutoTestXFeatures2D.cs" Link="AutoTestXFeatures2D.cs" />
+    <Compile Include="..\AutoTestXImgproc.cs" Link="AutoTestXImgproc.cs" />
     <Compile Include="..\AutoTestImage.cs" Link="AutoTestImage.cs" />
     <Compile Include="..\AutoTestMat.cs" Link="AutoTestMat.cs" />
     <Compile Include="..\AutoTestMatrix.cs" Link="AutoTestMatrix.cs" />
