@@ -248,5 +248,79 @@ namespace Emgu.CV.Test
                 }
             }
         }
+
+        [Test]
+        public void TestDisparityWLSFilter()
+        {
+            Size stereoSize = new Size(160, 120);
+            using (Mat left = new Mat(stereoSize, DepthType.Cv8U, 1))
+            using (Mat right = new Mat(stereoSize, DepthType.Cv8U, 1))
+            {
+                CvInvoke.Randu(left, new MCvScalar(0), new MCvScalar(255));
+
+                using (Mat warpMat = new Mat(2, 3, DepthType.Cv64F, 1))
+                {
+                    double[] warpData = new double[] { 1, 0, 8, 0, 1, 0 };
+                    System.Runtime.InteropServices.Marshal.Copy(warpData, 0, warpMat.DataPointer, warpData.Length);
+                    CvInvoke.WarpAffine(left, right, warpMat, stereoSize, Inter.Nearest, Warp.Default, BorderType.Replicate);
+                }
+
+                using (StereoBM matcher = new StereoBM(16, 15))
+                using (Mat disparity = new Mat())
+                {
+                    matcher.Compute(left, right, disparity);
+
+                    // DisparityWLSFilter's matcher-based constructor enables confidence-based
+                    // filtering, which requires the right view's disparity map (as CV_32F) too.
+                    using (RightMatcher rightMatcher = new RightMatcher(matcher))
+                    using (Mat disparityRight = new Mat())
+                    using (Mat disparityRight32F = new Mat())
+                    {
+                        rightMatcher.Compute(right, left, disparityRight);
+                        disparityRight.ConvertTo(disparityRight32F, DepthType.Cv32F);
+
+                        using (DisparityWLSFilter wls = new DisparityWLSFilter(matcher))
+                        using (Mat filtered = new Mat())
+                        {
+                            EmguAssert.IsTrue(wls.AlgorithmPtr != IntPtr.Zero, "DisparityWLSFilter.AlgorithmPtr should not be null");
+
+                            wls.Filter(disparity, left, filtered, disparityRight32F);
+                            EmguAssert.IsTrue(!filtered.IsEmpty, "DisparityWLSFilter output should not be empty");
+                            EmguAssert.AreEqual(left.Size, filtered.Size);
+                        }
+                    }
+                }
+            }
+        }
+
+        [Test]
+        public void TestEdgeBoxes()
+        {
+            using (Mat gray = CreateGrayImage())
+            using (Mat edgeMapByte = new Mat())
+            using (Mat edgeMap = new Mat())
+            using (Mat dx = new Mat())
+            using (Mat dy = new Mat())
+            using (Mat magnitude = new Mat())
+            using (Mat orientationMap = new Mat())
+            {
+                CvInvoke.Canny(gray, edgeMapByte, 50, 150);
+                edgeMapByte.ConvertTo(edgeMap, DepthType.Cv32F, 1.0 / 255);
+
+                CvInvoke.Sobel(gray, dx, DepthType.Cv32F, 1, 0);
+                CvInvoke.Sobel(gray, dy, DepthType.Cv32F, 0, 1);
+                CvInvoke.CartToPolar(dx, dy, magnitude, orientationMap, false);
+
+                using (EdgeBoxes edgeBoxes = new EdgeBoxes(minBoxArea: 50f))
+                {
+                    EmguAssert.IsTrue(edgeBoxes.AlgorithmPtr != IntPtr.Zero, "EdgeBoxes.AlgorithmPtr should not be null");
+
+                    // A quadrant-colored synthetic image may or may not yield qualifying proposals;
+                    // exercising the call path without throwing is the meaningful assertion here.
+                    Rectangle[] boxes = edgeBoxes.GetBoundingBoxes(edgeMap, orientationMap);
+                    EmguAssert.IsTrue(boxes != null, "GetBoundingBoxes should return a non-null array");
+                }
+            }
+        }
     }
 }
