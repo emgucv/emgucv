@@ -223,12 +223,14 @@ duplicate-symbol *and* zero undefined-symbol warnings) and all 5 `HelloTexture` 
 checks passing on a booted iOS Simulator, with no crash and no `.ips` crash report
 generated.
 
-Build all three targets to get complete Unity coverage:
+Build all three targets to get complete Unity coverage. Use the `full` variant (the
+default when no variant is given) -- this is what's actually been verified end-to-end for
+Unity, including the PNG/JPEG fixes above:
 ```bash
 cd platforms/ios
-./build.sh device_arm64 core
-./build.sh simulator_arm64 core
-./build.sh simulator_x86_64 core
+./build.sh device_arm64 full
+./build.sh simulator_arm64 full
+./build.sh simulator_x86_64 full
 ```
 This produces `libs/iOS/libcvextern_ios.xcframework` (`ios-arm64` for device,
 `ios-arm64_x86_64-simulator` for simulator, lipo'd together from whichever of the three
