@@ -24,7 +24,9 @@ namespace Emgu.CV.Demo
         // Use this for initialization
         void Start()
         {
-            Mat img = new Mat(new Size(640, 240), DepthType.Cv8U, 3);
+            // Tall enough for the header/OpenCL lines plus all 5 SelfTest lines
+            // drawn up to y=260 in SelfTest() below, with margin for descenders.
+            Mat img = new Mat(new Size(640, 300), DepthType.Cv8U, 3);
             img.SetTo(new MCvScalar());
             String openclStr = "None";
             if (CvInvoke.HaveOpenCL)
