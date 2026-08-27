@@ -48,6 +48,7 @@
     <Compile Include="..\AutoTestPtcloud.cs" Link="AutoTestPtcloud.cs" />
     <Compile Include="..\AutoTestQuality.cs" Link="AutoTestQuality.cs" />
     <Compile Include="..\AutoTestRapid.cs" Link="AutoTestRapid.cs" />
+    <Compile Include="..\AutoTestRgbd.cs" Link="AutoTestRgbd.cs" />
     <Compile Include="..\AutoTestReg.cs" Link="AutoTestReg.cs" />
     <Compile Include="..\AutoTestRetina.cs" Link="AutoTestRetina.cs" />
     <Compile Include="..\AutoTestSaliency.cs" Link="AutoTestSaliency.cs" />
