@@ -168,5 +168,18 @@ if test -d "../../../../platforms/macos/cvextern.bundle"
 then
   cp -rf ../../../../platforms/macos/cvextern.bundle ./
 fi
+
+cd Android/libs
+for ABI in arm64-v8a armeabi-v7a x86 x86_64
+do
+  if test -d "../../../../../../libs/android/$ABI"
+  then
+    mkdir -p $ABI
+    cp -f ../../../../../../libs/android/$ABI/libcvextern.so $ABI/ 2>/dev/null
+    cp -f ../../../../../../libs/android/$ABI/libc++_shared.so $ABI/ 2>/dev/null
+  fi
+done
+cd ../..
+
 cd ..
 cd ..
