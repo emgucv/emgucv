@@ -808,6 +808,15 @@ function Sync-SharedArchLibs {
     $lastArch = if (Test-Path $markerFile) { (Get-Content $markerFile -Raw).Trim() } else { $null }
     if ($lastArch -eq $Arch) { return }
 
+    # On a completely fresh checkout (no prior build of any arch),
+    # libs\Release\ doesn't exist yet -- Set-Content below would fail with
+    # "Could not find a part of the path" since it doesn't create parent
+    # directories.
+    $markerDir = Split-Path $markerFile -Parent
+    if (-not (Test-Path $markerDir)) {
+        New-Item -ItemType Directory -Force -Path $markerDir | Out-Null
+    }
+
     # Build only the targets that were actually generated for this configuration.
     # e.g. UWP/WindowsStore10 builds have leptonica HAVE_LIBTIFF=FALSE so xtiff
     # is never added to the cmake project and xtiff.vcxproj does not exist.
