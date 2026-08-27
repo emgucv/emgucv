@@ -18,6 +18,14 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
     CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md)
 
     SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
+    IF(EMGU_SIGN_FOUND AND WIN32)
+      # dotnet build parallelizes this project's target frameworks (netstandard2.0,
+      # net10.0-ios, net10.0-maccatalyst) by default, so their PostBuildEvent signing
+      # steps hit signtool.exe concurrently. The hardware-backed signing token can't
+      # service concurrent SignerSign() calls and fails with "An unexpected internal
+      # error has occurred" (0x8010001f) on whichever framework loses the race.
+      SET(EXTRA_BUILD_FLAGS "${EXTRA_BUILD_FLAGS} /p:BuildInParallel=false")
+    ENDIF()
 
     BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
 
