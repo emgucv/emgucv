@@ -122,11 +122,14 @@ toolchain-specific).
 
 ### Native C++ (Unity iOS)
 
-Use `./build_unity.sh [target] [variant]` instead of `./build.sh` directly -- same
-targets/variants as above, plus both PNG and JPEG enabled with their respective
-linkage-visible symbols renamed: `-DBUILD_PNG:BOOL=TRUE -DWITH_PNG:BOOL=TRUE
--DEMGU_CV_PNG_PREFIX:BOOL=TRUE -DBUILD_JPEG:BOOL=TRUE -DWITH_JPEG:BOOL=TRUE
--DEMGU_CV_JPEG_PREFIX:BOOL=TRUE`.
+Use the regular `./build.sh [target] [variant]` -- same targets/variants as the plain iOS
+build above. There is no separate Unity-specific build script: PNG and JPEG are enabled
+by default with their respective linkage-visible symbols renamed (`-DBUILD_PNG:BOOL=TRUE
+-DWITH_PNG:BOOL=TRUE -DEMGU_CV_PNG_PREFIX:BOOL=TRUE -DBUILD_JPEG:BOOL=TRUE
+-DWITH_JPEG:BOOL=TRUE -DEMGU_CV_JPEG_PREFIX:BOOL=TRUE`), so the same
+`libs/iOS/libcvextern_ios.xcframework` this build produces works for both regular iOS
+consumers and Unity iOS -- there used to be a separate `build_unity.sh` wrapper adding
+these flags, but since they're the default now it was redundant and has been removed.
 
 **JPEG needs the prefix flag, not just `WITH_JPEG:BOOL=TRUE`.** A plain
 `WITH_JPEG:BOOL=TRUE` builds and links `cvextern` itself cleanly, but the final Unity app
@@ -223,9 +226,9 @@ generated.
 Build all three targets to get complete Unity coverage:
 ```bash
 cd platforms/ios
-./build_unity.sh device_arm64 core
-./build_unity.sh simulator_arm64 core
-./build_unity.sh simulator_x86_64 core
+./build.sh device_arm64 core
+./build.sh simulator_arm64 core
+./build.sh simulator_x86_64 core
 ```
 This produces `libs/iOS/libcvextern_ios.xcframework` (`ios-arm64` for device,
 `ios-arm64_x86_64-simulator` for simulator, lipo'd together from whichever of the three
@@ -290,9 +293,9 @@ instead.
    ```
    A clean run logs `EmguCV_SelfTest:...PASS`/`FAIL` lines (from `HelloTexture.cs`'s
    `SelfTest`) to stdout, matching whatever module/codec configuration that particular
-   `cvextern` build actually has -- `build_unity.sh` enables PNG and JPEG uniformly
-   across all three variants (full/core/mini), so a `FAIL`/unavailable report on any of
-   them would indicate a real regression, not an expected variant difference.
+   `cvextern` build actually has -- `build.sh` enables PNG and JPEG uniformly across all
+   three variants (full/core/mini), so a `FAIL`/unavailable report on any of them would
+   indicate a real regression, not an expected variant difference.
 
 ### Native C++ (MacCatalyst / Xcode)
 Similar to iOS, run from within **`platforms/ios/`**:

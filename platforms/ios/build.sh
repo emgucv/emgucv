@@ -29,9 +29,9 @@ JOB_COUNT=1
 # symbol renamed (EMGU_CV_PNG_PREFIX / EMGU_CV_JPEG_PREFIX -- see
 # cmake/PngPrefix.cmake, cmake/JpegPrefix.cmake, and
 # Emgu.CV.Extern/cmake/BuildCvExternTarget.cmake). This was originally added
-# only for the Unity iOS build (build_unity.sh), to avoid duplicate/missing
+# only for a separate Unity-specific build script, to avoid duplicate/missing
 # libpng and libjpeg-turbo symbols against Unity's own statically-linked
-# copies at Unity's final app link. It's the default here too so a single
+# copies at Unity's final app link. It's the default here too so this single
 # libs/iOS/libcvextern_ios.xcframework build works for both regular iOS
 # consumers and Unity iOS, instead of needing two separately-built
 # xcframeworks that would overwrite the same output path -- the renaming is
