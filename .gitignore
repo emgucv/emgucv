@@ -28,6 +28,9 @@ libs/
 # checked in, not the binary itself. ---
 Emgu.CV.Unity/Assets/Emgu.CV/Plugins/WebGL/cvextern.a
 Emgu.CV.Unity/Assets/Emgu.CV/Plugins/iOS/libcvextern_ios.xcframework/
+Emgu.CV.Unity/Assets/Emgu.CV/Plugins/cvextern.bundle/Contents/Info.plist
+Emgu.CV.Unity/Assets/Emgu.CV/Plugins/cvextern.bundle/Contents/MacOS/libcvextern.dylib
+Emgu.CV.Unity/Assets/Emgu.CV/Plugins/cvextern.bundle/Contents/Resources/icons.icns
 
 # --- CMake-generated C# / native glue (do not edit manually) ---
 **/*.g.cs
