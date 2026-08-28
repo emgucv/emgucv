@@ -975,6 +975,18 @@ try {
             Push-Location $freetypeDir
             try {
                 $freetypePatch = Join-Path $repoRoot '3rdParty\0002-Generate-freetype2.pc-on-Windows-too.patch'
+                # git apply is byte-exact about line endings inside a patch's diff
+                # hunks. A working copy checked out before .gitattributes started
+                # forcing LF for *.patch (or any checkout with core.autocrlf=true
+                # that hasn't re-normalized this file yet -- git only re-applies
+                # checkout filters when a file's committed content changes, not
+                # retroactively) can have this file sitting on disk as CRLF, which
+                # git apply rejects as "corrupt patch". Normalize in place first so
+                # this works regardless of the working copy's checkout history.
+                $patchContent = Get-Content -Raw -LiteralPath $freetypePatch
+                if ($patchContent -match "`r`n") {
+                    Set-Content -LiteralPath $freetypePatch -NoNewline -Value ($patchContent -replace "`r`n", "`n")
+                }
                 # `git apply --check` always writes to stderr on failure (the
                 # expected outcome here whenever the patch isn't applied
                 # yet) -- 2>$null alone doesn't survive PowerShell's
