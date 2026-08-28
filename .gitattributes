@@ -1,0 +1,6 @@
+# git apply is byte-exact about line endings inside a patch's diff hunks.
+# Without this, a Windows checkout with core.autocrlf=true converts these
+# LF-only files to CRLF, corrupting the patch and making `git apply` fail
+# with "corrupt patch at line N" -- as hit by 3rdParty/0002-Generate-freetype2.pc-on-Windows-too.patch
+# on the acer_aio buildbot worker.
+*.patch text eol=lf
