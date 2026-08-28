@@ -114,6 +114,24 @@ IF( (TARGET Emgu.CV)
       Emgu.runtime.windows.cuda.blas.nuget
       Emgu.runtime.windows.cuda.blas.lt.nuget
       Emgu.runtime.windows.cuda.npp.nuget)
+
+    # Also declared as <dependency> entries in this package's own generated
+    # nuspec (cmake/NugetIds.cmake -- EMGU_CUDART_NUGET_ID, guarded the same
+    # as here; EMGU_CUDA_NVRTC_NUGET_ID, guarded by WITH_CUDNN there too) but
+    # missing from this build-ordering list. Without an explicit dependency
+    # edge here, nothing guarantees these two finish packing before a
+    # downstream consumer's `dotnet restore` needs them -- reproduced
+    # directly: Emgu.runtime.windows.cuda.rt's .nupkg happened to finish
+    # early enough to not be noticed, but Emgu.runtime.windows.cuda.nvrtc's
+    # took ~22 minutes longer than DebuggerVisualizer's restore step, which
+    # failed with NU1101 "Unable to find package Emgu.runtime.windows.cuda.nvrtc"
+    # even though the .nupkg existed on disk minutes later in the same run.
+    IF(TARGET Emgu.runtime.windows.cuda.rt.nuget)
+      ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.runtime.windows.cuda.rt.nuget)
+    ENDIF()
+    IF(WITH_CUDNN AND TARGET Emgu.runtime.windows.cuda.nvrtc.nuget)
+      ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.runtime.windows.cuda.nvrtc.nuget)
+    ENDIF()
   ENDIF()
 
   IF(TARGET Emgu.runtime.windows.msvc.rt.x64.nuget)

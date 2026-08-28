@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Canming Huang <support@emgu.com>
+Date: Fri, 28 Aug 2026 00:00:00 -0400
+Subject: [PATCH] Generate freetype2.pc on Windows too
+
+Upstream only installs the pkg-config metadata file on UNIX. The
+generation logic itself (CMake string substitution into
+builds/unix/freetype2.in) is fully portable -- nothing Unix-specific
+about it -- it's just gated behind `if (UNIX)`. Without it,
+freetype2.pc can never exist on a Windows build, so pkg-config can
+never resolve "freetype2" here no matter how PKG_CONFIG_PATH is set,
+which also breaks resolving harfbuzz.pc (it declares
+`Requires.private: freetype2 >= ...`, and pkg-config validates the
+full dependency chain -- including private requirements -- even for
+a plain --exists/--cflags query, not just --static).
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3ed55aad7..4b6de40c1 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -491,7 +491,7 @@ endif ()
+
+ if (NOT SKIP_INSTALL_LIBRARIES AND NOT SKIP_INSTALL_ALL)
+   # Generate the pkg-config file
+-  if (UNIX)
++  if (UNIX OR WIN32)
+     file(READ "${PROJECT_SOURCE_DIR}/builds/unix/freetype2.in" FREETYPE2_PC_IN)
+
+     string(REPLACE ";" ", " PKG_CONFIG_REQUIRED_PRIVATE "${PKG_CONFIG_REQUIRED_PRIVATE}")
+--
+2.45.1.windows.1

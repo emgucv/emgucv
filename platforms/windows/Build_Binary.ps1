@@ -96,7 +96,9 @@ $ErrorActionPreference = 'Stop'
 function Invoke-Native {
     <#
     Runs an external command and throws if it exits non-zero, instead of
-    silently continuing on failure into a broken partial build.
+    silently continuing on failure into a broken partial build. Pass/fail
+    is determined solely by $LASTEXITCODE -- never by whether the tool
+    happened to write anything to stderr.
 
     Piped through Out-Host rather than left as bare `& $FilePath @Args`:
     PowerShell treats an external command's stdout as pipeline output, so
@@ -106,13 +108,47 @@ function Invoke-Native {
     plus $buildDir, since its two Invoke-Native calls were unredirected).
     Out-Host still streams every line live; it just keeps it out of the
     success-object pipeline.
+
+    $ErrorActionPreference is forced to 'Continue' for the duration of the
+    call (restored in finally), regardless of the caller's own setting.
+    Without this, running in any context with no interactive console
+    attached (a background job, CI runner, scheduled task, remoting
+    session -- anything that isn't a real attached terminal) makes
+    PowerShell capture a native command's stderr text and wrap each line
+    as a terminating NativeCommandError/RemoteException; combined with
+    this script's own top-level $ErrorActionPreference = 'Stop', that
+    aborted the whole build the instant any tool wrote so much as a
+    harmless warning to stderr -- reproduced directly with cmake's own
+    "CMake Deprecation Warning" for a vendored third-party
+    cmake_minimum_required below 3.5 (e.g. 3rdParty\freetype2), which is
+    completely non-fatal and which cmake itself continues right past.
     #>
     param(
         [Parameter(Mandatory = $true)][string]$FilePath,
         [Parameter(ValueFromRemainingArguments = $true)][string[]]$ArgumentList
     )
     Write-Host "> $FilePath $($ArgumentList -join ' ')"
-    & $FilePath @ArgumentList | Out-Host
+    $previousEap = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        & $FilePath @ArgumentList 2>&1 | ForEach-Object {
+            # ErrorRecord.ToString() falls back to the .NET type name (e.g.
+            # "System.Management.Automation.RemoteException") when the
+            # wrapped stderr line is blank, instead of an empty string --
+            # use .Exception.Message directly for those so blank lines in a
+            # multi-line stderr message (e.g. cmake's own warning text)
+            # stay blank rather than rendering as noisy type-name litter.
+            if ($_ -is [System.Management.Automation.ErrorRecord]) {
+                Out-Host -InputObject $_.Exception.Message
+            }
+            else {
+                Out-Host -InputObject $_
+            }
+        }
+    }
+    finally {
+        $ErrorActionPreference = $previousEap
+    }
     if ($LASTEXITCODE -ne 0) {
         throw "Command failed with exit code $($LASTEXITCODE): $FilePath $($ArgumentList -join ' ')"
     }
@@ -872,6 +908,17 @@ try {
     $tbbInstallDir = (ConvertTo-ForwardSlash $repoRoot) + '/3rdParty/openvino/temp/tbb/cmake'
     $vtkInstallDir = "$installFolderFwd/lib/cmake/vtk-9.6"
 
+    # So pkg-config (if installed) can actually resolve the freetype2.pc /
+    # harfbuzz.pc this build installs into $installFolder/lib/pkgconfig --
+    # without this, CMake's pkg_check_modules() (which opencv_contrib's
+    # freetype module uses via ocv_check_modules) only ever searches
+    # pkg-config's own default/system search path, never this project-local
+    # install prefix. Prepended (";"-separated, the Windows convention) so
+    # it takes priority over any pre-existing PKG_CONFIG_PATH entries.
+    $pkgConfigDir = "$installFolderFwd/lib/pkgconfig"
+    if ($env:PKG_CONFIG_PATH) { $env:PKG_CONFIG_PATH = "$pkgConfigDir;$env:PKG_CONFIG_PATH" }
+    else { $env:PKG_CONFIG_PATH = $pkgConfigDir }
+
     $generalFlags = New-Object System.Collections.Generic.List[string]
     $generalFlags.Add('-DCMAKE_POLICY_VERSION_MINIMUM=3.5')
     $generalFlags.Add('-DCMAKE_BUILD_TYPE:STRING=Release')
@@ -916,6 +963,41 @@ try {
     if ($ComponentSet -eq 'Full') {
         if ($Arch -notin @('arm', 'arm64')) {
             $freetypeDir = Join-Path $repoRoot '3rdParty\freetype2'
+
+            # Upstream freetype2 only installs freetype2.pc on UNIX (its
+            # CMakeLists.txt gates the (otherwise fully portable) generation
+            # logic behind `if (UNIX)`), so pkg-config can never resolve
+            # "freetype2" on Windows without this. Checked via `git apply
+            # --reverse --check` (idempotent -- succeeds only if the patch is
+            # already applied) rather than a "does the build dir exist yet"
+            # heuristic like Build-OpenVino uses below, since a freetype2
+            # build dir can already exist here from before this patch existed.
+            Push-Location $freetypeDir
+            try {
+                $freetypePatch = Join-Path $repoRoot '3rdParty\0002-Generate-freetype2.pc-on-Windows-too.patch'
+                # `git apply --check` always writes to stderr on failure (the
+                # expected outcome here whenever the patch isn't applied
+                # yet) -- 2>$null alone doesn't survive PowerShell's
+                # background-job stderr-to-ErrorRecord promotion (see
+                # Invoke-Native's own comment above for the full mechanism),
+                # so this needs the same local $ErrorActionPreference =
+                # 'Continue' scoping, not just stream redirection.
+                $previousEap = $ErrorActionPreference
+                $ErrorActionPreference = 'Continue'
+                try {
+                    & git apply --reverse --check $freetypePatch 2>$null
+                }
+                finally {
+                    $ErrorActionPreference = $previousEap
+                }
+                if ($LASTEXITCODE -ne 0) {
+                    Invoke-Native -FilePath 'git' -ArgumentList 'apply', $freetypePatch
+                }
+            }
+            finally {
+                Pop-Location
+            }
+
             Build-ThirdPartyDependency -SourceDir $freetypeDir -BuildFolderName $buildFolderName `
                 -CMakeExe $vsEnv.CMakeExe -GeneralCMakeConfigFlags $cmakeArgs -ExtraFlags @(
                 '-DCMAKE_DISABLE_FIND_PACKAGE_ZLIB:BOOL=TRUE',

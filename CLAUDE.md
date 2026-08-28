@@ -14,6 +14,50 @@ Note: from **Git Bash**, avoid `cmd.exe /c "..."` entirely — Bash's MSYS path-
 
 All Windows native-build scripts (`platforms/windows/Build_Binary*.ps1`) are now PowerShell — invoke them directly (`& .\Build_Binary.ps1 -Arch x86_64 ...`), no `cmd.exe` wrapper needed. The legacy `.bat` equivalents have been removed.
 
+## Windows Build Prerequisites
+
+**`pkg-config` should be installed** via Chocolatey (requires an elevated/admin
+PowerShell session — the Chocolatey install on this machine writes to
+`C:\ProgramData\chocolatey`, which a non-admin session can't touch):
+```powershell
+choco install pkgconfiglite -y
+```
+`pkgconfiglite` is the only `pkg-config` package on the Chocolatey community
+repo (confirmed via `choco search pkg-config`) — it's not a stripped-down
+variant to choose over some fuller alternative. The name comes from what it
+wraps: [pkg-config-lite](https://sourceforge.net/projects/pkgconfiglite/), a
+standalone Win32 build with no glib/gettext/libiconv runtime DLLs to also
+install and keep on `PATH`, unlike upstream pkg-config. It implements the
+same CLI (`--cflags`, `--libs`, `--modversion`, etc.) that CMake's
+`FindPkgConfig.cmake` expects, so it's a drop-in for what this build needs.
+
+Without it, OpenCV's own `ocv_check_modules()` macro (`opencv/cmake/OpenCVUtils.cmake`)
+skips `pkg_check_modules()` entirely for every module that uses it (FreeType,
+HarfBuzz, BrotliDec, etc.), which surfaces as `-- Could NOT find PkgConfig
+(missing: PKG_CONFIG_EXECUTABLE)` during configure. For FreeType/HarfBuzz
+specifically, this used to be silently fatal for `-Cuda` builds: `cmake/ThirdPartyDeps.cmake`
+pre-seeds `FREETYPE_FOUND`/`FREETYPE_LIBRARIES` (and the HarfBuzz equivalents)
+so `opencv_contrib`'s `freetype` module detects them without pkg-config, but
+`ocv_check_modules()` has an unconditional second step that *re-derives*
+`FREETYPE_LIBRARIES`/`HARFBUZZ_LIBRARIES` from a `FREETYPE_LDFLAGS`/`HARFBUZZ_LDFLAGS`
+variable that was never set — silently overwriting the correct `.lib` paths
+with empty values right before the module's own `ocv_target_link_libraries()`
+call. This only broke `-Cuda` builds because `-Cuda` forces
+`BUILD_opencv_world:BOOL=TRUE`, and the resulting empty link libraries meant
+`freetype.lib`/`harfbuzz.lib` were silently absent from `opencv_world`'s link
+line — surfacing as `LNK2019` unresolved `FT_*`/`hb_*` symbols and `LNK1120`
+at `opencv_world.dll` link time, confirmed by grepping the generated
+`opencv_world.vcxproj`'s `AdditionalDependencies` and finding `freetype.lib`/
+`harfbuzz.lib` genuinely missing while every other 3rdparty lib (zlib, libpng,
+hdf5, etc.) was present. `cmake/ThirdPartyDeps.cmake` now also sets
+`FREETYPE_LDFLAGS`/`HARFBUZZ_LDFLAGS` to the same resolved `.lib` paths so
+that re-derivation reproduces the correct value instead of wiping it — so a
+`-Cuda` build no longer strictly *requires* `pkg-config` to link correctly.
+Installing `pkg-config` is still worthwhile: it's the code path OpenCV's own
+build system actually expects, and it quiets the remaining
+`Could NOT find PkgConfig` warnings for HarfBuzz's own `FindHarfBuzz.cmake`
+and BrotliDec (those two don't affect the link either way in this build).
+
 ## Project Overview
 
 Emgu CV is a .NET wrapper for OpenCV. It has two distinct layers:
