@@ -318,6 +318,31 @@ if(WITH_JPEG AND BUILD_JPEG)
       target_compile_options(${_emgu_jpeg_target} PRIVATE -include "${EMGU_CV_JPEG_PREFIX_HEADER}")
       message(STATUS "EMGU_CV_JPEG_PREFIX: applied to target ${_emgu_jpeg_target}")
     endforeach()
+
+    # libjpeg-turbo's SIMD kernels are a fourth OBJECT library, folded into
+    # libjpeg-turbo the same way via $<TARGET_OBJECTS:simd>, so it needs the
+    # rename header too. Without it the jsimd_* dispatch functions stay
+    # unrenamed while their callers in the (renamed) jpeg sources reference
+    # emgu_jsimd_*, which builds fine -- a static lib resolves nothing -- and
+    # only fails when an application finally links cvextern:
+    #   Undefined symbols: "_emgu_jsimd_can_fdct_ifast", referenced from
+    #   _emgu_jinit_forward_dct in libcvextern.a(jcdctmgr.o)
+    #
+    # Unlike the three targets above, `simd` is conditional: it only exists
+    # when libjpeg-turbo's WITH_SIMD applies to this architecture, so a
+    # missing target here is legitimate rather than an error.
+    #
+    # NOTE: this force-include only reaches sources the C preprocessor
+    # compiles. That covers every SIMD source on builds using the Neon
+    # intrinsics path (NEON_INTRINSICS=ON, e.g. Apple arm64, where the whole
+    # target is .c files). Builds whose SIMD kernels are hand-written
+    # assembly instead -- arm with NEON_INTRINSICS=OFF (jsimd_neon.S), or
+    # x86/x86_64 NASM (*.asm) -- would still define those kernels
+    # unprefixed. Those configurations need separate handling.
+    if(TARGET simd)
+      target_compile_options(simd PRIVATE -include "${EMGU_CV_JPEG_PREFIX_HEADER}")
+      message(STATUS "EMGU_CV_JPEG_PREFIX: applied to target simd")
+    endif()
   endif()
 endif()
 
