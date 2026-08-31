@@ -1,4 +1,4 @@
-name: Ubuntu build.
+name: Ubuntu build
 
 on:
   push:
@@ -36,4 +36,6 @@ jobs:
     - uses: actions/upload-artifact@v7
       with:
         name: emgucv-ubuntu-nuget-package
-        path: ${{ github.workspace }}/platforms/nuget/*.nupkg 
+        path: ${{ github.workspace }}/platforms/nuget/*.nupkg
+    - name: Run BuildInfo.Console demo
+      run: dotnet run --project Emgu.CV.Example/BuildInfo.Console/BuildInfo.Console.csproj

@@ -46,6 +46,8 @@ jobs:
       with:
         name: emgucv-debian-trixie-x64-nuget-package
         path: platforms/nuget/*.nupkg
+    - name: Run BuildInfo.Console demo
+      run: dotnet run --project Emgu.CV.Example/BuildInfo.Console/BuildInfo.Console.csproj
 
   build-arm64:
     name: Debian Trixie arm64
@@ -85,3 +87,5 @@ jobs:
       with:
         name: emgucv-debian-trixie-arm64-nuget-package
         path: platforms/nuget/*.nupkg
+    - name: Run BuildInfo.Console demo
+      run: dotnet run --project Emgu.CV.Example/BuildInfo.Console/BuildInfo.Console.csproj
