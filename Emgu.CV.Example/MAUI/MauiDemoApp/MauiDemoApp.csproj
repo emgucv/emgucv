@@ -26,6 +26,15 @@
 
 		<AcceptAndroidSDKLicenses>true</AcceptAndroidSDKLicenses>
 		<CodesignEntitlements Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">Platforms\MacCatalyst\Entitlements.plist</CodesignEntitlements>
+		<!--
+		Platforms\iOS\Entitlements.plist requests the raised memory limit the
+		multi-gigabyte language models need. It is deliberately NOT wired up by
+		default: a free Apple ID's provisioning profile carries no entitlements
+		at all, so the build only emits warning MT7140 and the request is
+		dropped. Enable this line when signing with a paid developer account.
+		<CodesignEntitlements Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+		-->
+
 		
 		<!-- <WindowsPackageType>None</WindowsPackageType> -->
 	</PropertyGroup>

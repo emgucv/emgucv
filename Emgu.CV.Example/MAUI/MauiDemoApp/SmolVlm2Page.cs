@@ -3,265 +3,211 @@
 //----------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Models;
-using Emgu.CV.Platform.Maui.UI;
-using Emgu.Util;
+
+using Microsoft.Maui.Controls.Shapes;
 
 namespace MauiDemoApp
 {
     /// <summary>
-    /// Chat with an image using the SmolVLM2 vision-language model running on
-    /// the dnn module. Each question is answered about the currently selected
-    /// image with KV-cached generation.
+    /// Chat with an image using the SmolVLM2 vision-language model running on the
+    /// dnn module. Each question is answered about the currently selected image
+    /// with KV-cached generation.
+    ///
+    /// The layout comes from <see cref="ChatShowcasePage"/>; this page adds the
+    /// image card the conversation is about.
     /// </summary>
-    public class SmolVlm2Page : ButtonTextImagePage
+    public class SmolVlm2Page : ChatShowcasePage
     {
-        private SmolVlm2 _model = new SmolVlm2();
-        private Mat _image = null;
-        private Editor _promptEditor;
-        private List<View> _bubbles = new List<View>();
+        // Glyph the main menu already uses for both language-model modules.
+        private const string GlyphText = ""; // text_fields
+
+        private readonly SmolVlm2 _model = new SmolVlm2();
+        private Image _preview;
+        private Mat _image;
+        private bool _defaultLoaded;
 
         public SmolVlm2Page()
-            : base(new Microsoft.Maui.Controls.Button[] { new Microsoft.Maui.Controls.Button() })
-        {
-            this.Title = "Chat with Image";
-
-            _promptEditor = new Editor();
-            _promptEditor.Placeholder = "Ask a question about the image...";
-            _promptEditor.Text = "Describe this image briefly.";
-            _promptEditor.HeightRequest = 80;
-            _promptEditor.BackgroundColor = Microsoft.Maui.Graphics.Colors.White;
-            _promptEditor.TextColor = Microsoft.Maui.Graphics.Color.FromArgb("#1A1C2E");
-            _promptEditor.FontFamily = "InterRegular";
-            MainLayout.Children.Insert(0, _promptEditor);
-
-            // On iOS/MacCatalyst, dismissing the keyboard via the "Done" accessory
-            // can leave the page ScrollView with the keyboard inset still applied,
-            // which freezes scrolling until the editor is focused again. Clearing
-            // the inset and re-enabling scrolling when the editor loses focus works
-            // around it.
-            _promptEditor.Unfocused += (sender, args) => ResetScrollAfterKeyboard();
-
-            var sendButton = this.GetButton();
-            sendButton.Text = "Send";
-
-            var pickImageButton = this.AdditionalButtons[0];
-            pickImageButton.Text = "Pick Image";
-
-            //Show the default sample image when the page opens.
-            this.Loaded += async (sender, args) =>
-            {
-                if (_image == null)
+            : base(
+                title: "Chat with Image",
+                heroTitle: "Chat with Image",
+                heroSubtitle: "Ask questions about a photo — the vision model answers on your device.",
+                glyph: GlyphText,
+                // Exact byte counts of the published files, so a half-finished
+                // download is never reported as installed.
+                models: new[]
                 {
-                    try
-                    {
-                        await LoadDefaultImage();
-                    }
-                    catch (Exception ex)
-                    {
-                        SetMessage(String.Format("Failed to load the sample image: {0}", ex.Message));
-                    }
-                }
-            };
-
-            sendButton.Clicked += async (sender, args) =>
-            {
-                String prompt = _promptEditor.Text;
-                if (String.IsNullOrWhiteSpace(prompt) || _image == null)
-                    return;
-
-                sendButton.IsEnabled = false;
-                pickImageButton.IsEnabled = false;
-                try
-                {
-                    if (!_model.Initialized)
-                    {
-                        SetMessage("Initializing the model, this downloads ~1.1 GB on the first run...");
-                        await _model.Init(DownloadManager_OnDownloadProgressChanged);
-                        if (!_model.Initialized)
+                    new ChatModel("SmolVLM2 256M", "1.1 GB • Vision + language", "smolvlm2_256m_video_instruct_onnx",
+                        new[]
                         {
-                            SetMessage("Failed to initialize the SmolVLM2 model.");
-                            return;
-                        }
-                    }
+                            ("tokenizer.json", 3548256L),
+                            ("vision_raw.onnx", 374230161L),
+                            ("embed_tokens.onnx", 113541419L),
+                            ("decoder_raw.onnx", 1244646L),
+                            ("decoder_raw.onnx_data", 651896064L)
+                        }, true, weightBytes: 1144460546L)
+                },
+                actionGlyph: MaskRcnnPage.GlyphImage,
+                actionText: "Change",
+                composerPlaceholder: "Ask a question about the image…")
+        {
+        }
 
-                    _promptEditor.Text = String.Empty;
-                    AddBubble(prompt, true);
-                    SetMessage("Generating...");
+        protected override string EmptyStateHint => "Ask something about the photo above.";
 
-                    String response = await Task.Run(() => _model.Generate(_image, prompt, 96));
-                    AddBubble(response.Trim(), false);
-                    SetMessage(null);
-                }
-                catch (Exception ex)
-                {
-                    SetMessage(String.Format("Error: {0}", ex.Message));
-                }
-                finally
-                {
-                    sendButton.IsEnabled = true;
-                    pickImageButton.IsEnabled = true;
-                }
+        protected override View BuildExtraCard()
+        {
+            _preview = new Image { Aspect = Aspect.AspectFit, HeightRequest = 240 };
+
+            var frame = new Border
+            {
+                BackgroundColor = MaskRcnnPage.ImageBackground,
+                Stroke = MaskRcnnPage.RowBorder,
+                StrokeThickness = 1,
+                Padding = new Thickness(10),
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(16) },
+                Content = _preview
             };
 
-            pickImageButton.Clicked += async (sender, args) =>
+            var header = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
+            header.Add(new Label
             {
-                try
-                {
-                    FileResult fileResult = await FilePicker.PickAsync(PickOptions.Images);
-                    if (fileResult == null)
-                        return;
-                    Mat picked;
-                    using (Stream stream = await fileResult.OpenReadAsync())
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-                        await stream.CopyToAsync(ms);
-                        picked = new Mat();
-                        CvInvoke.Imdecode(ms.ToArray(), ImreadModes.ColorBgr, picked);
-                    }
-                    if (picked.IsEmpty)
-                    {
-                        picked.Dispose();
-                        SetMessage("Failed to decode the selected image.");
-                        return;
-                    }
+                Text = "Image",
+                FontFamily = MaskRcnnPage.TitleFont,
+                FontSize = 17,
+                TextColor = MaskRcnnPage.PrimaryText,
+                VerticalOptions = LayoutOptions.Center
+            }, 0, 0);
 
-                    if (_image != null)
-                        _image.Dispose();
-                    _image = picked;
-                    SetImage(_image);
-
-                    //Each question is answered about the current image only, so
-                    //start a fresh conversation for the new image.
-                    ClearBubbles();
-                    SetMessage("Image loaded. Ask a question about it.");
-                }
-                catch (Exception ex)
-                {
-                    SetMessage(String.Format("Failed to pick an image: {0}", ex.Message));
-                }
+            return new Border
+            {
+                BackgroundColor = MaskRcnnPage.CardBackground,
+                Stroke = Colors.Transparent,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
+                Padding = new Thickness(16),
+                Content = new VerticalStackLayout { Spacing = 12, Children = { header, frame } }
             };
         }
 
-        private async Task LoadDefaultImage()
+        protected override async void OnAppearing()
         {
-            using (Stream stream = await FileSystem.OpenAppPackageFileAsync("dog416.png"))
-            using (MemoryStream ms = new MemoryStream())
+            base.OnAppearing();
+            if (_defaultLoaded)
+                return;
+            _defaultLoaded = true;
+
+            try
             {
+                using Stream stream = await FileSystem.OpenAppPackageFileAsync("dog416.png");
+                using MemoryStream ms = new MemoryStream();
                 await stream.CopyToAsync(ms);
                 Mat m = new Mat();
                 CvInvoke.Imdecode(ms.ToArray(), ImreadModes.ColorBgr, m);
-                _image = m;
-                SetImage(_image);
+                SetImage(m);
+            }
+            catch (Exception ex)
+            {
+                SetStatus("Could not load the sample image: " + ex.Message);
             }
         }
 
-        private void ClearBubbles()
+        protected override bool CanSend(out string reason)
         {
-            foreach (View bubble in _bubbles)
-                MainLayout.Children.Remove(bubble);
-            _bubbles.Clear();
+            if (_image == null)
+            {
+                reason = "Pick an image first.";
+                return false;
+            }
+            reason = null;
+            return true;
         }
 
-        /// <summary>
-        /// Append a chat bubble to the transcript, right-aligned accent for the
-        /// user and left-aligned white for the model.
-        /// </summary>
-        private void AddBubble(String text, bool isUser)
+        protected override async Task<bool> EnsureModelReadyAsync()
         {
-            var label = new Label
-            {
-                Text = text,
-                TextColor = isUser
-                    ? Microsoft.Maui.Graphics.Colors.White
-                    : Microsoft.Maui.Graphics.Color.FromArgb("#1A1C2E"),
-                FontFamily = "InterRegular",
-                FontSize = 15,
-                LineBreakMode = LineBreakMode.WordWrap
-            };
+            if (_model.Initialized)
+                return true;
 
-            var timestampLabel = new Label
+            SetStatus("Preparing the model… the first run downloads about 1.1 GB.");
+            await _model.Init(OnDownloadProgress);
+            if (!_model.Initialized)
             {
-                Text = DateTime.Now.ToString("t"),
-                TextColor = isUser
-                    ? Microsoft.Maui.Graphics.Color.FromArgb("#D7E1FF")
-                    : Microsoft.Maui.Graphics.Color.FromArgb("#8A8FA3"),
-                FontFamily = "InterRegular",
-                FontSize = 11,
-                HorizontalOptions = isUser ? LayoutOptions.End : LayoutOptions.Start
-            };
+                SetStatus("Could not load the model. Check your connection and try again.");
+                return false;
+            }
 
-            var bubbleContent = new VerticalStackLayout
+            UpdateModelSummary();
+            return true;
+        }
+
+        protected override string Generate(string prompt)
+        {
+            return _model.Generate(_image, prompt, 96);
+        }
+
+        protected override async void OnHeaderAction(object sender, EventArgs e)
+        {
+            try
             {
-                Spacing = 2,
-                Children = { label, timestampLabel }
-            };
+                FileResult fileResult = await FilePicker.PickAsync(PickOptions.Images);
+                if (fileResult == null)
+                    return;
 
-            var bubble = new Border
-            {
-                BackgroundColor = isUser
-                    ? Microsoft.Maui.Graphics.Color.FromArgb("#3D7BF7")
-                    : Microsoft.Maui.Graphics.Colors.White,
-                Stroke = Microsoft.Maui.Graphics.Colors.Transparent,
-                StrokeThickness = 0,
-                Padding = new Thickness(12, 8),
-                StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(12) },
-                HorizontalOptions = isUser ? LayoutOptions.End : LayoutOptions.Start,
-                MaximumWidthRequest = 460,
-                Content = bubbleContent
-            };
-
-            //Insert the bubble above the (status) message label so the
-            //transcript grows between the buttons and the status area.
-            int index = MainLayout.Children.IndexOf(MessageLabel);
-            MainLayout.Children.Insert(index < 0 ? MainLayout.Children.Count : index, bubble);
-            _bubbles.Add(bubble);
-
-            if (this.Content is ScrollView scrollView)
-            {
-                try
+                Mat picked = new Mat();
+                using (Stream stream = await fileResult.OpenReadAsync())
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    scrollView.ScrollToAsync(MessageLabel, ScrollToPosition.End, false);
+                    await stream.CopyToAsync(ms);
+                    CvInvoke.Imdecode(ms.ToArray(), ImreadModes.ColorBgr, picked);
                 }
-                catch (Exception)
+
+                if (picked.IsEmpty)
                 {
+                    picked.Dispose();
+                    SetStatus("That file could not be read as an image.");
+                    return;
                 }
+
+                SetImage(picked);
+
+                // Each question is answered about the current image only, so a new
+                // image starts a fresh conversation.
+                ClearTranscript();
+                SetStatus("Image loaded. Ask a question about it.");
+            }
+            catch (Exception ex)
+            {
+                SetStatus("Could not pick an image: " + ex.Message);
             }
         }
 
-        private void DownloadManager_OnDownloadProgressChanged(long? totalBytesToReceive, long bytesReceived, double? progressPercentage)
+        private void SetImage(Mat image)
         {
-            if (totalBytesToReceive == null)
-                SetMessage(String.Format("{0} MB downloaded.", bytesReceived / (1024 * 1024)));
-            else
-                SetMessage(String.Format("{0} of {1} MB downloaded ({2}%)", bytesReceived / (1024 * 1024), totalBytesToReceive / (1024 * 1024), progressPercentage));
+            _image?.Dispose();
+            _image = image;
+            if (_preview != null)
+                _preview.Source = MaskRcnnPage.MatToImageSource(image);
         }
 
-        /// <summary>
-        /// Clear the keyboard inset left on the page ScrollView after the keyboard
-        /// is dismissed on iOS/MacCatalyst, which otherwise freezes scrolling until
-        /// the editor is focused again.
-        /// </summary>
-        private void ResetScrollAfterKeyboard()
+        protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
         {
-#if __IOS__ || __MACCATALYST__
-            //Run after MAUI's own keyboard-dismiss handling has settled.
-            this.Dispatcher.Dispatch(() =>
+            base.OnNavigatedFrom(args);
+            if (!Navigation.NavigationStack.Contains(this) && !Navigation.ModalStack.Contains(this))
             {
-                if (this.Content?.Handler?.PlatformView is UIKit.UIScrollView scrollView)
+                // Both the model and the image are still being read by any
+                // in-flight generation on its background thread; freeing them
+                // underneath it is a native crash, so wait for it to finish.
+                Mat image = _image;
+                _image = null;
+                CleanupWhenIdle(() =>
                 {
-                    scrollView.ContentInset = UIKit.UIEdgeInsets.Zero;
-                    scrollView.ScrollIndicatorInsets = UIKit.UIEdgeInsets.Zero;
-                    scrollView.ScrollEnabled = true;
-                }
-            });
-#endif
+                    image?.Dispose();
+                    _model?.Dispose();
+                });
+            }
         }
     }
 }
