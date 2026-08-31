@@ -108,10 +108,12 @@
     <Compile Include="AutoTestPtcloud.cs" />
     <Compile Include="AutoTestRetina.cs" />
     <Compile Include="AutoTestSerialization.cs" />
+    <Compile Include="AutoTestShape.cs" />
     <Compile Include="AutoTestStereo.cs" />
     <Compile Include="AutoTestStitching.cs" />
     <Compile Include="AutoTestStructuredLight.cs" />
     <Compile Include="AutoTestText.cs" />
+    <Compile Include="AutoTestTiff.cs" />
     <Compile Include="AutoTestVideoIO.cs" />
     <Compile Include="AutoTestViz.cs" />
   </ItemGroup>

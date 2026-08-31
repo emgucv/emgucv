@@ -52,12 +52,14 @@
     <Compile Include="..\AutoTestRetina.cs" Link="AutoTestRetina.cs" />
     <Compile Include="..\AutoTestSaliency.cs" Link="AutoTestSaliency.cs" />
     <Compile Include="..\AutoTestSerialization.cs" Link="AutoTestSerialization.cs" />
+    <Compile Include="..\AutoTestShape.cs" Link="AutoTestShape.cs" />
     <Compile Include="..\AutoTestSignal.cs" Link="AutoTestSignal.cs" />
     <Compile Include="..\AutoTestStereo.cs" Link="AutoTestStereo.cs" />
     <Compile Include="..\AutoTestStitching.cs" Link="AutoTestStitching.cs" />
     <Compile Include="..\AutoTestStructuredLight.cs" Link="AutoTestStructuredLight.cs" />
     <Compile Include="..\AutoTestSurfaceMatching.cs" Link="AutoTestSurfaceMatching.cs" />
     <Compile Include="..\AutoTestText.cs" Link="AutoTestText.cs" />
+    <Compile Include="..\AutoTestTiff.cs" Link="AutoTestTiff.cs" />
     <Compile Include="..\AutoTestTracking.cs" Link="AutoTestTracking.cs" />
     <Compile Include="..\AutoTestVideo.cs" Link="AutoTestVideo.cs" />
     <Compile Include="..\AutoTestVideoIO.cs" Link="AutoTestVideoIO.cs" />

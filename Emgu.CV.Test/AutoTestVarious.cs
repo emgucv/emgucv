@@ -18,9 +18,7 @@ using System.Xml.Serialization;
 using Emgu.CV;
 using Emgu.CV.Aruco;
 using Emgu.CV.CvEnum;
-using Emgu.CV.Features;
 using Emgu.CV.Flann;
-using Emgu.CV.Shape;
 using Emgu.CV.Stitching;
 using Emgu.CV.Text;
 using Emgu.CV.Structure;
@@ -31,9 +29,7 @@ using Emgu.CV.Freetype;
 using Emgu.CV.StructuredLight;
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
-using Emgu.CV.Mcc;
 using Emgu.CV.Models;
-using Emgu.CV.Tiff;
 //using Emgu.CV.WinForms;
 using Emgu.CV.Util;
 using Emgu.CV.VideoStab;
@@ -148,22 +144,6 @@ namespace Emgu.CV.Test
                 }
 
                 EmguAssert.IsTrue(exceptionCaught);
-            }
-        }
-
-        [Test]
-        public void TestShapeDistanceExtractor()
-        {
-            using (HistogramCostExtractor comparer = new ChiHistogramCostExtractor())
-            using (ThinPlateSplineShapeTransformer transformer = new ThinPlateSplineShapeTransformer())
-            using (ShapeContextDistanceExtractor extractor = new ShapeContextDistanceExtractor(comparer, transformer))
-            using (HausdorffDistanceExtractor extractor2 = new HausdorffDistanceExtractor())
-            {
-                Point[] shape1 = new Point[] { new Point(0, 0), new Point(480, 0), new Point(480, 360), new Point(0, 360) };
-                Point[] shape2 = new Point[] { new Point(0, 0), new Point(480, 0), new Point(500, 240), new Point(480, 360), new Point(0, 360) };
-
-                float distance2 = extractor2.ComputeDistance(shape1, shape2);
-                float distance = extractor.ComputeDistance(shape1, shape2);
             }
         }
 
@@ -384,34 +364,6 @@ namespace Emgu.CV.Test
         }
 
         [Test]
-        public void TestFeature2DProperties()
-        {
-            using (FastFeatureDetector fast = new FastFeatureDetector())
-            {
-                fast.Threshold = 25;
-                EmguAssert.AreEqual(25, fast.Threshold);
-                fast.NonmaxSuppression = false;
-                EmguAssert.IsFalse(fast.NonmaxSuppression);
-                fast.Type = FastFeatureDetector.DetectorType.Type5_8;
-                EmguAssert.AreEqual(FastFeatureDetector.DetectorType.Type5_8, fast.Type);
-            }
-
-            using (ORB orb = new ORB())
-            {
-                orb.MaxFeatures = 250;
-                EmguAssert.AreEqual(250, orb.MaxFeatures);
-                orb.ScaleFactor = 1.5;
-                EmguAssert.IsTrue(Math.Abs(orb.ScaleFactor - 1.5) < 1e-6);
-                orb.NLevels = 4;
-                EmguAssert.AreEqual(4, orb.NLevels);
-                orb.FastThreshold = 15;
-                EmguAssert.AreEqual(15, orb.FastThreshold);
-                orb.Score = ORB.ScoreType.Fast;
-                EmguAssert.AreEqual(ORB.ScoreType.Fast, orb.Score);
-            }
-        }
-
-        [Test]
         public void TestRng()
         {
             Emgu.CV.RNG rng = new Emgu.CV.RNG();
@@ -472,94 +424,6 @@ namespace Emgu.CV.Test
         {
             bool loaded = (IntPtr.Zero != Emgu.Util.Toolbox.LoadLibrary("not_exist"));
             EmguAssert.IsFalse(loaded);
-        }
-
-        [Test]
-        public void TestMcc()
-        {
-            using (Mat image = EmguAssert.LoadMat("MCC24.png"))
-            using (CCheckerDetector detector = new CCheckerDetector())
-            {
-                if (detector.Process(image))
-                {
-                    using (CChecker checker = detector.BestColorChecker)
-                    {
-                        detector.Draw(checker, image, new MCvScalar(0, 255, 0), 1);
-                    }
-                        /*
-                    using (CCheckerDraw drawer = new CCheckerDraw(checker, new MCvScalar(0, 255, 0), 1))
-                    {
-                        drawer.Draw(image);
-                        //image.Save("c:\\tmp.out.png");
-                    }
-                    //using (Mat img = new Mat(new Size(480, 320), DepthType.Cv8U, 3))
-                    //{
-                    //    drawer.Draw(img);
-                    //}*/
-                }
-            }
-
-            using (CChecker c = new CChecker())
-            {
-                PointF p = c.Center;
-            }
-
-        }
-
-        [Test]
-        public void TestGeoTiffWriter()
-        {
-            String fileName = Path.Combine(Path.GetTempPath(), "test_geotiff.tif");
-            try
-            {
-                using (Mat image = new Mat(new Size(64, 64), DepthType.Cv8U, 3))
-                {
-                    image.SetTo(new MCvScalar(128, 64, 32));
-                    using (TiffWriter writer = new TiffWriter(fileName))
-                    {
-                        // Geo tags must be written before the image data is flushed.
-                        // ModelTiepoint: [i, j, k, x, y, z] — pixel (0,0) maps to lon/lat (10.0, 50.0)
-                        double[] tiepoint = new double[] { 0, 0, 0, 10.0, 50.0, 0.0 };
-                        // ModelPixelScale: [scaleX, scaleY, scaleZ] — 0.001 degrees/pixel
-                        double[] pixelScale = new double[] { 0.001, 0.001, 0.0 };
-                        writer.WriteGeoTag(tiepoint, pixelScale);
-                        writer.WriteImage(image);
-                    }
-                }
-                EmguAssert.IsTrue(File.Exists(fileName), "GeoTIFF file was not created");
-                EmguAssert.IsTrue(new FileInfo(fileName).Length > 0, "GeoTIFF file is empty");
-            }
-            finally
-            {
-                if (File.Exists(fileName))
-                    File.Delete(fileName);
-            }
-        }
-
-        [Test]
-        public void TestTileTiffWriter()
-        {
-            String fileName = Path.Combine(Path.GetTempPath(), "test_tile.tif");
-            try
-            {
-                Size imageSize = new Size(64, 64);
-                Size tileSize = new Size(32, 32);
-                using (Mat image = new Mat(imageSize, DepthType.Cv8U, 3))
-                {
-                    image.SetTo(new MCvScalar(100, 150, 200));
-                    using (TileTiffWriter writer = new TileTiffWriter(fileName, imageSize, tileSize))
-                    {
-                        writer.WriteImage(image);
-                    }
-                }
-                EmguAssert.IsTrue(File.Exists(fileName), "Tiled TIFF file was not created");
-                EmguAssert.IsTrue(new FileInfo(fileName).Length > 0, "Tiled TIFF file is empty");
-            }
-            finally
-            {
-                if (File.Exists(fileName))
-                    File.Delete(fileName);
-            }
         }
 
 #endif

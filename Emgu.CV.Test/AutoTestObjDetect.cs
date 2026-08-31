@@ -11,6 +11,7 @@ using System.Text;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Dpm;
+using Emgu.CV.Mcc;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 
@@ -104,6 +105,38 @@ namespace Emgu.CV.Test
                 {
                     String text = detector.Decode(m, pts);
                 }
+            }
+
+        }
+
+        [Test]
+        public void TestMcc()
+        {
+            using (Mat image = EmguAssert.LoadMat("MCC24.png"))
+            using (CCheckerDetector detector = new CCheckerDetector())
+            {
+                if (detector.Process(image))
+                {
+                    using (CChecker checker = detector.BestColorChecker)
+                    {
+                        detector.Draw(checker, image, new MCvScalar(0, 255, 0), 1);
+                    }
+                        /*
+                    using (CCheckerDraw drawer = new CCheckerDraw(checker, new MCvScalar(0, 255, 0), 1))
+                    {
+                        drawer.Draw(image);
+                        //image.Save("c:\\tmp.out.png");
+                    }
+                    //using (Mat img = new Mat(new Size(480, 320), DepthType.Cv8U, 3))
+                    //{
+                    //    drawer.Draw(img);
+                    //}*/
+                }
+            }
+
+            using (CChecker c = new CChecker())
+            {
+                PointF p = c.Center;
             }
 
         }
