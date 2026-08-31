@@ -131,9 +131,6 @@
     <Compile Include="..\AutoTestXFeatures2D.cs">
       <Link>AutoTestXFeatures2D.cs</Link>
     </Compile>
-    <Compile Include="..\AutoTestImage.cs">
-      <Link>AutoTestImage.cs</Link>
-    </Compile>
     <Compile Include="..\AutoTestMat.cs">
       <Link>AutoTestMat.cs</Link>
     </Compile>

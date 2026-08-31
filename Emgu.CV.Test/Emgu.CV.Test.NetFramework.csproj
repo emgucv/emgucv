@@ -96,7 +96,6 @@
     <Compile Include="EmguAssert.cs" />
     <Compile Include="Face.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AutoTestImage.cs" />
     <Compile Include="AutoTestML.cs" />
     <Compile Include="AutoTestAruco.cs" />
     <Compile Include="AutoTestDnn.cs" />
