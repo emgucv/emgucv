@@ -45,6 +45,13 @@ jobs:
       with:
         name: emgucv-maccatalyst-zip-package
         path: ${{ github.workspace }}/platforms/ios/catalyst_arm64/*.zip
+    - name: Build MacCatalyst MAUI demo app
+      run: dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-maccatalyst -p:ValidateXcodeVersion=false
+    - name: Build Emgu CV iOS native binary
+      run: ./build.sh simulator_arm64
+      working-directory: ./platforms/ios/
+    - name: Build iOS MAUI demo app for simulator
+      run: dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-ios -p:ValidateXcodeVersion=false
     - name: Install Android NDK
       run: |
         NDK_VERSION="28.0.12916984"
@@ -61,3 +68,5 @@ jobs:
       with:
         name: emgucv-android-arm64-v8a-nuget-package
         path: ${{ github.workspace }}/platforms/nuget/*.nupkg
+    - name: Build Android MAUI demo app
+      run: dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-android
