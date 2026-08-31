@@ -128,6 +128,9 @@
     <Compile Include="..\AutoTestVideoIO.cs">
       <Link>AutoTestVideoIO.cs</Link>
     </Compile>
+    <Compile Include="..\AutoTestViz.cs">
+      <Link>AutoTestViz.cs</Link>
+    </Compile>
     <Compile Include="..\AutoTestXFeatures2D.cs">
       <Link>AutoTestXFeatures2D.cs</Link>
     </Compile>

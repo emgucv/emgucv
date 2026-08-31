@@ -113,6 +113,7 @@
     <Compile Include="AutoTestStructuredLight.cs" />
     <Compile Include="AutoTestText.cs" />
     <Compile Include="AutoTestVideoIO.cs" />
+    <Compile Include="AutoTestViz.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\opencv\data\haarcascades\haarcascade_eye.xml">
