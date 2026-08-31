@@ -122,6 +122,7 @@ namespace Emgu.CV.Util
         /// </summary>
         public void Clear()
         {
+            _fileInfo.Refresh();
             if (_fileInfo.Exists)
                 _fileInfo.Delete();
         }
@@ -132,6 +133,9 @@ namespace Emgu.CV.Util
         /// <returns>An estimation of the number of elements in this storage</returns>
         public int EstimateSize()
         {
+            //FileInfo caches Exists/Length after first access and never auto-refreshes,
+            //so a stale value would be seen here after Append() writes via a separate FileStream.
+            _fileInfo.Refresh();
             return
                _fileInfo.Exists ?
                (int)(_fileInfo.Length / (_elementSize)) :
@@ -159,6 +163,7 @@ namespace Emgu.CV.Util
         /// <returns>The sub-sampled data in this storage</returns>
         public IEnumerable<T> GetSubsamples(int subsampleRate)
         {
+            _fileInfo.Refresh();
             if (!_fileInfo.Exists)
                 yield break;
 
@@ -185,6 +190,7 @@ namespace Emgu.CV.Util
         /// <returns>The data in this storage</returns>
         public IEnumerator<T> GetEnumerator()
         {
+            _fileInfo.Refresh();
             if (!_fileInfo.Exists)
                 yield break;
 

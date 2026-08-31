@@ -160,23 +160,19 @@ namespace Emgu.CV.Test
             //generate some randome points
             PointF[] pts = new PointF[120];
             GCHandle handle = GCHandle.Alloc(pts, GCHandleType.Pinned);
-            using(Mat ptsMat = new Mat(pts.Length, 2, DepthType.Cv32F, 1, handle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(float)) * 2))
-            //using (Matrix<float> ptsMat = new Matrix<float>(pts.Length, 2, handle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(float)) * 2))
+            using (Mat ptsMat = new Mat(pts.Length, 2, DepthType.Cv32F, 1, handle.AddrOfPinnedObject(), Marshal.SizeOf(typeof(float)) * 2))
             {
                 CvInvoke.Randu(ptsMat, new MCvScalar(), new MCvScalar(100));
-                //ptsMat.SetRandNormal(new MCvScalar(), new MCvScalar(100));
             }
             handle.Free();
 
             String fileName = Path.Combine(Path.GetTempPath(), "tmp.dat");
             Stopwatch watch = Stopwatch.StartNew();
             BinaryFileStorage<PointF> stor = new BinaryFileStorage<PointF>(fileName, pts);
-            //BinaryFileStorage<PointF> stor = new BinaryFileStorage<PointF>("abc.data", pts);
             watch.Stop();
             EmguAssert.WriteLine(String.Format("Time for writing {0} points: {1} milliseconds", pts.Length, watch.ElapsedMilliseconds));
             int estimatedSize = stor.EstimateSize();
-
-            //EmguAssert.IsTrue(pts.Length == estimatedSize);
+            EmguAssert.IsTrue(pts.Length == estimatedSize);
 
             watch.Reset();
             watch.Start();
@@ -187,12 +183,12 @@ namespace Emgu.CV.Test
             if (File.Exists(fileName))
                 File.Delete(fileName);
 
-            //EmguAssert.IsTrue(pts.Length == pts2.Length);
+            EmguAssert.IsTrue(pts.Length == pts2.Length);
 
             //Check for equality
             for (int i = 0; i < pts.Length; i++)
             {
-                //EmguAssert.IsTrue(pts[i] == pts2[i]);
+                EmguAssert.IsTrue(pts[i] == pts2[i]);
             }
         }
 #endif
