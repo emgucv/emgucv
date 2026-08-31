@@ -84,7 +84,6 @@
     <Compile Include="AutoTestFeatures.cs" />
     <Compile Include="AutoTestXFeatures2D.cs" />
     <Compile Include="AutoTestMat.cs" />
-    <Compile Include="AutoTestMatrix.cs" />
     <Compile Include="AutoTestOcr.cs" />
     <Compile Include="AutoTestOpenCL.cs" />
     <Compile Include="AutoTestQuaternions.cs" />
