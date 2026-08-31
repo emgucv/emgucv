@@ -38,6 +38,8 @@ jobs:
       with:
         name: emgucv-macos-zip-package
         path: ${{ github.workspace }}/platforms/macos/build_arm64/*.zip
+    - name: Run BuildInfo.Console demo
+      run: dotnet run --project Emgu.CV.Example/BuildInfo.Console/BuildInfo.Console.csproj
     - name: Build Emgu CV MacCatalyst native binary and package
       run: ./build_catalyst.sh arm64
       working-directory: ./platforms/ios/
