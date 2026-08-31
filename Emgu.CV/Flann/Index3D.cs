@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------
-//  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.       
+//  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
 using System;
@@ -14,7 +14,6 @@ using Emgu.CV.Util;
 
 namespace Emgu.CV.Flann
 {
-    /*
     /// <summary>
     /// Create index for 3D points
     /// </summary>
@@ -22,10 +21,7 @@ namespace Emgu.CV.Flann
     {
         private MCvPoint3D32f[] _points;
         private Index _flannIndex;
-        private Matrix<float> _dataMatrix;
-        private Matrix<float> _query;
-        private Matrix<float> _distance;
-        private Matrix<int> _index;
+        private Mat _dataMat;
         private GCHandle _dataHandle;
 
         /// <summary>
@@ -38,13 +34,15 @@ namespace Emgu.CV.Flann
             _points = points;
 
             _dataHandle = GCHandle.Alloc(_points, GCHandleType.Pinned);
-            _dataMatrix = new Matrix<float>(_points.Length, 3, _dataHandle.AddrOfPinnedObject());
+            _dataMat = new Mat(
+                _points.Length,
+                3,
+                DepthType.Cv32F,
+                1,
+                _dataHandle.AddrOfPinnedObject(),
+                3 * sizeof(float));
 
-            _flannIndex = new Index(_dataMatrix, ip);
-
-            _query = new Matrix<float>(1, 3);
-            _distance = new Matrix<float>(1, 1);
-            _index = new Matrix<int>(1, 1);
+            _flannIndex = new Index(_dataMat, ip);
         }
 
         /// <summary>
@@ -70,16 +68,26 @@ namespace Emgu.CV.Flann
         /// <returns>The nearest neighbor (may be an approximation, depends in the index type).</returns>
         public Neighbor NearestNeighbor(MCvPoint3D32f position)
         {
-            _query.Data[0, 0] = position.X;
-            _query.Data[0, 1] = position.Y;
-            _query.Data[0, 2] = position.Z;
-            _flannIndex.KnnSearch(_query, _index, _distance, 1, 1);
+            using (Mat query = new Mat(1, 3, DepthType.Cv32F, 1))
+            using (Mat index = new Mat(1, 1, DepthType.Cv32S, 1))
+            using (Mat distance = new Mat(1, 1, DepthType.Cv32F, 1))
+            {
+                float[] queryData = new float[] { position.X, position.Y, position.Z };
+                Marshal.Copy(queryData, 0, query.DataPointer, queryData.Length);
 
-            Neighbor n = new Neighbor();
-            n.Index = _index.Data[0, 0];
-            n.SquareDist = _distance.Data[0, 0];
+                _flannIndex.KnnSearch(query, index, distance, 1, 1);
 
-            return n;
+                int[] indexVal = new int[1];
+                index.CopyTo(indexVal);
+                float[] distanceVal = new float[1];
+                distance.CopyTo(distanceVal);
+
+                Neighbor n = new Neighbor();
+                n.Index = indexVal[0];
+                n.SquareDist = distanceVal[0];
+
+                return n;
+            }
         }
 
         /// <summary>
@@ -91,34 +99,38 @@ namespace Emgu.CV.Flann
         /// <returns>The neighbors found</returns>
         public Neighbor[] RadiusSearch(MCvPoint3D32f position, double radius, int maxResults)
         {
-            _query.Data[0, 0] = position.X;
-            _query.Data[0, 1] = position.Y;
-            _query.Data[0, 2] = position.Z;
-            using (Mat indicies = new Mat(new Size(maxResults, 1), DepthType.Cv32S, 1))
-            using (Mat sqrDistances = new Mat(new Size(maxResults, 1), DepthType.Cv32F, 1))
+            using (Mat query = new Mat(1, 3, DepthType.Cv32F, 1))
             {
-                indicies.SetTo(new MCvScalar(-1));
-                sqrDistances.SetTo(new MCvScalar(-1));
-                _flannIndex.RadiusSearch(_query, indicies, sqrDistances, radius, maxResults);
-                int[] indiciesVal = new int[indicies.Rows * indicies.Cols];
-                indicies.CopyTo(indiciesVal);
-                float[] sqrDistancesVal = new float[sqrDistances.Rows * sqrDistances.Cols];
-                sqrDistances.CopyTo(sqrDistancesVal);
+                float[] queryData = new float[] { position.X, position.Y, position.Z };
+                Marshal.Copy(queryData, 0, query.DataPointer, queryData.Length);
 
-                List<Neighbor> neighbors = new List<Neighbor>();
-                for (int j = 0; j < maxResults; j++)
+                using (Mat indicies = new Mat(new Size(maxResults, 1), DepthType.Cv32S, 1))
+                using (Mat sqrDistances = new Mat(new Size(maxResults, 1), DepthType.Cv32F, 1))
                 {
-                    if (indiciesVal[j] <= 0)
-                        break;
-                    Neighbor n = new Neighbor();
-                    n.Index = indiciesVal[j];
-                    n.SquareDist = sqrDistancesVal[j];
-                    neighbors.Add(n);
+                    indicies.SetTo(new MCvScalar(-1));
+                    sqrDistances.SetTo(new MCvScalar(-1));
+                    _flannIndex.RadiusSearch(query, indicies, sqrDistances, radius, maxResults);
+                    int[] indiciesVal = new int[indicies.Rows * indicies.Cols];
+                    indicies.CopyTo(indiciesVal);
+                    float[] sqrDistancesVal = new float[sqrDistances.Rows * sqrDistances.Cols];
+                    sqrDistances.CopyTo(sqrDistancesVal);
+
+                    List<Neighbor> neighbors = new List<Neighbor>();
+                    int resultCount = Math.Min(maxResults, indiciesVal.Length);
+                    for (int j = 0; j < resultCount; j++)
+                    {
+                        if (indiciesVal[j] < 0)
+                            break;
+                        Neighbor n = new Neighbor();
+                        n.Index = indiciesVal[j];
+                        n.SquareDist = sqrDistancesVal[j];
+                        neighbors.Add(n);
+                    }
+
+                    return neighbors.ToArray();
                 }
 
-                return neighbors.ToArray();
             }
-
         }
 
         /// <summary>
@@ -126,11 +138,9 @@ namespace Emgu.CV.Flann
         /// </summary>
         protected override void DisposeObject()
         {
-            _index.Dispose();
+            _flannIndex.Dispose();
+            _dataMat.Dispose();
             _dataHandle.Free();
-            _dataMatrix.Dispose();
-            _query.Dispose();
-            _distance.Dispose();
         }
-    }*/
+    }
 }

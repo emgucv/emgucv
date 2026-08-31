@@ -181,5 +181,25 @@ namespace Emgu.CV.Test
             EmguAssert.IsTrue(indicesValue[0] == 5);
             EmguAssert.IsTrue(distanceValue[0] == 0.0);
         }
+
+        [Test]
+        public void TestIndex3D()
+        {
+            MCvPoint3D32f[] points = new MCvPoint3D32f[10];
+            for (int i = 0; i < points.Length; i++)
+                points[i] = new MCvPoint3D32f(i, 0, 0);
+
+            using (Flann.LinearIndexParams p = new LinearIndexParams())
+            using (Flann.Index3D index3D = new Flann.Index3D(points, p))
+            {
+                Flann.Index3D.Neighbor nearest = index3D.NearestNeighbor(new MCvPoint3D32f(5.1f, 0, 0));
+                EmguAssert.IsTrue(nearest.Index == 5);
+
+                Flann.Index3D.Neighbor[] neighbors = index3D.RadiusSearch(new MCvPoint3D32f(5.0f, 0, 0), 2.5, 10);
+                EmguAssert.IsTrue(neighbors.Length > 0);
+                foreach (Flann.Index3D.Neighbor n in neighbors)
+                    EmguAssert.IsTrue(Math.Abs(n.Index - 5) <= 2);
+            }
+        }
     }
 }
