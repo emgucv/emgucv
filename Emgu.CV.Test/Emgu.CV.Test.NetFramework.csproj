@@ -91,7 +91,6 @@
     <Compile Include="AutoTestUMat.cs" />
     <Compile Include="AutoTestVarious.cs" />
     <Compile Include="AutoTestModels.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="EmguAssert.cs" />
     <Compile Include="Face.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

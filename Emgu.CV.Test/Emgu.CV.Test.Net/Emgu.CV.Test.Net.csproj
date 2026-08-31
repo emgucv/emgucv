@@ -66,7 +66,6 @@
     <Compile Include="..\AutoTestViz.cs" Link="AutoTestViz.cs" />
     <Compile Include="..\AutoTestVarious.cs" Link="AutoTestVarious.cs" />
     <Compile Include="..\AutoTestXStereo.cs" Link="AutoTestXStereo.cs" />
-    <Compile Include="..\Class1.cs" Link="Class1.cs" />
     <Compile Include="..\EmguAssert.cs" Link="EmguAssert.cs" />
     <Compile Include="..\Face.cs" Link="Face.cs" />
   </ItemGroup>
