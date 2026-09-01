@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	The language-model demos load multi-gigabyte ONNX weight files into memory
+	(Qwen3 0.6B alone is ~2.8 GB, exported at full 32-bit precision). That
+	exceeds the default per-app memory limit, and iOS responds by killing the
+	process outright: no exception, no crash log, just "terminated due to
+	signal 9" partway through loading the model.
+
+	Increased Memory Limit raises that ceiling on devices that have the RAM to
+	spare. Extended Virtual Addressing allows the >4 GB address space such an
+	allocation needs.
+	-->
+	<key>com.apple.developer.kernel.increased-memory-limit</key>
+	<true/>
+	<key>com.apple.developer.kernel.extended-virtual-addressing</key>
+	<true/>
+</dict>
+</plist>
