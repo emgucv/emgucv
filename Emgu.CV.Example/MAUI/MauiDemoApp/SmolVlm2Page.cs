@@ -51,8 +51,11 @@ namespace MauiDemoApp
                             ("decoder_raw.onnx_data", 651896064L)
                         }, true, weightBytes: 1144460546L)
                 },
-                actionGlyph: MaskRcnnPage.GlyphImage,
-                actionText: "Change",
+                // No header pill: this module's action is "Change Photo", which
+                // belongs above the image it changes, the way the detection pages
+                // place it. BuildExtraCard puts it there.
+                actionGlyph: null,
+                actionText: null,
                 composerPlaceholder: "Ask a question about the image…")
         {
         }
@@ -82,6 +85,7 @@ namespace MauiDemoApp
                 TextColor = MaskRcnnPage.PrimaryText,
                 VerticalOptions = LayoutOptions.Center
             }, 0, 0);
+            header.Add(BuildActionPill(MaskRcnnPage.GlyphImage, "Change Photo"), 1, 0);
 
             return new Border
             {
@@ -131,7 +135,7 @@ namespace MauiDemoApp
             if (_model.Initialized)
                 return true;
 
-            SetStatus("Preparing the model… the first run downloads about 1.1 GB.");
+            BeginModelLoad("Preparing the model… the first run downloads about 1.1 GB.");
             await _model.Init(OnDownloadProgress);
             if (!_model.Initialized)
             {

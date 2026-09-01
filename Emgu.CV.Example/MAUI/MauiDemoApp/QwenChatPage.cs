@@ -51,9 +51,12 @@ namespace MauiDemoApp
                     new ChatModel("Qwen3 1.7B", "7.6 GB • Better quality, slower", "qwen3_1.7b_onnx",
                         new[] { ("model.onnx", 0L), ("model.onnx_data", 0L) },
                         false, Variant.Qwen3Large, weightBytes: 7600000000L),
-                    new ChatModel("Qwen2.5 0.5B", "~1 GB • Previous generation / reference port", "qwen2.5_0.5b_instruct_onnx",
-                        new[] { ("tokenizer.json", 7031645L), ("model.onnx", 1125445L), ("model.onnx_data", 0L) },
-                        false, Variant.Qwen25, weightBytes: 1000000000L)
+                    // 2.4 GB, not the "~1 GB" a 0.5B model suggests: these weights
+                    // are exported at full 32-bit precision, so the download is
+                    // roughly four bytes per parameter.
+                    new ChatModel("Qwen2.5 0.5B", "2.4 GB • Previous generation / reference port", "qwen2.5_0.5b_instruct_onnx",
+                        new[] { ("tokenizer.json", 7031645L), ("model.onnx", 1125445L), ("model.onnx_data", 2520669824L) },
+                        false, Variant.Qwen25, weightBytes: 2528826914L)
                 },
                 actionGlyph: MaskRcnnPage.GlyphPlay,
                 actionText: "New Chat",
@@ -79,7 +82,7 @@ namespace MauiDemoApp
             if (_model != null)
                 return true;
 
-            SetStatus("Preparing the model… the first run downloads it.");
+            BeginModelLoad("Preparing the model… the first run downloads it.");
 
             if (variant == Variant.Qwen25)
             {

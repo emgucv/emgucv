@@ -96,6 +96,8 @@ namespace MauiDemoApp
         private bool _expanded;
         private bool _busy;
         private Task _generation;
+        private readonly string _moduleKey;
+        private bool _rowsShowDownloading;
 
         // Runtime UI.
         private readonly VerticalStackLayout _transcript;
@@ -144,9 +146,23 @@ namespace MauiDemoApp
             _models = models ?? Array.Empty<ChatModel>();
             _composerPlaceholder = composerPlaceholder;
             HeroGlyph = glyph;
+            _moduleKey = title;
+
+            // Prefer the module's default, but never start on a model this device
+            // cannot load: that state looks completely normal and then kills the
+            // app on the first send. Fall back to the first one that does fit, and
+            // only keep a blocked default if nothing fits at all (so the page still
+            // explains itself rather than showing an empty selection).
+            _selectedIndex = -1;
             for (int i = 0; i < _models.Length; i++)
-                if (_models[i].IsDefault)
+                if (_models[i].IsDefault && !ExceedsDeviceMemory(_models[i]))
                     _selectedIndex = i;
+            if (_selectedIndex < 0)
+                for (int i = 0; i < _models.Length && _selectedIndex < 0; i++)
+                    if (!ExceedsDeviceMemory(_models[i]))
+                        _selectedIndex = i;
+            if (_selectedIndex < 0)
+                _selectedIndex = 0;
 
             Title = title;
             BackgroundColor = MaskRcnnPage.PageBackground;
@@ -163,20 +179,6 @@ namespace MauiDemoApp
                 HorizontalTextAlignment = TextAlignment.Center,
                 VerticalOptions = LayoutOptions.Center
             };
-            // Guarded: "New Chat" resets the model's conversation state and "Change"
-            // swaps the image out, both of which the background generation is still
-            // using. Let either through mid-turn and the answer is corrupted at
-            // best, a native crash at worst.
-            var actionPill = PillButton(actionGlyph, actionText, (s, e) =>
-            {
-                if (_busy)
-                {
-                    SetStatus("Hang on — still answering.");
-                    return;
-                }
-                OnHeaderAction(s, e);
-            });
-
             var topRow = new Grid
             {
                 ColumnDefinitions =
@@ -188,7 +190,12 @@ namespace MauiDemoApp
             };
             topRow.Add(backButton, 0, 0);
             topRow.Add(titleLabel, 1, 0);
-            topRow.Add(actionPill, 2, 0);
+
+            // A module whose action belongs next to its own content (e.g. "Change
+            // Photo" above the image, as the detection pages do it) passes no
+            // caption and places BuildActionPill() itself.
+            if (!string.IsNullOrEmpty(actionText))
+                topRow.Add(BuildActionPill(actionGlyph, actionText), 2, 0);
 
             // ---------- Hero card ----------
             var heroTile = new Border
@@ -222,8 +229,11 @@ namespace MauiDemoApp
             // ---------- Model card ----------
             // Collapsed, this is a single summary row; expanded, it reveals the
             // full radio list plus a note about what the choice costs.
-            _collapsedName = new Label { FontFamily = MaskRcnnPage.TitleFont, FontSize = 16, TextColor = MaskRcnnPage.PrimaryText };
-            _collapsedDetail = new Label { FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = MaskRcnnPage.SecondaryText };
+            // Truncate rather than wrap: the badge beside these sizes to its own
+            // content, so a long one (e.g. "Too big") would otherwise squeeze the
+            // name into a one-word-per-line tower.
+            _collapsedName = new Label { FontFamily = MaskRcnnPage.TitleFont, FontSize = 16, TextColor = MaskRcnnPage.PrimaryText, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 1 };
+            _collapsedDetail = new Label { FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = MaskRcnnPage.SecondaryText, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 1 };
             _collapsedBadgeLabel = new Label { FontFamily = MaskRcnnPage.TitleFont, FontSize = 12, VerticalOptions = LayoutOptions.Center };
             _collapsedBadge = new Border
             {
@@ -304,8 +314,12 @@ namespace MauiDemoApp
 
             _modelRows = new VerticalStackLayout { Spacing = 8, IsVisible = false, Margin = new Thickness(0, 12, 0, 0) };
 
-            // Only offer the expander when there is actually a choice to make.
-            if (_models.Length > 1)
+            // The expander opens even for a single model. There is nothing to
+            // choose between, but the row behind it is where the size, the
+            // installed state, the delete action and any "too big for this device"
+            // explanation live — hiding all of that just because a module ships one
+            // model left the vision page looking like a different, emptier app.
+            if (_models.Length > 0)
             {
                 var expandTap = new TapGestureRecognizer();
                 expandTap.Tapped += async (s, e) => await ToggleModelList();
@@ -313,7 +327,6 @@ namespace MauiDemoApp
             }
             else
             {
-                // Nothing to choose between, so no expander.
                 _chevronDisc.IsVisible = false;
             }
 
@@ -483,6 +496,23 @@ namespace MauiDemoApp
         protected virtual void OnHeaderAction(object sender, EventArgs e) { }
 
         /// <summary>
+        /// Build the module's action button in the shared pill style, guarded so it
+        /// cannot fire mid-turn: "New Chat" resets the model's conversation state
+        /// and "Change Photo" swaps the image out, and the background generation is
+        /// still using both. Letting either through corrupts the answer at best and
+        /// crashes inside native code at worst.
+        /// </summary>
+        protected View BuildActionPill(string glyph, string text) => PillButton(glyph, text, (s, e) =>
+        {
+            if (_busy)
+            {
+                SetStatus("Hang on — still answering.");
+                return;
+            }
+            OnHeaderAction(s, e);
+        });
+
+        /// <summary>
         /// Whether a turn is currently being generated. Deliberately not named
         /// IsBusy — that is an existing Page property driving the platform activity
         /// indicator, and shadowing it invites setting the wrong one.
@@ -636,13 +666,24 @@ namespace MauiDemoApp
             });
         }
 
+        /// <summary>
+        /// Mark the start of loading this module's model, before any bytes move.
+        /// Call this instead of <see cref="SetStatus"/> when beginning a load that
+        /// may download, so guards like the delete action see it immediately
+        /// rather than only once the first progress callback lands.
+        /// </summary>
+        protected void BeginModelLoad(string message)
+        {
+            DownloadState.Begin(_moduleKey, message);
+        }
+
         /// <summary>Format a download-progress callback into the status line.</summary>
         protected void OnDownloadProgress(long? totalBytesToReceive, long bytesReceived, double? progressPercentage)
         {
             string msg = totalBytesToReceive != null
                 ? $"Downloading model… {bytesReceived / (1024 * 1024)} of {totalBytesToReceive.Value / (1024 * 1024)} MB ({(int)(progressPercentage ?? 0)}%)"
                 : $"Downloading model… {bytesReceived / (1024 * 1024)} MB";
-            DownloadState.Report(msg);
+            DownloadState.Report(_moduleKey, msg);
         }
 
         // ---------- Download state that outlives the page ----------
@@ -661,35 +702,62 @@ namespace MauiDemoApp
         {
             private static readonly object Sync = new object();
 
-            public static bool Active { get; private set; }
+            /// <summary>Which module owns the running download, null if none.</summary>
+            public static string Owner { get; private set; }
 
             public static string Message { get; private set; }
 
-            public static event Action<string> Changed;
+            /// <summary>Raised with the owning module and its latest message.</summary>
+            public static event Action<string, string> Changed;
 
-            public static void Report(string message)
+            public static bool IsActiveFor(string owner)
             {
                 lock (Sync)
-                {
-                    Active = true;
-                    Message = message;
-                }
-                Changed?.Invoke(message);
+                    return Owner != null && Owner == owner;
             }
 
-            public static void Finish()
+            /// <summary>
+            /// Mark a download as started, before the first byte arrives.
+            ///
+            /// Registering at the point of intent rather than on the first
+            /// progress callback matters: the gap covers the confirmation prompt,
+            /// the SHA256 validation of any existing files and the initial
+            /// request, and anything guarding on "is a download running" — such as
+            /// the delete action — would wave the user straight through it.
+            /// </summary>
+            public static void Begin(string owner, string message)
             {
                 lock (Sync)
                 {
-                    // Nothing was downloading, so there is no progress line to
-                    // clear — and firing anyway would wipe a status the caller has
+                    Owner = owner;
+                    Message = message;
+                }
+                Changed?.Invoke(owner, message);
+            }
+
+            public static void Report(string owner, string message)
+            {
+                lock (Sync)
+                {
+                    Owner = owner;
+                    Message = message;
+                }
+                Changed?.Invoke(owner, message);
+            }
+
+            public static void Finish(string owner)
+            {
+                lock (Sync)
+                {
+                    // Only the owner may clear it, and only if it was actually
+                    // running: firing otherwise would wipe a status the caller has
                     // just set, such as a download failure.
-                    if (!Active)
+                    if (Owner == null || Owner != owner)
                         return;
-                    Active = false;
+                    Owner = null;
                     Message = null;
                 }
-                Changed?.Invoke(null);
+                Changed?.Invoke(owner, null);
             }
         }
 
@@ -697,7 +765,7 @@ namespace MauiDemoApp
         {
             base.OnAppearing();
             DownloadState.Changed += OnSharedDownloadProgress;
-            if (DownloadState.Active)
+            if (DownloadState.IsActiveFor(_moduleKey))
                 SetStatus(DownloadState.Message);
         }
 
@@ -707,7 +775,30 @@ namespace MauiDemoApp
             DownloadState.Changed -= OnSharedDownloadProgress;
         }
 
-        private void OnSharedDownloadProgress(string message) => SetStatus(message);
+        // Only react to this module's own download. Two chat pages share this
+        // state, and echoing the other one's progress made a page look busy when
+        // it was not — and, worse, silently swallowed the user's own send.
+        private void OnSharedDownloadProgress(string owner, string message)
+        {
+            if (owner != _moduleKey)
+                return;
+
+            SetStatus(message);
+
+            // Rebuild only when the download starts or stops, never on the
+            // progress ticks in between: the delete action has to appear and
+            // disappear with it, but rebuilding every row a few times a second
+            // would make the list unusable.
+            bool active = DownloadState.IsActiveFor(_moduleKey);
+            if (active == _rowsShowDownloading)
+                return;
+            _rowsShowDownloading = active;
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                BuildModelRows();
+                UpdateModelSummary();
+            });
+        }
 
         // ---------- Send ----------
 
@@ -727,11 +818,27 @@ namespace MauiDemoApp
                 return;
             }
 
+            // Offer the override here as well as on the row. A module with a single
+            // model shows no expander at all, so the row is not reachable and this
+            // is the only place the user can get past the estimate — and it is
+            // where they asked to run the thing anyway.
+            ChatModel selected = SelectedModel;
+            if (selected != null && ExceedsDeviceMemory(selected))
+            {
+                if (!await ConfirmOversizedAsync(selected))
+                {
+                    SetStatus($"{selected.Name} needs more memory than this device allows.");
+                    return;
+                }
+                BuildModelRows();
+                UpdateModelSummary();
+            }
+
             // A download started by an earlier visit to this page is still running
             // and still writing to the model folder. Starting another one would
             // point a second writer at the same files (each is opened with
             // FileMode.Create), so wait for the first to land instead.
-            if (DownloadState.Active)
+            if (DownloadState.IsActiveFor(_moduleKey))
             {
                 SetStatus(DownloadState.Message);
                 return;
@@ -764,7 +871,7 @@ namespace MauiDemoApp
             }
             finally
             {
-                DownloadState.Finish();
+                DownloadState.Finish(_moduleKey);
                 SetBusy(false);
                 UpdateModelSummary();
             }
@@ -869,8 +976,8 @@ namespace MauiDemoApp
             // just muddy it at this size.
             radioDot.IsVisible = false;
 
-            var name = new Label { Text = model.Name, FontFamily = MaskRcnnPage.TitleFont, FontSize = 16, TextColor = MaskRcnnPage.PrimaryText };
-            var detail = new Label { Text = model.Detail, FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = MaskRcnnPage.SecondaryText };
+            var name = new Label { Text = model.Name, FontFamily = MaskRcnnPage.TitleFont, FontSize = 16, TextColor = MaskRcnnPage.PrimaryText, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 1 };
+            var detail = new Label { Text = model.Detail, FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = MaskRcnnPage.SecondaryText, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 2 };
             var text = new VerticalStackLayout { Spacing = 2, VerticalOptions = LayoutOptions.Center, Children = { name, detail } };
 
             var badges = new HorizontalStackLayout { Spacing = 6, VerticalOptions = LayoutOptions.Center };
@@ -878,7 +985,9 @@ namespace MauiDemoApp
             {
                 // One clear reason beats a stack of badges that ends in "but you
                 // can't have it".
-                badges.Children.Add(Badge("Too big for this device", BlockedText, BlockedFill));
+                // Kept short: this badge shares a row with the model name, and a
+                // long caption starves it. Tapping the row explains in full.
+                badges.Children.Add(Badge("Too big", BlockedText, BlockedFill));
             }
             else
             {
@@ -888,14 +997,6 @@ namespace MauiDemoApp
                     installed ? InstalledFill : MaskRcnnPage.ImageBackground));
             }
 
-            // Anything on disk can be removed — including a half-finished download,
-            // which is exactly the case worth reclaiming and the one a plain
-            // "Installed" check would miss. This replaces the old "Default" badge:
-            // which model is the default matters far less on a phone than being
-            // able to get several gigabytes back.
-            long onDisk = FolderBytes(model);
-            if (onDisk > 0)
-                badges.Children.Add(DeleteButton(model, onDisk));
 
             var grid = new Grid
             {
@@ -920,6 +1021,23 @@ namespace MauiDemoApp
                 name.TextColor = MaskRcnnPage.SecondaryText;
             }
 
+            var rowContent = new VerticalStackLayout { Children = { grid } };
+
+            // Anything on disk can be removed — including a half-finished download,
+            // which is exactly the case worth reclaiming and the one a plain
+            // "Installed" check would miss. This replaces the old "Default" badge:
+            // which model is the default matters far less on a phone than being
+            // able to get several gigabytes back.
+            //
+            // It sits on its own labelled line rather than as an icon among the
+            // badges: a bare glyph next to a status pill reads as decoration, and
+            // the one thing a destructive action must never be is ambiguous. It is
+            // also withheld entirely while this model is downloading, so the
+            // tap that deletes a file mid-write is not even offered.
+            long onDisk = FolderBytes(model);
+            if (onDisk > 0 && !DownloadState.IsActiveFor(_moduleKey))
+                rowContent.Children.Add(DeleteRow(model, onDisk));
+
             var row = new Border
             {
                 BackgroundColor = selected && !blocked ? MaskRcnnPage.TileBackground : MaskRcnnPage.CardBackground,
@@ -928,17 +1046,20 @@ namespace MauiDemoApp
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(15) },
                 Padding = new Thickness(12, 11),
                 Opacity = blocked ? 0.6 : 1,
-                Content = grid
+                Content = rowContent
             };
 
             int captured = index;
             var tap = new TapGestureRecognizer();
-            tap.Tapped += (s, e) =>
+            tap.Tapped += async (s, e) =>
             {
                 if (blocked)
                 {
-                    SetStatus($"{model.Name} needs about {model.WeightBytes / (1024.0 * 1024 * 1024):0.0} GB of memory. " +
-                              $"This device can give an app {DescribeBudget()}, so iOS would shut the app down while loading it.");
+                    if (!await ConfirmOversizedAsync(model))
+                        return;
+                    SelectModel(captured);
+                    BuildModelRows();
+                    UpdateModelSummary();
                     return;
                 }
                 SelectModel(captured);
@@ -977,22 +1098,43 @@ namespace MauiDemoApp
             return $"{bytes / (1024.0 * 1024.0):0} MB";
         }
 
-        private Border DeleteButton(ChatModel model, long onDisk)
+        private View DeleteRow(ChatModel model, long onDisk)
         {
-            var button = new Border
+            var icon = MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphClose, BlockedText, 16);
+            icon.VerticalOptions = LayoutOptions.Center;
+
+            var label = new Label
             {
-                WidthRequest = 32,
-                HeightRequest = 32,
-                BackgroundColor = BlockedFill,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(10) },
-                VerticalOptions = LayoutOptions.Center,
-                Content = MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphClose, BlockedText, 18)
+                // Says what it removes and what you get back, so the consequence is
+                // on the button rather than only in the confirmation.
+                Text = $"Delete download · frees {FormatSize(onDisk)}",
+                FontFamily = MaskRcnnPage.TitleFont,
+                FontSize = 13,
+                TextColor = BlockedText,
+                VerticalOptions = LayoutOptions.Center
             };
+
+            var content = new HorizontalStackLayout
+            {
+                Spacing = 6,
+                Padding = new Thickness(0, 9, 0, 1),
+                Children = { icon, label }
+            };
+
+            var stack = new VerticalStackLayout
+            {
+                Margin = new Thickness(0, 9, 0, 0),
+                Children =
+                {
+                    new BoxView { HeightRequest = 1, Color = MaskRcnnPage.RowBorder },
+                    content
+                }
+            };
+
             var tap = new TapGestureRecognizer();
             tap.Tapped += async (s, e) => await DeleteModel(model, onDisk);
-            button.GestureRecognizers.Add(tap);
-            return button;
+            stack.GestureRecognizers.Add(tap);
+            return stack;
         }
 
         private async Task DeleteModel(ChatModel model, long onDisk)
@@ -1002,9 +1144,9 @@ namespace MauiDemoApp
                 SetStatus("Hang on — still answering.");
                 return;
             }
-            if (DownloadState.Active)
+            if (DownloadState.IsActiveFor(_moduleKey))
             {
-                SetStatus("A download is in progress. Let it finish first.");
+                SetStatus("This model is downloading right now. Let it finish first.");
                 return;
             }
 
@@ -1074,6 +1216,17 @@ namespace MauiDemoApp
             _collapsedName.Text = model.Name;
             _collapsedDetail.Text = model.Detail;
 
+            // "Too big" outranks "Installed": a model sitting on disk that the
+            // device cannot load is not usable, and saying "Installed" here is the
+            // exact contradiction that sends someone to press Send and get killed.
+            if (ExceedsDeviceMemory(model))
+            {
+                _collapsedBadgeLabel.Text = "Too big";
+                _collapsedBadgeLabel.TextColor = BlockedText;
+                _collapsedBadge.BackgroundColor = BlockedFill;
+                return;
+            }
+
             bool installed = IsInstalled(model);
             _collapsedBadgeLabel.Text = installed ? "Installed" : "Not installed";
             _collapsedBadgeLabel.TextColor = installed ? InstalledText : MaskRcnnPage.SecondaryText;
@@ -1082,9 +1235,20 @@ namespace MauiDemoApp
 
         // ---------- Does this model fit in memory? ----------
 
-        // Loading a model needs its weights resident plus working room on top;
-        // 1.3x is a rough allowance for that overhead.
-        private const double WeightOverhead = 1.3;
+        // Peak memory as a multiple of the weight files on disk.
+        //
+        // Measured, not guessed, and it is much worse than it looks: the ONNX
+        // importer builds its own graph and tensors rather than mapping the file,
+        // so the weights are effectively resident more than once during load. Two
+        // observations on an iPhone 16 (8 GB), both killed by the OS:
+        //
+        //   Qwen3 0.6B    3.0 GB of weights  -> killed
+        //   SmolVLM2 256M 1.1 GB of weights  -> killed
+        //
+        // The smaller one already exceeded a budget of ~3.2 GB, which puts the
+        // real multiplier near or above 3x. Anything lower here hands the user a
+        // model that loads for a while and then takes the whole app down.
+        private const double WeightOverhead = 3.0;
 
         // Share of physical RAM one app can realistically hold. iOS enforces a
         // per-process limit well below the device total and kills anything that
@@ -1138,7 +1302,37 @@ namespace MauiDemoApp
         {
             if (model.WeightBytes <= 0 || MemoryBudget <= 0)
                 return false;
+            if (_forceAllowed.Contains(model.Folder))
+                return false;
             return model.WeightBytes * WeightOverhead > MemoryBudget;
+        }
+
+        // Models the user has explicitly chosen to try despite the estimate.
+        //
+        // The budget above is inferred from observed kills, not from any figure
+        // Apple publishes, and it changes with the build: a Release build carries a
+        // fraction of Debug's runtime overhead. An estimate that can only ever say
+        // no would permanently hide a model that might run fine, so the block is a
+        // strong warning the user can override rather than a locked door.
+        private static readonly HashSet<string> _forceAllowed = new HashSet<string>();
+
+        /// <summary>
+        /// Warn that a model looks too big and let the user proceed anyway.
+        /// Returns true if they chose to continue, and records the choice so the
+        /// model stops being blocked for the rest of the session.
+        /// </summary>
+        private async Task<bool> ConfirmOversizedAsync(ChatModel model)
+        {
+            bool tryAnyway = await DisplayAlertAsync(
+                $"{model.Name} may be too big",
+                $"Needs about {FormatSize((long)(model.WeightBytes * WeightOverhead))} to load; this device allows " +
+                $"{DescribeBudget()}. iOS will probably close the app.\n\nThis is an estimate — you can still try.",
+                "Try anyway",
+                "Cancel");
+
+            if (tryAnyway)
+                _forceAllowed.Add(model.Folder);
+            return tryAnyway;
         }
 
         private static string DescribeBudget()
