@@ -886,18 +886,35 @@ ELSEIF (APPLE)
 	COMMAND bash -c "[ ! -f '${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${CVEXTERN_DEPENDENCY_DLL_NAME}_x86_64${CVEXTERN_DEPENDENCY_DLL_EXT}' ] || ( mkdir -p '${UNMANAGED_LIBRARY_OUTPUT_PATH}/../../../osx-x64/native' && cp -f '${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${CVEXTERN_DEPENDENCY_DLL_NAME}_x86_64${CVEXTERN_DEPENDENCY_DLL_EXT}' '${UNMANAGED_LIBRARY_OUTPUT_PATH}/../../../osx-x64/native/${CVEXTERN_DEPENDENCY_DLL_NAME}${CVEXTERN_DEPENDENCY_DLL_EXT}' && chmod a+x '${UNMANAGED_LIBRARY_OUTPUT_PATH}/../../../osx-x64/native/${CVEXTERN_DEPENDENCY_DLL_NAME}${CVEXTERN_DEPENDENCY_DLL_EXT}' )"
 	VERBATIM
 	COMMENT "Populating thin per-architecture copies under runtimes/osx-<arch>/native")
+
+      # Package these RID-specific thin copies too (OPTIONAL: a given build
+      # only has whichever arch(es) were actually present in ../arch above --
+      # e.g. cv_macos_x86_64 has both once the arm64 dylib is pre-downloaded,
+      # but a plain arm64-only build only has osx-arm64).
+      INSTALL(FILES
+        ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../../../osx-arm64/native/${CVEXTERN_DEPENDENCY_DLL}
+        DESTINATION "libs/runtimes/osx-arm64/native/"
+        COMPONENT emgucv_binary
+        OPTIONAL)
+      INSTALL(FILES
+        ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../../../osx-x64/native/${CVEXTERN_DEPENDENCY_DLL}
+        DESTINATION "libs/runtimes/osx-x64/native/"
+        COMPONENT emgucv_binary
+        OPTIONAL)
     ELSE()
       add_custom_command(TARGET ${the_target}
 	POST_BUILD
 	COMMAND cp -f ${UNMANAGED_LIBRARY_OUTPUT_PATH}/${CVEXTERN_DEPENDENCY_DLL_NAME}${CVEXTERN_DEPENDENCY_DLL_EXT} ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../${CVEXTERN_DEPENDENCY_DLL_NAME}${CVEXTERN_DEPENDENCY_DLL_EXT}
 	COMMENT "Copying file to ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../${CVEXTERN_DEPENDENCY_DLL_NAME}${CVEXTERN_DEPENDENCY_DLL_EXT}")
     ENDIF()
-    
-    INSTALL(FILES
-      ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../${CVEXTERN_DEPENDENCY_DLL}
-      DESTINATION "libs/runtimes/osx/native/"
-      COMPONENT emgucv_binary)
-    
+
+    # Fat/universal binary no longer packaged -- see the per-RID osx-x64/osx-arm64
+    # INSTALL rules above instead.
+    #INSTALL(FILES
+    #  ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../${CVEXTERN_DEPENDENCY_DLL}
+    #  DESTINATION "libs/runtimes/osx/native/"
+    #  COMPONENT emgucv_binary)
+
   ENDFOREACH()
   
   #INSTALL(FILES ${the_target} 
