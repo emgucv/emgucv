@@ -822,10 +822,17 @@ ELSEIF (APPLE)
   # Each architecture build also writes its build information next to the thin
   # per-architecture binary, so the packaged .inc always matches the dylib it
   # sits beside (issue #978).
-  IF("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "arm64")
+  # Use IS_ARM64 (a real compiled-symbol check, see CheckTargetArch.cmake),
+  # not CMAKE_SYSTEM_PROCESSOR -- the latter reflects the host CPU, not the
+  # actual -arch being compiled for, so it's wrong when cross-compiling
+  # x86_64 on an Apple Silicon host (as "cv macos" now does before its
+  # native arm64 pass).
+  IF(IS_ARM64)
     SET(EMGUCV_OSX_RID "osx-arm64")
+    SET(EMGUCV_OSX_ARCH_SUFFIX "arm64")
   ELSE()
     SET(EMGUCV_OSX_RID "osx-x64")
+    SET(EMGUCV_OSX_ARCH_SUFFIX "x86_64")
   ENDIF()
   add_custom_command(TARGET ${the_target}
     POST_BUILD
@@ -867,8 +874,8 @@ ELSEIF (APPLE)
     IF( (${CVEXTERN_DEPENDENCY_DLL_EXT_LOWER} STREQUAL ".dylib") OR (${CVEXTERN_DEPENDENCY_DLL_EXT_LOWER} STREQUAL ".so") ) 
       add_custom_command(TARGET ${the_target}
 	POST_BUILD
-	COMMAND cp -f ${UNMANAGED_LIBRARY_OUTPUT_PATH}/${CVEXTERN_DEPENDENCY_DLL_NAME}${CVEXTERN_DEPENDENCY_DLL_EXT} ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${CVEXTERN_DEPENDENCY_DLL_NAME}_${CMAKE_SYSTEM_PROCESSOR}${CVEXTERN_DEPENDENCY_DLL_EXT}
-	COMMENT "Copying file to ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${CVEXTERN_DEPENDENCY_DLL_NAME}_${CMAKE_SYSTEM_PROCESSOR}${CVEXTERN_DEPENDENCY_DLL_EXT}")
+	COMMAND cp -f ${UNMANAGED_LIBRARY_OUTPUT_PATH}/${CVEXTERN_DEPENDENCY_DLL_NAME}${CVEXTERN_DEPENDENCY_DLL_EXT} ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${CVEXTERN_DEPENDENCY_DLL_NAME}_${EMGUCV_OSX_ARCH_SUFFIX}${CVEXTERN_DEPENDENCY_DLL_EXT}
+	COMMENT "Copying file to ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${CVEXTERN_DEPENDENCY_DLL_NAME}_${EMGUCV_OSX_ARCH_SUFFIX}${CVEXTERN_DEPENDENCY_DLL_EXT}")
       add_custom_command(TARGET ${the_target}
 	POST_BUILD
 	COMMAND lipo ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch/${CVEXTERN_DEPENDENCY_DLL_NAME}_*${CVEXTERN_DEPENDENCY_DLL_EXT} -output ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../${CVEXTERN_DEPENDENCY_DLL_NAME}${CVEXTERN_DEPENDENCY_DLL_EXT} -create
