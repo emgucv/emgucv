@@ -140,25 +140,35 @@ ENDIF()
 
 SET(UNMANAGED_LIBRARY_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}")
 # LIBRARY_OUTPUT_PATH was only re-pointed at the arch-specific
-# UNMANAGED_LIBRARY_OUTPUT_PATH for ANDROID, leaving every other
-# multi-arch-aware platform (in particular macOS arm64/x86_64) pointed at
-# the bare, non-arch-namespaced "libs" set above. CMake's Makefile/Ninja
+# UNMANAGED_LIBRARY_OUTPUT_PATH for ANDROID. CMake's Makefile/Ninja
 # generators fall back to LIBRARY_OUTPUT_PATH as the default
 # ARCHIVE_OUTPUT_DIRECTORY for any static-library target that doesn't set
 # that property explicitly -- which is exactly tesseract's case outside
 # WIN32 (see Emgu.CV.Extern/tesseract/libtesseract/CMakeLists.txt's
 # SET_TESSERACT_PROJECT_PROPERTY, whose ARCHIVE_OUTPUT_DIRECTORY override is
-# WIN32-only). So on macOS, tesseract's static libraries were built into
-# the shared, non-arch-namespaced libs/ folder regardless of which
-# architecture was configured, and whichever architecture built most
+# WIN32-only). So on macOS specifically, tesseract's static libraries were
+# built into the shared, non-arch-namespaced libs/ folder regardless of
+# which architecture was configured, and whichever architecture built most
 # recently silently overwrote what the other one needs -- surfacing as
 # "symbol(s) not found for architecture <x>" the next time that other
 # architecture's cvextern got relinked.
-# UNMANAGED_LIBRARY_OUTPUT_PATH already resolves correctly for every
-# platform (including an empty suffix, i.e. this exact bare path, for
-# platforms that don't need arch separation), so apply it unconditionally
-# instead of gating it to ANDROID.
-SET(LIBRARY_OUTPUT_PATH ${UNMANAGED_LIBRARY_OUTPUT_PATH})
+#
+# Extending this to every platform (not just ANDROID and APPLE) broke
+# Debian/Ubuntu/RHEL: their C# build/install steps (see
+# CS_LIBRARY_TARGET_DIR in cmake/modules/CSharpMacros.cmake) rely on
+# LIBRARY_OUTPUT_PATH staying at the bare, non-arch-namespaced path set
+# above, and moving it broke CPack's install step ("file INSTALL cannot
+# find .../libs/runtimes/<rid>/native/Build/Emgu.CV.Bitmap") on Debian CI.
+# Those platforms don't have macOS's problem in the first place -- each
+# runs its own arch in a separate CI job/container, not multiple
+# co-existing cross-compiles sharing one filesystem -- so they don't need
+# this fix and must keep the original bare path. Scope it to just ANDROID
+# and the "APPLE AND NOT IOS" branch above (plain macOS and Mac Catalyst,
+# which share the same arm64/x64 subfolder logic), matching that block's
+# own condition exactly.
+IF(ANDROID OR (APPLE AND NOT IOS))
+  SET(LIBRARY_OUTPUT_PATH ${UNMANAGED_LIBRARY_OUTPUT_PATH})
+ENDIF()
 FILE(MAKE_DIRECTORY ${UNMANAGED_LIBRARY_OUTPUT_PATH})
 
 SET(UNMANAGED_DLL_EXTRA)
