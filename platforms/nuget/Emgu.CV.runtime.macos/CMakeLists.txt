@@ -43,6 +43,18 @@ IF(HAVE_MACOS)
   ENDFOREACH()
   LIST(JOIN EMGUCV_MACOS_RID_LIST_MD " and " EMGUCV_MACOS_RID_LIST_TEXT)
 
+  # Package.nuspec.in unconditionally references both runtimes/osx-x64/native
+  # and runtimes/osx-arm64/native. A CI or single-arch dev build (e.g. the
+  # macOS GitHub Actions runner, which only runs configure_arm64) only ever
+  # populates one of these, and dotnet pack's NuGet.Build.Tasks.Pack throws
+  # "Could not find a part of the path '.../native'" -- a hard
+  # DirectoryNotFoundException, not just an empty glob match -- when a
+  # <file> src pattern's parent directory doesn't exist at all. Make sure
+  # both exist (even empty) so the *.dylib glob for whichever architecture
+  # wasn't built simply matches nothing instead of failing the whole pack.
+  FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/runtimes/osx-x64/native")
+  FILE(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../../../libs/runtimes/osx-arm64/native")
+
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec.in ${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/README.md.in ${CMAKE_CURRENT_SOURCE_DIR}/docs/README.md)
 
