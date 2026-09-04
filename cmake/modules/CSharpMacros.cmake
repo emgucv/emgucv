@@ -311,7 +311,28 @@ MACRO(BUILD_DOTNET_PROJ target csproj_file extra_flags)
   ENDIF()
 ENDMACRO()
 
+## Optional 6th argument: package_id. Several callers point csproj_file at the
+## shared Emgu.CV/NetStandard/Emgu.CV.csproj (which has GeneratePackageOnBuild=TRUE)
+## while overriding -p:NuspecFile to produce a *different* package from it (e.g.
+## the macos/rhel/uwp/ubuntu/windows runtime packages). The `dotnet pack` MSBuild
+## GenerateNuspec target keys its incremental up-to-date check off the project's
+## own $(PackageId)/$(PackageVersion) -- not off -p:NuspecFile -- so once
+## Emgu.CV.csproj's own default pack has produced
+## obj/<Config>/Emgu.CV.<version>.nuspec earlier in the same build (which
+## GeneratePackageOnBuild does automatically whenever the project is built,
+## e.g. as a dependency of some other target), every later BUILD_NUGET_PACKAGE
+## invocation reusing this csproj sees that file as already "up to date" and
+## silently skips GenerateNuspec -- the custom nuspec is never packed, no error,
+## no .nupkg, and the custom target still reports "Built target" success.
+## Passing a distinct -p:PackageId here gives GenerateNuspec's incremental
+## check a different intermediate filename to key off, avoiding the collision.
 MACRO(BUILD_NUGET_PACKAGE target csproj_file nuspec_file output_dir working_dir)
+  SET(_build_nuget_package_id "${ARGN}")
+  IF(_build_nuget_package_id)
+    SET(_build_nuget_package_id_flag "-p:PackageId=${_build_nuget_package_id}")
+  ELSE()
+    SET(_build_nuget_package_id_flag "")
+  ENDIF()
   IF(NUGET_FOUND AND WIN32)
 	ADD_CUSTOM_TARGET(
 	  ${target} ALL
@@ -326,9 +347,9 @@ MACRO(BUILD_NUGET_PACKAGE target csproj_file nuspec_file output_dir working_dir)
 	ADD_CUSTOM_TARGET(
 	  ${target} ALL
 	  COMMAND ${MAC_FRESH_SHELL_PREFIX} ${DOTNET_EXECUTABLE} restore /p:Configuration=${DEFAULT_CS_CONFIG} ${csproj_file}
-	  COMMAND ${DOTNET_EXECUTABLE} pack "${csproj_file}" -p:NuspecFile="${nuspec_file}" -p:NuspecBasePath="${working_dir}" --no-build -o "${output_dir}"
+	  COMMAND ${DOTNET_EXECUTABLE} pack "${csproj_file}" -p:NuspecFile="${nuspec_file}" -p:NuspecBasePath="${working_dir}" ${_build_nuget_package_id_flag} --no-build -o "${output_dir}"
 	  WORKING_DIRECTORY "${working_dir}"
-	  COMMENT "Building ${target} with command: ${DOTNET_EXECUTABLE} pack \"${csproj_file}\" -p:NuspecFile=\"${nuspec_file}\" -p:NuspecBasePath=\"${working_dir}\" --no-build -o \"${output_dir}\""
+	  COMMENT "Building ${target} with command: ${DOTNET_EXECUTABLE} pack \"${csproj_file}\" -p:NuspecFile=\"${nuspec_file}\" -p:NuspecBasePath=\"${working_dir}\" ${_build_nuget_package_id_flag} --no-build -o \"${output_dir}\""
 	)
   ELSEIF(NUGET_FOUND AND MONO_FOUND)
 	#Use mono with nuget.exe to create the nuget package
@@ -364,6 +385,7 @@ MACRO(BUILD_WINDOWS_RUNTIME_NUGET_PACKAGE nuget_id_var nuget_version_var)
     "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" #nuspec_file
     "${NUGET_OUTPUT_DIR}" #output_dir
     "${CMAKE_CURRENT_SOURCE_DIR}" #working_dir
+    "${${nuget_id_var}}" #package_id, see BUILD_NUGET_PACKAGE's comment
     )
 
   TARGET_SOURCES(${PROJECT_NAME} PRIVATE

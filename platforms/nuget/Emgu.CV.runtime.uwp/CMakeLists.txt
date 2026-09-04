@@ -35,6 +35,7 @@ IF(HAVE_WINSTORE_10)
     "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" #nuspec_file
     "${NUGET_OUTPUT_DIR}" #output_dir
     "${CMAKE_CURRENT_SOURCE_DIR}" #working_dir
+    "${EMGUCV_UWP_NUGET_ID}" #package_id, see BUILD_NUGET_PACKAGE's comment
     )
 
   TARGET_SOURCES(${PROJECT_NAME} PRIVATE

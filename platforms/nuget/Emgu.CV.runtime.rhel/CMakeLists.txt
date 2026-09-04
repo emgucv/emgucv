@@ -66,6 +66,7 @@ IF(HAVE_RHEL_X64 OR HAVE_RHEL_X86 OR HAVE_RHEL_ARM64)
     "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" #nuspec_file
     "${NUGET_OUTPUT_DIR}" #output_dir
     "${CMAKE_CURRENT_SOURCE_DIR}" #working_dir
+    "${EMGUCV_RHEL_NUGET_ID}" #package_id, see BUILD_NUGET_PACKAGE's comment
     )
 
   TARGET_SOURCES(${PROJECT_NAME} PRIVATE
