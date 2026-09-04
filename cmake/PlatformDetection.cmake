@@ -76,7 +76,15 @@ ELSEIF(WIN32)
   #MESSAGE(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> EMGUCV_ARCH: ${EMGUCV_ARCH}")
   #MESSAGE(STATUS ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER: ${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}")
 ELSEIF(APPLE AND NOT IOS)
-  IF ("${EMGUCV_ARCH}" STREQUAL "arm64")
+  # Use IS_ARM64 (a real compiled-symbol check, see CheckTargetArch.cmake),
+  # not a string comparison against EMGUCV_ARCH: on macOS, CHECK_TARGET_ARCH()
+  # sets TARGET_ARCH_NAME (and thus EMGUCV_ARCH) to "${CMAKE_SYSTEM_NAME}_arm64"
+  # / "${CMAKE_SYSTEM_NAME}_x64" -- i.e. "Darwin_arm64"/"Darwin_x64" -- so a
+  # bare STREQUAL "arm64" here never matched and this always fell through to
+  # the x64 branch regardless of the actual target architecture. See the
+  # matching comment in Emgu.CV.Extern/cmake/BuildCvExternTarget.cmake, which
+  # already uses IS_ARM64 for the same reason.
+  IF (IS_ARM64)
     SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/runtimes/osx/native/arm64")
   ELSE()
     SET(UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER "/runtimes/osx/native/x64")
@@ -131,9 +139,26 @@ ELSE()
 ENDIF()
 
 SET(UNMANAGED_LIBRARY_OUTPUT_PATH "${CMAKE_SOURCE_DIR}/libs${UNMANAGED_LIBRARY_OUTPUT_SUBFOLDER}")
-IF(ANDROID)
-  SET(LIBRARY_OUTPUT_PATH ${UNMANAGED_LIBRARY_OUTPUT_PATH})
-ENDIF()
+# LIBRARY_OUTPUT_PATH was only re-pointed at the arch-specific
+# UNMANAGED_LIBRARY_OUTPUT_PATH for ANDROID, leaving every other
+# multi-arch-aware platform (in particular macOS arm64/x86_64) pointed at
+# the bare, non-arch-namespaced "libs" set above. CMake's Makefile/Ninja
+# generators fall back to LIBRARY_OUTPUT_PATH as the default
+# ARCHIVE_OUTPUT_DIRECTORY for any static-library target that doesn't set
+# that property explicitly -- which is exactly tesseract's case outside
+# WIN32 (see Emgu.CV.Extern/tesseract/libtesseract/CMakeLists.txt's
+# SET_TESSERACT_PROJECT_PROPERTY, whose ARCHIVE_OUTPUT_DIRECTORY override is
+# WIN32-only). So on macOS, tesseract's static libraries were built into
+# the shared, non-arch-namespaced libs/ folder regardless of which
+# architecture was configured, and whichever architecture built most
+# recently silently overwrote what the other one needs -- surfacing as
+# "symbol(s) not found for architecture <x>" the next time that other
+# architecture's cvextern got relinked.
+# UNMANAGED_LIBRARY_OUTPUT_PATH already resolves correctly for every
+# platform (including an empty suffix, i.e. this exact bare path, for
+# platforms that don't need arch separation), so apply it unconditionally
+# instead of gating it to ANDROID.
+SET(LIBRARY_OUTPUT_PATH ${UNMANAGED_LIBRARY_OUTPUT_PATH})
 FILE(MAKE_DIRECTORY ${UNMANAGED_LIBRARY_OUTPUT_PATH})
 
 SET(UNMANAGED_DLL_EXTRA)
