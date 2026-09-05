@@ -302,7 +302,18 @@ IF(APPLE AND (NOT IOS))
   SET(IS_MACOS_BUILD ON)
   MESSAGE(STATUS "IS_MACOS_BUILD: ${IS_MACOS_BUILD}")
 ENDIF()
-CHECK_BINARY_EXIST("libs/runtimes/osx/native" "lib*.dylib" HAVE_MACOS ${IS_MACOS_BUILD})
+# macOS binaries live under RID-specific osx-x64/osx-arm64 folders now, not
+# the flat osx/native one (issue #978; see BuildCvExternTarget.cmake) -- this
+# matters for aggregator builds like cv pro, which assemble prebuilt macOS
+# binaries on a non-Mac host and only ever populate the RID folders.
+CHECK_BINARY_EXIST("libs/runtimes/osx-x64/native" "lib*.dylib" HAVE_MACOS_X64 OFF)
+CHECK_BINARY_EXIST("libs/runtimes/osx-arm64/native" "lib*.dylib" HAVE_MACOS_ARM64 OFF)
+IF(HAVE_MACOS_X64 OR HAVE_MACOS_ARM64)
+  SET(HAVE_MACOS ON)
+ELSE()
+  SET(HAVE_MACOS ${IS_MACOS_BUILD})
+ENDIF()
+MESSAGE(STATUS "HAVE_MACOS: ${HAVE_MACOS}")
 
 SET(IS_ANDROID_ARM64_V8A_BUILD OFF)
 IF(ANDROID AND ("${ANDROID_ABI}" STREQUAL "arm64-v8a"))
