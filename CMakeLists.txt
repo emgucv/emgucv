@@ -397,14 +397,14 @@ IF(HAVE_MACOS)
     DESTINATION "Solution/Mac"
     COMPONENT emgucv_example_source
     )
-  IF(NOT IS_MACOS_BUILD)
-    INSTALL(
-      FILES
-      "libs/runtimes/osx/native/libcvextern.dylib"
-      DESTINATION "libs/runtimes/osx/native"
-      COMPONENT emgucv_binary
-      )
-  ENDIF()
+  # The macOS dylibs themselves are installed by the CHECK_BINARY_EXIST calls
+  # in cmake/PlatformDetection.cmake (which is also what sets HAVE_MACOS),
+  # from the RID-specific libs/runtimes/osx-x64|osx-arm64/native folders --
+  # the old flat libs/runtimes/osx/native/libcvextern.dylib path is no longer
+  # populated (see the commented-out INSTALL in
+  # Emgu.CV.Extern/cmake/BuildCvExternTarget.cmake, "Fat/universal binary no
+  # longer packaged"), so re-installing it here would fail with
+  # "file INSTALL cannot find ... libs/runtimes/osx/native/libcvextern.dylib".
 ENDIF()
 
 IF(HAVE_MAC_CATALYST)
