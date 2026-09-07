@@ -47,6 +47,7 @@ MACRO(BUILD_DEBIAN_LINUX_RUNTIME_PACKAGE arch_lower arch_upper have_flag)
       "${CMAKE_CURRENT_SOURCE_DIR}/Package.nuspec" #nuspec_file
       "${NUGET_OUTPUT_DIR}" #output_dir
       "${CMAKE_CURRENT_SOURCE_DIR}" #working_dir
+      "${EMGUCV_DEBIAN_RUNTIME_NUGET_ID}" #package_id, see BUILD_NUGET_PACKAGE's comment
       )
 
     TARGET_SOURCES(${PROJECT_NAME} PRIVATE
