@@ -129,8 +129,6 @@ ENDIF()
 
 INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/PlatformDetection.cmake")
 
-INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/PackageNaming.cmake")
-
 # ----------------------------------------------------------------------------
 #  Build opencv and Emgu.CV.Extern
 # ----------------------------------------------------------------------------
@@ -171,6 +169,10 @@ IF(MSVC)
   SET(Threads_FOUND TRUE CACHE BOOL "" FORCE)
 ENDIF()
 ADD_SUBDIRECTORY(${OPENCV_SUBFOLDER})
+
+# Included after opencv (dnn module) so that flags it sets, e.g. HAVE_ONNXRUNTIME,
+# are available when PackageNaming.cmake decides the package name/labels.
+INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/PackageNaming.cmake")
 
 SET(OPENCV_MODULE_NAME_CANDIDATES
   core geometry ptcloud imgproc video flann ml imgcodecs videoio highgui objdetect features calib 3d
