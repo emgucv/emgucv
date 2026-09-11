@@ -10,6 +10,12 @@ IF(EMGU_CV_BUILD OR EMGU_CV_EXAMPLE_BUILD)
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
   IF(EMGU_SIGN_FOUND AND WIN32)
     CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignBinary.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Models/NetStandard/SignBinary.Targets)
+    # dotnet build parallelizes this project's target frameworks (netstandard2.0,
+    # net10.0-ios, net10.0-maccatalyst) by default, so their PostBuildEvent signing
+    # steps hit signtool.exe concurrently. The hardware-backed signing token can't
+    # service concurrent SignerSign() calls and fails with "An unexpected internal
+    # error has occurred" on whichever framework loses the race.
+    SET(EXTRA_BUILD_FLAGS "${EXTRA_BUILD_FLAGS} /p:BuildInParallel=false")
   ENDIF()
   IF(EMGU_NUGET_SIGN_FOUND AND WIN32)
     CONFIGURE_FILE(${EMGU_CV_SOURCE_DIR}/cmake/SignPkg.Targets.in ${EMGU_CV_SOURCE_DIR}/Emgu.CV.Models/NetStandard/SignPkg.Targets)

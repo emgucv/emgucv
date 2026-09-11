@@ -37,6 +37,15 @@ IF(HAVE_MAUI)
   PROJECT(Emgu.CV.runtime.maui)
 
   SET(EXTRA_BUILD_FLAGS "/p:Platform=\"AnyCPU\"")
+  IF(EMGU_SIGN_FOUND AND WIN32)
+    # dotnet build parallelizes this project's target frameworks (netstandard2.0,
+    # net10.0-android, net10.0-ios, net10.0-maccatalyst, net10.0-windows...) by
+    # default, so their PostBuildEvent signing steps hit signtool.exe
+    # concurrently. The hardware-backed signing token can't service concurrent
+    # SignerSign() calls and fails with "An unexpected internal error has
+    # occurred" on whichever framework loses the race.
+    SET(EXTRA_BUILD_FLAGS "${EXTRA_BUILD_FLAGS} /p:BuildInParallel=false")
+  ENDIF()
 
   BUILD_DOTNET_PROJ(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}/Emgu.CV.runtime.maui.csproj" "${EXTRA_BUILD_FLAGS}" ALL)
 
