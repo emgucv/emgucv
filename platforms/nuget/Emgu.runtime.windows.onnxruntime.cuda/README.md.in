@@ -1,0 +1,23 @@
+## About this package
+
+This package provides the ONNX Runtime v${EMGU_ONNXRUNTIME_CUDA_VERSION} CUDA and TensorRT GPU execution provider libraries.
+
+This package provides the native ONNX Runtime CUDA and TensorRT execution provider dependency for EMGU software libraries. It depends on the base `${EMGU_ONNXRUNTIME_NUGET_ID}` package, which must also be installed.
+
+For for information, please visit
+<${NUGET_EMGU_URL}/wiki>
+
+## Note
+
+If you are targeting .Net Framework, please read this first:
+<${NUGET_EMGU_URL}/wiki/index.php/Download_And_Installation#Targeting_.Net_Framework>
+
+If you have issues getting the pacakge installed for your project, and your project use packages.config to manage nuget packages, the following instructions will help:
+<${NUGET_EMGU_URL}/wiki/index.php/Download_And_Installation#Upgrade_from_packages.config_to_package_reference>
+
+## Publishing with `dotnet publish -r <rid>`
+
+This package ships its native binary under the standard, portable `win-x64`
+RID only (this build only provides the ONNX Runtime CUDA/TensorRT execution
+provider native binaries for Windows x64), so `dotnet publish -r win-x64`
+works without any extra configuration.

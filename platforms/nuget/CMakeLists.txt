@@ -21,6 +21,7 @@ ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.dnn.adv")
 ADD_SUBDIRECTORY("Emgu.runtime.windows.cuda.nvrtc")
 
 ADD_SUBDIRECTORY("Emgu.runtime.windows.onnxruntime")
+ADD_SUBDIRECTORY("Emgu.runtime.windows.onnxruntime.cuda")
 
 ADD_SUBDIRECTORY("Emgu.CV.runtime.windows")
 ADD_SUBDIRECTORY("Emgu.CV.runtime.uwp")

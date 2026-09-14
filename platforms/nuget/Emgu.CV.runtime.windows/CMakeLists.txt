@@ -133,6 +133,10 @@ IF( (TARGET Emgu.CV)
     IF(WITH_CUDNN AND TARGET Emgu.runtime.windows.cuda.nvrtc.nuget)
       ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.runtime.windows.cuda.nvrtc.nuget)
     ENDIF()
+
+    IF(HAVE_ONNXRUNTIME AND TARGET Emgu.runtime.windows.onnxruntime.cuda.nuget)
+      ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.runtime.windows.onnxruntime.cuda.nuget)
+    ENDIF()
   ENDIF()
 
   IF(TARGET Emgu.runtime.windows.msvc.rt.x64.nuget)
