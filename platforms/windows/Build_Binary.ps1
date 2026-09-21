@@ -36,6 +36,12 @@
     Ignored when -Cuda is set, which already enables the GPU-enabled ONNX
     Runtime package unconditionally.
 
+.PARAMETER Vtk
+    Build with VTK support (viz module). Purely opt-in, like -Cuda. Only
+    takes effect for a desktop x86/x86_64 -ComponentSet Full build (ignored
+    for UWP and arm/arm64, which VTK isn't built for regardless of this
+    switch).
+
 .PARAMETER Toolchain
     Compiler / VS-version / UWP selection.
 
@@ -72,6 +78,8 @@ param(
     [string]$CudaArchBin = '',
 
     [switch]$OnnxRuntime,
+
+    [switch]$Vtk,
 
     [ValidateSet('None', 'Intel', 'IntelOpenVino', 'OpenVino', 'WindowsStore10',
         'VS2015', 'VS2022', 'Commercial')]
@@ -1038,7 +1046,7 @@ try {
         $emguFlags.Add("-DOPENCV_EXTRA_MODULES_PATH:String=$(ConvertTo-ForwardSlash $openCvExtraModulesDir)")
         $emguFlags.Add('-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE')
 
-        $buildVtk = (-not $isUwp) -and ($Arch -notin @('arm', 'arm64')) -and ($Toolchain -in @('OpenVino', 'IntelOpenVino'))
+        $buildVtk = $Vtk -and (-not $isUwp) -and ($Arch -notin @('arm', 'arm64'))
         if ($buildVtk) {
             $vtkBuildDir = Build-Vtk -RootSrcFolder $repoRoot -BuildFolderName $buildFolderName -CMakeExe $vsEnv.CMakeExe -GeneralCMakeConfigFlags $cmakeArgs
             $emguFlags.Add("-DVTK_DIR:String=$(ConvertTo-ForwardSlash $vtkBuildDir)")
