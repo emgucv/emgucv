@@ -779,6 +779,33 @@ ELSEIF (APPLE)
     COMMAND mkdir -p ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch
     COMMENT "Creating arch folder: ${UNMANAGED_LIBRARY_OUTPUT_PATH}/../arch")
 
+  # The "cv macos" builder never configures with MAC_CATALYST (it builds the
+  # plain macOS dylib, not Mac Catalyst), so the xcframework-assembly logic
+  # under the IOS/MAC_CATALYST branch above never runs here -- even though
+  # this builder downloads the pre-built libcvextern_catalyst_arm64.a /
+  # libcvextern_catalyst_x86_64.a slices from the "cv catalyst" builder
+  # specifically to repackage them into Emgu.CV.runtime.maui.macos's
+  # net10.0-maccatalyst TFM. Without this, that .csproj's build finds no
+  # libs/iOS/libcvextern_catalyst.xcframework, silently skips embedding the
+  # native binary, and produces a nupkg missing its
+  # Emgu.CV.runtime.maui.macos.resources.zip entirely (~320KB instead of the
+  # ~65MB the "cv catalyst" builder's own package contains). Assemble it here
+  # too, once both downloaded slices are present.
+  IF(EXISTS "${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst_arm64.a" AND EXISTS "${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst_x86_64.a")
+    SET(CATALYST_FAT_LIB ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst.a)
+    add_custom_command(TARGET ${the_target}
+      POST_BUILD
+      COMMAND lipo -create -output ${CATALYST_FAT_LIB} ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst_*.a
+      WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+      COMMENT "Merging pre-downloaded Mac Catalyst static libraries into ${CATALYST_FAT_LIB}")
+    add_custom_command(TARGET ${the_target}
+      POST_BUILD
+      COMMAND rm -rf ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst.xcframework
+      COMMAND xcodebuild -create-xcframework -library ${CATALYST_FAT_LIB} -output ${CMAKE_SOURCE_DIR}/libs/iOS/libcvextern_catalyst.xcframework
+      WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/libs/iOS"
+      COMMENT "Creating xcframework for Mac Catalyst from pre-downloaded slices")
+  ENDIF()
+
   IF(EMGU_CV_WITH_DEPTHAI)  
     SET(LIBUSB_FILE_NAME "libusb_${CMAKE_SYSTEM_PROCESSOR}.dylib")
     IF ("${EMGUCV_ARCH}" STREQUAL "arm64")
