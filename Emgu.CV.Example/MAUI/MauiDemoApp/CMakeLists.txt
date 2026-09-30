@@ -151,5 +151,16 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
     IF(TARGET cvextern)
       ADD_DEPENDENCIES(${PROJECT_NAME} cvextern)
     ENDIF()
+
+    IF(HAVE_MAUI_ANDROID)
+      ADD_CUSTOM_COMMAND(
+        TARGET ${PROJECT_NAME}
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND}
+          -DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}/bin/${DEFAULT_CS_CONFIG}/net${DOTNET_VERSION_MAJOR}.0-android
+          -DDEST_DIR=${EMGU_CV_SOURCE_DIR}/package
+          -P ${EMGU_CV_SOURCE_DIR}/cmake/CopyMauiApk.cmake
+        COMMENT "Copying MAUI Android demo .apk to ${EMGU_CV_SOURCE_DIR}/package")
+    ENDIF()
   ENDIF()
 ENDIF()
