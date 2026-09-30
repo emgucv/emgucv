@@ -5,7 +5,7 @@
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   IgnorableNamespaces="uap rescap">
 
-  <Identity Name="EmguCorporation.EmguCVMAUIDemo" Publisher="OID.1.3.6.1.4.1.311.60.2.1.3=CA, OID.2.5.4.15=Private Organization, CN=Emgu Corporation, SERIALNUMBER=887931-1, O=Emgu Corporation, L=Markham, S=Ontario, C=CA" Version="1.0.0.0" />
+  <Identity Name="Emgu.CV.MAUI.Demo" Publisher="OID.1.3.6.1.4.1.311.60.2.1.3=CA, OID.2.5.4.15=Private Organization, CN=Emgu Corporation, SERIALNUMBER=887931-1, O=Emgu Corporation, L=Markham, S=Ontario, C=CA" Version="1.0.0.0" />
 
   <Properties>
     <DisplayName>$placeholder$</DisplayName>
