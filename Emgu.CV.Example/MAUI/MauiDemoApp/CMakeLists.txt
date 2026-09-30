@@ -209,9 +209,19 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
     # than let the ALL build fail or silently produce a package nobody can install.
     IF(EMGU_SIGN_FOUND)
       PROJECT(Example.Maui.DemoApp.Windows.Msix)
+      # AppxPackage's output filename/folder embeds Package.appxmanifest's Identity
+      # Version (currently AppPackages/MauiDemoApp_1.0.0.0_Test/MauiDemoApp_1.0.0.0_x64.msix),
+      # so the copy step below globs for it via CopyMsixToPackage.cmake rather than
+      # hardcoding that version a second time here. A plain `cmd /c copy` custom command
+      # doesn't work for this: cmd.exe's copy only expands wildcards in the filename
+      # component of a path, not in a directory component like "AppPackages\*\", so
+      # `copy AppPackages\*\*_x64.msix` fails with "The syntax of the command is
+      # incorrect." -- confirmed by reproducing it standalone. file(GLOB ...) in a
+      # cmake -P script has no such restriction.
       ADD_CUSTOM_TARGET(${PROJECT_NAME} ALL
         COMMAND "${DOTNET_EXECUTABLE}" publish "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true
-        COMMENT "Building signed MSIX for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (signing via EMGU_SIGN_EXECUTABLE_NATIVE_PATH=${EMGU_SIGN_EXECUTABLE_NATIVE_PATH})")
+        COMMAND ${CMAKE_COMMAND} "-DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}" "-DDEST_DIR=${CMAKE_SOURCE_DIR}/package" -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CopyMsixToPackage.cmake"
+        COMMENT "Building signed MSIX for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (signing via EMGU_SIGN_EXECUTABLE_NATIVE_PATH=${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}), then copying it to ${CMAKE_SOURCE_DIR}/package")
 
       SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES FOLDER "Emgu.CV.Examples")
 
