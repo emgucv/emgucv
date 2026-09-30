@@ -44,6 +44,20 @@
         <MtouchInterpreter>-all,System.Private.Windows.Core,aot-instances</MtouchInterpreter>
     </PropertyGroup>
 
+	<!--
+	MSIX signing: uses the same Emgu Corporation EV code-signing certificate that
+	EmguSign.bat/SignBinary.Targets use for Authenticode-signing output DLLs
+	(installed in Cert:\CurrentUser\My, thumbprint below). Package.appxmanifest's
+	Identity Publisher must exactly match this certificate's Subject, or
+	MakeAppx/signtool fails with a publisher/cert subject mismatch.
+	Only applies to WindowsPackageType=MSIX builds; the unpackaged .exe build
+	(WindowsPackageType=None) does not produce or sign an .msix at all.
+	-->
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
+		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
+		<PackageCertificateThumbprint>915C6CDEAE1C4D16C872CBD3A8DE7142D79BB661</PackageCertificateThumbprint>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.png" />

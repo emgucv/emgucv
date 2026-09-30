@@ -163,4 +163,75 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
         COMMENT "Copying MAUI Android demo .apk to ${EMGU_CV_SOURCE_DIR}/package")
     ENDIF()
   ENDIF()
+
+  # Windows builds of the MAUI demo app: an unpackaged .exe (WindowsPackageType=None,
+  # no cert needed) and, when a signing cert is available, a packaged/signed MSIX.
+  # Both invocations build the SAME csproj/Configuration/TargetFramework, and MSBuild's
+  # obj/bin intermediate paths are keyed only by Configuration+TargetFramework -- NOT by
+  # WindowsPackageType -- so both builds write to the identical
+  # obj/Release/net10.0-windows10.0.19041.0/ and bin/Release/.../win-x64/ directories
+  # (confirmed by inspecting the actual obj/ layout after building each). Running them
+  # concurrently (as independent CMake targets can be, e.g. under a parallel Visual
+  # Studio "Build Solution" or `cmake --build . --parallel`) risks two dotnet/MSBuild
+  # processes racing on the same intermediate files. The MSIX target below therefore
+  # takes an explicit ADD_DEPENDENCIES on the .exe target to force them to run
+  # sequentially instead.
+  IF(WIN32 AND HAVE_WINDESKTOP)
+    SET(MAUI_WINDOWS_TFM "net${DOTNET_VERSION_MAJOR}.0-windows10.0.19041.0")
+
+    PROJECT(Example.Maui.DemoApp.Windows.Exe)
+    ADD_CUSTOM_TARGET(${PROJECT_NAME} ALL
+      COMMAND "${DOTNET_EXECUTABLE}" build "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:WindowsPackageType=None
+      COMMENT "Building unpackaged .exe for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE}")
+
+    SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES FOLDER "Emgu.CV.Examples")
+
+    IF(TARGET Emgu.CV.runtime.windows.nuget)
+      ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.windows.nuget)
+    ENDIF()
+
+    IF(TARGET Emgu.CV.runtime.maui)
+      ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.maui)
+    ENDIF()
+
+    IF(TARGET cvextern)
+      ADD_DEPENDENCIES(${PROJECT_NAME} cvextern)
+    ENDIF()
+
+    # Signed MSIX packaging. Only added to the build graph when the same EmguSign.bat /
+    # code-signing certificate used to Authenticode-sign the other Windows binaries
+    # (Emgu.CV.dll, cvextern.dll, etc. -- see FindCodeSign.cmake and
+    # Package.appxmanifest's Identity Publisher, which must match that cert's Subject)
+    # is present on this machine. An MSIX built without it would either fail outright
+    # (AppxPackageSigningEnabled=true + a PackageCertificateThumbprint the local cert
+    # store can't resolve) or produce an unsigned/untrusted package not worth shipping,
+    # so on a machine without the signing cert we skip the MSIX target entirely rather
+    # than let the ALL build fail or silently produce a package nobody can install.
+    IF(EMGU_SIGN_FOUND)
+      PROJECT(Example.Maui.DemoApp.Windows.Msix)
+      ADD_CUSTOM_TARGET(${PROJECT_NAME} ALL
+        COMMAND "${DOTNET_EXECUTABLE}" publish "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true
+        COMMENT "Building signed MSIX for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (signing via EMGU_SIGN_EXECUTABLE_NATIVE_PATH=${EMGU_SIGN_EXECUTABLE_NATIVE_PATH})")
+
+      SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES FOLDER "Emgu.CV.Examples")
+
+      # Force sequential ordering with the .exe target -- see the comment above this
+      # IF(WIN32 AND HAVE_WINDESKTOP) block for why this is required, not optional.
+      ADD_DEPENDENCIES(${PROJECT_NAME} Example.Maui.DemoApp.Windows.Exe)
+
+      IF(TARGET Emgu.CV.runtime.windows.nuget)
+        ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.windows.nuget)
+      ENDIF()
+
+      IF(TARGET Emgu.CV.runtime.maui)
+        ADD_DEPENDENCIES(${PROJECT_NAME} Emgu.CV.runtime.maui)
+      ENDIF()
+
+      IF(TARGET cvextern)
+        ADD_DEPENDENCIES(${PROJECT_NAME} cvextern)
+      ENDIF()
+    ELSE()
+      MESSAGE(STATUS "EMGU_SIGN_EXECUTABLE_NATIVE_PATH not found -- skipping signed MSIX packaging for the MAUI Windows demo app.")
+    ENDIF()
+  ENDIF()
 ENDIF()
