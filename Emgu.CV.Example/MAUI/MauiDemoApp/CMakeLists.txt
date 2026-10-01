@@ -40,6 +40,16 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
         LIST(APPEND MAUI_BUILD_RUNTIME_IDENTIFIERS "maccatalyst-x64")
       ENDIF()
     ENDIF()
+    # The installed .NET MacCatalyst SDK validates its bundled pack version against
+    # an EXACT major.minor Xcode match (e.g. SDK 27.0.x demands Xcode 27.0, rejecting
+    # even a newer/older installed Xcode such as 26.6) and fails the build outright:
+    # "This version of .NET for MacCatalyst (X) requires Xcode Y. The current version
+    # of Xcode is Z." CI runner images and local dev machines drift from whatever
+    # exact version the SDK pins independently of this repo, so skip that check via
+    # the SDK's own documented opt-out rather than pinning a Xcode/SDK combination
+    # here. See the "Native C++ (MacCatalyst / Xcode)" / "MAUI Demo App (MacCatalyst)"
+    # sections of CLAUDE.md.
+    LIST(APPEND MAUI_BUILD_EXTRA_FLAGS "-p:ValidateXcodeVersion=false")
   ENDIF()
   #    IF(HAVE_WINDESKTOP AND WIN32)
   #      #Build windows
