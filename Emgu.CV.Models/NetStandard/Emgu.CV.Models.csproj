@@ -28,10 +28,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.Drawing.Common" Version="10.0.9" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
 	</ItemGroup>
 
