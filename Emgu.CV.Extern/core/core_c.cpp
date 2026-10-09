@@ -142,8 +142,12 @@ int cveStringGetLength(cv::String* string)
 }
 void cveStringRelease(cv::String** string)
 {
-	delete *string;
-	*string = 0;
+	try
+	{
+		delete *string;
+		*string = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::_InputArray* cveInputArrayFromDouble(double* scalar)
@@ -222,8 +226,12 @@ bool cveInputArrayIsEmpty(cv::_InputArray* ia)
 }
 void cveInputArrayRelease(cv::_InputArray** arr)
 {
-	delete *arr;
-	*arr = 0;
+	try
+	{
+		delete *arr;
+		*arr = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveInputArrayGetMat(cv::_InputArray* ia, int idx, cv::Mat* mat)
@@ -282,8 +290,12 @@ cv::_OutputArray* cveOutputArrayFromUMat(cv::UMat* mat)
 
 void cveOutputArrayRelease(cv::_OutputArray** arr)
 {
-	delete *arr;
-	*arr = 0;
+	try
+	{
+		delete *arr;
+		*arr = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::_InputOutputArray* cveInputOutputArrayFromMat(cv::Mat* mat)
@@ -302,8 +314,12 @@ cv::_InputOutputArray* cveInputOutputArrayFromGpuMat(cv::cuda::GpuMat* mat)
 }
 void cveInputOutputArrayRelease(cv::_InputOutputArray** arr)
 {
-	delete *arr;
-	*arr = 0;
+	try
+	{
+		delete *arr;
+		*arr = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::Scalar* cveScalarCreate(cv::Scalar* scalar)
@@ -314,8 +330,12 @@ cv::Scalar* cveScalarCreate(cv::Scalar* scalar)
 }
 void cveScalarRelease(cv::Scalar** scalar)
 {
-	delete *scalar;
-	*scalar = 0;
+	try
+	{
+		delete *scalar;
+		*scalar = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveMinMaxIdx(cv::_InputArray* src, double* minVal, double* maxVal, int* minIdx, int* maxIdx, cv::_InputArray* mask)
@@ -1102,8 +1122,12 @@ void cveFileStorageReleaseAndGetString(cv::FileStorage* storage, cv::String* res
 }
 void cveFileStorageRelease(cv::FileStorage** storage)
 {
-	delete *storage;
-	*storage = 0;
+	try
+	{
+		delete *storage;
+		*storage = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveFileStorageWriteMat(cv::FileStorage* fs, cv::String* name, cv::Mat* value)
 {
@@ -1271,8 +1295,12 @@ float cveFileNodeReadFloat(cv::FileNode* node, float defaultFloat)
 }
 void cveFileNodeRelease(cv::FileNode** node)
 {
-	delete *node;
-	*node = 0;
+	try
+	{
+		delete *node;
+		*node = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::FileNodeIterator* cveFileNodeIteratorCreate()
@@ -1319,8 +1347,12 @@ cv::FileNode* cveFileNodeIteratorGetFileNode(cv::FileNodeIterator* iterator)
 }
 void cveFileNodeIteratorRelease(cv::FileNodeIterator** iterator)
 {
-	delete* iterator;
-	*iterator = 0;
+	try
+	{
+		delete* iterator;
+		*iterator = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 bool cveUseOptimized()
@@ -1461,8 +1493,12 @@ void cveAffine3dGetValues(cv::Affine3d* affine, double* values)
 }
 void cveAffine3dRelease(cv::Affine3d** affine)
 {
-	delete* affine;
-	*affine = 0;
+	try
+	{
+		delete* affine;
+		*affine = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::RNG* cveRngCreate()
@@ -1531,8 +1567,12 @@ double cveRngUniformDouble(cv::RNG* rng, double a, double b)
 }
 void cveRngRelease(cv::RNG** rng)
 {
-	delete *rng;
-	*rng = 0;
+	try
+	{
+		delete *rng;
+		*rng = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::Moments* cveMomentsCreate()
@@ -1545,8 +1585,12 @@ cv::Moments* cveMomentsCreate()
 }
 void cveMomentsRelease(cv::Moments** moments)
 {
-	delete *moments;
-	*moments = 0;
+	try
+	{
+		delete *moments;
+		*moments = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveGetConfigDict(std::vector<cv::String>* key, std::vector<double>* value)

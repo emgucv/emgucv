@@ -39,8 +39,12 @@ cv::UMat* cveUMatCreateFromRange(cv::UMat* umat, cv::Range* rowRange, cv::Range*
 }
 void cveUMatRelease(cv::UMat** mat)
 {
-   delete *mat;
-   *mat = 0;
+   try
+   {
+      delete *mat;
+      *mat = 0;
+   }
+   CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveUMatGetSize(cv::UMat* mat, cv::Size* s)
 {

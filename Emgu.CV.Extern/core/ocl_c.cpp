@@ -62,7 +62,11 @@ void oclPlatformInfoGetDevice(cv::ocl::PlatformInfo* platformInfo, cv::ocl::Devi
 }
 void oclPlatformInfoRelease(cv::ocl::PlatformInfo** platformInfo)
 {
-	delete* platformInfo;
+	try
+	{
+		delete* platformInfo;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -80,8 +84,12 @@ const cv::ocl::Device* oclDeviceGetDefault()
 }
 void oclDeviceRelease(cv::ocl::Device** device)
 {
-	delete* device;
-	*device = 0;
+	try
+	{
+		delete* device;
+		*device = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -99,8 +107,12 @@ cv::ocl::Context* oclContextGetDefault()
 }
 void oclContextRelease(cv::ocl::Context** context)
 {
-	delete* context;
-	*context = 0;
+	try
+	{
+		delete* context;
+		*context = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 const cv::ocl::Program* oclContextGetProg(
 	cv::ocl::Context* context,
@@ -126,8 +138,12 @@ cv::ocl::Program* oclProgramCreate()
 }
 void oclProgramRelease(cv::ocl::Program** program)
 {
-	delete* program;
-	*program = 0;
+	try
+	{
+		delete* program;
+		*program = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void oclProgramGetBinary(cv::ocl::Program* program, std::vector<char>* binary)
 {
@@ -145,8 +161,12 @@ cv::ocl::ProgramSource* oclProgramSourceCreate(cv::String* source)
 }
 void oclProgramSourceRelease(cv::ocl::ProgramSource** programSource)
 {
-	delete* programSource;
-	*programSource = 0;
+	try
+	{
+		delete* programSource;
+		*programSource = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 const cv::String* oclProgramSourceGetSource(cv::ocl::ProgramSource* programSource)
 {
@@ -169,8 +189,12 @@ bool oclKernelCreate(cv::ocl::Kernel* kernel, cv::String* kname, cv::ocl::Progra
 }
 void oclKernelRelease(cv::ocl::Kernel** kernel)
 {
-	delete* kernel;
-	*kernel = 0;
+	try
+	{
+		delete* kernel;
+		*kernel = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 int oclKernelSetImage2D(cv::ocl::Kernel* kernel, int i, cv::ocl::Image2D* image2D)
 {
@@ -204,8 +228,12 @@ cv::ocl::Image2D* oclImage2DFromUMat(cv::UMat* src, bool norm, bool alias)
 }
 void oclImage2DRelease(cv::ocl::Image2D** image2D)
 {
-	delete* image2D;
-	*image2D = 0;
+	try
+	{
+		delete* image2D;
+		*image2D = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -219,8 +247,12 @@ cv::ocl::KernelArg* oclKernelArgCreate(int flags, cv::UMat* m, int wscale, int i
 }
 void oclKernelArgRelease(cv::ocl::KernelArg** k)
 {
-	delete* k;
-	*k = 0;
+	try
+	{
+		delete* k;
+		*k = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -238,8 +270,12 @@ void oclQueueFinish(cv::ocl::Queue* queue)
 }
 void oclQueueRelease(cv::ocl::Queue** queue)
 {
-	delete* queue;
-	*queue = 0;
+	try
+	{
+		delete* queue;
+		*queue = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 
