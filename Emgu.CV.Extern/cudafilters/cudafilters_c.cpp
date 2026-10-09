@@ -243,10 +243,14 @@ void cudaFilterApply(cv::cuda::Filter* filter, cv::_InputArray* image, cv::_Outp
 }
 void cudaFilterRelease(cv::Ptr<cv::cuda::Filter>** filter)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDAFILTERS
-	delete* filter;
-	*filter = 0;
+		delete* filter;
+		*filter = 0;
 #else
-	throw_no_cudafilters();
+		throw_no_cudafilters();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
