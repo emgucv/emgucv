@@ -22,12 +22,16 @@ cv::flann::LinearIndexParams* cveLinearIndexParamsCreate(cv::flann::IndexParams*
 }
 void cveLinearIndexParamsRelease(cv::flann::LinearIndexParams** p)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	delete* p;
-	*p = 0;
+		delete* p;
+		*p = 0;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::flann::KDTreeIndexParams* cveKDTreeIndexParamsCreate(cv::flann::IndexParams** ip, int trees)
@@ -46,12 +50,16 @@ cv::flann::KDTreeIndexParams* cveKDTreeIndexParamsCreate(cv::flann::IndexParams*
 }
 void cveKDTreeIndexParamsRelease(cv::flann::KDTreeIndexParams** p)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	delete* p;
-	*p = 0;
+		delete* p;
+		*p = 0;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::flann::LshIndexParams* cveLshIndexParamsCreate(cv::flann::IndexParams** ip, int tableNumber, int keySize, int multiProbeLevel)
@@ -70,12 +78,16 @@ cv::flann::LshIndexParams* cveLshIndexParamsCreate(cv::flann::IndexParams** ip, 
 }
 void cveLshIndexParamsRelease(cv::flann::LshIndexParams** p)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	delete* p;
-	*p = 0;
+		delete* p;
+		*p = 0;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::flann::KMeansIndexParams* cveKMeansIndexParamsCreate(cv::flann::IndexParams** ip, int branching, int iterations, cvflann::flann_centers_init_t centersInit, float cbIndex)
@@ -94,12 +106,16 @@ cv::flann::KMeansIndexParams* cveKMeansIndexParamsCreate(cv::flann::IndexParams*
 }
 void cveKMeansIndexParamsRelease(cv::flann::KMeansIndexParams** p)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	delete* p;
-	*p = 0;
+		delete* p;
+		*p = 0;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::flann::CompositeIndexParams* cveCompositeIndexParamsCreate(cv::flann::IndexParams** ip, int trees, int branching, int iterations, cvflann::flann_centers_init_t centersInit, float cbIndex)
@@ -118,12 +134,16 @@ cv::flann::CompositeIndexParams* cveCompositeIndexParamsCreate(cv::flann::IndexP
 }
 void cveCompositeIndexParamsRelease(cv::flann::CompositeIndexParams** p)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	delete* p;
-	*p = 0;
+		delete* p;
+		*p = 0;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::flann::AutotunedIndexParams* cveAutotunedIndexParamsCreate(cv::flann::IndexParams** ip, float targetPrecision, float buildWeight, float memoryWeight, float sampleFraction)
@@ -142,12 +162,16 @@ cv::flann::AutotunedIndexParams* cveAutotunedIndexParamsCreate(cv::flann::IndexP
 }
 void cveAutotunedIndexParamsRelease(cv::flann::AutotunedIndexParams** p)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	delete* p;
-	*p = 0;
+		delete* p;
+		*p = 0;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::flann::HierarchicalClusteringIndexParams* cveHierarchicalClusteringIndexParamsCreate(cv::flann::IndexParams** ip, int branching, cvflann::flann_centers_init_t centersInit, int trees, int leafSize)
@@ -166,12 +190,16 @@ cv::flann::HierarchicalClusteringIndexParams* cveHierarchicalClusteringIndexPara
 }
 void cveHierarchicalClusteringIndexParamsRelease(cv::flann::HierarchicalClusteringIndexParams** p)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	delete* p;
-	*p = 0;
+		delete* p;
+		*p = 0;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::flann::SearchParams* cveSearchParamsCreate(cv::flann::IndexParams** ip, int checks, float eps, bool sorted)
@@ -190,12 +218,16 @@ cv::flann::SearchParams* cveSearchParamsCreate(cv::flann::IndexParams** ip, int 
 }
 void cveSearchParamsRelease(cv::flann::SearchParams** p)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	delete* p;
-	*p = 0;
+		delete* p;
+		*p = 0;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::flann::Index* cveFlannIndexCreate(cv::_InputArray* features, cv::flann::IndexParams* p, int distType)
@@ -241,10 +273,14 @@ int cveFlannIndexRadiusSearch(cv::flann::Index* index, cv::_InputArray* queries,
 
 void cveFlannIndexRelease(cv::flann::Index** index)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FLANN
-	delete* index;
-	*index = 0;
+		delete* index;
+		*index = 0;
 #else
-	throw_no_flann();
+		throw_no_flann();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
