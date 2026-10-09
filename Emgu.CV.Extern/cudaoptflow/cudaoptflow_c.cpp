@@ -56,23 +56,9 @@ void cudaSparseOpticalFlowCalc(
 	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
-void cudaSparsePyrLKOpticalFlowRelease(cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>** flow)
-{
-	try
-	{
-#ifdef HAVE_OPENCV_CUDAOPTFLOW
-		delete *flow;
-		*flow = 0;
-#else
-		throw_no_cudaoptflow();
-#endif
-	}
-	CVAPI_CATCH_CV_ERRORS_VOID
-}
-
 //----------------------------------------------------------------------------
 //
-//  CudaBroxOpticalFlow 
+//  CudaBroxOpticalFlow
 //
 //----------------------------------------------------------------------------
 
@@ -285,7 +271,7 @@ cv::cuda::SparsePyrLKOpticalFlow* cudaSparsePyrLKOpticalFlowCreate(
 	CVAPI_CATCH_CV_ERRORS(0)
 }
 
-void cudaDensePyrLKOpticalFlowRelease(cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>** flow)
+void cudaSparsePyrLKOpticalFlowRelease(cv::Ptr<cv::cuda::SparsePyrLKOpticalFlow>** flow)
 {
 	try
 	{
