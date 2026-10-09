@@ -46,12 +46,16 @@ void cudaBackgroundSubtractorMOGApply(cv::cuda::BackgroundSubtractorMOG* mog, cv
 }
 void cudaBackgroundSubtractorMOGRelease(cv::Ptr<cv::cuda::BackgroundSubtractorMOG>** mog)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDABGSEGM
-	delete (*mog);
-	*mog = 0;
+		delete (*mog);
+		*mog = 0;
 #else
-    throw_no_cudabgsegm();
+		throw_no_cudabgsegm();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -95,12 +99,16 @@ void cudaBackgroundSubtractorMOG2Apply(cv::cuda::BackgroundSubtractorMOG2* mog, 
 
 void cudaBackgroundSubtractorMOG2Release(cv::Ptr<cv::cuda::BackgroundSubtractorMOG2>** mog)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDABGSEGM
-	delete (*mog);
-	*mog = 0;
+		delete (*mog);
+		*mog = 0;
 #else
-    throw_no_cudabgsegm();
+		throw_no_cudabgsegm();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 /*

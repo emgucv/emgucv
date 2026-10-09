@@ -24,12 +24,16 @@ cv::wechat_qrcode::WeChatQRCode* cveWeChatQRCodeCreate(
 
 void cveWeChatQRCodeRelease(cv::wechat_qrcode::WeChatQRCode** detector)
 {
+    try
+    {
 #ifdef HAVE_OPENCV_WECHAT_QRCODE
-    delete* detector;
-    *detector = 0;
+        delete* detector;
+        *detector = 0;
 #else
-    throw_no_wechat_qrcode();
+        throw_no_wechat_qrcode();
 #endif
+    }
+    CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveWeChatQRCodeDetectAndDecode(

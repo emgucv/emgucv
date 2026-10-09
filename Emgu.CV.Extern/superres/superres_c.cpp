@@ -38,12 +38,16 @@ cv::superres::FrameSource* cveSuperresCreateFrameSourceCamera(int deviceId, cv::
 }
 void cveSuperresFrameSourceRelease(cv::Ptr<cv::superres::FrameSource>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_SUPERRES
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_superres();
+		throw_no_superres();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveSuperresFrameSourceNextFrame(cv::superres::FrameSource* frameSource, cv::_OutputArray* frame)
 {
@@ -85,10 +89,14 @@ cv::superres::SuperResolution* cveSuperResolutionCreate(int type, cv::superres::
 }
 void cveSuperResolutionRelease(cv::Ptr<cv::superres::SuperResolution>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_SUPERRES
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_superres();
+		throw_no_superres();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
