@@ -42,6 +42,7 @@ namespace ${NAMESPACE_CS}
       public VectorOf${VECTOR_NAME}()
          : this(VectorOf${VECTOR_NAME}Create(), true)
       {
+         CvInvoke.CheckError();
       }
 
       internal VectorOf${VECTOR_NAME}(IntPtr ptr, bool needDispose)
@@ -57,6 +58,7 @@ namespace ${NAMESPACE_CS}
       public VectorOf${VECTOR_NAME}(int size)
          : this( VectorOf${VECTOR_NAME}CreateSize(size), true)
       {
+         CvInvoke.CheckError();
       }
 
       /// <summary>
@@ -76,10 +78,12 @@ namespace ${NAMESPACE_CS}
       {
          get
          {
-            return VectorOf${VECTOR_NAME}GetSize(_ptr);
+            int result = VectorOf${VECTOR_NAME}GetSize(_ptr);
+            CvInvoke.CheckError();
+            return result;
          }
       }
-	  
+
 	  /// <summary>
       /// The pointer to the first element on the vector. In case of an empty vector, IntPtr.Zero will be returned.
       /// </summary>
@@ -87,11 +91,13 @@ namespace ${NAMESPACE_CS}
       {
          get
          {
-            return VectorOf${VECTOR_NAME}GetStartAddress(_ptr);
+            IntPtr result = VectorOf${VECTOR_NAME}GetStartAddress(_ptr);
+            CvInvoke.CheckError();
+            return result;
          }
       }
-	  
-	  
+
+
 	  /// <summary>
       /// The size of memory in bytes, that is needed to hold all the items in this vector
       /// </summary>
@@ -99,7 +105,9 @@ namespace ${NAMESPACE_CS}
       {
          get
          {
-            return VectorOf${VECTOR_NAME}GetMemorySize(_ptr);
+            long result = VectorOf${VECTOR_NAME}GetMemorySize(_ptr);
+            CvInvoke.CheckError();
+            return result;
          }
       }
 	  
@@ -110,6 +118,7 @@ namespace ${NAMESPACE_CS}
       public void Clear()
       {
          VectorOf${VECTOR_NAME}Clear(_ptr);
+         CvInvoke.CheckError();
       }
 
       /// <summary>
@@ -119,6 +128,7 @@ namespace ${NAMESPACE_CS}
       public void Push(${VECTOR_ELEMENT_CS} value)
       {
          VectorOf${VECTOR_NAME}Push(_ptr, value.Ptr);
+         CvInvoke.CheckError();
       }
 
       /// <summary>
@@ -138,8 +148,9 @@ namespace ${NAMESPACE_CS}
       public void Push(VectorOf${VECTOR_NAME} other)
       {
          VectorOf${VECTOR_NAME}PushVector(_ptr, other);
+         CvInvoke.CheckError();
       }
-      
+
       /// <summary>
       /// Get the item in the specific index
       /// </summary>
@@ -151,6 +162,7 @@ namespace ${NAMESPACE_CS}
          {
             IntPtr itemPtr = IntPtr.Zero;
             VectorOf${VECTOR_NAME}GetItemPtr(_ptr, index, ref itemPtr);
+            CvInvoke.CheckError();
             return new ${VECTOR_ELEMENT_CS}(itemPtr, false);
          }
       }
@@ -171,7 +183,9 @@ namespace ${NAMESPACE_CS}
       /// <returns>The input array</returns>
       public InputArray GetInputArray()
       {
-        return new InputArray( cveInputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
+        IntPtr result = cveInputArrayFromVectorOf${VECTOR_NAME}(_ptr);
+        CvInvoke.CheckError();
+        return new InputArray( result, this );
       }
 
       /// <summary>
@@ -180,7 +194,9 @@ namespace ${NAMESPACE_CS}
       /// <returns>The output array</returns>
       public OutputArray GetOutputArray()
       {
-         return new OutputArray( cveOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
+         IntPtr result = cveOutputArrayFromVectorOf${VECTOR_NAME}(_ptr);
+         CvInvoke.CheckError();
+         return new OutputArray( result, this );
       }
 
       /// <summary>
@@ -189,16 +205,23 @@ namespace ${NAMESPACE_CS}
       /// <returns>The input output array</returns>
       public InputOutputArray GetInputOutputArray()
       {
-         return new InputOutputArray( cveInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
+         IntPtr result = cveInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr);
+         CvInvoke.CheckError();
+         return new InputOutputArray( result, this );
       }
 #endif
-      
+
       /// <summary>
       /// The size of the item in this Vector, counted as size in bytes.
       /// </summary>
       public static int SizeOfItemInBytes
       {
-         get { return VectorOf${VECTOR_NAME}SizeOfItemInBytes(); }
+         get
+         {
+            int result = VectorOf${VECTOR_NAME}SizeOfItemInBytes();
+            CvInvoke.CheckError();
+            return result;
+         }
       }
 
 #if ${IS_VECTOR_OF_VECTOR}

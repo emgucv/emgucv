@@ -64,8 +64,9 @@ namespace ${NAMESPACE_CS}
       public VectorOf${VECTOR_NAME}()
          : this(VectorOf${VECTOR_NAME}Create(), true)
       {
+         CvInvoke.CheckError();
       }
-	  
+
       internal VectorOf${VECTOR_NAME}(IntPtr ptr, bool needDispose)
       {
          _ptr = ptr;
@@ -79,6 +80,7 @@ namespace ${NAMESPACE_CS}
       public VectorOf${VECTOR_NAME}(int size)
          : this( VectorOf${VECTOR_NAME}CreateSize(size), true)
       {
+         CvInvoke.CheckError();
       }
 	  
       /// <summary>
@@ -100,11 +102,18 @@ namespace ${NAMESPACE_CS}
          if (values.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(values, GCHandleType.Pinned);
-            VectorOf${VECTOR_NAME}PushMulti(_ptr, handle.AddrOfPinnedObject(), values.Length);
-            handle.Free();
+            try
+            {
+               VectorOf${VECTOR_NAME}PushMulti(_ptr, handle.AddrOfPinnedObject(), values.Length);
+               CvInvoke.CheckError();
+            }
+            finally
+            {
+               handle.Free();
+            }
          }
       }
-      
+
       /// <summary>
       /// Push multiple values from the other vector into this vector
       /// </summary>
@@ -112,8 +121,9 @@ namespace ${NAMESPACE_CS}
       public void Push(VectorOf${VECTOR_NAME} other)
       {
          VectorOf${VECTOR_NAME}PushVector(_ptr, other);
+         CvInvoke.CheckError();
       }
-	  
+
       /// <summary>
       /// Convert the standard vector to an array of ${VECTOR_NAME}
       /// </summary>
@@ -124,8 +134,15 @@ namespace ${NAMESPACE_CS}
          if (res.Length > 0)
          {
             GCHandle handle = GCHandle.Alloc(res, GCHandleType.Pinned);
-            VectorOf${VECTOR_NAME}CopyData(_ptr, handle.AddrOfPinnedObject());
-            handle.Free();
+            try
+            {
+               VectorOf${VECTOR_NAME}CopyData(_ptr, handle.AddrOfPinnedObject());
+               CvInvoke.CheckError();
+            }
+            finally
+            {
+               handle.Free();
+            }
          }
          return res;
       }
@@ -156,6 +173,7 @@ namespace ${NAMESPACE_CS}
                       VectorOf${VECTOR_NAME}PushMulti(_ptr, (IntPtr)ptr, values.Length);
                   }
               }
+              CvInvoke.CheckError();
           }
        }
 	   
@@ -185,7 +203,9 @@ namespace ${NAMESPACE_CS}
       {
          get
          {
-            return VectorOf${VECTOR_NAME}GetSize(_ptr);
+            int result = VectorOf${VECTOR_NAME}GetSize(_ptr);
+            CvInvoke.CheckError();
+            return result;
          }
       }
 
@@ -195,6 +215,7 @@ namespace ${NAMESPACE_CS}
       public void Clear()
       {
          VectorOf${VECTOR_NAME}Clear(_ptr);
+         CvInvoke.CheckError();
       }
 
       /// <summary>
@@ -204,7 +225,9 @@ namespace ${NAMESPACE_CS}
       {
          get
          {
-            return VectorOf${VECTOR_NAME}GetStartAddress(_ptr);
+            IntPtr result = VectorOf${VECTOR_NAME}GetStartAddress(_ptr);
+            CvInvoke.CheckError();
+            return result;
          }
       }
 
@@ -215,7 +238,9 @@ namespace ${NAMESPACE_CS}
       {
          get
          {
-            return VectorOf${VECTOR_NAME}GetMemorySize(_ptr);
+            long result = VectorOf${VECTOR_NAME}GetMemorySize(_ptr);
+            CvInvoke.CheckError();
+            return result;
          }
       }
 
@@ -230,6 +255,7 @@ namespace ${NAMESPACE_CS}
          {
             ${VECTOR_ELEMENT_CS} result = new ${VECTOR_ELEMENT_CS}();
             VectorOf${VECTOR_NAME}GetItem(_ptr, index, ref result);
+            CvInvoke.CheckError();
             return result;
          }
       }
@@ -250,16 +276,20 @@ namespace ${NAMESPACE_CS}
       /// <returns>The input array </returns>
       public InputArray GetInputArray()
       {
-         return new InputArray( cveInputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
+         IntPtr result = cveInputArrayFromVectorOf${VECTOR_NAME}(_ptr);
+         CvInvoke.CheckError();
+         return new InputArray( result, this );
       }
-	  
+
       /// <summary>
       /// Get the data as OutputArray
       /// </summary>
       /// <returns>The output array </returns>
       public OutputArray GetOutputArray()
       {
-         return new OutputArray( cveOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
+         IntPtr result = cveOutputArrayFromVectorOf${VECTOR_NAME}(_ptr);
+         CvInvoke.CheckError();
+         return new OutputArray( result, this );
       }
 
       /// <summary>
@@ -268,16 +298,23 @@ namespace ${NAMESPACE_CS}
       /// <returns>The input output array </returns>
       public InputOutputArray GetInputOutputArray()
       {
-         return new InputOutputArray( cveInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr), this );
+         IntPtr result = cveInputOutputArrayFromVectorOf${VECTOR_NAME}(_ptr);
+         CvInvoke.CheckError();
+         return new InputOutputArray( result, this );
       }
 #endif
-      
+
       /// <summary>
       /// The size of the item in this Vector, counted as size in bytes.
       /// </summary>
       public static int SizeOfItemInBytes
       {
-         get { return VectorOf${VECTOR_NAME}SizeOfItemInBytes(); }
+         get
+         {
+            int result = VectorOf${VECTOR_NAME}SizeOfItemInBytes();
+            CvInvoke.CheckError();
+            return result;
+         }
       }
 	  
       internal class DebuggerProxy
