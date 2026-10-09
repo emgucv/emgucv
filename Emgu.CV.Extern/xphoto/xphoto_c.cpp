@@ -21,66 +21,90 @@ void cveWhiteBalancerBalanceWhite(cv::xphoto::WhiteBalancer* whiteBalancer, cv::
 
 cv::xphoto::SimpleWB* cveSimpleWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer, cv::Ptr<cv::xphoto::SimpleWB>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_XPHOTO
-	cv::Ptr<cv::xphoto::SimpleWB> ptr = cv::xphoto::createSimpleWB();
-	*sharedPtr = new cv::Ptr<cv::xphoto::SimpleWB>(ptr);
-	*whiteBalancer = dynamic_cast<cv::xphoto::WhiteBalancer*>(ptr.get());
-	return ptr.get();
+		cv::Ptr<cv::xphoto::SimpleWB> ptr = cv::xphoto::createSimpleWB();
+		*sharedPtr = new cv::Ptr<cv::xphoto::SimpleWB>(ptr);
+		*whiteBalancer = dynamic_cast<cv::xphoto::WhiteBalancer*>(ptr.get());
+		return ptr.get();
 #else
-	throw_no_xphoto();
+		throw_no_xphoto();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveSimpleWBRelease(cv::Ptr<cv::xphoto::SimpleWB>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_XPHOTO
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_xphoto();
+		throw_no_xphoto();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::xphoto::GrayworldWB* cveGrayworldWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer, cv::Ptr<cv::xphoto::GrayworldWB>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_XPHOTO
-	cv::Ptr<cv::xphoto::GrayworldWB> ptr = cv::xphoto::createGrayworldWB();
-	*sharedPtr = new cv::Ptr<cv::xphoto::GrayworldWB>(ptr);
-	*whiteBalancer = dynamic_cast<cv::xphoto::WhiteBalancer*>(ptr.get());
-	return ptr.get();
+		cv::Ptr<cv::xphoto::GrayworldWB> ptr = cv::xphoto::createGrayworldWB();
+		*sharedPtr = new cv::Ptr<cv::xphoto::GrayworldWB>(ptr);
+		*whiteBalancer = dynamic_cast<cv::xphoto::WhiteBalancer*>(ptr.get());
+		return ptr.get();
 #else
-	throw_no_xphoto();
+		throw_no_xphoto();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveGrayworldWBRelease(cv::Ptr<cv::xphoto::GrayworldWB>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_XPHOTO
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_xphoto();
+		throw_no_xphoto();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::xphoto::LearningBasedWB* cveLearningBasedWBCreate(cv::xphoto::WhiteBalancer** whiteBalancer, cv::Ptr<cv::xphoto::LearningBasedWB>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_XPHOTO
-	cv::Ptr<cv::xphoto::LearningBasedWB> ptr = cv::xphoto::createLearningBasedWB();
-	*sharedPtr = new cv::Ptr<cv::xphoto::LearningBasedWB>(ptr);
-	*whiteBalancer = dynamic_cast<cv::xphoto::WhiteBalancer*>(ptr.get());
-	return ptr.get();
+		cv::Ptr<cv::xphoto::LearningBasedWB> ptr = cv::xphoto::createLearningBasedWB();
+		*sharedPtr = new cv::Ptr<cv::xphoto::LearningBasedWB>(ptr);
+		*whiteBalancer = dynamic_cast<cv::xphoto::WhiteBalancer*>(ptr.get());
+		return ptr.get();
 #else
-	throw_no_xphoto();
+		throw_no_xphoto();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void cveLearningBasedWBRelease(cv::Ptr<cv::xphoto::LearningBasedWB>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_XPHOTO
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_xphoto();
+		throw_no_xphoto();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveApplyChannelGains(cv::_InputArray* src, cv::_OutputArray* dst, float gainB, float gainG, float gainR)
@@ -205,22 +229,30 @@ cv::xphoto::TonemapDurand* cveTonemapDurandCreate(
 	cv::Tonemap** tonemap, cv::Algorithm** algorithm,
 	cv::Ptr<cv::xphoto::TonemapDurand>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_XPHOTO
-	cv::Ptr<cv::xphoto::TonemapDurand> t = cv::xphoto::createTonemapDurand(gamma, contrast, saturation, sigmaSpace, sigmaColor);
-	*sharedPtr = new cv::Ptr<cv::xphoto::TonemapDurand>(t);
-	*tonemap = dynamic_cast<cv::Tonemap*>(t.get());
-	*algorithm = dynamic_cast<cv::Algorithm*>(t.get());
-	return t.get();
+		cv::Ptr<cv::xphoto::TonemapDurand> t = cv::xphoto::createTonemapDurand(gamma, contrast, saturation, sigmaSpace, sigmaColor);
+		*sharedPtr = new cv::Ptr<cv::xphoto::TonemapDurand>(t);
+		*tonemap = dynamic_cast<cv::Tonemap*>(t.get());
+		*algorithm = dynamic_cast<cv::Algorithm*>(t.get());
+		return t.get();
 #else
-	throw_no_xphoto();
+		throw_no_xphoto();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveTonemapDurandRelease(cv::Ptr<cv::xphoto::TonemapDurand>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_XPHOTO
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_xphoto();
+		throw_no_xphoto();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
