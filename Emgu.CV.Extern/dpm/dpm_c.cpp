@@ -97,10 +97,14 @@ bool cveDPMDetectorIsEmpty(DPMDetector* dpm)
 
 void cveDPMDetectorRelease(cv::Ptr<cv::dpm::DPMDetector>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_DPM
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_dpm();
+		throw_no_dpm();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

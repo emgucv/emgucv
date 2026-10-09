@@ -211,12 +211,16 @@ cv::rapid::Rapid* cveRapidCreate(cv::_InputArray* pts3d, cv::_InputArray* tris, 
 }
 void cveRapidRelease(cv::Ptr<cv::rapid::Rapid>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_RAPID
-	delete* sharedPtr;
-	*sharedPtr = 0;
+		delete* sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_rapid();
+		throw_no_rapid();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::rapid::OLSTracker* cveOLSTrackerCreate(
@@ -244,10 +248,14 @@ cv::rapid::OLSTracker* cveOLSTrackerCreate(
 }
 void cveOLSTrackerRelease(cv::Ptr<cv::rapid::OLSTracker>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_RAPID
-	delete* sharedPtr;
-	*sharedPtr = 0;
+		delete* sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_rapid();
+		throw_no_rapid();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

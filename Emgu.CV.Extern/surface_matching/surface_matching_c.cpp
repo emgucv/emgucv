@@ -67,12 +67,16 @@ int cveICPRegisterModelToScene2(cv::ppf_match_3d::ICP* icp, cv::Mat* srcPC, cv::
 
 void cveICPRelease(cv::ppf_match_3d::ICP** icp)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_SURFACE_MATCHING
-	delete* icp;
-	*icp = 0;
+		delete* icp;
+		*icp = 0;
 #else
-	throw_no_surface_matching();
+		throw_no_surface_matching();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::ppf_match_3d::Pose3D* cvePose3DCreate()
@@ -102,12 +106,16 @@ void cvePose3DUpdatePose(cv::ppf_match_3d::Pose3D* pose3d, cv::Mat* pose)
 }
 void cvePose3DRelease(cv::ppf_match_3d::Pose3D** pose3d)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_SURFACE_MATCHING
-	delete* pose3d;
-	*pose3d = 0;
+		delete* pose3d;
+		*pose3d = 0;
 #else
-	throw_no_surface_matching();
+		throw_no_surface_matching();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cvePose3DGetT(cv::ppf_match_3d::Pose3D* pose3d, cv::Point3d* t)
 {
@@ -223,12 +231,16 @@ void cvePPF3DDetectorMatch(cv::ppf_match_3d::PPF3DDetector* detector, cv::Mat* s
 
 void cvePPF3DDetectorRelease(cv::ppf_match_3d::PPF3DDetector** detector)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_SURFACE_MATCHING
-	delete* detector;
-	*detector = 0;
+		delete* detector;
+		*detector = 0;
 #else
-	throw_no_surface_matching();
+		throw_no_surface_matching();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveLoadPLYSimple(cv::String* fileName, int withNormals, cv::_OutputArray* result)
