@@ -48,13 +48,17 @@ void cvePlot2dRender(cv::plot::Plot2d* plot, cv::_OutputArray* result)
 }
 void cvePlot2dRelease(cv::plot::Plot2d** plot, cv::Ptr<cv::plot::Plot2d>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_PLOT
-   delete *sharedPtr;
-   *plot = 0;
-   *sharedPtr = 0;
+		delete *sharedPtr;
+		*plot = 0;
+		*sharedPtr = 0;
 #else
-	throw_no_plot();
+		throw_no_plot();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cvePlot2dSetPlotLineColor(cv::plot::Plot2d* plot, cv::Scalar* plotLineColor)
