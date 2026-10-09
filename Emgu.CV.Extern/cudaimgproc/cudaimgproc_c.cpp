@@ -215,12 +215,16 @@ void cudaCLAHEApply(cv::cuda::CLAHE* clahe, cv::_InputArray* src, cv::_OutputArr
 }
 void cudaCLAHERelease(cv::Ptr<cv::cuda::CLAHE>** clahe)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDAIMGPROC
-	delete *clahe;
-	*clahe = 0;
+		delete *clahe;
+		*clahe = 0;
 #else
-	throw_no_cudaimgproc();
+		throw_no_cudaimgproc();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -256,12 +260,16 @@ void cudaCannyEdgeDetectorDetect(cv::cuda::CannyEdgeDetector* detector, cv::_Inp
 }
 void cudaCannyEdgeDetectorRelease(cv::Ptr<cv::cuda::CannyEdgeDetector>** detector)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDAIMGPROC
-	delete *detector;
-	*detector = 0;
+		delete *detector;
+		*detector = 0;
 #else
-	throw_no_cudaimgproc();
+		throw_no_cudaimgproc();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -300,12 +308,16 @@ void cudaTemplateMatchingMatch(cv::cuda::TemplateMatching* tm, cv::_InputArray* 
 
 void cudaTemplateMatchingRelease(cv::Ptr<cv::cuda::TemplateMatching>** tm)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDAIMGPROC
-	delete *tm;
-	*tm = 0;
+		delete *tm;
+		*tm = 0;
 #else
-	throw_no_cudaimgproc();
+		throw_no_cudaimgproc();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -341,12 +353,16 @@ void cudaHoughLinesDetectorDetect(cv::cuda::HoughLinesDetector* detector, cv::_I
 }
 void cudaHoughLinesDetectorRelease(cv::Ptr<cv::cuda::HoughLinesDetector>** detector)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDAIMGPROC
-	delete *detector;
-	*detector = 0;
+		delete *detector;
+		*detector = 0;
 #else
-	throw_no_cudaimgproc();
+		throw_no_cudaimgproc();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -382,12 +398,16 @@ void cudaHoughSegmentDetectorDetect(cv::cuda::HoughSegmentDetector* detector, cv
 }
 void cudaHoughSegmentDetectorRelease(cv::Ptr<cv::cuda::HoughSegmentDetector>** detector)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDAIMGPROC
-	delete *detector;
-	*detector = 0;
+		delete *detector;
+		*detector = 0;
 #else
-	throw_no_cudaimgproc();
+		throw_no_cudaimgproc();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -423,12 +443,16 @@ void cudaHoughCirclesDetectorDetect(cv::cuda::HoughCirclesDetector* detector, cv
 }
 void cudaHoughCirclesDetectorRelease(cv::Ptr<cv::cuda::HoughCirclesDetector>** detector)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDAIMGPROC
-	delete *detector;
-	*detector = 0;
+		delete *detector;
+		*detector = 0;
 #else
-	throw_no_cudaimgproc();
+		throw_no_cudaimgproc();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaGammaCorrection(cv::_InputArray* src, cv::_OutputArray* dst, bool forward, cv::cuda::Stream* stream)
