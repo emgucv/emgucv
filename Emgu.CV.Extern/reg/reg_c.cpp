@@ -51,8 +51,12 @@ void cveMapScale(
 
 void cveMapRelease(cv::Ptr< cv::reg::Map >** mapSharedPtr)
 {
-	delete* mapSharedPtr;
-	*mapSharedPtr = 0;
+	try
+	{
+		delete* mapSharedPtr;
+		*mapSharedPtr = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 
@@ -70,12 +74,16 @@ cv::reg::MapShift* cveMapShiftCreate(cv::Point2d* shift, cv::reg::Map** map)
 
 void cveMapShiftRelease(cv::reg::MapShift** mapShift)
 {
-#ifdef HAVE_OPENCV_REG
-	delete* mapShift;
-	*mapShift = 0;
-#else
-	throw_no_reg();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_REG
+		delete* mapShift;
+		*mapShift = 0;
+	#else
+		throw_no_reg();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::reg::MapProjec* cveMapProjecCreate(cv::_InputArray* projTr, cv::reg::Map** map)
@@ -95,12 +103,16 @@ cv::reg::MapProjec* cveMapProjecCreate(cv::_InputArray* projTr, cv::reg::Map** m
 
 void cveMapProjecRelease(cv::reg::MapProjec** mapProjec)
 {
-#ifdef HAVE_OPENCV_REG
-	delete* mapProjec;
-	*mapProjec = 0;
-#else
-	throw_no_reg();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_REG
+		delete* mapProjec;
+		*mapProjec = 0;
+	#else
+		throw_no_reg();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::reg::MapAffine* cveMapAffineCreate(
@@ -122,12 +134,16 @@ cv::reg::MapAffine* cveMapAffineCreate(
 }
 void cveMapAffineRelease(cv::reg::MapAffine** mapAffine)
 {
-#ifdef HAVE_OPENCV_REG
-	delete* mapAffine;
-	*mapAffine = 0;
-#else
-	throw_no_reg();
-#endif
+	try
+	{
+	#ifdef HAVE_OPENCV_REG
+		delete* mapAffine;
+		*mapAffine = 0;
+	#else
+		throw_no_reg();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::reg::Map* cveMapperCalculate(
@@ -171,12 +187,16 @@ cv::reg::MapperGradAffine* cveMapperGradAffineCreate(cv::reg::Mapper** mapper)
 }
 void cveMapperGradAffineRelease(cv::reg::MapperGradAffine** mapper)
 {
-#ifdef HAVE_OPENCV_REG
-	delete* mapper;
-	*mapper = 0;
-#else
-	throw_no_reg();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_REG
+		delete* mapper;
+		*mapper = 0;
+	#else
+		throw_no_reg();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 
@@ -192,12 +212,16 @@ cv::reg::MapperGradEuclid* cveMapperGradEuclidCreate(cv::reg::Mapper** mapper)
 }
 void cveMapperGradEuclidRelease(cv::reg::MapperGradEuclid** mapper)
 {
-#ifdef HAVE_OPENCV_REG
-	delete* mapper;
-	*mapper = 0;
-#else
-	throw_no_reg();
-#endif		
+	try
+	{
+	#ifdef HAVE_OPENCV_REG
+		delete* mapper;
+		*mapper = 0;
+	#else
+		throw_no_reg();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 
@@ -214,12 +238,16 @@ cv::reg::MapperGradProj* cveMapperGradProjCreate(cv::reg::Mapper** mapper)
 
 void cveMapperGradProjRelease(cv::reg::MapperGradProj** mapper)
 {
-#ifdef HAVE_OPENCV_REG
-	delete* mapper;
-	*mapper = 0;
-#else
-	throw_no_reg();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_REG
+		delete* mapper;
+		*mapper = 0;
+	#else
+		throw_no_reg();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::reg::MapperGradShift* cveMapperGradShiftCreate(cv::reg::Mapper** mapper)
@@ -235,12 +263,16 @@ cv::reg::MapperGradShift* cveMapperGradShiftCreate(cv::reg::Mapper** mapper)
 
 void cveMapperGradShiftRelease(cv::reg::MapperGradShift** mapper)
 {
-#ifdef HAVE_OPENCV_REG
-	delete* mapper;
-	*mapper = 0;
-#else
-	throw_no_reg();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_REG
+		delete* mapper;
+		*mapper = 0;
+	#else
+		throw_no_reg();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::reg::MapperGradSimilar* cveMapperGradSimilarCreate(cv::reg::Mapper** mapper)
@@ -255,12 +287,16 @@ cv::reg::MapperGradSimilar* cveMapperGradSimilarCreate(cv::reg::Mapper** mapper)
 }
 void cveMapperGradSimilarRelease(cv::reg::MapperGradSimilar** mapper)
 {
-#ifdef HAVE_OPENCV_REG
-	delete* mapper;
-	*mapper = 0;
-#else
-	throw_no_reg();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_REG
+		delete* mapper;
+		*mapper = 0;
+	#else
+		throw_no_reg();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::reg::MapperPyramid* cveMapperPyramidCreate(cv::reg::Mapper* baseMapper, cv::reg::Mapper** mapper)
@@ -276,10 +312,14 @@ cv::reg::MapperPyramid* cveMapperPyramidCreate(cv::reg::Mapper* baseMapper, cv::
 }
 void cveMapperPyramidRelease(cv::reg::MapperPyramid** mapper)
 {
-#ifdef HAVE_OPENCV_REG
-	delete* mapper;
-	*mapper = 0;
-#else
-	throw_no_reg();
-#endif	
+	try
+	{
+	#ifdef HAVE_OPENCV_REG
+		delete* mapper;
+		*mapper = 0;
+	#else
+		throw_no_reg();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

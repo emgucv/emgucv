@@ -27,13 +27,17 @@ cv::bgsegm::BackgroundSubtractorMOG* cveBackgroundSubtractorMOGCreate(int histor
 
 void cveBackgroundSubtractorMOGRelease(cv::bgsegm::BackgroundSubtractorMOG** bgSubtractor, cv::Ptr<cv::bgsegm::BackgroundSubtractorMOG>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_BGSEGM
-	delete *sharedPtr;
-	*bgSubtractor = 0;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*bgSubtractor = 0;
+		*sharedPtr = 0;
 #else
-	throw_no_bgsegm();
+		throw_no_bgsegm();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //BackgroundSubtractorGMG
@@ -56,13 +60,17 @@ cv::bgsegm::BackgroundSubtractorGMG* cveBackgroundSubtractorGMGCreate(int initia
 }
 void cveBackgroundSubtractorGMGRelease(cv::bgsegm::BackgroundSubtractorGMG** bgSubtractor, cv::Ptr<cv::bgsegm::BackgroundSubtractorGMG>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_BGSEGM
-	delete *sharedPtr;
-	*bgSubtractor = 0;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*bgSubtractor = 0;
+		*sharedPtr = 0;
 #else
-	throw_no_bgsegm();
+		throw_no_bgsegm();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //BackgroundSubtractorCNT
@@ -92,13 +100,17 @@ cv::bgsegm::BackgroundSubtractorCNT* cveBackgroundSubtractorCNTCreate(
 }
 void cveBackgroundSubtractorCNTRelease(cv::bgsegm::BackgroundSubtractorCNT** bgSubtractor, cv::Ptr<cv::bgsegm::BackgroundSubtractorCNT>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_BGSEGM
-	delete *sharedPtr;
-	*bgSubtractor = 0;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*bgSubtractor = 0;
+		*sharedPtr = 0;
 #else
-	throw_no_bgsegm();
+		throw_no_bgsegm();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 
@@ -124,13 +136,17 @@ cv::bgsegm::BackgroundSubtractorGSOC* cveBackgroundSubtractorGSOCCreate(
 }
 void cveBackgroundSubtractorGSOCRelease(cv::bgsegm::BackgroundSubtractorGSOC** bgSubtractor, cv::Ptr<cv::bgsegm::BackgroundSubtractorGSOC>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_BGSEGM
-	delete *sharedPtr;
-	*bgSubtractor = 0;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*bgSubtractor = 0;
+		*sharedPtr = 0;
 #else
-	throw_no_bgsegm();
+		throw_no_bgsegm();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //BackgroundSubtractorLSBP
@@ -156,11 +172,15 @@ cv::bgsegm::BackgroundSubtractorLSBP* cveBackgroundSubtractorLSBPCreate(
 
 void cveBackgroundSubtractorLSBPRelease(cv::bgsegm::BackgroundSubtractorLSBP** bgSubtractor, cv::Ptr<cv::bgsegm::BackgroundSubtractorLSBP>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_BGSEGM
-	delete *sharedPtr;
-	*bgSubtractor = 0;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*bgSubtractor = 0;
+		*sharedPtr = 0;
 #else
-	throw_no_bgsegm();
+		throw_no_bgsegm();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
