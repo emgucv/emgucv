@@ -47,12 +47,16 @@ void cveLineDescriptorBinaryDescriptorCompute(cv::line_descriptor::BinaryDescrip
 
 void cveLineDescriptorBinaryDescriptorRelease(cv::Ptr<cv::line_descriptor::BinaryDescriptor>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_LINE_DESCRIPTOR
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_line_descriptor();
+		throw_no_line_descriptor();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::line_descriptor::LSDDetector* cveLineDescriptorLSDDetectorCreate(cv::Ptr<cv::line_descriptor::LSDDetector>** sharedPtr)
@@ -83,11 +87,15 @@ void cveLineDescriptorLSDDetectorDetect(cv::line_descriptor::LSDDetector* detect
 }
 void cveLineDescriptorLSDDetectorRelease(cv::Ptr<cv::line_descriptor::LSDDetector>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_LINE_DESCRIPTOR
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_line_descriptor();
+		throw_no_line_descriptor();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 

@@ -36,12 +36,16 @@ void cudaStereoBMFindStereoCorrespondence(cv::cuda::StereoBM* stereo, cv::_Input
 
 void cudaStereoBMRelease(cv::Ptr<cv::cuda::StereoBM>** stereoBM)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDASTEREO
-	delete *stereoBM;
-	*stereoBM = 0;
+		delete *stereoBM;
+		*stereoBM = 0;
 #else
-	throw_no_cudastereo();
+		throw_no_cudastereo();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::cuda::StereoConstantSpaceBP* cudaStereoConstantSpaceBPCreate(int ndisp, int iters, int levels, int nr_plane, cv::Ptr<cv::cuda::StereoConstantSpaceBP>** sharedPtr)
@@ -74,12 +78,16 @@ void cudaStereoConstantSpaceBPFindStereoCorrespondence(cv::cuda::StereoConstantS
 
 void cudaStereoConstantSpaceBPRelease(cv::Ptr<cv::cuda::StereoConstantSpaceBP>** stereo)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDASTEREO
-	delete *stereo;
-	*stereo = 0;
+		delete *stereo;
+		*stereo = 0;
 #else
-	throw_no_cudastereo();
+		throw_no_cudastereo();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::cuda::DisparityBilateralFilter* cudaDisparityBilateralFilterCreate(int ndisp, int radius, int iters, cv::Ptr<cv::cuda::DisparityBilateralFilter>** sharedPtr)
@@ -112,12 +120,16 @@ void cudaDisparityBilateralFilterApply(cv::cuda::DisparityBilateralFilter* filte
 
 void cudaDisparityBilateralFilterRelease(cv::Ptr<cv::cuda::DisparityBilateralFilter>** filter)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDASTEREO
-	delete *filter;
-	*filter = 0;
+		delete *filter;
+		*filter = 0;
 #else
-	throw_no_cudastereo();
+		throw_no_cudastereo();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaDrawColorDisp(cv::_InputArray* srcDisp, cv::_OutputArray* dstDisp, int ndisp, cv::cuda::Stream* stream)

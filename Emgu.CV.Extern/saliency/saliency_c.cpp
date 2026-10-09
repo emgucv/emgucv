@@ -26,13 +26,17 @@ cv::saliency::StaticSaliencySpectralResidual* cveStaticSaliencySpectralResidualC
 
 void cveStaticSaliencySpectralResidualRelease(cv::saliency::StaticSaliencySpectralResidual** saliency, cv::Ptr<cv::saliency::StaticSaliencySpectralResidual>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_SALIENCY
-	delete *sharedPtr;
-	*saliency = 0;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*saliency = 0;
+		*sharedPtr = 0;
 #else
-	throw_no_saliency();
+		throw_no_saliency();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::saliency::StaticSaliencyFineGrained* cveStaticSaliencyFineGrainedCreate(cv::saliency::StaticSaliency** static_saliency, cv::saliency::Saliency** saliency, cv::Algorithm** algorithm, cv::Ptr<cv::saliency::StaticSaliencyFineGrained>** sharedPtr)
@@ -54,13 +58,17 @@ cv::saliency::StaticSaliencyFineGrained* cveStaticSaliencyFineGrainedCreate(cv::
 }
 void cveStaticSaliencyFineGrainedRelease(cv::saliency::StaticSaliencyFineGrained** saliency, cv::Ptr<cv::saliency::StaticSaliencyFineGrained>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_SALIENCY
-	delete *sharedPtr;
-	*saliency = 0;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*saliency = 0;
+		*sharedPtr = 0;
 #else
-	throw_no_saliency();
+		throw_no_saliency();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::saliency::MotionSaliencyBinWangApr2014* cveMotionSaliencyBinWangApr2014Create(cv::saliency::MotionSaliency** motion_saliency, cv::saliency::Saliency** saliency, cv::Algorithm** algorithm, cv::Ptr<cv::saliency::MotionSaliencyBinWangApr2014>** sharedPtr)
@@ -83,13 +91,17 @@ cv::saliency::MotionSaliencyBinWangApr2014* cveMotionSaliencyBinWangApr2014Creat
 
 void cveMotionSaliencyBinWangApr2014Release(cv::saliency::MotionSaliencyBinWangApr2014** saliency, cv::Ptr<cv::saliency::MotionSaliencyBinWangApr2014>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_SALIENCY
-	delete *sharedPtr;
-	*saliency = 0;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*saliency = 0;
+		*sharedPtr = 0;
 #else
-	throw_no_saliency();
+		throw_no_saliency();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::saliency::ObjectnessBING* cveObjectnessBINGCreate(cv::saliency::Objectness** objectness_saliency, cv::saliency::Saliency** saliency, cv::Algorithm** algorithm, cv::Ptr<cv::saliency::ObjectnessBING>** sharedPtr)
@@ -112,13 +124,17 @@ cv::saliency::ObjectnessBING* cveObjectnessBINGCreate(cv::saliency::Objectness**
 
 void cveObjectnessBINGRelease(cv::saliency::ObjectnessBING** saliency, cv::Ptr<cv::saliency::ObjectnessBING>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_SALIENCY
-	delete *sharedPtr;
-	*saliency = 0;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*saliency = 0;
+		*sharedPtr = 0;
 #else
-	throw_no_saliency();
+		throw_no_saliency();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 bool cveSaliencyComputeSaliency(cv::saliency::Saliency* saliency, cv::_InputArray* image, cv::_OutputArray* saliencyMap)

@@ -111,12 +111,16 @@ cv::optflow::DualTVL1OpticalFlow* cveDenseOpticalFlowCreateDualTVL1(cv::DenseOpt
 }
 void cveDualTVL1OpticalFlowRelease(cv::Ptr<cv::optflow::DualTVL1OpticalFlow>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_OPTFLOW
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_optflow();
+		throw_no_optflow();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::optflow::RLOFOpticalFlowParameter* cveRLOFOpticalFlowParameterCreate()
@@ -133,12 +137,16 @@ cv::optflow::RLOFOpticalFlowParameter* cveRLOFOpticalFlowParameterCreate()
 }
 void cveRLOFOpticalFlowParameterRelease(cv::optflow::RLOFOpticalFlowParameter** p)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_OPTFLOW
-	delete *p;
-	*p = 0;
+		delete *p;
+		*p = 0;
 #else
-	throw_no_optflow();
+		throw_no_optflow();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::optflow::DenseRLOFOpticalFlow* cveDenseRLOFOpticalFlowCreate(
@@ -184,12 +192,16 @@ cv::optflow::DenseRLOFOpticalFlow* cveDenseRLOFOpticalFlowCreate(
 }
 void cveDenseRLOFOpticalFlowRelease(cv::Ptr<cv::optflow::DenseRLOFOpticalFlow>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_OPTFLOW
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_optflow();
+		throw_no_optflow();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 
@@ -221,10 +233,14 @@ cv::optflow::SparseRLOFOpticalFlow* cveSparseRLOFOpticalFlowCreate(
 
 void cveSparseRLOFOpticalFlowRelease(cv::Ptr<cv::optflow::SparseRLOFOpticalFlow>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_OPTFLOW
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_optflow();
+		throw_no_optflow();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

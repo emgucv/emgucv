@@ -25,12 +25,16 @@ cv::StereoSGBM* cveStereoSGBMCreate(
 }
 void cveStereoSGBMRelease(cv::Ptr<cv::StereoSGBM>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_STEREO
-	delete* sharedPtr;
-	*sharedPtr = 0;
+		delete* sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_stereo();
+		throw_no_stereo();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //StereoBM
@@ -64,12 +68,16 @@ void cveStereoMatcherCompute(cv::StereoMatcher* disparitySolver, cv::_InputArray
 }
 void cveStereoMatcherRelease(cv::Ptr<cv::StereoMatcher>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_STEREO
-	delete* sharedPtr;
-	*sharedPtr = 0;
+		delete* sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_stereo();
+		throw_no_stereo();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 bool cveStereoRectifyUncalibrated(cv::_InputArray* points1, cv::_InputArray* points2, cv::_InputArray* f, cv::Size* imgSize, cv::_OutputArray* h1, cv::_OutputArray* h2, double threshold)
