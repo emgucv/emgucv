@@ -8,42 +8,58 @@
 
 cv::freetype::FreeType2* cveFreeType2Create(cv::Algorithm** algorithmPtr, cv::Ptr<cv::freetype::FreeType2>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FREETYPE
-	cv::Ptr<cv::freetype::FreeType2> ptr = cv::freetype::createFreeType2();
-	*algorithmPtr = dynamic_cast<cv::Algorithm*>(ptr.get());
-	
-	*sharedPtr = new cv::Ptr<cv::freetype::FreeType2>(ptr);
-	return ptr.get();
+		cv::Ptr<cv::freetype::FreeType2> ptr = cv::freetype::createFreeType2();
+		*algorithmPtr = dynamic_cast<cv::Algorithm*>(ptr.get());
+
+		*sharedPtr = new cv::Ptr<cv::freetype::FreeType2>(ptr);
+		return ptr.get();
 #else
-	throw_no_freetype();
+		throw_no_freetype();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveFreeType2Release(cv::Ptr<cv::freetype::FreeType2>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FREETYPE
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_freetype();
+		throw_no_freetype();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveFreeType2LoadFontData(cv::freetype::FreeType2* freetype, cv::String* fontFileName, int id)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FREETYPE
-	freetype->loadFontData(*fontFileName, id);
+		freetype->loadFontData(*fontFileName, id);
 #else
-	throw_no_freetype();
+		throw_no_freetype();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveFreeType2SetSplitNumber(cv::freetype::FreeType2* freetype, int num)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FREETYPE
-	freetype->setSplitNumber(num);
+		freetype->setSplitNumber(num);
 #else
-	throw_no_freetype();
+		throw_no_freetype();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveFreeType2PutText(
@@ -55,11 +71,15 @@ void cveFreeType2PutText(
 	int thickness, int lineType, bool bottomLeftOrigin
 )
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FREETYPE
-	freetype->putText(*img, *text, *org, fontHeight, *color, thickness, lineType, bottomLeftOrigin);
+		freetype->putText(*img, *text, *org, fontHeight, *color, thickness, lineType, bottomLeftOrigin);
 #else
-	throw_no_freetype();
+		throw_no_freetype();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveFreeType2GetTextSize(
@@ -69,11 +89,15 @@ void cveFreeType2GetTextSize(
 	int* baseLine,
 	cv::Size* size)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FREETYPE
-	cv::Size s = freetype->getTextSize(*text, fontHeight, thickness, baseLine);
-	size->width = s.width;
-	size->height = s.height;
+		cv::Size s = freetype->getTextSize(*text, fontHeight, thickness, baseLine);
+		size->width = s.width;
+		size->height = s.height;
 #else
-	throw_no_freetype();
+		throw_no_freetype();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

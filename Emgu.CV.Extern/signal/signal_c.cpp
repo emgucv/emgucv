@@ -8,9 +8,13 @@
 
 void cveResampleSignal(cv::_InputArray* inputSignal, cv::_OutputArray* outSignal, int inFreq, int outFreq)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_SIGNAL
-	cv::signal::resampleSignal(*inputSignal, *outSignal, inFreq, outFreq);
+		cv::signal::resampleSignal(*inputSignal, *outSignal, inFreq, outFreq);
 #else
-	throw_no_signal();
+		throw_no_signal();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
