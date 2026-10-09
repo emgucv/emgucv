@@ -246,6 +246,22 @@ namespace Emgu.CV.Test
 
         }
 
+        /// <summary>
+        /// Regression test for https://github.com/emgucv/emgucv/issues/867 -- calling
+        /// CvInvoke.ConvexHull with an empty contour used to crash the process on Linux
+        /// instead of raising a catchable CvException, because the native geometry
+        /// module's functions were not wrapped with CVAPI_CATCH_CV_ERRORS.
+        /// </summary>
+        [Test]
+        public void TestConvexHullEmptyContourThrowsCvException()
+        {
+            using (VectorOfPoint emptyContour = new VectorOfPoint())
+            using (Mat hull = new Mat())
+            {
+                Assert.Throws<CvException>(() => CvInvoke.ConvexHull(emptyContour, hull));
+            }
+        }
+
         [Test]
         public void TestVectorOfMat()
         {

@@ -28,6 +28,7 @@ namespace Emgu.CV
         public Subdiv2D(Rectangle roi)
         {
             _ptr = CvInvoke.cveSubdiv2DCreate(ref roi);
+            CvInvoke.CheckError();
             _roi = roi;
         }
 
@@ -43,6 +44,7 @@ namespace Emgu.CV
             #endregion
 
             _ptr = CvInvoke.cveSubdiv2DCreate(ref _roi);
+            CvInvoke.CheckError();
 
             Insert(points, silent);
         }
@@ -62,6 +64,8 @@ namespace Emgu.CV
                     //ignore all errors
                     IntPtr oldErrorCallback = CvInvoke.RedirectError(CvInvoke.CvErrorHandlerIgnoreError, IntPtr.Zero, IntPtr.Zero);
 #endif
+                    // No CheckError() here by design: with CvErrorHandlerIgnoreError registered, the
+                    // [ThreadStatic] fast-path fields are never populated, so there is nothing to throw.
                     CvInvoke.cveSubdiv2DInsertMulti(_ptr, vpf);
 
 #if !UNITY_IOS
@@ -70,7 +74,10 @@ namespace Emgu.CV
 #endif
                 }
                 else
+                {
                     CvInvoke.cveSubdiv2DInsertMulti(_ptr, vpf);
+                    CvInvoke.CheckError();
+                }
         }
 
         /// <summary>
@@ -80,6 +87,7 @@ namespace Emgu.CV
         public void Insert(PointF point)
         {
             CvInvoke.cveSubdiv2DInsertSingle(_ptr, ref point);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -93,7 +101,9 @@ namespace Emgu.CV
         {
             subdiv2DEdge = 0;
             subdiv2DPoint = 0;
-            return CvInvoke.cveSubdiv2DLocate(_ptr, ref pt, ref subdiv2DEdge, ref subdiv2DPoint);
+            CvEnum.Subdiv2DPointLocationType result = CvInvoke.cveSubdiv2DLocate(_ptr, ref pt, ref subdiv2DEdge, ref subdiv2DPoint);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -105,7 +115,9 @@ namespace Emgu.CV
         public CvEnum.Subdiv2DPointLocationType FindNearest(PointF point, out PointF nearestPoint)
         {
             nearestPoint = new PointF();
-            return CvInvoke.cveSubdiv2DFindNearest(_ptr, ref point, ref nearestPoint);
+            CvEnum.Subdiv2DPointLocationType result = CvInvoke.cveSubdiv2DFindNearest(_ptr, ref point, ref nearestPoint);
+            CvInvoke.CheckError();
+            return result;
         }
 
         /// <summary>
@@ -123,6 +135,7 @@ namespace Emgu.CV
                     vi.Push(idx);
 
                 CvInvoke.cveSubdiv2DGetVoronoiFacetList(_ptr, vi, facetVec, centerVec);
+                CvInvoke.CheckError();
                 PointF[][] vertices = facetVec.ToArrayOfArray();
 #if UNSAFE_ALLOWED
                 var centers = centerVec.GetSpan();
@@ -151,6 +164,7 @@ namespace Emgu.CV
             using (VectorOfTriangle2DF triangleVec = new VectorOfTriangle2DF())
             {
                 CvInvoke.cveSubdiv2DGetTriangleList(_ptr, triangleVec);
+                CvInvoke.CheckError();
                 Triangle2DF[] result = triangleVec.ToArray();
                 if (includeVirtualPoints)
                     return result;
