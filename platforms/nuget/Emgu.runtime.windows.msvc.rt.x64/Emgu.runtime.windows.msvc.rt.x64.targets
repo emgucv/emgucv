@@ -3,8 +3,14 @@
   <!--
     .NET Framework projects do not apply the nuget "runtimes" asset convention,
     so without this file the MSVC runtime libraries never reach the output
-    folder (issue #983). Only imported by .NET Framework consumers via
-    build\net461 and buildTransitive\net461.
+    folder (issue #983). This file is shipped under build\net461 and
+    buildTransitive\net461 for .NET Framework consumers, and also under
+    build\net6.0-windows7.0 and buildTransitive\net6.0-windows7.0 (the OS
+    version suffix is required by NuGet for net5.0+ Windows-specific TFMs,
+    see NU1012) so that SDK-style projects targeting net6.0-windows or later
+    (net10.0-windows10.0.19041, etc.) resolve a same-family asset group
+    instead of falling back to the net461 group, which otherwise triggers
+    NuGet warning NU1701 (issue #1088).
   -->
   <ItemGroup Condition="'$(PlatformTarget)' == 'x64' Or '$(PlatformTarget)' == 'AnyCPU' Or '$(PlatformTarget)' == ''">
     <None Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\*.*">

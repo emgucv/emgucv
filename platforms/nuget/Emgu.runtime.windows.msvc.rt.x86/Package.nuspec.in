@@ -22,6 +22,8 @@
   <files>
 	<file src="Emgu.runtime.windows.msvc.rt.x86.targets" target="build\net461\${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}.targets" />
 	<file src="Emgu.runtime.windows.msvc.rt.x86.targets" target="buildTransitive\net461\${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}.targets" />
+	<file src="Emgu.runtime.windows.msvc.rt.x86.targets" target="build\net6.0-windows7.0\${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}.targets" />
+	<file src="Emgu.runtime.windows.msvc.rt.x86.targets" target="buildTransitive\net6.0-windows7.0\${EMGU_WINDOWS_MSVCRT_X86_NUGET_ID}.targets" />
 
 	<file src="..\..\..\libs\runtimes\win-x86\native\concrt*.dll" target="runtimes\win-x86\native" /> 
 	<file src="..\..\..\libs\runtimes\win-x86\native\msvcp*.dll" target="runtimes\win-x86\native" /> 

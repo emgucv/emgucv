@@ -68,12 +68,16 @@ cv::HistogramCostExtractor* cveEMDL1HistogramCostExtractorCreate(int nDummies, f
 
 void cveHistogramCostExtractorRelease(cv::Ptr<cv::HistogramCostExtractor>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_SHAPE
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_shape();
+		throw_no_shape();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::ThinPlateSplineShapeTransformer* cveThinPlateSplineShapeTransformerCreate(double regularizationParameter, cv::ShapeTransformer** transformer, cv::Ptr<cv::ThinPlateSplineShapeTransformer>** sharedPtr)
@@ -94,12 +98,16 @@ cv::ThinPlateSplineShapeTransformer* cveThinPlateSplineShapeTransformerCreate(do
 
 void cveThinPlateSplineShapeTransformerRelease(cv::Ptr<cv::ThinPlateSplineShapeTransformer>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_SHAPE
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_shape();
+		throw_no_shape();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::AffineTransformer* cveAffineTransformerCreate(bool fullAffine, cv::ShapeTransformer** transformer, cv::Ptr<cv::AffineTransformer>** sharedPtr)
@@ -120,12 +128,16 @@ cv::AffineTransformer* cveAffineTransformerCreate(bool fullAffine, cv::ShapeTran
 
 void cveAffineTransformerRelease(cv::Ptr<cv::AffineTransformer>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_SHAPE
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_shape();
+		throw_no_shape();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveShapeTransformerEstimateTransformation(
@@ -217,12 +229,16 @@ cv::ShapeContextDistanceExtractor* cveShapeContextDistanceExtractorCreate(
 
 void cveShapeContextDistanceExtractorRelease(cv::Ptr<cv::ShapeContextDistanceExtractor>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_SHAPE
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_shape();
+		throw_no_shape();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::HausdorffDistanceExtractor* cveHausdorffDistanceExtractorCreate(int distanceFlag, float rankProp, cv::ShapeDistanceExtractor** e, cv::Ptr<cv::HausdorffDistanceExtractor>** sharedPtr)
@@ -242,10 +258,14 @@ cv::HausdorffDistanceExtractor* cveHausdorffDistanceExtractorCreate(int distance
 }
 void cveHausdorffDistanceExtractorRelease(cv::Ptr<cv::HausdorffDistanceExtractor>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_SHAPE
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_shape();
+		throw_no_shape();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

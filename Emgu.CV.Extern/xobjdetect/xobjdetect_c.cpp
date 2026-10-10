@@ -70,11 +70,15 @@ void cveWBDetectorDetect(cv::xobjdetect::WBDetector* detector, cv::Mat* img, std
 }
 void cveWBDetectorRelease(cv::xobjdetect::WBDetector** detector, cv::Ptr<cv::xobjdetect::WBDetector>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_XOBJDETECT
-	delete *sharedPtr;
-	*detector = 0;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*detector = 0;
+		*sharedPtr = 0;
 #else
-	throw_no_xobjdetect();
+		throw_no_xobjdetect();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

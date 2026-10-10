@@ -45,12 +45,16 @@ cv::text::ERFilter* cveERFilterNM2Create(cv::String* classifier, float minProbab
 }
 void cveERFilterRelease(cv::Ptr<cv::text::ERFilter>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_TEXT
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_text();
+		throw_no_text();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveERFilterRun(cv::text::ERFilter* filter, cv::_InputArray* image, std::vector<cv::text::ERStat>* regions)
 {
@@ -159,10 +163,14 @@ void cveTextDetectorCNNDetect(cv::text::TextDetectorCNN* detector, cv::_InputArr
 }
 void cveTextDetectorCNNRelease(cv::Ptr<cv::text::TextDetectorCNN>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_TEXT
-	delete* sharedPtr;
-	*sharedPtr = 0;
+		delete* sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_text();
+		throw_no_text();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

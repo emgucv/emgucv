@@ -52,6 +52,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (OutputArray oaDst = dst.GetOutputArray())
                 cveGetAffineTransform(iaSrc, oaDst, affine);
+            CheckError();
             return affine;
         }
 
@@ -69,6 +70,7 @@ namespace Emgu.CV
         {
             using (OutputArray oaMapMatrix = mapMatrix.GetOutputArray())
                 cveGetRotationMatrix2D(ref center, angle, scale, oaMapMatrix);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -88,6 +90,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             using (InputArray iaDst = dst.GetInputArray())
                 cveGetPerspectiveTransform(iaSrc, iaDst, m);
+            CheckError();
             return m;
         }
 
@@ -128,6 +131,7 @@ namespace Emgu.CV
             using (InputArray iaM = m.GetInputArray())
             using (OutputArray oaIm = im.GetOutputArray())
                 cveInvertAffineTransform(iaM, oaIm);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -153,6 +157,7 @@ namespace Emgu.CV
             using (InputArray iaPoints = points.GetInputArray())
             using (OutputArray oaLine = line.GetOutputArray())
                 cveFitLine(iaPoints, oaLine, distType, param, reps, aeps);
+            CheckError();
         }
 
         /// <summary>
@@ -180,6 +185,7 @@ namespace Emgu.CV
             using (OutputArray oaLine = line.GetOutputArray())
             {
                 cveFitLine(iaPv, oaLine, distType, param, reps, aeps);
+                CheckError();
                 float[] values = line.ToArray();
                 direction = new PointF(values[0], values[1]);
                 pointOnLine = new PointF(values[2], values[3]);
@@ -199,7 +205,11 @@ namespace Emgu.CV
         public static CvEnum.RectIntersectType RotatedRectangleIntersection(RotatedRect rect1, RotatedRect rect2, IOutputArray intersectingRegion)
         {
             using (OutputArray oaIntersectingRegion = intersectingRegion.GetOutputArray())
-                return cveRotatedRectangleIntersection(ref rect1, ref rect2, oaIntersectingRegion);
+            {
+                CvEnum.RectIntersectType result = cveRotatedRectangleIntersection(ref rect1, ref rect2, oaIntersectingRegion);
+                CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -214,12 +224,19 @@ namespace Emgu.CV
         {
             PointF[] pts = new PointF[4];
             GCHandle handle = GCHandle.Alloc(pts, GCHandleType.Pinned);
-            using (Mat vp = new Mat(4, 2, DepthType.Cv32F, 1, handle.AddrOfPinnedObject(), 8))
-            using (OutputArray oaVp = vp.GetOutputArray())
+            try
             {
-                cveBoxPoints(ref box, oaVp);
+                using (Mat vp = new Mat(4, 2, DepthType.Cv32F, 1, handle.AddrOfPinnedObject(), 8))
+                using (OutputArray oaVp = vp.GetOutputArray())
+                {
+                    cveBoxPoints(ref box, oaVp);
+                }
+                CheckError();
             }
-            handle.Free();
+            finally
+            {
+                handle.Free();
+            }
             return pts;
         }
 
@@ -232,6 +249,7 @@ namespace Emgu.CV
         {
             using (OutputArray oaPoints = points.GetOutputArray())
                 cveBoxPoints(ref box, oaPoints);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -247,6 +265,7 @@ namespace Emgu.CV
             RotatedRect ellipse = new RotatedRect();
             using (InputArray iaPoints = points.GetInputArray())
                 cveFitEllipse(iaPoints, ref ellipse);
+            CheckError();
             return ellipse;
         }
 
@@ -263,6 +282,7 @@ namespace Emgu.CV
             RotatedRect ellipse = new RotatedRect();
             using (InputArray iaPoints = points.GetInputArray())
                 cveFitEllipseAMS(iaPoints, ref ellipse);
+            CheckError();
             return ellipse;
         }
 
@@ -279,6 +299,7 @@ namespace Emgu.CV
             RotatedRect ellipse = new RotatedRect();
             using (InputArray iaPoints = points.GetInputArray())
                 cveFitEllipseDirect(iaPoints, ref ellipse);
+            CheckError();
             return ellipse;
         }
 
@@ -296,6 +317,7 @@ namespace Emgu.CV
             using (InputArray iaPoints = points.GetInputArray())
             using (OutputArray oaClosestPts = closestPts.GetOutputArray())
                 cveGetClosestEllipsePoints(ref ellipseParams, iaPoints, oaClosestPts);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -329,6 +351,7 @@ namespace Emgu.CV
             using (InputArray iaPoints = points.GetInputArray())
             using (OutputArray oaHull = hull.GetOutputArray())
                 cveConvexHull(iaPoints, oaHull, clockwise, returnPoints);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -346,7 +369,11 @@ namespace Emgu.CV
         public static bool IsContourConvex(IInputArray contour)
         {
             using (InputArray iaContour = contour.GetInputArray())
-                return cveIsContourConvex(iaContour);
+            {
+                bool result = cveIsContourConvex(iaContour);
+                CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -366,7 +393,11 @@ namespace Emgu.CV
             using (InputArray iaP1 = p1.GetInputArray())
             using (InputArray iaP2 = p2.GetInputArray())
             using (OutputArray oaP12 = p12.GetOutputArray())
-                return cveIntersectConvexConvex(iaP1, iaP2, oaP12, handleNested);
+            {
+                float result = cveIntersectConvexConvex(iaP1, iaP2, oaP12, handleNested);
+                CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -386,7 +417,11 @@ namespace Emgu.CV
         public static double PointPolygonTest(IInputArray contour, PointF pt, bool measureDist)
         {
             using (InputArray iaContour = contour.GetInputArray())
-                return cvePointPolygonTest(iaContour, ref pt, measureDist);
+            {
+                double result = cvePointPolygonTest(iaContour, ref pt, measureDist);
+                CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -407,6 +442,7 @@ namespace Emgu.CV
             using (InputArray iaConvexhull = convexhull.GetInputArray())
             using (OutputArray oaConvecxityDefects = convexityDefects.GetOutputArray())
                 cveConvexityDefects(iaContour, iaConvexhull, oaConvecxityDefects);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -433,6 +469,7 @@ namespace Emgu.CV
             Rectangle rectangle = new Rectangle();
             using (InputArray iaPoints = points.GetInputArray())
                 cveBoundingRectangle(iaPoints, ref rectangle);
+            CheckError();
             return rectangle;
         }
 
@@ -448,7 +485,11 @@ namespace Emgu.CV
         public static double ContourArea(IInputArray contour, bool oriented = false)
         {
             using (InputArray iaContour = contour.GetInputArray())
-                return cveContourArea(iaContour, oriented);
+            {
+                double result = cveContourArea(iaContour, oriented);
+                CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -465,7 +506,11 @@ namespace Emgu.CV
         public static double ArcLength(IInputArray curve, bool isClosed)
         {
             using (InputArray iaCurve = curve.GetInputArray())
-                return cveArcLength(iaCurve, isClosed);
+            {
+                double result = cveArcLength(iaCurve, isClosed);
+                CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -494,6 +539,7 @@ namespace Emgu.CV
             RotatedRect rect = new RotatedRect();
             using (InputArray iaPoints = points.GetInputArray())
                 cveMinAreaRect(iaPoints, ref rect);
+            CheckError();
             return rect;
         }
 
@@ -522,6 +568,7 @@ namespace Emgu.CV
             float radius = 0;
             using (InputArray iaPoints = points.GetInputArray())
                 cveMinEnclosingCircle(iaPoints, ref center, ref radius);
+            CheckError();
             return new CircleF(center, radius);
         }
 
@@ -538,7 +585,11 @@ namespace Emgu.CV
         {
             using (InputArray iaPoints = points.GetInputArray())
             using (OutputArray oaTriangles = triangles.GetOutputArray())
-                return cveMinEnclosingTriangle(iaPoints, oaTriangles);
+            {
+                double result = cveMinEnclosingTriangle(iaPoints, oaTriangles);
+                CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -556,6 +607,7 @@ namespace Emgu.CV
             using (InputArray iaCurve = curve.GetInputArray())
             using (OutputArray oaApproxCurve = approxCurve.GetOutputArray())
                 cveApproxPolyDP(iaCurve, oaApproxCurve, epsilon, closed);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -578,6 +630,7 @@ namespace Emgu.CV
             using (InputArray iaCurve = curve.GetInputArray())
             using (OutputArray oaApproxCurve = approxCurve.GetOutputArray())
                 cveApproxPolyN(iaCurve, oaApproxCurve, nsides, epsilonPercentage, ensureConvex);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -599,6 +652,7 @@ namespace Emgu.CV
             Moments m = new Moments();
             using (InputArray iaArr = arr.GetInputArray())
                 cveMoments(iaArr, binaryImage, m);
+            CheckError();
             return m;
         }
 
@@ -620,7 +674,11 @@ namespace Emgu.CV
         {
             using (InputArray iaContour1 = contour1.GetInputArray())
             using (InputArray iaContour2 = contour2.GetInputArray())
-                return cveMatchShapes(iaContour1, iaContour2, method, parameter);
+            {
+                double result = cveMatchShapes(iaContour1, iaContour2, method, parameter);
+                CheckError();
+                return result;
+            }
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -635,6 +693,7 @@ namespace Emgu.CV
         {
             using (OutputArray oaHu = hu.GetOutputArray())
                 CvInvoke.cveHuMoments(m, oaHu);
+            CheckError();
         }
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -649,8 +708,15 @@ namespace Emgu.CV
         {
             double[] hu = new double[7];
             GCHandle handle = GCHandle.Alloc(hu, GCHandleType.Pinned);
-            CvInvoke.cveHuMoments2(m, handle.AddrOfPinnedObject());
-            handle.Free();
+            try
+            {
+                CvInvoke.cveHuMoments2(m, handle.AddrOfPinnedObject());
+                CheckError();
+            }
+            finally
+            {
+                handle.Free();
+            }
             return hu;
         }
 

@@ -168,13 +168,16 @@ void cveLinemodDetectorGetModalities(cv::linemod::Detector* detector, std::vecto
 
 void cveLinemodDetectorRelease(cv::Ptr<cv::linemod::Detector>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_RGBD
-	delete* sharedPtr;
-	*sharedPtr = 0;
+		delete* sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_rgbd();
-#endif	
-
+		throw_no_rgbd();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::linemod::Match* cveLinemodMatchCreate()
@@ -191,13 +194,16 @@ cv::linemod::Match* cveLinemodMatchCreate()
 }
 void cveLinemodMatchRelease(cv::linemod::Match** match)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_RGBD
-	delete* match;
-	*match = 0;
+		delete* match;
+		*match = 0;
 #else
-	throw_no_rgbd();
-#endif	
-
+		throw_no_rgbd();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::linemod::Modality* cveLinemodModalityCreate(cv::String* modalityType, cv::Ptr<cv::linemod::Modality>** sharedPtr)
@@ -216,11 +222,14 @@ cv::linemod::Modality* cveLinemodModalityCreate(cv::String* modalityType, cv::Pt
 }
 void cveLinemodModalityRelease(cv::Ptr<cv::linemod::Modality>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_RGBD
-	delete* sharedPtr;
-	*sharedPtr = 0;
+		delete* sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_rgbd();
-#endif	
-
+		throw_no_rgbd();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

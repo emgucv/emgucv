@@ -69,28 +69,40 @@ void VectorOfDMatchToMat(std::vector< std::vector<cv::DMatch> >* matches, cv::Ma
 
 void VectorOfKeyPointFilterByImageBorder(std::vector<cv::KeyPoint>* keypoints, cv::Size imageSize, int borderSize)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FEATURES
-	cv::KeyPointsFilter::runByImageBorder(*keypoints, imageSize, borderSize);
+		cv::KeyPointsFilter::runByImageBorder(*keypoints, imageSize, borderSize);
 #else
-	vectors_throw_no_features();
+		vectors_throw_no_features();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void VectorOfKeyPointFilterByKeypointSize(std::vector<cv::KeyPoint>* keypoints, float minSize, float maxSize)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FEATURES
-	cv::KeyPointsFilter::runByKeypointSize(*keypoints, minSize, maxSize);
+		cv::KeyPointsFilter::runByKeypointSize(*keypoints, minSize, maxSize);
 #else
-	vectors_throw_no_features();
+		vectors_throw_no_features();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void VectorOfKeyPointFilterByPixelsMask(std::vector<cv::KeyPoint>* keypoints, cv::Mat* mask)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_FEATURES
-	//cv::Mat m = cv::cvarrToMat(mask);
-	cv::KeyPointsFilter::runByPixelsMask(*keypoints, *mask);
+		//cv::Mat m = cv::cvarrToMat(mask);
+		cv::KeyPointsFilter::runByPixelsMask(*keypoints, *mask);
 #else
-	vectors_throw_no_features();
+		vectors_throw_no_features();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

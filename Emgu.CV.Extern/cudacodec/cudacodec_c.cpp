@@ -41,11 +41,15 @@ void cudaVideoWriterDelete(cv::Ptr<cv::cudacodec::VideoWriter>** writer)
 }
 void cudaVideoWriterRelease(cv::cudacodec::VideoWriter* writer)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDACODEC
-	writer->release();
+		writer->release();
 #else
-	throw_no_cudacodec();
-#endif	
+		throw_no_cudacodec();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cudaVideoWriterWrite(cv::cudacodec::VideoWriter* writer, cv::_InputArray* frame)
 {
@@ -82,12 +86,16 @@ cv::cudacodec::VideoReader* cudaVideoReaderCreate(cv::String* fileName, cv::Ptr<
 }
 void cudaVideoReaderRelease(cv::Ptr<cv::cudacodec::VideoReader>** reader)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDACODEC
-	delete* reader;
-	*reader = 0;
+		delete* reader;
+		*reader = 0;
 #else
-	throw_no_cudacodec();
+		throw_no_cudacodec();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 bool cudaVideoReaderNextFrame(cv::cudacodec::VideoReader* reader, cv::cuda::GpuMat* frame, cv::cuda::Stream* stream)
 {

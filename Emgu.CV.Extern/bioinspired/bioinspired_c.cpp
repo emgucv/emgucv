@@ -23,12 +23,16 @@ cv::bioinspired::Retina* cveRetinaCreate(cv::Size* inputSize, const bool colorMo
 }
 void cveRetinaRelease(cv::Ptr<cv::bioinspired::Retina>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_BIOINSPIRED
-	delete* sharedPtr;
-	*sharedPtr = 0;
+		delete* sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_bioinspired();
+		throw_no_bioinspired();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveRetinaRun(cv::bioinspired::Retina* retina, cv::_InputArray* image)
 {
@@ -149,10 +153,14 @@ void cveRetinaFastToneMappingApplyFastToneMapping(
 }
 void cveRetinaFastToneMappingRelease(cv::Ptr<cv::bioinspired::RetinaFastToneMapping>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_BIOINSPIRED
-	delete* sharedPtr;
-	*sharedPtr = 0;
+		delete* sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_bioinspired();
+		throw_no_bioinspired();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

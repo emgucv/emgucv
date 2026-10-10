@@ -25,12 +25,16 @@ cv::cuda::DescriptorMatcher* cveCudaDescriptorMatcherCreateBFMatcher(int distTyp
 
 void cveCudaDescriptorMatcherRelease(cv::Ptr<cv::cuda::DescriptorMatcher>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDAFEATURES2D
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_cudafeature2d();
+		throw_no_cudafeature2d();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveCudaDescriptorMatcherAdd(cv::cuda::DescriptorMatcher* matcher, const std::vector<cv::cuda::GpuMat>* trainDescs)
@@ -537,12 +541,16 @@ cv::cuda::FastFeatureDetector* cveCudaFastFeatureDetectorCreate(
 
 void cveCudaFastFeatureDetectorRelease(cv::Ptr<cv::cuda::FastFeatureDetector>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDAFEATURES2D
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_cudafeature2d();
+		throw_no_cudafeature2d();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -573,12 +581,16 @@ cv::cuda::ORB* cveCudaORBCreate(
 
 void cveCudaORBRelease(cv::Ptr<cv::cuda::ORB>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDAFEATURES2D
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_cudafeature2d();
+		throw_no_cudafeature2d();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -631,12 +643,16 @@ void cudaCornernessCriteriaCompute(cv::Ptr<cv::cuda::CornernessCriteria>* detect
 
 void cudaCornernessCriteriaRelease(cv::Ptr<cv::cuda::CornernessCriteria>** detector)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDAFEATURES2D
-	delete *detector;
-	*detector = 0;
+		delete *detector;
+		*detector = 0;
 #else
-	throw_no_cudafeature2d();
+		throw_no_cudafeature2d();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //----------------------------------------------------------------------------
@@ -672,10 +688,14 @@ void cudaCornersDetectorDetect(cv::cuda::CornersDetector* detector, cv::_InputAr
 }
 void cudaCornersDetectorRelease(cv::Ptr<cv::cuda::CornersDetector>** detector)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDAFEATURES2D
-	delete *detector;
-	*detector = 0;
+		delete *detector;
+		*detector = 0;
 #else
-	throw_no_cudafeature2d();
+		throw_no_cudafeature2d();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

@@ -43,12 +43,16 @@ void cudaBackgroundSubtractorGMGApply(cv::cuda::BackgroundSubtractorGMG* gmg, cv
 }
 void cudaBackgroundSubtractorGMGRelease(cv::Ptr<cv::cuda::BackgroundSubtractorGMG>** gmg)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDALEGACY
-	delete *gmg;
-	*gmg = 0;
+		delete *gmg;
+		*gmg = 0;
 #else
-throw_no_cudalegacy();
+		throw_no_cudalegacy();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 
@@ -116,11 +120,15 @@ void cudaBackgroundSubtractorFGDApply(cv::cuda::BackgroundSubtractorFGD* fgd, cv
 }
 void cudaBackgroundSubtractorFGDRelease(cv::Ptr<cv::cuda::BackgroundSubtractorFGD>** fgd)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDALEGACY
-	delete *fgd;
-	*fgd = 0;
+		delete *fgd;
+		*fgd = 0;
 #else
-throw_no_cudalegacy();
+		throw_no_cudalegacy();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 

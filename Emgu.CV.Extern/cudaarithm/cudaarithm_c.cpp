@@ -704,12 +704,16 @@ void cudaLookUpTableTransform(cv::cuda::LookUpTable* lut, cv::_InputArray* image
 }
 void cudaLookUpTableRelease(cv::Ptr<cv::cuda::LookUpTable>** lut)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDAARITHM
-	delete* lut;
-	*lut = 0;
+		delete* lut;
+		*lut = 0;
 #else
-	throw_no_cudaarithm();
+		throw_no_cudaarithm();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaTranspose(cv::_InputArray* src1, cv::_OutputArray* dst, cv::cuda::Stream* stream)
@@ -780,12 +784,16 @@ void cudaConvolutionConvolve(cv::cuda::Convolution* convolution, cv::_InputArray
 }
 void cudaConvolutionRelease(cv::Ptr<cv::cuda::Convolution>** convolution)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_CUDAARITHM
-	delete* convolution;
-	*convolution = 0;
+		delete* convolution;
+		*convolution = 0;
 #else
-	throw_no_cudaarithm();
+		throw_no_cudaarithm();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaInRange(cv::_InputArray* src, cv::Scalar* lowerb, cv::Scalar* upperb, cv::_OutputArray* dst, cv::cuda::Stream* stream)

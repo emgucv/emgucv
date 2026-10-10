@@ -71,8 +71,12 @@ cv::cuda::DeviceInfo* cudaDeviceInfoCreate(int* deviceId)
 
 void cudaDeviceInfoRelease(cv::cuda::DeviceInfo** di)
 {
-	delete* di;
-	*di = 0;
+	try
+	{
+		delete* di;
+		*di = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaDeviceInfoDeviceName(cv::cuda::DeviceInfo* device, char* name, int maxSizeInBytes)
@@ -293,8 +297,12 @@ cv::cuda::GpuMat* gpuMatGetRegion(cv::cuda::GpuMat* other, cv::Range* rowRange, 
 
 void gpuMatRelease(cv::cuda::GpuMat** mat)
 {
-	delete* mat;
-	*mat = 0;
+	try
+	{
+		delete* mat;
+		*mat = 0;
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::cuda::GpuMat* gpuMatCreateFromInputArray(cv::_InputArray* arr)

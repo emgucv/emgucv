@@ -36,12 +36,16 @@ cv::hfs::HfsSegment* cveHfsSegmentCreate(
 
 void cveHfsSegmentRelease(cv::Ptr<cv::hfs::HfsSegment>** hfsSegmentPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_HFS
-	delete *hfsSegmentPtr;
-	*hfsSegmentPtr = 0;
+		delete *hfsSegmentPtr;
+		*hfsSegmentPtr = 0;
 #else
-	throw_no_hfs();
+		throw_no_hfs();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveHfsPerformSegment(cv::hfs::HfsSegment* hfsSegment, cv::_InputArray* src, cv::Mat* dst, bool ifDraw, bool useGpu)

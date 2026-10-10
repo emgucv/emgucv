@@ -71,12 +71,16 @@ cv::structured_light::GrayCodePattern* cveGrayCodePatternCreate(
 }
 void cveGrayCodePatternRelease(cv::Ptr<cv::structured_light::GrayCodePattern>** sharedPtr)
 {
+    try
+    {
 #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    delete* sharedPtr;
-    *sharedPtr = 0;
+        delete* sharedPtr;
+        *sharedPtr = 0;
 #else
-    throw_no_structured_light();
+        throw_no_structured_light();
 #endif
+    }
+    CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveGrayCodePatternGetImagesForShadowMasks(cv::structured_light::GrayCodePattern* grayCodePattern, cv::_InputOutputArray* blackImage, cv::_InputOutputArray* whiteImage)
 {
@@ -151,12 +155,16 @@ cv::structured_light::SinusoidalPattern* cveSinusoidalPatternCreate(
 }
 void cveSinusoidalPatternRelease(cv::Ptr<cv::structured_light::SinusoidalPattern>** sharedPtr)
 {
+    try
+    {
 #ifdef HAVE_OPENCV_STRUCTURED_LIGHT
-    delete* sharedPtr;
-    *sharedPtr = 0;
+        delete* sharedPtr;
+        *sharedPtr = 0;
 #else
-    throw_no_structured_light();
+        throw_no_structured_light();
 #endif
+    }
+    CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveSinusoidalPatternComputePhaseMap(
     cv::structured_light::SinusoidalPattern* pattern,

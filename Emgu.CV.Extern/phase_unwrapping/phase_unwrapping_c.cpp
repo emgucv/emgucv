@@ -35,13 +35,17 @@ cv::phase_unwrapping::HistogramPhaseUnwrapping* cveHistogramPhaseUnwrappingCreat
 
 void cveHistogramPhaseUnwrappingRelease(cv::phase_unwrapping::HistogramPhaseUnwrapping** phase_unwrapping, cv::Ptr<cv::phase_unwrapping::HistogramPhaseUnwrapping>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_PHASE_UNWRAPPING
-	delete *sharedPtr;
-	*phase_unwrapping = 0;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*phase_unwrapping = 0;
+		*sharedPtr = 0;
 #else
-	throw_no_phase_unwrapping();
+		throw_no_phase_unwrapping();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveHistogramPhaseUnwrappingGetInverseReliabilityMap(cv::phase_unwrapping::HistogramPhaseUnwrapping* phase_unwrapping, cv::_OutputArray* reliabilityMap)

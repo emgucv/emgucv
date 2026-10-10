@@ -556,11 +556,15 @@ void cudaNonLocalMeans(
 	int borderMode,
 	cv::cuda::Stream* stream)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_PHOTO
-	cv::cuda::nonLocalMeans(*src, *dst, h, searchWindow, blockSize, borderMode, stream ? *stream : cv::cuda::Stream::Null());
+		cv::cuda::nonLocalMeans(*src, *dst, h, searchWindow, blockSize, borderMode, stream ? *stream : cv::cuda::Stream::Null());
 #else
-	throw_no_photo();
+		throw_no_photo();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaFastNlMeansDenoising(
@@ -571,11 +575,15 @@ void cudaFastNlMeansDenoising(
 	int blockSize,
 	cv::cuda::Stream* stream)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_PHOTO
-	cv::cuda::fastNlMeansDenoising(*src, *dst, h, searchWindow, blockSize, stream ? *stream : cv::cuda::Stream::Null());
+		cv::cuda::fastNlMeansDenoising(*src, *dst, h, searchWindow, blockSize, stream ? *stream : cv::cuda::Stream::Null());
 #else
-	throw_no_photo();
+		throw_no_photo();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cudaFastNlMeansDenoisingColored(
@@ -587,11 +595,15 @@ void cudaFastNlMeansDenoisingColored(
 	int blockSize,
 	cv::cuda::Stream* stream)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_PHOTO
-	cv::cuda::fastNlMeansDenoisingColored(*src, *dst, hLuminance, photoRender, searchWindow, blockSize, stream ? *stream : cv::cuda::Stream::Null());
+		cv::cuda::fastNlMeansDenoisingColored(*src, *dst, hLuminance, photoRender, searchWindow, blockSize, stream ? *stream : cv::cuda::Stream::Null());
 #else
-	throw_no_photo();
+		throw_no_photo();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 

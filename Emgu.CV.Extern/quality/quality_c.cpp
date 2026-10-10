@@ -57,12 +57,16 @@ cv::quality::QualityMSE* cveQualityMSECreate(
 
 void cveQualityMSERelease(cv::Ptr<cv::quality::QualityMSE>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_QUALITY
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_quality();
+		throw_no_quality();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::quality::QualityBRISQUE* cveQualityBRISQUECreate(
@@ -90,12 +94,16 @@ cv::quality::QualityBRISQUE* cveQualityBRISQUECreate(
 
 void cveQualityBRISQUERelease(cv::Ptr<cv::quality::QualityBRISQUE>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_QUALITY
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_quality();
+		throw_no_quality();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::quality::QualityPSNR* cveQualityPSNRCreate(
@@ -123,12 +131,16 @@ cv::quality::QualityPSNR* cveQualityPSNRCreate(
 
 void cveQualityPSNRRelease(cv::Ptr<cv::quality::QualityPSNR>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_QUALITY
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_quality();
+		throw_no_quality();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::quality::QualitySSIM* cveQualitySSIMCreate(
@@ -155,12 +167,16 @@ cv::quality::QualitySSIM* cveQualitySSIMCreate(
 
 void cveQualitySSIMRelease(cv::Ptr<cv::quality::QualitySSIM>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_QUALITY
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_quality();
+		throw_no_quality();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 cv::quality::QualityGMSD* cveQualityGMSDCreate(
@@ -187,10 +203,14 @@ cv::quality::QualityGMSD* cveQualityGMSDCreate(
 
 void cveQualityGMSDRelease(cv::Ptr<cv::quality::QualityGMSD>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_QUALITY
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_quality();
+		throw_no_quality();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

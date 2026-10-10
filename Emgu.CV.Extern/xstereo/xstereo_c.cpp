@@ -20,12 +20,16 @@ cv::stereo::QuasiDenseStereo* cveQuasiDenseStereoCreate(
 
 void cveQuasiDenseStereoRelease(cv::Ptr<cv::stereo::QuasiDenseStereo>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_XSTEREO
-	delete *sharedPtr;
-	*sharedPtr = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
 #else
-	throw_no_xstereo();
+		throw_no_xstereo();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveQuasiDenseStereoProcess(cv::stereo::QuasiDenseStereo* stereo, cv::Mat* imgLeft, cv::Mat* imgRight)

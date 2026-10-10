@@ -15,25 +15,41 @@ ${COMPILATION_CONDITION_C_OPEN}
 
 ${VECTOR_ADDITIONAL_CODE}
 
-std::vector< ${VECTOR_ELEMENT} >* VectorOf${VECTOR_NAME}Create() 
+std::vector< ${VECTOR_ELEMENT} >* VectorOf${VECTOR_NAME}Create()
 {
-   return new std::vector< ${VECTOR_ELEMENT} >(); 
+   try
+   {
+      return new std::vector< ${VECTOR_ELEMENT} >();
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
-std::vector< ${VECTOR_ELEMENT} >* VectorOf${VECTOR_NAME}CreateSize(int size) 
+std::vector< ${VECTOR_ELEMENT} >* VectorOf${VECTOR_NAME}CreateSize(int size)
 {
-   return new std::vector< ${VECTOR_ELEMENT} >(size); 
+   try
+   {
+      return new std::vector< ${VECTOR_ELEMENT} >(size);
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
 int VectorOf${VECTOR_NAME}GetSize(std::vector< ${VECTOR_ELEMENT} >* v)
 {
-   return (int) v->size();
+   try
+   {
+      return (int) v->size();
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
 
 void VectorOf${VECTOR_NAME}Push(std::vector< ${VECTOR_ELEMENT} >* v, ${VECTOR_ELEMENT}* value)
 {
-   v->push_back(*value);
+   try
+   {
+      v->push_back(*value);
+   }
+   CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //void VectorOf${VECTOR_NAME}PushMulti(std::vector< ${VECTOR_ELEMENT} >* v,  ${VECTOR_ELEMENT}* values, int count)
@@ -43,142 +59,246 @@ void VectorOf${VECTOR_NAME}Push(std::vector< ${VECTOR_ELEMENT} >* v, ${VECTOR_EL
 
 void VectorOf${VECTOR_NAME}PushVector(std::vector< ${VECTOR_ELEMENT} >* v, std::vector< ${VECTOR_ELEMENT} >* other)
 {
-   v->insert(v->end(), other->begin(), other->end());
+   try
+   {
+      v->insert(v->end(), other->begin(), other->end());
+   }
+   CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void VectorOf${VECTOR_NAME}Clear(std::vector< ${VECTOR_ELEMENT} >* v)
 {
-   v->clear();
+   try
+   {
+      v->clear();
+   }
+   CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void VectorOf${VECTOR_NAME}Release(std::vector< ${VECTOR_ELEMENT} >** v)
 {
-   delete *v;
-   *v = 0;
+   try
+   {
+      delete *v;
+      *v = 0;
+   }
+   CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void VectorOf${VECTOR_NAME}CopyData(std::vector< ${VECTOR_ELEMENT} >* v, ${VECTOR_ELEMENT}* data)
 {
-   VectorCopyData< ${VECTOR_ELEMENT} >(v, data);
+   try
+   {
+      VectorCopyData< ${VECTOR_ELEMENT} >(v, data);
+   }
+   CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 ${VECTOR_ELEMENT}* VectorOf${VECTOR_NAME}GetStartAddress(std::vector< ${VECTOR_ELEMENT} >* v)
 {
-   return v->empty() ? NULL : &(*v)[0];
+   try
+   {
+      return v->empty() ? NULL : &(*v)[0];
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
 int64_t VectorOf${VECTOR_NAME}GetMemorySize(std::vector< ${VECTOR_ELEMENT} >* v)
 {
-   if (v->empty()) return 0;
-   return (int64_t) (v->size() * sizeof(${VECTOR_ELEMENT}));
+   try
+   {
+      if (v->empty()) return 0;
+      return (int64_t) (v->size() * sizeof(${VECTOR_ELEMENT}));
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void VectorOf${VECTOR_NAME}GetItemPtr(std::vector<  ${VECTOR_ELEMENT} >* vec, int index,  ${VECTOR_ELEMENT}** element)
 {
-   *element = &vec->at(index);
+   try
+   {
+      *element = &vec->at(index);
+   }
+   CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 #if ${IS_INPUT_OUTPUT_ARRAY}
 cv::_InputArray* cveInputArrayFromVectorOf${VECTOR_NAME}(std::vector< ${VECTOR_ELEMENT} >* vec)
 {
-   return new cv::_InputArray(*vec);
+   try
+   {
+      return new cv::_InputArray(*vec);
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
 cv::_OutputArray* cveOutputArrayFromVectorOf${VECTOR_NAME}(std::vector< ${VECTOR_ELEMENT} >* vec)
 {
-   return new cv::_OutputArray(*vec);
+   try
+   {
+      return new cv::_OutputArray(*vec);
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
 cv::_InputOutputArray* cveInputOutputArrayFromVectorOf${VECTOR_NAME}(std::vector< ${VECTOR_ELEMENT} >* vec)
 {
-   return new cv::_InputOutputArray(*vec);
+   try
+   {
+      return new cv::_InputOutputArray(*vec);
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 #endif
 
 int VectorOf${VECTOR_NAME}SizeOfItemInBytes()
 {
-   return sizeof(${VECTOR_ELEMENT});
+   try
+   {
+      return sizeof(${VECTOR_ELEMENT});
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
 #else
 
 void * VectorOf${VECTOR_NAME}Create()
 {
-   throw_no_vector();
+   try
+   {
+      throw_no_vector();
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void * VectorOf${VECTOR_NAME}CreateSize(int size)
 {
-   throw_no_vector();
+   try
+   {
+      throw_no_vector();
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
 int VectorOf${VECTOR_NAME}GetSize(void* v)
 {
-   throw_no_vector();
+   try
+   {
+      throw_no_vector();
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void VectorOf${VECTOR_NAME}Push(void* v, void* value)
 {
-   throw_no_vector();
+   try
+   {
+      throw_no_vector();
+   }
+   CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //CVAPI(void) VectorOf${VECTOR_NAME}PushMulti(std::vector< ${VECTOR_ELEMENT} >* v, ${VECTOR_ELEMENT}* values, int count);
 
 void VectorOf${VECTOR_NAME}PushVector(void* v, void* other)
 {
-   throw_no_vector();
+   try
+   {
+      throw_no_vector();
+   }
+   CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void VectorOf${VECTOR_NAME}Clear(void* v)
 {
-   throw_no_vector();
+   try
+   {
+      throw_no_vector();
+   }
+   CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void VectorOf${VECTOR_NAME}Release(void** v)
 {
-   throw_no_vector();
+   try
+   {
+      throw_no_vector();
+   }
+   CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void VectorOf${VECTOR_NAME}CopyData(void* v, void* data)
 {
-   throw_no_vector();
+   try
+   {
+      throw_no_vector();
+   }
+   CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void* VectorOf${VECTOR_NAME}GetStartAddress(void* v)
 {
-   throw_no_vector();
+   try
+   {
+      throw_no_vector();
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
 int64_t VectorOf${VECTOR_NAME}GetMemorySize(void* v)
 {
-   throw_no_vector();
+   try
+   {
+      throw_no_vector();
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
 void VectorOf${VECTOR_NAME}GetItemPtr(void* vec, int index,  void** element)
 {
-   throw_no_vector();
+   try
+   {
+      throw_no_vector();
+   }
+   CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 #if ${IS_INPUT_OUTPUT_ARRAY}
 cv::_InputArray* cveInputArrayFromVectorOf${VECTOR_NAME}(void* vec)
 {
-   throw_no_vector();
+   try
+   {
+      throw_no_vector();
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
 cv::_OutputArray* cveOutputArrayFromVectorOf${VECTOR_NAME}(void* vec)
 {
-   throw_no_vector();
+   try
+   {
+      throw_no_vector();
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
 cv::_InputOutputArray* cveInputOutputArrayFromVectorOf${VECTOR_NAME}(void* vec)
 {
-   throw_no_vector();
+   try
+   {
+      throw_no_vector();
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 #endif
 
 int VectorOf${VECTOR_NAME}SizeOfItemInBytes()
 {
-   throw_no_vector();
+   try
+   {
+      throw_no_vector();
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }
 
 
