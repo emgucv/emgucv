@@ -76,6 +76,50 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 		<!-- <MauiAsset Include="Resources\Raw\**" LogicalName="%(Filename)%(Extension)" /> -->
 	</ItemGroup>
+	<!--
+	License texts shown by LicensePage.cs, bundled straight from each component's
+	own source tree rather than copied into this project. Each item is guarded by
+	Exists() so a checkout without an optional submodule (e.g. hdf5) still builds;
+	LicensePage shows a link to the project instead of a missing text.
+	-->
+	<PropertyGroup>
+		<EmguRoot>$(MSBuildThisFileDirectory)..\..\..\</EmguRoot>
+	</PropertyGroup>
+	<ItemGroup>
+		<LicenseFile Include="$(EmguRoot)LICENSE" LogicalName="emgucv.txt" />
+		<!-- opencv, opencv_contrib, tesseract and flatbuffers all ship this same plain Apache-2.0 text. -->
+		<LicenseFile Include="$(EmguRoot)opencv\LICENSE" LogicalName="Apache-2.0.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\COPYRIGHT" LogicalName="opencv-copyright.txt" />
+		<LicenseFile Include="$(EmguRoot)Emgu.CV.Extern\tesseract\libtesseract\leptonica\leptonica.git\leptonica-license.txt" LogicalName="leptonica.txt" />
+		<LicenseFile Include="$(EmguRoot)eigen\COPYING.MPL2" LogicalName="eigen.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\3rdparty\libjpeg-turbo\LICENSE.md" LogicalName="libjpeg-turbo.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\3rdparty\libjpeg-turbo\README.ijg" LogicalName="libjpeg-turbo-ijg.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\3rdparty\libpng\LICENSE" LogicalName="libpng.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\3rdparty\zlib\LICENSE" LogicalName="zlib.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\3rdparty\libtiff\LICENSE.md" LogicalName="libtiff.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\3rdparty\libwebp\COPYING" LogicalName="libwebp.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\3rdparty\openjpeg\LICENSE" LogicalName="openjpeg.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\3rdparty\protobuf\LICENSE" LogicalName="protobuf.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\3rdparty\mlas\LICENSE" LogicalName="mlas.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\3rdparty\ittnotify\src\ittnotify\BSD-3-Clause.txt" LogicalName="ittnotify.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\3rdparty\cpufeatures\LICENSE" LogicalName="cpufeatures.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\modules\core\3rdparty\SoftFloat\COPYING.txt" LogicalName="softfloat.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\modules\features\3rdparty\annoy\LICENSE" LogicalName="annoy.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\modules\features\3rdparty\mscr\chi_table_LICENSE.txt" LogicalName="mscr.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\modules\imgproc\fonts\Rubik_OFL.txt" LogicalName="OFL-1.1.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\hal\carotene\hal\tegra_hal.hpp" LogicalName="carotene.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv_contrib\modules\xfeatures2d\src\kaze\LICENSE.KAZE" LogicalName="kaze.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv_contrib\modules\xfeatures2d\src\kaze\LICENSE.AKAZE" LogicalName="akaze.txt" />
+		<LicenseFile Include="$(EmguRoot)3rdParty\freetype2\docs\FTL.TXT" LogicalName="freetype.txt" />
+		<LicenseFile Include="$(EmguRoot)harfbuzz\COPYING" LogicalName="harfbuzz.txt" />
+		<LicenseFile Include="$(EmguRoot)hdf5\COPYING" LogicalName="hdf5.txt" />
+	</ItemGroup>
+	<!-- Inside a target so the Exists() condition can batch over each file. -->
+	<Target Name="AddLicenseAssets" BeforeTargets="ResizetizeCollectItems">
+		<ItemGroup>
+			<MauiAsset Include="@(LicenseFile)" Condition="Exists('%(FullPath)')" LogicalName="licenses\%(LicenseFile.LogicalName)" />
+		</ItemGroup>
+	</Target>
 
 	<ItemGroup>
 	  <None Remove="Resources\Raw\box.png" />

@@ -151,6 +151,7 @@ namespace MauiDemoApp
             <H2> Emgu CV for MAUI</H2>
             <a href=http://www.emgu.com>Visit our website</a> <br/><br/>
             <a href=mailto:support@emgu.com>Email Support</a> <br/><br/>
+            <a href=""" + LicensesUrl + @""">Open Source Licenses</a> <br/><br/>
             <H4> OpenCL Info </H4>
             " + openclTxt + @"
             <H4> Cuda Info </H4>
@@ -204,7 +205,20 @@ namespace MauiDemoApp
                         }
                 };
             Content.BackgroundColor = Color.FromArgb("#F2F2F7");
+
+            // The licenses link is a native page, not a web page: intercept it.
+            var webView = (WebView)((Microsoft.Maui.Controls.ScrollView)Content).Content;
+            webView.Navigating += async (sender, e) =>
+            {
+                if (e.Url != null && e.Url.StartsWith(LicensesUrl, StringComparison.OrdinalIgnoreCase))
+                {
+                    e.Cancel = true;
+                    await Navigation.PushAsync(new LicensePage());
+                }
+            };
         }
+
+        private const String LicensesUrl = "emgu-demo://licenses";
 
         private static String GetBackendInfo(Emgu.CV.Backend[] backends)
         {
