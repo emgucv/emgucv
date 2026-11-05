@@ -394,11 +394,15 @@ must use an explicit platform version that the workload still ships.
 `cmake/PlatformDetection.cmake` uses it as `IOS_TFM_VERSION` in every generated
 `Directory.Build.props`:
 
-| Xcode (iOS SDK) | TFM |
+| Xcode | TFM |
 |---|---|
 | 27+ | `net10.0-ios` / `net10.0-maccatalyst` |
-| 26.6 (26.5) | `net10.0-ios26.5` / `net10.0-maccatalyst26.5` |
-| 26.0–26.5 (26.0–26.4) | `net10.0-ios26.0` / `net10.0-maccatalyst26.0` |
+| 26.x | `net10.0-ios26.0` / `net10.0-maccatalyst26.0` |
+
+Every 26.x Xcode uses 26.0, not its own minor version. Each SDK pack accepts only its
+own version plus 26.0 (its `*.SupportedTargetPlatforms.props`), so a version like 26.5
+stops being valid once a newer workload is installed. CI failed this way with
+`NETSDK1140: 26.5 is not a valid TargetPlatformVersion`.
 
 Override with `EMGU_IOS_TFM_VERSION=<ver>` (script) or `-DIOS_TFM_VERSION=<ver>` (CMake).
 Manual `dotnet build -f` commands below must use the same TFM, for example
@@ -436,7 +440,7 @@ does not require changing workloads or Xcode.
 After the C++ iOS binaries are built, you can build and run the MAUI demo app on an iOS simulator.
 
 Build then run on the default iOS simulator. Use the TFM for your Xcode, as in the MacCatalyst
-section; with Xcode 26.0–26.5 it is `net10.0-ios26.0`:
+section; with any Xcode 26.x it is `net10.0-ios26.0`:
 ```bash
 dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-ios
 dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-ios -t:Run

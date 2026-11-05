@@ -6,6 +6,9 @@
 # The bare TFM resolves to the newest bindings in the installed .NET workload,
 # which require the matching Xcode (e.g. 27.x bindings need Xcode 27). Older
 # Xcode releases must pin an explicit platform version the workload still ships.
+# Each iOS/MacCatalyst SDK pack accepts only its own version plus 26.0 (see the
+# packs' *.SupportedTargetPlatforms.props), so intermediate versions such as 26.5
+# disappear once a newer pack is installed; 26.0 is the one that stays valid.
 # Update the table below when the workload adds or drops platform versions.
 #
 # Set EMGU_IOS_TFM_VERSION to override the detection.
@@ -22,12 +25,9 @@ if [[ ! "$SDK_VERSION" =~ ^([0-9]+)\.([0-9]+) ]]; then
     exit 0
 fi
 MAJOR=${BASH_REMATCH[1]}
-MINOR=${BASH_REMATCH[2]}
 
 if [ "$MAJOR" -ge 27 ]; then
     echo ""
-elif [ "$MAJOR" -eq 26 ] && [ "$MINOR" -ge 5 ]; then
-    echo "26.5"
 elif [ "$MAJOR" -eq 26 ]; then
     echo "26.0"
 else
