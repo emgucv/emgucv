@@ -45,6 +45,7 @@
       <Link>NSImageExtension.cs</Link>
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\CIImageExtension.cs" Link="CIImageExtension.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)..\..\..\Emgu.CV.NativeImage\CVPixelBufferExtension.cs" Link="CVPixelBufferExtension.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)..\iOS\CvInvokeIOS.cs" Link="CvInvokeIOS.cs" />
   </ItemGroup>
 

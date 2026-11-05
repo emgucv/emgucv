@@ -573,7 +573,17 @@ namespace MauiDemoApp
         // collect the found list. Shared by the still page and live page.
         internal static (byte[] png, List<Found> found) RunDetect(Mat input, MaskRcnn model)
         {
-            using Mat annotated = input.Clone();
+            (Mat annotated, List<Found> found) = RenderDetections(input, model);
+            using (annotated)
+                return (Encode(annotated), found);
+        }
+
+        /// <summary>
+        /// Detect objects and draw them onto a copy of the input. The caller owns the returned Mat.
+        /// </summary>
+        internal static (Mat annotated, List<Found> found) RenderDetections(Mat input, MaskRcnn model)
+        {
+            Mat annotated = input.Clone();
             var found = new List<Found>();
 
             MaskedObject[] objects = model.Detect(input);
@@ -584,7 +594,7 @@ namespace MauiDemoApp
                 found.Add(new Found(o.Label, o.Confident, color));
                 o.Dispose();
             }
-            return (Encode(annotated), found);
+            return (annotated, found);
         }
 
         private void OnDownloadProgress(long? totalBytesToReceive, long bytesReceived, double? progressPercentage)
@@ -746,6 +756,31 @@ namespace MauiDemoApp
         }
 
         internal static ImageSource MatToImageSource(Mat m) => MatBytesToImageSource(Encode(m));
+
+#if __IOS__ || __MACCATALYST__
+        /// <summary>
+        /// Show a live camera frame by handing a UIImage straight to the native UIImageView,
+        /// avoiding a per-frame PNG encode/decode. The view's Aspect still applies, because the
+        /// MAUI image handler maps it to the UIImageView's ContentMode.
+        /// </summary>
+        internal static void ShowLiveFrame(Image view, Mat frame)
+        {
+            UIKit.UIImage image = frame.ToUIImage();
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                if (view.Handler?.PlatformView is UIKit.UIImageView imageView)
+                {
+                    UIKit.UIImage previous = imageView.Image;
+                    imageView.Image = image;
+                    previous?.Dispose();
+                }
+                else
+                {
+                    image.Dispose();
+                }
+            });
+        }
+#endif
 
         internal static ImageSource MatBytesToImageSource(byte[] png) =>
             ImageSource.FromStream(() => new MemoryStream(png));
@@ -926,12 +961,7 @@ namespace MauiDemoApp
                     _frame = new Mat();
 
                 using (CoreVideo.CVPixelBuffer pixelBuffer = e.Buffer.GetImageBuffer() as CoreVideo.CVPixelBuffer)
-                {
-                    pixelBuffer.Lock(CoreVideo.CVPixelBufferLock.ReadOnly);
-                    using (CoreImage.CIImage ciImage = new CoreImage.CIImage(pixelBuffer))
-                        ciImage.ToArray(_frame, ImreadModes.ColorBgr);
-                    pixelBuffer.Unlock(CoreVideo.CVPixelBufferLock.ReadOnly);
-                }
+                    pixelBuffer.ToArray(_frame, ImreadModes.ColorBgr);
 
                 if (_frame.IsEmpty)
                     return;
@@ -940,12 +970,12 @@ namespace MauiDemoApp
                 // phone held upright (portrait).
                 CvInvoke.Rotate(_frame, _frame, RotateFlags.Rotate90Clockwise);
 
-                (byte[] png, List<MaskRcnnPage.Found> found) = MaskRcnnPage.RunDetect(_frame, _model);
-                MainThread.BeginInvokeOnMainThread(() =>
+                (Mat annotated, _) = MaskRcnnPage.RenderDetections(_frame, _model);
+                using (annotated)
                 {
                     if (_running)
-                        _feed.Source = MaskRcnnPage.MatBytesToImageSource(png);
-                });
+                        MaskRcnnPage.ShowLiveFrame(_feed, annotated);
+                }
             }
             catch
             {

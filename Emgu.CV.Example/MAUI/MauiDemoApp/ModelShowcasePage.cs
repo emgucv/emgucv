@@ -1113,12 +1113,7 @@ namespace MauiDemoApp
                     _frame = new Mat();
 
                 using (CoreVideo.CVPixelBuffer pixelBuffer = e.Buffer.GetImageBuffer() as CoreVideo.CVPixelBuffer)
-                {
-                    pixelBuffer.Lock(CoreVideo.CVPixelBufferLock.ReadOnly);
-                    using (CoreImage.CIImage ciImage = new CoreImage.CIImage(pixelBuffer))
-                        ciImage.ToArray(_frame, ImreadModes.ColorBgr);
-                    pixelBuffer.Unlock(CoreVideo.CVPixelBufferLock.ReadOnly);
-                }
+                    pixelBuffer.ToArray(_frame, ImreadModes.ColorBgr);
 
                 if (_frame.IsEmpty)
                     return;
@@ -1129,12 +1124,8 @@ namespace MauiDemoApp
                     _renderMat = new Mat();
                 _frame.CopyTo(_renderMat);
                 _model.ProcessAndRender(_frame, _renderMat);
-                byte[] png = MaskRcnnPage.Encode(_renderMat);
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    if (_running)
-                        _feed.Source = MaskRcnnPage.MatBytesToImageSource(png);
-                });
+                if (_running)
+                    MaskRcnnPage.ShowLiveFrame(_feed, _renderMat);
             }
             catch
             {
