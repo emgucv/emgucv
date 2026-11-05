@@ -22,9 +22,16 @@ jobs:
       with:
         dotnet-version: '10.x'
     - name: Install dotnet workload
-      # Workload set 10.0.111.1 is the newest one targeting the MacCatalyst/iOS 26.5 SDK that the
-      # runner's Xcode 26.6 ships; 10.0.112.x and later require Xcode 27 (MT4162 / IL7000 otherwise).
-      run: dotnet workload install maui maccatalyst --version 10.0.111.1
+      # Not pinned: the bare net10.0-ios / -maccatalyst TFM in newer workload sets needs a newer
+      # Xcode than the runner may have (MT4162 / IL7000), but those sets still ship the older
+      # bindings, which the explicit TFM from the next step selects.
+      run: dotnet workload install maui maccatalyst
+    - name: Select iOS / MacCatalyst TFM for the runner's Xcode
+      run: |
+        V="$(./platforms/macos/apple_tfm_version.sh)"
+        echo "Xcode: $(xcodebuild -version | head -1); TFM platform version: '$V'"
+        echo "IOS_TFM=net10.0-ios$V" >> "$GITHUB_ENV"
+        echo "CATALYST_TFM=net10.0-maccatalyst$V" >> "$GITHUB_ENV"
     - name: Setup JDK 17
       uses: actions/setup-java@v5
       with:
@@ -50,12 +57,12 @@ jobs:
         name: emgucv-maccatalyst-zip-package
         path: ${{ github.workspace }}/platforms/ios/catalyst_arm64/*.zip
     - name: Build MacCatalyst MAUI demo app
-      run: dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-maccatalyst -p:ValidateXcodeVersion=false
+      run: dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f "$CATALYST_TFM" -p:TargetFrameworks="$CATALYST_TFM" -p:ValidateXcodeVersion=false
     - name: Build Emgu CV iOS native binary
       run: ./build.sh simulator_arm64
       working-directory: ./platforms/ios/
     - name: Build iOS MAUI demo app for simulator
-      run: dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-ios -p:ValidateXcodeVersion=false
+      run: dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f "$IOS_TFM" -p:TargetFrameworks="$IOS_TFM" -p:ValidateXcodeVersion=false
     - name: Install Android NDK
       run: |
         NDK_VERSION="28.0.12916984"

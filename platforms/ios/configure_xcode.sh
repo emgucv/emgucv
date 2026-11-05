@@ -16,23 +16,23 @@ fi
 #-DHB_HAVE_FREETYPE:BOOL=TRUE -DHB_BUILD_TESTS:BOOL=FALSE
 INSTALL_FOLDER=$PWD/build/install
 
+# Shared with the managed projects' SupportedOSPlatformVersion (see cmake/PlatformDetection.cmake).
+IPHONEOS_DEPLOYMENT_TARGET="$(tr -d '[:space:]' < "$CURRENT_SCRIPT_DIR/../../cmake/ios_min_version.txt")"
+
 
 if [ "$2" == "device" ]; then
     CV_TOOLCHAIN_OPTION=( -DCMAKE_TOOLCHAIN_FILE=$CURRENT_SCRIPT_DIR/cmake/Toolchains/Toolchain-iPhoneOS_Xcode.cmake )
     CV_OPTIMIZATION_OPTION=
     INSTALL_FOLDER=$INSTALL_FOLDER/OpenCV_iPhoneOS_$3
-    IPHONEOS_DEPLOYMENT_TARGET=15.0
 elif [ "$2" == "catalyst" ]; then
     CV_TOOLCHAIN_OPTION=( -DAPPLE_FRAME_WORK:BOOL=TRUE -DCMAKE_TOOLCHAIN_FILE=$CURRENT_SCRIPT_DIR/cmake/Toolchains/Toolchain-Catalyst_Xcode.cmake )
     CV_OPTIMIZATION_OPTION=
     INSTALL_FOLDER=$INSTALL_FOLDER/OpenCV_catalyst_$3
-    IPHONEOS_DEPLOYMENT_TARGET=15.0
 else #simulator
     CV_TOOLCHAIN_OPTION=( -DCMAKE_TOOLCHAIN_FILE=$CURRENT_SCRIPT_DIR/cmake/Toolchains/Toolchain-iPhoneSimulator_Xcode.cmake )
     #disable optimization for ios simulator. It is causing compilation issue when NEON is enabled for Apple Arm64.
     CV_OPTIMIZATION_OPTION=( -DCV_DISABLE_OPTIMIZATION:BOOL=TRUE )
     INSTALL_FOLDER=$INSTALL_FOLDER/OpenCV_iPhoneSimulator_$3
-    IPHONEOS_DEPLOYMENT_TARGET=15.0
 fi
 
 #need to set it as an enviroment variable for 4.9.0 release
@@ -50,7 +50,7 @@ CMAKE_COMMON_OPTION=( -DIPHONEOS_DEPLOYMENT_TARGET:STRING="$IPHONEOS_DEPLOYMENT_
 if [ "$2" == "catalyst" ]; then
     #CV_CONTRIB_OPTION+=( -DBUILD_JPEG:BOOL=FALSE -DBUILD_OPENJPEG:BOOL=FALSE -DWITH_JPEG:BOOL=FALSE )
     MACOS_SDK_PATH="$(xcrun --sdk macosx --show-sdk-path)"
-    CMAKE_CV_COMPILER_FLAGS="-target $3-apple-ios15.0-macabi -isysroot $MACOS_SDK_PATH -iframework $MACOS_SDK_PATH/System/iOSSupport/System/Library/Frameworks -isystem $MACOS_SDK_PATH/System/iOSSupport/usr/include"
+    CMAKE_CV_COMPILER_FLAGS="-target $3-apple-ios$IPHONEOS_DEPLOYMENT_TARGET-macabi -isysroot $MACOS_SDK_PATH -iframework $MACOS_SDK_PATH/System/iOSSupport/System/Library/Frameworks -isystem $MACOS_SDK_PATH/System/iOSSupport/usr/include"
     CMAKE_COMMON_OPTION+=( -DCMAKE_SYSTEM_NAME=Darwin -DCMAKE_C_FLAGS:STRING="$CMAKE_CV_COMPILER_FLAGS" -DCMAKE_CXX_FLAGS:STRING="$CMAKE_CV_COMPILER_FLAGS" -DCMAKE_EXE_LINKER_FLAGS:STRING="$CMAKE_CV_COMPILER_FLAGS" -DSWIFT_DISABLED:BOOL=TRUE -DIOS:BOOL=TRUE -DMAC_CATALYST:BOOL=TRUE -DWITH_OPENCL:BOOL=FALSE -DCMAKE_OSX_ARCHITECTURES=$3 -DCMAKE_OSX_SYSROOT=macosx -DCMAKE_CXX_COMPILER_WORKS:BOOL=TRUE -DCMAKE_C_COMPILER_WORKS:BOOL=TRUE )
     if [ "$3" != "arm64" ]; then
         CMAKE_COMMON_OPTION+=( -DWITH_KLEIDICV:BOOL=FALSE )

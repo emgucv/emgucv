@@ -154,7 +154,7 @@ Prerequisites:
 - `eigen` submodule present (built automatically as a dependency)
 - For full/default builds: `opencv_contrib/` submodule present
 
-The script calls `configure_xcode.sh` which invokes `cmake -GXcode` with the appropriate iOS toolchain file from `opencv/platforms/ios/cmake/Toolchains/`, then builds with `xcodebuild`. Deployment target is iOS 14.2 for device and simulator.
+The script calls `configure_xcode.sh` which invokes `cmake -GXcode` with the appropriate iOS toolchain file from `opencv/platforms/ios/cmake/Toolchains/`, then builds with `xcodebuild`. The deployment target for device and simulator comes from `cmake/ios_min_version.txt` (currently iOS 15.0).
 
 `eigen`'s own build directories are namespaced `eigen/build_ios_<device|simulator>_<arch>/` (not
 `eigen/build_<arch>/`) specifically so they don't collide with `platforms/macos`'s own
@@ -384,9 +384,38 @@ dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-wind
 Emgu.CV.Example/MAUI/MauiDemoApp/bin/Debug/net10.0-windows10.0.19041.0/win-x64/MauiDemoApp.exe
 ```
 
+### iOS / MacCatalyst TFM and minimum iOS version
+
+The bare `net10.0-ios` / `net10.0-maccatalyst` TFM binds to the newest iOS SDK in the
+installed .NET workload, which requires the matching Xcode (27.x bindings need Xcode 27;
+26.5 needs Xcode 26.6). Older Xcode releases, such as the Intel Mac mini's maximum of 26.3,
+must use an explicit platform version that the workload still ships.
+`platforms/macos/apple_tfm_version.sh` picks it from the installed Xcode's iOS SDK, and
+`cmake/PlatformDetection.cmake` uses it as `IOS_TFM_VERSION` in every generated
+`Directory.Build.props`:
+
+| Xcode (iOS SDK) | TFM |
+|---|---|
+| 27+ | `net10.0-ios` / `net10.0-maccatalyst` |
+| 26.6 (26.5) | `net10.0-ios26.5` / `net10.0-maccatalyst26.5` |
+| 26.0–26.5 (26.0–26.4) | `net10.0-ios26.0` / `net10.0-maccatalyst26.0` |
+
+Override with `EMGU_IOS_TFM_VERSION=<ver>` (script) or `-DIOS_TFM_VERSION=<ver>` (CMake).
+Manual `dotnet build -f` commands below must use the same TFM, for example
+`-f net10.0-ios$(platforms/macos/apple_tfm_version.sh)`. One machine-wide workload set works
+with every Xcode; there is no need to pin it per machine.
+
+The minimum iOS version is set in **`cmake/ios_min_version.txt`**, and only there. It feeds the
+native deployment target (`platforms/ios/configure_xcode.sh`, including the MacCatalyst
+`-apple-ios<ver>-macabi` target) and the iOS `SupportedOSPlatformVersion` of the generated
+runtime and demo props. CMake stops with an error if `IPHONEOS_DEPLOYMENT_TARGET` is passed
+with a different value. `Emgu.CV.Example/MAUI/BuildInfo/BuildInfo.csproj` isn't generated, so
+update it by hand.
+
 ### MAUI Demo App (MacCatalyst)
 
-After the MacCatalyst C++ binary is built, build then launch the MAUI demo app directly on macOS:
+After the MacCatalyst C++ binary is built, build then launch the MAUI demo app directly on
+macOS. Use the TFM for your Xcode (see above); with Xcode 27+ it is `net10.0-maccatalyst`:
 
 ```bash
 dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-maccatalyst
@@ -406,7 +435,8 @@ does not require changing workloads or Xcode.
 
 After the C++ iOS binaries are built, you can build and run the MAUI demo app on an iOS simulator.
 
-Build then run on the default iOS simulator:
+Build then run on the default iOS simulator. Use the TFM for your Xcode, as in the MacCatalyst
+section; with Xcode 26.0–26.5 it is `net10.0-ios26.0`:
 ```bash
 dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-ios
 dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-ios -t:Run

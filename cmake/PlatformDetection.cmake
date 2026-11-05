@@ -539,16 +539,36 @@ ENDIF()
 
 SET(ANDROID_TFM_VERSION "33.0")
 SET(WINDOWS_TFM_VERSION "10.0.19041.0")
-SET(IOS_TFM_VERSION "")
-if(CMAKE_GENERATOR STREQUAL "Xcode")
+# Minimum iOS version, shared by the native build (platforms/ios/configure_xcode.sh) and
+# the managed projects' SupportedOSPlatformVersion, so the two cannot drift apart.
+file(STRINGS "${CMAKE_CURRENT_LIST_DIR}/ios_min_version.txt" EMGU_IOS_MIN_VERSION LIMIT_COUNT 1)
+string(STRIP "${EMGU_IOS_MIN_VERSION}" EMGU_IOS_MIN_VERSION)
+if(DEFINED IPHONEOS_DEPLOYMENT_TARGET AND NOT "${IPHONEOS_DEPLOYMENT_TARGET}" STREQUAL "${EMGU_IOS_MIN_VERSION}")
+    message(FATAL_ERROR "IPHONEOS_DEPLOYMENT_TARGET (${IPHONEOS_DEPLOYMENT_TARGET}) does not match cmake/ios_min_version.txt (${EMGU_IOS_MIN_VERSION}). Change the minimum iOS version in that file instead.")
+endif()
+
+# The bare net*-ios / net*-maccatalyst TFM binds to the newest iOS SDK in the installed
+# .NET workload, which requires the matching Xcode. Pick the TFM platform version that
+# the installed Xcode can build; pass -DIOS_TFM_VERSION=... to override.
+if(CMAKE_HOST_APPLE)
     execute_process(
         COMMAND xcodebuild -version
         OUTPUT_VARIABLE XCODE_VERSION_OUTPUT
         OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
     )
     string(REGEX MATCH "Xcode ([0-9]+(\\.[0-9]+)*)" _ "${XCODE_VERSION_OUTPUT}")
     set(XCODE_VERSION "${CMAKE_MATCH_1}")
-    message(STATUS "Using Xcode ${XCODE_VERSION}")
+    if(NOT DEFINED IOS_TFM_VERSION)
+        execute_process(
+            COMMAND "${CMAKE_CURRENT_LIST_DIR}/../platforms/macos/apple_tfm_version.sh"
+            OUTPUT_VARIABLE IOS_TFM_VERSION
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+    endif()
+    message(STATUS "Using Xcode ${XCODE_VERSION}; iOS/MacCatalyst TFM platform version: '${IOS_TFM_VERSION}'; minimum iOS: ${EMGU_IOS_MIN_VERSION}")
+elseif(NOT DEFINED IOS_TFM_VERSION)
+    SET(IOS_TFM_VERSION "")
 endif()
 SET(EMGUCV_MAUI_DOTNET_VERSION "net${DOTNET_VERSION_MAJOR}.0")
 
