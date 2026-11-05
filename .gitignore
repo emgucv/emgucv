@@ -14,6 +14,15 @@ platforms/emscripten/build_dotnet/
 platforms/emscripten/build_dotnet_mini/
 platforms/unity/webgl/build_unity/
 platforms/unity/webgl/build_unity_mini/
+# iOS / MacCatalyst build trees from platforms/ios/build.sh and build_catalyst.sh
+platforms/ios/iphoneos_arm64/
+platforms/ios/simulator_*/
+platforms/ios/catalyst_*/
+# symlinks into opencv/platforms created by the same scripts
+platforms/ios/cmake
+platforms/scripts
+# rewritten on every configure by cmake/CPackApple.cmake
+cmake/macos/Info.plist
 platforms/nuget/*.nupkg
 platforms/nuget/**/*.nupkg
 platforms/nuget/**/*.props
@@ -56,3 +65,4 @@ Emgu.CV.Runtime/WebAssembly/Emgu.CV.runtime*.webassembly.targets
 bin/
 obj/
 Emgu.CV.Bitmap/Emgu.CV.Bitmap.xml
+Emgu.CV.Runtime/Maui/*/Emgu.CV.runtime.maui.*.xml
