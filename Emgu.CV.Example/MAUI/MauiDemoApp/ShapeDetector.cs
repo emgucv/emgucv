@@ -89,7 +89,10 @@ namespace Emgu.CV.Models
             #endregion
 
             #region circle detection
-            double circleAccumulatorThreshold = 120;
+            // A filled circle has a single edge, so it gathers about half the votes of a thick
+            // outlined one; 120 missed ~45% of filled circles. 90 was chosen on 1000 random
+            // demo scenes (see ShapeDetection-Circles.md); below ~85 non-circles start matching.
+            double circleAccumulatorThreshold = 90;
             circles = CvInvoke.HoughCircles(_gray, HoughModes.Gradient, 2.0, 20.0, cannyThreshold,
                 circleAccumulatorThreshold, 5);
             #endregion

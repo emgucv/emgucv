@@ -1,88 +1,63 @@
 # Shape Detection: circles are under-detected
 
-Status: open, not yet investigated. Observed 2026-11-05.
+Status: **fixed** on 2026-11-05 by lowering the `HoughCircles` accumulator threshold from 120 to
+90 in `ShapeDetector.cs`. First observed on 2026-11-05.
 
 ## Symptom
 
-On the Shape Detection page, the **3. Circles** result often misses circles that are
-clearly present in the sample image. Triangles, rectangles and lines are detected as
-expected on the same images, and the pipeline itself runs without errors.
+On the Shape Detection page, the **3. Circles** result often missed circles that were clearly in
+the sample image. Triangles, rectangles and lines were detected as expected on the same images.
 
 | Scene | Circles in the sample image | Circles detected |
 |---|---|---|
 | 1 | 1 (filled pink, large) | 0 (blank result image) |
-| 2 | 3 (purple outline, filled pink, small filled green) | 2: purple outline and filled pink; the small filled green circle was missed |
+| 2 | 3 (purple outline, filled pink, small filled green) | 2: the small filled green circle was missed |
 
-Detection time was 19–27 ms per image, so this is not a timeout or a crash. The page
-generates a new random scene each time it opens and on **New Image**, so results vary
-from run to run.
+Seen on an iPhone X (iOS 16.7.16). The detection code is shared by every platform, and the
+benchmark below reproduces the same behavior on macOS, so it is not iOS-specific.
 
-## Where it was seen
+## Cause
 
-- Device: iPhone X (`iPhone10,6`), iOS 16.7.16, physical device over USB.
-- Build: Debug, `net10.0-ios26.0`, `ios-arm64`, native `libs/iOS/libcvextern_ios.xcframework`
-  built with `platforms/ios/build.sh device_arm64` (full variant).
-- Not yet compared against another platform, so it is **unconfirmed** whether this is
-  iOS-specific. The detection code is shared by every platform, so the expectation is
-  that it is not.
+The circle step in `ShapeDetector.ComputeShapes()` is
+`HoughCircles(_gray, HoughModes.Gradient, dp 2.0, minDist 20, param1 180, param2, minRadius 5)`.
+With `param2` (the accumulator threshold) at 120, outlined circles were almost always found but
+filled circles often weren't. A thick outline has two edges, inner and outer, so its center
+collects about twice the votes of a filled circle, which has a single edge. 120 was above what
+many filled circles of the demo's 34–74 px radii can reach.
 
-## Relevant code
+Fill color made no difference: the misses were spread evenly over all nine palette colors, so
+the earlier color-contrast hypothesis was wrong.
 
-- `ShapeDetector.cs`, `ComputeShapes()`: circle detection is
-  ```csharp
-  double cannyThreshold = 180.0;
-  double circleAccumulatorThreshold = 120;
-  circles = CvInvoke.HoughCircles(_gray, HoughModes.Gradient, 2.0, 20.0, cannyThreshold,
-      circleAccumulatorThreshold, 5);
-  ```
-  `dp = 2.0`, `minDist = 20`, `param1` (Canny high threshold) = 180, `param2`
-  (accumulator threshold) = 120, `minRadius = 5`, `maxRadius` defaulted.
-  The input is `_gray` after a 3x3 Gaussian blur.
-- `ShapeDetectionPage.cs`, `GenerateRandomShapes()` / `DrawShape()`: builds the
-  800x560 random scene: 5–8 non-overlapping shapes, circle radius 34–74 px, randomly
-  filled or outlined, random colors on white.
+## Benchmark
 
-## Hypotheses, none verified yet
+A scratch console app recreated `ShapeDetectionPage.GenerateRandomShapes()` / `DrawShape()` with
+a fixed seed per scene, recorded every circle drawn, and scored the same preprocessing
+(`Bgr2Gray`, 3x3 Gaussian blur) plus `HoughCircles` against that ground truth. A detection
+counts as found if its center is within 25% of the radius and its radius within 30%. Run on
+macOS x64 against `libs/runtimes/osx-x64/native/libcvextern.dylib`, 1000 scenes (seeds 0–999),
+1359 circles:
 
-1. `param2 = 120` is too strict for this image size and these radii. With
-   `HoughModes.Gradient`, a lower accumulator threshold finds more circles, with more
-   false positives.
-2. Color-dependent contrast: after `Bgr2Gray`, some fill colors may have weak edges
-   against white. The missed green and pink fills are candidates. The Canny threshold of
-   180 inside `HoughCircles` may drop those edges.
-3. Possibly `HoughModes.GradientAlt` would be more robust for these clean synthetic
-   images (it uses a different `param2` scale, roughly 0–1).
+| `param2` | Circles found | False detections | Perfect scenes |
+|---|---|---|---|
+| 120 (before) | 54.7% (577 of 616 misses were filled) | 0 | 530 / 1000 |
+| 85 | 97.1% | 42 | 935 / 1000 |
+| **90 (chosen)** | **94.8%** | **17** | **920 / 1000** |
+| 95 | 91.3% | 10 | 881 / 1000 |
 
-## Suggested next steps
+At 80 and below, rectangles, triangles and line ends start producing false circles (46 at 80
+and 971 at 60, over 300 scenes). Raising `minDist` to 50 removed the duplicate circles stacked
+on a real one but not those false circles. `HoughModes.GradientAlt` found about 97% but always
+left about 26 duplicate circles per 300 scenes, so the plain `Gradient` mode with a lower
+threshold is the simpler fix. 90 was picked over 85 for about 40% of the false detections, at
+the cost of 15 fewer perfect scenes per 1000.
 
-- Reproduce on desktop (Windows, macOS or Ubuntu) with the same generated scene to
-  confirm it is platform-independent.
-- Make the scene reproducible for testing, for example with a fixed seed for `_rng`, and
-  compare the count of drawn circles with the count detected over many seeds.
-- Try lowering `circleAccumulatorThreshold`, or switch to `GradientAlt`, and check for
-  false positives on the triangles and rectangles.
+## Remaining limits
 
-## Reproducing on the iPhone X (as done on 2026-11-05)
-
-This Intel Mac mini runs at most Xcode 26.3, so the default `net10.0-ios` target (iOS
-26.5 bindings from workload set 10.0.401) does not build. The demo also sets an iOS
-minimum of 17.2 in `Directory.Build.props.in`. Both were overridden on the command line
-only:
-
-```bash
-dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj \
-  -p:TargetFrameworks=net10.0-ios26.0 -f net10.0-ios26.0 -r ios-arm64 \
-  -p:SupportedOSPlatformVersion=16.0 -p:ValidateXcodeVersion=false \
-  -p:CodesignKey="Apple Development: Canming Huang (424YYX4M5U)"
-
-/usr/local/share/dotnet/packs/Microsoft.iOS.Sdk.net10.0_26.0/26.0.11017/tools/bin/mlaunch \
-  --installdev Emgu.CV.Example/MAUI/MauiDemoApp/bin/Debug/net10.0-ios26.0/ios-arm64/MauiDemoApp.app \
-  --devname 5c134567325d1fc18d3a669ea08c6c4f4bdd23c4
-```
-
-The page was driven with Appium 3.9.0 and the XCUITest driver, using a WebDriverAgent
-already running on the device (`appium:webDriverAgentUrl` = `http://localhost:8100`,
-`appium:bundleId` = `com.emgu.cv.maui.demo`). The steps were: tap **Shape Detection**,
-scroll to **Results**, tap **3. Circles** to view the result full screen, then use
-**New Image** for another random scene. The full-screen viewer's close button has no
-accessibility label, so it was tapped by screen position.
+About 5% of circles are still missed. At 90, 68 of the 70 misses over 1000 scenes are filled
+circles with a radius under 60 px (36 at 34–44 px, 32 at 45–59 px); none of 60 px or more
+were missed. A finer accumulator (`dp` 1.5) didn't help: at `param2` 60 it matched the
+perfect-scene count with 3x the false detections, and at 70 it found only 74.6%. On the iPhone
+X after the change, three of four random scenes had all their circles found; the fourth
+missed one small filled circle, which is consistent with this limit. Higher recall would need a
+different approach, such as detecting circles from contours (`FindContours` + circularity),
+rather than more `HoughCircles` tuning.
