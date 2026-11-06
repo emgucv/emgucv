@@ -43,35 +43,11 @@ namespace Emgu.CV.Models
         }
 
         /// <summary>
-        /// The Superres model version
+        /// The Superres model version. OpenCV 5 removed the TensorFlow importer, so only the models
+        /// that opencv_extra distributes converted to ONNX are available.
         /// </summary>
         public enum SuperresVersion
-        {   
-            /// <summary>
-            /// Superres Edsr x2
-            /// </summary>
-            EdsrX2,
-            /// <summary>
-            /// Superres Edsr x3
-            /// </summary>
-            EdsrX3,
-            /// <summary>
-            /// Superres Edsr x4
-            /// </summary>
-            EdsrX4,
-
-            /// <summary>
-            /// Superres Espcn x2
-            /// </summary>
-            EspcnX2,
-            /// <summary>
-            /// Superres Espcn x3
-            /// </summary>
-            EspcnX3,
-            /// <summary>
-            /// Superres Espcn x4
-            /// </summary>
-            EspcnX4,
+        {
             /// <summary>
             /// Superres Fsrcnn x2
             /// </summary>
@@ -81,23 +57,9 @@ namespace Emgu.CV.Models
             /// </summary>
             FsrcnnX3,
             /// <summary>
-            /// Superres Fsrcnn x4
+            /// Superres Espcn x2
             /// </summary>
-            FsrcnnX4,
-            /// <summary>
-            /// Superres Lapsrn x2
-            /// </summary>
-            LapsrnX2,
-            /// <summary>
-            /// Superres Lapsrn x4
-            /// </summary>
-            LapsrnX4,
-            /// <summary>
-            /// Superres Lapsrn x8
-            /// </summary>
-            LapsrnX8
-
-
+            EspcnX2
         }
 
         /// <summary>
@@ -121,11 +83,11 @@ namespace Emgu.CV.Models
         /// <returns>Asyn task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(
-            SuperresVersion version = SuperresVersion.EdsrX4,
+            SuperresVersion version = SuperresVersion.FsrcnnX2,
             FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #else
         public async Task Init(
-            SuperresVersion version = SuperresVersion.EdsrX4,
+            SuperresVersion version = SuperresVersion.FsrcnnX2,
             FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null)
 #endif
         {
@@ -135,112 +97,38 @@ namespace Emgu.CV.Models
 
                 String algorithm = String.Empty;
                 int scale = -1;
-                if (version == SuperresVersion.EdsrX2)
+                //ONNX models converted from the original TensorFlow weights, published in opencv_extra.
+                const String baseUrl = "https://raw.githubusercontent.com/opencv/opencv_extra/5.1.0/testdata/cv/dnn_superres/";
+                if (version == SuperresVersion.FsrcnnX2)
                 {
                     manager.AddFile(
-                        "https://github.com/Saafke/EDSR_Tensorflow/raw/master/models/EDSR_x2.pb",
+                        baseUrl + "FSRCNN_x2.onnx",
                         _modelFolderName,
-                        null);
-                    algorithm = "edsr";
-                    scale = 2;
-                }
-                else if (version == SuperresVersion.EdsrX3)
-                {
-                    manager.AddFile(
-                        "https://github.com/Saafke/EDSR_Tensorflow/raw/master/models/EDSR_x3.pb",
-                        _modelFolderName,
-                        null);
-                    algorithm = "edsr";
-                    scale = 3;
-                }
-                else if (version == SuperresVersion.EdsrX4)
-                {
-                    manager.AddFile(
-                        "https://github.com/Saafke/EDSR_Tensorflow/raw/master/models/EDSR_x4.pb",
-                        _modelFolderName,
-                        null);
-                    algorithm = "edsr";
-                    scale = 4;
-                } else if (version == SuperresVersion.EspcnX2)
-                {
-                    manager.AddFile(
-                        "https://github.com/fannymonori/TF-ESPCN/raw/master/export/ESPCN_x2.pb",
-                        _modelFolderName,
-                        null);
-                    algorithm = "espcn";
-                    scale = 2;
-                }
-                else if (version == SuperresVersion.EspcnX3)
-                {
-                    manager.AddFile(
-                        "https://github.com/fannymonori/TF-ESPCN/raw/master/export/ESPCN_x3.pb",
-                        _modelFolderName,
-                        null);
-                    algorithm = "espcn";
-                    scale = 3;
-                }
-                else if (version == SuperresVersion.EspcnX4)
-                {
-                    manager.AddFile(
-                        "https://github.com/fannymonori/TF-ESPCN/raw/master/export/ESPCN_x4.pb",
-                        _modelFolderName,
-                        null);
-                    algorithm = "espcn";
-                    scale = 4;
-                }
-                else if (version == SuperresVersion.FsrcnnX2)
-                {
-                    manager.AddFile(
-                        "https://github.com/Saafke/FSRCNN_Tensorflow/raw/master/models/FSRCNN_x2.pb",
-                        _modelFolderName,
-                        null);
+                        "06C40FBCF2556E0BEF02FF05B0714BBF75ACAA2F3FED99CF2CED6E31BECAC27D");
                     algorithm = "fsrcnn";
                     scale = 2;
                 }
                 else if (version == SuperresVersion.FsrcnnX3)
                 {
                     manager.AddFile(
-                        "https://github.com/Saafke/FSRCNN_Tensorflow/raw/master/models/FSRCNN_x3.pb",
+                        baseUrl + "FSRCNN_x3.onnx",
                         _modelFolderName,
-                        null);
+                        "4F1F06B01BC234DF3B4C18AB056D32923D2D7667EA999B16F7F053A79566CEE7");
                     algorithm = "fsrcnn";
                     scale = 3;
                 }
-                else if (version == SuperresVersion.FsrcnnX4)
+                else if (version == SuperresVersion.EspcnX2)
                 {
                     manager.AddFile(
-                        "https://github.com/Saafke/FSRCNN_Tensorflow/raw/master/models/FSRCNN_x4.pb",
+                        baseUrl + "ESPCN_x2.onnx",
                         _modelFolderName,
-                        null);
-                    algorithm = "fsrcnn";
-                    scale = 4;
-                }
-                else if (version == SuperresVersion.LapsrnX2)
-                {
-                    manager.AddFile(
-                        "https://github.com/fannymonori/TF-LapSRN/raw/master/export/LapSRN_x2.pb",
-                        _modelFolderName,
-                        null);
-                    algorithm = "lapsrn";
+                        "BBD9A189EFAF43CE7C285DB5E49D2FF0E98D0922740C1C4B4BC3CA65203D7EC1");
+                    algorithm = "espcn";
                     scale = 2;
                 }
-                else if (version == SuperresVersion.LapsrnX4)
+                else
                 {
-                    manager.AddFile(
-                        "https://github.com/fannymonori/TF-LapSRN/raw/master/export/LapSRN_x4.pb",
-                        _modelFolderName,
-                        null);
-                    algorithm = "lapsrn";
-                    scale = 4;
-                }
-                else if (version == SuperresVersion.LapsrnX8)
-                {
-                    manager.AddFile(
-                        "https://github.com/fannymonori/TF-LapSRN/raw/master/export/LapSRN_x8.pb",
-                        _modelFolderName,
-                        null);
-                    algorithm = "lapsrn";
-                    scale = 8;
+                    throw new NotSupportedException(String.Format("Superres model {0} is not available.", version));
                 }
 
                 if (onDownloadProgressChanged != null)
@@ -315,7 +203,7 @@ namespace Emgu.CV.Models
         /// Download and initialize the yolo model
         /// </summary>
         /// <param name="onDownloadProgressChanged">Callback when download progress has been changed</param>
-        /// <param name="initOptions">A string, can be either "EdsrX2", "EdsrX3", "EdsrX4", "EspcnX2", "EspcnX3", "EspcnX4", specify the superres model to use. Deafult to use "EdsrX2". </param>
+        /// <param name="initOptions">A string, can be either "FsrcnnX2", "FsrcnnX3" or "EspcnX2", specify the superres model to use. Default to use "FsrcnnX2". </param>
         /// <returns>Async task</returns>
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
         public IEnumerator Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
@@ -323,40 +211,19 @@ namespace Emgu.CV.Models
         public async Task Init(FileDownloadManager.DownloadProgressChangedEventHandler onDownloadProgressChanged = null, Object initOptions = null)
 #endif
         {
-            SuperresVersion v = SuperresVersion.EdsrX2;
+            SuperresVersion v = SuperresVersion.FsrcnnX2;
             if (initOptions != null && ((initOptions as String) != null))
             {
                 String versionStr = initOptions as String;
                 //The UI may append a description after the model name
-                //(e.g. "EdsrX2 - 2x, best quality, slowest"); only the
+                //(e.g. "FsrcnnX2 - 2x, fast"); only the
                 //leading token is the model name.
                 int separatorIdx = versionStr.IndexOf(' ');
                 if (separatorIdx > 0)
                     versionStr = versionStr.Substring(0, separatorIdx);
-                if (versionStr.Equals("EdsrX2"))
-                    v = SuperresVersion.EdsrX2;
-                else if (versionStr.Equals("EdsrX3"))
-                    v = SuperresVersion.EdsrX3;
-                else if (versionStr.Equals("EdsrX4"))
-                    v = SuperresVersion.EdsrX4;
-                else if (versionStr.Equals("EspcnX2"))
-                    v = SuperresVersion.EspcnX2;
-                else if (versionStr.Equals("EspcnX3"))
-                    v = SuperresVersion.EspcnX3;
-                else if (versionStr.Equals("EspcnX4"))
-                    v = SuperresVersion.EspcnX4;
-                else if (versionStr.Equals("FsrcnnX2"))
-                    v = SuperresVersion.FsrcnnX2;
-                else if (versionStr.Equals("FsrcnnX3"))
-                    v = SuperresVersion.FsrcnnX3;
-                else if (versionStr.Equals("FsrcnnX4"))
-                    v = SuperresVersion.FsrcnnX4;
-                else if (versionStr.Equals("LapsrnX2"))
-                    v = SuperresVersion.LapsrnX2;
-                else if (versionStr.Equals("LapsrnX4"))
-                    v = SuperresVersion.LapsrnX4;
-                else if (versionStr.Equals("LapsrnX8"))
-                    v = SuperresVersion.LapsrnX8;
+                SuperresVersion parsed;
+                if (Enum.TryParse(versionStr, true, out parsed))
+                    v = parsed;
             }
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
             yield return Init(v, onDownloadProgressChanged);

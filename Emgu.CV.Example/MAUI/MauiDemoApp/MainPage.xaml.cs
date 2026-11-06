@@ -238,21 +238,12 @@ namespace MauiDemoApp
                     pickerTitle: "Super resolution version",
                     pickerOptions: new[]
                     {
-                        "EdsrX2 - 2x, best quality, slowest, large download",
-                        "EdsrX3 - 3x, best quality, slowest, large download",
-                        "EdsrX4 - 4x, best quality, slowest, large download",
-                        "EspcnX2 - 2x, fast, small model",
-                        "EspcnX3 - 3x, fast, small model",
-                        "EspcnX4 - 4x, fast, small model",
                         "FsrcnnX2 - 2x, fastest, tiny model",
                         "FsrcnnX3 - 3x, fastest, tiny model",
-                        "FsrcnnX4 - 4x, fastest, tiny model",
-                        "LapsrnX2 - 2x, balanced speed and quality",
-                        "LapsrnX4 - 4x, balanced speed and quality",
-                        "LapsrnX8 - 8x, balanced speed and quality",
+                        "EspcnX2 - 2x, fast, small model",
                     },
                     hasCamera: false,
-                    about: "Uses a neural network to upscale and sharpen an image, reconstructing fine detail (2×–8×)."));
+                    about: "Uses a neural network to upscale and sharpen an image, reconstructing fine detail (2×–3×)."));
             };
 
             if (haveDNN)

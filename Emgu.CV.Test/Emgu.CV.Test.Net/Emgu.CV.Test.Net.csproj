@@ -248,10 +248,6 @@
       <Link>fcn8s-heavy-pascal.prototxt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\opencv\samples\dnn\face_detector\deploy.prototxt">
-      <Link>deploy.prototxt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <Content Include="..\NotoSansCJK-Regular.ttc">
 	  <Link>NotoSansCJK-Regular.ttc</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

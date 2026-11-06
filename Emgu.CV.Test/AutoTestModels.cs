@@ -737,13 +737,42 @@ namespace Emgu.CV.Test
         [Test]
         public async Task TestDnnSuperres()
         {
-            using (Mat m = EmguAssert.LoadMat("pedestrian"))
+            using (Mat m = EmguAssert.LoadMat("pedestrian.png"))
             using (Emgu.CV.Models.Superres detector = new Models.Superres())
             {
-                await detector.Init(Models.Superres.SuperresVersion.EdsrX2, DownloadManager_OnDownloadProgressChanged);
+                await detector.Init(Models.Superres.SuperresVersion.FsrcnnX2, DownloadManager_OnDownloadProgressChanged);
                 String text = detector.ProcessAndRender(m, m);
             }
 
+        }
+
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestDnnMaskRcnn()
+        {
+            using (Mat m = EmguAssert.LoadMat("pedestrian.png"))
+            using (Mat result = new Mat())
+            using (Emgu.CV.Models.MaskRcnn detector = new Models.MaskRcnn())
+            {
+                await detector.Init(DownloadManager_OnDownloadProgressChanged);
+                EmguAssert.IsTrue(detector.Initialized, "Failed to initialize the Mask R-CNN model.");
+                m.CopyTo(result);
+                Models.MaskedObject[] objects = detector.Detect(m);
+                EmguAssert.IsTrue(objects.Length > 0, "Mask R-CNN should detect at least one object in the pedestrian image");
+                foreach (Models.MaskedObject obj in objects)
+                {
+                    Trace.WriteLine(String.Format("{0} ({1:F2}) at {2}", obj.Label, obj.Confident, obj.Region));
+                    obj.Render(result, detector.RenderColorRectangle, detector.RenderColorMask[obj.ClassId]);
+                    obj.Dispose();
+                }
+                CvInvoke.Imwrite("mask_rcnn_result.jpg", result);
+            }
         }
 
 #if !TEST_MODELS
