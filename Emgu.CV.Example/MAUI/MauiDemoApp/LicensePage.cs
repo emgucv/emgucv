@@ -15,8 +15,8 @@ namespace MauiDemoApp
     /// Lists the open source components the demo app is built from, with the full
     /// license text of each one. The texts are not copied into this project: the
     /// csproj bundles each component's own license file straight from its source
-    /// tree (opencv/, opencv_contrib/, the tesseract/leptonica/eigen/harfbuzz/hdf5/
-    /// freetype2 submodules) as a MauiAsset under "licenses/", so they always
+    /// tree (opencv/, opencv_contrib/, the tesseract/leptonica/eigen/hdf5
+    /// submodules) as a MauiAsset under "licenses/", so they always
     /// match the sources the native runtime was compiled from.
     /// </summary>
     public class LicensePage : SimpleDemoPage
@@ -92,7 +92,6 @@ namespace MauiDemoApp
             new Component { Name = "KleidiCV (Arm)", License = "Apache-2.0", Url = "https://gitlab.arm.com/kleidi/kleidicv", Notice = "Copyright 2023 - 2026 Arm Limited and/or its affiliates <open-source-office@arm.com>", Files = new[] { Apache2 } },
             new Component { Name = "ADE Framework", License = "Apache-2.0", Url = "https://github.com/opencv/ade", Notice = "Copyright (C) 2018 Intel Corporation", Files = new[] { Apache2 } },
             new Component { Name = "Rubik font", License = "OFL-1.1", Url = "https://github.com/googlefonts/rubik", Files = new[] { Ofl } },
-            new Component { Name = "FreeType", License = "FreeType License (FTL)", Url = "https://freetype.org", Files = new[] { "licenses/freetype.txt" } },
             new Component { Name = "HarfBuzz", License = "Old MIT", Url = "https://harfbuzz.github.io", Files = new[] { "licenses/harfbuzz.txt" } },
             new Component { Name = "HDF5", License = "BSD-3-Clause", Url = "https://www.hdfgroup.org", Files = new[] { "licenses/hdf5.txt" } },
             new Component { Name = "cpufeatures (Android)", License = "Apache-2.0", Url = "https://android.googlesource.com/platform/ndk", Files = new[] { "licenses/cpufeatures.txt", Apache2 } },

@@ -2,7 +2,7 @@
 #  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 #
 #  Assembles CPACK_PACKAGE_NAME from the platform labels and enabled features
-# (CUDA/OpenNI/ICC/IPP/OpenVINO/ONNXRuntime), plus license file selection.
+# (CUDA/OpenNI/ICC/IPP/ONNXRuntime), plus license file selection.
 #  Included from the root CMakeLists.txt; CMAKE_CURRENT_SOURCE_DIR still
 #  refers to the repository root here (include() does not change it).
 # ----------------------------------------------------------------------------
@@ -36,10 +36,6 @@ ENDIF()
 
 IF(WITH_IPP)
   SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-ipp")
-ENDIF()
-
-IF(WITH_INF_ENGINE OR WITH_OPENVINO)
-  SET(CPACK_PACKAGE_NAME "${CPACK_PACKAGE_NAME}-dldt")
 ENDIF()
 
 IF(HAVE_ONNXRUNTIME)

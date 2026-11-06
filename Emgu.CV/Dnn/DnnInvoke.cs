@@ -21,21 +21,17 @@ namespace Emgu.CV.Dnn
     public enum EngineType
     {
         /// <summary>
-        /// Force use the old dnn engine similar to 4.x branch
+        /// Automatically select the engine. Currently resolves to <see cref="OpenCV"/>.
         /// </summary>
-        Classic = 1,
+        Auto = 0,
         /// <summary>
-        /// Force use the new dnn engine. The engine does not support non CPU back-ends for now.
+        /// Use OpenCV's built-in DNN engine. The engine does not support non CPU back-ends for now.
         /// </summary>
-        New = 2,
+        OpenCV = 1,
         /// <summary>
-        /// Try to use the new engine and then fall back to the classic version.
+        /// Use the ONNX Runtime wrapper (ONNX only, requires build with WITH_ONNXRUNTIME=ON).
         /// </summary>
-        Auto = 3,
-        /// <summary>
-        /// Try to use the ONNX Runtime wrapper (ONNX only, requires build with WITH_ONNXRUNTIME=ON).
-        /// </summary>
-        Ort = 4
+        Ort = 2
     };
 
     /// <summary>
@@ -200,77 +196,6 @@ namespace Emgu.CV.Dnn
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveDnnImagesFromBlob(IntPtr blob, IntPtr images);
 
-        /// <summary>
-        /// Reads a network model stored in TensorFlow framework's format.
-        /// </summary>
-        /// <param name="model">path to the .pb file with binary protobuf description of the network architecture</param>
-        /// <param name="config">path to the .pbtxt file that contains text graph definition in protobuf format. Resulting Net object is built by text graph using weights from a binary one that let us make it more flexible.</param>
-        /// <returns>Net object.</returns>
-        public static Net ReadNetFromTensorflow(String model, String config = null)
-        {
-            using (CvString modelStr = new CvString(model))
-            using (CvString configStr = config == null ? new CvString() : new CvString(config))
-            {
-                IntPtr netPtr = cveReadNetFromTensorflow(modelStr, configStr);
-                CvInvoke.CheckError();
-                return new Net(netPtr);
-            }
-        }
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveReadNetFromTensorflow(IntPtr model, IntPtr config);
-
-        /// <summary>
-        /// Reads a network model stored in TensorFlow framework's format.
-        /// </summary>
-        /// <param name="model">path to the .pb file with binary protobuf description of the network architecture</param>
-        /// <param name="config">path to the .pbtxt file that contains text graph definition in protobuf format.</param>
-        /// <param name="extraOutputs">Names of intermediate tensors to expose as additional model outputs.</param>
-        /// <returns>Net object.</returns>
-        public static Net ReadNetFromTensorflow(String model, String config, String[] extraOutputs)
-        {
-            using (CvString modelStr = new CvString(model))
-            using (CvString configStr = config == null ? new CvString() : new CvString(config))
-            using (VectorOfCvString vcs = new VectorOfCvString(extraOutputs))
-            {
-                IntPtr netPtr = cveReadNetFromTensorflow3(modelStr, configStr, vcs);
-                CvInvoke.CheckError();
-                return new Net(netPtr);
-            }
-        }
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveReadNetFromTensorflow3(IntPtr model, IntPtr config, IntPtr extraOutputs);
-
-        /// <summary>
-        /// Reads a network model stored in TensorFlow framework's format.
-        /// </summary>
-        /// <param name="model">buffer containing the content of the pb file</param>
-        /// <param name="config">buffer containing the content of the pbtxt file</param>
-        /// <returns>Net object</returns>
-        public static Net ReadNetFromTensorflow(byte[] model, byte[] config = null)
-        {
-            GCHandle modelHandle = GCHandle.Alloc(model, GCHandleType.Pinned);
-            GCHandle configHandle = config == null ? new GCHandle() : GCHandle.Alloc(config, GCHandleType.Pinned);
-
-            try
-            {
-                IntPtr netPtr = cveReadNetFromTensorflow2(
-                    modelHandle.AddrOfPinnedObject(),
-                    model.Length,
-                    config == null ? IntPtr.Zero : configHandle.AddrOfPinnedObject(),
-                    config == null ? 0 : config.Length);
-                CvInvoke.CheckError();
-                return new Net(netPtr);
-            }
-            finally
-            {
-                modelHandle.Free();
-                if (configHandle.IsAllocated)
-                    configHandle.Free();
-            }
-
-        }
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveReadNetFromTensorflow2(IntPtr bufferModel, int lenModel, IntPtr bufferConfig, int lenConfig);
 
         /// <summary>
         /// Reads a network model stored in the TensorFlow Lite (TFLite) framework's format.
@@ -278,7 +203,7 @@ namespace Emgu.CV.Dnn
         /// <param name="model">
         /// The file path to the TFLite model.
         /// </param>
-        /// <param name="engine">Select DNN engine to be used. With auto selection the new engine is used first and falls back to classic.</param>
+        /// <param name="engine">Select DNN engine to be used. Auto resolves to the OpenCV engine.</param>
         /// <returns>
         /// A <see cref="Net"/> object representing the loaded network.
         /// </returns>
@@ -302,7 +227,7 @@ namespace Emgu.CV.Dnn
         /// Reads a network model stored in TFLite framework's format.
         /// </summary>
         /// <param name="model">buffer containing the content of the tflite file</param>
-        /// <param name="engine">Select DNN engine to be used. With auto selection the new engine is used first and falls back to classic.</param>
+        /// <param name="engine">Select DNN engine to be used. Auto resolves to the OpenCV engine.</param>
         /// <returns>Net object</returns>
         public static Net ReadNetFromTFLite(byte[] model, EngineType engine = EngineType.Auto)
         {
@@ -374,7 +299,7 @@ namespace Emgu.CV.Dnn
         /// Reads a network model ONNX.
         /// </summary>
         /// <param name="onnxFile">Path to the .onnx file with text description of the network architecture.</param>
-        /// <param name="engine">Select DNN engine to be used. With auto selection the new engine is used first and falls back to classic.</param>
+        /// <param name="engine">Select DNN engine to be used. Auto resolves to the OpenCV engine.</param>
         /// <returns>Network object that ready to do forward, throw an exception in failure cases.</returns>
         public static Net ReadNetFromONNX(String onnxFile, EngineType engine = EngineType.Auto)
         {
@@ -392,7 +317,7 @@ namespace Emgu.CV.Dnn
         /// Reads a network model from ONNX in-memory buffer.
         /// </summary>
         /// <param name="model">Memory address of the first byte of the buffer.</param>
-        /// <param name="engine">Select DNN engine to be used. With auto selection the new engine is used first and falls back to classic.</param>
+        /// <param name="engine">Select DNN engine to be used. Auto resolves to the OpenCV engine.</param>
         /// <returns>Net object</returns>
         public static Net ReadNetFromONNX(byte[] model, EngineType engine = EngineType.Auto)
         {
@@ -440,17 +365,11 @@ namespace Emgu.CV.Dnn
         /// </summary>
         /// <param name="model">
         /// Binary file contains trained weights. The following file extensions are expected for models from different frameworks:
-        ///    *.pb (TensorFlow, https://www.tensorflow.org/)
         ///    *.tflite (TensorFlow Lite)
-        ///    *.onnx (ONNX, https://onnx.ai/)
-        ///    *.bin (DLDT, https://software.intel.com/openvino-toolkit)</param>
-        /// <param name="config">
-        /// Text file contains network configuration. It could be a file with the following extensions:
-        ///    *.pbtxt (TensorFlow, https://www.tensorflow.org/)
-        ///    *.xml (DLDT, https://software.intel.com/openvino-toolkit)
-        /// </param>
+        ///    *.onnx (ONNX, https://onnx.ai/)</param>
+        /// <param name="config">Optional network configuration file; not used by the supported formats.</param>
         /// <param name="framework">Explicit framework name tag to determine a format.</param>
-        /// <param name="engine">Select DNN engine to be used. With auto selection the new engine is used first and falls back to classic.</param>
+        /// <param name="engine">Select DNN engine to be used. Auto resolves to the OpenCV engine.</param>
         /// <returns>Net object.</returns>
         public static Net ReadNet(String model, String config = null, String framework = null, EngineType engine = EngineType.Auto)
         {
@@ -466,40 +385,8 @@ namespace Emgu.CV.Dnn
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern IntPtr cveReadNet(IntPtr model, IntPtr config, IntPtr framework, EngineType engine);
 
-        /// <summary>
-        /// Load a network from Intel's Model Optimizer intermediate representation.
-        /// </summary>
-        /// <param name="xml">XML configuration file with network's topology.</param>
-        /// <param name="bin">Binary file with trained weights.</param>
-        /// <returns>Net object. Networks imported from Intel's Model Optimizer are launched in Intel's Inference Engine backend.</returns>
-        public static Net ReadNetFromModelOptimizer(String xml, String bin)
-        {
-            using (CvString xmlStr = new CvString(xml))
-            using (CvString binStr = new CvString(bin))
-            {
-                IntPtr netPtr = cveReadNetFromModelOptimizer(xmlStr, binStr);
-                CvInvoke.CheckError();
-                return new Net(netPtr);
-            }
-        }
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern IntPtr cveReadNetFromModelOptimizer(IntPtr xml, IntPtr bin);
 
 
-        /// <summary>
-        /// Create a text representation for a binary network stored in protocol buffer format.
-        /// </summary>
-        /// <param name="model">A path to binary network.</param>
-        /// <param name="output">A path to output text file to be created.</param>
-        public static void WriteTextGraph(String model, String output)
-        {
-            using (CvString csModel = new CvString(model))
-            using (CvString csOutput = new CvString(output))
-                cveDnnWriteTextGraph(csModel, csOutput);
-            CvInvoke.CheckError();
-        }
-        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
-        private static extern void cveDnnWriteTextGraph(IntPtr model, IntPtr output);
 
 
         /// <summary>

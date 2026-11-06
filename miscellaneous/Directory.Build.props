@@ -56,7 +56,6 @@
         <NamespaceSummaryItem name="Emgu.CV.XPhoto" isDocumented="True" xmlns="">Additional photo processing algorithms</NamespaceSummaryItem>
         <NamespaceSummaryItem name="Emgu.CV.Bioinspired" isDocumented="True" xmlns="">Biologically inspired vision models and derivated tools</NamespaceSummaryItem>
         <NamespaceSummaryItem name="Emgu.CV.Dpm" isDocumented="True" xmlns="">Deformable Part-based Models</NamespaceSummaryItem>
-        <NamespaceSummaryItem name="Emgu.CV.Freetype" isDocumented="True" xmlns="">Drawing UTF-8 strings with freetype/harfbuzz</NamespaceSummaryItem>
         <NamespaceSummaryItem name="Emgu.CV.Hfs" isDocumented="True" xmlns="">Hierarchical Feature Selection for Efficient Image Segmentation</NamespaceSummaryItem>
         <NamespaceSummaryItem name="Emgu.CV.Hdf" isDocumented="True" xmlns="">Hierarchical Data Format I/O routines</NamespaceSummaryItem>
         <NamespaceSummaryItem name="Emgu.CV.ImgHash" isDocumented="True" xmlns="">The module brings implementations of different image hashing algorithms.</NamespaceSummaryItem>

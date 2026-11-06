@@ -40,7 +40,7 @@ namespace Emgu.CV.Models
         public AlikedModel(
             Size inputSize = new Size(),
             bool normalizeDescriptors = true,
-            Emgu.CV.Dnn.EngineType engine = Emgu.CV.Dnn.EngineType.New,
+            Emgu.CV.Dnn.EngineType engine = Emgu.CV.Dnn.EngineType.OpenCV,
             Emgu.CV.Dnn.Backend backend = Emgu.CV.Dnn.Backend.Default,
             Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu)
             : base()

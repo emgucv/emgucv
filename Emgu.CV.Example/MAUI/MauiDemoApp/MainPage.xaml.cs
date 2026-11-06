@@ -480,8 +480,7 @@ namespace MauiDemoApp
             }
 
             {
-                //FontFace rendering is always available (imgproc module); the page
-                //offers the freetype module as an additional option when present.
+                //FontFace rendering is always available (imgproc module).
                 Button unicodeRenderingButton = new Button();
                 unicodeRenderingButton.Text = "Unicode Rendering";
 

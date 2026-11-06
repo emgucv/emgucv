@@ -8,8 +8,6 @@
 #   RUNTIME_DIR         - cmake runtime output dir (contains cvextern .a)
 #   WITH_TESSERACT      - TRUE/FALSE
 #   TESSERACT_DIR       - tesseract libs Release dir (when WITH_TESSERACT)
-#   FREETYPE_LIBS       - optional semicolon-separated list of freetype .a paths
-#   HARFBUZZ_LIBS       - optional semicolon-separated list of harfbuzz .a paths
 
 file(GLOB BIN_LIBS          "${BIN_DIR}/*.a")
 file(GLOB OPENCV_MODULE_LIBS "${OPENCV_MODULES_DIR}/*.a")
@@ -21,13 +19,6 @@ set(ALL_LIBS ${BIN_LIBS} ${OPENCV_MODULE_LIBS} ${OPENCV_3RD_LIBS} ${RUNTIME_LIBS
 if(WITH_TESSERACT)
   file(GLOB TESSERACT_LIBS "${TESSERACT_DIR}/*.a")
   list(APPEND ALL_LIBS ${TESSERACT_LIBS})
-endif()
-
-if(FREETYPE_LIBS)
-  list(APPEND ALL_LIBS ${FREETYPE_LIBS})
-endif()
-if(HARFBUZZ_LIBS)
-  list(APPEND ALL_LIBS ${HARFBUZZ_LIBS})
 endif()
 
 if(NOT ALL_LIBS)

@@ -7,8 +7,8 @@
 #
 # ABI ($1):      arm64-v8a (default), x86_64, x86, armeabi-v7a
 # variant ($2):  (empty) / full — all modules + contrib + Tesseract
-#                core            — no contrib, no Tesseract, no Freetype
-#                mini            — minimal modules, no contrib/Tesseract/Freetype
+#                core            — no contrib, no Tesseract
+#                mini            — minimal modules, no contrib/Tesseract
 # toolchain ($3): optional Android toolchain name (passed as ANDROID_TOOLCHAIN_NAME)
 #
 # Required environment (set by maccfg.sh or the caller):
@@ -84,12 +84,10 @@ OPTIONAL_FLAGS=()
 case "$VARIANT" in
     core)
         TESSERACT_OPTION="-DEMGU_CV_WITH_TESSERACT:BOOL=OFF"
-        OPTIONAL_FLAGS+=("-DEMGU_CV_WITH_FREETYPE:BOOL=OFF")
         BUILD_CONTRIB=0
         ;;
     mini)
         TESSERACT_OPTION="-DEMGU_CV_WITH_TESSERACT:BOOL=OFF"
-        OPTIONAL_FLAGS+=("-DEMGU_CV_WITH_FREETYPE:BOOL=OFF")
         BUILD_CONTRIB=0
         # flann must stay enabled: in OpenCV 5 imgproc depends on geometry, which depends on flann
         OPTIONAL_FLAGS+=(
@@ -102,7 +100,7 @@ case "$VARIANT" in
         ;;
 esac
 
-# ---- Base CMake flags shared by all sub-builds (eigen, freetype, harfbuzz, main) ----
+# ---- Base CMake flags shared by all sub-builds (eigen, main) ----
 BASE_CMAKE_FLAGS=(
     -G "$CMAKE_GENERATOR"
     "-DANDROID_ABI=$ANDROID_ABI"
@@ -143,35 +141,10 @@ EIGEN_DIR="$PWD"
 "$CMAKE" --build . --config Release --target install
 cd "$SOURCE_DIR"
 
-# ---- Build FreetType2 and HarfBuzz (full build only) ----
+# ---- Contrib modules (full build only) ----
 CONTRIB_CMAKE_FLAGS=()
 if [ "$BUILD_CONTRIB" -eq 1 ]; then
-    echo ""
-    echo "=== Building freetype2 ==="
-    cd "$SOURCE_DIR/3rdParty/freetype2"
-    mkdir -p "$BUILD_DIR"
-    cd "$BUILD_DIR"
-    "$CMAKE" "${BASE_CMAKE_FLAGS[@]}" -DCMAKE_POLICY_VERSION_MINIMUM=3.5 ..
-    "$CMAKE" --build . --config Release --parallel --target install
-    cd "$SOURCE_DIR"
-
-    echo ""
-    echo "=== Building harfbuzz ==="
-    cd "$SOURCE_DIR/harfbuzz"
-    mkdir -p "$BUILD_DIR"
-    cd "$BUILD_DIR"
-    "$CMAKE" "${BASE_CMAKE_FLAGS[@]}" \
-        -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-        "-DCMAKE_FIND_ROOT_PATH:STRING=$INSTALL_FOLDER" \
-        "-DHB_HAVE_FREETYPE:BOOL=TRUE" \
-        "-DCMAKE_CXX_FLAGS=-Wno-cast-function-type-strict" \
-        ..
-    "$CMAKE" --build . --config Release --parallel --target install
-    cd "$SOURCE_DIR"
-
     CONTRIB_CMAKE_FLAGS+=("-DOPENCV_EXTRA_MODULES_PATH:String=$SOURCE_DIR/opencv_contrib/modules")
-else
-    CONTRIB_CMAKE_FLAGS+=("-DEMGU_CV_WITH_FREETYPE:BOOL=OFF")
 fi
 
 # ---- Build main Emgu CV ----
@@ -193,6 +166,8 @@ cd "$SOURCE_DIR/$BUILD_DIR"
     -DWITH_IPP:BOOL=OFF \
     -DBUILD_DOCS:BOOL=OFF \
     -DBUILD_TESTS:BOOL=OFF \
+    -DWITH_UNIFONT:BOOL=ON \
+    -DWITH_ITALICFONT:BOOL=ON \
     -DBUILD_WITH_DEBUG_INFO:BOOL=OFF \
     -DBUILD_opencv_java:BOOL=OFF \
     -DBUILD_opencv_java_bindings_generator:BOOL=OFF \

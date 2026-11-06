@@ -213,10 +213,6 @@ ENDIF()
 #  ADD_DEPENDENCIES(${the_target}  ${CUDA_LIBRARIES})
 #ENDIF()
 
-IF (TARGET opencv_dnn_openvino)
-  ADD_DEPENDENCIES(${the_target} opencv_dnn_openvino)
-ENDIF()
-
 IF(EMGU_CV_WITH_TESSERACT)
   IF(TESSERACT_FOUND)
     #MESSAGE("TESSERACT found, no need to add dependency")
@@ -428,15 +424,6 @@ ENDIF()
 #  target_link_libraries(${the_target} inference_engine)
 #ENDIF()
 
-#message(STATUS "EMGU_CV_WITH_FREETYPE: ${EMGU_CV_WITH_FREETYPE}")
-GET_TARGET_PROPERTY(CVEXTERN_TARGET_TYPE ${the_target} TYPE)
-IF (CVEXTERN_TARGET_TYPE STREQUAL STATIC_LIBRARY)
-  # Do not need to link FREETYPE or HARFBUZZ if static linking
-  # e.g. IOS will use FREETYPE and HARFBUZZ framework
-ELSEIF (TARGET opencv_freetype)
-  target_link_libraries(${the_target} ${FREETYPE_LIBRARY} ${HARFBUZZ_LIBRARY})
-ENDIF()
-
 IF (TARGET opencv_hdf)
     message(STATUS "LINK CVEXTERN with HDF5_LIBRARIES: ${HDF5_LIBRARIES}")
 	target_link_libraries(${the_target} ${HDF5_LIBRARIES})
@@ -541,15 +528,6 @@ ELSEIF (IOS)
 	#  COMPONENT emgucv_binary) 	 
   ENDIF()
   #MESSAGE(STATUS "<<<<<< IOS_RELEASE_FOLDER: ${IOS_RELEASE_FOLDER} >>>>>>") 
-  GET_TARGET_PROPERTY(CVEXTERN_TARGET_TYPE ${the_target} TYPE)
-  SET(LIBTOOL_FREETYPE_ARGS "")
-  SET(LIBTOOL_HARFBUZZ_ARGS "")
-  IF (NOT CVEXTERN_TARGET_TYPE STREQUAL STATIC_LIBRARY)
-    IF (TARGET opencv_freetype)
-      SET(LIBTOOL_FREETYPE_ARGS "${FREETYPE_LIBRARIES}")
-      SET(LIBTOOL_HARFBUZZ_ARGS "${HARFBUZZ_LIBRARIES}")
-    ENDIF()
-  ENDIF()
   add_custom_command(TARGET ${the_target}
     POST_BUILD
     COMMAND ${CMAKE_COMMAND}
@@ -561,8 +539,6 @@ ELSEIF (IOS)
       -DRUNTIME_DIR=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release
       -DWITH_TESSERACT=${EMGU_CV_WITH_TESSERACT}
       -DTESSERACT_DIR=${CMAKE_BINARY_DIR}/libs/Release
-      "-DFREETYPE_LIBS=${LIBTOOL_FREETYPE_ARGS}"
-      "-DHARFBUZZ_LIBS=${LIBTOOL_HARFBUZZ_ARGS}"
       -P ${CMAKE_SOURCE_DIR}/cmake/libtool_link_ios.cmake
     WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
     COMMENT "Linking static library for ${IOS_ARCH}")

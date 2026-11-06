@@ -11,46 +11,6 @@
 #endif
 
 
-cv::dnn::Net* cveReadNetFromTensorflow(cv::String* model, cv::String* config)
-{
-	try
-	{
-	#ifdef HAVE_OPENCV_DNN
-		cv::dnn::Net net = cv::dnn::readNetFromTensorflow(*model, *config);
-		return new cv::dnn::Net(net);
-	#else
-		throw_no_dnn();
-	#endif
-	}
-	CVAPI_CATCH_CV_ERRORS(0)
-}
-cv::dnn::Net* cveReadNetFromTensorflow3(cv::String* model, cv::String* config, std::vector<cv::String>* extraOutputs)
-{
-	try
-	{
-	#ifdef HAVE_OPENCV_DNN
-		cv::dnn::Net net = cv::dnn::readNetFromTensorflow(*model, *config, cv::dnn::ENGINE_AUTO, *extraOutputs);
-		return new cv::dnn::Net(net);
-	#else
-		throw_no_dnn();
-	#endif
-	}
-	CVAPI_CATCH_CV_ERRORS(0)
-}
-cv::dnn::Net* cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, const char *bufferConfig, int lenConfig)
-{
-	try
-	{
-	#ifdef HAVE_OPENCV_DNN
-		cv::dnn::Net net = cv::dnn::readNetFromTensorflow(bufferModel, lenModel, bufferConfig, lenConfig);
-		return new cv::dnn::Net(net);
-	#else
-		throw_no_dnn();
-	#endif
-	}
-	CVAPI_CATCH_CV_ERRORS(0)
-}
-
 cv::dnn::Net* cveReadNetFromTFLite(cv::String* model, int engine)
 {
 	try
@@ -117,7 +77,7 @@ cv::dnn::Net* cveReadNetFromONNX2(const char* bufferModel, int lenModel, int eng
 	try
 	{
 	#ifdef HAVE_OPENCV_DNN
-		cv::dnn::Net net = cv::dnn::readNetFromONNX(bufferModel, lenModel, engine);
+		cv::dnn::Net net = cv::dnn::readNetFromONNX(bufferModel, (size_t)lenModel, engine);
 		return new cv::dnn::Net(net);
 	#else
 		throw_no_dnn();
@@ -154,20 +114,6 @@ cv::dnn::Net* cveReadNet(cv::String* model, cv::String* config, cv::String* fram
 	}
 	CVAPI_CATCH_CV_ERRORS(0)
 }
-cv::dnn::Net* cveReadNetFromModelOptimizer(cv::String* xml, cv::String* bin)
-{
-	try
-	{
-	#ifdef HAVE_OPENCV_DNN
-		cv::dnn::Net net = cv::dnn::readNetFromModelOptimizer(*xml, *bin);
-		return new cv::dnn::Net(net);
-	#else
-		throw_no_dnn();
-	#endif
-	}
-	CVAPI_CATCH_CV_ERRORS(0)
-}
-
 
 cv::dnn::Net* cveDnnNetCreate()
 {
@@ -502,19 +448,6 @@ void cveDnnImagesFromBlob(cv::Mat* blob, cv::_OutputArray* images)
 	{
 	#ifdef HAVE_OPENCV_DNN
 		cv::dnn::imagesFromBlob(*blob, *images);
-	#else
-		throw_no_dnn();
-	#endif
-	}
-	CVAPI_CATCH_CV_ERRORS_VOID
-}
-
-void cveDnnWriteTextGraph(cv::String* model, cv::String* output)
-{
-	try
-	{
-	#ifdef HAVE_OPENCV_DNN
-		cv::dnn::writeTextGraph(*model, *output);
 	#else
 		throw_no_dnn();
 	#endif

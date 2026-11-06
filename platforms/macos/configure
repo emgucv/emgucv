@@ -6,7 +6,6 @@ cd ../..
 BUILD_FOLDER=build_$1
 INSTALL_FOLDER=$PWD/platforms/macos/$BUILD_FOLDER/install
 CMAKE_FIND_ROOT_FOLDER=$INSTALL_FOLDER
-OPENVINO_OPTION=-DWITH_OPENVINO:BOOL=FALSE
 
 MACOS_SDK_PATH="$(xcrun --sdk macosx --show-sdk-path)"
 OSX_SYSROOT_OPTION="-DCMAKE_OSX_SYSROOT:STRING=$MACOS_SDK_PATH"
@@ -34,8 +33,6 @@ else
 fi
 
 BUILD_VTK=false
-BUILD_FREETYPE=false
-FREETYPE_OPTIONS=( -DEMGU_CV_WITH_FREETYPE:BOOL=FALSE -DBUILD_opencv_freetype:BOOL=FALSE )
 
 if [[ $# -lt 2 ]]; then
     CV_CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules
@@ -55,12 +52,6 @@ else
       TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
       echo "Building with vtk"
       BUILD_VTK=true
-    elif [ "$2" == "freetype" ]; then
-      CV_CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules
-      FREETYPE_OPTIONS=( -DEMGU_CV_WITH_FREETYPE:BOOL=TRUE )
-      TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
-      echo "Building with freetype"
-      BUILD_FREETYPE=true
     else
       CV_CONTRIB_OPTION=-DOPENCV_EXTRA_MODULES_PATH=../../../opencv_contrib/modules
       TESSERACT_OPTION=-DEMGU_CV_WITH_TESSERACT:BOOL=TRUE
@@ -78,63 +69,6 @@ cd ../..
 
 
 if [ "$CV_CONTRIB_OPTION" != "" ]; then
-    cd 3rdParty
-    
-    if [ "$BUILD_FREETYPE" = true ]; then  
-	cd freetype2
-	mkdir -p $BUILD_FOLDER
-	cd $BUILD_FOLDER
-	cmake $BUILD_ARCH $OSX_SYSROOT_OPTION -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" ../
-	cmake --build . --config Release --target install --parallel
-	cd ../..
-    fi
-
-    if [ "$2" == "openvino" ]; then
-	cd openvino
-	# NOTE: OpenVINO's CPU plugin uses the ARM Compute Library (ACL) which
-	# is built by scons. Install scons before running this script:
-	#   brew install scons
-	# The cmake-based ACL alternative (ENABLE_ARM_COMPUTE_CMAKE=ON) does not
-	# work here because docs/snippets and template_extension sub-projects call
-	# find_package(OpenVINO) during the build phase, which conflicts with the
-	# cmake-based ACL add_subdirectory already in use by the main project.
-	mkdir -p $BUILD_FOLDER
-	cd $BUILD_FOLDER
-	cmake $BUILD_ARCH $OSX_SYSROOT_OPTION \
-	    -DBUILD_SHARED_LIBS:BOOL=OFF \
-	    -DCMAKE_BUILD_TYPE:STRING="Release" \
-	    -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" \
-	    -DENABLE_INTEL_GPU:BOOL=OFF \
-	    -DENABLE_INTEL_NPU:BOOL=OFF \
-	    -DENABLE_TESTS:BOOL=OFF \
-	    -DENABLE_SAMPLES:BOOL=OFF \
-	    -DENABLE_JS:BOOL=OFF \
-	    -DENABLE_OV_ONNX_FRONTEND:BOOL=OFF \
-	    -DENABLE_OV_TF_FRONTEND:BOOL=OFF \
-	    -DENABLE_OV_TF_LITE_FRONTEND:BOOL=OFF \
-	    -DENABLE_OV_PADDLE_FRONTEND:BOOL=OFF \
-	    -DENABLE_OV_PYTORCH_FRONTEND:BOOL=OFF \
-	    -DENABLE_OV_JAX_FRONTEND:BOOL=OFF \
-	    ../
-	cmake --build . --config Release --target install
-	OPENVINO_INSTALL_DIR=$INSTALL_FOLDER/runtime/cmake
-	TBB_OPENVINO_DIR=$INSTALL_FOLDER/runtime/3rdparty/tbb/lib/cmake/TBB
-	CMAKE_FIND_ROOT_FOLDER="$CMAKE_FIND_ROOT_FOLDER;$OPENVINO_INSTALL_DIR"
-	OPENVINO_OPTION="-DWITH_OPENVINO:BOOL=TRUE -DOPENCV_DNN_OPENVINO:BOOL=TRUE -DOpenVINO_DIR:STRING=$OPENVINO_INSTALL_DIR -DTBB_DIR:STRING=$TBB_OPENVINO_DIR"
-	cd ../..
-    fi
-    
-    cd ..
-
-    if [ "$BUILD_FREETYPE" = true ]; then  
-	cd harfbuzz
-	mkdir -p $BUILD_FOLDER
-	cd $BUILD_FOLDER
-	cmake $BUILD_ARCH $OSX_SYSROOT_OPTION -DBUILD_SHARED_LIBS:BOOL=OFF -DCMAKE_BUILD_TYPE:STRING="Release" -DCMAKE_INSTALL_PREFIX:STRING="$INSTALL_FOLDER" -DCMAKE_FIND_ROOT_PATH:STRING="$INSTALL_FOLDER" -DHB_HAVE_FREETYPE:BOOL=TRUE -DHB_BUILD_TESTS:BOOL=FALSE ..
-	cmake --build . --config Release --target install --parallel 
-	cd ../..
-    fi
-    
     cd hdf5
     mkdir -p $BUILD_FOLDER
     cd $BUILD_FOLDER
@@ -170,12 +104,13 @@ cmake $BUILD_ARCH $OSX_SYSROOT_OPTION $CV_OPTIMIZATION \
       -DOPENCV_FORCE_3RDPARTY_BUILD:BOOL=TRUE \
       -DBUILD_PERF_TESTS=FALSE \
       -DBUILD_TESTS:BOOL=FALSE \
+      -DWITH_UNIFONT:BOOL=ON \
+      -DWITH_ITALICFONT:BOOL=ON \
       -DBUILD_DOCS:BOOL=FALSE \
       -DBUILD_JPEG:BOOL=TRUE \
       -DBUILD_ZLIB:BOOL=TRUE \
       -DBUILD_OPENEXR:BOOL=TRUE \
       $CV_PNG_OPTION \
-      $OPENVINO_OPTION \
       -DBUILD_TIFF:BOOL=TRUE \
       -DWITH_WEBP:BOOL=OFF \
       -DWITH_IPP:BOOL=OFF \
@@ -198,7 +133,6 @@ cmake $BUILD_ARCH $OSX_SYSROOT_OPTION $CV_OPTIMIZATION \
       -DWITH_LAPACK:BOOL=OFF \
       -DCMAKE_INSTALL_PREFIX:STRING=$INSTALL_FOLDER \
       -DCMAKE_IGNORE_PREFIX_PATH:STRING=/usr/local \
-      ${FREETYPE_OPTIONS[@]} \
       ../../../
 set +x
 #-DCMAKE_CXX_FLAGS_RELEASE:STRING=-g0 \

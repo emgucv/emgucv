@@ -102,8 +102,8 @@ namespace Emgu.CV.Models
             if (_fontFace == null)
             {
                 //Use the fonts embedded in the imgproc module instead of the optional
-                //freetype contrib module, so scene text rendering also works on
-                //platforms built without freetype2/harfbuzz (e.g. iOS / MacCatalyst).
+                //freetype contrib module (removed from Emgu CV), so scene text rendering works on
+                //every platform.
                 //Prefer the built-in Unicode font ("uni", WenQuanYi Micro Hei) since
                 //the OCR vocabulary contains CJK characters; fall back to the default
                 //embedded font if the native library was built without WITH_UNIFONT.

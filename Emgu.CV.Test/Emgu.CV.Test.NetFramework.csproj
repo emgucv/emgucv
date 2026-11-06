@@ -99,7 +99,6 @@
     <Compile Include="AutoTestDnn.cs" />
     <Compile Include="AutoTestFace.cs" />
     <Compile Include="AutoTestFlann.cs" />
-    <Compile Include="AutoTestFreetype.cs" />
     <Compile Include="AutoTestImgproc.cs" />
     <Compile Include="AutoTestObjDetect.cs" />
     <Compile Include="AutoTestOpticalFlow.cs" />

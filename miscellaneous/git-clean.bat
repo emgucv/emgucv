@@ -11,22 +11,6 @@ cd vtk
 git clean -d -f -x "."
 cd ..
 
-cd 3rdParty
-
-cd freetype2
-git clean -d -f -x "."
-cd ..
-
-cd openvino
-git clean -d -f -x "."
-cd ..
-
-cd ..
-
-cd harfbuzz 
-git clean -d -f -x "."
-cd ..
-
 cd hdf5 
 git clean -d -f -x "."
 cd ..

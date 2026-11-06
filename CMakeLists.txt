@@ -35,13 +35,9 @@ IF(POLICY CMP0069)
   SET(CMAKE_POLICY_DEFAULT_CMP0069 NEW)
 ENDIF()
 
-IF(WIN32 OR ANDROID OR IOS OR NETFX_CORE)
-  SET(EMGU_CV_WITH_FREETYPE ON CACHE BOOL "BUILD FREETYPE")
-ELSE()
-  SET(EMGU_CV_WITH_FREETYPE OFF CACHE BOOL "BUILD FREETYPE")
-ENDIF()
-
-INCLUDE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/ThirdPartyDeps.cmake")
+# opencv_contrib's freetype module needs an external HarfBuzz with hb-ft, which OpenCV 5.x's bundled
+# HarfBuzz (used by imgproc putText) does not provide, so the module is never built.
+SET(BUILD_opencv_freetype OFF CACHE BOOL "Disabled: not supported with the OpenCV 5 bundled HarfBuzz" FORCE)
 
 IF("${CMAKE_SYSTEM_NAME}" STREQUAL "Emscripten")
   SET(IS_EMSCRIPTEN_BUILD TRUE)
@@ -188,7 +184,6 @@ SET(OPENCV_MODULE_NAME_CANDIDATES
   saliency
   img_hash
   phase_unwrapping
-  freetype
   hfs
   quality
   stereo

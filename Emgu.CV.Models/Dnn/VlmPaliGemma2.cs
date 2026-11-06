@@ -374,11 +374,11 @@ namespace Emgu.CV.Models
             if (_tokenizer == null)
                 _tokenizer = Tokenizer.Load(configPath);
             if (_siglipNet == null)
-                _siglipNet = DnnInvoke.ReadNetFromONNX(Path.Combine(modelFolder, "vision_model.onnx"), EngineType.New);
+                _siglipNet = DnnInvoke.ReadNetFromONNX(Path.Combine(modelFolder, "vision_model.onnx"), EngineType.OpenCV);
             if (_embedNet == null)
-                _embedNet = DnnInvoke.ReadNetFromONNX(Path.Combine(modelFolder, "embedding.onnx"), EngineType.New);
+                _embedNet = DnnInvoke.ReadNetFromONNX(Path.Combine(modelFolder, "embedding.onnx"), EngineType.OpenCV);
             if (_gemmaNet == null)
-                _gemmaNet = DnnInvoke.ReadNetFromONNX(Path.Combine(modelFolder, "gemma2_3b.onnx"), EngineType.New);
+                _gemmaNet = DnnInvoke.ReadNetFromONNX(Path.Combine(modelFolder, "gemma2_3b.onnx"), EngineType.OpenCV);
         }
 
         private FileDownloadManager CreateDownloadManager()

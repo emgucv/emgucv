@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using Emgu.CV.CvEnum;
-using Emgu.CV.Freetype;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 
@@ -43,35 +42,21 @@ namespace Emgu.CV.Models
         /// </summary>
         /// <param name="image">The image to draw on</param>
         /// <param name="color">The color to draw the rectangle around the detected object</param>
-        /// <param name="freetype2">Optional freetype2 object, if provided, it will be used to draw the label. If null, will use CvInvoke.PutText instead.</param>
-        public virtual void Render(IInputOutputArray image, MCvScalar color, Freetype2 freetype2 = null)
+        public virtual void Render(IInputOutputArray image, MCvScalar color)
         {
-            CvInvoke.Rectangle(image, this.Region, color, 2);
-            String label = String.Format("{0}: {1}", this.Label == null ? this.ClassId.ToString() : this.Label,
-                this.Confident);
-            if (freetype2 == null)
-                CvInvoke.PutText(
-                    image,
-                    label,
-                    this.Region.Location,
-                    HersheyFonts.Duplex,
-                    1.0,
-                    color,
-                    1);
-            else
+            //Draw with the default FontFace (the built-in "sans" font) rather than a Hershey font.
+            //The shared instance keeps its glyph cache between calls; FontFace is not documented
+            //as thread safe, so serialize its use.
+            lock (_defaultFontFaceLock)
             {
-                freetype2.PutText(
-                    image,
-                    label,
-                    this.Region.Location,
-                    16,
-                    color,
-                    1,
-                    LineType.EightConnected,
-                    false
-                    );
+                if (_defaultFontFace == null)
+                    _defaultFontFace = new FontFace();
+                Render(image, color, _defaultFontFace);
             }
         }
+
+        private static readonly object _defaultFontFaceLock = new object();
+        private static FontFace _defaultFontFace;
 
         /// <summary>
         /// Draw the detected object on the image

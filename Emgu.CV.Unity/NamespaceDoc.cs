@@ -75,13 +75,6 @@ namespace Emgu.CV.Shape
 }
 
 /// <summary>
-/// Open CV freetype module
-/// </summary>
-namespace Emgu.CV.Freetype
-{
-}
-
-/// <summary>
 /// Open CV fuzzy module
 /// </summary>
 namespace Emgu.CV.Fuzzy

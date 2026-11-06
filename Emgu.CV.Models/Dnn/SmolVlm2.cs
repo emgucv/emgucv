@@ -112,15 +112,15 @@ namespace Emgu.CV.Models
                     String folder = Path.GetDirectoryName(manager.Files[0].LocalFile);
                     _tokenizer = new SmolLmTokenizer(Path.Combine(folder, "tokenizer.json"));
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-                    _visionNet = DnnInvoke.ReadNetFromONNX(Path.Combine(folder, "vision_raw.onnx"), EngineType.New);
-                    _embedNet = DnnInvoke.ReadNetFromONNX(Path.Combine(folder, "embed_tokens.onnx"), EngineType.New);
-                    _decoderNet = DnnInvoke.ReadNetFromONNX(Path.Combine(folder, "decoder_raw.onnx"), EngineType.New);
+                    _visionNet = DnnInvoke.ReadNetFromONNX(Path.Combine(folder, "vision_raw.onnx"), EngineType.OpenCV);
+                    _embedNet = DnnInvoke.ReadNetFromONNX(Path.Combine(folder, "embed_tokens.onnx"), EngineType.OpenCV);
+                    _decoderNet = DnnInvoke.ReadNetFromONNX(Path.Combine(folder, "decoder_raw.onnx"), EngineType.OpenCV);
 #else
                     await Task.Run(() =>
                     {
-                        _visionNet = DnnInvoke.ReadNetFromONNX(Path.Combine(folder, "vision_raw.onnx"), EngineType.New);
-                        _embedNet = DnnInvoke.ReadNetFromONNX(Path.Combine(folder, "embed_tokens.onnx"), EngineType.New);
-                        _decoderNet = DnnInvoke.ReadNetFromONNX(Path.Combine(folder, "decoder_raw.onnx"), EngineType.New);
+                        _visionNet = DnnInvoke.ReadNetFromONNX(Path.Combine(folder, "vision_raw.onnx"), EngineType.OpenCV);
+                        _embedNet = DnnInvoke.ReadNetFromONNX(Path.Combine(folder, "embed_tokens.onnx"), EngineType.OpenCV);
+                        _decoderNet = DnnInvoke.ReadNetFromONNX(Path.Combine(folder, "decoder_raw.onnx"), EngineType.OpenCV);
                     });
 #endif
                 }

@@ -13,10 +13,6 @@
         -march=armv8-a+sve2, and under the whole-program (LTO) build that
         SVE2 codegen leaks into libwebp's WebPGetColorPalette. SVE is absent
         on the emulator and most real devices.
-      - Adds -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to the freetype2/harfbuzz
-        sub-builds, needed for modern CMake to configure those submodules'
-        old cmake_minimum_required.
-      - Adds -DCMAKE_CXX_FLAGS=-Wno-cast-function-type-strict for harfbuzz.
       - Uses BUILD_DIR=android_<abi> (via the also-updated wincfg.ps1),
         matching build.sh and CLAUDE.md, instead of wincfg.cmd's stray
         build_<abi>.
@@ -32,7 +28,7 @@
     the .cmd.
 
 .PARAMETER Variant
-    "core" -- no Tesseract, no Freetype, no contrib modules.
+    "core" -- no Tesseract, no contrib modules.
     "mini" -- same as core, plus strips calib/dnn/photo/features/video.
     Anything else (including omitted) -- full build. Was %2 in the .cmd.
 
@@ -143,7 +139,7 @@ switch ($Variant) {
     }
 }
 
-# --- Base CMake flags shared by all sub-builds (eigen, freetype, harfbuzz, main) ---
+# --- Base CMake flags shared by all sub-builds (eigen, main) ---
 $baseCmakeFlags = @(
     '-G', $cmakeGenerator,
     "-DANDROID_ABI=$androidAbi",
@@ -182,56 +178,11 @@ finally {
     Pop-Location
 }
 
-# --- Build freetype2 + harfbuzz (full build only) ---------------------------
+# --- Contrib modules (full build only) ---------------------------------------
 $contribCmakeFlags = @()
 if ($buildContrib) {
-    Write-Host ''
-    Write-Host '=== Building freetype2 ==='
-    Push-Location (Join-Path $sourceDir '3rdParty\freetype2')
-    try {
-        New-Item -ItemType Directory -Force -Path $buildDir | Out-Null
-        Push-Location $buildDir
-        try {
-            Invoke-Native -FilePath $env:CMAKE -ArgumentList ($baseCmakeFlags + @('-DCMAKE_POLICY_VERSION_MINIMUM=3.5', '..'))
-            Invoke-Native -FilePath $env:CMAKE -ArgumentList @('--build', '.', '--config', 'Release', '--parallel', '--target', 'install')
-        }
-        finally {
-            Pop-Location
-        }
-    }
-    finally {
-        Pop-Location
-    }
-
-    Write-Host ''
-    Write-Host '=== Building harfbuzz ==='
-    Push-Location (Join-Path $sourceDir 'harfbuzz')
-    try {
-        New-Item -ItemType Directory -Force -Path $buildDir | Out-Null
-        Push-Location $buildDir
-        try {
-            Invoke-Native -FilePath $env:CMAKE -ArgumentList ($baseCmakeFlags + @(
-                    '-DCMAKE_POLICY_VERSION_MINIMUM=3.5',
-                    "-DCMAKE_FIND_ROOT_PATH:STRING=$(ConvertTo-ForwardSlash $installFolder)",
-                    '-DHB_HAVE_FREETYPE:BOOL=TRUE',
-                    '-DCMAKE_CXX_FLAGS=-Wno-cast-function-type-strict',
-                    '..'
-                ))
-            Invoke-Native -FilePath $env:CMAKE -ArgumentList @('--build', '.', '--config', 'Release', '--parallel', '--target', 'install')
-        }
-        finally {
-            Pop-Location
-        }
-    }
-    finally {
-        Pop-Location
-    }
-
     $openCvExtraModulesDir = Join-Path $sourceDir 'opencv_contrib\modules'
     $contribCmakeFlags = @("-DOPENCV_EXTRA_MODULES_PATH:String=$(ConvertTo-ForwardSlash $openCvExtraModulesDir)")
-}
-else {
-    $contribCmakeFlags = @('-DEMGU_CV_WITH_FREETYPE:BOOL=OFF')
 }
 
 # --- Create/enter the build dir ---------------------------------------------
@@ -257,6 +208,8 @@ try {
         '-DWITH_IPP:BOOL=OFF',
         '-DBUILD_DOCS:BOOL=OFF',
         '-DBUILD_TESTS:BOOL=OFF',
+        '-DWITH_UNIFONT:BOOL=ON',
+        '-DWITH_ITALICFONT:BOOL=ON',
         '-DBUILD_WITH_DEBUG_INFO:BOOL=OFF',
         '-DBUILD_opencv_java:BOOL=OFF',
         '-DBUILD_opencv_java_bindings_generator:BOOL=OFF',

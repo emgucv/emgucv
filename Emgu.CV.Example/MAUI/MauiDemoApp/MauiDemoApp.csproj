@@ -110,8 +110,7 @@
 		<LicenseFile Include="$(EmguRoot)opencv\hal\carotene\hal\tegra_hal.hpp" LogicalName="carotene.txt" />
 		<LicenseFile Include="$(EmguRoot)opencv_contrib\modules\xfeatures2d\src\kaze\LICENSE.KAZE" LogicalName="kaze.txt" />
 		<LicenseFile Include="$(EmguRoot)opencv_contrib\modules\xfeatures2d\src\kaze\LICENSE.AKAZE" LogicalName="akaze.txt" />
-		<LicenseFile Include="$(EmguRoot)3rdParty\freetype2\docs\FTL.TXT" LogicalName="freetype.txt" />
-		<LicenseFile Include="$(EmguRoot)harfbuzz\COPYING" LogicalName="harfbuzz.txt" />
+		<LicenseFile Include="$(EmguRoot)opencv\3rdparty\harfbuzz\COPYING" LogicalName="harfbuzz.txt" />
 		<LicenseFile Include="$(EmguRoot)hdf5\COPYING" LogicalName="hdf5.txt" />
 	</ItemGroup>
 	<!-- Inside a target so the Exists() condition can batch over each file. -->

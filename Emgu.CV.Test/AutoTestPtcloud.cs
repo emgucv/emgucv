@@ -27,7 +27,6 @@ using Emgu.CV.Bioinspired;
 using Emgu.CV.Dpm;
 using Emgu.CV.ImgHash;
 using Emgu.CV.Face;
-using Emgu.CV.Freetype;
 using Emgu.CV.StructuredLight;
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;

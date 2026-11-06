@@ -16,7 +16,6 @@ using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.Util;
 using Emgu.CV.Dnn;
-using Emgu.CV.Freetype;
 using Emgu.CV.Models;
 using Emgu.CV.Util;
 using Point = System.Drawing.Point;
@@ -57,10 +56,9 @@ namespace Emgu.CV.Models
         /// <param name="image">The image to draw on</param>
         /// <param name="color">The color used for drawing the region</param>
         /// <param name="maskColor">The color used for drawing the mask</param>
-        /// <param name="freetype2">Optional freetype2 object, if provided, it will be used to draw the label. If null, will use CvInvoke.PutText instead.</param>
-        public virtual void Render(IInputOutputArray image, MCvScalar color, MCvScalar maskColor, Freetype2 freetype2 = null)
+        public virtual void Render(IInputOutputArray image, MCvScalar color, MCvScalar maskColor)
         {
-            base.Render(image, color, freetype2);
+            base.Render(image, color);
             DrawMask(image, _mask, Region, maskColor);
         }
 

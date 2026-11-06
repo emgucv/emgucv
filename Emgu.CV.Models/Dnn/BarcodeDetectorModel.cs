@@ -171,24 +171,25 @@ namespace Emgu.CV.Models
                 watch.Stop();
 
 
-                for (int i = 0; i < barcodesFound.Length; i++)
-                {
-                    Point[] contour = Array.ConvertAll(barcodesFound[i].Points, Point.Round);
-
-                    using (VectorOfVectorOfPoint vpp = new VectorOfVectorOfPoint(new Point[][] { contour }))
+                using (FontFace fontFace = new FontFace())
+                    for (int i = 0; i < barcodesFound.Length; i++)
                     {
-                        CvInvoke.DrawContours(imageOut, vpp, -1, RenderColor);
-                    }
+                        Point[] contour = Array.ConvertAll(barcodesFound[i].Points, Point.Round);
 
-                    CvInvoke.PutText(
-                        imageOut,
-                        barcodesFound[i].DecodedInfo,
-                        Point.Round(barcodesFound[i].Points[0]),
-                        HersheyFonts.Simplex,
-                        1.0,
-                        RenderColor
-                        );
-                }
+                        using (VectorOfVectorOfPoint vpp = new VectorOfVectorOfPoint(new Point[][] { contour }))
+                        {
+                            CvInvoke.DrawContours(imageOut, vpp, -1, RenderColor);
+                        }
+
+                        CvInvoke.PutText(
+                            imageOut,
+                            barcodesFound[i].DecodedInfo,
+                            Point.Round(barcodesFound[i].Points[0]),
+                            RenderColor,
+                            fontFace,
+                            24
+                            );
+                    }
 
 
                 if (barcodesFound.Length == 0)

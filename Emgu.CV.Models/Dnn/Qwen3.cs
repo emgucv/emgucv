@@ -164,10 +164,10 @@ namespace Emgu.CV.Models
                     //the KV-cache (EnableKVCache/ResetKVCache are no-ops on that path),
                     //which this "causal-lm-with-past" export requires.
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-                    _net = DnnInvoke.ReadNetFromONNX(Path.Combine(modelFolder, "model.onnx"), EngineType.New);
+                    _net = DnnInvoke.ReadNetFromONNX(Path.Combine(modelFolder, "model.onnx"), EngineType.OpenCV);
 #else
                     String modelPath = Path.Combine(modelFolder, "model.onnx");
-                    _net = await Task.Run(() => DnnInvoke.ReadNetFromONNX(modelPath, EngineType.New));
+                    _net = await Task.Run(() => DnnInvoke.ReadNetFromONNX(modelPath, EngineType.OpenCV));
 #endif
                 }
             }

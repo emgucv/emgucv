@@ -171,21 +171,22 @@ namespace Emgu.CV.Models
             var qrCodesFound = _weChatQRCodeDetectionModel.DetectAndDecode(imageIn);
             watch.Stop();
 
-            for (int i = 0; i < qrCodesFound.Length; i++)
-            {
-                using (VectorOfVectorOfPoint vpp = new VectorOfVectorOfPoint(new Point[][] { qrCodesFound[i].Region }))
+            using (FontFace fontFace = new FontFace())
+                for (int i = 0; i < qrCodesFound.Length; i++)
                 {
-                    CvInvoke.DrawContours(imageOut, vpp, -1, RenderColor);
+                    using (VectorOfVectorOfPoint vpp = new VectorOfVectorOfPoint(new Point[][] { qrCodesFound[i].Region }))
+                    {
+                        CvInvoke.DrawContours(imageOut, vpp, -1, RenderColor);
+                    }
+                    CvInvoke.PutText(
+                        imageOut,
+                        qrCodesFound[i].Code,
+                        Point.Round(qrCodesFound[i].Region[0]),
+                        RenderColor,
+                        fontFace,
+                        24
+                        );
                 }
-                CvInvoke.PutText(
-                    imageOut,
-                    qrCodesFound[i].Code,
-                    Point.Round(qrCodesFound[i].Region[0]),
-                    HersheyFonts.Simplex,
-                    1.0,
-                    RenderColor
-                    );
-            }
 
             if (qrCodesFound.Length == 0)
             {

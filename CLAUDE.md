@@ -16,47 +16,25 @@ All Windows native-build scripts (`platforms/windows/Build_Binary*.ps1`) are now
 
 ## Windows Build Prerequisites
 
-**`pkg-config` should be installed** via Chocolatey (requires an elevated/admin
-PowerShell session — the Chocolatey install on this machine writes to
-`C:\ProgramData\chocolatey`, which a non-admin session can't touch):
+`pkg-config` is optional. It can be installed via Chocolatey (requires an elevated/admin
+PowerShell session -- the Chocolatey install on this machine writes to
+`C:\ProgramData\chocolatey`):
 ```powershell
 choco install pkgconfiglite -y
 ```
-`pkgconfiglite` is the only `pkg-config` package on the Chocolatey community
-repo (confirmed via `choco search pkg-config`) — it's not a stripped-down
-variant to choose over some fuller alternative. The name comes from what it
-wraps: [pkg-config-lite](https://sourceforge.net/projects/pkgconfiglite/), a
-standalone Win32 build with no glib/gettext/libiconv runtime DLLs to also
-install and keep on `PATH`, unlike upstream pkg-config. It implements the
-same CLI (`--cflags`, `--libs`, `--modversion`, etc.) that CMake's
-`FindPkgConfig.cmake` expects, so it's a drop-in for what this build needs.
+`pkgconfiglite` is the only `pkg-config` package on the Chocolatey community repo, a
+standalone Win32 build of [pkg-config-lite](https://sourceforge.net/projects/pkgconfiglite/)
+that implements the CLI CMake's `FindPkgConfig.cmake` expects. Without it OpenCV's
+`ocv_check_modules()` macro (`opencv/cmake/OpenCVUtils.cmake`) skips `pkg_check_modules()` and
+configure prints `Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE)`; nothing in this
+build needs it to link.
 
-Without it, OpenCV's own `ocv_check_modules()` macro (`opencv/cmake/OpenCVUtils.cmake`)
-skips `pkg_check_modules()` entirely for every module that uses it (FreeType,
-HarfBuzz, BrotliDec, etc.), which surfaces as `-- Could NOT find PkgConfig
-(missing: PKG_CONFIG_EXECUTABLE)` during configure. For FreeType/HarfBuzz
-specifically, this used to be silently fatal for `-Cuda` builds: `cmake/ThirdPartyDeps.cmake`
-pre-seeds `FREETYPE_FOUND`/`FREETYPE_LIBRARIES` (and the HarfBuzz equivalents)
-so `opencv_contrib`'s `freetype` module detects them without pkg-config, but
-`ocv_check_modules()` has an unconditional second step that *re-derives*
-`FREETYPE_LIBRARIES`/`HARFBUZZ_LIBRARIES` from a `FREETYPE_LDFLAGS`/`HARFBUZZ_LDFLAGS`
-variable that was never set — silently overwriting the correct `.lib` paths
-with empty values right before the module's own `ocv_target_link_libraries()`
-call. This only broke `-Cuda` builds because `-Cuda` forces
-`BUILD_opencv_world:BOOL=TRUE`, and the resulting empty link libraries meant
-`freetype.lib`/`harfbuzz.lib` were silently absent from `opencv_world`'s link
-line — surfacing as `LNK2019` unresolved `FT_*`/`hb_*` symbols and `LNK1120`
-at `opencv_world.dll` link time, confirmed by grepping the generated
-`opencv_world.vcxproj`'s `AdditionalDependencies` and finding `freetype.lib`/
-`harfbuzz.lib` genuinely missing while every other 3rdparty lib (zlib, libpng,
-hdf5, etc.) was present. `cmake/ThirdPartyDeps.cmake` now also sets
-`FREETYPE_LDFLAGS`/`HARFBUZZ_LDFLAGS` to the same resolved `.lib` paths so
-that re-derivation reproduces the correct value instead of wiping it — so a
-`-Cuda` build no longer strictly *requires* `pkg-config` to link correctly.
-Installing `pkg-config` is still worthwhile: it's the code path OpenCV's own
-build system actually expects, and it quiets the remaining
-`Could NOT find PkgConfig` warnings for HarfBuzz's own `FindHarfBuzz.cmake`
-and BrotliDec (those two don't affect the link either way in this build).
+Emgu CV no longer builds FreeType/HarfBuzz itself or the `opencv_contrib` `freetype` module
+(`BUILD_opencv_freetype` is forced OFF in the root `CMakeLists.txt`; the `Emgu.CV.Freetype`
+managed API was removed). That module needs an external HarfBuzz with `hb-ft`, while OpenCV 5.x
+bundles its own HarfBuzz subset (`opencv/3rdparty/harfbuzz`, no `hb-ft`) for `imgproc`'s
+`putText`/`FontFace`. Linking a second HarfBuzz into `cvextern` produces `LNK2005` duplicate
+symbols, so use `CvInvoke.PutText(..., FontFace, ...)` for Unicode/CJK text instead.
 
 ## Project Overview
 
@@ -115,7 +93,7 @@ cd platforms/android/scripts
 
 **Variant:**
 - *(empty)* — full build with `opencv_contrib` + Tesseract
-- `core` — core OpenCV only, no Tesseract/Freetype
+- `core` — core OpenCV only, no Tesseract
 - `mini` — minimal subset (strips dnn, ml, calib, video, etc.)
 
 Requires environment variables `ANDROID_NDK`, `CMAKE`, and `MAKE` to be set — `build.ps1` auto-detects these via `wincfg.ps1` (dot-sourced) if not already set. Output lands in `android_<abi>/`, and binaries are copied to `libs/android/<abi>/`.
@@ -138,7 +116,7 @@ cd platforms/ios
 
 **Variants (`$2`):**
 - *(empty)* — full build with `opencv_contrib` + Tesseract
-- `core` — core OpenCV only, no contrib/Freetype/Tesseract
+- `core` — core OpenCV only, no contrib/Tesseract
 - `mini` — minimal subset (strips dnn, ml, calib, video, etc.)
 
 Example — device only, core variant:
@@ -830,8 +808,7 @@ submodule in one go:
 ```
 
 The script runs `git clean -d -f -x` in each submodule (opencv, opencv_contrib,
-opencv_extra, eigen, vtk, tesseract, leptonica, depthai-core, freetype2,
-harfbuzz, hdf5, openvino) and finally in the repository root. It deletes
+opencv_extra, eigen, vtk, tesseract, leptonica, depthai-core, hdf5) and finally in the repository root. It deletes
 **every untracked file**, including:
 
 - CMake build trees (`build_x86_64/`, `platforms/ubuntu/*/build/`,
@@ -883,8 +860,7 @@ After building, native binaries land in `libs/runtimes/<rid>/native/` and are re
 ### Third-party Dependencies
 - `opencv/` — OpenCV source (built as part of CMake)
 - `Emgu.CV.Extern/tesseract/` — Tesseract OCR + Leptonica
-- `3rdParty/openvino/` — Intel OpenVINO (optional)
-- `3rdParty/freetype2/`, `harfbuzz/`, `hdf5/`, `eigen/`, `vtk/` — optional components
+- `hdf5/`, `eigen/`, `vtk/` — optional components
 - `build_x86_64/` — CMake build directory (generated, do not add to git)
 
 ### Platform Solutions

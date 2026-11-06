@@ -27,7 +27,6 @@ using Emgu.CV.Bioinspired;
 using Emgu.CV.Dpm;
 using Emgu.CV.ImgHash;
 using Emgu.CV.Face;
-using Emgu.CV.Freetype;
 
 using Emgu.CV.Dnn;
 using Emgu.CV.Cuda;
@@ -579,7 +578,7 @@ namespace Emgu.CV.Test
             await manager.Download();
             EmguAssert.IsTrue(manager.AllFilesDownloaded, "Failed to download the test model.");
 
-            using (Net net = DnnInvoke.ReadNetFromONNX(manager.Files[0].LocalFile, Emgu.CV.Dnn.EngineType.New))
+            using (Net net = DnnInvoke.ReadNetFromONNX(manager.Files[0].LocalFile, Emgu.CV.Dnn.EngineType.OpenCV))
             using (Mat image = new Mat(64, 64, DepthType.Cv8U, 3))
             {
                 image.SetTo(new MCvScalar(128, 128, 128));

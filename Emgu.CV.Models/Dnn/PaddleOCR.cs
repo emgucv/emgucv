@@ -156,8 +156,8 @@ namespace Emgu.CV.Models
                 {
                     //The recognition model has dynamic input shapes and requires
                     //the new dnn engine.
-                    _detNet = DnnInvoke.ReadNetFromONNX(manager.Files[0].LocalFile, EngineType.New);
-                    _recNet = DnnInvoke.ReadNetFromONNX(manager.Files[1].LocalFile, EngineType.New);
+                    _detNet = DnnInvoke.ReadNetFromONNX(manager.Files[0].LocalFile, EngineType.OpenCV);
+                    _recNet = DnnInvoke.ReadNetFromONNX(manager.Files[1].LocalFile, EngineType.OpenCV);
                     _dictionary = File.ReadAllLines(manager.Files[2].LocalFile);
 
                     //Used to render the recognized text, which may contain CJK

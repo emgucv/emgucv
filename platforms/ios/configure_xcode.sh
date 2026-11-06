@@ -5,15 +5,14 @@ CURRENT_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && 
 
 
 if [ "$1" == "core" ]; then
-    CV_CONTRIB_OPTION=( -DOPENCV_EXTRA_MODULES_PATH:STRING= -DEMGU_CV_WITH_FREETYPE:BOOL=FALSE -DEMGU_CV_WITH_TESSERACT:BOOL=FALSE )
+    CV_CONTRIB_OPTION=( -DOPENCV_EXTRA_MODULES_PATH:STRING= -DEMGU_CV_WITH_TESSERACT:BOOL=FALSE )
 elif [ "$1" == "mini" ]; then
     # flann must stay enabled: in OpenCV 5 imgproc depends on geometry, which depends on flann.
-    CV_CONTRIB_OPTION=( -DOPENCV_EXTRA_MODULES_PATH:STRING= -DEMGU_CV_WITH_FREETYPE:BOOL=FALSE -DEMGU_CV_WITH_TESSERACT:BOOL=FALSE -DBUILD_opencv_calib:BOOL=FALSE -DBUILD_opencv_dnn:BOOL=FALSE -DBUILD_opencv_photo:BOOL=FALSE -DBUILD_opencv_features:BOOL=FALSE -DBUILD_opencv_video:BOOL=FALSE )
+    CV_CONTRIB_OPTION=( -DOPENCV_EXTRA_MODULES_PATH:STRING= -DEMGU_CV_WITH_TESSERACT:BOOL=FALSE -DBUILD_opencv_calib:BOOL=FALSE -DBUILD_opencv_dnn:BOOL=FALSE -DBUILD_opencv_photo:BOOL=FALSE -DBUILD_opencv_features:BOOL=FALSE -DBUILD_opencv_video:BOOL=FALSE )
 else
-    CV_CONTRIB_OPTION=( -DOPENCV_EXTRA_MODULES_PATH:STRING=$CURRENT_SCRIPT_DIR/../../opencv_contrib/modules -DEMGU_CV_WITH_FREETYPE:BOOL=FALSE -DEMGU_CV_WITH_TESSERACT:BOOL=TRUE )
+    CV_CONTRIB_OPTION=( -DOPENCV_EXTRA_MODULES_PATH:STRING=$CURRENT_SCRIPT_DIR/../../opencv_contrib/modules -DEMGU_CV_WITH_TESSERACT:BOOL=TRUE )
 fi
 
-#-DHB_HAVE_FREETYPE:BOOL=TRUE -DHB_BUILD_TESTS:BOOL=FALSE
 INSTALL_FOLDER=$PWD/build/install
 
 # Shared with the managed projects' SupportedOSPlatformVersion (see cmake/PlatformDetection.cmake).
@@ -87,37 +86,6 @@ else
 fi
 
 
-#pushd $CURRENT_SCRIPT_DIR/../../3rdParty/freetype2
-#mkdir -p build_$3
-#cd build_$3
-#cmake \
-#    -GXcode \
-#    ${CV_TOOLCHAIN_OPTION[@]} \
-#    ${INSTALL_PREFIX_OPTION[@]} \
-#    ${CMAKE_COMMON_OPTION[@]} \
-#    -DCMAKE_DISABLE_FIND_PACKAGE_ZLIB:BOOL=TRUE \
-#    -DCMAKE_DISABLE_FIND_PACKAGE_BZip2:BOOL=TRUE \
-#    -DCMAKE_DISABLE_FIND_PACKAGE_PNG:BOOL=TRUE \
-#    -DCMAKE_DISABLE_FIND_PACKAGE_HarfBuzz:BOOL=TRUE \
-#    ${@:4} \
-#    ..
-#cmake --build . --config Release --target install
-#popd
-
-#pushd $CURRENT_SCRIPT_DIR/../../harfbuzz
-#mkdir -p build_$3
-#cd build_$3
-#cmake \
-#    -GXcode \
-#    ${CV_TOOLCHAIN_OPTION[@]} \
-#    ${INSTALL_PREFIX_OPTION[@]} \
-#    ${CMAKE_COMMON_OPTION[@]} \
-#    -DHB_HAVE_FREETYPE:BOOL=TRUE \
-#    ${@:4} \
-#    ..
-#cmake --build . --config Release --target install
-#popd
-
 
 cmake \
     -GXcode \
@@ -133,6 +101,8 @@ cmake \
     -DBUILD_SHARED_LIBS:BOOL=FALSE \
     -DBUILD_PERF_TESTS:BOOL=FALSE \
     -DBUILD_TESTS:BOOL=FALSE \
+    -DWITH_UNIFONT:BOOL=ON \
+    -DWITH_ITALICFONT:BOOL=ON \
     -DBUILD_opencv_apps:BOOL=FALSE \
     -DBUILD_opencv_java_bindings_generator:BOOL=FALSE \
     -DBUILD_opencv_python_bindings_generator:BOOL=FALSE \

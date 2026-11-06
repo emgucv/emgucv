@@ -50,9 +50,6 @@ namespace cv
 }
 #endif
 
-CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow(cv::String* model, cv::String* config);
-CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow2(const char *bufferModel, int lenModel, const char *bufferConfig, int lenConfig);
-CVAPI(cv::dnn::Net*) cveReadNetFromTensorflow3(cv::String* model, cv::String* config, std::vector<cv::String>* extraOutputs);
 
 CVAPI(cv::dnn::Net*) cveReadNetFromTFLite(cv::String* model, int engine);
 CVAPI(cv::dnn::Net*) cveReadNetFromTFLite2(const char* bufferModel, int lenModel, int engine);
@@ -67,7 +64,6 @@ CVAPI(void) cveReadTorchBlob(cv::String* filename, bool isBinary, cv::Mat* tenso
 */
 
 CVAPI(cv::dnn::Net*) cveReadNet(cv::String* model, cv::String* config, cv::String* framework, int engine);
-CVAPI(cv::dnn::Net*) cveReadNetFromModelOptimizer(cv::String* xml, cv::String* bin);
 
 CVAPI(cv::dnn::Net*) cveDnnNetCreate();
 CVAPI(void) cveDnnNetSetInput(cv::dnn::Net* net, cv::_InputArray* blob, cv::String* name, double scalefactor, cv::Scalar* mean);
@@ -118,7 +114,6 @@ CVAPI(void) cveDnnBlobFromImages(
 
 CVAPI(void) cveDnnImagesFromBlob(cv::Mat* blob, cv::_OutputArray* images);
 
-CVAPI(void) cveDnnWriteTextGraph(cv::String* model, cv::String* output);
 
 CVAPI(void) cveDnnNMSBoxes(
 	std::vector<cv::Rect>* bboxes, 

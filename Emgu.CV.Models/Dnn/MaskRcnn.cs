@@ -112,10 +112,9 @@ namespace Emgu.CV.Models
 
                 if (manager.AllFilesDownloaded)
                 {
-                    _maskRcnnDetector = Emgu.CV.Dnn.DnnInvoke.ReadNetFromTensorflow(
-                        manager.Files[0].LocalFile,
-                        manager.Files[1].LocalFile,
-                        new string[] { "detection_out_final", "detection_masks" });
+                    // OpenCV 5 removed the TensorFlow (.pb/.pbtxt) importer, which this model depends on.
+                    // A Mask R-CNN ONNX model is required to bring this class back.
+                    throw new NotSupportedException("Mask R-CNN requires the TensorFlow importer, which was removed in OpenCV 5.");
                     /*
                     _maskRcnnModel = new Model(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
                     _maskRcnnModel.SetInputSize(new Size(-1, -1));

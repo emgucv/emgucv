@@ -81,7 +81,7 @@ param(
 
     [switch]$Vtk,
 
-    [ValidateSet('None', 'Intel', 'IntelOpenVino', 'OpenVino', 'WindowsStore10',
+    [ValidateSet('None', 'Intel', 'WindowsStore10',
         'VS2015', 'VS2022', 'Commercial')]
     [string]$Toolchain = 'None',
 
@@ -128,7 +128,7 @@ function Invoke-Native {
     aborted the whole build the instant any tool wrote so much as a
     harmless warning to stderr -- reproduced directly with cmake's own
     "CMake Deprecation Warning" for a vendored third-party
-    cmake_minimum_required below 3.5 (e.g. 3rdParty\freetype2), which is
+    cmake_minimum_required below 3.5 (e.g. 3rdParty\hdf5), which is
     completely non-fatal and which cmake itself continues right past.
     #>
     param(
@@ -653,7 +653,7 @@ function Set-Sqlite3EnvVars {
 
 function Build-ThirdPartyDependency {
     <#
-    Configures + installs one of freetype2/harfbuzz/hdf5/eigen -- the four
+    Configures + installs one of hdf5/eigen -- the two
     dependencies that all follow the same "mkdir; cmake -G ...; cmake
     --build --target INSTALL" pattern.
     #>
@@ -703,41 +703,6 @@ function Build-Vtk {
         Invoke-Native -FilePath $CMakeExe -ArgumentList $flags
         Invoke-Native -FilePath $CMakeExe -ArgumentList '--build', '.', '--config', 'Release', '--target', 'INSTALL'
         return $buildDir
-    }
-    finally {
-        Pop-Location
-    }
-}
-
-function Build-OpenVino {
-    param(
-        [Parameter(Mandatory = $true)][string]$RootSrcFolder,
-        [Parameter(Mandatory = $true)][string]$BuildFolderName,
-        [Parameter(Mandatory = $true)][string]$CMakeExe,
-        [Parameter(Mandatory = $true)][string[]]$GeneralCMakeConfigFlags
-    )
-    $openVinoDir = Join-Path $RootSrcFolder '3rdParty\openvino'
-    $buildDir = Join-Path $openVinoDir $BuildFolderName
-
-    # Apply the VS2022-compatibility patch only the first time this build
-    # folder is created, to avoid re-applying an already-applied patch on
-    # subsequent runs.
-    if (-not (Test-Path $buildDir)) {
-        Push-Location $openVinoDir
-        try {
-            Invoke-Native -FilePath 'git' -ArgumentList 'apply', '../0001-Patch-manager.cpp-for-Visual-Studio-2022.patch'
-        }
-        finally {
-            Pop-Location
-        }
-    }
-
-    New-Item -ItemType Directory -Force -Path $buildDir | Out-Null
-    Push-Location $buildDir
-    try {
-        $flags = @($GeneralCMakeConfigFlags) + @('-DENABLE_JS:BOOL=OFF', '-DENABLE_SAMPLES:BOOL=OFF', '..')
-        Invoke-Native -FilePath $CMakeExe -ArgumentList $flags
-        Invoke-Native -FilePath $CMakeExe -ArgumentList '--build', '.', '--config', 'Release', '--target', 'INSTALL'
     }
     finally {
         Pop-Location
@@ -912,26 +877,13 @@ try {
     $installFolder = Join-Path $buildFolder 'install'
     $installFolderFwd = ConvertTo-ForwardSlash $installFolder
     $hdf5Dir = "$installFolderFwd/cmake/hdf5"
-    $openVinoInstallDir = "$installFolderFwd/runtime/cmake"
-    $tbbInstallDir = (ConvertTo-ForwardSlash $repoRoot) + '/3rdParty/openvino/temp/tbb/cmake'
     $vtkInstallDir = "$installFolderFwd/lib/cmake/vtk-9.6"
-
-    # So pkg-config (if installed) can actually resolve the freetype2.pc /
-    # harfbuzz.pc this build installs into $installFolder/lib/pkgconfig --
-    # without this, CMake's pkg_check_modules() (which opencv_contrib's
-    # freetype module uses via ocv_check_modules) only ever searches
-    # pkg-config's own default/system search path, never this project-local
-    # install prefix. Prepended (";"-separated, the Windows convention) so
-    # it takes priority over any pre-existing PKG_CONFIG_PATH entries.
-    $pkgConfigDir = "$installFolderFwd/lib/pkgconfig"
-    if ($env:PKG_CONFIG_PATH) { $env:PKG_CONFIG_PATH = "$pkgConfigDir;$env:PKG_CONFIG_PATH" }
-    else { $env:PKG_CONFIG_PATH = $pkgConfigDir }
 
     $generalFlags = New-Object System.Collections.Generic.List[string]
     $generalFlags.Add('-DCMAKE_POLICY_VERSION_MINIMUM=3.5')
     $generalFlags.Add('-DCMAKE_BUILD_TYPE:STRING=Release')
     $generalFlags.Add("-DCMAKE_INSTALL_PREFIX:STRING=$installFolderFwd")
-    $generalFlags.Add("-DCMAKE_FIND_ROOT_PATH:STRING=$installFolderFwd;$openVinoInstallDir;$tbbInstallDir;$vtkInstallDir")
+    $generalFlags.Add("-DCMAKE_FIND_ROOT_PATH:STRING=$installFolderFwd;$vtkInstallDir")
     if ($Toolchain -eq 'WindowsStore10') {
         $generalFlags.Add('-DCMAKE_SYSTEM_NAME:String=WindowsStore')
         if ($vsEnv.DevEnvKind -eq 'VS2017') { $generalFlags.Add('-DCMAKE_SYSTEM_VERSION:String=10.0.14393.0') }
@@ -949,6 +901,7 @@ try {
             '-DBUILD_DOCS:BOOL=FALSE',
             '-DBUILD_TESTS:BOOL=FALSE',
             '-DBUILD_opencv_apps:BOOL=FALSE',
+            '-DBUILD_opencv_freetype:BOOL=OFF',
             '-DBUILD_opencv_java:BOOL=FALSE',
             '-DBUILD_opencv_python2:BOOL=FALSE',
             '-DBUILD_opencv_python3:BOOL=FALSE',
@@ -958,6 +911,8 @@ try {
             '-DBUILD_WITH_DEBUG_INFO:BOOL=FALSE',
             '-DBUILD_WITH_STATIC_CRT:BOOL=FALSE',
             '-DWITH_OPENGL:BOOL=FALSE',
+            '-DWITH_UNIFONT:BOOL=ON',
+            '-DWITH_ITALICFONT:BOOL=ON',
             '-DCMAKE_DISABLE_FIND_PACKAGE_PNG:BOOL=TRUE',
             '-DCMAKE_IGNORE_PATH:STRING=C:/python-virt/python37/Library;C:/python-virt/python37/Library/include;C:/python-virt/python37/Library/lib',
             '-DVIDEOIO_PLUGIN_LIST:STRING=ffmpeg'
@@ -970,66 +925,6 @@ try {
     # --- Component set (contrib modules) --------------------------------
     if ($ComponentSet -eq 'Full') {
         if ($Arch -notin @('arm', 'arm64')) {
-            $freetypeDir = Join-Path $repoRoot '3rdParty\freetype2'
-
-            # Upstream freetype2 only installs freetype2.pc on UNIX (its
-            # CMakeLists.txt gates the (otherwise fully portable) generation
-            # logic behind `if (UNIX)`), so pkg-config can never resolve
-            # "freetype2" on Windows without this. Checked via `git apply
-            # --reverse --check` (idempotent -- succeeds only if the patch is
-            # already applied) rather than a "does the build dir exist yet"
-            # heuristic like Build-OpenVino uses below, since a freetype2
-            # build dir can already exist here from before this patch existed.
-            Push-Location $freetypeDir
-            try {
-                $freetypePatch = Join-Path $repoRoot '3rdParty\0002-Generate-freetype2.pc-on-Windows-too.patch'
-                # git apply is byte-exact about line endings inside a patch's diff
-                # hunks. A working copy checked out before .gitattributes started
-                # forcing LF for *.patch (or any checkout with core.autocrlf=true
-                # that hasn't re-normalized this file yet -- git only re-applies
-                # checkout filters when a file's committed content changes, not
-                # retroactively) can have this file sitting on disk as CRLF, which
-                # git apply rejects as "corrupt patch". Normalize in place first so
-                # this works regardless of the working copy's checkout history.
-                $patchContent = Get-Content -Raw -LiteralPath $freetypePatch
-                if ($patchContent -match "`r`n") {
-                    Set-Content -LiteralPath $freetypePatch -NoNewline -Value ($patchContent -replace "`r`n", "`n")
-                }
-                # `git apply --check` always writes to stderr on failure (the
-                # expected outcome here whenever the patch isn't applied
-                # yet) -- 2>$null alone doesn't survive PowerShell's
-                # background-job stderr-to-ErrorRecord promotion (see
-                # Invoke-Native's own comment above for the full mechanism),
-                # so this needs the same local $ErrorActionPreference =
-                # 'Continue' scoping, not just stream redirection.
-                $previousEap = $ErrorActionPreference
-                $ErrorActionPreference = 'Continue'
-                try {
-                    & git apply --reverse --check $freetypePatch 2>$null
-                }
-                finally {
-                    $ErrorActionPreference = $previousEap
-                }
-                if ($LASTEXITCODE -ne 0) {
-                    Invoke-Native -FilePath 'git' -ArgumentList 'apply', $freetypePatch
-                }
-            }
-            finally {
-                Pop-Location
-            }
-
-            Build-ThirdPartyDependency -SourceDir $freetypeDir -BuildFolderName $buildFolderName `
-                -CMakeExe $vsEnv.CMakeExe -GeneralCMakeConfigFlags $cmakeArgs -ExtraFlags @(
-                '-DCMAKE_DISABLE_FIND_PACKAGE_ZLIB:BOOL=TRUE',
-                '-DCMAKE_DISABLE_FIND_PACKAGE_BZip2:BOOL=TRUE',
-                '-DCMAKE_DISABLE_FIND_PACKAGE_PNG:BOOL=TRUE',
-                '-DCMAKE_DISABLE_FIND_PACKAGE_HarfBuzz:BOOL=TRUE'
-            )
-
-            $harfbuzzDir = Join-Path $repoRoot 'harfbuzz'
-            Build-ThirdPartyDependency -SourceDir $harfbuzzDir -BuildFolderName $buildFolderName `
-                -CMakeExe $vsEnv.CMakeExe -GeneralCMakeConfigFlags $cmakeArgs -ExtraFlags @('-DHB_HAVE_FREETYPE:BOOL=TRUE')
-
             if (-not $isUwp) {
                 $hdf5SrcDir = Join-Path $repoRoot 'hdf5'
                 Build-ThirdPartyDependency -SourceDir $hdf5SrcDir -BuildFolderName $buildFolderName `
@@ -1062,13 +957,11 @@ try {
                 '-DBUILD_opencv_video:BOOL=FALSE'
             ))
         $emguFlags.Add('-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE')
-        $emguFlags.Add('-DEMGU_CV_WITH_FREETYPE:BOOL=FALSE')
         $emguFlags.Add('-DEMGU_CV_WITH_DEPTHAI:BOOL=FALSE')
     }
     else {
         # Core
         $emguFlags.Add('-DEMGU_CV_WITH_TESSERACT:BOOL=FALSE')
-        $emguFlags.Add('-DEMGU_CV_WITH_FREETYPE:BOOL=FALSE')
         $emguFlags.Add('-DEMGU_CV_WITH_DEPTHAI:BOOL=FALSE')
     }
 
@@ -1160,28 +1053,12 @@ try {
         }
     }
 
-    # --- OpenVINO -------------------------------------------------------------
-    if ($Toolchain -in @('OpenVino', 'IntelOpenVino')) {
-        Build-OpenVino -RootSrcFolder $repoRoot -BuildFolderName $buildFolderName -CMakeExe $vsEnv.CMakeExe -GeneralCMakeConfigFlags $cmakeArgs
-        $emguFlags.Add('-DWITH_OPENVINO:BOOL=TRUE')
-        $emguFlags.Add('-DOPENCV_DNN_OPENVINO:BOOL=TRUE')
-        $emguFlags.Add('-DDNN_PLUGIN_LIST:STRING=all')
-        $emguFlags.Add("-DOpenVINO_DIR:STRING=$openVinoInstallDir")
-        $emguFlags.Add("-Dngraph_DIR:STRING=$openVinoInstallDir")
-        $emguFlags.Add("-DTBB_DIR:STRING=$tbbInstallDir")
-        $emguFlags.Add('-DENABLE_CXX11:BOOL=TRUE')
-        $buildType = 'COMMERCIAL'
-    }
-    else {
-        $emguFlags.Add('-DWITH_OPENVINO:BOOL=FALSE')
-    }
-
     # --- Intel compiler vs. plain Visual Studio -------------------------------
-    $isIntel = $Toolchain -in @('Intel', 'IntelOpenVino')
+    $isIntel = $Toolchain -in @('Intel')
     if ($isIntel) {
         $intelCompilerDir = $env:ICPP_COMPILER20
         if (-not $intelCompilerDir) {
-            throw "Toolchain 'Intel'/'IntelOpenVino' requires the ICPP_COMPILER20 environment variable (set by the Intel oneAPI/Parallel Studio installer)."
+            throw "Toolchain 'Intel' requires the ICPP_COMPILER20 environment variable (set by the Intel oneAPI/Parallel Studio installer)."
         }
         $intelDir = Join-Path $intelCompilerDir 'bin'
         $intelArch = if ($vsEnv.OsMode -eq ' Win64') { 'intel64' } else { 'ia32' }
@@ -1244,8 +1121,6 @@ try {
         }
         $emguFlags.Add('-DEMGU_ENABLE_SSE:BOOL=FALSE')
         $emguFlags.Add('-DWITH_IPP:BOOL=OFF')
-        $emguFlags.Add('-DEMGU_CV_WITH_FREETYPE:BOOL=OFF')
-        $emguFlags.Add('-DBUILD_opencv_freetype:BOOL=OFF')
     }
     else {
         $emguFlags.Add('-DEMGU_ENABLE_SSE:BOOL=TRUE')

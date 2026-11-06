@@ -107,10 +107,10 @@ namespace Emgu.CV.Models
                 {
                     _tokenizer = new UnigramTokenizer(manager.Files[0].LocalFile);
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-                    _net = DnnInvoke.ReadNetFromONNX(manager.Files[1].LocalFile, EngineType.New);
+                    _net = DnnInvoke.ReadNetFromONNX(manager.Files[1].LocalFile, EngineType.OpenCV);
 #else
                     String modelPath = manager.Files[1].LocalFile;
-                    _net = await Task.Run(() => DnnInvoke.ReadNetFromONNX(modelPath, EngineType.New));
+                    _net = await Task.Run(() => DnnInvoke.ReadNetFromONNX(modelPath, EngineType.OpenCV));
 #endif
                 }
             }

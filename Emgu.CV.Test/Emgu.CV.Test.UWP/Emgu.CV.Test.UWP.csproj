@@ -104,9 +104,6 @@
     <Compile Include="..\AutoTestFace.cs">
       <Link>AutoTestFace.cs</Link>
     </Compile>
-    <Compile Include="..\AutoTestFreetype.cs">
-      <Link>AutoTestFreetype.cs</Link>
-    </Compile>
     <Compile Include="..\AutoTestImgproc.cs">
       <Link>AutoTestImgproc.cs</Link>
     </Compile>

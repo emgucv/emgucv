@@ -110,10 +110,10 @@ namespace Emgu.CV.Models
                 {
                     _tokenizer = new ClipBpeTokenizer(manager.Files[0].LocalFile, manager.Files[1].LocalFile);
 #if UNITY_EDITOR || UNITY_IOS || UNITY_ANDROID || UNITY_STANDALONE || UNITY_WEBGL
-                    _net = DnnInvoke.ReadNetFromONNX(manager.Files[2].LocalFile, EngineType.New);
+                    _net = DnnInvoke.ReadNetFromONNX(manager.Files[2].LocalFile, EngineType.OpenCV);
 #else
                     String modelPath = manager.Files[2].LocalFile;
-                    _net = await Task.Run(() => DnnInvoke.ReadNetFromONNX(modelPath, EngineType.New));
+                    _net = await Task.Run(() => DnnInvoke.ReadNetFromONNX(modelPath, EngineType.OpenCV));
 #endif
                 }
             }
