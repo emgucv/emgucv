@@ -1128,7 +1128,7 @@ try {
         if ($buildType -eq 'COMMERCIAL') {
             $ippBuildFlags = @('-DWITH_IPP:BOOL=TRUE')
             if ($Arch -eq 'x86') { $cpuDispatchFlags = 'SSE4_1;SSE4_2' }
-            if ($Arch -eq 'x86_64') { $cpuDispatchFlags = 'SSE4_1;SSE4_2;AVX;AVX2;AVX512F' }
+            if ($Arch -eq 'x86_64') { $cpuDispatchFlags = 'SSE4_1;SSE4_2;AVX;AVX2;AVX512_SKX;AVX512_CLX' }
         }
         else {
             $ippBuildFlags = @('-DWITH_IPP:BOOL=FALSE')
