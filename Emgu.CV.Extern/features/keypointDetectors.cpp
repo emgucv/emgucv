@@ -931,19 +931,171 @@ void cveDISKRelease(cv::Ptr<cv::DISK>** sharedPtr)
 	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
+//XFeat
+cv::XFeat* cveXFeatCreate(
+	cv::String* modelPath,
+	int maxKeypoints,
+	float scoreThreshold,
+	cv::Size* inputSize,
+	int backendId,
+	int targetId,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::XFeat>** sharedPtr)
+{
+	try
+	{
+	#if defined(HAVE_OPENCV_FEATURES) && defined(HAVE_OPENCV_DNN)
+		cv::Ptr<cv::XFeat> xfeatPtr = cv::XFeat::create(*modelPath, maxKeypoints, scoreThreshold, *inputSize, backendId, targetId);
+		*sharedPtr = new cv::Ptr<cv::XFeat>(xfeatPtr);
+		*feature2D = dynamic_cast<cv::Feature2D*>(xfeatPtr.get());
+		return xfeatPtr.get();
+	#elif defined(HAVE_OPENCV_FEATURES)
+		throw_no_dnn();
+	#else
+		throw_no_features();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
+}
+cv::XFeat* cveXFeatCreateFromMemory(
+	std::vector<unsigned char>* modelData,
+	int maxKeypoints,
+	float scoreThreshold,
+	cv::Size* inputSize,
+	int backendId,
+	int targetId,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::XFeat>** sharedPtr)
+{
+	try
+	{
+	#if defined(HAVE_OPENCV_FEATURES) && defined(HAVE_OPENCV_DNN)
+		cv::Ptr<cv::XFeat> xfeatPtr = cv::XFeat::create(*modelData, maxKeypoints, scoreThreshold, *inputSize, backendId, targetId);
+		*sharedPtr = new cv::Ptr<cv::XFeat>(xfeatPtr);
+		*feature2D = dynamic_cast<cv::Feature2D*>(xfeatPtr.get());
+		return xfeatPtr.get();
+	#elif defined(HAVE_OPENCV_FEATURES)
+		throw_no_dnn();
+	#else
+		throw_no_features();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
+}
+void cveXFeatSetMaxKeypoints(cv::XFeat* xfeat, int maxKeypoints)
+{
+	try
+	{
+	#if defined(HAVE_OPENCV_FEATURES) && defined(HAVE_OPENCV_DNN)
+		xfeat->setMaxKeypoints(maxKeypoints);
+	#elif defined(HAVE_OPENCV_FEATURES)
+		throw_no_dnn();
+	#else
+		throw_no_features();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+int cveXFeatGetMaxKeypoints(cv::XFeat* xfeat)
+{
+	try
+	{
+	#if defined(HAVE_OPENCV_FEATURES) && defined(HAVE_OPENCV_DNN)
+		return xfeat->getMaxKeypoints();
+	#elif defined(HAVE_OPENCV_FEATURES)
+		throw_no_dnn();
+	#else
+		throw_no_features();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
+}
+void cveXFeatSetScoreThreshold(cv::XFeat* xfeat, float threshold)
+{
+	try
+	{
+	#if defined(HAVE_OPENCV_FEATURES) && defined(HAVE_OPENCV_DNN)
+		xfeat->setScoreThreshold(threshold);
+	#elif defined(HAVE_OPENCV_FEATURES)
+		throw_no_dnn();
+	#else
+		throw_no_features();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+float cveXFeatGetScoreThreshold(cv::XFeat* xfeat)
+{
+	try
+	{
+	#if defined(HAVE_OPENCV_FEATURES) && defined(HAVE_OPENCV_DNN)
+		return xfeat->getScoreThreshold();
+	#elif defined(HAVE_OPENCV_FEATURES)
+		throw_no_dnn();
+	#else
+		throw_no_features();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
+}
+void cveXFeatSetInputSize(cv::XFeat* xfeat, cv::Size* inputSize)
+{
+	try
+	{
+	#if defined(HAVE_OPENCV_FEATURES) && defined(HAVE_OPENCV_DNN)
+		xfeat->setInputSize(*inputSize);
+	#elif defined(HAVE_OPENCV_FEATURES)
+		throw_no_dnn();
+	#else
+		throw_no_features();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+void cveXFeatGetInputSize(cv::XFeat* xfeat, cv::Size* inputSize)
+{
+	try
+	{
+	#if defined(HAVE_OPENCV_FEATURES) && defined(HAVE_OPENCV_DNN)
+		*inputSize = xfeat->getInputSize();
+	#elif defined(HAVE_OPENCV_FEATURES)
+		throw_no_dnn();
+	#else
+		throw_no_features();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+void cveXFeatRelease(cv::Ptr<cv::XFeat>** sharedPtr)
+{
+	try
+	{
+	#if defined(HAVE_OPENCV_FEATURES) && defined(HAVE_OPENCV_DNN)
+		delete* sharedPtr;
+		*sharedPtr = 0;
+	#elif defined(HAVE_OPENCV_FEATURES)
+		throw_no_dnn();
+	#else
+		throw_no_features();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+
 //LightGlueMatcher
 cv::LightGlueMatcher* cveLightGlueMatcherCreate(
 	cv::String* modelPath,
 	float scoreThreshold,
 	int backend,
 	int target,
+	int type,
 	cv::DescriptorMatcher** matcher,
 	cv::Ptr<cv::LightGlueMatcher>** sharedPtr)
 {
 	try
 	{
 	#ifdef HAVE_OPENCV_FEATURES
-		cv::Ptr<cv::LightGlueMatcher> lgPtr = cv::LightGlueMatcher::create(*modelPath, scoreThreshold, backend, target);
+		cv::Ptr<cv::LightGlueMatcher> lgPtr = cv::LightGlueMatcher::create(*modelPath, scoreThreshold, backend, target, type);
 		*sharedPtr = new cv::Ptr<cv::LightGlueMatcher>(lgPtr);
 		*matcher = dynamic_cast<cv::DescriptorMatcher*>(lgPtr.get());
 		return lgPtr.get();
@@ -969,6 +1121,30 @@ void cveLightGlueMatcherSetPairInfo(
 	#endif
 	}
 	CVAPI_CATCH_CV_ERRORS_VOID
+}
+void cveLightGlueMatcherSetKeypointNormalization(cv::LightGlueMatcher* matcher, int normalization)
+{
+	try
+	{
+	#ifdef HAVE_OPENCV_FEATURES
+		matcher->setKeypointNormalization(normalization);
+	#else
+		throw_no_features();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+int cveLightGlueMatcherGetKeypointNormalization(cv::LightGlueMatcher* matcher)
+{
+	try
+	{
+	#ifdef HAVE_OPENCV_FEATURES
+		return matcher->getKeypointNormalization();
+	#else
+		throw_no_features();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0)
 }
 void cveLightGlueMatcherClearPairInfo(cv::LightGlueMatcher* matcher)
 {
@@ -1061,13 +1237,14 @@ cv::LightGlueMatcher* cveLightGlueMatcherCreateFromMemory(
 	float scoreThreshold,
 	int backend,
 	int target,
+	int type,
 	cv::DescriptorMatcher** matcher,
 	cv::Ptr<cv::LightGlueMatcher>** sharedPtr)
 {
 	try
 	{
 	#if defined(HAVE_OPENCV_FEATURES) && defined(HAVE_OPENCV_DNN)
-		cv::Ptr<cv::LightGlueMatcher> lgPtr = cv::LightGlueMatcher::create(*modelData, scoreThreshold, backend, target);
+		cv::Ptr<cv::LightGlueMatcher> lgPtr = cv::LightGlueMatcher::create(*modelData, scoreThreshold, backend, target, type);
 		*sharedPtr = new cv::Ptr<cv::LightGlueMatcher>(lgPtr);
 		*matcher = dynamic_cast<cv::DescriptorMatcher*>(lgPtr.get());
 		return lgPtr.get();

@@ -99,6 +99,7 @@ CVAPI(void) cveVideoWriterGetBackendName(cv::VideoWriter* writer, cv::String* na
 CVAPI(void) cveGetBackendName(int api, cv::String* name);
 CVAPI(void) cveGetBackends(std::vector<int>* backends);
 CVAPI(void) cveGetCameraBackends(std::vector<int>* backends);
+CVAPI(void) cveEnumerateDevices(int apiPreference, std::vector<int>* camIdx, std::vector<cv::String>* camNames, std::vector<int>* backends);
 CVAPI(void) cveGetStreamBackends(std::vector<int>* backends);
 CVAPI(void) cveGetWriterBackends(std::vector<int>* backends);
 

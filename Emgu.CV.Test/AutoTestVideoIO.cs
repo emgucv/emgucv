@@ -111,6 +111,20 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestEnumerateCameraDevices()
+        {
+            //The result depends on the cameras attached to the machine, it may be empty, but the call must not fail.
+            VideoDeviceInfo[] devices = CvInvoke.EnumerateCameraDevices();
+            EmguAssert.IsTrue(devices != null);
+            foreach (VideoDeviceInfo device in devices)
+            {
+                EmguAssert.IsFalse(String.IsNullOrEmpty(device.CameraName));
+                EmguAssert.IsTrue(device.Backend != null);
+                EmguAssert.IsFalse(String.IsNullOrEmpty(device.ToString()));
+            }
+        }
+
+        [Test]
         public void TestVideoWriterMSMF()
         {
             Backend[] backends = CvInvoke.WriterBackends;

@@ -27,6 +27,7 @@ namespace cv
 namespace cv
 {
 	class DISK {};
+	class XFeat {};
 }
 #endif
 
@@ -64,6 +65,7 @@ namespace cv {
 	class SIFT {};
 	class ALIKED {};
 	class DISK {};
+	class XFeat {};
 	class LightGlueMatcher {};
 	class AffineFeature {};
 	class ANNIndex {};
@@ -269,14 +271,44 @@ CVAPI(cv::DISK*) cveDISKCreate(
 	cv::Ptr<cv::DISK>** sharedPtr);
 CVAPI(void) cveDISKRelease(cv::Ptr<cv::DISK>** sharedPtr);
 
+//XFeat
+CVAPI(cv::XFeat*) cveXFeatCreate(
+	cv::String* modelPath,
+	int maxKeypoints,
+	float scoreThreshold,
+	cv::Size* inputSize,
+	int backendId,
+	int targetId,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::XFeat>** sharedPtr);
+CVAPI(cv::XFeat*) cveXFeatCreateFromMemory(
+	std::vector<unsigned char>* modelData,
+	int maxKeypoints,
+	float scoreThreshold,
+	cv::Size* inputSize,
+	int backendId,
+	int targetId,
+	cv::Feature2D** feature2D,
+	cv::Ptr<cv::XFeat>** sharedPtr);
+CVAPI(void) cveXFeatSetMaxKeypoints(cv::XFeat* xfeat, int maxKeypoints);
+CVAPI(int) cveXFeatGetMaxKeypoints(cv::XFeat* xfeat);
+CVAPI(void) cveXFeatSetScoreThreshold(cv::XFeat* xfeat, float threshold);
+CVAPI(float) cveXFeatGetScoreThreshold(cv::XFeat* xfeat);
+CVAPI(void) cveXFeatSetInputSize(cv::XFeat* xfeat, cv::Size* inputSize);
+CVAPI(void) cveXFeatGetInputSize(cv::XFeat* xfeat, cv::Size* inputSize);
+CVAPI(void) cveXFeatRelease(cv::Ptr<cv::XFeat>** sharedPtr);
+
 //LightGlueMatcher
 CVAPI(cv::LightGlueMatcher*) cveLightGlueMatcherCreate(
 	cv::String* modelPath,
 	float scoreThreshold,
 	int backend,
 	int target,
+	int type,
 	cv::DescriptorMatcher** matcher,
 	cv::Ptr<cv::LightGlueMatcher>** sharedPtr);
+CVAPI(void) cveLightGlueMatcherSetKeypointNormalization(cv::LightGlueMatcher* matcher, int normalization);
+CVAPI(int) cveLightGlueMatcherGetKeypointNormalization(cv::LightGlueMatcher* matcher);
 CVAPI(void) cveLightGlueMatcherSetPairInfo(
 	cv::LightGlueMatcher* matcher,
 	cv::_InputArray* queryKpts,
@@ -310,6 +342,7 @@ CVAPI(cv::LightGlueMatcher*) cveLightGlueMatcherCreateFromMemory(
 	float scoreThreshold,
 	int backend,
 	int target,
+	int type,
 	cv::DescriptorMatcher** matcher,
 	cv::Ptr<cv::LightGlueMatcher>** sharedPtr);
 

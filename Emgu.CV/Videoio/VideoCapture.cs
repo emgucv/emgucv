@@ -789,6 +789,49 @@ namespace Emgu.CV
     }
 
     /// <summary>
+    /// A camera device reported by a videoio backend. Available since OpenCV 5.1.
+    /// </summary>
+    public class VideoDeviceInfo
+    {
+        /// <summary>
+        /// Create the camera device information
+        /// </summary>
+        /// <param name="cameraIndex">The index to pass to VideoCapture together with the backend to open this device</param>
+        /// <param name="cameraName">The device name reported by the backend</param>
+        /// <param name="backend">The backend that reported this device</param>
+        public VideoDeviceInfo(int cameraIndex, String cameraName, Backend backend)
+        {
+            CameraIndex = cameraIndex;
+            CameraName = cameraName;
+            Backend = backend;
+        }
+
+        /// <summary>
+        /// The index to pass to VideoCapture together with <see cref="Backend"/> to open this device.
+        /// With the any backend an index of 100 or more is reinterpreted by OpenCV as a backend selector, so the index alone does not reliably identify the device.
+        /// </summary>
+        public int CameraIndex { get; private set; }
+
+        /// <summary>
+        /// The device name reported by the backend, or "cam: index" if unavailable
+        /// </summary>
+        public String CameraName { get; private set; }
+
+        /// <summary>
+        /// The backend that reported this device
+        /// </summary>
+        public Backend Backend { get; private set; }
+
+        /// <summary>
+        /// Get the string representation of this device
+        /// </summary>
+        public override string ToString()
+        {
+            return String.Format("{0} (index {1}, {2})", CameraName, CameraIndex, Backend.Name);
+        }
+    }
+
+    /// <summary>
     /// The backend for video
     /// </summary>
     public class Backend
@@ -930,6 +973,36 @@ namespace Emgu.CV
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveGetCameraBackends(IntPtr backends);
+
+        /// <summary>
+        /// Returns the list of camera devices available via VideoCapture(index, backend). Available since OpenCV 5.1.
+        /// Devices are returned in backend priority order. With the default (any backend) the same physical camera may be reported by more than one backend, use <see cref="VideoDeviceInfo.Backend"/> to tell the entries apart.
+        /// Only some backends (V4L2, MSMF, DirectShow, AVFoundation, Aravis and plugins implementing the enumeration callback) can list devices.
+        /// </summary>
+        /// <param name="apiPreference">The backend to query, or null to query all camera backends.</param>
+        /// <returns>The camera devices.</returns>
+        public static VideoDeviceInfo[] EnumerateCameraDevices(Backend apiPreference = null)
+        {
+            using (VectorOfInt viIdx = new VectorOfInt())
+            using (VectorOfCvString vsNames = new VectorOfCvString())
+            using (VectorOfInt viBackends = new VectorOfInt())
+            {
+                cveEnumerateDevices(apiPreference == null ? 0 : apiPreference.ID, viIdx, vsNames, viBackends);
+                CheckError();
+                int[] idx = viIdx.ToArray();
+                String[] names = vsNames.ToArray();
+                int[] backends = viBackends.ToArray();
+                VideoDeviceInfo[] result = new VideoDeviceInfo[idx.Length];
+                for (int i = 0; i < result.Length; i++)
+                {
+                    result[i] = new VideoDeviceInfo(idx[i], names[i], new Backend(backends[i]));
+                }
+
+                return result;
+            }
+        }
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveEnumerateDevices(int apiPreference, IntPtr camIdx, IntPtr camNames, IntPtr backends);
 
         /// <summary>
         /// Returns list of available backends which works via cv::VideoCapture(filename)

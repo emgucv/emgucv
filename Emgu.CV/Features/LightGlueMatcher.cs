@@ -11,6 +11,36 @@ using Emgu.Util;
 namespace Emgu.CV.Features
 {
     /// <summary>
+    /// The LightGlue model variant, which determines the keypoint normalization of the model.
+    /// </summary>
+    public enum LightGlueType
+    {
+        /// <summary>
+        /// ALIKED model: keypoints are normalized to [-1, 1]
+        /// </summary>
+        Aliked = 0,
+        /// <summary>
+        /// DISK model: keypoints are normalized to [0, 1]. Available since OpenCV 5.1.
+        /// </summary>
+        Disk = 1
+    }
+
+    /// <summary>
+    /// The keypoint normalization applied by LightGlueMatcher to the pixel coordinates.
+    /// </summary>
+    public enum LightGlueNormalization
+    {
+        /// <summary>
+        /// Per-axis mapping implied by the <see cref="LightGlueType"/> given at creation (default)
+        /// </summary>
+        Model = 0,
+        /// <summary>
+        /// LightGlue reference mapping (p - size / 2) / (max(W, H) / 2), which keeps the image aspect ratio. Available since OpenCV 5.1.
+        /// </summary>
+        MaxSide = 1
+    }
+
+    /// <summary>
     /// Wrapped LightGlueMatcher, a deep learning based descriptor matcher introduced
     /// in OpenCV 5. Requires the LightGlue ONNX model file.
     /// </summary>
@@ -25,11 +55,13 @@ namespace Emgu.CV.Features
         /// <param name="scoreThreshold">Match confidence threshold.</param>
         /// <param name="backend">DNN backend.</param>
         /// <param name="target">DNN target.</param>
+        /// <param name="type">The LightGlue model variant, use <see cref="LightGlueType.Disk"/> for the DISK model.</param>
         public LightGlueMatcher(
             String modelPath,
             float scoreThreshold = 0.0f,
             Emgu.CV.Dnn.Backend backend = Emgu.CV.Dnn.Backend.Default,
-            Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu)
+            Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu,
+            LightGlueType type = LightGlueType.Aliked)
         {
             using (CvString csModelPath = new CvString(modelPath))
                 _ptr = FeaturesInvoke.cveLightGlueMatcherCreate(
@@ -37,6 +69,7 @@ namespace Emgu.CV.Features
                     scoreThreshold,
                     backend,
                     target,
+                    (int)type,
                     ref _descriptorMatcherPtr,
                     ref _sharedPtr);
             CvInvoke.CheckError();
@@ -51,11 +84,13 @@ namespace Emgu.CV.Features
         /// <param name="scoreThreshold">Match confidence threshold.</param>
         /// <param name="backend">DNN backend.</param>
         /// <param name="target">DNN target.</param>
+        /// <param name="type">The LightGlue model variant, use <see cref="LightGlueType.Disk"/> for the DISK model.</param>
         public LightGlueMatcher(
             byte[] modelData,
             float scoreThreshold = 0.0f,
             Emgu.CV.Dnn.Backend backend = Emgu.CV.Dnn.Backend.Default,
-            Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu)
+            Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu,
+            LightGlueType type = LightGlueType.Aliked)
         {
             using (Util.VectorOfByte vbModelData = new Util.VectorOfByte(modelData))
                 _ptr = FeaturesInvoke.cveLightGlueMatcherCreateFromMemory(
@@ -63,6 +98,7 @@ namespace Emgu.CV.Features
                     scoreThreshold,
                     backend,
                     target,
+                    (int)type,
                     ref _descriptorMatcherPtr,
                     ref _sharedPtr);
             CvInvoke.CheckError();
@@ -84,6 +120,26 @@ namespace Emgu.CV.Features
             using (InputArray iaTrainKpts = trainKpts.GetInputArray())
                 FeaturesInvoke.cveLightGlueMatcherSetPairInfo(_ptr, iaQueryKpts, iaTrainKpts, ref queryImageSize, ref trainImageSize);
             CvInvoke.CheckError();
+        }
+
+        /// <summary>
+        /// Get or set the keypoint normalization applied to the pixel coordinates. The default, <see cref="LightGlueNormalization.Model"/>,
+        /// keeps the per-axis mapping implied by the <see cref="LightGlueType"/> given at creation.
+        /// The setting does not affect keypoints passed with an empty image size. Available since OpenCV 5.1.
+        /// </summary>
+        public LightGlueNormalization KeypointNormalization
+        {
+            get
+            {
+                int result = FeaturesInvoke.cveLightGlueMatcherGetKeypointNormalization(_ptr);
+                CvInvoke.CheckError();
+                return (LightGlueNormalization)result;
+            }
+            set
+            {
+                FeaturesInvoke.cveLightGlueMatcherSetKeypointNormalization(_ptr, (int)value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -110,11 +166,12 @@ namespace Emgu.CV.Features
             String modelPath,
             float scoreThreshold = 0.0f,
             Emgu.CV.Dnn.Backend backend = Emgu.CV.Dnn.Backend.Default,
-            Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu)
+            Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu,
+            LightGlueType type = LightGlueType.Aliked)
         {
             using (CvString csModelPath = new CvString(modelPath))
                 _ptr = FeaturesInvoke.cveLightGlueMatcherCreate(
-                    csModelPath, scoreThreshold, backend, target,
+                    csModelPath, scoreThreshold, backend, target, (int)type,
                     ref _descriptorMatcherPtr, ref _sharedPtr);
             CvInvoke.CheckError();
         }
@@ -139,6 +196,7 @@ namespace Emgu.CV.Features
             float scoreThreshold,
             Emgu.CV.Dnn.Backend backend,
             Emgu.CV.Dnn.Target target,
+            int type,
             ref IntPtr matcher,
             ref IntPtr sharedPtr);
 
@@ -148,6 +206,7 @@ namespace Emgu.CV.Features
             float scoreThreshold,
             Emgu.CV.Dnn.Backend backend,
             Emgu.CV.Dnn.Target target,
+            int type,
             ref IntPtr matcher,
             ref IntPtr sharedPtr);
 
@@ -158,6 +217,12 @@ namespace Emgu.CV.Features
             IntPtr trainKpts,
             ref Size queryImageSize,
             ref Size trainImageSize);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveLightGlueMatcherSetKeypointNormalization(IntPtr matcher, int normalization);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern int cveLightGlueMatcherGetKeypointNormalization(IntPtr matcher);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveLightGlueMatcherClearPairInfo(IntPtr matcher);

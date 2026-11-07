@@ -395,6 +395,27 @@ void cveGetCameraBackends(std::vector<int>* backends)
 	}
 	CVAPI_CATCH_CV_ERRORS_VOID
 }
+void cveEnumerateDevices(int apiPreference, std::vector<int>* camIdx, std::vector<cv::String>* camNames, std::vector<int>* backends)
+{
+	try
+	{
+	#ifdef HAVE_OPENCV_VIDEOIO
+		std::vector<cv::VideoDeviceInfo> devices = cv::videoio_registry::enumerateDevices((cv::VideoCaptureAPIs)apiPreference);
+		camIdx->clear();
+		camNames->clear();
+		backends->clear();
+		for (std::vector<cv::VideoDeviceInfo>::iterator it = devices.begin(); it != devices.end(); ++it)
+		{
+			camIdx->push_back(it->cam_idx);
+			camNames->push_back(cv::String(it->cam_name));
+			backends->push_back(static_cast<int>(it->backend));
+		}
+	#else
+		throw_no_videoio();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
 void cveGetStreamBackends(std::vector<int>* backends)
 {
 	try
