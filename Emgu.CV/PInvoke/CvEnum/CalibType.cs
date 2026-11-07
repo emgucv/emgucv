@@ -113,7 +113,12 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// For stereoCalibrate
         /// </summary>
-        UseExtrinsicGuess = (1 << 22)
+        UseExtrinsicGuess = (1 << 22),
+
+        /// <summary>
+        /// Disable the Schur complement and use the Bouguet calibration engine (value changed in OpenCV 5.1, it used to collide with TiltedModel)
+        /// </summary>
+        DisableSchurComplement = (1 << 27)
 
     }
 }

@@ -78,11 +78,56 @@ namespace Emgu.CV.Test
                 EmguAssert.AreEqual(CvEnum.DepthType.Cv16BF, m.Depth);
                 EmguAssert.AreEqual(2, m.ElementSize);
             }
+            foreach (CvEnum.DepthType fp8 in new CvEnum.DepthType[] { CvEnum.DepthType.Cv8FE4M3FN, CvEnum.DepthType.Cv8FE4M3FNUZ })
+            {
+                using (Mat m = new Mat(4, 5, fp8, 1))
+                using (Mat f32 = new Mat())
+                using (Mat back = new Mat())
+                {
+                    EmguAssert.AreEqual(fp8, m.Depth);
+                    EmguAssert.AreEqual(1, m.ElementSize);
+                    m.SetTo(new MCvScalar(2));
+                    m.ConvertTo(f32, CvEnum.DepthType.Cv32F);
+                    EmguAssert.AreEqual(2.0, CvInvoke.Mean(f32).V0);
+                    f32.ConvertTo(back, fp8);
+                    EmguAssert.AreEqual(fp8, back.Depth);
+                }
+            }
 
-            EmguAssert.AreEqual(CvEnum.DepthType.Cv32U, CvInvoke.GetDepthType(typeof(UInt32)));
+            EmguAssert.AreEqual(CvEnum.DepthType.Cv32U,CvInvoke.GetDepthType(typeof(UInt32)));
             EmguAssert.AreEqual(CvEnum.DepthType.Cv64U, CvInvoke.GetDepthType(typeof(UInt64)));
             EmguAssert.AreEqual(CvEnum.DepthType.Cv64S, CvInvoke.GetDepthType(typeof(Int64)));
             EmguAssert.AreEqual(CvEnum.DepthType.CvBool, CvInvoke.GetDepthType(typeof(bool)));
+        }
+
+        [TestAttribute]
+        public void TestOklabRoundTrip()
+        {
+            using (Mat bgr = new Mat(8, 8, DepthType.Cv32F, 3))
+            using (Mat lab = new Mat())
+            using (Mat back = new Mat())
+            using (Mat diff = new Mat())
+            {
+                bgr.SetTo(new MCvScalar(0.2, 0.5, 0.8));
+                CvInvoke.CvtColor(bgr, lab, ColorConversion.Bgr2Oklab);
+                CvInvoke.CvtColor(lab, back, ColorConversion.Oklab2Bgr);
+                CvInvoke.AbsDiff(bgr, back, diff);
+                double maxDiff = 0;
+                double minDiff = 0;
+                Point minLoc = new Point();
+                Point maxLoc = new Point();
+                using (Mat diff1 = diff.Reshape(1))
+                    CvInvoke.MinMaxLoc(diff1, ref minDiff, ref maxDiff, ref minLoc, ref maxLoc);
+                EmguAssert.IsTrue(maxDiff < 1e-3, String.Format("Oklab round trip error {0}", maxDiff));
+            }
+        }
+
+        [TestAttribute]
+        public void TestImwriteNewFlagValues()
+        {
+            EmguAssert.AreEqual(260, (int)ImwriteFlags.TiffCompressionLevel);
+            EmguAssert.AreEqual(515, (int)ImwriteFlags.AvifAlphaQuality);
+            EmguAssert.AreEqual(1 << 27, (int)CalibType.DisableSchurComplement);
         }
 
         [TestAttribute]

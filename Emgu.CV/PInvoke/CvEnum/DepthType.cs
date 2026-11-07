@@ -66,6 +66,14 @@ namespace Emgu.CV.CvEnum
         /// <summary>
         /// Represents a 32-bit unsigned integer depth type in OpenCV.
         /// </summary>
-        Cv32U = 12
+        Cv32U = 12,
+        /// <summary>
+        /// Represents an 8-bit floating-point depth type, OCP/ONNX FLOAT8E4M3FN (1 sign, 4 exponent, 3 mantissa bits, bias 7, no infinity, max 448). Available since OpenCV 5.1.
+        /// </summary>
+        Cv8FE4M3FN = 13,
+        /// <summary>
+        /// Represents an 8-bit floating-point depth type, ONNX FLOAT8E4M3FNUZ (1-4-3, bias 8, no infinity, single NaN, no negative zero). Available since OpenCV 5.1.
+        /// </summary>
+        Cv8FE4M3FNUZ = 14
     }
 }

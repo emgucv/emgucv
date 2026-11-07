@@ -594,7 +594,7 @@ namespace Emgu.CV
                 case CvEnum.DepthType.Cv32U:
                     return typeof(UInt32);
                 default:
-                    // Cv16F and Cv16BF have no managed equivalent on netstandard2.0
+                    // Cv16F, Cv16BF and the 8-bit floating point depths (Cv8FE4M3FN, Cv8FE4M3FNUZ) have no managed equivalent
                     throw new ArgumentException(String.Format("Unable to convert type {0} to depth type", t.ToString()));
             }
         }

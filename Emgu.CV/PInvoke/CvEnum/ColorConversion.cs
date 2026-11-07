@@ -1137,9 +1137,26 @@ namespace Emgu.CV.CvEnum
         Bgra2YuvYunv = Bgra2YuvYuy2,
 
         /// <summary>
+        /// Convert BGR to the perceptual Oklab color space [8U/32F]. Available since OpenCV 5.1.
+        /// </summary>
+        Bgr2Oklab = 155,
+        /// <summary>
+        /// Convert RGB to the perceptual Oklab color space [8U/32F]. Available since OpenCV 5.1.
+        /// </summary>
+        Rgb2Oklab = 156,
+        /// <summary>
+        /// Convert Oklab to BGR [8U/32F]. Available since OpenCV 5.1.
+        /// </summary>
+        Oklab2Bgr = 157,
+        /// <summary>
+        /// Convert Oklab to RGB [8U/32F]. Available since OpenCV 5.1.
+        /// </summary>
+        Oklab2Rgb = 158,
+
+        /// <summary>
         /// The max number, do not use
         /// </summary>
-        ColorCvtMax = 155
+        ColorCvtMax = 159
     }
 
 }

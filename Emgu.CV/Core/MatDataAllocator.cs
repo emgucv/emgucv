@@ -85,7 +85,7 @@ namespace Emgu.CV
                _data = new Int64[totalInBytes >> 3];
                break;
             default:
-               // Cv8U, CvBool (1 byte per element), Cv16F and Cv16BF (no managed
+               // Cv8U, CvBool and the 8-bit floating point depths (1 byte per element), Cv16F and Cv16BF (no managed
                // equivalent) are stored as raw bytes.
                _data = new byte[totalInBytes];
                break;

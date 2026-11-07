@@ -109,6 +109,10 @@ namespace Emgu.CV.CvEnum
         /// </summary>
         TiffCompression = 259,
         /// <summary>
+        /// For TIFF, if TiffCompression was used and supports it, sets a compression level. Valid range depends on the compression scheme: 1-9 for DEFLATE, 0-9 for LZMA, 1-22 for ZSTD, 1-100 for WEBP. -1 can be used as default. Available since OpenCV 5.1.
+        /// </summary>
+        TiffCompressionLevel = 260,
+        /// <summary>
         /// For JPEG2000, use to specify the target compression rate (multiplied by 1000). The value can be from 0 to 1000. Default is 1000.
         /// </summary>
         Jpeg2000CompressionX1000 = 272,
@@ -132,6 +136,10 @@ namespace Emgu.CV.CvEnum
         /// For AVIF, it is between 0 (slowest) and 10 (fastest). Default is 9.
         /// </summary>
         AvifSpeed = 514,
+        /// <summary>
+        /// For AVIF, it can be an alpha-plane quality between 0 and 100 (the higher the better). If not specified, it is synced with the color plane quality. Default is 95. Available since OpenCV 5.1.
+        /// </summary>
+        AvifAlphaQuality = 515,
         /// <summary>
         /// For JPEG XL, it can be a quality from 0 to 100 (the higher is the better). Default value is 95. If set, distance parameter is re-calicurated from quality level automatically. This parameter request libjxl v0.10 or later.
         /// </summary>
