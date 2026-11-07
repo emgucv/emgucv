@@ -26,6 +26,7 @@ namespace Emgu.CV
             using (OutputArray oaRgb = rgb == null ? OutputArray.GetEmpty() : rgb.GetOutputArray())
             {
                 cveLoadPointCloud(csFileName, oaVerticies, oaNormals, oaRgb);
+                CvInvoke.CheckError();
             }
         }
 
@@ -48,6 +49,7 @@ namespace Emgu.CV
             using (InputArray iaRgb = rgb == null ? InputArray.GetEmpty() : rgb.GetInputArray())
             {
                 cveSavePointCloud(csFileName, iaVertices, iaNormals, iaRgb);
+                CvInvoke.CheckError();
             }
         }
 
@@ -85,6 +87,7 @@ namespace Emgu.CV
             using (OutputArray oaTexCoords = texCoords == null ? OutputArray.GetEmpty() : texCoords.GetOutputArray())
             {
                 cveLoadMesh(csFilename, oaVertices, oaIndices, oaNormals, oaColors, oaTexCoords);
+                CvInvoke.CheckError();
             }
         }
 
@@ -129,6 +132,7 @@ namespace Emgu.CV
                     iaNormals,
                     iaColors,
                     iaTexCoords);
+                CvInvoke.CheckError();
             }
         }
 
@@ -164,6 +168,7 @@ namespace Emgu.CV
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             {
                 cveDepthTo3d(iaDepth, iaK, oaPoints3d, iaMask);
+                CvInvoke.CheckError();
             }
         }
 
@@ -185,6 +190,7 @@ namespace Emgu.CV
             using (OutputArray oaPoints3d = points3d.GetOutputArray())
             {
                 cveDepthTo3dSparse(iaDepth, iaK, iaPoints, oaPoints3d);
+                CvInvoke.CheckError();
             }
         }
 
@@ -206,6 +212,7 @@ namespace Emgu.CV
             using (OutputArray oaOutput = output.GetOutputArray())
             {
                 cveRescaleDepth(iaInput, (int)type, oaOutput, depthFactor);
+                CvInvoke.CheckError();
             }
         }
 
@@ -241,6 +248,7 @@ namespace Emgu.CV
             using (OutputArray oaRegistered = registeredDepth.GetOutputArray())
             {
                 cveRegisterDepth(iaUnregCam, iaRegCam, iaRegDist, iaRt, iaDepth, ref outputImagePlaneSize, oaRegistered, depthDilation);
+                CvInvoke.CheckError();
             }
         }
 
@@ -287,6 +295,7 @@ namespace Emgu.CV
             using (OutputArray oaWarpedMask = warpedMask == null ? OutputArray.GetEmpty() : warpedMask.GetOutputArray())
             {
                 cveWarpFrame(iaDepth, iaImage, iaMask, iaRt, iaCam, oaWarpedDepth, oaWarpedImage, oaWarpedMask);
+                CvInvoke.CheckError();
             }
         }
 

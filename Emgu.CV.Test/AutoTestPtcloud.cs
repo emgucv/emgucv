@@ -312,6 +312,27 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestPtcloudNativeErrorsAreRaised()
+        {
+            //native errors in the ptcloud functions must surface as a CvException from the call that caused them.
+            //depthTo3d asserts that the camera matrix K is 3x3.
+            bool thrown = false;
+            try
+            {
+                using (Mat depth = new Mat(4, 4, DepthType.Cv32F, 1))
+                using (Mat badK = new Mat(2, 2, DepthType.Cv64F, 1))
+                using (Mat points = new Mat())
+                    CvInvoke.DepthTo3d(depth, badK, points);
+            }
+            catch (Emgu.CV.Util.CvException)
+            {
+                thrown = true;
+            }
+
+            EmguAssert.IsTrue(thrown, "DepthTo3d with an invalid camera matrix should throw a CvException");
+        }
+
+        [Test]
         public void TestVolumeCreate()
         {
             foreach (VolumeType type in new VolumeType[]
