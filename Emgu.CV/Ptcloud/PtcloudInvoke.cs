@@ -542,5 +542,255 @@ namespace Emgu.CV
 
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern double cveApproxEnclosingSphere3D(IntPtr inputCloud, IntPtr center);
+
+        /// <summary>
+        /// Returns the PLY vertex property names <see cref="LoadGaussianSplats"/> reads by default. The order of the names is the
+        /// column order <see cref="DecodeGaussianSplats"/> expects. Available since OpenCV 5.1.
+        /// </summary>
+        /// <returns>The default PLY vertex property names of a 3D Gaussian Splatting scene.</returns>
+        public static String[] GetGaussianSplatPlyPropNames()
+        {
+            using (VectorOfCvString names = new VectorOfCvString())
+            {
+                cveGetGaussianSplatPlyPropNames(names);
+                CvInvoke.CheckError();
+                return names.ToArray();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveGetGaussianSplatPlyPropNames(IntPtr names);
+
+        /// <summary>
+        /// Decodes 3D Gaussian Splatting attributes into a renderable scene. Scales are exponentiated, opacity is put through a sigmoid,
+        /// the quaternion and scales are combined into a 3D covariance, and the zeroth order harmonic is evaluated to an RGB color.
+        /// Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="attributes">CV_32F matrix with one row per Gaussian and one column per name of <see cref="GetGaussianSplatPlyPropNames"/>, in that order.</param>
+        /// <param name="splats">Decoded scene, a CV_32F matrix with one row per Gaussian and <see cref="CvEnum.GaussianSplatLayout.Stride"/> columns.</param>
+        public static void DecodeGaussianSplats(IInputArray attributes, IOutputArray splats)
+        {
+            using (InputArray iaAttributes = attributes.GetInputArray())
+            using (OutputArray oaSplats = splats.GetOutputArray())
+            {
+                cveDecodeGaussianSplats(iaAttributes, oaSplats);
+                CvInvoke.CheckError();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveDecodeGaussianSplats(IntPtr attributes, IntPtr splats);
+
+        /// <summary>
+        /// Decodes the contents of a .splat file into a renderable scene. A .splat file is a headerless array of 32 byte records, one per
+        /// Gaussian, holding position, scale, color and rotation. Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="buf">CV_8U buffer holding the bytes of a .splat file.</param>
+        /// <param name="splats">Decoded scene, a CV_32F matrix with one row per Gaussian and <see cref="CvEnum.GaussianSplatLayout.Stride"/> columns.</param>
+        public static void DecodeGaussianSplatsPacked(IInputArray buf, IOutputArray splats)
+        {
+            using (InputArray iaBuf = buf.GetInputArray())
+            using (OutputArray oaSplats = splats.GetOutputArray())
+            {
+                cveDecodeGaussianSplatsPacked(iaBuf, oaSplats);
+                CvInvoke.CheckError();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveDecodeGaussianSplatsPacked(IntPtr buf, IntPtr splats);
+
+        /// <summary>
+        /// Loads a 3D Gaussian Splatting scene from a PLY or .splat file. The format is chosen from the file extension.
+        /// Higher order f_rest harmonics are ignored. Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="filename">Name of the file</param>
+        /// <param name="splats">Decoded scene, a CV_32F matrix with one row per Gaussian and <see cref="CvEnum.GaussianSplatLayout.Stride"/> columns, or empty on failure.</param>
+        /// <param name="plyProperties">Vertex property names to read from a PLY file, in the column order of <see cref="GetGaussianSplatPlyPropNames"/>. If null or empty the default list is used. Unused for .splat files.</param>
+        public static void LoadGaussianSplats(String filename, IOutputArray splats, String[] plyProperties = null)
+        {
+            using (CvString csFilename = new CvString(filename))
+            using (OutputArray oaSplats = splats.GetOutputArray())
+            {
+                if (plyProperties == null || plyProperties.Length == 0)
+                {
+                    cveLoadGaussianSplats(csFilename, oaSplats, IntPtr.Zero);
+                }
+                else
+                {
+                    using (VectorOfCvString vProperties = new VectorOfCvString(plyProperties))
+                        cveLoadGaussianSplats(csFilename, oaSplats, vProperties);
+                }
+
+                CvInvoke.CheckError();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveLoadGaussianSplats(IntPtr filename, IntPtr splats, IntPtr plyProperties);
+
+        /// <summary>
+        /// Renders a set of triangles on a depth and color image. The output images are not cleared before rendering, so the function can
+        /// draw over an existing image; before rendering from scratch fill depthBuf with zFar. The camera coordinate system emulates OpenGL's:
+        /// visible objects are in the z-negative area, -zNear &gt; z &gt; -zFar. Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="vertices">Vertices coordinates, CV_32FC3 or compatible. Pass a 1xN Mat: OpenCV 5.1 fails an assertion for an Nx1 column of 3-channel elements.</param>
+        /// <param name="indices">Triangle vertex indices, 3 per triangle, CV_32SC3 or compatible. Pass a 1xN Mat, like the vertices.</param>
+        /// <param name="colors">Per-vertex colors, CV_32FC3 or compatible, in [0, 1]. Can be empty or null. Pass a 1xN Mat, like the vertices.</param>
+        /// <param name="colorBuf">The rendered image, CV_32FC3, same size as depthBuf. Not cleared before rendering.</param>
+        /// <param name="depthBuf">The Z buffer, float values, same size as colorBuf. Not cleared before rendering.</param>
+        /// <param name="world2cam">A 4x3 or 4x4 float or double matrix containing the inverted camera pose.</param>
+        /// <param name="fovY">Field of view in vertical direction, in radians.</param>
+        /// <param name="zNear">Minimum Z value to render, everything closer is clipped.</param>
+        /// <param name="zFar">Maximum Z value to render, everything farther is clipped.</param>
+        /// <param name="shadingType">How triangles are filled.</param>
+        /// <param name="cullingMode">Which faces are drawn.</param>
+        /// <param name="glCompatibleMode">GL compatibility of the depth buffer.</param>
+        public static void TriangleRasterize(
+            IInputArray vertices,
+            IInputArray indices,
+            IInputArray colors,
+            IInputOutputArray colorBuf,
+            IInputOutputArray depthBuf,
+            IInputArray world2cam,
+            double fovY,
+            double zNear,
+            double zFar,
+            CvEnum.TriangleShadingType shadingType = CvEnum.TriangleShadingType.Shaded,
+            CvEnum.TriangleCullingMode cullingMode = CvEnum.TriangleCullingMode.Cw,
+            CvEnum.TriangleGlCompatibleMode glCompatibleMode = CvEnum.TriangleGlCompatibleMode.Disabled)
+        {
+            using (InputArray iaVertices = vertices.GetInputArray())
+            using (InputArray iaIndices = indices.GetInputArray())
+            using (InputArray iaColors = colors == null ? InputArray.GetEmpty() : colors.GetInputArray())
+            using (InputOutputArray ioaColorBuf = colorBuf.GetInputOutputArray())
+            using (InputOutputArray ioaDepthBuf = depthBuf.GetInputOutputArray())
+            using (InputArray iaWorld2cam = world2cam.GetInputArray())
+            {
+                cveTriangleRasterize(
+                    iaVertices, iaIndices, iaColors, ioaColorBuf, ioaDepthBuf, iaWorld2cam,
+                    fovY, zNear, zFar, (int)shadingType, (int)cullingMode, (int)glCompatibleMode);
+                CvInvoke.CheckError();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveTriangleRasterize(
+            IntPtr vertices,
+            IntPtr indices,
+            IntPtr colors,
+            IntPtr colorBuf,
+            IntPtr depthBuf,
+            IntPtr world2cam,
+            double fovY,
+            double zNear,
+            double zFar,
+            int shadingType,
+            int cullingMode,
+            int glCompatibleMode);
+
+        /// <summary>
+        /// Renders a set of triangles on a depth image only, see <see cref="TriangleRasterize"/>. Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="vertices">Vertices coordinates, CV_32FC3 or compatible. Pass a 1xN Mat: OpenCV 5.1 fails an assertion for an Nx1 column of 3-channel elements.</param>
+        /// <param name="indices">Triangle vertex indices, 3 per triangle, CV_32SC3 or compatible. Pass a 1xN Mat, like the vertices.</param>
+        /// <param name="depthBuf">The Z buffer, float values. Not cleared before rendering.</param>
+        /// <param name="world2cam">A 4x3 or 4x4 float or double matrix containing the inverted camera pose.</param>
+        /// <param name="fovY">Field of view in vertical direction, in radians.</param>
+        /// <param name="zNear">Minimum Z value to render, everything closer is clipped.</param>
+        /// <param name="zFar">Maximum Z value to render, everything farther is clipped.</param>
+        /// <param name="shadingType">How triangles are filled.</param>
+        /// <param name="cullingMode">Which faces are drawn.</param>
+        /// <param name="glCompatibleMode">GL compatibility of the depth buffer.</param>
+        public static void TriangleRasterizeDepth(
+            IInputArray vertices,
+            IInputArray indices,
+            IInputOutputArray depthBuf,
+            IInputArray world2cam,
+            double fovY,
+            double zNear,
+            double zFar,
+            CvEnum.TriangleShadingType shadingType = CvEnum.TriangleShadingType.Shaded,
+            CvEnum.TriangleCullingMode cullingMode = CvEnum.TriangleCullingMode.Cw,
+            CvEnum.TriangleGlCompatibleMode glCompatibleMode = CvEnum.TriangleGlCompatibleMode.Disabled)
+        {
+            using (InputArray iaVertices = vertices.GetInputArray())
+            using (InputArray iaIndices = indices.GetInputArray())
+            using (InputOutputArray ioaDepthBuf = depthBuf.GetInputOutputArray())
+            using (InputArray iaWorld2cam = world2cam.GetInputArray())
+            {
+                cveTriangleRasterizeDepth(
+                    iaVertices, iaIndices, ioaDepthBuf, iaWorld2cam,
+                    fovY, zNear, zFar, (int)shadingType, (int)cullingMode, (int)glCompatibleMode);
+                CvInvoke.CheckError();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveTriangleRasterizeDepth(
+            IntPtr vertices,
+            IntPtr indices,
+            IntPtr depthBuf,
+            IntPtr world2cam,
+            double fovY,
+            double zNear,
+            double zFar,
+            int shadingType,
+            int cullingMode,
+            int glCompatibleMode);
+
+        /// <summary>
+        /// Renders a set of triangles on a color image only, see <see cref="TriangleRasterize"/>. Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="vertices">Vertices coordinates, CV_32FC3 or compatible. Pass a 1xN Mat: OpenCV 5.1 fails an assertion for an Nx1 column of 3-channel elements.</param>
+        /// <param name="indices">Triangle vertex indices, 3 per triangle, CV_32SC3 or compatible. Pass a 1xN Mat, like the vertices.</param>
+        /// <param name="colors">Per-vertex colors, CV_32FC3 or compatible, in [0, 1]. Can be empty or null. Pass a 1xN Mat, like the vertices.</param>
+        /// <param name="colorBuf">The rendered image, CV_32FC3. Not cleared before rendering.</param>
+        /// <param name="world2cam">A 4x3 or 4x4 float or double matrix containing the inverted camera pose.</param>
+        /// <param name="fovY">Field of view in vertical direction, in radians.</param>
+        /// <param name="zNear">Minimum Z value to render, everything closer is clipped.</param>
+        /// <param name="zFar">Maximum Z value to render, everything farther is clipped.</param>
+        /// <param name="shadingType">How triangles are filled.</param>
+        /// <param name="cullingMode">Which faces are drawn.</param>
+        /// <param name="glCompatibleMode">GL compatibility of the depth buffer.</param>
+        public static void TriangleRasterizeColor(
+            IInputArray vertices,
+            IInputArray indices,
+            IInputArray colors,
+            IInputOutputArray colorBuf,
+            IInputArray world2cam,
+            double fovY,
+            double zNear,
+            double zFar,
+            CvEnum.TriangleShadingType shadingType = CvEnum.TriangleShadingType.Shaded,
+            CvEnum.TriangleCullingMode cullingMode = CvEnum.TriangleCullingMode.Cw,
+            CvEnum.TriangleGlCompatibleMode glCompatibleMode = CvEnum.TriangleGlCompatibleMode.Disabled)
+        {
+            using (InputArray iaVertices = vertices.GetInputArray())
+            using (InputArray iaIndices = indices.GetInputArray())
+            using (InputArray iaColors = colors == null ? InputArray.GetEmpty() : colors.GetInputArray())
+            using (InputOutputArray ioaColorBuf = colorBuf.GetInputOutputArray())
+            using (InputArray iaWorld2cam = world2cam.GetInputArray())
+            {
+                cveTriangleRasterizeColor(
+                    iaVertices, iaIndices, iaColors, ioaColorBuf, iaWorld2cam,
+                    fovY, zNear, zFar, (int)shadingType, (int)cullingMode, (int)glCompatibleMode);
+                CvInvoke.CheckError();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveTriangleRasterizeColor(
+            IntPtr vertices,
+            IntPtr indices,
+            IntPtr colors,
+            IntPtr colorBuf,
+            IntPtr world2cam,
+            double fovY,
+            double zNear,
+            double zFar,
+            int shadingType,
+            int cullingMode,
+            int glCompatibleMode);
     }
 }

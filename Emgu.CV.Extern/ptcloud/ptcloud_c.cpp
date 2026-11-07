@@ -1229,3 +1229,160 @@ double cveApproxEnclosingSphere3D(cv::_InputArray* inputCloud, cv::_OutputArray*
 	}
 	CVAPI_CATCH_CV_ERRORS(0.0)
 }
+void cveGetGaussianSplatPlyPropNames(std::vector<cv::String>* names)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		*names = cv::getGaussianSplatPlyPropNames();
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+void cveDecodeGaussianSplats(cv::_InputArray* attributes, cv::_OutputArray* splats)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		cv::decodeGaussianSplats(*attributes, *splats);
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+void cveDecodeGaussianSplatsPacked(cv::_InputArray* buf, cv::_OutputArray* splats)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		cv::decodeGaussianSplatsPacked(*buf, *splats);
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+void cveLoadGaussianSplats(cv::String* filename, cv::_OutputArray* splats, std::vector<cv::String>* plyProperties)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		cv::loadGaussianSplats(
+			*filename,
+			*splats,
+			plyProperties ? *plyProperties : std::vector<cv::String>());
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+#ifdef HAVE_OPENCV_PTCLOUD
+static cv::TriangleRasterizeSettings cveMakeTriangleRasterizeSettings(int shadingType, int cullingMode, int glCompatibleMode)
+{
+	cv::TriangleRasterizeSettings settings;
+	settings.setShadingType(static_cast<cv::TriangleShadingType>(shadingType));
+	settings.setCullingMode(static_cast<cv::TriangleCullingMode>(cullingMode));
+	settings.setGlCompatibleMode(static_cast<cv::TriangleGlCompatibleMode>(glCompatibleMode));
+	return settings;
+}
+#endif
+void cveTriangleRasterize(
+	cv::_InputArray* vertices,
+	cv::_InputArray* indices,
+	cv::_InputArray* colors,
+	cv::_InputOutputArray* colorBuf,
+	cv::_InputOutputArray* depthBuf,
+	cv::_InputArray* world2cam,
+	double fovY,
+	double zNear,
+	double zFar,
+	int shadingType,
+	int cullingMode,
+	int glCompatibleMode)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		cv::triangleRasterize(
+			*vertices,
+			*indices,
+			*colors,
+			*colorBuf,
+			*depthBuf,
+			*world2cam,
+			fovY,
+			zNear,
+			zFar,
+			cveMakeTriangleRasterizeSettings(shadingType, cullingMode, glCompatibleMode));
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+void cveTriangleRasterizeDepth(
+	cv::_InputArray* vertices,
+	cv::_InputArray* indices,
+	cv::_InputOutputArray* depthBuf,
+	cv::_InputArray* world2cam,
+	double fovY,
+	double zNear,
+	double zFar,
+	int shadingType,
+	int cullingMode,
+	int glCompatibleMode)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		cv::triangleRasterizeDepth(
+			*vertices,
+			*indices,
+			*depthBuf,
+			*world2cam,
+			fovY,
+			zNear,
+			zFar,
+			cveMakeTriangleRasterizeSettings(shadingType, cullingMode, glCompatibleMode));
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+void cveTriangleRasterizeColor(
+	cv::_InputArray* vertices,
+	cv::_InputArray* indices,
+	cv::_InputArray* colors,
+	cv::_InputOutputArray* colorBuf,
+	cv::_InputArray* world2cam,
+	double fovY,
+	double zNear,
+	double zFar,
+	int shadingType,
+	int cullingMode,
+	int glCompatibleMode)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		cv::triangleRasterizeColor(
+			*vertices,
+			*indices,
+			*colors,
+			*colorBuf,
+			*world2cam,
+			fovY,
+			zNear,
+			zFar,
+			cveMakeTriangleRasterizeSettings(shadingType, cullingMode, glCompatibleMode));
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}

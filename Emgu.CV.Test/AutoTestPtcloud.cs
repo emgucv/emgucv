@@ -68,6 +68,22 @@ namespace Emgu.CV.Test
             return m;
         }
 
+        //A 1xN CV_32FC3 Mat, the layout OpenCV 5.1's own tests use for the triangle rasterizer inputs: an Nx1 column of
+        //3-channel elements fails an in-place transpose assertion inside triangleRasterize.
+        private static Mat MakeRowMat(System.Collections.Generic.List<float[]> points)
+        {
+            float[] flat = new float[points.Count * 3];
+            for (int i = 0; i < points.Count; i++)
+            {
+                flat[3 * i] = points[i][0];
+                flat[3 * i + 1] = points[i][1];
+                flat[3 * i + 2] = points[i][2];
+            }
+            Mat m = new Mat(1, points.Count, DepthType.Cv32F, 3);
+            Marshal.Copy(flat, 0, m.DataPointer, flat.Length);
+            return m;
+        }
+
         private static float[] ReadFloats(Mat m, int count)
         {
             float[] result = new float[count];
@@ -308,6 +324,152 @@ namespace Emgu.CV.Test
                     CvInvoke.OrientNormals(empty, normals, new MCvPoint3D32f(0f, 0f, 1f));
                     CvInvoke.OrientNormalsConsistent(empty, normals, 8);
                 }
+            }
+        }
+
+        [Test]
+        public void TestGaussianSplatPlyPropNames()
+        {
+            String[] names = CvInvoke.GetGaussianSplatPlyPropNames();
+            EmguAssert.IsTrue(names.Length >= 14, "Expected at least x, y, z, f_dc_0..2, opacity, scale_0..2 and rot_0..3, got " + names.Length);
+            EmguAssert.IsTrue(Array.IndexOf(names, "x") >= 0 && Array.IndexOf(names, "opacity") >= 0 && Array.IndexOf(names, "rot_0") >= 0,
+                "The default property names should include x, opacity and rot_0");
+        }
+
+        [Test]
+        public void TestDecodeGaussianSplats()
+        {
+            //Two Gaussians with identity rotation, scale exp(log(0.1)) = 0.1, zero color harmonics and zero opacity logit.
+            //Decoding gives color 0.5, opacity sigmoid(0) = 0.5 and a diagonal covariance of 0.01.
+            String[] names = CvInvoke.GetGaussianSplatPlyPropNames();
+            int columns = names.Length;
+            int gaussians = 2;
+            float[] attributes = new float[gaussians * columns];
+            for (int g = 0; g < gaussians; g++)
+            {
+                attributes[g * columns + Array.IndexOf(names, "x")] = 1f + g;
+                attributes[g * columns + Array.IndexOf(names, "y")] = 2f + g;
+                attributes[g * columns + Array.IndexOf(names, "z")] = 3f + g;
+                for (int s = 0; s < 3; s++)
+                    attributes[g * columns + Array.IndexOf(names, "scale_" + s)] = (float)Math.Log(0.1);
+                attributes[g * columns + Array.IndexOf(names, "rot_0")] = 1f;
+            }
+
+            using (Mat attr = new Mat(gaussians, columns, DepthType.Cv32F, 1))
+            using (Mat splats = new Mat())
+            {
+                Marshal.Copy(attributes, 0, attr.DataPointer, attributes.Length);
+                CvInvoke.DecodeGaussianSplats(attr, splats);
+                int stride = (int)GaussianSplatLayout.Stride;
+                EmguAssert.AreEqual(gaussians * stride, splats.Total.ToInt32() * splats.NumberOfChannels);
+                float[] v = ReadFloats(splats, gaussians * stride);
+                for (int g = 0; g < gaussians; g++)
+                {
+                    int o = g * stride;
+                    int pos = (int)GaussianSplatLayout.Pos, cov = (int)GaussianSplatLayout.Cov;
+                    int rgb = (int)GaussianSplatLayout.Rgb, alpha = (int)GaussianSplatLayout.Alpha;
+                    EmguAssert.IsTrue(Math.Abs(v[o + pos] - (1f + g)) < 1e-5f && Math.Abs(v[o + pos + 1] - (2f + g)) < 1e-5f && Math.Abs(v[o + pos + 2] - (3f + g)) < 1e-5f, "position");
+                    for (int c = 0; c < 3; c++)
+                        EmguAssert.IsTrue(Math.Abs(v[o + rgb + c] - 0.5f) < 1e-3f, "color " + c + " = " + v[o + rgb + c]);
+                    EmguAssert.IsTrue(Math.Abs(v[o + alpha] - 0.5f) < 1e-3f, "opacity = " + v[o + alpha]);
+                    //upper triangle order: xx, xy, xz, yy, yz, zz
+                    EmguAssert.IsTrue(Math.Abs(v[o + cov] - 0.01f) < 1e-4f, "cov xx = " + v[o + cov]);
+                    EmguAssert.IsTrue(Math.Abs(v[o + cov + 3] - 0.01f) < 1e-4f, "cov yy = " + v[o + cov + 3]);
+                    EmguAssert.IsTrue(Math.Abs(v[o + cov + 5] - 0.01f) < 1e-4f, "cov zz = " + v[o + cov + 5]);
+                    EmguAssert.IsTrue(Math.Abs(v[o + cov + 1]) < 1e-4f && Math.Abs(v[o + cov + 2]) < 1e-4f && Math.Abs(v[o + cov + 4]) < 1e-4f, "off-diagonal covariance");
+                }
+            }
+        }
+
+        [Test]
+        public void TestDecodeGaussianSplatsPacked()
+        {
+            //One 32 byte .splat record: position (3 floats), scale (3 floats, already activated), RGBA (4 bytes),
+            //rotation quaternion (4 bytes, (b - 128) / 128).
+            byte[] record = new byte[32];
+            Buffer.BlockCopy(new float[] { 1f, 2f, 3f, 0.1f, 0.1f, 0.1f }, 0, record, 0, 24);
+            record[24] = 255; record[25] = 128; record[26] = 0; record[27] = 255;
+            record[28] = 255; record[29] = 128; record[30] = 128; record[31] = 128;
+            using (Mat buf = new Mat(1, record.Length, DepthType.Cv8U, 1))
+            using (Mat splats = new Mat())
+            {
+                Marshal.Copy(record, 0, buf.DataPointer, record.Length);
+                CvInvoke.DecodeGaussianSplatsPacked(buf, splats);
+                int stride = (int)GaussianSplatLayout.Stride;
+                EmguAssert.AreEqual(stride, splats.Total.ToInt32() * splats.NumberOfChannels);
+                float[] v = ReadFloats(splats, stride);
+                int pos = (int)GaussianSplatLayout.Pos, cov = (int)GaussianSplatLayout.Cov;
+                int rgb = (int)GaussianSplatLayout.Rgb, alpha = (int)GaussianSplatLayout.Alpha;
+                EmguAssert.IsTrue(Math.Abs(v[pos] - 1f) < 1e-5f && Math.Abs(v[pos + 1] - 2f) < 1e-5f && Math.Abs(v[pos + 2] - 3f) < 1e-5f, "position");
+                EmguAssert.IsTrue(Math.Abs(v[rgb] - 1f) < 1e-2f && Math.Abs(v[rgb + 1] - 128f / 255f) < 1e-2f && Math.Abs(v[rgb + 2]) < 1e-2f,
+                    "color " + v[rgb] + ", " + v[rgb + 1] + ", " + v[rgb + 2]);
+                EmguAssert.IsTrue(Math.Abs(v[alpha] - 1f) < 1e-2f, "opacity = " + v[alpha]);
+                //an almost identity rotation of an isotropic scale keeps the covariance close to 0.01 * I
+                EmguAssert.IsTrue(Math.Abs(v[cov] - 0.01f) < 1e-3f && Math.Abs(v[cov + 3] - 0.01f) < 1e-3f && Math.Abs(v[cov + 5] - 0.01f) < 1e-3f,
+                    "covariance diagonal " + v[cov] + ", " + v[cov + 3] + ", " + v[cov + 5]);
+            }
+        }
+
+        [Test]
+        public void TestTriangleRasterize()
+        {
+            //A triangle 2 units in front of the camera (the camera looks down -Z), seen with a 90 degree vertical field of view.
+            int width = 100;
+            int height = 100;
+            double zNear = 0.1;
+            double zFar = 10.0;
+            using (Mat vertices = MakeRowMat(new System.Collections.Generic.List<float[]>
+                   {
+                       new float[] { -1f, -1f, -2f },
+                       new float[] { 1f, -1f, -2f },
+                       new float[] { 0f, 1f, -2f }
+                   }))
+            using (Mat indices = new Mat(1, 1, DepthType.Cv32S, 3))
+            using (Mat colors = MakeRowMat(new System.Collections.Generic.List<float[]>
+                   {
+                       new float[] { 1f, 0f, 0f },
+                       new float[] { 0f, 1f, 0f },
+                       new float[] { 0f, 0f, 1f }
+                   }))
+            using (Mat world2cam = Mat.Eye(4, 4, DepthType.Cv32F, 1))
+            using (Mat colorBuf = new Mat(height, width, DepthType.Cv32F, 3))
+            using (Mat depthBuf = new Mat(height, width, DepthType.Cv32F, 1))
+            using (Mat depthOnly = new Mat(height, width, DepthType.Cv32F, 1))
+            using (Mat colorOnly = new Mat(height, width, DepthType.Cv32F, 3))
+            {
+                Marshal.Copy(new int[] { 0, 1, 2 }, 0, indices.DataPointer, 3);
+                colorBuf.SetTo(new MCvScalar(0, 0, 0));
+                colorOnly.SetTo(new MCvScalar(0, 0, 0));
+                depthBuf.SetTo(new MCvScalar(zFar));
+                depthOnly.SetTo(new MCvScalar(zFar));
+
+                CvInvoke.TriangleRasterize(
+                    vertices, indices, colors, colorBuf, depthBuf, world2cam, Math.PI / 2, zNear, zFar,
+                    TriangleShadingType.Shaded, TriangleCullingMode.None);
+                CvInvoke.TriangleRasterizeDepth(
+                    vertices, indices, depthOnly, world2cam, Math.PI / 2, zNear, zFar,
+                    TriangleShadingType.Shaded, TriangleCullingMode.None);
+                CvInvoke.TriangleRasterizeColor(
+                    vertices, indices, colors, colorOnly, world2cam, Math.PI / 2, zNear, zFar,
+                    TriangleShadingType.Shaded, TriangleCullingMode.None);
+
+                float[] depth = ReadFloats(depthBuf, width * height);
+                float[] depth2 = ReadFloats(depthOnly, width * height);
+                float[] color = ReadFloats(colorBuf, width * height * 3);
+                float[] color2 = ReadFloats(colorOnly, width * height * 3);
+
+                //the image center is inside the triangle, the top-left corner is outside of it
+                int center = (height / 2) * width + width / 2;
+                EmguAssert.IsTrue(Math.Abs(depth[center] - 2f) < 0.05f, "center depth = " + depth[center]);
+                EmguAssert.IsTrue(Math.Abs(depth[0] - zFar) < 1e-4, "corner depth = " + depth[0]);
+                EmguAssert.IsTrue(color[3 * center] + color[3 * center + 1] + color[3 * center + 2] > 0.5f, "The triangle center should be colored");
+                EmguAssert.IsTrue(color[0] == 0f && color[1] == 0f && color[2] == 0f, "The corner should stay black");
+
+                //the depth-only and color-only variants must agree with the combined one
+                for (int i = 0; i < depth.Length; i++)
+                    EmguAssert.IsTrue(Math.Abs(depth[i] - depth2[i]) < 1e-4f, "depth mismatch at " + i);
+                for (int i = 0; i < color.Length; i++)
+                    EmguAssert.IsTrue(Math.Abs(color[i] - color2[i]) < 1e-4f, "color mismatch at " + i);
             }
         }
 

@@ -257,4 +257,46 @@ CVAPI(void) cveOrientedBoundingBox3D(
 	cv::_OutputArray* halfExtents);
 CVAPI(double) cveApproxEnclosingSphere3D(cv::_InputArray* inputCloud, cv::_OutputArray* center);
 
+CVAPI(void) cveGetGaussianSplatPlyPropNames(std::vector<cv::String>* names);
+CVAPI(void) cveDecodeGaussianSplats(cv::_InputArray* attributes, cv::_OutputArray* splats);
+CVAPI(void) cveDecodeGaussianSplatsPacked(cv::_InputArray* buf, cv::_OutputArray* splats);
+CVAPI(void) cveLoadGaussianSplats(cv::String* filename, cv::_OutputArray* splats, std::vector<cv::String>* plyProperties);
+
+CVAPI(void) cveTriangleRasterize(
+	cv::_InputArray* vertices,
+	cv::_InputArray* indices,
+	cv::_InputArray* colors,
+	cv::_InputOutputArray* colorBuf,
+	cv::_InputOutputArray* depthBuf,
+	cv::_InputArray* world2cam,
+	double fovY,
+	double zNear,
+	double zFar,
+	int shadingType,
+	int cullingMode,
+	int glCompatibleMode);
+CVAPI(void) cveTriangleRasterizeDepth(
+	cv::_InputArray* vertices,
+	cv::_InputArray* indices,
+	cv::_InputOutputArray* depthBuf,
+	cv::_InputArray* world2cam,
+	double fovY,
+	double zNear,
+	double zFar,
+	int shadingType,
+	int cullingMode,
+	int glCompatibleMode);
+CVAPI(void) cveTriangleRasterizeColor(
+	cv::_InputArray* vertices,
+	cv::_InputArray* indices,
+	cv::_InputArray* colors,
+	cv::_InputOutputArray* colorBuf,
+	cv::_InputArray* world2cam,
+	double fovY,
+	double zNear,
+	double zFar,
+	int shadingType,
+	int cullingMode,
+	int glCompatibleMode);
+
 #endif
