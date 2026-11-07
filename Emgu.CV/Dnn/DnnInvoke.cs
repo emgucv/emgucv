@@ -25,7 +25,9 @@ namespace Emgu.CV.Dnn
         /// </summary>
         Auto = 0,
         /// <summary>
-        /// Use OpenCV's built-in DNN engine. The engine does not support non CPU back-ends for now.
+        /// Use OpenCV's built-in DNN engine. It runs on the CPU, and since OpenCV 5.1 it also supports
+        /// <see cref="Backend.Cuda"/> in a build with CUDA and cuDNN. The CUDA path is all or nothing: a model runs on the GPU only if
+        /// every operation in it has a CUDA implementation, otherwise the whole model silently runs on the CPU.
         /// </summary>
         OpenCV = 1,
         /// <summary>
