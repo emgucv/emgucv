@@ -24,6 +24,7 @@ namespace Emgu.CV.Models
         private readonly float _scoreThreshold;
         private readonly Emgu.CV.Dnn.Backend _backend;
         private readonly Emgu.CV.Dnn.Target _target;
+        private readonly LightGlueType _type;
 
         /// <summary>
         /// Create a LightGlueMatcherModel instance. Parameters mirror those of
@@ -33,15 +34,22 @@ namespace Emgu.CV.Models
         /// <param name="scoreThreshold">Match confidence threshold.</param>
         /// <param name="backend">DNN backend.</param>
         /// <param name="target">DNN target.</param>
+        /// <param name="type">
+        /// The LightGlue model variant. <see cref="LightGlueType.Aliked"/> (the default) downloads the ALIKED
+        /// LightGlue model to be used with <see cref="AlikedModel"/>, <see cref="LightGlueType.Disk"/> downloads the
+        /// DISK LightGlue model to be used with <see cref="DiskModel"/>.
+        /// </param>
         public LightGlueMatcherModel(
             float scoreThreshold = 0.0f,
             Emgu.CV.Dnn.Backend backend = Emgu.CV.Dnn.Backend.Default,
-            Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu)
+            Emgu.CV.Dnn.Target target = Emgu.CV.Dnn.Target.Cpu,
+            LightGlueType type = LightGlueType.Aliked)
             : base()
         {
             _scoreThreshold = scoreThreshold;
             _backend = backend;
             _target = target;
+            _type = type;
         }
 
         /// <summary>
@@ -64,9 +72,19 @@ namespace Emgu.CV.Models
             {
                 FileDownloadManager manager = new FileDownloadManager();
 
-                manager.AddFile(
-                    "https://raw.githubusercontent.com/YangGuanyuhan/lightglue_opencv_project/main/model/aliked_lightglue.onnx",
-                    _modelFolderName);
+                if (_type == LightGlueType.Disk)
+                {
+                    manager.AddFile(
+                        "https://github.com/fabio-sim/LightGlue-ONNX/releases/download/v0.1.0/disk_lightglue.onnx",
+                        _modelFolderName,
+                        "025C36DDDB245D70CF80674B75EEBBBAC7E20479A82B3EF3897C36B36D095406");
+                }
+                else
+                {
+                    manager.AddFile(
+                        "https://raw.githubusercontent.com/YangGuanyuhan/lightglue_opencv_project/main/model/aliked_lightglue.onnx",
+                        _modelFolderName);
+                }
 
                 if (onDownloadProgressChanged != null)
                     manager.OnDownloadProgressChanged += onDownloadProgressChanged;
@@ -83,7 +101,8 @@ namespace Emgu.CV.Models
                         manager.Files[0].LocalFile,
                         _scoreThreshold,
                         _backend,
-                        _target);
+                        _target,
+                        _type);
                 }
             }
         }
