@@ -47,6 +47,7 @@ namespace Emgu.CV
         public Odometry(OdometryType odometryType)
         {
             _ptr = CvInvoke.cveOdometryCreate((int)odometryType);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -64,11 +65,15 @@ namespace Emgu.CV
             using (InputArray iaSrcFrame = srcFrame.GetInputArray())
             using (InputArray iaDstFrame = dstFrame.GetInputArray())
             using (OutputArray oaRt = rt.GetOutputArray())
-                return CvInvoke.cveOdometryCompute1(
+            {
+                var result = CvInvoke.cveOdometryCompute1(
                     _ptr,
                     iaSrcFrame,
                     iaDstFrame,
                     oaRt);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -92,13 +97,17 @@ namespace Emgu.CV
             using (InputArray iaDstDepthFrame = dstDepthFrame.GetInputArray())
             using (InputArray iaDstRGBFrame = dstRGBFrame.GetInputArray())
             using (OutputArray oaRt = rt.GetOutputArray())
-                return CvInvoke.cveOdometryCompute2(
+            {
+                var result = CvInvoke.cveOdometryCompute2(
                     _ptr,
                     iaSrcDepthFrame,
                     iaSrcRGBFrame,
                     iaDstDepthFrame,
                     iaDstRGBFrame,
                     oaRt);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
 

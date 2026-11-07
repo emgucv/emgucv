@@ -34,6 +34,7 @@ namespace Emgu.CV
         public Octree(VectorOfPoint3D32F pointCloud, int maxDepth)
         {
             _ptr = CvInvoke.cveOctreeCreate(pointCloud, maxDepth, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

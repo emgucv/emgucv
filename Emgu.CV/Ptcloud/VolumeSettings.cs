@@ -27,6 +27,7 @@ namespace Emgu.CV
         public VolumeSettings(VolumeType volumeType = VolumeType.Tsdf)
         {
             _ptr = CvInvoke.cveVolumeSettingsCreate((int)volumeType);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -34,8 +35,17 @@ namespace Emgu.CV
         /// </summary>
         public int IntegrateWidth
         {
-            get { return CvInvoke.cveVolumeSettingsGetIntegrateWidth(_ptr); }
-            set { CvInvoke.cveVolumeSettingsSetIntegrateWidth(_ptr, value); }
+            get
+            {
+                var result = CvInvoke.cveVolumeSettingsGetIntegrateWidth(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                CvInvoke.cveVolumeSettingsSetIntegrateWidth(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -43,8 +53,17 @@ namespace Emgu.CV
         /// </summary>
         public int IntegrateHeight
         {
-            get { return CvInvoke.cveVolumeSettingsGetIntegrateHeight(_ptr); }
-            set { CvInvoke.cveVolumeSettingsSetIntegrateHeight(_ptr, value); }
+            get
+            {
+                var result = CvInvoke.cveVolumeSettingsGetIntegrateHeight(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                CvInvoke.cveVolumeSettingsSetIntegrateHeight(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -52,8 +71,17 @@ namespace Emgu.CV
         /// </summary>
         public int RaycastWidth
         {
-            get { return CvInvoke.cveVolumeSettingsGetRaycastWidth(_ptr); }
-            set { CvInvoke.cveVolumeSettingsSetRaycastWidth(_ptr, value); }
+            get
+            {
+                var result = CvInvoke.cveVolumeSettingsGetRaycastWidth(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                CvInvoke.cveVolumeSettingsSetRaycastWidth(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -61,8 +89,17 @@ namespace Emgu.CV
         /// </summary>
         public int RaycastHeight
         {
-            get { return CvInvoke.cveVolumeSettingsGetRaycastHeight(_ptr); }
-            set { CvInvoke.cveVolumeSettingsSetRaycastHeight(_ptr, value); }
+            get
+            {
+                var result = CvInvoke.cveVolumeSettingsGetRaycastHeight(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                CvInvoke.cveVolumeSettingsSetRaycastHeight(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -70,8 +107,17 @@ namespace Emgu.CV
         /// </summary>
         public float DepthFactor
         {
-            get { return CvInvoke.cveVolumeSettingsGetDepthFactor(_ptr); }
-            set { CvInvoke.cveVolumeSettingsSetDepthFactor(_ptr, value); }
+            get
+            {
+                var result = CvInvoke.cveVolumeSettingsGetDepthFactor(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                CvInvoke.cveVolumeSettingsSetDepthFactor(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -79,8 +125,17 @@ namespace Emgu.CV
         /// </summary>
         public float VoxelSize
         {
-            get { return CvInvoke.cveVolumeSettingsGetVoxelSize(_ptr); }
-            set { CvInvoke.cveVolumeSettingsSetVoxelSize(_ptr, value); }
+            get
+            {
+                var result = CvInvoke.cveVolumeSettingsGetVoxelSize(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                CvInvoke.cveVolumeSettingsSetVoxelSize(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -88,8 +143,17 @@ namespace Emgu.CV
         /// </summary>
         public float TsdfTruncateDistance
         {
-            get { return CvInvoke.cveVolumeSettingsGetTsdfTruncateDistance(_ptr); }
-            set { CvInvoke.cveVolumeSettingsSetTsdfTruncateDistance(_ptr, value); }
+            get
+            {
+                var result = CvInvoke.cveVolumeSettingsGetTsdfTruncateDistance(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                CvInvoke.cveVolumeSettingsSetTsdfTruncateDistance(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -97,8 +161,17 @@ namespace Emgu.CV
         /// </summary>
         public float MaxDepth
         {
-            get { return CvInvoke.cveVolumeSettingsGetMaxDepth(_ptr); }
-            set { CvInvoke.cveVolumeSettingsSetMaxDepth(_ptr, value); }
+            get
+            {
+                var result = CvInvoke.cveVolumeSettingsGetMaxDepth(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                CvInvoke.cveVolumeSettingsSetMaxDepth(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -107,8 +180,17 @@ namespace Emgu.CV
         /// </summary>
         public int MaxWeight
         {
-            get { return CvInvoke.cveVolumeSettingsGetMaxWeight(_ptr); }
-            set { CvInvoke.cveVolumeSettingsSetMaxWeight(_ptr, value); }
+            get
+            {
+                var result = CvInvoke.cveVolumeSettingsGetMaxWeight(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                CvInvoke.cveVolumeSettingsSetMaxWeight(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -116,8 +198,17 @@ namespace Emgu.CV
         /// </summary>
         public float RaycastStepFactor
         {
-            get { return CvInvoke.cveVolumeSettingsGetRaycastStepFactor(_ptr); }
-            set { CvInvoke.cveVolumeSettingsSetRaycastStepFactor(_ptr, value); }
+            get
+            {
+                var result = CvInvoke.cveVolumeSettingsGetRaycastStepFactor(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                CvInvoke.cveVolumeSettingsSetRaycastStepFactor(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -127,7 +218,10 @@ namespace Emgu.CV
         public void SetVolumePose(IInputArray pose)
         {
             using (InputArray iaPose = pose.GetInputArray())
+            {
                 CvInvoke.cveVolumeSettingsSetVolumePose(_ptr, iaPose);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -137,7 +231,10 @@ namespace Emgu.CV
         public void GetVolumePose(IOutputArray pose)
         {
             using (OutputArray oaPose = pose.GetOutputArray())
+            {
                 CvInvoke.cveVolumeSettingsGetVolumePose(_ptr, oaPose);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -148,7 +245,10 @@ namespace Emgu.CV
         public void SetVolumeResolution(IInputArray resolution)
         {
             using (InputArray iaResolution = resolution.GetInputArray())
+            {
                 CvInvoke.cveVolumeSettingsSetVolumeResolution(_ptr, iaResolution);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -158,7 +258,10 @@ namespace Emgu.CV
         public void GetVolumeResolution(IOutputArray resolution)
         {
             using (OutputArray oaResolution = resolution.GetOutputArray())
+            {
                 CvInvoke.cveVolumeSettingsGetVolumeResolution(_ptr, oaResolution);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -169,7 +272,10 @@ namespace Emgu.CV
         public void GetVolumeStrides(IOutputArray strides)
         {
             using (OutputArray oaStrides = strides.GetOutputArray())
+            {
                 CvInvoke.cveVolumeSettingsGetVolumeStrides(_ptr, oaStrides);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -182,7 +288,10 @@ namespace Emgu.CV
         public void SetCameraIntegrateIntrinsics(IInputArray intrinsics)
         {
             using (InputArray iaIntrinsics = intrinsics.GetInputArray())
+            {
                 CvInvoke.cveVolumeSettingsSetCameraIntegrateIntrinsics(_ptr, iaIntrinsics);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -195,7 +304,10 @@ namespace Emgu.CV
         public void GetCameraIntegrateIntrinsics(IOutputArray intrinsics)
         {
             using (OutputArray oaIntrinsics = intrinsics.GetOutputArray())
+            {
                 CvInvoke.cveVolumeSettingsGetCameraIntegrateIntrinsics(_ptr, oaIntrinsics);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -209,7 +321,10 @@ namespace Emgu.CV
         public void SetCameraRaycastIntrinsics(IInputArray intrinsics)
         {
             using (InputArray iaIntrinsics = intrinsics.GetInputArray())
+            {
                 CvInvoke.cveVolumeSettingsSetCameraRaycastIntrinsics(_ptr, iaIntrinsics);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -223,7 +338,10 @@ namespace Emgu.CV
         public void GetCameraRaycastIntrinsics(IOutputArray intrinsics)
         {
             using (OutputArray oaIntrinsics = intrinsics.GetOutputArray())
+            {
                 CvInvoke.cveVolumeSettingsGetCameraRaycastIntrinsics(_ptr, oaIntrinsics);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

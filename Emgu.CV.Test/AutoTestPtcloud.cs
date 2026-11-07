@@ -495,6 +495,30 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestPtcloudClassWrappersRaiseNativeErrors()
+        {
+            //an invalid argument must raise a CvException from the class wrapper call itself.
+            //Integrating an empty depth image into a volume is rejected by OpenCV.
+            bool thrown = false;
+            try
+            {
+                using (VolumeSettings settings = new VolumeSettings(VolumeType.Tsdf))
+                using (Volume volume = new Volume(VolumeType.Tsdf, settings))
+                using (Mat emptyDepth = new Mat())
+                using (Mat pose = Mat.Eye(4, 4, DepthType.Cv32F, 1))
+                {
+                    volume.Integrate(emptyDepth, pose);
+                }
+            }
+            catch (Emgu.CV.Util.CvException)
+            {
+                thrown = true;
+            }
+
+            EmguAssert.IsTrue(thrown, "Integrating an empty depth image should throw a CvException");
+        }
+
+        [Test]
         public void TestVolumeCreate()
         {
             foreach (VolumeType type in new VolumeType[]

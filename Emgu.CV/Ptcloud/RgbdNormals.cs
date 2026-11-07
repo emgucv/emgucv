@@ -63,6 +63,7 @@ namespace Emgu.CV
         {
             IntPtr algorithmPtr = IntPtr.Zero;
             using (InputArray iaK = k.GetInputArray())
+            {
                 _ptr = CvInvoke.cveRgbdNormalsCreate(
                     rows,
                     cols,
@@ -73,6 +74,8 @@ namespace Emgu.CV
                     ref algorithmPtr,
                     ref _sharedPtr
                 );
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -86,10 +89,13 @@ namespace Emgu.CV
         {
             using (InputArray iaPoints = points.GetInputArray())
             using (OutputArray oaNormals = normals.GetOutputArray())
+            {
                 CvInvoke.cveRgbdNormalsApply(
                     _ptr,
                     iaPoints,
                     oaNormals);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

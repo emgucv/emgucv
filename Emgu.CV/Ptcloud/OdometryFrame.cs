@@ -41,7 +41,10 @@ namespace Emgu.CV
             using (InputArray iaImage = image == null ? InputArray.GetEmpty() : image.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
             using (InputArray iaNormals = normals == null ? InputArray.GetEmpty() : normals.GetInputArray())
+            {
                 _ptr = CvInvoke.cveOdometryFrameCreate(iaDepth, iaImage, iaMask, iaNormals);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -51,7 +54,10 @@ namespace Emgu.CV
         public void GetImage(IOutputArray image)
         {
             using (OutputArray oaImage = image.GetOutputArray())
+            {
                 CvInvoke.cveOdometryFrameGetImage(_ptr, oaImage);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -61,7 +67,10 @@ namespace Emgu.CV
         public void GetGrayImage(IOutputArray image)
         {
             using (OutputArray oaImage = image.GetOutputArray())
+            {
                 CvInvoke.cveOdometryFrameGetGrayImage(_ptr, oaImage);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -71,7 +80,10 @@ namespace Emgu.CV
         public void GetDepth(IOutputArray depth)
         {
             using (OutputArray oaDepth = depth.GetOutputArray())
+            {
                 CvInvoke.cveOdometryFrameGetDepth(_ptr, oaDepth);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -82,7 +94,10 @@ namespace Emgu.CV
         public void GetProcessedDepth(IOutputArray depth)
         {
             using (OutputArray oaDepth = depth.GetOutputArray())
+            {
                 CvInvoke.cveOdometryFrameGetProcessedDepth(_ptr, oaDepth);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -93,7 +108,10 @@ namespace Emgu.CV
         public void GetMask(IOutputArray mask)
         {
             using (OutputArray oaMask = mask.GetOutputArray())
+            {
                 CvInvoke.cveOdometryFrameGetMask(_ptr, oaMask);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -103,7 +121,10 @@ namespace Emgu.CV
         public void GetNormals(IOutputArray normals)
         {
             using (OutputArray oaNormals = normals.GetOutputArray())
+            {
                 CvInvoke.cveOdometryFrameGetNormals(_ptr, oaNormals);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -112,7 +133,12 @@ namespace Emgu.CV
         /// </summary>
         public int PyramidLevels
         {
-            get { return CvInvoke.cveOdometryFrameGetPyramidLevels(_ptr); }
+            get
+            {
+                var result = CvInvoke.cveOdometryFrameGetPyramidLevels(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -126,7 +152,10 @@ namespace Emgu.CV
         public void GetPyramidAt(IOutputArray img, OdometryFramePyramidType pyramidType, int level)
         {
             using (OutputArray oaImg = img.GetOutputArray())
+            {
                 CvInvoke.cveOdometryFrameGetPyramidAt(_ptr, oaImg, pyramidType, new IntPtr(level));
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>

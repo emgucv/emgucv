@@ -46,11 +46,15 @@ namespace Emgu.CV
             if (settings == null)
             {
                 using (VolumeSettings defaultSettings = new VolumeSettings(volumeType))
+                {
                     _ptr = CvInvoke.cveVolumeCreate((int)volumeType, defaultSettings);
+                    CvInvoke.CheckError();
+                }
             }
             else
             {
                 _ptr = CvInvoke.cveVolumeCreate((int)volumeType, settings);
+                CvInvoke.CheckError();
             }
         }
 
@@ -64,7 +68,10 @@ namespace Emgu.CV
         {
             using (InputArray iaDepth = depth.GetInputArray())
             using (InputArray iaPose = pose.GetInputArray())
+            {
                 CvInvoke.cveVolumeIntegrate(_ptr, iaDepth, iaPose);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -79,7 +86,10 @@ namespace Emgu.CV
             using (InputArray iaDepth = depth.GetInputArray())
             using (InputArray iaImage = image.GetInputArray())
             using (InputArray iaPose = pose.GetInputArray())
+            {
                 CvInvoke.cveVolumeIntegrateColor(_ptr, iaDepth, iaImage, iaPose);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -91,7 +101,10 @@ namespace Emgu.CV
         public void IntegrateFrame(OdometryFrame frame, IInputArray pose)
         {
             using (InputArray iaPose = pose.GetInputArray())
+            {
                 CvInvoke.cveVolumeIntegrateFrame(_ptr, frame, iaPose);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -106,7 +119,10 @@ namespace Emgu.CV
             using (InputArray iaCameraPose = cameraPose.GetInputArray())
             using (OutputArray oaPoints = points.GetOutputArray())
             using (OutputArray oaNormals = normals.GetOutputArray())
+            {
                 CvInvoke.cveVolumeRaycast(_ptr, iaCameraPose, oaPoints, oaNormals);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -124,7 +140,10 @@ namespace Emgu.CV
             using (OutputArray oaPoints = points.GetOutputArray())
             using (OutputArray oaNormals = normals.GetOutputArray())
             using (OutputArray oaColors = colors.GetOutputArray())
+            {
                 CvInvoke.cveVolumeRaycastColor(_ptr, iaCameraPose, oaPoints, oaNormals, oaColors);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -143,7 +162,10 @@ namespace Emgu.CV
             using (InputArray iaK = k.GetInputArray())
             using (OutputArray oaPoints = points.GetOutputArray())
             using (OutputArray oaNormals = normals.GetOutputArray())
+            {
                 CvInvoke.cveVolumeRaycastEx(_ptr, iaCameraPose, height, width, iaK, oaPoints, oaNormals);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -165,7 +187,10 @@ namespace Emgu.CV
             using (OutputArray oaPoints = points.GetOutputArray())
             using (OutputArray oaNormals = normals.GetOutputArray())
             using (OutputArray oaColors = colors.GetOutputArray())
+            {
                 CvInvoke.cveVolumeRaycastExColor(_ptr, iaCameraPose, height, width, iaK, oaPoints, oaNormals, oaColors);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -177,7 +202,10 @@ namespace Emgu.CV
         {
             using (InputArray iaPoints = points.GetInputArray())
             using (OutputArray oaNormals = normals.GetOutputArray())
+            {
                 CvInvoke.cveVolumeFetchNormals(_ptr, iaPoints, oaNormals);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -189,7 +217,10 @@ namespace Emgu.CV
         {
             using (OutputArray oaPoints = points.GetOutputArray())
             using (OutputArray oaNormals = normals.GetOutputArray())
+            {
                 CvInvoke.cveVolumeFetchPointsNormals(_ptr, oaPoints, oaNormals);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -203,7 +234,10 @@ namespace Emgu.CV
             using (OutputArray oaPoints = points.GetOutputArray())
             using (OutputArray oaNormals = normals.GetOutputArray())
             using (OutputArray oaColors = colors.GetOutputArray())
+            {
                 CvInvoke.cveVolumeFetchPointsNormalsColors(_ptr, oaPoints, oaNormals, oaColors);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -212,6 +246,7 @@ namespace Emgu.CV
         public void Reset()
         {
             CvInvoke.cveVolumeReset(_ptr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -220,7 +255,12 @@ namespace Emgu.CV
         //TODO: remove this
         public int VisibleBlocks
         {
-            get { return CvInvoke.cveVolumeGetVisibleBlocks(_ptr); }
+            get
+            {
+                var result = CvInvoke.cveVolumeGetVisibleBlocks(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -228,7 +268,12 @@ namespace Emgu.CV
         /// </summary>
         public long TotalVolumeUnits
         {
-            get { return CvInvoke.cveVolumeGetTotalVolumeUnits(_ptr).ToInt64(); }
+            get
+            {
+                var result = CvInvoke.cveVolumeGetTotalVolumeUnits(_ptr).ToInt64();
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -239,7 +284,10 @@ namespace Emgu.CV
         public void GetBoundingBox(IOutputArray boundingBox, BoundingBoxPrecision precision)
         {
             using (OutputArray oaBoundingBox = boundingBox.GetOutputArray())
+            {
                 CvInvoke.cveVolumeGetBoundingBox(_ptr, oaBoundingBox, (int)precision);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -247,8 +295,17 @@ namespace Emgu.CV
         /// </summary>
         public bool EnableGrowth
         {
-            get { return CvInvoke.cveVolumeGetEnableGrowth(_ptr); }
-            set { CvInvoke.cveVolumeSetEnableGrowth(_ptr, value); }
+            get
+            {
+                var result = CvInvoke.cveVolumeGetEnableGrowth(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
+            set
+            {
+                CvInvoke.cveVolumeSetEnableGrowth(_ptr, value);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
