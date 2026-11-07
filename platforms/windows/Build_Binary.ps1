@@ -31,6 +31,11 @@
 .PARAMETER CudaArchBin
     Manually specify CUDA_ARCH_BIN_OPTION, e.g. "8.6".
 
+.PARAMETER CudnnJit
+    Requires -Cuda. Sets WITH_CUDNNJIT=ON (OpenCV 5.1: cuDNN graph API with
+    runtime-compiled (NVRTC) engines) and WITH_CUDNN=OFF, because OpenCV
+    ignores WITH_CUDNNJIT whenever the legacy cuDNN path is available.
+
 .PARAMETER OnnxRuntime
     Build with ONNX Runtime (CPU) support via WITH_ONNXRUNTIME/DOWNLOAD_ONNXRUNTIME.
     Ignored when -Cuda is set, which already enables the GPU-enabled ONNX
@@ -76,6 +81,8 @@ param(
     [switch]$Cuda,
 
     [string]$CudaArchBin = '',
+
+    [switch]$CudnnJit,
 
     [switch]$OnnxRuntime,
 
@@ -1021,6 +1028,10 @@ try {
             $cudaArchBinOption = Get-CudaArchBinOption -CudaSdkDir $cudaSdkDir -Override $CudaArchBin
             $emguFlags.Add('-DCUDA_64_BIT_DEVICE_CODE:BOOL=TRUE')
             $emguFlags.Add('-DWITH_CUDA:BOOL=TRUE')
+            if ($CudnnJit) {
+                $emguFlags.Add('-DWITH_CUDNNJIT:BOOL=TRUE')
+                $emguFlags.Add('-DWITH_CUDNN:BOOL=FALSE')
+            }
             $emguFlags.Add('-DCUDA_VERBOSE_BUILD:BOOL=TRUE')
             $emguFlags.Add("-DCUDA_TOOLKIT_ROOT_DIR:String=$(ConvertTo-ForwardSlash $cudaSdkDir)")
             $emguFlags.Add("-DCUDA_SDK_ROOT_DIR:String=$(ConvertTo-ForwardSlash $cudaSdkDir)")
