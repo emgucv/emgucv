@@ -1087,3 +1087,145 @@ bool cveVolumeGetEnableGrowth(cv::Volume* volume)
 	}
 	CVAPI_CATCH_CV_ERRORS(false)
 }
+void cveRemoveStatisticalOutliers(
+	cv::_InputArray* inputCloud,
+	cv::_OutputArray* outputCloud,
+	int meanK,
+	double stddevMulThresh,
+	cv::_OutputArray* keptIndices)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		cv::removeStatisticalOutliers(
+			*inputCloud,
+			*outputCloud,
+			meanK,
+			stddevMulThresh,
+			keptIndices ? *keptIndices : static_cast<cv::OutputArray>(cv::noArray()));
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+void cveRemoveRadiusOutliers(
+	cv::_InputArray* inputCloud,
+	cv::_OutputArray* outputCloud,
+	double radius,
+	int minNeighbors,
+	cv::_OutputArray* keptIndices)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		cv::removeRadiusOutliers(
+			*inputCloud,
+			*outputCloud,
+			radius,
+			minNeighbors,
+			keptIndices ? *keptIndices : static_cast<cv::OutputArray>(cv::noArray()));
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+void cveOrientNormals(cv::_InputArray* inputCloud, cv::_InputOutputArray* normals, cv::Point3f* viewpoint)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		cv::orientNormals(*inputCloud, *normals, *viewpoint);
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+void cveOrientNormalsConsistent(cv::_InputArray* inputCloud, cv::_InputOutputArray* normals, int k)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		cv::orientNormalsConsistent(*inputCloud, *normals, k);
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+float cveEstimateMedianSpacing(cv::_InputArray* inputCloud)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		return cv::estimateMedianSpacing(*inputCloud);
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0.0f)
+}
+void cveCreateMeshBPA(
+	cv::_InputArray* inputCloud,
+	cv::_InputArray* normals,
+	cv::_OutputArray* vertices,
+	cv::_OutputArray* triangles,
+	cv::_InputArray* radii)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		cv::createMeshBPA(
+			*inputCloud,
+			*normals,
+			*vertices,
+			*triangles,
+			radii ? *radii : static_cast<cv::InputArray>(cv::noArray()));
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+void cveBoundingBox3D(cv::_InputArray* inputCloud, cv::_OutputArray* minBound, cv::_OutputArray* maxBound)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		cv::boundingBox3D(*inputCloud, *minBound, *maxBound);
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+void cveOrientedBoundingBox3D(
+	cv::_InputArray* inputCloud,
+	cv::_OutputArray* center,
+	cv::_OutputArray* axes,
+	cv::_OutputArray* halfExtents)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		cv::orientedBoundingBox3D(*inputCloud, *center, *axes, *halfExtents);
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+double cveApproxEnclosingSphere3D(cv::_InputArray* inputCloud, cv::_OutputArray* center)
+{
+	try
+	{
+#ifdef HAVE_OPENCV_PTCLOUD
+		return cv::approxEnclosingSphere3D(*inputCloud, *center);
+#else
+		throw_no_ptcloud();
+#endif
+	}
+	CVAPI_CATCH_CV_ERRORS(0.0)
+}

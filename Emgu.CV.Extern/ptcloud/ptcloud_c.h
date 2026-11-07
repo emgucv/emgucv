@@ -228,4 +228,33 @@ CVAPI(void) cveVolumeGetBoundingBox(cv::Volume* volume, cv::_OutputArray* bb, in
 CVAPI(void) cveVolumeSetEnableGrowth(cv::Volume* volume, bool v);
 CVAPI(bool) cveVolumeGetEnableGrowth(cv::Volume* volume);
 
+CVAPI(void) cveRemoveStatisticalOutliers(
+	cv::_InputArray* inputCloud,
+	cv::_OutputArray* outputCloud,
+	int meanK,
+	double stddevMulThresh,
+	cv::_OutputArray* keptIndices);
+CVAPI(void) cveRemoveRadiusOutliers(
+	cv::_InputArray* inputCloud,
+	cv::_OutputArray* outputCloud,
+	double radius,
+	int minNeighbors,
+	cv::_OutputArray* keptIndices);
+CVAPI(void) cveOrientNormals(cv::_InputArray* inputCloud, cv::_InputOutputArray* normals, cv::Point3f* viewpoint);
+CVAPI(void) cveOrientNormalsConsistent(cv::_InputArray* inputCloud, cv::_InputOutputArray* normals, int k);
+CVAPI(float) cveEstimateMedianSpacing(cv::_InputArray* inputCloud);
+CVAPI(void) cveCreateMeshBPA(
+	cv::_InputArray* inputCloud,
+	cv::_InputArray* normals,
+	cv::_OutputArray* vertices,
+	cv::_OutputArray* triangles,
+	cv::_InputArray* radii);
+CVAPI(void) cveBoundingBox3D(cv::_InputArray* inputCloud, cv::_OutputArray* minBound, cv::_OutputArray* maxBound);
+CVAPI(void) cveOrientedBoundingBox3D(
+	cv::_InputArray* inputCloud,
+	cv::_OutputArray* center,
+	cv::_OutputArray* axes,
+	cv::_OutputArray* halfExtents);
+CVAPI(double) cveApproxEnclosingSphere3D(cv::_InputArray* inputCloud, cv::_OutputArray* center);
+
 #endif

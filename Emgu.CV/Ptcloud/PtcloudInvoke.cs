@@ -300,5 +300,238 @@ namespace Emgu.CV
             IntPtr warpedDepth,
             IntPtr warpedImage,
             IntPtr warpedMask);
+
+        /// <summary>
+        /// Removes statistical outliers from a point cloud. For each point the mean distance to its meanK nearest neighbors is computed.
+        /// Points whose mean distance exceeds global_mean + stddevMulThresh * global_stddev are dropped. Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="inputCloud">Input point cloud, 3-channel float array (CV_32FC3), or an Nx3 / 3xN CV_32F matrix.</param>
+        /// <param name="outputCloud">Output filtered point cloud, Nx1 CV_32FC3.</param>
+        /// <param name="meanK">Number of nearest neighbors used to estimate the mean distance of each point.</param>
+        /// <param name="stddevMulThresh">Standard-deviation multiplier for the distance threshold.</param>
+        /// <param name="keptIndices">Optional output, indices (CV_32S) into the input cloud of the points that were kept.</param>
+        public static void RemoveStatisticalOutliers(
+            IInputArray inputCloud,
+            IOutputArray outputCloud,
+            int meanK = 20,
+            double stddevMulThresh = 2.0,
+            IOutputArray keptIndices = null)
+        {
+            using (InputArray iaInputCloud = inputCloud.GetInputArray())
+            using (OutputArray oaOutputCloud = outputCloud.GetOutputArray())
+            using (OutputArray oaKeptIndices = keptIndices == null ? OutputArray.GetEmpty() : keptIndices.GetOutputArray())
+            {
+                cveRemoveStatisticalOutliers(iaInputCloud, oaOutputCloud, meanK, stddevMulThresh, oaKeptIndices);
+                CvInvoke.CheckError();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveRemoveStatisticalOutliers(
+            IntPtr inputCloud,
+            IntPtr outputCloud,
+            int meanK,
+            double stddevMulThresh,
+            IntPtr keptIndices);
+
+        /// <summary>
+        /// Removes radius outliers from a point cloud. Any point that has fewer than minNeighbors other points within radius is dropped.
+        /// Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="inputCloud">Input point cloud, 3-channel float array (CV_32FC3), or an Nx3 / 3xN CV_32F matrix.</param>
+        /// <param name="outputCloud">Output filtered point cloud, Nx1 CV_32FC3.</param>
+        /// <param name="radius">Search radius.</param>
+        /// <param name="minNeighbors">Minimum number of neighbors (not counting the point itself) required to keep a point.</param>
+        /// <param name="keptIndices">Optional output, indices (CV_32S) into the input cloud of the points that were kept.</param>
+        public static void RemoveRadiusOutliers(
+            IInputArray inputCloud,
+            IOutputArray outputCloud,
+            double radius,
+            int minNeighbors = 16,
+            IOutputArray keptIndices = null)
+        {
+            using (InputArray iaInputCloud = inputCloud.GetInputArray())
+            using (OutputArray oaOutputCloud = outputCloud.GetOutputArray())
+            using (OutputArray oaKeptIndices = keptIndices == null ? OutputArray.GetEmpty() : keptIndices.GetOutputArray())
+            {
+                cveRemoveRadiusOutliers(iaInputCloud, oaOutputCloud, radius, minNeighbors, oaKeptIndices);
+                CvInvoke.CheckError();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveRemoveRadiusOutliers(
+            IntPtr inputCloud,
+            IntPtr outputCloud,
+            double radius,
+            int minNeighbors,
+            IntPtr keptIndices);
+
+        /// <summary>
+        /// Flips point-cloud normals so that they face a given viewpoint. Each normal that points away from the viewpoint is negated.
+        /// Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="inputCloud">Input point cloud, 3-channel float array (CV_32FC3), or an Nx3 / 3xN CV_32F matrix.</param>
+        /// <param name="normals">Per-point normals to orient in place, Nx1 CV_32FC3.</param>
+        /// <param name="viewpoint">Point the normals should face towards (e.g. the camera center).</param>
+        public static void OrientNormals(IInputArray inputCloud, IInputOutputArray normals, MCvPoint3D32f viewpoint)
+        {
+            using (InputArray iaInputCloud = inputCloud.GetInputArray())
+            using (InputOutputArray ioaNormals = normals.GetInputOutputArray())
+            {
+                cveOrientNormals(iaInputCloud, ioaNormals, ref viewpoint);
+                CvInvoke.CheckError();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveOrientNormals(IntPtr inputCloud, IntPtr normals, ref MCvPoint3D32f viewpoint);
+
+        /// <summary>
+        /// Orients point-cloud normals consistently across the whole cloud, by propagating a consistent sign along the minimum spanning tree
+        /// of a k-nearest-neighbor graph. If the graph is disconnected the normals are oriented outward about the centroid instead.
+        /// Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="inputCloud">Input point cloud, 3-channel float array (CV_32FC3), or an Nx3 / 3xN CV_32F matrix.</param>
+        /// <param name="normals">Per-point normals to orient in place, Nx1 CV_32FC3.</param>
+        /// <param name="k">Number of nearest neighbors used to build the graph.</param>
+        public static void OrientNormalsConsistent(IInputArray inputCloud, IInputOutputArray normals, int k = 30)
+        {
+            using (InputArray iaInputCloud = inputCloud.GetInputArray())
+            using (InputOutputArray ioaNormals = normals.GetInputOutputArray())
+            {
+                cveOrientNormalsConsistent(iaInputCloud, ioaNormals, k);
+                CvInvoke.CheckError();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveOrientNormalsConsistent(IntPtr inputCloud, IntPtr normals, int k);
+
+        /// <summary>
+        /// Estimates the median spacing between neighboring points of a point cloud, i.e. the median distance from a sampled set of points to
+        /// their nearest neighbor. Useful for picking a ball radius for <see cref="CreateMeshBPA"/>. Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="inputCloud">Input point cloud, 3-channel float array (CV_32FC3), or an Nx3 / 3xN CV_32F matrix.</param>
+        /// <returns>Median nearest-neighbor distance, or 0 if the cloud has fewer than 2 points.</returns>
+        public static float EstimateMedianSpacing(IInputArray inputCloud)
+        {
+            using (InputArray iaInputCloud = inputCloud.GetInputArray())
+            {
+                float result = cveEstimateMedianSpacing(iaInputCloud);
+                CvInvoke.CheckError();
+                return result;
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern float cveEstimateMedianSpacing(IntPtr inputCloud);
+
+        /// <summary>
+        /// Reconstructs a triangle mesh from an oriented point cloud using Ball-Pivoting. The mesh vertices are the input points,
+        /// so estimate and orient the normals first. Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="inputCloud">Input point cloud, 3-channel float array (CV_32FC3), or an Nx3 / 3xN CV_32F matrix.</param>
+        /// <param name="normals">Per-point normals, Nx1 CV_32FC3 (same count as the cloud).</param>
+        /// <param name="vertices">Output mesh vertices (a copy of the input points), Nx1 CV_32FC3.</param>
+        /// <param name="triangles">Output triangle vertex indices, Mx3 CV_32S.</param>
+        /// <param name="radii">Optional ball radii (1D CV_32F/CV_64F). If null or empty, radii are derived from the median spacing as {1x, 2x, 4x}.</param>
+        public static void CreateMeshBPA(
+            IInputArray inputCloud,
+            IInputArray normals,
+            IOutputArray vertices,
+            IOutputArray triangles,
+            IInputArray radii = null)
+        {
+            using (InputArray iaInputCloud = inputCloud.GetInputArray())
+            using (InputArray iaNormals = normals.GetInputArray())
+            using (OutputArray oaVertices = vertices.GetOutputArray())
+            using (OutputArray oaTriangles = triangles.GetOutputArray())
+            using (InputArray iaRadii = radii == null ? InputArray.GetEmpty() : radii.GetInputArray())
+            {
+                cveCreateMeshBPA(iaInputCloud, iaNormals, oaVertices, oaTriangles, iaRadii);
+                CvInvoke.CheckError();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveCreateMeshBPA(
+            IntPtr inputCloud,
+            IntPtr normals,
+            IntPtr vertices,
+            IntPtr triangles,
+            IntPtr radii);
+
+        /// <summary>
+        /// Computes the axis-aligned bounding box of a point cloud. Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="inputCloud">Input point cloud, 3-channel float array (CV_32FC3), or an Nx3 / 3xN CV_32F matrix.</param>
+        /// <param name="minBound">Output minimum corner (x,y,z), 3x1 CV_32F.</param>
+        /// <param name="maxBound">Output maximum corner (x,y,z), 3x1 CV_32F.</param>
+        public static void BoundingBox3D(IInputArray inputCloud, IOutputArray minBound, IOutputArray maxBound)
+        {
+            using (InputArray iaInputCloud = inputCloud.GetInputArray())
+            using (OutputArray oaMinBound = minBound.GetOutputArray())
+            using (OutputArray oaMaxBound = maxBound.GetOutputArray())
+            {
+                cveBoundingBox3D(iaInputCloud, oaMinBound, oaMaxBound);
+                CvInvoke.CheckError();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveBoundingBox3D(IntPtr inputCloud, IntPtr minBound, IntPtr maxBound);
+
+        /// <summary>
+        /// Computes a PCA-based oriented bounding box of a point cloud. The box axes are the principal axes of the cloud; this is
+        /// not guaranteed to be the minimum-volume box. A point p is inside the box iff abs(axes * (p - center)) is at most halfExtents
+        /// component-wise. Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="inputCloud">Input point cloud, 3-channel float array (CV_32FC3), or an Nx3 / 3xN CV_32F matrix.</param>
+        /// <param name="center">Output box center (x,y,z), 3x1 CV_32F.</param>
+        /// <param name="axes">Output 3x3 CV_32F; each row is a unit box axis.</param>
+        /// <param name="halfExtents">Output half-size along each axis, 3x1 CV_32F.</param>
+        public static void OrientedBoundingBox3D(
+            IInputArray inputCloud,
+            IOutputArray center,
+            IOutputArray axes,
+            IOutputArray halfExtents)
+        {
+            using (InputArray iaInputCloud = inputCloud.GetInputArray())
+            using (OutputArray oaCenter = center.GetOutputArray())
+            using (OutputArray oaAxes = axes.GetOutputArray())
+            using (OutputArray oaHalfExtents = halfExtents.GetOutputArray())
+            {
+                cveOrientedBoundingBox3D(iaInputCloud, oaCenter, oaAxes, oaHalfExtents);
+                CvInvoke.CheckError();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveOrientedBoundingBox3D(
+            IntPtr inputCloud,
+            IntPtr center,
+            IntPtr axes,
+            IntPtr halfExtents);
+
+        /// <summary>
+        /// Computes an approximate minimum enclosing sphere of a point cloud (Ritter's algorithm). Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="inputCloud">Input point cloud, 3-channel float array (CV_32FC3), or an Nx3 / 3xN CV_32F matrix.</param>
+        /// <param name="center">Output sphere center (x,y,z), 3x1 CV_32F.</param>
+        /// <returns>Sphere radius, or 0 if the cloud is empty.</returns>
+        public static double ApproxEnclosingSphere3D(IInputArray inputCloud, IOutputArray center)
+        {
+            using (InputArray iaInputCloud = inputCloud.GetInputArray())
+            using (OutputArray oaCenter = center.GetOutputArray())
+            {
+                double result = cveApproxEnclosingSphere3D(iaInputCloud, oaCenter);
+                CvInvoke.CheckError();
+                return result;
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern double cveApproxEnclosingSphere3D(IntPtr inputCloud, IntPtr center);
     }
 }
