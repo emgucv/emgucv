@@ -557,6 +557,8 @@ namespace Emgu.CV.Test
             //Image<Gray, Byte> image = new Image<Gray, byte>(640, 320);
             //image.Draw(new CircleF(new PointF(200, 200), 30), new Gray(255.0), 4);
             Mat image = new Mat(640, 320, DepthType.Cv8U, 1);
+            //A new Mat is not zero-initialized; leftover memory makes the CPU/GPU border handling differ.
+            image.SetTo(new MCvScalar(0));
             CvInvoke.Circle(image, new Point(200, 200), 30, new MCvScalar(255), 4);
 
             Size ksize = new Size(morphIter * 2 + 1, morphIter * 2 + 1);
