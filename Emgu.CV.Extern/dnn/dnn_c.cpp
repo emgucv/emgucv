@@ -191,6 +191,19 @@ void cveDnnNetEnableKVCache(cv::dnn::Net* net)
 	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
+void cveDnnNetReserveKVCache(cv::dnn::Net* net, int maxSequenceLength)
+{
+	try
+	{
+	#ifdef HAVE_OPENCV_DNN
+		net->reserveKVCache(maxSequenceLength);
+	#else
+		throw_no_dnn();
+	#endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+
 void cveDnnNetDisableKVCache(cv::dnn::Net* net)
 {
 	try
@@ -407,13 +420,14 @@ void cveDnnBlobFromImage(
 	cv::Scalar* mean,
 	bool swapRB,
 	bool crop,
-	int ddepth
+	int ddepth,
+	int interpolation
 	)
 {
 	try
 	{
 	#ifdef HAVE_OPENCV_DNN
-		cv::dnn::blobFromImage(*image, *blob, scalefactor, *size, *mean, swapRB, crop, ddepth);
+		cv::dnn::blobFromImage(*image, *blob, scalefactor, *size, *mean, swapRB, crop, ddepth, interpolation);
 	#else
 		throw_no_dnn();
 	#endif
@@ -429,12 +443,13 @@ void cveDnnBlobFromImages(
 	cv::Scalar* mean,
 	bool swapRB,
 	bool crop,
-	int ddepth)
+	int ddepth,
+	int interpolation)
 {
 	try
 	{
 	#ifdef HAVE_OPENCV_DNN
-		cv::dnn::blobFromImages(*images, *blob, scalefactor, *size, *mean, swapRB, crop, ddepth);
+		cv::dnn::blobFromImages(*images, *blob, scalefactor, *size, *mean, swapRB, crop, ddepth, interpolation);
 	#else
 		throw_no_dnn();
 	#endif

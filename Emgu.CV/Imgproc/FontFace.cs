@@ -41,6 +41,23 @@ namespace Emgu.CV
         }
 
         /// <summary>
+        /// Provide the font file for a builtin font name that is not embedded in the native library, for example "uni" or "italic" when OpenCV was built without WITH_UNIFONT or WITH_ITALICFONT.
+        /// This is a global setting and applies to all FontFace objects created afterwards.
+        /// </summary>
+        /// <param name="fontName">The builtin font name, such as "sans", "italic" or "uni".</param>
+        /// <param name="fontPath">The path of the font file.</param>
+        /// <returns>True if the font is successfully registered.</returns>
+        public static bool SetBuiltinFont(String fontName, String fontPath)
+        {
+            bool result;
+            using (CvString csFontName = new CvString(fontName))
+            using (CvString csFontPath = new CvString(fontPath))
+                result = CvInvoke.cveFontFaceSetBuiltinFont(csFontName, csFontPath);
+            CvInvoke.CheckError();
+            return result;
+        }
+
+        /// <summary>
         /// Get the name of the loaded font.
         /// </summary>
         public String Name
@@ -101,6 +118,10 @@ namespace Emgu.CV
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         internal static extern bool cveFontFaceSet(IntPtr fontFace, IntPtr fontPathOrName);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        [return: MarshalAs(CvInvoke.BoolMarshalType)]
+        internal static extern bool cveFontFaceSetBuiltinFont(IntPtr fontName, IntPtr fontPath);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveFontFaceGetName(IntPtr fontFace, IntPtr name);

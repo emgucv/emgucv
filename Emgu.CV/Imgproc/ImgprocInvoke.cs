@@ -2198,6 +2198,37 @@ namespace Emgu.CV
 
 
         /// <summary>
+        /// Composites an overlay image onto a background image using a Porter-Duff operator. Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="overlay">The overlay (source) image, with an alpha channel (4 channels).</param>
+        /// <param name="background">The background (destination) image, with or without an alpha channel.</param>
+        /// <param name="dst">The output image.</param>
+        /// <param name="op">The compositing operator.</param>
+        /// <param name="premultiplied">False if the alpha of the overlay (and of the background, if it has one) is straight, as produced by Imread with Unchanged; true if it is already premultiplied, which skips the internal conversion.</param>
+        public static void AlphaComposite(
+            IInputArray overlay,
+            IInputArray background,
+            IOutputArray dst,
+            CvEnum.AlphaCompositeOperation op = CvEnum.AlphaCompositeOperation.Over,
+            bool premultiplied = false)
+        {
+            using (InputArray iaOverlay = overlay.GetInputArray())
+            using (InputArray iaBackground = background.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+                cveAlphaComposite(iaOverlay, iaBackground, oaDst, (int)op, premultiplied);
+            CvInvoke.CheckError();
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveAlphaComposite(
+            IntPtr overlay,
+            IntPtr background,
+            IntPtr dst,
+            int op,
+            [MarshalAs(CvInvoke.BoolMarshalType)]
+            bool premultiplied);
+
+        /// <summary>
         /// Contrast Limited Adaptive Histogram Equalization (CLAHE)
         /// </summary>
         /// <param name="src">The source image</param>

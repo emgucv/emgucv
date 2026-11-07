@@ -72,5 +72,23 @@ namespace Emgu.CV.Test
         }
 
 #endif
+
+        [Test]
+        public void TestBlobFromImageInterpolation()
+        {
+            using (Mat img = new Mat(new Size(100, 80), DepthType.Cv8U, 3))
+            {
+                CvInvoke.Randu(img, new MCvScalar(), new MCvScalar(255, 255, 255));
+                using (Mat blobLinear = DnnInvoke.BlobFromImage(img, 1.0 / 255, new Size(64, 64)))
+                using (Mat blobExact = DnnInvoke.BlobFromImage(img, 1.0 / 255, new Size(64, 64), new MCvScalar(), false, false, DepthType.Cv32F, Inter.LinearExact))
+                using (Mat blobNearest = DnnInvoke.BlobFromImage(img, 1.0 / 255, new Size(64, 64), new MCvScalar(), false, false, DepthType.Cv32F, Inter.Nearest))
+                {
+                    EmguAssert.AreEqual(4, blobExact.Dims);
+                    EmguAssert.AreEqual(64, blobExact.SizeOfDimension[3]);
+                    EmguAssert.AreEqual(64, blobNearest.SizeOfDimension[3]);
+                    EmguAssert.AreEqual(64, blobLinear.SizeOfDimension[3]);
+                }
+            }
+        }
     }
 }

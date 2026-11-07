@@ -74,6 +74,7 @@ CVAPI(void) cveDnnNetForward3(cv::dnn::Net* net, cv::_OutputArray* outputBlobs,	
 CVAPI(void) cveDnnNetEnableKVCache(cv::dnn::Net* net);
 CVAPI(void) cveDnnNetDisableKVCache(cv::dnn::Net* net);
 CVAPI(void) cveDnnNetResetKVCache(cv::dnn::Net* net);
+CVAPI(void) cveDnnNetReserveKVCache(cv::dnn::Net* net, int maxSequenceLength);
 CVAPI(void) cveDnnNetRelease(cv::dnn::Net** net);
 
 CVAPI(void) cveDnnNetGetUnconnectedOutLayers(cv::dnn::Net* net, std::vector<int>* layerIds);
@@ -100,7 +101,8 @@ CVAPI(void) cveDnnBlobFromImage(
 	cv::Scalar* mean, 
 	bool swapRB,
 	bool crop,
-	int ddepth);
+	int ddepth,
+	int interpolation);
 
 CVAPI(void) cveDnnBlobFromImages(
 	cv::_InputArray* images,
@@ -110,7 +112,8 @@ CVAPI(void) cveDnnBlobFromImages(
 	cv::Scalar* mean, 
 	bool swapRB,
 	bool crop,
-	int ddepth);
+	int ddepth,
+	int interpolation);
 
 CVAPI(void) cveDnnImagesFromBlob(cv::Mat* blob, cv::_OutputArray* images);
 

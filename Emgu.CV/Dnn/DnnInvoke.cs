@@ -54,6 +54,7 @@ namespace Emgu.CV.Dnn
         /// <param name="swapRB">Flag which indicates that swap first and last channels in 3-channel image is necessary.</param>
         /// <param name="crop">Flag which indicates whether image will be cropped after resize or not</param>
         /// <param name="ddepth">Depth of output blob. Choose CV_32F or CV_8U.</param>
+        /// <param name="interpolation">The resize interpolation mode (OpenCV 5.1). Use Inter.LinearExact for a bit-exact resize.</param>
         /// <returns>4-dimensional Mat with NCHW dimensions order.</returns>
         public static Mat BlobFromImage(
             IInputArray image, 
@@ -61,11 +62,12 @@ namespace Emgu.CV.Dnn
             Size size = new Size(), 
             MCvScalar mean = new MCvScalar(), 
             bool swapRB = false, 
-            bool crop = false, 
-            CvEnum.DepthType ddepth = CvEnum.DepthType.Cv32F)
+            bool crop = false,
+            CvEnum.DepthType ddepth = CvEnum.DepthType.Cv32F,
+            CvEnum.Inter interpolation = CvEnum.Inter.Linear)
         {
             Mat blob = new Mat();
-            BlobFromImage(image, blob, scaleFactor, size, mean, swapRB, crop, ddepth);
+            BlobFromImage(image, blob, scaleFactor, size, mean, swapRB, crop, ddepth, interpolation);
             return blob;
         }
 
@@ -80,6 +82,7 @@ namespace Emgu.CV.Dnn
         /// <param name="swapRB">Flag which indicates that swap first and last channels in 3-channel image is necessary.</param>
         /// <param name="crop">Flag which indicates whether image will be cropped after resize or not</param>
         /// <param name="ddepth">Depth of output blob. Choose CV_32F or CV_8U.</param>
+        /// <param name="interpolation">The resize interpolation mode (OpenCV 5.1). Use Inter.LinearExact for a bit-exact resize.</param>
         public static void BlobFromImage(
             IInputArray image, 
             IOutputArray blob, 
@@ -88,11 +91,12 @@ namespace Emgu.CV.Dnn
             MCvScalar mean = new MCvScalar(), 
             bool swapRB = false, 
             bool crop = false,
-            CvEnum.DepthType ddepth = CvEnum.DepthType.Cv32F)
+            CvEnum.DepthType ddepth = CvEnum.DepthType.Cv32F,
+            CvEnum.Inter interpolation = CvEnum.Inter.Linear)
         {
             using (InputArray iaImage = image.GetInputArray())
             using (OutputArray oaBlob = blob.GetOutputArray())
-                cveDnnBlobFromImage(iaImage, oaBlob, scaleFactor, ref size, ref mean, swapRB, crop, ddepth);
+                cveDnnBlobFromImage(iaImage, oaBlob, scaleFactor, ref size, ref mean, swapRB, crop, ddepth, (int)interpolation);
             CvInvoke.CheckError();
         }
 
@@ -107,7 +111,8 @@ namespace Emgu.CV.Dnn
             bool swapRB,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool crop,
-            CvEnum.DepthType ddepth);
+            CvEnum.DepthType ddepth,
+            int interpolation);
 
         /// <summary>
         /// Creates 4-dimensional blob from series of images. Optionally resizes and crops images from center, subtract mean values, scales values by scalefactor, swap Blue and Red channels.
@@ -119,6 +124,7 @@ namespace Emgu.CV.Dnn
         /// <param name="swapRB">Flag which indicates that swap first and last channels in 3-channel image is necessary.</param>
         /// <param name="crop">Flag which indicates whether image will be cropped after resize or not</param>
         /// <param name="ddepth">Depth of output blob. Choose CV_32F or CV_8U.</param>
+        /// <param name="interpolation">The resize interpolation mode (OpenCV 5.1). Use Inter.LinearExact for a bit-exact resize.</param>
         /// <returns>Input image is resized so one side after resize is equal to corresponding dimension in size and another one is equal or larger. Then, crop from the center is performed.</returns>
         public static Mat BlobFromImages(
             Mat[] images, 
@@ -127,12 +133,13 @@ namespace Emgu.CV.Dnn
             MCvScalar mean = new MCvScalar(), 
             bool swapRB = false, 
             bool crop = false,
-            CvEnum.DepthType ddepth = CvEnum.DepthType.Cv32F)
+            CvEnum.DepthType ddepth = CvEnum.DepthType.Cv32F,
+            CvEnum.Inter interpolation = CvEnum.Inter.Linear)
         {
             Mat blob = new Mat();
             using (VectorOfMat vm = new VectorOfMat(images))
             {
-                BlobFromImages(vm, blob, scaleFactor, size, mean, swapRB, crop, ddepth);
+                BlobFromImages(vm, blob, scaleFactor, size, mean, swapRB, crop, ddepth, interpolation);
             }
             return blob;
         }
@@ -148,6 +155,7 @@ namespace Emgu.CV.Dnn
         /// <param name="swapRB">flag which indicates that swap first and last channels in 3-channel image is necessary.</param>
         /// <param name="crop">	flag which indicates whether image will be cropped after resize or not</param>
         /// <param name="ddepth">Depth of output blob. Choose CV_32F or CV_8U.</param>
+        /// <param name="interpolation">The resize interpolation mode (OpenCV 5.1). Use Inter.LinearExact for a bit-exact resize.</param>
         public static void BlobFromImages(
             IInputArrayOfArrays images, 
             IOutputArray blob, 
@@ -156,12 +164,13 @@ namespace Emgu.CV.Dnn
             MCvScalar mean = new MCvScalar(), 
             bool swapRB = false, 
             bool crop = false,
-            CvEnum.DepthType ddepth = CvEnum.DepthType.Cv32F)
+            CvEnum.DepthType ddepth = CvEnum.DepthType.Cv32F,
+            CvEnum.Inter interpolation = CvEnum.Inter.Linear)
         {
             using (InputArray iaImages = images.GetInputArray())
             using (OutputArray oaBlob = blob.GetOutputArray())
             {
-                cveDnnBlobFromImages(iaImages, oaBlob, scaleFactor, ref size, ref mean, swapRB, crop, ddepth);
+                cveDnnBlobFromImages(iaImages, oaBlob, scaleFactor, ref size, ref mean, swapRB, crop, ddepth, (int)interpolation);
             }
             CvInvoke.CheckError();
         }
@@ -177,7 +186,8 @@ namespace Emgu.CV.Dnn
             bool swapRB,
             [MarshalAs(CvInvoke.BoolMarshalType)]
             bool crop,
-            CvEnum.DepthType ddepth);
+            CvEnum.DepthType ddepth,
+            int interpolation);
 
         /// <summary>
         /// Parse a 4D blob and output the images it contains as 2D arrays through a simpler data structure (std::vector&lt;cv::Mat&gt;).

@@ -26,6 +26,7 @@ CVAPI(void) cveSepFilter2D(cv::_InputArray* src, cv::_OutputArray* dst, int ddep
 
 CVAPI(void) cveBlendLinear(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputArray* weights1, cv::_InputArray* weights2, cv::_OutputArray* dst);
 
+CVAPI(void) cveAlphaComposite(cv::_InputArray* overlay, cv::_InputArray* background, cv::_OutputArray* dst, int op, bool premultiplied);
 CVAPI(void) cveCLAHE(cv::_InputArray* src, double clipLimit, cv::Size* tileGridSize, cv::_OutputArray* dst);
 
 //CVAPI(void) cveAdaptiveBilateralFilter(cv::_InputArray* src, cv::_OutputArray* dst, CvSize* ksize, double sigmaSpace, double maxSigmaColor, CvPoint* anchor, int borderType);
@@ -260,6 +261,7 @@ CVAPI(void) cveGetGaborKernel(
 CVAPI(cv::FontFace*) cveFontFaceCreate(cv::String* fontPathOrName);
 CVAPI(void) cveFontFaceRelease(cv::FontFace** fontFace);
 CVAPI(bool) cveFontFaceSet(cv::FontFace* fontFace, cv::String* fontPathOrName);
+CVAPI(bool) cveFontFaceSetBuiltinFont(cv::String* fontName, cv::String* fontPath);
 CVAPI(void) cveFontFaceGetName(cv::FontFace* fontFace, cv::String* name);
 CVAPI(bool) cveFontFaceSetInstance(cv::FontFace* fontFace, std::vector<int>* params);
 CVAPI(bool) cveFontFaceGetInstance(cv::FontFace* fontFace, std::vector<int>* params);

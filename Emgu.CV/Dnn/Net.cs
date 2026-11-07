@@ -257,6 +257,20 @@ namespace Emgu.CV.Dnn
         }
 
         /// <summary>
+        /// Pre-allocates the attention KV-cache so that no page allocation happens during generation.
+        /// Call after <see cref="EnableKVCache"/> and before the prefill forward pass.
+        /// This is a hint, not a limit: going past <paramref name="maxSequenceLength"/> still grows the cache.
+        /// <see cref="ResetKVCache"/> drops the reservation. Only models whose attention imports as a single fused op use the paged cache,
+        /// otherwise OpenCV logs a warning and does nothing. Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="maxSequenceLength">The maximum sequence length (prompt + generated tokens) to reserve the cache for.</param>
+        public void ReserveKVCache(int maxSequenceLength)
+        {
+            DnnInvoke.cveDnnNetReserveKVCache(_ptr, maxSequenceLength);
+            CvInvoke.CheckError();
+        }
+
+        /// <summary>
         /// Connects output of the first layer to input of the second layer.
         /// </summary>
         /// <param name="outPin">Descriptor of the first layer output.</param>
@@ -373,6 +387,9 @@ namespace Emgu.CV.Dnn
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnNetResetKVCache(IntPtr net);
+
+        [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        internal static extern void cveDnnNetReserveKVCache(IntPtr net, int maxSequenceLength);
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         internal static extern void cveDnnNetConnect(IntPtr net, IntPtr outPin, IntPtr inPin);

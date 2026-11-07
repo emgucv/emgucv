@@ -44,6 +44,15 @@ void cveBlendLinear(cv::_InputArray* src1, cv::_InputArray* src2, cv::_InputArra
 	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
+void cveAlphaComposite(cv::_InputArray* overlay, cv::_InputArray* background, cv::_OutputArray* dst, int op, bool premultiplied)
+{
+	try
+	{
+		cv::alphaComposite(*overlay, *background, *dst, op, premultiplied);
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
+
 void cveCLAHE(cv::_InputArray* src, double clipLimit, cv::Size* tileGridSize, cv::_OutputArray* dst)
 {
 	try
@@ -1023,6 +1032,14 @@ bool cveFontFaceSet(cv::FontFace* fontFace, cv::String* fontPathOrName)
 	try
 	{
 		return fontFace->set(*fontPathOrName);
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
+}
+bool cveFontFaceSetBuiltinFont(cv::String* fontName, cv::String* fontPath)
+{
+	try
+	{
+		return cv::FontFace::setBuiltinFont(*fontName, *fontPath);
 	}
 	CVAPI_CATCH_CV_ERRORS(false)
 }

@@ -841,6 +841,44 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestFontFaceSetBuiltinFont()
+        {
+            //An unknown builtin font name must be rejected, either by returning false or by raising an OpenCV error.
+            bool registered = false;
+            try
+            {
+                registered = FontFace.SetBuiltinFont("no_such_builtin_font", "no_such_font_file.ttf");
+            }
+            catch (Emgu.CV.Util.CvException)
+            {
+            }
+            EmguAssert.IsFalse(registered);
+        }
+
+        [Test]
+        public void TestAlphaComposite()
+        {
+            using (Mat overlay = new Mat(new Size(64, 48), DepthType.Cv8U, 4))
+            using (Mat background = new Mat(new Size(64, 48), DepthType.Cv8U, 3))
+            using (Mat dst = new Mat())
+            {
+                //opaque red overlay on a blue background
+                overlay.SetTo(new MCvScalar(0, 0, 255, 255));
+                background.SetTo(new MCvScalar(255, 0, 0));
+                CvInvoke.AlphaComposite(overlay, background, dst, AlphaCompositeOperation.Over);
+                EmguAssert.AreEqual(64, dst.Width);
+                EmguAssert.AreEqual(48, dst.Height);
+                MCvScalar mean = CvInvoke.Mean(dst);
+                EmguAssert.IsTrue(mean.V2 > 250 && mean.V0 < 5, String.Format("Unexpected composite {0}", mean));
+
+                //keep the background only
+                CvInvoke.AlphaComposite(overlay, background, dst, AlphaCompositeOperation.Dest);
+                mean = CvInvoke.Mean(dst);
+                EmguAssert.IsTrue(mean.V0 > 250 && mean.V2 < 5, String.Format("Unexpected composite {0}", mean));
+            }
+        }
+
+        [Test]
         public void TestNiBlack()
         {
             Mat m = EmguAssert.LoadMat("lena.jpg");
