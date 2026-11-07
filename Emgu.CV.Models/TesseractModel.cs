@@ -123,7 +123,20 @@ namespace Emgu.CV.Models
                     // PageSegMode.AutoOsd, and downloaded next to the main language
                     // file) can never be loaded.
                     _ocr = new Tesseract();
-                    _ocr.Init(_tessDataDirectory, _lang, _mode);
+                    try
+                    {
+                        _ocr.Init(_tessDataDirectory, _lang, _mode);
+                    }
+                    catch (ArgumentException)
+                    {
+                        // Tesseract cannot open a tessdata directory whose path has characters
+                        // outside the system code page (e.g. a unicode folder name on Windows).
+                        // Fall back to the in-memory language data; "osd" is not available then.
+                        _ocr.Dispose();
+                        var rawData = System.IO.File.ReadAllBytes(Path.Combine(_tessDataDirectory, String.Format("{0}.traineddata", _lang)));
+                        _ocr = new Tesseract();
+                        _ocr.Init(rawData, _lang, _mode);
+                    }
                 }
             }
         }

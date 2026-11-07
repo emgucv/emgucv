@@ -138,6 +138,10 @@ namespace Emgu.CV.Models
                 throw new InvalidOperationException("The model is not initialized. Call Init first.");
 
             List<int> ids = new List<int>(_tokenizer.Encode(text));
+            //OpenCV 5.1 applies the post_processor template of tokenizer.json, which may already
+            //terminate the sequence with <eos>; drop it so that exactly one is added below.
+            while (ids.Count > 0 && ids[ids.Count - 1] == EosId)
+                ids.RemoveAt(ids.Count - 1);
             if (ids.Count > TextSequenceLength - 1)
                 ids.RemoveRange(TextSequenceLength - 1, ids.Count - (TextSequenceLength - 1));
             ids.Add(EosId);
