@@ -53,6 +53,50 @@ namespace Emgu.CV.Test
     public class AutoTestPtcloud
     {
         [Test]
+        public void TestVolumeCreate()
+        {
+            foreach (VolumeType type in new VolumeType[]
+                     {
+                         VolumeType.Tsdf, VolumeType.HashTsdf, VolumeType.ColorTsdf, VolumeType.ColorHashTsdf
+                     })
+            {
+                using (VolumeSettings settings = new VolumeSettings(type))
+                using (Volume volume = new Volume(type, settings))
+                {
+                    EmguAssert.IsTrue(volume.Ptr != IntPtr.Zero, String.Format("Unable to create a {0} volume", type));
+                }
+            }
+        }
+
+        [Test]
+        public void TestColorHashTsdfIntegrate()
+        {
+            //OpenCV 5.1: ColorHashTSDF. The depth-only integrate throws for the color volume types,
+            //so the color overload must be used. The color image must be CV_8UC4, as in OpenCV's own tests.
+            using (VolumeSettings settings = new VolumeSettings(VolumeType.ColorHashTsdf))
+            using (Volume volume = new Volume(VolumeType.ColorHashTsdf, settings))
+            using (Mat depth = new Mat(480, 640, DepthType.Cv32F, 1))
+            using (Mat color = new Mat(480, 640, DepthType.Cv8U, 4))
+            using (Mat pose = Mat.Eye(4, 4, DepthType.Cv32F, 1))
+            {
+                depth.SetTo(new MCvScalar(1.0));
+                color.SetTo(new MCvScalar(10, 120, 200, 255));
+                volume.IntegrateColor(depth, color, pose);
+                CvInvoke.CheckError();
+
+                using (Mat points = new Mat())
+                using (Mat normals = new Mat())
+                using (Mat colors = new Mat())
+                {
+                    volume.FetchPointsNormalsColors(points, normals, colors);
+                    CvInvoke.CheckError();
+                    EmguAssert.AreEqual(points.Rows, normals.Rows);
+                    EmguAssert.AreEqual(points.Rows, colors.Rows);
+                }
+            }
+        }
+
+        [Test]
         public void TestRescaleDepth()
         {
             // CV_16U value 5000 represents 5000 mm; after rescale to CV_32F it should be 5.0 m

@@ -16,7 +16,7 @@ using Emgu.Util;
 namespace Emgu.CV
 {
     /// <summary>
-    /// A TSDF / HashTSDF / ColorTSDF volume, used for fusing a sequence of depth (and, for ColorTSDF, color)
+    /// A TSDF / HashTSDF / ColorTSDF / ColorHashTSDF volume, used for fusing a sequence of depth (and, for ColorTSDF and ColorHashTSDF, color)
     /// frames into a 3D reconstruction, and for rendering the reconstructed surface back out via raycasting.
     /// </summary>
     public class Volume : UnmanagedObject
@@ -39,7 +39,7 @@ namespace Emgu.CV
         /// <summary>
         /// Create a custom volume.
         /// </summary>
-        /// <param name="volumeType">The volume type: TSDF, HashTSDF or ColorTSDF.</param>
+        /// <param name="volumeType">The volume type: TSDF, HashTSDF, ColorTSDF or ColorHashTSDF.</param>
         /// <param name="settings">The settings for the volume. If not specified, the default settings for the given volume type will be used.</param>
         public Volume(VolumeType volumeType = VolumeType.Tsdf, VolumeSettings settings = null)
         {
@@ -68,11 +68,11 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Integrates the input depth and color data into the volume (ColorTSDF only). Camera intrinsics are
+        /// Integrates the input depth and color data into the volume (ColorTSDF and ColorHashTSDF only). Camera intrinsics are
         /// taken from the volume's settings.
         /// </summary>
         /// <param name="depth">The depth image.</param>
-        /// <param name="image">The color image. Must be registered with the depth data, i.e. have the same intrinsics and camera pose.</param>
+        /// <param name="image">The color image (CV_8UC4, the same size as the depth image). Must be registered with the depth data, i.e. have the same intrinsics and camera pose.</param>
         /// <param name="pose">The pose of the camera in global coordinates.</param>
         public void IntegrateColor(IInputArray depth, IInputArray image, IInputArray pose)
         {
@@ -86,7 +86,7 @@ namespace Emgu.CV
         /// Integrates the input data, from a precalculated <see cref="OdometryFrame"/>, into the volume.
         /// Camera intrinsics are taken from the volume's settings.
         /// </summary>
-        /// <param name="frame">The frame from which to take depth (and, for ColorTSDF, color) data.</param>
+        /// <param name="frame">The frame from which to take depth (and, for ColorTSDF and ColorHashTSDF, color) data.</param>
         /// <param name="pose">The pose of the camera in global coordinates.</param>
         public void IntegrateFrame(OdometryFrame frame, IInputArray pose)
         {
@@ -110,7 +110,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Renders the volume's contents into an image, including colors (ColorTSDF only). The resulting
+        /// Renders the volume's contents into an image, including colors (ColorTSDF and ColorHashTSDF only). The resulting
         /// points and normals are in the camera's coordinate system. Rendered image size and camera intrinsics
         /// are taken from the volume's settings.
         /// </summary>
@@ -147,7 +147,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Renders the volume's contents into an image of the given size, including colors (ColorTSDF only),
+        /// Renders the volume's contents into an image of the given size, including colors (ColorTSDF and ColorHashTSDF only),
         /// using the given camera intrinsics. The resulting points and normals are in the camera's coordinate
         /// system.
         /// </summary>
@@ -193,7 +193,7 @@ namespace Emgu.CV
         }
 
         /// <summary>
-        /// Extracts all points, normals and colors from the volume (ColorTSDF only).
+        /// Extracts all points, normals and colors from the volume (ColorTSDF and ColorHashTSDF only).
         /// </summary>
         /// <param name="points">Storage for all points.</param>
         /// <param name="normals">Storage for all normals, corresponding to the points.</param>

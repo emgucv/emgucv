@@ -101,6 +101,71 @@ namespace Emgu.CV.Test
         }
 
         [TestAttribute]
+        public void TestReduceNewTypes()
+        {
+            //OpenCV 5.1 added REDUCE_PROD, REDUCE_L1, REDUCE_L2, REDUCE_LOG_SUM and REDUCE_LOG_SUM_EXP.
+            //For these types dim is the axis to reduce (0: rows are reduced to 1xN, 1: columns are reduced to Mx1).
+            float[,] data = new float[,] { { 1, 2, 3, 4 }, { 5, 6, 7, 8 }, { 9, 10, 11, 12 } };
+            int rows = data.GetLength(0);
+            int cols = data.GetLength(1);
+            float[] flat = new float[rows * cols];
+            for (int r = 0; r < rows; r++)
+                for (int c = 0; c < cols; c++)
+                    flat[r * cols + c] = data[r, c];
+            using (Mat src = new Mat(rows, cols, DepthType.Cv32F, 1))
+            {
+                Marshal.Copy(flat, 0, src.DataPointer, flat.Length);
+                foreach (ReduceType type in new ReduceType[]
+                {
+                    ReduceType.ReduceProd, ReduceType.ReduceL1, ReduceType.ReduceL2,
+                    ReduceType.ReduceLogSum, ReduceType.ReduceLogSumExp
+                })
+                {
+                    for (int axis = 0; axis < 2; axis++)
+                    {
+                        int outerCount = axis == 0 ? cols : rows;
+                        int innerCount = axis == 0 ? rows : cols;
+                        double[] expected = new double[outerCount];
+                        for (int o = 0; o < outerCount; o++)
+                        {
+                            double prod = 1, l1 = 0, l2 = 0, sum = 0, sumExp = 0;
+                            for (int i = 0; i < innerCount; i++)
+                            {
+                                double v = axis == 0 ? data[i, o] : data[o, i];
+                                prod *= v;
+                                l1 += Math.Abs(v);
+                                l2 += v * v;
+                                sum += v;
+                                sumExp += Math.Exp(v);
+                            }
+                            switch (type)
+                            {
+                                case ReduceType.ReduceProd: expected[o] = prod; break;
+                                case ReduceType.ReduceL1: expected[o] = l1; break;
+                                case ReduceType.ReduceL2: expected[o] = Math.Sqrt(l2); break;
+                                case ReduceType.ReduceLogSum: expected[o] = Math.Log(sum); break;
+                                default: expected[o] = Math.Log(sumExp); break;
+                            }
+                        }
+
+                        using (Mat dst = new Mat())
+                        {
+                            CvInvoke.Reduce(src, dst, (ReduceDimension)axis, type, DepthType.Cv32F);
+                            EmguAssert.AreEqual(axis == 0 ? 1 : rows, dst.Rows);
+                            EmguAssert.AreEqual(axis == 0 ? cols : 1, dst.Cols);
+                            float[] result = new float[outerCount];
+                            Marshal.Copy(dst.DataPointer, result, 0, outerCount);
+                            for (int o = 0; o < outerCount; o++)
+                                EmguAssert.IsTrue(
+                                    Math.Abs(result[o] - expected[o]) <= 1e-4 * Math.Max(1.0, Math.Abs(expected[o])),
+                                    String.Format("{0} axis {1} index {2}: expected {3}, got {4}", type, axis, o, expected[o], result[o]));
+                        }
+                    }
+                }
+            }
+        }
+
+        [TestAttribute]
         public void TestOklabRoundTrip()
         {
             using (Mat bgr = new Mat(8, 8, DepthType.Cv32F, 3))

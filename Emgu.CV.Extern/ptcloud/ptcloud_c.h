@@ -41,7 +41,8 @@ namespace cv {
 	{
 		TSDF = 0,
 		HashTSDF = 1,
-		ColorTSDF = 2
+		ColorTSDF = 2,
+		ColorHashTSDF = 3
 	};
 	class VolumeSettings {};
 	class Volume {};

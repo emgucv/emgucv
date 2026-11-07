@@ -1627,7 +1627,9 @@ namespace Emgu.CV
         /// <remarks>
         /// The function can be used to compute horizontal and vertical projections of an raster image. 
         /// In case of CV_REDUCE_SUM and CV_REDUCE_AVG the output may have a larger element bit-depth to preserve accuracy. 
-        /// And multi-channel arrays are also supported in these two reduction modes
+        /// And multi-channel arrays are also supported in these two reduction modes.
+        /// The reduction types ReduceProd, ReduceL1, ReduceL2, ReduceLogSum and ReduceLogSumExp (OpenCV 5.1) treat dim as the axis to reduce, in [-dims, dims),
+        /// so <see cref="CvEnum.ReduceDimension.Auto"/> (-1) selects the last axis for these types.
         /// </remarks>
         /// <param name="src">The input matrix</param>
         /// <param name="dst">The output single-row/single-column vector that accumulates somehow all the matrix rows/columns</param>

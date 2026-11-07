@@ -20,6 +20,10 @@ namespace Emgu.CV
         /// <summary>
         /// ColorTSDF
         /// </summary>
-        ColorTsdf = 2
+        ColorTsdf = 2,
+        /// <summary>
+        /// ColorHashTSDF: hashed TSDF storage with color. Available since OpenCV 5.1.
+        /// </summary>
+        ColorHashTsdf = 3
     }
 }

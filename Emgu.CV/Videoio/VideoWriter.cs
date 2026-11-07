@@ -284,7 +284,10 @@ namespace Emgu.CV
             DtsDelay = 13,
 
             /// <summary>
-            /// (**open-only**) GStreamer backend only. Pixel format for the encoding profile. Default is "I420". Other values: "NV12", "BGRx".
+            /// (**open-only**) Pixel format of the encoded stream as a 4-character code, see <see cref="VideoWriter.Fourcc"/>.
+            /// GStreamer: raw format the encoder input is restricted to, for example "I420", "NV12" or "BGRx". When not set, the encoder picks its own input format.
+            /// FFmpeg: same encoding as the read-only codec pixel format property; opening fails if the code is unknown or the selected encoder does not support it.
+            /// FFmpeg and GStreamer back-ends.
             /// </summary>
             ColorSpace = 14,
 
@@ -292,6 +295,36 @@ namespace Emgu.CV
             /// (**open-only**) FFmpeg backend only. Defines that input frames contain alpha channel.
             /// </summary>
             EnableAlpha = 15,
+
+            /// <summary>
+            /// (**open-only**) Target bitrate of the encoded video stream in bits per second. Ignored when <see cref="Crf"/> is set.
+            /// Opening fails if the selected encoder does not support it. <see cref="VideoWriter.Get"/> returns the value passed when opening, or 0 if it was not set.
+            /// FFmpeg and GStreamer back-ends. Available since OpenCV 5.1.
+            /// </summary>
+            Bitrate = 16,
+
+            /// <summary>
+            /// (**open-only**) Constant Rate Factor: lower values give better quality and larger files. Only supported by encoders that expose a constant-quality control
+            /// (for example libx264, libx265, libvpx and libaom in FFmpeg; x264enc, x265enc, vp8enc and vp9enc in GStreamer). The useful range is codec specific, 0..51 for FFmpeg libx264.
+            /// Takes precedence over <see cref="Bitrate"/>. <see cref="VideoWriter.Get"/> returns the value passed when opening, or -1 if it was not set.
+            /// FFmpeg and GStreamer back-ends. Available since OpenCV 5.1.
+            /// </summary>
+            Crf = 17,
+
+            /// <summary>
+            /// (**open-only**) Encoding speed / compression trade-off, one of <see cref="VideoWriterPreset"/>. Only supported by encoders that expose a preset control
+            /// (libx264 and libx265, or the x264enc and x265enc GStreamer elements). Opening fails if the value is not a valid preset.
+            /// <see cref="VideoWriter.Get"/> returns the value passed when opening, or -1 if it was not set.
+            /// FFmpeg and GStreamer back-ends. Available since OpenCV 5.1.
+            /// </summary>
+            Preset = 18,
+
+            /// <summary>
+            /// (**open-only**) Group Of Pictures size, i.e. the maximum interval between key frames. Opening fails if the selected encoder does not support it.
+            /// <see cref="VideoWriter.Get"/> returns the value passed when opening, or 0 if it was not set.
+            /// FFmpeg and GStreamer back-ends. Available since OpenCV 5.1.
+            /// </summary>
+            GopSize = 19,
         }
     }
 

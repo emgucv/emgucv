@@ -125,6 +125,103 @@ namespace Emgu.CV.Test
         }
 
         [Test]
+        public void TestVideoWriterEncoderControls()
+        {
+            //OpenCV 5.1 added bitrate, CRF, preset and GOP size controls for the FFmpeg and GStreamer back-ends.
+            //They are open-only and the open fails if the encoder does not support them, so this test is
+            //inconclusive when no encoder that accepts them is available.
+            int backendIdx = 0;
+            foreach (Backend be in CvInvoke.WriterBackends)
+            {
+                if (be.Name.Equals("FFMPEG"))
+                {
+                    backendIdx = be.ID;
+                    break;
+                }
+            }
+
+            if (backendIdx <= 0)
+                Assert.Inconclusive("FFMPEG video writer back-end is not available.");
+
+            Size size = new Size(320, 240);
+            String fileName = GetTempFileName() + ".mp4";
+            VideoWriter writer = null;
+            try
+            {
+                int[] fourccs = new int[]
+                {
+                    VideoWriter.Fourcc('a', 'v', 'c', '1'),
+                    VideoWriter.Fourcc('H', '2', '6', '4'),
+                    VideoWriter.Fourcc('m', 'p', '4', 'v')
+                };
+                foreach (int fourcc in fourccs)
+                {
+                    try
+                    {
+                        writer = new VideoWriter(
+                            fileName,
+                            backendIdx,
+                            fourcc,
+                            25.0,
+                            size,
+                            new Tuple<VideoWriter.WriterProperty, int>(VideoWriter.WriterProperty.Bitrate, 500000),
+                            new Tuple<VideoWriter.WriterProperty, int>(VideoWriter.WriterProperty.GopSize, 12));
+                        break;
+                    }
+                    catch (NullReferenceException)
+                    {
+                        //the encoder is not available or does not accept the parameters, try the next one
+                        writer = null;
+                    }
+                }
+
+                if (writer == null)
+                    Assert.Inconclusive("No FFMPEG encoder accepting Bitrate and GopSize is available.");
+
+                EmguAssert.IsTrue(writer.IsOpened);
+                EmguAssert.AreEqual(500000.0, writer.Get(VideoWriter.WriterProperty.Bitrate));
+                EmguAssert.AreEqual(12.0, writer.Get(VideoWriter.WriterProperty.GopSize));
+                using (Mat frame = new Mat(size, DepthType.Cv8U, 3))
+                {
+                    for (int i = 0; i < 25; i++)
+                    {
+                        CvInvoke.Randu(frame, new MCvScalar(), new MCvScalar(255, 255, 255));
+                        writer.Write(frame);
+                    }
+                }
+            }
+            finally
+            {
+                if (writer != null)
+                    writer.Dispose();
+            }
+
+            try
+            {
+                FileInfo fi = new FileInfo(fileName);
+                EmguAssert.IsTrue(fi.Exists && fi.Length > 0, "The encoded file should not be empty");
+            }
+            finally
+            {
+                if (File.Exists(fileName))
+                    File.Delete(fileName);
+            }
+        }
+
+        [Test]
+        public void TestVideoWriterPresetValues()
+        {
+            //the preset values are passed to the encoder as integers and must match OpenCV's VideoWriterPresets
+            EmguAssert.AreEqual(0, (int)VideoWriterPreset.Ultrafast);
+            EmguAssert.AreEqual(5, (int)VideoWriterPreset.Medium);
+            EmguAssert.AreEqual(9, (int)VideoWriterPreset.Placebo);
+            EmguAssert.AreEqual(16, (int)VideoWriter.WriterProperty.Bitrate);
+            EmguAssert.AreEqual(17, (int)VideoWriter.WriterProperty.Crf);
+            EmguAssert.AreEqual(18, (int)VideoWriter.WriterProperty.Preset);
+            EmguAssert.AreEqual(19, (int)VideoWriter.WriterProperty.GopSize);
+        }
+
+        [Test]
         public void TestVideoWriterMSMF()
         {
             Backend[] backends = CvInvoke.WriterBackends;
