@@ -692,6 +692,15 @@ void cveReduce(cv::_InputArray* src, cv::_OutputArray* dst, int dim, int rtype, 
 	}
 	CVAPI_CATCH_CV_ERRORS_VOID
 }
+void cveReduceND(cv::_InputArray* src, cv::_OutputArray* dst, int rtype, std::vector<int>* axes, bool keepdims, int dtype)
+{
+	try
+	{
+		cv::ReduceParams params(rtype, axes ? *axes : std::vector<int>(), keepdims, dtype);
+		cv::reduce(*src, *dst, params);
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
+}
 void cveRandShuffle(cv::_InputOutputArray* dst, double iterFactor, uint64 rng)
 {
 	try

@@ -1650,6 +1650,42 @@ namespace Emgu.CV
         private static extern void cveReduce(IntPtr src, IntPtr dst, CvEnum.ReduceDimension dim, CvEnum.ReduceType type,
             CvEnum.DepthType dtype);
 
+        /// <summary>
+        /// Reduces an N-dimensional array over the given axes. Available since OpenCV 5.1.
+        /// </summary>
+        /// <param name="src">The input array</param>
+        /// <param name="dst">The output array</param>
+        /// <param name="type">The reduction operation type</param>
+        /// <param name="axes">The axes to reduce over. Negative values count from the last axis. If null or empty, all axes are reduced.</param>
+        /// <param name="keepDims">If true, the reduced axes are kept with size 1, otherwise they are removed from the output shape.</param>
+        /// <param name="dtype">Optional depth type of the output array</param>
+        public static void ReduceND(
+            IInputArray src,
+            IOutputArray dst,
+            CvEnum.ReduceType type = CvEnum.ReduceType.ReduceSum,
+            int[] axes = null,
+            bool keepDims = true,
+            CvEnum.DepthType dtype = CvEnum.DepthType.Default)
+        {
+            using (InputArray iaSrc = src.GetInputArray())
+            using (OutputArray oaDst = dst.GetOutputArray())
+            using (VectorOfInt vAxes = axes == null ? new VectorOfInt() : new VectorOfInt(axes))
+            {
+                cveReduceND(iaSrc, oaDst, type, vAxes, keepDims, dtype);
+                CvInvoke.CheckError();
+            }
+        }
+
+        [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
+        private static extern void cveReduceND(
+            IntPtr src,
+            IntPtr dst,
+            CvEnum.ReduceType type,
+            IntPtr axes,
+            [MarshalAs(BoolMarshalType)]
+            bool keepdims,
+            CvEnum.DepthType dtype);
+
         #endregion
 
         /// <summary>

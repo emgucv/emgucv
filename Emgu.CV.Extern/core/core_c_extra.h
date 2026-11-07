@@ -126,6 +126,7 @@ CVAPI(void) cveScaleAdd(cv::_InputArray* src1, double alpha, cv::_InputArray* sr
 CVAPI(void) cveAddWeighted(cv::_InputArray* src1, double alpha, cv::_InputArray* src2, double beta, double gamma, cv::_OutputArray* dst, int dtype);
 CVAPI(void) cveConvertScaleAbs(cv::_InputArray* src, cv::_OutputArray* dst, double alpha, double beta);
 CVAPI(void) cveReduce(cv::_InputArray* src, cv::_OutputArray* dst, int dim, int rtype, int dtype);
+CVAPI(void) cveReduceND(cv::_InputArray* src, cv::_OutputArray* dst, int rtype, std::vector<int>* axes, bool keepdims, int dtype);
 CVAPI(void) cveRandShuffle(cv::_InputOutputArray* dst, double iterFactor, uint64 rng);
 
 CVAPI(void) cvePow(cv::_InputArray* src, double power, cv::_OutputArray* dst);

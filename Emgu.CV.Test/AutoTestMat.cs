@@ -166,6 +166,79 @@ namespace Emgu.CV.Test
         }
 
         [TestAttribute]
+        public void TestReduceND()
+        {
+            //N-D reduce with ReduceParams (OpenCV 5.1) over a 2x3x4 array holding 1..24.
+            int[] sizes = new int[] { 2, 3, 4 };
+            float[] values = new float[24];
+            for (int i = 0; i < values.Length; i++)
+                values[i] = i + 1;
+
+            GCHandle handle = GCHandle.Alloc(values, GCHandleType.Pinned);
+            try
+            {
+                using (Mat src = new Mat(sizes, DepthType.Cv32F, handle.AddrOfPinnedObject()))
+                {
+                    //sum over axes 0 and 2, keeping the reduced dimensions: result is 1x3x1
+                    using (Mat dst = new Mat())
+                    {
+                        CvInvoke.ReduceND(src, dst, ReduceType.ReduceSum, new int[] { 0, 2 }, true, DepthType.Cv32F);
+                        int[] dstSizes = dst.SizeOfDimension;
+                        EmguAssert.AreEqual(3, dstSizes.Length);
+                        EmguAssert.AreEqual(1, dstSizes[0]);
+                        EmguAssert.AreEqual(3, dstSizes[1]);
+                        EmguAssert.AreEqual(1, dstSizes[2]);
+                        float[] result = new float[3];
+                        Marshal.Copy(dst.DataPointer, result, 0, 3);
+                        for (int j = 0; j < 3; j++)
+                        {
+                            double expected = 0;
+                            for (int i = 0; i < 2; i++)
+                                for (int k = 0; k < 4; k++)
+                                    expected += values[(i * 3 + j) * 4 + k];
+                            EmguAssert.IsTrue(Math.Abs(result[j] - expected) < 1e-3, String.Format("sum j={0}: expected {1}, got {2}", j, expected, result[j]));
+                        }
+                    }
+
+                    //negative axis: sum over the last axis without keeping it: 2x3 values
+                    using (Mat dst = new Mat())
+                    {
+                        CvInvoke.ReduceND(src, dst, ReduceType.ReduceSum, new int[] { -1 }, false, DepthType.Cv32F);
+                        int[] dstSizes = dst.SizeOfDimension;
+                        EmguAssert.AreEqual(2, dstSizes.Length);
+                        EmguAssert.AreEqual(2, dstSizes[0]);
+                        EmguAssert.AreEqual(3, dstSizes[1]);
+                        float[] result = new float[6];
+                        Marshal.Copy(dst.DataPointer, result, 0, 6);
+                        for (int r = 0; r < 6; r++)
+                        {
+                            double expected = 0;
+                            for (int k = 0; k < 4; k++)
+                                expected += values[r * 4 + k];
+                            EmguAssert.IsTrue(Math.Abs(result[r] - expected) < 1e-3, String.Format("sum r={0}: expected {1}, got {2}", r, expected, result[r]));
+                        }
+                    }
+
+                    //product over all axes (no axes given): 24!
+                    using (Mat dst = new Mat())
+                    {
+                        CvInvoke.ReduceND(src, dst, ReduceType.ReduceProd, null, true, DepthType.Cv32F);
+                        float[] result = new float[1];
+                        Marshal.Copy(dst.DataPointer, result, 0, 1);
+                        double expected = 1;
+                        for (int i = 1; i <= 24; i++)
+                            expected *= i;
+                        EmguAssert.IsTrue(Math.Abs(result[0] - expected) <= 1e-4 * expected, String.Format("prod: expected {0}, got {1}", expected, result[0]));
+                    }
+                }
+            }
+            finally
+            {
+                handle.Free();
+            }
+        }
+
+        [TestAttribute]
         public void TestOklabRoundTrip()
         {
             using (Mat bgr = new Mat(8, 8, DepthType.Cv32F, 3))
