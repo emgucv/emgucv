@@ -68,7 +68,7 @@ namespace Emgu.CV.Models
         public virtual void Render(IInputOutputArray image, MCvScalar color, FontFace fontFace, int fontSize = 16)
         {
             CvInvoke.Rectangle(image, this.Region, color, 2);
-            String label = String.Format("{0}: {1}", this.Label == null ? this.ClassId.ToString() : this.Label,
+            String label = String.Format("{0}: {1:F2}", this.Label == null ? this.ClassId.ToString() : this.Label,
                 this.Confident);
             CvInvoke.PutText(
                 image,

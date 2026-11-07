@@ -48,9 +48,6 @@ namespace MauiDemoApp
             Button yoloButton = new Button();
             yoloButton.Text = "Yolo (DNN module)";
 
-            Button licensePlateRecognitionButton = new Button();
-            licensePlateRecognitionButton.Text = "License Plate Recognition (DNN Module)";
-
             Button superresButton = new Button();
             superresButton.Text = "Super resolution (DNN Module)";
 
@@ -63,7 +60,6 @@ namespace MauiDemoApp
                 shapeDetectionButton,
                 maskRcnnButton,
                 yoloButton,
-                licensePlateRecognitionButton,
                 superresButton
             };
 
@@ -80,15 +76,8 @@ namespace MauiDemoApp
            // bool haveOptFlow = (openCVConfigDict["HAVE_OPENCV_OPTFLOW"] != 0);
 
 
-            bool hasInferenceEngine = false;
             if (haveDNN)
             {
-                var dnnBackends = DnnInvoke.AvailableBackends;
-                hasInferenceEngine = Array.Exists(dnnBackends, dnnBackend =>
-                    (dnnBackend.Backend == Emgu.CV.Dnn.Backend.InferenceEngine
-                     || dnnBackend.Backend == Emgu.CV.Dnn.Backend.InferenceEngineNgraph
-                     || dnnBackend.Backend == Emgu.CV.Dnn.Backend.InferenceEngineNnBuilder2019));
-
 #if DEBUG
                 DnnInvoke.EnableModelDiagnostics(true);
 #endif
@@ -144,25 +133,6 @@ namespace MauiDemoApp
             };
 
             
-            //licensePlateRecognitionButton.Clicked += (sender, args) =>
-            //{
-            //    ProcessAndRenderPage vehicleLicensePlateDetectorPage = new ProcessAndRenderPage(
-            //        new VehicleLicensePlateDetector(),
-            //        "Perform License Plate Recognition",
-            //        "cars_license_plate.png",
-            //        "This demo is based on the security barrier camera demo in the OpenVino model zoo. The models is trained with BIT-vehicle dataset. License plate is trained based on Chinese license plate that has white character on blue background. You will need to re-train your own model if you intend to use this in other countries.");
-            //    Picker p = vehicleLicensePlateDetectorPage.Picker;
-            //    p.IsVisible = true;
-            //    p.Title = "Preferred DNN backend & target";
-
-            //    foreach (String option in GetDnnBackends(DnnBackendType.InferenceEngineOnly))
-            //    {
-            //        p.Items.Add(option);
-            //    }
-
-            //    this.Navigation.PushAsync(vehicleLicensePlateDetectorPage);
-            //};
-
             maskRcnnButton.Clicked += (sender, args) =>
             {
                 this.Navigation.PushAsync(new MaskRcnnPage());
@@ -277,8 +247,6 @@ namespace MauiDemoApp
             //Scene text rendering uses the FontFace class from the imgproc module,
             //no longer requires the freetype contrib module.
             sceneTextDetectionButton.IsVisible = haveDNN;
-            //licensePlateRecognitionButton.IsVisible = hasInferenceEngine;
-            licensePlateRecognitionButton.IsVisible = false;
             featureDetectionButton.IsVisible = haveFeatures;
             
             
