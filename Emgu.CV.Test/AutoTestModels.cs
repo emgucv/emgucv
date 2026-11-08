@@ -129,6 +129,115 @@ namespace Emgu.CV.Test
 
         }
 
+        [DllImport("ucrtbase.dll")]
+        private static extern int _open_osfhandle(IntPtr osfhandle, int flags);
+
+        [DllImport("ucrtbase.dll")]
+        private static extern int _dup(int fd);
+
+        [DllImport("ucrtbase.dll")]
+        private static extern int _dup2(int fd1, int fd2);
+
+        [DllImport("ucrtbase.dll")]
+        private static extern int _close(int fd);
+
+        /// <summary>
+        /// ONNX Runtime silently falls back to the CPU when its CUDA execution provider fails to load
+        /// (for example because the provider needs CUDA libraries that are not present). The only sign is a
+        /// native stderr warning, so this test captures it and also compares the CUDA output with the CPU output.
+        /// </summary>
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestYoloOrtCuda()
+        {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                Assert.Inconclusive("Native stderr capture is only implemented for Windows.");
+            if (!CvInvoke.HaveOnnxRuntime)
+                Assert.Inconclusive("OpenCV was built without ONNX Runtime.");
+            if (!CudaInvoke.HasCuda)
+                Assert.Inconclusive("No CUDA device available.");
+
+            using (Emgu.CV.Models.Yolo detector = new Yolo())
+            {
+                // Downloads yolo11n.onnx into the model folder.
+                await detector.Init(Yolo.YoloVersion.Yolo11N, DownloadManager_OnDownloadProgressChanged);
+            }
+
+            String modelFile = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "emgu", "yolo", "yolo11n.onnx");
+            if (!File.Exists(modelFile))
+                Assert.Inconclusive("Model file not found: " + modelFile);
+
+            String errFile = Path.Combine(Path.GetTempPath(), "emgu_ort_cuda_stderr_" + Guid.NewGuid().ToString("N") + ".txt");
+            float[][] outputs = new float[2][];
+            using (Mat image = EmguAssert.LoadMat("pedestrian.png"))
+            using (Mat blob = new Mat())
+            {
+                DnnInvoke.BlobFromImage(image, blob, 1.0 / 255, new Size(640, 640), new MCvScalar(), true, false);
+                using (FileStream fs = new FileStream(errFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+                {
+                    // Redirect native stderr (file descriptor 2) into the file for the duration of the run.
+                    int savedStderr = _dup(2);
+                    try
+                    {
+                        _dup2(_open_osfhandle(fs.SafeFileHandle.DangerousGetHandle(), 0), 2);
+                        for (int i = 0; i < 2; i++)
+                        {
+                            using (Net net = DnnInvoke.ReadNetFromONNX(modelFile, EngineType.Ort))
+                            {
+                                if (i == 1)
+                                    net.SetPreferableTarget(Target.Cuda);
+                                net.SetInput(blob);
+                                using (Mat result = net.Forward())
+                                {
+                                    outputs[i] = new float[result.Total.ToInt32() * result.NumberOfChannels];
+                                    result.CopyTo(outputs[i]);
+                                }
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        _dup2(savedStderr, 2);
+                        _close(savedStderr);
+                    }
+                }
+            }
+
+            // ORT writes its warning as UTF-16 when stderr is a file, so decode both possibilities.
+            byte[] errBytes;
+            using (FileStream errStream = new FileStream(errFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (MemoryStream errMemory = new MemoryStream())
+            {
+                errStream.CopyTo(errMemory);
+                errBytes = errMemory.ToArray();
+            }
+            String errText = Encoding.Unicode.GetString(errBytes) + Encoding.UTF8.GetString(errBytes);
+            try { File.Delete(errFile); } catch { }
+            EmguAssert.IsTrue(
+                !errText.Contains("CUDA EP unavailable"),
+                "ONNX Runtime fell back to the CPU: " + errText);
+
+            EmguAssert.IsTrue(outputs[0].Length > 0 && outputs[0].Length == outputs[1].Length, "Unexpected output size");
+            double diff = 0, norm = 0;
+            for (int i = 0; i < outputs[0].Length; i++)
+            {
+                double d = outputs[0][i] - outputs[1][i];
+                diff += d * d;
+                norm += (double)outputs[0][i] * outputs[0][i];
+            }
+            double relativeError = Math.Sqrt(diff / norm);
+            Trace.WriteLine("ORT CUDA vs CPU relative L2 error: " + relativeError);
+            EmguAssert.IsTrue(relativeError < 1e-2, "ORT CUDA output differs from the CPU output: " + relativeError);
+        }
+
 #if !TEST_MODELS
 #if VS_TEST
         [Ignore()]
