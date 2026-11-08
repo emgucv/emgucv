@@ -10,6 +10,7 @@
 
 #include "opencv2/core/core.hpp"
 #include "cvapi_compat.h"
+#include "emgu_c.h"
 
 #include <stdarg.h>
 #include <stdio.h>

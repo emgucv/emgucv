@@ -66,12 +66,16 @@ int cveTessBaseAPIInitRaw(EmguTesseract* ocr, char* dataRaw, int size, cv::Strin
 
 void cveTessBaseAPIRelease(EmguTesseract** ocr)
 {
+	try
+	{
 #ifdef HAVE_EMGUCV_TESSERACT
-	delete *ocr;
-	*ocr = 0;
+		delete *ocr;
+		*ocr = 0;
 #else
-	throw_no_tesseract();
+		throw_no_tesseract();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 int cveTessBaseAPIRecognize(EmguTesseract* ocr)
@@ -370,12 +374,16 @@ bool cveTessPageIteratorGetBaseLine(
 
 void cveTessPageIteratorRelease(tesseract::PageIterator** iterator)
 {
+	try
+	{
 #ifdef HAVE_EMGUCV_TESSERACT
-	delete *iterator;
-	*iterator = 0;
+		delete *iterator;
+		*iterator = 0;
 #else
-	throw_no_tesseract();
+		throw_no_tesseract();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 int cveTessBaseAPIIsValidWord(EmguTesseract* ocr, char* word)
@@ -420,12 +428,16 @@ tesseract::TessPDFRenderer* cveTessPDFRendererCreate(cv::String* outputbase, cv:
 }
 void cveTessPDFRendererRelease(tesseract::TessPDFRenderer** renderer)
 {
+	try
+	{
 #ifdef HAVE_EMGUCV_TESSERACT
-	delete *renderer;
-	*renderer = 0;
+		delete *renderer;
+		*renderer = 0;
 #else
-	throw_no_tesseract();
+		throw_no_tesseract();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 bool cveTessResultRendererBeginDocument(tesseract::TessResultRenderer* resultRenderer, cv::String* title)
@@ -566,12 +578,16 @@ Pix* cveLeptCreatePixFromMat(cv::Mat* m)
 
 void cveLeptPixDestroy(Pix** pix)
 {
+	try
+	{
 #ifdef HAVE_EMGUCV_TESSERACT
-	pixDestroy(pix);
-	*pix = 0;
+		pixDestroy(pix);
+		*pix = 0;
 #else
-	throw_no_tesseract();
+		throw_no_tesseract();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 char* cveStdSetlocale(int category, char* locale)

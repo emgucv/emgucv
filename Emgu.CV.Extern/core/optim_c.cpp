@@ -8,5 +8,9 @@
 
 int cveSolveLP(const cv::Mat* Func, const cv::Mat* Constr, cv::Mat* z)
 {
-   return cv::solveLP(*Func, *Constr, *z);
+   try
+   {
+      return cv::solveLP(*Func, *Constr, *z);
+   }
+   CVAPI_CATCH_CV_ERRORS(0)
 }

@@ -49,13 +49,17 @@ cv::img_hash::AverageHash* cveAverageHashCreate(cv::img_hash::ImgHashBase** imgH
 }
 CVAPI(void) cveAverageHashRelease(cv::img_hash::AverageHash** hash, cv::Ptr<cv::img_hash::AverageHash>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_IMG_HASH
-	delete *sharedPtr;
-	*sharedPtr = 0;
-	*hash = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
+		*hash = 0;
 #else
-	throw_no_img_hash();
+		throw_no_img_hash();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //BlockMeanHash
@@ -76,13 +80,17 @@ cv::img_hash::BlockMeanHash* cveBlockMeanHashCreate(cv::img_hash::ImgHashBase** 
 }
 void cveBlockMeanHashRelease(cv::img_hash::BlockMeanHash** hash, cv::Ptr<cv::img_hash::BlockMeanHash>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_IMG_HASH
-	delete *sharedPtr;
-	*sharedPtr = 0;
-	*hash = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
+		*hash = 0;
 #else
-	throw_no_img_hash();
+		throw_no_img_hash();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //ColorMomentHash
@@ -103,13 +111,17 @@ cv::img_hash::ColorMomentHash* cveColorMomentHashCreate(cv::img_hash::ImgHashBas
 }
 CVAPI(void) cveColorMomentHashRelease(cv::img_hash::ColorMomentHash** hash, cv::Ptr<cv::img_hash::ColorMomentHash>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_IMG_HASH
-	delete *sharedPtr;
-	*sharedPtr = 0;
-	*hash = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
+		*hash = 0;
 #else
-	throw_no_img_hash();
+		throw_no_img_hash();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //MarrHildrethHash
@@ -130,13 +142,17 @@ cv::img_hash::MarrHildrethHash* cveMarrHildrethHashCreate(cv::img_hash::ImgHashB
 }
 void cveMarrHildrethHashRelease(cv::img_hash::MarrHildrethHash** hash, cv::Ptr<cv::img_hash::MarrHildrethHash>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_IMG_HASH
-	delete *sharedPtr;
-	*sharedPtr = 0;
-	*hash = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
+		*hash = 0;
 #else
-	throw_no_img_hash();
+		throw_no_img_hash();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //PHash
@@ -158,13 +174,17 @@ cv::img_hash::PHash* cvePHashCreate(cv::img_hash::ImgHashBase** imgHash, cv::Ptr
 
 void cvePHashRelease(cv::img_hash::PHash** hash, cv::Ptr<cv::img_hash::PHash>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_IMG_HASH
-	delete *sharedPtr;
-	*sharedPtr = 0;
-	*hash = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
+		*hash = 0;
 #else
-	throw_no_img_hash();
+		throw_no_img_hash();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 //RadialVarianceHash
@@ -185,11 +205,15 @@ cv::img_hash::RadialVarianceHash* cveRadialVarianceHashCreate(cv::img_hash::ImgH
 }
 void cveRadialVarianceHashRelease(cv::img_hash::RadialVarianceHash** hash, cv::Ptr<cv::img_hash::RadialVarianceHash>** sharedPtr)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_IMG_HASH
-	delete *sharedPtr;
-	*sharedPtr = 0;
-	*hash = 0;
+		delete *sharedPtr;
+		*sharedPtr = 0;
+		*hash = 0;
 #else
-	throw_no_img_hash();
+		throw_no_img_hash();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }

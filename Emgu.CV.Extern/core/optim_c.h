@@ -10,6 +10,7 @@
 
 #include "opencv2/core.hpp"
 #include "cvapi_compat.h"
+#include "emgu_c.h"
 #include "opencv2/core/optim.hpp"
 
 CVAPI(int) cveSolveLP(const cv::Mat* Func, const cv::Mat* Constr, cv::Mat* z);

@@ -25,6 +25,7 @@ namespace Emgu.CV
       {
          Cuda.GpuMat m = new Cuda.GpuMat();
          CvInvoke.cveInputArrayGetGpuMat(Ptr, m);
+         CvInvoke.CheckError();
          return m;
       }
    }

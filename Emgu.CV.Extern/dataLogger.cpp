@@ -15,11 +15,15 @@ DataLogger* cveDataLoggerCreate(int logLevel, int loggerId)
 
 void cveDataLoggerRelease(DataLogger** logger)
 {
-	if (*logger)
+	try
 	{
-		delete *logger;
-		*logger = 0;
+		if (*logger)
+		{
+			delete *logger;
+			*logger = 0;
+		}
 	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveDataLoggerRegisterCallback(DataLogger* logger, DataCallback dataCallback )

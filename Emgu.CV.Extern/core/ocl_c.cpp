@@ -15,15 +15,27 @@ void oclGetPlatformsInfo(std::vector<cv::ocl::PlatformInfo>* oclPlatforms)
 
 bool cveHaveOpenCL()
 {
-	return cv::ocl::haveOpenCL();
+	try
+	{
+		return cv::ocl::haveOpenCL();
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 bool cveUseOpenCL()
 {
-	return cv::ocl::useOpenCL();
+	try
+	{
+		return cv::ocl::useOpenCL();
+	}
+	CVAPI_CATCH_CV_ERRORS(false)
 }
 void cveSetUseOpenCL(bool flag)
 {
-	return cv::ocl::setUseOpenCL(flag);
+	try
+	{
+		return cv::ocl::setUseOpenCL(flag);
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveOclFinish()
 {

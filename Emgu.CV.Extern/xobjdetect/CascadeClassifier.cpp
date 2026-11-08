@@ -44,12 +44,16 @@ bool cveCascadeClassifierRead(cv::CascadeClassifier* classifier, cv::FileNode* n
 }
 void cveCascadeClassifierRelease(cv::CascadeClassifier** classifier)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_XOBJDETECT
-	delete* classifier;
-	*classifier = 0;
+		delete* classifier;
+		*classifier = 0;
 #else 
-	throw_no_xobjdetect();
+		throw_no_xobjdetect();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveCascadeClassifierDetectMultiScale(
 	cv::CascadeClassifier* classifier,

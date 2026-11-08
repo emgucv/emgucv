@@ -254,8 +254,12 @@ void cveInputArrayGetUMat(cv::_InputArray* ia, int idx, cv::UMat* umat)
 }
 void cveInputArrayGetGpuMat(cv::_InputArray* ia, cv::cuda::GpuMat* gpuMat)
 {
-	cv::cuda::GpuMat m = ia->getGpuMat();
-	cv::swap(m, *gpuMat);
+	try
+	{
+		cv::cuda::GpuMat m = ia->getGpuMat();
+		cv::swap(m, *gpuMat);
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveInputArrayCopyTo(cv::_InputArray* ia, cv::_OutputArray* arr, cv::_InputArray* mask)
@@ -1249,10 +1253,14 @@ void cveFileNodeGetName(cv::FileNode* node, cv::String* name)
 }
 void cveFileNodeGetKeys(cv::FileNode* node, std::vector< cv::String >* keys)
 {
-	std::vector< cv::String > kv = node->keys();
-	keys->clear();
-	for (std::vector< cv::String >::iterator it = kv.begin(); it != kv.end(); ++it)
-		keys->push_back(*it);
+	try
+	{
+		std::vector< cv::String > kv = node->keys();
+		keys->clear();
+		for (std::vector< cv::String >::iterator it = kv.begin(); it != kv.end(); ++it)
+			keys->push_back(*it);
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 void cveFileNodeReadString(cv::FileNode* node, cv::String* str, cv::String* defaultStr)
 {

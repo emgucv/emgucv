@@ -2957,6 +2957,7 @@ namespace Emgu.CV
         public static void Swap(UMat m1, UMat m2)
         {
             cveSwapUMat(m1, m2);
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveSwapUMat(IntPtr mat1, IntPtr mat2);
@@ -2970,7 +2971,9 @@ namespace Emgu.CV
         {
             get
             {
-                return cveHaveOpenCL();
+                bool result = cveHaveOpenCL();
+                CvInvoke.CheckError();
+                return result;
             }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -2984,11 +2987,14 @@ namespace Emgu.CV
         {
             get
             {
-                return cveUseOpenCL();
+                bool result = cveUseOpenCL();
+                CvInvoke.CheckError();
+                return result;
             }
             set
             {
                 cveSetUseOpenCL(value);
+                CvInvoke.CheckError();
             }
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
@@ -3158,7 +3164,9 @@ namespace Emgu.CV
         /// <returns>The return codes</returns>
         public static CvEnum.SolveLPResult SolveLP(Mat functionMatrix, Mat constraintMatrix, Mat zMatrix)
         {
-            return cveSolveLP(functionMatrix, constraintMatrix, zMatrix);
+            CvEnum.SolveLPResult result = cveSolveLP(functionMatrix, constraintMatrix, zMatrix);
+            CvInvoke.CheckError();
+            return result;
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern CvEnum.SolveLPResult cveSolveLP(IntPtr functionMatrix, IntPtr constraintMatrix, IntPtr zMatrix);

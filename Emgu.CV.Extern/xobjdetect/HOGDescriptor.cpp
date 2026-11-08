@@ -71,12 +71,16 @@ void cveHOGSetSVMDetector(cv::HOGDescriptor* descriptor, std::vector<float>* vec
 
 void cveHOGDescriptorRelease(cv::HOGDescriptor** descriptor)
 {
+	try
+	{
 #ifdef HAVE_OPENCV_XOBJDETECT
-	delete* descriptor;
-	*descriptor = 0;
+		delete* descriptor;
+		*descriptor = 0;
 #else 
-	throw_no_xobjdetect();
+		throw_no_xobjdetect();
 #endif
+	}
+	CVAPI_CATCH_CV_ERRORS_VOID
 }
 
 void cveHOGDescriptorDetectMultiScale(

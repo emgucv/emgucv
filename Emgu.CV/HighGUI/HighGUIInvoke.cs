@@ -22,7 +22,10 @@ namespace Emgu.CV
         public static void NamedWindow(String name, CvEnum.WindowFlags flags = WindowFlags.AutoSize)
         {
             using (CvString s = new CvString(name))
+            {
                 cveNamedWindow(s, flags);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveNamedWindow(IntPtr name, CvEnum.WindowFlags flags);
@@ -36,7 +39,10 @@ namespace Emgu.CV
         public static void SetWindowProperty(String name, CvEnum.WindowPropertyFlags propId, double propValue)
         {
             using (CvString s = new CvString(name))
+            {
                 cveSetWindowProperty(s, propId, propValue);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveSetWindowProperty(IntPtr name, CvEnum.WindowPropertyFlags propId, double propValue);
@@ -50,7 +56,11 @@ namespace Emgu.CV
         public static double GetWindowProperty(String name, CvEnum.WindowPropertyFlags propId)
         {
             using (CvString s = new CvString(name))
-                return cveGetWindowProperty(s, propId);
+            {
+                var result = cveGetWindowProperty(s, propId);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern double cveGetWindowProperty(IntPtr winname, CvEnum.WindowPropertyFlags propId);
@@ -64,7 +74,10 @@ namespace Emgu.CV
         {
             using (CvString s = new CvString(winname))
             using (CvString sTitle = new CvString(title))
+            {
                 cveSetWindowTitle(s, sTitle);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveSetWindowTitle(IntPtr winname, IntPtr title);
@@ -76,7 +89,9 @@ namespace Emgu.CV
         /// <returns>The code of the pressed key or -1 if no key were pressed until the specified timeout has elapsed</returns>
         public static int WaitKey(int delay = 0)
         {
-            return cveWaitKey(delay);
+            var result = cveWaitKey(delay);
+            CvInvoke.CheckError();
+            return result;
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern int cveWaitKey(int delay);
@@ -88,7 +103,9 @@ namespace Emgu.CV
         /// <returns>The code of the pressed key or -1 if no key was pressed since the last invocation.</returns>
         public static int PollKey()
         {
-            return cvePollKey();
+            var result = cvePollKey();
+            CvInvoke.CheckError();
+            return result;
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern int cvePollKey();
@@ -104,6 +121,7 @@ namespace Emgu.CV
             using (InputArray iaImage = image.GetInputArray())
             {
                 cveImshow(s, iaImage);
+                CvInvoke.CheckError();
             }
         }
 
@@ -117,7 +135,10 @@ namespace Emgu.CV
         public static void DestroyWindow(String name)
         {
             using (CvString s = new CvString(name))
+            {
                 cveDestroyWindow(s);
+                CvInvoke.CheckError();
+            }
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveDestroyWindow(IntPtr name);
@@ -128,6 +149,7 @@ namespace Emgu.CV
         public static void DestroyAllWindows()
         {
             cveDestroyAllWindows();
+            CvInvoke.CheckError();
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveDestroyAllWindows();
@@ -147,6 +169,7 @@ namespace Emgu.CV
             using (InputArray iaImg = img.GetInputArray())
             {
                 cveSelectROI(csWindowName, iaImg, showCrosshair, fromCenter, ref roi);
+                CvInvoke.CheckError();
             }
 
             return roi;
@@ -180,6 +203,7 @@ namespace Emgu.CV
             using (InputArray iaImg = img.GetInputArray())
             {
                 cveSelectROIs(csWindowName, iaImg, vr, showCrosshair, fromCenter);
+                CvInvoke.CheckError();
                 return vr.ToArray();
             }
         }

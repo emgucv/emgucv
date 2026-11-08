@@ -188,7 +188,7 @@ namespace Emgu.CV
         /// </summary>
         /// <param name="usage">Allocation Usage</param>
         public UMat(Usage usage = Usage.Default)
-           : this(UMatInvoke.cveUMatCreate(usage), true)
+           : this(CvInvoke.CheckError(UMatInvoke.cveUMatCreate(usage)), true)
         {
         }
 
@@ -225,7 +225,7 @@ namespace Emgu.CV
         /// <param name="parent">The parent UMat</param>
         /// <param name="roi">The region of interest</param>
         public UMat(UMat parent, Rectangle roi)
-          : this(UMatInvoke.cveUMatCreateFromRect(parent.Ptr, ref roi), true)
+          : this(CvInvoke.CheckError(UMatInvoke.cveUMatCreateFromRect(parent.Ptr, ref roi)), true)
         {
         }
 
@@ -236,7 +236,7 @@ namespace Emgu.CV
         /// <param name="rowRange">The region of interest</param>
         /// <param name="colRange">The region of interest</param>
         public UMat(UMat umat, Emgu.CV.Structure.Range rowRange, Emgu.CV.Structure.Range colRange)
-           : this(UMatInvoke.cveUMatCreateFromRange(umat.Ptr, ref rowRange, ref colRange), true)
+           : this(CvInvoke.CheckError(UMatInvoke.cveUMatCreateFromRange(umat.Ptr, ref rowRange, ref colRange)), true)
         {
         }
 
@@ -251,6 +251,7 @@ namespace Emgu.CV
         public void Create(int rows, int cols, CvEnum.DepthType type, int channels, Usage usage = Usage.Default)
         {
             UMatInvoke.cveUMatCreateData(_ptr, rows, cols, CvInvoke.MakeType(type, channels), usage);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -322,7 +323,10 @@ namespace Emgu.CV
         {
             using (OutputArray oaM = m.GetOutputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 UMatInvoke.cveUMatCopyTo(this, oaM, iaMask);
+                CvInvoke.CheckError();
+            }
         }
 
         /*
@@ -350,7 +354,10 @@ namespace Emgu.CV
         {
             using (InputArray iaValue = value.GetInputArray())
             using (InputArray iaMask = mask == null ? InputArray.GetEmpty() : mask.GetInputArray())
+            {
                 UMatInvoke.cveUMatSetTo(Ptr, iaValue, iaMask);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -408,7 +415,7 @@ namespace Emgu.CV
         /// <returns>The Mat representation of the UMat</returns>
         public Mat GetMat(CvEnum.AccessType access)
         {
-            return new Mat(UMatInvoke.cveUMatGetMat(_ptr, access), true, false);
+            return new Mat(CvInvoke.CheckError(UMatInvoke.cveUMatGetMat(_ptr, access)), true, false);
         }
 
         /// <summary>
@@ -461,7 +468,7 @@ namespace Emgu.CV
         /// <returns>A new mat header that has different shape</returns>
         public UMat Reshape(int cn, int rows = 0)
         {
-            return new UMat(UMatInvoke.cveUMatReshape(Ptr, cn, rows), true);
+            return new UMat(CvInvoke.CheckError(UMatInvoke.cveUMatReshape(Ptr, cn, rows)), true);
         }
 
 
@@ -487,7 +494,10 @@ namespace Emgu.CV
         public void ConvertTo(IOutputArray m, CvEnum.DepthType rtype, double alpha = 1.0, double beta = 0.0)
         {
             using (OutputArray oaM = m.GetOutputArray())
+            {
                 UMatInvoke.cveUMatConvertTo(Ptr, oaM, rtype, alpha, beta);
+                CvInvoke.CheckError();
+            }
         }
 
         /*
@@ -581,6 +591,7 @@ namespace Emgu.CV
                String.Format("Size of data is not enough, required at least {0}, but was {1} ", Total.ToInt32() * ElementSize / Toolbox.SizeOf<T>(), data.Length));
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             UMatInvoke.cveUMatCopyDataTo(this, handle.AddrOfPinnedObject());
+            CvInvoke.CheckError();
             handle.Free();
         }
 
@@ -596,6 +607,7 @@ namespace Emgu.CV
                data.Length == Total.ToInt32() * ElementSize / Toolbox.SizeOf<T>(), String.Format("Invalid data length, expecting {0} but was {1}", Total.ToInt32() * ElementSize / Toolbox.SizeOf<T>(), data.Length));
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             UMatInvoke.cveUMatCopyDataFrom(this, handle.AddrOfPinnedObject());
+            CvInvoke.CheckError();
             handle.Free();
         }
 
@@ -607,7 +619,11 @@ namespace Emgu.CV
         public double Dot(IInputArray mat)
         {
             using (InputArray iaMat = mat.GetInputArray())
-                return UMatInvoke.cveUMatDot(Ptr, iaMat);
+            {
+                var result = UMatInvoke.cveUMatDot(Ptr, iaMat);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>

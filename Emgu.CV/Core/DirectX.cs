@@ -27,7 +27,7 @@ namespace Emgu.CV
         /// <returns>Reference to the OpenCL context initialized from the D3D11 device</returns>
         public static Ocl.Context InitializeContextFromD3D11Device(IntPtr pD3D11Device)
         {
-            return new Ocl.Context(CvInvoke.cveDirectxOclInitializeContextFromD3D11Device(pD3D11Device), false);
+            return new Ocl.Context(CvInvoke.CheckError(CvInvoke.cveDirectxOclInitializeContextFromD3D11Device(pD3D11Device)), false);
         }
 
         /// <summary>
@@ -40,6 +40,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             {
                 CvInvoke.cveDirectxConvertToD3D11Texture2D(iaSrc, pD3D11Texture2D);
+                CvInvoke.CheckError();
             }
         }
 
@@ -53,6 +54,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 CvInvoke.cveDirectxConvertFromD3D11Texture2D(pD3D11Texture2D, oaDst);
+                CvInvoke.CheckError();
             }
         }
 
@@ -66,6 +68,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             {
                 CvInvoke.cveDirectxConvertToD3D10Texture2D(iaSrc, pD3D10Texture2D);
+                CvInvoke.CheckError();
             }
         }
 
@@ -79,6 +82,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 CvInvoke.cveDirectxConvertFromD3D10Texture2D(pD3D10Texture2D, oaDst);
+                CvInvoke.CheckError();
             }
         }
 
@@ -96,6 +100,7 @@ namespace Emgu.CV
             using (InputArray iaSrc = src.GetInputArray())
             {
                 CvInvoke.cveDirectxConvertToDirect3DSurface9(iaSrc, pDirect3DSurface9, surfaceSharedHandle);
+                CvInvoke.CheckError();
             }
         }
 
@@ -110,6 +115,7 @@ namespace Emgu.CV
             using (OutputArray oaDst = dst.GetOutputArray())
             {
                 CvInvoke.cveDirectxConvertFromDirect3DSurface9(pDirect3DSurface9, oaDst, surfaceSharedHandle);
+                CvInvoke.CheckError();
             }
         }
     }

@@ -129,6 +129,43 @@ namespace Emgu.CV.Test
         }
 
         [TestAttribute]
+        public void TestUMatAndSolveLPRaiseNativeErrors()
+        {
+            //These natives did not catch OpenCV errors before, so an invalid argument could crash the process.
+            bool thrown = false;
+            using (UMat parent = new UMat(10, 10, DepthType.Cv8U, 1))
+            {
+                try
+                {
+                    using (UMat roi = new UMat(parent, new Rectangle(0, 0, 100, 100)))
+                    {
+                    }
+                }
+                catch (Emgu.CV.Util.CvException)
+                {
+                    thrown = true;
+                }
+            }
+
+            EmguAssert.IsTrue(thrown, "A UMat with an out of range ROI should throw a CvException");
+
+            thrown = false;
+            try
+            {
+                using (Mat func = new Mat())
+                using (Mat constr = new Mat())
+                using (Mat z = new Mat())
+                    CvInvoke.SolveLP(func, constr, z);
+            }
+            catch (Emgu.CV.Util.CvException)
+            {
+                thrown = true;
+            }
+
+            EmguAssert.IsTrue(thrown, "SolveLP with empty matrices should throw a CvException");
+        }
+
+        [TestAttribute]
         public void TestReduceNewTypes()
         {
             //OpenCV 5.1 added REDUCE_PROD, REDUCE_L1, REDUCE_L2, REDUCE_LOG_SUM and REDUCE_LOG_SUM_EXP.

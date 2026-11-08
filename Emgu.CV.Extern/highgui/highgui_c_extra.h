@@ -10,6 +10,7 @@
 #include "opencv2/core/cvdef.h"
 #include "opencv2/core.hpp"
 #include "cvapi_compat.h"
+#include "emgu_c.h"
 
 #ifdef HAVE_OPENCV_HIGHGUI
 //#include "opencv2/highgui/highgui_c.h"
