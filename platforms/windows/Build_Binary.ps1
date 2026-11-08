@@ -1059,6 +1059,9 @@ try {
     # --- ONNX Runtime -----------------------------------------------------------
     if ($OnnxRuntime) {
         $emguFlags.Add('-DWITH_ONNXRUNTIME:BOOL=ON')
+        # 1.27 and later publish a CUDA 13 GPU package (gpu_cuda13) that matches the CUDA 13 toolkit this
+        # build uses; the older 1.25 GPU package was built against CUDA 12 and its CUDA provider did not load.
+        $emguFlags.Add('-DONNXRUNTIME_VERSION:STRING=1.31.1')
         if ($cudaSdkFound) {
             $emguFlags.Add('-DDOWNLOAD_ONNXRUNTIME_GPU:BOOL=ON')
         }
