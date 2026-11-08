@@ -786,6 +786,16 @@ cd platforms/ubuntu/<version>
 ./cmake_configure
 ```
 
+By default `cmake_configure` (Ubuntu and Debian) links the system copies of the image codec
+libraries (libtiff, libpng, libjpeg, libwebp, OpenJPEG) and libgeotiff installed by
+`apt_install_dependency`. OpenCV falls back to its bundled copy for any library it can't find.
+Add `--build-from-source` anywhere in the arguments (e.g. `./cmake_configure mini
+--build-from-source`) to build them, plus PROJ, from source and link them statically instead.
+`libcvextern.so` then doesn't need them installed at runtime (emgucv/emgucv#1090), but it does
+need `libsqlite3.so.0`, which PROJ uses. In CMake terms, the switch sets OpenCV's `BUILD_<LIB>`
+options and Emgu's `EMGU_CV_USE_SYSTEM_GEOTIFF` (default `ON`). zlib always comes from the
+system on Linux.
+
 ### Running Tests
 ```bash
 dotnet test Emgu.CV.Test/Emgu.CV.Test.Net/Emgu.CV.Test.Net.csproj

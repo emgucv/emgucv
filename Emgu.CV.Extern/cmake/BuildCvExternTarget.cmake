@@ -126,12 +126,20 @@ ENDIF()
 
 IF(EMGU_CV_WITH_TIFF)
   SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libgeotiff/cmake")
-  FIND_PACKAGE(GeoTIFF)
-  IF(GEOTIFF_FOUND)
-    MESSAGE(STATUS "CVEXTERN: GEOTIFF found. INCLUDE DIR: ${GEOTIFF_INCLUDE_DIR}")
+  # Turn EMGU_CV_USE_SYSTEM_GEOTIFF off to always build PROJ and libgeotiff from source as
+  # static libraries. Linking a system libgeotiff (e.g. from libgeotiff-dev) makes cvextern
+  # depend on the shared libgeotiff/libproj, which machines without those packages don't
+  # have (emgucv/emgucv#1090).
+  SET(EMGU_CV_USE_SYSTEM_GEOTIFF ON CACHE BOOL "Link the system libgeotiff if found, instead of building PROJ and libgeotiff from source")
+  SET(GEOTIFF_FOUND FALSE)
+  IF(EMGU_CV_USE_SYSTEM_GEOTIFF)
+    FIND_PACKAGE(GeoTIFF)
+    IF(GEOTIFF_FOUND)
+      MESSAGE(STATUS "CVEXTERN: GEOTIFF found. INCLUDE DIR: ${GEOTIFF_INCLUDE_DIR}")
+    ENDIF()
   ENDIF()
   IF (NOT GEOTIFF_FOUND)
-    MESSAGE(STATUS "CVEXTERN: GEOTIFF not found. Building PROJ and libgeotiff from source")
+    MESSAGE(STATUS "CVEXTERN: GEOTIFF not found or not used. Building PROJ and libgeotiff from source")
     # ----------------------------------------------------------------------------
     #  Build PROJ (required by libgeotiff 1.7.4)
     # ----------------------------------------------------------------------------

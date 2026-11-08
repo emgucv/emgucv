@@ -2,6 +2,29 @@
 
 cd "$(dirname "$0")"
 
+# By default the image codec libraries (libtiff, libpng, libjpeg, libwebp, OpenJPEG)
+# and libgeotiff are linked from the system copies installed by
+# apt_install_dependency, wherever they are found. Pass --build-from-source (anywhere
+# in the arguments) to build them, plus PROJ, from source and link them statically
+# instead, so libcvextern.so doesn't need them installed at runtime.
+USE_SYSTEM_LIBS=TRUE
+POSITIONAL_ARGS=()
+for arg in "$@"; do
+    if [ "$arg" == "--build-from-source" ]; then
+        USE_SYSTEM_LIBS=FALSE
+    else
+        POSITIONAL_ARGS+=("$arg")
+    fi
+done
+set -- "${POSITIONAL_ARGS[@]}"
+
+if [ "$USE_SYSTEM_LIBS" == "TRUE" ]; then
+    BUILD_3RDPARTY=FALSE
+else
+    BUILD_3RDPARTY=TRUE
+fi
+THIRDPARTY_OPTIONS=( -DBUILD_TIFF:BOOL=$BUILD_3RDPARTY -DBUILD_PNG:BOOL=$BUILD_3RDPARTY -DBUILD_JPEG:BOOL=$BUILD_3RDPARTY -DBUILD_WEBP:BOOL=$BUILD_3RDPARTY -DBUILD_OPENJPEG:BOOL=$BUILD_3RDPARTY -DBUILD_JASPER:BOOL=$BUILD_3RDPARTY -DBUILD_OPENEXR:BOOL=$BUILD_3RDPARTY -DEMGU_CV_USE_SYSTEM_GEOTIFF:BOOL=$USE_SYSTEM_LIBS )
+
 INSTALL_FOLDER=$PWD/build/install
 SCRIPT_FOLDER=$PWD
 
@@ -89,13 +112,8 @@ cmake \
       -DBUILD_TESTS:BOOL=FALSE \
       -DWITH_UNIFONT:BOOL=ON \
       -DWITH_ITALICFONT:BOOL=ON \
-      -DBUILD_PNG:BOOL=TRUE \
-      -DBUILD_JPEG:BOOL=TRUE \
-      -DBUILD_WEBP:BOOL=TRUE \
-      -DBUILD_JASPER:BOOL=TRUE \
+      ${THIRDPARTY_OPTIONS[@]} \
       -DBUILD_JAVA:BOOL=FALSE \
-      -DBUILD_TIFF:BOOL=FALSE \
-      -DBUILD_OPENEXR:BOOL=TRUE \
       -DBUILD_PERF_TESTS:BOOL=FALSE \
       -DBUILD_opencv_apps:BOOL=FALSE \
       -DBUILD_DOCS:BOOL=FALSE \
