@@ -126,6 +126,7 @@ cmake \
     -DWITH_EIGEN:BOOL=TRUE \
     -DEigen3_DIR:String="$TOP_FOLDER/eigen/build" \
     ${THIRDPARTY_OPTIONS[@]} \
+    -DCPU_DISPATCH:STRING=ALL \
     -DBUILD_opencv_python2:BOOL=FALSE \
     -DBUILD_opencv_python3:BOOL=FALSE \
     -DBUILD_opencv_java:BOOL=FALSE \
