@@ -110,19 +110,27 @@ BASE_CMAKE_FLAGS=(
     "-DCMAKE_C_FLAGS:STRING=-std=c11"
     "-DCMAKE_CXX_FLAGS_RELEASE:STRING=-g0 -O3"
     "-DCMAKE_C_FLAGS_RELEASE:STRING=-g0 -O3"
-    # Disable KleidiCV (ARM's optimized HAL, on by default for arm64 in
-    # OpenCV 5.0). It is the only component that compiles objects with
-    # -march=armv8-a+sve2, and under the whole-program (LTO) build that
-    # SVE2 codegen leaks into libwebp's WebPGetColorPalette. SVE is absent
-    # on the Android emulator and most real devices, so those instructions
-    # make libcvextern.so crash with SIGILL. Turning KleidiCV off removes
-    # every +sve2 object, so no SVE can be emitted anywhere. (Note:
-    # CPU_BASELINE_DISABLE=SVE does NOT help here — the SVE comes from
-    # KleidiCV/LTO, not OpenCV's own CPU baseline/dispatch.)
-    "-DWITH_KLEIDICV=OFF"
+    # KleidiCV (ARM's optimized HAL) with its SVE2 backend, and no LTO --
+    # the same configuration as OpenCV's official Android SDK
+    # (opencv/platforms/android/build_sdk.py). KleidiCV compiles its SVE2
+    # code into separate objects (-march=armv8-a+sve2) and only calls them
+    # after a runtime CPU check, so devices without SVE2 (the emulator, and
+    # most phones before Armv9) use its NEON paths instead.
+    #
+    # LTO must stay OFF while SVE2 is ON: whole-program optimization pulled
+    # that SVE2 codegen into unrelated code (libwebp's WebPGetColorPalette)
+    # outside KleidiCV's runtime check, making libcvextern.so crash with
+    # SIGILL on non-SVE devices. (CPU_BASELINE_DISABLE=SVE does NOT help --
+    # the SVE comes from KleidiCV/LTO, not OpenCV's own CPU baseline/dispatch.)
+    # Benchmarked on a Galaxy S10 (Snapdragon 855, no SVE2): LTO gave no
+    # measurable speedup in KleidiCV-covered functions, and KleidiCV is
+    # 2-5x faster than WITH_KLEIDICV=OFF for resize, pyrDown, flip and
+    # GaussianBlur (warpPerspective is ~30% slower).
+    "-DWITH_KLEIDICV=ON"
+    "-DKLEIDICV_ENABLE_SVE2:BOOL=ON"
+    "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=OFF"
     "-DCMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,--gc-sections, -Wl,--exclude-libs,All"
     "-DCMAKE_POLICY_DEFAULT_CMP0069=NEW"
-    "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=ON"
     "-DCMAKE_INSTALL_PREFIX:STRING=$INSTALL_FOLDER"
     "-DCMAKE_BUILD_TYPE:STRING=Release"
 )
