@@ -20,17 +20,17 @@ if [ -z "$ANDROID_SDK" ]; then
 fi
 
 if [ -z "$ANDROID_NDK" ] && [ -n "$ANDROID_SDK" ]; then
-    for NDK_CANDIDATE in \
-        "$ANDROID_SDK/ndk/28.0.12916984" \
-        "$ANDROID_SDK/ndk/27.1.12297006" \
-        "$ANDROID_SDK/ndk/25.0.8775105" \
-        "$ANDROID_SDK/ndk-bundle" \
-    ; do
-        if [ -d "$NDK_CANDIDATE" ]; then
-            ANDROID_NDK="$NDK_CANDIDATE"
-            break
-        fi
-    done
+    # Side-by-side NDKs (<sdk>/ndk/<version>): use the newest installed one.
+    # Folders whose name is not a plain version number are ignored.
+    NEWEST_NDK="$(ls -1 "$ANDROID_SDK/ndk" 2>/dev/null \
+        | grep -E '^[0-9]+(\.[0-9]+)*$' \
+        | sort -t. -k1,1n -k2,2n -k3,3n \
+        | tail -n 1)"
+    if [ -n "$NEWEST_NDK" ] && [ -d "$ANDROID_SDK/ndk/$NEWEST_NDK" ]; then
+        ANDROID_NDK="$ANDROID_SDK/ndk/$NEWEST_NDK"
+    elif [ -d "$ANDROID_SDK/ndk-bundle" ]; then
+        ANDROID_NDK="$ANDROID_SDK/ndk-bundle"
+    fi
 fi
 
 # ---- make / ninja ----
