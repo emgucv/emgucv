@@ -7,12 +7,12 @@
     PowerShell port of build.cmd. Brought to parity with the more actively
     maintained build.sh (macOS/Linux), which build.cmd had drifted from:
 
-      - Adds -DWITH_KLEIDICV=OFF. Without it, arm64 builds can crash with
-        SIGILL on real devices/emulators: KleidiCV (ARM's optimized HAL, on
-        by default for arm64 in OpenCV 5.0) compiles objects with
-        -march=armv8-a+sve2, and under the whole-program (LTO) build that
-        SVE2 codegen leaks into libwebp's WebPGetColorPalette. SVE is absent
-        on the emulator and most real devices.
+      - Builds KleidiCV (ARM's optimized HAL) with its SVE2 backend and LTO
+        off, matching build.sh and OpenCV's official Android SDK. KleidiCV
+        only calls its SVE2 code after a runtime CPU check, but under LTO
+        that code leaked into libwebp's WebPGetColorPalette and crashed with
+        SIGILL on devices without SVE (the emulator, most phones before
+        Armv9). See ../KleidiCV_Performance.md for the benchmark.
       - Uses BUILD_DIR=android_<abi> (via the also-updated wincfg.ps1),
         matching build.sh and CLAUDE.md, instead of wincfg.cmd's stray
         build_<abi>.
@@ -150,10 +150,15 @@ $baseCmakeFlags = @(
     '-DCMAKE_C_FLAGS:STRING=-std=c11',
     '-DCMAKE_CXX_FLAGS_RELEASE:STRING=-g0 -O3',
     '-DCMAKE_C_FLAGS_RELEASE:STRING=-g0 -O3',
-    '-DWITH_KLEIDICV=OFF',
+    # KleidiCV with its SVE2 backend, and no LTO -- same as build.sh and
+    # OpenCV's official Android SDK. LTO must stay OFF while SVE2 is ON: it
+    # pulls KleidiCV's SVE2 code outside its runtime CPU check and crashes
+    # non-SVE devices with SIGILL. See ../KleidiCV_Performance.md.
+    '-DWITH_KLEIDICV=ON',
+    '-DKLEIDICV_ENABLE_SVE2:BOOL=ON',
+    '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=OFF',
     '-DCMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,--gc-sections, -Wl,--exclude-libs,All',
     '-DCMAKE_POLICY_DEFAULT_CMP0069=NEW',
-    '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=ON',
     "-DCMAKE_INSTALL_PREFIX:STRING=$(ConvertTo-ForwardSlash $installFolder)",
     '-DCMAKE_BUILD_TYPE:STRING=Release'
 )
