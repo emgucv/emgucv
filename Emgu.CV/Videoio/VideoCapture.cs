@@ -387,6 +387,7 @@ namespace Emgu.CV
             using (VectorOfInt vectInt = ConvertCaptureProperties(captureProperties))
             {
                 _ptr = CvInvoke.cveVideoCaptureCreateFromDevice(camIndex, captureApi, vectInt);
+                CvInvoke.CheckError();
             }
             CvInvoke.CheckError();
 

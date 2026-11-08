@@ -31,7 +31,10 @@ namespace Emgu.CV
         public WText(String text, Point pos, int fontSize, MCvScalar color)
         {
             using (CvString cvs = new CvString(text))
+            {
                 _ptr = CvInvoke.cveWTextCreate(cvs, ref pos, fontSize, ref color, ref _widget2dPtr, ref _widgetPtr);
+                CvInvoke.CheckError();
+            }
 
         }
 

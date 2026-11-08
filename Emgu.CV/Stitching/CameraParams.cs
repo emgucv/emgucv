@@ -25,7 +25,7 @@ namespace Emgu.CV.Stitching
         /// Create a default camera parameters
         /// </summary>
         public CameraParams()
-            :this(StitchingInvoke.cveCameraParamsCreate(), true)
+            :this(CvInvoke.CheckError(StitchingInvoke.cveCameraParamsCreate()), true)
         {
         }
 

@@ -32,7 +32,7 @@ namespace Emgu.CV
         /// Create a new GMat
         /// </summary>
         public GMat()
-            : this(GapiInvoke.cveGMatCreate(), true)
+            : this(CvInvoke.CheckError(GapiInvoke.cveGMatCreate()), true)
         {
             CvInvoke.CheckError();
         }

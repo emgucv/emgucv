@@ -29,6 +29,7 @@ namespace Emgu.CV.XPhoto
         public GrayworldWB()
         {
             _ptr = XPhotoInvoke.cveGrayworldWBCreate(ref _whiteBalancerPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

@@ -161,6 +161,18 @@ namespace Emgu.CV
             }
         }
 
+        /// <summary>
+        /// Throws a <see cref="CvException"/> if the native call that produced <paramref name="ptr"/> recorded an error, otherwise returns the pointer.
+        /// Use it where a native call is an argument of a constructor initializer, such as <c>: this(Invoke.cveXCreate())</c>, and cannot be followed by a statement.
+        /// </summary>
+        /// <param name="ptr">The pointer returned by the native call</param>
+        /// <returns>The pointer, if no error is pending</returns>
+        internal static IntPtr CheckError(IntPtr ptr)
+        {
+            CheckError();
+            return ptr;
+        }
+
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         [return: MarshalAs(CvInvoke.BoolMarshalType)]
         private static extern bool cveHasPendingError();
@@ -2991,6 +3003,7 @@ namespace Emgu.CV
         public static void OclFinish()
         {
             cveOclFinish();
+            CvInvoke.CheckError();
         }
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]
         private static extern void cveOclFinish();

@@ -34,7 +34,10 @@ namespace Emgu.CV.Signal
         {
             using (InputArray iaInput = inputSignal.GetInputArray())
             using (OutputArray oaOutput = outSignal.GetOutputArray())
+            {
                 cveResampleSignal(iaInput, oaOutput, inFreq, outFreq);
+                CvInvoke.CheckError();
+            }
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

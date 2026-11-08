@@ -29,6 +29,7 @@ namespace Emgu.CV.Reg
         public MapperGradAffine()
         {
             _ptr = RegInvoke.cveMapperGradAffineCreate(ref _mapperPtr);
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/> 

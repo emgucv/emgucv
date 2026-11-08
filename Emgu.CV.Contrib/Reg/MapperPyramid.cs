@@ -30,6 +30,7 @@ namespace Emgu.CV.Reg
         public MapperPyramid(IMapper baseMapper)
         {
             _ptr = RegInvoke.cveMapperPyramidCreate(baseMapper.MapperPtr, ref _mapperPtr);
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/>   

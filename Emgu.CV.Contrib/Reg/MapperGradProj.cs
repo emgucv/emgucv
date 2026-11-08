@@ -29,6 +29,7 @@ namespace Emgu.CV.Reg
         public MapperGradProj()
         {
             _ptr = RegInvoke.cveMapperGradProjCreate(ref _mapperPtr);
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/> 

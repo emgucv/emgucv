@@ -27,6 +27,7 @@ namespace Emgu.CV
         public WCoordinateSystem(double scale = 1.0)
         {
             _ptr = CvInvoke.cveWCoordinateSystemCreate(scale, ref _widget3dPtr, ref _widgetPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

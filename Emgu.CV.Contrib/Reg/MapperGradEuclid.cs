@@ -29,6 +29,7 @@ namespace Emgu.CV.Reg
         public MapperGradEuclid()
         {
             _ptr = RegInvoke.cveMapperGradEuclidCreate(ref _mapperPtr);
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/> 

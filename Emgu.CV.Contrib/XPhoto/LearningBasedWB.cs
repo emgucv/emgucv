@@ -28,6 +28,7 @@ namespace Emgu.CV.XPhoto
         public LearningBasedWB()
         {
             _ptr = XPhotoInvoke.cveLearningBasedWBCreate(ref _whiteBalancerPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

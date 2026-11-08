@@ -29,6 +29,7 @@ namespace Emgu.CV.Reg
         public MapperGradShift()
         {
             _ptr = RegInvoke.cveMapperGradShiftCreate(ref _mapperPtr);
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/> 

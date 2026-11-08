@@ -26,6 +26,7 @@ namespace Emgu.CV
             using (CvString cvs = new CvString(windowName))
             {
                 _ptr = CvInvoke.cveViz3dCreate(cvs);
+                CvInvoke.CheckError();
             }
         }
 
@@ -38,7 +39,10 @@ namespace Emgu.CV
         public void ShowWidget(String id, IWidget widget, Affine3d pose = null)
         {
             using (CvString cvsId = new CvString(id))
+            {
                 CvInvoke.cveViz3dShowWidget(_ptr, cvsId, widget.GetWidget, pose);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -50,6 +54,7 @@ namespace Emgu.CV
             using (CvString cvsId = new CvString(id))
             {
                 CvInvoke.cveViz3dRemoveWidget(_ptr, cvsId);
+                CvInvoke.CheckError();
             }
         }
 
@@ -61,7 +66,10 @@ namespace Emgu.CV
         public void SetWidgetPose(String id, Affine3d pose)
         {
             using (CvString cvsId = new CvString(id))
+            {
                 CvInvoke.cveViz3dSetWidgetPose(_ptr, cvsId, pose);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -70,6 +78,7 @@ namespace Emgu.CV
         public void Spin()
         {
             CvInvoke.cveViz3dSpin(_ptr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -80,6 +89,7 @@ namespace Emgu.CV
         public void SpinOnce(int time = 1, bool forceRedraw = false)
         {
             CvInvoke.cveViz3dSpinOnce(_ptr, time, forceRedraw);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -87,7 +97,12 @@ namespace Emgu.CV
         /// </summary>
         public bool WasStopped
         {
-            get { return CvInvoke.cveViz3dWasStopped(_ptr); }
+            get
+            {
+                var result = CvInvoke.cveViz3dWasStopped(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
 
         }
 
@@ -97,6 +112,7 @@ namespace Emgu.CV
         public void SetBackgroundMeshLab()
         {
             CvInvoke.cveViz3dSetBackgroundMeshLab(_ptr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

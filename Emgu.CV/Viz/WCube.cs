@@ -30,6 +30,7 @@ namespace Emgu.CV
         public WCube(MCvPoint3D64f minPoint, MCvPoint3D64f maxPoint, bool wireFrame, MCvScalar color)
         {
             _ptr = CvInvoke.cveWCubeCreate(ref minPoint, ref maxPoint, wireFrame, ref color, ref _widget3dPtr, ref _widgetPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

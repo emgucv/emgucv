@@ -31,6 +31,7 @@ namespace Emgu.CV
         public WCylinder(ref MCvPoint3D64f axisPoint1, MCvPoint3D64f axisPoint2, double radius, int numsides, MCvScalar color)
         {
             _ptr = CvInvoke.cveWCylinderCreate(ref axisPoint1, ref axisPoint2, radius, numsides, ref color, ref _widget3dPtr, ref _widgetPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

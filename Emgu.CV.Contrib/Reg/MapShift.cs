@@ -30,6 +30,7 @@ namespace Emgu.CV.Reg
         public MapShift(MCvPoint2D64f shift)
         {
             _ptr = RegInvoke.cveMapShiftCreate(ref shift, ref _mapPtr);
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/> 

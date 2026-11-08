@@ -29,6 +29,7 @@ namespace Emgu.CV.Reg
         public MapperGradSimilar()
         {
             _ptr = RegInvoke.cveMapperGradSimilarCreate(ref _mapperPtr);
+            CvInvoke.CheckError();
         }
 
         /// <inheritdoc/> 

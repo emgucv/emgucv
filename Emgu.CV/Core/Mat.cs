@@ -375,7 +375,7 @@ namespace Emgu.CV
         /// Create an empty cv::Mat
         /// </summary>
         public Mat()
-           : this(MatInvoke.cveMatCreate(), true, true)
+           : this(CvInvoke.CheckError(MatInvoke.cveMatCreate()), true, true)
         {
             CvInvoke.CheckError();
         }
@@ -414,7 +414,7 @@ namespace Emgu.CV
         /// <param name="data">Pointer to the user data. Matrix constructors that take data and step parameters do not allocate matrix data. Instead, they just initialize the matrix header that points to the specified data, which means that no data is copied. This operation is very efficient and can be used to process external data using OpenCV functions. The external data is not automatically deallocated, so you should take care of it.</param>
         /// <param name="step">Number of bytes each matrix row occupies. The value should include the padding bytes at the end of each row, if any.</param>
         public Mat(int rows, int cols, CvEnum.DepthType type, int channels, IntPtr data, int step)
-           : this(MatInvoke.cveMatCreateWithData(rows, cols, CvInvoke.MakeType(type, channels), data, new IntPtr(step)), true, false)
+           : this(CvInvoke.CheckError(MatInvoke.cveMatCreateWithData(rows, cols, CvInvoke.MakeType(type, channels), data, new IntPtr(step))), true, false)
         {
             CvInvoke.CheckError();
         }
@@ -455,7 +455,7 @@ namespace Emgu.CV
             Justification = "NativeMatFileIO.ReadFileToMat is only reached here as a narrow platform-specific (iOS/macOS PNG) or Unicode-path fallback. If reflection-discovered readers are trimmed away, ReadFileToMat simply returns false and this constructor throws a clear ArgumentException instead of behaving unpredictably.")]
 #endif
         public Mat(String fileName, CvEnum.ImreadModes loadType = ImreadModes.ColorBgr)
-           : this(MatInvoke.cveMatCreate(), true, false)
+           : this(CvInvoke.CheckError(MatInvoke.cveMatCreate()), true, false)
         {
             CvInvoke.CheckError();
 
@@ -510,7 +510,7 @@ namespace Emgu.CV
         /// <param name="mat">The mat where the new Mat header will share data from</param>
         /// <param name="roi">The region of interest</param>
         public Mat(Mat mat, Rectangle roi)
-           : this(MatInvoke.cveMatCreateFromRect(mat.Ptr, ref roi), true, true)
+           : this(CvInvoke.CheckError(MatInvoke.cveMatCreateFromRect(mat.Ptr, ref roi)), true, true)
         {
             CvInvoke.CheckError();
         }
@@ -522,7 +522,7 @@ namespace Emgu.CV
         /// <param name="rowRange">The region of interest</param>
         /// <param name="colRange">The region of interest</param>
         public Mat(Mat mat, Emgu.CV.Structure.Range rowRange, Emgu.CV.Structure.Range colRange)
-           : this(MatInvoke.cveMatCreateFromRange(mat.Ptr, ref rowRange, ref colRange), true, true)
+           : this(CvInvoke.CheckError(MatInvoke.cveMatCreateFromRange(mat.Ptr, ref rowRange, ref colRange)), true, true)
         {
             CvInvoke.CheckError();
         }

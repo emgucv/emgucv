@@ -24,6 +24,7 @@ namespace Emgu.CV.XPhoto
         public SimpleWB()
         {
             _ptr = XPhotoInvoke.cveSimpleWBCreate(ref _whiteBalancerPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

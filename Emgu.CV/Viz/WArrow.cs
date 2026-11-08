@@ -31,6 +31,7 @@ namespace Emgu.CV
         public WArrow(MCvPoint3D64f pt1, MCvPoint3D64f pt2, double thickness, MCvScalar color)
         {
             _ptr = CvInvoke.cveWArrowCreate(ref pt1, ref pt2, thickness, ref color, ref _widget3dPtr, ref _widgetPtr);
+            CvInvoke.CheckError();
         }
 
 

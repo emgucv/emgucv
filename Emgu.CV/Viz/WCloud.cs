@@ -29,7 +29,10 @@ namespace Emgu.CV
         {
             using (InputArray iaCloud = cloud.GetInputArray())
             using (InputArray iaColor = color.GetInputArray())
+            {
                 CvInvoke.cveWCloudCreateWithColorArray(iaCloud, iaColor, ref _widget3dPtr, ref _widgetPtr);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -40,7 +43,10 @@ namespace Emgu.CV
         public WCloud(IInputArray cloud, MCvScalar color)
         {
             using (InputArray iaCloud = cloud.GetInputArray())
+            {
                 CvInvoke.cveWCloudCreateWithColor(iaCloud, ref color, ref _widget3dPtr, ref _widgetPtr);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -98,6 +104,7 @@ namespace Emgu.CV
             {
                 Mat cloud = new Mat();
                 cveReadCloud(cs, cloud, oaColors, oaNormals);
+                CvInvoke.CheckError();
                 return cloud;
             }
         }
@@ -120,6 +127,7 @@ namespace Emgu.CV
             using (InputArray iaNormals = normals == null ? InputArray.GetEmpty() : normals.GetInputArray())
             {
                 cveWriteCloud(cs, iaCloud, iaColors, iaNormals, binary);
+                CvInvoke.CheckError();
             }
         }
         [DllImport(ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

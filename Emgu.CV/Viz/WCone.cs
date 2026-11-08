@@ -30,6 +30,7 @@ namespace Emgu.CV
         public WCone(double length, double radius, int resolution, MCvScalar color)
         {
             _ptr = CvInvoke.cveWConeCreateAtOrigin(length, radius, resolution, ref color, ref _widget3dPtr, ref _widgetPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -43,6 +44,7 @@ namespace Emgu.CV
         public WCone(double radius, MCvPoint3D64f center, MCvPoint3D64f tip, int resolution, MCvScalar color)
         {
             _ptr = CvInvoke.cveWConeCreate(radius, ref center, ref tip, resolution, ref color, ref _widget3dPtr, ref _widgetPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

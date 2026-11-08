@@ -89,6 +89,7 @@ namespace Emgu.CV.Reg
         public static void Scale(this IMap map, double factor)
         {
             cveMapScale(map.MapPtr, factor);
+            CvInvoke.CheckError();
         }
 
         [DllImport(CvInvoke.ExternLibrary, CallingConvention = CvInvoke.CvCallingConvention)]

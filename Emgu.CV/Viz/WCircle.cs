@@ -29,6 +29,7 @@ namespace Emgu.CV
         public WCircle(double radius, double thickness, MCvScalar color)
         {
             _ptr = CvInvoke.cveWCircleCreateAtOrigin(radius, thickness, ref color, ref _widget3dPtr, ref _widgetPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -42,6 +43,7 @@ namespace Emgu.CV
         public WCircle(double radius, MCvPoint3D64f center, MCvPoint3D64f normal, double thickness, MCvScalar color)
         {
             _ptr = CvInvoke.cveWCircleCreate(radius, ref center, ref normal, thickness, ref color, ref _widget3dPtr, ref _widgetPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

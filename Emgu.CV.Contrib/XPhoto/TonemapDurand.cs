@@ -33,6 +33,7 @@ namespace Emgu.CV.XPhoto
             : base(IntPtr.Zero, IntPtr.Zero)
         {
             _ptr = XPhotoInvoke.cveTonemapDurandCreate(gamma, contrast, saturation, sigmaSpace, sigmaColor, ref _tonemapPtr, ref _algorithmPtr, ref _sharedPtr);
+            CvInvoke.CheckError();
         }
 
         /// <summary>

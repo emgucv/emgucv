@@ -101,6 +101,34 @@ namespace Emgu.CV.Test
         }
 
         [TestAttribute]
+        public void TestMatConstructorRaisesNativeErrors()
+        {
+            //A ROI outside of the parent matrix is rejected by OpenCV; the Mat constructor must throw it
+            //instead of leaving the error pending for the next unrelated call.
+            bool thrown = false;
+            using (Mat parent = new Mat(10, 10, DepthType.Cv8U, 1))
+            {
+                try
+                {
+                    using (Mat roi = new Mat(parent, new Rectangle(0, 0, 100, 100)))
+                    {
+                    }
+                }
+                catch (Emgu.CV.Util.CvException)
+                {
+                    thrown = true;
+                }
+            }
+
+            EmguAssert.IsTrue(thrown, "A Mat with an out of range ROI should throw a CvException");
+            //no stale error is left behind
+            using (Mat ok = new Mat(2, 2, DepthType.Cv8U, 1))
+            {
+                EmguAssert.AreEqual(2, ok.Rows);
+            }
+        }
+
+        [TestAttribute]
         public void TestReduceNewTypes()
         {
             //OpenCV 5.1 added REDUCE_PROD, REDUCE_L1, REDUCE_L2, REDUCE_LOG_SUM and REDUCE_LOG_SUM_EXP.

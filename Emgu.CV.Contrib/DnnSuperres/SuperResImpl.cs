@@ -25,6 +25,7 @@ namespace Emgu.CV.DnnSuperres
         public DnnSuperResImpl()
         {
             _ptr = DnnSuperresInvoke.cveDnnSuperResImplCreate();
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -35,7 +36,10 @@ namespace Emgu.CV.DnnSuperres
         public DnnSuperResImpl(String algorithm, int scale)
         {
             using (CvString csAlgorithm = new CvString(algorithm))
+            {
                 _ptr = DnnSuperresInvoke.cveDnnSuperResImplCreate2(csAlgorithm, scale);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -45,7 +49,10 @@ namespace Emgu.CV.DnnSuperres
         public void ReadModel(String path)
         {
             using (CvString csPath = new CvString(path))
+            {
                 DnnSuperresInvoke.cveDnnSuperResImplReadModel1(_ptr, csPath);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -59,6 +66,7 @@ namespace Emgu.CV.DnnSuperres
             using (CvString csDefinition = new CvString(definition))
             {
                 DnnSuperresInvoke.cveDnnSuperResImplReadModel2(_ptr, csWeight, csDefinition);
+                CvInvoke.CheckError();
             }
         }
 
@@ -70,7 +78,10 @@ namespace Emgu.CV.DnnSuperres
         public void SetModel(String algorithm, int scale)
         {
             using (CvString csAlgorithm = new CvString(algorithm))
+            {
                 DnnSuperresInvoke.cveDnnSuperResImplSetModel(_ptr, csAlgorithm, scale);
+                CvInvoke.CheckError();
+            }
         }
 
         /// <summary>
@@ -84,6 +95,7 @@ namespace Emgu.CV.DnnSuperres
             using (OutputArray oaResult = result.GetOutputArray())
             {
                 DnnSuperresInvoke.cveDnnSuperResImplUpsample(_ptr, iaImg, oaResult);
+                CvInvoke.CheckError();
             }
         }
 
@@ -94,6 +106,7 @@ namespace Emgu.CV.DnnSuperres
         public void SetPreferableBackend(Emgu.CV.Dnn.Backend backendId)
         {
             DnnSuperresInvoke.cveDnnSuperResImplSetPreferableBackend(_ptr, backendId);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -103,6 +116,7 @@ namespace Emgu.CV.DnnSuperres
         public void SetPreferableTarget(Emgu.CV.Dnn.Target targetId)
         {
             DnnSuperresInvoke.cveDnnSuperResImplSetPreferableTarget(_ptr, targetId);
+            CvInvoke.CheckError();
         }
 
         /// <summary>
@@ -110,7 +124,12 @@ namespace Emgu.CV.DnnSuperres
         /// </summary>
         public int Scale
         {
-            get { return DnnSuperresInvoke.cveDnnSuperResImplGetScale(_ptr); }
+            get
+            {
+                var result = DnnSuperresInvoke.cveDnnSuperResImplGetScale(_ptr);
+                CvInvoke.CheckError();
+                return result;
+            }
         }
 
         /// <summary>
@@ -123,6 +142,7 @@ namespace Emgu.CV.DnnSuperres
                 using (CvString csAlgorithm = new CvString())
                 {
                     DnnSuperresInvoke.cveDnnSuperResImplGetAlgorithm(_ptr, csAlgorithm);
+                    CvInvoke.CheckError();
                     return csAlgorithm.ToString();
                 }
             }
