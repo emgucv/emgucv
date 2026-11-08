@@ -1,8 +1,29 @@
 # ONNX Runtime CUDA execution provider does not load in the Windows CUDA build
 
-Status: **known limitation, accepted for now** (decision 2026-11-07: keep running ONNX Runtime on the CPU).
+Status: **cause confirmed, workaround verified (2026-11-08).** Decision (2026-11-08): keep running ONNX Runtime on the CPU by default and
+document the CUDA 12 requirement in the `Emgu.runtime.windows.onnxruntime.cuda` README (option 1 below); packaging the
+CUDA 12 libraries is not planned for now.
 Revisit when a CUDA 13 build of ONNX Runtime is available for Windows, or when the build is moved to a CUDA 12
 toolkit.
+
+## Verified workaround (2026-11-08)
+Copying the CUDA 12.6.54 DLLs from the Emgu runtime packages (kept in `D:\release\nuget_repo`) next to
+`onnxruntime_providers_cuda.dll` in `libs/runtimes/win-x64/native` makes the CUDA provider load:
+`cudart64_12.dll` (`.rt`), `cublas64_12.dll` (`.blas`), `cublasLt64_12.dll` (`.blas.lt`, 487 MB),
+`cufft64_11.dll` (`.fft`). cuDNN 9 (`cudnn64_9.dll`) and `curand64_10.dll` were already present. The CUDA 12 and
+CUDA 13 libraries have different file names, so both sets sit in one folder.
+
+`yolo11m.onnx`, 640x640, RTX 3070, 10 iterations after a warm-up: `EngineType.Ort` default target 190.5 ms,
+`Target.Cuda` **19.3 ms** (about 10x), no "CUDA EP unavailable" line on stderr. CPU and CUDA outputs of one forward
+pass agree: relative L2 error 1.2E-4, max absolute difference 0.55 on box values up to 637 (one model, one input).
+
+Packaging constraints found while looking at this:
+- The CUDA 12 and CUDA 13 packages use the same NuGet ids (`Emgu.runtime.windows.cuda.rt`, `.blas`, ...), and a
+  project can resolve only one version of an id. So `Emgu.runtime.windows.onnxruntime.cuda` cannot simply depend on the
+  12.x versions next to the 13.2.44 ones the main package uses. It would need separate ids, or the DLLs bundled into it.
+- `cublasLt64_12.dll` is 487 MB (the `.blas.lt` 12.6.54 nupkg is 335 MB), over nuget.org's 250 MB package limit, which
+  is probably why only 11.6.112 of `.blas.lt` is published there.
+- The four extra libraries add about 850 MB unpacked.
 
 ## Symptom
 In the Windows CUDA build (`Build_Binary.ps1 -Arch x86_64 -Cuda -OnnxRuntime ...`), a net created with
@@ -60,8 +81,8 @@ not the CUDA 12 ones the provider needs. I did not find an official Windows CUDA
 1. **Build against a CUDA 12 toolkit.** Then ORT's provider finds `cublasLt64_12.dll` and the rest. Not possible on
    the current dev machine as set up: `v12.9` does not resolve through `CUDA_PATH_V12_9`, and the cuDNN 9.20
    install only has a `13.2` bin folder. It would also move the whole OpenCV CUDA build to CUDA 12.
-2. **Ship the CUDA 12 runtime libraries next to the provider** (`cublas64_12`, `cublasLt64_12`, `cudart64_12`, and
-   probably cuDNN and cuFFT for 12), alongside the CUDA 13 ones. Several hundred MB extra.
+2. **Ship the CUDA 12 runtime libraries next to the provider** (`cublas64_12`, `cublasLt64_12`, `cudart64_12`,
+   `cufft64_11`), alongside the CUDA 13 ones. Verified to work (see above); the open problem is packaging, not function.
 3. **Keep ORT on the CPU. (chosen)** No change needed.
 
 ## Follow-ups to consider (not done)
