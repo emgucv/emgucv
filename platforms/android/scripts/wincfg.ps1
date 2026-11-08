@@ -72,7 +72,16 @@ foreach ($candidate in $ndkCandidates) {
 
 if ($env:ProgramFiles -and (Test-Path "${env:ProgramFiles(x86)}\Android\android-sdk\ndk-bundle")) { $env:ANDROID_NDK = "${env:ProgramFiles(x86)}\Android\android-sdk\ndk-bundle" }
 if ($env:ANDROID_SDK -and (Test-Path (Join-Path $env:ANDROID_SDK 'ndk-bundle'))) { $env:ANDROID_NDK = Join-Path $env:ANDROID_SDK 'ndk-bundle' }
-if ($env:ANDROID_SDK -and (Test-Path (Join-Path $env:ANDROID_SDK 'ndk\28.0.12916984'))) { $env:ANDROID_NDK = Join-Path $env:ANDROID_SDK 'ndk\28.0.12916984' }
+
+# Side-by-side NDKs installed by sdkmanager / Android Studio: <sdk>\ndk\<version>.
+# Use the newest one.
+if ($env:ANDROID_SDK -and (Test-Path (Join-Path $env:ANDROID_SDK 'ndk'))) {
+    $newestNdk = Get-ChildItem -Path (Join-Path $env:ANDROID_SDK 'ndk') -Directory |
+        Where-Object { $v = $null; [version]::TryParse($_.Name, [ref]$v) } |
+        Sort-Object { [version]$_.Name } -Descending |
+        Select-Object -First 1
+    if ($newestNdk) { $env:ANDROID_NDK = $newestNdk.FullName }
+}
 
 # ---------------------------------------------------------------------------
 # Make (prefer the NDK's bundled make.exe)
