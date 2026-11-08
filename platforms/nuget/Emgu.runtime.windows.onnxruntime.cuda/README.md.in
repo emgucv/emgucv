@@ -15,17 +15,16 @@ If you are targeting .Net Framework, please read this first:
 If you have issues getting the pacakge installed for your project, and your project use packages.config to manage nuget packages, the following instructions will help:
 <${NUGET_EMGU_URL}/wiki/index.php/Download_And_Installation#Upgrade_from_packages.config_to_package_reference>
 
-## Running on the GPU requires CUDA 12 libraries
+## GPU requirements
 
-The ONNX Runtime v${EMGU_ONNXRUNTIME_CUDA_VERSION} CUDA execution provider in this package is built against CUDA 12,
-while the Emgu CV CUDA runtime packages ship CUDA 13. The provider needs `cudart64_12.dll`, `cublas64_12.dll`,
-`cublasLt64_12.dll`, `cufft64_11.dll` and cuDNN 9 (`cudnn64_9.dll`). Without the CUDA 12 libraries the provider fails to
-load, and ONNX Runtime silently runs the model on the CPU instead (a "CUDA EP unavailable" warning is written to the
-native stderr; no exception is thrown).
+The ONNX Runtime v${EMGU_ONNXRUNTIME_CUDA_VERSION} CUDA execution provider in this package is the CUDA 13 build
+(`gpu_cuda13`), matching the CUDA 13 libraries shipped by the Emgu CV CUDA runtime packages, so no extra CUDA libraries
+need to be installed. It needs an NVIDIA driver that supports CUDA 13 and a GPU of compute capability 7.5 or newer
+(Turing, Ampere, Ada, Hopper, Blackwell). V100 (7.0) and older GPUs are not supported.
 
-To use the GPU, install the CUDA 12 toolkit (cuDNN 9 is already included in the Emgu CV CUDA runtime packages) and make
-sure its `bin` folder is on `PATH`, or copy the CUDA 12 DLLs listed above next to `onnxruntime_providers_cuda.dll`. If
-you do not need the GPU, nothing has to be done: the CPU path works as is.
+If the provider cannot be loaded, ONNX Runtime does not raise an error: the model silently runs on the CPU, and a
+"CUDA EP unavailable" warning is written to the native stderr. Check for that line if GPU inference is not faster than
+CPU inference.
 
 ## Publishing with `dotnet publish -r <rid>`
 
