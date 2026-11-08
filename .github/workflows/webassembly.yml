@@ -2,9 +2,9 @@ name: WebAssembly build.
 
 on:
   push:
-    branches: [ EMGUCV_5_0 ]
+    branches: [ EMGUCV_5_x ]
   pull_request:
-    branches: [ EMGUCV_5_0 ]
+    branches: [ EMGUCV_5_x ]
 
 permissions:
   contents: read
@@ -63,7 +63,7 @@ jobs:
 
   deploy-demo:
     needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/EMGUCV_5_0'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/EMGUCV_5_x'
 
     permissions:
       pages: write
