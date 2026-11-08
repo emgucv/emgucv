@@ -82,23 +82,12 @@ if ($env:ANDROID_NDK -and (Test-Path $env:ANDROID_NDK)) {
 }
 
 # ---------------------------------------------------------------------------
-# CMake -- last matching candidate wins, same order as wincfg.cmd.
+# CMake -- shared with windows/Build_Binary.ps1 (Visual Studio's bundled CMake
+# is preferred over a standalone install).
 # ---------------------------------------------------------------------------
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..\..')
-$vswhere = Join-Path $repoRoot 'miscellaneous\vswhere.exe'
-$vs2022Dir = ''
-if (Test-Path $vswhere) {
-    $vs2022Result = & $vswhere -version '[17.0,18.0)' -property installationPath 2>$null
-    if ($vs2022Result) { $vs2022Dir = ($vs2022Result | Select-Object -First 1) }
-}
-
-if (Test-Path "${env:ProgramFiles(x86)}\CMake 2.8\bin\cmake.exe") { $env:CMAKE = "${env:ProgramFiles(x86)}\CMake 2.8\bin\cmake.exe" }
-if (Test-Path "${env:ProgramFiles(x86)}\CMake\bin\cmake.exe") { $env:CMAKE = "${env:ProgramFiles(x86)}\CMake\bin\cmake.exe" }
-if (Test-Path "$env:ProgramFiles\CMake\bin\cmake.exe") { $env:CMAKE = "$env:ProgramFiles\CMake\bin\cmake.exe" }
-if ($vs2022Dir -and (Test-Path (Join-Path $vs2022Dir 'Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe'))) {
-    $env:CMAKE = Join-Path $vs2022Dir 'Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe'
-}
-if ($env:ProgramW6432 -and (Test-Path "$env:ProgramW6432\CMake\bin\cmake.exe")) { $env:CMAKE = "$env:ProgramW6432\CMake\bin\cmake.exe" }
+. (Join-Path $repoRoot 'platforms\windows\Find-CMake.ps1')
+$env:CMAKE = Find-CMakeExe -RepoRoot $repoRoot
 
 # ---------------------------------------------------------------------------
 # Ant (legacy, only used by the old jni/ant Java project flow)

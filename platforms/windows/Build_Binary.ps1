@@ -174,6 +174,8 @@ function ConvertTo-ForwardSlash {
     return $Path -replace '\\', '/'
 }
 
+. (Join-Path $PSScriptRoot 'Find-CMake.ps1')
+
 # ---------------------------------------------------------------------------
 # Visual Studio / CMake toolchain detection
 #
@@ -305,20 +307,8 @@ function Resolve-VisualStudioEnvironment {
         default { throw "Could not detect a usable Visual Studio / MSBuild installation." }
     }
 
-    # CMake.exe detection (prefers VS2022's bundled CMake unless pinned to
-    # vs2022/CUDA needs VS2026's bundled one; falls back to a system install).
-    $cmakeExe = 'cmake.exe'
-    if (Test-Path (Join-Path $programFilesX86 'CMake\bin\cmake.exe')) { $cmakeExe = Join-Path $programFilesX86 'CMake\bin\cmake.exe' }
-    if (Test-Path (Join-Path $programFiles 'CMake\bin\cmake.exe')) { $cmakeExe = Join-Path $programFiles 'CMake\bin\cmake.exe' }
-    if ($env:ProgramW6432 -and (Test-Path (Join-Path $env:ProgramW6432 'CMake\bin\cmake.exe'))) { $cmakeExe = Join-Path $env:ProgramW6432 'CMake\bin\cmake.exe' }
-    if ($vs2022Dir -and (Test-Path (Join-Path $vs2022Dir 'Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe'))) {
-        $cmakeExe = Join-Path $vs2022Dir 'Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe'
-    }
-    if ($Toolchain -ne 'VS2022') {
-        if ($vs2026Dir -and (Test-Path (Join-Path $vs2026Dir 'Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe'))) {
-            $cmakeExe = Join-Path $vs2026Dir 'Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe'
-        }
-    }
+    # CMake.exe detection lives in Find-CMake.ps1, shared with android/scripts/wincfg.ps1.
+    $cmakeExe = Find-CMakeExe -RepoRoot $repoRoot -Toolchain $Toolchain
 
     return [PSCustomObject]@{
         DevEnvKind        = $devEnvKind
