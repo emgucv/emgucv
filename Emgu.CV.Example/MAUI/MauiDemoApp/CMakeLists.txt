@@ -7,7 +7,12 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
   SET(MAUI_BUILD_FRAMEWORKS)
   SET(MAUI_BUILD_RUNTIME_IDENTIFIERS)
   SET(MAUI_BUILD_EXTRA_FLAGS)
-  IF(HAVE_MAUI_ANDROID)
+  # Each native build packages only its own platform's demo, like the iOS and
+  # Catalyst branches below. HAVE_MAUI_ANDROID alone is true whenever Android
+  # binaries exist in libs/android, which made e.g. the Catalyst build add an
+  # Android target too -- and one dotnet build can't take two TFMs here (see
+  # MAUI_BUILD_FRAMEWORKS_STR below).
+  IF(HAVE_MAUI_ANDROID AND ANDROID)
     #Build android
     LIST(APPEND MAUI_BUILD_FRAMEWORKS "net${DOTNET_VERSION_MAJOR}.0-android")
   ENDIF()
@@ -72,8 +77,14 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
     # Use "%3B" (URL-encoded semicolon) instead of ";" as the list separator.
     # The generated Xcode post-build shell script embeds these values unquoted, so a
     # literal ";" would be interpreted by the shell as a command separator, truncating
-    # the dotnet argument list. MSBuild/dotnet decodes "%3B" back to ";" at runtime,
-    # so the property value is received correctly as a semicolon-separated list.
+    # the dotnet argument list. But MSBuild treats an escaped "%3B" as a literal
+    # character, not a list separator, so two or more entries reach the inner build
+    # as one invalid TargetFramework (NETSDK1046). This only works with a single
+    # framework, which the per-platform conditions above guarantee.
+    LIST(LENGTH MAUI_BUILD_FRAMEWORKS _maui_framework_count)
+    IF(_maui_framework_count GREATER 1)
+      MESSAGE(FATAL_ERROR "MauiDemoApp: one target framework per build is supported, got: ${MAUI_BUILD_FRAMEWORKS}")
+    ENDIF()
     LIST(JOIN MAUI_BUILD_FRAMEWORKS "%3B" MAUI_BUILD_FRAMEWORKS_STR)
     SET(MAUI_BUILD_FRAMEWORKS_STR "/p:TargetFrameworks=${MAUI_BUILD_FRAMEWORKS_STR}")
   ELSE()
