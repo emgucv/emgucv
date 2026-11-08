@@ -18,9 +18,12 @@ INSTALL_FOLDER=$PWD/build/install
 # Shared with the managed projects' SupportedOSPlatformVersion (see cmake/PlatformDetection.cmake).
 IPHONEOS_DEPLOYMENT_TARGET="$(tr -d '[:space:]' < "$CURRENT_SCRIPT_DIR/../../cmake/ios_min_version.txt")"
 
-
+# -UCMAKE_OSX_SYSROOT: OpenCV's iOS toolchain only sets CMAKE_SYSTEM_NAME=iOS inside
+# `if(NOT DEFINED CMAKE_OSX_SYSROOT)`. When CMake re-detects the system in an existing
+# build tree (e.g. after a CMake upgrade), the cached sysroot skips that block and the
+# build silently configures as Darwin (macOS), failing on AppKit in imgcodecs.
 if [ "$2" == "device" ]; then
-    CV_TOOLCHAIN_OPTION=( -DCMAKE_TOOLCHAIN_FILE=$CURRENT_SCRIPT_DIR/cmake/Toolchains/Toolchain-iPhoneOS_Xcode.cmake )
+    CV_TOOLCHAIN_OPTION=( -UCMAKE_OSX_SYSROOT -DCMAKE_TOOLCHAIN_FILE=$CURRENT_SCRIPT_DIR/cmake/Toolchains/Toolchain-iPhoneOS_Xcode.cmake )
     CV_OPTIMIZATION_OPTION=
     INSTALL_FOLDER=$INSTALL_FOLDER/OpenCV_iPhoneOS_$3
 elif [ "$2" == "catalyst" ]; then
@@ -28,7 +31,7 @@ elif [ "$2" == "catalyst" ]; then
     CV_OPTIMIZATION_OPTION=
     INSTALL_FOLDER=$INSTALL_FOLDER/OpenCV_catalyst_$3
 else #simulator
-    CV_TOOLCHAIN_OPTION=( -DCMAKE_TOOLCHAIN_FILE=$CURRENT_SCRIPT_DIR/cmake/Toolchains/Toolchain-iPhoneSimulator_Xcode.cmake )
+    CV_TOOLCHAIN_OPTION=( -UCMAKE_OSX_SYSROOT -DCMAKE_TOOLCHAIN_FILE=$CURRENT_SCRIPT_DIR/cmake/Toolchains/Toolchain-iPhoneSimulator_Xcode.cmake )
     #disable optimization for ios simulator. It is causing compilation issue when NEON is enabled for Apple Arm64.
     CV_OPTIMIZATION_OPTION=( -DCV_DISABLE_OPTIMIZATION:BOOL=TRUE )
     INSTALL_FOLDER=$INSTALL_FOLDER/OpenCV_iPhoneSimulator_$3
