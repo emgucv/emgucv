@@ -2,6 +2,29 @@
 
 cd "$(dirname "$0")"
 
+# By default the image codec libraries (libtiff, libpng, libjpeg, libwebp, OpenJPEG)
+# and libgeotiff are linked from the system copies installed by
+# apt_install_dependency, wherever they are found. Pass --build-from-source (anywhere
+# in the arguments) to build them, plus PROJ, from source and link them statically
+# instead, so libcvextern.so doesn't need them installed at runtime.
+USE_SYSTEM_LIBS=TRUE
+POSITIONAL_ARGS=()
+for arg in "$@"; do
+    if [ "$arg" == "--build-from-source" ]; then
+        USE_SYSTEM_LIBS=FALSE
+    else
+        POSITIONAL_ARGS+=("$arg")
+    fi
+done
+set -- "${POSITIONAL_ARGS[@]}"
+
+if [ "$USE_SYSTEM_LIBS" == "TRUE" ]; then
+    BUILD_3RDPARTY=FALSE
+else
+    BUILD_3RDPARTY=TRUE
+fi
+THIRDPARTY_OPTIONS=( -DBUILD_TIFF:BOOL=$BUILD_3RDPARTY -DBUILD_PNG:BOOL=$BUILD_3RDPARTY -DBUILD_JPEG:BOOL=$BUILD_3RDPARTY -DBUILD_WEBP:BOOL=$BUILD_3RDPARTY -DBUILD_OPENJPEG:BOOL=$BUILD_3RDPARTY -DBUILD_JASPER:BOOL=$BUILD_3RDPARTY -DBUILD_OPENEXR:BOOL=$BUILD_3RDPARTY -DEMGU_CV_USE_SYSTEM_GEOTIFF:BOOL=$USE_SYSTEM_LIBS )
+
 SYSTEM_ARCH=$(getconf LONG_BIT)
 echo System is $SYSTEM_ARCH bit
 
@@ -102,10 +125,7 @@ cmake \
     $TESSERACT_OPTION \
     -DWITH_EIGEN:BOOL=TRUE \
     -DEigen3_DIR:String="$TOP_FOLDER/eigen/build" \
-    -DBUILD_TIFF:BOOL=TRUE \
-    -DBUILD_PNG:BOOL=TRUE \
-    -DBUILD_JPEG:BOOL=TRUE \
-    -DBUILD_OPENEXR:BOOL=TRUE \
+    ${THIRDPARTY_OPTIONS[@]} \
     -DBUILD_opencv_python2:BOOL=FALSE \
     -DBUILD_opencv_python3:BOOL=FALSE \
     -DBUILD_opencv_java:BOOL=FALSE \
