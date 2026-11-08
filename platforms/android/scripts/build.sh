@@ -110,24 +110,6 @@ BASE_CMAKE_FLAGS=(
     "-DCMAKE_C_FLAGS:STRING=-std=c11"
     "-DCMAKE_CXX_FLAGS_RELEASE:STRING=-g0 -O3"
     "-DCMAKE_C_FLAGS_RELEASE:STRING=-g0 -O3"
-    # KleidiCV (ARM's optimized HAL) with its SVE2 backend, and no LTO --
-    # the same configuration as OpenCV's official Android SDK
-    # (opencv/platforms/android/build_sdk.py). KleidiCV compiles its SVE2
-    # code into separate objects (-march=armv8-a+sve2) and only calls them
-    # after a runtime CPU check, so devices without SVE2 (the emulator, and
-    # most phones before Armv9) use its NEON paths instead.
-    #
-    # LTO must stay OFF while SVE2 is ON: whole-program optimization pulled
-    # that SVE2 codegen into unrelated code (libwebp's WebPGetColorPalette)
-    # outside KleidiCV's runtime check, making libcvextern.so crash with
-    # SIGILL on non-SVE devices. (CPU_BASELINE_DISABLE=SVE does NOT help --
-    # the SVE comes from KleidiCV/LTO, not OpenCV's own CPU baseline/dispatch.)
-    # Benchmarked on a Galaxy S10 (Snapdragon 855, no SVE2): LTO gave no
-    # measurable speedup in KleidiCV-covered functions, and KleidiCV is
-    # 2-5x faster than WITH_KLEIDICV=OFF for resize, pyrDown, flip and
-    # GaussianBlur (warpPerspective is ~30% slower).
-    "-DWITH_KLEIDICV=ON"
-    "-DKLEIDICV_ENABLE_SVE2:BOOL=ON"
     "-DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=OFF"
     "-DCMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,--gc-sections, -Wl,--exclude-libs,All"
     "-DCMAKE_POLICY_DEFAULT_CMP0069=NEW"
@@ -136,6 +118,29 @@ BASE_CMAKE_FLAGS=(
 )
 if [ -n "$ANDROID_TOOLCHAIN_NAME" ]; then
     BASE_CMAKE_FLAGS+=("-DANDROID_TOOLCHAIN_NAME=$ANDROID_TOOLCHAIN_NAME")
+fi
+
+# KleidiCV (ARM's optimized HAL) with its SVE2 backend, and no LTO --
+# the same configuration as OpenCV's official Android SDK
+# (opencv/platforms/android/build_sdk.py). KleidiCV compiles its SVE2
+# code into separate objects (-march=armv8-a+sve2) and only calls them
+# after a runtime CPU check, so devices without SVE2 (the emulator, and
+# most phones before Armv9) use its NEON paths instead.
+#
+# LTO must stay OFF while SVE2 is ON: whole-program optimization pulled
+# that SVE2 codegen into unrelated code (libwebp's WebPGetColorPalette)
+# outside KleidiCV's runtime check, making libcvextern.so crash with
+# SIGILL on non-SVE devices. (CPU_BASELINE_DISABLE=SVE does NOT help --
+# the SVE comes from KleidiCV/LTO, not OpenCV's own CPU baseline/dispatch.)
+# Benchmarked on a Galaxy S10 (Snapdragon 855, no SVE2): LTO gave no
+# measurable speedup in KleidiCV-covered functions, and KleidiCV is
+# 2-5x faster than WITH_KLEIDICV=OFF for resize, pyrDown, flip and
+# GaussianBlur (warpPerspective is ~30% slower).
+#
+# KleidiCV supports aarch64 only: passing WITH_KLEIDICV=ON for the other ABIs
+# forces it into the build and fails with "KleidiCV is only supported for aarch64".
+if [ "$ANDROID_ABI" = "arm64-v8a" ]; then
+    BASE_CMAKE_FLAGS+=("-DWITH_KLEIDICV=ON" "-DKLEIDICV_ENABLE_SVE2:BOOL=ON")
 fi
 
 # ---- Build Eigen ----

@@ -150,18 +150,26 @@ $baseCmakeFlags = @(
     '-DCMAKE_C_FLAGS:STRING=-std=c11',
     '-DCMAKE_CXX_FLAGS_RELEASE:STRING=-g0 -O3',
     '-DCMAKE_C_FLAGS_RELEASE:STRING=-g0 -O3',
-    # KleidiCV with its SVE2 backend, and no LTO -- same as build.sh and
-    # OpenCV's official Android SDK. LTO must stay OFF while SVE2 is ON: it
-    # pulls KleidiCV's SVE2 code outside its runtime CPU check and crashes
-    # non-SVE devices with SIGILL. See ../KleidiCV_Performance.md.
-    '-DWITH_KLEIDICV=ON',
-    '-DKLEIDICV_ENABLE_SVE2:BOOL=ON',
+    # No LTO -- same as build.sh and OpenCV's official Android SDK. LTO must
+    # stay OFF while KleidiCV's SVE2 is ON (see the KleidiCV block below).
     '-DCMAKE_INTERPROCEDURAL_OPTIMIZATION:BOOL=OFF',
     '-DCMAKE_SHARED_LINKER_FLAGS:STRING=-Wl,--gc-sections, -Wl,--exclude-libs,All',
     '-DCMAKE_POLICY_DEFAULT_CMP0069=NEW',
     "-DCMAKE_INSTALL_PREFIX:STRING=$(ConvertTo-ForwardSlash $installFolder)",
     '-DCMAKE_BUILD_TYPE:STRING=Release'
 )
+
+# KleidiCV (ARM's optimized HAL) with its SVE2 backend. It supports aarch64
+# only: passing WITH_KLEIDICV=ON for armeabi-v7a/x86/x86_64 forces it into the
+# build and fails with "KleidiCV is only supported for aarch64". SVE2 + LTO
+# pulls KleidiCV's SVE2 code outside its runtime CPU check and crashes non-SVE
+# devices with SIGILL. See ../KleidiCV_Performance.md.
+if ($androidAbi -eq 'arm64-v8a') {
+    $baseCmakeFlags += @(
+        '-DWITH_KLEIDICV=ON',
+        '-DKLEIDICV_ENABLE_SVE2:BOOL=ON'
+    )
+}
 
 # --- Build Eigen (unconditionally) ------------------------------------------
 Write-Host ''
