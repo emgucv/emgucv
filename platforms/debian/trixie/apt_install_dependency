@@ -1,14 +1,14 @@
 #!/bin/bash
 
-#sudo apt install build-essential libtiff5-dev libgeotiff-dev libgtk-3-dev libgstreamer1.0-dev libavcodec-dev libswscale-dev libavformat-dev libopenexr-dev libjasper-dev libdc1394-22-dev libv4l-dev libeigen3-dev libopengl-dev cmake-curses-gui freeglut3-dev git
-
 sudo apt install -y build-essential libtiff-dev libgeotiff-dev libpng-dev libgtk-4-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
   libavcodec-dev libswscale-dev libavformat-dev libopenexr-dev libdc1394-dev libv4l-dev \
   libeigen3-dev libopengl-dev cmake-curses-gui freeglut3-dev git libvtk9-dev qt6-base-dev \
-  mono-runtime mono-complete
+  mono-runtime mono-complete \
+  sqlite3
+
+# sqlite3 is needed if building libgeotiff from source code.
 
 # dotnet-sdk-10.0 is not in the standard Debian repos.
 # Install it via the Microsoft package feed:
 # https://learn.microsoft.com/dotnet/core/install/linux-debian
-  
-#  libmono-system-net-http4.0-cil libmono-system-io-compression4.0-cil
+
