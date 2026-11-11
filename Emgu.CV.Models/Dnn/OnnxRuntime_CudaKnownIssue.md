@@ -32,12 +32,45 @@ Measurement, `yolo11m.onnx` 640x640, RTX 3070, 10 iterations after a warm-up:
 CPU and CUDA outputs of one forward pass agree: relative L2 error 1.2E-4, max absolute difference 0.55 on box values up
 to 637 (one model, one input).
 
-Unit test: `AutoTestModels.TestYoloOrtCuda` (runs with `-p:TestModels=true`, Windows only). It runs yolo11n on both ORT
-targets with native stderr captured, fails if the "CUDA EP unavailable" line appears, and compares the two outputs. It
-fails as expected when `onnxruntime_providers_cuda.dll` is hidden.
+Unit tests (run with `-p:TestModels=true`, Windows only), both fail as expected when `onnxruntime_providers_cuda.dll` is
+hidden:
+- `AutoTestModels.TestYoloOrtCuda` runs yolo11n on both ORT targets with native stderr captured, fails if the
+  "CUDA EP unavailable" line appears, and compares the two outputs.
+- `AutoTestModels.TestOrtCudaModels` does the same for the other ONNX models (table below). Dinov2, PaddleOCR, MaskRcnn,
+  MiniLM and MultilingualE5 are downloaded through their `Emgu.CV.Models` classes; the other models are tested only when
+  their file is already in the emgu model folder.
+
+### Other models (2026-11-10)
+Same setup (RTX 3070, ORT 1.31.1 `gpu_cuda13`). One input per model (`pedestrian.png` resized, or fixed token ids for the
+text encoders), the first output only, average of 5 runs after 2 warm-up runs. Every model ran on CUDA, none printed the
+"CUDA EP unavailable" warning.
+
+| Model | CPU ms | CUDA ms | Relative L2 error |
+|---|---|---|---|
+| mask_rcnn (MaskRCNN-10) | 977 | 79 | 1.5E-3 |
+| DB_TD500_resnet50 | 365 | 41 | 7.5E-3 |
+| disk | 514 | 31 | not compared (see below) |
+| dinov2_small | 118 | 7 | 1.2E-3 |
+| paddleocr_det | 72 | 13 | 4.7E-3 |
+| xfeat | 26 | 8 | 7.5E-4 |
+| paddleocr_rec | 24 | 9 | 1.3E-3 |
+| sface | 16 | 2.4 | 1.4E-3 |
+| FSRCNN_x2 | 11 | 3.5 | 1.6E-4 |
+| all_minilm_l6_v2 | 5.2 | 4.5 | 5.6E-4 |
+| multilingual_e5_small | 8.2 | 9.6 | 2.6E-4 |
+| crnn_cs_CN | 9.0 | 8.7 | 1.2E-4 |
+| yunet_2023 | 7.1 | 8.2 | 1.8E-4 |
+
+- The small models (the last four) are too small for the GPU to help, so no speedup is expected.
+- DISK's first output is an int64 list whose length depends on a threshold: CPU and CUDA returned 5534 and 5532
+  elements. If that is a keypoint list, one keypoint more or less shifts every later element, so the test compares only
+  the output size (within 1%), not the values.
+- Input layouts differ per model: FSRCNN_x2 takes NHWC `[1,H,W,1]`, MaskRCNN a 3-D `[3,H,W]` input, xfeat a 640 high
+  input, the text encoders int64 `input_ids`, `attention_mask` and `token_type_ids`.
 
 Not verified: Linux (the same package naming applies to `onnxruntime-linux-x64-gpu_cuda13`, but it was not built or
-tested), and models other than YOLO.
+tested), and models with several inputs or token-by-token decoding (CLIP, SigLIP, SigLIP2, SmolVLM2, PaliGemma2; the Qwen
+models do not use ORT).
 
 ## History: ORT 1.25.1 with the CUDA 13 build
 ### Symptom
@@ -101,7 +134,7 @@ Moving to the CUDA 13 package of ORT 1.31.1 made this workaround unnecessary.
 - Linux: confirm the `gpu_cuda13` package works in the Ubuntu CUDA build.
 
 ## How to re-check later
-Run `AutoTestModels.TestYoloOrtCuda`. By hand: call `ReadNetFromONNX(model, EngineType.Ort)` then
+Run `AutoTestModels.TestYoloOrtCuda` and `AutoTestModels.TestOrtCudaModels`. By hand: call `ReadNetFromONNX(model, EngineType.Ort)` then
 `SetPreferableTarget(Target.Cuda)` and time a few forward passes against `EngineType.Ort` with no target set. A real GPU
 run is clearly faster, and the stderr line above is absent. `dotnet test` hides the native stderr, so redirect it in
 the test: P/Invoke `_open_osfhandle` and `_dup2(fd, 2)` from `ucrtbase.dll` onto a file opened with

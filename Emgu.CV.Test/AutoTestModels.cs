@@ -238,6 +238,239 @@ namespace Emgu.CV.Test
             EmguAssert.IsTrue(relativeError < 1e-2, "ORT CUDA output differs from the CPU output: " + relativeError);
         }
 
+        private class OrtCudaCase
+        {
+            public String Name;
+            public String File;
+            public int Width, Height;
+            public bool Gray;
+            public bool Text;
+            public bool LengthMayDiffer;
+            public double Scale = 1.0 / 255;
+            public bool SwapRB = true;
+            public int[] Reshape;
+        }
+
+        private static void SetInt64Input(Net net, long[] values, String name)
+        {
+            GCHandle handle = GCHandle.Alloc(values, GCHandleType.Pinned);
+            try
+            {
+                using (Mat input = new Mat(new int[] { 1, values.Length }, DepthType.Cv64S, handle.AddrOfPinnedObject()))
+                    net.SetInput(input, name);
+            }
+            finally
+            {
+                handle.Free();
+            }
+        }
+
+        /// <summary>
+        /// Run a model on ONNX Runtime, on the CPU or with Target.Cuda, with native stderr captured. Returns the
+        /// first output and the average time of a forward pass (after two warm-up passes).
+        /// </summary>
+        private static float[] OrtForward(String modelFile, bool cuda, OrtCudaCase c, Mat image, out double msPerRun, out String stderrText)
+        {
+            String errFile = Path.Combine(Path.GetTempPath(), "emgu_ort_cuda_stderr_" + Guid.NewGuid().ToString("N") + ".txt");
+            float[] output;
+            double elapsedMs = 0;
+            using (FileStream fs = new FileStream(errFile, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+            {
+                int savedStderr = _dup(2);
+                try
+                {
+                    _dup2(_open_osfhandle(fs.SafeFileHandle.DangerousGetHandle(), 0), 2);
+                    using (Net net = DnnInvoke.ReadNetFromONNX(modelFile, EngineType.Ort))
+                    using (Mat gray = new Mat())
+                    using (Mat blob = new Mat())
+                    {
+                        if (cuda)
+                            net.SetPreferableTarget(Target.Cuda);
+
+                        long[] ids = new long[] { 0, 6, 1234, 2054, 2003, 1996, 3007, 1997, 2605, 1029, 2 };
+                        long[] mask = new long[ids.Length];
+                        for (int i = 0; i < mask.Length; i++)
+                            mask[i] = 1;
+                        long[] types = new long[ids.Length];
+
+                        Mat reshaped = null;
+                        Mat input = blob;
+                        if (!c.Text)
+                        {
+                            Mat source = image;
+                            if (c.Gray)
+                            {
+                                CvInvoke.CvtColor(image, gray, ColorConversion.Bgr2Gray);
+                                source = gray;
+                            }
+                            DnnInvoke.BlobFromImage(source, blob, c.Scale, new Size(c.Width, c.Height), new MCvScalar(), c.SwapRB && !c.Gray, false);
+                            if (c.Reshape != null)
+                            {
+                                reshaped = blob.Reshape(1, c.Reshape);
+                                input = reshaped;
+                            }
+                        }
+
+                        Func<Mat> forward = delegate ()
+                        {
+                            if (c.Text)
+                            {
+                                SetInt64Input(net, ids, "input_ids");
+                                SetInt64Input(net, mask, "attention_mask");
+                                SetInt64Input(net, types, "token_type_ids");
+                            }
+                            else
+                                net.SetInput(input);
+                            return net.Forward();
+                        };
+
+                        for (int i = 0; i < 2; i++)
+                            forward().Dispose();
+                        Stopwatch sw = Stopwatch.StartNew();
+                        for (int i = 0; i < 5; i++)
+                            forward().Dispose();
+                        elapsedMs = sw.Elapsed.TotalMilliseconds;
+
+                        using (Mat result = forward())
+                        using (Mat floatResult = new Mat())
+                        {
+                            // Some models (for example DISK) return integer outputs; compare them as floats.
+                            result.ConvertTo(floatResult, DepthType.Cv32F);
+                            output = new float[floatResult.Total.ToInt32() * floatResult.NumberOfChannels];
+                            floatResult.CopyTo(output);
+                        }
+                        if (reshaped != null)
+                            reshaped.Dispose();
+                    }
+                }
+                finally
+                {
+                    _dup2(savedStderr, 2);
+                    _close(savedStderr);
+                }
+            }
+            msPerRun = elapsedMs / 5;
+
+            byte[] errBytes;
+            using (FileStream errStream = new FileStream(errFile, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (MemoryStream errMemory = new MemoryStream())
+            {
+                errStream.CopyTo(errMemory);
+                errBytes = errMemory.ToArray();
+            }
+            stderrText = Encoding.Unicode.GetString(errBytes) + Encoding.UTF8.GetString(errBytes);
+            try { File.Delete(errFile); } catch { }
+            return output;
+        }
+
+        /// <summary>
+        /// Run the ONNX models used by Emgu.CV.Models (other than YOLO) on ONNX Runtime with Target.Cuda and
+        /// compare against the ONNX Runtime CPU output. Some models are downloaded by their Emgu.CV.Models
+        /// classes; the others are tested only when their file is already in the emgu model folder.
+        /// </summary>
+#if !TEST_MODELS
+#if VS_TEST
+        [Ignore()]
+#else
+        [Ignore("Ignore from test run by default.")]
+#endif
+#endif
+        [Test]
+        public async Task TestOrtCudaModels()
+        {
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                Assert.Inconclusive("Native stderr capture is only implemented for Windows.");
+            if (!CvInvoke.HaveOnnxRuntime)
+                Assert.Inconclusive("OpenCV was built without ONNX Runtime.");
+            if (!CudaInvoke.HasCuda)
+                Assert.Inconclusive("No CUDA device available.");
+
+            // Download the models through their wrappers.
+            using (Emgu.CV.Models.Dinov2 m = new Emgu.CV.Models.Dinov2())
+                await m.Init(DownloadManager_OnDownloadProgressChanged);
+            using (Emgu.CV.Models.PaddleOCR m = new Emgu.CV.Models.PaddleOCR())
+                await m.Init(DownloadManager_OnDownloadProgressChanged);
+            using (Emgu.CV.Models.MaskRcnn m = new Emgu.CV.Models.MaskRcnn())
+                await m.Init(DownloadManager_OnDownloadProgressChanged);
+            using (Emgu.CV.Models.MiniLM m = new Emgu.CV.Models.MiniLM())
+                await m.Init(DownloadManager_OnDownloadProgressChanged);
+            using (Emgu.CV.Models.MultilingualE5 m = new Emgu.CV.Models.MultilingualE5())
+                await m.Init(DownloadManager_OnDownloadProgressChanged);
+
+            // Input sizes and layouts follow what each model expects.
+            List<OrtCudaCase> cases = new List<OrtCudaCase>
+            {
+                new OrtCudaCase { Name = "dinov2_small", File = "dinov2_small_onnx/model.onnx", Width = 224, Height = 224 },
+                new OrtCudaCase { Name = "paddleocr_det", File = "paddleocr/ch_PP-OCRv4_det_infer.onnx", Width = 640, Height = 640 },
+                new OrtCudaCase { Name = "paddleocr_rec", File = "paddleocr/ch_PP-OCRv4_rec_infer.onnx", Width = 320, Height = 48 },
+                new OrtCudaCase { Name = "mask_rcnn", File = "mask_rcnn_onnx/MaskRCNN-10.onnx", Width = 800, Height = 800, Scale = 1.0, SwapRB = false, Reshape = new int[] { 3, 800, 800 } },
+                new OrtCudaCase { Name = "all_minilm_l6_v2", File = "all_minilm_l6_v2_onnx/model.onnx", Text = true },
+                new OrtCudaCase { Name = "multilingual_e5_small", File = "multilingual_e5_small_onnx/model.onnx", Text = true },
+                // The models below are only tested when their files are already in the emgu model folder.
+                new OrtCudaCase { Name = "DB_TD500_resnet50", File = "scene_text_detector/DB_TD500_resnet50.onnx", Width = 736, Height = 736 },
+                new OrtCudaCase { Name = "crnn_cs_CN", File = "scene_text_detector/crnn_cs_CN.onnx", Width = 100, Height = 32 },
+                new OrtCudaCase { Name = "sface", File = "face_recognizer_sface/face_recognition_sface_2021dec.onnx", Width = 112, Height = 112, Scale = 1.0, SwapRB = false },
+                new OrtCudaCase { Name = "yunet_2023", File = "face_detector_yn/face_detection_yunet_2023mar.onnx", Width = 640, Height = 640, Scale = 1.0, SwapRB = false },
+                new OrtCudaCase { Name = "FSRCNN_x2", File = "superres/FSRCNN_x2.onnx", Width = 128, Height = 128, Gray = true, Reshape = new int[] { 1, 128, 128, 1 } },
+                new OrtCudaCase { Name = "xfeat", File = "xfeat/xfeat.onnx", Width = 640, Height = 640, Gray = true },
+                // The output is a keypoint list whose length depends on a threshold, so CPU and CUDA can differ by a keypoint.
+                new OrtCudaCase { Name = "disk", File = "disk/disk.onnx", Width = 640, Height = 480, LengthMayDiffer = true },
+            };
+
+            String modelRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "emgu");
+            int tested = 0;
+            using (Mat image = EmguAssert.LoadMat("pedestrian.png"))
+            {
+                foreach (OrtCudaCase c in cases)
+                {
+                    String modelFile = Path.Combine(modelRoot, c.File);
+                    if (!File.Exists(modelFile))
+                    {
+                        Trace.WriteLine(c.Name + ": model file not found, skipped.");
+                        continue;
+                    }
+
+                    double cpuMs, cudaMs;
+                    String cpuErr, cudaErr;
+                    float[] cpu = OrtForward(modelFile, false, c, image, out cpuMs, out cpuErr);
+                    float[] cuda = OrtForward(modelFile, true, c, image, out cudaMs, out cudaErr);
+
+                    EmguAssert.IsTrue(
+                        !cudaErr.Contains("CUDA EP unavailable"),
+                        c.Name + ": ONNX Runtime fell back to the CPU: " + cudaErr);
+
+                    int length = Math.Min(cpu.Length, cuda.Length);
+                    EmguAssert.IsTrue(length > 0, c.Name + ": empty output");
+                    if (c.LengthMayDiffer)
+                    {
+                        // A keypoint list: one keypoint more or less shifts every later element, so only the size is compared.
+                        EmguAssert.IsTrue(
+                            Math.Abs(cpu.Length - cuda.Length) <= 0.01 * Math.Max(cpu.Length, cuda.Length),
+                            c.Name + ": output size differs " + cpu.Length + " vs " + cuda.Length);
+                        Trace.WriteLine(String.Format("{0}: CPU {1:F1} ms, CUDA {2:F1} ms, output size {3} vs {4}", c.Name, cpuMs, cudaMs, cpu.Length, cuda.Length));
+                        tested++;
+                        continue;
+                    }
+                    EmguAssert.IsTrue(cpu.Length == cuda.Length, c.Name + ": output size differs " + cpu.Length + " vs " + cuda.Length);
+
+                    double diff = 0, norm = 0;
+                    for (int i = 0; i < length; i++)
+                    {
+                        double d = cpu[i] - cuda[i];
+                        diff += d * d;
+                        norm += (double)cpu[i] * cpu[i];
+                    }
+                    double relativeError = norm > 0 ? Math.Sqrt(diff / norm) : 0;
+                    Trace.WriteLine(String.Format("{0}: CPU {1:F1} ms, CUDA {2:F1} ms, relative L2 error {3:E2}", c.Name, cpuMs, cudaMs, relativeError));
+                    EmguAssert.IsTrue(relativeError < 2e-2, c.Name + ": ORT CUDA output differs from the CPU output: " + relativeError);
+                    tested++;
+                }
+            }
+
+            if (tested == 0)
+                Assert.Inconclusive("No model file found.");
+        }
+
 #if !TEST_MODELS
 #if VS_TEST
         [Ignore()]
