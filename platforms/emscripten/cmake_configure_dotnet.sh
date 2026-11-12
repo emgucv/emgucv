@@ -80,6 +80,12 @@ fi
 
 echo "Using Emscripten SDK: $EMSCRIPTEN_SDK_ROOT"
 
+# Emscripten version of the selected pack (e.g. 6.0.2). Several versions can be
+# installed side by side (one per .NET SDK workload), so the Node and Cache packs
+# and the EM_CACHE directory below must match it.
+EMSCRIPTEN_VERSION=$(echo "$EMSCRIPTEN_SDK_ROOT" | sed -n 's#.*/Microsoft\.NET\.Runtime\.Emscripten\.\([0-9.]*\)\.Sdk\..*#\1#p')
+echo "Emscripten version: $EMSCRIPTEN_VERSION"
+
 EMSCRIPTEN_TOOLCHAIN="$EMSCRIPTEN_SDK_ROOT/cmake/Modules/Platform/Emscripten.cmake"
 EMCC="$EMSCRIPTEN_SDK_ROOT/emcc"
 EMCMAKE="$EMSCRIPTEN_SDK_ROOT/emcmake"
@@ -113,7 +119,7 @@ export DOTNET_EMSCRIPTEN_BINARYEN_ROOT="$EMSCRIPTEN_PACK_ROOT/tools"
 
 # Node ships in a sibling Node pack (binary is 5 levels deep under packs/)
 NODE_BIN=$(find "$DOTNET_PACKS_DIR" -maxdepth 6 -name "node" \
-    -path "*/Microsoft.NET.Runtime.Emscripten.*.Node.*" 2>/dev/null | head -1)
+    -path "*/Microsoft.NET.Runtime.Emscripten.${EMSCRIPTEN_VERSION}.Node.*" 2>/dev/null | head -1)
 if [ -n "$NODE_BIN" ]; then
     export DOTNET_EMSCRIPTEN_NODE_JS="$NODE_BIN"
 else
@@ -124,7 +130,7 @@ fi
 # rm -rf silently fails to remove files, causing cp to fail when the dotnet
 # Cache pack has __string/__tuple as directories but the old cache has them
 # as files.  $HOME is on ext4 so operations are reliable.
-LINUX_EM_CACHE="$HOME/.emscripten_dotnet_cache"
+LINUX_EM_CACHE="$HOME/.emscripten_dotnet_cache/$EMSCRIPTEN_VERSION"
 export EM_CACHE="$LINUX_EM_CACHE"
 
 # Seed the Linux-native cache from the dotnet pre-built Cache pack on first use.
@@ -135,12 +141,13 @@ DOTNET_CACHE_PACK=$(find "$DOTNET_PACKS_DIR" \
     -maxdepth 7 \
     -type d \
     -name "cache" \
-    -path "*/Microsoft.NET.Runtime.Emscripten.*.Cache.*" \
+    -path "*/Microsoft.NET.Runtime.Emscripten.${EMSCRIPTEN_VERSION}.Cache.*" \
     2>/dev/null | head -1)
 if [ -n "$DOTNET_CACHE_PACK" ] && \
    [ ! -f "$EM_CACHE/sysroot/lib/wasm32-emscripten/libc.a" ]; then
     echo "Seeding Linux EM_CACHE from dotnet Cache pack: $DOTNET_CACHE_PACK"
     rm -rf "$EM_CACHE"
+    mkdir -p "$(dirname "$EM_CACHE")"
     cp -r "$DOTNET_CACHE_PACK" "$EM_CACHE"
 fi
 
