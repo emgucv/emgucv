@@ -966,9 +966,11 @@ namespace MauiDemoApp
                 if (_frame.IsEmpty)
                     return;
 
-                // The camera delivers landscape frames; rotate to match the
-                // phone held upright (portrait).
+#if !__MACCATALYST__
+                // An iPhone camera delivers landscape frames; rotate to match the
+                // phone held upright (portrait). A Mac webcam is already upright.
                 CvInvoke.Rotate(_frame, _frame, RotateFlags.Rotate90Clockwise);
+#endif
 
                 (Mat annotated, _) = MaskRcnnPage.RenderDetections(_frame, _model);
                 using (annotated)
