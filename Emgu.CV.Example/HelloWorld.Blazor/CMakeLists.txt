@@ -4,7 +4,10 @@
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
 
-IF(HAVE_EMSCRIPTEN)
+# Build the demo only in the WebAssembly build itself. HAVE_EMSCRIPTEN is also set by any other
+# build that finds libs/webgl/cvextern.a, where the demo's pinned Emgu.CV.runtime.webassembly
+# version usually doesn't exist yet and the restore fails (NU1102).
+IF(IS_EMSCRIPTEN_BUILD)
 
   IF(DOTNET_FOUND)
     PROJECT(Example.HelloWorld.Blazor)
