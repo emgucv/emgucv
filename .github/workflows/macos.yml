@@ -9,7 +9,8 @@ on:
 jobs:
   build:
 
-    runs-on: macos-latest
+    # .NET 11's iOS / MacCatalyst bindings need Xcode 27, which only the xcode-27 image has.
+    runs-on: xcode-27
     
     # one day time out
     timeout-minutes: 1440
@@ -18,11 +19,14 @@ jobs:
     - uses: actions/checkout@v7
       with:
         submodules: true
+    - name: Select Xcode 27.2
+      # The image defaults to an older Xcode 27; .NET 11's iOS pack is built for 27.2.
+      run: sudo xcode-select -s /Applications/Xcode_27.2.app
     - uses: actions/setup-dotnet@v6
       with:
-        dotnet-version: '10.x'
+        dotnet-version: '11.x'
     - name: Install dotnet workload
-      # Not pinned: the bare net10.0-ios / -maccatalyst TFM in newer workload sets needs a newer
+      # Not pinned: the bare net11.0-ios / -maccatalyst TFM in newer workload sets needs a newer
       # Xcode than the runner may have (MT4162 / IL7000), but those sets still ship the older
       # bindings, which the explicit TFM from the next step selects.
       run: dotnet workload install maui maccatalyst
@@ -30,8 +34,8 @@ jobs:
       run: |
         V="$(./platforms/macos/apple_tfm_version.sh)"
         echo "Xcode: $(xcodebuild -version | head -1); TFM platform version: '$V'"
-        echo "IOS_TFM=net10.0-ios$V" >> "$GITHUB_ENV"
-        echo "CATALYST_TFM=net10.0-maccatalyst$V" >> "$GITHUB_ENV"
+        echo "IOS_TFM=net11.0-ios$V" >> "$GITHUB_ENV"
+        echo "CATALYST_TFM=net11.0-maccatalyst$V" >> "$GITHUB_ENV"
     - name: Setup JDK 17
       uses: actions/setup-java@v5
       with:
@@ -80,4 +84,4 @@ jobs:
         name: emgucv-android-arm64-v8a-nuget-package
         path: ${{ github.workspace }}/platforms/nuget/*.nupkg
     - name: Build Android MAUI demo app
-      run: dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-android
+      run: dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net11.0-android

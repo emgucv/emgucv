@@ -354,17 +354,31 @@ locate the installed Windows App Runtime 1.8 framework package at startup.
 
 **Build:**
 ```bash
-dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-windows10.0.19041.0 -p:WindowsPackageType=None
+dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net11.0-windows10.0.19041.0 -p:WindowsPackageType=None
 ```
 
 **Run:**
 ```bash
-Emgu.CV.Example/MAUI/MauiDemoApp/bin/Debug/net10.0-windows10.0.19041.0/win-x64/MauiDemoApp.exe
+Emgu.CV.Example/MAUI/MauiDemoApp/bin/Debug/net11.0-windows10.0.19041.0/win-x64/MauiDemoApp.exe
 ```
+
+### .NET version per platform
+
+Every generated target framework uses `net<N>.0`, where `<N>` is the major version of the
+installed .NET SDK (`DOTNET_VERSION_MAJOR`, read from `dotnet --version` in
+`cmake/modules/FindCSharp.cmake`). The SDK on the build machine therefore decides the target:
+
+- **macOS, Windows, iOS, MacCatalyst, Android and WebAssembly:** .NET 11. CI installs `11.x`.
+- **Ubuntu and Debian:** .NET 10. CI installs `10.x`.
+
+.NET 11's iOS and MacCatalyst bindings accept only the 27.x platform versions, so iOS and
+MacCatalyst builds need Xcode 27. The macOS CI job runs on the `xcode-27` runner image and
+selects Xcode 27.2. A machine that can't run Xcode 27, such as the Intel Mac mini (Xcode 26.3
+at most), needs the .NET 10 SDK and the `net10.0-ios26.0` TFM from the table below.
 
 ### iOS / MacCatalyst TFM and minimum iOS version
 
-The bare `net10.0-ios` / `net10.0-maccatalyst` TFM binds to the newest iOS SDK in the
+The bare `net11.0-ios` / `net11.0-maccatalyst` TFM binds to the newest iOS SDK in the
 installed .NET workload, which requires the matching Xcode (27.x bindings need Xcode 27;
 26.5 needs Xcode 26.6). Older Xcode releases, such as the Intel Mac mini's maximum of 26.3,
 must use an explicit platform version that the workload still ships.
@@ -374,8 +388,8 @@ must use an explicit platform version that the workload still ships.
 
 | Xcode | TFM |
 |---|---|
-| 27+ | `net10.0-ios` / `net10.0-maccatalyst` |
-| 26.x | `net10.0-ios26.0` / `net10.0-maccatalyst26.0` |
+| 27+ | `net11.0-ios` / `net11.0-maccatalyst` |
+| 26.x | `net10.0-ios26.0` / `net10.0-maccatalyst26.0` (.NET 10 SDK only) |
 
 Every 26.x Xcode uses 26.0, not its own minor version. Each SDK pack accepts only its
 own version plus 26.0 (its `*.SupportedTargetPlatforms.props`), so a version like 26.5
@@ -384,7 +398,7 @@ stops being valid once a newer workload is installed. CI failed this way with
 
 Override with `EMGU_IOS_TFM_VERSION=<ver>` (script) or `-DIOS_TFM_VERSION=<ver>` (CMake).
 Manual `dotnet build -f` commands below must use the same TFM, for example
-`-f net10.0-ios$(platforms/macos/apple_tfm_version.sh)`. One machine-wide workload set works
+`-f net11.0-ios$(platforms/macos/apple_tfm_version.sh)`. One machine-wide workload set works
 with every Xcode; there is no need to pin it per machine.
 
 The minimum iOS version is set in **`cmake/ios_min_version.txt`**, and only there. It feeds the
@@ -397,11 +411,11 @@ update it by hand.
 ### MAUI Demo App (MacCatalyst)
 
 After the MacCatalyst C++ binary is built, build then launch the MAUI demo app directly on
-macOS. Use the TFM for your Xcode (see above); with Xcode 27+ it is `net10.0-maccatalyst`:
+macOS. Use the TFM for your Xcode (see above); with Xcode 27+ it is `net11.0-maccatalyst`:
 
 ```bash
-dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-maccatalyst
-open "Emgu.CV.Example/MAUI/MauiDemoApp/bin/Debug/net10.0-maccatalyst/maccatalyst-arm64/Emgu.app"
+dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net11.0-maccatalyst
+open "Emgu.CV.Example/MAUI/MauiDemoApp/bin/Debug/net11.0-maccatalyst/maccatalyst-arm64/Emgu.app"
 ```
 
 Note: `-t:Run` does not work reliably for MacCatalyst — build and `open` separately instead.
@@ -418,10 +432,10 @@ does not require changing workloads or Xcode.
 After the C++ iOS binaries are built, you can build and run the MAUI demo app on an iOS simulator.
 
 Build then run on the default iOS simulator. Use the TFM for your Xcode, as in the MacCatalyst
-section; with any Xcode 26.x it is `net10.0-ios26.0`:
+section; with Xcode 27+ it is `net11.0-ios`:
 ```bash
-dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-ios
-dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net10.0-ios -t:Run
+dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net11.0-ios
+dotnet build Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj -f net11.0-ios -t:Run
 ```
 
 The project is defined in `Emgu.CV.Example/MAUI/MauiDemoApp/MauiDemoApp.csproj`. The solution file for iOS is at `Solution/iOS/Emgu.CV.iOS.Maui.sln`.

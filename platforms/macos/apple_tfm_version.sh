@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Prints the iOS/MacCatalyst platform version to put in the .NET TFM
-# (net10.0-ios<VERSION> / net10.0-maccatalyst<VERSION>) for the installed Xcode.
+# (net<N>.0-ios<VERSION> / net<N>.0-maccatalyst<VERSION>) for the installed Xcode.
 # An empty result means the bare TFM, i.e. the workload's newest bindings.
 #
 # The bare TFM resolves to the newest bindings in the installed .NET workload,
