@@ -92,7 +92,7 @@ jobs:
       id: build_solution
       run: |
           Push-Location ${{ github.workspace }}\Solution\Windows.Desktop\
-          msbuild Emgu.CV.sln `
+          dotnet msbuild Emgu.CV.sln `
           -p:Configuration=Release `
           -p:Platform=x64 `
           -p:UseSharedCompilation=false `
