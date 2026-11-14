@@ -312,7 +312,7 @@ namespace Emgu.CV
             Crf = 17,
 
             /// <summary>
-            /// (**open-only**) Encoding speed / compression trade-off, one of <see cref="VideoWriterPreset"/>. Only supported by encoders that expose a preset control
+            /// (**open-only**) Encoding speed / compression trade-off, one of <see cref="Emgu.CV.CvEnum.VideoWriterPreset"/>. Only supported by encoders that expose a preset control
             /// (libx264 and libx265, or the x264enc and x265enc GStreamer elements). Opening fails if the value is not a valid preset.
             /// <see cref="VideoWriter.Get"/> returns the value passed when opening, or -1 if it was not set.
             /// FFmpeg and GStreamer back-ends. Available since OpenCV 5.1.
