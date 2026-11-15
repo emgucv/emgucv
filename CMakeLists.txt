@@ -213,10 +213,23 @@ FOREACH(OPENCV_MODULE_NAME ${OPENCV_MODULE_NAME_CANDIDATES})
 ENDFOREACH()
 
 # ----------------------------------------------------------------------------
+#  Build version: -DEMGUCV_BUILD_VERSION=<n> or the EMGUCV_BUILD_VERSION
+#  environment variable overrides the git commit count.
+# ----------------------------------------------------------------------------
+IF("${EMGUCV_BUILD_VERSION}" STREQUAL "" AND DEFINED ENV{EMGUCV_BUILD_VERSION})
+  SET(EMGUCV_BUILD_VERSION "$ENV{EMGUCV_BUILD_VERSION}")
+ENDIF()
+
+IF(NOT "${EMGUCV_BUILD_VERSION}" STREQUAL "")
+  IF(NOT EMGUCV_BUILD_VERSION MATCHES "^[0-9]+$" OR EMGUCV_BUILD_VERSION GREATER 65535)
+    MESSAGE(FATAL_ERROR "EMGUCV_BUILD_VERSION must be an integer from 0 to 65535, got '${EMGUCV_BUILD_VERSION}'")
+  ENDIF()
+  SET(EMGUCV_GITVERSION "${EMGUCV_BUILD_VERSION}")
+  MESSAGE(STATUS "Emgu CV build version (specified): ${EMGUCV_GITVERSION}")
+# ----------------------------------------------------------------------------
 #  Autodetect if we are in a GIT repository
 # ----------------------------------------------------------------------------
-
-IF(GIT_EXECUTABLE)
+ELSEIF(GIT_EXECUTABLE)
   MESSAGE(STATUS "Extracting Emgu CV git version, please wait...")
   EXECUTE_PROCESS(
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
