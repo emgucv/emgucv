@@ -734,6 +734,9 @@ function Get-CudaArchBinOption {
         'v13.0' = '7.5 8.0 8.6 8.9 9.0 12.0'
         'v13.1' = '7.5 8.0 8.6 8.9 9.0 12.0'
         'v13.2' = '7.5 8.0 8.6 8.9 9.0 12.0'
+        'v13.3' = '7.5 8.0 8.6 8.9 9.0 12.0'
+        'v13.4' = '7.5 8.0 8.6 8.9 9.0 10.0 12.0'
+        'v13.5' = '7.5 8.0 8.6 8.9 9.0 10.0 12.0'
     }
     $leaf = Split-Path $CudaSdkDir -Leaf
     if ($table.Contains($leaf)) { return $table[$leaf] }
@@ -741,10 +744,10 @@ function Get-CudaArchBinOption {
 }
 
 function Find-CudaSdkDir {
-    # Prefers CUDA 13.2, then walks the version list newest first, checking
+    # Prefers CUDA 13.5, then walks the version list newest first, checking
     # CUDA_PATH_V<version> environment variables.
     $versions = @(
-        '13_2', '13_1', '13_0', '12_9', '12_8', '12_6', '12_0',
+        '13_5', '13_4', '13_3', '13_2', '13_1', '13_0', '12_9', '12_8', '12_6', '12_0',
         '11_8', '11_6', '11_3', '11_1', '11_0',
         '10_1', '10_0', '9_1', '9_0', '8_0', '7_5'
     )
