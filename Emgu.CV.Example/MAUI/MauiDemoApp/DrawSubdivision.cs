@@ -53,12 +53,26 @@ namespace PlanarSubdivisionExample
       {
          Triangle2DF[] delaunayTriangles;
          VoronoiFacet[] voronoiFacets;
-         Random r = new Random((int)(DateTime.Now.Ticks & 0x0000ffff));
 
          CreateSubdivision(maxValue, pointCount, out delaunayTriangles, out voronoiFacets);
 
+         return Draw(maxValue, delaunayTriangles, voronoiFacets);
+      }
+
+      /// <summary>
+      /// Draw an existing planar subdivision: colored Voronoi facets with black edges, a red dot per point and the white Delaunay triangulation on top
+      /// </summary>
+      /// <param name="maxValue">The size of the (square) output image</param>
+      /// <param name="delaunayTriangles">The delaunay triangles</param>
+      /// <param name="voronoiFacets">The voronoi facets</param>
+      /// <returns>An image representing the planar subvidision</returns>
+      public static Mat Draw(float maxValue, Triangle2DF[] delaunayTriangles, VoronoiFacet[] voronoiFacets)
+      {
+         Random r = new Random((int)(DateTime.Now.Ticks & 0x0000ffff));
+
          //create an image for display purpose
          Mat img = new Mat((int)maxValue, (int)maxValue, DepthType.Cv8U, 3);
+         img.SetTo(new MCvScalar(0, 0, 0));
 
          //Draw the voronoi Facets
          foreach (VoronoiFacet facet in voronoiFacets)

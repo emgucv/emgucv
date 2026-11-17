@@ -110,13 +110,13 @@ namespace MauiDemoApp
 
             helloWorldButton.Clicked += (sender, args) =>
             {
-                this.Navigation.PushAsync(new HelloWorldPage(demoGlyph("hello")));
+                this.Navigation.PushAsync(new HelloWorldPage());
             };
 
             
             planarSubdivisionButton.Clicked += (sender, args) =>
             {
-                this.Navigation.PushAsync(new PlanarSubdivisionPage(demoGlyph("planar")));
+                this.Navigation.PushAsync(new PlanarSubdivisionPage());
             };
 
 
@@ -129,7 +129,7 @@ namespace MauiDemoApp
             
             featureDetectionButton.Clicked += (sender, args) =>
             {
-                this.Navigation.PushAsync(new FeatureMatchingPage(demoGlyph("feature matching")));
+                this.Navigation.PushAsync(new FeatureMatchingPage());
             };
 
             
@@ -141,15 +141,14 @@ namespace MauiDemoApp
 
             sceneTextDetectionButton.Clicked += (sender, args) =>
             {
-                this.Navigation.PushAsync(new ModelShowcasePage(
+                this.Navigation.PushAsync(new ModelStagePage(
                     "Scene Text",
                     "Find and read English and Chinese text in a photo.",
-                    demoGlyph("scene text"),
                     () => new SceneTextDetector(),
                     new[]
                     {
-                        new ModelShowcasePage.Sample("cars_license_plate.png", "License plate", MaskRcnnPage.GlyphImage),
-                        new ModelShowcasePage.Sample("test_image.png", "Document", MaskRcnnPage.GlyphImage),
+                        new StageSample("cars_license_plate.png", "license plate"),
+                        new StageSample("test_image.png", "document"),
                     },
                     customProcess: (model, input) =>
                     {
@@ -167,7 +166,18 @@ namespace MauiDemoApp
                     },
                     about: "Finds text anywhere in a photo — signs, labels, plates — and reads it, even at odd angles.",
                     tag: "DNN",
-                    category: "Detection"));
+                    category: "Detection",
+                    module: "dnn module",
+                    itemSingular: "word", itemPlural: "words",
+                    codeSnippet: @"using Emgu.CV;
+using Emgu.CV.Models;
+
+using var detector = new SceneTextDetector();
+await detector.Init();
+
+using Mat image = CvInvoke.Imread(""plate.png"");
+foreach (DetectedObject word in detector.Detect(image))
+    Console.WriteLine($""{word.Label} at {word.Region}"");"));
             };
             yoloButton.Clicked += (sender, args) =>
             {
@@ -178,27 +188,37 @@ namespace MauiDemoApp
             {
                 // The model name must be the first token; the text after it is a
                 // description (Superres.Init only parses the leading token).
-                this.Navigation.PushAsync(new ModelShowcasePage(
+                this.Navigation.PushAsync(new ModelStagePage(
                     "Super Resolution",
                     "Upscale a photo with a neural network.",
-                    demoGlyph("super resolution"),
                     () => new Superres(),
                     new[]
                     {
-                        new ModelShowcasePage.Sample("dog416.png", "Dog & bike", MaskRcnnPage.GlyphImage),
-                        new ModelShowcasePage.Sample("lena.jpg", "Portrait", MaskRcnnPage.GlyphImage),
+                        new StageSample("dog416.png", "dog & bike"),
+                        new StageSample("lena.jpg", "portrait"),
                     },
-                    pickerTitle: "Super resolution version",
-                    pickerOptions: new[]
+                    optionsTitle: "Model",
+                    options: new[]
                     {
-                        "FsrcnnX2 - 2x, fastest, tiny model",
-                        "FsrcnnX3 - 3x, fastest, tiny model",
-                        "EspcnX2 - 2x, fast, small model",
+                        "FsrcnnX2",
+                        "FsrcnnX3",
+                        "EspcnX2",
                     },
                     hasCamera: false,
-                    about: "Uses a neural network to upscale and sharpen an image, reconstructing fine detail (2×–3×).",
+                    about: "Uses a neural network to upscale and sharpen an image, reconstructing fine detail (2×–3×).\n\nFSRCNN ×2 and ×3 are tiny and fastest; ESPCN ×2 is small and fast. Use Compare to drag between the original and the upscaled result.",
+                    runLabel: "Upscale",
                     tag: "DNN",
-                    category: "Image & 3D"));
+                    category: "Image & 3D",
+                    module: "dnn_superres",
+                    codeSnippet: @"using Emgu.CV;
+using Emgu.CV.Models;
+
+using var superres = new Superres();
+await superres.Init(null, ""{option}"");
+
+using Mat image = CvInvoke.Imread(""dog.png"");
+using Mat bigger = new Mat();
+superres.Upsample(image, bigger);"));
             };
 
             if (haveDNN)
@@ -243,19 +263,30 @@ namespace MauiDemoApp
 
                 ocrButton.Clicked += (sender, args) =>
                 {
-                    this.Navigation.PushAsync(new ModelShowcasePage(
+                    this.Navigation.PushAsync(new ModelStagePage(
                         "Tesseract OCR",
                         "Read printed text from an image.",
-                        demoGlyph("ocr"),
                         () => new TesseractModel(),
                         new[]
                         {
-                            new ModelShowcasePage.Sample("test_image.png", "Document", MaskRcnnPage.GlyphImage),
+                            new StageSample("test_image.png", "document"),
                         },
                         hasCamera: false,
                         about: "Classic document OCR — reads printed text from an image into editable text.",
                     tag: "Tesseract",
-                    category: "Detection"));
+                    category: "Detection",
+                    module: "tesseract",
+                    runLabel: "Read text",
+                    itemSingular: "line", itemPlural: "lines",
+                    codeSnippet: @"using Emgu.CV;
+using Emgu.CV.Models;
+
+using var ocr = new TesseractModel(""eng"");
+await ocr.Init();
+
+using Mat image = CvInvoke.Imread(""document.png"");
+using Mat render = image.Clone();
+Console.WriteLine(ocr.ProcessAndRender(image, render));"));
                 };
             }
 
@@ -267,15 +298,14 @@ namespace MauiDemoApp
 
                 paddleOcrButton.Clicked += (sender, args) =>
                 {
-                    this.Navigation.PushAsync(new ModelShowcasePage(
+                    this.Navigation.PushAsync(new ModelStagePage(
                         "PaddleOCR",
                         "Detect and read text with PP-OCRv4.",
-                        demoGlyph("ocr"),
                         () => new PaddleOCR(),
                         new[]
                         {
-                            new ModelShowcasePage.Sample("cars_license_plate.png", "License plate", MaskRcnnPage.GlyphImage),
-                            new ModelShowcasePage.Sample("test_image.png", "Document", MaskRcnnPage.GlyphImage),
+                            new StageSample("cars_license_plate.png", "license plate"),
+                            new StageSample("test_image.png", "document"),
                         },
                         customProcess: (model, input) =>
                         {
@@ -297,7 +327,19 @@ namespace MauiDemoApp
                         },
                         about: "A newer, more accurate OCR engine (PP-OCRv4) that finds and reads text — strong on dense and multilingual text.",
                     tag: "DNN",
-                    category: "Detection"));
+                    category: "Detection",
+                    module: "dnn module",
+                    runLabel: "Read text",
+                    itemSingular: "line", itemPlural: "lines",
+                    codeSnippet: @"using Emgu.CV;
+using Emgu.CV.Models;
+
+using var ocr = new PaddleOCR();
+await ocr.Init();
+
+using Mat image = CvInvoke.Imread(""document.png"");
+foreach (PaddleOCR.OcrResult r in ocr.Recognize(image))
+    Console.WriteLine(r.Text);"));
                 };
             }
 
@@ -342,21 +384,32 @@ namespace MauiDemoApp
                     if (haveFace && haveDNN)
                         detectors.Add(FaceDetectionModel.FaceLandmark);
 
-                    this.Navigation.PushAsync(new ModelShowcasePage(
+                    this.Navigation.PushAsync(new ModelStagePage(
                         "Face Detection",
                         "Find faces in a photo.",
-                        demoGlyph("face"),
                         () => new FaceDetectionModel(),
                         new[]
                         {
-                            new ModelShowcasePage.Sample("lena.jpg", "Portrait", MaskRcnnPage.GlyphImage),
-                            new ModelShowcasePage.Sample("pedestrian.png", "People", MaskRcnnPage.GlyphImage),
+                            new StageSample("lena.jpg", "portrait"),
+                            new StageSample("pedestrian.png", "people"),
                         },
-                        pickerTitle: "Face detector",
-                        pickerOptions: detectors.ToArray(),
+                        optionsTitle: "Face detector",
+                        options: detectors.ToArray(),
                         about: "Finds faces in a photo; pick the engine — Yunet, a Haar cascade, or one that also marks facial landmarks.",
                     tag: null,
-                    category: "Detection"));
+                    category: "Detection",
+                    module: "objdetect",
+                    codeSnippet: @"using Emgu.CV;
+using Emgu.CV.Models;
+
+// FaceDetectionModel is in this demo app; it wraps
+// FaceDetectorYN / CascadeClassifier / Facemark.
+using var faces = new FaceDetectionModel();
+await faces.Init(null, ""{option}"");
+
+using Mat image = CvInvoke.Imread(""portrait.jpg"");
+using Mat render = image.Clone();
+faces.ProcessAndRender(image, render);"));
                 };
 
                 Button pedestrianDetectionButton = new Button();
@@ -365,18 +418,42 @@ namespace MauiDemoApp
 
                 pedestrianDetectionButton.Clicked += (sender, args) =>
                 {
-                    this.Navigation.PushAsync(new ModelShowcasePage(
+                    this.Navigation.PushAsync(new ModelStagePage(
                         "Pedestrian Detection",
                         "Detect people in a photo with HOG.",
-                        demoGlyph("pedestrian"),
                         () => new PedestrianDetector(),
                         new[]
                         {
-                            new ModelShowcasePage.Sample("pedestrian.png", "Street", MaskRcnnPage.GlyphImage),
+                            new StageSample("pedestrian.png", "street"),
                         },
+                        stageProcess: (model, input) =>
+                        {
+                            // HOG returns rectangles: draw them live and count people.
+                            var sw = System.Diagnostics.Stopwatch.StartNew();
+                            System.Drawing.Rectangle[] people = ((PedestrianDetector)model).Find(input);
+                            sw.Stop();
+                            var lime = DemoTheme.Lime;
+                            return new StageResult
+                            {
+                                Boxes = people.Select(r => new StageBox(new RectF(r.X, r.Y, r.Width, r.Height), "person", lime)).ToArray(),
+                                Rows = people.Select((r, i) => new StageRow($"person {i + 1}", $"{r.Width}×{r.Height} px", null, lime)).ToArray(),
+                                InferenceMs = sw.Elapsed.TotalMilliseconds,
+                            };
+                        },
+                        itemSingular: "person", itemPlural: "people",
                         about: "Detects people using HOG — a classic, lightweight person-finder for surveillance and counting.",
                     tag: null,
-                    category: "Detection"));
+                    category: "Detection",
+                    module: "objdetect · HOG",
+                    codeSnippet: @"using Emgu.CV;
+using Emgu.CV.Models;
+
+using var detector = new PedestrianDetector();
+await detector.Init();
+
+using Mat image = CvInvoke.Imread(""street.png"");
+foreach (var person in detector.Find(image))
+    Console.WriteLine($""person at {person}"");"));
                 };
 
             }
@@ -395,18 +472,28 @@ namespace MauiDemoApp
                 buttonList.Add(barcodeQrcodeDetectionButton);
                 barcodeQrcodeDetectionButton.Clicked += (sender, args) =>
                 {
-                    this.Navigation.PushAsync(new ModelShowcasePage(
+                    this.Navigation.PushAsync(new ModelStagePage(
                         "Barcode & QRCode",
                         "Detect and decode barcodes and QR codes.",
-                        demoGlyph("barcode"),
                         () => new CombinedModel(new BarcodeDetectorModel(), new WeChatQRCodeDetector()),
                         new[]
                         {
-                            new ModelShowcasePage.Sample("qrcode_barcode.png", "QR & barcode", MaskRcnnPage.GlyphImage),
+                            new StageSample("qrcode_barcode.png", "qr & barcode"),
                         },
                         about: "Detects and decodes barcodes and QR codes, returning the value they encode.",
                     tag: null,
-                    category: "Detection"));
+                    category: "Detection",
+                    module: "objdetect · wechat_qrcode",
+                    codeSnippet: @"using Emgu.CV;
+using Emgu.CV.Models;
+
+using var model = new CombinedModel(
+    new BarcodeDetectorModel(), new WeChatQRCodeDetector());
+await model.Init();
+
+using Mat image = CvInvoke.Imread(""codes.png"");
+using Mat render = image.Clone();
+Console.WriteLine(model.ProcessAndRender(image, render));"));
                 };
             }
 
@@ -444,7 +531,7 @@ namespace MauiDemoApp
 
                 unicodeRenderingButton.Clicked += (sender, args) =>
                 {
-                    this.Navigation.PushAsync(new UnicodeRenderingPage(demoGlyph("unicode")));
+                    this.Navigation.PushAsync(new UnicodeRenderingPage());
                 };
             }
             
