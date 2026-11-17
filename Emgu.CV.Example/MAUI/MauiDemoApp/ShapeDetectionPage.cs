@@ -84,6 +84,30 @@ namespace MauiDemoApp
             // Show / hide each kind of detection, so overlapping results (e.g. a
             // rectangle found inside a circle) can be told apart.
             var chips = new FlexLayout { Wrap = Microsoft.Maui.Layouts.FlexWrap.Wrap };
+            var typeChips = new List<ChipView>();
+            // "All" chip first: selected when every type is shown; tapping it shows
+            // everything, or hides everything if all were already shown.
+            var allChip = new ChipView("All", true, 11) { Margin = new Thickness(0, 0, 8, 8) };
+            Action repaint = () =>
+            {
+                allChip.IsSelected = _show.All(v => v);
+                if (_masks != null && !IsBusy)
+                {
+                    _repaintOnly = true;
+                    _ = RunAsync();
+                }
+            };
+            allChip.Tapped += (s, e) =>
+            {
+                bool showAll = !_show.All(v => v);
+                for (int j = 0; j < _show.Length; j++)
+                {
+                    _show[j] = showAll;
+                    typeChips[j].IsSelected = showAll;
+                }
+                repaint();
+            };
+            chips.Children.Add(allChip);
             Color[] colors = { TriangleColor, RectangleColor, CircleColor, LineColor };
             for (int i = 0; i < ShowNames.Length; i++)
             {
@@ -97,12 +121,9 @@ namespace MauiDemoApp
                 {
                     _show[idx] = !_show[idx];
                     chip.IsSelected = _show[idx];
-                    if (_masks != null && !IsBusy)
-                    {
-                        _repaintOnly = true;
-                        _ = RunAsync();
-                    }
+                    repaint();
                 };
+                typeChips.Add(chip);
                 chips.Children.Add(chip);
             }
             return new VerticalStackLayout
