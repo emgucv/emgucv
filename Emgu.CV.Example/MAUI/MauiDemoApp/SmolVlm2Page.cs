@@ -26,6 +26,7 @@ namespace MauiDemoApp
 
         private readonly SmolVlm2 _model = new SmolVlm2();
         private Image _preview;
+        private Label _imageBadgeLabel;
         private Mat _image;
         private bool _defaultLoaded;
 
@@ -48,9 +49,9 @@ namespace MauiDemoApp
                             ("decoder_raw.onnx_data", 651896064L)
                         }, true, weightBytes: 1144460546L)
                 },
-                // No header pill: this module's action is "Change", which belongs
-                // above the image it changes, the way the detection pages place
-                // it. BuildExtraCard puts it there.
+                // No pill in the model section: this module's action is "Change",
+                // which belongs on the image it changes. BuildExtraCard puts it
+                // there.
                 actionText: null,
                 composerPlaceholder: "Ask a question about the image…",
                 tag: "VLM",
@@ -60,18 +61,42 @@ namespace MauiDemoApp
 
         protected override string EmptyStateHint => "Ask something about the photo above.";
 
+        protected override bool IsModelLoaded => _model.Initialized;
+
+        protected override string AboutText =>
+            "SmolVLM2 is a small vision-language model: it looks at the photo and answers questions about it, running locally on the OpenCV dnn module.\n\n" +
+            "Each question is answered about the current photo only. Changing the photo starts a new conversation.";
+
+        // Mirrors what EnsureModelReadyAsync, the image loading and Generate call.
+        protected override string CodeSnippet =>
+            "using Emgu.CV;\n" +
+            "using Emgu.CV.CvEnum;\n" +
+            "using Emgu.CV.Models;\n\n" +
+            "var vlm = new SmolVlm2();\n" +
+            "await vlm.Init(onDownloadProgress);   // downloads once\n\n" +
+            "using Mat image = new Mat();\n" +
+            "CvInvoke.Imdecode(photoBytes, ImreadModes.ColorBgr, image);\n\n" +
+            "string answer = vlm.Generate(image, \"What is in this picture?\", 96);";
+
         protected override View BuildExtraCard()
         {
-            _preview = new Image { Aspect = Aspect.AspectFit, HeightRequest = 300 };
+            // The photo being discussed, in the main area above the conversation:
+            // a grey well like the image demos' stage, with a name badge and a
+            // floating CHANGE pill. The page sets the well's height per layout.
+            _preview = new Image { Aspect = Aspect.AspectFit, Margin = new Thickness(14) };
 
-            // The photo sits flush on a light grey backdrop, like the detection pages.
-            var frame = DemoTheme.ImageFrame(_preview);
+            (Border badge, Label badgeLabel, BoxView dot) = DemoControls.Badge("Sample · dog");
+            dot.IsVisible = false;
+            badge.Margin = new Thickness(12);
+            _imageBadgeLabel = badgeLabel;
 
-            var header = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            header.Add(DemoTheme.SectionLabel("Image"), 0, 0);
-            header.Add(BuildActionPill("Change"), 1, 0);
+            View change = BuildActionPill("Change");
+            change.HorizontalOptions = LayoutOptions.End;
+            change.VerticalOptions = LayoutOptions.End;
+            change.Margin = new Thickness(12);
+            change.Shadow = new Shadow { Brush = Colors.Black, Opacity = DemoTheme.IsDark ? 0.6f : 0.08f, Radius = 10, Offset = new Point(0, 2) };
 
-            return new VerticalStackLayout { Spacing = 16, Children = { header, frame } };
+            return DemoControls.Well(new Grid { Children = { _preview, badge, change } });
         }
 
         protected override async void OnAppearing()
@@ -88,7 +113,7 @@ namespace MauiDemoApp
                 await stream.CopyToAsync(ms);
                 Mat m = new Mat();
                 CvInvoke.Imdecode(ms.ToArray(), ImreadModes.ColorBgr, m);
-                SetImage(m);
+                SetImage(m, "Sample · dog");
             }
             catch (Exception ex)
             {
@@ -152,7 +177,7 @@ namespace MauiDemoApp
                     return;
                 }
 
-                SetImage(picked);
+                SetImage(picked, fileResult.FileName);
 
                 // Each question is answered about the current image only, so a new
                 // image starts a fresh conversation.
@@ -165,12 +190,14 @@ namespace MauiDemoApp
             }
         }
 
-        private void SetImage(Mat image)
+        private void SetImage(Mat image, string name)
         {
             _image?.Dispose();
             _image = image;
             if (_preview != null)
                 _preview.Source = MaskRcnnPage.MatToImageSource(image);
+            if (_imageBadgeLabel != null)
+                _imageBadgeLabel.Text = string.IsNullOrEmpty(name) ? "Your photo" : name;
         }
 
         protected override void OnNavigatedFrom(NavigatedFromEventArgs args)

@@ -14,10 +14,11 @@ namespace MauiDemoApp
 {
     /// <summary>
     /// A reusable, on-theme chat page for the local language-model demos. It gives
-    /// Qwen Chat and Chat with Image the same shell the detection modules get from
-    /// <see cref="ModelShowcasePage"/>: a giant lowercase header, flat sections
-    /// separated by hairlines, and the palette, fonts and helpers from
-    /// <see cref="DemoTheme"/>.
+    /// Qwen Chat and Chat with Image the same two-pane layout the image demos get
+    /// from <see cref="StagePage"/>: a header with a giant lowercase title, the
+    /// conversation and composer in the main area, and a settings panel (model,
+    /// performance, the C# behind it) on the right. Phones get one column with the
+    /// composer pinned to the bottom.
     ///
     /// The page owns everything that is identical between the two demos — header,
     /// model section, transcript, composer, busy and download state — and leaves each
@@ -69,8 +70,8 @@ namespace MauiDemoApp
             }
         }
 
-        // Bubble palette. The user's turn is solid black with white type, like the
-        // app's primary buttons; the model's turn sits on the soft grey pill fill,
+        // Bubble palette. The user's turn is filled with the text color and set in
+        // the page color, like the app's primary buttons; the model's turn sits on the soft grey pill fill,
         // so a long answer never becomes a wall of black.
         private static Color UserBubble => DemoTheme.Accent;
         private static Color UserBubbleText => DemoTheme.OnAccent;
@@ -92,8 +93,18 @@ namespace MauiDemoApp
         // read as "the model" rather than repeating the page's own title glyph.
         private const string GlyphModel = "";
 
+        // Same breakpoint and panel width as StagePage, so the chat pages switch
+        // between the two-pane and one-column layouts at the same window width as
+        // the image demos.
+        private const double PanelWidth = 380;
+        private const double WideBreakpoint = 900;
+
         private readonly ChatModel[] _models;
         private readonly string _composerPlaceholder;
+        private readonly string _title;
+        private readonly string _description;
+        private readonly string _tag;
+        private readonly string _category;
 
         private int _selectedIndex;
         private bool _expanded;
@@ -101,10 +112,29 @@ namespace MauiDemoApp
         private Task _generation;
         private readonly string _moduleKey;
         private bool _rowsShowDownloading;
+        private bool _wide, _layoutBuilt;
 
-        // Runtime UI.
+        // What was said, in order, for the share button.
+        private readonly List<(string Speaker, string Text)> _messages = new List<(string, string)>();
+
+        // Wall-clock seconds of each answer (a Stopwatch around Generate only, not
+        // the download or the model load), for the performance tiles.
+        private readonly List<double> _replySeconds = new List<double>();
+
+        // ---------- Runtime UI ----------
+        // Built once in the constructor, then re-arranged between the wide
+        // (two-pane) and phone (one-column) layouts on SizeChanged, the same way
+        // StagePage does it.
+        private readonly Grid _root = new Grid();
+        private readonly View _headerWide, _headerPhone;
+        private readonly View _modelSection;
+        private readonly View _perfSection;
+        private readonly View _codeLink;
+        private readonly View _extra;
+        private readonly Grid _chatBody;
         private readonly VerticalStackLayout _transcript;
         private readonly VerticalStackLayout _emptyState;
+        private readonly View _typingRow;
         private readonly VerticalStackLayout _modelRows;
         private readonly Label _collapsedName;
         private readonly Label _collapsedDetail;
@@ -112,15 +142,27 @@ namespace MauiDemoApp
         private readonly Label _collapsedBadgeLabel;
         private readonly Image _chevron;
         private readonly Border _chevronDisc;
+        private readonly BoxView _modelStateDot;
+        private readonly Label _modelStateLabel;
         private readonly Editor _promptEditor;
         private readonly Label _counterLabel;
         private readonly Border _sendButton;
         private readonly Image _sendIcon;
         private readonly ActivityIndicator _sendSpinner;
+        private readonly Grid _statusRow;
+        private readonly BoxView _statusDot;
         private readonly Label _statusLabel;
-        private readonly Border _statusCard;
-        private readonly ScrollView _scroll;
-        private readonly VerticalStackLayout _pageChildren;
+        private readonly VerticalStackLayout _composerArea;
+        private readonly Label _perfLast, _perfAverage, _perfCount;
+        private readonly List<Border> _perfTiles = new List<Border>();
+        // The conversation's own scroller on desktop; on the phone the whole
+        // column scrolls instead (_pageScroll).
+        private readonly ScrollView _chatScroll = new ScrollView();
+        private ScrollView _pageScroll;
+        private VerticalStackLayout _phoneDetails;
+        private readonly Grid _sheetOverlay;
+        private readonly Border _sheetCard;
+        private readonly BoxView _sheetScrim;
 
         /// <summary>The model the user currently has selected.</summary>
         protected ChatModel SelectedModel => _models.Length > 0 ? _models[_selectedIndex] : null;
@@ -130,9 +172,9 @@ namespace MauiDemoApp
         /// </summary>
         /// <param name="title">Page title, shown as the giant lowercase header.</param>
         /// <param name="heroSubtitle">One-line description under the title.</param>
-        /// <param name="glyph">Material Symbols glyph shown beside the tag in the header.</param>
+        /// <param name="glyph">Material Symbols glyph identifying the module.</param>
         /// <param name="models">Selectable models. Pass a single entry for a module with no choice.</param>
-        /// <param name="actionText">Caption for the header action pill, or null for none (the info icon shows instead).</param>
+        /// <param name="actionText">Caption for the action pill in the model section (e.g. "New Chat"), or null for none.</param>
         /// <param name="composerPlaceholder">Placeholder text for the message box.</param>
         /// <param name="tag">Short tag pill in the header, e.g. "LLM".</param>
         /// <param name="category">Grey category text beside the tag.</param>
@@ -150,6 +192,10 @@ namespace MauiDemoApp
             _composerPlaceholder = composerPlaceholder;
             HeroGlyph = glyph;
             _moduleKey = title;
+            _title = title;
+            _description = heroSubtitle;
+            _tag = tag;
+            _category = category;
 
             // Prefer the module's default, but never start on a model this device
             // cannot load: that state looks completely normal and then kills the
@@ -170,13 +216,22 @@ namespace MauiDemoApp
             Title = title;
             BackgroundColor = DemoTheme.PageBackground;
             Shell.SetNavBarIsVisible(this, false);
+            Content = _root;
+            SizeChanged += (s, e) => BuildLayout();
 
-            // ---------- Header: plain icons, a giant lowercase title, then tag / category ----------
-            // A module whose action belongs next to its own content (e.g. "Change"
-            // above the image, as the detection pages do it) passes no caption and
-            // places BuildActionPill() itself; the header then shows the info icon.
-            View action = string.IsNullOrEmpty(actionText) ? null : BuildActionPill(actionText);
-            var header = DemoTheme.PageHeader(this, title, heroSubtitle, glyph, tag, category, showInfo: action == null, trailing: action);
+            // Cmd+Return sends on the Mac (the menu bar carries the shortcut), like
+            // Cmd+Return runs the image demos.
+            var sendItem = new MenuFlyoutItem { Text = "Send Message" };
+            sendItem.KeyboardAccelerators.Add(new KeyboardAccelerator { Modifiers = KeyboardAcceleratorModifiers.Cmd, Key = "\r" });
+            sendItem.Clicked += async (s, e) => await OnSend();
+            var menu = new MenuBarItem { Text = "Demo" };
+            menu.Add(sendItem);
+            MenuBarItems.Add(menu);
+
+            // ---------- Header ----------
+            _headerWide = BuildHeader(wide: true);
+            _headerPhone = BuildHeader(wide: false);
+            _headerWide.SizeChanged += (s, e) => SizeAreas();
 
             // ---------- Model ----------
             // Collapsed, this is a single flat summary row; expanded, it reveals the
@@ -184,7 +239,7 @@ namespace MauiDemoApp
             // Truncate rather than wrap: the badge beside these sizes to its own
             // content, so a long one (e.g. "Too big") would otherwise squeeze the
             // name into a one-word-per-line tower.
-            _collapsedName = new Label { FontFamily = DemoTheme.TitleFont, FontSize = 17, TextColor = DemoTheme.PrimaryText, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 1 };
+            _collapsedName = new Label { FontFamily = DemoTheme.TitleFont, FontSize = 16, TextColor = DemoTheme.PrimaryText, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 1 };
             _collapsedDetail = new Label { FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 1 };
             _collapsedBadgeLabel = new Label { FontFamily = DemoTheme.BodyFont, FontSize = 12, CharacterSpacing = 0.5, VerticalOptions = LayoutOptions.Center };
             _collapsedBadge = new Border
@@ -207,8 +262,8 @@ namespace MauiDemoApp
                 Children = { _collapsedName, _collapsedDetail }
             };
 
-            // A soft grey disc behind the chevron so the row reads as something you
-            // can open, rather than a bare status line.
+            // A soft disc behind the chevron so the row reads as something you can
+            // open, rather than a bare status line.
             _chevronDisc = new Border
             {
                 WidthRequest = 30,
@@ -232,7 +287,6 @@ namespace MauiDemoApp
                 Children = { _collapsedBadge, _chevronDisc }
             };
 
-            // Flush with the title: no card, no outline, no inner padding.
             var summaryRow = new Grid
             {
                 ColumnSpacing = 12,
@@ -262,56 +316,99 @@ namespace MauiDemoApp
             else
             {
                 _chevronDisc.IsVisible = false;
+                summaryRow.IsVisible = false;
             }
 
-            var modelSection = new VerticalStackLayout
+            // Download / loaded state of the selected model: dot + one line.
+            _modelStateDot = new BoxView { WidthRequest = 6, HeightRequest = 6, CornerRadius = 3, Color = DemoTheme.StatusGreen, VerticalOptions = LayoutOptions.Start, Margin = new Thickness(0, 5, 0, 0) };
+            _modelStateLabel = new Label { FontFamily = DemoTheme.BodyFont, FontSize = 12, TextColor = DemoTheme.SecondaryText, LineBreakMode = LineBreakMode.WordWrap };
+            var modelState = new Grid { ColumnSpacing = 7, IsVisible = _models.Length > 0, ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) } };
+            modelState.Add(_modelStateDot, 0, 0);
+            modelState.Add(_modelStateLabel, 1, 0);
+
+            // The module's action (e.g. NEW CHAT) sits on the right of the section
+            // label. A module whose action belongs next to its own content (e.g.
+            // "Change" on the image) passes no caption and places
+            // BuildActionPill() itself.
+            var modelHeader = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
+            modelHeader.Add(DemoControls.SectionLabel("Model"), 0, 0);
+            if (!string.IsNullOrEmpty(actionText))
+                modelHeader.Add(BuildActionPill(actionText), 1, 0);
+
+            _modelSection = new VerticalStackLayout
             {
-                Spacing = 14,
-                Children = { DemoTheme.SectionLabel("Model"), summaryRow, _modelRows }
+                Spacing = 12,
+                Children = { modelHeader, summaryRow, modelState, _modelRows }
             };
 
-            // ---------- Transcript ----------
+            // ---------- Conversation ----------
             // Empty state: oversized pale type instead of an icon, as on the
-            // detection pages.
+            // image demos.
             _emptyState = new VerticalStackLayout
             {
                 Spacing = 8,
-                Padding = new Thickness(0, 4, 0, 8),
                 Children =
                 {
-                    DemoTheme.EmptyStateTitle("no messages yet"),
+                    new Label
+                    {
+                        Text = "no messages yet",
+                        FontFamily = DemoTheme.HeroFont,
+                        FontSize = 40,
+                        CharacterSpacing = -1.6,
+                        LineHeight = 0.95,
+                        TextColor = DemoTheme.EmptyStateText,
+                        // Negative spacing measures narrower than it draws.
+                        Padding = new Thickness(0, 0, 6, 0)
+                    },
                     new Label { Text = EmptyStateHint, FontFamily = DemoTheme.BodyFont, FontSize = 14, TextColor = DemoTheme.SecondaryText }
                 }
             };
-            _transcript = new VerticalStackLayout { Spacing = 14, Children = { _emptyState } };
+            _transcript = new VerticalStackLayout { Spacing = 14 };
+            // Both share one cell: the empty state shows only while the transcript
+            // has nothing in it.
+            _chatBody = new Grid { Children = { _emptyState, _transcript } };
 
-            // ---------- Status line ----------
-            _statusLabel = new Label { FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.PrimaryText, VerticalOptions = LayoutOptions.Center };
-            var statusIcon = DemoTheme.MakeIcon(DemoTheme.GlyphInfo, DemoTheme.PrimaryText, 18);
-            statusIcon.VerticalOptions = LayoutOptions.Start;
-            var statusGrid = new Grid
+            // "Thinking" bubble shown on the model's side while it generates.
+            var typingSpinner = new ActivityIndicator { Color = DemoTheme.SecondaryText, IsRunning = true, WidthRequest = 16, HeightRequest = 16, VerticalOptions = LayoutOptions.Center };
+            var typingBubble = new Border
+            {
+                BackgroundColor = ModelBubble,
+                Stroke = Colors.Transparent,
+                StrokeThickness = 0,
+                Padding = new Thickness(14, 11),
+                HorizontalOptions = LayoutOptions.Start,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(18, 18, 6, 18) },
+                Content = new HorizontalStackLayout
+                {
+                    Spacing = 8,
+                    Children =
+                    {
+                        typingSpinner,
+                        new Label { Text = "thinking…", FontFamily = DemoTheme.BodyFont, FontSize = 14, TextColor = DemoTheme.SecondaryText, VerticalOptions = LayoutOptions.Center }
+                    }
+                }
+            };
+            var typingGrid = new Grid
             {
                 ColumnSpacing = 9,
                 ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) }
             };
-            statusGrid.Add(statusIcon, 0, 0);
-            statusGrid.Add(_statusLabel, 1, 0);
-            _statusCard = new Border
-            {
-                BackgroundColor = DemoTheme.BannerBackground,
-                Stroke = Colors.Transparent,
-                StrokeThickness = 0,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(2) },
-                Padding = new Thickness(12, 10),
-                IsVisible = false,
-                Content = statusGrid
-            };
+            typingGrid.Add(Avatar(), 0, 0);
+            typingGrid.Add(typingBubble, 1, 0);
+            _typingRow = typingGrid;
 
-            var conversationSection = new VerticalStackLayout
+            // ---------- Status line (just above the composer) ----------
+            _statusDot = new BoxView { WidthRequest = 6, HeightRequest = 6, CornerRadius = 3, Color = DemoTheme.StatusGreen, VerticalOptions = LayoutOptions.Start, Margin = new Thickness(0, 5, 0, 0) };
+            _statusLabel = new Label { FontFamily = DemoTheme.BodyFont, FontSize = 12, TextColor = DemoTheme.SecondaryText, LineBreakMode = LineBreakMode.WordWrap, MaxLines = 2 };
+            _statusRow = new Grid
             {
-                Spacing = 16,
-                Children = { DemoTheme.SectionLabel("Conversation"), _statusCard, _transcript }
+                ColumnSpacing = 7,
+                Padding = new Thickness(6, 0),
+                IsVisible = false,
+                ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) }
             };
+            _statusRow.Add(_statusDot, 0, 0);
+            _statusRow.Add(_statusLabel, 1, 0);
 
             // ---------- Composer ----------
             _promptEditor = new Editor
@@ -336,87 +433,138 @@ namespace MauiDemoApp
 
             _counterLabel = new Label
             {
-                Text = "0 / " + MaxPromptLength,
+                Text = SendHint + "0 / " + MaxPromptLength,
                 FontFamily = DemoTheme.BodyFont,
-                FontSize = 12,
+                FontSize = 11,
                 TextColor = DemoTheme.MutedText,
-                VerticalOptions = LayoutOptions.Center
+                Margin = new Thickness(4, 0, 0, 2)
             };
 
-            _sendIcon = DemoTheme.MakeIcon(DemoTheme.GlyphPlay, DemoTheme.OnAccent, 24);
-            _sendSpinner = new ActivityIndicator { Color = DemoTheme.OnAccent, WidthRequest = 22, HeightRequest = 22, IsRunning = false, IsVisible = false };
+            _sendIcon = DemoTheme.MakeIcon(DemoTheme.GlyphPlay, DemoTheme.OnAccent, 22);
+            _sendSpinner = new ActivityIndicator { Color = DemoTheme.OnAccent, WidthRequest = 20, HeightRequest = 20, IsRunning = false, IsVisible = false };
             _sendButton = new Border
             {
-                WidthRequest = 48,
-                HeightRequest = 48,
+                WidthRequest = 44,
+                HeightRequest = 44,
                 BackgroundColor = DemoTheme.Accent,
                 Stroke = Colors.Transparent,
                 StrokeThickness = 0,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(24) },
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
                 HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.End,
                 Content = new Grid { Children = { _sendIcon, _sendSpinner } }
             };
             var sendTap = new TapGestureRecognizer();
             sendTap.Tapped += async (s, e) => await OnSend();
             _sendButton.GestureRecognizers.Add(sendTap);
+            DemoControls.AddHover(_sendButton);
 
-            var composerFooter = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            composerFooter.Add(_counterLabel, 0, 0);
-            composerFooter.Add(_sendButton, 1, 0);
+            var composerGrid = new Grid
+            {
+                ColumnSpacing = 10,
+                ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) },
+                RowDefinitions = { new RowDefinition(GridLength.Auto), new RowDefinition(GridLength.Auto) }
+            };
+            composerGrid.Add(_promptEditor, 0, 0);
+            composerGrid.Add(_counterLabel, 0, 1);
+            composerGrid.Add(_sendButton, 1, 0);
+            Grid.SetRowSpan(_sendButton, 2);
 
-            // Flat light-grey well, like the image backdrop: no outline, no shadow.
+            // Flat rounded well: no outline, no shadow.
             var composerCard = new Border
             {
                 BackgroundColor = DemoTheme.ImageBackground,
                 Stroke = Colors.Transparent,
                 StrokeThickness = 0,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(20) },
-                Padding = new Thickness(14, 8, 10, 10),
-                Content = new VerticalStackLayout { Spacing = 4, Children = { _promptEditor, composerFooter } }
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
+                Padding = new Thickness(12, 4, 8, 8),
+                Content = composerGrid
             };
 
-            // ---------- Page ----------
-            _pageChildren = new VerticalStackLayout
+            _composerArea = new VerticalStackLayout { Spacing = 8, Children = { _statusRow, composerCard } };
+            _composerArea.SizeChanged += (s, e) => SizeAreas();
+
+            // ---------- Performance ----------
+            var perfHeader = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
+            perfHeader.Add(DemoControls.SectionLabel("Performance"), 0, 0);
+            perfHeader.Add(new Label { Text = "OpenCV DNN · on device", FontFamily = DemoTheme.TitleFont, FontSize = 12, TextColor = DemoTheme.SecondaryText, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center }, 1, 0);
+            var perfRow = new Grid { ColumnSpacing = 8, ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Star) } };
+            (var t1, _perfLast) = PerfTile("last reply");
+            (var t2, _perfAverage) = PerfTile("average");
+            (var t3, _perfCount) = PerfTile("replies");
+            perfRow.Add(t1, 0, 0);
+            perfRow.Add(t2, 1, 0);
+            perfRow.Add(t3, 2, 0);
+            _perfSection = new VerticalStackLayout
             {
-                Spacing = 20,
-                Padding = new Thickness(20, 16, 20, 28),
-                Children = { header }
+                Spacing = 12,
+                Children =
+                {
+                    perfHeader,
+                    perfRow,
+                    new Label { Text = "Time from send to answer for this model, measured on this device. Download and loading are not counted.", FontFamily = DemoTheme.BodyFont, FontSize = 12, TextColor = DemoTheme.MutedText }
+                }
             };
 
-            if (_models.Length > 0)
+            // ---------- The C# behind this ----------
+            if (CodeSnippet != null)
             {
-                _pageChildren.Children.Add(DemoTheme.Divider());
-                _pageChildren.Children.Add(modelSection);
+                var codeRow = new Grid { ColumnSpacing = 10, Padding = new Thickness(0, 6), ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
+                codeRow.Add(DemoTheme.MakeIcon(DemoTheme.GlyphCode, DemoTheme.PrimaryText, 18), 0, 0);
+                codeRow.Add(new Label { Text = "View the C# behind this", FontFamily = DemoTheme.TitleFont, FontSize = 14, TextColor = DemoTheme.PrimaryText, VerticalOptions = LayoutOptions.Center }, 1, 0);
+                codeRow.Add(DemoTheme.MakeIcon(MaskRcnnPage.GlyphChevronRight, DemoTheme.MutedText, 18), 2, 0);
+                var codeTap = new TapGestureRecognizer();
+                codeTap.Tapped += (s, e) => ShowCodeSheet();
+                codeRow.GestureRecognizers.Add(codeTap);
+                DemoControls.AddHover(codeRow);
+                _codeLink = codeRow;
             }
 
-            // Modules with extra content (e.g. the image being discussed) drop it in
-            // between the model section and the conversation.
-            View extra = BuildExtraCard();
-            if (extra != null)
+            // ---------- Sheet (code / info) ----------
+            _sheetScrim = new BoxView { Color = Color.FromArgb("#80000000"), Opacity = 0 };
+            var scrimTap = new TapGestureRecognizer();
+            scrimTap.Tapped += (s, e) => CloseSheet();
+            _sheetScrim.GestureRecognizers.Add(scrimTap);
+            _sheetCard = new Border
             {
-                _pageChildren.Children.Add(DemoTheme.Divider());
-                _pageChildren.Children.Add(extra);
-            }
+                BackgroundColor = DemoTheme.PageBackground,
+                Stroke = Colors.Transparent,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
+                Padding = new Thickness(22),
+                Margin = new Thickness(16),
+                MaximumWidthRequest = 640,
+                VerticalOptions = LayoutOptions.Center
+            };
+            _sheetOverlay = new Grid { IsVisible = false, Children = { _sheetScrim, _sheetCard } };
 
-            _pageChildren.Children.Add(DemoTheme.Divider());
-            _pageChildren.Children.Add(conversationSection);
-            _pageChildren.Children.Add(composerCard);
-
-            _scroll = new Microsoft.Maui.Controls.ScrollView { Content = _pageChildren };
-            Content = _scroll;
+            // Modules with extra content (e.g. the image being discussed) put it in
+            // the main area, above the conversation.
+            _extra = BuildExtraCard();
 
             BuildModelRows();
             UpdateModelSummary();
+            RefreshPerf();
         }
 
         // ---------- Hooks for the concrete modules ----------
 
-        /// <summary>Hint shown under "No messages yet".</summary>
+        /// <summary>Hint shown under "no messages yet".</summary>
         protected virtual string EmptyStateHint => "Ask a question to get started.";
 
-        /// <summary>Optional section inserted between the model section and the conversation.</summary>
+        /// <summary>
+        /// Optional view shown in the main area above the conversation (e.g. the
+        /// image being discussed). The page sets its height for each layout.
+        /// </summary>
         protected virtual View BuildExtraCard() => null;
+
+        /// <summary>Whether the selected model is loaded in memory right now.</summary>
+        protected virtual bool IsModelLoaded => false;
+
+        /// <summary>The short C# snippet behind this demo, built on demand. Null hides the link.</summary>
+        protected virtual string CodeSnippet => null;
+
+        /// <summary>Paragraph(s) for the info sheet; defaults to the description.</summary>
+        protected virtual string AboutText => null;
 
         /// <summary>
         /// Make sure the selected model is loaded, downloading it if needed. Report
@@ -430,25 +578,44 @@ namespace MauiDemoApp
         /// <summary>Called when the user picks a different model.</summary>
         protected virtual void OnModelChanged(ChatModel model) { }
 
-        /// <summary>Called when the header action pill is tapped.</summary>
+        /// <summary>Called when the action pill is tapped.</summary>
         protected virtual void OnHeaderAction(object sender, EventArgs e) { }
 
         /// <summary>
-        /// Build the module's action button as the shared uppercase grey pill,
-        /// guarded so it cannot fire mid-turn: "New Chat" resets the model's
-        /// conversation state and "Change" swaps the image out, and the background
-        /// generation is still using both. Letting either through corrupts the
-        /// answer at best and crashes inside native code at worst.
+        /// Build the module's action button as a small uppercase pill, guarded so
+        /// it cannot fire mid-turn: "New Chat" resets the model's conversation
+        /// state and "Change" swaps the image out, and the background generation
+        /// is still using both. Letting either through corrupts the answer at best
+        /// and crashes inside native code at worst.
         /// </summary>
-        protected View BuildActionPill(string text) => DemoTheme.TextPill(text, () =>
+        protected View BuildActionPill(string text)
         {
-            if (_busy)
+            // Page-colored with a hairline, so it reads both on the page and on the
+            // grey panel well.
+            var pill = new Border
             {
-                SetStatus("Hang on — still answering.");
-                return;
-            }
-            OnHeaderAction(this, EventArgs.Empty);
-        });
+                BackgroundColor = DemoTheme.PageBackground,
+                Stroke = DemoTheme.Hairline,
+                StrokeThickness = 1,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(100) },
+                Padding = new Thickness(14, 7),
+                VerticalOptions = LayoutOptions.Center,
+                Content = new Label { Text = text.ToUpperInvariant(), FontFamily = DemoTheme.TitleFont, FontSize = 11, CharacterSpacing = 1.4, TextColor = DemoTheme.PrimaryText }
+            };
+            var tap = new TapGestureRecognizer();
+            tap.Tapped += (s, e) =>
+            {
+                if (_busy)
+                {
+                    SetStatus("Hang on — still answering.");
+                    return;
+                }
+                OnHeaderAction(this, EventArgs.Empty);
+            };
+            pill.GestureRecognizers.Add(tap);
+            DemoControls.AddHover(pill);
+            return pill;
+        }
 
         /// <summary>
         /// Whether a turn is currently being generated. Deliberately not named
@@ -484,23 +651,445 @@ namespace MauiDemoApp
             return true;
         }
 
+        private static bool IsDesktop => DeviceInfo.Idiom == DeviceIdiom.Desktop;
+
+        private static string SendHint => IsDesktop ? "⌘↵ to send · " : string.Empty;
+
+        // ================= Layout =================
+
+        private void BuildLayout()
+        {
+            if (Width <= 0)
+                return;
+            bool wide = Width >= WideBreakpoint;
+            if (_layoutBuilt && wide == _wide)
+            {
+                SizeAreas();
+                return;
+            }
+
+            // The panel has room for the whole model list, so open it the first
+            // time the page comes up wide. On the phone it stays collapsed.
+            if (!_layoutBuilt && wide && _models.Length > 0)
+            {
+                _expanded = true;
+                _modelRows.IsVisible = true;
+                _chevron.Rotation = 180;
+            }
+
+            _wide = wide;
+            _layoutBuilt = true;
+
+            foreach (var v in new View[] { _headerWide, _headerPhone, _modelSection, _perfSection, _codeLink, _extra, _chatBody, _chatScroll, _composerArea, _sheetOverlay })
+                Detach(v);
+            _root.Children.Clear();
+            _root.RowDefinitions.Clear();
+
+            // Perf tiles sit on the grey well on desktop and on the page on phones.
+            foreach (Border tile in _perfTiles)
+                tile.BackgroundColor = wide ? DemoTheme.PageBackground : DemoTheme.ImageBackground;
+
+            if (wide)
+            {
+                // ---------- Panel (right) ----------
+                var panelStack = new VerticalStackLayout { Spacing = 20, Children = { _modelSection, DemoControls.Hairline(), _perfSection } };
+                if (_codeLink != null)
+                {
+                    panelStack.Children.Add(DemoControls.Hairline());
+                    panelStack.Children.Add(_codeLink);
+                }
+                var panel = DemoControls.Well(panelStack, 22, new Thickness(20));
+                panel.VerticalOptions = LayoutOptions.Start;
+
+                // ---------- Main area (left): the conversation card ----------
+                // A page-colored card with a hairline rather than a grey well, so the
+                // model's grey bubbles keep their contrast.
+                _chatBody.Padding = new Thickness(20, 8, 20, 20);
+                _emptyState.VerticalOptions = LayoutOptions.Center;
+                _chatScroll.Content = _chatBody;
+                _promptEditor.HeightRequest = 76;
+
+                var cardHead = new Grid { Padding = new Thickness(20, 16, 20, 4) };
+                cardHead.Add(DemoControls.SectionLabel("Conversation"));
+                var composerZone = new Grid { Padding = new Thickness(16) };
+                composerZone.Add(_composerArea);
+
+                var cardGrid = new Grid
+                {
+                    RowDefinitions =
+                    {
+                        new RowDefinition(GridLength.Auto),
+                        new RowDefinition(GridLength.Auto),
+                        new RowDefinition(GridLength.Auto),
+                        new RowDefinition(GridLength.Auto)
+                    }
+                };
+                cardGrid.Add(cardHead, 0, 0);
+                cardGrid.Add(_chatScroll, 0, 1);
+                cardGrid.Add(DemoControls.Hairline(), 0, 2);
+                cardGrid.Add(composerZone, 0, 3);
+
+                var chatCard = new Border
+                {
+                    BackgroundColor = DemoTheme.PageBackground,
+                    Stroke = DemoTheme.Hairline,
+                    StrokeThickness = 1,
+                    StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
+                    Content = cardGrid
+                };
+
+                var main = new VerticalStackLayout { Spacing = 14 };
+                if (_extra != null)
+                    main.Children.Add(_extra);
+                main.Children.Add(chatCard);
+
+                var body = new Grid { ColumnSpacing = 20, ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(new GridLength(PanelWidth)) } };
+                body.Add(main, 0, 0);
+                body.Add(panel, 1, 0);
+
+                var page = new VerticalStackLayout { Padding = new Thickness(32, 22, 32, 32), Spacing = 22, Children = { _headerWide, body } };
+                _pageScroll = new ScrollView { Content = page };
+                _root.Add(_pageScroll);
+            }
+            else
+            {
+                // ---------- Phone: one column, composer pinned to the bottom ----------
+                _chatBody.Padding = new Thickness(0);
+                _emptyState.VerticalOptions = LayoutOptions.Start;
+                _promptEditor.HeightRequest = 56;
+
+                var column = new VerticalStackLayout { Padding = new Thickness(16, 10, 16, 24), Spacing = 18, Children = { _headerPhone, _modelSection } };
+
+                // Performance and the code link fold away with the model list, so
+                // the conversation stays near the top on a small screen.
+                _phoneDetails = new VerticalStackLayout { Spacing = 18, IsVisible = _expanded, Children = { DemoControls.Hairline(), _perfSection } };
+                if (_codeLink != null)
+                {
+                    _phoneDetails.Children.Add(DemoControls.Hairline());
+                    _phoneDetails.Children.Add(_codeLink);
+                }
+                column.Children.Add(_phoneDetails);
+                column.Children.Add(DemoControls.Hairline());
+                if (_extra != null)
+                    column.Children.Add(_extra);
+                column.Children.Add(new VerticalStackLayout { Spacing = 14, Children = { DemoControls.SectionLabel("Conversation"), _chatBody } });
+
+                var composerZone = new Grid { Padding = new Thickness(16, 10, 16, 10) };
+                composerZone.Add(_composerArea);
+                var bottomBar = new VerticalStackLayout { BackgroundColor = DemoTheme.PageBackground, Children = { DemoControls.Hairline(), composerZone } };
+
+                _pageScroll = new ScrollView { Content = column };
+                _root.RowDefinitions.Add(new RowDefinition(GridLength.Star));
+                _root.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+                _root.Add(_pageScroll, 0, 0);
+                _root.Add(bottomBar, 0, 1);
+            }
+
+            _root.Add(_sheetOverlay);
+            if (_root.RowDefinitions.Count > 1)
+                Grid.SetRowSpan(_sheetOverlay, 2);
+            SizeAreas();
+        }
+
+        /// <summary>
+        /// Size the parts that depend on the window: the image above the
+        /// conversation, and on desktop the conversation's own scroll area, which
+        /// fills what is left of the window under the header and over the composer.
+        /// </summary>
+        private void SizeAreas()
+        {
+            if (!_layoutBuilt || Height <= 0)
+                return;
+            if (_wide)
+            {
+                double extraH = 0;
+                if (_extra != null)
+                {
+                    extraH = Math.Clamp(Height * 0.28, 150, 320);
+                    _extra.HeightRequest = extraH;
+                }
+                double headerH = _headerWide.Height > 0 ? _headerWide.Height : 170;
+                double composerH = _composerArea.Height > 0 ? _composerArea.Height : 110;
+                // Page padding (22 + 32) and spacing (22), the gap under the image
+                // (14), the card's head row (~36), hairline and composer padding
+                // (1 + 32), and the card's outline.
+                double chrome = 22 + headerH + 22 + (_extra != null ? extraH + 14 : 0) + 36 + 1 + composerH + 32 + 32 + 2;
+                double h = Math.Max(220, Height - chrome);
+                if (Math.Abs(_chatScroll.HeightRequest - h) > 0.5)
+                    _chatScroll.HeightRequest = h;
+                _chatBody.MinimumHeightRequest = Math.Max(0, h - 28);
+            }
+            else
+            {
+                if (_extra != null)
+                    _extra.HeightRequest = Math.Clamp(Width * 0.62, 200, 360);
+                _chatBody.MinimumHeightRequest = -1;
+            }
+        }
+
+        private static void Detach(View v)
+        {
+            if (v?.Parent is Layout l)
+                l.Children.Remove(v);
+            else if (v?.Parent is Border b)
+                b.Content = null;
+            else if (v?.Parent is ScrollView sv)
+                sv.Content = null;
+        }
+
+        private View BuildHeader(bool wide)
+        {
+            var back = DemoControls.CircleButton(DemoTheme.GlyphArrowBack, async () => await Navigation.PopAsync());
+            var share = DemoControls.CircleButton(DemoTheme.GlyphShare, async () => await ShareConversation());
+            var info = DemoControls.CircleButton(DemoTheme.GlyphInfo, ShowInfoSheet);
+            var right = new HorizontalStackLayout { Spacing = 8, HorizontalOptions = LayoutOptions.End, Children = { share, info } };
+
+            var topRow = new Grid { ColumnSpacing = 12, ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
+            topRow.Add(back, 0, 0);
+            if (wide)
+            {
+                var crumbs = new HorizontalStackLayout { Spacing = 8, VerticalOptions = LayoutOptions.Center };
+                crumbs.Children.Add(Crumb("Demos", false, async () => await Navigation.PopAsync()));
+                if (!string.IsNullOrEmpty(_category))
+                {
+                    crumbs.Children.Add(Crumb("/", false, null));
+                    crumbs.Children.Add(Crumb(_category, false, async () => await Navigation.PopAsync()));
+                }
+                crumbs.Children.Add(Crumb("/", false, null));
+                crumbs.Children.Add(Crumb(_title.ToLowerInvariant(), true, null));
+                topRow.Add(crumbs, 1, 0);
+            }
+            topRow.Add(right, 2, 0);
+
+            string titleText = _title.ToLowerInvariant();
+            // Long names step down so they still fit.
+            double titleSize = wide ? (titleText.Length <= 8 ? 120 : titleText.Length <= 14 ? 96 : 76)
+                                    : (titleText.Length <= 6 ? 84 : titleText.Length <= 10 ? 64 : 48);
+            var title = new Label
+            {
+                Text = titleText,
+                FontFamily = DemoTheme.HeroFont,
+                FontSize = titleSize,
+                CharacterSpacing = -titleSize * 0.05,
+                LineHeight = 0.9,
+                TextColor = DemoTheme.PrimaryText,
+                Margin = new Thickness(-3, 0, 0, 0),
+                // Tight negative spacing makes the label measure narrower than the
+                // glyphs it draws; pad the right so the last letter isn't clipped.
+                Padding = new Thickness(0, 0, titleSize * 0.12, 0),
+                VerticalOptions = LayoutOptions.End
+            };
+            var metaRow = new HorizontalStackLayout { Spacing = 8 };
+            if (!string.IsNullOrEmpty(_tag))
+                metaRow.Children.Add(DemoControls.Tag(_tag));
+            if (!string.IsNullOrEmpty(_category))
+                metaRow.Children.Add(new Label { Text = _category, FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText, VerticalOptions = LayoutOptions.Center });
+            if (wide)
+                metaRow.Children.Add(new Label { Text = "· dnn module", FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.MutedText, VerticalOptions = LayoutOptions.Center });
+            var desc = new Label { Text = _description, FontFamily = DemoTheme.BodyFont, FontSize = wide ? 16 : 15, TextColor = DemoTheme.SecondaryText };
+
+            if (wide)
+            {
+                var titleRow = new Grid { ColumnSpacing = 24, Margin = new Thickness(0, 14, 0, 0), ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) } };
+                titleRow.Add(title, 0, 0);
+                titleRow.Add(new VerticalStackLayout { Spacing = 10, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(0, 18, 0, 0), Children = { metaRow, desc } }, 1, 0);
+                return new VerticalStackLayout { Children = { topRow, titleRow } };
+            }
+            return new VerticalStackLayout
+            {
+                Spacing = 8,
+                Children = { topRow, new VerticalStackLayout { Margin = new Thickness(0, 10, 0, 0), Children = { title } }, metaRow, desc }
+            };
+        }
+
+        private static View Crumb(string text, bool current, Action onTap)
+        {
+            var l = new Label
+            {
+                Text = text,
+                FontFamily = current ? DemoTheme.TitleFont : DemoTheme.BodyFont,
+                FontSize = 13,
+                TextColor = current ? DemoTheme.PrimaryText : DemoTheme.SecondaryText,
+                VerticalOptions = LayoutOptions.Center
+            };
+            if (onTap != null)
+            {
+                var t = new TapGestureRecognizer();
+                t.Tapped += (s, e) => onTap();
+                l.GestureRecognizers.Add(t);
+                DemoControls.AddHover(l);
+            }
+            return l;
+        }
+
+        private (View tile, Label value) PerfTile(string caption)
+        {
+            var value = new Label { Text = "—", FontFamily = DemoTheme.TitleFont, FontSize = 17, TextColor = DemoTheme.PrimaryText };
+            var tile = new Border
+            {
+                BackgroundColor = DemoTheme.PageBackground,
+                Stroke = Colors.Transparent,
+                StrokeThickness = 0,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(12) },
+                Padding = new Thickness(12, 10),
+                Content = new VerticalStackLayout
+                {
+                    Spacing = 2,
+                    Children = { value, new Label { Text = caption, FontFamily = DemoTheme.BodyFont, FontSize = 11, TextColor = DemoTheme.MutedText } }
+                }
+            };
+            _perfTiles.Add(tile);
+            return (tile, value);
+        }
+
+        // ---------- Performance ----------
+
+        private void RecordReply(double seconds)
+        {
+            _replySeconds.Add(seconds);
+            RefreshPerf();
+        }
+
+        private void RefreshPerf()
+        {
+            if (_replySeconds.Count == 0)
+            {
+                _perfLast.Text = "—";
+                _perfAverage.Text = "—";
+                _perfCount.Text = "0";
+                return;
+            }
+            double total = 0;
+            foreach (double s in _replySeconds)
+                total += s;
+            _perfLast.Text = FormatSeconds(_replySeconds[_replySeconds.Count - 1]);
+            _perfAverage.Text = FormatSeconds(total / _replySeconds.Count);
+            _perfCount.Text = _replySeconds.Count.ToString();
+        }
+
+        private static string FormatSeconds(double s) => s < 10 ? $"{s:0.0} s" : $"{s:0} s";
+
+        // ---------- Share / sheets ----------
+
+        private async Task ShareConversation()
+        {
+            if (_messages.Count == 0)
+            {
+                SetStatus("Nothing to share yet — send a message first.");
+                return;
+            }
+            try
+            {
+                var sb = new System.Text.StringBuilder();
+                foreach ((string speaker, string text) in _messages)
+                {
+                    sb.Append(speaker).Append(": ").AppendLine(text);
+                    sb.AppendLine();
+                }
+                await Share.Default.RequestAsync(new ShareTextRequest { Title = _title, Text = sb.ToString().TrimEnd() });
+            }
+            catch (Exception ex)
+            {
+                SetStatus("Could not share: " + ex.Message);
+            }
+        }
+
+        private void ShowCodeSheet()
+        {
+            string code = CodeSnippet;
+            if (code == null)
+                return;
+            var copyLabel = new Label { Text = "COPY", FontFamily = DemoTheme.TitleFont, FontSize = 11, CharacterSpacing = 1.2, TextColor = DemoTheme.PrimaryText, VerticalOptions = LayoutOptions.Center };
+            var copy = new Border
+            {
+                BackgroundColor = DemoTheme.PillBackground,
+                Stroke = Colors.Transparent,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(100) },
+                Padding = new Thickness(12, 7),
+                VerticalOptions = LayoutOptions.Center,
+                Content = new HorizontalStackLayout { Spacing = 6, Children = { DemoTheme.MakeIcon(DemoTheme.GlyphCopy, DemoTheme.PrimaryText, 15), copyLabel } }
+            };
+            var copyTap = new TapGestureRecognizer();
+            copyTap.Tapped += async (s, e) =>
+            {
+                await Clipboard.Default.SetTextAsync(code);
+                copyLabel.Text = "COPIED";
+            };
+            copy.GestureRecognizers.Add(copyTap);
+            DemoControls.AddHover(copy);
+
+            var head = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Auto) }, ColumnSpacing = 8 };
+            head.Add(new Label { Text = "the C# behind this", FontFamily = DemoTheme.HeroFont, FontSize = 26, CharacterSpacing = -0.8, TextColor = DemoTheme.PrimaryText, VerticalOptions = LayoutOptions.Center }, 0, 0);
+            head.Add(copy, 1, 0);
+            head.Add(DemoControls.CircleButton(DemoTheme.GlyphClose, CloseSheet, 34), 2, 0);
+
+            var codeBox = DemoControls.Well(new ScrollView
+            {
+                Orientation = ScrollOrientation.Both,
+                Content = new Label { Text = code, FontFamily = "Menlo", FontSize = 13, TextColor = DemoTheme.PrimaryText, LineHeight = 1.25 }
+            }, 14, new Thickness(16));
+
+            OpenSheet(new VerticalStackLayout
+            {
+                Spacing = 14,
+                Children =
+                {
+                    head,
+                    new Label { Text = "The core of what this page runs, for the model selected now.", FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText },
+                    codeBox
+                }
+            });
+        }
+
+        private void ShowInfoSheet()
+        {
+            var head = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
+            head.Add(new Label { Text = "about " + _title.ToLowerInvariant(), FontFamily = DemoTheme.HeroFont, FontSize = 26, CharacterSpacing = -0.8, TextColor = DemoTheme.PrimaryText, VerticalOptions = LayoutOptions.Center }, 0, 0);
+            head.Add(DemoControls.CircleButton(DemoTheme.GlyphClose, CloseSheet, 34), 1, 0);
+            var stack = new VerticalStackLayout { Spacing = 12, Children = { head } };
+            foreach (string para in (AboutText ?? _description ?? "").Split("\n\n"))
+                stack.Children.Add(new Label { Text = para, FontFamily = DemoTheme.BodyFont, FontSize = 15, TextColor = DemoTheme.SecondaryText });
+            stack.Children.Add(new Label { Text = "Everything runs on this device; models download once, the first time you use them.", FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.MutedText });
+            OpenSheet(stack);
+        }
+
+        private void OpenSheet(View content)
+        {
+            _sheetCard.Content = content;
+            _sheetOverlay.IsVisible = true;
+            _sheetScrim.Opacity = 0;
+            _sheetCard.Opacity = 0;
+            _sheetCard.Scale = 0.97;
+            _ = _sheetScrim.FadeToAsync(1, 180, Easing.CubicOut);
+            _ = _sheetCard.FadeToAsync(1, 180, Easing.CubicOut);
+            _ = _sheetCard.ScaleToAsync(1, 180, Easing.CubicOut);
+        }
+
+        private async void CloseSheet()
+        {
+            await Task.WhenAll(_sheetScrim.FadeToAsync(0, 140), _sheetCard.FadeToAsync(0, 140));
+            _sheetOverlay.IsVisible = false;
+        }
+
         // ---------- Transcript ----------
 
         /// <summary>Remove every message from the transcript and show the empty state.</summary>
         protected void ClearTranscript()
         {
             _transcript.Children.Clear();
-            _transcript.Children.Add(_emptyState);
+            _messages.Clear();
             _emptyState.IsVisible = true;
         }
 
         /// <summary>
-        /// Append one turn to the transcript: the user's on the right in a black
-        /// bubble, the model's on the left in grey behind its avatar.
+        /// Append one turn to the transcript: the user's on the right in a bubble
+        /// filled with the text color, the model's on the left in grey behind its
+        /// avatar.
         /// </summary>
         protected void AddMessage(string text, bool isUser)
         {
             _emptyState.IsVisible = false;
+            _messages.Add((isUser ? "You" : (SelectedModel?.Name ?? "Model"), text));
 
             var bubble = new Border
             {
@@ -540,7 +1129,7 @@ namespace MauiDemoApp
             {
                 Spacing = 4,
                 HorizontalOptions = isUser ? LayoutOptions.End : LayoutOptions.Start,
-                MaximumWidthRequest = 460,
+                MaximumWidthRequest = 520,
                 Children = { bubble, timestamp }
             };
 
@@ -565,6 +1154,24 @@ namespace MauiDemoApp
             ScrollToEnd();
         }
 
+        /// <summary>Show or hide the "thinking…" bubble at the end of the transcript.</summary>
+        private void ShowTyping(bool on)
+        {
+            if (on)
+            {
+                if (_typingRow.Parent == null)
+                    _transcript.Children.Add(_typingRow);
+                _emptyState.IsVisible = false;
+                ScrollToEnd();
+            }
+            else
+            {
+                _transcript.Children.Remove(_typingRow);
+                if (_transcript.Children.Count == 0)
+                    _emptyState.IsVisible = true;
+            }
+        }
+
         private Border Avatar() => new Border
         {
             WidthRequest = 30,
@@ -577,16 +1184,21 @@ namespace MauiDemoApp
             Content = DemoTheme.MakeIcon(GlyphModel, DemoTheme.PrimaryText, 17)
         };
 
-        /// <summary>Glyph identifying the module, as shown in the header.</summary>
+        /// <summary>Glyph identifying the module.</summary>
         protected string HeroGlyph { get; set; } = MaskRcnnPage.GlyphInfo;
 
         private async void ScrollToEnd()
         {
             try
             {
-                // Let the new bubble get a size before scrolling to it.
+                // Let the new bubble get a size before scrolling to it. On desktop
+                // the conversation has its own scroller; on the phone the whole
+                // column scrolls and the conversation is at its end.
                 await Task.Yield();
-                await _scroll.ScrollToAsync(0, _pageChildren.Height, true);
+                if (_wide)
+                    await _chatScroll.ScrollToAsync(0, _chatBody.Height, true);
+                else if (_pageScroll?.Content is View content)
+                    await _pageScroll.ScrollToAsync(0, content.Height, true);
             }
             catch (Exception)
             {
@@ -595,14 +1207,67 @@ namespace MauiDemoApp
 
         // ---------- Status ----------
 
-        /// <summary>Show a status line above the transcript, or hide it when null.</summary>
+        /// <summary>Show a status line just above the composer, or hide it when null.</summary>
         protected void SetStatus(string message)
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                _statusCard.IsVisible = !string.IsNullOrEmpty(message);
+                _statusRow.IsVisible = !string.IsNullOrEmpty(message);
                 _statusLabel.Text = message ?? string.Empty;
+                _statusDot.Color = StatusDotColor(message);
+                UpdateModelState();
             });
+        }
+
+        // Green for ordinary news, lime while something is live (a download or an
+        // answer in progress), red for a failure or a model that won't fit.
+        private Color StatusDotColor(string message)
+        {
+            if (string.IsNullOrEmpty(message))
+                return DemoTheme.StatusGreen;
+            if (message.StartsWith("Error") || message.StartsWith("Could not") || message.StartsWith("That file") || message.Contains("more memory"))
+                return BlockedText;
+            if (_busy || DownloadState.IsActiveFor(_moduleKey))
+                return DemoTheme.Lime;
+            return DemoTheme.StatusGreen;
+        }
+
+        /// <summary>The dot + line under the model summary: loaded, downloading, downloaded or not.</summary>
+        private void UpdateModelState()
+        {
+            ChatModel model = SelectedModel;
+            if (model == null)
+                return;
+
+            Color dot;
+            string text;
+            if (IsModelLoaded)
+            {
+                dot = DemoTheme.StatusGreen;
+                text = "Loaded · runs on this device";
+            }
+            else if (DownloadState.IsActiveFor(_moduleKey))
+            {
+                dot = DemoTheme.Lime;
+                text = DownloadState.Message ?? "Preparing the model…";
+            }
+            else if (ExceedsDeviceMemory(model))
+            {
+                dot = BlockedText;
+                text = "Probably too big for this device";
+            }
+            else if (IsInstalled(model))
+            {
+                dot = DemoTheme.StatusGreen;
+                text = "Downloaded · loads with your first message";
+            }
+            else
+            {
+                dot = DemoTheme.MutedText;
+                text = "Not downloaded · downloads with your first message";
+            }
+            _modelStateDot.Color = dot;
+            _modelStateLabel.Text = text;
         }
 
         /// <summary>
@@ -703,6 +1368,7 @@ namespace MauiDemoApp
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            BuildLayout();
             DownloadState.Changed += OnSharedDownloadProgress;
             if (DownloadState.IsActiveFor(_moduleKey))
                 SetStatus(DownloadState.Message);
@@ -791,17 +1457,26 @@ namespace MauiDemoApp
 
                 _promptEditor.Text = string.Empty;
                 AddMessage(prompt.Trim(), true);
-                SetStatus("Generating…");
+                // The "thinking…" bubble shows the work in progress, so clear any
+                // leftover download line rather than leave it reading 100%.
+                SetStatus(null);
+                ShowTyping(true);
 
                 // Kept so teardown can wait for it: the model and (for the vision
                 // module) the image are native objects this call is still reading
                 // on a background thread. Disposing them out from under it is a
                 // hard crash, not a catchable exception.
+                // Timed here, around the generation alone: the download and model
+                // load above are deliberately not part of the reply time.
+                var stopwatch = System.Diagnostics.Stopwatch.StartNew();
                 Task<string> generation = Task.Run(() => Generate(prompt));
                 _generation = generation;
                 string response = await generation;
+                stopwatch.Stop();
 
+                ShowTyping(false);
                 AddMessage((response ?? string.Empty).Trim(), false);
+                RecordReply(stopwatch.Elapsed.TotalSeconds);
                 SetStatus(null);
             }
             catch (Exception ex)
@@ -810,6 +1485,7 @@ namespace MauiDemoApp
             }
             finally
             {
+                ShowTyping(false);
                 DownloadState.Finish(_moduleKey);
                 SetBusy(false);
                 UpdateModelSummary();
@@ -834,7 +1510,7 @@ namespace MauiDemoApp
                 text = text.Substring(0, MaxPromptLength);
                 _promptEditor.Text = text;
             }
-            _counterLabel.Text = text.Length + " / " + MaxPromptLength;
+            _counterLabel.Text = SendHint + text.Length + " / " + MaxPromptLength;
         }
 
         // ---------- Model card ----------
@@ -843,6 +1519,9 @@ namespace MauiDemoApp
         {
             _expanded = !_expanded;
             _modelRows.IsVisible = _expanded;
+            // On the phone, performance and the code link fold away with the list.
+            if (!_wide && _phoneDetails != null)
+                _phoneDetails.IsVisible = _expanded;
             await _chevron.RotateToAsync(_expanded ? 180 : 0, 180, Easing.CubicOut);
         }
 
@@ -976,11 +1655,12 @@ namespace MauiDemoApp
             if (onDisk > 0 && !DownloadState.IsActiveFor(_moduleKey))
                 rowContent.Children.Add(DeleteRow(model, onDisk));
 
-            // Flat row on the page background; the filled radio marks the selection
-            // and hairlines (added by BuildModelRows) separate the rows.
+            // Flat row on whatever it sits on (the page, or the panel well); the
+            // filled radio marks the selection and hairlines (added by
+            // BuildModelRows) separate the rows.
             var row = new Border
             {
-                BackgroundColor = DemoTheme.PageBackground,
+                BackgroundColor = Colors.Transparent,
                 Stroke = Colors.Transparent,
                 StrokeThickness = 0,
                 Padding = new Thickness(0, 14),
@@ -1141,6 +1821,9 @@ namespace MauiDemoApp
             if (index == _selectedIndex || _busy)
                 return;
             _selectedIndex = index;
+            // Reply times belong to one model; start counting again for the new one.
+            _replySeconds.Clear();
+            RefreshPerf();
             BuildModelRows();
             UpdateModelSummary();
             OnModelChanged(SelectedModel);
@@ -1155,6 +1838,7 @@ namespace MauiDemoApp
 
             _collapsedName.Text = model.Name;
             _collapsedDetail.Text = model.Detail;
+            UpdateModelState();
 
             // "Too big" outranks "Installed": a model sitting on disk that the
             // device cannot load is not usable, and saying "Installed" here is the
@@ -1324,7 +2008,7 @@ namespace MauiDemoApp
         }
 
         /// <summary>
-        /// Clear the keyboard inset left on the page ScrollView after the keyboard
+        /// Clear the keyboard inset left on the page's scroll views after the keyboard
         /// is dismissed on iOS/MacCatalyst, which otherwise freezes scrolling until
         /// the editor is focused again.
         /// </summary>
@@ -1334,11 +2018,16 @@ namespace MauiDemoApp
             //Run after MAUI's own keyboard-dismiss handling has settled.
             this.Dispatcher.Dispatch(() =>
             {
-                if (this.Content?.Handler?.PlatformView is UIKit.UIScrollView scrollView)
+                // The page content is now a layout grid, so reset the scroll views
+                // it holds: the page column, and on desktop the conversation's own.
+                foreach (ScrollView view in new[] { _pageScroll, _chatScroll })
                 {
-                    scrollView.ContentInset = UIKit.UIEdgeInsets.Zero;
-                    scrollView.ScrollIndicatorInsets = UIKit.UIEdgeInsets.Zero;
-                    scrollView.ScrollEnabled = true;
+                    if (view?.Handler?.PlatformView is UIKit.UIScrollView scrollView)
+                    {
+                        scrollView.ContentInset = UIKit.UIEdgeInsets.Zero;
+                        scrollView.ScrollIndicatorInsets = UIKit.UIEdgeInsets.Zero;
+                        scrollView.ScrollEnabled = true;
+                    }
                 }
             });
 #endif

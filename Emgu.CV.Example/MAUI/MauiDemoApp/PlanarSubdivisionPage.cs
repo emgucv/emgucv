@@ -3,77 +3,113 @@
 //----------------------------------------------------------------------------
 
 using System;
+using System.Diagnostics;
 
 using Emgu.CV;
+using Emgu.CV.Structure;
 
 using PlanarSubdivisionExample;
 
 namespace MauiDemoApp
 {
-    public class PlanarSubdivisionPage : SimpleDemoPage
+    /// <summary>
+    /// Random points, their Delaunay triangulation and Voronoi diagram, on the
+    /// <see cref="StagePage"/> layout. Every run scatters a new set of points.
+    /// </summary>
+    public class PlanarSubdivisionPage : StagePage
     {
         private const int MaxValue = 600;
+        private static readonly int[] PointCounts = { 10, 30, 60, 100 };
 
-        private readonly Image _image = new Image { Aspect = Aspect.AspectFit, HeightRequest = 300, HorizontalOptions = LayoutOptions.Fill };
-        // Text of the (non-tappable) "30 points" tag pill in the Subdivision header.
-        private readonly Label _badge;
-        private readonly Label _sliderValue = new Label { Text = "30 points", FontFamily = DemoTheme.TitleFont, FontSize = 15, TextColor = DemoTheme.PrimaryText, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center };
-        private int _pointCount = 30;
+        private SegmentedControl _countControl;
+        private volatile int _pointCount = 30;
 
-        public PlanarSubdivisionPage(string glyph)
-            : base("Planar Subdivision", "Delaunay triangulation & Voronoi diagram", glyph, ImageCategory)
+        public PlanarSubdivisionPage() : base(new StageConfig
         {
-            var badgePill = DemoTheme.TagPill("30 points");
-            _badge = (Label)badgePill.Content;
+            Title = "planar",
+            Category = "Image & 3D",
+            Module = "imgproc · Subdiv2D",
+            Description = "Delaunay triangulation and Voronoi diagram of random points.",
+            About = "Scatters random points, then builds a planar subdivision of them with OpenCV's Subdiv2D. The white lines are the Delaunay triangulation: it connects the points into triangles, avoiding long thin ones. The colored cells are the Voronoi diagram: each cell holds every place that is closer to its point (the red dot) than to any other.\n\nThe two are duals of each other, and both are used for meshes, interpolation and nearest-neighbour lookups. Each run makes a new random set.",
+            HasCamera = false,
+            AutoRun = true,
+            ShowResultCount = false,
+            RunLabel = "Generate",
+            OptionsTitle = "Points",
+            ResultsTitle = "Subdivision",
+            ItemSingular = "stat",
+            ItemPlural = "stats",
+            EmptyCaption = "generate to see the counts here",
+        })
+        {
+        }
 
-            AddSection(new VerticalStackLayout
+        protected override View BuildOptions()
+        {
+            _countControl = new SegmentedControl(PointCounts.Select(c => c.ToString()), Array.IndexOf(PointCounts, _pointCount));
+            _countControl.SelectionChanged += (s, e) =>
             {
-                Spacing = 16,
-                Children =
-                {
-                    SectionHeader("Subdivision", badgePill),
-                    DemoTheme.ImageFrame(_image),
-                    Caption("Colored Voronoi cells with the Delaunay triangulation overlaid. Each dot is a cell centre.")
-                }
-            });
-
-            AddContent(PrimaryButton("New Points", MaskRcnnPage.GlyphPlay, (s, e) => Generate()));
-
-            // ---- Point-count slider card ----
-            var slider = new Slider { Minimum = 10, Maximum = 100, Value = 30, MinimumTrackColor = DemoTheme.Accent, MaximumTrackColor = DemoTheme.Hairline, ThumbColor = DemoTheme.Accent, HorizontalOptions = LayoutOptions.Fill };
-            slider.ValueChanged += (s, e) =>
-            {
-                _pointCount = (int)Math.Round(e.NewValue);
-                _sliderValue.Text = $"{_pointCount} points";
+                _pointCount = PointCounts[_countControl.SelectedIndex];
+                SetOptionsValue($"{_pointCount} points");
+                _ = RunAsync();   // generated demo: refresh right away
             };
-            slider.DragCompleted += (s, e) => Generate();
-
-            var sliderRow = new Grid { ColumnSpacing = 12, ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            sliderRow.Add(new Label { Text = "10", FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText, VerticalOptions = LayoutOptions.Center }, 0, 0);
-            sliderRow.Add(slider, 1, 0);
-            sliderRow.Add(new Label { Text = "100", FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText, VerticalOptions = LayoutOptions.Center }, 2, 0);
-
-            AddSection(new VerticalStackLayout
-            {
-                Spacing = 8,
-                Children =
-                {
-                    SectionHeader("Point Count", _sliderValue),
-                    sliderRow,
-                    Caption("Adjust the number of random points.")
-                }
-            });
-
-            AddAbout("Scatters random points, then builds and draws the Delaunay triangulation and Voronoi diagram between them — a demo of OpenCV's computational geometry (Subdiv2D).");
-
-            Generate();
+            return _countControl;
         }
 
-        private void Generate()
+        protected override void OnStatusInit()
         {
-            using (Mat m = DrawSubdivision.Draw(MaxValue, _pointCount))
-                _image.Source = ToImageSource(m);
-            _badge.Text = $"{_pointCount} points";
+            SetOptionsValue($"{_pointCount} points");
+            SetStatus("New random points every run");
         }
+
+        protected override StageResult RunCore(Mat input)
+        {
+            int count = _pointCount;
+            var compute = Stopwatch.StartNew();
+            DrawSubdivision.CreateSubdivision(MaxValue, count, out Triangle2DF[] triangles, out VoronoiFacet[] facets);
+            compute.Stop();
+
+            var draw = Stopwatch.StartNew();
+            using Mat img = DrawSubdivision.Draw(MaxValue, triangles, facets);
+            byte[] png = MaskRcnnPage.Encode(img);
+            draw.Stop();
+
+            return new StageResult
+            {
+                OutputPng = png,
+                OutputWidth = img.Width,
+                OutputHeight = img.Height,
+                Rows = new[]
+                {
+                    // Swatches match what's drawn: red dots, white (here grey, so it shows
+                    // in light mode) triangle edges, colored cells.
+                    new StageRow("Points", count.ToString(), null, Color.FromArgb("#FF3B30")),
+                    new StageRow("Delaunay triangles", triangles.Length.ToString(), null, Color.FromArgb("#BDBDBD")),
+                    new StageRow("Voronoi cells", facets.Length.ToString(), null, DemoTheme.BoxColors[1]),
+                },
+                Summary = $"{triangles.Length} triangles · {compute.Elapsed.TotalMilliseconds:0.0} ms",
+                InferenceMs = compute.Elapsed.TotalMilliseconds,
+                PrePostMs = draw.Elapsed.TotalMilliseconds,
+            };
+        }
+
+        protected override string CodeSnippet => $@"using Emgu.CV;
+using Emgu.CV.Structure;
+using System.Drawing;
+
+// {_pointCount} random points in a {MaxValue} x {MaxValue} square
+var rng = new Random();
+PointF[] points = new PointF[{_pointCount}];
+for (int i = 0; i < points.Length; i++)
+    points[i] = new PointF(
+        (float)rng.NextDouble() * {MaxValue},
+        (float)rng.NextDouble() * {MaxValue});
+
+using Subdiv2D subdivision = new Subdiv2D(points);
+Triangle2DF[] triangles = subdivision.GetDelaunayTriangles();
+VoronoiFacet[] cells = subdivision.GetVoronoiFacets();
+
+Console.WriteLine(
+    $""{{triangles.Length}} triangles, {{cells.Length}} cells"");";
     }
 }

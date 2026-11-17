@@ -3,290 +3,197 @@
 //----------------------------------------------------------------------------
 
 using System;
-using System.Linq;
-using System.IO;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Features;
+using Emgu.CV.Structure;
+using Emgu.CV.Util;
 using Emgu.CV.XFeatures2D;
-
-using Microsoft.Maui.Controls.Shapes;
-using Microsoft.Maui.Media;
-using Microsoft.Maui.Storage;
 
 using FeatureMatchingExample;
 
 namespace MauiDemoApp
 {
-    public class FeatureMatchingPage : SimpleDemoPage
+    /// <summary>
+    /// Finds a known object (box.png) in a scene with KAZE or SIFT features on the
+    /// <see cref="StagePage"/> layout. The scene is the stage's input: a sample, or
+    /// any photo the user picks or drops.
+    /// </summary>
+    public class FeatureMatchingPage : StagePage
     {
-        // Built-in Emgu sample images (file, friendly name, glyph) for either slot.
-        private static readonly (string file, string name, string glyph)[] Samples =
+        private const string ModelFile = "box.png";
+        private static readonly string[] Detectors = { "KAZE", "SIFT" };
+
+        // Drawn into the result image: sky match lines, a lime outline, grey
+        // unmatched keypoints. All read on both light and dark photos.
+        private static readonly MCvScalar MatchColor = new MCvScalar(252, 211, 125);   // #7DD3FC, BGR
+        private static readonly MCvScalar OutlineColor = new MCvScalar(58, 255, 212);  // #D4FF3A, BGR
+        private static readonly MCvScalar PointColor = new MCvScalar(150, 150, 150);
+
+        private Mat _model;
+        private SegmentedControl _detectorControl;
+        private volatile int _detector;   // 0 = KAZE, 1 = SIFT
+
+        public FeatureMatchingPage() : base(new StageConfig
         {
-            ("box.png", "Box (object)", MaskRcnnPage.GlyphImage),
-            ("box_in_scene.png", "Box on a desk", MaskRcnnPage.GlyphImage),
-            ("lena.jpg", "Portrait", MaskRcnnPage.GlyphImage),
-            ("dog416.png", "Dog & bike", MaskRcnnPage.GlyphDog),
-            ("pedestrian.png", "Street scene", MaskRcnnPage.GlyphWalk),
-        };
-
-        private readonly Image _image = new Image { Aspect = Aspect.AspectFit, HeightRequest = 220, HorizontalOptions = LayoutOptions.Fill };
-        private readonly Label _matchCount = new Label { Text = "—", FontFamily = DemoTheme.TitleFont, FontSize = 22, TextColor = DemoTheme.PrimaryText };
-        private readonly Label _located = new Label { Text = "—", FontFamily = DemoTheme.TitleFont, FontSize = 22, TextColor = DemoTheme.SecondaryText };
-
-        private readonly Image _modelThumb = new Image { WidthRequest = 46, HeightRequest = 46, Aspect = Aspect.AspectFill };
-        private readonly Image _sceneThumb = new Image { WidthRequest = 46, HeightRequest = 46, Aspect = Aspect.AspectFill };
-        private readonly Label _modelName = new Label { Text = "Box (object)", FontFamily = DemoTheme.BodyFont, FontSize = 14, TextColor = DemoTheme.SecondaryText, VerticalOptions = LayoutOptions.Center };
-        private readonly Label _sceneName = new Label { Text = "Box on a desk", FontFamily = DemoTheme.BodyFont, FontSize = 14, TextColor = DemoTheme.SecondaryText, VerticalOptions = LayoutOptions.Center };
-
-        private Mat _modelMat;
-        private Mat _sceneMat;
-        private int _feature;   // 0 = KAZE, 1 = SIFT
-        private bool _busy;
-        private bool _ran;
-
-        public FeatureMatchingPage(string glyph)
-            : base("Feature Matching", "Find an object in a scene using features", glyph, ImageCategory)
+            Title = "feature matching",
+            Category = "Image & 3D",
+            Module = "features module",
+            Description = "Find a known object in a scene by matching keypoints.",
+            About = "Finds the box from box.png inside a cluttered scene. A detector (KAZE or SIFT) picks out distinctive keypoints in both images and describes each one; the descriptors are matched, matches that aren't clearly better than their runner-up or that disagree on size and rotation are dropped, and a homography is fitted to what remains.\n\nThe homography maps the box's corners into the scene, drawn as the lime outline. The same technique underlies panorama stitching, object tracking and augmented reality.\n\nPick another sample, or add your own photo, to try a scene with or without the box.",
+            Samples = new[]
+            {
+                new StageSample("box_in_scene.png", "box_in_scene.png"),
+                new StageSample("lena.jpg", "lena.jpg"),
+            },
+            HasCamera = false,
+            AutoRun = true,
+            ShowResultCount = false,
+            RunLabel = "Match",
+            OptionsTitle = "Detector",
+            ResultsTitle = "Matching",
+            ItemSingular = "stat",
+            ItemPlural = "stats",
+            EmptyCaption = "match to see keypoints and matches here",
+            MaxImageSize = 1280,
+        })
         {
-            var matchesStat = new VerticalStackLayout { Spacing = 2, Children = { new Label { Text = "Matches Found", FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText }, _matchCount } };
-            var locatedStat = new VerticalStackLayout { Spacing = 2, Children = { new Label { Text = "Object Located", FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText }, _located } };
-            var statInner = new Grid { ColumnSpacing = 16, ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) } };
-            statInner.Add(matchesStat, 0, 0);
-            statInner.Add(new BoxView { WidthRequest = 1, Color = DemoTheme.Hairline }, 1, 0);
-            statInner.Add(locatedStat, 2, 0);
-
-            AddSection(new VerticalStackLayout
-            {
-                Spacing = 16,
-                Children =
-                {
-                    SectionHeader("Match Result", DemoTheme.TextPill("Change Images", ChangeImages)),
-                    DemoTheme.ImageFrame(_image),
-                    statInner
-                }
-            });
-
-            // ---- Detector: a row of pills, like the model pills on the model pages ----
-            AddSection(new VerticalStackLayout
-            {
-                Spacing = 14,
-                Children =
-                {
-                    SectionHeader("Detector"),
-                    PillToggle(new[] { "KAZE", "SIFT" }, 0, i => _feature = i)
-                }
-            });
-
-            AddContent(PrimaryButton("Match", MaskRcnnPage.GlyphPlay, (s, e) => Match()));
-
-            // ---- Images: pick model + scene from samples or the photo library ----
-            AddSection(new VerticalStackLayout
-            {
-                Spacing = 4,
-                Children =
-                {
-                    SectionHeader("Images"),
-                    ChooserRow("Model Image", _modelThumb, _modelName, () => PickImage(true)),
-                    new BoxView { HeightRequest = 1, Color = DemoTheme.Hairline, Margin = new Thickness(0, 4) },
-                    ChooserRow("Scene Image", _sceneThumb, _sceneName, () => PickImage(false))
-                }
-            });
-
-            AddAbout("Finds a known object inside a cluttered scene: it detects keypoints (KAZE or SIFT), matches them between the two images, and projects the object's outline where it is found — the basis of panorama stitching, object tracking, and AR.");
         }
 
-        protected override async void OnAppearing()
+        protected override View BuildOptions()
         {
-            base.OnAppearing();
-            if (_ran)
-                return;
-            _ran = true;
-            _modelMat = await LoadPackageImage("box.png");
-            _sceneMat = await LoadPackageImage("box_in_scene.png");
-            if (_modelMat != null) _modelThumb.Source = ToImageSource(_modelMat);
-            if (_sceneMat != null) _sceneThumb.Source = ToImageSource(_sceneMat);
-            Match();
-        }
-
-        protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
-        {
-            base.OnNavigatedFrom(args);
-            if (!Navigation.NavigationStack.Contains(this) && !Navigation.ModalStack.Contains(this))
+            _detectorControl = new SegmentedControl(Detectors, _detector);
+            _detectorControl.SelectionChanged += (s, e) =>
             {
-                _modelMat?.Dispose(); _modelMat = null;
-                _sceneMat?.Dispose(); _sceneMat = null;
-            }
-        }
-
-        // A tappable "thumbnail + name + chevron" row.
-        private View ChooserRow(string title, Image thumb, Label nameLabel, Action onTap)
-        {
-            var thumbFrame = new Border
-            {
-                WidthRequest = 46,
-                HeightRequest = 46,
-                BackgroundColor = DemoTheme.ImageBackground,
-                Stroke = Colors.Transparent,
-                StrokeThickness = 0,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(2) },
-                Content = thumb
+                _detector = _detectorControl.SelectedIndex;
+                SetOptionsValue(Detectors[_detector]);
+                _ = RunAsync();   // generated demo: refresh right away
             };
-            var texts = new VerticalStackLayout { Spacing = 1, VerticalOptions = LayoutOptions.Center, Children = { new Label { Text = title, FontFamily = DemoTheme.TitleFont, FontSize = 16, TextColor = DemoTheme.PrimaryText }, nameLabel } };
-            var grid = new Grid { Padding = new Thickness(0, 10), ColumnSpacing = 14, ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            grid.Add(thumbFrame, 0, 0);
-            grid.Add(texts, 1, 0);
-            grid.Add(DemoTheme.MakeIcon(MaskRcnnPage.GlyphChevronRight, DemoTheme.SecondaryText, 22), 2, 0);
-            var tap = new TapGestureRecognizer();
-            tap.Tapped += (s, e) => onTap();
-            grid.GestureRecognizers.Add(tap);
-            return grid;
+            return _detectorControl;
         }
 
-        // The "Change Images" pill: pick which slot, then the image.
-        private async void ChangeImages()
+        protected override void OnStatusInit()
         {
-            var slots = new System.Collections.Generic.List<(string glyph, string label, string value)>
-            {
-                (null, "IMAGE TO CHANGE", null),
-                (MaskRcnnPage.GlyphImage, "Model Image", "model"),
-                (MaskRcnnPage.GlyphImage, "Scene Image", "scene"),
-            };
-            string slot = await ShowChooser("Change Image", slots);
-            if (slot == "model") PickImage(true);
-            else if (slot == "scene") PickImage(false);
+            SetOptionsValue(Detectors[_detector]);
+            SetStatus("Looking for " + ModelFile);
         }
 
-        private async void PickImage(bool isModel)
+        protected override async Task<bool> PrepareAsync()
         {
-            var options = new System.Collections.Generic.List<(string glyph, string label, string value)>();
-            options.Add((null, "SAMPLE IMAGES", null));
-            foreach (var s in Samples)
-                options.Add((s.glyph, s.name, "sample:" + s.file));
-            options.Add((null, "YOUR PHOTOS", null));
-            options.Add((MaskRcnnPage.GlyphCamera, "Photo Library", "library"));
-
-            string choice = await ShowChooser(isModel ? "Model Image" : "Scene Image", options);
-            if (string.IsNullOrEmpty(choice))
-                return;
-
-            Mat m;
-            string name;
-            if (choice == "library")
-            {
-                FileResult file = (await MediaPicker.Default.PickPhotosAsync())?.FirstOrDefault();
-                if (file == null)
-                    return;
-                SetBusy(true, "Loading photo…");
-                m = await LoadFileImage(file);
-                SetBusy(false);
-                name = "Library photo";
-            }
-            else
-            {
-                string file = choice.Substring("sample:".Length);
-                m = await LoadPackageImage(file);
-                name = file;
-                foreach (var s in Samples)
-                    if (s.file == file) { name = s.name; break; }
-            }
-            if (m == null)
-            {
-                await DisplayAlertAsync("Feature Matching", "That image could not be loaded.", "OK");
-                return;
-            }
-
-            if (isModel)
-            {
-                _modelMat?.Dispose(); _modelMat = m; _modelName.Text = name; _modelThumb.Source = ToImageSource(m);
-            }
-            else
-            {
-                _sceneMat?.Dispose(); _sceneMat = m; _sceneName.Text = name; _sceneThumb.Source = ToImageSource(m);
-            }
-            Match();
-        }
-
-        private async void Match()
-        {
-            if (_busy || _modelMat == null || _sceneMat == null)
-                return;
-            _busy = true;
-            SetBusy(true, "Matching…");
+            if (_model != null)
+                return true;
             try
             {
-                Mat model = _modelMat, scene = _sceneMat;
-                int feature = _feature;
-                var result = await Task.Run(() =>
+                byte[] bytes = await MaskRcnnPage.ReadAppFileAsync(ModelFile);
+                var m = new Mat();
+                CvInvoke.Imdecode(bytes, ImreadModes.ColorBgr, m);
+                if (m.IsEmpty)
                 {
-                    Feature2D fx = feature == 1 ? (Feature2D)new SIFT() : new KAZE();
-                    Mat r = DrawMatches.Draw(model, scene, fx, out long time, out int count, out bool located);
-                    fx.Dispose();
-                    return (image: r, count, located);
-                });
-
-                _image.Source = ToImageSource(result.image);
-                result.image.Dispose();
-
-                _matchCount.Text = result.count.ToString();
-                _matchCount.TextColor = DemoTheme.PrimaryText;
-                _located.Text = result.located ? "Yes" : "No";
-                _located.TextColor = result.located ? DemoTheme.PrimaryText : DemoTheme.SecondaryText;
+                    m.Dispose();
+                    SetStatus("Could not load " + ModelFile, DemoTheme.MutedText);
+                    return false;
+                }
+                _model = m;
+                return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                await DisplayAlertAsync("Feature Matching", ex.Message, "OK");
+                SetStatus("Could not load " + ModelFile, DemoTheme.MutedText);
+                return false;
+            }
+        }
+
+        protected override StageResult RunCore(Mat input)
+        {
+            Mat model = _model;
+            int detector = _detector;
+
+            var match = Stopwatch.StartNew();
+            using Feature2D fx = detector == 1 ? new SIFT() : new KAZE();
+            using VectorOfVectorOfDMatch matches = new VectorOfVectorOfDMatch();
+            DrawMatches.FindMatch(model, input, fx, out _,
+                out VectorOfKeyPoint modelKeyPoints, out VectorOfKeyPoint sceneKeyPoints,
+                matches, out Mat mask, out Mat homography);
+            match.Stop();
+
+            try
+            {
+                var draw = Stopwatch.StartNew();
+                int good = mask == null ? 0 : CvInvoke.CountNonZero(mask);
+                bool found = homography != null;
+                using Mat result = DrawMatches.Draw(model, modelKeyPoints, input, sceneKeyPoints, matches, mask, homography,
+                    MatchColor, PointColor, OutlineColor, out _);
+                byte[] png = MaskRcnnPage.Encode(result);
+                draw.Stop();
+
+                return new StageResult
+                {
+                    OutputPng = png,
+                    OutputWidth = result.Width,
+                    OutputHeight = result.Height,
+                    Rows = new[]
+                    {
+                        new StageRow("Keypoints · box", modelKeyPoints.Size.ToString()),
+                        new StageRow("Keypoints · scene", sceneKeyPoints.Size.ToString()),
+                        new StageRow("Good matches", good.ToString(), null, DemoTheme.BoxColors[1]),
+                        new StageRow("Homography", found ? "Found" : "Not found", null, found ? DemoTheme.Lime : DemoTheme.MutedText),
+                    },
+                    Note = found ? null : "Not enough consistent matches to locate the box in this scene.",
+                    Summary = $"{(found ? "box found" : "not found")} · {match.Elapsed.TotalMilliseconds:0} ms",
+                    InferenceMs = match.Elapsed.TotalMilliseconds,
+                    PrePostMs = draw.Elapsed.TotalMilliseconds,
+                };
             }
             finally
             {
-                _busy = false;
-                SetBusy(false);
+                modelKeyPoints.Dispose();
+                sceneKeyPoints.Dispose();
+                mask?.Dispose();
+                homography?.Dispose();
             }
         }
 
-        private static async Task<Mat> LoadPackageImage(string name)
-        {
-            try
-            {
-                using Stream s = await FileSystem.OpenAppPackageFileAsync(name);
-                using MemoryStream ms = new MemoryStream();
-                await s.CopyToAsync(ms);
-                return Decode(ms.ToArray());
-            }
-            catch { return null; }
-        }
+        protected override string CodeSnippet => $@"using Emgu.CV;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Features;
+using Emgu.CV.Flann;
+using Emgu.CV.Structure;
+using Emgu.CV.Util;
+{(_detector == 0 ? "using Emgu.CV.XFeatures2D;\n" : "")}
+using Mat box = CvInvoke.Imread(""box.png"", ImreadModes.ColorBgr);
+using Mat scene = CvInvoke.Imread(""box_in_scene.png"", ImreadModes.ColorBgr);
+using Feature2D detector = new {Detectors[_detector]}();
 
-        private static async Task<Mat> LoadFileImage(FileResult file)
-        {
-            try
-            {
-                using Stream s = await file.OpenReadAsync();
-                using MemoryStream ms = new MemoryStream();
-                await s.CopyToAsync(ms);
-                return Decode(ms.ToArray());
-            }
-            catch { return null; }
-        }
+// Keypoints + descriptors for both images
+using var boxPoints = new VectorOfKeyPoint();
+using var scenePoints = new VectorOfKeyPoint();
+using Mat boxDesc = new Mat(), sceneDesc = new Mat();
+detector.DetectAndCompute(box, null, boxPoints, boxDesc, false);
+detector.DetectAndCompute(scene, null, scenePoints, sceneDesc, false);
 
-        private static Mat Decode(byte[] bytes)
+// Two nearest neighbours per scene descriptor
+using var matches = new VectorOfVectorOfDMatch();
+using var matcher = new FlannBasedMatcher(
+    new LinearIndexParams(), new SearchParams());
+matcher.Add(boxDesc);
+matcher.KnnMatch(sceneDesc, matches, 2, null);
+
+// Keep distinctive, consistent matches, then fit a homography
+using Mat mask = new Mat(matches.Size, 1, DepthType.Cv8U, 1);
+mask.SetTo(new MCvScalar(255));
+FeaturesToolbox.VoteForUniqueness(matches, 0.8, mask);
+FeaturesToolbox.VoteForSizeAndOrientation(
+    boxPoints, scenePoints, matches, mask, 1.5, 20);
+Mat homography = FeaturesToolbox.GetHomographyMatrixFromMatchedFeatures(
+    boxPoints, scenePoints, matches, mask, 2);
+Console.WriteLine(homography != null ? ""box found"" : ""not found"");";
+
+        protected override void OnClosed()
         {
-            Mat m = new Mat();
-            CvInvoke.Imdecode(bytes, ImreadModes.ColorBgr, m);
-            if (m.IsEmpty) { m.Dispose(); return null; }
-            // Full-resolution phone photos (12MP+) can exhaust memory when run
-            // through SIFT/KAZE and crash the native side. Cap the longest side.
-            const int maxSide = 1600;
-            int longest = Math.Max(m.Width, m.Height);
-            if (longest > maxSide)
-            {
-                double scale = (double)maxSide / longest;
-                Mat resized = new Mat();
-                CvInvoke.Resize(m, resized, System.Drawing.Size.Empty, scale, scale, Inter.Area);
-                m.Dispose();
-                return resized;
-            }
-            return m;
+            _model?.Dispose();
+            _model = null;
         }
     }
 }

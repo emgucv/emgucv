@@ -66,6 +66,39 @@ namespace MauiDemoApp
 
         protected override string EmptyStateHint => "Ask anything — the model runs entirely on your device.";
 
+        protected override bool IsModelLoaded =>
+            _model != null && _loaded != null && SelectedModel != null && _loaded.Equals((Variant)SelectedModel.Tag);
+
+        protected override string AboutText =>
+            "A small Qwen language model running locally on the OpenCV dnn module. Nothing you type leaves this device.\n\n" +
+            "The model remembers the conversation: each turn feeds the whole transcript back in, then generates the answer one token at a time with a KV cache. NEW CHAT forgets it.";
+
+        // Mirrors exactly what EnsureModelReadyAsync and Generate call for the
+        // selected model.
+        protected override string CodeSnippet
+        {
+            get
+            {
+                Variant variant = SelectedModel != null ? (Variant)SelectedModel.Tag : Variant.Qwen3Small;
+                if (variant == Variant.Qwen25)
+                    return
+                        "using Emgu.CV.Models;\n\n" +
+                        "var qwen = new Qwen25();\n" +
+                        "await qwen.Init(onDownloadProgress);   // downloads once\n\n" +
+                        "// Remembers earlier turns of the conversation.\n" +
+                        "string reply = qwen.Chat(\"What is OpenCV?\", 128);\n\n" +
+                        "qwen.ResetChat();   // NEW CHAT";
+                string version = variant == Variant.Qwen3Large ? "Qwen3_1_7B" : "Qwen3_0_6B";
+                return
+                    "using Emgu.CV.Models;\n\n" +
+                    "var qwen = new Qwen3();\n" +
+                    $"await qwen.Init(Qwen3.Qwen3Version.{version}, onDownloadProgress);\n\n" +
+                    "// Remembers earlier turns of the conversation.\n" +
+                    "string reply = qwen.Chat(\"What is OpenCV?\", 128);\n\n" +
+                    "qwen.ResetChat();   // NEW CHAT";
+            }
+        }
+
         protected override async Task<bool> EnsureModelReadyAsync()
         {
             var variant = (Variant)SelectedModel.Tag;

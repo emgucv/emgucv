@@ -1,4 +1,4 @@
-﻿//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
@@ -16,23 +16,24 @@ using Emgu.CV.Structure;
 using Emgu.CV.Util;
 
 using Microsoft.Maui.ApplicationModel;
-using Microsoft.Maui.Controls.PlatformConfiguration;
-using Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;
 using Microsoft.Maui.Controls.Shapes;
-using Microsoft.Maui.Media;
 using Microsoft.Maui.Storage;
 
+using DrawRect = System.Drawing.Rectangle;
 using DrawSize = System.Drawing.Size;
 
 namespace MauiDemoApp
 {
     /// <summary>
-    /// Bespoke, on-theme showcase page for the Mask R-CNN (DNN) object-detection
-    /// demo. Shows an input photo (curated sample or user-picked), runs Mask R-CNN
-    /// on the still image, and lists the objects it found. Real-time camera
-    /// detection opens as a dedicated full-screen page.
+    /// Mask R-CNN instance segmentation on the shared <see cref="StagePage"/>
+    /// layout: each object's mask is tinted and outlined on the stage image, its
+    /// box and label are drawn live over it, and the panel lists every object with
+    /// its confidence. Real-time camera detection opens as a dedicated page.
+    ///
+    /// This class also hosts palette, glyph and Mat / ImageSource helpers that the
+    /// rest of the app uses.
     /// </summary>
-    public class MaskRcnnPage : ContentPage
+    public class MaskRcnnPage : StagePage
     {
         // ---------- Palette (from DemoTheme) ----------
         internal static Color PageBackground => DemoTheme.PageBackground;
@@ -65,446 +66,183 @@ namespace MauiDemoApp
         internal const string GlyphCar = "";    // directions_car
         internal const string GlyphCamera = ""; // photo_camera
 
-        // Curated sample photos the model handles well.
-        private static readonly (string File, string Name)[] Samples =
+        private const string ModelName = "R-50-FPN";
+
+        private MaskRcnn _model = new MaskRcnn();
+
+        public MaskRcnnPage() : base(new StageConfig
         {
-            ("dog416.png", "Dog & bike"),
-            ("pedestrian.png", "Street"),
-            ("stop-sign.jpg", "Stop sign"),
-            ("cars_license_plate.png", "Cars")
-        };
-
-        // Icon per sample (parallel to Samples), for the Change Photo sheet.
-        private static readonly string[] SampleGlyphs = { GlyphDog, GlyphWalk, GlyphStop, GlyphCar };
-
-        private readonly MaskRcnn _model = new MaskRcnn();
-
-        private Mat _currentImage;
-        private bool _detecting;
-        private bool _defaultLoaded;
-        private byte[] _lastResultPng;
-
-        // Default empty-state text, restored by ResetResults.
-        private const string EmptyTitle = "no detections yet";
-        private const string EmptyCaption = "run a detection to see objects here";
-
-        // UI we update at runtime.
-        private readonly Image _previewImage;
-        private readonly VerticalStackLayout _resultsRows;
-        private readonly VerticalStackLayout _emptyState;
-        private readonly Label _emptyTitle;
-        private readonly Label _emptyCaption;
-        private readonly Label _resultsCountLabel;
-        private readonly Image _resultsCheck;
-        private readonly Label _resultsTimeLabel;
-        private readonly Button _detectButton;
-        private readonly Grid _loadingOverlay;
-        private readonly Label _loadingLabel;
-        private readonly ActivityIndicator _loadingIndicator;
-
-        // Change Photo bottom sheet (in-page overlay).
-        private readonly Grid _sheetOverlay;
-        private readonly BoxView _sheetScrim;
-        private readonly Border _sheetCard;
-        private readonly VerticalStackLayout _sheetList;
-        private TaskCompletionSource<string> _sheetTcs;
-        private bool _sheetAnimating;
-
-        public MaskRcnnPage()
+            Title = "Mask R-CNN",
+            Tag = "DNN",
+            Category = "Detection",
+            Module = "dnn module",
+            Description = "Find, label and outline every object in a photo.",
+            About = "Instance segmentation: for every object it finds, Mask R-CNN gives a label, a confidence score, a bounding box and a pixel mask tracing the object's exact outline. Two people standing side by side get two separate masks.\n\n" +
+                    "This is the ResNet-50 FPN model from the ONNX Model Zoo, trained on the 80 everyday COCO classes (people, animals, vehicles, household items). It runs on OpenCV's DNN module and downloads once, the first time you use it.\n\n" +
+                    "It is far more detailed than a box-only detector such as YOLO, but also much slower, so the live camera view updates less smoothly.",
+            Samples = new[]
+            {
+                new StageSample("dog416.png", "Dog & bike"),
+                new StageSample("pedestrian.png", "Street"),
+                new StageSample("stop-sign.jpg", "Stop sign"),
+                new StageSample("cars_license_plate.png", "Cars"),
+            },
+            HasCamera = true,
+            RunLabel = "Detect",
+            EmptyTitle = "no detections yet",
+            EmptyCaption = "run a detection to see objects here",
+            MaxImageSize = 1024,
+        })
         {
-            Title = "Mask R-CNN";
-            BackgroundColor = PageBackground;
-            Shell.SetNavBarIsVisible(this, false);
-
-            // ---------- Header: plain icons, a giant lowercase title, then tag / category ----------
-            var header = DemoTheme.PageHeader(this, "Mask R-CNN", "Find, label and outline objects in a photo using AI.", GlyphMask, "DNN", "Detection");
-
-            // ---------- Input image ----------
-            var inputHeader = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            inputHeader.Add(DemoTheme.SectionLabel("Input Image"), 0, 0);
-            inputHeader.Add(DemoTheme.TextPill("Change", () => OnChangePhoto(this, EventArgs.Empty)), 1, 0);
-
-            // The photo sits flush on a light grey backdrop, like a product shot.
-            _previewImage = new Image { Aspect = Aspect.AspectFit, HeightRequest = 340 };
-            var previewFrame = DemoTheme.ImageFrame(_previewImage);
-            // Tap the (annotated) image to view it full-screen.
-            var previewTap = new TapGestureRecognizer();
-            previewTap.Tapped += async (s, e) =>
-            {
-                if (_lastResultPng != null)
-                    await Navigation.PushModalAsync(new FullScreenImagePage(_lastResultPng, "Mask R-CNN"));
-            };
-            previewFrame.GestureRecognizers.Add(previewTap);
-
-            var inputSection = new VerticalStackLayout { Spacing = 16, Children = { inputHeader, previewFrame } };
-
-            // ---------- Buttons: black pill for the main action, grey pill for live ----------
-            _detectButton = DemoTheme.PrimaryButton("Detect Image", DemoTheme.GlyphPlay);
-            _detectButton.Clicked += OnDetectClicked;
-
-            var liveButton = DemoTheme.SecondaryButton("Live Detection", DemoTheme.GlyphVideo);
-            liveButton.Clicked += OnLiveDetection;
-
-            var buttonStack = new VerticalStackLayout { Spacing = 12, Children = { _detectButton, liveButton } };
-
-            // ---------- Results ----------
-            _resultsCountLabel = new Label { Text = "0 objects", TextTransform = TextTransform.Uppercase, FontFamily = BodyFont, FontSize = 12, CharacterSpacing = 1.5, TextColor = SecondaryText, VerticalOptions = LayoutOptions.Center };
-            _resultsCheck = MakeIcon(GlyphCheck, PrimaryText, 16);
-            _resultsCheck.IsVisible = false;
-            _resultsTimeLabel = new Label { Text = "", FontFamily = BodyFont, FontSize = 12, TextColor = DemoTheme.MutedText, IsVisible = false, HorizontalTextAlignment = TextAlignment.End };
-            var countRow = new HorizontalStackLayout { Spacing = 6, HorizontalOptions = LayoutOptions.End, Children = { _resultsCountLabel, _resultsCheck } };
-            var statusStack = new VerticalStackLayout { HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center, Children = { countRow, _resultsTimeLabel } };
-
-            var resultsHeader = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            resultsHeader.Add(DemoTheme.SectionLabel("Results"), 0, 0);
-            resultsHeader.Add(statusStack, 1, 0);
-
-            // Empty state: oversized pale type instead of an icon. The title and caption
-            // are rewritten by OnDetectClicked / ShowError and restored by ResetResults.
-            _emptyTitle = DemoTheme.EmptyStateTitle(EmptyTitle);
-            _emptyCaption = new Label { Text = EmptyCaption, FontFamily = BodyFont, FontSize = 14, TextColor = SecondaryText };
-            _emptyState = new VerticalStackLayout
-            {
-                Spacing = 8,
-                Padding = new Thickness(0, 4, 0, 8),
-                Children = { _emptyTitle, _emptyCaption }
-            };
-
-            _resultsRows = new VerticalStackLayout { Spacing = 0 };
-
-            var resultsSection = new VerticalStackLayout { Spacing = 16, Children = { resultsHeader, _emptyState, _resultsRows } };
-
-            var content = new VerticalStackLayout
-            {
-                Spacing = 20,
-                Padding = new Thickness(20, 16, 20, 28),
-                Children =
-                {
-                    header,
-                    DemoTheme.Divider(),
-                    inputSection,
-                    buttonStack,
-                    DemoTheme.Divider(),
-                    resultsSection,
-                    DemoTheme.Divider(),
-                    ModelShowcasePage.BuildAboutCard("Detects objects and traces the exact outline (mask) of each one, with a label and confidence score.", flush: true)
-                }
-            };
-
-            // ---------- Loading overlay ----------
-            _loadingIndicator = new ActivityIndicator { IsRunning = false, Color = Accent, WidthRequest = 44, HeightRequest = 44, HorizontalOptions = LayoutOptions.Center };
-            _loadingLabel = new Label { Text = "Working…", FontFamily = BodyFont, FontSize = 15, TextColor = PrimaryText, HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center };
-            var loadingCard = new Border
-            {
-                BackgroundColor = CardBackground,
-                Stroke = RowBorder,
-                StrokeThickness = 1,
-                Padding = new Thickness(28, 22),
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(20) },
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Center,
-                Content = new VerticalStackLayout { Spacing = 14, WidthRequest = 240, Children = { _loadingIndicator, _loadingLabel } }
-            };
-            _loadingOverlay = new Grid { IsVisible = false, BackgroundColor = DemoTheme.LoadingVeil, Children = { loadingCard } };
-
-            // ---------- Change Photo sheet overlay (covers the whole page) ----------
-            _sheetList = new VerticalStackLayout { Spacing = 0 };
-            _sheetCard = new Border
-            {
-                BackgroundColor = CardBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(28, 28, 0, 0) },
-                // Negative bottom margin bleeds the card past the home-indicator
-                // safe area so the white reaches the screen edge; the extra bottom
-                // padding keeps Cancel above the home indicator.
-                Padding = new Thickness(20, 8, 20, 60),
-                Margin = new Thickness(0, 0, 0, -40),
-                VerticalOptions = LayoutOptions.End,
-                Content = _sheetList
-            };
-            // Bleed the scrim past the top/bottom safe areas so the whole screen dims.
-            _sheetScrim = new BoxView { Color = Color.FromArgb("#66000000"), Opacity = 0, Margin = new Thickness(0, -120, 0, -120) };
-            var sheetScrimTap = new TapGestureRecognizer();
-            sheetScrimTap.Tapped += (s, e) => CloseSheet(null);
-            _sheetScrim.GestureRecognizers.Add(sheetScrimTap);
-            _sheetOverlay = new Grid { IsVisible = false, Children = { _sheetScrim, _sheetCard } };
-            BuildSheet();
-
-            Content = new Grid { Children = { new Microsoft.Maui.Controls.ScrollView { Content = content }, _loadingOverlay, _sheetOverlay } };
         }
 
-        protected override async void OnAppearing()
+        protected override string BackendName => "CPU · OpenCV DNN";
+
+        protected override void OnStatusInit() => UpdateStatus();
+
+        // Local file the model downloads to (same folder / name MaskRcnn.Init uses).
+        private static string ModelFilePath => System.IO.Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "emgu", "mask_rcnn_onnx", "MaskRCNN-10.onnx");
+
+        private void UpdateStatus()
         {
-            base.OnAppearing();
-            if (!_defaultLoaded)
+            SetOptionsValue(ModelName);
+            if (_model != null && _model.Initialized)
             {
-                _defaultLoaded = true;
-                Mat m = await LoadSampleAsync(0);
-                if (m != null)
-                    SetCurrentImage(m);
-            }
-        }
-
-        protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
-        {
-            base.OnNavigatedFrom(args);
-            if (!Navigation.NavigationStack.Contains(this) && !Navigation.ModalStack.Contains(this))
-            {
-                _currentImage?.Dispose();
-                _currentImage = null;
-                _model.Dispose();
-            }
-        }
-
-        // ---------- Image sources ----------
-
-        private async void OnChangePhoto(object sender, EventArgs e)
-        {
-            string action = await OpenChangePhotoSheet();
-            if (string.IsNullOrEmpty(action))
-                return;
-
-            if (action.StartsWith("sample:"))
-            {
-                int idx = int.Parse(action.Substring("sample:".Length));
-                Mat sm = await LoadSampleAsync(idx);
-                if (sm != null) SetCurrentImage(sm);
+                SetStatus("Loaded");
                 return;
             }
-
-            try
-            {
-                FileResult file = action == "camera"
-                    ? await MediaPicker.Default.CapturePhotoAsync()
-                    : (await MediaPicker.Default.PickPhotosAsync())?.FirstOrDefault();
-                if (file == null)
-                    return;
-
-                SetBusy(true, "Loading photo…");
-                using Stream stream = await file.OpenReadAsync();
-                using MemoryStream ms = new MemoryStream();
-                await stream.CopyToAsync(ms);
-                Mat m = new Mat();
-                CvInvoke.Imdecode(ms.ToArray(), ImreadModes.ColorBgr, m);
-                SetBusy(false);
-                if (m.IsEmpty)
-                {
-                    m.Dispose();
-                    await DisplayAlertAsync("Photo", "That file could not be read as an image.", "OK");
-                    return;
-                }
-                SetCurrentImage(Downscale(m, 1024));
-            }
-            catch (Exception ex)
-            {
-                SetBusy(false);
-                await DisplayAlertAsync("Could not load photo", ex.Message, "OK");
-            }
+            var fi = new FileInfo(ModelFilePath);
+            if (fi.Exists)
+                SetStatus($"Downloaded · {fi.Length / (1024.0 * 1024.0):0.0} MB");
+            else
+                SetStatus("Not downloaded", DemoTheme.MutedText, showDownload: true);
         }
 
-        // ---------- Change Photo bottom sheet ----------
-
-        private void BuildSheet()
+        protected override async Task<bool> PrepareAsync()
         {
-            _sheetList.Children.Clear();
-            _sheetList.Children.Add(new BoxView { WidthRequest = 40, HeightRequest = 5, CornerRadius = 3, Color = DemoTheme.SheetHandle, HorizontalOptions = LayoutOptions.Center, Margin = new Thickness(0, 10, 0, 6) });
-            _sheetList.Children.Add(new Label { Text = "Change Photo", FontFamily = TitleFont, FontSize = 20, TextColor = PrimaryText, HorizontalOptions = LayoutOptions.Center, Margin = new Thickness(0, 0, 0, 6) });
-
-            _sheetList.Children.Add(SheetSection("SAMPLE IMAGES"));
-            for (int i = 0; i < Samples.Length; i++)
-                _sheetList.Children.Add(SheetRow(SampleGlyphs[i], Samples[i].Name, $"sample:{i}", i < Samples.Length - 1));
-
-            _sheetList.Children.Add(SheetSection("YOUR PHOTOS"));
-            bool cam = MediaPicker.Default.IsCaptureSupported;
-            _sheetList.Children.Add(SheetRow(GlyphImage, "Photo Library", "library", cam));
-            if (cam)
-                _sheetList.Children.Add(SheetRow(GlyphCamera, "Take Photo", "camera", false));
-
-            var cancelLabel = new Label { Text = "Cancel", FontFamily = TitleFont, FontSize = 17, TextColor = Accent, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
-            var cancel = new Border { BackgroundColor = DemoTheme.BannerBackground, Stroke = Colors.Transparent, StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(14) }, HeightRequest = 52, Margin = new Thickness(0, 14, 0, 0), Content = cancelLabel };
-            var cancelTap = new TapGestureRecognizer();
-            cancelTap.Tapped += (s, e) => CloseSheet(null);
-            cancel.GestureRecognizers.Add(cancelTap);
-            _sheetList.Children.Add(cancel);
+            if (_model == null)
+                return false;
+            if (_model.Initialized)
+                return true;
+            SetStatus("Loading model…", DemoTheme.Lime);
+            await Task.Run(() => _model.Init(OnDownloadProgress, null));
+            if (!_model.Initialized)
+            {
+                SetStatus("Download failed · check your connection", DemoTheme.MutedText, showDownload: true);
+                return false;
+            }
+            UpdateStatus();
+            return true;
         }
 
-        private static View SheetSection(string text) => new Label
+        protected override StageResult RunCore(Mat input)
         {
-            Text = text,
-            FontFamily = TitleFont,
-            FontSize = 12,
-            TextColor = SecondaryText,
-            CharacterSpacing = 1.2,
-            Margin = new Thickness(2, 16, 0, 2)
-        };
+            var total = Stopwatch.StartNew();
+            // "pre": a 3-channel BGR copy to draw the masks on.
+            using var canvas = new Mat();
+            if (input.NumberOfChannels == 4)
+                CvInvoke.CvtColor(input, canvas, ColorConversion.Bgra2Bgr);
+            else
+                input.CopyTo(canvas);
 
-        private View SheetRow(string glyph, string text, string value, bool divider)
-        {
-            var grid = new Grid
+            var infer = Stopwatch.StartNew();
+            MaskedObject[] objects = _model.Detect(canvas);
+            infer.Stop();
+
+            // "post": tint and outline each mask, then collect boxes and rows.
+            objects = objects.OrderByDescending(o => o.Confident).ToArray();
+            var boxes = new List<StageBox>();
+            var rows = new List<StageRow>();
+            foreach (MaskedObject o in objects)
             {
-                Padding = new Thickness(2, 14),
-                ColumnSpacing = 16,
-                ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) }
+                Color color = ClassColor(o.ClassId);
+                DrawMask(canvas, o, new MCvScalar(color.Blue * 255, color.Green * 255, color.Red * 255));
+                boxes.Add(new StageBox(new RectF(o.Region.X, o.Region.Y, o.Region.Width, o.Region.Height), $"{o.Label} {o.Confident:0.00}", color, o.Confident));
+                rows.Add(ScoreRow(o.Label, o.Confident, color));
+                o.Dispose();
+            }
+            byte[] png = Encode(canvas);
+            total.Stop();
+
+            return new StageResult
+            {
+                OutputPng = png,
+                OutputWidth = canvas.Width,
+                OutputHeight = canvas.Height,
+                Boxes = boxes.ToArray(),
+                Rows = rows.ToArray(),
+                InferenceMs = infer.Elapsed.TotalMilliseconds,
+                PrePostMs = total.Elapsed.TotalMilliseconds - infer.Elapsed.TotalMilliseconds,
             };
-            grid.Add(MakeIcon(glyph, Accent, 26), 0, 0);
-            grid.Add(new Label { Text = text, FontFamily = BodyFont, FontSize = 17, TextColor = PrimaryText, VerticalOptions = LayoutOptions.Center }, 1, 0);
-            var tap = new TapGestureRecognizer();
-            tap.Tapped += (s, e) => CloseSheet(value);
-            grid.GestureRecognizers.Add(tap);
-
-            var stack = new VerticalStackLayout();
-            stack.Children.Add(grid);
-            if (divider)
-                stack.Children.Add(new BoxView { HeightRequest = 1, Color = RowBorder, Margin = new Thickness(42, 0, 0, 0) });
-            return stack;
         }
 
-        private Task<string> OpenChangePhotoSheet()
+        // Tint the object's pixels (mask probability above 0.5) with its color and
+        // trace the mask's outline. The region is already clipped to the image.
+        private static void DrawMask(Mat image, MaskedObject o, MCvScalar color)
         {
-            _sheetTcs = new TaskCompletionSource<string>();
-            _sheetOverlay.IsVisible = true;
-            _sheetScrim.Opacity = 0;
-            _sheetCard.TranslationY = 700;
-            _ = Task.WhenAll(
-                _sheetScrim.FadeToAsync(1, 220, Easing.CubicOut),
-                _sheetCard.TranslateToAsync(0, 0, 260, Easing.CubicOut));
-            return _sheetTcs.Task;
-        }
-
-        private async void CloseSheet(string value)
-        {
-            if (_sheetAnimating)
+            DrawRect r = o.Region;
+            if (r.Width <= 0 || r.Height <= 0)
                 return;
-            _sheetAnimating = true;
-            await Task.WhenAll(
-                _sheetScrim.FadeToAsync(0, 180, Easing.CubicIn),
-                _sheetCard.TranslateToAsync(0, 700, 220, Easing.CubicIn));
-            _sheetOverlay.IsVisible = false;
-            _sheetAnimating = false;
-            _sheetTcs?.TrySetResult(value);
+            using Mat roi = new Mat(image, r);
+            using Mat prob = new Mat();
+            CvInvoke.Resize(o.Mask, prob, r.Size);
+            using Mat bin = new Mat();
+            CvInvoke.Threshold(prob, bin, 0.5, 255, ThresholdType.Binary);
+            using Mat mask = new Mat();
+            bin.ConvertTo(mask, DepthType.Cv8U);
+
+            using Mat tint = new Mat(r.Size, DepthType.Cv8U, 3);
+            tint.SetTo(color);
+            using Mat blended = new Mat();
+            CvInvoke.AddWeighted(roi, 0.5, tint, 0.5, 0, blended);
+            blended.CopyTo(roi, mask);
+
+            using var contours = new VectorOfVectorOfPoint();
+            CvInvoke.FindContours(mask, contours, null, RetrType.External, ChainApproxMethod.ChainApproxSimple, r.Location);
+            CvInvoke.DrawContours(image, contours, -1, color, 2, LineType.AntiAlias);
         }
 
-        private async Task<Mat> LoadSampleAsync(int idx)
-        {
-            try
-            {
-                byte[] bytes = await ReadAppFileAsync(Samples[idx].File);
-                Mat m = new Mat();
-                CvInvoke.Imdecode(bytes, ImreadModes.ColorBgr, m);
-                return m.IsEmpty ? null : m;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        private void SetCurrentImage(Mat image)
-        {
-            _currentImage?.Dispose();
-            _currentImage = image;
-            _previewImage.Source = MatToImageSource(image);
-            ResetResults();
-        }
-
-        private void ResetResults()
-        {
-            _resultsRows.Children.Clear();
-            _emptyState.IsVisible = true;
-            _emptyTitle.Text = EmptyTitle;
-            _emptyCaption.Text = EmptyCaption;
-            _resultsCountLabel.Text = "0 objects";
-            _resultsCountLabel.TextColor = SecondaryText;
-            _resultsCheck.IsVisible = false;
-            _resultsTimeLabel.IsVisible = false;
-            _lastResultPng = null;
-        }
-
-        // ---------- Detection ----------
-
-        private async void OnDetectClicked(object sender, EventArgs e)
-        {
-            if (_detecting || _currentImage == null)
-                return;
-
-            _detecting = true;
-            _detectButton.IsEnabled = false;
-            SetBusy(true, "Preparing…");
-
-            try
-            {
-                if (!_model.Initialized)
-                {
-                    SetBusy(true, "Downloading AI model…\n(first time only)");
-                    await Task.Run(() => _model.Init(OnDownloadProgress, null));
-                    if (!_model.Initialized)
-                    {
-                        ShowError("Could not download or initialize the model. Check your connection and try again.");
-                        return;
-                    }
-                }
-
-                SetBusy(true, "Detecting objects…");
-                Mat input = _currentImage;
-                var sw = Stopwatch.StartNew();
-                (byte[] png, List<Found> found) = await Task.Run(() => RunDetect(input, _model));
-                sw.Stop();
-
-                _lastResultPng = png;
-                _previewImage.Source = MatBytesToImageSource(png);
-                _emptyState.IsVisible = false;
-
-                _resultsRows.Children.Clear();
-                for (int i = 0; i < found.Count; i++)
-                    _resultsRows.Children.Add(BuildObjectRow(found[i], i == found.Count - 1));
-
-                _resultsCountLabel.Text = found.Count == 1 ? "1 object" : $"{found.Count} objects";
-                _resultsCountLabel.TextColor = PrimaryText;
-                _resultsCheck.IsVisible = found.Count > 0;
-                _resultsTimeLabel.Text = $"Detected in {sw.ElapsedMilliseconds} ms";
-                _resultsTimeLabel.IsVisible = true;
-
-                if (found.Count == 0)
-                {
-                    _emptyState.IsVisible = true;
-                    _emptyTitle.Text = "no objects found";
-                    _emptyCaption.Text = "Try a different photo.";
-                }
-            }
-            catch (Exception ex)
-            {
-                ShowError("Detection failed: " + ex.Message);
-            }
-            finally
-            {
-                _detecting = false;
-                _detectButton.IsEnabled = true;
-                SetBusy(false);
-            }
-        }
-
-        private async void OnLiveDetection(object sender, EventArgs e)
+        protected override async Task OpenLiveCameraAsync()
         {
 #if __IOS__ || __MACCATALYST__
             await Navigation.PushModalAsync(new MaskRcnnLivePage());
 #else
-            // Other platforms: reuse the proven full-featured camera detector.
+            // Other platforms: reuse the full-featured camera detector.
             await Navigation.PushAsync(new Emgu.CV.Platform.Maui.UI.ProcessAndRenderPage(
                 new MaskRcnn(), "Mask R-CNN (Live)", null, "Real-time object detection from the camera."));
 #endif
         }
 
-        // Runs on a background thread: detect, draw boxes/labels/masks, and
-        // collect the found list. Shared by the still page and live page.
-        internal static (byte[] png, List<Found> found) RunDetect(Mat input, MaskRcnn model)
+        protected override string CodeSnippet => @"using Emgu.CV;
+using Emgu.CV.Models;
+using Emgu.CV.Structure;
+
+using var maskRcnn = new MaskRcnn();
+await maskRcnn.Init();   // downloads the model once
+
+using Mat image = CvInvoke.Imread(""dog.png"");
+MaskedObject[] objects = maskRcnn.Detect(image,
+    matchScoreThreshold: 0.5f, nmsThreshold: 0.4f);
+
+foreach (MaskedObject o in objects)
+{
+    // o.Mask is a small probability map for o.Region
+    Console.WriteLine($""{o.Label} {o.Confident:0.00} at {o.Region}"");
+    o.Render(image, new MCvScalar(0, 0, 255),
+        maskRcnn.RenderColorMask[o.ClassId]);
+    o.Dispose();
+}";
+
+        protected override void OnClosed()
         {
-            (Mat annotated, List<Found> found) = RenderDetections(input, model);
-            using (annotated)
-                return (Encode(annotated), found);
+            _model?.Dispose();
+            _model = null;
         }
 
         /// <summary>
         /// Detect objects and draw them onto a copy of the input. The caller owns the returned Mat.
+        /// Used by the live camera page.
         /// </summary>
         internal static (Mat annotated, List<Found> found) RenderDetections(Mat input, MaskRcnn model)
         {
@@ -522,30 +260,7 @@ namespace MauiDemoApp
             return (annotated, found);
         }
 
-        private void OnDownloadProgress(long? totalBytesToReceive, long bytesReceived, double? progressPercentage)
-        {
-            string msg = totalBytesToReceive != null
-                ? $"Downloading AI model…\n{bytesReceived / (1024 * 1024)} of {totalBytesToReceive.Value / (1024 * 1024)} MB ({(int)(progressPercentage ?? 0)}%)"
-                : $"Downloading AI model…\n{bytesReceived / (1024 * 1024)} MB";
-            MainThread.BeginInvokeOnMainThread(() => _loadingLabel.Text = msg);
-        }
-
-        private void ShowError(string message)
-        {
-            _resultsRows.Children.Clear();
-            _emptyState.IsVisible = true;
-            _emptyTitle.Text = "something went wrong";
-            _emptyCaption.Text = message;
-        }
-
-        private void SetBusy(bool busy, string message = "Working…")
-        {
-            _loadingLabel.Text = message;
-            _loadingOverlay.IsVisible = busy;
-            _loadingIndicator.IsRunning = busy;
-        }
-
-        // A detected object for the results list.
+        // A detected object, as returned by RenderDetections.
         internal readonly struct Found
         {
             public readonly string Label;
@@ -557,47 +272,7 @@ namespace MauiDemoApp
             }
         }
 
-        private View BuildObjectRow(Found f, bool isLast)
-        {
-            var dot = new Border
-            {
-                WidthRequest = 14,
-                HeightRequest = 14,
-                BackgroundColor = Color.FromRgb((int)f.Color.V2, (int)f.Color.V1, (int)f.Color.V0),
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(7) },
-                VerticalOptions = LayoutOptions.Center
-            };
-            var nameLabel = new Label { Text = Capitalize(f.Label), FontFamily = BodyFont, FontSize = 16, TextColor = PrimaryText, VerticalOptions = LayoutOptions.Center };
-            var confLabel = new Label { Text = $"{(int)Math.Round(f.Confident * 100)}%", FontFamily = TitleFont, FontSize = 15, TextColor = PrimaryText, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center };
-
-            var grid = new Grid
-            {
-                Padding = new Thickness(2, 14),
-                ColumnSpacing = 12,
-                ColumnDefinitions =
-                {
-                    new ColumnDefinition(GridLength.Auto),
-                    new ColumnDefinition(GridLength.Star),
-                    new ColumnDefinition(GridLength.Auto)
-                }
-            };
-            grid.Add(dot, 0, 0);
-            grid.Add(nameLabel, 1, 0);
-            grid.Add(confLabel, 2, 0);
-
-            var stack = new VerticalStackLayout();
-            stack.Children.Add(grid);
-            if (!isLast)
-                stack.Children.Add(new BoxView { HeightRequest = 1, Color = RowBorder });
-            return stack;
-        }
-
         // ---------- Helpers ----------
-
-        internal static string Capitalize(string s) =>
-            string.IsNullOrEmpty(s) ? s : char.ToUpperInvariant(s[0]) + s.Substring(1);
-
         internal static async Task<byte[]> ReadAppFileAsync(string fileName)
         {
             using Stream stream = await FileSystem.OpenAppPackageFileAsync(fileName);

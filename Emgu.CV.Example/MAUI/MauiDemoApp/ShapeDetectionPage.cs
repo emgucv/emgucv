@@ -1,10 +1,10 @@
-﻿//----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
 using System;
+using System.Diagnostics;
 using System.IO;
-using System.Threading.Tasks;
 
 using Emgu.CV;
 using Emgu.CV.CvEnum;
@@ -21,270 +21,259 @@ using DrawSize = System.Drawing.Size;
 namespace MauiDemoApp
 {
     /// <summary>
-    /// Bespoke, on-theme showcase page for the classic (non-DNN) OpenCV shape
-    /// detection demo. Generates a random scene of non-overlapping shapes,
-    /// runs <see cref="ShapeDetector"/>, and presents each detection stage as a
-    /// tappable result row.
+    /// Classic (non-DNN) OpenCV shape detection on the shared <see cref="StagePage"/>
+    /// layout. Each run draws a random scene of non-overlapping shapes, runs
+    /// <see cref="ShapeDetector"/> on it, and shows the scene with every detected
+    /// triangle, rectangle, circle and line outlined, plus a count per shape type.
     /// </summary>
-    public class ShapeDetectionPage : ContentPage
+    public class ShapeDetectionPage : StagePage
     {
-        // ---------- Palette (from DemoTheme, matches the home screen) ----------
-        private static Color PageBackground => DemoTheme.PageBackground;
-        private static Color CardBackground => DemoTheme.CardBackground;
-        private static Color PrimaryText => DemoTheme.PrimaryText;
-        private static Color SecondaryText => DemoTheme.SecondaryText;
-        private static Color Accent => DemoTheme.Accent;
-        private static Color RowBorder => DemoTheme.Hairline;
-        private static Color TileBackground => DemoTheme.PillBackground;
-        private static Color ImageBackground => DemoTheme.ImageBackground;
-        private static Color CancelColor => Color.FromArgb("#E5484D");
+        // One color per shape type, shared by the outlines and the result rows.
+        private static Color TriangleColor => ClassColor(2);   // pink
+        private static Color RectangleColor => ClassColor(1);  // sky
+        private static Color CircleColor => ClassColor(3);     // orange
+        private static Color LineColor => ClassColor(0);       // lime
 
-        private const string BodyFont = "InterRegular";
-        private const string TitleFont = "InterSemiBold";
-        private const string IconFont = "MaterialSymbols";
-
-        // ---------- Material Symbols glyphs ----------
-        private const string GlyphShape = "";        // crop_free
-        private const string GlyphChevronRight = ""; // chevron_right
-        private const string GlyphExpandMore = "";   // expand_more
-        private const string GlyphCube = "";         // view_in_ar
-        private const string GlyphImage = "";        // image
-        private const string GlyphSettings = "";     // settings
-        private const string GlyphCheckCircle = "";  // check_circle
-        private const string GlyphClose = "";        // close
-        private const string GlyphPlay = "";   // play_arrow
-
-        private readonly ShapeDetector _detector = new ShapeDetector();
+        private ShapeDetector _detector = new ShapeDetector();
         private readonly Random _rng = new Random();
+        private Mat _scene;                 // the last generated scene
+        private bool _keepScene;            // re-detect the same scene instead of drawing a new one
+        private SegmentedControl _sceneControl;
 
-        // The current sample image, owned by this page.
-        private Mat _currentImage;
+        // Which detected shape types are painted on the result (toggled by chips),
+        // and the cached detection so toggling only repaints.
+        private readonly bool[] _show = { true, true, true, true };   // triangles, rectangles, circles, lines
+        private static readonly string[] ShowNames = { "Triangles", "Rectangles", "Circles", "Lines" };
+        private Mat[] _masks;               // per type, from the last detection
+        private int[] _counts;
+        private double _lastInferMs;
+        private bool _repaintOnly;
 
-        // Guard against overlapping detection runs (e.g. rapid Random taps).
-        private bool _detecting;
-        private bool _redetectPending;
-        private bool _cancelRequested;
-
-        // UI we need to update at runtime.
-        private readonly Image _previewImage;
-        private readonly VerticalStackLayout _resultsRows;
-        private readonly Label _resultsHint;
-        private readonly VerticalStackLayout _emptyState;
-        private readonly HorizontalStackLayout _statusStack;
-        private readonly Label _statusLabel;
-        private readonly Button _detectButton;
-        private readonly Image _pipelineChevron;
-        private readonly VerticalStackLayout _pipelineDetails;
-        private readonly Grid _loadingOverlay;
-        private readonly Label _loadingLabel;
-        private readonly ActivityIndicator _loadingIndicator;
-
-        public ShapeDetectionPage()
+        public ShapeDetectionPage() : base(new StageConfig
         {
-            Title = "Shape Detection";
-            BackgroundColor = PageBackground;
-            Shell.SetNavBarIsVisible(this, false);
-
-            // ---------- Header: plain icons, a giant lowercase title, then category ----------
-            var header = DemoTheme.PageHeader(
-                this,
-                "Shape Detection",
-                "Detect circles, lines, triangles and rectangles using OpenCV.",
-                GlyphShape,
-                null,
-                "Detection");
-
-            // ---------- Sample image ----------
-            _previewImage = new Image { Aspect = Aspect.AspectFit, HeightRequest = 340 };
-            // The scene sits flush on a light grey backdrop, like a product shot.
-            var previewFrame = DemoTheme.ImageFrame(_previewImage);
-            var sampleSection = new VerticalStackLayout { Spacing = 16, Children = { DemoTheme.SectionLabel("Sample Image"), previewFrame } };
-
-            // ---------- Detect button ----------
-            _detectButton = DemoTheme.PrimaryButton("New Image", GlyphCube);
-            _detectButton.Clicked += OnDetectButtonClicked;
-
-            // ---------- Results ----------
-            _statusLabel = new Label
-            {
-                FontFamily = BodyFont,
-                FontSize = 12,
-                CharacterSpacing = 1.5,
-                TextTransform = TextTransform.Uppercase,
-                TextColor = SecondaryText,
-                VerticalOptions = LayoutOptions.Center
-            };
-            _statusStack = new HorizontalStackLayout
-            {
-                Spacing = 6,
-                IsVisible = false,
-                HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.Center,
-                Children = { _statusLabel, MakeIcon(GlyphCheckCircle, PrimaryText, 16) }
-            };
-            var resultsHeader = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            resultsHeader.Add(DemoTheme.SectionLabel("Results"), 0, 0);
-            resultsHeader.Add(_statusStack, 1, 0);
-
-            // Empty state: oversized pale type plus a small grey caption. The caption
-            // doubles as the error / cancelled message.
-            _resultsHint = new Label
-            {
-                Text = "Tap “New Image” to generate a scene and detect shapes.",
-                FontFamily = BodyFont,
-                FontSize = 14,
-                TextColor = SecondaryText
-            };
-            _emptyState = new VerticalStackLayout
-            {
-                Spacing = 8,
-                Padding = new Thickness(0, 4, 0, 8),
-                Children = { DemoTheme.EmptyStateTitle("no results yet"), _resultsHint }
-            };
-            _resultsRows = new VerticalStackLayout { Spacing = 0 };
-
-            var resultsSection = new VerticalStackLayout { Spacing = 16, Children = { resultsHeader, _emptyState, _resultsRows } };
-
-            // ---------- Pipeline (collapsible) ----------
-            _pipelineChevron = MakeIcon(GlyphExpandMore, SecondaryText, 22);
-            _pipelineChevron.HorizontalOptions = LayoutOptions.End;
-
-            var pipelineTitle = new Label { Text = "Pipeline", FontFamily = TitleFont, FontSize = 16, TextColor = PrimaryText };
-            var pipelineSteps = new Label
-            {
-                Text = "Grayscale → Blur → Canny → Hough → Contours",
-                FontFamily = BodyFont,
-                FontSize = 13,
-                TextColor = SecondaryText
-            };
-            var pipelineTile = new Border
-            {
-                WidthRequest = 42,
-                HeightRequest = 42,
-                BackgroundColor = TileBackground,
-                Stroke = Colors.Transparent,
-                StrokeThickness = 0,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(21) },
-                VerticalOptions = LayoutOptions.Center,
-                Content = MakeIcon(GlyphSettings, PrimaryText, 22)
-            };
-            var pipelineHeader = new Grid
-            {
-                ColumnSpacing = 12,
-                ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) }
-            };
-            pipelineHeader.Add(pipelineTile, 0, 0);
-            pipelineHeader.Add(new VerticalStackLayout { VerticalOptions = LayoutOptions.Center, Children = { pipelineTitle, pipelineSteps } }, 1, 0);
-            pipelineHeader.Add(_pipelineChevron, 2, 0);
-
-            _pipelineDetails = new VerticalStackLayout
-            {
-                Spacing = 8,
-                IsVisible = false,
-                Margin = new Thickness(0, 12, 0, 0),
-                Children =
-                {
-                    PipelineStep("Grayscale", "Convert the image to a single intensity channel."),
-                    PipelineStep("Gaussian Blur", "Smooth the image to suppress noise."),
-                    PipelineStep("Canny", "Detect edges from intensity gradients."),
-                    PipelineStep("Hough Transform", "Find circles (HoughCircles) and line segments (HoughLinesP)."),
-                    PipelineStep("Contours", "Approximate polygons to classify triangles and rectangles.")
-                }
-            };
-
-            var pipelineSection = new VerticalStackLayout { Children = { pipelineHeader, _pipelineDetails } };
-            var pipelineTap = new TapGestureRecognizer();
-            pipelineTap.Tapped += (s, e) =>
-            {
-                _pipelineDetails.IsVisible = !_pipelineDetails.IsVisible;
-                ((FontImageSource)_pipelineChevron.Source).Glyph = _pipelineDetails.IsVisible ? GlyphChevronRight : GlyphExpandMore;
-            };
-            pipelineHeader.GestureRecognizers.Add(pipelineTap);
-
-            var content = new VerticalStackLayout
-            {
-                Spacing = 20,
-                Padding = new Thickness(20, 16, 20, 28),
-                Children =
-                {
-                    header,
-                    DemoTheme.Divider(),
-                    sampleSection,
-                    _detectButton,
-                    DemoTheme.Divider(),
-                    resultsSection,
-                    DemoTheme.Divider(),
-                    pipelineSection,
-                    DemoTheme.Divider(),
-                    ModelShowcasePage.BuildAboutCard("Finds geometric shapes — triangles, rectangles, circles — in an image using classic contour analysis (no AI model).", flush: true)
-                }
-            };
-
-            // ---------- Loading overlay (spinner shown while busy) ----------
-            _loadingIndicator = new ActivityIndicator { IsRunning = false, Color = Accent, WidthRequest = 44, HeightRequest = 44, HorizontalOptions = LayoutOptions.Center };
-            _loadingLabel = new Label { Text = "Detecting…", FontFamily = BodyFont, FontSize = 15, TextColor = PrimaryText, HorizontalOptions = LayoutOptions.Center };
-            var loadingCard = new Border
-            {
-                BackgroundColor = CardBackground,
-                Stroke = RowBorder,
-                StrokeThickness = 1,
-                Padding = new Thickness(28, 22),
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(20) },
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Center,
-                Content = new VerticalStackLayout { Spacing = 14, Children = { _loadingIndicator, _loadingLabel } }
-            };
-            _loadingOverlay = new Grid
-            {
-                IsVisible = false,
-                BackgroundColor = DemoTheme.LoadingVeil,
-                Children = { loadingCard }
-            };
-
-            Content = new Grid { Children = { new ScrollView { Content = content }, _loadingOverlay } };
+            Title = "Shape Detection",
+            Category = "Detection",
+            Module = "imgproc module",
+            Description = "Find triangles, rectangles, circles and lines with classic OpenCV.",
+            About = "No AI model here: this is classic computer vision. The image is converted to grayscale and blurred, Canny finds its edges, the Hough transform finds circles and straight line segments, and contours simplified to 3 or 4 corners become triangles and rectangles (4 corners count as a rectangle only if every angle is close to 90°).\n\n" +
+                    "Each run draws a fresh random scene of filled and outlined shapes, some of them rotated. Choose \"Keep scene\" to run the detector again on the same one.\n\n" +
+                    "Line segments are counted along every straight edge, including the sides of rectangles and triangles, so there are usually more lines than shapes.",
+            RunLabel = "Detect shapes",
+            AutoRun = true,
+            OptionsTitle = "Scene",
+            EmptyCaption = "run it to count the shapes",
+            ItemSingular = "shape type",
+            ItemPlural = "shape types",
+            ResultsTitle = "Shapes found",
+        })
+        {
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            // Fresh random sample every time the page is opened.
-            if (_currentImage == null)
-                SetCurrentImage(GenerateRandomShapes());
-        }
+        protected override string BackendName => "CPU · OpenCV";
 
-        protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
+        protected override View BuildOptions()
         {
-            base.OnNavigatedFrom(args);
-            // Release native resources only when the page has actually been
-            // popped — NOT when the full-screen viewer modal is presented over
-            // it (disposing the detector here is what caused Detect to throw a
-            // NullReferenceException after closing the viewer).
-            if (!Navigation.NavigationStack.Contains(this) && !Navigation.ModalStack.Contains(this))
+            _sceneControl = new SegmentedControl(new[] { "New each run", "Keep scene" }, 0);
+            _sceneControl.SelectionChanged += (s, e) =>
             {
-                _currentImage?.Dispose();
-                _currentImage = null;
-                _detector.Dispose();
+                _keepScene = _sceneControl.SelectedIndex == 1;
+                UpdateStatus();
+            };
+            _sceneControl.HorizontalOptions = LayoutOptions.Start;
+
+            // Show / hide each kind of detection, so overlapping results (e.g. a
+            // rectangle found inside a circle) can be told apart.
+            var chips = new FlexLayout { Wrap = Microsoft.Maui.Layouts.FlexWrap.Wrap };
+            var typeChips = new List<ChipView>();
+            // "All" chip first: selected when every type is shown; tapping it shows
+            // everything, or hides everything if all were already shown.
+            var allChip = new ChipView("All", true, 11) { Margin = new Thickness(0, 0, 8, 8) };
+            Action repaint = () =>
+            {
+                allChip.IsSelected = _show.All(v => v);
+                if (_masks != null && !IsBusy)
+                {
+                    _repaintOnly = true;
+                    _ = RunAsync();
+                }
+            };
+            allChip.Tapped += (s, e) =>
+            {
+                bool showAll = !_show.All(v => v);
+                for (int j = 0; j < _show.Length; j++)
+                {
+                    _show[j] = showAll;
+                    typeChips[j].IsSelected = showAll;
+                }
+                repaint();
+            };
+            chips.Children.Add(allChip);
+            Color[] colors = { TriangleColor, RectangleColor, CircleColor, LineColor };
+            for (int i = 0; i < ShowNames.Length; i++)
+            {
+                int idx = i;
+                var chip = new ChipView(ShowNames[i], true, 11) { Margin = new Thickness(0, 0, 8, 8) };
+                var dot = new BoxView { WidthRequest = 8, HeightRequest = 8, CornerRadius = 4, Color = colors[i], VerticalOptions = LayoutOptions.Center };
+                var chipLabel = chip.Content;
+                chip.Content = null;
+                chip.Content = new HorizontalStackLayout { Spacing = 6, Children = { dot, chipLabel } };
+                chip.Tapped += (s, e) =>
+                {
+                    _show[idx] = !_show[idx];
+                    chip.IsSelected = _show[idx];
+                    repaint();
+                };
+                typeChips.Add(chip);
+                chips.Children.Add(chip);
             }
+            return new VerticalStackLayout
+            {
+                Spacing = 12,
+                Children = { _sceneControl, DemoControls.SectionLabel("Show on image"), chips }
+            };
         }
 
-        // ---------- Sample image sources ----------
+        protected override void OnStatusInit() => UpdateStatus();
 
-        private void SetCurrentImage(Mat image)
+        private void UpdateStatus()
         {
-            _currentImage?.Dispose();
-            _currentImage = image;
-            _previewImage.Source = MatToImageSource(image);
-
-            // A new input automatically runs detection.
-            _ = RunDetectionAsync();
+            SetOptionsValue("800 × 560");
+            SetStatus(_keepScene ? "Detects the same scene again" : "A new random scene every run");
         }
+
+        protected override StageResult RunCore(Mat input)
+        {
+            var total = Stopwatch.StartNew();
+            var infer = new Stopwatch();
+            bool repaint = _repaintOnly && _masks != null && _scene != null;
+            _repaintOnly = false;
+            if (!repaint)
+            {
+                // "pre": draw the scene (or reuse the last one).
+                if (_scene == null || !_keepScene)
+                {
+                    _scene?.Dispose();
+                    _scene = GenerateRandomShapes();
+                }
+
+                infer.Start();
+                using ShapeDetectionResult result = _detector.Detect(_scene);
+                infer.Stop();
+                _lastInferMs = infer.Elapsed.TotalMilliseconds;
+
+                // Keep each kind of detection as a mask so the chips can repaint.
+                if (_masks != null)
+                    foreach (var m in _masks) m.Dispose();
+                _masks = new[]
+                {
+                    ExactColor(result.TrianglesRectangles, DrawColor.OrangeRed),
+                    ExactColor(result.TrianglesRectangles, DrawColor.RoyalBlue),
+                    NonWhite(result.Circles),
+                    NonWhite(result.Lines),
+                };
+                _counts = new[] { result.TriangleCount, result.RectangleCount, result.CircleCount, result.LineCount };
+            }
+
+            // "post": paint the shown detections on a darkened copy of the scene.
+            using Mat canvas = RenderFound(_scene, _masks, _show);
+            byte[] png = MaskRcnnPage.Encode(canvas);
+            total.Stop();
+
+            var result_ = _counts;
+            int shapes = result_[0] + result_[1] + result_[2];
+            int max = Math.Max(1, result_.Max());
+            return new StageResult
+            {
+                OutputPng = png,
+                OutputWidth = canvas.Width,
+                OutputHeight = canvas.Height,
+                Rows = new[]
+                {
+                    CountRow("Triangles", result_[0], max, TriangleColor),
+                    CountRow("Rectangles", result_[1], max, RectangleColor),
+                    CountRow("Circles", result_[2], max, CircleColor),
+                    CountRow("Lines", result_[3], max, LineColor),
+                },
+                Summary = $"{shapes} {(shapes == 1 ? "shape" : "shapes")} · {result_[3]} {(result_[3] == 1 ? "line" : "lines")} · {_lastInferMs:0} ms",
+                InferenceMs = _lastInferMs,
+                PrePostMs = total.Elapsed.TotalMilliseconds - infer.Elapsed.TotalMilliseconds,
+            };
+        }
+
+        private static StageRow CountRow(string label, int count, int max, Color color) =>
+            new StageRow(label, count.ToString(), (double)count / max, color);
+
+        // ShapeDetector.Detect returns each stage as its own image on white: triangles
+        // (OrangeRed) and rectangles (RoyalBlue) together, circles, and lines. Turn
+        // those drawings into masks and paint them, in the page's colors, over a
+        // darkened copy of the scene. Lines go first so shapes stay on top.
+        // masks / show are indexed triangles, rectangles, circles, lines.
+        private static Mat RenderFound(Mat scene, Mat[] masks, bool[] show)
+        {
+            Mat canvas = new Mat();
+            scene.ConvertTo(canvas, DepthType.Cv8U, 0.35);
+            if (show[3]) Paint(canvas, masks[3], LineColor);
+            if (show[2]) Paint(canvas, masks[2], CircleColor);
+            if (show[1]) Paint(canvas, masks[1], RectangleColor);
+            if (show[0]) Paint(canvas, masks[0], TriangleColor);
+            return canvas;
+        }
+
+        private static Mat NonWhite(Mat image)
+        {
+            using Mat gray = new Mat();
+            CvInvoke.CvtColor(image, gray, ColorConversion.Bgr2Gray);
+            Mat mask = new Mat();
+            CvInvoke.Threshold(gray, mask, 250, 255, ThresholdType.BinaryInv);
+            return mask;
+        }
+
+        private static Mat ExactColor(Mat image, DrawColor color)
+        {
+            Mat mask = new Mat();
+            using var bgr = new ScalarArray(new Bgr(color).MCvScalar);
+            CvInvoke.InRange(image, bgr, bgr, mask);
+            return mask;
+        }
+
+        private static void Paint(Mat canvas, Mat mask, Color color) =>
+            canvas.SetTo(new MCvScalar(color.Blue * 255, color.Green * 255, color.Red * 255), mask);
+
+        protected override string CodeSnippet => @"using Emgu.CV;
+using Emgu.CV.Models;
+
+using var detector = new ShapeDetector();
+using Mat image = CvInvoke.Imread(""shapes.png"");
+
+// Grayscale → blur → Canny → Hough → contours
+using ShapeDetectionResult r = detector.Detect(image);
+
+Console.WriteLine(
+    $""{r.TriangleCount} triangles, {r.RectangleCount} rectangles, "" +
+    $""{r.CircleCount} circles, {r.LineCount} lines"");
+
+// Each stage is also returned as an image
+CvInvoke.Imwrite(""circles.png"", r.Circles);
+CvInvoke.Imwrite(""lines.png"", r.Lines);";
+
+        protected override void OnClosed()
+        {
+            _scene?.Dispose();
+            _scene = null;
+            if (_masks != null)
+                foreach (var m in _masks) m.Dispose();
+            _masks = null;
+            _detector?.Dispose();
+            _detector = null;
+        }
+
+        // ---------- Random scene ----------
 
         private static readonly DrawColor[] ShapePalette =
         {
             DrawColor.RoyalBlue, DrawColor.SeaGreen, DrawColor.OrangeRed, DrawColor.MediumPurple,
             DrawColor.Goldenrod, DrawColor.Crimson, DrawColor.Teal, DrawColor.DarkOrange, DrawColor.HotPink
         };
-
         /// <summary>
         /// Generate a fresh random scene of shapes. Shapes are placed so they
         /// never overlap each other and are always fully inside the canvas (never
@@ -409,201 +398,6 @@ namespace MauiDemoApp
             else
                 CvInvoke.Polylines(img, vp, true, color, thickness);
         }
-
-        // ---------- Detection ----------
-
-        // The button doubles as New Image / Cancel depending on the busy state.
-        // Idle: generate a fresh scene (which automatically runs detection).
-        private void OnDetectButtonClicked(object sender, EventArgs e)
-        {
-            if (_detecting)
-            {
-                _cancelRequested = true;
-                _redetectPending = false;
-            }
-            else
-            {
-                SetCurrentImage(GenerateRandomShapes());
-            }
-        }
-
-        private async Task RunDetectionAsync()
-        {
-            // If a run is already in progress, just flag that the latest image
-            // should be re-detected once it finishes (handles rapid Random taps).
-            if (_detecting)
-            {
-                _redetectPending = true;
-                return;
-            }
-
-            _detecting = true;
-            _cancelRequested = false;
-            SetBusy(true, "Detecting…");
-
-            try
-            {
-                do
-                {
-                    _redetectPending = false;
-
-                    Mat input = _currentImage;
-                    if (input == null)
-                        break;
-
-                    // Detect on a clone on a background thread: keeps the UI
-                    // responsive (spinner animates) and stays safe if the source
-                    // image is replaced/disposed while detection is running.
-                    using Mat clone = input.Clone();
-                    using ShapeDetectionResult result = await Task.Run(() => _detector.Detect(clone));
-
-                    if (_cancelRequested)
-                        break;
-
-                    _resultsRows.Children.Clear();
-                    BuildResultRow(1, "Original", result.Original);
-                    BuildResultRow(2, "Triangles & Rectangles", result.TrianglesRectangles);
-                    BuildResultRow(3, "Circles", result.Circles);
-                    BuildResultRow(4, "Lines", result.Lines);
-
-                    _statusLabel.Text = $"Completed in {result.ElapsedMilliseconds} ms";
-                    _statusStack.IsVisible = true;
-                    _emptyState.IsVisible = false;
-                }
-                while (_redetectPending && !_cancelRequested);
-            }
-            catch (Exception ex)
-            {
-                _resultsRows.Children.Clear();
-                _statusStack.IsVisible = false;
-                _emptyState.IsVisible = true;
-                _resultsHint.Text = "Detection failed: " + ex.Message;
-            }
-            finally
-            {
-                _detecting = false;
-                SetBusy(false);
-
-                if (_cancelRequested)
-                {
-                    _resultsRows.Children.Clear();
-                    _statusStack.IsVisible = false;
-                    _emptyState.IsVisible = true;
-                    _resultsHint.Text = "Detection cancelled. Tap “New Image” to run again.";
-                }
-            }
-        }
-
-        // Toggle the busy state: spinner overlay + Run/Cancel button.
-        private void SetBusy(bool busy, string message = "Detecting…")
-        {
-            _loadingLabel.Text = message;
-            _loadingOverlay.IsVisible = busy;
-            _loadingIndicator.IsRunning = busy;
-            _detectButton.Text = busy ? "Cancel" : "New Image";
-            _detectButton.BackgroundColor = busy ? CancelColor : Accent;
-            _detectButton.TextColor = busy ? Colors.White : DemoTheme.OnAccent;
-            _detectButton.ImageSource = new FontImageSource
-            {
-                FontFamily = IconFont,
-                Glyph = busy ? GlyphClose : GlyphCube,
-                Color = busy ? Colors.White : DemoTheme.OnAccent,
-                Size = 20
-            };
-        }
-
-        private void BuildResultRow(int number, string title, Mat image)
-        {
-            byte[] png = Encode(image);
-
-            var thumb = new Image { Source = MatToImageSource(png), Aspect = Aspect.AspectFit, WidthRequest = 70, HeightRequest = 50 };
-            var thumbFrame = new Border
-            {
-                WidthRequest = 78,
-                HeightRequest = 56,
-                BackgroundColor = ImageBackground,
-                Stroke = Colors.Transparent,
-                StrokeThickness = 0,
-                Padding = new Thickness(4),
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(2) },
-                VerticalOptions = LayoutOptions.Center,
-                Content = thumb
-            };
-
-            var nameLabel = new Label
-            {
-                Text = $"{number}. {title}",
-                FontFamily = TitleFont,
-                FontSize = 16,
-                TextColor = PrimaryText,
-                VerticalOptions = LayoutOptions.Center
-            };
-
-            var expandIcon = MakeIcon(GlyphShape, PrimaryText, 20);
-            expandIcon.HorizontalOptions = LayoutOptions.End;
-
-            // Flat row: no card or outline, just a hairline between rows.
-            var row = new Grid
-            {
-                Padding = new Thickness(0, 12),
-                ColumnSpacing = 14,
-                BackgroundColor = PageBackground,
-                ColumnDefinitions =
-                {
-                    new ColumnDefinition(GridLength.Auto),
-                    new ColumnDefinition(GridLength.Star),
-                    new ColumnDefinition(GridLength.Auto)
-                }
-            };
-            row.Add(thumbFrame, 0, 0);
-            row.Add(nameLabel, 1, 0);
-            row.Add(expandIcon, 2, 0);
-
-            var tap = new TapGestureRecognizer();
-            tap.Tapped += async (s, e) => await Navigation.PushModalAsync(new FullScreenImagePage(png, $"{number}. {title}"));
-            row.GestureRecognizers.Add(tap);
-
-            if (_resultsRows.Children.Count > 0)
-                _resultsRows.Children.Add(new BoxView { HeightRequest = 1, Color = DemoTheme.Hairline });
-            _resultsRows.Children.Add(row);
-        }
-
-        // ---------- Small UI helpers ----------
-
-        private static Image MakeIcon(string glyph, Color color, double size) => new Image
-        {
-            Source = new FontImageSource { FontFamily = IconFont, Glyph = glyph, Color = color, Size = size },
-            WidthRequest = size,
-            HeightRequest = size,
-            VerticalOptions = LayoutOptions.Center,
-            HorizontalOptions = LayoutOptions.Center
-        };
-
-        private View PipelineStep(string name, string description)
-        {
-            return new VerticalStackLayout
-            {
-                Children =
-                {
-                    new Label { Text = name, FontFamily = TitleFont, FontSize = 14, TextColor = PrimaryText },
-                    new Label { Text = description, FontFamily = BodyFont, FontSize = 13, TextColor = SecondaryText }
-                }
-            };
-        }
-
-        // ---------- Mat <-> ImageSource ----------
-
-        private static byte[] Encode(Mat m)
-        {
-            using VectorOfByte buf = new VectorOfByte();
-            CvInvoke.Imencode(".png", m, buf);
-            return buf.ToArray();
-        }
-
-        private static ImageSource MatToImageSource(Mat m) => MatToImageSource(Encode(m));
-
-        private static ImageSource MatToImageSource(byte[] png) =>
-            ImageSource.FromStream(() => new MemoryStream(png));
     }
 
     /// <summary>

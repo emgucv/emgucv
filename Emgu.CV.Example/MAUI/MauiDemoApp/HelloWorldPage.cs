@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using Emgu.CV;
 using Emgu.CV.CvEnum;
@@ -13,64 +14,114 @@ using DrawPoint = System.Drawing.Point;
 
 namespace MauiDemoApp
 {
-    public class HelloWorldPage : SimpleDemoPage
+    /// <summary>
+    /// The classic smoke test on the <see cref="StagePage"/> layout: draws
+    /// "Hello, world" on a randomly colored image, and lists which parts of
+    /// OpenCV this build includes.
+    /// </summary>
+    public class HelloWorldPage : StagePage
     {
-        private readonly Image _img = new Image { Aspect = Aspect.AspectFit, HeightRequest = 240 };
-        private readonly Random _rng = new Random();
-
-        public HelloWorldPage(string glyph)
-            : base("Hello World", "Library smoke test", glyph, ImageCategory)
+        private static readonly (string label, HersheyFonts font, string code)[] Fonts =
         {
-            Redraw();
+            ("Simplex", HersheyFonts.Simplex, "Simplex"),
+            ("Complex", HersheyFonts.Complex, "Complex"),
+            ("Script", HersheyFonts.ScriptComplex, "ScriptComplex"),
+        };
 
-            AddSection(new VerticalStackLayout
-            {
-                Spacing = 16,
-                Children =
-                {
-                    SectionHeader("Output Image", DemoTheme.TextPill("Draw Again", Redraw)),
-                    DemoTheme.ImageFrame(_img),
-                    Caption("Tap “Draw Again” to re-run the draw with random colors.")
-                }
-            });
+        private readonly Random _rng = new Random();
+        private SegmentedControl _fontControl;
+        private volatile int _fontIndex = 1;
 
-            AddSection(BuildSystemCheck());
-
-            AddAbout("Creates a blue image and writes “Hello, world” in green — the classic smoke test that the whole OpenCV pipeline (create → draw → display) works end to end.");
+        public HelloWorldPage() : base(new StageConfig
+        {
+            Title = "hello world",
+            Category = "Image & 3D",
+            Module = "core + imgproc",
+            Description = "Draw \"Hello, world\" on an image: the library smoke test.",
+            About = "Creates an image, fills it with a random color and writes \"Hello, world\" on it with one of OpenCV's built-in Hershey fonts. If you can see the text, the whole pipeline works end to end: create, draw, encode, display.\n\nThe results list is a system check: the OpenCV version, how many worker threads it uses, and which optional modules were built into this copy of the library.",
+            HasCamera = false,
+            AutoRun = true,
+            RunLabel = "Render",
+            OptionsTitle = "Font",
+            ResultsTitle = "System check",
+            ItemSingular = "check",
+            ItemPlural = "checks",
+            EmptyCaption = "render to run the system check",
+        })
+        {
         }
 
-        // ---- Draw "Hello, world" with a random background/text colour and position ----
-        private void Redraw()
+        protected override View BuildOptions()
         {
-            using Mat m = new Mat(200, 400, DepthType.Cv8U, 3);
+            _fontControl = new SegmentedControl(Fonts.Select(f => f.label), _fontIndex);
+            _fontControl.SelectionChanged += (s, e) =>
+            {
+                _fontIndex = _fontControl.SelectedIndex;
+                SetOptionsValue("Hershey " + Fonts[_fontIndex].label);
+                _ = RunAsync();   // generated demo: refresh right away
+            };
+            return _fontControl;
+        }
+
+        protected override void OnStatusInit()
+        {
+            SetOptionsValue("Hershey " + Fonts[_fontIndex].label);
+            SetStatus("OpenCV " + OpenCvVersion());
+        }
+
+        protected override StageResult RunCore(Mat input)
+        {
+            var draw = Stopwatch.StartNew();
+            using Mat m = new Mat(400, 800, DepthType.Cv8U, 3);
             MCvScalar bg = new MCvScalar(_rng.Next(40, 210), _rng.Next(40, 210), _rng.Next(40, 210));
             m.SetTo(bg);
+            // Dark text on a light background, light text on a dark one.
             double lum = 0.114 * bg.V0 + 0.587 * bg.V1 + 0.299 * bg.V2;
             MCvScalar fg = lum > 140 ? new MCvScalar(25, 25, 25) : new MCvScalar(240, 240, 240);
-            int x = 12 + _rng.Next(0, 90);
-            int y = 95 + _rng.Next(0, 55);
-            CvInvoke.PutText(m, "Hello, world", new DrawPoint(x, y), HersheyFonts.Complex, 1.0, fg, 2, LineType.AntiAlias);
-            _img.Source = ToImageSource(m);
+            int x = 30 + _rng.Next(0, 180);
+            int y = 180 + _rng.Next(0, 120);
+            CvInvoke.PutText(m, "Hello, world", new DrawPoint(x, y), Fonts[_fontIndex].font, 2.0, fg, 3, LineType.AntiAlias);
+            draw.Stop();
+
+            var post = Stopwatch.StartNew();
+            byte[] png = MaskRcnnPage.Encode(m);
+            var rows = SystemCheck();
+            post.Stop();
+
+            return new StageResult
+            {
+                OutputPng = png,
+                OutputWidth = m.Width,
+                OutputHeight = m.Height,
+                Rows = rows,
+                Summary = $"rendered · {draw.Elapsed.TotalMilliseconds:0.0} ms",
+                InferenceMs = draw.Elapsed.TotalMilliseconds,
+                PrePostMs = post.Elapsed.TotalMilliseconds,
+            };
         }
 
-        // ---- "Is it working?" — the smoke test made explicit ----
-        private static View BuildSystemCheck()
+        // ---- "Is it working?": the smoke test made explicit ----
+        private static StageRow[] SystemCheck()
         {
             var cfg = CvInvoke.ConfigDict;
-            var rows = new VerticalStackLayout { Spacing = 0 };
-            rows.Children.Add(InfoRow("OpenCV version", OpenCvVersion(), true));
-            rows.Children.Add(InfoRow("Worker threads", SafeThreads(), true));
-            rows.Children.Add(CheckRow("DNN module", Have(cfg, "HAVE_OPENCV_DNN"), true));
-            rows.Children.Add(CheckRow("Features (SIFT / KAZE)", Have(cfg, "HAVE_OPENCV_FEATURES"), true));
-            rows.Children.Add(CheckRow("Object detection", Have(cfg, "HAVE_OPENCV_OBJDETECT"), true));
-            rows.Children.Add(CheckRow("Tesseract OCR", Have(cfg, "HAVE_EMGUCV_TESSERACT"), true));
-            rows.Children.Add(CheckRow("Video", Have(cfg, "HAVE_OPENCV_VIDEO"), true));
-            rows.Children.Add(CheckRow("QR / Barcode", Have(cfg, "HAVE_OPENCV_WECHAT_QRCODE"), false));
-
-            return new VerticalStackLayout { Spacing = 8, Children = { SectionHeader("System Check"), rows } };
+            return new[]
+            {
+                new StageRow("OpenCV version", OpenCvVersion()),
+                new StageRow("Worker threads", SafeThreads()),
+                Check("DNN module", cfg, "HAVE_OPENCV_DNN"),
+                Check("Features (SIFT / KAZE)", cfg, "HAVE_OPENCV_FEATURES"),
+                Check("Object detection", cfg, "HAVE_OPENCV_OBJDETECT"),
+                Check("Tesseract OCR", cfg, "HAVE_EMGUCV_TESSERACT"),
+                Check("Video", cfg, "HAVE_OPENCV_VIDEO"),
+                Check("QR / Barcode", cfg, "HAVE_OPENCV_WECHAT_QRCODE"),
+            };
         }
 
-        private static bool Have(Dictionary<string, double> cfg, string key) => cfg.TryGetValue(key, out double v) && v != 0;
+        private static StageRow Check(string label, Dictionary<string, double> cfg, string key)
+        {
+            bool ok = cfg.TryGetValue(key, out double v) && v != 0;
+            return new StageRow(label, ok ? "Available" : "Not built", null, ok ? DemoTheme.StatusGreen : DemoTheme.MutedText);
+        }
 
         private static string SafeThreads()
         {
@@ -87,30 +138,18 @@ namespace MauiDemoApp
             catch { return "—"; }
         }
 
-        private static View InfoRow(string label, string value, bool divider)
-        {
-            var grid = new Grid { Padding = new Thickness(0, 12), ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            grid.Add(new Label { Text = label, FontFamily = DemoTheme.BodyFont, FontSize = 16, TextColor = DemoTheme.PrimaryText, VerticalOptions = LayoutOptions.Center }, 0, 0);
-            grid.Add(new Label { Text = value, FontFamily = DemoTheme.TitleFont, FontSize = 15, TextColor = DemoTheme.PrimaryText, VerticalOptions = LayoutOptions.Center }, 1, 0);
-            return Wrap(grid, divider);
-        }
+        protected override string CodeSnippet => $@"using Emgu.CV;
+using Emgu.CV.CvEnum;
+using Emgu.CV.Structure;
 
-        private static View CheckRow(string label, bool ok, bool divider)
-        {
-            var grid = new Grid { Padding = new Thickness(0, 12), ColumnSpacing = 12, ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            grid.Add(DemoTheme.MakeIcon(ok ? MaskRcnnPage.GlyphCheck : MaskRcnnPage.GlyphClose, ok ? DemoTheme.PrimaryText : DemoTheme.MutedText, 18), 0, 0);
-            grid.Add(new Label { Text = label, FontFamily = DemoTheme.BodyFont, FontSize = 16, TextColor = DemoTheme.PrimaryText, VerticalOptions = LayoutOptions.Center }, 1, 0);
-            grid.Add(new Label { Text = ok ? "Available" : "Not built", FontFamily = DemoTheme.TitleFont, FontSize = 13, TextColor = ok ? DemoTheme.PrimaryText : DemoTheme.SecondaryText, VerticalOptions = LayoutOptions.Center }, 2, 0);
-            return Wrap(grid, divider);
-        }
+using Mat image = new Mat(400, 800, DepthType.Cv8U, 3);
+image.SetTo(new MCvScalar(180, 120, 60));   // B, G, R
 
-        private static View Wrap(View row, bool divider)
-        {
-            var stack = new VerticalStackLayout();
-            stack.Children.Add(row);
-            if (divider)
-                stack.Children.Add(new BoxView { HeightRequest = 1, Color = DemoTheme.Hairline });
-            return stack;
-        }
+CvInvoke.PutText(image, ""Hello, world"",
+    new System.Drawing.Point(40, 220),
+    HersheyFonts.{Fonts[_fontIndex].code}, 2.0,
+    new MCvScalar(240, 240, 240), 3, LineType.AntiAlias);
+
+CvInvoke.Imwrite(""hello.png"", image);";
     }
 }

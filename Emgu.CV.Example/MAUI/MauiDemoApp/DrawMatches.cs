@@ -44,13 +44,13 @@ namespace FeatureMatchingExample
             using (UMat uObservedImage = observedImage.GetUMat(AccessType.Read))
             {
                 //extract features from the object image
-                Mat modelDescriptors = new Mat();
+                using Mat modelDescriptors = new Mat();
                 featureDetectorExtractor.DetectAndCompute(uModelImage, null, modelKeyPoints, modelDescriptors, false);
 
                 watch = Stopwatch.StartNew();
 
                 // extract features from the observed image
-                Mat observedDescriptors = new Mat();
+                using Mat observedDescriptors = new Mat();
                 featureDetectorExtractor.DetectAndCompute(uObservedImage, null, observedKeyPoints, observedDescriptors, false);
 
                 // Brute force, slower but more accurate
@@ -113,40 +113,68 @@ namespace FeatureMatchingExample
                 matchCount = mask == null ? 0 : CvInvoke.CountNonZero(mask);
                 objectLocated = homography != null;
 
-                //Draw the matched keypoints
-                Mat result = new Mat();
-                FeaturesToolbox.DrawMatches(modelImage, modelKeyPoints, observedImage, observedKeyPoints,
-                   matches, result, new MCvScalar(255, 255, 255), new MCvScalar(255, 255, 255), mask);
-
-                #region draw the projected region on the image
-
-                if (homography != null)
-                {
-                    //draw a rectangle along the projected model
-                    Rectangle rect = new Rectangle(Point.Empty, modelImage.Size);
-                    PointF[] pts = new PointF[]
-                    {
-                        new PointF(rect.Left, rect.Bottom),
-                        new PointF(rect.Right, rect.Bottom),
-                        new PointF(rect.Right, rect.Top),
-                        new PointF(rect.Left, rect.Top)
-                    };
-                    pts = CvInvoke.PerspectiveTransform(pts, homography);
-
-                    Point[] points = new Point[pts.Length];
-					for (int i = 0; i < points.Length; i++)
-						points[i] = Point.Round(pts[i]);
-
-                    using (VectorOfPoint vp = new VectorOfPoint(points))
-                    {
-                        CvInvoke.Polylines(result, vp, true, new MCvScalar(255, 0, 0, 255), 5);
-                    }
-                }
-                #endregion
-
-                return result;
-
+                return Draw(modelImage, modelKeyPoints, observedImage, observedKeyPoints, matches, mask, homography,
+                   new MCvScalar(255, 255, 255), new MCvScalar(255, 255, 255), new MCvScalar(255, 0, 0, 255), out _);
             }
+        }
+
+        /// <summary>
+        /// Draw the result of <see cref="FindMatch"/>: the model and observed images side by side, the matched
+        /// features and, if a homography was found, the projected outline of the model in the observed image.
+        /// </summary>
+        /// <param name="modelImage">The model image</param>
+        /// <param name="modelKeyPoints">The model key points</param>
+        /// <param name="observedImage">The observed image</param>
+        /// <param name="observedKeyPoints">The observed key points</param>
+        /// <param name="matches">The matches</param>
+        /// <param name="mask">The match mask, non-zero for the matches to draw</param>
+        /// <param name="homography">The homography, or null if the model was not located</param>
+        /// <param name="matchColor">The color of the match lines</param>
+        /// <param name="singlePointColor">The color of the unmatched key points</param>
+        /// <param name="outlineColor">The color of the projected outline</param>
+        /// <param name="outline">The projected outline in the observed image's coordinates, or null if the model was not located</param>
+        /// <returns>The drawing</returns>
+        public static Mat Draw(
+            Mat modelImage, VectorOfKeyPoint modelKeyPoints,
+            Mat observedImage, VectorOfKeyPoint observedKeyPoints,
+            VectorOfVectorOfDMatch matches, Mat mask, Mat homography,
+            MCvScalar matchColor, MCvScalar singlePointColor, MCvScalar outlineColor,
+            out Point[] outline)
+        {
+            outline = null;
+            //Draw the matched keypoints
+            Mat result = new Mat();
+            FeaturesToolbox.DrawMatches(modelImage, modelKeyPoints, observedImage, observedKeyPoints,
+               matches, result, matchColor, singlePointColor, mask);
+
+            #region draw the projected region on the image
+
+            if (homography != null)
+            {
+                //draw a rectangle along the projected model
+                Rectangle rect = new Rectangle(Point.Empty, modelImage.Size);
+                PointF[] pts = new PointF[]
+                {
+                    new PointF(rect.Left, rect.Bottom),
+                    new PointF(rect.Right, rect.Bottom),
+                    new PointF(rect.Right, rect.Top),
+                    new PointF(rect.Left, rect.Top)
+                };
+                pts = CvInvoke.PerspectiveTransform(pts, homography);
+
+                // The observed image is drawn on the left, so its coordinates are unchanged.
+                outline = new Point[pts.Length];
+                for (int i = 0; i < outline.Length; i++)
+                    outline[i] = Point.Round(pts[i]);
+
+                using (VectorOfPoint vp = new VectorOfPoint(outline))
+                {
+                    CvInvoke.Polylines(result, vp, true, outlineColor, 5);
+                }
+            }
+            #endregion
+
+            return result;
         }
     }
 }
