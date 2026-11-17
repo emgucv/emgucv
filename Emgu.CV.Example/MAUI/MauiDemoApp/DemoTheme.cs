@@ -15,29 +15,47 @@ namespace MauiDemoApp
 
         private static Color Pick(string light, string dark) => Color.FromArgb(IsDark ? dark : light);
 
-        internal static Color PageBackground => Pick("#FFFFFF", "#0E0E0E");
-        internal static Color CardBackground => Pick("#FFFFFF", "#0E0E0E");
-        internal static Color PrimaryText => Pick("#111111", "#F2F2F2");
-        internal static Color SecondaryText => Pick("#5E5E5E", "#A3A3A3");
+        internal static Color PageBackground => Pick("#FFFFFF", "#0D0D0D");
+        internal static Color CardBackground => Pick("#FFFFFF", "#0D0D0D");
+        internal static Color PrimaryText => Pick("#0E0E0E", "#F4F4F2");
+        internal static Color SecondaryText => Pick("#6B6B6B", "#A3A3A3");
+        // "Faint" text: section labels, captions, the module line.
         internal static Color MutedText => Pick("#9A9A9A", "#6E6E6E");
         // Buttons, selections and links use the main text color (black, or white in dark mode).
         internal static Color Accent => PrimaryText;
         // Text and icons drawn on top of an Accent-colored pill.
         internal static Color OnAccent => PageBackground;
-        internal static Color Hairline => Pick("#E4E4E4", "#2A2A2A");
-        // Soft grey fill for pills, tags and icon tiles.
-        internal static Color PillBackground => Pick("#EFEFEC", "#222222");
-        // Backdrop behind photos and previews.
-        internal static Color ImageBackground => Pick("#F5F5F5", "#1A1A1A");
-        internal static Color BannerBackground => Pick("#F3F3F3", "#1A1A1A");
+        internal static Color Hairline => Pick("#ECECEA", "#232323");
+        // Fill for chips, tags, secondary buttons and icon tiles.
+        internal static Color PillBackground => Pick("#F1F1EE", "#1E1E1E");
+        // "Well": the backdrop behind photos and the settings panel.
+        internal static Color ImageBackground => Pick("#F5F5F3", "#161616");
+        internal static Color BannerBackground => PillBackground;
         // Half-see-through page color behind loading spinners.
-        internal static Color LoadingVeil => Pick("#B3FFFFFF", "#B30E0E0E");
-        internal static Color LoadingVeilStrong => Pick("#F5FFFFFF", "#F50E0E0E");
+        internal static Color LoadingVeil => Pick("#B3FFFFFF", "#B30D0D0D");
+        internal static Color LoadingVeilStrong => Pick("#F5FFFFFF", "#F50D0D0D");
         // The little grab handle at the top of bottom sheets.
         internal static Color SheetHandle => Pick("#D4D4D4", "#444444");
 
+        // The one accent color (lime). Only for detection boxes, "featured" labels
+        // and live / status marks: nothing else.
+        internal static readonly Color Lime = Color.FromArgb("#D4FF3A");
+        // "On device" / result dot.
+        internal static readonly Color StatusGreen = Color.FromArgb("#22C55E");
+        // Box colors, cycled per class: lime first, then sky, pink and a few more.
+        internal static readonly Color[] BoxColors =
+        {
+            Color.FromArgb("#D4FF3A"), Color.FromArgb("#7DD3FC"), Color.FromArgb("#F9A8D4"),
+            Color.FromArgb("#FDBA74"), Color.FromArgb("#C4B5FD"), Color.FromArgb("#86EFAC"),
+            Color.FromArgb("#FDE047"), Color.FromArgb("#A5F3FC"),
+        };
+        // Dark glass behind badges that sit on top of a photo.
+        internal static readonly Color PhotoBadgeBackground = Color.FromArgb("#B3111111");
+
         internal const string BodyFont = "InterRegular";
         internal const string TitleFont = "InterSemiBold";
+        // Extra-bold display face for the huge lowercase hero / page titles.
+        internal const string HeroFont = "InterDisplayExtraBold";
         internal const string IconFont = "MaterialSymbols";
 
         // Only glyphs present in the bundled (subset) Material Symbols font work;
@@ -46,6 +64,19 @@ namespace MauiDemoApp
         internal const string GlyphInfo = MaskRcnnPage.GlyphInfo;
         internal const string GlyphPlay = MaskRcnnPage.GlyphPlay;
         internal const string GlyphVideo = MaskRcnnPage.GlyphVideo;
+        internal const string GlyphArrowBack = "\ue5c4";
+        internal const string GlyphShare = "\ue6b8";      // ios_share
+        internal const string GlyphCode = "\ue86f";
+        internal const string GlyphFullscreen = "\ue5d0";
+        internal const string GlyphCompare = "\ue3b9";
+        internal const string GlyphPhoto = "\ue251";      // image
+        internal const string GlyphCameraAlt = "\ue3b0";  // photo_camera
+        internal const string GlyphAdd = "\ue145";
+        internal const string GlyphDownload = "\ue171";
+        internal const string GlyphCopy = "\ue14d";
+        internal const string GlyphCheck = "\ue5ca";
+        internal const string GlyphClose = "\ue14c";
+        internal const string GlyphArrowForward = "\ue5c8";
 
         // Pale grey for oversized empty-state type ("no results yet").
         internal static Color EmptyStateText => Pick("#D9D9D9", "#333333");
@@ -144,6 +175,7 @@ namespace MauiDemoApp
                         CharacterSpacing = -titleSize * 0.05,
                         LineHeight = 0.95,
                         TextColor = PrimaryText,
+                        Padding = new Thickness(0, 0, titleSize * 0.1, 0),
                         Margin = new Thickness(-2, 18, 0, 6)
                     }
                 }

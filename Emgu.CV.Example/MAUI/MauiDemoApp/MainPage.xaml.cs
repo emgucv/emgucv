@@ -180,28 +180,7 @@ namespace MauiDemoApp
             };
             yoloButton.Clicked += (sender, args) =>
             {
-                this.Navigation.PushAsync(new ModelShowcasePage(
-                    "YOLO",
-                    "Detect and label objects in a photo.",
-                    demoGlyph("yolo"),
-                    () => new Yolo(),
-                    new[]
-                    {
-                        new ModelShowcasePage.Sample("dog416.png", "Dog & bike", MaskRcnnPage.GlyphImage),
-                        new ModelShowcasePage.Sample("pedestrian.png", "Street", MaskRcnnPage.GlyphImage),
-                        new ModelShowcasePage.Sample("cars_license_plate.png", "Cars", MaskRcnnPage.GlyphImage),
-                    },
-                    pickerTitle: "Model version",
-                    pickerOptions: new[]
-                    {
-                        "Yolo12N", "Yolo12S", "Yolo12M", "Yolo12L", "Yolo12X",
-                        "Yolo11N", "Yolo11S", "Yolo11M", "Yolo11L", "Yolo11X",
-                        "YoloV10N", "YoloV10S", "YoloV10M", "YoloV10B", "YoloV10L", "YoloV10X",
-                        "YoloV8N",
-                    },
-                    about: "Fast, general-purpose object detection: one neural network finds and labels every object in a single pass — hence \"You Only Look Once.\"",
-                    tag: "DNN",
-                    category: "Detection"));
+                this.Navigation.PushAsync(new YoloPage());
             };
 
             superresButton.Clicked += (sender, args) =>
@@ -836,6 +815,7 @@ namespace MauiDemoApp
                 double size = Math.Clamp((width - 2 * SideMargin) / 3.85, 48, 150);
                 wordmark.FontSize = size;
                 wordmark.CharacterSpacing = -size * 0.06;
+                wordmark.Padding = new Thickness(0, 0, size * 0.1, 0);
                 // The font reserves room above lowercase letters for capitals; pull the
                 // wordmark up by that much. Phones also get much less padding around it.
                 bool compact = width < 600;
