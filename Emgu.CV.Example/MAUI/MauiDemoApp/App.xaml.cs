@@ -12,7 +12,7 @@
             // The user can pin light or dark in Settings; "system" leaves it Unspecified.
             UserAppTheme = SettingsPage.SavedAppearance;
             RequestedThemeChanged += (s, e) =>
-                Microsoft.Maui.ApplicationModel.MainThread.BeginInvokeOnMainThread(async () =>
+                Microsoft.Maui.ApplicationModel.MainThread.BeginInvokeOnMainThread(() =>
                 {
                     bool reopenSettings = SettingsPage.ReopenAfterThemeChange;
                     SettingsPage.ReopenAfterThemeChange = false;
@@ -21,8 +21,10 @@
                         var shell = new AppShell();
                         window.Page = shell;
                         // Changed from the Settings page: land back on it, not on home.
+                        // Push once the new shell is on screen (iOS ignores a push
+                        // made before it has loaded).
                         if (reopenSettings)
-                            await shell.Navigation.PushAsync(new SettingsPage(), false);
+                            shell.Loaded += async (ls, le) => await shell.Navigation.PushAsync(new SettingsPage(), false);
                     }
                 });
 

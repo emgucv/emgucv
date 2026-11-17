@@ -12,6 +12,8 @@ namespace MauiDemoApp
 {
     public partial class MainPage : ContentPage
     {
+        private static bool _dnnDiagnosticsEnabled;
+
         //int count = 0;
 
         public MainPage()
@@ -79,7 +81,14 @@ namespace MauiDemoApp
             if (haveDNN)
             {
 #if DEBUG
-                DnnInvoke.EnableModelDiagnostics(true);
+                // Only once per app run: the home page is rebuilt when the theme
+                // changes, and enabling diagnostics a second time throws "Layer
+                // NotImplemented already was registered" (fatal on iOS).
+                if (!_dnnDiagnosticsEnabled)
+                {
+                    DnnInvoke.EnableModelDiagnostics(true);
+                    _dnnDiagnosticsEnabled = true;
+                }
 #endif
             }
 
