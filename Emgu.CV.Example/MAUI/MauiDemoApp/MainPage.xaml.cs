@@ -806,6 +806,7 @@ namespace MauiDemoApp
                 double size = Math.Clamp((width - 2 * SideMargin) / 3.85, 48, 150);
                 wordmark.FontSize = size;
                 wordmark.CharacterSpacing = -size * 0.06;
+                wordmark.Padding = new Thickness(0, 0, size * 0.1, 0);
                 // The font reserves room above lowercase letters for capitals; pull the
                 // wordmark up by that much. Phones also get much less padding around it.
                 bool compact = width < 600;

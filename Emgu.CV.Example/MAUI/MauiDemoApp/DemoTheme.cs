@@ -175,6 +175,7 @@ namespace MauiDemoApp
                         CharacterSpacing = -titleSize * 0.05,
                         LineHeight = 0.95,
                         TextColor = PrimaryText,
+                        Padding = new Thickness(0, 0, titleSize * 0.1, 0),
                         Margin = new Thickness(-2, 18, 0, 6)
                     }
                 }

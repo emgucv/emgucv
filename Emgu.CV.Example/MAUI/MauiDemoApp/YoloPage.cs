@@ -571,6 +571,9 @@ namespace MauiDemoApp
                 LineHeight = 0.9,
                 TextColor = DemoTheme.PrimaryText,
                 Margin = new Thickness(-3, 0, 0, 0),
+                // Tight negative spacing makes the label measure narrower than the
+                // glyphs it draws; pad the right so the last letter isn't clipped.
+                Padding = new Thickness(0, 0, titleSize * 0.12, 0),
                 VerticalOptions = LayoutOptions.End
             };
             var metaRow = new HorizontalStackLayout
@@ -1120,7 +1123,9 @@ foreach (DetectedObject o in objects)
                 float cw = ts.Width + 12, ch = 18;
                 float cx = r.X - 1;
                 float cy = r.Y - ch - 3;
-                if (cy < oy) cy = r.Y + 3;     // no room above: put the chip inside the box
+                // No room above (top of the photo, where the result badge sits too):
+                // put the chip at the bottom of the box instead.
+                if (cy < oy + 34) cy = r.Bottom - ch - 3;
                 canvas.FillColor = b.Color;
                 canvas.FillRoundedRectangle(cx, cy, cw, ch, 5);
                 canvas.FontColor = Color.FromArgb("#0E0E0E");
