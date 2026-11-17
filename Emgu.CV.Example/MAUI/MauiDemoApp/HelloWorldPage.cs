@@ -15,28 +15,26 @@ namespace MauiDemoApp
 {
     public class HelloWorldPage : SimpleDemoPage
     {
-        private static readonly Color Green = Color.FromArgb("#2BA84A");
-
         private readonly Image _img = new Image { Aspect = Aspect.AspectFit, HeightRequest = 240 };
         private readonly Random _rng = new Random();
 
         public HelloWorldPage(string glyph)
-            : base("Hello World", "Library smoke test", glyph)
+            : base("Hello World", "Library smoke test", glyph, ImageCategory)
         {
             Redraw();
 
-            AddCard(Card(new VerticalStackLayout
+            AddSection(new VerticalStackLayout
             {
-                Spacing = 14,
+                Spacing = 16,
                 Children =
                 {
-                    SectionHeader("Output Image", PillButton(MaskRcnnPage.GlyphPlay, "Draw Again", Redraw)),
-                    ImageFrame(_img),
+                    SectionHeader("Output Image", DemoTheme.TextPill("Draw Again", Redraw)),
+                    DemoTheme.ImageFrame(_img),
                     Caption("Tap “Draw Again” to re-run the draw with random colors.")
                 }
-            }));
+            });
 
-            AddCard(BuildSystemCheck());
+            AddSection(BuildSystemCheck());
 
             AddAbout("Creates a blue image and writes “Hello, world” in green — the classic smoke test that the whole OpenCV pipeline (create → draw → display) works end to end.");
         }
@@ -69,7 +67,7 @@ namespace MauiDemoApp
             rows.Children.Add(CheckRow("Video", Have(cfg, "HAVE_OPENCV_VIDEO"), true));
             rows.Children.Add(CheckRow("QR / Barcode", Have(cfg, "HAVE_OPENCV_WECHAT_QRCODE"), false));
 
-            return Card(new VerticalStackLayout { Spacing = 12, Children = { SectionHeader("System Check"), rows } });
+            return new VerticalStackLayout { Spacing = 8, Children = { SectionHeader("System Check"), rows } };
         }
 
         private static bool Have(Dictionary<string, double> cfg, string key) => cfg.TryGetValue(key, out double v) && v != 0;
@@ -92,17 +90,17 @@ namespace MauiDemoApp
         private static View InfoRow(string label, string value, bool divider)
         {
             var grid = new Grid { Padding = new Thickness(0, 12), ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            grid.Add(new Label { Text = label, FontFamily = MaskRcnnPage.BodyFont, FontSize = 16, TextColor = MaskRcnnPage.PrimaryText, VerticalOptions = LayoutOptions.Center }, 0, 0);
-            grid.Add(new Label { Text = value, FontFamily = MaskRcnnPage.TitleFont, FontSize = 15, TextColor = MaskRcnnPage.Accent, VerticalOptions = LayoutOptions.Center }, 1, 0);
+            grid.Add(new Label { Text = label, FontFamily = DemoTheme.BodyFont, FontSize = 16, TextColor = DemoTheme.PrimaryText, VerticalOptions = LayoutOptions.Center }, 0, 0);
+            grid.Add(new Label { Text = value, FontFamily = DemoTheme.TitleFont, FontSize = 15, TextColor = DemoTheme.PrimaryText, VerticalOptions = LayoutOptions.Center }, 1, 0);
             return Wrap(grid, divider);
         }
 
         private static View CheckRow(string label, bool ok, bool divider)
         {
             var grid = new Grid { Padding = new Thickness(0, 12), ColumnSpacing = 12, ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            grid.Add(MaskRcnnPage.MakeIcon(ok ? MaskRcnnPage.GlyphCheck : MaskRcnnPage.GlyphClose, ok ? Green : MaskRcnnPage.SecondaryText, 18), 0, 0);
-            grid.Add(new Label { Text = label, FontFamily = MaskRcnnPage.BodyFont, FontSize = 16, TextColor = MaskRcnnPage.PrimaryText, VerticalOptions = LayoutOptions.Center }, 1, 0);
-            grid.Add(new Label { Text = ok ? "Available" : "Not built", FontFamily = MaskRcnnPage.TitleFont, FontSize = 13, TextColor = ok ? Green : MaskRcnnPage.SecondaryText, VerticalOptions = LayoutOptions.Center }, 2, 0);
+            grid.Add(DemoTheme.MakeIcon(ok ? MaskRcnnPage.GlyphCheck : MaskRcnnPage.GlyphClose, ok ? DemoTheme.PrimaryText : DemoTheme.MutedText, 18), 0, 0);
+            grid.Add(new Label { Text = label, FontFamily = DemoTheme.BodyFont, FontSize = 16, TextColor = DemoTheme.PrimaryText, VerticalOptions = LayoutOptions.Center }, 1, 0);
+            grid.Add(new Label { Text = ok ? "Available" : "Not built", FontFamily = DemoTheme.TitleFont, FontSize = 13, TextColor = ok ? DemoTheme.PrimaryText : DemoTheme.SecondaryText, VerticalOptions = LayoutOptions.Center }, 2, 0);
             return Wrap(grid, divider);
         }
 
@@ -111,7 +109,7 @@ namespace MauiDemoApp
             var stack = new VerticalStackLayout();
             stack.Children.Add(row);
             if (divider)
-                stack.Children.Add(new BoxView { HeightRequest = 1, Color = MaskRcnnPage.RowBorder });
+                stack.Children.Add(new BoxView { HeightRequest = 1, Color = DemoTheme.Hairline });
             return stack;
         }
     }

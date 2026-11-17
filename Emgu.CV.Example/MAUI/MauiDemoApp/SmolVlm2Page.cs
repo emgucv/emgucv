@@ -9,8 +9,6 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Models;
 
-using Microsoft.Maui.Controls.Shapes;
-
 namespace MauiDemoApp
 {
     /// <summary>
@@ -19,7 +17,7 @@ namespace MauiDemoApp
     /// with KV-cached generation.
     ///
     /// The layout comes from <see cref="ChatShowcasePage"/>; this page adds the
-    /// image card the conversation is about.
+    /// image section the conversation is about.
     /// </summary>
     public class SmolVlm2Page : ChatShowcasePage
     {
@@ -34,7 +32,6 @@ namespace MauiDemoApp
         public SmolVlm2Page()
             : base(
                 title: "Chat with Image",
-                heroTitle: "Chat with Image",
                 heroSubtitle: "Ask questions about a photo — the vision model answers on your device.",
                 glyph: GlyphText,
                 // Exact byte counts of the published files, so a half-finished
@@ -51,12 +48,13 @@ namespace MauiDemoApp
                             ("decoder_raw.onnx_data", 651896064L)
                         }, true, weightBytes: 1144460546L)
                 },
-                // No header pill: this module's action is "Change Photo", which
-                // belongs above the image it changes, the way the detection pages
-                // place it. BuildExtraCard puts it there.
-                actionGlyph: null,
+                // No header pill: this module's action is "Change", which belongs
+                // above the image it changes, the way the detection pages place
+                // it. BuildExtraCard puts it there.
                 actionText: null,
-                composerPlaceholder: "Ask a question about the image…")
+                composerPlaceholder: "Ask a question about the image…",
+                tag: "VLM",
+                category: "Chat")
         {
         }
 
@@ -64,37 +62,16 @@ namespace MauiDemoApp
 
         protected override View BuildExtraCard()
         {
-            _preview = new Image { Aspect = Aspect.AspectFit, HeightRequest = 240 };
+            _preview = new Image { Aspect = Aspect.AspectFit, HeightRequest = 300 };
 
-            var frame = new Border
-            {
-                BackgroundColor = MaskRcnnPage.ImageBackground,
-                Stroke = MaskRcnnPage.RowBorder,
-                StrokeThickness = 1,
-                Padding = new Thickness(10),
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(16) },
-                Content = _preview
-            };
+            // The photo sits flush on a light grey backdrop, like the detection pages.
+            var frame = DemoTheme.ImageFrame(_preview);
 
             var header = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            header.Add(new Label
-            {
-                Text = "Image",
-                FontFamily = MaskRcnnPage.TitleFont,
-                FontSize = 17,
-                TextColor = MaskRcnnPage.PrimaryText,
-                VerticalOptions = LayoutOptions.Center
-            }, 0, 0);
-            header.Add(BuildActionPill(MaskRcnnPage.GlyphImage, "Change Photo"), 1, 0);
+            header.Add(DemoTheme.SectionLabel("Image"), 0, 0);
+            header.Add(BuildActionPill("Change"), 1, 0);
 
-            return new Border
-            {
-                BackgroundColor = MaskRcnnPage.CardBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                Padding = new Thickness(16),
-                Content = new VerticalStackLayout { Spacing = 12, Children = { header, frame } }
-            };
+            return new VerticalStackLayout { Spacing = 16, Children = { header, frame } };
         }
 
         protected override async void OnAppearing()

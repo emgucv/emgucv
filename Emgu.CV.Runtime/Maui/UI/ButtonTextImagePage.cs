@@ -142,13 +142,16 @@ namespace Emgu.CV.Platform.Maui.UI
         public ButtonTextImagePage(Microsoft.Maui.Controls.Button[] additionalButtons = null)
         {
             // ---------- Palette (matches the home screen) ----------
-            var pageBackground = Microsoft.Maui.Graphics.Color.FromArgb("#EEF1F8");
-            var cardBackground = Microsoft.Maui.Graphics.Colors.White;
-            var primaryText = Microsoft.Maui.Graphics.Color.FromArgb("#1A1C2E");
-            var secondaryText = Microsoft.Maui.Graphics.Color.FromArgb("#8A8FA3");
-            var accent = Microsoft.Maui.Graphics.Color.FromArgb("#3D7BF7");
-            var rowBorder = Microsoft.Maui.Graphics.Color.FromArgb("#ECEEF5");
-            var imageBackground = Microsoft.Maui.Graphics.Color.FromArgb("#F2F2F7");
+            // Follows the device's light / dark setting.
+            bool dark = Microsoft.Maui.Controls.Application.Current?.RequestedTheme == Microsoft.Maui.ApplicationModel.AppTheme.Dark;
+            Func<string, string, Microsoft.Maui.Graphics.Color> pick = (light, darkHex) => Microsoft.Maui.Graphics.Color.FromArgb(dark ? darkHex : light);
+            var pageBackground = pick("#FFFFFF", "#0E0E0E");
+            var cardBackground = pageBackground;
+            var primaryText = pick("#111111", "#F2F2F2");
+            var secondaryText = pick("#5E5E5E", "#A3A3A3");
+            var accent = primaryText;
+            var rowBorder = pick("#E4E4E4", "#2A2A2A");
+            var imageBackground = pick("#F5F5F5", "#1A1A1A");
             const string bodyFont = "InterRegular";
             const string mediumFont = "InterSemiBold";
 
@@ -156,7 +159,7 @@ namespace Emgu.CV.Platform.Maui.UI
             Action<Microsoft.Maui.Controls.Button> stylePrimaryButton = (button) =>
             {
                 button.BackgroundColor = accent;
-                button.TextColor = Microsoft.Maui.Graphics.Colors.White;
+                button.TextColor = pageBackground;
                 button.FontFamily = mediumFont;
                 button.FontSize = 16;
                 button.CornerRadius = 14;

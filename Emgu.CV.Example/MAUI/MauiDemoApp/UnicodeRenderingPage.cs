@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
@@ -34,50 +34,54 @@ namespace MauiDemoApp
             FontSize = 16,
             HeightRequest = 128,
             BackgroundColor = Colors.Transparent,
-            TextColor = MaskRcnnPage.PrimaryText
+            TextColor = DemoTheme.PrimaryText
         };
-        private readonly Label _status = new Label { Text = "Ready", FontFamily = MaskRcnnPage.TitleFont, FontSize = 13, TextColor = MaskRcnnPage.Accent };
+        private readonly Label _status = new Label { Text = "Ready", FontFamily = DemoTheme.TitleFont, FontSize = 13, TextColor = DemoTheme.PrimaryText };
 
         private FontFace _fontFace;
         private bool _busy;
         private bool _drawn;
 
         public UnicodeRenderingPage(string glyph)
-            : base("Unicode Rendering", "Draw text in any language on an image", glyph)
+            : base("Unicode Rendering", "Draw text in any language on an image", glyph, ImageCategory)
         {
-            AddCard(Card(new VerticalStackLayout
+            AddSection(new VerticalStackLayout
             {
-                Spacing = 14,
+                Spacing = 16,
                 Children =
                 {
                     SectionHeader("Rendered Image"),
-                    ImageFrame(_image),
+                    DemoTheme.ImageFrame(_image),
                     Caption("Your text drawn with OpenCV's Unicode text rendering.")
                 }
-            }));
+            });
 
+            // Flat light-grey text box, no outline.
             var editorFrame = new Border
             {
-                BackgroundColor = MaskRcnnPage.ImageBackground,
-                Stroke = MaskRcnnPage.RowBorder,
-                StrokeThickness = 1,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(14) },
+                BackgroundColor = DemoTheme.ImageBackground,
+                Stroke = Colors.Transparent,
+                StrokeThickness = 0,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(2) },
                 Padding = new Thickness(10, 2),
                 Content = _editor
             };
 
             var inputChildren = new VerticalStackLayout { Spacing = 14 };
-            inputChildren.Children.Add(new Label { Text = "Your Text", FontFamily = MaskRcnnPage.TitleFont, FontSize = 17, TextColor = MaskRcnnPage.PrimaryText });
+            inputChildren.Children.Add(SectionHeader("Your Text"));
             inputChildren.Children.Add(Caption("Type anything — English, 中文, 日本語, 한국어, Русский — one line each."));
             inputChildren.Children.Add(editorFrame);
-            inputChildren.Children.Add(PrimaryButton("Draw", MaskRcnnPage.GlyphPlay, (s, e) => DrawText()));
+            AddSection(inputChildren);
 
             var statusRow = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            statusRow.Add(new Label { Text = "Renderer: FontFace", FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = MaskRcnnPage.SecondaryText, VerticalOptions = LayoutOptions.Center }, 0, 0);
+            statusRow.Add(new Label { Text = "Renderer: FontFace", FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText, VerticalOptions = LayoutOptions.Center }, 0, 0);
             statusRow.Add(_status, 1, 0);
-            inputChildren.Children.Add(statusRow);
 
-            AddCard(Card(inputChildren));
+            AddContent(new VerticalStackLayout
+            {
+                Spacing = 12,
+                Children = { PrimaryButton("Draw", MaskRcnnPage.GlyphPlay, (s, e) => DrawText()), statusRow }
+            });
 
             AddAbout("Plain OpenCV text only supports ASCII. This renders any Unicode text (CJK, Cyrillic, …) onto an image using the FontFace text API.");
         }

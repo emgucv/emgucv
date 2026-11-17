@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
@@ -34,15 +34,15 @@ namespace MauiDemoApp
     /// </summary>
     public class MaskRcnnPage : ContentPage
     {
-        // ---------- Palette ----------
-        internal static readonly Color PageBackground = Color.FromArgb("#EEF1F8");
-        internal static readonly Color CardBackground = Colors.White;
-        internal static readonly Color PrimaryText = Color.FromArgb("#1A1C2E");
-        internal static readonly Color SecondaryText = Color.FromArgb("#8A8FA3");
-        internal static readonly Color Accent = Color.FromArgb("#3D7BF7");
-        internal static readonly Color RowBorder = Color.FromArgb("#ECEEF5");
-        internal static readonly Color TileBackground = Color.FromArgb("#E8EFFE");
-        internal static readonly Color ImageBackground = Color.FromArgb("#F2F2F7");
+        // ---------- Palette (from DemoTheme) ----------
+        internal static Color PageBackground => DemoTheme.PageBackground;
+        internal static Color CardBackground => DemoTheme.CardBackground;
+        internal static Color PrimaryText => DemoTheme.PrimaryText;
+        internal static Color SecondaryText => DemoTheme.SecondaryText;
+        internal static Color Accent => DemoTheme.Accent;
+        internal static Color RowBorder => DemoTheme.Hairline;
+        internal static Color TileBackground => DemoTheme.PillBackground;
+        internal static Color ImageBackground => DemoTheme.ImageBackground;
 
         internal const string BodyFont = "InterRegular";
         internal const string TitleFont = "InterSemiBold";
@@ -84,10 +84,16 @@ namespace MauiDemoApp
         private bool _defaultLoaded;
         private byte[] _lastResultPng;
 
+        // Default empty-state text, restored by ResetResults.
+        private const string EmptyTitle = "no detections yet";
+        private const string EmptyCaption = "run a detection to see objects here";
+
         // UI we update at runtime.
         private readonly Image _previewImage;
         private readonly VerticalStackLayout _resultsRows;
         private readonly VerticalStackLayout _emptyState;
+        private readonly Label _emptyTitle;
+        private readonly Label _emptyCaption;
         private readonly Label _resultsCountLabel;
         private readonly Image _resultsCheck;
         private readonly Label _resultsTimeLabel;
@@ -110,64 +116,17 @@ namespace MauiDemoApp
             BackgroundColor = PageBackground;
             Shell.SetNavBarIsVisible(this, false);
 
-            // ---------- Header ----------
-            var headerTile = new Border
-            {
-                WidthRequest = 64,
-                HeightRequest = 64,
-                BackgroundColor = CardBackground,
-                Stroke = RowBorder,
-                StrokeThickness = 1,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(18) },
-                VerticalOptions = LayoutOptions.Start,
-                Content = MakeIcon(GlyphMask, Accent, 32)
-            };
-            var titleLabel = new Label { Text = "Mask R-CNN", FontFamily = TitleFont, FontSize = 30, TextColor = PrimaryText };
-            var subtitleLabel = new Label
-            {
-                Text = "Find, label and outline objects in a photo using AI.",
-                FontFamily = BodyFont,
-                FontSize = 15,
-                TextColor = SecondaryText,
-                Margin = new Thickness(0, 2, 0, 0)
-            };
-            var titleStack = new VerticalStackLayout { VerticalOptions = LayoutOptions.Center, Children = { titleLabel, subtitleLabel } };
+            // ---------- Header: plain icons, a giant lowercase title, then tag / category ----------
+            var header = DemoTheme.PageHeader(this, "Mask R-CNN", "Find, label and outline objects in a photo using AI.", GlyphMask, "DNN", "Detection");
 
-            var backButton = CircleButton(GlyphChevronLeft, async () => await Navigation.PopAsync());
-            var infoButton = CircleButton(GlyphInfo, async () => await Navigation.PushAsync(new AboutPage()));
-
-            var topRow = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            topRow.Add(backButton, 0, 0);
-            topRow.Add(infoButton, 2, 0);
-
-            var headerBody = new Grid
-            {
-                ColumnSpacing = 16,
-                Margin = new Thickness(0, 12, 0, 0),
-                ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) }
-            };
-            headerBody.Add(headerTile, 0, 0);
-            headerBody.Add(titleStack, 1, 0);
-
-            var header = new VerticalStackLayout { Children = { topRow, headerBody } };
-
-            // ---------- Input Image card ----------
-            var inputTitle = new Label { Text = "Input Image", FontFamily = TitleFont, FontSize = 19, TextColor = PrimaryText, VerticalOptions = LayoutOptions.Center };
-            var changePhoto = PillButton(GlyphImage, "Change Photo", OnChangePhoto);
+            // ---------- Input image ----------
             var inputHeader = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            inputHeader.Add(inputTitle, 0, 0);
-            inputHeader.Add(changePhoto, 1, 0);
+            inputHeader.Add(DemoTheme.SectionLabel("Input Image"), 0, 0);
+            inputHeader.Add(DemoTheme.TextPill("Change", () => OnChangePhoto(this, EventArgs.Empty)), 1, 0);
 
+            // The photo sits flush on a light grey backdrop, like a product shot.
             _previewImage = new Image { Aspect = Aspect.AspectFit, HeightRequest = 340 };
-            var previewFrame = new Border
-            {
-                BackgroundColor = ImageBackground,
-                Stroke = RowBorder,
-                StrokeThickness = 1,
-                Padding = new Thickness(10),
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(16) },
-                Content = _previewImage
-            };
+            var previewFrame = DemoTheme.ImageFrame(_previewImage);
             // Tap the (annotated) image to view it full-screen.
             var previewTap = new TapGestureRecognizer();
             previewTap.Tapped += async (s, e) =>
@@ -177,94 +136,58 @@ namespace MauiDemoApp
             };
             previewFrame.GestureRecognizers.Add(previewTap);
 
-            var inputCard = new Border
-            {
-                BackgroundColor = CardBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                Padding = new Thickness(16),
-                Content = new VerticalStackLayout { Spacing = 14, Children = { inputHeader, previewFrame } }
-            };
+            var inputSection = new VerticalStackLayout { Spacing = 16, Children = { inputHeader, previewFrame } };
 
-            // ---------- Buttons ----------
-            _detectButton = new Button
-            {
-                Text = "Detect Image",
-                FontFamily = TitleFont,
-                FontSize = 17,
-                BackgroundColor = Accent,
-                TextColor = Colors.White,
-                CornerRadius = 16,
-                HeightRequest = 56,
-                ImageSource = new FontImageSource { FontFamily = IconFont, Glyph = GlyphPlay, Color = Colors.White, Size = 20 },
-                ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 8)
-            };
+            // ---------- Buttons: black pill for the main action, grey pill for live ----------
+            _detectButton = DemoTheme.PrimaryButton("Detect Image", DemoTheme.GlyphPlay);
             _detectButton.Clicked += OnDetectClicked;
 
-            var liveButton = new Button
-            {
-                Text = "Live Detection",
-                FontFamily = TitleFont,
-                FontSize = 16,
-                BackgroundColor = CardBackground,
-                TextColor = Accent,
-                BorderColor = Accent,
-                BorderWidth = 1,
-                CornerRadius = 16,
-                HeightRequest = 52,
-                ImageSource = new FontImageSource { FontFamily = IconFont, Glyph = GlyphVideo, Color = Accent, Size = 20 },
-                ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 8)
-            };
+            var liveButton = DemoTheme.SecondaryButton("Live Detection", DemoTheme.GlyphVideo);
             liveButton.Clicked += OnLiveDetection;
 
             var buttonStack = new VerticalStackLayout { Spacing = 12, Children = { _detectButton, liveButton } };
 
-            // ---------- Results card ----------
-            var resultsTitle = new Label { Text = "Results", FontFamily = TitleFont, FontSize = 19, TextColor = PrimaryText, VerticalOptions = LayoutOptions.Center };
-
-            _resultsCountLabel = new Label { Text = "0 objects", FontFamily = BodyFont, FontSize = 14, TextColor = SecondaryText, VerticalOptions = LayoutOptions.Center };
-            _resultsCheck = MakeIcon(GlyphCheck, Color.FromArgb("#2BA84A"), 18);
+            // ---------- Results ----------
+            _resultsCountLabel = new Label { Text = "0 objects", TextTransform = TextTransform.Uppercase, FontFamily = BodyFont, FontSize = 12, CharacterSpacing = 1.5, TextColor = SecondaryText, VerticalOptions = LayoutOptions.Center };
+            _resultsCheck = MakeIcon(GlyphCheck, PrimaryText, 16);
             _resultsCheck.IsVisible = false;
-            _resultsTimeLabel = new Label { Text = "", FontFamily = BodyFont, FontSize = 12, TextColor = SecondaryText, IsVisible = false, HorizontalTextAlignment = TextAlignment.End };
+            _resultsTimeLabel = new Label { Text = "", FontFamily = BodyFont, FontSize = 12, TextColor = DemoTheme.MutedText, IsVisible = false, HorizontalTextAlignment = TextAlignment.End };
             var countRow = new HorizontalStackLayout { Spacing = 6, HorizontalOptions = LayoutOptions.End, Children = { _resultsCountLabel, _resultsCheck } };
             var statusStack = new VerticalStackLayout { HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center, Children = { countRow, _resultsTimeLabel } };
 
             var resultsHeader = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            resultsHeader.Add(resultsTitle, 0, 0);
+            resultsHeader.Add(DemoTheme.SectionLabel("Results"), 0, 0);
             resultsHeader.Add(statusStack, 1, 0);
 
+            // Empty state: oversized pale type instead of an icon. The title and caption
+            // are rewritten by OnDetectClicked / ShowError and restored by ResetResults.
+            _emptyTitle = DemoTheme.EmptyStateTitle(EmptyTitle);
+            _emptyCaption = new Label { Text = EmptyCaption, FontFamily = BodyFont, FontSize = 14, TextColor = SecondaryText };
             _emptyState = new VerticalStackLayout
             {
-                Spacing = 6,
-                Padding = new Thickness(0, 18, 0, 8),
-                HorizontalOptions = LayoutOptions.Center,
-                Children =
-                {
-                    MakeIcon(GlyphImage, Color.FromArgb("#C2C7D6"), 40),
-                    new Label { Text = "No detections yet", FontFamily = TitleFont, FontSize = 15, TextColor = PrimaryText, HorizontalTextAlignment = TextAlignment.Center },
-                    new Label { Text = "Tap “Detect Image” to analyze.", FontFamily = BodyFont, FontSize = 13, TextColor = SecondaryText, HorizontalTextAlignment = TextAlignment.Center }
-                }
+                Spacing = 8,
+                Padding = new Thickness(0, 4, 0, 8),
+                Children = { _emptyTitle, _emptyCaption }
             };
 
             _resultsRows = new VerticalStackLayout { Spacing = 0 };
 
-            var resultsCard = new Border
-            {
-                BackgroundColor = CardBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                Padding = new Thickness(16),
-                Content = new VerticalStackLayout { Spacing = 12, Children = { resultsHeader, _emptyState, _resultsRows } }
-            };
+            var resultsSection = new VerticalStackLayout { Spacing = 16, Children = { resultsHeader, _emptyState, _resultsRows } };
 
             var content = new VerticalStackLayout
             {
-                Spacing = 18,
+                Spacing = 20,
                 Padding = new Thickness(20, 16, 20, 28),
                 Children =
                 {
-                    header, inputCard, buttonStack, resultsCard,
-                    ModelShowcasePage.BuildAboutCard("Detects objects and traces the exact outline (mask) of each one, with a label and confidence score.")
+                    header,
+                    DemoTheme.Divider(),
+                    inputSection,
+                    buttonStack,
+                    DemoTheme.Divider(),
+                    resultsSection,
+                    DemoTheme.Divider(),
+                    ModelShowcasePage.BuildAboutCard("Detects objects and traces the exact outline (mask) of each one, with a label and confidence score.", flush: true)
                 }
             };
 
@@ -282,7 +205,7 @@ namespace MauiDemoApp
                 VerticalOptions = LayoutOptions.Center,
                 Content = new VerticalStackLayout { Spacing = 14, WidthRequest = 240, Children = { _loadingIndicator, _loadingLabel } }
             };
-            _loadingOverlay = new Grid { IsVisible = false, BackgroundColor = Color.FromArgb("#B3EEF1F8"), Children = { loadingCard } };
+            _loadingOverlay = new Grid { IsVisible = false, BackgroundColor = DemoTheme.LoadingVeil, Children = { loadingCard } };
 
             // ---------- Change Photo sheet overlay (covers the whole page) ----------
             _sheetList = new VerticalStackLayout { Spacing = 0 };
@@ -384,7 +307,7 @@ namespace MauiDemoApp
         private void BuildSheet()
         {
             _sheetList.Children.Clear();
-            _sheetList.Children.Add(new BoxView { WidthRequest = 40, HeightRequest = 5, CornerRadius = 3, Color = Color.FromArgb("#D5D8E0"), HorizontalOptions = LayoutOptions.Center, Margin = new Thickness(0, 10, 0, 6) });
+            _sheetList.Children.Add(new BoxView { WidthRequest = 40, HeightRequest = 5, CornerRadius = 3, Color = DemoTheme.SheetHandle, HorizontalOptions = LayoutOptions.Center, Margin = new Thickness(0, 10, 0, 6) });
             _sheetList.Children.Add(new Label { Text = "Change Photo", FontFamily = TitleFont, FontSize = 20, TextColor = PrimaryText, HorizontalOptions = LayoutOptions.Center, Margin = new Thickness(0, 0, 0, 6) });
 
             _sheetList.Children.Add(SheetSection("SAMPLE IMAGES"));
@@ -398,7 +321,7 @@ namespace MauiDemoApp
                 _sheetList.Children.Add(SheetRow(GlyphCamera, "Take Photo", "camera", false));
 
             var cancelLabel = new Label { Text = "Cancel", FontFamily = TitleFont, FontSize = 17, TextColor = Accent, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
-            var cancel = new Border { BackgroundColor = Color.FromArgb("#F2F2F7"), Stroke = Colors.Transparent, StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(14) }, HeightRequest = 52, Margin = new Thickness(0, 14, 0, 0), Content = cancelLabel };
+            var cancel = new Border { BackgroundColor = DemoTheme.BannerBackground, Stroke = Colors.Transparent, StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(14) }, HeightRequest = 52, Margin = new Thickness(0, 14, 0, 0), Content = cancelLabel };
             var cancelTap = new TapGestureRecognizer();
             cancelTap.Tapped += (s, e) => CloseSheet(null);
             cancel.GestureRecognizers.Add(cancelTap);
@@ -488,6 +411,8 @@ namespace MauiDemoApp
         {
             _resultsRows.Children.Clear();
             _emptyState.IsVisible = true;
+            _emptyTitle.Text = EmptyTitle;
+            _emptyCaption.Text = EmptyCaption;
             _resultsCountLabel.Text = "0 objects";
             _resultsCountLabel.TextColor = SecondaryText;
             _resultsCheck.IsVisible = false;
@@ -542,8 +467,8 @@ namespace MauiDemoApp
                 if (found.Count == 0)
                 {
                     _emptyState.IsVisible = true;
-                    ((Label)_emptyState.Children[1]).Text = "No objects found";
-                    ((Label)_emptyState.Children[2]).Text = "Try a different photo.";
+                    _emptyTitle.Text = "no objects found";
+                    _emptyCaption.Text = "Try a different photo.";
                 }
             }
             catch (Exception ex)
@@ -609,8 +534,8 @@ namespace MauiDemoApp
         {
             _resultsRows.Children.Clear();
             _emptyState.IsVisible = true;
-            ((Label)_emptyState.Children[1]).Text = "Something went wrong";
-            ((Label)_emptyState.Children[2]).Text = message;
+            _emptyTitle.Text = "something went wrong";
+            _emptyCaption.Text = message;
         }
 
         private void SetBusy(bool busy, string message = "Working…")
@@ -701,50 +626,6 @@ namespace MauiDemoApp
             VerticalOptions = LayoutOptions.Center,
             HorizontalOptions = LayoutOptions.Center
         };
-
-        private Border CircleButton(string glyph, Action onTap)
-        {
-            var cb = new Border
-            {
-                WidthRequest = 44,
-                HeightRequest = 44,
-                BackgroundColor = CardBackground,
-                Stroke = RowBorder,
-                StrokeThickness = 1,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                VerticalOptions = LayoutOptions.Center,
-                Content = MakeIcon(glyph, PrimaryText, 22)
-            };
-            var t = new TapGestureRecognizer();
-            t.Tapped += (s, e) => onTap();
-            cb.GestureRecognizers.Add(t);
-            return cb;
-        }
-
-        private Border PillButton(string glyph, string text, EventHandler onTap)
-        {
-            var pill = new Border
-            {
-                BackgroundColor = TileBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(13) },
-                Padding = new Thickness(14, 9),
-                VerticalOptions = LayoutOptions.Center,
-                Content = new HorizontalStackLayout
-                {
-                    Spacing = 7,
-                    Children =
-                    {
-                        MakeIcon(glyph, Accent, 18),
-                        new Label { Text = text, FontFamily = TitleFont, FontSize = 14, TextColor = Accent, VerticalOptions = LayoutOptions.Center }
-                    }
-                }
-            };
-            var t = new TapGestureRecognizer();
-            t.Tapped += (s, e) => onTap(s, e);
-            pill.GestureRecognizers.Add(t);
-            return pill;
-        }
 
         // ---------- Mat <-> ImageSource ----------
 
@@ -865,10 +746,10 @@ namespace MauiDemoApp
             // ---------- Scanning pill (overlaid on the camera) ----------
             var dot = new Border { WidthRequest = 10, HeightRequest = 10, BackgroundColor = Color.FromArgb("#2BE07A"), Stroke = Colors.Transparent, StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(5) }, VerticalOptions = LayoutOptions.Center };
             var scanningTitle = new Label { Text = "Scanning…", FontFamily = MaskRcnnPage.TitleFont, FontSize = 15, TextColor = Colors.White };
-            var scanningSub = new Label { Text = "Point your camera at objects", FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = Color.FromArgb("#D6D6DE"), HorizontalOptions = LayoutOptions.Center };
+            var scanningSub = new Label { Text = "Point your camera at objects", FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = Color.FromArgb("#D0D0D0"), HorizontalOptions = LayoutOptions.Center };
             var pill = new Border
             {
-                BackgroundColor = Color.FromArgb("#E01A1C2E"),
+                BackgroundColor = Color.FromArgb("#E0111111"),
                 Stroke = Colors.Transparent,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(18) },
                 Padding = new Thickness(22, 12),
@@ -902,7 +783,7 @@ namespace MauiDemoApp
             _loadingLabel = new Label { Text = "Starting camera…", FontFamily = MaskRcnnPage.BodyFont, FontSize = 15, TextColor = MaskRcnnPage.PrimaryText, HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center };
             var loadingBox = new VerticalStackLayout { Spacing = 14, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, Children = { _spinner, _loadingLabel } };
 
-            _overlay = new Grid { BackgroundColor = Color.FromArgb("#F5EEF1F8"), Children = { loadingBox } };
+            _overlay = new Grid { BackgroundColor = DemoTheme.LoadingVeilStrong, Children = { loadingBox } };
 
             var root = new Grid { RowDefinitions = { new RowDefinition(GridLength.Auto), new RowDefinition(GridLength.Star) } };
             root.Add(topBar, 0, 0);

@@ -10,7 +10,7 @@ namespace MauiDemoApp
 {
     /// <summary>
     /// Chat demo using a Qwen language model running on the dnn module. The model
-    /// can be swapped in the model card; the conversation history is kept per
+    /// can be swapped in the model section; the conversation history is kept per
     /// session and each turn re-prefills the transcript with KV-cached generation
     /// for the response.
     ///
@@ -37,7 +37,6 @@ namespace MauiDemoApp
         public QwenChatPage()
             : base(
                 title: "Qwen Chat",
-                heroTitle: "Chat with Qwen",
                 heroSubtitle: "Local language models for fast, private and secure conversations.",
                 glyph: GlyphText,
                 // Sizes are the exact byte counts of the published files, so a
@@ -58,9 +57,10 @@ namespace MauiDemoApp
                         new[] { ("tokenizer.json", 7031645L), ("model.onnx", 1125445L), ("model.onnx_data", 2520669824L) },
                         false, Variant.Qwen25, weightBytes: 2528826914L)
                 },
-                actionGlyph: MaskRcnnPage.GlyphPlay,
                 actionText: "New Chat",
-                composerPlaceholder: "Type your message…")
+                composerPlaceholder: "Type your message…",
+                tag: "LLM",
+                category: "Chat")
         {
         }
 
