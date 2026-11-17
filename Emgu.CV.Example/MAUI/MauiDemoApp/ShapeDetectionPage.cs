@@ -40,6 +40,15 @@ namespace MauiDemoApp
         private bool _keepScene;            // re-detect the same scene instead of drawing a new one
         private SegmentedControl _sceneControl;
 
+        // Which detected shape types are painted on the result (toggled by chips),
+        // and the cached detection so toggling only repaints.
+        private readonly bool[] _show = { true, true, true, true };   // triangles, rectangles, circles, lines
+        private static readonly string[] ShowNames = { "Triangles", "Rectangles", "Circles", "Lines" };
+        private Mat[] _masks;               // per type, from the last detection
+        private int[] _counts;
+        private double _lastInferMs;
+        private bool _repaintOnly;
+
         public ShapeDetectionPage() : base(new StageConfig
         {
             Title = "Shape Detection",
@@ -71,7 +80,36 @@ namespace MauiDemoApp
                 UpdateStatus();
             };
             _sceneControl.HorizontalOptions = LayoutOptions.Start;
-            return _sceneControl;
+
+            // Show / hide each kind of detection, so overlapping results (e.g. a
+            // rectangle found inside a circle) can be told apart.
+            var chips = new FlexLayout { Wrap = Microsoft.Maui.Layouts.FlexWrap.Wrap };
+            Color[] colors = { TriangleColor, RectangleColor, CircleColor, LineColor };
+            for (int i = 0; i < ShowNames.Length; i++)
+            {
+                int idx = i;
+                var chip = new ChipView(ShowNames[i], true, 11) { Margin = new Thickness(0, 0, 8, 8) };
+                var dot = new BoxView { WidthRequest = 8, HeightRequest = 8, CornerRadius = 4, Color = colors[i], VerticalOptions = LayoutOptions.Center };
+                var chipLabel = chip.Content;
+                chip.Content = null;
+                chip.Content = new HorizontalStackLayout { Spacing = 6, Children = { dot, chipLabel } };
+                chip.Tapped += (s, e) =>
+                {
+                    _show[idx] = !_show[idx];
+                    chip.IsSelected = _show[idx];
+                    if (_masks != null && !IsBusy)
+                    {
+                        _repaintOnly = true;
+                        _ = RunAsync();
+                    }
+                };
+                chips.Children.Add(chip);
+            }
+            return new VerticalStackLayout
+            {
+                Spacing = 12,
+                Children = { _sceneControl, DemoControls.SectionLabel("Show on image"), chips }
+            };
         }
 
         protected override void OnStatusInit() => UpdateStatus();
@@ -85,24 +123,44 @@ namespace MauiDemoApp
         protected override StageResult RunCore(Mat input)
         {
             var total = Stopwatch.StartNew();
-            // "pre": draw the scene (or reuse the last one).
-            if (_scene == null || !_keepScene)
+            var infer = new Stopwatch();
+            bool repaint = _repaintOnly && _masks != null && _scene != null;
+            _repaintOnly = false;
+            if (!repaint)
             {
-                _scene?.Dispose();
-                _scene = GenerateRandomShapes();
+                // "pre": draw the scene (or reuse the last one).
+                if (_scene == null || !_keepScene)
+                {
+                    _scene?.Dispose();
+                    _scene = GenerateRandomShapes();
+                }
+
+                infer.Start();
+                using ShapeDetectionResult result = _detector.Detect(_scene);
+                infer.Stop();
+                _lastInferMs = infer.Elapsed.TotalMilliseconds;
+
+                // Keep each kind of detection as a mask so the chips can repaint.
+                if (_masks != null)
+                    foreach (var m in _masks) m.Dispose();
+                _masks = new[]
+                {
+                    ExactColor(result.TrianglesRectangles, DrawColor.OrangeRed),
+                    ExactColor(result.TrianglesRectangles, DrawColor.RoyalBlue),
+                    NonWhite(result.Circles),
+                    NonWhite(result.Lines),
+                };
+                _counts = new[] { result.TriangleCount, result.RectangleCount, result.CircleCount, result.LineCount };
             }
 
-            var infer = Stopwatch.StartNew();
-            using ShapeDetectionResult result = _detector.Detect(_scene);
-            infer.Stop();
-
-            // "post": outline what was found on a darkened copy of the scene.
-            using Mat canvas = RenderFound(_scene, result);
+            // "post": paint the shown detections on a darkened copy of the scene.
+            using Mat canvas = RenderFound(_scene, _masks, _show);
             byte[] png = MaskRcnnPage.Encode(canvas);
             total.Stop();
 
-            int shapes = result.TriangleCount + result.RectangleCount + result.CircleCount;
-            int max = Math.Max(1, Math.Max(Math.Max(result.TriangleCount, result.RectangleCount), Math.Max(result.CircleCount, result.LineCount)));
+            var result_ = _counts;
+            int shapes = result_[0] + result_[1] + result_[2];
+            int max = Math.Max(1, result_.Max());
             return new StageResult
             {
                 OutputPng = png,
@@ -110,13 +168,13 @@ namespace MauiDemoApp
                 OutputHeight = canvas.Height,
                 Rows = new[]
                 {
-                    CountRow("Triangles", result.TriangleCount, max, TriangleColor),
-                    CountRow("Rectangles", result.RectangleCount, max, RectangleColor),
-                    CountRow("Circles", result.CircleCount, max, CircleColor),
-                    CountRow("Lines", result.LineCount, max, LineColor),
+                    CountRow("Triangles", result_[0], max, TriangleColor),
+                    CountRow("Rectangles", result_[1], max, RectangleColor),
+                    CountRow("Circles", result_[2], max, CircleColor),
+                    CountRow("Lines", result_[3], max, LineColor),
                 },
-                Summary = $"{shapes} {(shapes == 1 ? "shape" : "shapes")} · {result.LineCount} {(result.LineCount == 1 ? "line" : "lines")} · {infer.Elapsed.TotalMilliseconds:0} ms",
-                InferenceMs = infer.Elapsed.TotalMilliseconds,
+                Summary = $"{shapes} {(shapes == 1 ? "shape" : "shapes")} · {result_[3]} {(result_[3] == 1 ? "line" : "lines")} · {_lastInferMs:0} ms",
+                InferenceMs = _lastInferMs,
                 PrePostMs = total.Elapsed.TotalMilliseconds - infer.Elapsed.TotalMilliseconds,
             };
         }
@@ -128,14 +186,15 @@ namespace MauiDemoApp
         // (OrangeRed) and rectangles (RoyalBlue) together, circles, and lines. Turn
         // those drawings into masks and paint them, in the page's colors, over a
         // darkened copy of the scene. Lines go first so shapes stay on top.
-        private static Mat RenderFound(Mat scene, ShapeDetectionResult result)
+        // masks / show are indexed triangles, rectangles, circles, lines.
+        private static Mat RenderFound(Mat scene, Mat[] masks, bool[] show)
         {
             Mat canvas = new Mat();
             scene.ConvertTo(canvas, DepthType.Cv8U, 0.35);
-            using (Mat m = NonWhite(result.Lines)) Paint(canvas, m, LineColor);
-            using (Mat m = NonWhite(result.Circles)) Paint(canvas, m, CircleColor);
-            using (Mat m = ExactColor(result.TrianglesRectangles, DrawColor.RoyalBlue)) Paint(canvas, m, RectangleColor);
-            using (Mat m = ExactColor(result.TrianglesRectangles, DrawColor.OrangeRed)) Paint(canvas, m, TriangleColor);
+            if (show[3]) Paint(canvas, masks[3], LineColor);
+            if (show[2]) Paint(canvas, masks[2], CircleColor);
+            if (show[1]) Paint(canvas, masks[1], RectangleColor);
+            if (show[0]) Paint(canvas, masks[0], TriangleColor);
             return canvas;
         }
 
@@ -180,6 +239,9 @@ CvInvoke.Imwrite(""lines.png"", r.Lines);";
         {
             _scene?.Dispose();
             _scene = null;
+            if (_masks != null)
+                foreach (var m in _masks) m.Dispose();
+            _masks = null;
             _detector?.Dispose();
             _detector = null;
         }

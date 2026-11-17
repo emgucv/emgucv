@@ -809,6 +809,30 @@ Console.WriteLine(model.ProcessAndRender(image, render));"));
                 pills.Add((pill, label, i));
                 pillRow.Children.Add(pill);
             }
+            // A round search button at the start of the filter row, so search is
+            // right next to the categories (same toggle as the top-right icon).
+            var searchPill = new Border
+            {
+                BackgroundColor = pillBackground,
+                Stroke = Colors.Transparent,
+                StrokeThickness = 0,
+                StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(20) },
+                WidthRequest = 40,
+                HeightRequest = 40,
+                VerticalOptions = LayoutOptions.Center,
+                Content = makeIcon(gSearch, primaryText, 20)
+            };
+            var searchPillTap = new TapGestureRecognizer();
+            searchPillTap.Tapped += (s, e) =>
+            {
+                searchBar.IsVisible = !searchBar.IsVisible;
+                if (searchBar.IsVisible)
+                    searchEntry.Focus();
+                else
+                    searchEntry.Text = "";
+            };
+            searchPill.GestureRecognizers.Add(searchPillTap);
+            pillRow.Children.Insert(0, searchPill);
             var categoryBar = new ScrollView
             {
                 Orientation = ScrollOrientation.Horizontal,

@@ -93,7 +93,9 @@ namespace MauiDemoApp
         private Label _resultBadgeLabel, _sampleBadgeLabel;
         private ActivityIndicator _stageSpinner;
         private Label _stageEmpty;
-        private BoxView _splitHandle;
+        private Grid _splitHandle;
+        private Border _beforeBadge, _afterBadge;
+        private Label _compareLabel;
         private Border _toolbar, _compareButton;
         private SegmentedControl _sourceToggle;
         private HorizontalStackLayout _thumbs;
@@ -227,8 +229,46 @@ namespace MauiDemoApp
             _sampleBadge.IsVisible = false;
             _stageSpinner = new ActivityIndicator { Color = DemoTheme.Lime, IsRunning = false, IsVisible = false, WidthRequest = 36, HeightRequest = 36, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
             _stageEmpty = new Label { Text = "press " + c.RunLabel.ToLowerInvariant(), FontFamily = DemoTheme.HeroFont, FontSize = 30, CharacterSpacing = -1, TextColor = DemoTheme.EmptyStateText, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center, IsVisible = c.Samples.Length == 0 };
-            _splitHandle = new BoxView { WidthRequest = 2, Color = Colors.White, IsVisible = false, HorizontalOptions = LayoutOptions.Start, Margin = new Thickness(0, 16, 0, 70), InputTransparent = true };
-            _stage = new Grid { Children = { _photoBefore, _photo, _overlay, _splitHandle, _stageEmpty, _resultBadge, _sampleBadge, _stageSpinner } };
+            // Before / after divider: a white line with a round knob (◂ ▸) that you drag.
+            var knob = new Border
+            {
+                WidthRequest = 38,
+                HeightRequest = 38,
+                BackgroundColor = Colors.White,
+                Stroke = Colors.Transparent,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(19) },
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.Center,
+                Shadow = new Shadow { Brush = Colors.Black, Opacity = 0.35f, Radius = 8, Offset = new Point(0, 2) },
+                Content = new HorizontalStackLayout
+                {
+                    Spacing = -4,
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center,
+                    Children =
+                    {
+                        DemoTheme.MakeIcon(MaskRcnnPage.GlyphChevronLeft, Color.FromArgb("#0E0E0E"), 18),
+                        DemoTheme.MakeIcon(MaskRcnnPage.GlyphChevronRight, Color.FromArgb("#0E0E0E"), 18)
+                    }
+                }
+            };
+            _splitHandle = new Grid
+            {
+                WidthRequest = 38,
+                IsVisible = false,
+                HorizontalOptions = LayoutOptions.Start,
+                Margin = new Thickness(0, 16, 0, 70),
+                InputTransparent = true,
+                Children = { new BoxView { WidthRequest = 2, Color = Colors.White, HorizontalOptions = LayoutOptions.Center }, knob }
+            };
+            (_beforeBadge, var beforeLabel, var beforeDot) = DemoControls.Badge("BEFORE");
+            (_afterBadge, var afterLabel, var afterDot) = DemoControls.Badge("AFTER");
+            beforeDot.IsVisible = afterDot.IsVisible = false;
+            beforeLabel.CharacterSpacing = afterLabel.CharacterSpacing = 1.2;
+            _afterBadge.HorizontalOptions = LayoutOptions.End;
+            _beforeBadge.IsVisible = _afterBadge.IsVisible = false;
+            _beforeBadge.InputTransparent = _afterBadge.InputTransparent = true;
+            _stage = new Grid { Children = { _photoBefore, _photo, _overlay, _splitHandle, _stageEmpty, _resultBadge, _sampleBadge, _beforeBadge, _afterBadge, _stageSpinner } };
             _overlay.SizeChanged += (s, e) => { PlaceBadges(); UpdateSplit(); };
             var pan = new PanGestureRecognizer();
             pan.PanUpdated += OnSplitPan;
@@ -254,7 +294,22 @@ namespace MauiDemoApp
                 toolbarRow.Children.Add(_sourceToggle);
                 toolbarRow.Children.Add(new BoxView { WidthRequest = 1, HeightRequest = 20, Color = DemoTheme.Hairline, VerticalOptions = LayoutOptions.Center, Margin = new Thickness(4, 0) });
             }
-            _compareButton = DemoControls.CircleButton(DemoTheme.GlyphCompare, ToggleCompare, 34, Colors.Transparent);
+            // A labelled pill, so it's obvious what it does.
+            _compareLabel = new Label { Text = "Compare", FontFamily = DemoTheme.TitleFont, FontSize = 13, TextColor = DemoTheme.PrimaryText, VerticalOptions = LayoutOptions.Center };
+            _compareButton = new Border
+            {
+                BackgroundColor = Colors.Transparent,
+                Stroke = Colors.Transparent,
+                StrokeThickness = 0,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(100) },
+                Padding = new Thickness(12, 7),
+                VerticalOptions = LayoutOptions.Center,
+                Content = new HorizontalStackLayout { Spacing = 6, Children = { DemoTheme.MakeIcon(DemoTheme.GlyphCompare, DemoTheme.PrimaryText, 17), _compareLabel } }
+            };
+            var compareTap = new TapGestureRecognizer();
+            compareTap.Tapped += (s, e) => ToggleCompare();
+            _compareButton.GestureRecognizers.Add(compareTap);
+            DemoControls.AddHover(_compareButton);
             toolbarRow.Children.Add(_compareButton);
             toolbarRow.Children.Add(DemoControls.CircleButton(DemoTheme.GlyphFullscreen, OpenFullscreen, 34, Colors.Transparent));
             _toolbar = new Border
@@ -568,6 +623,8 @@ namespace MauiDemoApp
             double ox = r.X + 16 + 10, oy = r.Y + 16 + 10;
             _resultBadge.Margin = new Thickness(ox, oy, 0, 0);
             _sampleBadge.Margin = new Thickness(0, oy, ox, 0);
+            _beforeBadge.Margin = new Thickness(ox, oy, 0, 0);
+            _afterBadge.Margin = new Thickness(0, oy, ox, 0);
         }
 
         private View BuildHeader(bool wide)
@@ -797,6 +854,9 @@ namespace MauiDemoApp
         /// <summary>Run again (e.g. when an option changes on a generated demo).</summary>
         protected Task RunAsync() => Run();
 
+        /// <summary>True while a run is in progress.</summary>
+        protected bool IsBusy => _busy;
+
         private async Task Run()
         {
             if (_busy || (Config.Samples.Length > 0 && _image == null))
@@ -950,8 +1010,12 @@ namespace MauiDemoApp
             _compareButton.BackgroundColor = _comparing ? DemoTheme.PillBackground : Colors.Transparent;
             _overlay.IsVisible = !_comparing;
             bool split = _comparing && _result?.OutputPng != null && _image != null;
+            _compareLabel.Text = _comparing ? (split ? "Drag to compare" : "Show results") : "Compare";
             _photoBefore.IsVisible = split;
             _splitHandle.IsVisible = split;
+            _beforeBadge.IsVisible = _afterBadge.IsVisible = split;
+            _resultBadge.IsVisible = !split && _result != null;
+            _sampleBadge.IsVisible = !split && _wide && _sampleBadgeLabel.Text?.Length > 0;
             if (split)
             {
                 _photoBefore.Source = MaskRcnnPage.MatToImageSource(_image);
@@ -972,7 +1036,7 @@ namespace MauiDemoApp
             var fit = FitRect();
             double x = fit.X + fit.Width * _split;
             _photo.Clip = new RectangleGeometry(new Rect(x, 0, Math.Max(0, _photo.Width - x), Math.Max(1, _photo.Height)));
-            _splitHandle.TranslationX = 16 + x - 1;
+            _splitHandle.TranslationX = 16 + x - 19;
         }
 
         private double _panStartX;
