@@ -114,33 +114,33 @@ namespace MauiDemoApp
             <meta name=""viewport"" content=""width=device-width, initial-scale=1"">
             <style type=""text/css"">
             body {
-                background-color: #F2F2F7;
-                color: #1C1C1E;
+                background-color: " + Hex(DemoTheme.PageBackground) + @";
+                color: " + Hex(DemoTheme.PrimaryText) + @";
                 font-family: -apple-system, ""Segoe UI"", Roboto, sans-serif;
                 font-size: 15px;
                 line-height: 1.5;
                 margin: 0;
                 padding: 20px;
             }
-            h2 { font-size: 28px; font-weight: 700; margin: 0 0 4px 0; }
+            h2 { font-size: 40px; font-weight: 600; letter-spacing: -1.5px; margin: 8px 0 12px 0; }
             h4 {
-                font-size: 13px;
-                font-weight: 600;
+                font-size: 12px;
+                font-weight: 400;
                 text-transform: uppercase;
-                letter-spacing: 0.5px;
-                color: #8A8A8E;
+                letter-spacing: 2px;
+                color: " + Hex(DemoTheme.SecondaryText) + @";
                 margin: 24px 0 6px 0;
             }
-            a { color: #007AFF; text-decoration: none; }
+            a { color: " + Hex(DemoTheme.PrimaryText) + @"; text-decoration: underline; }
             textarea {
                 width: 100%;
                 box-sizing: border-box;
                 margin: 0;
                 padding: 10px;
-                border: 1px solid #C6C6C8;
+                border: 1px solid " + Hex(DemoTheme.Hairline) + @";
                 border-radius: 10px;
-                background-color: #FFFFFF;
-                color: #1C1C1E;
+                background-color: " + Hex(DemoTheme.ImageBackground) + @";
+                color: " + Hex(DemoTheme.PrimaryText) + @";
                 font-family: ui-monospace, Menlo, Consolas, monospace;
                 font-size: 12px;
             }
@@ -204,7 +204,7 @@ namespace MauiDemoApp
 
                         }
                 };
-            Content.BackgroundColor = Color.FromArgb("#F2F2F7");
+            Content.BackgroundColor = DemoTheme.PageBackground;
 
             // The licenses link is a native page, not a web page: intercept it.
             var webView = (WebView)((Microsoft.Maui.Controls.ScrollView)Content).Content;
@@ -217,6 +217,8 @@ namespace MauiDemoApp
                 }
             };
         }
+
+        private static String Hex(Color c) => c.ToRgbaHex(false);
 
         private const String LicensesUrl = "emgu-demo://licenses";
 

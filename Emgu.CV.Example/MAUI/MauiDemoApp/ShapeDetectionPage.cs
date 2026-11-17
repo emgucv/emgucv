@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
@@ -28,16 +28,16 @@ namespace MauiDemoApp
     /// </summary>
     public class ShapeDetectionPage : ContentPage
     {
-        // ---------- Palette (matches the home screen) ----------
-        private static readonly Color PageBackground = Color.FromArgb("#EEF1F8");
-        private static readonly Color CardBackground = Colors.White;
-        private static readonly Color PrimaryText = Color.FromArgb("#1A1C2E");
-        private static readonly Color SecondaryText = Color.FromArgb("#8A8FA3");
-        private static readonly Color Accent = Color.FromArgb("#3D7BF7");
-        private static readonly Color RowBorder = Color.FromArgb("#ECEEF5");
-        private static readonly Color TileBackground = Color.FromArgb("#E8EFFE");
-        private static readonly Color ImageBackground = Color.FromArgb("#F2F2F7");
-        private static readonly Color CancelColor = Color.FromArgb("#E5484D");
+        // ---------- Palette (from DemoTheme, matches the home screen) ----------
+        private static Color PageBackground => DemoTheme.PageBackground;
+        private static Color CardBackground => DemoTheme.CardBackground;
+        private static Color PrimaryText => DemoTheme.PrimaryText;
+        private static Color SecondaryText => DemoTheme.SecondaryText;
+        private static Color Accent => DemoTheme.Accent;
+        private static Color RowBorder => DemoTheme.Hairline;
+        private static Color TileBackground => DemoTheme.PillBackground;
+        private static Color ImageBackground => DemoTheme.ImageBackground;
+        private static Color CancelColor => Color.FromArgb("#E5484D");
 
         private const string BodyFont = "InterRegular";
         private const string TitleFont = "InterSemiBold";
@@ -45,9 +45,7 @@ namespace MauiDemoApp
 
         // ---------- Material Symbols glyphs ----------
         private const string GlyphShape = "";        // crop_free
-        private const string GlyphInfo = "";         // info
         private const string GlyphChevronRight = ""; // chevron_right
-        private const string GlyphChevronLeft = "";  // chevron_left
         private const string GlyphExpandMore = "";   // expand_more
         private const string GlyphCube = "";         // view_in_ar
         private const string GlyphImage = "";        // image
@@ -71,6 +69,7 @@ namespace MauiDemoApp
         private readonly Image _previewImage;
         private readonly VerticalStackLayout _resultsRows;
         private readonly Label _resultsHint;
+        private readonly VerticalStackLayout _emptyState;
         private readonly HorizontalStackLayout _statusStack;
         private readonly Label _statusLabel;
         private readonly Button _detectButton;
@@ -84,128 +83,67 @@ namespace MauiDemoApp
         {
             Title = "Shape Detection";
             BackgroundColor = PageBackground;
-            // Draw our own header (back + info) to match the home screen.
             Shell.SetNavBarIsVisible(this, false);
 
-            // ---------- Header ----------
-            var headerTile = new Border
-            {
-                WidthRequest = 64,
-                HeightRequest = 64,
-                BackgroundColor = CardBackground,
-                Stroke = RowBorder,
-                StrokeThickness = 1,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(18) },
-                VerticalOptions = LayoutOptions.Start,
-                Content = MakeIcon(GlyphShape, Accent, 32)
-            };
+            // ---------- Header: plain icons, a giant lowercase title, then category ----------
+            var header = DemoTheme.PageHeader(
+                this,
+                "Shape Detection",
+                "Detect circles, lines, triangles and rectangles using OpenCV.",
+                GlyphShape,
+                null,
+                "Detection");
 
-            var titleLabel = new Label { Text = "Shape Detection", FontFamily = TitleFont, FontSize = 30, TextColor = PrimaryText };
-            var subtitleLabel = new Label
-            {
-                Text = "Detect circles, lines, triangles and rectangles using OpenCV.",
-                FontFamily = BodyFont,
-                FontSize = 15,
-                TextColor = SecondaryText,
-                Margin = new Thickness(0, 2, 0, 0)
-            };
-            var titleStack = new VerticalStackLayout
-            {
-                VerticalOptions = LayoutOptions.Center,
-                Children = { titleLabel, subtitleLabel }
-            };
-
-            var backButton = CircleButton(GlyphChevronLeft, async () => await Navigation.PopAsync());
-            var infoButton = CircleButton(GlyphInfo, async () => await Navigation.PushAsync(new AboutPage()));
-
-            var topRow = new Grid
-            {
-                ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) }
-            };
-            topRow.Add(backButton, 0, 0);
-            topRow.Add(infoButton, 2, 0);
-
-            var headerBody = new Grid
-            {
-                ColumnSpacing = 16,
-                Margin = new Thickness(0, 12, 0, 0),
-                ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) }
-            };
-            headerBody.Add(headerTile, 0, 0);
-            headerBody.Add(titleStack, 1, 0);
-
-            var header = new VerticalStackLayout { Children = { topRow, headerBody } };
-
-            // ---------- Sample Image card ----------
-            var sampleTitle = new Label { Text = "Sample Image", FontFamily = TitleFont, FontSize = 19, TextColor = PrimaryText, VerticalOptions = LayoutOptions.Center };
-
-            _previewImage = new Image { Aspect = Aspect.AspectFit, HeightRequest = 220 };
-            var previewFrame = new Border
-            {
-                BackgroundColor = ImageBackground,
-                Stroke = RowBorder,
-                StrokeThickness = 1,
-                Padding = new Thickness(10),
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(16) },
-                Content = _previewImage
-            };
-
-            var sampleCard = new Border
-            {
-                BackgroundColor = CardBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                Padding = new Thickness(16),
-                Content = new VerticalStackLayout { Spacing = 14, Children = { sampleTitle, previewFrame } }
-            };
+            // ---------- Sample image ----------
+            _previewImage = new Image { Aspect = Aspect.AspectFit, HeightRequest = 340 };
+            // The scene sits flush on a light grey backdrop, like a product shot.
+            var previewFrame = DemoTheme.ImageFrame(_previewImage);
+            var sampleSection = new VerticalStackLayout { Spacing = 16, Children = { DemoTheme.SectionLabel("Sample Image"), previewFrame } };
 
             // ---------- Detect button ----------
-            _detectButton = new Button
-            {
-                Text = "New Image",
-                FontFamily = TitleFont,
-                FontSize = 17,
-                BackgroundColor = Accent,
-                TextColor = Colors.White,
-                CornerRadius = 16,
-                HeightRequest = 56,
-                ImageSource = new FontImageSource { FontFamily = IconFont, Glyph = "", Color = Colors.White, Size = 20 }, // play_arrow
-                ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 8)
-            };
+            _detectButton = DemoTheme.PrimaryButton("New Image", GlyphCube);
             _detectButton.Clicked += OnDetectButtonClicked;
 
-            // ---------- Results card ----------
-            var resultsTitle = new Label { Text = "Results", FontFamily = TitleFont, FontSize = 19, TextColor = PrimaryText, VerticalOptions = LayoutOptions.Center };
-            _statusLabel = new Label { FontFamily = BodyFont, FontSize = 14, TextColor = SecondaryText, VerticalOptions = LayoutOptions.Center };
+            // ---------- Results ----------
+            _statusLabel = new Label
+            {
+                FontFamily = BodyFont,
+                FontSize = 12,
+                CharacterSpacing = 1.5,
+                TextTransform = TextTransform.Uppercase,
+                TextColor = SecondaryText,
+                VerticalOptions = LayoutOptions.Center
+            };
             _statusStack = new HorizontalStackLayout
             {
                 Spacing = 6,
                 IsVisible = false,
+                HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.Center,
-                Children = { _statusLabel, MakeIcon(GlyphCheckCircle, Color.FromArgb("#2BA84A"), 18) }
+                Children = { _statusLabel, MakeIcon(GlyphCheckCircle, PrimaryText, 16) }
             };
             var resultsHeader = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            resultsHeader.Add(resultsTitle, 0, 0);
+            resultsHeader.Add(DemoTheme.SectionLabel("Results"), 0, 0);
             resultsHeader.Add(_statusStack, 1, 0);
 
+            // Empty state: oversized pale type plus a small grey caption. The caption
+            // doubles as the error / cancelled message.
             _resultsHint = new Label
             {
                 Text = "Tap “New Image” to generate a scene and detect shapes.",
                 FontFamily = BodyFont,
                 FontSize = 14,
-                TextColor = SecondaryText,
-                Margin = new Thickness(2, 6, 0, 0)
+                TextColor = SecondaryText
             };
-            _resultsRows = new VerticalStackLayout { Spacing = 10 };
-
-            var resultsCard = new Border
+            _emptyState = new VerticalStackLayout
             {
-                BackgroundColor = CardBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                Padding = new Thickness(16),
-                Content = new VerticalStackLayout { Spacing = 12, Children = { resultsHeader, _resultsHint, _resultsRows } }
+                Spacing = 8,
+                Padding = new Thickness(0, 4, 0, 8),
+                Children = { DemoTheme.EmptyStateTitle("no results yet"), _resultsHint }
             };
+            _resultsRows = new VerticalStackLayout { Spacing = 0 };
+
+            var resultsSection = new VerticalStackLayout { Spacing = 16, Children = { resultsHeader, _emptyState, _resultsRows } };
 
             // ---------- Pipeline (collapsible) ----------
             _pipelineChevron = MakeIcon(GlyphExpandMore, SecondaryText, 22);
@@ -225,9 +163,10 @@ namespace MauiDemoApp
                 HeightRequest = 42,
                 BackgroundColor = TileBackground,
                 Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(11) },
+                StrokeThickness = 0,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(21) },
                 VerticalOptions = LayoutOptions.Center,
-                Content = MakeIcon(GlyphSettings, Accent, 22)
+                Content = MakeIcon(GlyphSettings, PrimaryText, 22)
             };
             var pipelineHeader = new Grid
             {
@@ -253,14 +192,7 @@ namespace MauiDemoApp
                 }
             };
 
-            var pipelineCard = new Border
-            {
-                BackgroundColor = CardBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                Padding = new Thickness(16),
-                Content = new VerticalStackLayout { Children = { pipelineHeader, _pipelineDetails } }
-            };
+            var pipelineSection = new VerticalStackLayout { Children = { pipelineHeader, _pipelineDetails } };
             var pipelineTap = new TapGestureRecognizer();
             pipelineTap.Tapped += (s, e) =>
             {
@@ -271,12 +203,20 @@ namespace MauiDemoApp
 
             var content = new VerticalStackLayout
             {
-                Spacing = 18,
+                Spacing = 20,
                 Padding = new Thickness(20, 16, 20, 28),
                 Children =
                 {
-                    header, sampleCard, _detectButton, resultsCard, pipelineCard,
-                    ModelShowcasePage.BuildAboutCard("Finds geometric shapes — triangles, rectangles, circles — in an image using classic contour analysis (no AI model).")
+                    header,
+                    DemoTheme.Divider(),
+                    sampleSection,
+                    _detectButton,
+                    DemoTheme.Divider(),
+                    resultsSection,
+                    DemoTheme.Divider(),
+                    pipelineSection,
+                    DemoTheme.Divider(),
+                    ModelShowcasePage.BuildAboutCard("Finds geometric shapes — triangles, rectangles, circles — in an image using classic contour analysis (no AI model).", flush: true)
                 }
             };
 
@@ -297,7 +237,7 @@ namespace MauiDemoApp
             _loadingOverlay = new Grid
             {
                 IsVisible = false,
-                BackgroundColor = Color.FromArgb("#B3EEF1F8"),
+                BackgroundColor = DemoTheme.LoadingVeil,
                 Children = { loadingCard }
             };
 
@@ -528,7 +468,7 @@ namespace MauiDemoApp
 
                     _statusLabel.Text = $"Completed in {result.ElapsedMilliseconds} ms";
                     _statusStack.IsVisible = true;
-                    _resultsHint.IsVisible = false;
+                    _emptyState.IsVisible = false;
                 }
                 while (_redetectPending && !_cancelRequested);
             }
@@ -536,7 +476,7 @@ namespace MauiDemoApp
             {
                 _resultsRows.Children.Clear();
                 _statusStack.IsVisible = false;
-                _resultsHint.IsVisible = true;
+                _emptyState.IsVisible = true;
                 _resultsHint.Text = "Detection failed: " + ex.Message;
             }
             finally
@@ -548,7 +488,7 @@ namespace MauiDemoApp
                 {
                     _resultsRows.Children.Clear();
                     _statusStack.IsVisible = false;
-                    _resultsHint.IsVisible = true;
+                    _emptyState.IsVisible = true;
                     _resultsHint.Text = "Detection cancelled. Tap “New Image” to run again.";
                 }
             }
@@ -562,11 +502,12 @@ namespace MauiDemoApp
             _loadingIndicator.IsRunning = busy;
             _detectButton.Text = busy ? "Cancel" : "New Image";
             _detectButton.BackgroundColor = busy ? CancelColor : Accent;
+            _detectButton.TextColor = busy ? Colors.White : DemoTheme.OnAccent;
             _detectButton.ImageSource = new FontImageSource
             {
                 FontFamily = IconFont,
                 Glyph = busy ? GlyphClose : GlyphCube,
-                Color = Colors.White,
+                Color = busy ? Colors.White : DemoTheme.OnAccent,
                 Size = 20
             };
         }
@@ -575,16 +516,16 @@ namespace MauiDemoApp
         {
             byte[] png = Encode(image);
 
-            var thumb = new Image { Source = MatToImageSource(png), Aspect = Aspect.AspectFit, WidthRequest = 64, HeightRequest = 48 };
-            var thumbCard = new Border
+            var thumb = new Image { Source = MatToImageSource(png), Aspect = Aspect.AspectFit, WidthRequest = 70, HeightRequest = 50 };
+            var thumbFrame = new Border
             {
                 WidthRequest = 78,
                 HeightRequest = 56,
                 BackgroundColor = ImageBackground,
-                Stroke = RowBorder,
-                StrokeThickness = 1,
+                Stroke = Colors.Transparent,
+                StrokeThickness = 0,
                 Padding = new Thickness(4),
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(10) },
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(2) },
                 VerticalOptions = LayoutOptions.Center,
                 Content = thumb
             };
@@ -598,22 +539,15 @@ namespace MauiDemoApp
                 VerticalOptions = LayoutOptions.Center
             };
 
-            var expandTile = new Border
-            {
-                WidthRequest = 38,
-                HeightRequest = 38,
-                BackgroundColor = TileBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(10) },
-                HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.Center,
-                Content = MakeIcon(GlyphShape, Accent, 20)
-            };
+            var expandIcon = MakeIcon(GlyphShape, PrimaryText, 20);
+            expandIcon.HorizontalOptions = LayoutOptions.End;
 
-            var grid = new Grid
+            // Flat row: no card or outline, just a hairline between rows.
+            var row = new Grid
             {
-                Padding = new Thickness(10),
+                Padding = new Thickness(0, 12),
                 ColumnSpacing = 14,
+                BackgroundColor = PageBackground,
                 ColumnDefinitions =
                 {
                     new ColumnDefinition(GridLength.Auto),
@@ -621,23 +555,16 @@ namespace MauiDemoApp
                     new ColumnDefinition(GridLength.Auto)
                 }
             };
-            grid.Add(thumbCard, 0, 0);
-            grid.Add(nameLabel, 1, 0);
-            grid.Add(expandTile, 2, 0);
-
-            var row = new Border
-            {
-                BackgroundColor = CardBackground,
-                Stroke = RowBorder,
-                StrokeThickness = 1,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(14) },
-                Content = grid
-            };
+            row.Add(thumbFrame, 0, 0);
+            row.Add(nameLabel, 1, 0);
+            row.Add(expandIcon, 2, 0);
 
             var tap = new TapGestureRecognizer();
             tap.Tapped += async (s, e) => await Navigation.PushModalAsync(new FullScreenImagePage(png, $"{number}. {title}"));
             row.GestureRecognizers.Add(tap);
 
+            if (_resultsRows.Children.Count > 0)
+                _resultsRows.Children.Add(new BoxView { HeightRequest = 1, Color = DemoTheme.Hairline });
             _resultsRows.Children.Add(row);
         }
 
@@ -651,25 +578,6 @@ namespace MauiDemoApp
             VerticalOptions = LayoutOptions.Center,
             HorizontalOptions = LayoutOptions.Center
         };
-
-        private Border CircleButton(string glyph, Action onTap)
-        {
-            var cb = new Border
-            {
-                WidthRequest = 44,
-                HeightRequest = 44,
-                BackgroundColor = CardBackground,
-                Stroke = RowBorder,
-                StrokeThickness = 1,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                VerticalOptions = LayoutOptions.Center,
-                Content = MakeIcon(glyph, PrimaryText, 22)
-            };
-            var t = new TapGestureRecognizer();
-            t.Tapped += (s, e) => onTap();
-            cb.GestureRecognizers.Add(t);
-            return cb;
-        }
 
         private View PipelineStep(string name, string description)
         {

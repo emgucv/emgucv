@@ -6,10 +6,25 @@
         {
             InitializeComponent();
 
-            // Force light mode throughout the app for now. Dark mode can be
-            // introduced later; until then every page renders against the
-            // light palette used by the home screen.
-            UserAppTheme = AppTheme.Light;
+            // Follow the device's light / dark setting. Pages pick their colors from
+            // DemoTheme when they're built, so when the setting changes, rebuild the
+            // app's pages (this returns to the home screen).
+            // The user can pin light or dark in Settings; "system" leaves it Unspecified.
+            UserAppTheme = SettingsPage.SavedAppearance;
+            RequestedThemeChanged += (s, e) =>
+                Microsoft.Maui.ApplicationModel.MainThread.BeginInvokeOnMainThread(async () =>
+                {
+                    bool reopenSettings = SettingsPage.ReopenAfterThemeChange;
+                    SettingsPage.ReopenAfterThemeChange = false;
+                    foreach (var window in Windows)
+                    {
+                        var shell = new AppShell();
+                        window.Page = shell;
+                        // Changed from the Settings page: land back on it, not on home.
+                        if (reopenSettings)
+                            await shell.Navigation.PushAsync(new SettingsPage(), false);
+                    }
+                });
 
             Emgu.CV.Platform.Maui.MauiInvoke.Init();
 

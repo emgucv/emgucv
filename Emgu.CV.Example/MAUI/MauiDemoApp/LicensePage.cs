@@ -106,14 +106,14 @@ namespace MauiDemoApp
         };
 
         public LicensePage()
-            : base("Licenses", "Open source components", MaskRcnnPage.GlyphInfo)
+            : base("Licenses", "Open source components", MaskRcnnPage.GlyphInfo, category: null, showInfo: false)
         {
-            AddCard(BuildSection("Emgu CV", null, EmguComponents));
-            AddCard(BuildSection("Native runtime",
+            AddSection(BuildSection("Emgu CV", null, EmguComponents));
+            AddSection(BuildSection("Native runtime",
                 "Compiled into the Emgu CV native library (cvextern). The exact set depends on the platform and build configuration.",
                 NativeComponents));
-            AddCard(BuildSection("App framework & fonts", null, AppComponents));
-            AddCard(Card(Caption("Models that individual demos download at run time are not part of the app; each is distributed under its publisher's own license.")));
+            AddSection(BuildSection("App framework & fonts", null, AppComponents));
+            AddSection(Caption("Models that individual demos download at run time are not part of the app; each is distributed under its publisher's own license."));
         }
 
         private static View BuildSection(string title, string caption, Component[] components)
@@ -126,12 +126,12 @@ namespace MauiDemoApp
             for (int i = 0; i < components.Length; i++)
                 rows.Children.Add(BuildRow(components[i], i + 1 < components.Length));
             stack.Children.Add(rows);
-            return Card(stack);
+            return stack;
         }
 
         private static View BuildRow(Component c, bool divider)
         {
-            var chevron = MaskRcnnPage.MakeIcon(GlyphExpandMore, MaskRcnnPage.SecondaryText, 22);
+            var chevron = DemoTheme.MakeIcon(GlyphExpandMore, DemoTheme.SecondaryText, 22);
             var header = new Grid
             {
                 Padding = new Thickness(0, 12),
@@ -143,8 +143,8 @@ namespace MauiDemoApp
                 Spacing = 2,
                 Children =
                 {
-                    new Label { Text = c.Name, FontFamily = MaskRcnnPage.TitleFont, FontSize = 16, TextColor = MaskRcnnPage.PrimaryText },
-                    new Label { Text = c.License, FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = MaskRcnnPage.Accent }
+                    new Label { Text = c.Name, FontFamily = DemoTheme.TitleFont, FontSize = 16, TextColor = DemoTheme.PrimaryText },
+                    new Label { Text = c.License, FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText }
                 }
             }, 0, 0);
             chevron.VerticalOptions = LayoutOptions.Center;
@@ -170,13 +170,13 @@ namespace MauiDemoApp
 
             var stack = new VerticalStackLayout { Children = { header, details } };
             if (divider)
-                stack.Children.Add(new BoxView { HeightRequest = 1, Color = MaskRcnnPage.RowBorder });
+                stack.Children.Add(new BoxView { HeightRequest = 1, Color = DemoTheme.Hairline });
             return stack;
         }
 
         private static async Task FillDetails(VerticalStackLayout details, Component c)
         {
-            var link = new Label { Text = c.Url, FontFamily = MaskRcnnPage.BodyFont, FontSize = 14, TextColor = MaskRcnnPage.Accent, TextDecorations = TextDecorations.Underline };
+            var link = new Label { Text = c.Url, FontFamily = DemoTheme.BodyFont, FontSize = 14, TextColor = DemoTheme.PrimaryText, TextDecorations = TextDecorations.Underline };
             var linkTap = new TapGestureRecognizer();
             linkTap.Tapped += async (s, e) =>
             {
@@ -186,7 +186,7 @@ namespace MauiDemoApp
             details.Children.Add(link);
 
             if (c.Notice != null)
-                details.Children.Add(new Label { Text = c.Notice, FontFamily = MaskRcnnPage.TitleFont, FontSize = 13, TextColor = MaskRcnnPage.PrimaryText });
+                details.Children.Add(new Label { Text = c.Notice, FontFamily = DemoTheme.TitleFont, FontSize = 13, TextColor = DemoTheme.PrimaryText });
 
             var texts = new List<string>();
             if (c.Text != null)
@@ -200,12 +200,12 @@ namespace MauiDemoApp
 
         private static Border LicenseText(string text) => new Border
         {
-            BackgroundColor = MaskRcnnPage.ImageBackground,
-            Stroke = MaskRcnnPage.RowBorder,
-            StrokeThickness = 1,
+            BackgroundColor = DemoTheme.ImageBackground,
+            Stroke = Colors.Transparent,
+            StrokeThickness = 0,
             Padding = new Thickness(12),
-            StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(12) },
-            Content = new Label { Text = text, FontSize = 12, TextColor = MaskRcnnPage.PrimaryText, LineBreakMode = LineBreakMode.WordWrap }
+            StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(2) },
+            Content = new Label { Text = text, FontSize = 12, TextColor = DemoTheme.PrimaryText, LineBreakMode = LineBreakMode.WordWrap }
         };
 
         private static async Task<string> ReadLicense(string file, Component c)

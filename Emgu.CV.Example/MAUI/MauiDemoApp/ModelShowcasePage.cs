@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
@@ -110,6 +110,8 @@ namespace MauiDemoApp
         /// <param name="pickerTitle">Optional label for a version picker.</param>
         /// <param name="pickerOptions">Optional version options, passed to Init as the selection string.</param>
         /// <param name="hasCamera">Whether the module supports live camera detection.</param>
+        /// <param name="tag">Optional short module tag shown as a pill under the title, e.g. "DNN".</param>
+        /// <param name="category">Optional group name shown next to the tag, e.g. "Detection".</param>
         public ModelShowcasePage(
             string title,
             string subtitle,
@@ -120,7 +122,9 @@ namespace MauiDemoApp
             string[] pickerOptions = null,
             bool hasCamera = true,
             Func<IProcessAndRenderModel, Mat, (byte[] png, IReadOnlyList<string> items)> customProcess = null,
-            string about = null)
+            string about = null,
+            string tag = null,
+            string category = null)
         {
             _modelFactory = modelFactory;
             _customProcess = customProcess;
@@ -138,71 +142,33 @@ namespace MauiDemoApp
             BackgroundColor = MaskRcnnPage.PageBackground;
             Shell.SetNavBarIsVisible(this, false);
 
-            // ---------- Header ----------
-            var headerTile = new Border
-            {
-                WidthRequest = 64,
-                HeightRequest = 64,
-                BackgroundColor = MaskRcnnPage.CardBackground,
-                Stroke = MaskRcnnPage.RowBorder,
-                StrokeThickness = 1,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(18) },
-                VerticalOptions = LayoutOptions.Start,
-                Content = MaskRcnnPage.MakeIcon(glyph, MaskRcnnPage.Accent, 32)
-            };
-            var titleLabel = new Label { Text = title, FontFamily = MaskRcnnPage.TitleFont, FontSize = 30, TextColor = MaskRcnnPage.PrimaryText };
-            var subtitleLabel = new Label
-            {
-                Text = subtitle,
-                FontFamily = MaskRcnnPage.BodyFont,
-                FontSize = 15,
-                TextColor = MaskRcnnPage.SecondaryText,
-                Margin = new Thickness(0, 2, 0, 0)
-            };
-            var titleStack = new VerticalStackLayout { VerticalOptions = LayoutOptions.Center, Children = { titleLabel, subtitleLabel } };
-
-            var backButton = CircleButton(MaskRcnnPage.GlyphChevronLeft, async () => await Navigation.PopAsync());
-            var infoButton = CircleButton(MaskRcnnPage.GlyphInfo, async () => await Navigation.PushAsync(new AboutPage()));
-
-            var topRow = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            topRow.Add(backButton, 0, 0);
-            topRow.Add(infoButton, 2, 0);
-
-            var headerBody = new Grid
-            {
-                ColumnSpacing = 16,
-                Margin = new Thickness(0, 12, 0, 0),
-                ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) }
-            };
-            headerBody.Add(headerTile, 0, 0);
-            headerBody.Add(titleStack, 1, 0);
-
-            var header = new VerticalStackLayout { Children = { topRow, headerBody } };
+            // ---------- Header: plain icons, a giant lowercase title, then tag / category ----------
+            var header = DemoTheme.PageHeader(this, title, subtitle, glyph, tag, category);
 
             var pageChildren = new VerticalStackLayout
             {
-                Spacing = 18,
+                Spacing = 20,
                 Padding = new Thickness(20, 16, 20, 28),
                 Children = { header }
             };
 
-            // ---------- Input Image card (only for still-image modules) ----------
+            // ---------- Input image (only for still-image modules) ----------
             _previewImage = new Image { Aspect = Aspect.AspectFit, HeightRequest = 340 };
             if (_hasStillImage)
             {
-                var inputTitle = new Label { Text = "Input Image", FontFamily = MaskRcnnPage.TitleFont, FontSize = 19, TextColor = MaskRcnnPage.PrimaryText, VerticalOptions = LayoutOptions.Center };
-                var changePhoto = PillButton(MaskRcnnPage.GlyphImage, "Change Photo", OnChangePhoto);
-                var inputHeader = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-                inputHeader.Add(inputTitle, 0, 0);
-                inputHeader.Add(changePhoto, 1, 0);
+                pageChildren.Children.Add(Divider());
 
+                var inputHeader = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
+                inputHeader.Add(SectionLabel("Input Image"), 0, 0);
+                inputHeader.Add(TextPill("Change", OnChangePhoto), 1, 0);
+
+                // The photo sits flush on a light grey backdrop, like a product shot.
                 var previewFrame = new Border
                 {
                     BackgroundColor = MaskRcnnPage.ImageBackground,
-                    Stroke = MaskRcnnPage.RowBorder,
-                    StrokeThickness = 1,
-                    Padding = new Thickness(10),
-                    StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(16) },
+                    Stroke = Colors.Transparent,
+                    StrokeThickness = 0,
+                    StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(2) },
                     Content = _previewImage
                 };
                 var previewTap = new TapGestureRecognizer();
@@ -213,59 +179,87 @@ namespace MauiDemoApp
                 };
                 previewFrame.GestureRecognizers.Add(previewTap);
 
-                var inputChildren = new VerticalStackLayout { Spacing = 14, Children = { inputHeader, previewFrame } };
+                pageChildren.Children.Add(new VerticalStackLayout { Spacing = 16, Children = { inputHeader, previewFrame } });
 
-                // Optional version picker.
+                // Optional version choice, shown as a row of pills. The (never displayed)
+                // Picker still holds the selection that the model code reads.
                 if (_pickerOptions != null && _pickerOptions.Length > 0)
                 {
-                    _versionPicker = new Microsoft.Maui.Controls.Picker
-                    {
-                        Title = _pickerTitle,
-                        FontFamily = MaskRcnnPage.BodyFont,
-                        TextColor = MaskRcnnPage.PrimaryText,
-                        TitleColor = MaskRcnnPage.SecondaryText
-                    };
+                    _versionPicker = new Microsoft.Maui.Controls.Picker();
                     foreach (string opt in _pickerOptions)
                         _versionPicker.Items.Add(opt);
                     _versionPicker.SelectedIndex = 0;
                     _pickerIndex = 0;
                     _versionPicker.SelectedIndexChanged += OnPickerChanged;
 
-                    var pickerFrame = new Border
+                    var optionPills = new List<(Border pill, Label label)>();
+                    Action refreshOptions = () =>
                     {
-                        BackgroundColor = MaskRcnnPage.ImageBackground,
-                        Stroke = MaskRcnnPage.RowBorder,
-                        StrokeThickness = 1,
-                        Padding = new Thickness(12, 2),
-                        StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(14) },
-                        Content = _versionPicker
+                        for (int i = 0; i < optionPills.Count; i++)
+                        {
+                            bool selected = i == _versionPicker.SelectedIndex;
+                            optionPills[i].pill.BackgroundColor = selected ? MaskRcnnPage.PrimaryText : MaskRcnnPage.TileBackground;
+                            optionPills[i].label.TextColor = selected ? DemoTheme.OnAccent : MaskRcnnPage.PrimaryText;
+                        }
                     };
-                    inputChildren.Children.Add(pickerFrame);
-                }
+                    var optionRow = new HorizontalStackLayout { Spacing = 10 };
+                    for (int i = 0; i < _pickerOptions.Length; i++)
+                    {
+                        int idx = i;
+                        var label = new Label { Text = _pickerOptions[i].ToUpperInvariant(), FontFamily = MaskRcnnPage.BodyFont, FontSize = 14, CharacterSpacing = 1, VerticalOptions = LayoutOptions.Center };
+                        var pill = new Border
+                        {
+                            Stroke = Colors.Transparent,
+                            StrokeThickness = 0,
+                            StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
+                            Padding = new Thickness(20, 11),
+                            Content = label
+                        };
+                        var tap = new TapGestureRecognizer();
+                        tap.Tapped += (s, e) =>
+                        {
+                            _versionPicker.SelectedIndex = idx;
+                            refreshOptions();
+                        };
+                        pill.GestureRecognizers.Add(tap);
+                        optionPills.Add((pill, label));
+                        optionRow.Children.Add(pill);
+                    }
+                    refreshOptions();
 
-                var inputCard = new Border
-                {
-                    BackgroundColor = MaskRcnnPage.CardBackground,
-                    Stroke = Colors.Transparent,
-                    StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                    Padding = new Thickness(16),
-                    Content = inputChildren
-                };
-                pageChildren.Children.Add(inputCard);
+                    pageChildren.Children.Add(Divider());
+                    pageChildren.Children.Add(new VerticalStackLayout
+                    {
+                        Spacing = 14,
+                        Children =
+                        {
+                            SectionLabel(string.IsNullOrEmpty(_pickerTitle) ? "Model" : _pickerTitle),
+                            new Microsoft.Maui.Controls.ScrollView
+                            {
+                                Orientation = ScrollOrientation.Horizontal,
+                                HorizontalScrollBarVisibility = ScrollBarVisibility.Never,
+                                Margin = new Thickness(0, 0, -20, 0),
+                                Content = optionRow
+                            }
+                        }
+                    });
+                }
             }
 
-            // ---------- Buttons ----------
+            // ---------- Buttons: black pill for the main action, grey pill for live ----------
             _detectButton = new Button
             {
                 Text = _hasStillImage ? "Detect Image" : "Open Camera",
+                TextTransform = TextTransform.Uppercase,
+                CharacterSpacing = 2,
                 FontFamily = MaskRcnnPage.TitleFont,
-                FontSize = 17,
+                FontSize = 15,
                 BackgroundColor = MaskRcnnPage.Accent,
-                TextColor = Colors.White,
-                CornerRadius = 16,
+                TextColor = DemoTheme.OnAccent,
+                CornerRadius = 28,
                 HeightRequest = 56,
-                ImageSource = new FontImageSource { FontFamily = MaskRcnnPage.IconFont, Glyph = _hasStillImage ? MaskRcnnPage.GlyphPlay : MaskRcnnPage.GlyphVideo, Color = Colors.White, Size = 20 },
-                ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 8)
+                ImageSource = new FontImageSource { FontFamily = MaskRcnnPage.IconFont, Glyph = _hasStillImage ? MaskRcnnPage.GlyphPlay : MaskRcnnPage.GlyphVideo, Color = DemoTheme.OnAccent, Size = 20 },
+                ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 10)
             };
             if (_hasStillImage)
                 _detectButton.Clicked += OnDetectClicked;
@@ -279,70 +273,68 @@ namespace MauiDemoApp
             _liveButton = new Button
             {
                 Text = "Live Detection",
+                TextTransform = TextTransform.Uppercase,
+                CharacterSpacing = 2,
                 FontFamily = MaskRcnnPage.TitleFont,
-                FontSize = 16,
-                BackgroundColor = MaskRcnnPage.CardBackground,
-                TextColor = MaskRcnnPage.Accent,
-                BorderColor = MaskRcnnPage.Accent,
-                BorderWidth = 1,
-                CornerRadius = 16,
-                HeightRequest = 52,
-                ImageSource = new FontImageSource { FontFamily = MaskRcnnPage.IconFont, Glyph = MaskRcnnPage.GlyphVideo, Color = MaskRcnnPage.Accent, Size = 20 },
-                ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 8)
+                FontSize = 15,
+                BackgroundColor = MaskRcnnPage.TileBackground,
+                TextColor = MaskRcnnPage.PrimaryText,
+                BorderWidth = 0,
+                CornerRadius = 28,
+                HeightRequest = 56,
+                ImageSource = new FontImageSource { FontFamily = MaskRcnnPage.IconFont, Glyph = MaskRcnnPage.GlyphVideo, Color = MaskRcnnPage.PrimaryText, Size = 18 },
+                ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 10)
             };
             _liveButton.Clicked += OnLiveDetection;
             if (_hasStillImage && _hasCamera)
                 buttonChildren.Children.Add(_liveButton);
             pageChildren.Children.Add(buttonChildren);
 
-            // ---------- Results card ----------
-            var resultsTitle = new Label { Text = "Results", FontFamily = MaskRcnnPage.TitleFont, FontSize = 19, TextColor = MaskRcnnPage.PrimaryText, VerticalOptions = LayoutOptions.Center };
-
-            _resultsStatusLabel = new Label { Text = "Ready", FontFamily = MaskRcnnPage.BodyFont, FontSize = 14, TextColor = MaskRcnnPage.SecondaryText, VerticalOptions = LayoutOptions.Center };
-            _resultsCheck = MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphCheck, Color.FromArgb("#2BA84A"), 18);
+            // ---------- Results ----------
+            _resultsStatusLabel = new Label { Text = "Ready", TextTransform = TextTransform.Uppercase, FontFamily = MaskRcnnPage.BodyFont, FontSize = 12, CharacterSpacing = 1.5, TextColor = MaskRcnnPage.SecondaryText, VerticalOptions = LayoutOptions.Center };
+            _resultsCheck = MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphCheck, MaskRcnnPage.PrimaryText, 16);
             _resultsCheck.IsVisible = false;
-            _resultsTimeLabel = new Label { Text = "", FontFamily = MaskRcnnPage.BodyFont, FontSize = 12, TextColor = MaskRcnnPage.SecondaryText, IsVisible = false, HorizontalTextAlignment = TextAlignment.End };
+            _resultsTimeLabel = new Label { Text = "", FontFamily = MaskRcnnPage.BodyFont, FontSize = 12, TextColor = DemoTheme.MutedText, IsVisible = false, HorizontalTextAlignment = TextAlignment.End };
             var statusRow = new HorizontalStackLayout { Spacing = 6, HorizontalOptions = LayoutOptions.End, Children = { _resultsStatusLabel, _resultsCheck } };
             var statusStack = new VerticalStackLayout { HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center, Children = { statusRow, _resultsTimeLabel } };
 
             var resultsHeader = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            resultsHeader.Add(resultsTitle, 0, 0);
+            resultsHeader.Add(SectionLabel("Results"), 0, 0);
             resultsHeader.Add(statusStack, 1, 0);
 
+            // Empty state: oversized pale type instead of an icon. Children[1] and [2]
+            // are rewritten by ShowError and restored by ResetResults.
+            var emptyIcon = MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphImage, DemoTheme.MutedText, 1);
+            emptyIcon.IsVisible = false;
             _emptyState = new VerticalStackLayout
             {
-                Spacing = 6,
-                Padding = new Thickness(0, 18, 0, 8),
-                HorizontalOptions = LayoutOptions.Center,
+                Spacing = 8,
+                Padding = new Thickness(0, 4, 0, 8),
                 Children =
                 {
-                    MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphImage, Color.FromArgb("#C2C7D6"), 40),
-                    new Label { Text = "No results yet", FontFamily = MaskRcnnPage.TitleFont, FontSize = 15, TextColor = MaskRcnnPage.PrimaryText, HorizontalTextAlignment = TextAlignment.Center },
-                    new Label { Text = _hasStillImage ? "Tap the button above to analyze." : "Open the camera to start.", FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = MaskRcnnPage.SecondaryText, HorizontalTextAlignment = TextAlignment.Center }
+                    emptyIcon,
+                    new Label { Text = EmptyTitle, FontFamily = MaskRcnnPage.TitleFont, FontSize = 44, CharacterSpacing = -2.2, LineHeight = 0.95, TextColor = DemoTheme.EmptyStateText },
+                    new Label { Text = EmptyCaption, FontFamily = MaskRcnnPage.BodyFont, FontSize = 14, TextColor = MaskRcnnPage.SecondaryText }
                 }
             };
 
             _resultsMessage = new Label { FontFamily = MaskRcnnPage.BodyFont, FontSize = 15, TextColor = MaskRcnnPage.PrimaryText, IsVisible = false };
             _resultsBody = new VerticalStackLayout { Spacing = 0, Children = { _resultsMessage } };
 
-            var resultsCard = new Border
-            {
-                BackgroundColor = MaskRcnnPage.CardBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                Padding = new Thickness(16),
-                Content = new VerticalStackLayout { Spacing = 12, Children = { resultsHeader, _emptyState, _resultsBody } }
-            };
-            // The Results card only ever populates on the still-image path; for
-            // camera-only modules the live feed opens on its own full-screen page,
-            // so this card would sit permanently on "No results yet". Only show it
-            // when there's a still-image flow to report into.
+            // The results only ever populate on the still-image path; for camera-only
+            // modules the live feed opens on its own full-screen page.
             if (_hasStillImage)
-                pageChildren.Children.Add(resultsCard);
+            {
+                pageChildren.Children.Add(Divider());
+                pageChildren.Children.Add(new VerticalStackLayout { Spacing = 16, Children = { resultsHeader, _emptyState, _resultsBody } });
+            }
 
             // ---------- About this module (collapsible) ----------
             if (!string.IsNullOrWhiteSpace(_about))
-                pageChildren.Children.Add(BuildAboutCard(_about));
+            {
+                pageChildren.Children.Add(Divider());
+                pageChildren.Children.Add(BuildAboutCard(_about, flush: true));
+            }
 
             // ---------- Loading overlay ----------
             _loadingIndicator = new ActivityIndicator { IsRunning = false, Color = MaskRcnnPage.Accent, WidthRequest = 44, HeightRequest = 44, HorizontalOptions = LayoutOptions.Center };
@@ -358,7 +350,7 @@ namespace MauiDemoApp
                 VerticalOptions = LayoutOptions.Center,
                 Content = new VerticalStackLayout { Spacing = 14, WidthRequest = 240, Children = { _loadingIndicator, _loadingLabel } }
             };
-            _loadingOverlay = new Grid { IsVisible = false, BackgroundColor = Color.FromArgb("#B3EEF1F8"), Children = { loadingCard } };
+            _loadingOverlay = new Grid { IsVisible = false, BackgroundColor = DemoTheme.LoadingVeil, Children = { loadingCard } };
 
             // ---------- Change Photo sheet ----------
             _sheetList = new VerticalStackLayout { Spacing = 0 };
@@ -477,7 +469,7 @@ namespace MauiDemoApp
         private void BuildSheet()
         {
             _sheetList.Children.Clear();
-            _sheetList.Children.Add(new BoxView { WidthRequest = 40, HeightRequest = 5, CornerRadius = 3, Color = Color.FromArgb("#D5D8E0"), HorizontalOptions = LayoutOptions.Center, Margin = new Thickness(0, 10, 0, 6) });
+            _sheetList.Children.Add(new BoxView { WidthRequest = 40, HeightRequest = 5, CornerRadius = 3, Color = DemoTheme.SheetHandle, HorizontalOptions = LayoutOptions.Center, Margin = new Thickness(0, 10, 0, 6) });
             _sheetList.Children.Add(new Label { Text = "Change Photo", FontFamily = MaskRcnnPage.TitleFont, FontSize = 20, TextColor = MaskRcnnPage.PrimaryText, HorizontalOptions = LayoutOptions.Center, Margin = new Thickness(0, 0, 0, 6) });
 
             _sheetList.Children.Add(SheetSection("SAMPLE IMAGES"));
@@ -491,7 +483,7 @@ namespace MauiDemoApp
                 _sheetList.Children.Add(SheetRow(MaskRcnnPage.GlyphCamera, "Take Photo", "camera", false));
 
             var cancelLabel = new Label { Text = "Cancel", FontFamily = MaskRcnnPage.TitleFont, FontSize = 17, TextColor = MaskRcnnPage.Accent, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
-            var cancel = new Border { BackgroundColor = Color.FromArgb("#F2F2F7"), Stroke = Colors.Transparent, StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(14) }, HeightRequest = 52, Margin = new Thickness(0, 14, 0, 0), Content = cancelLabel };
+            var cancel = new Border { BackgroundColor = DemoTheme.BannerBackground, Stroke = Colors.Transparent, StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(14) }, HeightRequest = 52, Margin = new Thickness(0, 14, 0, 0), Content = cancelLabel };
             var cancelTap = new TapGestureRecognizer();
             cancelTap.Tapped += (s, e) => CloseSheet(null);
             cancel.GestureRecognizers.Add(cancelTap);
@@ -582,6 +574,8 @@ namespace MauiDemoApp
             _resultsBody.Children.Clear();
             _resultsBody.Children.Add(_resultsMessage);
             _emptyState.IsVisible = true;
+            ((Label)_emptyState.Children[1]).Text = EmptyTitle;
+            ((Label)_emptyState.Children[2]).Text = EmptyCaption;
             _resultsMessage.IsVisible = false;
             _resultsMessage.Text = "";
             _resultsStatusLabel.Text = "Ready";
@@ -764,7 +758,7 @@ namespace MauiDemoApp
         {
             _emptyState.IsVisible = true;
             _resultsMessage.IsVisible = false;
-            ((Label)_emptyState.Children[1]).Text = "Something went wrong";
+            ((Label)_emptyState.Children[1]).Text = "something went wrong";
             ((Label)_emptyState.Children[2]).Text = message;
         }
 
@@ -777,6 +771,16 @@ namespace MauiDemoApp
 
         // ---------- Small styled controls ----------
 
+        private const string EmptyTitle = "no results yet";
+        private const string EmptyCaption = "run a detection to see labels here";
+
+        internal static Label SectionLabel(string text) => DemoTheme.SectionLabel(text);
+
+        internal static BoxView Divider() => DemoTheme.Divider();
+
+
+        private static Border TextPill(string text, EventHandler onTap) => DemoTheme.TextPill(text, () => onTap(null, EventArgs.Empty));
+
         private Border CircleButton(string glyph, Action onTap)
         {
             var cb = new Border
@@ -784,7 +788,7 @@ namespace MauiDemoApp
                 WidthRequest = 44,
                 HeightRequest = 44,
                 BackgroundColor = MaskRcnnPage.CardBackground,
-                Stroke = MaskRcnnPage.RowBorder,
+                Stroke = Colors.Transparent,
                 StrokeThickness = 1,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
                 VerticalOptions = LayoutOptions.Center,
@@ -799,9 +803,9 @@ namespace MauiDemoApp
         // ---------- About this module (collapsible one-paragraph card) ----------
         // Static + self-contained (its own toggle state is captured in the tap
         // closure) so the bespoke pages (Mask R-CNN, Shape Detection) can reuse it.
-        internal static View BuildAboutCard(string about)
+        internal static View BuildAboutCard(string about, bool flush = false)
         {
-            var titleLabel = new Label { Text = "About this module", FontFamily = MaskRcnnPage.TitleFont, FontSize = 17, TextColor = MaskRcnnPage.PrimaryText, VerticalOptions = LayoutOptions.Center };
+            var titleLabel = new Label { Text = "ABOUT THIS MODULE", FontFamily = MaskRcnnPage.BodyFont, FontSize = 12, CharacterSpacing = 1, TextColor = MaskRcnnPage.SecondaryText, VerticalOptions = LayoutOptions.Center };
             var chevron = MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphChevronRight, MaskRcnnPage.SecondaryText, 22);
 
             var headerRow = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
@@ -826,7 +830,7 @@ namespace MauiDemoApp
                 BackgroundColor = MaskRcnnPage.CardBackground,
                 Stroke = Colors.Transparent,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                Padding = new Thickness(16),
+                Padding = flush ? new Thickness(0, 4) : new Thickness(16),
                 Content = new VerticalStackLayout { Children = { headerRow, details } }
             };
         }
@@ -837,7 +841,7 @@ namespace MauiDemoApp
             {
                 BackgroundColor = MaskRcnnPage.TileBackground,
                 Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(13) },
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(20) },
                 Padding = new Thickness(14, 9),
                 VerticalOptions = LayoutOptions.Center,
                 Content = new HorizontalStackLayout
@@ -909,7 +913,7 @@ namespace MauiDemoApp
             };
             var exitPill = new Border
             {
-                BackgroundColor = Color.FromArgb("#E01A1C2E"),
+                BackgroundColor = Color.FromArgb("#E0111111"),
                 Stroke = Colors.Transparent,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(18) },
                 Padding = new Thickness(14, 8, 18, 8),
@@ -928,10 +932,10 @@ namespace MauiDemoApp
 
             var dot = new Border { WidthRequest = 10, HeightRequest = 10, BackgroundColor = Color.FromArgb("#2BE07A"), Stroke = Colors.Transparent, StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(5) }, VerticalOptions = LayoutOptions.Center };
             var scanningTitle = new Label { Text = "Scanning…", FontFamily = MaskRcnnPage.TitleFont, FontSize = 15, TextColor = Colors.White };
-            var scanningSub = new Label { Text = "Point your camera at the subject", FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = Color.FromArgb("#D6D6DE"), HorizontalOptions = LayoutOptions.Center };
+            var scanningSub = new Label { Text = "Point your camera at the subject", FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = Color.FromArgb("#D0D0D0"), HorizontalOptions = LayoutOptions.Center };
             var pill = new Border
             {
-                BackgroundColor = Color.FromArgb("#E01A1C2E"),
+                BackgroundColor = Color.FromArgb("#E0111111"),
                 Stroke = Colors.Transparent,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(18) },
                 Padding = new Thickness(22, 12),
@@ -952,7 +956,7 @@ namespace MauiDemoApp
             _spinner = new ActivityIndicator { IsRunning = false, Color = MaskRcnnPage.Accent, WidthRequest = 44, HeightRequest = 44, HorizontalOptions = LayoutOptions.Center };
             _loadingLabel = new Label { Text = "Starting camera…", FontFamily = MaskRcnnPage.BodyFont, FontSize = 15, TextColor = MaskRcnnPage.PrimaryText, HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center };
             var loadingBox = new VerticalStackLayout { Spacing = 14, VerticalOptions = LayoutOptions.Center, HorizontalOptions = LayoutOptions.Center, Children = { _spinner, _loadingLabel } };
-            _overlay = new Grid { BackgroundColor = Color.FromArgb("#F5EEF1F8"), Children = { loadingBox } };
+            _overlay = new Grid { BackgroundColor = DemoTheme.LoadingVeilStrong, Children = { loadingBox } };
 
             // Edge-to-edge: the feed fills the whole page (theme background behind
             // it), with the exit control and floating pills on top — no chrome bar
@@ -992,7 +996,7 @@ namespace MauiDemoApp
                 };
                 var border = new Border
                 {
-                    BackgroundColor = Color.FromArgb("#E01A1C2E"),
+                    BackgroundColor = Color.FromArgb("#E0111111"),
                     Stroke = Colors.Transparent,
                     StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(16) },
                     Padding = new Thickness(12, 6, 10, 6),
@@ -1035,7 +1039,7 @@ namespace MauiDemoApp
             };
             var collapseBorder = new Border
             {
-                BackgroundColor = Color.FromArgb("#E01A1C2E"),
+                BackgroundColor = Color.FromArgb("#E0111111"),
                 Stroke = Colors.Transparent,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(16) },
                 Padding = new Thickness(10, 6, 14, 6),

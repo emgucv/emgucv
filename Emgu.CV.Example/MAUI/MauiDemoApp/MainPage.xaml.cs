@@ -165,7 +165,9 @@ namespace MauiDemoApp
                                 items.Add(o.Label);
                         return (MaskRcnnPage.Encode(annotated), (IReadOnlyList<string>)items);
                     },
-                    about: "Finds text anywhere in a photo — signs, labels, plates — and reads it, even at odd angles."));
+                    about: "Finds text anywhere in a photo — signs, labels, plates — and reads it, even at odd angles.",
+                    tag: "DNN",
+                    category: "Detection"));
             };
             yoloButton.Clicked += (sender, args) =>
             {
@@ -188,7 +190,9 @@ namespace MauiDemoApp
                         "YoloV10N", "YoloV10S", "YoloV10M", "YoloV10B", "YoloV10L", "YoloV10X",
                         "YoloV8N",
                     },
-                    about: "Fast, general-purpose object detection: one neural network finds and labels every object in a single pass — hence \"You Only Look Once.\""));
+                    about: "Fast, general-purpose object detection: one neural network finds and labels every object in a single pass — hence \"You Only Look Once.\"",
+                    tag: "DNN",
+                    category: "Detection"));
             };
 
             superresButton.Clicked += (sender, args) =>
@@ -213,7 +217,9 @@ namespace MauiDemoApp
                         "EspcnX2 - 2x, fast, small model",
                     },
                     hasCamera: false,
-                    about: "Uses a neural network to upscale and sharpen an image, reconstructing fine detail (2×–3×)."));
+                    about: "Uses a neural network to upscale and sharpen an image, reconstructing fine detail (2×–3×).",
+                    tag: "DNN",
+                    category: "Image & 3D"));
             };
 
             if (haveDNN)
@@ -268,7 +274,9 @@ namespace MauiDemoApp
                             new ModelShowcasePage.Sample("test_image.png", "Document", MaskRcnnPage.GlyphImage),
                         },
                         hasCamera: false,
-                        about: "Classic document OCR — reads printed text from an image into editable text."));
+                        about: "Classic document OCR — reads printed text from an image into editable text.",
+                    tag: "Tesseract",
+                    category: "Detection"));
                 };
             }
 
@@ -308,7 +316,9 @@ namespace MauiDemoApp
                             }
                             return (MaskRcnnPage.Encode(annotated), (IReadOnlyList<string>)items);
                         },
-                        about: "A newer, more accurate OCR engine (PP-OCRv4) that finds and reads text — strong on dense and multilingual text."));
+                        about: "A newer, more accurate OCR engine (PP-OCRv4) that finds and reads text — strong on dense and multilingual text.",
+                    tag: "DNN",
+                    category: "Detection"));
                 };
             }
 
@@ -328,7 +338,9 @@ namespace MauiDemoApp
                         () => new VideoSurveillanceModel(),
                         null,
                         hasCamera: true,
-                        about: "Learns the static background from the camera, then flags and tracks anything that moves."));
+                        about: "Learns the static background from the camera, then flags and tracks anything that moves.",
+                    tag: null,
+                    category: "Video"));
                 };
             }
 
@@ -363,7 +375,9 @@ namespace MauiDemoApp
                         },
                         pickerTitle: "Face detector",
                         pickerOptions: detectors.ToArray(),
-                        about: "Finds faces in a photo; pick the engine — Yunet, a Haar cascade, or one that also marks facial landmarks."));
+                        about: "Finds faces in a photo; pick the engine — Yunet, a Haar cascade, or one that also marks facial landmarks.",
+                    tag: null,
+                    category: "Detection"));
                 };
 
                 Button pedestrianDetectionButton = new Button();
@@ -381,7 +395,9 @@ namespace MauiDemoApp
                         {
                             new ModelShowcasePage.Sample("pedestrian.png", "Street", MaskRcnnPage.GlyphImage),
                         },
-                        about: "Detects people using HOG — a classic, lightweight person-finder for surveillance and counting."));
+                        about: "Detects people using HOG — a classic, lightweight person-finder for surveillance and counting.",
+                    tag: null,
+                    category: "Detection"));
                 };
 
             }
@@ -409,7 +425,9 @@ namespace MauiDemoApp
                         {
                             new ModelShowcasePage.Sample("qrcode_barcode.png", "QR & barcode", MaskRcnnPage.GlyphImage),
                         },
-                        about: "Detects and decodes barcodes and QR codes, returning the value they encode."));
+                        about: "Detects and decodes barcodes and QR codes, returning the value they encode.",
+                    tag: null,
+                    category: "Detection"));
                 };
             }
 
@@ -451,21 +469,19 @@ namespace MauiDemoApp
                 };
             }
             
-            // ---------- Palette ----------
-            string titleFont = "InterSemiBold";
+            // ---------- Palette: plain white storefront, black type, grey details ----------
+            string boldFont = "InterSemiBold";
             string bodyFont = "InterRegular";
-            string mediumFont = "InterSemiBold";
             const string IconFont = "MaterialSymbols";
 
-            Color pageBackground = Color.FromArgb("#EEF1F8");
-            Color cardBackground = Colors.White;
-            Color primaryText = Color.FromArgb("#1A1C2E");
-            Color secondaryText = Color.FromArgb("#8A8FA3");
-            Color accent = Color.FromArgb("#3D7BF7");
-            Color rowBorder = Color.FromArgb("#ECEEF5");
-            Color tileBackground = Color.FromArgb("#E8EFFE");
-            Color chevronColor = Color.FromArgb("#C2C7D6");
-
+            Color pageBackground = DemoTheme.PageBackground;
+            Color primaryText = DemoTheme.PrimaryText;
+            Color secondaryText = DemoTheme.SecondaryText;
+            Color mutedText = DemoTheme.MutedText;
+            Color bannerBackground = DemoTheme.BannerBackground;
+            Color pillBackground = DemoTheme.PillBackground;
+            Color hairline = DemoTheme.Hairline;
+            const double SideMargin = 28;
             // ---------- Icon helper (Material Symbols glyphs) ----------
             const string gInfo = "", gSearch = "", gSparkle = "", gChevron = "";
 
@@ -505,347 +521,340 @@ namespace MauiDemoApp
                 return "";                                                       // widgets
             };
 
-            // ---------- Sort the demo buttons into broad groups ----------
-            string[] categoryNames = { "Detection", "Image & 3D", "Video", "LLM" };
-            string[] pillGlyphs = { "", "", "" }; // crop_free, view_in_ar, smart_display // crop_free, view_in_ar, smart_display
-            // Extend the pill glyphs for the new LLM tab. Reuse the existing three by
-            // index (so the glyph characters don't have to be retyped) and give LLM the
-            // qwen glyph.
-            pillGlyphs = new string[] { pillGlyphs[0], pillGlyphs[1], pillGlyphs[2], demoGlyph("qwen") };
-            var categoryDemos = new List<Button>[] { new List<Button>(), new List<Button>(), new List<Button>(), new List<Button>() };
+            // ---------- Sort the demos into the menu's groups ----------
+            // Group 0 is "All"; the rest match categorize().
+            string[] categoryNames = { "All", "Detection", "Image & 3D", "Video", "LLM" };
 
             Func<string, int> categorize = (text) =>
             {
                 string t = (text ?? "").ToLowerInvariant();
-                if (t.Contains("qwen") || t.Contains("smolvlm")) return 3;   // LLM
-                if (t.Contains("video")) return 2;
+                if (t.Contains("qwen") || t.Contains("smolvlm")) return 4;   // LLM
+                if (t.Contains("video")) return 3;
                 if (t.Contains("hello") || t.Contains("planar") || t.Contains("feature matching")
                     || t.Contains("super resolution") || t.Contains("3d") || t.Contains("unicode"))
-                    return 1;
-                return 0;
+                    return 2;
+                return 1;
             };
 
-            var demoNames = new Dictionary<Button, string>();
+            // "Yolo (DNN module)" -> name "Yolo", tag "DNN".
+            Func<string, (string name, string tag)> splitName = (text) =>
+            {
+                text = text ?? "";
+                int open = text.IndexOf('(');
+                if (open < 0 || !text.EndsWith(")"))
+                    return (text.Trim(), null);
+                string tag = text.Substring(open + 1, text.Length - open - 2);
+                tag = System.Text.RegularExpressions.Regex.Replace(tag, @"\s*module\s*$", "", System.Text.RegularExpressions.RegexOptions.IgnoreCase).Trim();
+                return (text.Substring(0, open).Trim(), tag.Length > 0 ? tag : null);
+            };
+
+            // ---------- One product-style tile per demo ----------
+            var tiles = new List<(View tile, string name, int category)>();
+            var tilePictures = new List<(Grid picture, Image icon)>();
             foreach (View v in buttonList)
             {
-                if (v is Button b && b.IsVisible)
+                if (!(v is Button b) || !b.IsVisible)
+                    continue;
+
+                string fullText = b.Text;
+                var (name, tag) = splitName(fullText);
+                int category = categorize(fullText);
+
+                var picture = new Grid { HeightRequest = 150, BackgroundColor = pageBackground };
+                var tileIcon = makeIcon(demoGlyph(fullText), primaryText, 76);
+                picture.Add(tileIcon);
+                tilePictures.Add((picture, tileIcon));
+                if (tag != null)
                 {
-                    demoNames[b] = b.Text;
-                    categoryDemos[categorize(b.Text)].Add(b);
-                }
-            }
-
-            // ---------- Build a rich row (icon tile + name + chevron) for a demo ----------
-            Func<Button, View> buildRow = (b) =>
-            {
-                string name = demoNames.TryGetValue(b, out var nm) ? nm : b.Text;
-
-                var tile = new Border
-                {
-                    WidthRequest = 42,
-                    HeightRequest = 42,
-                    BackgroundColor = tileBackground,
-                    Stroke = Colors.Transparent,
-                    StrokeThickness = 0,
-                    StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(11) },
-                    VerticalOptions = LayoutOptions.Center,
-                    Content = makeIcon(demoGlyph(name), accent, 22)
-                };
-
-                var nameLabel = new Label
-                {
-                    Text = name,
-                    FontFamily = bodyFont,
-                    FontSize = 16,
-                    TextColor = primaryText,
-                    VerticalOptions = LayoutOptions.Center,
-                    LineBreakMode = LineBreakMode.TailTruncation
-                };
-
-                var chevron = makeIcon(gChevron, chevronColor, 22);
-                chevron.HorizontalOptions = LayoutOptions.End;
-
-                var grid = new Grid
-                {
-                    Padding = new Thickness(12, 12),
-                    ColumnSpacing = 12,
-                    ColumnDefinitions =
+                    picture.Add(new Border
                     {
-                        new ColumnDefinition(GridLength.Auto),
-                        new ColumnDefinition(GridLength.Star),
-                        new ColumnDefinition(GridLength.Auto)
+                        BackgroundColor = pillBackground,
+                        Stroke = Colors.Transparent,
+                        StrokeThickness = 0,
+                        StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(14) },
+                        Padding = new Thickness(11, 5),
+                        HorizontalOptions = LayoutOptions.End,
+                        VerticalOptions = LayoutOptions.Start,
+                        Content = new Label { Text = tag, FontFamily = bodyFont, FontSize = 13, TextColor = primaryText }
+                    });
+                }
+
+                var tile = new VerticalStackLayout
+                {
+                    Spacing = 3,
+                    Children =
+                    {
+                        picture,
+                        new Label
+                        {
+                            Text = name,
+                            FontFamily = boldFont,
+                            FontSize = 18,
+                            TextColor = primaryText,
+                            Margin = new Thickness(0, 14, 0, 0),
+                            LineBreakMode = LineBreakMode.WordWrap,
+                            // Long names like "Scene Text detection" wrap rather than get cut off.
+                            MaxLines = 2
+                        },
+                        new Label { Text = categoryNames[category], FontFamily = bodyFont, FontSize = 14, TextColor = secondaryText },
+                        new Label { Text = tag != null ? tag.ToLowerInvariant() + " module" : "opencv", FontFamily = bodyFont, FontSize = 12, TextColor = mutedText }
                     }
                 };
-                grid.Add(tile, 0, 0);
-                grid.Add(nameLabel, 1, 0);
-                grid.Add(chevron, 2, 0);
 
-                // Reuse the original button as a transparent tap layer over the whole row.
-                b.Text = "";
-                b.BackgroundColor = Colors.Transparent;
-                b.BorderWidth = 0;
-                b.CornerRadius = 14;
-                b.Margin = new Thickness(0);
-                b.Padding = new Thickness(0);
-                b.HorizontalOptions = LayoutOptions.Fill;
-                b.VerticalOptions = LayoutOptions.Fill;
-                grid.Add(b, 0, 0);
-                Grid.SetColumnSpan(b, 3);
+                // Tapping the tile fires the original button's Clicked handler.
+                Button source = b;
+                var tap = new TapGestureRecognizer();
+                tap.Tapped += (s, e) => ((Microsoft.Maui.IButton)source).Clicked();
+                tile.GestureRecognizers.Add(tap);
 
-                return new Border
-                {
-                    BackgroundColor = cardBackground,
-                    Stroke = rowBorder,
-                    StrokeThickness = 1,
-                    StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(14) },
-                    Content = grid
-                };
-            };
-
-            // Pre-build all rows once (avoids re-parenting issues when switching categories).
-            var categoryRows = new List<(View row, string name)>[categoryNames.Length];
-            for (int c = 0; c < categoryNames.Length; c++)
-            {
-                categoryRows[c] = new List<(View, string)>();
-                foreach (Button b in categoryDemos[c])
-                    categoryRows[c].Add((buildRow(b), demoNames[b]));
+                tiles.Add((tile, name, category));
             }
 
-            // ---------- Section card (header + rows) ----------
-            var demoStack = new VerticalStackLayout { Spacing = 10 };
-
-            var sectionTitle = new Label
+            // ---------- Tile grid; the column count follows the page width ----------
+            var tileGrid = new Grid { ColumnSpacing = 24, RowSpacing = 40, Margin = new Thickness(SideMargin, 0, SideMargin, 48) };
+            var emptyLabel = new Label
             {
-                FontFamily = mediumFont,
-                FontSize = 20,
-                TextColor = primaryText,
-                VerticalOptions = LayoutOptions.Center
-            };
-            var sectionHeader = new HorizontalStackLayout
-            {
-                Spacing = 10,
-                Padding = new Thickness(6, 4, 6, 12),
-                Children = { makeIcon(gSparkle, accent, 22), sectionTitle }
-            };
-            var sectionCard = new Border
-            {
-                BackgroundColor = cardBackground,
-                Stroke = Colors.Transparent,
-                StrokeThickness = 0,
-                StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(24) },
-                Padding = new Thickness(14, 14, 14, 16),
-                Margin = new Thickness(16, 0, 16, 28),
-                Content = new VerticalStackLayout { Children = { sectionHeader, demoStack } }
+                Text = "no matching demos",
+                FontFamily = bodyFont,
+                FontSize = 14,
+                TextColor = secondaryText,
+                Margin = new Thickness(SideMargin, 0, SideMargin, 48),
+                IsVisible = false
             };
 
-            // ---------- Search box (toggled by the header search button) ----------
             var searchEntry = new Entry
             {
-                Placeholder = "Search modules",
+                Placeholder = "search",
                 FontFamily = bodyFont,
-                FontSize = 16,
+                FontSize = 15,
                 TextColor = primaryText,
-                PlaceholderColor = secondaryText,
-                BackgroundColor = Colors.Transparent,
-                VerticalOptions = LayoutOptions.Center
+                PlaceholderColor = mutedText,
+                BackgroundColor = Colors.Transparent
             };
-            var searchGrid = new Grid
-            {
-                ColumnSpacing = 8,
-                Padding = new Thickness(14, 2),
-                ColumnDefinitions =
-                {
-                    new ColumnDefinition(GridLength.Auto),
-                    new ColumnDefinition(GridLength.Star)
-                }
-            };
-            searchGrid.Add(makeIcon(gSearch, secondaryText, 20), 0, 0);
-            searchGrid.Add(searchEntry, 1, 0);
-            var searchCard = new Border
+            var searchBar = new VerticalStackLayout
             {
                 IsVisible = false,
-                BackgroundColor = cardBackground,
-                Stroke = rowBorder,
-                StrokeThickness = 1,
-                StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(14) },
-                Margin = new Thickness(16, 0, 16, 0),
-                Content = searchGrid
+                Margin = new Thickness(SideMargin, 0, SideMargin, 0),
+                Children = { searchEntry, new BoxView { HeightRequest = 1, Color = primaryText } }
             };
 
-            // ---------- Category pills ----------
             int currentCategory = 0;
-            Action<int> selectCategory = null;
+            double lastWidth = -1;
+            Action layoutTiles = () =>
+            {
+                double width = this.Width > 0 ? this.Width : 400;
+                int columns = Math.Max(2, (int)((width - 2 * SideMargin + 24) / (210 + 24)));
 
-            var carouselRow = new HorizontalStackLayout { Spacing = 12, Padding = new Thickness(16, 0, 16, 0) };
-            var categoryCards = new Border[categoryNames.Length];
-            var categoryLabels = new Label[categoryNames.Length];
-            var categoryIcons = new Image[categoryNames.Length];
+                // Phones get shorter picture boxes, smaller icons and tighter rows, so
+                // a two-column grid isn't mostly white space.
+                bool compact = width < 600;
+                foreach (var (picture, icon) in tilePictures)
+                {
+                    picture.HeightRequest = compact ? 96 : 150;
+                    icon.WidthRequest = icon.HeightRequest = compact ? 52 : 76;
+                    ((FontImageSource)icon.Source).Size = compact ? 52 : 76;
+                }
+                tileGrid.RowSpacing = compact ? 28 : 40;
 
+                string q = (searchEntry.Text ?? "").Trim().ToLowerInvariant();
+                var shown = tiles.Where(t => q.Length > 0
+                    ? t.name.ToLowerInvariant().Contains(q)
+                    : currentCategory == 0 || t.category == currentCategory).ToList();
+
+                tileGrid.Children.Clear();
+                tileGrid.ColumnDefinitions.Clear();
+                tileGrid.RowDefinitions.Clear();
+                for (int c = 0; c < columns; c++)
+                    tileGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+                for (int r = 0; r < (shown.Count + columns - 1) / columns; r++)
+                    tileGrid.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
+                for (int i = 0; i < shown.Count; i++)
+                    tileGrid.Add(shown[i].tile, i % columns, i / columns);
+
+                emptyLabel.IsVisible = shown.Count == 0;
+            };
+
+            // ---------- Top banner ----------
+            var banner = new Label
+            {
+                Text = "OpenCV 5.1 · free & open source on every platform",
+                FontFamily = bodyFont,
+                FontSize = 12,
+                TextColor = primaryText,
+                BackgroundColor = bannerBackground,
+                HorizontalTextAlignment = TextAlignment.Center,
+                Padding = new Thickness(12, 7)
+            };
+
+            // ---------- Group filter: a row of pills under the wordmark ----------
+            // The selected group is a solid black pill; the others are grey. Each
+            // shows how many demos it holds, so the row reads clearly as a filter.
+            var pills = new List<(Border pill, Label label, int category)>();
+            var pillRow = new HorizontalStackLayout { Spacing = 10 };
+            Action refreshMenu = () =>
+            {
+                bool searching = (searchEntry.Text ?? "").Length > 0;
+                foreach (var (pill, label, category) in pills)
+                {
+                    bool selected = !searching && category == currentCategory;
+                    pill.BackgroundColor = selected ? primaryText : pillBackground;
+                    label.TextColor = selected ? pageBackground : primaryText;
+                }
+            };
             for (int i = 0; i < categoryNames.Length; i++)
             {
+                int count = i == 0 ? tiles.Count : tiles.Count(t => t.category == i);
+                // Hide a group that has no demos on this build (e.g. no LLM support).
+                if (count == 0)
+                    continue;
                 int idx = i;
-                var ic = makeIcon(pillGlyphs[i], primaryText, 20);
-                var lbl = new Label
+                var label = new Label
                 {
-                    Text = categoryNames[i],
-                    FontFamily = mediumFont,
-                    FontSize = 15,
-                    TextColor = primaryText,
-                    VerticalOptions = LayoutOptions.Center
+                    FontFamily = bodyFont,
+                    FontSize = 14,
+                    CharacterSpacing = 0.5,
+                    VerticalOptions = LayoutOptions.Center,
+                    FormattedText = new FormattedString
+                    {
+                        Spans =
+                        {
+                            new Span { Text = categoryNames[i].ToUpperInvariant() },
+                            new Span { Text = "  " + count, FontSize = 11 }
+                        }
+                    }
                 };
-                var hs = new HorizontalStackLayout { Spacing = 8, VerticalOptions = LayoutOptions.Center, Children = { ic, lbl } };
-                var catCard = new Border
+                var pill = new Border
                 {
-                    StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(16) },
-                    Stroke = rowBorder,
-                    StrokeThickness = 1,
-                    BackgroundColor = cardBackground,
-                    Padding = new Thickness(18, 12),
-                    Content = hs
+                    Stroke = Colors.Transparent,
+                    StrokeThickness = 0,
+                    StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(20) },
+                    Padding = new Thickness(18, 10),
+                    Content = label
                 };
                 var tap = new TapGestureRecognizer();
-                tap.Tapped += (s, e) => selectCategory(idx);
-                catCard.GestureRecognizers.Add(tap);
-                categoryCards[i] = catCard;
-                categoryLabels[i] = lbl;
-                categoryIcons[i] = ic;
-                carouselRow.Children.Add(catCard);
+                tap.Tapped += (s, e) =>
+                {
+                    currentCategory = idx;
+                    searchEntry.Text = "";
+                    refreshMenu();
+                    layoutTiles();
+                };
+                pill.GestureRecognizers.Add(tap);
+                pills.Add((pill, label, i));
+                pillRow.Children.Add(pill);
             }
-
-            var carousel = new ScrollView
+            var categoryBar = new ScrollView
             {
                 Orientation = ScrollOrientation.Horizontal,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Never,
-                Content = carouselRow
+                Margin = new Thickness(SideMargin, 0, 0, 44),
+                Content = pillRow
             };
 
-            selectCategory = (idx) =>
+            Func<string, Action, View> iconButton = (glyph, onTap) =>
             {
-                currentCategory = idx;
-                for (int i = 0; i < categoryCards.Length; i++)
-                {
-                    bool sel = (i == idx);
-                    categoryCards[i].BackgroundColor = sel ? accent : cardBackground;
-                    categoryCards[i].Stroke = sel ? Colors.Transparent : rowBorder;
-                    categoryLabels[i].TextColor = sel ? Colors.White : primaryText;
-                    ((FontImageSource)categoryIcons[i].Source).Color = sel ? Colors.White : primaryText;
-                }
-
-                string q = (searchEntry.Text ?? "").Trim().ToLowerInvariant();
-                bool searching = q.Length > 0;
-
-                // While searching, the module grouping is irrelevant: hide the
-                // category carousel and section heading and just list every
-                // matching module by name, across all categories.
-                carousel.IsVisible = !searching;
-                sectionHeader.IsVisible = !searching;
-
-                demoStack.Children.Clear();
-
-                if (!searching)
-                {
-                    sectionTitle.Text = categoryNames[idx] + " Modules";
-                    foreach (var (row, name) in categoryRows[idx])
-                    {
-                        row.IsVisible = true;
-                        demoStack.Children.Add(row);
-                    }
-                    return;
-                }
-
-                int matches = 0;
-                for (int c = 0; c < categoryRows.Length; c++)
-                {
-                    foreach (var (row, name) in categoryRows[c])
-                    {
-                        if (!name.ToLowerInvariant().Contains(q))
-                            continue;
-                        row.IsVisible = true;
-                        demoStack.Children.Add(row);
-                        matches++;
-                    }
-                }
-
-                if (matches == 0)
-                    demoStack.Children.Add(new Label
-                    {
-                        Text = "No matching modules",
-                        FontFamily = bodyFont,
-                        FontSize = 15,
-                        TextColor = secondaryText,
-                        HorizontalOptions = LayoutOptions.Center,
-                        Margin = new Thickness(0, 20)
-                    });
-            };
-
-            searchEntry.TextChanged += (s, e) => selectCategory(currentCategory);
-
-            // ---------- Header (title + subtitle + info/search buttons) ----------
-            Func<string, Action, Border> circleButton = (glyph, onTap) =>
-            {
-                var cb = new Border
-                {
-                    WidthRequest = 46,
-                    HeightRequest = 46,
-                    BackgroundColor = cardBackground,
-                    Stroke = rowBorder,
-                    StrokeThickness = 1,
-                    StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(23) },
-                    VerticalOptions = LayoutOptions.Center,
-                    Content = makeIcon(glyph, primaryText, 22)
-                };
+                var icon = makeIcon(glyph, primaryText, 24);
+                icon.Margin = new Thickness(6, 0);
                 var t = new TapGestureRecognizer();
                 t.Tapped += (s, e) => onTap();
-                cb.GestureRecognizers.Add(t);
-                return cb;
+                icon.GestureRecognizers.Add(t);
+                return icon;
             };
 
-            var infoBtn = circleButton(gInfo, () => this.Navigation.PushAsync(new AboutPage()));
-            var searchBtn = circleButton(gSearch, () =>
+            searchEntry.TextChanged += (s, e) =>
             {
-                searchCard.IsVisible = !searchCard.IsVisible;
-                if (searchCard.IsVisible)
-                    searchEntry.Focus();
-                else
-                {
-                    searchEntry.Text = "";
-                    selectCategory(currentCategory);
-                }
-            });
+                refreshMenu();
+                layoutTiles();
+            };
 
-            var titleLabel = new Label { Text = "Emgu CV", FontFamily = titleFont, FontSize = 40, TextColor = primaryText };
-            var subtitleLabel = new Label
+            // ---------- Top row: blurb on the left, search / info on the right ----------
+            var blurb = new Label
             {
-                Text = "Computer Vision made simple",
+                // Phones get a shorter line; bigger screens have room for the full one.
+                Text = DeviceInfo.Idiom == DeviceIdiom.Phone
+                    ? "opencv for .net, real-time vision and on-device ai on every platform."
+                    : "a cross-platform .net wrapper for opencv: real-time computer vision and on-device ai on windows, mac, linux, ios and android.",
                 FontFamily = bodyFont,
-                FontSize = 15,
+                FontSize = 11,
+                LineHeight = 1.35,
                 TextColor = secondaryText,
-                Margin = new Thickness(0, 2, 0, 0)
+                // Wider on big screens so it sits in two short lines instead of four.
+                MaximumWidthRequest = DeviceInfo.Idiom == DeviceIdiom.Phone ? 250 : 420,
+                HorizontalOptions = LayoutOptions.Start
             };
-            var titleStack = new VerticalStackLayout { VerticalOptions = LayoutOptions.Center, Children = { titleLabel, subtitleLabel } };
 
-            var header = new Grid
+            var topRow = new Grid
             {
-                Padding = new Thickness(24, 22, 20, 8),
-                ColumnDefinitions =
+                Padding = new Thickness(SideMargin, 22, SideMargin - 6, 12),
+                ColumnSpacing = 12,
+                ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) }
+            };
+            topRow.Add(blurb, 0, 0);
+            topRow.Add(new HorizontalStackLayout
+            {
+                VerticalOptions = LayoutOptions.Start,
+                Children =
                 {
-                    new ColumnDefinition(GridLength.Star),
-                    new ColumnDefinition(GridLength.Auto)
+                    iconButton(gSearch, () =>
+                    {
+                        searchBar.IsVisible = !searchBar.IsVisible;
+                        if (searchBar.IsVisible)
+                            searchEntry.Focus();
+                        else
+                            searchEntry.Text = "";
+                    }),
+                    iconButton(SettingsPage.GlyphSettings, () => this.Navigation.PushAsync(new SettingsPage()))
                 }
-            };
-            header.Add(titleStack, 0, 0);
-            header.Add(new HorizontalStackLayout { Spacing = 10, VerticalOptions = LayoutOptions.Center, Children = { infoBtn, searchBtn } }, 1, 0);
+            }, 1, 0);
 
-            selectCategory(0);
+            // ---------- The giant wordmark ----------
 
-            var contentLayout = new VerticalStackLayout
+            var wordmark = new Label
             {
-                Spacing = 16,
-                Children = { header, searchCard, carousel, sectionCard }
+                Text = "emgu cv",
+                FontFamily = boldFont,
+                TextColor = primaryText,
+                LineBreakMode = LineBreakMode.NoWrap,
+                Margin = new Thickness(SideMargin - 4, 56, SideMargin, 28)
             };
+
+            // Size the wordmark to span the page: Inter SemiBold's "emgu cv" is about
+            // 3.8 em wide with the tightened spacing below.
+            Action fitWordmark = () =>
+            {
+                double width = this.Width > 0 ? this.Width : 400;
+                // Capped so on a big window it no longer eats half the screen.
+                double size = Math.Clamp((width - 2 * SideMargin) / 3.85, 48, 150);
+                wordmark.FontSize = size;
+                wordmark.CharacterSpacing = -size * 0.06;
+                // The font reserves room above lowercase letters for capitals; pull the
+                // wordmark up by that much. Phones also get much less padding around it.
+                bool compact = width < 600;
+                wordmark.Margin = new Thickness(SideMargin - 4, (compact ? 12 : 20) - size * 0.2, SideMargin, compact ? 16 : 24);
+                categoryBar.Margin = new Thickness(SideMargin, 0, 0, compact ? 24 : 44);
+            };
+
+            this.SizeChanged += (s, e) =>
+            {
+                if (Math.Abs(this.Width - lastWidth) < 1)
+                    return;
+                lastWidth = this.Width;
+                fitWordmark();
+                layoutTiles();
+            };
+
+            refreshMenu();
+            fitWordmark();
+            layoutTiles();
 
             this.BackgroundColor = pageBackground;
-            this.Content = new ScrollView { Content = contentLayout };
+            this.Content = new ScrollView
+            {
+                Content = new VerticalStackLayout
+                {
+                    Children = { banner, topRow, searchBar, wordmark, categoryBar, tileGrid, emptyLabel }
+                }
+            };
         }
 
 

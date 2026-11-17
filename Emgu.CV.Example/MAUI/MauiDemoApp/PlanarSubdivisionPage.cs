@@ -6,8 +6,6 @@ using System;
 
 using Emgu.CV;
 
-using Microsoft.Maui.Controls.Shapes;
-
 using PlanarSubdivisionExample;
 
 namespace MauiDemoApp
@@ -17,38 +15,32 @@ namespace MauiDemoApp
         private const int MaxValue = 600;
 
         private readonly Image _image = new Image { Aspect = Aspect.AspectFit, HeightRequest = 300, HorizontalOptions = LayoutOptions.Fill };
-        private readonly Label _badge = new Label { Text = "30 points", FontFamily = MaskRcnnPage.TitleFont, FontSize = 13, TextColor = MaskRcnnPage.Accent };
-        private readonly Label _sliderValue = new Label { Text = "30 points", FontFamily = MaskRcnnPage.TitleFont, FontSize = 15, TextColor = MaskRcnnPage.Accent, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center };
+        // Text of the (non-tappable) "30 points" tag pill in the Subdivision header.
+        private readonly Label _badge;
+        private readonly Label _sliderValue = new Label { Text = "30 points", FontFamily = DemoTheme.TitleFont, FontSize = 15, TextColor = DemoTheme.PrimaryText, HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center };
         private int _pointCount = 30;
 
         public PlanarSubdivisionPage(string glyph)
-            : base("Planar Subdivision", "Delaunay triangulation & Voronoi diagram", glyph)
+            : base("Planar Subdivision", "Delaunay triangulation & Voronoi diagram", glyph, ImageCategory)
         {
-            var badgeBorder = new Border
-            {
-                BackgroundColor = MaskRcnnPage.TileBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(11) },
-                Padding = new Thickness(12, 6),
-                VerticalOptions = LayoutOptions.Center,
-                Content = _badge
-            };
+            var badgePill = DemoTheme.TagPill("30 points");
+            _badge = (Label)badgePill.Content;
 
-            AddCard(Card(new VerticalStackLayout
+            AddSection(new VerticalStackLayout
             {
-                Spacing = 14,
+                Spacing = 16,
                 Children =
                 {
-                    SectionHeader("Subdivision", badgeBorder),
-                    ImageFrame(_image),
+                    SectionHeader("Subdivision", badgePill),
+                    DemoTheme.ImageFrame(_image),
                     Caption("Colored Voronoi cells with the Delaunay triangulation overlaid. Each dot is a cell centre.")
                 }
-            }));
+            });
 
-            AddCard(PrimaryButton("New Points", MaskRcnnPage.GlyphPlay, (s, e) => Generate()));
+            AddContent(PrimaryButton("New Points", MaskRcnnPage.GlyphPlay, (s, e) => Generate()));
 
             // ---- Point-count slider card ----
-            var slider = new Slider { Minimum = 10, Maximum = 100, Value = 30, MinimumTrackColor = MaskRcnnPage.Accent, ThumbColor = MaskRcnnPage.Accent, HorizontalOptions = LayoutOptions.Fill };
+            var slider = new Slider { Minimum = 10, Maximum = 100, Value = 30, MinimumTrackColor = DemoTheme.Accent, MaximumTrackColor = DemoTheme.Hairline, ThumbColor = DemoTheme.Accent, HorizontalOptions = LayoutOptions.Fill };
             slider.ValueChanged += (s, e) =>
             {
                 _pointCount = (int)Math.Round(e.NewValue);
@@ -57,11 +49,11 @@ namespace MauiDemoApp
             slider.DragCompleted += (s, e) => Generate();
 
             var sliderRow = new Grid { ColumnSpacing = 12, ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            sliderRow.Add(new Label { Text = "10", FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = MaskRcnnPage.SecondaryText, VerticalOptions = LayoutOptions.Center }, 0, 0);
+            sliderRow.Add(new Label { Text = "10", FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText, VerticalOptions = LayoutOptions.Center }, 0, 0);
             sliderRow.Add(slider, 1, 0);
-            sliderRow.Add(new Label { Text = "100", FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = MaskRcnnPage.SecondaryText, VerticalOptions = LayoutOptions.Center }, 2, 0);
+            sliderRow.Add(new Label { Text = "100", FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText, VerticalOptions = LayoutOptions.Center }, 2, 0);
 
-            AddCard(Card(new VerticalStackLayout
+            AddSection(new VerticalStackLayout
             {
                 Spacing = 8,
                 Children =
@@ -70,7 +62,7 @@ namespace MauiDemoApp
                     sliderRow,
                     Caption("Adjust the number of random points.")
                 }
-            }));
+            });
 
             AddAbout("Scatters random points, then builds and draws the Delaunay triangulation and Voronoi diagram between them — a demo of OpenCV's computational geometry (Subdiv2D).");
 

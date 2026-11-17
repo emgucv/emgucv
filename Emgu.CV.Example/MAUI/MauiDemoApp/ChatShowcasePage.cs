@@ -1,4 +1,4 @@
-//----------------------------------------------------------------------------
+﻿//----------------------------------------------------------------------------
 //  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
@@ -15,11 +15,12 @@ namespace MauiDemoApp
     /// <summary>
     /// A reusable, on-theme chat page for the local language-model demos. It gives
     /// Qwen Chat and Chat with Image the same shell the detection modules get from
-    /// <see cref="ModelShowcasePage"/>: the card layout, palette, fonts and spacing
-    /// all come from the shared tokens on <see cref="MaskRcnnPage"/>.
+    /// <see cref="ModelShowcasePage"/>: a giant lowercase header, flat sections
+    /// separated by hairlines, and the palette, fonts and helpers from
+    /// <see cref="DemoTheme"/>.
     ///
     /// The page owns everything that is identical between the two demos — header,
-    /// model card, transcript, composer, busy and download state — and leaves each
+    /// model section, transcript, composer, busy and download state — and leaves each
     /// module to supply its models and the actual generation call.
     /// </summary>
     public abstract class ChatShowcasePage : ContentPage
@@ -68,15 +69,17 @@ namespace MauiDemoApp
             }
         }
 
-        // Bubble palette. The user's turn picks up the same accent tint the app
-        // uses for selected rows and pills; the model's turn uses the neutral
-        // image/well background, so a long answer never becomes a wall of accent.
-        private static readonly Color UserBubble = MaskRcnnPage.TileBackground;
-        private static readonly Color ModelBubble = MaskRcnnPage.ImageBackground;
-        private static readonly Color InstalledText = Color.FromArgb("#2BA84A");
-        private static readonly Color InstalledFill = Color.FromArgb("#E7F7EC");
-        private static readonly Color BlockedText = Color.FromArgb("#C2453D");
-        private static readonly Color BlockedFill = Color.FromArgb("#FBEAE9");
+        // Bubble palette. The user's turn is solid black with white type, like the
+        // app's primary buttons; the model's turn sits on the soft grey pill fill,
+        // so a long answer never becomes a wall of black.
+        private static Color UserBubble => DemoTheme.Accent;
+        private static Color UserBubbleText => DemoTheme.OnAccent;
+        private static Color ModelBubble => DemoTheme.PillBackground;
+        private static Color ModelBubbleText => DemoTheme.PrimaryText;
+        // Red is kept only where it carries meaning: a model this device can't
+        // run, and the destructive delete action.
+        private static Color BlockedText => Color.FromArgb(DemoTheme.IsDark ? "#F08A82" : "#C2453D");
+        private static Color BlockedFill => Color.FromArgb(DemoTheme.IsDark ? "#3A1E1D" : "#FBEAE9");
 
         private const int MaxPromptLength = 4000;
 
@@ -125,23 +128,23 @@ namespace MauiDemoApp
         /// <summary>
         /// Create a chat page.
         /// </summary>
-        /// <param name="title">Page title shown in the header bar.</param>
-        /// <param name="heroTitle">Headline inside the hero card.</param>
-        /// <param name="heroSubtitle">Supporting line under the headline.</param>
-        /// <param name="glyph">Material Symbols glyph for the hero tile and model avatars.</param>
+        /// <param name="title">Page title, shown as the giant lowercase header.</param>
+        /// <param name="heroSubtitle">One-line description under the title.</param>
+        /// <param name="glyph">Material Symbols glyph shown beside the tag in the header.</param>
         /// <param name="models">Selectable models. Pass a single entry for a module with no choice.</param>
-        /// <param name="actionGlyph">Glyph for the header action pill.</param>
-        /// <param name="actionText">Caption for the header action pill.</param>
+        /// <param name="actionText">Caption for the header action pill, or null for none (the info icon shows instead).</param>
         /// <param name="composerPlaceholder">Placeholder text for the message box.</param>
+        /// <param name="tag">Short tag pill in the header, e.g. "LLM".</param>
+        /// <param name="category">Grey category text beside the tag.</param>
         protected ChatShowcasePage(
             string title,
-            string heroTitle,
             string heroSubtitle,
             string glyph,
             ChatModel[] models,
-            string actionGlyph,
             string actionText,
-            string composerPlaceholder)
+            string composerPlaceholder,
+            string tag = null,
+            string category = null)
         {
             _models = models ?? Array.Empty<ChatModel>();
             _composerPlaceholder = composerPlaceholder;
@@ -165,112 +168,54 @@ namespace MauiDemoApp
                 _selectedIndex = 0;
 
             Title = title;
-            BackgroundColor = MaskRcnnPage.PageBackground;
+            BackgroundColor = DemoTheme.PageBackground;
             Shell.SetNavBarIsVisible(this, false);
 
-            // ---------- Header ----------
-            var backButton = CircleButton(MaskRcnnPage.GlyphChevronLeft, async () => await Navigation.PopAsync());
-            var titleLabel = new Label
-            {
-                Text = title,
-                FontFamily = MaskRcnnPage.TitleFont,
-                FontSize = 20,
-                TextColor = MaskRcnnPage.PrimaryText,
-                HorizontalTextAlignment = TextAlignment.Center,
-                VerticalOptions = LayoutOptions.Center
-            };
-            var topRow = new Grid
-            {
-                ColumnDefinitions =
-                {
-                    new ColumnDefinition(GridLength.Auto),
-                    new ColumnDefinition(GridLength.Star),
-                    new ColumnDefinition(GridLength.Auto)
-                }
-            };
-            topRow.Add(backButton, 0, 0);
-            topRow.Add(titleLabel, 1, 0);
+            // ---------- Header: plain icons, a giant lowercase title, then tag / category ----------
+            // A module whose action belongs next to its own content (e.g. "Change"
+            // above the image, as the detection pages do it) passes no caption and
+            // places BuildActionPill() itself; the header then shows the info icon.
+            View action = string.IsNullOrEmpty(actionText) ? null : BuildActionPill(actionText);
+            var header = DemoTheme.PageHeader(this, title, heroSubtitle, glyph, tag, category, showInfo: action == null, trailing: action);
 
-            // A module whose action belongs next to its own content (e.g. "Change
-            // Photo" above the image, as the detection pages do it) passes no
-            // caption and places BuildActionPill() itself.
-            if (!string.IsNullOrEmpty(actionText))
-                topRow.Add(BuildActionPill(actionGlyph, actionText), 2, 0);
-
-            // ---------- Hero card ----------
-            var heroTile = new Border
-            {
-                WidthRequest = 54,
-                HeightRequest = 54,
-                BackgroundColor = MaskRcnnPage.TileBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(16) },
-                VerticalOptions = LayoutOptions.Start,
-                Content = MaskRcnnPage.MakeIcon(glyph, MaskRcnnPage.Accent, 28)
-            };
-            var heroText = new VerticalStackLayout
-            {
-                Spacing = 3,
-                VerticalOptions = LayoutOptions.Center,
-                Children =
-                {
-                    new Label { Text = heroTitle, FontFamily = MaskRcnnPage.TitleFont, FontSize = 21, TextColor = MaskRcnnPage.PrimaryText },
-                    new Label { Text = heroSubtitle, FontFamily = MaskRcnnPage.BodyFont, FontSize = 14, TextColor = MaskRcnnPage.SecondaryText }
-                }
-            };
-            var heroRow = new Grid
-            {
-                ColumnSpacing = 14,
-                ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) }
-            };
-            heroRow.Add(heroTile, 0, 0);
-            heroRow.Add(heroText, 1, 0);
-
-            // ---------- Model card ----------
-            // Collapsed, this is a single summary row; expanded, it reveals the
+            // ---------- Model ----------
+            // Collapsed, this is a single flat summary row; expanded, it reveals the
             // full radio list plus a note about what the choice costs.
             // Truncate rather than wrap: the badge beside these sizes to its own
             // content, so a long one (e.g. "Too big") would otherwise squeeze the
             // name into a one-word-per-line tower.
-            _collapsedName = new Label { FontFamily = MaskRcnnPage.TitleFont, FontSize = 16, TextColor = MaskRcnnPage.PrimaryText, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 1 };
-            _collapsedDetail = new Label { FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = MaskRcnnPage.SecondaryText, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 1 };
-            _collapsedBadgeLabel = new Label { FontFamily = MaskRcnnPage.TitleFont, FontSize = 12, VerticalOptions = LayoutOptions.Center };
+            _collapsedName = new Label { FontFamily = DemoTheme.TitleFont, FontSize = 17, TextColor = DemoTheme.PrimaryText, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 1 };
+            _collapsedDetail = new Label { FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 1 };
+            _collapsedBadgeLabel = new Label { FontFamily = DemoTheme.BodyFont, FontSize = 12, CharacterSpacing = 0.5, VerticalOptions = LayoutOptions.Center };
             _collapsedBadge = new Border
             {
+                BackgroundColor = DemoTheme.PillBackground,
                 Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(9) },
-                Padding = new Thickness(9, 4),
+                StrokeThickness = 0,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(14) },
+                Padding = new Thickness(12, 5),
                 VerticalOptions = LayoutOptions.Center,
                 Content = _collapsedBadgeLabel
             };
-            _chevron = MaskRcnnPage.MakeIcon(GlyphExpandMore, MaskRcnnPage.SecondaryText, 22);
+            _chevron = DemoTheme.MakeIcon(GlyphExpandMore, DemoTheme.PrimaryText, 22);
             _chevron.VerticalOptions = LayoutOptions.Center;
 
-            var summaryAvatar = new Border
-            {
-                WidthRequest = 36,
-                HeightRequest = 36,
-                BackgroundColor = MaskRcnnPage.TileBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(11) },
-                VerticalOptions = LayoutOptions.Center,
-                Content = MaskRcnnPage.MakeIcon(GlyphModel, MaskRcnnPage.Accent, 19)
-            };
             var summaryText = new VerticalStackLayout
             {
-                Spacing = 1,
+                Spacing = 2,
                 VerticalOptions = LayoutOptions.Center,
                 Children = { _collapsedName, _collapsedDetail }
             };
 
-            // A tinted disc behind the chevron so the row reads as something you
+            // A soft grey disc behind the chevron so the row reads as something you
             // can open, rather than a bare status line.
             _chevronDisc = new Border
             {
                 WidthRequest = 30,
                 HeightRequest = 30,
-                BackgroundColor = MaskRcnnPage.ImageBackground,
+                BackgroundColor = DemoTheme.PillBackground,
                 Stroke = Colors.Transparent,
+                StrokeThickness = 0,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(15) },
                 VerticalOptions = LayoutOptions.Center,
                 Content = _chevron
@@ -287,32 +232,21 @@ namespace MauiDemoApp
                 Children = { _collapsedBadge, _chevronDisc }
             };
 
+            // Flush with the title: no card, no outline, no inner padding.
             var summaryRow = new Grid
             {
                 ColumnSpacing = 12,
+                BackgroundColor = Colors.Transparent,
                 ColumnDefinitions =
                 {
-                    new ColumnDefinition(GridLength.Auto),
                     new ColumnDefinition(GridLength.Star),
                     new ColumnDefinition(GridLength.Auto)
                 }
             };
-            summaryRow.Add(summaryAvatar, 0, 0);
-            summaryRow.Add(summaryText, 1, 0);
-            summaryRow.Add(summaryTrailing, 2, 0);
+            summaryRow.Add(summaryText, 0, 0);
+            summaryRow.Add(summaryTrailing, 1, 0);
 
-            var summaryFrame = new Border
-            {
-                BackgroundColor = MaskRcnnPage.CardBackground,
-                Stroke = MaskRcnnPage.RowBorder,
-                StrokeThickness = 1,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(16) },
-                Padding = new Thickness(12, 10),
-                Margin = new Thickness(0, 14, 0, 0),
-                Content = summaryRow
-            };
-
-            _modelRows = new VerticalStackLayout { Spacing = 8, IsVisible = false, Margin = new Thickness(0, 12, 0, 0) };
+            _modelRows = new VerticalStackLayout { Spacing = 0, IsVisible = false };
 
             // The expander opens even for a single model. There is nothing to
             // choose between, but the row behind it is where the size, the
@@ -323,77 +257,70 @@ namespace MauiDemoApp
             {
                 var expandTap = new TapGestureRecognizer();
                 expandTap.Tapped += async (s, e) => await ToggleModelList();
-                summaryFrame.GestureRecognizers.Add(expandTap);
+                summaryRow.GestureRecognizers.Add(expandTap);
             }
             else
             {
                 _chevronDisc.IsVisible = false;
             }
 
-            var heroChildren = new VerticalStackLayout { Children = { heroRow } };
-            if (_models.Length > 0)
+            var modelSection = new VerticalStackLayout
             {
-                heroChildren.Children.Add(summaryFrame);
-                heroChildren.Children.Add(_modelRows);
-            }
-
-            var heroCard = new Border
-            {
-                BackgroundColor = MaskRcnnPage.CardBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                Padding = new Thickness(16),
-                Content = heroChildren
+                Spacing = 14,
+                Children = { DemoTheme.SectionLabel("Model"), summaryRow, _modelRows }
             };
 
             // ---------- Transcript ----------
+            // Empty state: oversized pale type instead of an icon, as on the
+            // detection pages.
             _emptyState = new VerticalStackLayout
             {
-                Spacing = 6,
-                Padding = new Thickness(0, 26, 0, 22),
-                HorizontalOptions = LayoutOptions.Center,
+                Spacing = 8,
+                Padding = new Thickness(0, 4, 0, 8),
                 Children =
                 {
-                    MaskRcnnPage.MakeIcon(glyph, Color.FromArgb("#C2C7D6"), 40),
-                    new Label { Text = "No messages yet", FontFamily = MaskRcnnPage.TitleFont, FontSize = 15, TextColor = MaskRcnnPage.PrimaryText, HorizontalTextAlignment = TextAlignment.Center },
-                    new Label { Text = EmptyStateHint, FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = MaskRcnnPage.SecondaryText, HorizontalTextAlignment = TextAlignment.Center }
+                    DemoTheme.EmptyStateTitle("no messages yet"),
+                    new Label { Text = EmptyStateHint, FontFamily = DemoTheme.BodyFont, FontSize = 14, TextColor = DemoTheme.SecondaryText }
                 }
             };
             _transcript = new VerticalStackLayout { Spacing = 14, Children = { _emptyState } };
 
-            var transcriptCard = new Border
-            {
-                BackgroundColor = MaskRcnnPage.CardBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                Padding = new Thickness(14),
-                Content = _transcript
-            };
-
             // ---------- Status line ----------
-            _statusLabel = new Label { FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = MaskRcnnPage.Accent, VerticalOptions = LayoutOptions.Center };
+            _statusLabel = new Label { FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.PrimaryText, VerticalOptions = LayoutOptions.Center };
+            var statusIcon = DemoTheme.MakeIcon(DemoTheme.GlyphInfo, DemoTheme.PrimaryText, 18);
+            statusIcon.VerticalOptions = LayoutOptions.Start;
+            var statusGrid = new Grid
+            {
+                ColumnSpacing = 9,
+                ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) }
+            };
+            statusGrid.Add(statusIcon, 0, 0);
+            statusGrid.Add(_statusLabel, 1, 0);
             _statusCard = new Border
             {
-                BackgroundColor = MaskRcnnPage.TileBackground,
+                BackgroundColor = DemoTheme.BannerBackground,
                 Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(14) },
+                StrokeThickness = 0,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(2) },
                 Padding = new Thickness(12, 10),
                 IsVisible = false,
-                Content = new HorizontalStackLayout
-                {
-                    Spacing = 9,
-                    Children = { MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphInfo, MaskRcnnPage.Accent, 18), _statusLabel }
-                }
+                Content = statusGrid
+            };
+
+            var conversationSection = new VerticalStackLayout
+            {
+                Spacing = 16,
+                Children = { DemoTheme.SectionLabel("Conversation"), _statusCard, _transcript }
             };
 
             // ---------- Composer ----------
             _promptEditor = new Editor
             {
                 Placeholder = _composerPlaceholder,
-                PlaceholderColor = MaskRcnnPage.SecondaryText,
+                PlaceholderColor = DemoTheme.MutedText,
                 BackgroundColor = Colors.Transparent,
-                TextColor = MaskRcnnPage.PrimaryText,
-                FontFamily = MaskRcnnPage.BodyFont,
+                TextColor = DemoTheme.PrimaryText,
+                FontFamily = DemoTheme.BodyFont,
                 FontSize = 15,
                 HeightRequest = 76,
                 AutoSize = EditorAutoSizeOption.Disabled
@@ -410,20 +337,21 @@ namespace MauiDemoApp
             _counterLabel = new Label
             {
                 Text = "0 / " + MaxPromptLength,
-                FontFamily = MaskRcnnPage.BodyFont,
+                FontFamily = DemoTheme.BodyFont,
                 FontSize = 12,
-                TextColor = MaskRcnnPage.SecondaryText,
+                TextColor = DemoTheme.MutedText,
                 VerticalOptions = LayoutOptions.Center
             };
 
-            _sendIcon = MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphPlay, Colors.White, 24);
-            _sendSpinner = new ActivityIndicator { Color = Colors.White, WidthRequest = 22, HeightRequest = 22, IsRunning = false, IsVisible = false };
+            _sendIcon = DemoTheme.MakeIcon(DemoTheme.GlyphPlay, DemoTheme.OnAccent, 24);
+            _sendSpinner = new ActivityIndicator { Color = DemoTheme.OnAccent, WidthRequest = 22, HeightRequest = 22, IsRunning = false, IsVisible = false };
             _sendButton = new Border
             {
                 WidthRequest = 48,
                 HeightRequest = 48,
-                BackgroundColor = MaskRcnnPage.Accent,
+                BackgroundColor = DemoTheme.Accent,
                 Stroke = Colors.Transparent,
+                StrokeThickness = 0,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(24) },
                 HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.Center,
@@ -437,32 +365,42 @@ namespace MauiDemoApp
             composerFooter.Add(_counterLabel, 0, 0);
             composerFooter.Add(_sendButton, 1, 0);
 
+            // Flat light-grey well, like the image backdrop: no outline, no shadow.
             var composerCard = new Border
             {
-                BackgroundColor = MaskRcnnPage.CardBackground,
-                Stroke = MaskRcnnPage.RowBorder,
-                StrokeThickness = 1,
+                BackgroundColor = DemoTheme.ImageBackground,
+                Stroke = Colors.Transparent,
+                StrokeThickness = 0,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(20) },
-                Padding = new Thickness(14, 8, 14, 12),
+                Padding = new Thickness(14, 8, 10, 10),
                 Content = new VerticalStackLayout { Spacing = 4, Children = { _promptEditor, composerFooter } }
             };
 
             // ---------- Page ----------
             _pageChildren = new VerticalStackLayout
             {
-                Spacing = 16,
+                Spacing = 20,
                 Padding = new Thickness(20, 16, 20, 28),
-                Children = { topRow, heroCard }
+                Children = { header }
             };
 
-            // Modules with extra chrome (e.g. the image being discussed) drop it in
-            // between the hero card and the transcript.
+            if (_models.Length > 0)
+            {
+                _pageChildren.Children.Add(DemoTheme.Divider());
+                _pageChildren.Children.Add(modelSection);
+            }
+
+            // Modules with extra content (e.g. the image being discussed) drop it in
+            // between the model section and the conversation.
             View extra = BuildExtraCard();
             if (extra != null)
+            {
+                _pageChildren.Children.Add(DemoTheme.Divider());
                 _pageChildren.Children.Add(extra);
+            }
 
-            _pageChildren.Children.Add(_statusCard);
-            _pageChildren.Children.Add(transcriptCard);
+            _pageChildren.Children.Add(DemoTheme.Divider());
+            _pageChildren.Children.Add(conversationSection);
             _pageChildren.Children.Add(composerCard);
 
             _scroll = new Microsoft.Maui.Controls.ScrollView { Content = _pageChildren };
@@ -477,7 +415,7 @@ namespace MauiDemoApp
         /// <summary>Hint shown under "No messages yet".</summary>
         protected virtual string EmptyStateHint => "Ask a question to get started.";
 
-        /// <summary>Optional card inserted between the hero card and the transcript.</summary>
+        /// <summary>Optional section inserted between the model section and the conversation.</summary>
         protected virtual View BuildExtraCard() => null;
 
         /// <summary>
@@ -496,20 +434,20 @@ namespace MauiDemoApp
         protected virtual void OnHeaderAction(object sender, EventArgs e) { }
 
         /// <summary>
-        /// Build the module's action button in the shared pill style, guarded so it
-        /// cannot fire mid-turn: "New Chat" resets the model's conversation state
-        /// and "Change Photo" swaps the image out, and the background generation is
-        /// still using both. Letting either through corrupts the answer at best and
-        /// crashes inside native code at worst.
+        /// Build the module's action button as the shared uppercase grey pill,
+        /// guarded so it cannot fire mid-turn: "New Chat" resets the model's
+        /// conversation state and "Change" swaps the image out, and the background
+        /// generation is still using both. Letting either through corrupts the
+        /// answer at best and crashes inside native code at worst.
         /// </summary>
-        protected View BuildActionPill(string glyph, string text) => PillButton(glyph, text, (s, e) =>
+        protected View BuildActionPill(string text) => DemoTheme.TextPill(text, () =>
         {
             if (_busy)
             {
                 SetStatus("Hang on — still answering.");
                 return;
             }
-            OnHeaderAction(s, e);
+            OnHeaderAction(this, EventArgs.Empty);
         });
 
         /// <summary>
@@ -557,8 +495,8 @@ namespace MauiDemoApp
         }
 
         /// <summary>
-        /// Append one turn to the transcript: the user's on the right in the accent
-        /// tint, the model's on the left behind its avatar.
+        /// Append one turn to the transcript: the user's on the right in a black
+        /// bubble, the model's on the left in grey behind its avatar.
         /// </summary>
         protected void AddMessage(string text, bool isUser)
         {
@@ -581,8 +519,8 @@ namespace MauiDemoApp
                 Content = new Label
                 {
                     Text = text,
-                    TextColor = MaskRcnnPage.PrimaryText,
-                    FontFamily = MaskRcnnPage.BodyFont,
+                    TextColor = isUser ? UserBubbleText : ModelBubbleText,
+                    FontFamily = DemoTheme.BodyFont,
                     FontSize = 15,
                     LineBreakMode = LineBreakMode.WordWrap
                 }
@@ -591,9 +529,9 @@ namespace MauiDemoApp
             var timestamp = new Label
             {
                 Text = DateTime.Now.ToString("t"),
-                FontFamily = MaskRcnnPage.BodyFont,
+                FontFamily = DemoTheme.BodyFont,
                 FontSize = 11,
-                TextColor = MaskRcnnPage.SecondaryText,
+                TextColor = DemoTheme.MutedText,
                 Margin = new Thickness(4, 0),
                 HorizontalOptions = isUser ? LayoutOptions.End : LayoutOptions.Start
             };
@@ -631,14 +569,15 @@ namespace MauiDemoApp
         {
             WidthRequest = 30,
             HeightRequest = 30,
-            BackgroundColor = MaskRcnnPage.Accent,
+            BackgroundColor = DemoTheme.PillBackground,
             Stroke = Colors.Transparent,
-            StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(10) },
+            StrokeThickness = 0,
+            StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(15) },
             VerticalOptions = LayoutOptions.Start,
-            Content = MaskRcnnPage.MakeIcon(GlyphModel, Colors.White, 17)
+            Content = DemoTheme.MakeIcon(GlyphModel, DemoTheme.PrimaryText, 17)
         };
 
-        /// <summary>Glyph identifying the module, used for the hero tile and empty state.</summary>
+        /// <summary>Glyph identifying the module, as shown in the header.</summary>
         protected string HeroGlyph { get; set; } = MaskRcnnPage.GlyphInfo;
 
         private async void ScrollToEnd()
@@ -909,37 +848,35 @@ namespace MauiDemoApp
 
         private void BuildModelRows()
         {
+            // A flat list: hairlines between rows instead of a card per row.
             _modelRows.Children.Clear();
             for (int i = 0; i < _models.Length; i++)
+            {
+                _modelRows.Children.Add(DemoTheme.Divider());
                 _modelRows.Children.Add(BuildModelRow(i));
+            }
+            _modelRows.Children.Add(DemoTheme.Divider());
 
             if (_models.Length > 1)
             {
                 var noteGrid = new Grid
                 {
                     ColumnSpacing = 9,
+                    Margin = new Thickness(0, 12, 0, 0),
                     ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) }
                 };
-                var noteIcon = MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphInfo, MaskRcnnPage.Accent, 18);
+                var noteIcon = DemoTheme.MakeIcon(DemoTheme.GlyphInfo, DemoTheme.SecondaryText, 16);
                 noteIcon.VerticalOptions = LayoutOptions.Start;
                 noteGrid.Add(noteIcon, 0, 0);
                 noteGrid.Add(new Label
                 {
                     Text = "Larger models answer better but generate more slowly, and each one downloads separately.",
-                    FontFamily = MaskRcnnPage.BodyFont,
+                    FontFamily = DemoTheme.BodyFont,
                     FontSize = 13,
-                    TextColor = MaskRcnnPage.Accent
+                    TextColor = DemoTheme.SecondaryText
                 }, 1, 0);
 
-                _modelRows.Children.Add(new Border
-                {
-                    BackgroundColor = MaskRcnnPage.TileBackground,
-                    Stroke = Colors.Transparent,
-                    StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(14) },
-                    Padding = new Thickness(12, 10),
-                    Margin = new Thickness(0, 2, 0, 0),
-                    Content = noteGrid
-                });
+                _modelRows.Children.Add(noteGrid);
             }
         }
 
@@ -954,7 +891,7 @@ namespace MauiDemoApp
             {
                 WidthRequest = 10,
                 HeightRequest = 10,
-                BackgroundColor = MaskRcnnPage.Accent,
+                BackgroundColor = DemoTheme.Accent,
                 Stroke = Colors.Transparent,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(5) },
                 HorizontalOptions = LayoutOptions.Center,
@@ -966,7 +903,7 @@ namespace MauiDemoApp
                 WidthRequest = 22,
                 HeightRequest = 22,
                 BackgroundColor = Colors.Transparent,
-                Stroke = selected ? MaskRcnnPage.Accent : Color.FromArgb("#C2C7D6"),
+                Stroke = selected ? DemoTheme.Accent : DemoTheme.MutedText,
                 StrokeThickness = selected ? 6 : 1.5,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(11) },
                 VerticalOptions = LayoutOptions.Center,
@@ -976,8 +913,8 @@ namespace MauiDemoApp
             // just muddy it at this size.
             radioDot.IsVisible = false;
 
-            var name = new Label { Text = model.Name, FontFamily = MaskRcnnPage.TitleFont, FontSize = 16, TextColor = MaskRcnnPage.PrimaryText, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 1 };
-            var detail = new Label { Text = model.Detail, FontFamily = MaskRcnnPage.BodyFont, FontSize = 13, TextColor = MaskRcnnPage.SecondaryText, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 2 };
+            var name = new Label { Text = model.Name, FontFamily = DemoTheme.TitleFont, FontSize = 16, TextColor = DemoTheme.PrimaryText, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 1 };
+            var detail = new Label { Text = model.Detail, FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText, LineBreakMode = LineBreakMode.TailTruncation, MaxLines = 2 };
             var text = new VerticalStackLayout { Spacing = 2, VerticalOptions = LayoutOptions.Center, Children = { name, detail } };
 
             var badges = new HorizontalStackLayout { Spacing = 6, VerticalOptions = LayoutOptions.Center };
@@ -991,10 +928,11 @@ namespace MauiDemoApp
             }
             else
             {
+                // Plain grey pill either way; black type marks the one that's ready.
                 badges.Children.Add(Badge(
                     installed ? "Installed" : "Not installed",
-                    installed ? InstalledText : MaskRcnnPage.SecondaryText,
-                    installed ? InstalledFill : MaskRcnnPage.ImageBackground));
+                    installed ? DemoTheme.PrimaryText : DemoTheme.SecondaryText,
+                    DemoTheme.PillBackground));
             }
 
 
@@ -1018,7 +956,7 @@ namespace MauiDemoApp
             if (blocked)
             {
                 radio.IsVisible = false;
-                name.TextColor = MaskRcnnPage.SecondaryText;
+                name.TextColor = DemoTheme.SecondaryText;
             }
 
             var rowContent = new VerticalStackLayout { Children = { grid } };
@@ -1038,13 +976,14 @@ namespace MauiDemoApp
             if (onDisk > 0 && !DownloadState.IsActiveFor(_moduleKey))
                 rowContent.Children.Add(DeleteRow(model, onDisk));
 
+            // Flat row on the page background; the filled radio marks the selection
+            // and hairlines (added by BuildModelRows) separate the rows.
             var row = new Border
             {
-                BackgroundColor = selected && !blocked ? MaskRcnnPage.TileBackground : MaskRcnnPage.CardBackground,
-                Stroke = selected && !blocked ? MaskRcnnPage.Accent : MaskRcnnPage.RowBorder,
-                StrokeThickness = selected && !blocked ? 1.5 : 1,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(15) },
-                Padding = new Thickness(12, 11),
+                BackgroundColor = DemoTheme.PageBackground,
+                Stroke = Colors.Transparent,
+                StrokeThickness = 0,
+                Padding = new Thickness(0, 14),
                 Opacity = blocked ? 0.6 : 1,
                 Content = rowContent
             };
@@ -1108,7 +1047,7 @@ namespace MauiDemoApp
                 // Says what it removes and what you get back, so the consequence is
                 // on the button rather than only in the confirmation.
                 Text = $"Delete download · frees {FormatSize(onDisk)}",
-                FontFamily = MaskRcnnPage.TitleFont,
+                FontFamily = DemoTheme.TitleFont,
                 FontSize = 13,
                 TextColor = BlockedText,
                 VerticalOptions = LayoutOptions.Center
@@ -1126,7 +1065,7 @@ namespace MauiDemoApp
                 Margin = new Thickness(0, 9, 0, 0),
                 Children =
                 {
-                    new BoxView { HeightRequest = 1, Color = MaskRcnnPage.RowBorder },
+                    DemoTheme.Divider(),
                     content
                 }
             };
@@ -1190,10 +1129,11 @@ namespace MauiDemoApp
         {
             BackgroundColor = fill,
             Stroke = Colors.Transparent,
-            StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(9) },
-            Padding = new Thickness(9, 4),
+            StrokeThickness = 0,
+            StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(14) },
+            Padding = new Thickness(12, 5),
             VerticalOptions = LayoutOptions.Center,
-            Content = new Label { Text = text, FontFamily = MaskRcnnPage.TitleFont, FontSize = 12, TextColor = textColor }
+            Content = new Label { Text = text, FontFamily = DemoTheme.BodyFont, FontSize = 12, CharacterSpacing = 0.5, TextColor = textColor }
         };
 
         private void SelectModel(int index)
@@ -1229,8 +1169,8 @@ namespace MauiDemoApp
 
             bool installed = IsInstalled(model);
             _collapsedBadgeLabel.Text = installed ? "Installed" : "Not installed";
-            _collapsedBadgeLabel.TextColor = installed ? InstalledText : MaskRcnnPage.SecondaryText;
-            _collapsedBadge.BackgroundColor = installed ? InstalledFill : MaskRcnnPage.ImageBackground;
+            _collapsedBadgeLabel.TextColor = installed ? DemoTheme.PrimaryText : DemoTheme.SecondaryText;
+            _collapsedBadge.BackgroundColor = DemoTheme.PillBackground;
         }
 
         // ---------- Does this model fit in memory? ----------
@@ -1381,48 +1321,6 @@ namespace MauiDemoApp
             {
                 return false;
             }
-        }
-
-        // ---------- Small styled controls (mirrors ModelShowcasePage) ----------
-
-        private Border CircleButton(string glyph, Action onTap)
-        {
-            var cb = new Border
-            {
-                WidthRequest = 44,
-                HeightRequest = 44,
-                BackgroundColor = MaskRcnnPage.CardBackground,
-                Stroke = MaskRcnnPage.RowBorder,
-                StrokeThickness = 1,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                VerticalOptions = LayoutOptions.Center,
-                Content = MaskRcnnPage.MakeIcon(glyph, MaskRcnnPage.PrimaryText, 22)
-            };
-            var t = new TapGestureRecognizer();
-            t.Tapped += (s, e) => onTap();
-            cb.GestureRecognizers.Add(t);
-            return cb;
-        }
-
-        private Border PillButton(string glyph, string text, EventHandler onTap)
-        {
-            var content = new HorizontalStackLayout { Spacing = 7, VerticalOptions = LayoutOptions.Center };
-            content.Children.Add(MaskRcnnPage.MakeIcon(glyph, MaskRcnnPage.Accent, 18));
-            content.Children.Add(new Label { Text = text, FontFamily = MaskRcnnPage.TitleFont, FontSize = 14, TextColor = MaskRcnnPage.Accent, VerticalOptions = LayoutOptions.Center });
-
-            var pill = new Border
-            {
-                BackgroundColor = MaskRcnnPage.TileBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(13) },
-                Padding = new Thickness(14, 9),
-                VerticalOptions = LayoutOptions.Center,
-                Content = content
-            };
-            var t = new TapGestureRecognizer();
-            t.Tapped += (s, e) => onTap(s, e);
-            pill.GestureRecognizers.Add(t);
-            return pill;
         }
 
         /// <summary>
