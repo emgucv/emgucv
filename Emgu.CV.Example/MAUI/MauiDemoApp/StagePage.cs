@@ -586,7 +586,19 @@ namespace MauiDemoApp
 
         private void SizeStage()
         {
-            _stage.HeightRequest = _wide ? Math.Clamp(Height - 430, 360, 720) : Math.Clamp(Width * 0.95, 260, 520);
+            if (_stage == null)
+                return;
+            if (_wide)
+            {
+                _stage.HeightRequest = Math.Clamp(Height - 430, 360, 720);
+                return;
+            }
+            // Phone: fit the box to the image's shape so a wide picture doesn't
+            // sit in a tall box with empty bands above and below it.
+            var sz = StageImageSize;
+            double photoWidth = Width - 32 - 32;          // page padding + photo margins
+            double photoHeight = sz.Width > 0 ? photoWidth * sz.Height / sz.Width : photoWidth * 0.75;
+            _stage.HeightRequest = Math.Clamp(photoHeight + 16 + 70, 220, 560);
         }
 
         private static void Detach(View v)
@@ -847,6 +859,7 @@ namespace MauiDemoApp
             SetCompare(false);
             ShowResult(animate: false);
             PlaceBadges();
+            SizeStage();
         }
 
         // ================= Run =================
@@ -883,6 +896,7 @@ namespace MauiDemoApp
                     _photo.Source = MaskRcnnPage.MatToImageSource(_image);
                 ShowResult(animate: true);
                 PlaceBadges();
+                SizeStage();
             }
             catch (Exception ex)
             {
