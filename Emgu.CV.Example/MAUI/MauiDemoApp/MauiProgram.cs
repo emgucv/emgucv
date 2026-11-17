@@ -18,6 +18,7 @@ namespace MauiDemoApp
                     fonts.AddFont("Inter-Light.ttf", "InterLight");
                     fonts.AddFont("Inter-Regular.ttf", "InterRegular");
                     fonts.AddFont("Inter-SemiBold.ttf", "InterSemiBold");
+                    fonts.AddFont("InterDisplay-ExtraBold.ttf", "InterDisplayExtraBold");
                     fonts.AddFont("MaterialSymbolsOutlined.ttf", "MaterialSymbols");
                 });
 
