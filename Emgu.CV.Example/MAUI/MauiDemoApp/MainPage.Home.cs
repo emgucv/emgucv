@@ -480,44 +480,215 @@ namespace MauiDemoApp
 
             refreshChips();
             BackgroundColor = DemoTheme.PageBackground;
+            _homeRoot = root;
             Content = root;
             arrange();
         }
 
         // ---------- Camera tab: pick which demo runs on the live camera ----------
 
-        private async Task ChooseLiveCamera(List<DemoCard> cards)
+        private Grid _homeRoot;
+        private const string LastCameraKey = "home_last_live_camera";
+
+        private sealed class CameraChoice
+        {
+            public string Key, Title, Subtitle, Glyph;
+            public bool Fast;
+            public Func<Task> Open;
+        }
+
+        private Task ChooseLiveCamera(List<DemoCard> cards)
         {
             // Every demo here that has a live camera mode, if this build has it.
-            var options = new List<(string label, Func<Task> open)>();
-            void Add(string card, string label, Func<Task> open)
+            var options = new List<CameraChoice>();
+            void Add(string card, string title, string subtitle, string glyph, bool fast, Func<Task> open)
             {
                 if (cards.Any(c => c.Name == card))
-                    options.Add((label, open));
+                    options.Add(new CameraChoice { Key = card, Title = title, Subtitle = subtitle, Glyph = glyph, Fast = fast, Open = open });
             }
 #if __IOS__ || __MACCATALYST__
             Func<string, Func<IProcessAndRenderModel>, Func<Task>> live = (title, factory) =>
                 () => Navigation.PushModalAsync(new ModelShowcaseLivePage(title, factory, null));
-            Add("mask r-cnn", "Objects + outlines (Mask R-CNN)", () => Navigation.PushModalAsync(new MaskRcnnLivePage()));
+            Func<Task> maskRcnn = () => Navigation.PushModalAsync(new MaskRcnnLivePage());
 #else
             Func<string, Func<IProcessAndRenderModel>, Func<Task>> live = (title, factory) =>
                 () => Navigation.PushAsync(new Emgu.CV.Platform.Maui.UI.ProcessAndRenderPage(factory(), title + " (Live)", null, "Real-time detection from the camera."));
-            Add("mask r-cnn", "Objects + outlines (Mask R-CNN)", live("Mask R-CNN", () => new MaskRcnn()));
+            Func<Task> maskRcnn = live("Mask R-CNN", () => new MaskRcnn());
 #endif
-            Add("yolo", "Objects (YOLO)", () => YoloPage.OpenLiveCamera(Navigation));
-            Add("face detection", "Faces", live("Face Detection", () => new FaceDetectionModel()));
-            Add("pedestrian detection", "People (HOG)", live("Pedestrian Detection", () => new PedestrianDetector()));
-            Add("barcode & qr code", "Barcodes & QR codes", live("Barcode & QR", () => new CombinedModel(new BarcodeDetectorModel(), new WeChatQRCodeDetector())));
-            Add("scene text", "Text in the scene", live("Scene Text", () => new SceneTextDetector()));
-            Add("video surveillance", "Motion tracking", live("Video Surveillance", () => new VideoSurveillanceModel()));
-            // Lead with YOLO: the fastest one.
-            options = options.OrderBy(o => o.label.StartsWith("Objects (YOLO)") ? 0 : 1).ToList();
-            if (options.Count == 0)
+            Add("yolo", "objects", "80 everyday things · YOLO", GlyphObjects, true, () => YoloPage.OpenLiveCamera(Navigation));
+            Add("mask r-cnn", "objects + outlines", "Exact shapes · Mask R-CNN", GlyphOutlines, false, maskRcnn);
+            Add("face detection", "faces", "Finds every face · YuNet", GlyphFace, true, live("Face Detection", () => new FaceDetectionModel()));
+            Add("pedestrian detection", "people", "Walking pedestrians · HOG", GlyphWalk, true, live("Pedestrian Detection", () => new PedestrianDetector()));
+            Add("barcode & qr code", "barcodes & QR codes", "Reads the code instantly", GlyphQr, true, live("Barcode & QR", () => new CombinedModel(new BarcodeDetectorModel(), new WeChatQRCodeDetector())));
+            Add("scene text", "text in the scene", "Signs, labels, plates", GlyphTitle, false, live("Scene Text", () => new SceneTextDetector()));
+            Add("video surveillance", "motion", "Tracks anything that moves", GlyphMotion, true, live("Video Surveillance", () => new VideoSurveillanceModel()));
+            if (options.Count > 0 && _homeRoot != null)
+                ShowCameraSheet(options);
+            return Task.CompletedTask;
+        }
+
+        private const string GlyphObjects = "\ue3b4";   // center_focus_strong
+        private const string GlyphOutlines = "\ue3e2";  // filter_tilt_shift
+        private const string GlyphFace = "\ue87c";      // face
+        private const string GlyphWalk = "\ue536";      // directions_walk
+        private const string GlyphQr = "\uf206";        // qr_code_scanner
+        private const string GlyphTitle = "\ue264";     // title
+        private const string GlyphMotion = "\ue650";    // vital_signs
+
+        /// <summary>
+        /// A themed bottom sheet over the home page: one row per live demo, with an
+        /// icon, a one-line description and a fast / slower hint. The last one used is
+        /// highlighted.
+        /// </summary>
+        private void ShowCameraSheet(List<CameraChoice> options)
+        {
+            if (_homeRoot.Children.OfType<View>().Any(v => v.ClassId == "camera-sheet"))
                 return;
-            string pick = await DisplayActionSheetAsync("Live camera: what should it detect?", "Cancel", null, options.Select(o => o.label).ToArray());
-            var chosen = options.FirstOrDefault(o => o.label == pick);
-            if (chosen.open != null)
-                await chosen.open();
+            bool dark = DemoTheme.IsDark;
+            string last = Preferences.Default.Get(LastCameraKey, "yolo");
+            var lastLabel = Color.FromArgb(dark ? "#D4FF3A" : "#5E7D00");
+            var orange = Color.FromArgb("#F59E0B");
+
+            var overlay = new Grid { ClassId = "camera-sheet" };
+            var scrim = new BoxView { Color = Color.FromArgb("#99000000"), Opacity = 0 };
+            overlay.Add(scrim);
+
+            var list = new VerticalStackLayout { Spacing = 2 };
+            var sheet = new Border
+            {
+                BackgroundColor = Color.FromArgb(dark ? "#161616" : "#FFFFFF"),
+                Stroke = DemoTheme.Hairline,
+                StrokeThickness = 1,
+                StrokeShape = new RoundRectangle { CornerRadius = 30 },
+                Padding = new Thickness(14, 10, 14, 14),
+                Margin = new Thickness(8, 0, 8, 8),
+                VerticalOptions = LayoutOptions.End,
+                MaximumWidthRequest = 520,
+            };
+            overlay.Add(sheet);
+
+            bool closing = false;
+            async Task Close()
+            {
+                if (closing) return;
+                closing = true;
+                await Task.WhenAll(scrim.FadeToAsync(0, 160), sheet.TranslateToAsync(0, sheet.Height + 40, 200, Easing.CubicIn));
+                _homeRoot.Children.Remove(overlay);
+            }
+
+            var closeBtn = new Border
+            {
+                WidthRequest = 36, HeightRequest = 36,
+                BackgroundColor = DemoTheme.PillBackground,
+                StrokeThickness = 0,
+                StrokeShape = new RoundRectangle { CornerRadius = 18 },
+                VerticalOptions = LayoutOptions.Start,
+                Content = new Label { Text = DemoTheme.GlyphClose, FontFamily = DemoTheme.IconFont, FontSize = 20, TextColor = DemoTheme.SecondaryText, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center },
+            };
+            var closeTap = new TapGestureRecognizer();
+            closeTap.Tapped += async (s, e) => await Close();
+            closeBtn.GestureRecognizers.Add(closeTap);
+            var scrimTap = new TapGestureRecognizer();
+            scrimTap.Tapped += async (s, e) => await Close();
+            scrim.GestureRecognizers.Add(scrimTap);
+
+            var header = new Grid
+            {
+                Padding = new Thickness(6, 4, 0, 10),
+                ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) }
+            };
+            header.Add(new VerticalStackLayout
+            {
+                Spacing = 4,
+                Children =
+                {
+                    new Label { Text = "LIVE CAMERA", FontFamily = DemoTheme.TitleFont, FontSize = 12, CharacterSpacing = 1.6, TextColor = DemoTheme.SecondaryText },
+                    new Label { Text = "what should it detect?", FontFamily = DemoTheme.HeroFont, FontSize = 30, CharacterSpacing = -1.2, LineHeight = 0.95, TextColor = DemoTheme.PrimaryText },
+                }
+            }, 0, 0);
+            header.Add(closeBtn, 1, 0);
+
+            foreach (var o in options)
+            {
+                bool isLast = o.Key == last;
+                var icon = new Border
+                {
+                    WidthRequest = 46, HeightRequest = 46,
+                    BackgroundColor = isLast ? DemoTheme.Lime : DemoTheme.PillBackground,
+                    StrokeThickness = 0,
+                    StrokeShape = new RoundRectangle { CornerRadius = 14 },
+                    VerticalOptions = LayoutOptions.Center,
+                    Content = new Label { Text = o.Glyph, FontFamily = DemoTheme.IconFont, FontSize = 24, TextColor = isLast ? Colors.Black : DemoTheme.PrimaryText, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center },
+                };
+                var title = new HorizontalStackLayout
+                {
+                    Spacing = 8,
+                    Children = { new Label { Text = o.Title, FontFamily = DemoTheme.TitleFont, FontSize = 17, TextColor = DemoTheme.PrimaryText, VerticalOptions = LayoutOptions.Center } }
+                };
+                if (isLast)
+                    title.Children.Add(new Label { Text = "LAST USED", FontFamily = DemoTheme.TitleFont, FontSize = 10, CharacterSpacing = 1, TextColor = lastLabel, VerticalOptions = LayoutOptions.Center });
+                var speed = new HorizontalStackLayout
+                {
+                    Spacing = 6,
+                    VerticalOptions = LayoutOptions.Center,
+                    Children =
+                    {
+                        new Ellipse { WidthRequest = 7, HeightRequest = 7, Fill = o.Fast ? DemoTheme.StatusGreen : orange, VerticalOptions = LayoutOptions.Center },
+                        new Label { Text = o.Fast ? "Fast" : "Slower", FontFamily = DemoTheme.TitleFont, FontSize = 12, TextColor = DemoTheme.SecondaryText, VerticalOptions = LayoutOptions.Center },
+                    }
+                };
+                var row = new Grid
+                {
+                    ColumnSpacing = 14,
+                    ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) }
+                };
+                row.Add(icon, 0, 0);
+                row.Add(new VerticalStackLayout
+                {
+                    Spacing = 2,
+                    VerticalOptions = LayoutOptions.Center,
+                    Children = { title, new Label { Text = o.Subtitle, FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText, LineBreakMode = LineBreakMode.TailTruncation } }
+                }, 1, 0);
+                row.Add(speed, 2, 0);
+                var cell = new Border
+                {
+                    Padding = new Thickness(8, 8, 12, 8),
+                    StrokeThickness = 0,
+                    StrokeShape = new RoundRectangle { CornerRadius = 18 },
+                    BackgroundColor = isLast ? DemoTheme.PillBackground : Colors.Transparent,
+                    Content = row,
+                };
+                var tap = new TapGestureRecognizer();
+                var choice = o;
+                tap.Tapped += async (s, e) =>
+                {
+                    if (closing) return;
+                    Preferences.Default.Set(LastCameraKey, choice.Key);
+                    await Close();
+                    await choice.Open();
+                };
+                cell.GestureRecognizers.Add(tap);
+                list.Children.Add(cell);
+            }
+
+            sheet.Content = new VerticalStackLayout
+            {
+                Children =
+                {
+                    new BoxView { WidthRequest = 40, HeightRequest = 5, CornerRadius = 3, Color = DemoTheme.SheetHandle, HorizontalOptions = LayoutOptions.Center, Margin = new Thickness(0, 0, 0, 10) },
+                    header,
+                    new ScrollView { Content = list, MaximumHeightRequest = Math.Max(240, (Height > 0 ? Height : 800) - 220) },
+                }
+            };
+
+            _homeRoot.Add(overlay, 0, 0);
+            Grid.SetRowSpan(overlay, 2);
+            sheet.TranslationY = 900;
+            overlay.Dispatcher.Dispatch(async () =>
+            {
+                sheet.TranslationY = sheet.Height > 0 ? sheet.Height + 40 : 900;
+                await Task.WhenAll(scrim.FadeToAsync(1, 180), sheet.TranslateToAsync(0, 0, 260, Easing.CubicOut));
+            });
         }
 
         // ---------- Cards ----------
