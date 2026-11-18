@@ -77,6 +77,10 @@ namespace MauiDemoApp
         internal const string GlyphCheck = "\ue5ca";
         internal const string GlyphClose = "\ue14c";
         internal const string GlyphArrowForward = "\ue5c8";
+        /// <summary>ClassId for an Entry drawn without the native border (see MauiProgram).</summary>
+        internal const string BorderlessEntry = "borderless";
+        internal const string GlyphSearch = "\ue8b6";
+        internal const string GlyphGrid = "\ue9b0";       // grid_view
 
         // Pale grey for oversized empty-state type ("no results yet").
         internal static Color EmptyStateText => Pick("#D9D9D9", "#333333");

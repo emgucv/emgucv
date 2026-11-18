@@ -758,6 +758,11 @@ namespace MauiDemoApp
                     await LoadSample(0);
                 if (Config.AutoRun)
                     await Run();
+                //TEMP-AUTOOPEN-BEGIN
+                if (!Config.AutoRun && Environment.GetEnvironmentVariable("EMGU_DEMO_AUTORUN") != null) await Run();
+                if (Environment.GetEnvironmentVariable("EMGU_DEMO_SAVEPREVIEW") != null && RenderAnnotated() is byte[] previewPng)
+                    System.IO.File.WriteAllBytes(System.IO.Path.Combine(FileSystem.CacheDirectory, "preview-" + Config.Title.ToLowerInvariant().Replace(' ', '-') + ".png"), previewPng);
+                //TEMP-AUTOOPEN-END
             }
         }
 

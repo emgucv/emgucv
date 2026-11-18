@@ -26,6 +26,13 @@ namespace MauiDemoApp
             ("v8", "YoloV8", new[] { "n" }),
         };
 
+        /// <summary>Preferences key: the last measured inference time (ms), shown on the home screen.</summary>
+        internal const string LastInferenceKey = "yolo_last_inference_ms";
+
+        /// <summary>Open the live camera as soon as the page appears (home "Live camera" / Camera tab).</summary>
+        public bool StartWithCamera { get; set; }
+        private bool _cameraStarted;
+
         private Yolo _model = new Yolo();
         private string _modelLoaded;          // selection the model was initialized with
         private SegmentedControl _versionControl, _sizeControl;
@@ -178,6 +185,7 @@ namespace MauiDemoApp
             // "post": sort for display.
             found = found.OrderByDescending(o => o.Confident).ToArray();
             total.Stop();
+            Preferences.Default.Set(LastInferenceKey, infer.Elapsed.TotalMilliseconds);
             return new StageResult
             {
                 Boxes = found.Select(o => new StageBox(new RectF(o.Region.X, o.Region.Y, o.Region.Width, o.Region.Height), $"{o.Label} {o.Confident:0.00}", ClassColor(o.ClassId), o.Confident)).ToArray(),
@@ -185,6 +193,16 @@ namespace MauiDemoApp
                 InferenceMs = infer.Elapsed.TotalMilliseconds,
                 PrePostMs = total.Elapsed.TotalMilliseconds - infer.Elapsed.TotalMilliseconds,
             };
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            if (StartWithCamera && !_cameraStarted)
+            {
+                _cameraStarted = true;
+                await OpenLiveCameraAsync();
+            }
         }
 
         protected override async Task OpenLiveCameraAsync()

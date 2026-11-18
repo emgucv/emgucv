@@ -22,6 +22,23 @@ namespace MauiDemoApp
                     fonts.AddFont("MaterialSymbolsOutlined.ttf", "MaterialSymbols");
                 });
 
+            // Entries marked DemoTheme.BorderlessEntry (e.g. the home search field)
+            // sit inside their own rounded pill, so drop the native border.
+            Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("Borderless", (handler, view) =>
+            {
+                if (view is Entry e && e.ClassId == DemoTheme.BorderlessEntry)
+                {
+#if __IOS__ || __MACCATALYST__
+                    handler.PlatformView.BorderStyle = UIKit.UITextBorderStyle.None;
+                    handler.PlatformView.BackgroundColor = UIKit.UIColor.Clear;
+#elif __ANDROID__
+                    handler.PlatformView.Background = null;
+#elif WINDOWS
+                    handler.PlatformView.BorderThickness = new Microsoft.UI.Xaml.Thickness(0);
+#endif
+                }
+            });
+
             return builder.Build();
         }
     }
