@@ -39,6 +39,7 @@ namespace MauiDemoApp
         public string ResultsTitle = "Results";
         public bool ShowResultCount = true;   // "N objects" next to the results title
         public int MaxImageSize = 1280;      // user photos are downscaled to this
+        public bool RunOpensCamera;          // the Run button opens the live camera (camera-only demos)
     }
 
     /// <summary>A box drawn over the input image, in image pixels.</summary>
@@ -533,7 +534,7 @@ namespace MauiDemoApp
                 var stageCard = new Grid { RowDefinitions = { new RowDefinition(GridLength.Star), new RowDefinition(GridLength.Auto) } };
                 stageCard.Add(DemoControls.Well(_stage), 0, 0);
                 var under = new Grid { Margin = new Thickness(0, 14, 0, 0), ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-                if (Config.Samples.Length > 0)
+                if (Config.Samples.Length > 0 && !Config.RunOpensCamera)
                 {
                     under.Add(new Label { Text = "Drop an image here, or pick a sample", FontFamily = DemoTheme.BodyFont, FontSize = 12, TextColor = DemoTheme.MutedText, VerticalOptions = LayoutOptions.Center }, 0, 0);
                     under.Add(_thumbs, 1, 0);
@@ -541,7 +542,9 @@ namespace MauiDemoApp
                 }
 
                 panelItems.Add(_runButton);
-                panelItems.AddRange(new View[] { DemoControls.Hairline(), _resultsSection, DemoControls.Hairline(), _perfSection });
+                panelItems.AddRange(new View[] { DemoControls.Hairline(), _resultsSection });
+                if (!Config.RunOpensCamera)
+                    panelItems.AddRange(new View[] { DemoControls.Hairline(), _perfSection });
                 if (_codeLink != null)
                     panelItems.AddRange(new View[] { DemoControls.Hairline(), _codeLink });
                 var panelStack = new VerticalStackLayout { Spacing = 20 };
@@ -559,11 +562,13 @@ namespace MauiDemoApp
             else
             {
                 var column = new VerticalStackLayout { Padding = new Thickness(16, 10, 16, 24), Spacing = 18, Children = { _headerPhone, DemoControls.Well(_stage) } };
-                if (Config.Samples.Length > 0)
+                if (Config.Samples.Length > 0 && !Config.RunOpensCamera)
                     column.Children.Add(new ScrollView { Orientation = ScrollOrientation.Horizontal, HorizontalScrollBarVisibility = ScrollBarVisibility.Never, Content = _thumbs });
                 foreach (var v in panelItems)
                     column.Children.Add(v);
-                foreach (var v in new View[] { DemoControls.Hairline(), _resultsSection, DemoControls.Hairline(), _perfSection })
+                foreach (var v in Config.RunOpensCamera
+                    ? new View[] { DemoControls.Hairline(), _resultsSection }
+                    : new View[] { DemoControls.Hairline(), _resultsSection, DemoControls.Hairline(), _perfSection })
                     column.Children.Add(v);
                 if (_codeLink != null)
                 {
@@ -758,11 +763,6 @@ namespace MauiDemoApp
                     await LoadSample(0);
                 if (Config.AutoRun)
                     await Run();
-                //TEMP-AUTOOPEN-BEGIN
-                if (!Config.AutoRun && Environment.GetEnvironmentVariable("EMGU_DEMO_AUTORUN") != null) await Run();
-                if (Environment.GetEnvironmentVariable("EMGU_DEMO_SAVEPREVIEW") != null && RenderAnnotated() is byte[] previewPng)
-                    System.IO.File.WriteAllBytes(System.IO.Path.Combine(FileSystem.CacheDirectory, "preview-" + Config.Title.ToLowerInvariant().Replace(' ', '-') + ".png"), previewPng);
-                //TEMP-AUTOOPEN-END
             }
         }
 
@@ -791,7 +791,7 @@ namespace MauiDemoApp
                 CvInvoke.Imdecode(bytes, ImreadModes.ColorBgr, m);
                 if (m.IsEmpty) { m.Dispose(); return; }
                 _sampleIndex = idx;
-                SetImage(m, "Sample · " + Config.Samples[idx].Name);
+                SetImage(m, Config.RunOpensCamera ? "Example" : "Sample · " + Config.Samples[idx].Name);
             }
             catch (Exception ex)
             {
@@ -877,6 +877,11 @@ namespace MauiDemoApp
 
         private async Task Run()
         {
+            if (Config.RunOpensCamera)
+            {
+                await OpenLiveCameraAsync();
+                return;
+            }
             if (_busy || (Config.Samples.Length > 0 && _image == null))
                 return;
             _busy = true;

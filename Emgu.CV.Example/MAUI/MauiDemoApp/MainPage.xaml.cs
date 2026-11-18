@@ -361,16 +361,7 @@ foreach (PaddleOCR.OcrResult r in ocr.Recognize(image))
 
                 videoSurveillanceButton.Clicked += (sender, args) =>
                 {
-                    this.Navigation.PushAsync(new ModelShowcasePage(
-                        "Video Surveillance",
-                        "Track moving foreground objects from the camera.",
-                        demoGlyph("video"),
-                        () => new VideoSurveillanceModel(),
-                        null,
-                        hasCamera: true,
-                        about: "Learns the static background from the camera, then flags and tracks anything that moves.",
-                    tag: null,
-                    category: "Video"));
+                    this.Navigation.PushAsync(new VideoSurveillancePage());
                 };
             }
 

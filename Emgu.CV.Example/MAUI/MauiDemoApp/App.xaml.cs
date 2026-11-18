@@ -11,9 +11,6 @@
             // app's pages (this returns to the home screen).
             // The user can pin light or dark in Settings; "system" leaves it Unspecified.
             UserAppTheme = SettingsPage.SavedAppearance;
-            //TEMP-AUTOOPEN-BEGIN
-            if (Environment.GetEnvironmentVariable("EMGU_DEMO_THEME") is string tempTheme) UserAppTheme = tempTheme == "dark" ? AppTheme.Dark : AppTheme.Light;
-            //TEMP-AUTOOPEN-END
             RequestedThemeChanged += (s, e) =>
                 Microsoft.Maui.ApplicationModel.MainThread.BeginInvokeOnMainThread(() =>
                 {

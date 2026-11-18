@@ -471,10 +471,6 @@ namespace MauiDemoApp
                     layoutCards();
             };
 
-            //TEMP-AUTOOPEN-BEGIN
-            if (Environment.GetEnvironmentVariable("EMGU_DEMO_SCROLL") is string sc)
-                Dispatcher.DispatchDelayed(TimeSpan.FromSeconds(3), async () => { if (sc == "list") viewSwitch.SelectedIndex = 1; if (sc == "list") { listMode = true; layoutCards(); } await scroll.ScrollToAsync(grid, ScrollToPosition.Start, false); });
-            //TEMP-AUTOOPEN-END
             refreshChips();
             BackgroundColor = DemoTheme.PageBackground;
             Content = root;
