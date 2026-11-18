@@ -2,6 +2,8 @@
 //  Copyright (C) 2004-2026 by EMGU Corporation. All rights reserved.
 //----------------------------------------------------------------------------
 
+using Emgu.CV.Models;
+
 using Microsoft.Maui.Controls.Shapes;
 
 namespace MauiDemoApp
@@ -392,7 +394,7 @@ namespace MauiDemoApp
                 return v;
             };
             tabBar.Add(tab(DemoTheme.GlyphGrid, "Demos", true, null), 0, 0);
-            tabBar.Add(tab(DemoTheme.GlyphVideo, "Camera", false, yolo == null ? null : async () => await YoloPage.OpenLiveCamera(Navigation)), 1, 0);
+            tabBar.Add(tab(DemoTheme.GlyphVideo, "Camera", false, async () => await ChooseLiveCamera(cards)), 1, 0);
             tabBar.Add(tab(DemoTheme.GlyphDownload, "Models", false, () => Navigation.PushAsync(new SettingsPage())), 2, 0);
             tabBar.Add(tab(SettingsPage.GlyphSettings, "Settings", false, () => Navigation.PushAsync(new SettingsPage())), 3, 0);
             var tabHost = new VerticalStackLayout { Children = { DemoControls.Hairline(), tabBar } };
@@ -480,6 +482,42 @@ namespace MauiDemoApp
             BackgroundColor = DemoTheme.PageBackground;
             Content = root;
             arrange();
+        }
+
+        // ---------- Camera tab: pick which demo runs on the live camera ----------
+
+        private async Task ChooseLiveCamera(List<DemoCard> cards)
+        {
+            // Every demo here that has a live camera mode, if this build has it.
+            var options = new List<(string label, Func<Task> open)>();
+            void Add(string card, string label, Func<Task> open)
+            {
+                if (cards.Any(c => c.Name == card))
+                    options.Add((label, open));
+            }
+#if __IOS__ || __MACCATALYST__
+            Func<string, Func<IProcessAndRenderModel>, Func<Task>> live = (title, factory) =>
+                () => Navigation.PushModalAsync(new ModelShowcaseLivePage(title, factory, null));
+            Add("mask r-cnn", "Objects + outlines (Mask R-CNN)", () => Navigation.PushModalAsync(new MaskRcnnLivePage()));
+#else
+            Func<string, Func<IProcessAndRenderModel>, Func<Task>> live = (title, factory) =>
+                () => Navigation.PushAsync(new Emgu.CV.Platform.Maui.UI.ProcessAndRenderPage(factory(), title + " (Live)", null, "Real-time detection from the camera."));
+            Add("mask r-cnn", "Objects + outlines (Mask R-CNN)", live("Mask R-CNN", () => new MaskRcnn()));
+#endif
+            Add("yolo", "Objects (YOLO)", () => YoloPage.OpenLiveCamera(Navigation));
+            Add("face detection", "Faces", live("Face Detection", () => new FaceDetectionModel()));
+            Add("pedestrian detection", "People (HOG)", live("Pedestrian Detection", () => new PedestrianDetector()));
+            Add("barcode & qr code", "Barcodes & QR codes", live("Barcode & QR", () => new CombinedModel(new BarcodeDetectorModel(), new WeChatQRCodeDetector())));
+            Add("scene text", "Text in the scene", live("Scene Text", () => new SceneTextDetector()));
+            Add("video surveillance", "Motion tracking", live("Video Surveillance", () => new VideoSurveillanceModel()));
+            // Lead with YOLO: the fastest one.
+            options = options.OrderBy(o => o.label.StartsWith("Objects (YOLO)") ? 0 : 1).ToList();
+            if (options.Count == 0)
+                return;
+            string pick = await DisplayActionSheetAsync("Live camera: what should it detect?", "Cancel", null, options.Select(o => o.label).ToArray());
+            var chosen = options.FirstOrDefault(o => o.label == pick);
+            if (chosen.open != null)
+                await chosen.open();
         }
 
         // ---------- Cards ----------

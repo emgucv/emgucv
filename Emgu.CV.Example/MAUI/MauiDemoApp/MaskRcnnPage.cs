@@ -368,9 +368,7 @@ foreach (MaskedObject o in objects)
             AllowAvCaptureSession = true;
             outputRecorder.BufferReceived += OnCameraFrame;
 
-            // AspectFit: show the camera's whole picture (like the Camera app) rather
-            // than filling the tall screen and cropping off the left and right.
-            _feed = new Image { Aspect = Aspect.AspectFit, HorizontalOptions = LayoutOptions.Fill, VerticalOptions = LayoutOptions.Fill };
+            _feed = new Image { Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Fill, VerticalOptions = LayoutOptions.Fill };
 
             // ---------- Top bar: Exit (left) / title (centered) / info (right) ----------
             var exitRow = new HorizontalStackLayout

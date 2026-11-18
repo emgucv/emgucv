@@ -97,14 +97,16 @@ namespace MauiDemoApp
             _pickerSelection = pickerSelection;
             _paneModel = _model as IMultiPaneModel;
 
-            BackgroundColor = MaskRcnnPage.PageBackground;
-            this.SafeAreaEdges = Microsoft.Maui.SafeAreaEdges.All;
+            BackgroundColor = Colors.Black;
+            // The camera runs under the status bar and home indicator (true full
+            // screen); only the controls layer below keeps clear of them.
+            this.SafeAreaEdges = Microsoft.Maui.SafeAreaEdges.None;
             AllowAvCaptureSession = true;
             outputRecorder.BufferReceived += OnCameraFrame;
 
-            // AspectFit: show the camera's whole picture (like the Camera app) rather
-            // than filling the tall screen and cropping off the left and right.
-            _feed = new Image { Aspect = Aspect.AspectFit, HorizontalOptions = LayoutOptions.Fill, VerticalOptions = LayoutOptions.Fill };
+            // AspectFill: the picture covers the whole screen (the sides of the
+            // camera frame are cropped on a tall phone, like a full-screen viewfinder).
+            _feed = new Image { Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Fill, VerticalOptions = LayoutOptions.Fill };
 
             // Floating exit control (white on a translucent pill) so the video
             // can run edge-to-edge with no chrome bar stealing vertical space.
@@ -169,18 +171,22 @@ namespace MauiDemoApp
             // Edge-to-edge: the feed fills the whole page (theme background behind
             // it), with the exit control and floating pills on top — no chrome bar
             // or card margin stealing space from the video.
-            var layers = new Grid { BackgroundColor = Colors.Black };   // letterbox bars around the camera picture
+            var layers = new Grid { BackgroundColor = Colors.Black };
             layers.Children.Add(_feed);
-            layers.Children.Add(exitPill);
-            layers.Children.Add(pill);
+            // Controls stay inside the safe area (clear of the Dynamic Island and
+            // the home indicator) while the feed behind them is full screen.
+            var controls = new Grid { SafeAreaEdges = Microsoft.Maui.SafeAreaEdges.All };
+            controls.Children.Add(exitPill);
+            controls.Children.Add(pill);
             // When the model exposes stacked panes (e.g. Video Surveillance),
             // overlay a per-pane expand control so either pane can go full-screen.
             if (_paneModel != null)
             {
                 BuildPaneControls();
-                layers.Children.Add(_splitControls);
-                layers.Children.Add(_collapseControl);
+                controls.Children.Add(_splitControls);
+                controls.Children.Add(_collapseControl);
             }
+            layers.Children.Add(controls);
             layers.Children.Add(_overlay);
             Content = layers;
         }
