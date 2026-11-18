@@ -326,6 +326,11 @@ namespace MauiDemoApp
                 sectionTitle.Text = q.Length > 0 ? $"results for “{q}”" : currentGroup == 0 ? "All demos" : CategoryNames[currentGroup];
                 sectionNote.Text = q.Length > 0 || currentGroup != 0 ? $"{shown.Count} demo{(shown.Count == 1 ? "" : "s")}" : "Sorted by category";
                 emptyLabel.IsVisible = shown.Count == 0;
+                // The featured card is for browsing; hide it while filtering or searching
+                // so the matching demos are right there.
+                bool browsing = q.Length == 0 && currentGroup == 0;
+                if (wideFeatured != null) wideFeatured.IsVisible = browsing;
+                if (phoneFeatured != null) phoneFeatured.IsVisible = browsing;
 
                 grid.Children.Clear();
                 grid.ColumnDefinitions.Clear();
