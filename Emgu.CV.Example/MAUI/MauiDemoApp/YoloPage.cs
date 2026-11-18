@@ -29,9 +29,6 @@ namespace MauiDemoApp
         /// <summary>Preferences key: the last measured inference time (ms), shown on the home screen.</summary>
         internal const string LastInferenceKey = "yolo_last_inference_ms";
 
-        /// <summary>Open the live camera as soon as the page appears (home "Live camera" / Camera tab).</summary>
-        public bool StartWithCamera { get; set; }
-        private bool _cameraStarted;
 
         private Yolo _model = new Yolo();
         private string _modelLoaded;          // selection the model was initialized with
@@ -195,22 +192,19 @@ namespace MauiDemoApp
             };
         }
 
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            if (StartWithCamera && !_cameraStarted)
-            {
-                _cameraStarted = true;
-                await OpenLiveCameraAsync();
-            }
-        }
+        protected override Task OpenLiveCameraAsync() => OpenLiveCamera(Navigation, Selection);
 
-        protected override async Task OpenLiveCameraAsync()
+        /// <summary>
+        /// Open YOLO's full-screen live camera. Also used straight from the home
+        /// screen (Camera tab, "Live camera"), so closing it returns there; opening
+        /// it while a page is still sliding in can leave that page frozen on iOS.
+        /// </summary>
+        internal static async Task OpenLiveCamera(INavigation navigation, string selection = null)
         {
 #if __IOS__ || __MACCATALYST__
-            await Navigation.PushModalAsync(new ModelShowcaseLivePage("YOLO", () => new Yolo(), Selection));
+            await navigation.PushModalAsync(new ModelShowcaseLivePage("YOLO", () => new Yolo(), selection));
 #else
-            await Navigation.PushAsync(new Emgu.CV.Platform.Maui.UI.ProcessAndRenderPage(
+            await navigation.PushAsync(new Emgu.CV.Platform.Maui.UI.ProcessAndRenderPage(
                 new Yolo(), "YOLO (Live)", null, "Real-time detection from the camera."));
 #endif
         }

@@ -102,7 +102,9 @@ namespace MauiDemoApp
             AllowAvCaptureSession = true;
             outputRecorder.BufferReceived += OnCameraFrame;
 
-            _feed = new Image { Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Fill, VerticalOptions = LayoutOptions.Fill };
+            // AspectFit: show the camera's whole picture (like the Camera app) rather
+            // than filling the tall screen and cropping off the left and right.
+            _feed = new Image { Aspect = Aspect.AspectFit, HorizontalOptions = LayoutOptions.Fill, VerticalOptions = LayoutOptions.Fill };
 
             // Floating exit control (white on a translucent pill) so the video
             // can run edge-to-edge with no chrome bar stealing vertical space.
@@ -167,7 +169,7 @@ namespace MauiDemoApp
             // Edge-to-edge: the feed fills the whole page (theme background behind
             // it), with the exit control and floating pills on top — no chrome bar
             // or card margin stealing space from the video.
-            var layers = new Grid { BackgroundColor = MaskRcnnPage.PageBackground };
+            var layers = new Grid { BackgroundColor = Colors.Black };   // letterbox bars around the camera picture
             layers.Children.Add(_feed);
             layers.Children.Add(exitPill);
             layers.Children.Add(pill);

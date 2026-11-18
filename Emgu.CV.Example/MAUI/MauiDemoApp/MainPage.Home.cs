@@ -392,7 +392,7 @@ namespace MauiDemoApp
                 return v;
             };
             tabBar.Add(tab(DemoTheme.GlyphGrid, "Demos", true, null), 0, 0);
-            tabBar.Add(tab(DemoTheme.GlyphVideo, "Camera", false, yolo == null ? null : () => Navigation.PushAsync(new YoloPage { StartWithCamera = true })), 1, 0);
+            tabBar.Add(tab(DemoTheme.GlyphVideo, "Camera", false, yolo == null ? null : async () => await YoloPage.OpenLiveCamera(Navigation)), 1, 0);
             tabBar.Add(tab(DemoTheme.GlyphDownload, "Models", false, () => Navigation.PushAsync(new SettingsPage())), 2, 0);
             tabBar.Add(tab(SettingsPage.GlyphSettings, "Settings", false, () => Navigation.PushAsync(new SettingsPage())), 3, 0);
             var tabHost = new VerticalStackLayout { Children = { DemoControls.Hairline(), tabBar } };
@@ -727,7 +727,7 @@ namespace MauiDemoApp
                 HeightRequest = 48,
                 Padding = new Thickness(24, 0)
             };
-            live.Clicked += (s, e) => Navigation.PushAsync(new YoloPage { StartWithCamera = true });
+            live.Clicked += async (s, e) => await YoloPage.OpenLiveCamera(Navigation);
             Func<string, string, View> stat = (v, caption) => new VerticalStackLayout
             {
                 Spacing = 2,
