@@ -12,6 +12,7 @@ namespace MauiDemoApp
     /// </summary>
     public class SettingsPage : ContentPage
     {
+        private const string GlyphDelete = "\ue872";      // delete (trash can)
         internal const string GlyphSettings = "";   // settings (gear)
         private const string GlyphChevronRight = ""; // chevron_right
 
@@ -61,6 +62,7 @@ namespace MauiDemoApp
                     },
                     DemoTheme.Divider(),
                     DemoTheme.SectionLabel("Models"),
+                    new Label { Text = "Models this app has downloaded. Delete one to free up space; its demo downloads it again the next time you run it.", FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText },
                     _models,
                     DemoTheme.Divider(),
                     DemoTheme.SectionLabel("Backend"),
@@ -157,7 +159,27 @@ namespace MauiDemoApp
                 }, 0, 0);
                 row.Add(new Label { Text = Size(bytes), FontFamily = DemoTheme.BodyFont, FontSize = 14, TextColor = DemoTheme.SecondaryText, VerticalOptions = LayoutOptions.Center }, 1, 0);
                 var target = dir;
-                row.Add(DemoControls.CircleButton(DemoTheme.GlyphClose, async () =>
+                // A labelled red "Delete" pill: clearly a button, clearly destructive.
+                var red = Color.FromArgb(DemoTheme.IsDark ? "#FF6B6B" : "#D93025");
+                var deleteButton = new Border
+                {
+                    BackgroundColor = DemoTheme.PillBackground,
+                    Stroke = Colors.Transparent,
+                    StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(100) },
+                    Padding = new Thickness(12, 7),
+                    VerticalOptions = LayoutOptions.Center,
+                    Content = new HorizontalStackLayout
+                    {
+                        Spacing = 5,
+                        Children =
+                        {
+                            DemoTheme.MakeIcon(GlyphDelete, red, 16),
+                            new Label { Text = "DELETE", FontFamily = DemoTheme.TitleFont, FontSize = 11, CharacterSpacing = 1.2, TextColor = red, VerticalOptions = LayoutOptions.Center }
+                        }
+                    }
+                };
+                var deleteTap = new TapGestureRecognizer();
+                deleteTap.Tapped += async (s, e) =>
                 {
                     bool ok = await DisplayAlertAsync("Delete model?",
                         $"Delete \"{Pretty(target.Name)}\" ({Size(bytes)})? The demo downloads it again the next time you run it.", "Delete", "Cancel");
@@ -166,7 +188,10 @@ namespace MauiDemoApp
                     try { target.Delete(true); }
                     catch (Exception ex) { await DisplayAlertAsync("Could not delete", ex.Message, "OK"); }
                     RefreshModels();
-                }, 32), 2, 0);
+                };
+                deleteButton.GestureRecognizers.Add(deleteTap);
+                DemoControls.AddHover(deleteButton);
+                row.Add(deleteButton, 2, 0);
                 _models.Children.Add(row);
             }
             long total = folders.Sum(f => f.bytes);
