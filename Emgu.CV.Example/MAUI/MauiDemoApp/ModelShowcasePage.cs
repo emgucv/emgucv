@@ -90,6 +90,55 @@ namespace MauiDemoApp
         private readonly IMultiPaneModel _paneModel;
         private View _splitControls;
         private View _collapseControl;
+        private HorizontalStackLayout _topLeft;
+
+        /// <summary>
+        /// Adds a "<name> demo ›" pill next to Exit. Tapping it closes the camera and
+        /// runs <paramref name="openDemo"/> (which opens the demo's own page), so people
+        /// who reached the camera from the home screen can find the full demo.
+        /// </summary>
+        internal ModelShowcaseLivePage WithDemoLink(string name, Func<Task> openDemo)
+        {
+            if (openDemo != null)
+                _topLeft.Children.Add(DemoLinkPill(name, Color.FromArgb("#E0111111"), Colors.White, async () =>
+                {
+                    _running = false;
+                    await Navigation.PopModalAsync();
+                    await openDemo();
+                }));
+            return this;
+        }
+
+        internal static View DemoLinkPill(string name, Color background, Color foreground, Func<Task> onTap)
+        {
+            var pill = new Border
+            {
+                BackgroundColor = background,
+                Stroke = Colors.Transparent,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(18) },
+                Padding = new Thickness(16, 8, 10, 8),
+                VerticalOptions = LayoutOptions.Center,
+                Content = new HorizontalStackLayout
+                {
+                    Spacing = 2,
+                    Children =
+                    {
+                        new Label { Text = name + " demo", FontFamily = MaskRcnnPage.TitleFont, FontSize = 15, TextColor = foreground, VerticalOptions = LayoutOptions.Center },
+                        MaskRcnnPage.MakeIcon("\ue5cc", foreground, 22),   // chevron_right
+                    }
+                }
+            };
+            bool busy = false;
+            var tap = new TapGestureRecognizer();
+            tap.Tapped += async (s, e) =>
+            {
+                if (busy) return;
+                busy = true;
+                await onTap();
+            };
+            pill.GestureRecognizers.Add(tap);
+            return pill;
+        }
 
         public ModelShowcaseLivePage(string title, Func<IProcessAndRenderModel> modelFactory, string pickerSelection)
         {
@@ -127,9 +176,6 @@ namespace MauiDemoApp
                 Stroke = Colors.Transparent,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(18) },
                 Padding = new Thickness(14, 8, 18, 8),
-                Margin = new Thickness(12, 12, 0, 0),
-                HorizontalOptions = LayoutOptions.Start,
-                VerticalOptions = LayoutOptions.Start,
                 Content = exitRow
             };
             var exitTap = new TapGestureRecognizer();
@@ -176,7 +222,15 @@ namespace MauiDemoApp
             // Controls stay inside the safe area (clear of the Dynamic Island and
             // the home indicator) while the feed behind them is full screen.
             var controls = new Grid { SafeAreaEdges = Microsoft.Maui.SafeAreaEdges.All };
-            controls.Children.Add(exitPill);
+            _topLeft = new HorizontalStackLayout
+            {
+                Spacing = 8,
+                Margin = new Thickness(12, 12, 0, 0),
+                HorizontalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.Start,
+                Children = { exitPill }
+            };
+            controls.Children.Add(_topLeft);
             controls.Children.Add(pill);
             // When the model exposes stacked panes (e.g. Video Surveillance),
             // overlay a per-pane expand control so either pane can go full-screen.

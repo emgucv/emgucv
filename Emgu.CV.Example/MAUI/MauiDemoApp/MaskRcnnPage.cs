@@ -352,6 +352,23 @@ foreach (MaskedObject o in objects)
     internal class MaskRcnnLivePage : Emgu.Util.AvCaptureSessionPage
     {
         private readonly MaskRcnn _model = new MaskRcnn();
+        private Grid _topBar;
+        private View _infoBtn;
+
+        /// <summary>Swaps the info button for a "Mask R-CNN demo ›" pill (see ModelShowcaseLivePage.WithDemoLink).</summary>
+        internal MaskRcnnLivePage WithDemoLink(string name, Func<Task> openDemo)
+        {
+            if (openDemo == null)
+                return this;
+            _infoBtn.IsVisible = false;
+            _topBar.Add(ModelShowcaseLivePage.DemoLinkPill(name, DemoTheme.PillBackground, MaskRcnnPage.PrimaryText, async () =>
+            {
+                _running = false;
+                await Navigation.PopModalAsync();
+                await openDemo();
+            }), 2, 0);
+            return this;
+        }
         private readonly Image _feed;
         private readonly Grid _overlay;
         private readonly Label _loadingLabel;
@@ -417,6 +434,8 @@ foreach (MaskedObject o in objects)
             Grid.SetColumnSpan(titleLabel, 3);
             topBar.Add(exitRow, 0, 0);
             topBar.Add(infoBtn, 2, 0);
+            _topBar = topBar;
+            _infoBtn = infoBtn;
 
             // ---------- Scanning pill (overlaid on the camera) ----------
             var dot = new Border { WidthRequest = 10, HeightRequest = 10, BackgroundColor = Color.FromArgb("#2BE07A"), Stroke = Colors.Transparent, StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(5) }, VerticalOptions = LayoutOptions.Center };

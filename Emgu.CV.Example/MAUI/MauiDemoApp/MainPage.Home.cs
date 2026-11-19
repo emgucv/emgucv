@@ -511,22 +511,30 @@ namespace MauiDemoApp
                 if (cards.Any(c => c.Name == card))
                     options.Add(new CameraChoice { Key = card, Title = title, Subtitle = subtitle, Glyph = glyph, Fast = fast, Open = open });
             }
+            // Opens a demo's own page, for the "<name> demo ›" pill on the camera screen.
+            Func<string, Func<Task>> demo = card => () =>
+            {
+                var c = cards.FirstOrDefault(x => x.Name == card);
+                if (c != null)
+                    ((Microsoft.Maui.IButton)c.Source).Clicked();
+                return Task.CompletedTask;
+            };
 #if __IOS__ || __MACCATALYST__
-            Func<string, Func<IProcessAndRenderModel>, Func<Task>> live = (title, factory) =>
-                () => Navigation.PushModalAsync(new ModelShowcaseLivePage(title, factory, null));
-            Func<Task> maskRcnn = () => Navigation.PushModalAsync(new MaskRcnnLivePage());
+            Func<string, string, string, Func<IProcessAndRenderModel>, Func<Task>> live = (card, title, linkName, factory) =>
+                () => Navigation.PushModalAsync(new ModelShowcaseLivePage(title, factory, null).WithDemoLink(linkName, demo(card)));
+            Func<Task> maskRcnn = () => Navigation.PushModalAsync(new MaskRcnnLivePage().WithDemoLink("Mask R-CNN", demo("mask r-cnn")));
 #else
-            Func<string, Func<IProcessAndRenderModel>, Func<Task>> live = (title, factory) =>
+            Func<string, string, string, Func<IProcessAndRenderModel>, Func<Task>> live = (card, title, linkName, factory) =>
                 () => Navigation.PushAsync(new Emgu.CV.Platform.Maui.UI.ProcessAndRenderPage(factory(), title + " (Live)", null, "Real-time detection from the camera."));
-            Func<Task> maskRcnn = live("Mask R-CNN", () => new MaskRcnn());
+            Func<Task> maskRcnn = live("mask r-cnn", "Mask R-CNN", null, () => new MaskRcnn());
 #endif
-            Add("yolo", "objects", "80 everyday things · YOLO", GlyphObjects, true, () => YoloPage.OpenLiveCamera(Navigation));
+            Add("yolo", "objects", "80 everyday things · YOLO", GlyphObjects, true, () => YoloPage.OpenLiveCamera(Navigation, null, demo("yolo")));
             Add("mask r-cnn", "objects + outlines", "Exact shapes · Mask R-CNN", GlyphOutlines, false, maskRcnn);
-            Add("face detection", "faces", "Finds every face · YuNet", GlyphFace, true, live("Face Detection", () => new FaceDetectionModel()));
-            Add("pedestrian detection", "people", "Walking pedestrians · HOG", GlyphWalk, true, live("Pedestrian Detection", () => new PedestrianDetector()));
-            Add("barcode & qr code", "barcodes & QR codes", "Reads the code instantly", GlyphQr, true, live("Barcode & QR", () => new CombinedModel(new BarcodeDetectorModel(), new WeChatQRCodeDetector())));
-            Add("scene text", "text in the scene", "Signs, labels, plates", GlyphTitle, false, live("Scene Text", () => new SceneTextDetector()));
-            Add("video surveillance", "motion", "Tracks anything that moves", GlyphMotion, true, live("Video Surveillance", () => new VideoSurveillanceModel()));
+            Add("face detection", "faces", "Finds every face · YuNet", GlyphFace, true, live("face detection", "Face Detection", "Faces", () => new FaceDetectionModel()));
+            Add("pedestrian detection", "people", "Walking pedestrians · HOG", GlyphWalk, true, live("pedestrian detection", "Pedestrian Detection", "People", () => new PedestrianDetector()));
+            Add("barcode & qr code", "barcodes & QR codes", "Reads the code instantly", GlyphQr, true, live("barcode & qr code", "Barcode & QR", "Barcode", () => new CombinedModel(new BarcodeDetectorModel(), new WeChatQRCodeDetector())));
+            Add("scene text", "text in the scene", "Signs, labels, plates", GlyphTitle, false, live("scene text", "Scene Text", "Scene text", () => new SceneTextDetector()));
+            Add("video surveillance", "motion", "Tracks anything that moves", GlyphMotion, true, live("video surveillance", "Video Surveillance", "Motion", () => new VideoSurveillanceModel()));
             if (options.Count > 0 && _homeRoot != null)
                 ShowCameraSheet(options);
             return Task.CompletedTask;
@@ -969,7 +977,7 @@ namespace MauiDemoApp
                 HeightRequest = 48,
                 Padding = new Thickness(24, 0)
             };
-            live.Clicked += async (s, e) => await YoloPage.OpenLiveCamera(Navigation);
+            live.Clicked += async (s, e) => await YoloPage.OpenLiveCamera(Navigation, null, () => { ((Microsoft.Maui.IButton)yolo.Source).Clicked(); return Task.CompletedTask; });
             Func<string, string, View> stat = (v, caption) => new VerticalStackLayout
             {
                 Spacing = 2,

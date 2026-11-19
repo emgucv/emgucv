@@ -199,10 +199,10 @@ namespace MauiDemoApp
         /// screen (Camera tab, "Live camera"), so closing it returns there; opening
         /// it while a page is still sliding in can leave that page frozen on iOS.
         /// </summary>
-        internal static async Task OpenLiveCamera(INavigation navigation, string selection = null)
+        internal static async Task OpenLiveCamera(INavigation navigation, string selection = null, Func<Task> openDemo = null)
         {
 #if __IOS__ || __MACCATALYST__
-            await navigation.PushModalAsync(new ModelShowcaseLivePage("YOLO", () => new Yolo(), selection));
+            await navigation.PushModalAsync(new ModelShowcaseLivePage("YOLO", () => new Yolo(), selection).WithDemoLink("YOLO", openDemo));
 #else
             await navigation.PushAsync(new Emgu.CV.Platform.Maui.UI.ProcessAndRenderPage(
                 new Yolo(), "YOLO (Live)", null, "Real-time detection from the camera."));
