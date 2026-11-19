@@ -24,782 +24,13 @@ using Microsoft.Maui.Storage;
 namespace MauiDemoApp
 {
     /// <summary>
-    /// A reusable, on-theme showcase page for any <see cref="IProcessAndRenderModel"/>.
-    /// It reproduces the bespoke Mask R-CNN experience (curated sample photos, a
-    /// photo/camera picker, a styled results card and — on iOS — a full-screen
-    /// live camera page) for every other detection module, without duplicating the
-    /// layout. Each module only supplies a title, subtitle, glyph, a factory for its
-    /// model, its sample photos and (optionally) a version picker.
-    ///
-    /// Unlike the bespoke Mask R-CNN page (which renders a structured per-object
-    /// list), this base uses the common <see cref="IProcessAndRenderModel.ProcessAndRender"/>
-    /// contract: it shows the annotated image plus the message string the model
-    /// returns. That works uniformly for every module.
+    /// What remains of the old showcase page: the collapsible "About this module"
+    /// card (still used by SimpleDemoPage / the licenses page). The demos
+    /// themselves now use <see cref="StagePage"/>; the live camera page below is
+    /// shared by them.
     /// </summary>
-    public class ModelShowcasePage : ContentPage
+    internal static class ModelShowcasePage
     {
-        /// <summary>A curated sample photo shown in the Change Photo sheet.</summary>
-        public sealed class Sample
-        {
-            public string File { get; }
-            public string Name { get; }
-            public string Glyph { get; }
-            public Sample(string file, string name, string glyph)
-            {
-                File = file; Name = name; Glyph = glyph;
-            }
-        }
-
-        private readonly Func<IProcessAndRenderModel> _modelFactory;
-        private readonly Sample[] _samples;
-        private readonly string _pickerTitle;
-        private readonly string[] _pickerOptions;
-        private readonly bool _hasCamera;
-        private readonly bool _hasStillImage;
-        private readonly string _title;
-
-        // Optional per-module hook: given the model and input image, produce the
-        // annotated PNG plus a list of textual result items (e.g. recognized
-        // words). When set, the Results card lists these rows instead of the
-        // generic message string.
-        private readonly Func<IProcessAndRenderModel, Mat, (byte[] png, IReadOnlyList<string> items)> _customProcess;
-
-        // Optional "About this module" description, shown as one paragraph in a
-        // collapsible card at the bottom of the page.
-        private readonly string _about;
-
-        private IProcessAndRenderModel _model;
-        private Mat _currentImage;
-        private Mat _renderBuffer;
-        private bool _busy;
-        private bool _defaultLoaded;
-        private byte[] _lastResultPng;
-        private int _pickerIndex = -1;
-
-        // Runtime UI.
-        private readonly Image _previewImage;
-        private readonly VerticalStackLayout _resultsBody;
-        private readonly VerticalStackLayout _emptyState;
-        private readonly Label _resultsStatusLabel;
-        private readonly Image _resultsCheck;
-        private readonly Label _resultsTimeLabel;
-        private readonly Label _resultsMessage;
-        private readonly Button _detectButton;
-        private readonly Button _liveButton;
-        private readonly Grid _loadingOverlay;
-        private readonly Label _loadingLabel;
-        private readonly ActivityIndicator _loadingIndicator;
-        private readonly Microsoft.Maui.Controls.Picker _versionPicker;
-
-        // Change Photo sheet.
-        private readonly Grid _sheetOverlay;
-        private readonly BoxView _sheetScrim;
-        private readonly Border _sheetCard;
-        private readonly VerticalStackLayout _sheetList;
-        private TaskCompletionSource<string> _sheetTcs;
-        private bool _sheetAnimating;
-
-        /// <summary>
-        /// Create a showcase page for a model.
-        /// </summary>
-        /// <param name="title">Module name, shown in the header.</param>
-        /// <param name="subtitle">One-line description under the title.</param>
-        /// <param name="glyph">Material Symbols glyph for the header tile.</param>
-        /// <param name="modelFactory">Creates a fresh model instance (used by both the still page and the live page).</param>
-        /// <param name="samples">Curated sample photos. Pass null/empty for a camera-only module.</param>
-        /// <param name="pickerTitle">Optional label for a version picker.</param>
-        /// <param name="pickerOptions">Optional version options, passed to Init as the selection string.</param>
-        /// <param name="hasCamera">Whether the module supports live camera detection.</param>
-        /// <param name="tag">Optional short module tag shown as a pill under the title, e.g. "DNN".</param>
-        /// <param name="category">Optional group name shown next to the tag, e.g. "Detection".</param>
-        public ModelShowcasePage(
-            string title,
-            string subtitle,
-            string glyph,
-            Func<IProcessAndRenderModel> modelFactory,
-            Sample[] samples,
-            string pickerTitle = null,
-            string[] pickerOptions = null,
-            bool hasCamera = true,
-            Func<IProcessAndRenderModel, Mat, (byte[] png, IReadOnlyList<string> items)> customProcess = null,
-            string about = null,
-            string tag = null,
-            string category = null)
-        {
-            _modelFactory = modelFactory;
-            _customProcess = customProcess;
-            _about = about;
-            _samples = samples ?? Array.Empty<Sample>();
-            _pickerTitle = pickerTitle;
-            _pickerOptions = pickerOptions;
-            _hasCamera = hasCamera;
-            _hasStillImage = _samples.Length > 0;
-            _title = title;
-
-            _model = modelFactory();
-
-            Title = title;
-            BackgroundColor = MaskRcnnPage.PageBackground;
-            Shell.SetNavBarIsVisible(this, false);
-
-            // ---------- Header: plain icons, a giant lowercase title, then tag / category ----------
-            var header = DemoTheme.PageHeader(this, title, subtitle, glyph, tag, category);
-
-            var pageChildren = new VerticalStackLayout
-            {
-                Spacing = 20,
-                Padding = new Thickness(20, 16, 20, 28),
-                Children = { header }
-            };
-
-            // ---------- Input image (only for still-image modules) ----------
-            _previewImage = new Image { Aspect = Aspect.AspectFit, HeightRequest = 340 };
-            if (_hasStillImage)
-            {
-                pageChildren.Children.Add(Divider());
-
-                var inputHeader = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-                inputHeader.Add(SectionLabel("Input Image"), 0, 0);
-                inputHeader.Add(TextPill("Change", OnChangePhoto), 1, 0);
-
-                // The photo sits flush on a light grey backdrop, like a product shot.
-                var previewFrame = new Border
-                {
-                    BackgroundColor = MaskRcnnPage.ImageBackground,
-                    Stroke = Colors.Transparent,
-                    StrokeThickness = 0,
-                    StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(2) },
-                    Content = _previewImage
-                };
-                var previewTap = new TapGestureRecognizer();
-                previewTap.Tapped += async (s, e) =>
-                {
-                    if (_lastResultPng != null)
-                        await Navigation.PushModalAsync(new FullScreenImagePage(_lastResultPng, title));
-                };
-                previewFrame.GestureRecognizers.Add(previewTap);
-
-                pageChildren.Children.Add(new VerticalStackLayout { Spacing = 16, Children = { inputHeader, previewFrame } });
-
-                // Optional version choice, shown as a row of pills. The (never displayed)
-                // Picker still holds the selection that the model code reads.
-                if (_pickerOptions != null && _pickerOptions.Length > 0)
-                {
-                    _versionPicker = new Microsoft.Maui.Controls.Picker();
-                    foreach (string opt in _pickerOptions)
-                        _versionPicker.Items.Add(opt);
-                    _versionPicker.SelectedIndex = 0;
-                    _pickerIndex = 0;
-                    _versionPicker.SelectedIndexChanged += OnPickerChanged;
-
-                    var optionPills = new List<(Border pill, Label label)>();
-                    Action refreshOptions = () =>
-                    {
-                        for (int i = 0; i < optionPills.Count; i++)
-                        {
-                            bool selected = i == _versionPicker.SelectedIndex;
-                            optionPills[i].pill.BackgroundColor = selected ? MaskRcnnPage.PrimaryText : MaskRcnnPage.TileBackground;
-                            optionPills[i].label.TextColor = selected ? DemoTheme.OnAccent : MaskRcnnPage.PrimaryText;
-                        }
-                    };
-                    var optionRow = new HorizontalStackLayout { Spacing = 10 };
-                    for (int i = 0; i < _pickerOptions.Length; i++)
-                    {
-                        int idx = i;
-                        var label = new Label { Text = _pickerOptions[i].ToUpperInvariant(), FontFamily = MaskRcnnPage.BodyFont, FontSize = 14, CharacterSpacing = 1, VerticalOptions = LayoutOptions.Center };
-                        var pill = new Border
-                        {
-                            Stroke = Colors.Transparent,
-                            StrokeThickness = 0,
-                            StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                            Padding = new Thickness(20, 11),
-                            Content = label
-                        };
-                        var tap = new TapGestureRecognizer();
-                        tap.Tapped += (s, e) =>
-                        {
-                            _versionPicker.SelectedIndex = idx;
-                            refreshOptions();
-                        };
-                        pill.GestureRecognizers.Add(tap);
-                        optionPills.Add((pill, label));
-                        optionRow.Children.Add(pill);
-                    }
-                    refreshOptions();
-
-                    pageChildren.Children.Add(Divider());
-                    pageChildren.Children.Add(new VerticalStackLayout
-                    {
-                        Spacing = 14,
-                        Children =
-                        {
-                            SectionLabel(string.IsNullOrEmpty(_pickerTitle) ? "Model" : _pickerTitle),
-                            new Microsoft.Maui.Controls.ScrollView
-                            {
-                                Orientation = ScrollOrientation.Horizontal,
-                                HorizontalScrollBarVisibility = ScrollBarVisibility.Never,
-                                Margin = new Thickness(0, 0, -20, 0),
-                                Content = optionRow
-                            }
-                        }
-                    });
-                }
-            }
-
-            // ---------- Buttons: black pill for the main action, grey pill for live ----------
-            _detectButton = new Button
-            {
-                Text = _hasStillImage ? "Detect Image" : "Open Camera",
-                TextTransform = TextTransform.Uppercase,
-                CharacterSpacing = 2,
-                FontFamily = MaskRcnnPage.TitleFont,
-                FontSize = 15,
-                BackgroundColor = MaskRcnnPage.Accent,
-                TextColor = DemoTheme.OnAccent,
-                CornerRadius = 28,
-                HeightRequest = 56,
-                ImageSource = new FontImageSource { FontFamily = MaskRcnnPage.IconFont, Glyph = _hasStillImage ? MaskRcnnPage.GlyphPlay : MaskRcnnPage.GlyphVideo, Color = DemoTheme.OnAccent, Size = 20 },
-                ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 10)
-            };
-            if (_hasStillImage)
-                _detectButton.Clicked += OnDetectClicked;
-            else
-                _detectButton.Clicked += OnLiveDetection;
-
-            var buttonChildren = new VerticalStackLayout { Spacing = 12, Children = { _detectButton } };
-
-            // A separate Live button only makes sense when the primary action is a
-            // still-image detect and the module also supports the camera.
-            _liveButton = new Button
-            {
-                Text = "Live Detection",
-                TextTransform = TextTransform.Uppercase,
-                CharacterSpacing = 2,
-                FontFamily = MaskRcnnPage.TitleFont,
-                FontSize = 15,
-                BackgroundColor = MaskRcnnPage.TileBackground,
-                TextColor = MaskRcnnPage.PrimaryText,
-                BorderWidth = 0,
-                CornerRadius = 28,
-                HeightRequest = 56,
-                ImageSource = new FontImageSource { FontFamily = MaskRcnnPage.IconFont, Glyph = MaskRcnnPage.GlyphVideo, Color = MaskRcnnPage.PrimaryText, Size = 18 },
-                ContentLayout = new Button.ButtonContentLayout(Button.ButtonContentLayout.ImagePosition.Left, 10)
-            };
-            _liveButton.Clicked += OnLiveDetection;
-            if (_hasStillImage && _hasCamera)
-                buttonChildren.Children.Add(_liveButton);
-            pageChildren.Children.Add(buttonChildren);
-
-            // ---------- Results ----------
-            _resultsStatusLabel = new Label { Text = "Ready", TextTransform = TextTransform.Uppercase, FontFamily = MaskRcnnPage.BodyFont, FontSize = 12, CharacterSpacing = 1.5, TextColor = MaskRcnnPage.SecondaryText, VerticalOptions = LayoutOptions.Center };
-            _resultsCheck = MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphCheck, MaskRcnnPage.PrimaryText, 16);
-            _resultsCheck.IsVisible = false;
-            _resultsTimeLabel = new Label { Text = "", FontFamily = MaskRcnnPage.BodyFont, FontSize = 12, TextColor = DemoTheme.MutedText, IsVisible = false, HorizontalTextAlignment = TextAlignment.End };
-            var statusRow = new HorizontalStackLayout { Spacing = 6, HorizontalOptions = LayoutOptions.End, Children = { _resultsStatusLabel, _resultsCheck } };
-            var statusStack = new VerticalStackLayout { HorizontalOptions = LayoutOptions.End, VerticalOptions = LayoutOptions.Center, Children = { statusRow, _resultsTimeLabel } };
-
-            var resultsHeader = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
-            resultsHeader.Add(SectionLabel("Results"), 0, 0);
-            resultsHeader.Add(statusStack, 1, 0);
-
-            // Empty state: oversized pale type instead of an icon. Children[1] and [2]
-            // are rewritten by ShowError and restored by ResetResults.
-            var emptyIcon = MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphImage, DemoTheme.MutedText, 1);
-            emptyIcon.IsVisible = false;
-            _emptyState = new VerticalStackLayout
-            {
-                Spacing = 8,
-                Padding = new Thickness(0, 4, 0, 8),
-                Children =
-                {
-                    emptyIcon,
-                    new Label { Text = EmptyTitle, FontFamily = MaskRcnnPage.TitleFont, FontSize = 44, CharacterSpacing = -2.2, LineHeight = 0.95, TextColor = DemoTheme.EmptyStateText },
-                    new Label { Text = EmptyCaption, FontFamily = MaskRcnnPage.BodyFont, FontSize = 14, TextColor = MaskRcnnPage.SecondaryText }
-                }
-            };
-
-            _resultsMessage = new Label { FontFamily = MaskRcnnPage.BodyFont, FontSize = 15, TextColor = MaskRcnnPage.PrimaryText, IsVisible = false };
-            _resultsBody = new VerticalStackLayout { Spacing = 0, Children = { _resultsMessage } };
-
-            // The results only ever populate on the still-image path; for camera-only
-            // modules the live feed opens on its own full-screen page.
-            if (_hasStillImage)
-            {
-                pageChildren.Children.Add(Divider());
-                pageChildren.Children.Add(new VerticalStackLayout { Spacing = 16, Children = { resultsHeader, _emptyState, _resultsBody } });
-            }
-
-            // ---------- About this module (collapsible) ----------
-            if (!string.IsNullOrWhiteSpace(_about))
-            {
-                pageChildren.Children.Add(Divider());
-                pageChildren.Children.Add(BuildAboutCard(_about, flush: true));
-            }
-
-            // ---------- Loading overlay ----------
-            _loadingIndicator = new ActivityIndicator { IsRunning = false, Color = MaskRcnnPage.Accent, WidthRequest = 44, HeightRequest = 44, HorizontalOptions = LayoutOptions.Center };
-            _loadingLabel = new Label { Text = "Working…", FontFamily = MaskRcnnPage.BodyFont, FontSize = 15, TextColor = MaskRcnnPage.PrimaryText, HorizontalOptions = LayoutOptions.Center, HorizontalTextAlignment = TextAlignment.Center };
-            var loadingCard = new Border
-            {
-                BackgroundColor = MaskRcnnPage.CardBackground,
-                Stroke = MaskRcnnPage.RowBorder,
-                StrokeThickness = 1,
-                Padding = new Thickness(28, 22),
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(20) },
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Center,
-                Content = new VerticalStackLayout { Spacing = 14, WidthRequest = 240, Children = { _loadingIndicator, _loadingLabel } }
-            };
-            _loadingOverlay = new Grid { IsVisible = false, BackgroundColor = DemoTheme.LoadingVeil, Children = { loadingCard } };
-
-            // ---------- Change Photo sheet ----------
-            _sheetList = new VerticalStackLayout { Spacing = 0 };
-            _sheetCard = new Border
-            {
-                BackgroundColor = MaskRcnnPage.CardBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(28, 28, 0, 0) },
-                Padding = new Thickness(20, 8, 20, 60),
-                Margin = new Thickness(0, 0, 0, -40),
-                VerticalOptions = LayoutOptions.End,
-                Content = _sheetList
-            };
-            _sheetScrim = new BoxView { Color = Color.FromArgb("#66000000"), Opacity = 0, Margin = new Thickness(0, -120, 0, -120) };
-            var sheetScrimTap = new TapGestureRecognizer();
-            sheetScrimTap.Tapped += (s, e) => CloseSheet(null);
-            _sheetScrim.GestureRecognizers.Add(sheetScrimTap);
-            _sheetOverlay = new Grid { IsVisible = false, Children = { _sheetScrim, _sheetCard } };
-            if (_hasStillImage)
-                BuildSheet();
-
-            Content = new Grid { Children = { new Microsoft.Maui.Controls.ScrollView { Content = pageChildren }, _loadingOverlay, _sheetOverlay } };
-        }
-
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            if (_hasStillImage && !_defaultLoaded)
-            {
-                _defaultLoaded = true;
-                Mat m = await LoadSampleAsync(0);
-                if (m != null)
-                    SetCurrentImage(m);
-            }
-        }
-
-        protected override void OnNavigatedFrom(NavigatedFromEventArgs args)
-        {
-            base.OnNavigatedFrom(args);
-            if (!Navigation.NavigationStack.Contains(this) && !Navigation.ModalStack.Contains(this))
-            {
-                _currentImage?.Dispose();
-                _currentImage = null;
-                _renderBuffer?.Dispose();
-                _renderBuffer = null;
-                _model?.Dispose();
-                _model = null;
-            }
-        }
-
-        // ---------- Version picker ----------
-
-        private void OnPickerChanged(object sender, EventArgs e)
-        {
-            if (_versionPicker.SelectedIndex == _pickerIndex)
-                return;
-            _pickerIndex = _versionPicker.SelectedIndex;
-            // A different version means the model must be re-initialized.
-            _model?.Clear();
-            ResetResults();
-        }
-
-        private string CurrentPickerSelection =>
-            (_versionPicker != null && _versionPicker.SelectedIndex >= 0)
-                ? _versionPicker.Items[_versionPicker.SelectedIndex]
-                : null;
-
-        // ---------- Image sources ----------
-
-        private async void OnChangePhoto(object sender, EventArgs e)
-        {
-            string action = await OpenChangePhotoSheet();
-            if (string.IsNullOrEmpty(action))
-                return;
-
-            if (action.StartsWith("sample:"))
-            {
-                int idx = int.Parse(action.Substring("sample:".Length));
-                Mat sm = await LoadSampleAsync(idx);
-                if (sm != null) SetCurrentImage(sm);
-                return;
-            }
-
-            try
-            {
-                FileResult file = action == "camera"
-                    ? await MediaPicker.Default.CapturePhotoAsync()
-                    : (await MediaPicker.Default.PickPhotosAsync())?.FirstOrDefault();
-                if (file == null)
-                    return;
-
-                SetBusy(true, "Loading photo…");
-                using Stream stream = await file.OpenReadAsync();
-                using MemoryStream ms = new MemoryStream();
-                await stream.CopyToAsync(ms);
-                Mat m = new Mat();
-                CvInvoke.Imdecode(ms.ToArray(), ImreadModes.ColorBgr, m);
-                SetBusy(false);
-                if (m.IsEmpty)
-                {
-                    m.Dispose();
-                    await DisplayAlertAsync("Photo", "That file could not be read as an image.", "OK");
-                    return;
-                }
-                SetCurrentImage(MaskRcnnPage.Downscale(m, 1024));
-            }
-            catch (Exception ex)
-            {
-                SetBusy(false);
-                await DisplayAlertAsync("Could not load photo", ex.Message, "OK");
-            }
-        }
-
-        // ---------- Change Photo bottom sheet ----------
-
-        private void BuildSheet()
-        {
-            _sheetList.Children.Clear();
-            _sheetList.Children.Add(new BoxView { WidthRequest = 40, HeightRequest = 5, CornerRadius = 3, Color = DemoTheme.SheetHandle, HorizontalOptions = LayoutOptions.Center, Margin = new Thickness(0, 10, 0, 6) });
-            _sheetList.Children.Add(new Label { Text = "Change Photo", FontFamily = MaskRcnnPage.TitleFont, FontSize = 20, TextColor = MaskRcnnPage.PrimaryText, HorizontalOptions = LayoutOptions.Center, Margin = new Thickness(0, 0, 0, 6) });
-
-            _sheetList.Children.Add(SheetSection("SAMPLE IMAGES"));
-            for (int i = 0; i < _samples.Length; i++)
-                _sheetList.Children.Add(SheetRow(_samples[i].Glyph, _samples[i].Name, $"sample:{i}", i < _samples.Length - 1));
-
-            _sheetList.Children.Add(SheetSection("YOUR PHOTOS"));
-            bool cam = MediaPicker.Default.IsCaptureSupported;
-            _sheetList.Children.Add(SheetRow(MaskRcnnPage.GlyphImage, "Photo Library", "library", cam));
-            if (cam)
-                _sheetList.Children.Add(SheetRow(MaskRcnnPage.GlyphCamera, "Take Photo", "camera", false));
-
-            var cancelLabel = new Label { Text = "Cancel", FontFamily = MaskRcnnPage.TitleFont, FontSize = 17, TextColor = MaskRcnnPage.Accent, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
-            var cancel = new Border { BackgroundColor = DemoTheme.BannerBackground, Stroke = Colors.Transparent, StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(14) }, HeightRequest = 52, Margin = new Thickness(0, 14, 0, 0), Content = cancelLabel };
-            var cancelTap = new TapGestureRecognizer();
-            cancelTap.Tapped += (s, e) => CloseSheet(null);
-            cancel.GestureRecognizers.Add(cancelTap);
-            _sheetList.Children.Add(cancel);
-        }
-
-        private static View SheetSection(string text) => new Label
-        {
-            Text = text,
-            FontFamily = MaskRcnnPage.TitleFont,
-            FontSize = 12,
-            TextColor = MaskRcnnPage.SecondaryText,
-            CharacterSpacing = 1.2,
-            Margin = new Thickness(2, 16, 0, 2)
-        };
-
-        private View SheetRow(string glyph, string text, string value, bool divider)
-        {
-            var grid = new Grid
-            {
-                Padding = new Thickness(2, 14),
-                ColumnSpacing = 16,
-                ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) }
-            };
-            grid.Add(MaskRcnnPage.MakeIcon(glyph, MaskRcnnPage.Accent, 26), 0, 0);
-            grid.Add(new Label { Text = text, FontFamily = MaskRcnnPage.BodyFont, FontSize = 17, TextColor = MaskRcnnPage.PrimaryText, VerticalOptions = LayoutOptions.Center }, 1, 0);
-            var tap = new TapGestureRecognizer();
-            tap.Tapped += (s, e) => CloseSheet(value);
-            grid.GestureRecognizers.Add(tap);
-
-            var stack = new VerticalStackLayout();
-            stack.Children.Add(grid);
-            if (divider)
-                stack.Children.Add(new BoxView { HeightRequest = 1, Color = MaskRcnnPage.RowBorder, Margin = new Thickness(42, 0, 0, 0) });
-            return stack;
-        }
-
-        private Task<string> OpenChangePhotoSheet()
-        {
-            _sheetTcs = new TaskCompletionSource<string>();
-            _sheetOverlay.IsVisible = true;
-            _sheetScrim.Opacity = 0;
-            _sheetCard.TranslationY = 700;
-            _ = Task.WhenAll(
-                _sheetScrim.FadeToAsync(1, 220, Easing.CubicOut),
-                _sheetCard.TranslateToAsync(0, 0, 260, Easing.CubicOut));
-            return _sheetTcs.Task;
-        }
-
-        private async void CloseSheet(string value)
-        {
-            if (_sheetAnimating)
-                return;
-            _sheetAnimating = true;
-            await Task.WhenAll(
-                _sheetScrim.FadeToAsync(0, 180, Easing.CubicIn),
-                _sheetCard.TranslateToAsync(0, 700, 220, Easing.CubicIn));
-            _sheetOverlay.IsVisible = false;
-            _sheetAnimating = false;
-            _sheetTcs?.TrySetResult(value);
-        }
-
-        private async Task<Mat> LoadSampleAsync(int idx)
-        {
-            try
-            {
-                byte[] bytes = await MaskRcnnPage.ReadAppFileAsync(_samples[idx].File);
-                Mat m = new Mat();
-                CvInvoke.Imdecode(bytes, ImreadModes.ColorBgr, m);
-                return m.IsEmpty ? null : m;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        private void SetCurrentImage(Mat image)
-        {
-            _currentImage?.Dispose();
-            _currentImage = image;
-            _previewImage.Source = MaskRcnnPage.MatToImageSource(image);
-            ResetResults();
-        }
-
-        private void ResetResults()
-        {
-            _resultsBody.Children.Clear();
-            _resultsBody.Children.Add(_resultsMessage);
-            _emptyState.IsVisible = true;
-            ((Label)_emptyState.Children[1]).Text = EmptyTitle;
-            ((Label)_emptyState.Children[2]).Text = EmptyCaption;
-            _resultsMessage.IsVisible = false;
-            _resultsMessage.Text = "";
-            _resultsStatusLabel.Text = "Ready";
-            _resultsStatusLabel.TextColor = MaskRcnnPage.SecondaryText;
-            _resultsCheck.IsVisible = false;
-            _resultsTimeLabel.IsVisible = false;
-            _lastResultPng = null;
-        }
-
-        // ---------- Detection (still image) ----------
-
-        private async void OnDetectClicked(object sender, EventArgs e)
-        {
-            if (_busy || _currentImage == null || _model == null)
-                return;
-
-            _busy = true;
-            _detectButton.IsEnabled = false;
-            SetBusy(true, "Preparing…");
-
-            try
-            {
-                if (!_model.Initialized)
-                {
-                    SetBusy(true, "Downloading model…\n(first time only)");
-                    string selection = CurrentPickerSelection;
-                    await Task.Run(() => _model.Init(OnDownloadProgress, selection));
-                    if (!_model.Initialized)
-                    {
-                        ShowError("Could not download or initialize the model. Check your connection and try again.");
-                        return;
-                    }
-                }
-
-                SetBusy(true, "Analyzing…");
-                Mat input = _currentImage;
-                var sw = Stopwatch.StartNew();
-
-                byte[] png;
-                if (_customProcess != null)
-                {
-                    // Module supplies structured items (e.g. recognized words).
-                    IReadOnlyList<string> items;
-                    (png, items) = await Task.Run(() => _customProcess(_model, input));
-                    sw.Stop();
-                    ShowItemResults(items);
-                }
-                else
-                {
-                    // Generic: annotated image + the model's message string. Most
-                    // models only return timing, so strip it (we show our own
-                    // timestamp) and fall back to a friendly line.
-                    string message;
-                    (png, message) = await Task.Run(() => RunProcess(input));
-                    sw.Stop();
-                    ShowMessageResult(CleanMessage(message));
-                }
-
-                _lastResultPng = png;
-                if (png != null)
-                    _previewImage.Source = MaskRcnnPage.MatBytesToImageSource(png);
-
-                _resultsStatusLabel.TextColor = MaskRcnnPage.PrimaryText;
-                _resultsCheck.IsVisible = true;
-                _resultsTimeLabel.Text = $"Analyzed in {sw.ElapsedMilliseconds} ms";
-                _resultsTimeLabel.IsVisible = true;
-            }
-            catch (Exception ex)
-            {
-                ShowError("Detection failed: " + ex.Message);
-            }
-            finally
-            {
-                _busy = false;
-                _detectButton.IsEnabled = true;
-                SetBusy(false);
-            }
-        }
-
-        // Runs on a background thread: process the image and return the annotated
-        // PNG plus the model's message. Honors the model's RenderMethod.
-        private (byte[] png, string message) RunProcess(Mat input)
-        {
-            if (_renderBuffer == null)
-                _renderBuffer = new Mat();
-            input.CopyTo(_renderBuffer);
-            string msg = _model.ProcessAndRender(input, _renderBuffer);
-            return (MaskRcnnPage.Encode(_renderBuffer), msg);
-        }
-
-        // Show the generic single-message result (annotated image + one line).
-        private void ShowMessageResult(string detail)
-        {
-            _resultsBody.Children.Clear();
-            _resultsBody.Children.Add(_resultsMessage);
-            _resultsMessage.IsVisible = true;
-            _resultsMessage.Text = detail ?? "Results are highlighted on the image above.";
-            _emptyState.IsVisible = false;
-            _resultsStatusLabel.Text = "Complete";
-        }
-
-        // Show a list of textual result items (e.g. recognized words) as rows.
-        private void ShowItemResults(IReadOnlyList<string> items)
-        {
-            _resultsBody.Children.Clear();
-            _resultsMessage.IsVisible = false;
-            _emptyState.IsVisible = false;
-
-            if (items == null || items.Count == 0)
-            {
-                _resultsBody.Children.Add(_resultsMessage);
-                _resultsMessage.IsVisible = true;
-                _resultsMessage.Text = "Nothing recognized in this image.";
-                _resultsStatusLabel.Text = "0 found";
-                return;
-            }
-
-            for (int i = 0; i < items.Count; i++)
-                _resultsBody.Children.Add(BuildTextRow(items[i], i == items.Count - 1));
-            _resultsStatusLabel.Text = items.Count == 1 ? "1 found" : $"{items.Count} found";
-        }
-
-        private static View BuildTextRow(string text, bool isLast)
-        {
-            var icon = MaskRcnnPage.MakeIcon(MaskRcnnPage.GlyphCheck, MaskRcnnPage.Accent, 16);
-            var label = new Label { Text = text, FontFamily = MaskRcnnPage.BodyFont, FontSize = 16, TextColor = MaskRcnnPage.PrimaryText, VerticalOptions = LayoutOptions.Center };
-            var grid = new Grid
-            {
-                Padding = new Thickness(2, 14),
-                ColumnSpacing = 12,
-                ColumnDefinitions = { new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Star) }
-            };
-            grid.Add(icon, 0, 0);
-            grid.Add(label, 1, 0);
-            var stack = new VerticalStackLayout();
-            stack.Children.Add(grid);
-            if (!isLast)
-                stack.Children.Add(new BoxView { HeightRequest = 1, Color = MaskRcnnPage.RowBorder });
-            return stack;
-        }
-
-        // Remove any timing phrase from a model's result message (we show our own
-        // timestamp). Returns null when nothing meaningful is left, so the caller
-        // can substitute a friendly default. Keeps real content (barcode values,
-        // OCR text, "No barcodes found", etc.).
-        private static string CleanMessage(string msg)
-        {
-            if (string.IsNullOrWhiteSpace(msg))
-                return null;
-            // Drop "(in 42 ms)" / "in 42 milliseconds" style phrases.
-            string s = System.Text.RegularExpressions.Regex.Replace(
-                msg, @"\(?\s*in\s+\d+\s*(ms|milliseconds)\s*\)?",
-                "", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-            s = s.Trim().Trim('.', ' ', '(', ')').Trim();
-            // "Detected" (with the timing stripped) carries no extra information.
-            if (s.Length == 0 || s.Equals("Detected", StringComparison.OrdinalIgnoreCase))
-                return null;
-            return s;
-        }
-
-        private async void OnLiveDetection(object sender, EventArgs e)
-        {
-#if __IOS__ || __MACCATALYST__
-            await Navigation.PushModalAsync(new ModelShowcaseLivePage(_title, _modelFactory, CurrentPickerSelection));
-#else
-            await Navigation.PushAsync(new Emgu.CV.Platform.Maui.UI.ProcessAndRenderPage(
-                _modelFactory(), _title + " (Live)", null, "Real-time detection from the camera."));
-#endif
-        }
-
-        private void OnDownloadProgress(long? totalBytesToReceive, long bytesReceived, double? progressPercentage)
-        {
-            string msg = totalBytesToReceive != null
-                ? $"Downloading model…\n{bytesReceived / (1024 * 1024)} of {totalBytesToReceive.Value / (1024 * 1024)} MB ({(int)(progressPercentage ?? 0)}%)"
-                : $"Downloading model…\n{bytesReceived / (1024 * 1024)} MB";
-            MainThread.BeginInvokeOnMainThread(() => _loadingLabel.Text = msg);
-        }
-
-        private void ShowError(string message)
-        {
-            _emptyState.IsVisible = true;
-            _resultsMessage.IsVisible = false;
-            ((Label)_emptyState.Children[1]).Text = "something went wrong";
-            ((Label)_emptyState.Children[2]).Text = message;
-        }
-
-        private void SetBusy(bool busy, string message = "Working…")
-        {
-            _loadingLabel.Text = message;
-            _loadingOverlay.IsVisible = busy;
-            _loadingIndicator.IsRunning = busy;
-        }
-
-        // ---------- Small styled controls ----------
-
-        private const string EmptyTitle = "no results yet";
-        private const string EmptyCaption = "run a detection to see labels here";
-
-        internal static Label SectionLabel(string text) => DemoTheme.SectionLabel(text);
-
-        internal static BoxView Divider() => DemoTheme.Divider();
-
-
-        private static Border TextPill(string text, EventHandler onTap) => DemoTheme.TextPill(text, () => onTap(null, EventArgs.Empty));
-
-        private Border CircleButton(string glyph, Action onTap)
-        {
-            var cb = new Border
-            {
-                WidthRequest = 44,
-                HeightRequest = 44,
-                BackgroundColor = MaskRcnnPage.CardBackground,
-                Stroke = Colors.Transparent,
-                StrokeThickness = 1,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(22) },
-                VerticalOptions = LayoutOptions.Center,
-                Content = MaskRcnnPage.MakeIcon(glyph, MaskRcnnPage.PrimaryText, 22)
-            };
-            var t = new TapGestureRecognizer();
-            t.Tapped += (s, e) => onTap();
-            cb.GestureRecognizers.Add(t);
-            return cb;
-        }
-
         // ---------- About this module (collapsible one-paragraph card) ----------
         // Static + self-contained (its own toggle state is captured in the tap
         // closure) so the bespoke pages (Mask R-CNN, Shape Detection) can reuse it.
@@ -834,31 +65,6 @@ namespace MauiDemoApp
                 Content = new VerticalStackLayout { Children = { headerRow, details } }
             };
         }
-
-        private Border PillButton(string glyph, string text, EventHandler onTap)
-        {
-            var pill = new Border
-            {
-                BackgroundColor = MaskRcnnPage.TileBackground,
-                Stroke = Colors.Transparent,
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(20) },
-                Padding = new Thickness(14, 9),
-                VerticalOptions = LayoutOptions.Center,
-                Content = new HorizontalStackLayout
-                {
-                    Spacing = 7,
-                    Children =
-                    {
-                        MaskRcnnPage.MakeIcon(glyph, MaskRcnnPage.Accent, 18),
-                        new Label { Text = text, FontFamily = MaskRcnnPage.TitleFont, FontSize = 14, TextColor = MaskRcnnPage.Accent, VerticalOptions = LayoutOptions.Center }
-                    }
-                }
-            };
-            var t = new TapGestureRecognizer();
-            t.Tapped += (s, e) => onTap(s, e);
-            pill.GestureRecognizers.Add(t);
-            return pill;
-        }
     }
 
 #if __IOS__ || __MACCATALYST__
@@ -884,6 +90,55 @@ namespace MauiDemoApp
         private readonly IMultiPaneModel _paneModel;
         private View _splitControls;
         private View _collapseControl;
+        private HorizontalStackLayout _topLeft;
+
+        /// <summary>
+        /// Adds a "<name> demo ›" pill next to Exit. Tapping it closes the camera and
+        /// runs <paramref name="openDemo"/> (which opens the demo's own page), so people
+        /// who reached the camera from the home screen can find the full demo.
+        /// </summary>
+        internal ModelShowcaseLivePage WithDemoLink(string name, Func<Task> openDemo)
+        {
+            if (openDemo != null)
+                _topLeft.Children.Add(DemoLinkPill(name, Color.FromArgb("#E0111111"), Colors.White, async () =>
+                {
+                    _running = false;
+                    await Navigation.PopModalAsync();
+                    await openDemo();
+                }));
+            return this;
+        }
+
+        internal static View DemoLinkPill(string name, Color background, Color foreground, Func<Task> onTap)
+        {
+            var pill = new Border
+            {
+                BackgroundColor = background,
+                Stroke = Colors.Transparent,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(18) },
+                Padding = new Thickness(16, 8, 10, 8),
+                VerticalOptions = LayoutOptions.Center,
+                Content = new HorizontalStackLayout
+                {
+                    Spacing = 2,
+                    Children =
+                    {
+                        new Label { Text = name + " demo", FontFamily = MaskRcnnPage.TitleFont, FontSize = 15, TextColor = foreground, VerticalOptions = LayoutOptions.Center },
+                        MaskRcnnPage.MakeIcon("\ue5cc", foreground, 22),   // chevron_right
+                    }
+                }
+            };
+            bool busy = false;
+            var tap = new TapGestureRecognizer();
+            tap.Tapped += async (s, e) =>
+            {
+                if (busy) return;
+                busy = true;
+                await onTap();
+            };
+            pill.GestureRecognizers.Add(tap);
+            return pill;
+        }
 
         public ModelShowcaseLivePage(string title, Func<IProcessAndRenderModel> modelFactory, string pickerSelection)
         {
@@ -891,11 +146,15 @@ namespace MauiDemoApp
             _pickerSelection = pickerSelection;
             _paneModel = _model as IMultiPaneModel;
 
-            BackgroundColor = MaskRcnnPage.PageBackground;
-            this.SafeAreaEdges = Microsoft.Maui.SafeAreaEdges.All;
+            BackgroundColor = Colors.Black;
+            // The camera runs under the status bar and home indicator (true full
+            // screen); only the controls layer below keeps clear of them.
+            this.SafeAreaEdges = Microsoft.Maui.SafeAreaEdges.None;
             AllowAvCaptureSession = true;
             outputRecorder.BufferReceived += OnCameraFrame;
 
+            // AspectFill: the picture covers the whole screen (the sides of the
+            // camera frame are cropped on a tall phone, like a full-screen viewfinder).
             _feed = new Image { Aspect = Aspect.AspectFill, HorizontalOptions = LayoutOptions.Fill, VerticalOptions = LayoutOptions.Fill };
 
             // Floating exit control (white on a translucent pill) so the video
@@ -917,9 +176,6 @@ namespace MauiDemoApp
                 Stroke = Colors.Transparent,
                 StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(18) },
                 Padding = new Thickness(14, 8, 18, 8),
-                Margin = new Thickness(12, 12, 0, 0),
-                HorizontalOptions = LayoutOptions.Start,
-                VerticalOptions = LayoutOptions.Start,
                 Content = exitRow
             };
             var exitTap = new TapGestureRecognizer();
@@ -961,18 +217,30 @@ namespace MauiDemoApp
             // Edge-to-edge: the feed fills the whole page (theme background behind
             // it), with the exit control and floating pills on top — no chrome bar
             // or card margin stealing space from the video.
-            var layers = new Grid { BackgroundColor = MaskRcnnPage.PageBackground };
+            var layers = new Grid { BackgroundColor = Colors.Black };
             layers.Children.Add(_feed);
-            layers.Children.Add(exitPill);
-            layers.Children.Add(pill);
+            // Controls stay inside the safe area (clear of the Dynamic Island and
+            // the home indicator) while the feed behind them is full screen.
+            var controls = new Grid { SafeAreaEdges = Microsoft.Maui.SafeAreaEdges.All };
+            _topLeft = new HorizontalStackLayout
+            {
+                Spacing = 8,
+                Margin = new Thickness(12, 12, 0, 0),
+                HorizontalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.Start,
+                Children = { exitPill }
+            };
+            controls.Children.Add(_topLeft);
+            controls.Children.Add(pill);
             // When the model exposes stacked panes (e.g. Video Surveillance),
             // overlay a per-pane expand control so either pane can go full-screen.
             if (_paneModel != null)
             {
                 BuildPaneControls();
-                layers.Children.Add(_splitControls);
-                layers.Children.Add(_collapseControl);
+                controls.Children.Add(_splitControls);
+                controls.Children.Add(_collapseControl);
             }
+            layers.Children.Add(controls);
             layers.Children.Add(_overlay);
             Content = layers;
         }

@@ -12,6 +12,7 @@ namespace MauiDemoApp
     /// </summary>
     public class SettingsPage : ContentPage
     {
+        private const string GlyphDelete = "\ue872";      // delete (trash can)
         internal const string GlyphSettings = "";   // settings (gear)
         private const string GlyphChevronRight = ""; // chevron_right
 
@@ -60,6 +61,13 @@ namespace MauiDemoApp
                         TextColor = DemoTheme.MutedText
                     },
                     DemoTheme.Divider(),
+                    DemoTheme.SectionLabel("Models"),
+                    new Label { Text = "Models this app has downloaded. Delete one to free up space; its demo downloads it again the next time you run it.", FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.SecondaryText },
+                    _models,
+                    DemoTheme.Divider(),
+                    DemoTheme.SectionLabel("Backend"),
+                    BackendList(),
+                    DemoTheme.Divider(),
                     DemoTheme.SectionLabel("About"),
                     Row("System info", () => Navigation.PushAsync(new AboutPage())),
                     Row("Open source licenses", () => Navigation.PushAsync(new LicensePage())),
@@ -75,6 +83,144 @@ namespace MauiDemoApp
             };
 
             Content = new ScrollView { Content = body };
+            RefreshModels();
+        }
+
+        // ---------- Models: what's downloaded, with sizes, and delete ----------
+
+        private readonly VerticalStackLayout _models = new VerticalStackLayout { Spacing = 0 };
+
+        // Every demo downloads its models under <LocalApplicationData>/emgu/<folder>/.
+        private static string ModelRoot => System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "emgu");
+
+        private static readonly HashSet<string> ModelExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            { ".onnx", ".onnx_data", ".traineddata", ".caffemodel", ".prototxt", ".pb", ".pbtxt", ".tflite", ".weights", ".bin", ".names", ".xml", ".yml", ".yaml" };
+        private static readonly HashSet<string> PersonalExtensions = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            { ".png", ".jpg", ".jpeg", ".gif", ".heic", ".webp", ".md", ".pdf", ".doc", ".docx", ".pptx", ".xlsx", ".mov", ".mp4" };
+
+        // On some platforms (Mac Catalyst) this folder is ~/Documents/emgu, where
+        // people may keep their own files too. Only treat a folder as a model if it
+        // holds model files and nothing that looks like a photo or document, so a
+        // delete button never appears next to someone's own folder.
+        private static bool IsModelFolder(System.IO.DirectoryInfo d)
+        {
+            try
+            {
+                var files = d.EnumerateFiles("*", System.IO.SearchOption.AllDirectories).ToList();
+                return files.Any(f => ModelExtensions.Contains(f.Extension))
+                    && !files.Any(f => PersonalExtensions.Contains(f.Extension));
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private static string Pretty(string folder) => folder.Replace('_', ' ').Replace('-', ' ').ToLowerInvariant();
+
+        private static string Size(long bytes) =>
+            bytes >= 1L << 30 ? $"{bytes / (double)(1L << 30):0.0} GB"
+            : bytes >= 1 << 20 ? $"{bytes / (double)(1 << 20):0.0} MB"
+            : $"{Math.Max(1, bytes / 1024)} KB";
+
+        private void RefreshModels()
+        {
+            _models.Children.Clear();
+            var folders = System.IO.Directory.Exists(ModelRoot)
+                ? new System.IO.DirectoryInfo(ModelRoot).GetDirectories()
+                    .Where(IsModelFolder)
+                    .Select(d => (dir: d, bytes: d.EnumerateFiles("*", System.IO.SearchOption.AllDirectories).Sum(f => f.Length)))
+                    .Where(x => x.bytes > 0)
+                    .OrderByDescending(x => x.bytes)
+                    .ToList()
+                : new List<(System.IO.DirectoryInfo dir, long bytes)>();
+
+            if (folders.Count == 0)
+            {
+                _models.Children.Add(new Label { Text = "No models downloaded yet. Each demo downloads its model the first time you run it.", FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.MutedText });
+                return;
+            }
+            foreach (var (dir, bytes) in folders)
+            {
+                var row = new Grid
+                {
+                    Padding = new Thickness(0, 8),
+                    ColumnSpacing = 12,
+                    ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto), new ColumnDefinition(GridLength.Auto) }
+                };
+                row.Add(new VerticalStackLayout
+                {
+                    VerticalOptions = LayoutOptions.Center,
+                    Children =
+                    {
+                        new Label { Text = Pretty(dir.Name), FontFamily = DemoTheme.TitleFont, FontSize = 16, TextColor = DemoTheme.PrimaryText },
+                        new Label { Text = $"{dir.EnumerateFiles("*", System.IO.SearchOption.AllDirectories).Count()} files", FontFamily = DemoTheme.BodyFont, FontSize = 12, TextColor = DemoTheme.MutedText }
+                    }
+                }, 0, 0);
+                row.Add(new Label { Text = Size(bytes), FontFamily = DemoTheme.BodyFont, FontSize = 14, TextColor = DemoTheme.SecondaryText, VerticalOptions = LayoutOptions.Center }, 1, 0);
+                var target = dir;
+                // A labelled red "Delete" pill: clearly a button, clearly destructive.
+                var red = Color.FromArgb(DemoTheme.IsDark ? "#FF6B6B" : "#D93025");
+                var deleteButton = new Border
+                {
+                    BackgroundColor = DemoTheme.PillBackground,
+                    Stroke = Colors.Transparent,
+                    StrokeShape = new Microsoft.Maui.Controls.Shapes.RoundRectangle { CornerRadius = new CornerRadius(100) },
+                    Padding = new Thickness(12, 7),
+                    VerticalOptions = LayoutOptions.Center,
+                    Content = new HorizontalStackLayout
+                    {
+                        Spacing = 5,
+                        Children =
+                        {
+                            DemoTheme.MakeIcon(GlyphDelete, red, 16),
+                            new Label { Text = "DELETE", FontFamily = DemoTheme.TitleFont, FontSize = 11, CharacterSpacing = 1.2, TextColor = red, VerticalOptions = LayoutOptions.Center }
+                        }
+                    }
+                };
+                var deleteTap = new TapGestureRecognizer();
+                deleteTap.Tapped += async (s, e) =>
+                {
+                    bool ok = await DisplayAlertAsync("Delete model?",
+                        $"Delete \"{Pretty(target.Name)}\" ({Size(bytes)})? The demo downloads it again the next time you run it.", "Delete", "Cancel");
+                    if (!ok)
+                        return;
+                    try { target.Delete(true); }
+                    catch (Exception ex) { await DisplayAlertAsync("Could not delete", ex.Message, "OK"); }
+                    RefreshModels();
+                };
+                deleteButton.GestureRecognizers.Add(deleteTap);
+                DemoControls.AddHover(deleteButton);
+                row.Add(deleteButton, 2, 0);
+                _models.Children.Add(row);
+            }
+            long total = folders.Sum(f => f.bytes);
+            _models.Children.Add(new Label { Text = $"{Size(total)} in total · close a demo before deleting its model", FontFamily = DemoTheme.BodyFont, FontSize = 12, TextColor = DemoTheme.MutedText, Margin = new Thickness(0, 6, 0, 0) });
+        }
+
+        // ---------- Backend: what OpenCV DNN can run on, on this device ----------
+
+        private static View BackendList()
+        {
+            var stack = new VerticalStackLayout { Spacing = 6 };
+            try
+            {
+                if (Emgu.CV.CvInvoke.ConfigDict["HAVE_OPENCV_DNN"] != 0)
+                {
+                    foreach (var b in Emgu.CV.Dnn.DnnInvoke.AvailableBackends)
+                    {
+                        var row = new Grid { ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Auto) } };
+                        row.Add(new Label { Text = b.Backend.ToString(), FontFamily = DemoTheme.TitleFont, FontSize = 15, TextColor = DemoTheme.PrimaryText }, 0, 0);
+                        row.Add(DemoControls.Tag(b.Target.ToString()), 1, 0);
+                        stack.Children.Add(row);
+                    }
+                }
+            }
+            catch (Exception) { }
+            if (stack.Children.Count == 0)
+                stack.Children.Add(new Label { Text = "OpenCV DNN isn't available in this build.", FontFamily = DemoTheme.BodyFont, FontSize = 13, TextColor = DemoTheme.MutedText });
+            stack.Children.Add(new Label { Text = "What OpenCV's DNN module can use on this device. The demos run on the default backend (the CPU here).", FontFamily = DemoTheme.BodyFont, FontSize = 12, TextColor = DemoTheme.MutedText, Margin = new Thickness(0, 4, 0, 0) });
+            return stack;
         }
 
         private View AppearancePills()
