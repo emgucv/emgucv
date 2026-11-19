@@ -479,8 +479,14 @@ namespace MauiDemoApp
 
             refreshChips();
             BackgroundColor = DemoTheme.PageBackground;
-            _homeRoot = root;
-            Content = root;
+            // The page itself ignores the safe area so the camera sheet's dim layer can
+            // cover the whole screen; the home content keeps to the safe area.
+            SafeAreaEdges = Microsoft.Maui.SafeAreaEdges.None;
+            root.SafeAreaEdges = Microsoft.Maui.SafeAreaEdges.All;
+            var layer = new Grid { SafeAreaEdges = Microsoft.Maui.SafeAreaEdges.None, BackgroundColor = DemoTheme.PageBackground };
+            layer.Add(root);
+            _homeRoot = layer;
+            Content = layer;
             arrange();
         }
 
@@ -548,30 +554,46 @@ namespace MauiDemoApp
             var lastLabel = Color.FromArgb(dark ? "#D4FF3A" : "#5E7D00");
             var orange = Color.FromArgb("#F59E0B");
 
-            var overlay = new Grid { ClassId = "camera-sheet" };
+            var overlay = new Grid { ClassId = "camera-sheet", SafeAreaEdges = Microsoft.Maui.SafeAreaEdges.None };
             var scrim = new BoxView { Color = Color.FromArgb("#99000000"), Opacity = 0 };
             overlay.Add(scrim);
 
             var list = new VerticalStackLayout { Spacing = 2 };
+            var sheetColor = Color.FromArgb(dark ? "#161616" : "#FFFFFF");
             var sheet = new Border
             {
-                BackgroundColor = Color.FromArgb(dark ? "#161616" : "#FFFFFF"),
-                Stroke = DemoTheme.Hairline,
-                StrokeThickness = 1,
-                StrokeShape = new RoundRectangle { CornerRadius = 30 },
-                Padding = new Thickness(14, 10, 14, 14),
-                Margin = new Thickness(8, 0, 8, 8),
+                BackgroundColor = sheetColor,
+                StrokeThickness = 0,
+                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(30, 30, 0, 0) },
+                Padding = new Thickness(14, 10, 14, 6),
+                Margin = new Thickness(8, 0, 8, 0),
                 VerticalOptions = LayoutOptions.End,
                 MaximumWidthRequest = 520,
             };
-            overlay.Add(sheet);
+            // The sheet stays inside the safe area (a Border reaching into the bottom
+            // inset hangs the iOS layout), so a plain box of the same colour fills the
+            // strip under it, down to the screen's rounded bottom corners.
+            var skirt = new BoxView
+            {
+                Color = sheetColor,
+                HeightRequest = 80,
+                CornerRadius = new CornerRadius(0, 0, 30, 30),
+                Margin = new Thickness(8, 0, 8, 6),
+                VerticalOptions = LayoutOptions.End,
+                MaximumWidthRequest = 520,
+                InputTransparent = true,
+            };
+            var panel = new Grid { SafeAreaEdges = Microsoft.Maui.SafeAreaEdges.None, InputTransparent = true, CascadeInputTransparent = false };
+            panel.Add(skirt);
+            panel.Add(new Grid { SafeAreaEdges = Microsoft.Maui.SafeAreaEdges.All, InputTransparent = true, CascadeInputTransparent = false, Children = { sheet } });
+            overlay.Add(panel);
 
             bool closing = false;
             async Task Close()
             {
                 if (closing) return;
                 closing = true;
-                await Task.WhenAll(scrim.FadeToAsync(0, 160), sheet.TranslateToAsync(0, sheet.Height + 40, 200, Easing.CubicIn));
+                await Task.WhenAll(scrim.FadeToAsync(0, 160), panel.TranslateToAsync(0, sheet.Height + 120, 200, Easing.CubicIn));
                 _homeRoot.Children.Remove(overlay);
             }
 
@@ -680,13 +702,25 @@ namespace MauiDemoApp
                 }
             };
 
-            _homeRoot.Add(overlay, 0, 0);
-            Grid.SetRowSpan(overlay, 2);
-            sheet.TranslationY = 900;
-            overlay.Dispatcher.Dispatch(async () =>
+            _homeRoot.Add(overlay);
+            panel.TranslationY = 1200;
+            Dispatcher.DispatchDelayed(TimeSpan.FromMilliseconds(30), async () =>
             {
-                sheet.TranslationY = sheet.Height > 0 ? sheet.Height + 40 : 900;
-                await Task.WhenAll(scrim.FadeToAsync(1, 180), sheet.TranslateToAsync(0, 0, 260, Easing.CubicOut));
+                try
+                {
+                    panel.TranslationY = sheet.Height > 0 ? sheet.Height + 120 : 1200;
+                    await Task.WhenAll(scrim.FadeToAsync(1, 180), panel.TranslateToAsync(0, 0, 260, Easing.CubicOut));
+                }
+                catch (Exception)
+                {
+                    // Animation interrupted (e.g. page left); the final state is set below.
+                }
+                // Make sure it ends fully shown even if an animation was cut short.
+                if (!closing)
+                {
+                    scrim.Opacity = 1;
+                    panel.TranslationY = 0;
+                }
             });
         }
 
