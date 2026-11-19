@@ -370,7 +370,7 @@ namespace MauiDemoApp
             {
                 BackgroundColor = DemoTheme.PageBackground,
                 Padding = new Thickness(8, 8, 8, 4),
-                ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Star) }
+                ColumnDefinitions = { new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Star), new ColumnDefinition(GridLength.Star) }
             };
             Func<string, string, bool, Action, View> tab = (glyph, label, active, onTap) =>
             {
@@ -395,8 +395,7 @@ namespace MauiDemoApp
             };
             tabBar.Add(tab(DemoTheme.GlyphGrid, "Demos", true, null), 0, 0);
             tabBar.Add(tab(DemoTheme.GlyphVideo, "Camera", false, async () => await ChooseLiveCamera(cards)), 1, 0);
-            tabBar.Add(tab(DemoTheme.GlyphDownload, "Models", false, () => Navigation.PushAsync(new SettingsPage())), 2, 0);
-            tabBar.Add(tab(SettingsPage.GlyphSettings, "Settings", false, () => Navigation.PushAsync(new SettingsPage())), 3, 0);
+            tabBar.Add(tab(SettingsPage.GlyphSettings, "Settings", false, () => Navigation.PushAsync(new SettingsPage())), 2, 0);
             var tabHost = new VerticalStackLayout { Children = { DemoControls.Hairline(), tabBar } };
 
             // ---------- Arrange for the current width ----------
