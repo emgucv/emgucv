@@ -196,6 +196,23 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
           -P ${EMGU_CV_SOURCE_DIR}/cmake/CopyMauiApk.cmake
         COMMENT "Copying MAUI Android demo .apk to ${EMGU_CV_SOURCE_DIR}/package")
     ENDIF()
+
+    # The csproj zips the Release Mac Catalyst app only when it is signed with a
+    # Developer ID identity (and notarized, when it can be), so an ad hoc signed
+    # app that Gatekeeper would block never lands in the package folder. With
+    # RuntimeIdentifiers set, the signed app and the zip are in the TFM folder,
+    # not its per-RID subfolder.
+    IF(HAVE_MAUI_MAC AND MAC_CATALYST)
+      ADD_CUSTOM_COMMAND(
+        TARGET ${PROJECT_NAME}
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND}
+          -DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}/bin/${DEFAULT_CS_CONFIG}/net${DOTNET_VERSION_MAJOR}.0-maccatalyst${IOS_TFM_VERSION}
+          -DDEST_DIR=${EMGU_CV_SOURCE_DIR}/package
+          -DPATTERN=Emgu.CV.Maui.Demo.maccatalyst.*.zip
+          -P ${EMGU_CV_SOURCE_DIR}/cmake/CopyMauiApk.cmake
+        COMMENT "Copying MAUI Mac Catalyst demo .zip to ${EMGU_CV_SOURCE_DIR}/package")
+    ENDIF()
   ENDIF()
 
   # Windows builds of the MAUI demo app: an unpackaged .exe (WindowsPackageType=None,

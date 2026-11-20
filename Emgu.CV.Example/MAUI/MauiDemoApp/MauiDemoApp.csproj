@@ -116,6 +116,70 @@
 		<Warning Condition="'$(_EmguCVAndroidSigning)' == ''" Text="EMGU_ANDROID_KEYSTORE and EMGU_ANDROID_KEYSTORE_PASS are not set (or the keystore file doesn't exist): the Release Android package is signed with this machine's debug key, so it can't update an install signed with the Emgu key." />
 	</Target>
 
+	<!--
+	Mac Catalyst Release signing for download outside the Mac App Store (e.g. from a GitHub
+	release), when a "Developer ID Application" identity is in the keychain; otherwise the
+	SDK signs ad hoc, as before, which Gatekeeper blocks on other Macs. "Apple Distribution"
+	can't be used: it is for the Mac App Store only. Set:
+	  EMGU_MACCATALYST_CODESIGN_KEY  the identity to sign with (default: the first
+	                                 "Developer ID Application" identity in the keychain)
+	  EMGU_NOTARY_PROFILE            the notarytool keychain profile (default "emgu-notary";
+	                                 made with "xcrun notarytool store-credentials")
+	The SDK reads CodesignKey into _SpecifiedCodesignKey before this file is evaluated, and
+	the identity is looked up by running "security", so both are set by a target that runs
+	before the SDK detects the signing identity. Notarization needs the hardened runtime and
+	a secure timestamp; UseHardenedRuntime turns on both.
+	-->
+	<Target Name="EmguCVDetectMacCatalystSigning" BeforeTargets="_DetectSigningIdentity" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst' And '$(Configuration)' == 'Release'">
+		<Exec Condition="'$(EMGU_MACCATALYST_CODESIGN_KEY)' == ''" Command="security find-identity -v -p codesigning | sed -n 's/.*&quot;\(Developer ID Application: .*\)&quot;.*/\1/p' | head -n 1" ConsoleToMSBuild="true" StandardOutputImportance="low">
+			<Output TaskParameter="ConsoleOutput" PropertyName="_EmguCVMacCatalystCodesignKey" />
+		</Exec>
+		<PropertyGroup>
+			<_EmguCVMacCatalystCodesignKey Condition="'$(EMGU_MACCATALYST_CODESIGN_KEY)' != ''">$(EMGU_MACCATALYST_CODESIGN_KEY)</_EmguCVMacCatalystCodesignKey>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(_EmguCVMacCatalystCodesignKey)' != ''">
+			<EnableCodeSigning>true</EnableCodeSigning>
+			<CodesignKey>$(_EmguCVMacCatalystCodesignKey)</CodesignKey>
+			<_SpecifiedCodesignKey>$(_EmguCVMacCatalystCodesignKey)</_SpecifiedCodesignKey>
+			<UseHardenedRuntime>true</UseHardenedRuntime>
+		</PropertyGroup>
+		<Message Importance="high" Condition="'$(_EmguCVMacCatalystCodesignKey)' != ''" Text="Signing the Mac Catalyst app with &quot;$(_EmguCVMacCatalystCodesignKey)&quot;, hardened runtime." />
+		<Warning Condition="'$(_EmguCVMacCatalystCodesignKey)' == ''" Text="No &quot;Developer ID Application&quot; signing identity in the keychain and EMGU_MACCATALYST_CODESIGN_KEY is not set: the Release Mac Catalyst app is signed ad hoc and isn't packaged for download." />
+	</Target>
+
+	<!--
+	The signed app, notarized and stapled when the notary profile works, zipped as
+	"Emgu.CV.Maui.Demo.maccatalyst.arm64.5.1.0.6717.zip" beside the .app (the name matches the
+	Android and Windows packages). A stapled app opens on other Macs without a network check.
+	If notarization fails the zip still holds the signed app, and the build warns: Gatekeeper
+	blocks an app that isn't notarized when it is downloaded.
+	With RuntimeIdentifiers set (as the CMake build does), the app bundle is made by an inner
+	build for each RID and signed by the outer one, so this runs after Codesign, in the build
+	where the bundle was actually signed (_CodesignAppBundleCondition).
+	cmake/CopyMauiApk.cmake copies the zip to {root}/package.
+	-->
+	<Target Name="EmguCVPackageMacCatalystApp" AfterTargets="Codesign" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst' And '$(_EmguCVMacCatalystCodesignKey)' != '' And '$(EmguCVPackageVersion)' != '' And '$(_CodesignAppBundleCondition)' == 'true'">
+		<PropertyGroup>
+			<_EmguCVMacCatalystApp>$(AppBundleDir.TrimEnd('/'))</_EmguCVMacCatalystApp>
+			<_EmguCVMacCatalystRid>$(RuntimeIdentifier)</_EmguCVMacCatalystRid>
+			<_EmguCVMacCatalystRid Condition="'$(_EmguCVMacCatalystRid)' == ''">$(RuntimeIdentifiers)</_EmguCVMacCatalystRid>
+			<_EmguCVMacCatalystArch>$(_EmguCVMacCatalystRid.Replace('maccatalyst-', ''))</_EmguCVMacCatalystArch>
+			<_EmguCVMacCatalystArch Condition="$(_EmguCVMacCatalystArch.Contains(';'))">universal</_EmguCVMacCatalystArch>
+			<_EmguCVMacCatalystZip>$([System.IO.Path]::GetDirectoryName('$(_EmguCVMacCatalystApp)'))/Emgu.CV.Maui.Demo.maccatalyst.$(_EmguCVMacCatalystArch).$(EmguCVPackageVersion).zip</_EmguCVMacCatalystZip>
+			<_EmguCVNotaryProfile>$(EMGU_NOTARY_PROFILE)</_EmguCVNotaryProfile>
+			<_EmguCVNotaryProfile Condition="'$(_EmguCVNotaryProfile)' == ''">emgu-notary</_EmguCVNotaryProfile>
+		</PropertyGroup>
+		<Delete Files="$(_EmguCVMacCatalystZip)" />
+		<Exec Command="ditto -c -k --sequesterRsrc --keepParent &quot;$(_EmguCVMacCatalystApp)&quot; &quot;$(_EmguCVMacCatalystZip)&quot;" />
+		<Exec Command="xcrun notarytool submit &quot;$(_EmguCVMacCatalystZip)&quot; --keychain-profile &quot;$(_EmguCVNotaryProfile)&quot; --wait &amp;&amp; xcrun stapler staple &quot;$(_EmguCVMacCatalystApp)&quot;" ContinueOnError="true" IgnoreStandardErrorWarningFormat="true">
+			<Output TaskParameter="ExitCode" PropertyName="_EmguCVNotaryExitCode" />
+		</Exec>
+		<Delete Files="$(_EmguCVMacCatalystZip)" Condition="'$(_EmguCVNotaryExitCode)' == '0'" />
+		<Exec Command="ditto -c -k --sequesterRsrc --keepParent &quot;$(_EmguCVMacCatalystApp)&quot; &quot;$(_EmguCVMacCatalystZip)&quot;" Condition="'$(_EmguCVNotaryExitCode)' == '0'" />
+		<Message Importance="high" Condition="'$(_EmguCVNotaryExitCode)' == '0'" Text="Notarized and stapled: $(_EmguCVMacCatalystZip)" />
+		<Warning Condition="'$(_EmguCVNotaryExitCode)' != '0'" Text="Notarizing the Mac Catalyst app with the notarytool profile &quot;$(_EmguCVNotaryProfile)&quot; failed, so $(_EmguCVMacCatalystZip) holds a signed app that isn't notarized." />
+	</Target>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.png" />
