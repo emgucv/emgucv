@@ -71,6 +71,51 @@
 		<AppxPackageName>Emgu.CV.Maui.Demo.$(Platform).$(EmguCVPackageVersion)</AppxPackageName>
 	</PropertyGroup>
 
+	<!--
+	A copy of the signed Android package named like the MSIX above:
+	"Emgu.CV.Maui.Demo.android.5.1.0.6717.apk" beside "com.emgu.cv.maui.demo-Signed.apk".
+	The Android SDK names its packages after the ApplicationId, and its signing step derives
+	the signed file's name from that too, so the SDK's own names are left alone (install and
+	run keep using them) and the signed package is copied once it is made: by _Sign for an .apk
+	build (Debug), or by _CreateUniversalApkFromBundle for an .aab build (Release, where the
+	universal "-Signed.apk" is made from the bundle after _Sign). A target runs only once per
+	build, hence one target for each.
+	cmake/CopyMauiApk.cmake copies only this file to {root}/package when it exists.
+	-->
+	<Target Name="EmguCVCopyVersionedApk" AfterTargets="_Sign" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' And '$(EmguCVPackageVersion)' != '' And '$(AndroidPackageFormat)' != 'aab'">
+		<Copy SourceFiles="$(ApkFileSigned)" DestinationFiles="$(OutDir)Emgu.CV.Maui.Demo.android.$(EmguCVPackageVersion).apk" SkipUnchangedFiles="true" Condition="Exists('$(ApkFileSigned)')" />
+	</Target>
+	<Target Name="EmguCVCopyVersionedUniversalApk" AfterTargets="_CreateUniversalApkFromBundle" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' And '$(EmguCVPackageVersion)' != '' And '$(AndroidPackageFormat)' == 'aab'">
+		<Copy SourceFiles="$(ApkFileSigned)" DestinationFiles="$(OutDir)Emgu.CV.Maui.Demo.android.$(EmguCVPackageVersion).apk" SkipUnchangedFiles="true" Condition="Exists('$(ApkFileSigned)')" />
+	</Target>
+
+	<!--
+	Android Release signing with the Emgu keystore, when it is available; otherwise (and for Debug)
+	the Android SDK signs with its own debug key, as before. An APK signed with one key can't
+	update an app installed from one signed with another, so released APKs need the same key
+	every time. The keystore and its passwords are never in the repository; set:
+	  EMGU_ANDROID_KEYSTORE       the keystore file's full path
+	  EMGU_ANDROID_KEYSTORE_PASS  its password
+	  EMGU_ANDROID_KEY_ALIAS      the key's alias (default "emgu")
+	  EMGU_ANDROID_KEY_PASS       the key's password (default: the keystore's password)
+	The passwords are passed as "env:NAME", which the Android SDK reads from the environment
+	itself, so they don't appear on a command line or in a build log.
+	-->
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' And '$(Configuration)' == 'Release' And '$(EMGU_ANDROID_KEYSTORE)' != '' And Exists('$(EMGU_ANDROID_KEYSTORE)') And '$(EMGU_ANDROID_KEYSTORE_PASS)' != ''">
+		<AndroidKeyStore>true</AndroidKeyStore>
+		<AndroidSigningKeyStore>$(EMGU_ANDROID_KEYSTORE)</AndroidSigningKeyStore>
+		<AndroidSigningKeyAlias Condition="'$(EMGU_ANDROID_KEY_ALIAS)' != ''">$(EMGU_ANDROID_KEY_ALIAS)</AndroidSigningKeyAlias>
+		<AndroidSigningKeyAlias Condition="'$(EMGU_ANDROID_KEY_ALIAS)' == ''">emgu</AndroidSigningKeyAlias>
+		<AndroidSigningStorePass>env:EMGU_ANDROID_KEYSTORE_PASS</AndroidSigningStorePass>
+		<AndroidSigningKeyPass Condition="'$(EMGU_ANDROID_KEY_PASS)' != ''">env:EMGU_ANDROID_KEY_PASS</AndroidSigningKeyPass>
+		<AndroidSigningKeyPass Condition="'$(EMGU_ANDROID_KEY_PASS)' == ''">env:EMGU_ANDROID_KEYSTORE_PASS</AndroidSigningKeyPass>
+		<_EmguCVAndroidSigning>the Emgu keystore ($(EMGU_ANDROID_KEYSTORE), alias $(AndroidSigningKeyAlias))</_EmguCVAndroidSigning>
+	</PropertyGroup>
+	<Target Name="EmguCVReportAndroidSigning" BeforeTargets="_Sign" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' And '$(Configuration)' == 'Release'">
+		<Message Importance="high" Condition="'$(_EmguCVAndroidSigning)' != ''" Text="Signing the Android package with $(_EmguCVAndroidSigning)." />
+		<Warning Condition="'$(_EmguCVAndroidSigning)' == ''" Text="EMGU_ANDROID_KEYSTORE and EMGU_ANDROID_KEYSTORE_PASS are not set (or the keystore file doesn't exist): the Release Android package is signed with this machine's debug key, so it can't update an install signed with the Emgu key." />
+	</Target>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.png" />
