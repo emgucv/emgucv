@@ -244,7 +244,7 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
     IF(EMGU_SIGN_FOUND)
       PROJECT(Example.Maui.DemoApp.Windows.Msix)
       # AppxPackage's output filename embeds the Emgu CV release version (currently
-      # AppPackages/Emgu.CV.Maui.Demo.x64.5.1.0.6716_Test/Emgu.CV.Maui.Demo.x64.5.1.0.6716.msix,
+      # AppPackages/Emgu.CV.Maui.Demo.windows.x64.5.1.0.6716_Test/Emgu.CV.Maui.Demo.windows.x64.5.1.0.6716.msix,
       # see MauiDemoApp.csproj's <AppxPackageName> override and Directory.Build.props.in's
       # EmguCVPackageVersion, both ultimately from the CPACK/EMGUCV_GITVERSION variables set
       # near the top of the root CMakeLists.txt), so the copy step below globs for it via

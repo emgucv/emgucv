@@ -63,12 +63,12 @@
 		file name, not something settable via $(ProjectName) alone since the vendor targets
 		(Microsoft.Build.Msix.Packaging.targets) hardcode the "_" separators and field order
 		when deriving AppxPackageName. Setting AppxPackageName directly bypasses that derivation
-		entirely, giving "Emgu.CV.Maui.Demo.x64.5.1.0.6716.msix" once AppxPackageExtension
+		entirely, giving "Emgu.CV.Maui.Demo.windows.x64.5.1.0.6716.msix" once AppxPackageExtension
 		(".msix") is appended. $(EmguCVPackageVersion) comes from Directory.Build.props (see
 		Directory.Build.props.in), kept in sync with Package.appxmanifest's Identity Version:
 		both are substituted from the same CMake variables at configure time.
 		-->
-		<AppxPackageName>Emgu.CV.Maui.Demo.$(Platform).$(EmguCVPackageVersion)</AppxPackageName>
+		<AppxPackageName>Emgu.CV.Maui.Demo.windows.$(Platform).$(EmguCVPackageVersion)</AppxPackageName>
 	</PropertyGroup>
 
 	<!--
