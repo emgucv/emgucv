@@ -100,6 +100,12 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
 
   SET(MAUI_WINDOWS_SDK_VERSION "10.0.22621.0")
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in ${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props)
+  # Package.appxmanifest's Identity Version must be a real (CPACK-derived) version rather
+  # than a hardcoded placeholder, so that AppxPackage's output filename -- which embeds
+  # this Identity Version, see the MSIX packaging block below -- carries the actual Emgu CV
+  # release version (e.g. "5.1.0.6690", matching CPACK_PACKAGE_VERSION / version.rc.in's
+  # MAJOR.MINOR.PATCH.EMGUCV_GITVERSION convention) instead of always "1.0.0.0".
+  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Platforms/Windows/Package.appxmanifest.in ${CMAKE_CURRENT_SOURCE_DIR}/Platforms/Windows/Package.appxmanifest)
 
   INSTALL(
     DIRECTORY
@@ -139,14 +145,18 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
     TARGET_SOURCES(${PROJECT_NAME} PRIVATE
       "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in"
       "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
+      "${CMAKE_CURRENT_SOURCE_DIR}/Platforms/Windows/Package.appxmanifest.in"
+      "${CMAKE_CURRENT_SOURCE_DIR}/Platforms/Windows/Package.appxmanifest"
       "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj"
       )
 
     SOURCE_GROUP("Template" FILES
-      "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in")
+      "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props.in"
+      "${CMAKE_CURRENT_SOURCE_DIR}/Platforms/Windows/Package.appxmanifest.in")
 
     SOURCE_GROUP("Source" FILES
       "${CMAKE_CURRENT_SOURCE_DIR}/Directory.Build.props"
+      "${CMAKE_CURRENT_SOURCE_DIR}/Platforms/Windows/Package.appxmanifest"
       "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj"
       )
 
@@ -233,10 +243,13 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
     # than let the ALL build fail or silently produce a package nobody can install.
     IF(EMGU_SIGN_FOUND)
       PROJECT(Example.Maui.DemoApp.Windows.Msix)
-      # AppxPackage's output filename/folder embeds Package.appxmanifest's Identity
-      # Version (currently AppPackages/MauiDemoApp_1.0.0.0_Test/MauiDemoApp_1.0.0.0_x64.msix),
-      # so the copy step below globs for it via CopyMsixToPackage.cmake rather than
-      # hardcoding that version a second time here. A plain `cmd /c copy` custom command
+      # AppxPackage's output filename embeds the Emgu CV release version (currently
+      # AppPackages/Emgu.CV.Maui.Demo.x64.5.1.0.6716_Test/Emgu.CV.Maui.Demo.x64.5.1.0.6716.msix,
+      # see MauiDemoApp.csproj's <AppxPackageName> override and Directory.Build.props.in's
+      # EmguCVPackageVersion, both ultimately from the CPACK/EMGUCV_GITVERSION variables set
+      # near the top of the root CMakeLists.txt), so the copy step below globs for it via
+      # CopyMsixToPackage.cmake rather than hardcoding that version a second time here.
+      # A plain `cmd /c copy` custom command
       # doesn't work for this: cmd.exe's copy only expands wildcards in the filename
       # component of a path, not in a directory component like "AppPackages\*\", so
       # `copy AppPackages\*\*_x64.msix` fails with "The syntax of the command is

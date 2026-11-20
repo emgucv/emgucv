@@ -4,6 +4,10 @@
     <!-- Versions -->
     <ApplicationDisplayVersion>${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}</ApplicationDisplayVersion>
     <ApplicationVersion>${EMGUCV_GITVERSION}</ApplicationVersion>
+    <!-- Same MAJOR.MINOR.PATCH.GITVERSION convention as CPACK_PACKAGE_VERSION / version.rc.in.
+         Kept in sync with Platforms/Windows/Package.appxmanifest.in's Identity Version by
+         both being substituted from the same CMake variables at configure time. -->
+    <EmguCVPackageVersion>${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.${EMGUCV_GITVERSION}</EmguCVPackageVersion>
     
     <TargetFrameworks>net${DOTNET_VERSION_MAJOR}.0-android</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('osx'))">$(TargetFrameworks);net${DOTNET_VERSION_MAJOR}.0-ios${IOS_TFM_VERSION};net${DOTNET_VERSION_MAJOR}.0-maccatalyst${IOS_TFM_VERSION}</TargetFrameworks>

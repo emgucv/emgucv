@@ -54,6 +54,7 @@ Emgu.CV.Extern/version.rc
 
 # --- CMake-generated project/version metadata ---
 Directory.Build.props
+Emgu.CV.Example/MAUI/MauiDemoApp/Platforms/Windows/Package.appxmanifest
 CommonAssemblyInfo.cs
 LICENSE.txt
 emgucv.version.txt

@@ -56,6 +56,19 @@
 	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
 		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
 		<PackageCertificateThumbprint>915C6CDEAE1C4D16C872CBD3A8DE7142D79BB661</PackageCertificateThumbprint>
+		<!--
+		Overrides the Appx packaging targets' default package filename stem, which is otherwise
+		"$(MSBuildProjectName)_$(AppxManifestIdentityVersion)_$(Platform)" (e.g.
+		"MauiDemoApp_5.1.0.6716_x64"): underscore-separated and keyed off the literal .csproj
+		file name, not something settable via $(ProjectName) alone since the vendor targets
+		(Microsoft.Build.Msix.Packaging.targets) hardcode the "_" separators and field order
+		when deriving AppxPackageName. Setting AppxPackageName directly bypasses that derivation
+		entirely, giving "Emgu.CV.Maui.Demo.x64.5.1.0.6716.msix" once AppxPackageExtension
+		(".msix") is appended. $(EmguCVPackageVersion) comes from Directory.Build.props (see
+		Directory.Build.props.in), kept in sync with Package.appxmanifest's Identity Version:
+		both are substituted from the same CMake variables at configure time.
+		-->
+		<AppxPackageName>Emgu.CV.Maui.Demo.$(Platform).$(EmguCVPackageVersion)</AppxPackageName>
 	</PropertyGroup>
 
 	<ItemGroup>
