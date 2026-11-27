@@ -240,6 +240,20 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
     # this whole block, mirroring the Android/iOS/MacCatalyst branches above which pass their
     # RuntimeIdentifier(s) explicitly rather than relying on an SDK default.
     #
+    # Pinning Platform alone is NOT enough once more than one architecture is built in the same
+    # configure (see MAUI_WINDOWS_PLATFORMS below): Microsoft.Maui.Sdk.Before.targets sets
+    # RuntimeIdentifier unconditionally from the *build machine's own OS architecture*
+    # ($(_SingleProjectHostArchitecture), via System.Runtime.InteropServices.RuntimeInformation),
+    # never from $(Platform) -- it only skips this when RuntimeIdentifier/RuntimeIdentifiers was
+    # already explicitly set. So on an x64 build machine, every Platform value silently gets
+    # RuntimeIdentifier=win-x64, and MSBuild's own PlatformTarget/RuntimeIdentifier consistency
+    # check (Microsoft.NET.RuntimeIdentifierInference.targets) then fails outright for any
+    # Platform other than x64 ("error NETSDK1032: The RuntimeIdentifier platform 'win-x64' and
+    # the PlatformTarget 'arm64' must be compatible") -- reproduced locally by building this
+    # csproj directly for Platform=arm64/x86 with nothing else changed, even from a clean obj/.
+    # Passing RuntimeIdentifier explicitly below (matching Platform) bypasses MAUI's host-arch
+    # default entirely, the same fix already used by the Android/iOS/MacCatalyst branches above.
+    #
     # CHECK_BINARY_EXIST (cmake/PlatformDetection.cmake) sets these flags whenever
     # libs/runtimes/win-<arch>/native/*.dll already exists on disk, regardless of which single
     # EMGUCV_ARCH the current configure is for -- so if Build_Binary.ps1 was run for more than
@@ -269,12 +283,12 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
     FOREACH(_maui_plat ${MAUI_WINDOWS_PLATFORMS})
       IF(_maui_windows_exe_first)
         ADD_CUSTOM_TARGET(${PROJECT_NAME} ALL
-          COMMAND "${DOTNET_EXECUTABLE}" build "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${_maui_plat} -p:WindowsPackageType=None
+          COMMAND "${DOTNET_EXECUTABLE}" build "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${_maui_plat} -p:RuntimeIdentifier=win-${_maui_plat} -p:WindowsPackageType=None
           COMMENT "Building unpackaged .exe for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (Platform=${_maui_plat})")
         SET(_maui_windows_exe_first FALSE)
       ELSE()
         ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
-          COMMAND "${DOTNET_EXECUTABLE}" build "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${_maui_plat} -p:WindowsPackageType=None
+          COMMAND "${DOTNET_EXECUTABLE}" build "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${_maui_plat} -p:RuntimeIdentifier=win-${_maui_plat} -p:WindowsPackageType=None
           COMMENT "Building unpackaged .exe for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (Platform=${_maui_plat})")
       ENDIF()
     ENDFOREACH()
@@ -320,13 +334,13 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
       FOREACH(_maui_plat ${MAUI_WINDOWS_PLATFORMS})
         IF(_maui_windows_msix_first)
           ADD_CUSTOM_TARGET(${PROJECT_NAME} ALL
-            COMMAND "${DOTNET_EXECUTABLE}" publish "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${_maui_plat} -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true
+            COMMAND "${DOTNET_EXECUTABLE}" publish "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${_maui_plat} -p:RuntimeIdentifier=win-${_maui_plat} -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true
             COMMAND ${CMAKE_COMMAND} "-DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}" "-DDEST_DIR=${CMAKE_SOURCE_DIR}/package" -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CopyMsixToPackage.cmake"
             COMMENT "Building signed MSIX for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (Platform=${_maui_plat}, signing via EMGU_SIGN_EXECUTABLE_NATIVE_PATH=${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}), then copying it to ${CMAKE_SOURCE_DIR}/package")
           SET(_maui_windows_msix_first FALSE)
         ELSE()
           ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND "${DOTNET_EXECUTABLE}" publish "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${_maui_plat} -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true
+            COMMAND "${DOTNET_EXECUTABLE}" publish "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${_maui_plat} -p:RuntimeIdentifier=win-${_maui_plat} -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true
             COMMAND ${CMAKE_COMMAND} "-DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}" "-DDEST_DIR=${CMAKE_SOURCE_DIR}/package" -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CopyMsixToPackage.cmake"
             COMMENT "Building signed MSIX for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (Platform=${_maui_plat}, signing via EMGU_SIGN_EXECUTABLE_NATIVE_PATH=${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}), then copying it to ${CMAKE_SOURCE_DIR}/package")
         ENDIF()
