@@ -94,26 +94,33 @@
 	the Android SDK signs with its own debug key, as before. An APK signed with one key can't
 	update an app installed from one signed with another, so released APKs need the same key
 	every time. The keystore and its passwords are never in the repository; set:
-	  EMGU_ANDROID_KEYSTORE       the keystore file's full path
-	  EMGU_ANDROID_KEYSTORE_PASS  its password
-	  EMGU_ANDROID_KEY_ALIAS      the key's alias (default "emgu")
-	  EMGU_ANDROID_KEY_PASS       the key's password (default: the keystore's password)
-	The passwords are passed as "env:NAME", which the Android SDK reads from the environment
-	itself, so they don't appear on a command line or in a build log.
+	  EMGU_ANDROID_KEYSTORE            the keystore file's full path
+	  EMGU_ANDROID_KEYSTORE_PASS_FILE  the full path of a file that holds its password, or
+	  EMGU_ANDROID_KEYSTORE_PASS       its password
+	  EMGU_ANDROID_KEY_ALIAS           the key's alias (default "emgu")
+	  EMGU_ANDROID_KEY_PASS            the key's password (default: the keystore's password)
+	The passwords are passed as "file:PATH" or "env:NAME", which the Android SDK reads itself,
+	so they don't appear on a command line or in a build log. Prefer the file on a build
+	machine: a build server that logs each step's environment (buildbot does) would log a
+	password held in a variable, but only the path of a file. The file wins when both are set.
 	-->
-	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' And '$(Configuration)' == 'Release' And '$(EMGU_ANDROID_KEYSTORE)' != '' And Exists('$(EMGU_ANDROID_KEYSTORE)') And '$(EMGU_ANDROID_KEYSTORE_PASS)' != ''">
+	<PropertyGroup>
+		<_EmguCVAndroidStorePass Condition="'$(EMGU_ANDROID_KEYSTORE_PASS_FILE)' != '' And Exists('$(EMGU_ANDROID_KEYSTORE_PASS_FILE)')">file:$(EMGU_ANDROID_KEYSTORE_PASS_FILE)</_EmguCVAndroidStorePass>
+		<_EmguCVAndroidStorePass Condition="'$(_EmguCVAndroidStorePass)' == '' And '$(EMGU_ANDROID_KEYSTORE_PASS)' != ''">env:EMGU_ANDROID_KEYSTORE_PASS</_EmguCVAndroidStorePass>
+	</PropertyGroup>
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' And '$(Configuration)' == 'Release' And '$(EMGU_ANDROID_KEYSTORE)' != '' And Exists('$(EMGU_ANDROID_KEYSTORE)') And '$(_EmguCVAndroidStorePass)' != ''">
 		<AndroidKeyStore>true</AndroidKeyStore>
 		<AndroidSigningKeyStore>$(EMGU_ANDROID_KEYSTORE)</AndroidSigningKeyStore>
 		<AndroidSigningKeyAlias Condition="'$(EMGU_ANDROID_KEY_ALIAS)' != ''">$(EMGU_ANDROID_KEY_ALIAS)</AndroidSigningKeyAlias>
 		<AndroidSigningKeyAlias Condition="'$(EMGU_ANDROID_KEY_ALIAS)' == ''">emgu</AndroidSigningKeyAlias>
-		<AndroidSigningStorePass>env:EMGU_ANDROID_KEYSTORE_PASS</AndroidSigningStorePass>
+		<AndroidSigningStorePass>$(_EmguCVAndroidStorePass)</AndroidSigningStorePass>
 		<AndroidSigningKeyPass Condition="'$(EMGU_ANDROID_KEY_PASS)' != ''">env:EMGU_ANDROID_KEY_PASS</AndroidSigningKeyPass>
-		<AndroidSigningKeyPass Condition="'$(EMGU_ANDROID_KEY_PASS)' == ''">env:EMGU_ANDROID_KEYSTORE_PASS</AndroidSigningKeyPass>
+		<AndroidSigningKeyPass Condition="'$(EMGU_ANDROID_KEY_PASS)' == ''">$(_EmguCVAndroidStorePass)</AndroidSigningKeyPass>
 		<_EmguCVAndroidSigning>the Emgu keystore ($(EMGU_ANDROID_KEYSTORE), alias $(AndroidSigningKeyAlias))</_EmguCVAndroidSigning>
 	</PropertyGroup>
 	<Target Name="EmguCVReportAndroidSigning" BeforeTargets="_Sign" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' And '$(Configuration)' == 'Release'">
 		<Message Importance="high" Condition="'$(_EmguCVAndroidSigning)' != ''" Text="Signing the Android package with $(_EmguCVAndroidSigning)." />
-		<Warning Condition="'$(_EmguCVAndroidSigning)' == ''" Text="EMGU_ANDROID_KEYSTORE and EMGU_ANDROID_KEYSTORE_PASS are not set (or the keystore file doesn't exist): the Release Android package is signed with this machine's debug key, so it can't update an install signed with the Emgu key." />
+		<Warning Condition="'$(_EmguCVAndroidSigning)' == ''" Text="EMGU_ANDROID_KEYSTORE and EMGU_ANDROID_KEYSTORE_PASS_FILE (or EMGU_ANDROID_KEYSTORE_PASS) are not set, or the keystore or password file doesn't exist: the Release Android package is signed with this machine's debug key, so it can't update an install signed with the Emgu key." />
 	</Target>
 
 	<!--
