@@ -230,10 +230,28 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
   IF(WIN32 AND HAVE_WINDESKTOP)
     SET(MAUI_WINDOWS_TFM "net${DOTNET_VERSION_MAJOR}.0-windows10.0.19041.0")
 
+    # Without an explicit Platform, MSBuild's $(Platform) defaults to "AnyCPU", which the
+    # WindowsAppSDK/MAUI Windows packaging targets then resolve to an x86 RuntimeIdentifier
+    # regardless of which architecture's cvextern.dll was actually built by Build_Binary.ps1
+    # -- there is no implicit link between the two. This bit the "cv x64" builder: its native
+    # build correctly produced win-x64 binaries, but the MAUI Windows .exe/.msix below silently
+    # packaged win-x86 ones instead, with no build error. Pin Platform explicitly from the same
+    # HAVE_WINDESKTOP_X64/_ARM64/_X86 flags (cmake/PlatformDetection.cmake) that already gate
+    # this whole block, mirroring the Android/iOS/MacCatalyst branches above which pass their
+    # RuntimeIdentifier(s) explicitly rather than relying on an SDK default.
+    SET(MAUI_WINDOWS_PLATFORM "")
+    IF(HAVE_WINDESKTOP_X64)
+      SET(MAUI_WINDOWS_PLATFORM "x64")
+    ELSEIF(HAVE_WINDESKTOP_ARM64)
+      SET(MAUI_WINDOWS_PLATFORM "arm64")
+    ELSEIF(HAVE_WINDESKTOP_X86)
+      SET(MAUI_WINDOWS_PLATFORM "x86")
+    ENDIF()
+
     PROJECT(Example.Maui.DemoApp.Windows.Exe)
     ADD_CUSTOM_TARGET(${PROJECT_NAME} ALL
-      COMMAND "${DOTNET_EXECUTABLE}" build "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:WindowsPackageType=None
-      COMMENT "Building unpackaged .exe for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE}")
+      COMMAND "${DOTNET_EXECUTABLE}" build "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${MAUI_WINDOWS_PLATFORM} -p:WindowsPackageType=None
+      COMMENT "Building unpackaged .exe for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (Platform=${MAUI_WINDOWS_PLATFORM})")
 
     SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES FOLDER "Emgu.CV.Examples")
 
@@ -273,9 +291,9 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
       # incorrect." -- confirmed by reproducing it standalone. file(GLOB ...) in a
       # cmake -P script has no such restriction.
       ADD_CUSTOM_TARGET(${PROJECT_NAME} ALL
-        COMMAND "${DOTNET_EXECUTABLE}" publish "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true
+        COMMAND "${DOTNET_EXECUTABLE}" publish "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${MAUI_WINDOWS_PLATFORM} -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true
         COMMAND ${CMAKE_COMMAND} "-DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}" "-DDEST_DIR=${CMAKE_SOURCE_DIR}/package" -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CopyMsixToPackage.cmake"
-        COMMENT "Building signed MSIX for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (signing via EMGU_SIGN_EXECUTABLE_NATIVE_PATH=${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}), then copying it to ${CMAKE_SOURCE_DIR}/package")
+        COMMENT "Building signed MSIX for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (Platform=${MAUI_WINDOWS_PLATFORM}, signing via EMGU_SIGN_EXECUTABLE_NATIVE_PATH=${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}), then copying it to ${CMAKE_SOURCE_DIR}/package")
 
       SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES FOLDER "Emgu.CV.Examples")
 
