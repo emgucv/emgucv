@@ -90,6 +90,19 @@
 	</Target>
 
 	<!--
+	The Android SDK lists the native libraries of referenced library projects (libcvextern.so from
+	Emgu.CV.runtime.maui.android's .aar) in obj/.../libraryimports.cache, and rebuilds that list
+	only when the set of referenced libraries changes, not when a library gains files. The CMake
+	build compiles this app once per Android ABI in the same folder, and the .aar gains one
+	libcvextern.so each time, so the list kept the first pass's content and the packaged app
+	missed libcvextern.so for the ABIs built later. Removing the stamp makes the SDK list the
+	extracted files again on every build, which takes no noticeable time.
+	-->
+	<Target Name="EmguCVRefreshAndroidLibraryImports" BeforeTargets="_BuildLibraryImportsCache" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' And '$(_AndroidStampDirectory)' != ''">
+		<Delete Files="$(_AndroidStampDirectory)_BuildLibraryImportsCache.stamp" />
+	</Target>
+
+	<!--
 	Android Release signing with the Emgu keystore, when it is available; otherwise (and for Debug)
 	the Android SDK signs with its own debug key, as before. An APK signed with one key can't
 	update an app installed from one signed with another, so released APKs need the same key
