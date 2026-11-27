@@ -239,19 +239,45 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
     # HAVE_WINDESKTOP_X64/_ARM64/_X86 flags (cmake/PlatformDetection.cmake) that already gate
     # this whole block, mirroring the Android/iOS/MacCatalyst branches above which pass their
     # RuntimeIdentifier(s) explicitly rather than relying on an SDK default.
-    SET(MAUI_WINDOWS_PLATFORM "")
+    #
+    # CHECK_BINARY_EXIST (cmake/PlatformDetection.cmake) sets these flags whenever
+    # libs/runtimes/win-<arch>/native/*.dll already exists on disk, regardless of which single
+    # EMGUCV_ARCH the current configure is for -- so if Build_Binary.ps1 was run for more than
+    # one -Arch against this same tree without cleaning in between (e.g. a release machine that
+    # ran x64, then arm64, then x86), more than one of these can be TRUE simultaneously in one
+    # configure. Build every available architecture's own .exe/.msix below, then combine them
+    # into one signed .msixbundle when there's more than one -- a single builder's normal
+    # single-arch case (only one flag TRUE) is unaffected and keeps producing just one .msix.
+    SET(MAUI_WINDOWS_PLATFORMS)
     IF(HAVE_WINDESKTOP_X64)
-      SET(MAUI_WINDOWS_PLATFORM "x64")
-    ELSEIF(HAVE_WINDESKTOP_ARM64)
-      SET(MAUI_WINDOWS_PLATFORM "arm64")
-    ELSEIF(HAVE_WINDESKTOP_X86)
-      SET(MAUI_WINDOWS_PLATFORM "x86")
+      LIST(APPEND MAUI_WINDOWS_PLATFORMS "x64")
     ENDIF()
+    IF(HAVE_WINDESKTOP_ARM64)
+      LIST(APPEND MAUI_WINDOWS_PLATFORMS "arm64")
+    ENDIF()
+    IF(HAVE_WINDESKTOP_X86)
+      LIST(APPEND MAUI_WINDOWS_PLATFORMS "x86")
+    ENDIF()
+    LIST(LENGTH MAUI_WINDOWS_PLATFORMS MAUI_WINDOWS_PLATFORM_COUNT)
+    # Matches Directory.Build.props.in's EmguCVPackageVersion / Package.appxmanifest.in's
+    # Identity Version substitution -- the single source of truth for this release's version,
+    # and what MauiDemoApp.csproj's <AppxPackageName> bakes into each per-arch .msix's filename.
+    SET(MAUI_WINDOWS_PACKAGE_VERSION "${CPACK_PACKAGE_VERSION_MAJOR}.${CPACK_PACKAGE_VERSION_MINOR}.${CPACK_PACKAGE_VERSION_PATCH}.${EMGUCV_GITVERSION}")
 
     PROJECT(Example.Maui.DemoApp.Windows.Exe)
-    ADD_CUSTOM_TARGET(${PROJECT_NAME} ALL
-      COMMAND "${DOTNET_EXECUTABLE}" build "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${MAUI_WINDOWS_PLATFORM} -p:WindowsPackageType=None
-      COMMENT "Building unpackaged .exe for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (Platform=${MAUI_WINDOWS_PLATFORM})")
+    SET(_maui_windows_exe_first TRUE)
+    FOREACH(_maui_plat ${MAUI_WINDOWS_PLATFORMS})
+      IF(_maui_windows_exe_first)
+        ADD_CUSTOM_TARGET(${PROJECT_NAME} ALL
+          COMMAND "${DOTNET_EXECUTABLE}" build "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${_maui_plat} -p:WindowsPackageType=None
+          COMMENT "Building unpackaged .exe for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (Platform=${_maui_plat})")
+        SET(_maui_windows_exe_first FALSE)
+      ELSE()
+        ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
+          COMMAND "${DOTNET_EXECUTABLE}" build "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${_maui_plat} -p:WindowsPackageType=None
+          COMMENT "Building unpackaged .exe for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (Platform=${_maui_plat})")
+      ENDIF()
+    ENDFOREACH()
 
     SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES FOLDER "Emgu.CV.Examples")
 
@@ -290,10 +316,47 @@ IF(HAVE_MAUI_ANDROID OR HAVE_MAUI_IOS OR HAVE_MAUI_MAC OR HAVE_WINDESKTOP)
       # `copy AppPackages\*\*_x64.msix` fails with "The syntax of the command is
       # incorrect." -- confirmed by reproducing it standalone. file(GLOB ...) in a
       # cmake -P script has no such restriction.
-      ADD_CUSTOM_TARGET(${PROJECT_NAME} ALL
-        COMMAND "${DOTNET_EXECUTABLE}" publish "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${MAUI_WINDOWS_PLATFORM} -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true
-        COMMAND ${CMAKE_COMMAND} "-DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}" "-DDEST_DIR=${CMAKE_SOURCE_DIR}/package" -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CopyMsixToPackage.cmake"
-        COMMENT "Building signed MSIX for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (Platform=${MAUI_WINDOWS_PLATFORM}, signing via EMGU_SIGN_EXECUTABLE_NATIVE_PATH=${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}), then copying it to ${CMAKE_SOURCE_DIR}/package")
+      SET(_maui_windows_msix_first TRUE)
+      FOREACH(_maui_plat ${MAUI_WINDOWS_PLATFORMS})
+        IF(_maui_windows_msix_first)
+          ADD_CUSTOM_TARGET(${PROJECT_NAME} ALL
+            COMMAND "${DOTNET_EXECUTABLE}" publish "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${_maui_plat} -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true
+            COMMAND ${CMAKE_COMMAND} "-DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}" "-DDEST_DIR=${CMAKE_SOURCE_DIR}/package" -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CopyMsixToPackage.cmake"
+            COMMENT "Building signed MSIX for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (Platform=${_maui_plat}, signing via EMGU_SIGN_EXECUTABLE_NATIVE_PATH=${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}), then copying it to ${CMAKE_SOURCE_DIR}/package")
+          SET(_maui_windows_msix_first FALSE)
+        ELSE()
+          ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND "${DOTNET_EXECUTABLE}" publish "${CMAKE_CURRENT_SOURCE_DIR}/MauiDemoApp.csproj" -c ${DEFAULT_CS_CONFIG} -f ${MAUI_WINDOWS_TFM} -p:Platform=${_maui_plat} -p:WindowsPackageType=MSIX -p:GenerateAppxPackageOnBuild=true
+            COMMAND ${CMAKE_COMMAND} "-DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}" "-DDEST_DIR=${CMAKE_SOURCE_DIR}/package" -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CopyMsixToPackage.cmake"
+            COMMENT "Building signed MSIX for ${PROJECT_NAME} with ${DOTNET_EXECUTABLE} (Platform=${_maui_plat}, signing via EMGU_SIGN_EXECUTABLE_NATIVE_PATH=${EMGU_SIGN_EXECUTABLE_NATIVE_PATH}), then copying it to ${CMAKE_SOURCE_DIR}/package")
+        ENDIF()
+      ENDFOREACH()
+
+      # More than one architecture's native binaries were available this configure (see the
+      # HAVE_WINDESKTOP_X64/_ARM64/_X86 comment above) -- combine the per-arch .msix packages
+      # just built into one signed .msixbundle via makeappx.exe, in addition to (not instead
+      # of) the individual per-arch .msix files already copied to package/ above.
+      IF(MAUI_WINDOWS_PLATFORM_COUNT GREATER 1)
+        IF(NOT MAKEAPPX_FOUND)
+          MESSAGE(FATAL_ERROR "MAUI_WINDOWS_PLATFORMS has ${MAUI_WINDOWS_PLATFORM_COUNT} entries (${MAUI_WINDOWS_PLATFORMS}) but MAKEAPPX_EXECUTABLE (cmake/modules/FindCSharp.cmake) was not found -- cannot combine them into a .msixbundle.")
+        ENDIF()
+        SET(MAUI_WINDOWS_BUNDLE_FILE "${CMAKE_SOURCE_DIR}/package/Emgu.CV.Maui.Demo.windows.${MAUI_WINDOWS_PACKAGE_VERSION}.msixbundle")
+        ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
+          COMMAND ${CMAKE_COMMAND}
+            "-DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
+            "-DPLATFORMS=${MAUI_WINDOWS_PLATFORMS}"
+            "-DVERSION=${MAUI_WINDOWS_PACKAGE_VERSION}"
+            "-DMAKEAPPX_EXECUTABLE=${MAKEAPPX_EXECUTABLE}"
+            "-DOUTPUT_FILE=${MAUI_WINDOWS_BUNDLE_FILE}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/BundleMsixPackages.cmake"
+          COMMENT "Combining ${MAUI_WINDOWS_PLATFORM_COUNT} per-arch MSIX packages (${MAUI_WINDOWS_PLATFORMS}) into ${MAUI_WINDOWS_BUNDLE_FILE}")
+        # EMGU_SIGN_BINARY (cmake/modules/FindCodeSign.cmake) is generic over any file, not
+        # just DLLs -- reuse the same EmguSign.bat/signtool machinery used to sign cvextern.dll
+        # etc. elsewhere, instead of hand-rolling a second signing invocation here. Custom
+        # commands on the same target run in the order they were added, so this runs after the
+        # bundle above.
+        EMGU_SIGN_BINARY(${PROJECT_NAME} "${MAUI_WINDOWS_BUNDLE_FILE}")
+      ENDIF()
 
       SET_TARGET_PROPERTIES(${PROJECT_NAME} PROPERTIES FOLDER "Emgu.CV.Examples")
 
