@@ -17,6 +17,24 @@
 		<BaseOutputPath>$(OpenCVBinaryDir)\Build\$(AssemblyName)\$(Platform)\</BaseOutputPath>
 	</PropertyGroup>
 
+	<!--
+	When built as a ProjectReference from MauiDemoApp.csproj's per-architecture Windows loop
+	(Platform=x64/x86/arm64, RuntimeIdentifier=win-<arch> passed as command-line globals, see
+	that project's CMakeLists.txt), WinAppSDK's PRI-merge task (WinAppSdkGenerateProjectPriFile)
+	expects this reference's own build output to also live under a "win-<arch>" RuntimeIdentifier
+	subfolder, matching the referencing project's RuntimeIdentifier, otherwise it fails with
+	"PRI252: File .../Emgu.CV.runtime.maui.pri not found", since RuntimeIdentifier itself does not
+	propagate to this class-library ProjectReference's own build (confirmed: its real output path
+	has no RID subfolder even though RuntimeIdentifier is a command-line global for the whole
+	build). Reproduced locally and via CI with nothing else changed. Only set it when Platform is
+	explicitly non-AnyCPU (i.e. only for that P2P edge); the UI project's own standalone build
+	(CMakeLists.txt's BUILD_DOTNET_PROJ, always /p:Platform="AnyCPU") must keep producing the
+	real shipped nuget package layout unaffected.
+	-->
+	<PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(Platform)' != 'AnyCPU' and '$(RuntimeIdentifier)' == ''">
+		<RuntimeIdentifier>win-$(Platform)</RuntimeIdentifier>
+	</PropertyGroup>
+
 	<ItemGroup>
 	  
 	  <ProjectReference Include="..\..\..\Emgu.CV\NetStandard\Emgu.CV.csproj" />
